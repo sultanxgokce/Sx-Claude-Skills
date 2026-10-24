@@ -544,6 +544,16 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   kapi('KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" ekran adresi adı değil kimliği taşır', K('MIMAR').grup === 'gecici-emekli' && j.kayitsiz.length === 1 && adr(j.kayitsiz[0], '2026/85'), JSON.stringify(j.kayitsiz));
   kapi('KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)', j.proje === PROJE);
   p8.kill();
+  // KD8 (2.24.0 · göz tur 1): tuz KULLANILAMAZSA (yaratılamaz dizin) kimlik null VE ekran null — adres adla KURULMAZ
+  const p8b = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KOLTUK_TUZ: join(T, 'yok-dizin', 'tuz'), KAPI_PORT: '18798', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: PROJE,
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18798/sedir/giris')).status === 200) break; } catch {} }
+  const c8b = await giris(18798, '/sedir'); const j8b = await (await iste(18798, '/sedir/api/kadro', { cerez: c8b })).json();
+  const hepsi8b = [...(j8b.kisiler || []).map((x) => x.oturum).filter(Boolean), ...(j8b.kayitsiz || []), ...(j8b.altyapi || [])];
+  const kl8b = await (await iste(18798, '/sedir/api/koltuklar', { cerez: c8b })).json();
+  kapi('KD8 tuz kullanılamazsa kimlik VE ekran null (adres adla kurulmaz) — kadro ve koltuklar ucu', hepsi8b.length > 0 && hepsi8b.every((o) => o.kimlik === null && o.ekran === null)
+    && (kl8b.koltuklar || []).length > 0 && kl8b.koltuklar.every((o) => o.kimlik === null && o.ekran === null) && !JSON.stringify(j8b).includes('?arg='), JSON.stringify(j8b.kayitsiz));
+  p8b.kill();
   const p9 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18793', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: join(T, 'yok-proje'),
     KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_BOZUK }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18793/sedir/giris')).status === 200) break; } catch {} }

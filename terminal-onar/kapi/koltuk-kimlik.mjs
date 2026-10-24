@@ -8,16 +8,26 @@ import crypto from 'node:crypto';
 export const KOLTUK_KIMLIK_DESEN = /^k[0-9a-f]{16}$/;
 const tuzYolu = () => process.env.KOLTUK_TUZ || path.join(process.env.HOME || '/config', '.koltuk-tuz');
 
+const TUZ_DESEN = /^[0-9a-f]{32}$/;
+// Var olan tuz yalnız şu üç şartla kullanılır (göz tur 1): bu kullanıcıya ait · biçimi 32 onaltılık · kipi 600. Kip gevşekse ve dosya
+// bizimse 600'e çekilir; başkasınınsa ya da biçimi bozuksa KULLANILMAZ (null → kimlik yok, adres yok). Kabuk eşi aynı kuralı taşır.
+function tuzGecerli(y) {
+  let st; try { st = fs.statSync(y); } catch { return null; }
+  if (!st.isFile() || (typeof process.getuid === 'function' && st.uid !== process.getuid())) return null;
+  if ((st.mode & 0o077) !== 0) { try { fs.chmodSync(y, 0o600); } catch { return null; } }
+  let t; try { t = fs.readFileSync(y, 'utf8'); } catch { return null; }
+  return TUZ_DESEN.test(t) ? t : null;
+}
+
 export function koltukTuz() {
   const y = tuzYolu();
-  try { const t = fs.readFileSync(y, 'utf8').slice(0, 64); if (t) return t; } catch { /* yok → yarat */ }
+  if (fs.existsSync(y)) return tuzGecerli(y);
   try {
     const g = `${y}.${process.pid}.${crypto.randomBytes(4).toString('hex')}`;
     fs.writeFileSync(g, crypto.randomBytes(16).toString('hex'), { mode: 0o600 });
     try { fs.linkSync(g, y); } catch { /* başkası önce yarattı → onunkini oku */ }
     fs.rmSync(g, { force: true });
-    const t = fs.readFileSync(y, 'utf8').slice(0, 64);
-    return t || null;
+    return tuzGecerli(y);
   } catch { return null; }
 }
 

@@ -16,10 +16,11 @@ geçirip bağlanır.
   Tuzsuz düz özet olsaydı ad listesi olan biri kimlikleri deneyerek adı bulurdu.
 - **Adla bağlanma sürer** (eski bağlantılar, kutunun kendi telefon ekranı). Kimlik biçiminde ADI olan koltuk adıyla açılır (ad önceliklidir).
 - **Bilinmeyen kimlik** → red, oturum açılmaz ve red ekranı koltuk ADLARINI BASMAZ (adres mahrem kutudan geldi). Tuz
-  yaratılamazsa kimlik uydurulmaz: kapı `kimlik: null` verir (adres adla kurulur; merkez mahrem kutuda kimliksiz kayda adres vermez),
-  kabuk reddeder.
+  kullanılamazsa kimlik uydurulmaz: kapı `kimlik: null` VE `ekran: null` verir (adres adla KURULMAZ — göz tur 1), kabuk reddeder.
+- **Var olan tuz** yalnız: bu kullanıcının · 32 onaltılık · kip 600 (gevşekse ve bizimse 600'e çekilir); başkasının, bozuk biçimli
+  ya da dizin olan tuz KULLANILMAZ (iki dilde aynı kural).
 - Kabuk (`scripts/koltuk-adi.sh` `koltuk_kimlik`) ve kapı (`kapi/koltuk-kimlik.mjs`) aynı formülü taşır; eşdeğerlik
-  `scripts/koltuk-kimlik.test.sh` (25 kapı: 8 adlık derlem · tuz kipi · yarış · tuzsuz). Bağlanma: `koltuk-bagla.test.sh` K0-K8.
+  `scripts/koltuk-kimlik.test.sh` (32 kapı: 8 adlık derlem · tuz kipi · yarış · tuzsuz · var olan tuzun geçerliği). Bağlanma: `koltuk-bagla.test.sh` K0-K8.
 - Kapıyı başlatan bütün sınavlar tuzu geçici yolda tutar (gerçek `$HOME`'a yazmaz).
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.

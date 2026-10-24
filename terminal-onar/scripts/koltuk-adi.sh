@@ -24,14 +24,18 @@ koltuk_adi_gecerli() {
 #    Kapı (kapi/koltuk-kimlik.mjs) aynı formülü taşır — eşdeğerliği koltuk-kimlik.test.sh ölçer.
 KOLTUK_KIMLIK_DESEN='^k[0-9a-f]{16}$'
 koltuk_tuz_yolu() { printf '%s' "${KOLTUK_TUZ:-$HOME/.koltuk-tuz}"; }
-koltuk_tuz() {  # tuzu basar; yoksa ATOMİK yaratır (ln: iki süreç aynı anda yaratırsa ikisi de AYNI dosyayı okur) · rc 1 = yaratılamadı
-  local y g; y="$(koltuk_tuz_yolu)"
-  if [ ! -s "$y" ]; then
+koltuk_tuz() {  # tuzu basar; yoksa ATOMİK yaratır (ln: iki süreç aynı anda yaratırsa ikisi de AYNI dosyayı okur) · rc 1 = kullanılamaz
+  # Var olan tuz yalnız: bu kullanıcının · 32 onaltılık · kip 600 (gevşekse ve bizimse 600'e çekilir). Kapı eşi aynı kuralı taşır (göz tur 1).
+  local y g t; y="$(koltuk_tuz_yolu)"
+  if [ ! -e "$y" ]; then
     g="$(umask 077; mktemp "$y.XXXXXX")" || return 1
     head -c 16 /dev/urandom | od -An -tx1 | tr -d ' \n' > "$g" && ln "$g" "$y" 2>/dev/null; rm -f "$g"
   fi
-  [ -s "$y" ] || return 1
-  head -c 64 "$y"
+  [ -f "$y" ] && [ "$(stat -c %u "$y" 2>/dev/null)" = "$(id -u)" ] || return 1
+  case "$(stat -c %a "$y")" in 600|400) ;; *) chmod 600 "$y" 2>/dev/null || return 1 ;; esac
+  t="$(cat "$y" 2>/dev/null)" || return 1
+  [[ "$t" =~ ^[0-9a-f]{32}$ ]] || return 1
+  printf '%s' "$t"
 }
 koltuk_kimlik() {  # <ad> → kimlik · rc 1 = tuz yok (kimlik UYDURULMAZ)
   local t; t="$(koltuk_tuz)" || return 1

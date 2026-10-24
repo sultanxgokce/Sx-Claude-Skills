@@ -36,6 +36,21 @@ export KOLTUK_TUZ="$S/yok/dizin/tuz"
 [ "$(kn BASIRET)" = NULL ] && ok "T5 kapı: tuz yaratılamazsa kimlik NULL (uydurulmaz)" || bad T5 "$(kn BASIRET)"
 kb BASIRET >/dev/null 2>&1; [ $? = 1 ] && ok "T6 kabuk: tuz yaratılamazsa rc 1" || bad T6 "rc≠1"
 
+echo "G · var olan tuz gizli ve geçerli olmalı (göz tur 1)"
+for dil in kb kn; do
+  export KOLTUK_TUZ="$S/g-$dil/tuz"; mkdir -p "$S/g-$dil"; printf '%s' 0123456789abcdef0123456789abcdef > "$KOLTUK_TUZ"; chmod 644 "$KOLTUK_TUZ"
+  k=$($dil BASIRET)
+  [ "$(stat -c %a "$KOLTUK_TUZ")" = 600 ] && [[ "$k" =~ ^k[0-9a-f]{16}$ ]] && ok "G1 $dil: kipi gevşek (644) KENDİ tuzumuz 600'e çekilir, kimlik üretilir" || bad "G1 $dil" "kip=$(stat -c %a "$KOLTUK_TUZ") k=$k"
+  printf 'kisa' > "$KOLTUK_TUZ"; chmod 600 "$KOLTUK_TUZ"
+  if [ $dil = kb ]; then kb BASIRET >/dev/null 2>&1; r=$?; [ $r = 1 ] && ok "G2 kb: biçimi bozuk tuz (32 onaltılık değil) kullanılmaz → rc 1" || bad "G2 kb" "rc=$r"
+  else [ "$(kn BASIRET)" = NULL ] && ok "G2 kn: biçimi bozuk tuz kullanılmaz → NULL" || bad "G2 kn" "$(kn BASIRET)"; fi
+  rm -f "$KOLTUK_TUZ"; mkdir "$KOLTUK_TUZ"
+  if [ $dil = kb ]; then kb BASIRET >/dev/null 2>&1; r=$?; [ $r = 1 ] && ok "G3 kb: tuz yolu dizinse kullanılmaz → rc 1" || bad "G3 kb" "rc=$r"
+  else [ "$(kn BASIRET)" = NULL ] && ok "G3 kn: tuz yolu dizinse kullanılmaz → NULL" || bad "G3 kn" "$(kn BASIRET)"; fi
+done
+export KOLTUK_TUZ="$S/g-esit/tuz"; mkdir -p "$S/g-esit"; printf '%s' 0123456789abcdef0123456789abcdef > "$KOLTUK_TUZ"; chmod 600 "$KOLTUK_TUZ"
+[ "$(kb 'Ayşe Yılmaz')" = "$(kn 'Ayşe Yılmaz')" ] && ok "G4 hazır (dışarıdan konmuş) geçerli tuzla iki dil yine eşdeğer" || bad G4 "ayrıştı"
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [ "$DUSEN" -eq 0 ]

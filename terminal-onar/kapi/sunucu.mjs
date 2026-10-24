@@ -54,9 +54,10 @@ const KOLTUK_AC_BETIK = process.env.KAPI_KOLTUK_AC_BETIK || path.join(BETIK, 'ko
 // Boş bırakılırsa bugünkü kök-yol davranışı BAYT BAYT aynı kalır (geriye dönük).
 const TABAN = (process.env.KAPI_TABAN || '').replace(/\/+$/, '');
 const T = (y) => TABAN + y;   // dışarıya verilen mutlak yol
-// Ekran adresi (2.24.0 · P4GT2W): ?arg= ad DIŞI kimlik taşır (koltuk-bagla.sh çözer). Tuz okunamazsa kimlik null → adres adla
-// kurulur (kutunun kendi ekranı bugünkü gibi açılsın); mahrem kutuda merkez kimliksiz kayda adres VERMEZ.
-const ekranAdresi = (ad) => { const kimlik = koltukKimlik(ad); return { kimlik, ekran: T('/tty/') + '?arg=' + encodeURIComponent(kimlik || ad) }; };
+// Ekran adresi (2.24.0 · P4GT2W): ?arg= ad DIŞI kimlik taşır (koltuk-bagla.sh çözer). Tuz okunamazsa kimlik null → ekran da NULL:
+// adres adla KURULMAZ (göz tur 1: hata anında sızıntıya geri dönülmesin). 'ekran' alanını kapının kendi sayfası kullanmıyor
+// (telefon ekranı adresi koltuk adından kendisi kurar); merkez de kendi adresini üretir.
+const ekranAdresi = (ad) => { const kimlik = koltukKimlik(ad); return { kimlik, ekran: kimlik ? T('/tty/') + '?arg=' + encodeURIComponent(kimlik) : null }; };
 // Kutu adı: PWA kimliğinde ve sayfa başlığında görünür. Taban "/sedir" ise "sedir".
 const KUTU = process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '') || 'kutu';
 const KABUK_TMUX = process.env.TO_KABUK_TMUX || KUTU + '-kabuk';   // el kabuğu (ortak.sh KABUK_TMUX ile aynı türetim)
@@ -457,7 +458,7 @@ const sunucu = http.createServer(async (req, res) => {
         return m ? json(res, 200, { mesajlar: m }) : json(res, 404, { hata: 'Konuşma kaydı bulunamadı.' });
       }
       // Koltuklar: kutudaki görünür tmux oturumları. Liste betikten gelir (ttyd'nin kabul ettiğiyle
-      // AYNI liste); kapı ad türetmez. Ekran adresi: <taban>/tty/?arg=<kimlik> (2.24.0: ad değil ad dışı kimlik; tuz yoksa ad).
+      // AYNI liste); kapı ad türetmez. Ekran adresi: <taban>/tty/?arg=<kimlik> (2.24.0: ad değil ad dışı kimlik; tuz yoksa adres YOK).
       if (y === '/api/koltuklar') {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
