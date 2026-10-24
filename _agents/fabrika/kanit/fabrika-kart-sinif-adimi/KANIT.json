@@ -1,0 +1,42 @@
+{
+  "is": "fabrika-kart-sinif-adimi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-25T00:13:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi-sinif-adimi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-sinif-adimi-once.txt",
+      "sha256": "91c6fdb3f231eb9b38ee1501033f9bbc49b1f9b85d0b898c36c7cad89e491f14",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki-agac2/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-24T22:35:23+03:00",
+      "sure_sn": 225.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cbe1e00a508f4db4b851988e7bcceb85"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi-sinif-adimi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sinif-adimi-sonra.txt",
+      "sha256": "46139d8e68724bc0257c543f6e2f4ac8c2a29f0773c2707fb36dcd1e60d37502",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-kart-sinif-adimi/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-25T00:13:27+03:00",
+      "sure_sn": 5613.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "860fd632c1f14042a2880c52241c1ac7"
+    }
+  ],
+  "imza": "4bda88b1816647b302164c2ce26bc6e74545d1c4f37326c674dc3fa18d151e75"
+}

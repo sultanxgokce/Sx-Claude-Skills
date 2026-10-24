@@ -430,7 +430,7 @@ import json,sys
 y=[json.loads(l) for l in open(sys.argv[1])][-1]; b=y["govde"]; k=json.load(open(sys.argv[2]))
 assert y["yol"]=="/kayit/gorev_KARTTEST00000001" and y["jeton"]=="kart-sinav-jeton"
 assert b["yerine"]=={"atanan":"BANI","tahmin_dk":"45","gorev_durumu":"calisiliyor"}, b
-assert b["adimlar"][0].startswith("[▶ çalışılıyor] BANI · kart gb-1 açıldı, tahmin 45 dk")
+assert b["adimlar"][0]=="[▶ çalışılıyor] BANI · kart gb-1 açıldı, tahmin 45 dk · sınıf: yok", b["adimlar"][0]   # 0.25.2: sınıf cevabı adıma yazılır (merkez otomatik devri bunu okur)
 assert k["gorev"]=="gorev_KARTTEST00000001" and k["tahmin_dk"]==45 and k["gorev_yazimlari"][-1]["olay"]=="ac" and k["gorev_yazimlari"][-1]["sonuc"]=="yazıldı"
 PY
 [ $RC -eq 0 ] && grep -q "✓ görev gorev_KARTTEST00000001 → çalışılıyor (defter)" <<<"$O" && ! grep -q "kart-sinav-jeton" <<<"$O"; g $? "G2b rc 0, ekranda '→ çalışılıyor (defter)', jeton değeri çıktıda YOK"
@@ -496,6 +496,16 @@ PY
 [ $RC -eq 0 ] && grep -q "→ göz adımı (durum değişmez) (defter)" <<<"$O"; g $? "G9b rc 0, ekranda '→ göz adımı (durum değişmez) (defter)'"
 N0=$(yz); O="$(bash "$KT" goz-adim gb-5 --not "x" 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ] && grep -q "görev bağı yok" <<<"$O"; g $? "G9c bağsız kart: deftere gitmez, rc 0, söyler"
 bash "$KT" goz-adim gb-6 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "G9d --not olmadan rc 1"
+# 0.25.2 (gorev …5SW5W · Sultan D1 24 Eki): açılış adımı kartın sınıf cevabını taşır; sınıflı kart "sınıf: yok" DİYEMEZ (merkez bunu otomatik devre sokmasın)
+N0=$(yz); bash "$KT" ac gb-8 --is "sınıflı bağlı iş" --istedi Sultan --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki e --oda sinav-oda --gorev gorev_KARTTEST00000008 --tahmin 30 >/dev/null 2>&1
+python3 - "$T/yazim.jsonl" "$N0" <<'PY'; g $? "G2c 🔴 sınıflı kart (yetki=e) açılış adımı '· sınıf: yetki' der — 'sınıf: yok' DEĞİL (merkez otomatik devre sokmaz)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000008")]   # gb-8 açılışı eski açık kartları da bekliyor'a çeker: yalnız kendi yazımına bak
+assert len(m)==1, l
+a=m[0]["govde"]["adimlar"][0]
+assert a=="[▶ çalışılıyor] BANI · kart gb-8 açıldı, tahmin 30 dk · sınıf: yetki", a
+PY
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"

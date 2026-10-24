@@ -104,7 +104,7 @@ gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 if olay=="ac":
-    y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk" % (kim,is_,k.get("tahmin_dk"))
+    y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk · sınıf: %s" % (kim,is_,k.get("tahmin_dk"),",".join(k.get("siniflar") or []) or "yok")   # 0.25.2: merkezin otomatik doğrulama devri sınıfsız işi buradan okur (sınıf bilinmiyorsa Doğrulat)
 elif olay=="bitti":
     # DİLİM ≠ GÖREV (KF22R · Sultan D1 21 Eki): kart = dilim; PR birleşmesi görevi BİTİRMEZ. Varsayılan: göreve yalnız dilim adımı,
     #   durum 'çalışılıyor' kalır. Görev de bitecekse --gorev-bitti + kanıt sınıfı (ekran: --kare + --surum · ölçüm: --olcum · belge: --belge);
