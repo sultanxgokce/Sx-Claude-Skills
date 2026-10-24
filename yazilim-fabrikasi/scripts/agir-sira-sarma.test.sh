@@ -3,7 +3,7 @@
 # agir-sira-sarma.test.sh — denetci.sh ve kanit.sh olcum'un ağır koşularının kod kutusunun ortak sırasına (agir-sira.sh) sarılması
 #   (görev …489VP8 · SERDAR 24 Eki "(a) ONAY"): en çok 15 dk bekle → UYARIYLA koş (fail-open) · sıra yoksa/kapalıysa sarmasız ·
 #   sınav kancası (DENETCI_KOMUT) sırayı hiç görmez · bekleme zaman aşımına SAYILMAZ. HERMETİK: sahte sıra betiği, sahte codex; gerçek
-#   sıra kütüğüne (/config/.filo) ve yüke dokunmaz. Mutasyon kanıtlı.
+#   sıra kütüğüne (/config/.filo) ve yüke dokunmaz; G bölümü gerçek sıra betiğini YALNIZ geçici AGIR_SIRA_DIZ ile koşar. Mutasyon kanıtlı.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PKG="${MUTANT_PKG:-$HERE}"; D="$PKG/denetci.sh"; K="$PKG/kanit.sh"   # mutant koşusunda PKG = mutasyonlu tam kopya
@@ -42,6 +42,11 @@ grep -qx 42 "$T/_agents/fabrika/kanit/is-k/olcum-olc-tek.txt"; g $? "K2 komutun 
 [ $rc -eq 0 ] && grep -qx 42 "$T/_agents/fabrika/kanit/is-k4/olcum-olc-tek.txt"; g $? "K5 sıra betiği yoksa (başka kutu) komut sarmasız koşar"
 : > "$SIRA_LOG"; AGIR_SIRA_BEKLE=7 bash "$K" olcum is-k5 olc --asama tek -- true >/dev/null 2>&1
 grep -q '|kos|7|' "$SIRA_LOG"; g $? "K6 AGIR_SIRA_BEKLE ortamdan geçer (900 yalnız varsayılan)"
+: > "$SIRA_LOG"; AGIR_SIRA_BEKLE=99999 bash "$K" olcum is-k7 olc --asama tek -- true >/dev/null 2>&1
+grep -q '|kos|900|' "$SIRA_LOG" && ! grep -q '|99999|' "$SIRA_LOG"; g $? "K7 AGIR_SIRA_BEKLE=99999 → 900'e kırpılır (en çok 15 dk SERT tavan)" "→ $(cat "$SIRA_LOG")"
+: > "$SIRA_LOG"; AGIR_SIRA_BEKLE=0 bash "$K" olcum is-k8 olc --asama tek -- true >/dev/null 2>&1; r0=$(cat "$SIRA_LOG")
+: > "$SIRA_LOG"; AGIR_SIRA_BEKLE=abc bash "$K" olcum is-k8b olc --asama tek -- true >/dev/null 2>&1
+grep -q '|kos|900|' <<<"$r0" && grep -q '|kos|900|' "$SIRA_LOG"; g $? "K8 AGIR_SIRA_BEKLE=0 / sayı değil → 900"
 
 echo "════ D · denetci.sh (codex yolu) ════"
 bash "$K" olcum is-d olc --asama tek -- true >/dev/null 2>&1
@@ -60,6 +65,22 @@ SAHTE="$T/sahte-denetci.sh"; printf '#!/usr/bin/env bash\nprintf "%%s" "$SAHTE_J
 bash "$K" olcum is-d5 olc --asama tek -- true >/dev/null 2>&1
 : > "$SIRA_LOG"; SAHTE_JSON="$J" AGIR_SIRA_BETIK="$T/yok.sh" bash "$D" is-d5 --diff "$T/d.patch" >/dev/null 2>&1; rc=$?
 [ $rc -eq 0 ] && [ ! -s "$SIRA_LOG" ]; g $? "D5 sıra betiği yoksa denetim sarmasız yine yürür (rc 0)"
+bash "$K" olcum is-d6 olc --asama tek -- true >/dev/null 2>&1
+: > "$SIRA_LOG"; SAHTE_JSON="$J" AGIR_SIRA_BEKLE=5000 bash "$D" is-d6 --diff "$T/d.patch" >/dev/null 2>&1
+grep -q '^denetci-is-d6|kos|900|' "$SIRA_LOG"; g $? "D6 AGIR_SIRA_BEKLE=5000 → 900'e kırpılır (en çok 15 dk SERT tavan)" "→ $(cat "$SIRA_LOG")"
+
+echo "════ G · GERÇEK sıra betiği (kütük): yük altında koşulunca 'yuk-altinda-kosuldu' satırı ════"
+GERCEK=/config/projects/Nexus/scripts/agir-sira.sh
+if [ -f "$GERCEK" ]; then
+  GD="$T/gercek-sira"; mkdir -p "$GD"; GL="$GD/sira.log"
+  env AGIR_SIRA_BETIK="$GERCEK" AGIR_SIRA_DIZ="$GD" AGIR_SIRA_YUK=1 AGIR_SIRA_YUK_OKU="echo 99" AGIR_SIRA_ADIM=1 AGIR_SIRA_BEKLE=2 bash "$K" olcum is-g1 olc --asama tek -- bash -c 'echo $((6*7))' >/dev/null 2>&1; rc=$?
+  [ $rc -eq 0 ] && grep -q $'^[^\t]*\tkanit-is-g1-olc\tyuk-altinda-kosuldu\t' "$GL" && grep -qx 42 "$T/_agents/fabrika/kanit/is-g1/olcum-olc-tek.txt"; g $? "G1 kanit.sh olcum: yük aşılınca komut koşar (42) ve kütükte yuk-altinda-kosuldu satırı var" "→ rc=$rc $(cat "$GL" 2>/dev/null)"
+  bash "$K" olcum is-g2 olc --asama tek -- true >/dev/null 2>&1
+  env AGIR_SIRA_BETIK="$GERCEK" AGIR_SIRA_DIZ="$GD" AGIR_SIRA_YUK=1 AGIR_SIRA_YUK_OKU="echo 99" AGIR_SIRA_ADIM=1 AGIR_SIRA_BEKLE=2 SAHTE_JSON="$J" bash "$D" is-g2 --diff "$T/d.patch" >/dev/null 2>&1; rc=$?
+  [ $rc -eq 0 ] && grep -q $'^[^\t]*\tdenetci-is-g2\tyuk-altinda-kosuldu\t' "$GL"; g $? "G2 denetci.sh: yük aşılınca denetim yine koşar (rc 0) ve kütükte yuk-altinda-kosuldu satırı var" "→ rc=$rc $(cat "$GL" 2>/dev/null)"
+else
+  echo "  ⚠ G1/G2 ATLANDI: gerçek sıra betiği bu kutuda yok ($GERCEK) — 'geçti' sayılmaz, ölçülemedi"
+fi
 
 echo "════ MUTASYON (kopya; her mutant bir kapıyı kırmızı yapmalı) ════"
 mut() { # mut <ad> <dosya> <eski> <yeni> <kapı> <açıklama> — paketin tam kopyasında TEK çapa değişir, aksi halde 'çapa bayat'
@@ -74,12 +95,15 @@ PY
 }
 if [ "${1:-}" != "--mutant-kos" ]; then
   mut M1 kanit.py '"AGIR_SIRA_ZAMAN_ASIMI": "kos"' '"AGIR_SIRA_ZAMAN_ASIMI": "ertele"' K1 "kanit kipi ertele olursa K1 kırmızı (yük altında iş durur)"
-  mut M2 kanit.py '"AGIR_SIRA_BEKLE", "900"' '"AGIR_SIRA_BEKLE", "1800"' K1 "kanit bekleme tavanı 900'den kayarsa K1 kırmızı"
+  mut M2 kanit.py 'ham = os.environ.get("AGIR_SIRA_BEKLE", "900")' 'ham = os.environ.get("AGIR_SIRA_BEKLE", "600")' K1 "kanit varsayılan bekleme 900'den kayarsa K1 kırmızı"
   mut M3 kanit.py 'os.environ.get("KANIT_SIRA", "1") == "0" or ' '' K4 "kanit KANIT_SIRA=0 kapısı kalkarsa K4 kırmızı"
   mut M4 kanit.py ' or not os.path.isfile(betik)' '' K5 "kanit sıra betiği yoksa sarmaya kalkarsa K5 kırmızı"
-  mut M5 denetci.sh 'AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="${AGIR_SIRA_BEKLE:-900}"' 'AGIR_SIRA_ZAMAN_ASIMI=ertele AGIR_SIRA_BEKLE="${AGIR_SIRA_BEKLE:-900}"' D1 "denetci kipi ertele olursa D1 kırmızı"
-  mut M6 denetci.sh '    AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="${AGIR_SIRA_BEKLE:-900}" bash "$SIRA_BETIK"' '    timeout -k "$ZA_K" "$ZA" env AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="${AGIR_SIRA_BEKLE:-900}" bash "$SIRA_BETIK"' D2 "denetci timeout sıranın DIŞINA taşınırsa bekleme zaman aşımına sayılır (D2 kırmızı)"
+  mut M5 denetci.sh 'AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="$SIRA_BEKLE"' 'AGIR_SIRA_ZAMAN_ASIMI=ertele AGIR_SIRA_BEKLE="$SIRA_BEKLE"' D1 "denetci kipi ertele olursa D1 kırmızı"
+  mut M6 denetci.sh '    AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="$SIRA_BEKLE" bash "$SIRA_BETIK"' '    timeout -k "$ZA_K" "$ZA" env AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="$SIRA_BEKLE" bash "$SIRA_BETIK"' D2 "denetci timeout sıranın DIŞINA taşınırsa bekleme zaman aşımına sayılır (D2 kırmızı)"
   mut M7 denetci.sh '[ -z "${DENETCI_KOMUT:-}" ] && [ -f "$SIRA_BETIK" ]' '[ -f "$SIRA_BETIK" ]' D4 "denetci sınav kancasında da sıraya girerse D4 kırmızı"
+  mut M9 kanit.py '        bekle = min(bekle, 900)' '        bekle = bekle' K7 "kanit 900 tavanını kırpmazsa K7 kırmızı (15 dk sert tavan değil)"
+  mut M10 denetci.sh '[ "$SIRA_BEKLE" -gt 900 ] &&' 'false &&' D6 "denetci 900 tavanını kırpmazsa D6 kırmızı"
+  mut M11 kanit.py 'ham.isdigit() and int(ham) > 0 else 900' 'ham.isdigit() else 900' K8 "kanit sıfır/sayı olmayan beklemede 900'e dönmezse K8 kırmızı"
   mut M8 denetci.sh '"${DENETCI_SIRA:-1}" != 0 ] && [ -z' '"x" != 0 ] && [ -z' D3 "denetci DENETCI_SIRA=0 kapısı kalkarsa D3 kırmızı"
 fi
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

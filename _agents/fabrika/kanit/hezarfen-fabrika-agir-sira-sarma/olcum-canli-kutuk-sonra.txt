@@ -1,0 +1,8 @@
+$ grep -P kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda\t(yuk-altinda-kosuldu|bitti) /config/.filo/agir-sira/sira.log
+# rc=0 sure=0.0s zaman=2026-10-24T08:46:33+03:00
+--- stdout ---
+2026-10-24T08:21:10+03:00	kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda	yuk-altinda-kosuldu	20	2	7.19	-
+2026-10-24T08:21:10+03:00	kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda	bitti	20	2	7.19	0
+2026-10-24T08:32:24+03:00	kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda	yuk-altinda-kosuldu	20	2	5.12	-
+2026-10-24T08:32:24+03:00	kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda	bitti	20	2	5.12	0
+--- stderr ---

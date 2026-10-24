@@ -1,6 +1,6 @@
 $ bash -c echo CANLI-KOSU-TAMAM
-# rc=0 sure=20.0s zaman=2026-10-24T08:21:10+03:00
+# rc=0 sure=20.0s zaman=2026-10-24T08:32:24+03:00
 --- stdout ---
 CANLI-KOSU-TAMAM
 --- stderr ---
-⚠ agir-sira: yük 7.19 (eşik 1) 20 sn düşmedi; YUK ALTINDA KOŞULUYOR (fail-open): kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda
+⚠ agir-sira: yük 5.12 (eşik 1) 20 sn düşmedi; YUK ALTINDA KOŞULUYOR (fail-open): kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda

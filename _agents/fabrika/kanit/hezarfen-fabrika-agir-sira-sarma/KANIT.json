@@ -1,14 +1,14 @@
 {
   "is": "hezarfen-fabrika-agir-sira-sarma",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-24T08:21:10+03:00",
+  "guncelleme": "2026-10-24T08:46:33+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sarma-sinavi",
       "asama": "once",
       "dosya": "olcum-sarma-sinavi-once.txt",
-      "sha256": "0403cc5b1b02a16f8c83f42c5730caf538124595ffb40020b3d766b7473e18cc",
+      "sha256": "2f905956b54a54ff1a71edaefd81652f5d3092d464bedf0e2de84dfdeade9bdb",
       "komut": [
         "env",
         "MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/eski-pkg",
@@ -18,34 +18,34 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-24T08:00:11+03:00",
-      "sure_sn": 2.4,
+      "zaman": "2026-10-24T08:29:25+03:00",
+      "sure_sn": 3.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "a357312b2b4e4e449aa794c4052df07a"
+      "olcum_id": "458a136616e94258bc67e4d853071cb0"
     },
     {
       "tur": "olcum",
       "etiket": "sarma-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sarma-sinavi-sonra.txt",
-      "sha256": "107f5c26762472b6726b473857a91d708aefc24f95f6e8f7b16e9a8d57297e84",
+      "sha256": "f6b8cc4819e75857572eea0f68894fe5f8d5dcded48a68d5d41435d63ccbc42d",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-24T08:07:09+03:00",
-      "sure_sn": 59.3,
+      "zaman": "2026-10-24T08:31:48+03:00",
+      "sure_sn": 143.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "20654a24168e4df4a1e6edb17abf1b7d"
+      "olcum_id": "30ee44078c6f42878eb901e123d999a3"
     },
     {
       "tur": "olcum",
       "etiket": "sarma-sinavi-mutant",
       "asama": "sonra",
       "dosya": "olcum-sarma-sinavi-mutant-sonra.txt",
-      "sha256": "f1e5c536a2297571ccd0a298273a84c9dd125db679fd03c8808dacd663c9aba4",
+      "sha256": "4b61695d9a69504ff0ba48bcc8a4456f1a93cb275e3961a9a8f32b87e2c26720",
       "komut": [
         "env",
         "MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-pkg",
@@ -55,20 +55,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-24T08:07:16+03:00",
-      "sure_sn": 6.5,
+      "zaman": "2026-10-24T08:32:04+03:00",
+      "sure_sn": 15.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sarma-sinavi",
       "beklenen": "kirmizi",
-      "olcum_id": "6ef069b54fc942d5ba2a86501cf05c5e"
+      "olcum_id": "68fe2c4b378e4ae39ff26c86389fb45e"
     },
     {
       "tur": "olcum",
       "etiket": "canli-yuk-altinda",
       "asama": "sonra",
       "dosya": "olcum-canli-yuk-altinda-sonra.txt",
-      "sha256": "e875edb1e8cc23ab1d9aa54d788f9ceb49362ea2b13173ecde0bdf2df6f867ef",
+      "sha256": "b2eb921c714cfaced4268f190ccf54a7a1b9ab0089cfd15fc26a144588e3a76f",
       "komut": [
         "bash",
         "-c",
@@ -76,11 +76,30 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-24T08:21:10+03:00",
+      "zaman": "2026-10-24T08:32:24+03:00",
       "sure_sn": 20.0,
       "boru_denetimi": "temiz",
-      "olcum_id": "8939a3fbab2f4aeaad2bdcb651098ec2"
+      "olcum_id": "9f109461520d4567b05cfb6da2e4e46f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kutuk",
+      "asama": "sonra",
+      "dosya": "olcum-canli-kutuk-sonra.txt",
+      "sha256": "e4e949577b8d173cbf554f4b48e1b1c2990ba9d5e85079ebc3944ace25ea205c",
+      "komut": [
+        "grep",
+        "-P",
+        "kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda\\t(yuk-altinda-kosuldu|bitti)",
+        "/config/.filo/agir-sira/sira.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T08:46:33+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dcddd722aa044d57b98f869461dc6273"
     }
   ],
-  "imza": "cf0ecacddd6b77e25e8ed486722b3b1965ee9398e2c8428b620c7d9f941de53a"
+  "imza": "9b8de5634207dcc224967f0c861a8d88192c0bd06c883af02ad77782c4325a33"
 }

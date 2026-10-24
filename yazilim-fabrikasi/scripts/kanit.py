@@ -43,7 +43,13 @@ def sira_komutu(komut, etiket):
     betik = os.environ.get("AGIR_SIRA_BETIK") or "/config/projects/Nexus/scripts/agir-sira.sh"
     if os.environ.get("KANIT_SIRA", "1") == "0" or not os.path.isfile(betik):
         return komut, {}
-    env = {"AGIR_SIRA_ZAMAN_ASIMI": "kos", "AGIR_SIRA_BEKLE": os.environ.get("AGIR_SIRA_BEKLE", "900")}
+    # göz tur 1: "en çok 15 dk" sert tavandır — ortamdaki değer 900'ü aşamaz, sayı değilse 900
+    ham = os.environ.get("AGIR_SIRA_BEKLE", "900")
+    bekle = int(ham) if ham.isdigit() and int(ham) > 0 else 900
+    if bekle > 900 or not (ham.isdigit() and int(ham) > 0):
+        print(f"⚠ AGIR_SIRA_BEKLE={ham} → 900 sn (en çok 15 dk bekle; sonra uyarıyla koş)", file=sys.stderr)
+        bekle = min(bekle, 900)
+    env = {"AGIR_SIRA_ZAMAN_ASIMI": "kos", "AGIR_SIRA_BEKLE": str(bekle)}
     return ["bash", betik, etiket, "--", *komut], env
 
 
