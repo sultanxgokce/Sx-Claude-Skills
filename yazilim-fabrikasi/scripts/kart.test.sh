@@ -571,17 +571,35 @@ printf '{"is":"zz-2","aldi":"NAKKAS","durum":"acik","sorular":[{"no":1}]}' > "$K
 bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; [ $? -eq 2 ]; g $? "S19b 🔴 sorular listesi bozuk kart (alan eksik): rc 2"
 rm -f "$KDQ/zz-2.json"
 bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; g $? "S19d bozuk kart kalkınca yine rc 0"
+# kanca dilimi (SERDAR (b)): ajan adı yazım farkından bağımsız — kartlarda BERİD ve BERID birlikte duruyor, tmux oturum adı "berid"
+bash "$KT" ac ad-1 --is "ad katlama sınavı için eski servis temizliği" --istedi SERDAR --aldi BERİD --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+bash "$KT" sor ad-1 --kime SERDAR --eylem "eski servisi sil" --soru "Eski servisi silebilir miyim, ölçüm ekte?" >/dev/null 2>&1
+for AD in BERID berid BERİD Berid; do
+  O="$(bash "$KT" acik-soru "$AD" 2>&1)"; RC=$?; [ "$RC" -eq 3 ] && grep -q "ad-1 · soru 1" <<<"$O"; g $? "S20 🔴 kart sahibi BERİD, sorgu '$AD': soru GÖRÜLDÜ (rc 3) — yazım farkı kartı gizlemez"
+done
+bash "$KT" acik-soru BERNA >/dev/null 2>&1; g $? "S20b benzeyen ama başka ad (BERNA): soru yok (rc 0) — katlama yalnız yazımı eşler"
+bash "$KT" ac ad-2 --is "ad katlama ikinci kart ASCII sahip" --istedi SERDAR --aldi NAKKAS --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+bash "$KT" sor ad-2 --kime SERDAR --eylem "yedeği sil" --soru "Eski yedeği silebilir miyim, yer açılacak?" >/dev/null 2>&1
+bash "$KT" acik-soru NAKKAŞ >/dev/null 2>&1; [ $? -eq 3 ]; g $? "S20c 🔴 kart sahibi NAKKAS, sorgu 'NAKKAŞ': soru görüldü (rc 3)"
+bash "$KT" sor ad-1 --kime BERID --eylem "kendine sor" --soru "Kendi kendime sorayım mı, yazımı değiştirerek?" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S21 🔴 kartın sahibi BERİD kendine 'BERID' yazarak soramaz (soran kendine soramaz)"
+bash "$KT" sor ad-1 --kime Serdar --eylem "ikinci soru" --soru "Yazımı farklı yazılmış sorulana ikinci soru açılabilir mi, cevabı kim verir?" >/dev/null 2>&1; g $? "S21b sorulan 'Serdar' yazımıyla da sorulabilir"
+bash "$KT" cevap ad-1 --no 2 --kim SERDAR --karar evet --oturum s1 --soz "olur" >/dev/null 2>&1; g $? "S21c 'Serdar' diye sorulan soruyu 'SERDAR' cevaplar (aynı kişi, yazım farkı)"
+bash "$KT" cevap ad-1 --no 1 --kim SERDAR --karar hayir --oturum s2 --soz "silme" >/dev/null 2>&1; g $? "S21d ilk soru cevaplandı"
+bash "$KT" cevap ad-2 --no 1 --kim SERDAR --karar hayir --oturum s3 --soz "silme" >/dev/null 2>&1
+bash "$KT" bitti ad-1 >/dev/null 2>&1; bash "$KT" bitti ad-2 >/dev/null 2>&1
+bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; g $? "S21e ad katlama kartları kapandı, sonraki sınavlar için cevapsız soru kalmadı (rc 0)"
 echo "── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──"
-for M in "bitti engeli" "sorulan kimliği" "sinifli kural" "bozuk kart"; do
+for M in "bitti engeli" "sorulan kimliği" "sinifli kural" "bozuk kart" "ad katlama"; do
   MD="$T/mut-soru-${M// /-}"; mkdir -p "$MD"; cp "$HERE"/*.py "$HERE"/*.sh "$MD/" 2>/dev/null
   python3 - "$MD" "$M" <<'PYM' || g 1 "mutant kurulamadı ($M — çapa bayat)"
 import sys; d,m=sys.argv[1:]
 def deg(f,a,b):
     p=d+"/"+f; s=open(p,encoding="utf-8").read(); assert s.count(a)==1,(m,a); open(p,"w",encoding="utf-8").write(s.replace(a,b,1))
 if m=="bitti engeli": deg("kart.sh",'    if [ "$CMD" = "bitti" ]; then\n      SD="$(bash','    if false; then\n      SD="$(bash')
-if m=="sorulan kimliği": deg("soru.py",'    if kim != s["kime"]:','    if False:')
+if m=="sorulan kimliği": deg("soru.py",'    if not ayni_ad(kim, s["kime"]):','    if False:')
 if m=="sinifli kural": deg("soru.py",'and kime != "Sultan":','and False:')
 if m=="bozuk kart": deg("kart.sh",'if bozuk: print(f"ÖLÇÜLEMEDİ','if False: print(f"ÖLÇÜLEMEDİ')
+if m=="ad katlama": deg("soru.py",'    return ad_katla(a) == ad_katla(b) != ""','    return a == b')
 PYM
   cd "$SQ" || { g 1 "T-SORU deposu kayboldu"; break; }; rm -f _agents/fabrika/kartlar/mm-*.json
   bash "$MD/kart.sh" ac mm-1 --is "mutant sınavı için railway temizliği" --istedi SERDAR --aldi MIRAHUR --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
@@ -591,6 +609,8 @@ PYM
     "sorulan kimliği") bash "$MD/kart.sh" cevap mm-1 --no 1 --kim HENDESE --karar evet --oturum x --soz "olur" >/dev/null 2>&1; g $? "mutant ($M): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi" ;;
     "sinifli kural") bash "$MD/kart.sh" ac mm-2 --is "mutant sınıflı yedek silme işi" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h --oda sinav-oda >/dev/null 2>&1
                      bash "$MD/kart.sh" sor mm-2 --kime SERDAR --eylem "yedeği sil" --soru "Eski yedeği silebilir miyim, yer açılacak?" >/dev/null 2>&1; g $? "mutant ($M): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi" ;;
+    "ad katlama") bash "$MD/kart.sh" ac mm-3 --is "ad katlama mutantı için servis temizliği" --istedi SERDAR --aldi BERİD --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+                  bash "$MD/kart.sh" sor mm-3 --kime SERDAR --eylem "servisi sil" --soru "Eski servisi silebilir miyim, ölçüm ekte?" >/dev/null 2>&1; bash "$MD/kart.sh" acik-soru BERID >/dev/null 2>&1; g $? "mutant ($M): BERİD kartı 'BERID' sorgusunda görünmedi (rc 0) → S20 bu mutantta düşerdi" ;;
     "bozuk kart") printf '{bozuk' > "$SQ/_agents/fabrika/kartlar/mm-bozuk.json"; bash "$MD/kart.sh" acik-soru NAKKAS >/dev/null 2>&1; g $? "mutant ($M): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi"; rm -f "$SQ/_agents/fabrika/kartlar/mm-bozuk.json" ;;
   esac
 done

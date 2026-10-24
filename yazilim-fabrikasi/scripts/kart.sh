@@ -824,7 +824,7 @@ n=0; bozuk=[]
 for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try:
         k=json.load(open(p,encoding="utf-8"))
-        if k.get("aldi")!=ajan: continue
+        if not S.ayni_ad(k.get("aldi"),ajan): continue   # yazım farkı (BERİD/BERID) kartı gizlemez
         ac=[(s["no"],s["kime"],s["eylem"],s["zaman"]) for s in S.acik(k)]
     except Exception: bozuk.append(os.path.basename(p)); continue
     for no,kime,eylem,zaman in ac: n+=1; print(f"❓ {k['is']} · soru {no} → {kime}: {eylem} ({zaman}'den beri)")

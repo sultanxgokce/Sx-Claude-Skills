@@ -16,11 +16,27 @@ Sınırlar (bilerek):
   · SINIFLI kartta soru yalnız Sultan'a sorulur (sınıf işinin karar mercii Sultan'dır — reis-dedi ile aynı kural).
   · Araç kimlik doğrulayamaz: cevabı ajan kayda geçirir (D1 deseni — oturum ref + birebir söz). Uydurmayı imkânsız kılmaz,
     KAYITLI ve denetlenebilir kılar (sultan-dedi ile aynı dürüst sınır).
+  · Ajan adları yazım farkından bağımsız eşlenir (BERİD = BERID = berid): soran/sorulan/sorgu aynı kişiyi farklı yazımla gösterse de kural dolanılmaz.
   · "hayır" kesindir: aynı soru yeniden cevaplanmaz; eylem yine isteniyorsa YENİ soru açılır (gerekçesiyle).
 """
 import datetime
 
 KARARLAR = ("evet", "hayir")
+
+# Ajan adı yazım farkından bağımsız karşılaştırılır (BERİD = BERID = berid; NAKKAŞ = NAKKAS; NECCÂR = NECCAR). Niçin: kartlarda
+# aynı ajan iki yazımla duruyor (sohbet deposu: BERID 18 kart, BERİD 8 kart) ve tmux oturum adı ASCII ("berid"). Tam eşleşme
+# kanca sorgusunda (acik-soru) kartların bir kısmını görmez, "soran kendi sorusunu cevaplayamaz" kuralında da yazım değiştirerek
+# dolanılırdı. Katlama kipi-bağımsız ve tek yerde: önce Türkçe harfler elle (str.lower 'İ'yi 'i'+birleşik nokta yapar), sonra küçük harf.
+_KATLA = str.maketrans({"İ": "i", "I": "i", "ı": "i", "Â": "a", "â": "a", "Î": "i", "î": "i", "Û": "u", "û": "u",
+                          "Ğ": "g", "ğ": "g", "Ü": "u", "ü": "u", "Ş": "s", "ş": "s", "Ö": "o", "ö": "o", "Ç": "c", "ç": "c"})
+
+
+def ad_katla(ad):
+    return str(ad or "").translate(_KATLA).lower().strip()
+
+
+def ayni_ad(a, b):
+    return ad_katla(a) == ad_katla(b) != ""
 
 
 def simdi():
@@ -54,7 +70,7 @@ def durum(k):
 def sor(k, kime, eylem, soru):
     if k.get("durum") in ("bitti", "canli-borclu"):
         raise ValueError(f"kart kapanmış (durum {k.get('durum')}) — soru açık işe bağlanır")
-    if kime == k.get("aldi"):
+    if ayni_ad(kime, k.get("aldi")):
         raise ValueError(f"--kime '{kime}' kartın sahibi — soran kendine soramaz (cevabı başkası verir)")
     if (k.get("sultan") or k.get("siniflar")) and kime != "Sultan":
         raise ValueError(f"kart SINIFLI ({', '.join(k.get('siniflar') or ['?'])}) — sınıf işinde soru Sultan'a sorulur (--kime Sultan)")
@@ -72,9 +88,9 @@ def cevapla(k, no, kim, karar, oturum, soz):
         raise ValueError(f"soru no {no} yok (kartta {len(sorular(k))} soru)")
     if s.get("cevap"):
         raise ValueError(f"soru no {no} zaten cevaplı ({s['cevap']['karar']}, {s['cevap']['zaman']}) — yeniden cevap yok; gerekirse YENİ soru aç")
-    if kim != s["kime"]:
+    if not ayni_ad(kim, s["kime"]):
         raise ValueError(f"--kim '{kim}' bu sorunun sorulanı değil (sorulan: {s['kime']}) — cevabı yalnız sorulan verir")
-    if kim == k.get("aldi"):
+    if ayni_ad(kim, k.get("aldi")):
         raise ValueError("soran kendi sorusunu cevaplayamaz")
     s["cevap"] = {"karar": karar, "kim": kim, "oturum": oturum, "soz": soz, "zaman": simdi()}
     return s
