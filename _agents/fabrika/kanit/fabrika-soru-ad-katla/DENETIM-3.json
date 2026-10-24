@@ -1,0 +1,48 @@
+{
+  "tur": 3,
+  "is": "fabrika-soru-ad-katla",
+  "pr": "452",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T12:28:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla",
+  "dal": "fabrika-soru-ad-katla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24625,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9574
+  },
+  "bas": "356e064b66bf517981ef1c18f9b85b6a7f799f66",
+  "duzeltme_farki": {
+    "onceki_bas": "b298e4c75dfcd40ef96d3354df8d8765027b593f",
+    "dosya": 8,
+    "bayt": 18099,
+    "tam_bayt": 81079
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Ad katlama ve `acik-soru '*'` sorgusu çalışıyor; araç imzalı ölçüm 297/0 yeşil. Ancak iş kartı yıkıcı komut kancasının kartların tamamını görmesini isterken değişiklik yalnız sorgu arayüzünü genişletiyor, kancanın `'*'` ile çağırdığına dair kod veya uçtan uca sınav göstermiyor; önce bu bağlantı kurulup ölçülmeli.",
+    "bulgular": [
+      {
+        "ne": "Yıkıcı komut kancasının bütün kartları sorgulaması uygulanmış veya doğrulanmış değil; yalnız `kart.sh acik-soru '*'` yeteneği eklenmiş.",
+        "kanit": "Üretim farkında davranış değişikliği `scripts/kart.sh` içindeki `ajan!=\"*\"` filtresiyle sınırlı; `kapi-atlama-guard.sh` değişikliği yok. Yeni S22/S22b sınavları da doğrudan `bash \"$KT\" acik-soru '*'` çağırıyor ve gerçek kanca yolunu koşturmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:824; yazilim-fabrikasi/scripts/kart.test.sh:590-593; değişiklik farkı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; aynı kart sınavı önce rc=1 ve 286/14, sonra rc=0 ve 297/0 veriyor. Bu çift ad katlama ile yıldız sorgusunu güçlü biçimde ölçüyor, fakat talepteki yıkıcı komut kancasının yıldız sorgusunu gerçekten çağırdığını ölçmüyor. Önceki turda bulgu bulunmadığından kapanışı değerlendirilecek eski bulgu yok."
+  }
+}

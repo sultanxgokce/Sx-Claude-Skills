@@ -34,7 +34,7 @@
 #   kart.sh sor <iş> --kime <AD> --eylem "<geri alınamaz eylem ≥5>" --soru "<soru ≥20>"   CEVAP BEKLE (gorev_…CMWNK): eylemi soruya bağlar
 #   kart.sh cevap <iş> --no N --kim <sorulan> --karar evet|hayir --oturum <ref> --soz "<sorulanın sözü, birebir>"
 #   kart.sh cevap-bekle <iş> → "yok|evet|acik|hayir<TAB>…"; rc 0 yok/evet · 3 açık · 4 hayır  (kart.sh cevap-bekle X && <eylem>)
-#   kart.sh acik-soru <AJAN> → ajanın kartlarındaki cevapsız sorular; rc 0 yok · 3 var · 2 okunamayan kart (ÖLÇÜLEMEDİ) · cevapsız soru varken kart.sh bitti REDDEDER
+#   kart.sh acik-soru <AJAN|'*'> → ajanın (ya da '*' = depodaki HERKESİN) kartlarındaki cevapsız sorular; rc 0 yok · 3 var · 2 okunamayan kart (ÖLÇÜLEMEDİ) · cevapsız soru varken kart.sh bitti REDDEDER
 #   kart.sh izin-durum <iş> → "gerekmiyor|bekliyor|basla|dur<TAB>açıklama" (kart yok/bozuk rc 3 — fail-closed)
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
@@ -824,11 +824,11 @@ n=0; bozuk=[]
 for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try:
         k=json.load(open(p,encoding="utf-8"))
-        if k.get("aldi")!=ajan: continue
+        if ajan!="*" and not S.ayni_ad(k.get("aldi"),ajan): continue   # yazım farkı (BERİD/BERID) kartı gizlemez; '*' = HERKES (kimliği çözülemeyen oturum için kanca)
         ac=[(s["no"],s["kime"],s["eylem"],s["zaman"]) for s in S.acik(k)]
     except Exception: bozuk.append(os.path.basename(p)); continue
     for no,kime,eylem,zaman in ac: n+=1; print(f"❓ {k['is']} · soru {no} → {kime}: {eylem} ({zaman}'den beri)")
-if n: print(f"── {ajan}: {n} cevapsız soru"); raise SystemExit(3)
+if n: print(f"── {ajan if ajan!='*' else 'herkes'}: {n} cevapsız soru"); raise SystemExit(3)
 if bozuk: print(f"ÖLÇÜLEMEDİ: {len(bozuk)} kart okunamadı ({', '.join(bozuk[:5])}) — 'cevapsız soru yok' DENEMEZ"); raise SystemExit(2)
 print(f"◻ {ajan}: cevapsız soru yok"); raise SystemExit(0)
 PY

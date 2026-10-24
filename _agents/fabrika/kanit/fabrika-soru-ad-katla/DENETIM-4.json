@@ -1,0 +1,40 @@
+{
+  "tur": 4,
+  "is": "fabrika-soru-ad-katla",
+  "pr": "452",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T12:32:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla",
+  "dal": "fabrika-soru-ad-katla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18831,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3237
+  },
+  "bas": "2fe454091ca0737ac933d83a6a8b42267f217ef4",
+  "duzeltme_farki": {
+    "onceki_bas": "356e064b66bf517981ef1c18f9b85b6a7f799f66",
+    "dosya": 2,
+    "bayt": 3237,
+    "tam_bayt": 83888
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ajan adları yazım farkından bağımsız karşılaştırılmış ve `acik-soru '*'` ile herkesin cevapsız sorularını sorgulama teslim edilmiş. Önceki kanca bulgusu usulünce ayrı karta daraltılmış; araç imzalı önce/sonra ölçümü 286/14 kırmızıdan 297/0 yeşile döndüğü için bu kart üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı, SHA değerleri tutuyor ve sarı kayıt yok. Aynı kart sınavının önceki ağaçta rc=1 ile 286 geçti/14 kaldı, son ağaçta rc=0 ile 297 geçti/0 kaldı vermesi güçlü bir ölçüm çiftidir; önceki turdaki B1 üretim koduyla kapanmamış olsa da iş kartı resmen daraltılmış ve kalan kanca bağlantısı `fabrika-soru-kanca-baglanti` kartına taşındığından artık bu kartın kapsamında değildir."
+  }
+}

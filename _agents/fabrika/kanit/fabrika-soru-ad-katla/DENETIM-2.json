@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "fabrika-soru-ad-katla",
+  "pr": "452",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T11:34:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla",
+  "dal": "fabrika-soru-ad-katla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20359,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 11582
+  },
+  "bas": "b298e4c75dfcd40ef96d3354df8d8765027b593f",
+  "duzeltme_farki": {
+    "onceki_bas": "7132a92babb0ed273924050aedc6014146dc4163",
+    "dosya": 7,
+    "bayt": 15020,
+    "tam_bayt": 76250
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki tek açık, sınıflı kartların Sultan kuralında birebir karşılaştırmanın `ayni_ad` ile değiştirilmesi ve küçük harfli `sultan` ile sınanmasıyla kapanmış. Araç imzalı kırmızı-yeşil ölçüm çifti 286/12’den 295/0’a geçiyor; talebin ad katlama ve yıkıcı komut kancası kapsamlarında üretimi engelleyen bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; aynı kart sınavının önce ölçümü rc=1, 286 geçti/12 kaldı, sonra ölçümü rc=0, 295 geçti/0 kaldı. Önceki B1, `soru.py` koşulunun `not ayni_ad(kime, \"Sultan\")` yapılması ve S21f/S21g ile hem eşdeğer Sultan yazımının kabulünün hem de başka kişinin reddinin ölçülmesi sayesinde kapanmış; mutasyon eşlemesi de yeni koşula güncellenmiş. Çıktı kırpılmış olsa da korunan sonuç ve ilgili iddia satırları yeterli; sarı kayıt yok."
+  }
+}

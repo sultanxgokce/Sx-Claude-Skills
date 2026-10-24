@@ -1,0 +1,42 @@
+{
+  "is": "fabrika-soru-ad-katla",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-24T12:26:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi-ad-katlama",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-ad-katlama-once.txt",
+      "sha256": "af5c0d3d2db4601dda12d892e4568965b4b97f2be99d085fe143bd4722014538",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki-agac/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-24T12:26:03+03:00",
+      "sure_sn": 43.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "166041e95d3242e7bedb50471d4d1341"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi-ad-katlama",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-ad-katlama-sonra.txt",
+      "sha256": "b4ac20436ad22ce92322750e2169409caaa5f88e74514e55b9287a61f22fe64b",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T12:25:20+03:00",
+      "sure_sn": 412.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a3be2408de47475c9b0accc9c346ab67"
+    }
+  ],
+  "imza": "9518509be3e4e509bef9a041135fc428a9d7ae6a36a6c7153cc2d72bb5d543e3"
+}

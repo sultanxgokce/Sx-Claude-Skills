@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "fabrika-soru-ad-katla",
+  "pr": "452",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T10:46:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla",
+  "dal": "fabrika-soru-ad-katla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28128,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 56119
+  },
+  "bas": "7132a92babb0ed273924050aedc6014146dc4163",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Cevapsız soru sorgusu ile soran/sorulan kimlik denetimlerinin çoğu ortak ad katlama işlevine geçirilmiş ve BERİD/BERID gibi örnekler önce kırmızı, sonra yeşil ölçümle doğrulanmış. Ancak sınıflı kartın yalnız Sultan’a soru açma kuralı hâlâ birebir metin karşılaştırıyor; talep bütün soru kurallarını kapsadığı için önce bu boşluk kapatılmalı.",
+    "bulgular": [
+      {
+        "ne": "Sınıflı kartlarda sorunun yalnız Sultan’a yöneltilmesi kuralı yazım farkından bağımsız değil; `sultan` veya farklı yazımlı eşdeğer ad reddedilirken diğer kimlik kuralları `ayni_ad` kullanıyor.",
+        "kanit": "Üretim farkında `sor()` içindeki koşul hâlâ `(k.get(\"sultan\") or k.get(\"siniflar\")) and kime != \"Sultan\"`; aynı farkta kendine sorma ve cevaplama denetimleri `ayni_ad(...)` ile değiştirilmiş. Sonra ölçümü 293/0 yeşil olsa da eklenen S20–S21 testleri bu sınıflı-kart/Sultan yazım varyantını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/soru.py:73 civarı; olcum-kart-sinavi-ad-katlama-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; aynı kart sınavının önce ölçümü 286 geçti/9 kaldı, sonra ölçümü 293 geçti/0 kaldı olduğundan gerçek bir kırmızı-yeşil ölçüm çifti var. Gerçekçi BERİD/BERID, NAKKAŞ/NAKKAS örnekleri ve ad-katlama mutantı ana davranışı destekliyor; ancak sınıflı karttaki Sultan karşılaştırmasının yazım varyantı ölçülmemiş."
+  }
+}
