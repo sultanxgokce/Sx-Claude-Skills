@@ -587,8 +587,10 @@ bash "$KT" cevap ad-1 --no 2 --kim SERDAR --karar evet --oturum s1 --soz "olur" 
 bash "$KT" cevap ad-1 --no 1 --kim SERDAR --karar hayir --oturum s2 --soz "silme" >/dev/null 2>&1; g $? "S21d ilk soru cevaplandı"
 bash "$KT" sor ss-2 --kime sultan --eylem "yedeği sil (yazım farkı)" --soru "Sultan yazımı küçük harfle de sınıflı kartta kabul edilir mi, karar kimin?" >/dev/null 2>&1; g $? "S21f 🔴 sınıflı kartta 'sultan' (yazım farkı) = Sultan: soru açıldı"
 bash "$KT" sor ss-2 --kime SERDAR --eylem "yedeği sil" --soru "Sınıflı kartta SERDAR yazımı hâlâ reddedilmeli, değil mi?" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S21g sınıflı kartta SERDAR hâlâ reddedilir (katlama Sultan kuralını gevşetmedi)"
+O="$(bash "$KT" acik-soru '*' 2>&1)"; RC=$?; [ "$RC" -eq 3 ] && grep -q "ad-1 · soru 1" <<<"$O" && grep -q "ad-2 · soru 1" <<<"$O" && grep -q "herkes" <<<"$O"; g $? "S22 🔴 acik-soru '*': kimliği çözülemeyen oturum için HERKESİN cevapsız sorusu görülür (rc 3)"
 bash "$KT" cevap ad-2 --no 1 --kim SERDAR --karar hayir --oturum s3 --soz "silme" >/dev/null 2>&1
 bash "$KT" bitti ad-1 >/dev/null 2>&1; bash "$KT" bitti ad-2 >/dev/null 2>&1
+bash "$KT" acik-soru '*' >/dev/null 2>&1; [ $? -eq 3 ]; g $? "S22b '*' ss-2'deki cevapsız soruyu hâlâ görüyor (rc 3 — başka kartın sorusu)"
 bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; g $? "S21e ad katlama kartları kapandı, sonraki sınavlar için cevapsız soru kalmadı (rc 0)"
 echo "── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──"
 for M in "bitti engeli" "sorulan kimliği" "sinifli kural" "bozuk kart" "ad katlama"; do
