@@ -585,6 +585,8 @@ bash "$KT" sor ad-1 --kime BERID --eylem "kendine sor" --soru "Kendi kendime sor
 bash "$KT" sor ad-1 --kime Serdar --eylem "ikinci soru" --soru "Yazımı farklı yazılmış sorulana ikinci soru açılabilir mi, cevabı kim verir?" >/dev/null 2>&1; g $? "S21b sorulan 'Serdar' yazımıyla da sorulabilir"
 bash "$KT" cevap ad-1 --no 2 --kim SERDAR --karar evet --oturum s1 --soz "olur" >/dev/null 2>&1; g $? "S21c 'Serdar' diye sorulan soruyu 'SERDAR' cevaplar (aynı kişi, yazım farkı)"
 bash "$KT" cevap ad-1 --no 1 --kim SERDAR --karar hayir --oturum s2 --soz "silme" >/dev/null 2>&1; g $? "S21d ilk soru cevaplandı"
+bash "$KT" sor ss-2 --kime sultan --eylem "yedeği sil (yazım farkı)" --soru "Sultan yazımı küçük harfle de sınıflı kartta kabul edilir mi, karar kimin?" >/dev/null 2>&1; g $? "S21f 🔴 sınıflı kartta 'sultan' (yazım farkı) = Sultan: soru açıldı"
+bash "$KT" sor ss-2 --kime SERDAR --eylem "yedeği sil" --soru "Sınıflı kartta SERDAR yazımı hâlâ reddedilmeli, değil mi?" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S21g sınıflı kartta SERDAR hâlâ reddedilir (katlama Sultan kuralını gevşetmedi)"
 bash "$KT" cevap ad-2 --no 1 --kim SERDAR --karar hayir --oturum s3 --soz "silme" >/dev/null 2>&1
 bash "$KT" bitti ad-1 >/dev/null 2>&1; bash "$KT" bitti ad-2 >/dev/null 2>&1
 bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; g $? "S21e ad katlama kartları kapandı, sonraki sınavlar için cevapsız soru kalmadı (rc 0)"
@@ -597,7 +599,7 @@ def deg(f,a,b):
     p=d+"/"+f; s=open(p,encoding="utf-8").read(); assert s.count(a)==1,(m,a); open(p,"w",encoding="utf-8").write(s.replace(a,b,1))
 if m=="bitti engeli": deg("kart.sh",'    if [ "$CMD" = "bitti" ]; then\n      SD="$(bash','    if false; then\n      SD="$(bash')
 if m=="sorulan kimliği": deg("soru.py",'    if not ayni_ad(kim, s["kime"]):','    if False:')
-if m=="sinifli kural": deg("soru.py",'and kime != "Sultan":','and False:')
+if m=="sinifli kural": deg("soru.py",'and not ayni_ad(kime, "Sultan"):','and False:')
 if m=="bozuk kart": deg("kart.sh",'if bozuk: print(f"ÖLÇÜLEMEDİ','if False: print(f"ÖLÇÜLEMEDİ')
 if m=="ad katlama": deg("soru.py",'    return ad_katla(a) == ad_katla(b) != ""','    return a == b')
 PYM

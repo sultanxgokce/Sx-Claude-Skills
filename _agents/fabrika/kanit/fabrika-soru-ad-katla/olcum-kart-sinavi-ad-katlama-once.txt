@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki-agac/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=1 sure=930.3s zaman=2026-10-24T10:36:40+03:00
+# rc=1 sure=931.7s zaman=2026-10-24T11:02:22+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -292,12 +292,15 @@ $ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934
   ✓ S21b sorulan 'Serdar' yazımıyla da sorulabilir
   ✗ S21c 'Serdar' diye sorulan soruyu 'SERDAR' cevaplar (aynı kişi, yazım farkı)
   ✓ S21d ilk soru cevaplandı
+  ✗ S21f 🔴 sınıflı kartta 'sultan' (yazım farkı) = Sultan: soru açıldı
+  ✓ S21g sınıflı kartta SERDAR hâlâ reddedilir (katlama Sultan kuralını gevşetmedi)
   ✓ S21e ad katlama kartları kapandı, sonraki sınavlar için cevapsız soru kalmadı (rc 0)
 ── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──
   ✓ mutant (bitti engeli): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi
   ✗ mutant kurulamadı (sorulan kimliği — çapa bayat)
   ✗ mutant (sorulan kimliği): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi
-  ✓ mutant (sinifli kural): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi
+  ✗ mutant kurulamadı (sinifli kural — çapa bayat)
+  ✗ mutant (sinifli kural): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi
   ✓ mutant (bozuk kart): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi
   ✗ mutant kurulamadı (ad katlama — çapa bayat)
   ✓ mutant (ad katlama): BERİD kartı 'BERID' sorgusunda görünmedi (rc 0) → S20 bu mutantta düşerdi
@@ -329,13 +332,17 @@ $ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934
   ✓ M-OL6 tek-yer şartı gevşerse 'canlı, CI' geçer (OL15 düşerdi)
   ✓ M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)
 
-── SONUÇ: 286 geçti · 9 kaldı ──
+── SONUÇ: 286 geçti · 12 kaldı ──
 --- stderr ---
 ⚠ agir-sira: sıra dolu — 2 yuva 900 sn boşalmadı; YUK ALTINDA KOŞULUYOR (yuvasız, fail-open): kanit-fabrika-soru-ad-katla-kart-sinavi-ad-katlama
 Traceback (most recent call last):
   File "<stdin>", line 5, in <module>
   File "<stdin>", line 3, in deg
 AssertionError: ('sorulan kimliği', '    if not ayni_ad(kim, s["kime"]):')
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "<stdin>", line 3, in deg
+AssertionError: ('sinifli kural', 'and not ayni_ad(kime, "Sultan"):')
 Traceback (most recent call last):
   File "<stdin>", line 8, in <module>
   File "<stdin>", line 3, in deg

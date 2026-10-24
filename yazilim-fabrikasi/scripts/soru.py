@@ -72,7 +72,7 @@ def sor(k, kime, eylem, soru):
         raise ValueError(f"kart kapanmış (durum {k.get('durum')}) — soru açık işe bağlanır")
     if ayni_ad(kime, k.get("aldi")):
         raise ValueError(f"--kime '{kime}' kartın sahibi — soran kendine soramaz (cevabı başkası verir)")
-    if (k.get("sultan") or k.get("siniflar")) and kime != "Sultan":
+    if (k.get("sultan") or k.get("siniflar")) and not ayni_ad(kime, "Sultan"):
         raise ValueError(f"kart SINIFLI ({', '.join(k.get('siniflar') or ['?'])}) — sınıf işinde soru Sultan'a sorulur (--kime Sultan)")
     no = max([s["no"] for s in sorular(k)] or [0]) + 1
     k.setdefault("sorular", []).append({"no": no, "kime": kime, "eylem": eylem, "soru": soru, "soran": k.get("aldi"),

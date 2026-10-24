@@ -1,42 +1,42 @@
 {
   "is": "fabrika-soru-ad-katla",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-24T10:37:54+03:00",
+  "guncelleme": "2026-10-24T11:17:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kart-sinavi-ad-katlama",
       "asama": "once",
       "dosya": "olcum-kart-sinavi-ad-katlama-once.txt",
-      "sha256": "05fc35fc70e2bbdffc8ae13b7aae7e773ae8cdefed130635ee73539a11ad13aa",
+      "sha256": "945daa757cb19ed6e5caf353b3c80360574a21e1e916e6eb3237f3891cfa028e",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki-agac/yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-24T10:36:40+03:00",
-      "sure_sn": 930.3,
+      "zaman": "2026-10-24T11:02:22+03:00",
+      "sure_sn": 931.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1684758a583149ffbce498c760fa0427"
+      "olcum_id": "e8819597f0184b6bb710bf3140ce5343"
     },
     {
       "tur": "olcum",
       "etiket": "kart-sinavi-ad-katlama",
       "asama": "sonra",
       "dosya": "olcum-kart-sinavi-ad-katlama-sonra.txt",
-      "sha256": "3ff5c02a58c438fbd0332bf4e483af70cbe5d93c2afe722f379928dd7a031d67",
+      "sha256": "a31791617af306292e419a753c30da262c7ce532d1a2768a45ee7601744f3498",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla/yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-24T10:37:54+03:00",
-      "sure_sn": 74.2,
+      "zaman": "2026-10-24T11:17:55+03:00",
+      "sure_sn": 932.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "143c1b79e59745239cd14e77b2bd8632"
+      "olcum_id": "ab9f8af5612641878f3caf3bd729790a"
     }
   ],
-  "imza": "fcae2b85482b24ee7d5fe44fcbeebfabe739be7924f93749835f977f9e871cf0"
+  "imza": "841881b6bab112dbe90caa3e51aebbe108f9f8f06df1f04bc135bd9adf5fb96d"
 }

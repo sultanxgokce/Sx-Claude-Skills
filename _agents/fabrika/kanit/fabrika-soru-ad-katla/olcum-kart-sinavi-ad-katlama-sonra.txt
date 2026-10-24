@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=74.2s zaman=2026-10-24T10:37:54+03:00
+# rc=0 sure=932.6s zaman=2026-10-24T11:17:55+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -292,6 +292,8 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla/yazilim-fabri
   ✓ S21b sorulan 'Serdar' yazımıyla da sorulabilir
   ✓ S21c 'Serdar' diye sorulan soruyu 'SERDAR' cevaplar (aynı kişi, yazım farkı)
   ✓ S21d ilk soru cevaplandı
+  ✓ S21f 🔴 sınıflı kartta 'sultan' (yazım farkı) = Sultan: soru açıldı
+  ✓ S21g sınıflı kartta SERDAR hâlâ reddedilir (katlama Sultan kuralını gevşetmedi)
   ✓ S21e ad katlama kartları kapandı, sonraki sınavlar için cevapsız soru kalmadı (rc 0)
 ── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──
   ✓ mutant (bitti engeli): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi
@@ -327,6 +329,6 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-fabrika-soru-ad-katla/yazilim-fabri
   ✓ M-OL6 tek-yer şartı gevşerse 'canlı, CI' geçer (OL15 düşerdi)
   ✓ M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)
 
-── SONUÇ: 293 geçti · 0 kaldı ──
+── SONUÇ: 295 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-fabrika-soru-ad-katla-kart-sinavi-ad-katlama 45 sn bekledi (yuva 2, load1 12.83)
+⚠ agir-sira: sıra dolu — 2 yuva 900 sn boşalmadı; YUK ALTINDA KOŞULUYOR (yuvasız, fail-open): kanit-fabrika-soru-ad-katla-kart-sinavi-ad-katlama
