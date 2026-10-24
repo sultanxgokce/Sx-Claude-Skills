@@ -1,0 +1,32 @@
+{
+  "is": "fabrika-kart-sinif-adimi",
+  "cumle": "Kart açılışında göreve yazılan adım kartın sınıf cevabını da taşısın (· sınıf: yok ya da sınıf listesi); merkezin otomatik doğrulama devri sınıfsız işi bundan okur",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-24T22:12:17+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JF57J0M4D7GX9V0JM5SW5W",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-24T22:12:18+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
