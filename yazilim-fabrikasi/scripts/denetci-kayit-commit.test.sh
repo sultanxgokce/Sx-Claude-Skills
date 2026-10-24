@@ -7,6 +7,7 @@
 # HERMETİK: gerçek denetçi çağrılmaz (DENETCI_KOMUT sahte betik); geçici birincil depo + iş adıyla aynı dalda worktree.
 # Mutantlar geçici kopyada; kontrol kopyası önce gerçek betikle aynı kapıları geçmeli (kopyada çöken sınav sahte yeşil vermesin).
 set -uo pipefail
+export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI
 # Karne bu sınavın konusu değil (denetci-karne.test.sh'ın): açık kalırsa birincile yazılan karne e kapısındaki `git add -A` ile
 # dala girer, sonra değişir ve `checkout main` reddedilir — göz #418 tur 1 bunu yakaladı (8 yutulan checkout hatası, 14/14 yeşil).

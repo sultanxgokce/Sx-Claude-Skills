@@ -1,0 +1,105 @@
+{
+  "is": "hezarfen-fabrika-agir-sira-sarma",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-24T08:54:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sarma-sinavi",
+      "asama": "once",
+      "dosya": "olcum-sarma-sinavi-once.txt",
+      "sha256": "5ec7711b34a59ec0771454ca07c470772720feb1b57c740fa8197c2e65e1564f",
+      "komut": [
+        "env",
+        "MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/eski-pkg",
+        "bash",
+        "yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh",
+        "--mutant-kos"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-24T08:51:21+03:00",
+      "sure_sn": 4.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "30747c44f20d4a73b8adee117a637e97"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sarma-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sarma-sinavi-sonra.txt",
+      "sha256": "dafdb8e997fbce486c40ac2bd3234fe201bcaa12498e4dc1cd9b16bc70b04240",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T08:54:06+03:00",
+      "sure_sn": 164.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7ad77c00a03943b28d2048644f026625"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sarma-sinavi-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-sarma-sinavi-mutant-sonra.txt",
+      "sha256": "d3ff7da8358f2be7e9dd39d58d07c627b083d5b67ee36ad8849773d9451e05ce",
+      "komut": [
+        "env",
+        "MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-pkg",
+        "bash",
+        "yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh",
+        "--mutant-kos"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-24T08:54:22+03:00",
+      "sure_sn": 15.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sarma-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "5237fd4481d244a0839c8218a0f7ae64"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-yuk-altinda",
+      "asama": "sonra",
+      "dosya": "olcum-canli-yuk-altinda-sonra.txt",
+      "sha256": "b2eb921c714cfaced4268f190ccf54a7a1b9ab0089cfd15fc26a144588e3a76f",
+      "komut": [
+        "bash",
+        "-c",
+        "echo CANLI-KOSU-TAMAM"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T08:32:24+03:00",
+      "sure_sn": 20.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "9f109461520d4567b05cfb6da2e4e46f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kutuk",
+      "asama": "sonra",
+      "dosya": "olcum-canli-kutuk-sonra.txt",
+      "sha256": "e4e949577b8d173cbf554f4b48e1b1c2990ba9d5e85079ebc3944ace25ea205c",
+      "komut": [
+        "grep",
+        "-P",
+        "kanit-hezarfen-fabrika-agir-sira-sarma-canli-yuk-altinda\\t(yuk-altinda-kosuldu|bitti)",
+        "/config/.filo/agir-sira/sira.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T08:46:33+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dcddd722aa044d57b98f869461dc6273"
+    }
+  ],
+  "imza": "00d341c85554ae4e7b138b5c62f24a050d4191f1691e5cbcc051a41ad2a8fc76"
+}

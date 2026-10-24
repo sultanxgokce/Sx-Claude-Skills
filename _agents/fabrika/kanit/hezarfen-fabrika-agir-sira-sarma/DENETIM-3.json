@@ -1,0 +1,40 @@
+{
+  "tur": 3,
+  "is": "hezarfen-fabrika-agir-sira-sarma",
+  "pr": "451",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T09:05:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-fabrika-agir-sira-sarma",
+  "dal": "hezarfen-fabrika-agir-sira-sarma",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24835,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 14578
+  },
+  "bas": "98579457764268dd7bde1e3311f4200aeb3ed355",
+  "duzeltme_farki": {
+    "onceki_bas": "bcfaeed4c017a16103b632af493142a97d47dc9c",
+    "dosya": 8,
+    "bayt": 17977,
+    "tam_bayt": 51650
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, denetci.sh ve kanit.sh ağır koşuları 900 saniyelik sert tavan, kapatma/yokluk geçişleri, fail-open uyarısı ve yuk-altinda-kosuldu kaydıyla istenen sıraya sarıyor. Önceki B1, aşırı uzun sayısal girdiyi karşılaştırmadan önce uzunluk kapısıyla 900'e kırpan düzeltme ve bunu doğrulayan D7/K9 ile kapanmış; gerçek ölçüm 30/30 geçtiği ve mutasyon sınavı bozuk kodu yakaladığı için üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önceki kırmızı ölçüm 8/18 başarısızlıktan gerçek kodun sonraki ölçümünde 30/30 başarıya dönen bir önce/sonra çifti sunuyor; K1-K9 ve D1-D7 sarma, 900 saniye tavanı, sıfır/sayı dışı/aşırı büyük girdiler, devre dışı bırakma ve sıra betiği yokluğu davranışlarını sınamış. G1/G2 ile ayrıca canlı yük-altı koşusu ve gerçek kütük satırları fail-open uyarısını ve yuk-altinda-kosuldu kaydını doğruluyor. Mutasyon kaydındaki 11 geçti/7 kaldı sonucu beklenen başarısızlıktır ve gercek_olcum=sarma-sinavi kaydındaki gerçek kod sonucunu geçersiz kılmaz."
+  }
+}

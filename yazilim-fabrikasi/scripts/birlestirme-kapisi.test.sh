@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # birlestirme-kapisi.test.sh — kapının GERÇEKTEN kapı olduğunu ölçer + mutasyon.
 set -uo pipefail
+export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 G="$HERE/birlestirme-kapisi.sh"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
 gecen=0; kalan=0

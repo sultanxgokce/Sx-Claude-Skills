@@ -36,6 +36,23 @@ TUZ = "yazilim-fabrikasi-kanit-2026"  # imza tuzu: elle yazımı yakalar; kripto
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
+def sira_komutu(komut, etiket):
+    """Ağır ölçüm komutunu kod kutusunun ortak sırasına (agir-sira.sh) sarar (SERDAR 24 Eki, 489VP8 (a)): en çok 15 dk yuva/yük bekler, dolarsa UYARIYLA
+    koşar ve sıra kütüğüne 'yuk-altinda-kosuldu' yazar (fail-open). Sıra betiği yoksa (başka kutu) ya da KANIT_SIRA=0 ise komut aynen döner.
+    Bekleme/uyarı satırları komutun stderr'ine düşer → kanıt dosyasında görünür."""
+    betik = os.environ.get("AGIR_SIRA_BETIK") or "/config/projects/Nexus/scripts/agir-sira.sh"
+    if os.environ.get("KANIT_SIRA", "1") == "0" or not os.path.isfile(betik):
+        return komut, {}
+    # göz tur 1: "en çok 15 dk" sert tavandır — ortamdaki değer 900'ü aşamaz, sayı değilse 900
+    ham = os.environ.get("AGIR_SIRA_BEKLE", "900")
+    bekle = int(ham) if ham.isdigit() and int(ham) > 0 else 900
+    if bekle > 900 or not (ham.isdigit() and int(ham) > 0):
+        print(f"⚠ AGIR_SIRA_BEKLE={ham} → 900 sn (en çok 15 dk bekle; sonra uyarıyla koş)", file=sys.stderr)
+        bekle = min(bekle, 900)
+    env = {"AGIR_SIRA_ZAMAN_ASIMI": "kos", "AGIR_SIRA_BEKLE": str(bekle)}
+    return ["bash", betik, etiket, "--", *komut], env
+
+
 def hata(m, rc=1):
     print(f"✗ {m}", file=sys.stderr); sys.exit(rc)
 
@@ -344,7 +361,8 @@ def cmd_olcum(a):
     ad = f"olcum-{a.etiket}-{a.asama}.txt"
     yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
-    p = subprocess.run(a.komut, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
+    sarili, sira_env = sira_komutu(a.komut, f"kanit-{a.is_adi}-{a.etiket}")
+    p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
     with open(yol, "w", encoding="utf-8") as f:
         if mut:
