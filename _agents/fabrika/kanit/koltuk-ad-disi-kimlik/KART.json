@@ -1,0 +1,25 @@
+{
+  "is": "koltuk-ad-disi-kimlik",
+  "cumle": "terminal-onar 2.24.0: kapı her oturuma addan türemeyen bir 'kimlik' verir (kutuya özel gizli tuzla sha256, 'k'+16 onaltılık) ve ekran adresini bu kimlikle kurar; koltuk-bagla.sh bu kimlikle aynı oturuma bağlanır, bilinmeyen kimlik reddedilir, adla bağlanma çalışmaya devam eder (P4GT2W: vekatip Kadro 'Aç' adresinde müvekkil adı)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-24T12:50:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "terminal-onar sınavları + kimlik sınavı + mutantlar",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "gorev": "gorev_01M5NWBY2DYJT0GCP75NP4GT2W",
+  "tahmin_dk": 120
+}
