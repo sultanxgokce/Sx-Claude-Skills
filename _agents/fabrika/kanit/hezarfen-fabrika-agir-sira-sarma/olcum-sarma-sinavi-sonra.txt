@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh
-# rc=0 sure=143.1s zaman=2026-10-24T08:31:48+03:00
+# rc=0 sure=164.7s zaman=2026-10-24T08:54:06+03:00
 --- stdout ---
 ════ K · kanit.sh olcum ════
   ✓ K1 ölçüm komutu sıradan geçer: etiket kanit-<iş>-<etiket> · kos kipi · bekle 900 sn (15 dk)
@@ -17,6 +17,8 @@ $ bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh
   ✓ D4 sınav kancası (DENETCI_KOMUT) sırayı HİÇ görmez
   ✓ D5 sıra betiği yoksa denetim sarmasız yine yürür (rc 0)
   ✓ D6 AGIR_SIRA_BEKLE=5000 → 900'e kırpılır (en çok 15 dk SERT tavan)
+  ✓ D7 kabuk tamsayı aralığını aşan AGIR_SIRA_BEKLE de 900'e kırpılır (taşma tavanı atlatmaz)
+  ✓ K9 aynı taşma değeri kanit.sh'te de 900'e kırpılır
 ════ G · GERÇEK sıra betiği (kütük): yük altında koşulunca 'yuk-altinda-kosuldu' satırı ════
   ✓ G1 kanit.sh olcum: yük aşılınca komut koşar (42) ve kütükte yuk-altinda-kosuldu satırı var
   ✓ G2 denetci.sh: yük aşılınca denetim yine koşar (rc 0) ve kütükte yuk-altinda-kosuldu satırı var
@@ -31,7 +33,8 @@ $ bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh
   ✓ M9 kanit 900 tavanını kırpmazsa K7 kırmızı (15 dk sert tavan değil)
   ✓ M10 denetci 900 tavanını kırpmazsa D6 kırmızı
   ✓ M11 kanit sıfır/sayı olmayan beklemede 900'e dönmezse K8 kırmızı
+  ✓ M12 denetci uzunluk kapısı kalkarsa D7 kırmızı (taşma tavanı atlatır)
   ✓ M8 denetci DENETCI_SIRA=0 kapısı kalkarsa D3 kırmızı
 
-── SONUÇ: 27 geçti · 0 kaldı ──
+── SONUÇ: 30 geçti · 0 kaldı ──
 --- stderr ---

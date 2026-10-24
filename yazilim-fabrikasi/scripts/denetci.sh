@@ -106,7 +106,7 @@ SIRA_BETIK="${AGIR_SIRA_BETIK:-/config/projects/Nexus/scripts/agir-sira.sh}"
 #   "En çok 15 dk" sert tavandır (göz tur 1): AGIR_SIRA_BEKLE 900'ü aşamaz, sayı değilse 900.
 SIRA_BEKLE="${AGIR_SIRA_BEKLE:-900}"
 case "$SIRA_BEKLE" in ''|*[!0-9]*|0) printf '⚠ AGIR_SIRA_BEKLE=%s geçersiz → 900 sn\n' "$SIRA_BEKLE" >&2; SIRA_BEKLE=900 ;; esac
-[ "$SIRA_BEKLE" -gt 900 ] && { printf '⚠ AGIR_SIRA_BEKLE=%s → 900 sn (en çok 15 dk bekle)\n' "$SIRA_BEKLE" >&2; SIRA_BEKLE=900; }
+[ "${#SIRA_BEKLE}" -gt 4 ] || [ "$SIRA_BEKLE" -gt 900 ] && { printf '⚠ AGIR_SIRA_BEKLE=%s → 900 sn (en çok 15 dk bekle)\n' "$SIRA_BEKLE" >&2; SIRA_BEKLE=900; }
 _sinirli() {
   local b=$SECONDS r
   if [ "${DENETCI_SIRA:-1}" != 0 ] && [ -z "${DENETCI_KOMUT:-}" ] && [ -f "$SIRA_BETIK" ]; then

@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sarma-sinavi-* ===
 $ env MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-pkg bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh --mutant-kos
-# rc=1 sure=15.3s zaman=2026-10-24T08:32:04+03:00
+# rc=1 sure=15.9s zaman=2026-10-24T08:54:21+03:00
 --- stdout ---
 ════ K · kanit.sh olcum ════
   ✓ K1 ölçüm komutu sıradan geçer: etiket kanit-<iş>-<etiket> · kos kipi · bekle 900 sn (15 dk)
@@ -18,14 +18,16 @@ $ env MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c
   ✓ D4 sınav kancası (DENETCI_KOMUT) sırayı HİÇ görmez
   ✓ D5 sıra betiği yoksa denetim sarmasız yine yürür (rc 0)
   ✗ D6 AGIR_SIRA_BEKLE=5000 → 900'e kırpılır (en çok 15 dk SERT tavan) → denetci-is-d6|ertele|5000|bash
+  ✗ D7 kabuk tamsayı aralığını aşan AGIR_SIRA_BEKLE de 900'e kırpılır (taşma tavanı atlatmaz) → denetci-is-d7|ertele|99999999999999999999999999|bash
+  ✗ K9 aynı taşma değeri kanit.sh'te de 900'e kırpılır → kanit-is-k9-olc|kos|99999999999999999999999999|true
 ════ G · GERÇEK sıra betiği (kütük): yük altında koşulunca 'yuk-altinda-kosuldu' satırı ════
   ✓ G1 kanit.sh olcum: yük aşılınca komut koşar (42) ve kütükte yuk-altinda-kosuldu satırı var
-  ✗ G2 denetci.sh: yük aşılınca denetim yine koşar (rc 0) ve kütükte yuk-altinda-kosuldu satırı var → rc=3 2026-10-24T08:31:57+03:00	kanit-is-g1-olc	yuk-altinda-kosuldu	2	1	99	-
-2026-10-24T08:31:57+03:00	kanit-is-g1-olc	bitti	2	1	99	0
-2026-10-24T08:32:00+03:00	denetci-is-g2	ertelendi	2	1	99	75
-2026-10-24T08:32:02+03:00	denetci-is-g2	ertelendi	2	1	99	75
-2026-10-24T08:32:04+03:00	denetci-is-g2	ertelendi	2	1	99	75
+  ✗ G2 denetci.sh: yük aşılınca denetim yine koşar (rc 0) ve kütükte yuk-altinda-kosuldu satırı var → rc=3 2026-10-24T08:54:15+03:00	kanit-is-g1-olc	yuk-altinda-kosuldu	2	1	99	-
+2026-10-24T08:54:15+03:00	kanit-is-g1-olc	bitti	2	1	99	0
+2026-10-24T08:54:17+03:00	denetci-is-g2	ertelendi	2	1	99	75
+2026-10-24T08:54:19+03:00	denetci-is-g2	ertelendi	2	1	99	75
+2026-10-24T08:54:21+03:00	denetci-is-g2	ertelendi	2	1	99	75
 ════ MUTASYON (kopya; her mutant bir kapıyı kırmızı yapmalı) ════
 
-── SONUÇ: 11 geçti · 5 kaldı ──
+── SONUÇ: 11 geçti · 7 kaldı ──
 --- stderr ---

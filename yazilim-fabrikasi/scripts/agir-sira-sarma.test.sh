@@ -68,6 +68,12 @@ bash "$K" olcum is-d5 olc --asama tek -- true >/dev/null 2>&1
 bash "$K" olcum is-d6 olc --asama tek -- true >/dev/null 2>&1
 : > "$SIRA_LOG"; SAHTE_JSON="$J" AGIR_SIRA_BEKLE=5000 bash "$D" is-d6 --diff "$T/d.patch" >/dev/null 2>&1
 grep -q '^denetci-is-d6|kos|900|' "$SIRA_LOG"; g $? "D6 AGIR_SIRA_BEKLE=5000 → 900'e kırpılır (en çok 15 dk SERT tavan)" "→ $(cat "$SIRA_LOG")"
+bash "$K" olcum is-d7 olc --asama tek -- true >/dev/null 2>&1
+: > "$SIRA_LOG"; SAHTE_JSON="$J" AGIR_SIRA_BEKLE=99999999999999999999999999 bash "$D" is-d7 --diff "$T/d.patch" >/dev/null 2>&1
+grep -q '^denetci-is-d7|kos|900|' "$SIRA_LOG"; g $? "D7 kabuk tamsayı aralığını aşan AGIR_SIRA_BEKLE de 900'e kırpılır (taşma tavanı atlatmaz)" "→ $(cat "$SIRA_LOG")"
+bash "$K" olcum is-k9 olc --asama tek -- true >/dev/null 2>&1
+: > "$SIRA_LOG"; AGIR_SIRA_BEKLE=99999999999999999999999999 bash "$K" olcum is-k9 olc --asama tek -- true >/dev/null 2>&1
+grep -q '|kos|900|' "$SIRA_LOG"; g $? "K9 aynı taşma değeri kanit.sh'te de 900'e kırpılır" "→ $(cat "$SIRA_LOG")"
 
 echo "════ G · GERÇEK sıra betiği (kütük): yük altında koşulunca 'yuk-altinda-kosuldu' satırı ════"
 GERCEK=/config/projects/Nexus/scripts/agir-sira.sh
@@ -104,6 +110,7 @@ if [ "${1:-}" != "--mutant-kos" ]; then
   mut M9 kanit.py '        bekle = min(bekle, 900)' '        bekle = bekle' K7 "kanit 900 tavanını kırpmazsa K7 kırmızı (15 dk sert tavan değil)"
   mut M10 denetci.sh '[ "$SIRA_BEKLE" -gt 900 ] &&' 'false &&' D6 "denetci 900 tavanını kırpmazsa D6 kırmızı"
   mut M11 kanit.py 'ham.isdigit() and int(ham) > 0 else 900' 'ham.isdigit() else 900' K8 "kanit sıfır/sayı olmayan beklemede 900'e dönmezse K8 kırmızı"
+  mut M12 denetci.sh '[ "${#SIRA_BEKLE}" -gt 4 ] || ' '' D7 "denetci uzunluk kapısı kalkarsa D7 kırmızı (taşma tavanı atlatır)"
   mut M8 denetci.sh '"${DENETCI_SIRA:-1}" != 0 ] && [ -z' '"x" != 0 ] && [ -z' D3 "denetci DENETCI_SIRA=0 kapısı kalkarsa D3 kırmızı"
 fi
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

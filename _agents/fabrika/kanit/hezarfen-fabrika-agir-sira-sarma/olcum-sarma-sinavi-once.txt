@@ -1,5 +1,5 @@
 $ env MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/eski-pkg bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh --mutant-kos
-# rc=1 sure=3.4s zaman=2026-10-24T08:29:25+03:00
+# rc=1 sure=4.6s zaman=2026-10-24T08:51:21+03:00
 --- stdout ---
 ════ K · kanit.sh olcum ════
   ✗ K1 ölçüm komutu sıradan geçer: etiket kanit-<iş>-<etiket> · kos kipi · bekle 900 sn (15 dk) →  ✓ ölçüm kaydedildi: olcum-olc-tek.txt rc=0 renk=yesil
@@ -18,12 +18,14 @@ $ env MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c
   ✓ D4 sınav kancası (DENETCI_KOMUT) sırayı HİÇ görmez
   ✓ D5 sıra betiği yoksa denetim sarmasız yine yürür (rc 0)
   ✗ D6 AGIR_SIRA_BEKLE=5000 → 900'e kırpılır (en çok 15 dk SERT tavan) → 
+  ✗ D7 kabuk tamsayı aralığını aşan AGIR_SIRA_BEKLE de 900'e kırpılır (taşma tavanı atlatmaz) → 
+  ✗ K9 aynı taşma değeri kanit.sh'te de 900'e kırpılır → 
 ════ G · GERÇEK sıra betiği (kütük): yük altında koşulunca 'yuk-altinda-kosuldu' satırı ════
   ✗ G1 kanit.sh olcum: yük aşılınca komut koşar (42) ve kütükte yuk-altinda-kosuldu satırı var → rc=0 
   ✗ G2 denetci.sh: yük aşılınca denetim yine koşar (rc 0) ve kütükte yuk-altinda-kosuldu satırı var → rc=0 
 ════ MUTASYON (kopya; her mutant bir kapıyı kırmızı yapmalı) ════
 
-── SONUÇ: 8 geçti · 8 kaldı ──
+── SONUÇ: 8 geçti · 10 kaldı ──
 --- stderr ---
-grep: /tmp/tmp.fAzJTpvnJS/gercek-sira/sira.log: No such file or directory
-grep: /tmp/tmp.fAzJTpvnJS/gercek-sira/sira.log: No such file or directory
+grep: /tmp/tmp.9kxR8kzR7A/gercek-sira/sira.log: No such file or directory
+grep: /tmp/tmp.9kxR8kzR7A/gercek-sira/sira.log: No such file or directory
