@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki-agac/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=1 sure=931.7s zaman=2026-10-24T11:02:22+03:00
+# rc=1 sure=43.0s zaman=2026-10-24T12:26:03+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -294,6 +294,8 @@ $ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934
   ✓ S21d ilk soru cevaplandı
   ✗ S21f 🔴 sınıflı kartta 'sultan' (yazım farkı) = Sultan: soru açıldı
   ✓ S21g sınıflı kartta SERDAR hâlâ reddedilir (katlama Sultan kuralını gevşetmedi)
+  ✗ S22 🔴 acik-soru '*': kimliği çözülemeyen oturum için HERKESİN cevapsız sorusu görülür (rc 3)
+  ✗ S22b '*' ss-2'deki cevapsız soruyu hâlâ görüyor (rc 3 — başka kartın sorusu)
   ✓ S21e ad katlama kartları kapandı, sonraki sınavlar için cevapsız soru kalmadı (rc 0)
 ── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──
   ✓ mutant (bitti engeli): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi
@@ -332,9 +334,9 @@ $ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934
   ✓ M-OL6 tek-yer şartı gevşerse 'canlı, CI' geçer (OL15 düşerdi)
   ✓ M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)
 
-── SONUÇ: 286 geçti · 12 kaldı ──
+── SONUÇ: 286 geçti · 14 kaldı ──
 --- stderr ---
-⚠ agir-sira: sıra dolu — 2 yuva 900 sn boşalmadı; YUK ALTINDA KOŞULUYOR (yuvasız, fail-open): kanit-fabrika-soru-ad-katla-kart-sinavi-ad-katlama
+⏳ agir-sira: kanit-fabrika-soru-ad-katla-kart-sinavi-ad-katlama 15 sn bekledi (yuva 2, load1 10.53)
 Traceback (most recent call last):
   File "<stdin>", line 5, in <module>
   File "<stdin>", line 3, in deg
