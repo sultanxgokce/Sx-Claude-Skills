@@ -1,0 +1,35 @@
+{
+  "tur": 2,
+  "is": "koltuk-ad-disi-kimlik",
+  "pr": "453",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T15:35:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik",
+  "dal": "koltuk-ad-disi-kimlik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 73996,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, kapı ekran adreslerini kutuya özel gizli tuzdan üretilen ad dışı kimlikle kuruyor; bağlayıcı kimliği aynı oturuma çözüyor, bilinmeyeni reddediyor ve adla bağlanmayı koruyor. Önceki turun iki uygulama bulgusu da kapanmış, hedef davranış gerçek ölçümler ve dokuz mutantla sınanmış; üretimi engelleyen bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önceki B1 kapanmış: sunucu.mjs içindeki ekranAdresi artık tuz kullanılamadığında kimlik ve ekranı null bırakıyor; KD8 bunu hem /api/kadro hem /api/koltuklar yüzünde ölçüyor, adla geri düşüş mutantı da yakalanıyor. Önceki B2 kapanmış: iki uygulama mevcut tuzun sahipliğini, biçimini ve kipini denetliyor; G1-G4 ölçümleri gevşek kipi düzeltme ile bozuk/dizin tuzu reddini iki dilde doğruluyor, kip ve biçim denetimsiz mutantlar yakalanıyor. Koltuk-bağla önce/sonra çifti 86/92’den 92/92’ye çıkmış; kimlik eşdeğerliği 32/32, kapı 112/112 ve regresyon takımı yeşil. Mutasyon kaydındaki rc=1 beklenen başarıdır: temiz pozitif kontrol geçerken dokuz bilinçli bozukluk sınavlarca yakalanmıştır. Tarayıcıdaki dört kırmızı sonuç dal ve tabanda birebir aynı olduğundan bu değişikliğin regresyonu değildir."
+  }
+}

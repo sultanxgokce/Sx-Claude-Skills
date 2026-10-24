@@ -9,6 +9,13 @@
  * Her iddianın ATEŞLEYEN ve ATEŞLEMEYEN yüzü birlikte ölçülür (SEDİR/MEDDAH kuralı).
  */
 import { spawn } from 'node:child_process';
+// 2.24.0: kapı ad dışı kimlik için tuz okur/yaratır → sınav GERÇEK $HOME'a dokunmasın (tuz geçici yolda)
+import { mkdtempSync as _mkt } from 'node:fs'; import { tmpdir as _tmp } from 'node:os';
+process.env.KOLTUK_TUZ = _mkt(_tmp() + '/kapi-tuz-') + '/tuz';
+import { koltukKimlik as _kk, KOLTUK_KIMLIK_DESEN as _KD } from './koltuk-kimlik.mjs';
+// beklenen ekran adresi: ad DEĞİL kimlik (aynı tuz) · ADI TAŞIMADIĞI ayrıca ölçülür (adr)
+const ekr = (ad) => '/sedir/tty/?arg=' + _kk(ad);
+const adr = (o, ad) => !!o && o.ekran === ekr(ad) && _KD.test(o.kimlik || '') && o.kimlik === _kk(ad) && !o.ekran.includes(encodeURIComponent(ad)) && !o.ekran.includes(ad);
 import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
@@ -172,7 +179,7 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   kapi('Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)', !JSON.stringify(j).includes('kotu'));
   const b = j.koltuklar?.find((k) => k.ad === 'BASIRET') || {};
   kapi('Y4 Claude işareti ve son etkinlik taşınır', b.claude === true && b.son === 1760000100, `→ ${JSON.stringify(b)}`);
-  kapi('Y5 ekran adresi TABANLI ve ?arg= ile (ttyd -a sözleşmesi)', b.ekran === '/sedir/tty/?arg=BASIRET', `→ ${b.ekran}`);
+  kapi('Y5 ekran adresi TABANLI ve ?arg= ile, ad değil AD DIŞI kimlik taşır (2.24.0 · P4GT2W)', adr(b, 'BASIRET'), `→ ${b.ekran}`);
   kapi('Y6 ana koltuk işaretli', j.koltuklar?.[0]?.ana === true && b.ana === false && j.ana === 'sinavkutu-ana');
   const kbk = j.koltuklar?.find((k) => k.ad === 'sinavkutu-kabuk') || {};
   kapi('Y6b el kabuğu işaretli (yalnız <kutu>-kabuk; ana ve ajan değil)', kbk.kabuk === true && b.kabuk === false && j.koltuklar?.[0]?.kabuk === false && j.kabuk === 'sinavkutu-kabuk', `→ ${JSON.stringify(kbk)}`);
@@ -498,7 +505,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const j = await (await iste(18787, '/sedir/api/koltuklar', { cerez })).json();
   const k = (j.koltuklar || []).find((x) => x.ad === '2026/85');
   kapi('SL1 "/" içeren koltuk listede (eski süzgeç düşürüyordu)', !!k, `→ ${(j.koltuklar || []).map((x) => x.ad).join(',')}`);
-  kapi('SL2 ekran adresi encodeURIComponent ile (?arg=2026%2F85)', !!k && k.ekran === '/sedir/tty/?arg=2026%2F85', `→ ${k && k.ekran}`);
+  kapi('SL2 ekran adresi "2026/85" adını (kodlu da) TAŞIMAZ, kimlik taşır', adr(k, '2026/85'), `→ ${k && k.ekran}`);
   const r = await iste(18787, '/sedir/api/koltuk/2026%2F85', { cerez }); const jr = await r.json();
   kapi('SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider', r.status === 200 && jr.ad === '2026/85' && readFileSync(DEF2, 'utf8').trim() === 'durum 2026/85', `→ ${r.status} ${JSON.stringify(jr)}`);
   const r2 = await iste(18787, '/sedir/api/koltuk/a%20b', { cerez });
@@ -532,11 +539,21 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const r = await iste(18791, '/sedir/api/kadro', { cerez }); const j = await r.json();
   const K = (id) => (j.kisiler || []).find((x) => x.id === id);
   kapi('KD1 200 + kaynak aile kaydı + sayılar', r.status === 200 && j.kaynak.length === 1 && j.kaynak[0].endsWith('aile-registry.yaml') && JSON.stringify(j.sayilar) === JSON.stringify({ calisan: 1, dusen: 1, 'kayitta-var-calismiyor': 0, 'gecici-emekli': 1, kayitsiz: 1, altyapi: 1 }), `→ ${r.status} ${JSON.stringify(j.sayilar)} ${JSON.stringify(j.kaynak)}`);
-  kapi('KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi', K('BASIRET').grup === 'calisan' && K('BASIRET').oturum.hal === 'dis-olay' && K('BASIRET').oturum.ne === 'CI bekleniyor' && K('BASIRET').oturum.ekran === '/sedir/tty/?arg=BASIRET', JSON.stringify(K('BASIRET')));
-  kapi('KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk boş kabuk olsa da DÜŞEN değil, altyapı (E2: "ana oturum")', K('KALFA').grup === 'dusen' && !j.kisiler.some((x) => x.tmux === 'sinavkutu-ana') && j.altyapi.length === 1 && j.altyapi[0].ana && j.altyapi[0].altyapi === 'ana oturum' && j.altyapi[0].ekran === '/sedir/tty/?arg=sinavkutu-ana', JSON.stringify(j.altyapi));
-  kapi('KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" kodlu ekran adresiyle', K('MIMAR').grup === 'gecici-emekli' && j.kayitsiz.length === 1 && j.kayitsiz[0].ekran === '/sedir/tty/?arg=2026%2F85', JSON.stringify(j.kayitsiz));
+  kapi('KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi', K('BASIRET').grup === 'calisan' && K('BASIRET').oturum.hal === 'dis-olay' && K('BASIRET').oturum.ne === 'CI bekleniyor' && adr(K('BASIRET').oturum, 'BASIRET'), JSON.stringify(K('BASIRET')));
+  kapi('KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk boş kabuk olsa da DÜŞEN değil, altyapı (E2: "ana oturum")', K('KALFA').grup === 'dusen' && !j.kisiler.some((x) => x.tmux === 'sinavkutu-ana') && j.altyapi.length === 1 && j.altyapi[0].ana && j.altyapi[0].altyapi === 'ana oturum' && adr(j.altyapi[0], 'sinavkutu-ana'), JSON.stringify(j.altyapi));
+  kapi('KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" ekran adresi adı değil kimliği taşır', K('MIMAR').grup === 'gecici-emekli' && j.kayitsiz.length === 1 && adr(j.kayitsiz[0], '2026/85'), JSON.stringify(j.kayitsiz));
   kapi('KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)', j.proje === PROJE);
   p8.kill();
+  // KD8 (2.24.0 · göz tur 1): tuz KULLANILAMAZSA (yaratılamaz dizin) kimlik null VE ekran null — adres adla KURULMAZ
+  const p8b = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KOLTUK_TUZ: join(T, 'yok-dizin', 'tuz'), KAPI_PORT: '18798', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: PROJE,
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18798/sedir/giris')).status === 200) break; } catch {} }
+  const c8b = await giris(18798, '/sedir'); const j8b = await (await iste(18798, '/sedir/api/kadro', { cerez: c8b })).json();
+  const hepsi8b = [...(j8b.kisiler || []).map((x) => x.oturum).filter(Boolean), ...(j8b.kayitsiz || []), ...(j8b.altyapi || [])];
+  const kl8b = await (await iste(18798, '/sedir/api/koltuklar', { cerez: c8b })).json();
+  kapi('KD8 tuz kullanılamazsa kimlik VE ekran null (adres adla kurulmaz) — kadro ve koltuklar ucu', hepsi8b.length > 0 && hepsi8b.every((o) => o.kimlik === null && o.ekran === null)
+    && (kl8b.koltuklar || []).length > 0 && kl8b.koltuklar.every((o) => o.kimlik === null && o.ekran === null) && !JSON.stringify(j8b).includes('?arg='), JSON.stringify(j8b.kayitsiz));
+  p8b.kill();
   const p9 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18793', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: join(T, 'yok-proje'),
     KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_BOZUK }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18793/sedir/giris')).status === 200) break; } catch {} }

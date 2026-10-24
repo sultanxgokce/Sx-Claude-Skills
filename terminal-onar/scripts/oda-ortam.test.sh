@@ -4,6 +4,7 @@
 # Hermetik: geçici dizin, sahte koltuk listesi; gerçek tmux'a, gerçek kayda, canlı kapıya dokunmaz. + 3 mutant (kopya üstünde).
 # kabuk-testleri: sure=120
 set -uo pipefail
+export KOLTUK_TUZ="$(mktemp -d)/tuz"   # 2.24.0: kimlik tuzu geçici yolda (gerçek $HOME'a dokunulmaz)
 D="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; KOK="$(dirname "$D")"
 G=0; K=0; ok(){ G=$((G+1)); echo "  ✓ $1"; }; kirmizi(){ K=$((K+1)); echo "  ✗ $1"; }
 esit(){ [ "$1" = "$2" ] && ok "$3" || kirmizi "$3 :: '$1' ≠ '$2'"; }

@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "koltuk-ad-disi-kimlik",
+  "pr": "453",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T13:49:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik",
+  "dal": "koltuk-ad-disi-kimlik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64507,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultan’ım, ad dışı kimlik üretimi, iki dil eşdeğerliği, kimlikle bağlanma, bilinmeyen kimliği reddetme ve adla geriye uyumluluk güçlü sınavlarla kurulmuş. Ancak mahremiyet özelliği tuz sorunu yaşandığında adı yeniden ekran adresine koyarak açıkça fail-open çalışıyor; bu, “her oturuma kimlik verir ve ekran adresini bu kimlikle kurar” talebinin kritik istisnası olduğundan önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Tuz okunamaz veya yaratılamazsa ekran adresi kimlik yerine doğrudan oturum adıyla kuruluyor; mahremiyeti sağlamak için gelen değişiklik hata anında tam olarak önlemek istediği veri sızıntısına geri dönüyor.",
+        "kanit": "İş kartı kapının her oturuma kimlik vermesini ve ekran adresini bu kimlikle kurmasını istiyor. Buna karşılık ekranAdresi, koltukKimlik(ad) null döndüğünde encodeURIComponent(kimlik || ad) kullanıyor; kimlik sınavındaki T5 de tuz yaratılamadığında null sonucunu doğruluyor. /api/koltuklar bütün kayıtları doğrudan ekranAdresi ile döndürüyor; burada merkez için anlatılan kimliksiz kayda adres vermeme koruması uygulanmıyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:54 ve terminal-onar/kapi/sunucu.mjs:464; olcum-kimlik-esdegerlik-sinavi-sonra.txt T5",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Var olan tuz dosyasının gizli olma koşulu uygulanmıyor; dosya doluysa kipini denetlemeden kabul ediliyor.",
+        "kanit": "koltukTuz ilk başarılı okumada içeriği doğrudan döndürüyor, koltuk_tuz da yalnız -s denetimi yapıyor. E0/T2 ölçümleri sadece yeni yaratılan dosyanın 600 olduğunu kanıtlıyor; önceden var olan 0644 tuzu reddeden veya düzelten bir ölçüm yok.",
+        "konum": "terminal-onar/kapi/koltuk-kimlik.mjs:11-13; terminal-onar/scripts/koltuk-adi.sh:27-33; olcum-kimlik-esdegerlik-sinavi-sonra.txt E0 ve T2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra koltuk-bağla çifti 86/92’den 92/92’ye ilerlemeyi, kimlik eşdeğerlik ölçümü 25/25’i, kapı ölçümü 111/111’i ve regresyon takımı yeşil sonucu gösteriyor; mutasyon kaydı da sekiz bozuk varyantın beklendiği gibi yakalandığını kanıtlıyor. Buna rağmen sınavlar tuz yokluğunda null üretimini ölçerken ekran adresinin adla fail-open olmasını hedefe aykırı saymıyor; mevcut gevşek kipli tuz vakası da ölçülmemiş."
+  }
+}

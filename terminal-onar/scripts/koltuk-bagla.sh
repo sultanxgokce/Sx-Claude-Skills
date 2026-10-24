@@ -297,6 +297,22 @@ if [ -z "$ISTEK" ]; then
   #    öteki koltuklar gibi beyaz listeden geçer (bağımsız göz, tur 1: açık ad listeyi deliyordu).
   exec tmux new-session -A -s "$ANA" -c "$PROJE"
 fi
+# ── AD DIŞI KİMLİK (2.24.0 · P4GT2W): adres 'k'+16 onaltılık taşıyorsa ve bu ADDA bir koltuk yoksa kimlik çözülür:
+#    görünür koltuklardan kimliği tutan TEK koltuğa bağlanılır. Tutmazsa red — ama koltuk ADLARI BASILMAZ (adres mahrem
+#    kutudan geldi; red ekranı da Sultan'ın ekranıdır). Çözülen ad aşağıdaki kapılardan (süzgeç · gizli · beyaz liste) AYNEN geçer.
+if [[ "$ISTEK" =~ $KOLTUK_KIMLIK_DESEN ]]; then
+  KLISTE="$(koltuklar)" || red "Koltuklar ölçülemedi (tmux listesi alınamadı) — bağlanmıyorum."
+  if ! grep -qxF -- "$ISTEK" <<< "$KLISTE"; then
+    BUL=""
+    while IFS= read -r k; do
+      [ -n "$k" ] || continue
+      kk="$(koltuk_kimlik "$k")" || { printf '\r\n  \033[1;31m⛔ %s\033[0m\r\n\r\n' "Koltuk kimliği hesaplanamadı (tuz yok) — bağlanmıyorum."; exit 3; }
+      [ "$kk" = "$ISTEK" ] && { BUL="$k"; break; }
+    done <<< "$KLISTE"
+    [ -n "$BUL" ] || { printf '\r\n  \033[1;31m⛔ %s\033[0m\r\n\r\n' "Bu kimlikte bir koltuk yok (kapanmış olabilir) — listeyi yenileyip yeniden dene."; exit 3; }
+    ISTEK="$BUL"
+  fi
+fi
 gecerli_ad "$ISTEK" || red "Geçersiz koltuk adı."
 gizli "$ISTEK" && red "Bu oturum bir koltuk değil (altyapı)."
 # 🔴 Liste ÖNCE alınır: `koltuklar | grep -q` biçiminde grep erken çıkınca üretici SIGPIPE alır ve

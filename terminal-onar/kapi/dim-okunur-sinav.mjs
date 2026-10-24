@@ -67,6 +67,8 @@ async function kapiAc(port, ek = {}) {
 const P1 = 18797, P2 = 18798;
 // 🔴 BAYAT KAPI PORTU + ÇIKIŞ TEMİZLİĞİ (#347 deseni; ölçüldü 16 Eki: launch'ta çöken bir koşum kapılarını bıraktı, sonraki koşum 'kapı açılmadı').
 import net from 'node:net';
+// 2.24.0: kapı ad dışı kimlik için tuz yaratır → sınav GERÇEK $HOME'a dokunmasın
+process.env.KOLTUK_TUZ ||= (await import('node:fs')).mkdtempSync((await import('node:os')).tmpdir() + '/kapi-tuz-') + '/tuz';
 const portDolu = (port) => new Promise((r) => { const c = net.connect({ port, host: '127.0.0.1' }); const bitir = (v) => { try { c.destroy(); } catch {} r(v); };
   c.once('connect', () => bitir(true)); c.once('error', () => bitir(false)); setTimeout(() => bitir(false), 1500); });
 // 🔴 Çıkış kancası PORT KONTROLÜNDEN ÖNCE kayıtlı olmalı (tur 1 ölçümü: rc-4 çıkışı kancadan önce geliyordu, ttyd kalıyordu)

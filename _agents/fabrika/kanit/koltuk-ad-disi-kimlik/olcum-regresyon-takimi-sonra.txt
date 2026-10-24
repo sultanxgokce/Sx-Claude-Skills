@@ -1,0 +1,19 @@
+$ bash -c r=0; cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar; for t in kapi/koltuk-fark.test.sh scripts/oda-ortam.test.sh scripts/kabuk-sekmesi.test.sh scripts/koltuk-adi.test.sh scripts/kutu-red.test.sh scripts/koltuk-ac.test.sh; do o=$(timeout 600 bash $t < /dev/null 2>&1); c=$?; o=$(tail -1 <<< "$o"); echo "$t rc=$c · $o"; [ $c -eq 0 ] || r=1; done; for t in rapor dava kadro-hal kimlik kadro kadro-yaz; do (cd kapi && timeout 300 node $t.test.mjs < /dev/null > /dev/null 2>&1); c=$?; echo "kapi/$t.test.mjs rc=$c"; [ $c -eq 0 ] || r=1; done; (cd kapi && timeout 300 node tarayici-sinav.mjs < /dev/null 2>&1 | tail -1); c=${PIPESTATUS[0]}; echo "kapi/tarayici-sinav.mjs rc=$c"; [ $c -eq 0 ] || r=1; if [ -e $HOME/.koltuk-tuz ]; then echo "✗ sınavlar gerçek $HOME'a tuz yazdı"; r=1; else echo "gerçek $HOME'da tuz yok (sınavlar geçici yolda)"; fi; exit $r
+# rc=0 sure=134.3s zaman=2026-10-24T15:31:01+03:00
+--- stdout ---
+kapi/koltuk-fark.test.sh rc=0 · GEÇEN: 26 · KALAN: 0
+scripts/oda-ortam.test.sh rc=0 · GECEN=15 DUSEN=0
+scripts/kabuk-sekmesi.test.sh rc=0 · ── SONUÇ: 24 geçti · 0 kaldı
+scripts/koltuk-adi.test.sh rc=0 · GEÇEN: 5 · KALAN: 0
+scripts/kutu-red.test.sh rc=0 · SONUÇ: 14 geçti · 0 kaldı
+scripts/koltuk-ac.test.sh rc=0 · GEÇEN: 45 · KALAN: 0
+kapi/rapor.test.mjs rc=0
+kapi/dava.test.mjs rc=0
+kapi/kadro-hal.test.mjs rc=0
+kapi/kimlik.test.mjs rc=0
+kapi/kadro.test.mjs rc=0
+kapi/kadro-yaz.test.mjs rc=0
+GEÇEN: 21 · KALAN: 0
+kapi/tarayici-sinav.mjs rc=0
+gerçek /config'da tuz yok (sınavlar geçici yolda)
+--- stderr ---

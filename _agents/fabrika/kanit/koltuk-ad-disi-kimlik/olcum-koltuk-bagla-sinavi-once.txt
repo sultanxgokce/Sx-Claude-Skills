@@ -1,0 +1,15 @@
+$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/taban/terminal-onar/scripts && timeout 300 bash koltuk-bagla.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/once.out 2>&1; r=$?; grep -E ' K[0-9] |toplam' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/once.out | cut -c1-160; exit $r
+# rc=1 sure=18.4s zaman=2026-10-24T15:25:40+03:00
+--- stdout ---
+  ✗ K0 — KB= KC=
+  ✗ K1 — rc=0 iz=new-session -A -s maiset-ana -c /p
+  ✗ K2 — iz=new-session -A -s maiset-ana -c /p
+  ✓ K3 bilinmeyen kimlik → rc=3, oturum AÇILMAZ
+  ✗ K4 —  
+  ✗ K5 — rc=0 iz=new-session -A -s maiset-ana -c /p
+  ✓ K6 kimlik biçiminde ADI olan koltuk adıyla bağlanır (ad önceliklidir)
+  ✗ K7 — rc=0 iz=new-session -A -s maiset-ana -c /p
+  ✓ K8 adla bağlanma çalışmaya devam eder
+Q · soru alanı (2.23.0 · K1 Engel kurgusu · V6FJPZ): yazı kutusu varken soru yok · 8. sütun soru JSON · sır süzgeci · beri
+toplam=92 geçen=86 düşen=6
+--- stderr ---

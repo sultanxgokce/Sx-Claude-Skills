@@ -1,0 +1,41 @@
+$ bash -c cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/scripts && timeout 300 bash koltuk-kimlik.test.sh < /dev/null
+# rc=0 sure=1.0s zaman=2026-10-24T15:25:59+03:00
+--- stdout ---
+E · iki dil eşdeğer
+  ✓ E0 tuz yoksa kapı yaratır: 32 onaltılık, kip 600
+  ✓ E1 aynı kimlik: 'BASIRET'
+  ✓ E1 aynı kimlik: '2026/85'
+  ✓ E1 aynı kimlik: 'Ayşe Yılmaz'
+  ✓ E1 aynı kimlik: 'a b'
+  ✓ E1 aynı kimlik: 'ş😀x'
+  ✓ E1 aynı kimlik: '-x'
+  ✓ E1 aynı kimlik: 'k0123456789abc'
+  ✓ E1 aynı kimlik: 'xxxxxxxxxxxxxx'
+  ✓ E2 kararlı: aynı tuz + aynı ad → aynı kimlik
+  ✓ E3 harf farkı ayrı kimlik verir
+T · tuz kutuya özel ve gizli
+  ✓ T1 başka tuz → başka kimlik (ad listesiyle tahmin edilemez)
+  ✓ T2 kabuk da tuzu 600 kipte yaratır
+  ✓ T3 yarış 1: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 1: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 2: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 2: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 3: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 3: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 4: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 4: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 5: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 5: geçici tuz dosyası kalmaz
+  ✓ T5 kapı: tuz yaratılamazsa kimlik NULL (uydurulmaz)
+  ✓ T6 kabuk: tuz yaratılamazsa rc 1
+G · var olan tuz gizli ve geçerli olmalı (göz tur 1)
+  ✓ G1 kb: kipi gevşek (644) KENDİ tuzumuz 600'e çekilir, kimlik üretilir
+  ✓ G2 kb: biçimi bozuk tuz (32 onaltılık değil) kullanılmaz → rc 1
+  ✓ G3 kb: tuz yolu dizinse kullanılmaz → rc 1
+  ✓ G1 kn: kipi gevşek (644) KENDİ tuzumuz 600'e çekilir, kimlik üretilir
+  ✓ G2 kn: biçimi bozuk tuz kullanılmaz → NULL
+  ✓ G3 kn: tuz yolu dizinse kullanılmaz → NULL
+  ✓ G4 hazır (dışarıdan konmuş) geçerli tuzla iki dil yine eşdeğer
+
+toplam=32 geçen=32 düşen=0
+--- stderr ---

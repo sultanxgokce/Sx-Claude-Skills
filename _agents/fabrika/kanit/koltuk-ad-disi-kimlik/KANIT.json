@@ -1,0 +1,137 @@
+{
+  "is": "koltuk-ad-disi-kimlik",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-24T15:35:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "once",
+      "dosya": "olcum-koltuk-bagla-sinavi-once.txt",
+      "sha256": "100cd18c8a44e95fa421ced9eab83d6e4aaf9f15a57c81086069407342f8a78f",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/taban/terminal-onar/scripts && timeout 300 bash koltuk-bagla.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/once.out 2>&1; r=$?; grep -E ' K[0-9] |toplam' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/once.out | cut -c1-160; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-24T15:25:40+03:00",
+      "sure_sn": 18.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "0f5dcbf38e9248ef9bad6b900539dc59"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-sinavi-sonra.txt",
+      "sha256": "4a53e06b6c14f468449f74ecedb0f2beeaf7f3418a51e68eedc9f69cd1ca5725",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/scripts && timeout 300 bash koltuk-bagla.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T15:25:58+03:00",
+      "sure_sn": 18.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "dd86ce57db9e42a68c3f4a6a184b814e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kimlik-esdegerlik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kimlik-esdegerlik-sinavi-sonra.txt",
+      "sha256": "3f25c87088b66455b645ce2d32ac298d31f917b88f05142d5b5f93639c39329c",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/scripts && timeout 300 bash koltuk-kimlik.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T15:25:59+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1aa5245f01064b4dbfebe3fee4b4bde2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "1696402e97e448da5a6fa99ffb062b40e6c9edeff26552e551ac2c9cbc9e67d6",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/kapi && timeout 600 bash kapi-sinav.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/kapi.out 2>&1; r=$?; grep -E 'Y5|SL2|KD2|KD3|KD4|GECEN|SONUÇ|^  ✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/kapi.out | cut -c1-200; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T15:26:42+03:00",
+      "sure_sn": 42.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ec93a661e6534562b1d98cf580becb1e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-takimi",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-takimi-sonra.txt",
+      "sha256": "4a09f591fec1231d80a455f1efd8f97e115eb3e00e3ba44ecd2b299541af9c74",
+      "komut": [
+        "bash",
+        "-c",
+        "r=0; bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mutant.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik temiz > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-temiz.out 2>&1; c=$?; echo \"pozitif kontrol rc=$c · $(grep -E 'toplam=|GECEN' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-temiz.out | tr '\\n' ' ')\"; [ $c -eq 0 ] || r=1; for m in bagla-cozmez red-ad-basar ad-oncelik-yok tuz-uydur tuzsuz-kapi ekran-ad ad-geri kip-denetimsiz bicim-denetimsiz; do bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mutant.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik $m > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out 2>&1; c=$?; echo \"mutant $m rc=$c · $(grep -E 'ÇAPA' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out) $(grep -m1 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out | cut -c1-90)\"; [ $c -eq 1 ] || r=1; done; [ $r -eq 0 ] && { echo 'hepsi yakalandı'; exit 1; }; echo 'en az bir mutant YAKALANMADI'; exit 0"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-24T15:28:47+03:00",
+      "sure_sn": 124.8,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "koltuk-bagla-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "0b51ea9b9cf64205b30c16eaf3e5bdc0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "regresyon-takimi",
+      "asama": "sonra",
+      "dosya": "olcum-regresyon-takimi-sonra.txt",
+      "sha256": "37eeea97fbc43981e3eae5da0de991a02734b8d7a8dc451497c1c261c0850bc4",
+      "komut": [
+        "bash",
+        "-c",
+        "r=0; cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar; for t in kapi/koltuk-fark.test.sh scripts/oda-ortam.test.sh scripts/kabuk-sekmesi.test.sh scripts/koltuk-adi.test.sh scripts/kutu-red.test.sh scripts/koltuk-ac.test.sh; do o=$(timeout 600 bash $t < /dev/null 2>&1); c=$?; o=$(tail -1 <<< \"$o\"); echo \"$t rc=$c · $o\"; [ $c -eq 0 ] || r=1; done; for t in rapor dava kadro-hal kimlik kadro kadro-yaz; do (cd kapi && timeout 300 node $t.test.mjs < /dev/null > /dev/null 2>&1); c=$?; echo \"kapi/$t.test.mjs rc=$c\"; [ $c -eq 0 ] || r=1; done; (cd kapi && timeout 300 node tarayici-sinav.mjs < /dev/null 2>&1 | tail -1); c=${PIPESTATUS[0]}; echo \"kapi/tarayici-sinav.mjs rc=$c\"; [ $c -eq 0 ] || r=1; if [ -e $HOME/.koltuk-tuz ]; then echo \"✗ sınavlar gerçek $HOME'a tuz yazdı\"; r=1; else echo \"gerçek $HOME'da tuz yok (sınavlar geçici yolda)\"; fi; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T15:31:01+03:00",
+      "sure_sn": 134.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "84451c17cf8b432eb70072f084970755"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tarayici-kirmizi-taban-kiyasi",
+      "asama": "tek",
+      "dosya": "olcum-tarayici-kirmizi-taban-kiyasi-tek.txt",
+      "sha256": "5da8fde1c14c230a2238f91d6de965c31cb3e5cafabc18381940fb5044844f51",
+      "komut": [
+        "bash",
+        "-c",
+        "r=0; for t in pano-sinav dim-okunur-sinav; do (cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/kapi && timeout 300 node $t.mjs < /dev/null 2>&1) | grep '✗' | sed 's/→.*//' > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-dal-$t.txt; (cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/taban/terminal-onar/kapi && timeout 300 node $t.mjs < /dev/null 2>&1) | grep '✗' | sed 's/→.*//' > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-taban-$t.txt; echo \"$t dal=$(wc -l < /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-dal-$t.txt) taban=$(wc -l < /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-taban-$t.txt) kırmızı: $(cat /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-dal-$t.txt | tr '\\n' ' ')\"; cmp -s /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-dal-$t.txt /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/tk-taban-$t.txt || { echo \"✗ $t dal ile taban kırmızıları FARKLI\"; r=1; }; done; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T15:35:18+03:00",
+      "sure_sn": 256.7,
+      "boru_denetimi": "temiz",
+      "olcum_id": "2fb7326bdf514d73ad66c3064e8ae217"
+    }
+  ],
+  "imza": "fd4537a100a08b1d8dcf4ac3e65b79b9ca5dc5539172622a3f67c613b05d6879"
+}

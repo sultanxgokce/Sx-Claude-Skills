@@ -9,6 +9,8 @@ import { mkdtempSync, writeFileSync, chmodSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+// 2.24.0: kapı ad dışı kimlik için tuz yaratır → sınav GERÇEK $HOME'a dokunmasın
+process.env.KOLTUK_TUZ ||= (await import('node:fs')).mkdtempSync((await import('node:os')).tmpdir() + '/kapi-tuz-') + '/tuz';
 const KOK = dirname(fileURLToPath(import.meta.url));
 const PW = process.env.KANIT_PLAYWRIGHT_DIR || '/config/projects/Nexus/ui/node_modules';
 let chromium; try { ({ chromium } = await import(pathToFileURL(join(PW, 'playwright/index.mjs')).href)); }
