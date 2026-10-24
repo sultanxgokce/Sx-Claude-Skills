@@ -1,0 +1,38 @@
+{
+  "is": "hezarfen-fabrika-agir-sira-sarma",
+  "cumle": "denetci.sh ve kanit.sh olcum ağır koşularını agir-sira.sh'e sarsın (en çok 15 dk yuva/yük bekler, sonra uyarıyla koşar ve kütüğe 'yuk-altinda-kosuldu' yazar); sıra betiği yoksa ya da DENETCI_SIRA=0 / KANIT_SIRA=0 ise sarmasız koşar",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-24T07:51:39+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5M49KS8DECGPWD1GV489VP8",
+  "tahmin_dk": 90,
+  "olcut": [
+    "en çok 15 dk"
+  ],
+  "olcum_yeri": "yerel, 12 çekirdek",
+  "sayi_uyarilari": [
+    "0 ise"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-24T07:51:39+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

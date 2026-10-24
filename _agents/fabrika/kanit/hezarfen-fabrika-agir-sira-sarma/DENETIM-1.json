@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "hezarfen-fabrika-agir-sira-sarma",
+  "pr": "451",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T08:22:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-fabrika-agir-sira-sarma",
+  "dal": "hezarfen-fabrika-agir-sira-sarma",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37629,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9688
+  },
+  "bas": "91e485195c79ebf675668152f2c90a54211fc353",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, iki ağır koşu ortak sıraya sarılmış; kapatma, sıra yokluğu, çıktı/rc aktarımı, zaman aşımının sıra içinde tutulması ve fail-open yolu gerçek ölçüm ile mutasyon sınavlarında karşılık buluyor. Önce bekleme süresini gerçekten 15 dakikayla sınırlayın ve kütüğe `yuk-altinda-kosuldu` yazıldığını doğrudan ölçün; mevcut kod ortam değişkeniyle tavanı aşabiliyor, kanıt ise yalnız uyarıyı gösteriyor.",
+    "bulgular": [
+      {
+        "ne": "“En çok 15 dk” sert bir tavan değil: AGIR_SIRA_BEKLE değeri doğrulanmadan aynen geçirildiği için çağıran 900 saniyenin üzerinde bekleme belirleyebilir.",
+        "kanit": "`kanit.py` sira_komutu içinde `os.environ.get(\"AGIR_SIRA_BEKLE\", \"900\")`, `denetci.sh` içinde `${AGIR_SIRA_BEKLE:-900}` doğrudan sıra betiğine aktarılıyor. K6 da ortamdan gelen değerin geçirilmesini bekliyor; 900 üstünü reddeden veya 900'e kırpan bir kapı yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:36; yazilim-fabrikasi/scripts/denetci.sh:106; yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh:45",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`yuk-altinda-kosuldu` kütük kaydı talebi doğrudan sınanmamış.",
+        "kanit": "`canli-yuk-altinda` ölçümü 20 saniye sonunda fail-open uyarısını gösteriyor, ancak çıktı veya manifestte sıra kütüğünden `yuk-altinda-kosuldu` kaydı yok. Sarma sınavının sahte sıra betiği de yalnız çağrı parametrelerini kaydediyor; bu kütük olayını üretmiyor ya da doğrulamıyor.",
+        "konum": "olcum-canli-yuk-altinda-sonra.txt; yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh:14-20",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarma sınavında önce 8/11 iken sonra 19/19, gerçek kod kaydı yeşil ve mutant kayıt beklenen kırmızıyı üretiyor. Gerçekçi yük ölçümü fail-open uyarısını doğruluyor; ancak komutu doğrudan `echo` olarak gösterdiğinden iki sarmalayıcının canlı yolunu ölçmüyor ve kütükte `yuk-altinda-kosuldu` kaydını göstermiyor."
+  }
+}
