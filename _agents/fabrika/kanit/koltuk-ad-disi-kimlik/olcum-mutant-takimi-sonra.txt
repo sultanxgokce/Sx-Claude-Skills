@@ -1,14 +1,16 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-koltuk-bagla-sinavi-* ===
-$ bash -c r=0; bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mutant.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik temiz > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-temiz.out 2>&1; c=$?; echo "pozitif kontrol rc=$c · $(grep -E 'toplam=|GECEN' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-temiz.out | tr '\n' ' ')"; [ $c -eq 0 ] || r=1; for m in bagla-cozmez red-ad-basar ad-oncelik-yok tuz-uydur tuzsuz-kapi kip-acik ekran-ad; do bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mutant.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik $m > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out 2>&1; c=$?; echo "mutant $m rc=$c · $(grep -E 'ÇAPA' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out) $(grep -m1 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out | cut -c1-90)"; [ $c -eq 1 ] || r=1; done; [ $r -eq 0 ] && { echo 'hepsi yakalandı'; exit 1; }; echo 'en az bir mutant YAKALANMADI'; exit 0
-# rc=1 sure=111.2s zaman=2026-10-24T13:27:08+03:00
+$ bash -c r=0; bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mutant.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik temiz > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-temiz.out 2>&1; c=$?; echo "pozitif kontrol rc=$c · $(grep -E 'toplam=|GECEN' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-temiz.out | tr '\n' ' ')"; [ $c -eq 0 ] || r=1; for m in bagla-cozmez red-ad-basar ad-oncelik-yok tuz-uydur tuzsuz-kapi ekran-ad ad-geri kip-denetimsiz bicim-denetimsiz; do bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mutant.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik $m > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out 2>&1; c=$?; echo "mutant $m rc=$c · $(grep -E 'ÇAPA' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out) $(grep -m1 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/mut-$m.out | cut -c1-90)"; [ $c -eq 1 ] || r=1; done; [ $r -eq 0 ] && { echo 'hepsi yakalandı'; exit 1; }; echo 'en az bir mutant YAKALANMADI'; exit 0
+# rc=1 sure=124.8s zaman=2026-10-24T15:28:47+03:00
 --- stdout ---
-pozitif kontrol rc=0 · toplam=92 geçen=92 düşen=0 toplam=25 geçen=25 düşen=0 GECEN: 111  ·  KALAN: 0 
+pozitif kontrol rc=0 · toplam=92 geçen=92 düşen=0 toplam=32 geçen=32 düşen=0 GECEN: 112  ·  KALAN: 0 
 mutant bagla-cozmez rc=1 ·    ✗ K1 — rc=3 iz=
 mutant red-ad-basar rc=1 ·    ✗ K4 —  
 mutant ad-oncelik-yok rc=1 ·    ✗ K6 — iz=
 mutant tuz-uydur rc=1 ·    ✗ K7 — rc=3 iz=
-mutant tuzsuz-kapi rc=1 ·    ✗ E1 BASIRET — kabuk=kfe7352f8ce95afa2 kapı=k838f220c42d8dc37
-mutant kip-acik rc=1 ·    ✗ E0 — kip=644
+mutant tuzsuz-kapi rc=1 ·    ✗ E1 BASIRET — kabuk=k221693beee5df9fc kapı=k838f220c42d8dc37
 mutant ekran-ad rc=1 ·    ✗ Y5 ekran adresi TABANLI ve ?arg= ile, ad değil AD DIŞI kimlik taşır (2.24.0 · P
+mutant ad-geri rc=1 ·    ✗ KD8 tuz kullanılamazsa kimlik VE ekran null (adres adla kurulmaz) — kadro ve kolt
+mutant kip-denetimsiz rc=1 ·    ✗ G1 kn — kip=644 k=k9f831d2c0c6c098c
+mutant bicim-denetimsiz rc=1 ·    ✗ G2 kb — rc=0
 hepsi yakalandı
 --- stderr ---
