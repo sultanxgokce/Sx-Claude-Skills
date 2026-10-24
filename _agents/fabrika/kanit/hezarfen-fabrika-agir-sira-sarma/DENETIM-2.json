@@ -1,0 +1,48 @@
+{
+  "tur": 2,
+  "is": "hezarfen-fabrika-agir-sira-sarma",
+  "pr": "451",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T08:48:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-fabrika-agir-sira-sarma",
+  "dal": "hezarfen-fabrika-agir-sira-sarma",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31130,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 19968
+  },
+  "bas": "bcfaeed4c017a16103b632af493142a97d47dc9c",
+  "duzeltme_farki": {
+    "onceki_bas": "91e485195c79ebf675668152f2c90a54211fc353",
+    "dosya": 11,
+    "bayt": 30008,
+    "tam_bayt": 46829
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, istenen iki sarma yolu, kapatma/yokluk geçişleri, fail-open uyarısı ve `yuk-altinda-kosuldu` kütük kaydı uygulanmış; önceki B1 normal değerler için, B2 ise gerçek sıra kütüğü ölçümüyle kapanmış. Ancak `denetci.sh` sayısal fakat kabuk tamsayı aralığını aşan bir `AGIR_SIRA_BEKLE` değerinde karşılaştırmayı güvenle yapamadığı için 900 saniyelik sert tavan aşılabilir; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "`denetci.sh` içindeki 900 saniye tavanı, yalnız rakamlardan oluşan fakat kabuğun tamsayı aralığını aşan bir `AGIR_SIRA_BEKLE` değeriyle aşılabilir.",
+        "kanit": "Değer önce `case` ile yalnız biçim bakımından doğrulanıyor, ardından `[ \"$SIRA_BEKLE\" -gt 900 ]` ile karşılaştırılıyor. Çok büyük bir rakam dizisi ilk kapıdan geçer; Bash sayısal karşılaştırması hata verdiğinde `&&` içindeki 900'e kırpma çalışmaz ve `_sinirli` aynı değeri sıra betiğine aktarır. K7/D6 ölçümleri yalnız 99999 ve 5000 değerlerini kapsıyor; taşma büyüklüğünü sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:108-113; yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh:68-70",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce 8/16 başarısızken sonra gerçek kod ölçümü 27/27 yeşil; mutasyon kaydı beklenen kırmızıyı üreterek sınavların ilgili bozulmaları yakaladığını gösteriyor. Önceki B1, 99999/5000 değerlerinin 900'e kırpıldığı K7/D6 ölçümleriyle büyük ölçüde kapanmış olsa da `denetci.sh` taşma girdisi açık kalıyor; önceki B2 ise G1/G2 ve ayrıca gerçek kütükteki `yuk-altinda-kosuldu` satırlarıyla doğrudan kapanmış."
+  }
+}
