@@ -1,0 +1,19 @@
+$ bash -c cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/kapi && timeout 600 bash kapi-sinav.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/kapi.out 2>&1; r=$?; grep -E 'Y5|SL2|KD2|KD3|KD4|GECEN|SONUÇ|^  ✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kk/kapi.out | cut -c1-200; exit $r
+# rc=0 sure=41.5s zaman=2026-10-24T13:25:17+03:00
+--- stdout ---
+SONUÇ: 30 geçti · 0 kaldı
+── SONUÇ: 28 geçti · 0 kaldı ──
+  ✓ Y5 zaten dondurulmuşu dondur/emekli et → 409 (üstüne yazıp önceki değeri kaybetmez)
+SONUÇ: 28 geçti · 0 kaldı
+SONUÇ: 29 geçti · 0 kaldı
+SONUÇ: 18 geçti · 0 kaldı
+  ✓ Y5 pano.js okunamazsa SIGHUP süreci ÖLDÜRMEZ, son sağlam kopya sunulur
+  ✓ Y5b hata günlüğe düşer (sessiz değil)
+  ✓ Y5 ekran adresi TABANLI ve ?arg= ile, ad değil AD DIŞI kimlik taşır (2.24.0 · P4GT2W)
+  ✓ SL2 ekran adresi "2026/85" adını (kodlu da) TAŞIMAZ, kimlik taşır
+  ✓ KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi
+  ✓ KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk boş kabuk olsa da DÜŞEN değil, altyapı (E2: "ana oturum")
+  ✓ KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" ekran adresi adı değil kimliği taşır
+GECEN: 111  ·  KALAN: 0
+SONUÇ: kapı birim sınavı geçti
+--- stderr ---

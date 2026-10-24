@@ -1,0 +1,33 @@
+$ bash -c cd /config/projects/_wt/Sx-Claude-Skills-koltuk-ad-disi-kimlik/terminal-onar/scripts && timeout 300 bash koltuk-kimlik.test.sh < /dev/null
+# rc=0 sure=0.7s zaman=2026-10-24T13:24:35+03:00
+--- stdout ---
+E · iki dil eşdeğer
+  ✓ E0 tuz yoksa kapı yaratır: 32 onaltılık, kip 600
+  ✓ E1 aynı kimlik: 'BASIRET'
+  ✓ E1 aynı kimlik: '2026/85'
+  ✓ E1 aynı kimlik: 'Ayşe Yılmaz'
+  ✓ E1 aynı kimlik: 'a b'
+  ✓ E1 aynı kimlik: 'ş😀x'
+  ✓ E1 aynı kimlik: '-x'
+  ✓ E1 aynı kimlik: 'k0123456789abc'
+  ✓ E1 aynı kimlik: 'xxxxxxxxxxxxxx'
+  ✓ E2 kararlı: aynı tuz + aynı ad → aynı kimlik
+  ✓ E3 harf farkı ayrı kimlik verir
+T · tuz kutuya özel ve gizli
+  ✓ T1 başka tuz → başka kimlik (ad listesiyle tahmin edilemez)
+  ✓ T2 kabuk da tuzu 600 kipte yaratır
+  ✓ T3 yarış 1: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 1: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 2: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 2: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 3: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 3: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 4: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 4: geçici tuz dosyası kalmaz
+  ✓ T3 yarış 5: aynı anda üç yaratıcı tek tuz okur
+  ✓ T4 yarış 5: geçici tuz dosyası kalmaz
+  ✓ T5 kapı: tuz yaratılamazsa kimlik NULL (uydurulmaz)
+  ✓ T6 kabuk: tuz yaratılamazsa rc 1
+
+toplam=25 geçen=25 düşen=0
+--- stderr ---
