@@ -98,8 +98,19 @@ case "$ZA" in ''|*[!0-9]*|0) printf '⚠ DENETCI_ZAMAN_ASIMI=%s geçersiz (pozit
 case "$ZA_K" in ''|*[!0-9]*|0) ZA_K=30 ;; esac
 # _sinirli <komut…> — ZA sn sonra TERM, yutarsa ZA_K sn sonra KILL (göz tur 1: -k'sız timeout TERM'i yutan denetçide yine asılı kalır).
 #   KILL ile biten aşım 137 döner; süre dolmuşsa o da zaman aşımıdır → 124'e çevrilir (tek anlam: aşım = 124).
+#   AĞIR SIRA (SERDAR 24 Eki, 489VP8 (a)): codex/claude koşusu kod kutusunda ortak sıraya (agir-sira.sh) girer — en çok 15 dk yuva/yük bekler,
+#   dolarsa UYARIYLA koşar ve sıra kütüğüne 'yuk-altinda-kosuldu' yazar (fail-open, sessiz değil; iş yük yüzünden durmaz). Bekleme ZA'ya SAYILMAZ:
+#   zaman aşımı yalnız komutun kendi süresini ölçer (sıra dışta, timeout içte). Sıra betiği yoksa (başka kutu) ya da DENETCI_SIRA=0 ise sarmasız.
+#   Sınav kancası DENETCI_KOMUT koşarken sıra HİÇ devreye girmez (sınav gerçek yola/yüke dokunmaz).
+SIRA_BETIK="${AGIR_SIRA_BETIK:-/config/projects/Nexus/scripts/agir-sira.sh}"
 _sinirli() {
   local b=$SECONDS r
+  if [ "${DENETCI_SIRA:-1}" != 0 ] && [ -z "${DENETCI_KOMUT:-}" ] && [ -f "$SIRA_BETIK" ]; then
+    AGIR_SIRA_ZAMAN_ASIMI=kos AGIR_SIRA_BEKLE="${AGIR_SIRA_BEKLE:-900}" bash "$SIRA_BETIK" "denetci-${IS:-iş}" -- bash -c '
+      s=$SECONDS; timeout -k "$1" "$2" "${@:3}"; r=$?
+      [ "$r" -eq 137 ] && [ $((SECONDS - s)) -ge "$2" ] && r=124
+      exit "$r"' _ "$ZA_K" "$ZA" "$@"; return $?
+  fi
   timeout -k "$ZA_K" "$ZA" "$@"; r=$?
   [ "$r" -eq 137 ] && [ $((SECONDS - b)) -ge "$ZA" ] && r=124
   return "$r"

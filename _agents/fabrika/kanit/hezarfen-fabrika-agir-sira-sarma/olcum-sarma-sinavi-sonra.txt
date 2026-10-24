@@ -1,0 +1,28 @@
+$ bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh
+# rc=0 sure=59.3s zaman=2026-10-24T08:07:09+03:00
+--- stdout ---
+════ K · kanit.sh olcum ════
+  ✓ K1 ölçüm komutu sıradan geçer: etiket kanit-<iş>-<etiket> · kos kipi · bekle 900 sn (15 dk)
+  ✓ K2 komutun çıktısı kanıt dosyasında (sarma çıktıyı yutmaz)
+  ✓ K3 komutun rc'si (3) sarmadan geçip kayda yazılır (renk kırmızı)
+  ✓ K4 KANIT_SIRA=0 → sıra çağrılmaz
+  ✓ K5 sıra betiği yoksa (başka kutu) komut sarmasız koşar
+  ✓ K6 AGIR_SIRA_BEKLE ortamdan geçer (900 yalnız varsayılan)
+════ D · denetci.sh (codex yolu) ════
+  ✓ D1 codex koşusu sıradan geçer: etiket denetci-<iş> · kos · 900 sn; 5/E GEÇTİ rc 0
+  ✓ D2 sıradaki 4 sn bekleme 2 sn'lik zaman aşımına SAYILMAZ (timeout sıranın İÇİNDE)
+  ✓ D3 DENETCI_SIRA=0 → sıra çağrılmaz
+  ✓ D4 sınav kancası (DENETCI_KOMUT) sırayı HİÇ görmez
+  ✓ D5 sıra betiği yoksa denetim sarmasız yine yürür (rc 0)
+════ MUTASYON (kopya; her mutant bir kapıyı kırmızı yapmalı) ════
+  ✓ M1 kanit kipi ertele olursa K1 kırmızı (yük altında iş durur)
+  ✓ M2 kanit bekleme tavanı 900'den kayarsa K1 kırmızı
+  ✓ M3 kanit KANIT_SIRA=0 kapısı kalkarsa K4 kırmızı
+  ✓ M4 kanit sıra betiği yoksa sarmaya kalkarsa K5 kırmızı
+  ✓ M5 denetci kipi ertele olursa D1 kırmızı
+  ✓ M6 denetci timeout sıranın DIŞINA taşınırsa bekleme zaman aşımına sayılır (D2 kırmızı)
+  ✓ M7 denetci sınav kancasında da sıraya girerse D4 kırmızı
+  ✓ M8 denetci DENETCI_SIRA=0 kapısı kalkarsa D3 kırmızı
+
+── SONUÇ: 19 geçti · 0 kaldı ──
+--- stderr ---

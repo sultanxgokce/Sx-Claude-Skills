@@ -6,6 +6,7 @@
 # HERMETİK: denetçi DENETCI_KOMUT ile sahte betik (istemi diske bırakır); `gh` PATH'te sahte betik (FAKE_* ortamından basar).
 # Mutant kipi: MUTANT_D=<bozuk denetci.sh> ile koşunca kapılar o dosyayı sınar.
 set -uo pipefail
+export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"

@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.24.1
+version: 0.25.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -132,6 +132,7 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+- **0.25.0 (24 Eki, SERDAR kararı · 489VP8 (a) · ağır sıra):** `denetci.sh` (codex/claude koşusu) ve `kanit.sh olcum` (ölçüm komutu) kod kutusunun ortak sırasına (`/config/projects/Nexus/scripts/agir-sira.sh`, yoksa sarmasız) girer: en çok **15 dk** yuva/yük bekler (`AGIR_SIRA_BEKLE`, varsayılan 900), dolarsa **uyarıyla koşar** (fail-open, sessiz değil) ve sıra kütüğüne `yuk-altinda-kosuldu` yazar — iş yük yüzünden durmaz. Bekleme `DENETCI_ZAMAN_ASIMI`'na sayılmaz (timeout sıranın içinde). Kapatma: `DENETCI_SIRA=0` / `KANIT_SIRA=0`; `DENETCI_KOMUT` (sınav kancası) sırayı hiç görmez; diğer sınavlar ikisini 0'lar. Sınav: `agir-sira-sarma.test.sh` (19 kapı, 8 mutant).
 - **0.24.1 (24 Eki, SERDAR bulgusu · canlı-yazılan dosya kapısı):** `birlestirme-kapisi.sh` PR'ın değişen dosyalarını `canli-dosyalar.txt` listesiyle (bash glob) karşılaştırır; eşleşen varsa UYARI basar, **rc DEĞİŞMEZ**. Neden: ajan defterleri, aile-registry, `*.jsonl` havuzları gibi başka süreçlerin sürekli yazdığı dosyalara dokunan PR, birleşme sonrası birincil checkout'ta `git pull`'u kirli ağaçla kilitler (cloudtop #507). Değişen dosya listesi okunamazsa "ölçülemedi" denir (temiz denmez). Ret kipi bilerek eklenmedi. Sınav: `birlestirme-kapisi.test.sh` T15 (7 madde, mutant dahil).
 - **0.24.0 (2026-10-24, BÂNİ · SERDAR 14:1x kararı, görev …Y7J3Q; sürüm sırası: HEZARFEN Sx #449 0.23.0'ı aldı, bu iş 0.24.0):** göz turu kartın görevine tek satır adım yazar (`kart.sh goz-adim`, durum değişmez); `kart.sh ac --gorev` aynı ajanın başka açık görev bağlı kartının görevini `bekliyor` + "başka işe geçti: <kart>" yapar.
 - **0.23.0 (2026-10-23, HEZARFEN · SERDAR araştırması "69/43 saatlik iş", görev …90KA6C):** `kart.sh ac` cümlede sayısal ölçüt görürse (`≤6 dk`, `<5 sn`, `en çok 40 MB`, `6 dk altında`, `40 dk'dan az`) `--olcum-yeri` ister: `"yerel, 12 çekirdek"` | `"CI, 2 çekirdek"` | `"canlı"` (yerel ve CI için çekirdek sayısı şart); yoksa kart AÇILMAZ. W1G2N'de '4 paralel iş ≤6 dk' ölçütü 2 çekirdekli CI'da fiziken tutmuyordu, ~4,5 saat boşa gitti. `daralt` yeni cümlede ölçüt varsa yeri ister; ölçüt değişirse eski ölçüt GEÇERSİZ sayılır, karta `olcut_gecmisi` (eski→yeni) yazılır, görev bağlıysa görev adımı düşer. Dürüst sınır: görev başlığı defterde eklemeli alan, bu araç yeniden adlandıramaz (uyarı basar); yazıyla sayı ("altı dakika") ve eşik kelimesiz ölçüt yakalanmaz. Sınav T17 (OL1-OL12 + M-OL1-4).

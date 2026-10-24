@@ -1,0 +1,21 @@
+$ env MUTANT_PKG=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/eski-pkg bash yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh --mutant-kos
+# rc=1 sure=2.4s zaman=2026-10-24T08:00:11+03:00
+--- stdout ---
+════ K · kanit.sh olcum ════
+  ✗ K1 ölçüm komutu sıradan geçer: etiket kanit-<iş>-<etiket> · kos kipi · bekle 900 sn (15 dk) →  ✓ ölçüm kaydedildi: olcum-olc-tek.txt rc=0 renk=yesil
+42
+  ✓ K2 komutun çıktısı kanıt dosyasında (sarma çıktıyı yutmaz)
+  ✓ K3 komutun rc'si (3) sarmadan geçip kayda yazılır (renk kırmızı)
+  ✓ K4 KANIT_SIRA=0 → sıra çağrılmaz
+  ✓ K5 sıra betiği yoksa (başka kutu) komut sarmasız koşar
+  ✗ K6 AGIR_SIRA_BEKLE ortamdan geçer (900 yalnız varsayılan) 
+════ D · denetci.sh (codex yolu) ════
+  ✗ D1 codex koşusu sıradan geçer: etiket denetci-<iş> · kos · 900 sn; 5/E GEÇTİ rc 0 → rc=0 
+  ✓ D2 sıradaki 4 sn bekleme 2 sn'lik zaman aşımına SAYILMAZ (timeout sıranın İÇİNDE)
+  ✓ D3 DENETCI_SIRA=0 → sıra çağrılmaz
+  ✓ D4 sınav kancası (DENETCI_KOMUT) sırayı HİÇ görmez
+  ✓ D5 sıra betiği yoksa denetim sarmasız yine yürür (rc 0)
+════ MUTASYON (kopya; her mutant bir kapıyı kırmızı yapmalı) ════
+
+── SONUÇ: 8 geçti · 3 kaldı ──
+--- stderr ---

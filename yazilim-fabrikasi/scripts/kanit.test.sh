@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # kanit.test.sh — kanıt aracını sahte depoda koşturur: manifesti araç yazar, elle yazım yakalanır, sarı yeşil sayılmaz.
 set -uo pipefail
+export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 K="$HERE/kanit.sh"
 gecen=0; kalan=0
