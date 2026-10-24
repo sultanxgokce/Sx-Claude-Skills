@@ -21,5 +21,12 @@
   "kapsam_uyarilari": [],
   "sayi_uyarilari": [],
   "gorev": "gorev_01M5NWBY2DYJT0GCP75NP4GT2W",
-  "tahmin_dk": 120
+  "tahmin_dk": 120,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-24T13:49:21+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
 }
