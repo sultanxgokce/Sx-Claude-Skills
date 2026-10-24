@@ -17,3 +17,23 @@ koltuk_adi_gecerli() {
   case "${1: -1}" in [[:space:]]) return 1 ;; esac
   return 0
 }
+
+# ── AD DIŞI KİMLİK (2.24.0 · P4GT2W): adreste ad yerine taşınan kimlik. Mahrem kutuda oturum adı müvekkil adıdır;
+#    'Aç' adresine (?arg=) giderse fareyle üstüne gelince, geçmişte ve kayıtlarda görünür. Kimlik = 'k' + sha256(tuz \n ad)'ın
+#    ilk 16 onaltılığı; TUZ kutuya özel ve gizlidir (yoksa ad listesi olan biri kimliği deneyerek adı bulurdu).
+#    Kapı (kapi/koltuk-kimlik.mjs) aynı formülü taşır — eşdeğerliği koltuk-kimlik.test.sh ölçer.
+KOLTUK_KIMLIK_DESEN='^k[0-9a-f]{16}$'
+koltuk_tuz_yolu() { printf '%s' "${KOLTUK_TUZ:-$HOME/.koltuk-tuz}"; }
+koltuk_tuz() {  # tuzu basar; yoksa ATOMİK yaratır (ln: iki süreç aynı anda yaratırsa ikisi de AYNI dosyayı okur) · rc 1 = yaratılamadı
+  local y g; y="$(koltuk_tuz_yolu)"
+  if [ ! -s "$y" ]; then
+    g="$(umask 077; mktemp "$y.XXXXXX")" || return 1
+    head -c 16 /dev/urandom | od -An -tx1 | tr -d ' \n' > "$g" && ln "$g" "$y" 2>/dev/null; rm -f "$g"
+  fi
+  [ -s "$y" ] || return 1
+  head -c 64 "$y"
+}
+koltuk_kimlik() {  # <ad> → kimlik · rc 1 = tuz yok (kimlik UYDURULMAZ)
+  local t; t="$(koltuk_tuz)" || return 1
+  printf 'k%s' "$(printf '%s\n%s' "$t" "$1" | sha256sum | cut -c1-16)"
+}

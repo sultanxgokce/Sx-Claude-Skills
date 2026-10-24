@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # koltuk-fark.test.sh — fark ölçerinin her hükmü (G-BANI-0007). Hermetik: sahte tmux (PATH), gerçek koltuk-bagla.sh/koltuklar.mjs.
 set -u
+export KOLTUK_TUZ="$(mktemp -d)/tuz"   # 2.24.0: kimlik tuzu geçici yolda (gerçek $HOME'a dokunulmaz)
 D="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; T="$(mktemp -d)"
 trap 'kill $(jobs -p) 2>/dev/null; find "$T" -mindepth 1 -delete; rmdir "$T"' EXIT
 g=0; k=0; kapi() { if [ "$2" = "$3" ]; then g=$((g+1)); echo "  ✓ $1"; else k=$((k+1)); echo "  ✗ $1 → beklenen [$2] olan [$3]"; fi; }

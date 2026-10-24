@@ -1,9 +1,28 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.23.0
+version: 2.24.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.24.0 · Ekran adresi ad değil AD DIŞI KİMLİK taşır (24 Eki · gorev_…P4GT2W · SERDAR 12:4x)
+Mahrem kutuda (vekatip) oturum adı müvekkil adıdır. Merkez Kadro'da adı kısaltıyordu ama "Aç" bağlantısının adresi
+(`/<kutu>/tty/?arg=<ad>`) adı TAM taşıyordu: fareyle üstüne gelince, tarayıcı geçmişinde ve kayıtlarda görünüyordu (canlı ölçüm:
+8 satırın 6'sı). Artık kapı her oturuma bir `kimlik` verir ve `ekran` adresini onunla kurar (`/api/koltuklar`, `/api/kadro`,
+geri-aç yanıtı). `koltuk-bagla.sh` adresteki kimliği görünür koltuklardan çözer ve AYNI kapılardan (süzgeç · gizli · beyaz liste)
+geçirip bağlanır.
+- **Kimlik** = `k` + sha256(tuz `\n` ad)'ın ilk 16 onaltılığı. **Tuz** kutuya özel ve gizlidir (`$KOLTUK_TUZ`, varsayılan
+  `$HOME/.koltuk-tuz`, 32 onaltılık, kip 600); ilk ihtiyaçta ATOMİK yaratılır (`ln`: aynı anda yaratan süreçler tek tuz okur).
+  Tuzsuz düz özet olsaydı ad listesi olan biri kimlikleri deneyerek adı bulurdu.
+- **Adla bağlanma sürer** (eski bağlantılar, kutunun kendi telefon ekranı). Kimlik biçiminde ADI olan koltuk adıyla açılır (ad önceliklidir).
+- **Bilinmeyen kimlik** → red, oturum açılmaz ve red ekranı koltuk ADLARINI BASMAZ (adres mahrem kutudan geldi). Tuz
+  yaratılamazsa kimlik uydurulmaz: kapı `kimlik: null` verir (adres adla kurulur; merkez mahrem kutuda kimliksiz kayda adres vermez),
+  kabuk reddeder.
+- Kabuk (`scripts/koltuk-adi.sh` `koltuk_kimlik`) ve kapı (`kapi/koltuk-kimlik.mjs`) aynı formülü taşır; eşdeğerlik
+  `scripts/koltuk-kimlik.test.sh` (25 kapı: 8 adlık derlem · tuz kipi · yarış · tuzsuz). Bağlanma: `koltuk-bagla.test.sh` K0-K8.
+- Kapıyı başlatan bütün sınavlar tuzu geçici yolda tutar (gerçek `$HOME`'a yazmaz).
+- Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
+  satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
 
 ## 🆕 2.23.0 · Koltuğun sorusu kapıdan okunur — tür · metin · şıklar · ne zamandan beri (23 Eki · K1 · gorev_…V6FJPZ Engel kurgusu · SERDAR 14:42)
 Kapı bir koltuğun "soru" hâlinde olduğunu biliyordu ama **sorunun kendisini** vermiyordu; Sultan hangi soruyu, hangi şıklarla, ne

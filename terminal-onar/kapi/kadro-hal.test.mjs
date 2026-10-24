@@ -7,6 +7,8 @@ import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, existsSync, rmSync
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// 2.24.0: kapı ad dışı kimlik için tuz yaratır → sınav GERÇEK $HOME'a dokunmasın
+process.env.KOLTUK_TUZ ||= (await import('node:fs')).mkdtempSync((await import('node:os')).tmpdir() + '/kapi-tuz-') + '/tuz';
 const KOK = dirname(fileURLToPath(import.meta.url));
 const T = mkdtempSync(join(tmpdir(), 'kadro-hal-'));
 const SIFRE = 'sinav-parolasi-1234', PORT = 18797;

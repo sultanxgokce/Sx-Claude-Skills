@@ -5,6 +5,7 @@
 #   Görünürlük: koltuk listesinde gizli DEĞİL; kadroda altyapı (kapatılamaz).
 # 🔴 GERÇEK tmux, KENDİ soketinde (PATH'teki sarmalayıcı -S ile yönlendirir) — kutunun oturumlarına dokunmaz.
 set -u
+export KOLTUK_TUZ="$(mktemp -d)/tuz"   # 2.24.0: kimlik tuzu geçici yolda (gerçek $HOME'a dokunulmaz)
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 gecen=0; kalan=0
 kapi(){ if [ "$2" = "$3" ]; then gecen=$((gecen+1)); echo "  ✓ $1"; else kalan=$((kalan+1)); echo "  ✗ $1 — beklenen=$2 gerçek=$3"; fi; }

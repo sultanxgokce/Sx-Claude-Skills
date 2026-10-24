@@ -9,6 +9,7 @@ ok()  { GECEN=$((GECEN+1)); echo "  ✓ $1"; }
 bad() { DUSEN=$((DUSEN+1)); echo "  ✗ $1 — $2"; }
 S="$(mktemp -d)"; trap 'rm -r -f -- "$S" 2>/dev/null' EXIT
 mkdir -p "$S/bin"
+export KOLTUK_TUZ="$S/tuz"   # 2.24.0: kimlik tuzu geçici yolda (gerçek $HOME'a dokunulmaz)
 # Sahte tmux: oturum listesi $S/oturumlar'dan; "çalıştırılan" komutlar $S/iz'e yazılır.
 cat > "$S/bin/tmux" <<'T'
 #!/usr/bin/env bash
@@ -70,6 +71,28 @@ kos maiset-ana /p basiret
 [ "$(rc)" = 3 ] && ok "B5 harf büyüklüğü tam eşleşir (basiret ≠ BASIRET)" || bad B5 "rc=$(rc)"
 kos maiset-ana /p 'BASIRE'
 [ "$(rc)" = 3 ] && ok "B6 önek eşleşmez (BASIRE ≠ BASIRET)" || bad B6 "rc=$(rc)"
+
+echo "K · ad dışı kimlik (2.24.0 · P4GT2W: adreste müvekkil adı yerine kimlik)"
+kk() { ( . ./koltuk-adi.sh; koltuk_kimlik "$1" ); }
+KB=$(kk BASIRET); KC=$(kk CARSI)
+[[ "$KB" =~ ^k[0-9a-f]{16}$ ]] && [ "$KB" != "$KC" ] && ok "K0 kimlik biçimi k+16 onaltılık, ad başına ayrı" || bad K0 "KB=$KB KC=$KC"
+kos maiset-ana /p "$KB"
+[ "$(iz)" = "attach-session -t =BASIRET" ] && ok "K1 kimlik → doğru koltuğa TAM eşleşmeli bağlanır" || bad K1 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p "$KC"
+[ "$(iz)" = "attach-session -t =CARSI" ] && ok "K2 başka kimlik → kendi koltuğu (ilk satıra düşmez)" || bad K2 "iz=$(iz)"
+kos maiset-ana /p k0123456789abcdef
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "K3 bilinmeyen kimlik → rc=3, oturum AÇILMAZ" || bad K3 "rc=$(rc) iz=$(iz)"
+! grep -qE 'BASIRET|CARSI|maiset-ana' "$S/cikti" && grep -q "kimlikte bir koltuk yok" "$S/cikti" && ok "K4 🔴 kimlik reddinde koltuk ADLARI BASILMAZ (sebep yazılır)" || bad K4 "$(tr '\r' ' ' < "$S/cikti")"
+kos maiset-ana /p "$(kk ttyd-maiset)"
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "K5 altyapı oturumunun kimliği de açılamaz (beyaz liste aynı)" || bad K5 "rc=$(rc) iz=$(iz)"
+printf '%s\n' maiset-ana BASIRET k00000000000000aa > "$S/oturumlar"
+kos maiset-ana /p k00000000000000aa
+[ "$(iz)" = "attach-session -t =k00000000000000aa" ] && ok "K6 kimlik biçiminde ADI olan koltuk adıyla bağlanır (ad önceliklidir)" || bad K6 "iz=$(iz)"
+printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"
+KOLTUK_TUZ="$S/yok-dizin/tuz" kos maiset-ana /p "$KB"
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && grep -q "tuz yok" "$S/cikti" && ok "K7 tuz yaratılamazsa kimlik uydurulmaz → red, bağlanmaz" || bad K7 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p BASIRET
+[ "$(iz)" = "attach-session -t =BASIRET" ] && ok "K8 adla bağlanma çalışmaya devam eder" || bad K8 "iz=$(iz)"
 
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
 # ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──

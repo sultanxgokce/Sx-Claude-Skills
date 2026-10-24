@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { oturumKimlikleri } from './kimlik.mjs';
 import { kayitAyristir, kadroBirlestir } from './kadro.mjs';
 import { koltukSatirlari } from './koltuklar.mjs';
+// 2.24.0: kapı ad dışı kimlik için tuz yaratır → sınav GERÇEK $HOME'a dokunmasın
+process.env.KOLTUK_TUZ ||= (await import('node:fs')).mkdtempSync((await import('node:os')).tmpdir() + '/kapi-tuz-') + '/tuz';
 let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log('  ✓ ' + ad); } else { k++; console.log('  ✗ ' + ad + ' ' + ek); } };
 const T = mkdtempSync(join(tmpdir(), 'kimlik-'));
 const ALAN = 'pid:[4026531111]';

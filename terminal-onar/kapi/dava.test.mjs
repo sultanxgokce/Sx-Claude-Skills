@@ -10,6 +10,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { davaKuraliAyristir, davaOzet, yerAcAday, kendiligindenDondurulacak, kadroBirlestir, kayitAyristir } from './kadro.mjs';
 import { alanlarYaz, kisaAdGecerli, DOSYA_NO, baglaGeriAl, KadroHata } from './kadro-yaz.mjs';
+// 2.24.0: kapı ad dışı kimlik için tuz yaratır → sınav GERÇEK $HOME'a dokunmasın
+process.env.KOLTUK_TUZ ||= (await import('node:fs')).mkdtempSync((await import('node:os')).tmpdir() + '/kapi-tuz-') + '/tuz';
 const KOK = dirname(fileURLToPath(import.meta.url));
 const T = mkdtempSync(join(tmpdir(), 'dava-'));
 const SIFRE = 'sinav-parolasi-1234', PORT = 18803, GUN = 86400, SIMDI = Math.floor(Date.now() / 1000);
@@ -126,8 +128,8 @@ kapi('DV15 iz kadro-hal.log: "bekci dondur \\"2023/1\\" … (14 gün dokunulmad�
 
 console.log('── DV-D · Aç: yer varken açar, tavan doluyken yer açar (B4)');
 const c1 = await hal({ eylem: 'geri-ac', id: '2025/204', yer_ac: true });
-kapi('DV16 açık 3 < tavan 4 → kimse dondurulmaz (donduruldu: null); açıcı "ac ali --eski"; yanıtta ekran = /sedir/tty/?arg=ali',
-  c1.s === 200 && c1.j.tamam && c1.j.donduruldu === null && c1.j.oturum === true && c1.j.ekran === '/sedir/tty/?arg=ali' && acIz().trim() === 'ac ali --eski', JSON.stringify(c1));
+kapi('DV16 açık 3 < tavan 4 → kimse dondurulmaz (donduruldu: null); açıcı "ac ali --eski"; yanıtta ekran adı değil kimliği taşır (2.24.0)',
+  c1.s === 200 && c1.j.tamam && c1.j.donduruldu === null && c1.j.oturum === true && /^k[0-9a-f]{16}$/.test(c1.j.kimlik || '') && c1.j.ekran === '/sedir/tty/?arg=' + c1.j.kimlik && !c1.j.ekran.includes('ali') && acIz().trim() === 'ac ali --eski', JSON.stringify(c1));
 const blok204 = () => (davalar().match(/  - id: 2025\/204\n(?:    .*\n)*/) || [''])[0];
 kapi('DV17 geri açılan davanın kaydı: durum ve durum_once satırları KALKTI; son_calisma kaldı (açıkken oturumun son\'u kullanılır)',
   !/durum/.test(blok204()) && blok204().includes(`    son_calisma: ${SIMDI - 13 * GUN}\n`), blok204());
