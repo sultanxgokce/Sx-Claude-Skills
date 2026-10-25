@@ -1,0 +1,62 @@
+{
+  "is": "hezarfen-denetci-tavan-defteri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-25T17:42:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "tavan-defteri",
+      "asama": "once",
+      "dosya": "olcum-tavan-defteri-once.txt",
+      "sha256": "1762600687024f937e697c2396efbfeeef6aafb83b0df1c9f33b4821c7cd46dc",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-25T17:42:55+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "27be2d91f2b746b9966734e8c5aed72e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-defteri",
+      "asama": "sonra",
+      "dosya": "olcum-tavan-defteri-sonra.txt",
+      "sha256": "b3d25a4bcebe1e9b087993b00ea78dce5a2d1f510652ab059e6237219b71be44",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-25T17:42:34+03:00",
+      "sure_sn": 27.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2dcd6db5ea054f10878f17377b710d14"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-defteri-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-tavan-defteri-mutant-sonra.txt",
+      "sha256": "561205877fe20244bfcbb2523c8635481378c32378a2430d5b9846b2277e7e5b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-25T17:42:58+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "tavan-defteri",
+      "beklenen": "kirmizi",
+      "olcum_id": "03197813b9a4457298a2ef9c374083b6"
+    }
+  ],
+  "imza": "beefa617c53a3452014316aabe5e58f6654df7bfaf4a16237bf52951bef16e49"
+}

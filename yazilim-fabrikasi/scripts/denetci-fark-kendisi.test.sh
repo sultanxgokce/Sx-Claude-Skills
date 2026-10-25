@@ -66,6 +66,9 @@ echo yarim > "$KOK/w/kayitsiz.txt"; kanitla f4
 kapi "F4a kanıt/kart dışı kayıtsız dosya → rc=3" 3 den f4
 iceren "F4b neden söyleniyor: kayıtsız" "kayıtsız değişiklik" "$KOK/son.out"
 mv "$KOK/w/kayitsiz.txt" "$KOK/kayitsiz.txt"
+mkdir -p "$KOK/w/_agents/fabrika"; echo "TAVAN-ACILDI" > "$KOK/w/_agents/fabrika/tavan-defteri.log"; kanitla f4c; : > "$KOK/istem.md"
+kapi "F4c (…VAHT3) tavan-defteri.log aracın kendi defteridir, kayıtsız değişiklik SAYILMAZ → GEÇTİ (devam yolu kendi kapısına takılmaz)" 0 den f4c
+mv "$KOK/w/_agents/fabrika/tavan-defteri.log" "$KOK/tavan-defteri.log"
 
 echo "════ F5 · --pr: PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR (itilmemiş commit) — hangi dalda durulursa dursun ════"
 BAS="$(git -C "$KOK/w" rev-parse HEAD)"
@@ -101,6 +104,7 @@ PY
   mut bas-dal 'YEREL_BAS="$(git -C "$DEPO" rev-parse -q --verify "refs/heads/$PR_DAL" 2>/dev/null)"' 'YEREL_BAS="$( [ "$(git -C "$DEPO" rev-parse --abbrev-ref HEAD)" = "$PR_DAL" ] && git -C "$DEPO" rev-parse HEAD)"' "F5f"
   mut kir '[ "$KIRLI" -eq 0 ] ||' 'true ||' "F4a"
   mut bos '[ -s "$TMP/diff.patch" ] ||' 'true ||' "F6a"
+  mut tavan-defteri '|tavan-defteri\.log$)' ')' "F4c"
 fi
 
 echo ""; echo "── SONUÇ (fark-kendisi): $GECEN geçti · $DUSEN kaldı ──"

@@ -127,7 +127,7 @@ _m a denetci.sh 'karne_yaz
 _m a denetci.sh 'KANIT_DEPO="" bash "$HERE/karne.sh" yaz "$IS" --depo "$KART_DEPO"' 'bash "$HERE/karne.sh" yaz "$IS"' "birincil yönlendirmesi yok → karne iş alanına düşüyor"
 _m d denetci.sh '[ "${DENETCI_KARNE:-1}" = 1 ] ||' 'true ||' "DENETCI_KARNE=0 dinlenmiyor"
 _m e denetci.sh 'else _bilgi "   ⚠ karne yazılamadı' 'else exit 9; _bilgi "   ⚠ karne yazılamadı' "karne düşüşü turun sonucunu değiştiriyor"
-_m p denetci.sh "grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|karne\\.jsonl\$)'" "grep -v -E '^.. _agents/fabrika/(kanit|kartlar)/'" "karne kir sayılıyor"
+_m p denetci.sh "grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|karne\\.jsonl\$|tavan-defteri\\.log\$)'" "grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|tavan-defteri\\.log\$)'" "karne kir sayılıyor"
 _m l karne.sh 'if durum=="bitti": aday.append(r)' 'aday.append(r)' "kart durumu okunmuyor"
 _m n karne.sh 'if r["puan"]!=5 or r["dogru"]!="H": continue' 'if r["puan"]!=5: continue' "doğru-şey şartı yok"
 _m m karne.sh 'except (OSError,ValueError): okunamadi.append(r); continue' 'except (OSError,ValueError): continue' "okunamayan kart sessiz düşüyor"
