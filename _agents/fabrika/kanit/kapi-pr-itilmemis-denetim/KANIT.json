@@ -1,0 +1,62 @@
+{
+  "is": "kapi-pr-itilmemis-denetim",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T01:56:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinav-once.txt",
+      "sha256": "605e51d6fc2968424593fa5aca3a60c25bfdae7dd0dfac70ecd55ceada57f4ad",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/kapi-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T01:55:32+03:00",
+      "sure_sn": 53.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "25886c7e2e9c41cfb49058fc1984cfcd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-sonra.txt",
+      "sha256": "57b661a57ef177bd8e0d963f1bef2cff9d23756a5a270c7b67238e64379609db",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/kapi-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T01:56:14+03:00",
+      "sure_sn": 41.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6964f1bac3b244ec89c4700b3b63529f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-prbas",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-prbas-sonra.txt",
+      "sha256": "f6e53ea48c1a30aab76e363d4a58e2704c0a482dbccfd8c4991061c804462d12",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/kapi-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T01:56:58+03:00",
+      "sure_sn": 44.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "22ca097af439480c90d57b8344923c0f"
+    }
+  ],
+  "imza": "6969e18e007f2a25b554444d96b8758b3aa43d8462059fccae1cbf2b915b9c85"
+}
