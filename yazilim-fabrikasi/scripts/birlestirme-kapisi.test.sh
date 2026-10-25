@@ -348,10 +348,12 @@ json.dump({"tur":1,"is":is_,"pr":"7","yazan":"claude","denetci":"codex","zaman":
  "kanit_durumu":"sağlam","sonuc":{"kod_puani":int(puan),"dogru_sey":dogru,"ozet":"o","bulgular":[],"kanit_gorusu":"k"}},open(p,"w"))
 PY
 }
+it() { # it <ağaç> <PR no> → ağaçtaki kanıtı commit'le ve PR başına (refs/pull/<N>/head) it
+  ( cd "$1" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q -f origin "HEAD:refs/pull/$2/head" ) >/dev/null 2>&1; }
 kartP() { ( cd "$P" && KANIT_DEPO="$P" bash "$KT" ac "$1" --is "örnek iş cümlesi burada" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1 ); }
 kapi() { ( cd "$1" && shift && env -u KANIT_DEPO bash "$G" "$@" 2>&1 ); }   # KANIT_DEPO yok: kapı birincili git'ten bulur (canlıdaki gibi)
 
-kartP is-ck; A="$(alan is-ck)"; kanitla "$A" is-ck 5 E
+kartP is-ck; A="$(alan is-ck)"; kanitla "$A" is-ck 5 E; it "$A" 7
 CIKTI="$(kapi "$P" is-ck --pr 7)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "kanıt yeri: iş alanı ($A, dal iş adıyla aynı)" <<<"$CIKTI"; g $? "🔴 BİRİNCİLDEN çağrı iş alanındaki kanıtı buldu → GEÇTİ (15 Eki'de 'kanıt YOK' deyip kaçışa itmişti)"
 CIKTI="$(kapi "$A" is-ck)"; RC=$?
@@ -365,7 +367,7 @@ CIKTI="$(kapi "$P" is-ck --pr 7)"; RC=$?
 CIKTI="$(kapi "$P" is-ck)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "kanıt yeri: hiçbir yerde (arandı: dalı 'is-ck' olan ağaçlar · birincil depo)" <<<"$CIKTI"; g $? "--pr verilmezse PR başına bakılmaz; aranan yerler sayılır, kapı kapalı (rc=1)"
 # bayat kopya: birincilde eski 5/E kopyası var, iş alanında güncel 3/E → iş alanı esas, kapı GEÇMEZ
-kartP is-bayat; B="$(alan is-bayat)"; kanitla "$B" is-bayat 3 E
+kartP is-bayat; B="$(alan is-bayat)"; kanitla "$B" is-bayat 3 E; it "$B" 8
 mkdir -p "$P/_agents/fabrika/kanit"; cp -r "$B/_agents/fabrika/kanit/is-bayat" "$P/_agents/fabrika/kanit/"
 python3 -c "import json,sys;p=sys.argv[1];d=json.load(open(p));d['sonuc']['kod_puani']=5;json.dump(d,open(p,'w'))" "$P/_agents/fabrika/kanit/is-bayat/DENETIM-1.json"
 CIKTI="$(kapi "$P" is-bayat --pr 8)"; RC=$?
@@ -399,13 +401,42 @@ while IFS=' |' read -r ts _; do
   [ -n "$ts" ] || continue; n=$((n+1)); s="${SINIF[$ts]:-}"; [ -n "$s" ] || { hepsi=1; continue; }
   is_="is-kacis-$n"; kartP "$is_"; D_="$(alan "$is_")"
   IFS=: read -r tur puan dogru <<<"$s"
-  [ "$tur" = kanitsiz ] || kanitla "$D_" "$is_" "$puan" "$dogru"
+  [ "$tur" = kanitsiz ] || { kanitla "$D_" "$is_" "$puan" "$dogru"; it "$D_" "9$n"; }
   kapi "$P" "$is_" --pr "9$n" >/dev/null; rc=$?
   [ "$rc" -eq 0 ] && gecen_sinif="$gecen_sinif $tur"
   [ "$tur" = kanit-yeri ] && [ "$rc" -ne 0 ] && hepsi=1
   [ "$tur" != kanit-yeri ] && [ "$rc" -eq 0 ] && hepsi=1
 done <<<"$KACIS"
 [ "$hepsi" = 0 ] && [ "$gecen_sinif" = " kanit-yeri" ]; g $? "🔴 9 kaçışın yalnız 'kanıt başka yerde' olanı (15 Eki 10:42) artık kapıdan geçer; 8'i (tavan · kanıtsız) KAPALI kalır — kapı gevşemedi (geçen:$gecen_sinif)"
+
+echo "════ T14pr · İTİLMEMİŞ KAYIT (…898AX): kanıt/DENETİM yerelde var, PR başında YOK → kapı --pr kipinde REDDEDER (#907/#908 iki kez DENETIM-1.json'suz birleşti) ════"
+kartP is-itil; I="$(alan is-itil)"; kanitla "$I" is-itil 5 E
+mv "$I/_agents/fabrika/kanit/is-itil/DENETIM-1.json" "$R/denetim-yedek.json"; it "$I" 71          # PR başı: yalnız ölçüm kaydı, DENETİM YOK (itilen bu)
+mv "$R/denetim-yedek.json" "$I/_agents/fabrika/kanit/is-itil/DENETIM-1.json"                       # DENETİM yerelde: commit'lenmemiş
+CIKTI="$(kapi "$P" is-itil --pr 71)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "kanıt dizini PR #71 başıyla AYNI değil" <<<"$CIKTI" && grep -q "DENETIM-1.json" <<<"$CIKTI"; g $? "🔴 DENETİM yerelde commit'lenmemiş, PR başında yok → rc=1 ve eksik dosya ADIYLA söylenir (eski kapı rc=0 verirdi)"
+( cd "$I" && git add -A _agents && git commit -qm "docs: denetim" ) >/dev/null 2>&1                 # commit'lendi ama İTİLMEDİ
+CIKTI="$(kapi "$P" is-itil --pr 71)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "itilmemiş commit var" <<<"$CIKTI" && grep -q "DENETIM-1.json" <<<"$CIKTI"; g $? "🔴 DENETİM yerelde commit'li ama İTİLMEMİŞ → rc=1: 'itilmemiş commit var' + yerel baş ≠ PR başı + dosya adı"
+# MUTANT (itilmemiş durumdayken): PR başı bloğu kapatılırsa kapı bu işi GEÇİRİR — gerçek kapı rc=1 verirken; yani blok süs değil
+PKG2="$(mktemp -d)"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$HERE/izin.py" "$PKG2/"
+sed 's|^if \[ -n "\$PR" \] \&\& \[ -n "\$DZ_AGAC" \]; then$|if false; then|' "$G" > "$PKG2/mutant-prbas.sh"; chmod +x "$PKG2/mutant-prbas.sh"
+[ "$(grep -c '^if false; then$' "$PKG2/mutant-prbas.sh")" = 1 ]; g $? "mutant üretildi (PR başı bloğu kapatıldı; çapa bulundu — çapa kayarsa sınav sessiz yeşil vermez)"
+( cd "$P" && env -u KANIT_DEPO bash "$PKG2/mutant-prbas.sh" is-itil --pr 71 >/dev/null 2>&1 ); MRC=$?
+[ "$MRC" -eq 0 ]; g $? "🔴 mutant (PR başı denetimi kapalı) itilmemiş DENETİM'e rc=0 verir — gerçek kapı rc=1 verdi: sınav bu bloğu ölçüyor (#907/#908 davranışı)"
+find "$PKG2" -delete
+( cd "$I" && git push -q -f origin "HEAD:refs/pull/71/head" ) >/dev/null 2>&1
+CIKTI="$(kapi "$P" is-itil --pr 71)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "PR başı: kanıt dizini PR #71 başıyla aynı" <<<"$CIKTI"; g $? "itildikten sonra aynı çağrı GEÇER (rc=0) ve PR başıyla aynılığı söyler (kapı sağlam işi reddetmiyor)"
+CIKTI="$(kapi "$I" is-itil)"; RC=$?
+[ "$RC" -eq 0 ] && ! grep -q "PR başı" <<<"$CIKTI"; g $? "--pr verilmezse (iş adıyla çağrı) PR başı denetimi YOK: eski davranış aynen (geriye uyum)"
+kartP is-cekil; J="$(alan is-cekil)"; kanitla "$J" is-cekil 5 E                                    # PR #72 başı hiç itilmedi
+CIKTI="$(kapi "$P" is-cekil --pr 72)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "PR #72 başı çekilemedi" <<<"$CIKTI"; g $? "PR başı çekilemezse ÖLÇÜLEMEDİ (rc=3) — 'temiz' denmez"
+( cd "$J" && echo yeni > ek.txt && git add ek.txt && git commit -qm "feat: kod" ) >/dev/null 2>&1
+it "$J" 72; ( cd "$J" && echo daha > ek2.txt && git add ek2.txt && git commit -qm "feat: itilmemiş kod" ) >/dev/null 2>&1
+CIKTI="$(kapi "$P" is-cekil --pr 72)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "itilmemiş commit var" <<<"$CIKTI" && ! grep -q "AYNI değil" <<<"$CIKTI"; g $? "kanıt itilmiş ama KOD commit'i itilmemiş → rc=1 (göz başka bir hâli görmüş olurdu); dosya satırı yok, yalnız baş uyuşmazlığı"
 
 echo "════ T14 · CANLI BORÇ (5WYQMW): dağıtım birleşmeden SONRA ise kapı kayıtlı borçla geçer; kart BİTMEZ; ödenmezse kırmızı ════"
 # (T13 daraltma bölümü $T'yi sildi → mutantlar için kardeş dosyalar yeniden konur)

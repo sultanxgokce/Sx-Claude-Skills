@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.25.3
+version: 0.25.4
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -132,6 +132,7 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+- **0.25.4 (26 Eki, görev …898AX · kart kapi-pr-itilmemis-denetim):** `birlestirme-kapisi.sh --pr N` kanıt dizinini YEREL ağaçtan okuyorsa onu PR'ın başıyla (origin pull/N/head) bayt bayt karşılaştırır: yerel baş ≠ PR başı → `itilmemiş commit var`, dizindeki dosya PR başında yok ya da farklıysa ad ad söylenir (commit'lenmemiş DENETIM de burada yakalanır), PR başı çekilemezse ÖLÇÜLEMEDİ (rc=3). Eskiden itilmemiş DENETIM-1.json kapıyı geçiriyordu: Nexus #907 ve #908 denetim kaydı olmadan birleşti (PR başı 80987568, yerel 77e7bf21, rc0). `--pr` verilmeyen çağrı aynen eski. Sınav: `birlestirme-kapisi.test.sh` T14pr (çıplak uzak + itilmemiş commit, mutant). Not: `--pr` kullanan eski sınavlar kanıtı önce PR başına iter.
 - **0.25.3 (25 Eki, görev …VAHT3 · kart hezarfen-denetci-tavan-defteri):** `denetci.sh` tavan açılırken (reis/Sultan 'devam') kendi yazdığı `tavan-defteri.log` satırını artık 'kayıtsız değişiklik' saymaz; aracın kendi defteridir (karne.jsonl gibi). Eskiden devam yolu kendi kapısına takılıp rc 3 (ÖLÇÜLEMEDİ) dönüyordu, yalnız daralt geçiyordu. Sınav: `denetci-fark-kendisi.test.sh` F4c + mutant.
 - **0.25.2 (24 Eki, Sultan D1 "izin 2/3" · görev …5SW5W · kart fabrika-kart-sinif-adimi):** `kart.sh ac --gorev` ile göreve yazılan açılış adımı kartın sınıf cevabını da taşır: `[▶ çalışılıyor] <ajan> · kart <iş> açıldı, tahmin N dk · sınıf: yok` ya da `· sınıf: yetki,para` (kartın `e`/`?` cevaplı sınıfları). Okuyan: merkezin otomatik doğrulama devri (sınıfsız iş onaya girince MUHAKKİK devri kendiliğinden); göreve bağlı HER kart sınıfsız demeli, sınıflı ya da işaretsiz (eski) açılış varsa iş Doğrulat'ta kalır. Eski açılış adımları değişmez. Sınav: kart.test.sh G2 (yok) + G2c (sınıflı → `sınıf: yetki`).
 - **0.25.1 (24 Eki, SERDAR kararı (b) · görev CMWNK dilim 2 · kart fabrika-soru-ad-katla):** `kart.sh acik-soru <AJAN>` ve soru kuralları (`sor`: soran kendine soramaz · `cevap`: sorulan olmayan cevap veremez, soran kendi sorusunu cevaplayamaz) ajan adını **yazım farkından bağımsız** karşılaştırır (`soru.ad_katla`: BERİD = BERID = berid, NAKKAŞ = NAKKAS, NECCÂR = NECCAR). Neden: kartlarda aynı ajan iki yazımla duruyor (sohbet deposu: BERID 18 kart, BERİD 8 kart) ve tmux oturum adı ASCII ("berid"); yıkıcı komut kancası (`cloudtop/claude-user/hooks/kapi-atlama-guard.sh` bölüm 4) kimliği oturum adından alıp bu komuta sorar — tam eşleşmeyle kartların üçte biri görünmezdi, "soran kendine soramaz" kuralı da yazım değiştirerek dolanılırdı. Davranış değişmedi: benzer ama başka ad (BERNA) eşleşmez, boş ad eşleşmez. Ek: `kart.sh acik-soru '*'` = depodaki HERKESİN cevapsız soruları (kancanın ajan kimliğini çözemediği oturum için; kimliksiz oturumda sessizce geçmek yerine soruya bakılır). Sınav: `kart.test.sh` S20–S21d + mutant "ad katlama".

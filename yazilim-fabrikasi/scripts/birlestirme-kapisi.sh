@@ -65,7 +65,7 @@ kanit_bul() {
   for t in "${agaclar[@]}"; do
     yol="$t/_agents/fabrika/kanit/$IS"
     if [ -f "$yol/KANIT.json" ] && dal_tutar "$t"; then
-      DZ="$yol"; [ "$t" = "$WT" ] && DZ_YER="çağrılan ağaç ($t, dal iş adıyla aynı)" || DZ_YER="iş alanı ($t, dal iş adıyla aynı)"; return 0
+      DZ="$yol"; DZ_AGAC="$t"; [ "$t" = "$WT" ] && DZ_YER="çağrılan ağaç ($t, dal iş adıyla aynı)" || DZ_YER="iş alanı ($t, dal iş adıyla aynı)"; return 0
     fi
   done
   if [ -n "$PR" ] && git -C "$DEPO" remote get-url origin >/dev/null 2>&1 && git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
@@ -74,15 +74,46 @@ kanit_bul() {
       DZ="$KANIT_GECICI/_agents/fabrika/kanit/$IS"; DZ_YER="PR #$PR başı ($(git -C "$DEPO" rev-parse --short FETCH_HEAD 2>/dev/null))"; return 0
     fi
   fi
-  if [ -f "$DEPO/_agents/fabrika/kanit/$IS/KANIT.json" ]; then DZ="$DEPO/_agents/fabrika/kanit/$IS"; DZ_YER="birincil depo ($DEPO)"; return 0; fi
+  if [ -f "$DEPO/_agents/fabrika/kanit/$IS/KANIT.json" ]; then DZ="$DEPO/_agents/fabrika/kanit/$IS"; DZ_AGAC="$DEPO"; DZ_YER="birincil depo ($DEPO)"; return 0; fi
   DZ="/kanit-bulunamadi/_agents/fabrika/kanit/$IS"   # bulunamadı: hiçbir yeri GÖSTERMEZ (aşağıdaki her okuma "yok" görür; mutant birincil-aranmaz)
   DZ_YER="hiçbir yerde (arandı: dalı '$IS' olan ağaçlar${PR:+ · PR #$PR başı} · birincil depo)"; return 1
 }
-DZ=""; DZ_YER=""; kanit_bul || true
+DZ=""; DZ_YER=""; DZ_AGAC=""; kanit_bul || true
 
 eksik=0; olcemedi=0
 _y "── BİRLEŞTİRME KAPISI · iş: $IS"
 _y "  · kanıt yeri: $DZ_YER"
+
+# 🔴 PR BAŞI DOĞRULAMASI (…898AX · SERDAR 26 Eki 2026): kanıt YEREL ağaçtan okunduysa kapı, orada duran ama PR'a İTİLMEMİŞ bir denetim
+#    kaydını da "var" sayıyordu → #907 ve #908 iki kez DENETIM-1.json'suz birleşti (PR başı 80987568, yerel 77e7bf21, kapı rc0).
+#    Kapı artık --pr verilmişse okuduğu kanıt dizinini PR'ın BAŞIYLA bayt bayt karşılaştırır: (a) yerel baş ≠ PR başı → "itilmemiş commit var",
+#    (b) kanıt dizinindeki her dosyanın PR başındaki karşılığı yoksa ya da farklıysa ad ad söylenir (commit'lenmemiş dosya da burada yakalanır).
+#    PR başı çekilemezse ÖLÇÜLEMEDİ (rc=3): "ölçemedim"i "temiz" saymak bu açığın kendisiydi. Kanıt zaten PR başından okunduysa (DZ_AGAC boş) bakılacak şey yok.
+if [ -n "$PR" ] && [ -n "$DZ_AGAC" ]; then
+  if git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
+    prbas="$(git -C "$DEPO" rev-parse FETCH_HEAD 2>/dev/null)"
+    if [ -z "$prbas" ]; then
+      _h "PR #$PR başı çözülemedi — itilmemiş kayıt ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1))
+    else
+      yerel_bas="$(git -C "$DZ_AGAC" rev-parse HEAD 2>/dev/null)"; farklar=""
+      for f in "$DZ"/*; do
+        [ -f "$f" ] || continue
+        yb="$(git -C "$DZ_AGAC" hash-object -- "$f" 2>/dev/null)"
+        ub="$(git -C "$DEPO" rev-parse -q --verify "$prbas:_agents/fabrika/kanit/$IS/$(basename "$f")" 2>/dev/null)" || ub=""
+        [ -n "$yb" ] && [ "$yb" = "$ub" ] || farklar="$farklar $(basename "$f")"
+      done
+      if [ "$DZ_AGAC" != "$DEPO" ] && [ -n "$yerel_bas" ] && [ "$yerel_bas" != "$prbas" ]; then
+        _h "itilmemiş commit var — PR #$PR başı ${prbas:0:8} ≠ yerel baş ${yerel_bas:0:8} (önce push; PR başı GitHub'da birkaç dakika geç güncellenebilir)"; eksik=$((eksik+1))
+      fi
+      if [ -n "$farklar" ]; then
+        _h "kanıt dizini PR #$PR başıyla AYNI değil (PR'da yok ya da farklı:$farklar) — itilmemiş ya da commit'lenmemiş kayıt kapıyı geçirmez"; eksik=$((eksik+1))
+      fi
+      [ -z "$farklar" ] && { [ "$DZ_AGAC" = "$DEPO" ] || [ "$yerel_bas" = "$prbas" ]; } && _y "  ✓ PR başı: kanıt dizini PR #$PR başıyla aynı (${prbas:0:8})"
+    fi
+  else
+    _h "PR #$PR başı çekilemedi (origin pull/$PR/head) — kanıt dizininin PR'a itilip itilmediği ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1))
+  fi
+fi
 
 # 1 · KART
 if [ -f "$KART" ]; then
