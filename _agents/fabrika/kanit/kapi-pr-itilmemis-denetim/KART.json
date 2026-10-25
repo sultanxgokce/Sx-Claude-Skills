@@ -1,0 +1,32 @@
+{
+  "is": "kapi-pr-itilmemis-denetim",
+  "cumle": "Birleştirme kapısı --pr kipinde PR açıkken kanıt dizinini PR başındaki dosyalarla karşılaştırır; itilmemiş ya da PR başında bulunmayan denetim kaydı varsa birleştirmeyi reddeder",
+  "istedi": "SERDAR 26 Eki 01:39",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-26T01:40:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5TJZ61JZ58988BZHZS898AX",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T01:40:30+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
