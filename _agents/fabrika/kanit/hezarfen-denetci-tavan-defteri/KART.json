@@ -1,0 +1,32 @@
+{
+  "is": "hezarfen-denetci-tavan-defteri",
+  "cumle": "Denetçi tavan açıldığında kendi tavan defterine yazdığı satırı kayıtsız değişiklik sayıp ölçülemedi (rc 3) dönüyor; araç defteri kir sayılmasın, devam yolu açılsın",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-25T17:40:40+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5SMXVYEPEYPQ7B2S27VAHT3",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-25T17:40:40+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
