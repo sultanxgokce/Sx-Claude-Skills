@@ -500,7 +500,8 @@ else
   GERIDE="$(git -C "$DEPO" rev-list --count "HEAD..$ANA")"
   [ "$GERIDE" -eq 0 ] || { _hata "dal ana hattın ($ANA) $GERIDE commit GERİSİNDE — fark başkasının işini 'silinmiş' gösterirdi. Önce rebase/merge, sonra koştur"; exit 3; }
   # karne.jsonl kartlar gibi aracın kendi defteri: birincil checkout'ta koşan denetçinin bir önceki turu onu yazar, kir sayılmaz (NPTHAQ)
-  KIRLI="$(git -C "$DEPO" status --porcelain -uall | grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|karne\.jsonl$)' | wc -l)"
+  # tavan-defteri.log da aracın kendi defteri: tavan açılırken (reis/sultan 'devam') denetçinin kendisi yazar; kir sayılırsa devam yolu kendi kapısına takılır (görev …VAHT3)
+  KIRLI="$(git -C "$DEPO" status --porcelain -uall | grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|karne\.jsonl$|tavan-defteri\.log$)' | wc -l)"
   [ "$KIRLI" -eq 0 ] || { _hata "$KIRLI kayıtsız değişiklik var (kanıt/kart dışı) — farka girmez, göz eksik kod görürdü. Önce commit'le"; exit 3; }
   git -C "$DEPO" diff "$ANA...HEAD" > "$TMP/diff.patch" || { _hata "git diff $ANA...HEAD düştü"; exit 3; }
   [ -s "$TMP/diff.patch" ] || { _hata "fark BOŞ ($ANA...HEAD) — denetlenecek değişiklik yok"; exit 3; }
