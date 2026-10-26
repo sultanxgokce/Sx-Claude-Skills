@@ -1,0 +1,23 @@
+{
+  "is": "kart-canli-ayarla",
+  "cumle": "kart.sh canli-ayarla komutu açık kartın canlı kanıt şartını yalnız kartın sahibinin gerekçeli kararıyla değiştirir (--reis kartın aldı alanıyla aynı olmalı); karar karta ve geçmişe yazılır, başka ad reddedilir",
+  "istedi": "SERDAR 25 Eki (retro W42 BÂNİ Ö2)",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-26T06:14:30+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "kart sınavı: kabul + sahip dışı ret + gerekçe ret + mutant",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canli, canlı)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
