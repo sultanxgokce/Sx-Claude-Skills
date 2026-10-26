@@ -2299,6 +2299,17 @@ rc=$?
 [ "$rc" = "5" ] && [ "$CP_MD5_0" = "$(md5sum "$CS_HOSTFILE" | awk '{print $1}')" ] \
   && ok "senkron başka-pano (d0013 negatif): başka projenin panosu komşu-drift → rc=5 + yazım=0" \
   || bad "senkron başka-pano (d0013 negatif): başka projenin panosu sessizce geçti (rc=$rc)"
+# 69g. HOST'ta zaten pano VAR (yarım doğum kalıntısı): repo = base+aday+pano, host = base+pano → pano iki
+#      tarafta da dışlanır → YAZIM OLUR (host tarafı dışlanmazsa sahte komşu-drift rc=5 olurdu)
+{ _cs_base_yaml; _cs_aday_blok; _cs_pano_blok senktest; } > "$CP_REPO/infra/docker-compose.server.yml"
+git -C "$CP_REPO" -c user.email=t@t -c user.name=t commit -qam fixture3 2>/dev/null; git -C "$CP_REPO" fetch -q origin main 2>/dev/null
+{ _cs_base_yaml; _cs_pano_blok senktest; } > "$CS_HOSTFILE"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3E" ISKAN_KANIT_DIR="$CS_KANIT3E" "${CS_ENV_ORTAK[@]}" ISKAN_CLOUDTOP_REPO_DIR="$CP_REPO" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && [ "$(git -C "$CP_REPO" show origin/main:infra/docker-compose.server.yml | md5sum | awk '{print $1}')" = "$(md5sum "$CS_HOSTFILE" | awk '{print $1}')" ] \
+  && ok "senkron host-pano-var (d0013): host'ta kalan pano iki tarafta da dışlandı → YAZIM oldu + bayt-eş" \
+  || bad "senkron host-pano-var (d0013): host tarafındaki pano komşu-drift sayıldı (rc=$rc)"
 rm -f "$CS_LOG3E"; find "$CP_REPO" "$CS_KANIT3E" -delete
 rm -f "$CS_LOG3" "$CS_LOG3C" "$CS_LOG3D"
 
