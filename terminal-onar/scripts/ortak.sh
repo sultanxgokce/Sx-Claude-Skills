@@ -125,6 +125,28 @@ KURT_KAPALI_SEBEP="kapalı (Sultan 16 Eki)"
 TABAN="${TO_TABAN:-/$KUTU}"
 case "$TABAN" in /) TABAN="" ;; */) TABAN="${TABAN%/}" ;; esac
 BELLEK_ENV="NODE_OPTIONS=--max-old-space-size=3072 MALLOC_ARENA_MAX=2"
+# 🗜 Yerli otomatik sıkıştırma — filo standardı 600k (%60), gorev_…880TAK (Sultan 26 Eki; SERDAR 22:4x: ortak settings.json 13 kutuda
+#    ortak → oraya YAZILMAZ, eşik OTURUMA ortamla verilir). Ölçüldü (claude 2.1.310): CLAUDE_CODE_AUTO_COMPACT_WINDOW ayar dosyasının
+#    üstüne çıkar, '600k' kabul eder, model penceresine kırpılır; ortam varken /autocompact değiştiremez — standart bilerek kilitlidir.
+#    claude_baslat (onar.sh) ana koltuğu ve kurtarıcıyı bu önekle yazar; bekçi her turda sikistirma_denetle ile ölçer.
+SIKISTIRMA_ENV="CLAUDE_CODE_AUTO_COMPACT_WINDOW=${TO_AUTOCOMPACT:-600k}"
+sikistirma_denetle() {  # → stdout: güncel · "N koltuk eşiksiz: pid…" · "ölçülemedi: …" (rc 3). Koşan her claude: ortam 600k YA DA hesap ayarı autoCompactWindow ≤ 600000
+  local proc="${TO_PROC:-/proc}" pids="${TO_CLAUDE_PIDLER-$(pgrep -x claude 2>/dev/null)}" p ortam v kd ayar n=0 eksik=""
+  [ -n "$pids" ] || { echo "ölçülemedi: koşan claude yok"; return 3; }
+  for p in $pids; do
+    ortam=$(tr '\0' '\n' < "$proc/$p/environ" 2>/dev/null) || { eksik="$eksik $p(ortam okunamadı)"; n=$((n+1)); continue; }
+    v=$(printf '%s\n' "$ortam" | sed -n 's/^CLAUDE_CODE_AUTO_COMPACT_WINDOW=//p' | head -1)
+    case "$v" in 600k|600K|600000|600) continue ;; esac   # standart değer → açık, ayara bakılmaz (ortam ayarın üstündedir)
+    kd=$(printf '%s\n' "$ortam" | sed -n 's/^CLAUDE_CONFIG_DIR=//p' | head -1); ayar="${kd:-${HOME:-/config}/.claude}/settings.json"
+    [ -z "$v" ] && python3 - "$ayar" <<'PY' 2>/dev/null && continue
+import json, sys
+d = json.load(open(sys.argv[1], encoding="utf-8")); v = d.get("autoCompactWindow")
+sys.exit(0 if isinstance(v, int) and not isinstance(v, bool) and 100000 <= v <= 600000 else 1)
+PY
+    eksik="$eksik $p${v:+(ortam=$v)}"; n=$((n+1))
+  done
+  [ "$n" = 0 ] && echo güncel || echo "$n koltuk eşiksiz:$eksik"
+}
 
 export TZ=Europe/Istanbul  # cron UTC koşar; günlük yerel saatle yazılsın
 # cron'un çıplak PATH'i claude'u bulamaz

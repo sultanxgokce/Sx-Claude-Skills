@@ -347,12 +347,12 @@ _iskan_apply_ac() {
   if [ "$mod" = "resume" ]; then
     local transkript_yolu="$transkript_dizin/${deger}.jsonl"
     tmux new-session -d -s "$tmux_adi" -n "$tmux_adi" -c "$workdir" \
-      exec env CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 claude --dangerously-skip-permissions --resume "$transkript_yolu"
+      exec env CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude --dangerously-skip-permissions --resume "$transkript_yolu"
     echo "  → [yeşil] AÇILDI: $tmux_adi (gerçek-resume, session_id=$deger, workdir=$workdir)"
     printf '%s\tresume\t%s\t%s\n' "$rol" "$deger" "$tmux_adi" >> "$rezerve_file"
   else
     tmux new-session -d -s "$tmux_adi" -n "$tmux_adi" -c "$workdir" \
-      exec claude --dangerously-skip-permissions --session-id "$deger"
+      exec env CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude --dangerously-skip-permissions --session-id "$deger"
     echo "  → [yeşil] AÇILDI: $tmux_adi (degraded-replay, rezerve session_id=$deger, workdir=$workdir — bir SONRAKİ kurtarma gerçek-resume olur)"
     printf '%s\tdegraded\t%s\t%s\n' "$rol" "$deger" "$tmux_adi" >> "$rezerve_file"
   fi

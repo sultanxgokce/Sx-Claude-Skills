@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.11.3
+version: 0.11.4
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -116,6 +116,13 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-10-26, yerli otomatik sıkıştırma 600k her koltuğun ortamında — v0.11.4 · BERİD, gorev_…880TAK, SERDAR 22:4x)
+- **`templates/baslat-claude.sh` ve `iskan.sh`'ın iki açılış satırı `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` ile açar** (ilk açılış da `--resume` da).
+  Sultan: 600k (%60) tüm filoya, yeni oturumlarda açık, kontrol mekanizması olsun; SERDAR: ortak settings.json 13 kutuda ortak → oraya yazılmaz,
+  eşik oturuma ortamla verilir. Ölçüldü (claude 2.1.310): ortam ayar dosyasının üstüne çıkar, `600k` kabul, model penceresine kırpılır.
+  Bekçi: terminal-onar 2.28.0 `sikistirma_denetle` (kutu başına). Sınav: baslat-claude.test.sh 8) üç kapı. **Sınır:** 11 İSKÂN kutusundaki
+  co-locate kopyalar bu şablondan yeniden indirilmedikçe eski kalır (kopya dağıtımı ayrı iş; bekçi eksik kutuyu "eşiksiz" gösterir).
 
 ## Durum (2026-10-26, komşu-bayt kapısı doğan projenin panosunu kayma saymaz — v0.11.2 · MİRAHUR, SERDAR 13:29)
 - **Compose senkronu doğan projenin pano servisini (`cloudtop-pano-<proje>`) komşu sayıyordu** (ders d0013): munavebe doğumu

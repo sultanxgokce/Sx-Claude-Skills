@@ -1,0 +1,90 @@
+$ bash -c bash terminal-onar/scripts/sikistirma-ortami.test.sh && bash iskan/scripts/baslat-claude.test.sh && bash terminal-onar/scripts/kurtarici-kapali.test.sh && node ahi/schema/version-lint.mjs . && node ahi/schema/validate-repo.mjs . --strict && node --check sync-skills.mjs
+# rc=0 sure=4.1s zaman=2026-10-26T23:03:33+03:00
+--- stdout ---
+── 1) claude_baslat'ın tmux'a yazdığı satır ──
+  ✓ K1 başlatma 'doğdu' ile döndü (rc 0)
+  ✓ K1b yazılan satırda bellek öneğinden SONRA, komuttan ÖNCE 600k eşiği
+  ✓ K2 değer tek yerden (TO_AUTOCOMPACT=500k satıra geçer)
+  ✓ K3 ana koltuk (iki dal) + kurtarıcı aynı claude_baslat ile açılır (ikinci başlatma yolu yok)
+── 2) mutant: önek onar.sh'tan kaldırılınca sınav DÜŞER ──
+  ✓ M1 mutant satırda eşik YOK (K1b bunu yakalar; yeşil görünmez)
+  ✓ M1b mutant gerçekten uygulandı (onar.sh farklı)
+── 3) bekçi: sikistirma_denetle sahte /proc ile ──
+  ✓ B1 ortam 600k + hesap ayarı 600000 → güncel
+  ✓ B2 ortamsız+ayarsız · sapmış ortam · 'auto' ayar → üçü eşiksiz, sapma değeriyle
+  ✓ B3 koşan claude yok → ölçülemedi (yeşil değil)
+  ✓ B3b … rc 3
+  ✓ B4 bekçi her turda ölçer ve yalnız DEĞİŞİNCE günlüğe yazar (statik)
+SONUÇ: geçen=11 kalan=0
+── söz dizimi ──
+  ✓ şablon söz dizimi
+── 1) İLK açılış: iz yok → --session-id ile taze başlar ──
+  ✓ ilk açılış rc=0
+  ✓ ilk çağrı --session-id (doğru)
+  ✓ başarılı açılışta iz bırakıldı
+── 2) YENİDEN açılış: iz var → --resume (menüye düşmez) ──
+  ✓ yeniden açılış rc=0
+  ✓ --resume ile açıldı (insan-eli gerekmez)
+  ✓ boşuna --session-id denenmedi
+── 3) İZ KAYBOLMUŞ ama oturum VAR → kendi kendini onarır ──
+  ✓ iz kayıpken de rc=0 (kendini onardı)
+  ✓ onarımı açıkça söylüyor (sessiz değil)
+  ✓ iz yeniden yazıldı
+── 4) TANIMADIĞIMIZ hata → körlemesine taze oturum AÇMAZ ──
+  ✓ tanınmayan hatada rc≠0 (sahte-yeşil yok)
+  ✓ ham çıktıyı gösteriyor (teşhis edilebilir)
+── 5) prob için --print KULLANILMIYOR (jeton + sahte-mesaj) ──
+  ✓ şablonda --print yok
+── 6) transcript ağacına DOKUNMUYOR (yüzey-daraltması değişmezi) ──
+  ✓ transcript yolu şablonda geçmiyor
+── 7) KOLTUĞA ÖZEL İZİN DOSYASI: kayıtta settings_file → her açılış yolunda --settings ──
+  ✓ izinli koltuk ilk açılış rc=0
+  ✓ taze açılışta --settings geçti
+  ✓ izinli koltuk yeniden açılış rc=0
+  ✓ yeniden açılışta da --settings geçti (restart korumayı düşürmez)
+── 8) izin dosyası kayıtta VAR ama diskte YOK → koltuk AÇILMAZ ──
+  ✓ kayıp izin dosyasında rc≠0
+  ✓ sebebi açıkça söylüyor
+  ✓ claude HİÇ çağrılmadı (yasaksız açılış yok)
+── 9) alan YOKSA bayt-aynı: --settings eklenmez ──
+  ✓ alansız koltuk eskisi gibi açıldı (--settings yok)
+
+── 8) YERLİ OTOMATİK SIKIŞTIRMA 600k: sürecin ortamında, ilk açılışta da --resume'da da (gorev_…880TAK) ──
+  ✓ ilk açılışta CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k
+  ✓ --resume yolunda da 600k (süreç özelliği, her yolda)
+  ✓ değer tek yerden (ISKAN_AUTOCOMPACT)
+baslat-claude: GEÇTI=25 DUSTU=0
+  ✓ H0 onar.sh adım 4 bloğu çıkarıldı (kurtarici_kapali dalı içinde)
+  ✓ H1 sahte tmux gerçekten devrede (gerçek tmux'a DOKUNULMAZ)
+── D · durum.sh
+  ✓ D1 işaret YOK + kurtarıcı yok → 'yok' (eski davranış aynen)
+  ✓ D2 işaret VAR + kurtarıcı yok → 'kapalı (Sultan 16 Eki)'
+  ✓ D2b 'düştü/yok' DENMEZ
+  ✓ D3 --json da aynı sözü taşır
+  ✓ D4 dosya yerine TO_KURTARICI=0 beyanı da işarettir
+  ✓ D5 işaretsiz 'yok' düzeni BOZUK sayar (rc 1) — kontrol
+  ✓ D6 🔴 işaretli 'kapalı' düzeni SAĞLAM sayar (rc 0) — bekçi merdiveni boşuna tırmandırmaz
+  ✓ D7 işaret VAR ama kurtarıcı AÇIK → 'kapalı-ama-AÇIK' + bozuk (K0 kapatacak)
+── O · onar.sh adım 4 (çıkarılan blok)
+  ✓ O1 işaret VAR + oturum yok → yeni oturum AÇILMAZ (tmux new-session çağrılmadı)
+  ✓ O1b günlük 'kapalı (Sultan 16 Eki) — açılmadı' der
+  ✓ O2 işaret VAR + oturum AÇIK → KAPATILIR (kill-session)
+  ✓ O2b oturum dosyası gitti (durum işarete yakınsadı)
+  ✓ O2c günlük 'açık bulundu, KAPATILDI' der
+  ✓ O3 işaret YOK → eski yol: oturum kurulur, Claude başlatılmaya çalışılır
+  ✓ O3b işaret yokken kill-session YOK
+── M · kademe.sh (K0 sahte-bozuk, K1 sahte claude, K3 haber dosyaya)
+  ✓ M1 merdiven K3'e düşer (rc 1)
+  ✓ M2 K2 ATLANIR: günlük 'K2 kurtarıcı kapalı … MUAVİN/SERDAR'a bildir'
+  ✓ M2b kurtarıcıya komut YAZILMAZ (send-keys yok)
+  ✓ M3 K3 iletisi 'kurtarıcı kapalı → MUAVİN/SERDAR'a bildir' taşır
+  ✓ M4 işaret yokken K2 denenir (eski davranış: 'kurtarıcı ajan da ayakta değil')
+  ✓ M4b işaret yokken K3 iletisinde kapalı notu YOK
+── MUTASYON (beklenen KIRMIZI): işaret kontrolü sökülürse kapılar ısırır mı
+  ✓ X1 MUTANT durum.sh işareti görmez → 'yok' basar (D2 onu yakalar)
+  ✓ X2 MUTANT onar adım 4 işarete rağmen kurtarıcıyı AÇAR (O1 onu yakalar)
+
+kurtarici-kapali.test: 25 geçti · 0 kaldı
+✓ install-listesi 69 skill: SKILL.md + version tam
+✓ repo-parity temiz (catalog 79 ↔ sync-targets 69)
+--- stderr ---

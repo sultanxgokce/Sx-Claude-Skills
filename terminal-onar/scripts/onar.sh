@@ -66,7 +66,7 @@ claude_baslat() {
   esac
   cmd=$(tmux display -p -t "$hedef" '#{pane_current_command}' 2>/dev/null)
   case "$cmd" in bash|sh|zsh|dash) ;; *) gunluk "K0 DUR: hedef panede '$cmd' çalışıyor — yazılmadı"; return 1 ;; esac
-  tmux send-keys -t "$hedef" -l "cd $PROJE && $BELLEK_ENV $komut"
+  tmux send-keys -t "$hedef" -l "cd $PROJE && $BELLEK_ENV $SIKISTIRMA_ENV $komut"
   tmux send-keys -t "$hedef" Enter
   local i; for i in $(seq 1 45); do sleep 2; claude_pid "$tm" >/dev/null && return 0; done
   return 1

@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh main
+# rc=1 sure=0.3s zaman=2026-10-26T23:03:28+03:00
+--- stdout ---
+kaynak=main · terminal-onar yazılan satır: YOK · İSKÂN doğan süreç: CLAUDE_CODE_AUTO_COMPACT_WINDOW=YOK (beklenen ikisi de 600k)
+--- stderr ---
