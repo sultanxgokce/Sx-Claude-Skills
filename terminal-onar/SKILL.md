@@ -1,9 +1,16 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.26.0
+version: 2.27.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.27.0 · Kişi terminali yolu `/tty-k` — kapı ttyd-kisi'ye vekiller, abc ttyd'sine düşmez (26 Eki · görev …A5Y3P · A5-3 · BÂNİ)
+Kapı `<taban>/tty-k[/…]` isteklerini (sayfa · `token` · `ws`) **kişi ttyd'sine** (`/run/kisi/<kişi>-ttyd.sock`; kişi adı kurulumdan,
+`KAPI_KISI` varsayılan `ayse`; `KAPI_TTYD_KISI_SOKET` ile yol) önekini sıyırarak iletir — ttyd-kisi `-b`'siz koşar, yolları kökten alır.
+Kapı köprüyle KONUŞMAZ ve kişiyi tanımaz (bir kutu = bir kişi; izin listesi köprüde). Soket yoksa **502** ("kurulu değil") — abc ttyd'sine
+hiçbir koşulda düşmez; `/tty/*` vekili değişmedi. Merkez tarafı (cloudtop 1.90.0): kişiye `/tty*` 403, yalnız `/tty-k` açık.
+Sınav `sunucu.test.mjs` TK1–TK7 (girişsiz 401 · kökten yol · abc sayacı 0 · soket yükseltme · /tty/ aynen · soket yokken 502 · abc açık kalır).
 
 ## 🆕 2.26.0 · Koltuk köprüsü — kısıtlı kişi için "ham tuş yok, iki güvenli düğme" (26 Eki · görev …A5Y3P · A5-1 · Sultan 12:58)
 Ayşenur koltukları izleyebilir, ajana mesaj bırakabilir, menü sorusuna şık seçebilir; **kabuk, kasa, ham tuş yok**. Ayrı Linux kullanıcısı
@@ -583,6 +590,7 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
+- **2.27.0 (2026-10-26, BÂNİ · A5-3):** kapıda `/tty-k/*` → ttyd-kisi vekili (kökten yol, soket yoksa 502, abc ttyd'sine düşmez); `KAPI_KISI` · `KAPI_TTYD_KISI_SOKET`.
 - **2.26.0 (2026-10-26, HEZARFEN · A5-1):** koltuk köprüsü + kişi istemcisi + mesaj komutu + kuru kipli kurulum paketi; ham tuş eylemi yok; `ttyd-kisi` `-W` düzeltmesi.
 - **2.13.2 (2026-10-16, BÂNİ · tarayıcı sınavı artıkları):** `dim-okunur-sinav.mjs` tarayıcıyı `tarayici-bul.mjs` ile bulur (2.13.1 ile aynı kural; eski sabit yol ikilisiz pakette çöküyordu) ve `launch()` hatası ÖLÇÜLEMEDİ. `bekci-iz.test.sh`: sahte tmux/crontab PATH ile veriliyordu ama `ortak.sh` /usr/bin'i öne koyduğu için hiç kullanılmıyordu (ölçüldü: `command -v tmux` gerçek yolu veriyordu) — sınav artık betiklerin KOPYASINI koşturur, kopyanın ortak.sh'ı sahte kutuyu sona ekleyip öne alır, H1 kapısı bunu her koşuda ölçer (kurtarici-kapali.test deseni). Dim sınavına da #347 deseni: bayat kapı portu ön-kontrolü (ÖLÇÜLEMEDİ rc 4) + çıkışta ttyd/kapı/tmux temizliği (launch'ta çöken koşum kapılarını bırakıyordu, ölçüldü); temizlik iki sınavda SIGKILL ve çıkış kancası PORT KONTROLÜNDEN ÖNCE kayıtlı (#347'de kanca sonra kaydediliyordu, rc-4 çıkışı kancasızdı → ttyd kalıyordu; ölçüldü); kanıtta kapılı (önce/sonra bayat süreç 0). Davranış değişikliği yok; sınav dürüstlüğü.
 - **2.13.1 (2026-10-16, BÂNİ · tarayıcı sınavı Playwright yolu, SERDAR bulgusu gorev_01M50PZVB1GCVG6D33V1PH96CT):** `pano-sinav.mjs` varsayılan olarak `/config/projects/Nexus/ui/node_modules`'a bakıyordu; orada paket var ama tarayıcı İKİLİSİ indirilmemiş → import geçip launch ÇÖKÜYORDU (rc 1 yığın; rc=4 ÖLÇÜLEMEDİ değil). Yeni `kapi/tarayici-bul.mjs`: adaylar sırayla (`KANIT_PLAYWRIGHT_DIR` → Nexus → nvm global `~/.nvm/versions/node/*/lib/node_modules`, en yeni önce), paketi VE `chromium.executablePath()` ikilisi diskte olan ilki seçilir; hiçbiri yoksa denenen yollar sebebiyle (`paket yok` / `ikili yok — npx playwright install`) ÖLÇÜLEMEDİ rc 4. `chromium.launch()` hatası da ÖLÇÜLEMEDİ. Artık ortam değişkensiz `node pano-sinav.mjs` bu kutuda 34/34. Üçüncü ortam hatasının (15 sn sayfa zaman aşımı) kökü ayrıydı: yarım kalan koşumun kapısı sabit portu (:18795/:18796) tutuyordu, sonraki koşum 200 görüp ölü ttyd soketine gidiyordu → pano-sinav artık koşmadan önce portu yoklar, cevap varsa ÖLÇÜLEMEDİ rc 4 + PID ile kapatma ipucu basar (bayat kapı portu dersi, 15 Eki). Sınav `tarayici-bul.test.mjs` (12; nvm sayısal sıra, G1 ölçülemeyince rc 4; `kapi-sinav.test.sh` ile CI'da — rc 4 sarı). Not: `dim-okunur-sinav.mjs` (#346) aynı eski deseni taşıyor — #346 birleşince aynı bulucuya bağlanır.

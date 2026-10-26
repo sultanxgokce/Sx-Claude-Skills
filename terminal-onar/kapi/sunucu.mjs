@@ -39,6 +39,12 @@ const GENEL = path.join(KOK, 'genel');
 const BETIK = path.resolve(KOK, '../scripts');
 const PORT = +(process.env.KAPI_PORT || 7681);
 const TTYD_SOKET = process.env.KAPI_TTYD_SOKET || path.join(process.env.TO_DURUM_DIZ || '/config/.terminal-onar', 'ttyd.sock');
+// ── KİŞİ TERMİNALİ (2.27.0 · A5-3 · görev …A5Y3P · HEZARFEN köprü sözleşmesi): /tty-k/* → ttyd-kisi (ayrı kullanıcı, komutu kabuksuz
+//    kisi-istemci.py; koltuğu istemci köprüden seçer, ?arg= taşınmaz). Kapı köprüyle KONUŞMAZ ve kişiyi tanımaz: bir kutu = bir kişi,
+//    soket kurulumdan (kisi-kur.sh: /run/kisi/<kişi>-ttyd.sock; ttyd -b'siz → yol kökten: / · /token · /ws). Soket yoksa 502 —
+//    abc ttyd'sine (TTYD_SOKET) hiçbir koşulda DÜŞMEZ (fail-closed: kişi isteği abc kabuğuna ulaşamaz).
+const KISI_AD = String(process.env.KAPI_KISI || 'ayse').replace(/[^a-z0-9_-]/g, '') || 'ayse';
+const TTYD_KISI_SOKET = process.env.KAPI_TTYD_KISI_SOKET || ('/run/kisi/' + KISI_AD + '-ttyd.sock');
 const ANA_TMUX = process.env.TO_ANA_TMUX || 'sedir-ana';
 // Kutunun proje dizini — ortak.sh ile AYNI kural (TO_PROJE ya da /config/projects/<kutu>); kadro kayıt dosyaları buradan okunur
 const PROJE = process.env.TO_PROJE || ('/config/projects/' + (process.env.TO_KUTU || (process.env.KAPI_TABAN || '').replace(/^\/+|\/+$/g, '') || 'kutu'));
@@ -195,6 +201,19 @@ async function tmuxGonder(metin) {
 const TUSLAR = new Set(['Escape', 'Up', 'Down', 'Left', 'Right', 'Enter', 'Tab', 'BTab', 'C-c', 'BSpace',
   '1', '2', '3', '4', '5', 'y', 'n']);
 
+// ---- kişi terminali: <taban>/tty-k[/...] → ttyd-kisi köküne (/, /token, /ws). Yol değilse null.
+function ttyKisiYolu(url) {
+  const tk = T('/tty-k'), u = String(url || ''), p = u.split('?')[0];
+  if (!(p === tk || p.startsWith(tk + '/'))) return null;
+  const r = u.slice(tk.length); return r.startsWith('/') ? r : ('/' + r);
+}
+function ttydKisiVekil(req, res) {
+  const yol = ttyKisiYolu(req.url);
+  const bas = { ...req.headers, host: 'localhost' };
+  const v = http.request({ socketPath: TTYD_KISI_SOKET, path: yol, method: req.method, headers: bas }, (yan) => { res.writeHead(yan.statusCode, yan.headers); yan.pipe(res); });
+  v.on('error', () => { if (!res.headersSent) json(res, 502, { hata: 'Kişi terminali bu kutuda kurulu değil (ttyd-kisi yok).' }); else res.destroy(); });
+  req.pipe(v);
+}
 // ---- ttyd'ye vekâlet (HTTP). ttyd'nin HTML sayfasına pano köprüsü (genel/pano.js) gömülür.
 function ttydVekil(req, res) {
   const bas = { ...req.headers, host: 'localhost' };
@@ -354,6 +373,7 @@ const sunucu = http.createServer(async (req, res) => {
   //    ölçmesi zor. Tek bir değişken enjekte etmek denetlenebilir.
   if (y === '/' || y === '/index.html') return dosyaTabanli(res, 'index.html');
   if (y === '/uygulama.js') return dosya(res, 'uygulama.js');
+  if (y === '/tty-k' || y.startsWith('/tty-k/')) return ttydKisiVekil(req, res);   // kişi terminali ÖNCE: '/tty' öneki onu da yakalardı (abc ttyd'sine düşerdi)
   if (y.startsWith('/tty')) return ttydVekil(req, res);
 
     // ── RAPOR SAYFALARI (2026-09-30, Sultan isteği) ─────────────────────────────
@@ -674,6 +694,23 @@ sunucu.on('upgrade', (req, soket, bas) => {
   console.log(new Date().toISOString(), 'tam-terminal bağlantısı', (req.headers['user-agent'] || '').slice(0, 80));
   // 🔴 ÖNEK DEĞİL SINIR: `startsWith('/sedir/tty')` `/sedir/ttyXYZ` yolunu da kabul
   //    ederdi. Yol ya tam eşleşir ya da eğik çizgiyle devam eder.
+  // KİŞİ TERMİNALİ soketi (A5-3): <taban>/tty-k/ws → ttyd-kisi; soket yoksa 502 (abc ttyd'sine düşmez)
+  const _kyol = ttyKisiYolu(req.url || '');
+  if (_kyol !== null) {
+    if (!girisli(req)) { soket.end('HTTP/1.1 401 Unauthorized\r\n\r\n'); return; }
+    const hk = net.connect(TTYD_KISI_SOKET, () => {
+      const b = [`${req.method} ${_kyol} HTTP/1.1`];
+      for (let i = 0; i < req.rawHeaders.length; i += 2) {
+        const ad = req.rawHeaders[i];
+        b.push(`${ad}: ${ad.toLowerCase() === 'host' ? 'localhost' : req.rawHeaders[i + 1]}`);
+      }
+      hk.write(b.join('\r\n') + '\r\n\r\n'); if (bas?.length) hk.write(bas);
+      hk.pipe(soket); soket.pipe(hk);
+    });
+    hk.on('error', () => { if (soket.writable) soket.end('HTTP/1.1 502 Bad Gateway\r\n\r\n'); hk.destroy(); soket.destroy(); });
+    soket.on('error', () => { hk.destroy(); soket.destroy(); });
+    return;
+  }
   const _tty = T('/tty');
   const _yol = (req.url || '').split('?')[0];
   if (!girisli(req) || !(_yol === _tty || _yol.startsWith(_tty + '/'))) { soket.end('HTTP/1.1 401 Unauthorized\r\n\r\n'); return; }
@@ -690,4 +727,4 @@ sunucu.on('upgrade', (req, soket, bas) => {
   hedef.on('error', kapat); soket.on('error', kapat);
 });
 
-sunucu.listen(PORT, '0.0.0.0', () => console.log(new Date().toISOString(), `kapı :${PORT}${TABAN || ' (kök)'} → ttyd ${TTYD_SOKET}`));
+sunucu.listen(PORT, '0.0.0.0', () => console.log(new Date().toISOString(), `kapı :${PORT}${TABAN || ' (kök)'} → ttyd ${TTYD_SOKET} · kişi ttyd ${TTYD_KISI_SOKET}`));

@@ -1,0 +1,88 @@
+{
+  "is": "kapi-tty-k",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T18:44:29+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinavi-once.txt",
+      "sha256": "1d6f3b556efbc1f636f9a4cbd289841ff7e489c7a79398f4c0db62925d421fb2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ttyk/kapi-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T18:43:50+03:00",
+      "sure_sn": 7.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "db2b594eea9b445da2f42b8416e7104c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "66aa49aade7b31d19aa6af6ec86776af5a1ea6f31670f9c5c8d4de1f9f9fa861",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ttyk/kapi-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:40:31+03:00",
+      "sure_sn": 7.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e7eef39519d24d8caef1cd97af53f1aa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "regresyon-takimi",
+      "asama": "sonra",
+      "dosya": "olcum-regresyon-takimi-sonra.txt",
+      "sha256": "13aa606960f23ddcabc58d7ed399fd628eecfc1538ec4dcba1a5f3abad5e122c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ttyk/kapi-reg.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:41:14+03:00",
+      "sure_sn": 42.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5c691901cb8048f1b7a7f0f562e35563"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-takimi",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-takimi-sonra.txt",
+      "sha256": "06e38bd78aa8461c2ccacaa0b97d70e9bbb710148674995fbbdfa3a5054eae49",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ttyk/mut-kapi.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:44:29+03:00",
+      "sure_sn": 37.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e1d0d76927284dd39deb557f5cdf5cfa"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "sunucu-test",
+      "asama": "tek",
+      "dosya": "dosya-sunucu-test-tek.mjs",
+      "sha256": "5ba9b8ec642c9587e43cc4bd8647c540d6a2ed28f639719b7e2c27471e02d42a",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-kapi-tty-k/terminal-onar/kapi/sunucu.test.mjs",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:43:46+03:00",
+      "olcum_id": "27b4a183eece4cb4bd6d6b90a5979556"
+    }
+  ],
+  "imza": "f39f016528748d366eac22588fc2c0dde7b9e75865f11f9be1ad9d7226e9c3b5"
+}

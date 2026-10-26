@@ -1,0 +1,10 @@
+$ python3 /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ttyk/mut-kapi.py
+# rc=0 sure=37.3s zaman=2026-10-26T18:44:29+03:00
+--- stdout ---
+pozitif kontrol rc=0 ✓ yeşil
+✓ yakalandı: abc-ye-duser (rc=1) → ✗ TK2 /tty-k/ kişi ttyd'sine KÖKTEN gider (ttyd -b yok): / · /token · tabansız /tty-k → / → [{"ttyd":true,"yol
+✓ yakalandı: yol-once-tty (rc=1) → ✗ TK2 /tty-k/ kişi ttyd'sine KÖKTEN gider (ttyd -b yok): / · /token · tabansız /tty-k → / → [{"ttyd":true,"yol
+✓ yakalandı: soket-abc (rc=1) → ✗ TK5 /tty/ vekili DEĞİŞMEDİ: abc ttyd'sine tabanlı yol → {"ttyd":true,"yol":"/sedir/tty/"}
+✓ yakalandı: hata-abc-ye (rc=1) → ✗ TK6 ttyd-kisi yokken sayfa ve soket 502 (abc ttyd'sine DÜŞMEZ: abc sayacı aynı) · hata metni kurulumu söyler
+MUTANT ÖZET: tanımlı=4 üretildi=4 yakalandı=4
+--- stderr ---
