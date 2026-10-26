@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/kisi-kur.test.sh
-# rc=0 sure=0.2s zaman=2026-10-26T23:15:29+03:00
+# rc=0 sure=0.3s zaman=2026-10-26T23:17:49+03:00
 --- stdout ---
   ✓ Q1 kuru kip rc 0
   ✓ Q2 kuru kipte hiçbir dizin/dosya oluşmadı
@@ -17,7 +17,10 @@ $ bash terminal-onar/scripts/kisi-kur.test.sh
   ✓ Q13 kök olmadan --uygula reddi (rc 2)
   ✓ Q10 ttyd komutu çözülen TAM yolla yazılır
   ✓ Q11 ttyd bulunamazsa rc 3, 'ttyd bulunamadı', hiçbir adım basılmadı
-  ✓ Q12 ttyd başkalarına çalıştırılabilir değilse rc 3 (ayse çalıştıramaz)
+  ✓ Q12 ttyd dosyası başkalarına çalıştırılabilir değilse rc 3 (ayse çalıştıramaz)
+  ✓ Q14 dosya açık ama ÜST DİZİN kapalıysa rc 3 (geçiş izni yok)
+  ✓ Q15 göreli TTYD_BIN reddedilir (komuta mutlak yol yazılır)
+  ✓ Q16 sembolik bağ çözülür: komuta GERÇEK dosyanın yolu yazılır
 
-17 geçti, 0 kaldı
+20 geçti, 0 kaldı
 --- stderr ---

@@ -40,7 +40,18 @@ TTYD="${TTYD_BIN:-$(command -v ttyd 2>/dev/null || true)}"
 if [ -z "$TTYD" ]; then for c in /config/.local/bin/ttyd /usr/local/bin/ttyd /usr/bin/ttyd; do [ -x "$c" ] && { TTYD="$c"; break; }; done; fi
 if [ -z "$KOK" ]; then
   [ -n "$TTYD" ] && [ -x "$TTYD" ] || { echo "kisi-kur: ttyd bulunamadı (PATH, /config/.local/bin, /usr/local/bin) — kurulmadı; TTYD_BIN=<yol> ver" >&2; exit 3; }
-  [ $(( $(stat -c %a "$TTYD") % 2 )) -eq 1 ] || { echo "kisi-kur: $TTYD diğer kullanıcılara çalıştırılabilir değil — \`$KULLANICI\` çalıştıramaz, kurulmadı" >&2; exit 3; }
+  case "$TTYD" in /*) ;; *) echo "kisi-kur: TTYD_BIN mutlak yol olmalı (verilen: $TTYD) — kurulmadı" >&2; exit 3 ;; esac
+  TTYD="$(readlink -f "$TTYD")"   # sembolik bağ çözülür: komuta yazılan yol gerçek dosyanın yolu
+  # `$KULLANICI` bu dosyayı çalıştırabilmeli. Kullanıcı varsa GERÇEK sınav (onun kimliğiyle); yoksa dosya + bütün üst dizinlerde "diğerleri x" biti aranır (ACL/grup izni sayılmaz: dar ama güvenli taraf)
+  if [ "$(id -u)" = 0 ] && id -u "$KULLANICI" >/dev/null 2>&1; then
+    su -s /bin/sh "$KULLANICI" -c 'test -x "$1"' _ "$TTYD" || { echo "kisi-kur: \`$KULLANICI\` $TTYD dosyasını çalıştıramıyor (kullanıcı kimliğiyle sınandı) — kurulmadı" >&2; exit 3; }
+  else
+    p="$TTYD"
+    while :; do
+      [ $(( $(stat -c %a "$p") % 2 )) -eq 1 ] || { echo "kisi-kur: $p diğer kullanıcılara çalıştırılabilir/geçilebilir değil — \`$KULLANICI\` $TTYD dosyasını çalıştıramaz, kurulmadı (TTYD_BIN=<herkese açık yol>)" >&2; exit 3; }
+      [ "$p" = / ] && break; p="$(dirname "$p")"
+    done
+  fi
 fi
 n=0; adim() { n=$((n+1)); printf '\nADIM %d — %s\n' "$n" "$1"; }
 yap() {  # yap <komut...>: kuru kipte yalnız basar
