@@ -5,6 +5,7 @@
 #   sınav kancası (DENETCI_KOMUT) sırayı hiç görmez · bekleme zaman aşımına SAYILMAZ. HERMETİK: sahte sıra betiği, sahte codex; gerçek
 #   sıra kütüğüne (/config/.filo) ve yüke dokunmaz; G bölümü gerçek sıra betiğini YALNIZ geçici AGIR_SIRA_DIZ ile koşar. Mutasyon kanıtlı.
 set -uo pipefail
+export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PKG="${MUTANT_PKG:-$HERE}"; D="$PKG/denetci.sh"; K="$PKG/kanit.sh"   # mutant koşusunda PKG = mutasyonlu tam kopya
 T="$(mktemp -d)"; trap 'python3 -c "import shutil,sys; shutil.rmtree(sys.argv[1], True)" "$T"' EXIT

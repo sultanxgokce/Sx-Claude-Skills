@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/on-sonra.sh
+# rc=0 sure=13.8s zaman=2026-10-26T12:19:08+03:00
+--- stdout ---
+on-goz-otomatik-cagri=1/1
+--- stderr ---

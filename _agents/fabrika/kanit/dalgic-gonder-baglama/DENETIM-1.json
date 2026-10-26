@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "dalgic-gonder-baglama",
+  "pr": "465",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T13:56:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dalgic-gonder-baglama",
+  "dal": "dalgic-gonder-baglama",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35990,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 5916
+  },
+  "bas": "0ed7d47ab529d733d9ce30c440a99d777428a58c",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gönder akışına, bağımsız göz çağrısından önce çalışan ve raporunu ekrana basan DALGIÇ ön-gözü bağlanmış; UYUMSUZ ve ölçülemeyen sonuçlar yalnız bilgi olarak tutulmuş. Sultan, gerçek ölçümün 0/1’den 1/1’e geçtiğini, mutasyonun bozuk davranışı yakaladığını ve göze giden istemin açık/kapalı durumda bayt bayt aynı sınandığını gördüğü için işi üretime hazır sayar.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; önce/sonra ölçüm çifti kırmızı rc=1 ve yeşil rc=0 olarak davranış değişimini gösteriyor. Sonraki gerçek ölçüm on-goz-otomatik-cagri=1/1; ayrıca mutasyon kaydı yeşil olup bilerek bozulan kodda 0/1 ve rc=1 üreterek sınavın kusuru yakaladığını doğruluyor. Sarı kayıt yok; görsel gerektirmeyen kabuk akışı için ölçüm kanıtı yeterli."
+  }
+}

@@ -47,8 +47,8 @@ _zil_cal() {   # _zil_cal <komut…> → rc (aile-notify meşgul koltukta zili k
 _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
-  if [ -z "$an" ] && [ -n "${DENETCI_KOMUT:-}" ]; then   # sınav kipi: gerçek zil ARANMAZ, yalnız açıkça verilen çalar
-    printf '· sınav kipi (DENETCI_KOMUT): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
+  if [ -z "$an" ] && { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ] || [ -n "${SAHTE_ISTEM_KOPYA:-}" ]; }; then   # sınav kipi (sahte göz/sahte json): gerçek zil ARANMAZ, yalnız açıkça verilen çalar
+    printf '· sınav kipi (DENETCI_KOMUT/SAHTE_JSON): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
   [ -n "$an" ] || an="$(command -v aile-notify.sh 2>/dev/null)"
   [ -n "$an" ] || for k in "${DEPO:-}/scripts/aile-notify.sh" /config/projects/Nexus/scripts/aile-notify.sh; do [ -f "$k" ] && { an="$k"; break; }; done
   if [ -z "$an" ] || [ ! -f "$an" ]; then printf '⚠ denetçi bitiş zili ATLANDI: aile-notify bulunamadı (FABRIKA_AILE_NOTIFY ile ver) — rc %s\n' "$rc" >&2; return 0; fi
@@ -654,6 +654,26 @@ fi
 if [ -n "$KART" ]; then cp "$KART" "$TMP/kart.md"
 elif [ -n "$PR" ]; then (cd "$DEPO" && gh pr view "$PR" --json title,body --jq '"# \(.title)\n\n\(.body)"' > "$TMP/kart.md") || echo "(iş kartı okunamadı)" > "$TMP/kart.md"
 else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'ye yakın değerlendirilir)" > "$TMP/kart.md"; fi
+# ── DALGIÇ ÖN-GÖZ (ZP640T, SERDAR 26 Eki): bağımsız göze GİTMEDEN önce yazanın farkı kart cümlesine ucuz bir ön-gözle karşılaştırılır
+#    (W42-E1 deneyi: 5 işte 5-16 sn, 0,03-0,12 USD). 🔴 YALNIZ BİLGİDİR: puana, tur sayımına, rc'ye ve göze giden isteme dokunmaz
+#    (göz bağımsızlığı bozulmasın; rapor göze kendiliğinden GİTMEZ — yazan PR gövdesine koyarsa göz onu gövdeden okur, o yazanın kararı).
+#    UYUMSUZ/ÖLÇÜLEMEDİ büyük uyarı basar. Rapor her durumda ekrana yazılır (kontrol karakterleri süzülür, 4000 bayta kırpılır).
+#    Kapalı: DALGIC_KAPALI=1 (sınavlar), kartsız koşu. dalgic.sh yoksa (başka kutu) "atlandı" yazar. Ön-göz çıktısı $TMP altında kalır (EXIT'te silinir).
+if [ "${DALGIC_KAPALI:-0}" != 1 ] && [ -n "$KART" ]; then
+  DALGIC_BIN="${DALGIC_BIN:-}"
+  if [ -z "$DALGIC_BIN" ]; then for _d in "$DEPO/_agents/dalgic/dalgic.sh" /config/projects/Nexus/_agents/dalgic/dalgic.sh; do if [ -r "$_d" ]; then DALGIC_BIN="$_d"; break; fi; done; fi
+  if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
+  else
+    DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$TMP/diff.patch" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
+    DALGIC_OUT="$(tr -d '\000-\010\013-\037\177' < "$TMP/dalgic.ham" | head -c 4000)"
+    case "$DALGIC_RC" in
+      0) _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;
+      1) _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor (bu rapor bağımsız göze KENDİLİĞİNDEN gitmez). Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:" ;;
+      *) _bilgi "· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=$DALGIC_RC) — UYUMLU sayılmaz; denetim yine sürer" ;;
+    esac
+    [ -z "$DALGIC_OUT" ] || { printf '%s\n' "$DALGIC_OUT" | sed 's/^/   | /'; _bilgi ""; }
+  fi
+fi
 # İstem PARÇA PARÇA kurulur, sonra birleşir (BÂNİ 21:59, 18 Eki): boyut kapısı aşağıda istemin tamamını ölçer ve
 # aşınca HANGİ parçanın şiştiğini söyler. Birleşen metin eskisiyle bayt bayt aynıdır.
 { cat "$ISTEM"; } > "$TMP/p-sablon.md"
