@@ -1,0 +1,26 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/dy-once.sh
+# rc=1 sure=0.1s zaman=2026-10-26T16:53:26+03:00
+--- stdout ---
+── KURU: neyi yazacağını basar, deftere yazmaz
+  ✗ D1 kuru rc=0 — beklenen=0 gerçek=127
+  ✓ D2 kuru: ekle çağrılmaz
+  ✗ D3 kuru: 'yazardım' satırları (yeni + iptal olan = 2) — beklenen=2 gerçek=0
+  ✗ D4 kuru: açık ve onay bekleyen görevle aynı başlık (büyük/küçük harf, sıra numarası farkıyla) atlanır — beklenen=2 gerçek=0
+  ✗ D4b kutu listeden türedi (huma) — beklenen=1 gerçek=0
+── UYGULA: yazar, İKİNCİ koşu çift yazmaz
+  ✗ D5 uygula rc=0 — beklenen=0 gerçek=127
+  ✗ D6 iki görev yazıldı — beklenen=2 gerçek=0
+  ✗ D7 ekle bayrakları: kutu · atanan · özellik · günlük plan kaynağı — beklenen=2 gerçek=0
+  ✓ D8 ikinci koşu: hiçbir şey yazılmaz (idempotent)
+── ÖLÇÜLEMEYEN durum 'yazılacak bir şey yok' DENMEZ
+  ✗ D9 defter listesi okunamadı → rc=3 — beklenen=3 gerçek=127
+  ✗ D10 çıpa yok → rc=3 — beklenen=3 gerçek=127
+  ✗ D10b liste BOŞ → rc=3 (boş liste 'iş yok' değil, ölçülemedi) — beklenen=3 gerçek=127
+── Hata ve sınırlar
+  ✗ D11 ekle başarısız → rc=1 (yazıldı denmez) — beklenen=1 gerçek=127
+  ✗ D12 200 karakter üstü madde REDDEDİLİR (rc=1), ekle çağrılmaz — beklenen=1:0 gerçek=127:0
+  ✗ D13 geçersiz aciliyet rc=2 — beklenen=2 gerçek=127
+  ✗ D14 tanınmayan argüman rc=2 — beklenen=2 gerçek=127
+  ✗ D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer — beklenen=1 gerçek=0
+── SONUÇ: 2 geçti · 15 kaldı ──
+--- stderr ---

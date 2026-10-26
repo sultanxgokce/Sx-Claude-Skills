@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-deftere-yaz",
+  "pr": "472",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T16:55:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-deftere-yaz",
+  "dal": "gunluk-plan-deftere-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25579,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8739
+  },
+  "bas": "b9ca7f689d1f396f5a153c5c4987f39e58e05dd8",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Deftere yazma, açık görev tekrarını engelleme ve hata sınırları için çalışan bir betik ile hermetik sınav eklenmiş. Ancak onay şartı uygulanmıyor ve aynı gün tamamlanmış madde yeniden açılabildiği için iş kartının iki temel talebi henüz karşılanmıyor; önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Betik yalnız onaylanan plan maddelerini seçmiyor; çıpadaki bütün açık maddeleri doğrudan aday kabul ediyor. Onaydan önce çağrılmaması yalnız belge talimatına bırakılmış ve sınavda onaysız maddenin reddi ölçülmemiş.",
+        "kanit": "Üretim kodunda `CIPA_METNI` içindeki her `- [ ]` satırı işleniyor; onay durumunu okuyan veya doğrulayan hiçbir koşul yok. SKILL metni yalnız “Plan onaylandıktan sonra koşulur” diyor; sonraki ölçümdeki 17 sınav arasında onay kapısı bulunmuyor.",
+        "konum": "gunluk-plan/scripts/deftere-yaz.sh:35-70; gunluk-plan/SKILL.md:95; olcum-deftere-yaz-sinavi-sonra.txt D1-D15",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“Aynı gün aynı madde ikinci kez yazılmaz” şartı sağlanmıyor: eşleştirme yalnız açık görevleri kapsıyor. Aynı başlık bugün tamamlanmış, bitmiş veya iptal edilmişse listeden çıkarılıyor ve yeniden yazılıyor; ayrıca gün karşılaştırması yapılmıyor.",
+        "kanit": "Durum filtresi `iptal`, `bitti` ve `tamam` kayıtlarını açık başlık kümesinden çıkarıyor; kodda görev tarihini bugünün tarihiyle karşılaştıran bir denetim yok. Sınav da iptal edilmiş aynı başlığın yeniden yazılmasını bekleyerek bu davranışı D3/D6'da başarılı sayıyor.",
+        "konum": "gunluk-plan/scripts/deftere-yaz.sh:47-54; gunluk-plan/scripts/deftere-yaz.test.sh:31-44; olcum-deftere-yaz-sinavi-sonra.txt D3,D6",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; kırmızı önce/yeşil sonra ölçüm çifti ile 10/10 mutant yakalama kaydı var, sarı kayıt yok. Bununla birlikte yeşil sınav yanlış hedefi de onaylıyor: iptal edilmiş aynı maddeyi yeniden yazılabilir sayıyor ve onay kapısını sınamıyor. Gerçek defter kaydı yalnız kuru çalıştırmayı gösteriyor; gerçek yazım veya ikinci gerçek koşu kanıtı değil."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-deftere-yaz",
+  "pr": "472",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T17:06:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-deftere-yaz",
+  "dal": "gunluk-plan-deftere-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29211,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 11296
+  },
+  "bas": "407bd461e99067d52d6f198657733fe4f5bd19d9",
+  "duzeltme_farki": {
+    "onceki_bas": "59d5953026e4e745093d007455c87937597a07fd",
+    "dosya": 9,
+    "bayt": 23434,
+    "tam_bayt": 36918
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Aynı gün ve mevcut plan imzası kapıya bağlanmış; önceki B1’in eski tarih ve değişmiş plan bölümü kapanmış, idempotans ile hata sınırları da yeşil ölçülmüş. Ama onayın gerçekten Sultan’dan geldiği hâlâ doğrulanmıyor ve sınav kuru koşuyu bir yerde fiilen çağırmadan geçmiş sayıyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kısmen kapanmış: tarih bugüne, onay da mevcut plan imzasına bağlanmış; ancak sohbet referansı, alıntı ve beyanın gerçek bir Sultan onayından geldiği doğrulanmıyor. Bugünün tarihi ile kuru koşudan öğrenilen plan imzasını taşıyan uydurma bir metin de bütün açık maddeleri yazdırabilir; bu yüzden “onaylanan plan maddeleri” şartı güvenilir biçimde sağlanmıyor.",
+        "kanit": "Kod yalnız düzenli ifade, `${ONAY%% *} = $BUGUN` ve metin içindeki `plan:$PLAN_IMZA` eşleşmesini denetliyor; oturum referansı veya alıntı herhangi bir güvenilir onay kaynağına bağlanmıyor. Test de `yenile_onay` içinde onayı kendi üretiyor ve D17f bunun kabul edildiğini gösteriyor.",
+        "konum": "gunluk-plan/scripts/deftere-yaz.sh:63-76; gunluk-plan/scripts/deftere-yaz.test.sh:12-14,82-83; olcum-deftere-yaz-sinavi-sonra.txt D17c-D17f",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "D19 kuru-koşu sınavı artık aracı çalıştırmıyor; önceki komutun başarı kodunu kontrol ederek koşulsuz geçebiliyor.",
+        "kanit": "`: > \"$T/ekle.log\"` komutunun hemen ardından `kapi ... \"$?\"` çağrılıyor; arada `bash \"$ARAC\"` yok. Buna rağmen ölçüm çıktısı D19’u geçti gösteriyor, dolayısıyla bu yeşil satır kuru koşu davranışını ölçmüyor.",
+        "konum": "gunluk-plan/scripts/deftere-yaz.test.sh:84-85; olcum-deftere-yaz-sinavi-sonra.txt D19",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Belgelenen en fazla 15 kelimelik onay alıntısı sınırı uygulanmıyor.",
+        "kanit": "SKILL biçimi `\"<≤15 kelime verbatim>\"` diyor; uygulamadaki ifade yalnız alıntının en az üç karakter olmasını (`[^\\\"]{3,}`) şart koşuyor ve üst kelime sınırı denetlenmiyor.",
+        "konum": "gunluk-plan/SKILL.md:95; gunluk-plan/scripts/deftere-yaz.sh:66-70",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra çifti 28/28 sonucu, mutasyon kaydı 17/17 mutantın yakalandığını gösteriyor; mutasyon FAIL’i gerçek kod kusuru değildir. Bununla birlikte yeşil D19 satırı hatalı test akışı nedeniyle ölçüm sayılmaz; gerçek defter kaydı da yalnız kuru koşudur, bir aday ile uzun madde reddini gösterir ve gerçek yazım/ikinci gerçek koşuyu kanıtlamaz."
+  }
+}

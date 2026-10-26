@@ -1,0 +1,48 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-deftere-yaz",
+  "pr": "472",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T16:59:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-deftere-yaz",
+  "dal": "gunluk-plan-deftere-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30054,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12216
+  },
+  "bas": "59d5953026e4e745093d007455c87937597a07fd",
+  "duzeltme_farki": {
+    "onceki_bas": "b9ca7f689d1f396f5a153c5c4987f39e58e05dd8",
+    "dosya": 9,
+    "bayt": 25135,
+    "tam_bayt": 30637
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Aynı gün kapanmış görevleri de tekrar engelleyen tarihli eşleştirme eklenmiş ve önceki B2 kapanmış; sınav bunu ve ikinci koşu idempotansını ölçüyor. Ancak önceki B1 yalnız biçimsel bir metin kapısına dönüştürülmüş: onay referansı mevcut planla veya günle bağlanmadığından herhangi bir uygun biçimli metin onaysız maddelerin yazılmasına izin verebilir; önce bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 tam kapanmamış: `--onay` yalnız düzenli ifadeye göre denetleniyor; tarihin bugünle, referansın mevcut planla veya kırpığın gerçek onayla ilişkisi doğrulanmıyor. Bu nedenle eski ya da uydurma fakat biçime uyan bir metin, çıpadaki bütün açık maddeler için onay sayılıyor.",
+        "kanit": "Kapı yalnız `grep -Eq` sonucuna bakıyor ve başarılı olunca `ONAY` bir daha kullanılmıyor; `BUGUN` ya da `CIPA_METNI` ile hiçbir bağ kurulmamış. Sınavdaki sabit `ONAY` metni de gerçek bir onay kaynağından okunmadan D5-D8 ve D11-D15'i geçiriyor; D16-D18 yalnız eksik/biçimsiz dizgilerin reddini ölçüyor.",
+        "konum": "gunluk-plan/scripts/deftere-yaz.sh:17-34; gunluk-plan/scripts/deftere-yaz.test.sh:8,42-48,57-69; olcum-deftere-yaz-sinavi-sonra.txt D5-D8,D16-D18",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti 22/22 geçişi, mutasyon kaydı 14/14 mutantın yakalandığını gösteriyor; B2 için bugün kapanan görevler ve ikinci koşu açıkça ölçülmüş. Gerçek defter ölçümü yalnız kuru koşudur ve bir uzun maddenin reddiyle bir adayın yazılacağını gösterir; gerçek yazım/ikinci gerçek koşu kanıtı değildir. Yeşil sınav ayrıca onayın gerçekliğini değil yalnız metin biçimini sınadığı için B1 iddiasını tamamlamaz."
+  }
+}

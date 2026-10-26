@@ -1,0 +1,40 @@
+{
+  "tur": 4,
+  "is": "gunluk-plan-deftere-yaz",
+  "pr": "472",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T17:10:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-deftere-yaz",
+  "dal": "gunluk-plan-deftere-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24237,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 11701
+  },
+  "bas": "0730119d2c8ed4015891ba55baceaafd5e95acda",
+  "duzeltme_farki": {
+    "onceki_bas": "407bd461e99067d52d6f198657733fe4f5bd19d9",
+    "dosya": 9,
+    "bayt": 15721,
+    "tam_bayt": 42357
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B2, kuru koşuyu gerçekten çalıştırıp çıktıyı ve ekle çağrısını denetleyen D19 ile; B3 ise 15 kelime sınırı ve iki sınır testiyle kapanmış, B1’in kalan kaynak-doğrulama kısmı da açıkça ayrı karta daraltılmıştır. Mevcut kartın onay referansı biçimi, gün/imza bağı, yazma davranışı ve aynı gün mükerrerliği ölçülmüş; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Kırmızı önce/yeşil sonra çifti 2/17’den 30/30’a geçişi gösteriyor; D19 artık aracı gerçekten çağırıyor, D17h-D17i de 15 kelime sınırının iki tarafını ölçüyor. Mutasyon kaydı 19 mutantın tamamının yakalandığını gösteriyor ve içindeki başarısızlıklar beklenen mutasyon sonucudur. Gerçek defter kaydı yalnız kuru koşu olduğundan gerçek yazma/ikinci gerçek koşu kanıtı değildir; ayrıca kayıt dıştan rc=0 iken stdout içinde rc=1 bildiriyor, fakat esas hermetik ölçüm yazma ve idempotans davranışını yeşil doğruluyor."
+  }
+}
