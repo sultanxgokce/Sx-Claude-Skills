@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-once.sh
+# rc=1 sure=686.4s zaman=2026-10-26T09:39:02+03:00
+--- stdout ---
+beğeni-kuralı-satırı=0 tur-biçimi-satırı=0 (gönder adımı belgesi, origin/main)
+--- stderr ---
+⏳ agir-sira: kanit-begeni-dongusu-tur-kurali-kural-satiri 686 sn bekledi (yuva 2, load1 15.11)

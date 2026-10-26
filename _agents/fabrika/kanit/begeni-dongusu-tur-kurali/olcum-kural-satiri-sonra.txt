@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-sonra.sh
+# rc=0 sure=320.8s zaman=2026-10-26T09:46:01+03:00
+--- stdout ---
+beğeni-kuralı-satırı=1 tur-biçimi-satırı=1 (gönder adımı belgesi, bu dal)
+--- stderr ---
+⏳ agir-sira: kanit-begeni-dongusu-tur-kurali-kural-satiri 320 sn bekledi (yuva 2, load1 17.53)

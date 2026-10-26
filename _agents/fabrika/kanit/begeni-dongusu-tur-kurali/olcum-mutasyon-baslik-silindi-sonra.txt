@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kural-satiri-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-mut.sh
+# rc=1 sure=0.0s zaman=2026-10-26T09:39:02+03:00
+--- stdout ---
+beğeni-kuralı-satırı=0 tur-biçimi-satırı=1 (başlık satırı silinmiş kopya)
+--- stderr ---
