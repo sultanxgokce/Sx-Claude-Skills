@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-supur.sh /config/.claude/skills/yazilim-fabrikasi/scripts/kart.sh eslesen
+# rc=1 sure=0.1s zaman=2026-10-26T22:01:26+03:00
+--- stdout ---
+supur-varyant-eslesen=0/2
+--- stderr ---
