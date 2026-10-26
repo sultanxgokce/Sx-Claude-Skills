@@ -1,0 +1,32 @@
+{
+  "is": "telefon-tam-terminal",
+  "cumle": "terminal-onar koltuk-bagla.sh telefon kipi: adres 'tel.' önekli gelirse (tel. = ana oturum, tel.<koltuk ya da kimlik> = o koltuk) tmux'a ignore-size bayrağıyla bağlanır, böylece telefon bağlıyken masaüstündeki pencere daralmaz; öneksiz adres bugünkü gibi; önekten sonra gelen ad aynı kapılardan geçer; argümansız yol aynen",
+  "istedi": "Sultan",
+  "aldi": "BANI",
+  "zaman": "2026-10-26T10:22:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5TAFGGN6MWHMWRZ46XQY97Y",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T10:22:10+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

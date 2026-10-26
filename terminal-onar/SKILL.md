@@ -1,9 +1,19 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.24.0
+version: 2.25.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.25.0 · Telefon kipi: `tel.` önekiyle bağlanan telefon masaüstünü DARALTMAZ (26 Eki · gorev_…XQY97Y D4 · Sultan 25 Eki)
+Sultan: "terminal mobilde de çalışmalı" ve telefondaki terminal masaüstündeki oturumu daraltmamalı. Bugün telefon terminale hiç
+bağlanmıyor (merkez soketi kesiyor), çünkü `window-size smallest` altında telefon bir istemci olarak bağlanınca pencere HERKES
+için telefon boyuna iner — gerçek tmux 3.4 ile ölçüldü: 200 sütunluk pencere 50 sütunluk telefon gelince 50'ye düştü
+(`koltuk-bagla.sh`'nin bugünkü `window-size latest` ayarı da bunu önlemiyor). Artık adres `?arg=tel.` (ana oturum) ya da
+`?arg=tel.<koltuk|kimlik>` ise `koltuk-bagla.sh` öneki ayırır, kalan adı bugünkü kapıların HEPSİNDEN geçirir (süzgeç · gizli ·
+beyaz liste · kimlik çözümü) ve tmux'a `-f ignore-size` ile bağlanır: istemci pencere boyu hesabına girmez, aynı ölçümde pencere 200
+sütunda kaldı. Önek belirsiz olamaz (koltuk adında nokta yasak). Öneksiz adres ve argümansız yol bayt bayt aynı. Telefonun ekranını
+masaüstü genişliğinde açıp yana kaydırmak merkezin işi (cloudtop, ayrı kart). Sınav: `koltuk-bagla.test.sh` T1–T10.
 
 ## 🆕 2.24.0 · Ekran adresi ad değil AD DIŞI KİMLİK taşır (24 Eki · gorev_…P4GT2W · SERDAR 12:4x)
 Mahrem kutuda (vekatip) oturum adı müvekkil adıdır. Merkez Kadro'da adı kısaltıyordu ama "Aç" bağlantısının adresi

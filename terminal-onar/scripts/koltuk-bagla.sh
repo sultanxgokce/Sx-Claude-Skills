@@ -3,6 +3,8 @@
 #
 #   koltuk-bagla.sh <ana-oturum> <proje-dizini> [koltuk]   ttyd'nin çalıştırdığı komut (ttyd -a: adresteki
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
+#                                                          TELEFON KİPİ (2.25.0): ?arg=tel. (ana oturum) · ?arg=tel.<koltuk|kimlik> →
+#                                                          tmux'a '-f ignore-size' ile bağlanır: telefon pencere boyunu ETKİLEMEZ, masaüstü daralmaz
 #   koltuk-bagla.sh --gizli                                listede OLMAYAN oturumlar, gerekçesiyle: ad · neden (G-BANI-0007:
 #                                                          sessiz düşürme yok — gizlenen her oturum adıyla ve nedeniyle sayılır)
 #   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
@@ -280,6 +282,13 @@ fi
 ANA="${1:?kullanım: koltuk-bagla.sh <ana-oturum> <proje-dizini> [koltuk] | --liste}"
 PROJE="${2:?proje dizini eksik}"
 ISTEK="${3:-}"
+# ── TELEFON KİPİ (2.25.0 · …XQY97Y D4 · Sultan 25 Eki "terminal mobilde de çalışmalı", masaüstü daralmasın): adres 'tel.' önekliyse
+#    önek ayrılır, kalan ad (boş = ana oturum) AŞAĞIDAKİ KAPILARIN HEPSİNDEN AYNEN geçer; tek fark bağlanırken '-f ignore-size'.
+#    ignore-size: istemci pencere boyu hesabına girmez — infra/tmux.conf 'window-size smallest' iken bile telefon masaüstünü daraltmaz
+#    (gerçek tmux 3.4 ile ölçüldü: bayraksız 50 sütunluk istemci 200 sütunluk pencereyi 50'ye indirdi, bayrakla 200 kaldı).
+#    Önek belirsiz olamaz: koltuk adında nokta YASAK (koltuk-adi.sh KOLTUK_AD_DESEN), 'tel.' hiçbir koltuğun adı olamaz.
+TEL=0; IGN=()
+if [[ "$ISTEK" == tel.* ]]; then TEL=1; ISTEK="${ISTEK#tel.}"; IGN=(-f ignore-size); fi
 # 🔴 Birden çok arg (?arg=X&arg=Y) ttyd'de birden çok argüman olur (canlı ölçüldü: ARGS=[X Y]).
 #    Belirsiz adres SEÇİLMEZ, reddedilir — ilkini alıp gerisini yutmak sessiz bir karar olurdu.
 COK_ARG=$(( $# > 3 ))
@@ -295,7 +304,8 @@ if [ -z "$ISTEK" ]; then
   # Argümansız: bugünkü davranış BAYT BAYT aynı — ana oturuma bağlan, yoksa aç.
   # 🔴 Yalnız ARGÜMANSIZ yol oturum YARATIR. Ana oturumun adı adresle açıkça verilirse o da
   #    öteki koltuklar gibi beyaz listeden geçer (bağımsız göz, tur 1: açık ad listeyi deliyordu).
-  exec tmux new-session -A -s "$ANA" -c "$PROJE"
+  # telefon kipinde de aynı yol (ana yoksa açar) — yalnız istemci bayrağı eklenir
+  exec tmux new-session -A "${IGN[@]}" -s "$ANA" -c "$PROJE"
 fi
 # ── AD DIŞI KİMLİK (2.24.0 · P4GT2W): adres 'k'+16 onaltılık taşıyorsa ve bu ADDA bir koltuk yoksa kimlik çözülür:
 #    görünür koltuklardan kimliği tutan TEK koltuğa bağlanılır. Tutmazsa red — ama koltuk ADLARI BASILMAZ (adres mahrem
@@ -319,8 +329,11 @@ gizli "$ISTEK" && red "Bu oturum bir koltuk değil (altyapı)."
 #    pipefail altında var olan koltuk da "yok" sayılırdı (sınav A2 yakaladı).
 LISTE="$(koltuklar)" || red "Koltuklar ölçülemedi (tmux listesi alınamadı) — bağlanmıyorum."
 grep -qxF -- "$ISTEK" <<< "$LISTE" || red "Bu kutuda '$ISTEK' adlı bir koltuk yok."
-# Telefon bağlanınca masaüstü kalıcı daralmasın (onar.sh'taki ana oturum ayarının aynısı).
-for w in $(tmux list-windows -t "=$ISTEK" -F '#{window_id}' 2>/dev/null); do
-  tmux set-option -w -t "$w" window-size latest 2>/dev/null || true
-done
-exec tmux attach-session -t "=$ISTEK"
+# Telefon bağlanınca masaüstü kalıcı daralmasın (onar.sh'taki ana oturum ayarının aynısı). Telefon kipinde gereksiz: ignore-size istemcisi
+# pencere boyuna hiç girmez, pencere ayarına dokunulmaz.
+if [ "$TEL" = 0 ]; then
+  for w in $(tmux list-windows -t "=$ISTEK" -F '#{window_id}' 2>/dev/null); do
+    tmux set-option -w -t "$w" window-size latest 2>/dev/null || true
+  done
+fi
+exec tmux attach-session "${IGN[@]}" -t "=$ISTEK"

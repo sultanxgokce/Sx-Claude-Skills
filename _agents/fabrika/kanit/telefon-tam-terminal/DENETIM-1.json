@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "telefon-tam-terminal",
+  "pr": "462",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T10:57:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal",
+  "dal": "telefon-tam-terminal",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34247,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`tel.` ve `tel.<koltuk|kimlik>` adresleri ayrıştırılmış, kalan ad mevcut kapılardan geçirilmiş ve tmux bağlantısına `-f ignore-size` eklenmiş; öneksiz ve argümansız davranışlar korunmuş. Gerçek tmux ölçümü, kapsam sınavları, regresyon takımı ve mutasyon kanıtı birlikte geçtiği için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Önce/sonra çifti gerçek tmux 3.4 üzerinde gerçekçi 200/50 sütun istemcileriyle davranış değişimini ölçüyor: önce telefon bağlantıları pencereyi 50 sütuna indirirken sonra `ignore-size` ile koltuk ve ana oturum 200 sütunda kalıyor; ayrıca 102/102 kapsam sınavı, dört regresyon takımı ve ilgili kusurları yakalayan mutasyon ölçümü mevcut."
+  }
+}

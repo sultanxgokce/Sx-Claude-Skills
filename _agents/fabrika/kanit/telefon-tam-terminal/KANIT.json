@@ -1,0 +1,117 @@
+{
+  "is": "telefon-tam-terminal",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T10:52:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "once",
+      "dosya": "olcum-koltuk-bagla-sinavi-once.txt",
+      "sha256": "1efff5c7363d962dad8ec922a80fdbc7f6ea8060c0655336ffcf9a1e90555413",
+      "komut": [
+        "bash",
+        "/tmp/tmp.zOWCaBY8Y8/terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T10:46:57+03:00",
+      "sure_sn": 1163.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b0f5cb3d3fe54e52a91e49b61b997949"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-sinavi-sonra.txt",
+      "sha256": "93c6f6c7f8b8a0202fb65682a47f9fa0ee669cb66bc244848e670e18a17baae5",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T10:48:35+03:00",
+      "sure_sn": 97.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1d95476bd24d4ee5a13e262d130c1754"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-tmux-telefon",
+      "asama": "once",
+      "dosya": "olcum-gercek-tmux-telefon-once.txt",
+      "sha256": "0e14eb0ec28afd385ad2a78234fd96589e861c60404f38b0ce233653fb869322",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/telefon-kipi-olc.sh",
+        "/tmp/tmp.zOWCaBY8Y8/terminal-onar/scripts/koltuk-bagla.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T10:49:06+03:00",
+      "sure_sn": 30.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0755199fe1c34728aa4c3e096b7da684"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-tmux-telefon",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-tmux-telefon-sonra.txt",
+      "sha256": "8587e852b37b3c9b47b26bde62160f2e5a5bf6befd7182816f1fa9165cc73812",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/telefon-kipi-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal/terminal-onar/scripts/koltuk-bagla.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T10:49:10+03:00",
+      "sure_sn": 4.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5655aff404194806860e999f302e1676"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "regresyon-takimi",
+      "asama": "sonra",
+      "dosya": "olcum-regresyon-takimi-sonra.txt",
+      "sha256": "6c6bd243182f799d98410f9bbb475b2a73dc528dc0695e9bfb36e900906dd2d3",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal/terminal-onar/scripts && r=0; for t in kabuk-sekmesi.test.sh koltuk-ac.test.sh ../kapi/koltuk-fark.test.sh; do bash $t > /tmp/claude-1000/d4-reg.txt 2>&1; c=$?; echo \"== $t rc=$c · $(tail -1 /tmp/claude-1000/d4-reg.txt)\"; [ $c = 0 ] || r=1; done; node ../kapi/kadro.test.mjs > /tmp/claude-1000/d4-reg.txt 2>&1; c=$?; echo \"== kadro.test.mjs rc=$c · $(tail -1 /tmp/claude-1000/d4-reg.txt)\"; [ $c = 0 ] || r=1; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T10:49:36+03:00",
+      "sure_sn": 25.7,
+      "boru_denetimi": "temiz",
+      "olcum_id": "247a6f1803264b58a859c87e113e7237"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-takimi",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-takimi-sonra.txt",
+      "sha256": "4407cc977aff4437fe6dec447ea20edc5d416ce67991dee0a1574ef4f2a47013",
+      "komut": [
+        "bash",
+        "-c",
+        "\nD=$(mktemp -d); r=0\ndene() { python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' $D/m; cp -r /config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal/terminal-onar $D/m\n  python3 - \"$D/m/scripts/koltuk-bagla.sh\" \"$2\" \"$3\" <<'PY'\nimport sys; p,a,b=sys.argv[1:4]; s=open(p).read(); assert s.count(a)==1, 'çapa yok: '+a[:50]; open(p,'w').write(s.replace(a,b)); print('mutant üretildi')\nPY\n  (cd $D/m/scripts && bash koltuk-bagla.test.sh > $D/c.txt 2>&1); c=$?; echo \"$1: rc=$c (≠0 = yakalandı) · $(grep -E '✗' $D/c.txt | cut -c3-8 | sort -u | tr '\\n' ' ')\"; [ $c -ne 0 ] || r=9; }\n(cp -r /config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal/terminal-onar $D/p && cd $D/p/scripts && bash koltuk-bagla.test.sh | tail -1 | sed 's/^/pozitif kontrol: /')\ndene bayraksiz-koltuk 'exec tmux attach-session \"${IGN[@]}\" -t' 'exec tmux attach-session -t'\ndene bayraksiz-ana 'exec tmux new-session -A \"${IGN[@]}\" -s' 'exec tmux new-session -A -s'\ndene onek-yok 'if [[ \"$ISTEK\" == tel.* ]]; then' 'if false; then'\ndene pencere-ayari 'if [ \"$TEL\" = 0 ]; then' 'if true; then'\npython3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' $D\n[ $r -eq 0 ] && exit 1 || exit 0"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T10:52:04+03:00",
+      "sure_sn": 148.6,
+      "boru_denetimi": "ayrıştırılamadı: heredoc içeren betik denetlenmedi",
+      "mutasyon": true,
+      "gercek_olcum": "koltuk-bagla-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "4375e9cd8a22488cb5dcb9943d7fcbed"
+    }
+  ],
+  "imza": "e39f6241c0d8509b8c19766c5fab5b703aadbd6a36a3023302b0690670b7d82a"
+}
