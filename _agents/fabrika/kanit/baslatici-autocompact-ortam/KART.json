@@ -1,0 +1,32 @@
+{
+  "is": "baslatici-autocompact-ortam",
+  "cumle": "terminal-onar claude_baslat (ana koltuk + kurtarıcı) ve İSKÂN baslat-claude şablonu + iskan.sh açılışları CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k ortamıyla açar; ortak settings.json'a yazılmaz (görev …880TAK, SERDAR 26 Eki 22:4x)",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-26T22:51:57+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5W6P88395EKE737BC880TAK",
+  "tahmin_dk": 2,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T22:51:57+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

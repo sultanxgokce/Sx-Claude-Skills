@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "baslatici-autocompact-ortam",
+  "pr": "483",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T23:06:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-baslatici-autocompact-ortam",
+  "dal": "baslatici-autocompact-ortam",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35723,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 11529
+  },
+  "bas": "c8dcf9063d56259ff37fa4533a9d129e7f10281b",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Başlatıcılar ana koltuk, kurtarıcı ve İSKÂN açılışlarına 600k ortamını eklemiş; ortak settings.json’a dokunmadan istenen yön uygulanmış ve önce/sonra ile mutasyon ölçümü bunu destekliyor. Önce bekçinin hatalı biçimde `600` değerini de standart kabul etmesini çözün; bu, kontrol mekanizmasının ciddi bir sapmayı “güncel” saymasına yol açabilir.",
+    "bulgular": [
+      {
+        "ne": "Bekçi `600` ortam değerini geçerli 600k standardıyla eşdeğer sayıyor; oysa `600`, `600k` ile aynı değer değildir ve sapmış oturumu “güncel” gösterebilir.",
+        "kanit": "Eklenen `case \"$v\" in 600k|600K|600000|600) continue ;; esac` dalı `600` değerinde doğrudan başarıya geçiyor. Aynı değişiklikteki açıklama ve iş kartı standardı açıkça `600k`; B2 sınavı yalnız `900k` sapmasını ölçüyor, `600` yanlış kabulünü yakalamıyor.",
+        "konum": "terminal-onar/scripts/ortak.sh: sikistirma_denetle içindeki ortam değeri case dalı; terminal-onar/scripts/sikistirma-ortami.test.sh:B1-B2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce ölçümü ile yeşil sonra ölçümü gerçek davranışta iki başlatıcı yüzeyinde YOK→600k çiftini gösteriyor; ayrıca mutasyon kaydı sınavın kaldırılmış öneği yakaladığını doğruluyor. Birleşik sınavlar yeşil ve gerçekçi sahte tmux/proc verileri kullanıyor, ancak bekçinin kabul ettiği tüm değerleri kapsamadığı için `600` vakası kanıtta açık kalmış."
+  }
+}
