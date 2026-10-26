@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-once.sh
+# rc=1 sure=94.8s zaman=2026-10-26T16:42:11+03:00
+--- stdout ---
+golge-dogru=1/2
+--- stderr ---
+⏳ agir-sira: kanit-golge-birlestirme-golge-dogru 90 sn bekledi (yuva 1, load1 15.76)

@@ -365,4 +365,8 @@ if [ "$eksik" -gt 0 ]; then
   exit 1
 fi
 _y ""; _y "✓ GEÇTİ — kanıt imzalı, bağımsız göz 5/5 + doğru şey E, kart yerinde."
+# TCBXPP (Sultan 26 Eki): sınıfsız işte GEÇTİ = "birleştirirdim" kaydı (1 hafta yalnız bildirim; birleştirme yine sahibinde). Kayıt kapıyı bozmaz.
+if [ "$sultan" != "E" ] && [ "$sinif" = "yok" ] && [ -x "$HERE/golge-birlestirme.sh" ]; then
+  bash "$HERE/golge-birlestirme.sh" "$IS" --depo "$DEPO" ${PR:+--pr "$PR"} ${prbas:+--sha "$prbas"} </dev/null 2>&1 | sed 's/^/  /' || true
+fi
 exit 0
