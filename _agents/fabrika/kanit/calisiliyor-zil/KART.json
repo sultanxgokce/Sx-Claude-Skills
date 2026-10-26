@@ -1,0 +1,30 @@
+{
+  "is": "calisiliyor-zil",
+  "cumle": "Çalışılıyor uzlaştırıcısı sahibine zil atar ve koltuğu boş kalan işi önerir: kartı kapanan/PR'ı birleşen iş bekliyor'a çekilince sahibine posta gider; koltuğu 60 dk'dan uzun boş olan çalışılıyor iş için tek zil (bekliyor/onay önerisi); kart.sh çalıştırılmasa da koltuklardan süpürme kipi vardır; 2 kapı ölçülür: zil sayısı önce 0 sonra N, tekrar koşuda yinelenmez",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-26T11:33:41+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: zil",
+  "kapsam_uyarilari": [],
+  "olcut": [
+    "60 dk'dan uzun"
+  ],
+  "olcum_yeri": "yerel, 12 çekirdek",
+  "sayi_uyarilari": [
+    "2 kapı",
+    "0 sonra"
+  ]
+}

@@ -536,7 +536,7 @@ assert a=="[▶ çalışılıyor] BANI · kart gb-8 açıldı, tahmin 30 dk · s
 PY
 # DKYSHH + X666: kart.sh ac/bitti sonrası ajanın kartsız 'çalışılıyor' görevi bekliyor'a çekilir (calisiliyor-uzlastir.py)
 printf '{"gorevler":[{"id":"gorev_KARTSIZ0000000001","canli":{"gorev_durumu":"calisiliyor","atanan":"BANI"},"adlar":[{"deger":"kartsız iş"}],"son_adim":"2026-10-26T01:00"}]}' > "$T/gorevler-kart.json"
-export KART_UZLASTIR_KOKLER="$KK"
+export KART_UZLASTIR_KOKLER="$KK" UZLASTIR_ZIL_KOMUT=/bin/true UZLASTIR_KOLTUK_KOMUT=/bin/true   # sahibine zil/koltuk: gerçek postaneye mektup GİTMEZ
 N0=$(yz); O="$(bash "$KT" ac gb-9 --is "uzlaştırma bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000009 --tahmin 30 2>&1)"; RC=$?
 [ $RC -eq 0 ] && python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G10 ac sonrası kartsız çalışılıyor görev (gorev_KARTSIZ…) bekliyor'a çekilir + 'açık kartı yok' notu; kart rc 0"
 import json,sys
@@ -560,7 +560,7 @@ assert len(m)==1, l
 PY2
 O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" bitti gb-9 2>&1)"; RC=$?   # jeton okunamazsa uzlaştırma SESSİZ atlamaz: söyler, kart rc'si bozulmaz
 grep -q "uzlaştırma atlandı: defter jetonu okunamadı" <<<"$O"; g $? "G10d jeton okunamıyorsa otomatik uzlaştırma bunu SÖYLER (sessiz atlamaz; kart yine işlenir)"
-rm -f "$T/gorevler-kart.json"; unset KART_UZLASTIR_KOKLER
+rm -f "$T/gorevler-kart.json"; unset KART_UZLASTIR_KOKLER UZLASTIR_ZIL_KOMUT UZLASTIR_KOLTUK_KOMUT
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"

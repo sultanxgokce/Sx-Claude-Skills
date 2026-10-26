@@ -1,0 +1,57 @@
+{
+  "tur": 1,
+  "is": "calisiliyor-zil",
+  "pr": "466",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T13:59:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-calisiliyor-zil",
+  "dal": "calisiliyor-zil",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42607,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 38274
+  },
+  "bas": "38a2a066300369798b0f2aa672acd52805c53b03",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Uzlaştırıcı, bekliyor’a çekilen iş için sahibine zil, boş koltuk için öneri zili ve koltuklardan süpürme kipini eklemiş; ana talep doğru hedeflenmiş. Ancak “60 dakikadan uzun” sınırı kodda 60 dakika dahil uygulanıyor ve iş kartının istediği 0→N→tekrar koşuda değişmeme ölçüm çifti kanıtta gerçekten gösterilmediği için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Boş koltuk eşiği iş kartındaki “60 dk’dan uzun” şartına uymuyor; tam 60 dakikada da zil üretiliyor.",
+        "kanit": "Koşul `bos[0] >= s.koltuk_bos_dk`; varsayılan 60 iken 60 değeri kabul edilir. K2 yalnız 30 dakikayı, K1 ise 66 dakikayı ölçtüğünden sınır değeri yakalanmamış.",
+        "konum": "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.py: tek_ajan içindeki `bos[0] >= s.koltuk_bos_dk` koşulu; olcum-uzlastir-sinav-sonra.txt K1/K2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Talep edilen iki kapılı zil ölçümü kanıtlanmamış: önce 0, sonra N ve tekrar koşuda sayının değişmemesi ayrı ölçüm olarak yok.",
+        "kanit": "Z1 yalnız tek çalıştırmada `zl() = 1` ve `--tekrar` argümanının yazıldığını doğruluyor; aynı girdinin ikinci kez çalıştırılıp zil sayısının sabit kaldığını gösteren koşu bulunmuyor. Üstelik `kos()` her çağrıda `zil.log` dosyasını siliyor.",
+        "konum": "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh: `kos()` ve Z1; olcum-uzlastir-sinav-sonra.txt Z1",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek posta sağlayıcısında zil teslimi ve tekrar engellemenin uçtan uca davranışı bu konteynerde ölçülmemiş.",
+        "kanit": "Z0 açıkça sahte posta aracı kullanıldığını ve gerçek `posta.sh` çağrısı yapılmadığını söylüyor; iş kartında ayrıca `canli_gerekir: true` ve sebep olarak “zil” kayıtlı.",
+        "konum": "olcum-uzlastir-sinav-sonra.txt Z0; iş kartı `canli_gerekir`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı posta sağlayıcısı + yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; üç kayıt da yeşil, sarı kayıt yok. Ana sınav gerçekçi sahte defter/posta/koltuk verileriyle 26 kapıyı ölçüyor, fakat iş kartının açıkça istediği 0→N ve tekrar koşuda yinelenmeme ölçüm çifti yok; yalnız tekrar anahtarının komuta eklendiği sınanmış. `uzlastir-mutasyon` kaydı manifestte `mutasyon: true` taşımadığından rubriğe göre MUTASYON KANITI sayılamaz; çıktısı destekleyici olsa da özel mutasyon güvencesi vermez."
+  }
+}

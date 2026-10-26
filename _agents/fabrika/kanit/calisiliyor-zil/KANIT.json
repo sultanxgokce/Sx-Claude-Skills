@@ -1,0 +1,94 @@
+{
+  "is": "calisiliyor-zil",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T15:18:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "uzlastir-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-uzlastir-sinav-sonra.txt",
+      "sha256": "01a5ca5022c2e1df8e94bc75d47b4b29adf7974630779c386b293d769be70c56",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T14:54:34+03:00",
+      "sure_sn": 3.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "11470f798b3d4199b98ec581ae3e950f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "uzlastir-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-uzlastir-mutasyon-sonra.txt",
+      "sha256": "91ecf13662548bab2859ccecfc857750a0b449ec747a643c90ca486c44d6ee7a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T14:58:53+03:00",
+      "sure_sn": 258.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "93e8f5332ed943b990d90bc167cf9d0b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "17a473f2ffc4c37aa36715644ff984b5eb809f21ad59962ead0a0063e4fa06d2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:16:24+03:00",
+      "sure_sn": 63.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cb105a02cf444d32a17e824895d97cd6"
+    },
+    {
+      "tur": "canli",
+      "etiket": "uzlastir-zil-canli",
+      "asama": "canli",
+      "dosya": "canli-uzlastir-zil-canli.txt",
+      "sha256": "27fa8e71846e080c03441ca973cbc4f372d8a15b2bdf54e19009bd4ebc2817bd",
+      "komut": [
+        "tail",
+        "-n",
+        "5",
+        "--",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/canli-cz.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/canli-cz.txt",
+      "kaynak_turu": "dosya",
+      "son": 5,
+      "desen": "gonderildi · HEZARFEN",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-26T12:18:19.883Z gonderildi · HEZARFEN · HEZARFEN → HEZARFEN · orta",
+        "saat": "2026-10-26T12:18:19.883Z",
+        "saat_iso": "2026-10-26T12:18:19+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-26T12:18:19.883Z gonderildi · HEZARFEN · HEZARFEN → HEZARFEN · orta",
+        "saat": "2026-10-26T12:18:19.883Z",
+        "saat_iso": "2026-10-26T12:18:19+00:00"
+      },
+      "zaman": "2026-10-26T15:18:42+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "5ec496177f694856ad297961a99c8c16"
+    }
+  ],
+  "imza": "a1b486d327304799d19bff3239f6b3f6d1e8a28ff5e722cd84d60fb7b8eefaf7"
+}
