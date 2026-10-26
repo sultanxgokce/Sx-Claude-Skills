@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "baslatici-autocompact-ortam",
+  "pr": "483",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T23:11:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-baslatici-autocompact-ortam",
+  "dal": "baslatici-autocompact-ortam",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29643,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 13270
+  },
+  "bas": "49dbf6737bc88b8cff48ec70e59fe3b67a7ddfe9",
+  "duzeltme_farki": {
+    "onceki_bas": "c8dcf9063d56259ff37fa4533a9d129e7f10281b",
+    "dosya": 13,
+    "bayt": 27433,
+    "tam_bayt": 40350
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ana koltuk, kurtarıcı ve İSKÂN açılışları sabit `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` ortamıyla açılıyor; ortak settings.json’a yazılmıyor ve önceki turdaki bekçinin `600` değerini yanlışlıkla geçerli sayması tam eşleşme ile kapatılmış. Önce/sonra davranış ölçümü, gerçek ölçüme bağlı mutasyon ve birleşik sınavlar talebi yeterince doğruladığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü iki başlatıcı yüzeyinde YOK, sonra ölçümü ikisinde de 600k gösteriyor; mutasyon kaydı önek kaldırıldığında sınavın bozuk kodu yakaladığını doğruluyor. Birleşik sınavlar yeşil; dış ortamın 500k/900k ile standardı ezememesi ve bekçinin `600`, `600000`, `900k` değerlerini sapma sayması ölçülmüş. Önceki tur B1 bulgusu, `case` ile yapılan geniş kabulün kaldırılıp yalnız `[ \"$v\" = 600k ]` değerinin geçerli sayılması ve B2’ye `600`/`600000` vakalarının eklenmesiyle kapanmış."
+  }
+}

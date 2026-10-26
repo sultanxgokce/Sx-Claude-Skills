@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-baslatici-ortami-* ===
+$ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-mut.sh
+# rc=1 sure=0.1s zaman=2026-10-26T23:44:39+03:00
+--- stdout ---
+kaynak=alan · terminal-onar yazılan satır: YOK · İSKÂN doğan süreç: CLAUDE_CODE_AUTO_COMPACT_WINDOW=YOK (beklenen ikisi de 600k)
+geri kondu: onar 1 (1) · şablon 1 (1)
+--- stderr ---

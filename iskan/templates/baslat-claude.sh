@@ -56,6 +56,13 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
+# ── 🗜 YERLİ OTOMATİK SIKIŞTIRMA — filo standardı 600k (%60) (gorev_…880TAK · Sultan 26 Eki; SERDAR 22:4x) ──────────
+# Ortak settings.json 13 kutuda ortak → oraya YAZILMAZ; eşik OTURUMA ortamla verilir (süreç özelliği: ilk açılışta da --resume'da da).
+# Ölçüldü (claude 2.1.310): CLAUDE_CODE_AUTO_COMPACT_WINDOW ayar dosyasındaki autoCompactWindow'un üstüne çıkar, '600k' biçimini kabul
+# eder, model penceresinden büyükse pencereye kırpılır; ortam varken /autocompact değiştiremez — standart bilerek kilitlidir.
+# Bekçi: terminal-onar sikistirma_denetle (kutu başına) + cloudtop koltuk-autocompact-denetle.py. Değer SABİTTİR, dış ortam ezemez (kaçış yok).
+export CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k
+
 # ── KOLTUĞA ÖZEL İZİN DOSYASI (2026-09-14, Sultan onayı · AKAR/EHLİVUKUF) ─────
 # NİÇİN: bir koltuk "ekler ama silemez" gibi DAR yetkiyle açılacaksa kural istemde (prompt)
 #   değil, claude'un kendi izin katmanında olmalı — istem kuralı ölçülemez, izin kuralı ölçülür.

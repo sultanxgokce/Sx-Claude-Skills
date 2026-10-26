@@ -1,0 +1,82 @@
+{
+  "is": "baslatici-autocompact-ortam",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T23:44:43+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "baslatici-ortami",
+      "asama": "once",
+      "dosya": "olcum-baslatici-ortami-once.txt",
+      "sha256": "8ed6577155d6eb7c4e10e0253d757f710a7d9eb9506324d4ac0787f52ce7bb30",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh",
+        "main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T23:44:39+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8681d19c33374022a706365d0de09d3a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "baslatici-ortami",
+      "asama": "sonra",
+      "dosya": "olcum-baslatici-ortami-sonra.txt",
+      "sha256": "3659859148cffaa6cd3775fc6c3554d558ab1ab9fe6afb86cf74b9f64ee80ea5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh",
+        "alan"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T23:44:39+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5f3d2922af5246eaa36fb5df04124e9f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "baslatici-mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-baslatici-mutasyon-tek.txt",
+      "sha256": "026b28358cfe939f0254a1943f7904cc291900fab5fb7ea5b5a64404b3f4f3ab",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T23:44:39+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "baslatici-ortami",
+      "beklenen": "kirmizi",
+      "olcum_id": "90995b48486f48b79e909a5fd61f3225"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "tek",
+      "dosya": "olcum-sinavlar-tek.txt",
+      "sha256": "0689e7f38cfc0977dc0ffc7e221c137d4f9a2ca35a8dc0bb813139f970fa0ac4",
+      "komut": [
+        "bash",
+        "-c",
+        "bash terminal-onar/scripts/sikistirma-ortami.test.sh && bash iskan/scripts/baslat-claude.test.sh && bash terminal-onar/scripts/kurtarici-kapali.test.sh && bash kabuk-biti.test.sh && node ahi/schema/version-lint.mjs . && node ahi/schema/validate-repo.mjs . --strict && node --check sync-skills.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T23:44:43+03:00",
+      "sure_sn": 4.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "e6ca87c38b0e4f979aef6ea50e2b63fd"
+    }
+  ],
+  "imza": "58392fb05446007980a652977ba5bb9672e96b1a9eaa9174bb653c43974ff0b9"
+}
