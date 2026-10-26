@@ -430,6 +430,10 @@ import sys, json, http.server, socketserver, os
 T=sys.argv[1]
 class H(http.server.BaseHTTPRequestHandler):
     def log_message(self,*a): pass
+    def do_GET(self):   # uzlaştırma (DKYSHH/X666): görev listesi $T/gorevler-kart.json'dan; dosya yoksa 404 (eski sınavlar etkilenmez)
+        f=os.path.join(T,"gorevler-kart.json")
+        if self.headers.get("x-defter-jeton")!="kart-sinav-jeton" or not os.path.exists(f): self.send_response(404); self.end_headers(); return
+        self.send_response(200); self.end_headers(); self.wfile.write(open(f,"rb").read())
     def do_PATCH(self):
         n=int(self.headers.get("content-length") or 0); b=json.loads(self.rfile.read(n) or b"{}")
         with open(os.path.join(T,"yazim.jsonl"),"a") as f: f.write(json.dumps({"yol":self.path,"jeton":self.headers.get("x-defter-jeton"),"govde":b},ensure_ascii=False)+"\n")
@@ -529,6 +533,31 @@ assert len(m)==1, l
 a=m[0]["govde"]["adimlar"][0]
 assert a=="[▶ çalışılıyor] BANI · kart gb-8 açıldı, tahmin 30 dk · sınıf: yetki", a
 PY
+# DKYSHH + X666: kart.sh ac/bitti sonrası ajanın kartsız 'çalışılıyor' görevi bekliyor'a çekilir (calisiliyor-uzlastir.py)
+printf '{"gorevler":[{"id":"gorev_KARTSIZ0000000001","canli":{"gorev_durumu":"calisiliyor","atanan":"BANI"},"adlar":[{"deger":"kartsız iş"}],"son_adim":"2026-10-26T01:00"}]}' > "$T/gorevler-kart.json"
+export KART_UZLASTIR_KOKLER="$KK"
+N0=$(yz); O="$(bash "$KT" ac gb-9 --is "uzlaştırma bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000009 --tahmin 30 2>&1)"; RC=$?
+[ $RC -eq 0 ] && python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G10 ac sonrası kartsız çalışılıyor görev (gorev_KARTSIZ…) bekliyor'a çekilir + 'açık kartı yok' notu; kart rc 0"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTSIZ0000000001")]
+assert len(m)==1 and m[0]["govde"]["yerine"]["gorev_durumu"]=="bekliyor" and "açık kartı yok" in m[0]["govde"]["yerine"]["not"], l
+PY2
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-10 --is "uzlaştırma kapalı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000010 --tahmin 30 >/dev/null 2>&1
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G10b KART_UZLASTIR=0 → uzlaştırma yazmaz (kapatma anahtarı)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+assert not [x for x in l if x["yol"].endswith("gorev_KARTSIZ0000000001")], l
+PY2
+printf '{"gorevler":[{"id":"gorev_KARTTEST00000009","canli":{"gorev_durumu":"calisiliyor","atanan":"BANI"},"adlar":[{"deger":"bağlı iş"}],"son_adim":"2026-10-26T01:00"}]}' > "$T/gorevler-kart.json"
+N0=$(yz); bash "$KT" bitti gb-9 >/dev/null 2>&1; RC=$?
+[ $RC -eq 0 ] && python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G10c bitti sonrası kartı kapanan görev (açık kartı kalmadı) bekliyor'a çekilir (X666: 0MHE6C biçimi)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000009") and "açık kartı yok" in json.dumps(x["govde"],ensure_ascii=False)]
+assert len(m)==1, l
+PY2
+rm -f "$T/gorevler-kart.json"; unset KART_UZLASTIR_KOKLER
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"

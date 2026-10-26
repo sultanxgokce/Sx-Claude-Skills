@@ -166,6 +166,18 @@ PY
   [ "$sonuc" = "yazıldı" ]
 }
 
+# 🔴 ÇALIŞILIYOR UZLAŞTIRMASI (DKYSHH + X666 · SERDAR 26 Eki): açılış ve bitiş/tıkanmadan SONRA ajanın 'çalışılıyor' görevleri açık kartlarıyla
+#    uzlaştırılır: açık kartı olmayan görev ve ajan başına 2'den fazlası 'bekliyor + başka işe geçti' olur. En iyi gayret: defter yoksa/yazamazsa
+#    kart İŞLENMİŞ kalır (söylenir, rc'yi bozmaz). KART_UZLASTIR=0 kapatır; KART_UZLASTIR_KOKLER (boşlukla) kart dizinlerini değiştirir (sınav).
+uzlastir() {  # uzlastir <ajan>
+  [ "${KART_UZLASTIR:-1}" = 0 ] && return 0
+  [ -r "$DEFTER_JY" ] || return 0
+  local kok args=() kokler="${KART_UZLASTIR_KOKLER:-}"
+  if [ -z "$kokler" ]; then kokler="$KD"; for kok in /config/projects/*/_agents/fabrika/kartlar; do [ -d "$kok" ] && kokler="$kokler $kok"; done; fi
+  for kok in $kokler; do args+=(--kart-kok "$kok"); done
+  python3 "$(dirname "${BASH_SOURCE[0]}")/calisiliyor-uzlastir.py" --ajan "$1" --uygula "${args[@]}" || true
+}
+
 tetik() {  # tetik <oda> <başlık> <gövde> → 0 gitti/oda yok · 1 atılmadı/düştü (sınıfsız çağıran yok sayar: iş düşmez;
            #   sınıflı açılış bunu "Sultan'a ulaşılamadı" sayar ve kartı geri alır — göz 23 Eki tur 2)
   [ -n "$1" ] || return 0
@@ -389,6 +401,7 @@ for f in sorted(glob.glob(kd+"/*.json")):
 PY
 ); do GECTI_KART="$IS" gorev_yaz "$KD/$ONC.json" gecti || GRC=4; done
     fi
+    uzlastir "$ALDI"
     exit $GRC
     ;;
   bitti|tikandi)
@@ -466,6 +479,7 @@ PY
       export GOREV_BITTI KARE SURUM OLCUM BELGE
     fi
     GRC=0; [ -n "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev',''))")" ] && { gorev_yaz "$KD/$IS.json" "$CMD" || GRC=4; }
+    uzlastir "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('aldi',''))")"
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"
     exit $GRC
     ;;
