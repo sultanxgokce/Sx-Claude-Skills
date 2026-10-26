@@ -509,7 +509,7 @@ for p in prler:
     if p.get("mergedAt"):
         dal.setdefault(p["headRefName"],p); no[int(p["number"])]=p
 simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-kapanan=[]; sinifli=[]; bozuk=[]; bekleyen=0
+kapanan=[]; sinifli=[]; bozuk=[]; bekleyen=0; yazilacak=[]
 for f in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try: k=json.load(open(f,encoding="utf-8"))
     except Exception: bozuk.append(os.path.basename(f)); continue
@@ -521,17 +521,22 @@ for f in sorted(glob.glob(os.path.join(kd,"*.json"))):
     if not p: bekleyen+=1; continue
     if k.get("siniflar"): sinifli.append((k["is"],p["number"])); continue
     kapanan.append((k["is"],p["number"],p["mergedAt"],yontem,k.get("durum")))
-    if mod=="uygula":
-        k["durum"]="bitti"; k["bitis"]=p["mergedAt"]; k["pr"]=str(p["number"])
-        k["supuruldu"]={"zaman":simdi,"pr":p["number"],"birlesti":p["mergedAt"],"yontem":yontem}
+    yazilacak.append((f,k,p,yontem))
+if bozuk:   # atomik: okunamayan kart varken kısmi uygulama YOK ('ÖLÇÜLEMEDİ' sonrası durum değişmiş olmasın)
+    print(f"✗ {len(bozuk)} kart okunamadı ({', '.join(bozuk[:5])}) — süpürme ÖLÇÜLEMEDİ, HİÇBİR kart değişmedi (kartı onar ya da kaldır, yeniden koş)",file=sys.stderr); raise SystemExit(3)
+if mod=="uygula":
+    for f,k,p,yontem in yazilacak:
+        onceki=k.get("durum"); tk=k.pop("tikanma",None)
+        k["durum"]="bitti"; k["bitis"]=simdi; k["pr"]=str(p["number"])   # bitis = süpürme anı (gün sonu o gün kapanana bakar); birleşme zamanı damgada
+        k["supuruldu"]={"zaman":simdi,"pr":p["number"],"birlesti":p["mergedAt"],"yontem":yontem,"onceki_durum":onceki}
+        if tk: k["supuruldu"]["onceki_tikanma"]=tk
         k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"supuruldu","pr":p["number"]})
         json.dump(k,open(f,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 bas="KAPATILDI" if mod=="uygula" else "KAPATILIRDI (kuru-koşu, hiçbir şey yazılmadı)"
-print(f"supur {mod}: {len(kapanan)} kart {bas} · {bekleyen} kartın birleşmiş PR'ı yok (açık kalır) · {len(sinifli)} sınıflı kart atlandı · {len(bozuk)} kart okunamadı")
+print(f"supur {mod}: {len(kapanan)} kart {bas} · {bekleyen} kartın birleşmiş PR'ı yok (açık kalır) · {len(sinifli)} sınıflı kart atlandı")
 for is_,n,m,y,d in kapanan: print(f"  ✓ {is_} ← PR #{n} ({m[:10]}, {y}, önceki: {d})")
 for is_,n in sinifli: print(f"  · {is_} — PR #{n} birleşmiş ama kart SINIFLI: birleştirme kararı reis/Sultan'ındır, süpürülmez")
-for b in bozuk: print(f"  ⚠ {b} okunamadı (JSON bozuk) — dokunulmadı")
-raise SystemExit(3 if bozuk else 0)
+raise SystemExit(0)
 SUPPY
     exit $?
     ;;

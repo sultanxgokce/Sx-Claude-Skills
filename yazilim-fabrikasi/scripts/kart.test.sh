@@ -851,17 +851,13 @@ O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && [ "$(durum dal-birlesti)" = bitti ] && [ "$(durum dal-tikandi)" = bitti ] && [ "$(durum kartpr-birlesti)" = bitti ]; g $? "S3 uygula: dal adı eşleşen (açık, tıkandı) ve kartta pr yazılı kart bitti olur" "→ rc=$RC $O"
 python3 - "$SD/_agents/fabrika/kartlar/dal-birlesti.json" <<'PYC'
 import json,sys; k=json.load(open(sys.argv[1]))
-assert k["pr"]=="71" and k["bitis"]=="2026-10-20T10:00:00Z", k
+assert k["pr"]=="71" and k["bitis"][:10]==__import__("datetime").date.today().isoformat() and k["supuruldu"]["birlesti"]=="2026-10-20T10:00:00Z", k
 assert k["supuruldu"]["pr"]==71 and k["supuruldu"]["yontem"]=="dal-adi", k
 assert k["gecmis"][-1]["olay"]=="supuruldu", k
 PYC
 g $? "S4 süpürülen kartta PR no, birleşme zamanı, 'supuruldu' damgası ve geçmiş satırı var"
 [ "$(durum acik-pr)" = acik ] && [ "$(durum sinifli-birlesti)" = acik ] && [ "$(durum kartpr-yanlis)" = acik ] && [ "$(durum zaten-bitti)" = bitti ]; g $? "S5 açık PR'lı · SINIFLI · kartta pr'ı birleşmemiş kart açık KALIR (dal adı birleşmiş PR'la eşleşse bile kart.pr öncelikli)"
 O="$(bash "$KT" supur uygula 2>&1)"; grep -q "supur uygula: 0 kart KAPATILDI" <<<"$O"; g $? "S6 ikinci koşu 0 kart kapatır (idempotent)"
-sk gunsonu-kart acik "" HENDESE '[]'; python3 - <<'PYG'
-import json,glob,datetime
-f="_agents/fabrika/kartlar/dal-birlesti.json"; k=json.load(open(f)); k["bitis"]=datetime.datetime.now().astimezone().isoformat(timespec="seconds"); json.dump(k,open(f,"w"),ensure_ascii=False)
-PYG
 GS_O="$(bash "$GS" 2>&1)"; grep -q "dal-birlesti.*süpürüldü (PR birleşmiş, kanıt toplanmadı)" <<<"$GS_O" && ! grep -q "dal-birlesti.*⚠ YOK" <<<"$GS_O"; g $? "S7 gün sonu süpürülen kart için 'KANIT YOK' DEMEZ, 'süpürüldü' der" "→ $(grep dal-birlesti <<<"$GS_O" | head -1 | cut -c1-200)"
 sk aldi-a acik "" ALFA '[]'; sk aldi-b acik "" BETA '[]'
 python3 - "$T/gh-pr.json" <<'PYA'
@@ -878,8 +874,25 @@ python3 - "$T/gh-pr.json" <<'PYB'
 import json,sys; l=json.load(open(sys.argv[1])); l.append({"number":83,"headRefName":"aldi-c","mergedAt":"2026-10-23T12:00:00Z"}); json.dump(l,open(sys.argv[1],"w"))
 PYB
 O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
-[ "$RC" -eq 3 ] && [ "$(durum aldi-c)" = bitti ] && grep -q "bozuk-kart.json okunamadı" <<<"$O"; g $? "S11 bozuk kart varsa dokunulmaz, söylenir, rc 3 (okunan kartlar süpürülür)" "→ rc=$RC"
+[ "$RC" -eq 3 ] && [ "$(durum aldi-c)" = acik ] && grep -q "bozuk-kart.json" <<<"$O" && grep -q "HİÇBİR kart değişmedi" <<<"$O"; g $? "S11 bozuk kart varsa ATOMİK: rc 3, okunabilen kart bile süpürülmez (kısmi uygulama yok)" "→ rc=$RC"
 rm -f _agents/fabrika/kartlar/bozuk-kart.json
+O="$(bash "$KT" supur uygula 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && [ "$(durum aldi-c)" = bitti ]; g $? "S11b bozuk kart kalkınca aynı koşu süpürür" "→ rc=$RC"
+python3 - <<'PYT'
+import json
+f="_agents/fabrika/kartlar/dal-tikandi.json"; k=json.load(open(f))
+assert "tikanma" not in k and k["supuruldu"]["onceki_durum"]=="tikandi", k
+PYT
+g $? "S13 tıkandı kartın tikanma alanı kapanışta temizlenir, damgaya taşınır (onceki_durum)"
+sk gorevli acik "" HENDESE '[]'; python3 - <<'PYG'
+import json
+f="_agents/fabrika/kartlar/gorevli.json"; k=json.load(open(f)); k["gorev"]="gorev_SAHTE"; json.dump(k,open(f,"w"))
+l=json.load(open("/dev/stdin")) if False else None
+PYG
+python3 - "$T/gh-pr.json" <<'PYH'
+import json,sys; l=json.load(open(sys.argv[1])); l.append({"number":95,"headRefName":"gorevli","mergedAt":"2026-10-25T10:00:00Z"}); json.dump(l,open(sys.argv[1],"w"))
+PYH
+TK0="$(wc -c < "$TETIK_KAYIT")"; O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(durum gorevli)" = bitti ] && [ "$(wc -c < "$TETIK_KAYIT")" = "$TK0" ] && ! grep -qi "defter" <<<"$O" && [ "$(python3 -c "import json;print(json.load(open('_agents/fabrika/kartlar/gorevli.json'))['gorev'])")" = gorev_SAHTE ]; g $? "S14 görevli kart süpürülür ama görev defterine/odaya DOKUNULMAZ (tetik yok, defter çağrısı yok, kart.gorev korunur)" "→ rc=$RC $O"
 O="$(bash "$KT" supur 2>&1)"; grep -q kullanım <<<"$O"; g $? "S12 kip verilmezse kullanım (kuru|uygula) — varsayılan YAZMA yok"
 # mutantlar: her kapı bozulunca ilgili sınav kırmızıya dönmeli
 SMUT="$T/pkg-supur"; mkdir -p "$SMUT"; cp "$HERE"/*.py "$HERE"/*.sh "$SMUT/" 2>/dev/null

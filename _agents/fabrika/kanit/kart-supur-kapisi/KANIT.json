@@ -1,7 +1,7 @@
 {
   "is": "kart-supur-kapisi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T15:48:46+03:00",
+  "guncelleme": "2026-10-26T15:53:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,38 +25,38 @@
       "etiket": "supur-uygula",
       "asama": "sonra",
       "dosya": "olcum-supur-uygula-sonra.txt",
-      "sha256": "8b2929994ecb5cf1bc177ef3a17289d0c5491177d3f2eb67a76e4fac5e0934ba",
+      "sha256": "f19a6abfc54bd8016afab9c0d3bb770f80e8901517e2d64b1c01b739e96590ad",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T15:48:46+03:00",
+      "zaman": "2026-10-26T15:53:18+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1d33c858180f48eaad51556682827fbb"
+      "olcum_id": "968bd818098e4a8488083d6d67389e7c"
     },
     {
       "tur": "olcum",
       "etiket": "supur-uygula-mutant",
       "asama": "tek",
       "dosya": "olcum-supur-uygula-mutant-tek.txt",
-      "sha256": "810b993590c0ac29cb4d4c819520b541862c29b58548468fec46459018c07929",
+      "sha256": "7a661b3d94446208d151a54b5463a4d8dde031039898be5c0acdfce8825a26b6",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T15:48:46+03:00",
-      "sure_sn": 0.2,
+      "zaman": "2026-10-26T15:53:19+03:00",
+      "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "supur-uygula",
       "beklenen": "kirmizi",
-      "olcum_id": "dd4dc92b2e434bfab0069e4b1761c9b1"
+      "olcum_id": "553083a6bd314e088cc4124534300298"
     }
   ],
-  "imza": "4680149c1584669a68768165c61b6e803e134306b150f49f4d817f01f8365db5"
+  "imza": "c093ef3697ed333d9d92773678d5a255a19b5000c2b6f4f4302a26c532630b0e"
 }
