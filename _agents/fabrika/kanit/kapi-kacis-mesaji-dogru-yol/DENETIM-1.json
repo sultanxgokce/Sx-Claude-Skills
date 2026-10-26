@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "kapi-kacis-mesaji-dogru-yol",
+  "pr": "458",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T07:53:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-kacis-mesaji-dogru-yol",
+  "dal": "kapi-kacis-mesaji-dogru-yol",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24446,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 47888
+  },
+  "bas": "66a4a67ed8dd725ae1bb0cf4c317dbcea96716e5",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Birleştirme kapısı, FABRIKA_KAPISIZ kaçışını yalnız çalıştırılabilir birleştirme kancası bulunan depoda gösteriyor; kancasız depoda değişkenin etkisizliğini ve kayıtlı karar yolunu açıkça söylüyor. Önce/sonra ölçümü iki hedef davranışın düzeldiğini, mutasyon ölçümü de kanca koşulu bozulduğunda sınavın hatayı yakaladığını gösterdiği için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA doğrulamalı. kapi-sinav ölçüm çifti önce 159 geçti/2 kaldı ve rc=1 iken sonra 161 geçti/0 kaldı ve rc=0 gösteriyor; T2 hem kancalı hem kancasız depo mesajlarını doğrudan sınıyor. mutasyon-kanca-kosulu kaydı mutasyon:true ve gercek_olcum:kapi-sinav etiketli; bilerek bozulan koşulda aynı iki hedef sınavın düşmesi, sınavın değişikliği gerçekten ölçtüğünü doğruluyor. Sarı kayıt yok."
+  }
+}

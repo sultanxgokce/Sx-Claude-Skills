@@ -1,0 +1,32 @@
+{
+  "is": "kapi-kacis-mesaji-dogru-yol",
+  "cumle": "Birleştirme kapısı engel mesajı FABRIKA_KAPISIZ kaçış satırını yalnız birleştirme kancası olan depoda basar; kancası olmayan depoda bu değişkenin bir şey yapmadığını ve gerçek yolu (eksiği tamamlamak, karar gerekirse kart.sh sultan-dedi ya da reis-dedi) söyler",
+  "istedi": "HENDESE (görev …S47706, retro bulgusu 23 Eki)",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-26T07:40:16+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "kapı sınavı: kancalı depoda satır var, kancasız depoda yok ve gerçek yol yazılı, mutant",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5MHZAT6GQSPE8MGTZS47706",
+  "tahmin_dk": 45,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T07:40:16+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
