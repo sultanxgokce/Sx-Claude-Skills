@@ -1,0 +1,79 @@
+{
+  "is": "fabrika-kapi-pr-is-adi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T18:42:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-t17",
+      "asama": "once",
+      "dosya": "olcum-kapi-t17-once.txt",
+      "sha256": "01c713537400128afab8349bb907abead486d823e0a796bcb7258982affd43ed",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/kp-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T18:39:06+03:00",
+      "sure_sn": 7.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "749a2985aead4b62bbf2ff0799af8d8c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-t17",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-t17-sonra.txt",
+      "sha256": "448d0692e6aa664426bb35a4aa5b5f8bdaacc34aee281ac26408c5412842e6c1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/kp-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:39:14+03:00",
+      "sure_sn": 8.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "11f1ab3a69ac4ef1b7688f81a5ed7503"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kapi-tam-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kapi-tam-sinav-sonra.txt",
+      "sha256": "40cbf10ca2947321638b2dd00ed14b3f42d3ea8b576470e37116be033de9055b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/kp-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:41:33+03:00",
+      "sure_sn": 139.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fda7b8cafeec4789a79d4f48f683e573"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-mutantlar",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-mutantlar-sonra.txt",
+      "sha256": "be341033d9389e0e2f7c239c5f900a596fc1cfb7568d857e73cb6cac8b622a0d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/kp-mut2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:42:26+03:00",
+      "sure_sn": 44.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gercek-kapi-tam-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "b34d9e09d818497d8f0ae6fa8c9e51a9"
+    }
+  ],
+  "imza": "4d842742bcf49268f0352e99d81be6d5431884e6bed324f2a6e99be28a3f0a77"
+}

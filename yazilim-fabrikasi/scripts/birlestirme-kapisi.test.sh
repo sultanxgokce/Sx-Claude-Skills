@@ -620,4 +620,50 @@ open(p,"w",encoding="utf-8").write(s.replace(a,'pass'))
 PYG
 bash "$PKG/birlestirme-kapisi.sh" is-gp >/dev/null 2>&1; [ "$(satir is-gp)" -ge 1 ]; g $? "T16g mutant (kapı VE betikteki sınıf koşulu söküldü): sınıflı iş kayıt bırakır → T16c bu mutantta düşerdi"
 
+echo "════ T17 · İŞ ADI PR'IN KANIT DİZİNİNDEN: dal ≠ iş (gorev …THYFXG0 · #884/#817/#960 sınıfı) — GEÇTİ ve KALDI yüzü ════"
+# Kanıt PR'ı ayrı dalla açılır: dal 'kanit-dali', iş (kart + kanıt dizini) 'is-asil'. Eski kapı dalı iş sanıp "kart/kanıt YOK" derdi.
+GS="$R/golge"; mkdir -p "$GS"
+cat > "$GS/gh" <<'GHS'
+#!/bin/sh
+# sahte gh: pr view → FAKE_DAL · pr diff --name-only → FAKE_DOSYALAR (boşlukla ayrık) ya da FAKE_DOSYA_YOK varsa hata
+case "$1 $2" in
+  "pr view") echo "$FAKE_DAL" ;;
+  "pr diff") [ -n "${FAKE_DOSYA_YOK:-}" ] && exit 1; printf '%s\n' $FAKE_DOSYALAR ;;
+  *) exit 2 ;;
+esac
+GHS
+chmod +x "$GS/gh"
+KD="_agents/fabrika/kanit"
+ghk() { ( export PATH="$GS:$PATH"; "$@" ); }   # sahte gh'li çağrı
+
+kartP is-asil; A2="$(alan kanit-dali)"; kanitla "$A2" is-asil 5 E
+( cd "$A2" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/31/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A2" >/dev/null 2>&1
+CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 31")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "kapı iş: is-asil\|iş: is-asil" <<<"$CIKTI" && grep -q "iş adı PR'ın tek kanıt dizininden türetildi: 'is-asil' (PR dalı 'kanit-dali' ayrışıyor)" <<<"$CIKTI" && grep -q "kanıt yeri: PR #31 başı" <<<"$CIKTI"; g $? "🔴 T17a GEÇTİ yüzü: dal 'kanit-dali' ≠ iş 'is-asil' → iş PR'ın kanıt dizininden türedi, kart+kanıt+puan bulundu (rc=0)"
+
+kartP is-zayif; A3="$(alan kanit-dali2)"; kanitla "$A3" is-zayif 3 E
+( cd "$A3" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/32/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A3" >/dev/null 2>&1
+CIKTI="$(ghk env FAKE_DAL=kanit-dali2 FAKE_DOSYALAR="$KD/is-zayif/KANIT.json $KD/is-zayif/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 32")"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "iş: is-zayif" <<<"$CIKTI" && ! grep -q "kart YOK" <<<"$CIKTI"; g $? "🔴 T17b KALDI yüzü: dal ≠ iş ama puan 3/E → kapı DOĞRU işi ölçüp KAPALI kalır (rc=1, 'kart YOK' değil)"
+
+CIKTI="$(ghk env FAKE_DAL=baska-dal FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 31")"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "birden çok kanıt dizinine dokunuyor ve hiçbiri dal adı" <<<"$CIKTI" && grep -q "a b" <<<"$CIKTI"; g $? "T17c KALDI yüzü: PR iki kanıt dizinine dokunuyor, hiçbiri dal adı değil → ÖLÇÜLEMEDİ (rc=3, adaylar basılır)"
+
+CIKTI="$(ghk env FAKE_DAL=is-ck FAKE_DOSYALAR="$KD/is-ck/KANIT.json $KD/diger/x.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "dal adıyla eşleşen seçildi: 'is-ck'" <<<"$CIKTI"; g $? "T17d PR iki dizine dokunuyor ama biri dal adı → dal adı seçilir (rc=0)"
+
+CIKTI="$(ghk env FAKE_DAL=is-ck FAKE_DOSYA_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17e dosya listesi okunamadı → dal adı YEDEK olarak kullanılır (rc=0, türetme notu yok)"
+
+CIKTI="$(ghk env FAKE_DAL=is-ck FAKE_DOSYALAR="ui/app/x.ts README.md" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI"; g $? "T17f PR hiçbir kanıt dizinine dokunmuyor → dal adı (eski davranış korunur)"
+
+CIKTI="$(ghk env FAKE_DAL=hendese/is-ck FAKE_DOSYALAR="$KD/is-ck/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17g önekli dal (hendese/is-ck) = kanıt dizini → not düşmez, aynı iş (rc=0)"
+
+CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' is-ck --pr 7")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17h iş adı elle verilmişse türetme DEVREYE GİRMEZ (açık ad kazanır)"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

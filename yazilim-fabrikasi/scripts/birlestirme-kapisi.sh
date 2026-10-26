@@ -18,7 +18,7 @@
 #
 # Kullanım:
 #   birlestirme-kapisi.sh <iş> [--depo KÖK] [--sessiz]
-#   birlestirme-kapisi.sh --pr <N> [--depo KÖK]     (PR'ın dal adından iş adını çözer)
+#   birlestirme-kapisi.sh --pr <N> [--depo KÖK]     (iş adını PR'ın değiştirdiği TEK kanıt dizininden çözer; dal adı yedek)
 # rc: 0 GEÇTİ · 1 eksik (kanıt yok/puan yetersiz/kart yok) · 2 kullanım · 3 ÖLÇÜLEMEDİ (yeşil değil)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -45,6 +45,25 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
   IS="$(cd "$DEPO" && gh pr view "$PR" --json headRefName --jq .headRefName 2>/dev/null)"
   [ -n "$IS" ] || { _h "PR #$PR dalı okunamadı — ÖLÇÜLEMEDİ"; exit 3; }
   IS="${IS##*/}"   # muavin/<iş> gibi önekleri at
+  # 🔴 İŞ ADI DAL ADINDAN DEĞİL, PR'IN DEĞİŞTİRDİĞİ KANIT DİZİNİNDEN gelir (gorev …THYFXG0): kanıt PR'ı ayrı dalla açılınca
+  #    (dal 'merkez-dogrulat-kanit' ≠ iş 'merkez-dogrulat-kendiliginden') dal adı yanlış işi gösterir, kapı "kart/kanıt/denetim YOK" der ve
+  #    birleştirme kancası kapı iş adıyla GEÇMİŞ PR'ı keserdi (#884, #817, #960). Kural: PR'ın değiştirdiği dosyalardan
+  #    _agents/fabrika/kanit/<X>/ altındaki farklı X'ler toplanır —
+  #      tek X → iş adı X (dal adı yedek, ayrışıyorsa söylenir) · birden çok X → dal adıyla eşleşen varsa o, yoksa ÖLÇÜLEMEDİ (rc=3, adaylar basılır)
+  #      sıfır X ya da dosya listesi okunamadı → dal adı (eski davranış; kapı yine de kanıt yoksa kapalı kalır).
+  DAL_ADI="$IS"; IS_NOT=""
+  if PRDOSYA="$(cd "$DEPO" && gh pr diff "$PR" --name-only 2>/dev/null)" && [ -n "$PRDOSYA" ]; then
+    ADAY="$(printf '%s\n' "$PRDOSYA" | awk -F/ '$1=="_agents" && $2=="fabrika" && $3=="kanit" && NF>=5 {print $4}' | sort -u)"
+    NADAY="$(printf '%s' "$ADAY" | grep -c . || true)"
+    if [ "$NADAY" -eq 1 ]; then
+      IS="$ADAY"
+      [ "$IS" = "$DAL_ADI" ] || IS_NOT="iş adı PR'ın tek kanıt dizininden türetildi: '$IS' (PR dalı '$DAL_ADI' ayrışıyor)"
+    elif [ "$NADAY" -gt 1 ]; then
+      if printf '%s\n' "$ADAY" | grep -qxF -- "$DAL_ADI"; then IS="$DAL_ADI"; IS_NOT="PR birden çok kanıt dizinine dokunuyor; dal adıyla eşleşen seçildi: '$IS'"
+      else _h "PR #$PR birden çok kanıt dizinine dokunuyor ve hiçbiri dal adı ('$DAL_ADI') değil: $(printf '%s' "$ADAY" | tr '\n' ' ')— iş adını elle ver — ÖLÇÜLEMEDİ"; exit 3
+      fi
+    fi
+  fi
 fi
 [ -n "$IS" ] || { _h "iş adı gerekiyor (ya da --pr N)"; exit 2; }
 
@@ -82,6 +101,7 @@ DZ=""; DZ_YER=""; DZ_AGAC=""; kanit_bul || true
 
 eksik=0; olcemedi=0
 _y "── BİRLEŞTİRME KAPISI · iş: $IS"
+[ -n "${IS_NOT:-}" ] && _y "  · $IS_NOT"
 _y "  · kanıt yeri: $DZ_YER"
 
 # 🔴 PR BAŞI DOĞRULAMASI (…898AX · SERDAR 26 Eki 2026): kanıt YEREL ağaçtan okunduysa kapı, orada duran ama PR'a İTİLMEMİŞ bir denetim
