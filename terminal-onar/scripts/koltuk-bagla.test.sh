@@ -25,7 +25,7 @@ case "$1" in
   capture-pane)  case "$4" in =*) echo "can't find pane: $4" >&2; exit 1 ;; esac   # gerçek tmux gibi: bölme hedefinde '=ad' geçersiz
                  case "$4" in %*) t="${4#%}" ;; *) t="${4%:}" ;; esac; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
   list-windows)  echo "@1" ;;
-  set-option)    : ;;
+  set-option)    echo "$*" >> "$SAHTE/iz-set" ;;
   new-session|attach-session) echo "$*" >> "$SAHTE/iz"; exit 0 ;;
   *) exit 1 ;;
 esac
@@ -93,6 +93,30 @@ KOLTUK_TUZ="$S/yok-dizin/tuz" kos maiset-ana /p "$KB"
 [ "$(rc)" = 3 ] && [ -z "$(iz)" ] && grep -q "tuz yok" "$S/cikti" && ok "K7 tuz yaratılamazsa kimlik uydurulmaz → red, bağlanmaz" || bad K7 "rc=$(rc) iz=$(iz)"
 kos maiset-ana /p BASIRET
 [ "$(iz)" = "attach-session -t =BASIRET" ] && ok "K8 adla bağlanma çalışmaya devam eder" || bad K8 "iz=$(iz)"
+
+echo "T · telefon kipi (2.25.0 · …XQY97Y D4): tel. öneki → ignore-size, masaüstü daralmaz; ad aynı kapılardan geçer"
+: > "$S/iz-set"; kos maiset-ana /p tel.
+[ "$(iz)" = "new-session -A -f ignore-size -s maiset-ana -c /p" ] && ok "T1 'tel.' → ana oturum ignore-size ile (yoksa açılır — argümansız yolun aynısı)" || bad T1 "$(iz)"
+: > "$S/iz-set"; kos maiset-ana /p tel.BASIRET
+[ "$(iz)" = "attach-session -f ignore-size -t =BASIRET" ] && [ ! -s "$S/iz-set" ] && ok "T2 'tel.<koltuk>' → TAM eşleşmeli hedefe ignore-size ile; pencere ayarına (window-size) dokunulmaz" || bad T2 "iz=$(iz) set=$(cat "$S/iz-set")"
+kos maiset-ana /p "tel.$KB"
+[ "$(iz)" = "attach-session -f ignore-size -t =BASIRET" ] && ok "T3 'tel.<kimlik>' → kimlik çözülür, aynı koltuğa ignore-size ile" || bad T3 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p tel.YOK
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "T4 🔴 olmayan koltuk telefon kipinde de reddedilir, oturum AÇILMAZ" || bad T4 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p tel.ttyd-maiset
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "T5 🔴 altyapı oturumu telefon kipinde de açılamaz" || bad T5 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p tel.tel.BASIRET
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "T6 önek bir kez ayrılır: 'tel.tel.X' geçersiz ad (nokta) → red" || bad T6 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p TEL.BASIRET
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "T7 önek harfi harfine: 'TEL.' telefon kipi değil, geçersiz ad → red" || bad T7 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p "$KB" tel
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "T8 kip ikinci argümanla verilemez (birden çok argüman reddi aynen)" || bad T8 "rc=$(rc) iz=$(iz)"
+printf '%s\n' BASIRET CARSI imglistener > "$S/oturumlar"
+kos maiset-ana /p tel.maiset-ana
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "T9 🔴 ana oturum YOKKEN 'tel.<ana adı>' YARATMAZ (A4'ün telefon yüzü)" || bad T9 "rc=$(rc) iz=$(iz)"
+printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"
+: > "$S/iz-set"; kos maiset-ana /p BASIRET
+[ "$(iz)" = "attach-session -t =BASIRET" ] && [ -s "$S/iz-set" ] && ok "T10 öneksiz adres bugünkü gibi: bayraksız bağlanır, window-size latest yazılır" || bad T10 "iz=$(iz) set=$(cat "$S/iz-set")"
 
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
 # ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──
