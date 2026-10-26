@@ -1,7 +1,7 @@
 {
   "is": "dalgic-gonder-baglama",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T11:58:07+03:00",
+  "guncelleme": "2026-10-26T12:19:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,38 +25,38 @@
       "etiket": "on-goz-cagri",
       "asama": "sonra",
       "dosya": "olcum-on-goz-cagri-sonra.txt",
-      "sha256": "2e3e7d2f0193333f428c32e1bb06d1a96d11ff9ada5b1eb1baf36313147a69a1",
+      "sha256": "fd1446df5d60b4766cf172913bbc50a162828059588f4416078ad3f592e17c50",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/on-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T11:57:37+03:00",
-      "sure_sn": 36.0,
+      "zaman": "2026-10-26T12:19:08+03:00",
+      "sure_sn": 13.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "d83a32899f9640459eca8b408888d9aa"
+      "olcum_id": "747f8a4d86844453b693fe8851e2cf2c"
     },
     {
       "tur": "olcum",
       "etiket": "on-goz-cagri-mutant",
       "asama": "tek",
       "dosya": "olcum-on-goz-cagri-mutant-tek.txt",
-      "sha256": "b167ac1b48305a4e4f5ccd3642a6832b621fceae40a400b3fdaa3003d5023bea",
+      "sha256": "a70aadb3a7e9346b9c2297590ffe78394b49fff4ba4471342ae8681805ea75ee",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/on-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T11:58:07+03:00",
-      "sure_sn": 29.5,
+      "zaman": "2026-10-26T12:19:53+03:00",
+      "sure_sn": 43.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "on-goz-cagri",
       "beklenen": "kirmizi",
-      "olcum_id": "a4652c2841654a63a978d61e66a6c720"
+      "olcum_id": "32299693e6ad44ab89f563113db18b9e"
     }
   ],
-  "imza": "911ed49458dfd2b3dbe26d987632bc146f2b88d2bdb53fa9f90ea6087bb9cbe6"
+  "imza": "1afcf3d48c396e163f5b555b886c5f2d7b9d27c07aec132ad0d54fb98b676e68"
 }

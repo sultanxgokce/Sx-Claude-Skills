@@ -878,6 +878,19 @@ CIKTI="$(on "$T/yok-dalgic.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "dalgic.sh y
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 CIKTI="$(DALGIC_KAPALI=1 DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && ! grep -q "ön-göz\|ÖN-GÖZ" <<<"$CIKTI"; g $? "DALGIC_KAPALI=1: ön-göz hiç koşmaz"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(on "$T/dalgic-0.sh")"; grep -q "sahte dalgic rapor rc=0" <<<"$CIKTI"; g $? "rapor her durumda ekrana yazılır (UYUMLU'da da)"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(on "$T/dalgic-3.sh")"; grep -q "sahte dalgic rapor rc=3" <<<"$CIKTI"; g $? "ÖLÇÜLEMEDİ'de de rapor (neden) görünür"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+printf '#!/usr/bin/env bash\nprintf "kacis:\\033[2J\\033]0;hile\\007 bitti\\n"; head -c 9000 /dev/zero | tr "\\0" "x"; exit 0\n' > "$T/dalgic-kirli.sh"
+CIKTI="$(on "$T/dalgic-kirli.sh")"; ! grep -q $'\033' <<<"$CIKTI" && [ "$(grep -c . <<<"$CIKTI")" -lt 60 ] && [ "$(wc -c <<<"$CIKTI")" -lt 6500 ]; g $? "ön-göz çıktısında kontrol karakteri süzülür, çıktı 4000 bayta kırpılır"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(DALGIC_KAPALI=0 DALGIC_BIN="$T/dalgic-0.sh" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1)"; grep -q "ön-göz (DALGIÇ): UYUMLU" <<<"$CIKTI"; g $? "DALGIC_KAPALI=0 ön-gözü KAPATMAZ (yalnız =1 kapatır)"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+# 🔴 göz bağımsızlığı: ön-göz açıkken ve kapalıyken göze giden istem BAYT BAYT aynı olmalı
+DALGIC_KAPALI=1 SAHTE_ISTEM_KOPYA="$T/istem-kapali.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" >/dev/null 2>&1; rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+DALGIC_KAPALI= DALGIC_BIN="$T/dalgic-1.sh" SAHTE_ISTEM_KOPYA="$T/istem-acik.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" >/dev/null 2>&1; rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+[ -s "$T/istem-kapali.md" ] && cmp -s "$T/istem-kapali.md" "$T/istem-acik.md"; g $? "🔴 göze giden istem ön-göz açıkken ve kapalıyken BAYT BAYT aynı (ön-göz bağımsızlığı bozmaz)"
 # MUTASYON: UYUMSUZ kolu kaldırılırsa uyarı kaybolur → yukarıdaki 🔴 kapı düşerdi
 MO="$T/pkg-on"; mkdir -p "$MO"; cp "$HERE"/*.py "$HERE"/*.sh "$MO/" 2>/dev/null
 python3 - "$MO/denetci.sh" <<'PYM'
