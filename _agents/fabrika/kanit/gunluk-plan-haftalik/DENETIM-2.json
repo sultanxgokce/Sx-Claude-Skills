@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-haftalik",
+  "pr": "473",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T17:55:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-haftalik",
+  "dal": "gunluk-plan-haftalik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20459,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 12296
+  },
+  "bas": "6db121f3d62c4667c49801c9b9e2a0a2acedb9d8",
+  "duzeltme_farki": {
+    "onceki_bas": "c231a4d989ba7dc94b583e9999e58f9a46ea2983",
+    "dosya": 10,
+    "bayt": 15244,
+    "tam_bayt": 29618
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Son bir haftayı görev listesinden ölçen, Z1-Z3 zayıflıklarını çıkaran ve açık onayla ULAK'a bildiren haftalık değerlendirme adımı yapılmış. Önceki turun yanlış-temiz sonucu düzeltilip özel sınavla güvenceye alınmış; yalnız rötuş değil, üretime hazır düzeyde kanıt var.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra çifti 2/20'den 21/21'e geçişi gösteriyor; gerçek görev verisiyle kuru koşu Z2/Z3 ve sayımları üretmiş, gerçek kod ölçümü yeşil kalmış, mutasyon ölçümü de bilerek bozulan 9/9 davranışı yakalamış. Önceki B1 kapanmış: haftalik.sh filtre sonrasında boş listeyi OLCULEMEDI yapıyor ve H16 var olmayan --kutu için rc=3 ile temiz sonuç basılmadığını doğruluyor."
+  }
+}
