@@ -117,12 +117,13 @@ bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh --baslik "<tek c�
 bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh … --uygula                                                                   # deftere yazar
 ```
 - **Yeni havuz KURULMAZ:** yazım mevcut görev defterine `bulgu.sh yaz` ile gider (türü özellik); kayıt başlıkta `[tarama] ` işaretini taşır ve günlük tavan bu işaretten SAYILIR.
-- **Ölçmeden iş yazılmaz (değişmez 1):** `--kaynak` (dosya:satır ya da https adresi) ve `--kanit` (en az 20 karakter, bu turda ölçülen şey) ZORUNLU; kaynaksız ya da kanıtsız çağrı rc 2.
-- **Günde en çok 3:** bir kutuda bugün hareketi olan `[tarama] ` kaydı 3'e ulaştıysa dördüncüsü rc 2 ile reddedilir ("yarına"). Tavan değişmez; yalnız sınavda `GUNLUK_PLAN_TARAMA_TAVAN` ile düşürülür/yükseltilir.
+- **Ölçmeden iş yazılmaz (değişmez 1):** `--kaynak` (dosya:satır ya da https adresi) ve `--kanit` ZORUNLU. `dosya:satır` ise dosya GERÇEKTEN var ve satır dosyanın içinde olmalı (çalışma dizinine ya da mutlak yola göre); `--kanit` en az 20 karakter ve ölçülmüş bir SAYI taşımalı (kaç dosya/satır/ms/adet). **Dürüst sınır:** betik https adresinin açılıp açılmadığını ve kanıt cümlesinin doğruluğunu doğrulayamaz; biçim, dosya varlığı ve sayı şartını denetler, gerisi yazanın ölçümüdür — bu yüzden ikisi de kaydın notuna yazılır, gözle denetlenebilir.
+- **Günde en çok 3:** bir kutuda bugün hareketi olan `[tarama] ` kaydı 3'e ulaştıysa dördüncüsü rc 2 ile reddedilir ("yarına"). Tavan SABİTTİR: ortam değişkeniyle ya da argümanla değişmez.
 - **İdempotent:** aynı başlık (büyük-küçük harf ve noktalama farkı yok sayılır) defterde açıksa ya da BUGÜN kapandıysa yazılmaz; eski günde kapanmış başlık yeniden açılabilir.
+- **Kutu tahmin edilmez:** liste tek kutu gösteriyorsa o, birden çok kutu gösteriyorsa (tümünü gören rol) `--kutu` şart (rc 3). Yazım jetonun kutusuna gider; yazımdan sonra kaydın hangi kutuda göründüğü okunur — sayım yapılan kutudan farklıysa ya da görünmüyorsa rc 1 ve açıkça söylenir.
 - **Ölçemezse yazmaz:** görev listesi okunamadı/boşsa ya da ajan kimliği çıkmıyorsa rc 3 — "tavan dolu değil" denmez. Başlık 160 karakteri aşarsa reddedilir (başlık değil nottur; ayrıntı `--kanit`'e).
 - Kuru koşu varsayılandır; `--uygula` yalnız yukarıdaki kapıları geçen çağrıyı yazar.
-Sınavı: `bash scripts/tarama-ekle.test.sh` (T1-T11, hermetik: sahte gorev.sh + sahte bulgu.sh).
+Sınavı: `bash scripts/tarama-ekle.test.sh` (T1-T12b, hermetik: sahte gorev.sh + sahte bulgu.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 

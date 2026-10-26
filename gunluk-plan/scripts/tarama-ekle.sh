@@ -3,17 +3,17 @@
 #   (görev 0HC75A dilim (b); SERDAR 26 Eki: "havuza, günde ≤3").
 #
 # Yeni havuz/defter KURMAZ: yazım bulgu.sh yaz ile (türü özellik). Tarama kayıtları başlıkta "[tarama] " işaretini taşır; günlük tavan bu işaretten SAYILIR.
-#   Ölçmeden iş yazılmaz (gunluk-plan değişmez 1): --kaynak (dosya:satır ya da https URL) ve --kanit (bu turda ölçülen, ≥ 20 karakter) ZORUNLU.
+#   Ölçmeden iş yazılmaz (gunluk-plan değişmez 1): --kaynak (var olan dosya:satır ya da https URL) ve --kanit (bu turda ölçülen, ≥ 20 karakter, en az bir sayı) ZORUNLU.
 #   VARSAYILAN KURU: neyi yazacağını basar. Yazmak için --uygula.
 #   İDEMPOTENT: aynı başlıkta (normalize) açık ya da bugün kapanmış görev varsa yazılmaz.
-#   TAVAN: bir kutuda bugün en çok 3 tarama kaydı (GUNLUK_PLAN_TARAMA_TAVAN ile değişmez, yalnız sınavda düşürülür). Sayım ölçülemezse yazılmaz.
+#   TAVAN: bir kutuda bugün en çok 3 tarama kaydı — SABİT, hiçbir ortam değişkeniyle/argümanla değişmez. Sayım ölçülemezse yazılmaz.
 #
 #   tarama-ekle.sh --baslik "<tek cümle, Sultan-dilinde>" --kaynak <dosya:satır|https://…> --kanit "<ölçüm>" [--uygula] [--kutu K] [--kim AJAN]
 #   rc: 0 tamam (kuru dahil) · 1 yazım hatası · 2 kullanım/ret (eksik kaynak-kanıt, uzun başlık, tavan dolu, kopya) · 3 ölçülemedi
 set -uo pipefail
 GOREV="${GUNLUK_PLAN_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
 BULGU="${GUNLUK_PLAN_BULGU_SH:-/config/.claude/skills/bulgu/scripts/bulgu.sh}"
-TAVAN="${GUNLUK_PLAN_TARAMA_TAVAN:-3}"
+TAVAN=3   # DEĞİŞMEZ: ortamdan/argümandan okunmaz (Sultan: günde ≤3)
 BUGUN="${GUNLUK_PLAN_TARIH:-$(date +%F)}"
 UYGULA=0; BASLIK=""; KAYNAK=""; KANIT=""; KUTU="${GUNLUK_PLAN_KUTU:-}"; KIM=""
 while [ $# -gt 0 ]; do
@@ -30,6 +30,11 @@ done
 [ -n "$BASLIK" ] || { echo "REDDEDİLDİ: --baslik şart (tek cümle, Sultan-dilinde)" >&2; exit 2; }
 [ "${#BASLIK}" -le 160 ] || { echo "REDDEDİLDİ: başlık 160 karakteri aşıyor (başlık değil nottur; ayrıntı --kanit'e)" >&2; exit 2; }
 printf '%s' "$KAYNAK" | grep -Eq '^(https://[^ ]+|[^ :]+:[0-9]+)$' || { echo "REDDEDİLDİ: --kaynak 'dosya:satır' ya da https adresi olmalı (ölçmeden iş yazılmaz): '$KAYNAK'" >&2; exit 2; }
+case "$KAYNAK" in https://*) ;; *)   # dosya:satır → dosya GERÇEKTEN var ve satır dosya içinde (çalışma dizinine ya da mutlak yola göre)
+  f="${KAYNAK%:*}"; ln="${KAYNAK##*:}"
+  [ -f "$f" ] || { echo "REDDEDİLDİ: --kaynak dosyası yok: '$f' (çalışma dizini: $PWD) — ölçmeden iş yazılmaz" >&2; exit 2; }
+  [ "$ln" -ge 1 ] && [ "$ln" -le "$(wc -l < "$f" | tr -d ' ')" ] || { echo "REDDEDİLDİ: --kaynak satırı dosyanın dışında: '$KAYNAK'" >&2; exit 2; } ;; esac
+printf '%s' "$KANIT" | grep -q '[0-9]' || { echo "REDDEDİLDİ: --kanit ölçülmüş bir sayı taşımıyor (kaç dosya/satır/ms/adet?) — ölçmeden iş yazılmaz" >&2; exit 2; }
 [ "${#KANIT}" -ge 20 ] || { echo "REDDEDİLDİ: --kanit en az 20 karakter, bu turda ölçülen şeyi söylemeli (ölçmeden iş yazılmaz)" >&2; exit 2; }
 [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
 [ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
@@ -37,8 +42,10 @@ printf '%s' "$KAYNAK" | grep -Eq '^(https://[^ ]+|[^ :]+:[0-9]+)$' || { echo "RE
 
 LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 [ "$LRC" -eq 0 ] && [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı (rc=$LRC) — tavan sayılamadan yazılmaz" >&2; exit 3; }
-if [ -z "$KUTU" ]; then
-  KUTU="$(printf '%s\n' "$LISTE" | awk '$1 ~ /^gorev_/ {print $2}' | sort | uniq -c | sort -rn | awk 'NR==1 {print $2}')"
+if [ -z "$KUTU" ]; then   # tahmin YOK: liste tek kutuyu gösteriyorsa o; birden çoksa (tümünü gören rol) --kutu şart
+  KUTULAR="$(printf '%s\n' "$LISTE" | awk '$1 ~ /^gorev_/ {print $2}' | sort -u)"
+  [ "$(printf '%s\n' "$KUTULAR" | grep -c .)" -le 1 ] || { echo "ÖLÇÜLEMEDİ: liste birden çok kutu gösteriyor ($(printf '%s' "$KUTULAR" | tr '\n' ' ')) — --kutu ver (yazım jetonun kutusuna gider; sayım aynı kutuda yapılmalı)" >&2; exit 3; }
+  KUTU="$KUTULAR"
 fi
 [ -n "$KUTU" ] || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
 
@@ -68,7 +75,12 @@ SAY="${SONUC% *}"; KOPYA="${SONUC#* }"
 if [ "$UYGULA" -eq 1 ]; then
   [ -f "$BULGU" ] || { echo "ÖLÇÜLEMEDİ: bulgu.sh yok ($BULGU)" >&2; exit 3; }
   if bash "$BULGU" yaz "[tarama] $BASLIK" --kim "$KIM" --etiket ozellik --not "kaynak: $KAYNAK · kanıt: $KANIT" >/dev/null 2>&1; then
-    echo "  ✓ yazıldı: [tarama] $BASLIK  (bugün $((SAY+1))/$TAVAN)"
+    # yazım jetonun kutusuna gider: sayımın yapıldığı kutuyla aynı mı? (--kutu ile tavan çevresinden dolaşılamaz)
+    L2="$(bash "$GOREV" liste 2>/dev/null)"
+    YK="$(printf '%s\n' "$L2" | awk -v b="[tarama] $BASLIK" '$1 ~ /^gorev_/ { i=index($0,b); if (i>0) {print $2; exit} }')"
+    if [ -z "$YK" ]; then echo "  ✗ YAZILDI ama defterde göremedim — kutu doğrulanamadı: [tarama] $BASLIK" >&2; exit 1; fi
+    if [ "$YK" != "$KUTU" ]; then echo "  ✗ kayıt '$YK' kutusuna yazıldı, tavan '$KUTU' kutusunda sayıldı — tavan o kutuda ölçülmedi; kaydı elle gözden geçir" >&2; exit 1; fi
+    echo "  ✓ yazıldı: [tarama] $BASLIK  (bugün $((SAY+1))/$TAVAN · kutu $YK)"
   else echo "  ✗ YAZILAMADI: $BASLIK" >&2; exit 1; fi
 else
   echo "  ◻ yazardım: [tarama] $BASLIK  (bugün $((SAY+1))/$TAVAN) · kaynak: $KAYNAK"
