@@ -1,14 +1,14 @@
 {
   "is": "baslatici-autocompact-ortam",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T23:10:14+03:00",
+  "guncelleme": "2026-10-26T23:44:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "baslatici-ortami",
       "asama": "once",
       "dosya": "olcum-baslatici-ortami-once.txt",
-      "sha256": "95020c69691eee45c285e3532b20273d615ec807407ceb816b7feaec743100eb",
+      "sha256": "8ed6577155d6eb7c4e10e0253d757f710a7d9eb9506324d4ac0787f52ce7bb30",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh",
@@ -16,17 +16,17 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-26T23:10:10+03:00",
+      "zaman": "2026-10-26T23:44:39+03:00",
       "sure_sn": 0.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c93adf867cfc4677914ee3395fe6b25d"
+      "olcum_id": "8681d19c33374022a706365d0de09d3a"
     },
     {
       "tur": "olcum",
       "etiket": "baslatici-ortami",
       "asama": "sonra",
       "dosya": "olcum-baslatici-ortami-sonra.txt",
-      "sha256": "48d9f881d56f67a30694db274bb106960fc8459e54539645b22b53f523441d47",
+      "sha256": "3659859148cffaa6cd3775fc6c3554d558ab1ab9fe6afb86cf74b9f64ee80ea5",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh",
@@ -34,49 +34,49 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:10:10+03:00",
+      "zaman": "2026-10-26T23:44:39+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "ed9518316f91414eaccaaa91e74f40f3"
+      "olcum_id": "5f3d2922af5246eaa36fb5df04124e9f"
     },
     {
       "tur": "olcum",
       "etiket": "baslatici-mutasyon",
       "asama": "tek",
       "dosya": "olcum-baslatici-mutasyon-tek.txt",
-      "sha256": "c933d9e3d3977467d7ac2910a20585672b76966946998c5178e0172e0da5df1e",
+      "sha256": "026b28358cfe939f0254a1943f7904cc291900fab5fb7ea5b5a64404b3f4f3ab",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:10:10+03:00",
+      "zaman": "2026-10-26T23:44:39+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "baslatici-ortami",
       "beklenen": "kirmizi",
-      "olcum_id": "8e9e77547ebf4240bbb9346404d1577b"
+      "olcum_id": "90995b48486f48b79e909a5fd61f3225"
     },
     {
       "tur": "olcum",
       "etiket": "sinavlar",
       "asama": "tek",
       "dosya": "olcum-sinavlar-tek.txt",
-      "sha256": "a6baa5278095ac5b1507023dfbb5ae58e3f004270b3ee30db3dcfa3a3472c850",
+      "sha256": "0689e7f38cfc0977dc0ffc7e221c137d4f9a2ca35a8dc0bb813139f970fa0ac4",
       "komut": [
         "bash",
         "-c",
-        "bash terminal-onar/scripts/sikistirma-ortami.test.sh && bash iskan/scripts/baslat-claude.test.sh && bash terminal-onar/scripts/kurtarici-kapali.test.sh && node ahi/schema/version-lint.mjs . && node ahi/schema/validate-repo.mjs . --strict && node --check sync-skills.mjs"
+        "bash terminal-onar/scripts/sikistirma-ortami.test.sh && bash iskan/scripts/baslat-claude.test.sh && bash terminal-onar/scripts/kurtarici-kapali.test.sh && bash kabuk-biti.test.sh && node ahi/schema/version-lint.mjs . && node ahi/schema/validate-repo.mjs . --strict && node --check sync-skills.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:10:14+03:00",
+      "zaman": "2026-10-26T23:44:43+03:00",
       "sure_sn": 4.1,
       "boru_denetimi": "temiz",
-      "olcum_id": "3001fdd42cdc480fbdc87aa173ae057e"
+      "olcum_id": "e6ca87c38b0e4f979aef6ea50e2b63fd"
     }
   ],
-  "imza": "b409c6abdc4e714de0610f27d1955b05d213f9e985eb5beb29b2a00e949888fe"
+  "imza": "58392fb05446007980a652977ba5bb9672e96b1a9eaa9174bb653c43974ff0b9"
 }
