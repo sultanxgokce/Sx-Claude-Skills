@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "iskan-haric-pano",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T22:49:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-iskan-haric-pano",
+  "dal": "iskan-haric-pano",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15847,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 29493
+  },
+  "bas": "abd8b3663e1237c5fa3e39210f2ac07b6f033a28",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İskan-host yapısal ek-teşhisi artık hem doğan projenin ana servisini hem pano servisini iki compose tarafında da dışlıyor; compose_parse da tekrarlı --haric seçeneklerini gerçekten işliyor. Sultan’ım, değişiklik kartın istediği yere doğrudan oturmuş, geriye üretimi durduracak bir kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Güncel gerçek ölçüm 281/281 yeşil, hedef davranış testte iki servisin de düşmesi ve iskan-host çağrısının iki tarafta iki --haric taşımasıyla sınanıyor; ayrıca önceki sürümün tekrarlı seçeneği reddettiğini gösteren ayrı yeşil karşı-ölçüm bulunduğundan önce/sonra ölçüm çifti yeterli."
+  }
+}
