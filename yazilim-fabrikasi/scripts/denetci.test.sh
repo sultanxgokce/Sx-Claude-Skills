@@ -779,7 +779,7 @@ mut "canli-iz-ezilir" '/başka denetçi koşuyor/s@; exit 3$@@'
 mut "asim-ham-yazilmaz" 's@^if \[ "$DRC" -eq 124 \]; then$@if false; then@'
 mut "kosuyor-silinmez" 's@^  \[ -n "$KOSUYOR" \] \&\& rm -f "$KOSUYOR"$@  :@'
 mut "kosuyor-yazilmaz" 's@^KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"$@KOSUYOR=""@'
-mut "sinav-kipi-gercek-zil" 's@^  if \[ -z "$an" \] \&\& \[ -n "${DENETCI_KOMUT:-}" \]; then@  if false; then@'
+mut "sinav-kipi-gercek-zil" 's@^  if \[ -z "$an" \] \&\& { \[ -n "${DENETCI_KOMUT:-}" \] || \[ -n "${SAHTE_JSON:-}" \] || \[ -n "${SAHTE_ISTEM_KOPYA:-}" \]; }; then@  if false; then@'
 MUT_BOLUM=
 mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; \[ -z@head -60 "$f"; [ -z@'
 mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)$@e = len(L)@'

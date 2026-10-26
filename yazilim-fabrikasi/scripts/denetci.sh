@@ -47,8 +47,8 @@ _zil_cal() {   # _zil_cal <komut…> → rc (aile-notify meşgul koltukta zili k
 _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
-  if [ -z "$an" ] && [ -n "${DENETCI_KOMUT:-}" ]; then   # sınav kipi: gerçek zil ARANMAZ, yalnız açıkça verilen çalar
-    printf '· sınav kipi (DENETCI_KOMUT): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
+  if [ -z "$an" ] && { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ] || [ -n "${SAHTE_ISTEM_KOPYA:-}" ]; }; then   # sınav kipi (sahte göz/sahte json): gerçek zil ARANMAZ, yalnız açıkça verilen çalar
+    printf '· sınav kipi (DENETCI_KOMUT/SAHTE_JSON): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
   [ -n "$an" ] || an="$(command -v aile-notify.sh 2>/dev/null)"
   [ -n "$an" ] || for k in "${DEPO:-}/scripts/aile-notify.sh" /config/projects/Nexus/scripts/aile-notify.sh; do [ -f "$k" ] && { an="$k"; break; }; done
   if [ -z "$an" ] || [ ! -f "$an" ]; then printf '⚠ denetçi bitiş zili ATLANDI: aile-notify bulunamadı (FABRIKA_AILE_NOTIFY ile ver) — rc %s\n' "$rc" >&2; return 0; fi

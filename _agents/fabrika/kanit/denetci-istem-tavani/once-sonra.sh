@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export FABRIKA_AILE_NOTIFY=-   # sahte işe gerçek zil çalmasın (SERDAR 26 Eki: 'is-o' zili)
 # once-sonra.sh <eski-scripts-dizini> <yeni-scripts-dizini> — aynı girdiyle ana hat ve dal: (1) eşik altı istem bayt bayt aynı mı
 # (2) BÂNİ vakası (fark eşik altı, istem eşik üstü): eski kırpar + tur yakar, yeni İŞİ BÖL + tur yakmaz.
 set -uo pipefail
