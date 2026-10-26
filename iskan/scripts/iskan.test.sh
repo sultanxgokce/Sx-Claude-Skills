@@ -2259,6 +2259,47 @@ CS_MD5_Y1="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
   && printf '%s' "$out" | grep -q 'aday-bitişik satır' && grep -q 'HUMA-BAKIM' "$CS_KANIT3D/compose-senkron-fark.txt" \
   && ok "senkron asimetrik-yutma (MAJOR-1): host-only bitişik yorum → rc=5 + yazım=0 (tam-dosya onu SİLERDİ; sahte-attestasyon kapandı)" \
   || bad "senkron asimetrik-yutma (MAJOR-1): host-only aday-bitişik yorum sessizce silinebilir (rc=$rc)"
+
+# 69e. DOĞAN PROJENİN PANO SERVİSİ (ders d0013): repo = base+aday+cloudtop-pano-<proje>, host = base
+#      → pano doğan projenin parçası, komşu-drift SAYILMAZ → YAZIM OLUR, host==origin/main bayt-eş
+_cs_pano_blok() { cat <<EOF
+
+  cloudtop-pano-$1:
+    image: test
+    container_name: cloudtop-pano-$1
+    mem_limit: 256m
+    ports:
+      - "127.0.0.1:9997:8080"
+EOF
+}
+CP_REPO="$(mktemp -d)"; mkdir -p "$CP_REPO/infra"
+{ _cs_base_yaml; _cs_aday_blok; _cs_pano_blok senktest; } > "$CP_REPO/infra/docker-compose.server.yml"
+git -C "$CP_REPO" init -q -b main 2>/dev/null; git -C "$CP_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$CP_REPO" -c user.email=t@t -c user.name=t commit -qm fixture 2>/dev/null
+git -C "$CP_REPO" remote add origin "$CP_REPO" 2>/dev/null; git -C "$CP_REPO" fetch -q origin main 2>/dev/null
+_cs_base_yaml > "$CS_HOSTFILE"
+CS_KANIT3E="$(mktemp -d)"; CS_LOG3E="$(mktemp)"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3E" ISKAN_KANIT_DIR="$CS_KANIT3E" "${CS_ENV_ORTAK[@]}" ISKAN_CLOUDTOP_REPO_DIR="$CP_REPO" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+CP_MD5_R="$(git -C "$CP_REPO" show origin/main:infra/docker-compose.server.yml | md5sum | awk '{print $1}')"
+CP_MD5_H="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
+[ "$rc" = "0" ] && [ "$CP_MD5_R" = "$CP_MD5_H" ] \
+  && ok "senkron doğan-pano (d0013): cloudtop-pano-<proje> komşu-drift sayılmadı → YAZIM oldu + host==origin/main BAYT-eş" \
+  || bad "senkron doğan-pano (d0013): pano servisi komşu-drift sayılıyor (rc=$rc)"
+
+# 69f. BAŞKA projenin panosu DOĞAN SAYILMAZ (negatif): repo = base+aday+cloudtop-pano-baska, host = base
+#      → gerçek komşu-drift → rc=5 + yazım=0
+{ _cs_base_yaml; _cs_aday_blok; _cs_pano_blok baska; } > "$CP_REPO/infra/docker-compose.server.yml"
+git -C "$CP_REPO" -c user.email=t@t -c user.name=t commit -qam fixture2 2>/dev/null; git -C "$CP_REPO" fetch -q origin main 2>/dev/null
+_cs_base_yaml > "$CS_HOSTFILE"; CP_MD5_0="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3E" ISKAN_KANIT_DIR="$CS_KANIT3E" "${CS_ENV_ORTAK[@]}" ISKAN_CLOUDTOP_REPO_DIR="$CP_REPO" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+[ "$rc" = "5" ] && [ "$CP_MD5_0" = "$(md5sum "$CS_HOSTFILE" | awk '{print $1}')" ] \
+  && ok "senkron başka-pano (d0013 negatif): başka projenin panosu komşu-drift → rc=5 + yazım=0" \
+  || bad "senkron başka-pano (d0013 negatif): başka projenin panosu sessizce geçti (rc=$rc)"
+rm -f "$CS_LOG3E"; find "$CP_REPO" "$CS_KANIT3E" -delete
 rm -f "$CS_LOG3" "$CS_LOG3C" "$CS_LOG3D"
 
 # 70. komşu-fark (ölü tenant-bloğu): körü-körüne ezme YOK → rc=5 + fark-dosyası + yazım=0
