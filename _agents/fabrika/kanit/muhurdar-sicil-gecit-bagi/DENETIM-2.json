@@ -1,0 +1,48 @@
+{
+  "tur": 2,
+  "is": "muhurdar-sicil-gecit-bagi",
+  "pr": "474",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T18:44:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-muhurdar-sicil-gecit-bagi",
+  "dal": "muhurdar-sicil-gecit-bagi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29381,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12049
+  },
+  "bas": "92287890846d8aadd1419b54683d61450d94d828",
+  "duzeltme_farki": {
+    "onceki_bas": "9f3d93a49d75fcd8c1dc81506dee75f60f2f5774",
+    "dosya": 11,
+    "bayt": 26527,
+    "tam_bayt": 35769
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Görev-kaynak bağı ve zaman aşımı düzeltilmiş; mühür kopyası da ortak kilit ve atomik dosya değişimiyle güçlendirilmiş, dolayısıyla daraltılmış kartta doğru iş yapılmış. Ancak süpürme mühür özetini ortak kilidi almadan önce okuduğu için önceki atomiklik bulgusu bütünüyle kapanmamış; önce bu yarış penceresi çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kısmen kapanmış: yazıcı özel, teslim-isle bölümü paylaşımlı kilit kullanıyor; fakat süpürme `muhur-ozet.json` dosyasını ve mühürdar bilgisini kilidi almadan önce okuyor. Aynı görev yeniden mühürlenirse bu aralıkta dosyalar değişebilir ve eski özetten alınan mühürdar yeni mühür dosyalarıyla `teslim-isle` çağrısına taşınabilir.",
+        "kanit": "Akış önce kilitsiz bölümde `oz.get(\"muhurdar\")` doğrulamasını yapıyor; ardından `kilit = open(...)` ve `LOCK_SH` geliyor. `subprocess.run(..., \"teslim-isle\", oz[\"muhurdar\"], ..., md)` çağrısı böylece kilit öncesinde okunmuş `oz` ile kilit altında yeniden okunacak `md` dosyalarını birleştiriyor. Yeni j testi yalnız kopyalama ve ardışık üstüne yazmayı sınıyor; eşzamanlı okuyucu-yazıcı yarışını sınamıyor.",
+        "konum": "tescil/scripts/lib/sicil.py:cmd_supur, mühür özeti doğrulaması ile `.kilit`/`LOCK_SH` bölümü; tescil/scripts/supur.test.sh:test j",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce 0/2 ve sonra 2/2 ölçüm çifti ile mutasyon kaydı, sınavın hedeflenen değişikliği ve bozulmayı ayırt ettiğini gösteriyor. Önceki B1, `kay == \"teslim:\" + g` denetimi ve g2 kapısıyla; B3 ise `TimeoutExpired` yakalama ve k kapısıyla kapanmış. B2 için işlevsel j kapısı eklenmiş olsa da çıktı yalnız toplu 2/2 özeti veriyor ve eşzamanlı kilit yarışını ölçen bir vaka bulunmuyor."
+  }
+}
