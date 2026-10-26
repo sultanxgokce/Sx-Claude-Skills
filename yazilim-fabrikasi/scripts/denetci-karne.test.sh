@@ -7,6 +7,7 @@
 # HERMETİK: gerçek denetçi çağrılmaz (DENETCI_KOMUT sahte betik); geçici birincil depo + iş adıyla aynı dalda worktree.
 # Mutantlar geçici kopyada; kontrol kopyası önce gerçek betikle aynı kapıları geçmeli (kopyada çöken sınav sahte yeşil vermesin).
 set -uo pipefail
+export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI
 HERE="$(cd "$(dirname "$0")" && pwd)"

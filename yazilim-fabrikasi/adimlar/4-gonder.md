@@ -8,6 +8,9 @@
    Fable ↔ Claude da geçerli. Dış servis (Greptile) yok — Sultan K1.
    Denetçi üç şey alır: diff · KANIT.json · iş kartı. Kodu **ve** talep ⟷ kanıt kıyasını yapar; kanıt manifestini
    de denetler (elle yazılmış manifest = ret).
+   **Ön-göz (0.26.1, ZP640T):** `denetci.sh` bağımsız göze GİTMEDEN önce DALGIÇ'ı (`_agents/dalgic/dalgic.sh`) kendiliğinden koşar: kart cümlesi ⟷ fark, 5-16 sn, ~0,03-0,12 USD
+   (W42-E1 deneyi). Çıktı ekrana yazılır; **yalnız bilgidir** — puana, tur sayımına, çıkış koduna ve göze giden isteme dokunmaz (göz bağımsız kalır). `UYUMSUZ` büyük uyarı basar:
+   düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz. `ÖLÇÜLEMEDİ` UYUMLU sayılmaz. `DALGIC_KAPALI=1` kapatır; `dalgic.sh` olmayan kutuda "atlandı" yazar, denetim sürer. Kartsız koşuda çalışmaz.
 3. **Puan iki satır** (`DENETIM.json`):
    - **KOD İYİ Mİ** 0-5: ciddi hata → 2 · uygulama sorunları → "önce bunları çöz" · yalnız rötuş → 5. **5 = üretime hazır.**
    - **DOĞRU ŞEY Mİ** E/H: iş kartındaki talep ile kanıt yan yana. Kod doğru ama yanlış şeyi yapmışsa **H**;

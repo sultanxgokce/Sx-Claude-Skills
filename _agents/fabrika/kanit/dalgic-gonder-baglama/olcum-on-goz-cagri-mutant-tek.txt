@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-cagri-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/on-mut.sh
+# rc=1 sure=29.5s zaman=2026-10-26T11:58:07+03:00
+--- stdout ---
+on-goz-otomatik-cagri=0/1
+--- stderr ---

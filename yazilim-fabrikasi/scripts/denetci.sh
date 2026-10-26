@@ -654,6 +654,23 @@ fi
 if [ -n "$KART" ]; then cp "$KART" "$TMP/kart.md"
 elif [ -n "$PR" ]; then (cd "$DEPO" && gh pr view "$PR" --json title,body --jq '"# \(.title)\n\n\(.body)"' > "$TMP/kart.md") || echo "(iş kartı okunamadı)" > "$TMP/kart.md"
 else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'ye yakın değerlendirilir)" > "$TMP/kart.md"; fi
+# ── DALGIÇ ÖN-GÖZ (ZP640T, SERDAR 26 Eki): bağımsız göze GİTMEDEN önce yazanın farkı kart cümlesine ucuz bir ön-gözle karşılaştırılır
+#    (W42-E1 deneyi: 4 işte 5-16 sn, 0,03-0,12 USD). 🔴 YALNIZ BİLGİDİR: puana, tur sayımına, rc'ye ve göze giden isteme dokunmaz
+#    (göz bağımsızlığı bozulmasın); UYUMSUZ/ÖLÇÜLEMEDİ büyük uyarı basar, çağıran okur ve düzeltir ya da PR'ın Sınır bölümüne yazar.
+#    Kapalı: DALGIC_KAPALI=1 (sınavlar), kartsız koşu. dalgic.sh yoksa (başka kutu) sessiz atlanır — "ön-göz yok" yazar.
+if [ -z "${DALGIC_KAPALI:-}" ] && [ -n "$KART" ]; then
+  DALGIC_BIN="${DALGIC_BIN:-}"
+  if [ -z "$DALGIC_BIN" ]; then for _d in "$DEPO/_agents/dalgic/dalgic.sh" /config/projects/Nexus/_agents/dalgic/dalgic.sh; do if [ -r "$_d" ]; then DALGIC_BIN="$_d"; break; fi; done; fi
+  if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
+  else
+    DALGIC_OUT="$(DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$TMP/diff.patch" --is "$IS" </dev/null 2>&1)"; DALGIC_RC=$?
+    case "$DALGIC_RC" in
+      0) _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;
+      1) _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor; göz bunu da görecek. Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:"; printf '%s\n' "$DALGIC_OUT" | sed 's/^/   | /'; _bilgi "" ;;
+      *) _bilgi "· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=$DALGIC_RC) — UYUMLU sayılmaz; denetim yine sürer" ;;
+    esac
+  fi
+fi
 # İstem PARÇA PARÇA kurulur, sonra birleşir (BÂNİ 21:59, 18 Eki): boyut kapısı aşağıda istemin tamamını ölçer ve
 # aşınca HANGİ parçanın şiştiğini söyler. Birleşen metin eskisiyle bayt bayt aynıdır.
 { cat "$ISTEM"; } > "$TMP/p-sablon.md"

@@ -7,6 +7,7 @@
 #   (T11'de 15 mutant var, her biri TÜM süiti IC_KOSUM ile yeniden koşuyor — mutant sayısı büyüdükçe
 #   toplam süre büyüyor; CI'da varsayılan 300 sn'de üst üste Terminated oldu, 2026-10-15.)
 set -uo pipefail
+export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -861,6 +862,29 @@ CIKTI="$(SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-stur --diff "$T/d.patch" 2>&
 [ "$RC" -eq 4 ]; g $? "Sultan turundan sonra 3 düşük göz turu → yine rc=4 (sıfırlama tavanı kaldırmaz)"
 grep -q "DARALTILMIŞ: ilk 2 tur" <<<"$CIKTI"; g $? "denetçi sıfırı söyledi (ilk 2 tur sayılmıyor)"
 unset KANIT_DEPO; export KANIT_DEPO="$T"
+
+echo "════ T-ONGOZ · DALGIÇ ön-göz gönder akışında kendiliğinden koşar, YALNIZ bilgidir (ZP640T) ════"
+bash "$HERE/kart.sh" ac is-on --is "ön-göz sınavı için küçük bir iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$K" olcum is-on olc --asama tek -- echo 1 >/dev/null 2>&1
+for sonuc in 0 1 3; do printf '#!/usr/bin/env bash\necho "sahte dalgic rapor rc=%s"; exit %s\n' "$sonuc" "$sonuc" > "$T/dalgic-$sonuc.sh"; done
+on() { DALGIC_KAPALI= DALGIC_BIN="$1" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1; }
+CIKTI="$(on "$T/dalgic-0.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ön-göz (DALGIÇ): UYUMLU" <<<"$CIKTI"; g $? "ön-göz UYUMLU: bilgi satırı basıldı, denetim aynen geçti (rc 0)"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(on "$T/dalgic-1.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ÖN-GÖZ (DALGIÇ): UYUMSUZ" <<<"$CIKTI" && grep -q "sahte dalgic rapor rc=1" <<<"$CIKTI"; g $? "🔴 ön-göz UYUMSUZ: büyük uyarı + rapor basıldı AMA denetim sürdü ve geçti (rc 0; göz bağımsız kalır)"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(on "$T/dalgic-3.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ÖLÇÜLEMEDİ (rc=3) — UYUMLU sayılmaz" <<<"$CIKTI"; g $? "ön-göz ÖLÇÜLEMEDİ: UYUMLU sayılmaz uyarısı, denetim sürer (rc 0)"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(on "$T/yok-dalgic.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "dalgic.sh yok — ATLANDI" <<<"$CIKTI"; g $? "dalgic.sh yoksa 'ATLANDI' yazılır, denetim yine koşar (rc 0)"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+CIKTI="$(DALGIC_KAPALI=1 DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && ! grep -q "ön-göz\|ÖN-GÖZ" <<<"$CIKTI"; g $? "DALGIC_KAPALI=1: ön-göz hiç koşmaz"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
+# MUTASYON: UYUMSUZ kolu kaldırılırsa uyarı kaybolur → yukarıdaki 🔴 kapı düşerdi
+MO="$T/pkg-on"; mkdir -p "$MO"; cp "$HERE"/*.py "$HERE"/*.sh "$MO/" 2>/dev/null
+python3 - "$MO/denetci.sh" <<'PYM'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='1) _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ'; assert s.count(a)==1; open(sys.argv[1],"w",encoding="utf-8").write(s.replace(a,'1) : ; _bilgi "ÖN-GÖZ-KAPALI',1))
+PYM
+CIKTI="$(DALGIC_KAPALI= DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bash "$MO/denetci.sh" is-on --diff "$T/d.patch" 2>&1)"; ! grep -q "ÖN-GÖZ (DALGIÇ): UYUMSUZ" <<<"$CIKTI"; g $? "mutant (UYUMSUZ kolu söküldü): uyarı BASILMAZ → üstteki 🔴 kapı düşerdi"
+rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 
 echo "════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════"
 bash "$K" olcum is-bol olc --asama tek -- echo 1 >/dev/null 2>&1
