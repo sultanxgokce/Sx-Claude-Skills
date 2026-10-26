@@ -1,0 +1,48 @@
+{
+  "tur": 2,
+  "is": "hezarfen-a5-koprusu",
+  "pr": "467",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T15:04:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-a5-koprusu",
+  "dal": "hezarfen-a5-koprusu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35045,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 13938
+  },
+  "bas": "476b6e5f1e0bb6d2a89268cc175edd136a1b9ad0",
+  "duzeltme_farki": {
+    "onceki_bas": "fd68fbd1ec2cead8d37325936bdaa5a7cf24f0bf",
+    "dosya": 10,
+    "bayt": 24999,
+    "tam_bayt": 88563
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Ayşenur için izinli koltuğu salt okur izleyen, ham tuşu kapatan ve yalnız mesaj ile sunulan menü şıkkına izin veren köprü yapılmış; B1 fail-closed iz kapısıyla kapanmış, B2 ise ikinci doğrulamayla yalnız daraltılmıştır. Gerçek ölçüm 72 sınavı geçiriyor ve mutasyonlar kritik kapıları yakalıyor; ancak ikinci doğrulama ile `tmux send-keys` arasında hâlâ yanlış bağlama tuş gönderilebilen yarış bulunduğundan üretim öncesi bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki tur B2 kapanmamış: menü sorusu ikinci kez doğrulansa da bu doğrulama ile `tmux send-keys` ayrı işlemler olduğundan soru aradaki pencerede değişebilir; şık artık geçerli olmayan terminal bağlamına gönderilebilir.",
+        "kanit": "`sik()` ikinci `izinli_gorunur()` okuması ve soru-imzası karşılaştırmasından sonra ayrı bir `subprocess.run(... \"send-keys\" ...)` çağrısı yapıyor; eklenen yorum ve SKILL.md de işlemin tamamen atomik olmadığını açıkça belirtiyor. K28 yalnız birinci ve ikinci okuma arasındaki değişimi, mutasyon kaydı da ikinci doğrulamanın kaldırılmasını yakalıyor; ikinci okuma ile gönderim arasındaki değişimi ölçmüyor.",
+        "konum": "terminal-onar/scripts/koltuk-koprusu.py:239",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce kaydı yalnız sınav dosyalarının bulunmadığını gösterirken gerçek sonra ölçümü dört takımda toplam 72 geçiş ve sıfır kalan veriyor. B1, iz yazımının `fsync` sonrası başarı döndürmesi, hata halinde mesaj/şık eylemlerinin reddedilmesi ve K27 ile ilgili mutasyonun bunu yakalaması sayesinde kanıtlı biçimde kapanmış. B2 için K28 ve mutasyon ikinci doğrulamanın çalıştığını kanıtlıyor, fakat kalan doğrulama-gönderim penceresini kapatmıyor veya ölçmüyor."
+  }
+}
