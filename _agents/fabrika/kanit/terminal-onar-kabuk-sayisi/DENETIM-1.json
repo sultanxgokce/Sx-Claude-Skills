@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-kabuk-sayisi",
+  "pr": "486",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T01:08:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kabuk-sayisi",
+  "dal": "terminal-onar-kabuk-sayisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14979,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3345
+  },
+  "bas": "85f970024caad9a4237fa178f642b9acaecabb96",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Yeni `· N shell(s) ·` durum çubuğu yazımı tanınmış; tekil, çoğul ve bir negatif vaka eklenmiş, araç imzalı önce/sonra ölçümü de 103/105'ten 105/105'e geçişi gösteriyor. Ancak `running` tümüyle isteğe bağlı ve eşleşme durum çubuğuna bağlanmadığı için son satırı `2 shells` ile biten sıradan konuşma metni de yanlışlıkla arka plan işi sayılabilir; önce bu ayrım sağlamlaştırılmalı.",
+    "bulgular": [
+      {
+        "ne": "Yeni düzenli ifade, `running` bulunmayan herhangi bir `N shell(s)` ifadesini satır sonunda kabul ediyor; bunun durum çubuğu olduğunu doğrulamadığından sıradan mesajlarda yanlış `dis-olay` sonucu üretebilir. Mevcut negatif sınav yalnız `1 shell command` örneğini kapsıyor ve satır sonunda yalın `N shells` anlatısını sınamıyor.",
+        "kanit": "Üretim kalıbında `( running)?` isteğe bağlı ve son koşul `(·|$)`; dolayısıyla örneğin `İki iş için 2 shells` satırı sondaki `2 shells` alt dizisi üzerinden eşleşir. D13j ise `1 shell command denendi` kullandığı için `$` koşuluna zaten uymaz ve bu yanlış-pozitif yolu ölçmez.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:208; terminal-onar/scripts/koltuk-bagla.test.sh:193",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı etiketli kırmızı önce/yeşil sonra ölçüm çifti gerçek test çıktısıyla 105 sınavın tamamının geçtiğini ve yeni D13h-i vakalarının eski kodda kırıldığını gösteriyor. Kanıt hedeflenen olumlu davranış ile mevcut D13j negatifini ölçüyor, fakat düzenli ifadenin satır sonundaki yalın `N shells` metnine karşı yanlış-pozitif sınırını ölçmüyor."
+  }
+}

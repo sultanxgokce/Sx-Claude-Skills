@@ -1,0 +1,23 @@
+{
+  "is": "terminal-onar-kabuk-sayisi",
+  "cumle": "terminal-onar koltuk hâli, durum çubuğundaki 'N shells' yazımını da arka plan işi sayar; boş görünen koltuk dış olay bekliyor olur",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T01:05:09+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
