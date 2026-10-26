@@ -1,0 +1,32 @@
+{
+  "is": "kapi-sari-sayim",
+  "cumle": "birlestirme-kapisi.sh: sonraki yeşil kayıtla yerine geçilmiş bayat sarı kayıt ve geçersiz ilan edilmiş sarı kayıt kapıyı kilitlemesin (#817)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-26T19:21:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5WDTHJW99BKJKJX81ERH8A3",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T19:21:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
