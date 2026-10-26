@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "supur-dal-adi-varyanti",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T22:05:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-supur-dal-adi-varyanti",
+  "dal": "supur-dal-adi-varyanti",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28918,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 6307
+  },
+  "bas": "12e0049e0605fc980d85725dae89e0d7778ef36e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Süpürme eşlemesi, birleşmiş PR dalını tam adın yanında ekip/ad ve ad-sayı biçimlerinde bulacak; altdizeyi ve başka karta ait tam dal adını dışlayacak şekilde daraltılmış. Üretim kodu talebi karşılıyor; araç imzalı ölçümler olumlu ve olumsuz yolları, mutasyon kaydı da yanlış altdize eşlemesini sınavın yakaladığını gösterdiğinden üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Eşleşen varyantlar için önce 0/2 ve sonra 2/2 ölçüm çifti var; gerçek kodun yanlış eşleşmeme ölçümü 2/2 yeşil, mutasyon kaydı ise bilerek bozulan altdize davranışını 0/2 ile yakalıyor. Kanıt, iş kartındaki iki olumlu varyantı ve altdize yasağını doğrudan ölçüyor; diffteki sınav ayrıca başka karta ait dal sahipliğini kapsıyor."
+  }
+}
