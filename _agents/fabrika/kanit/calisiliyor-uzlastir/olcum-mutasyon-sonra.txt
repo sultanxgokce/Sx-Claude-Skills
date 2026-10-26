@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
-# rc=0 sure=513.5s zaman=2026-10-26T10:42:09+03:00
+# rc=0 sure=172.7s zaman=2026-10-26T10:56:37+03:00
 --- stdout ---
   ✓ pozitif kontrol: dokunulmamış kopya YEŞİL
   ✓ UM1 azami yok sayılır (fazlası çalışılıyor kalır) — kural ölünce sınav KIRMIZI
@@ -15,7 +15,7 @@ $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
   ✓ UK1 kart açılışından sonra uzlaştırma çağrılmaz — kural ölünce sınav KIRMIZI
   ✓ UK2 bitti/tıkandı sonrası uzlaştırma çağrılmaz — kural ölünce sınav KIRMIZI
   ✓ UK3 KART_UZLASTIR=0 anahtarı yok sayılır — kural ölünce sınav KIRMIZI
+  ✓ UK4 jeton okunamayınca uzlaştırma sessiz atlar — kural ölünce sınav KIRMIZI
 ─────────────
-MUTASYON: gecti=13 dusen=0
+MUTASYON: gecti=14 dusen=0
 --- stderr ---
-⏳ agir-sira: kanit-calisiliyor-uzlastir-mutasyon 372 sn bekledi (yuva 2, load1 17.85)

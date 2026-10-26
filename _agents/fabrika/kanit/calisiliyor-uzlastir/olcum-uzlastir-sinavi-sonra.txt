@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh
-# rc=0 sure=266.3s zaman=2026-10-26T10:32:04+03:00
+# rc=0 sure=397.5s zaman=2026-10-26T10:53:01+03:00
 --- stdout ---
 ════ calisiliyor-uzlastir ════
 PASS  U1 iki kartlı çalışılıyor (azami 2) dokunulmaz, deftere yazım YOK (kart ad yazımı BERID/BERİD eşit sayılır)
@@ -16,4 +16,4 @@ PASS  U9 --azami 0 geçersiz: rc 2
 PASS  U10 --azami 3 ile üç kartlı iş dokunulmaz (sayı kuraldan gelir, koda gömülü değil)
 ── SONUÇ: PASS=12 FAIL=0 ──
 --- stderr ---
-⏳ agir-sira: kanit-calisiliyor-uzlastir-uzlastir-sinavi 261 sn bekledi (yuva 2, load1 16.67)
+⏳ agir-sira: kanit-calisiliyor-uzlastir-uzlastir-sinavi 395 sn bekledi (yuva 2, load1 6.45)

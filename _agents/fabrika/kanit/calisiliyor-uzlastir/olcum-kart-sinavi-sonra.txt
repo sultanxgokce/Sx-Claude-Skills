@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=90.8s zaman=2026-10-26T10:33:35+03:00
+# rc=0 sure=42.8s zaman=2026-10-26T10:53:44+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -259,6 +259,7 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ G10 ac sonrası kartsız çalışılıyor görev (gorev_KARTSIZ…) bekliyor'a çekilir + 'açık kartı yok' notu; kart rc 0
   ✓ G10b KART_UZLASTIR=0 → uzlaştırma yazmaz (kapatma anahtarı)
   ✓ G10c bitti sonrası kartı kapanan görev (açık kartı kalmadı) bekliyor'a çekilir (X666: 0MHE6C biçimi)
+  ✓ G10d jeton okunamıyorsa otomatik uzlaştırma bunu SÖYLER (sessiz atlamaz; kart yine işlenir)
   ✓ G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)
 ════ T15 · KANIT AĞACI: bitti/daralt birincil checkout'tan çağrılınca kanıtı kartın İŞ ALANINDAN okur ve nereden okuduğunu söyler; hiçbir yerde yoksa uyarır (Nexus #1223: daralt tur_sifir=0 yazmıştı) ════
   ✓ kart açıldı (birincil)
@@ -353,5 +354,5 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ M-OL6 tek-yer şartı gevşerse 'canlı, CI' geçer (OL15 düşerdi)
   ✓ M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)
 
-── SONUÇ: 318 geçti · 0 kaldı ──
+── SONUÇ: 319 geçti · 0 kaldı ──
 --- stderr ---
