@@ -557,6 +557,8 @@ l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
 m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000009") and "açık kartı yok" in json.dumps(x["govde"],ensure_ascii=False)]
 assert len(m)==1, l
 PY2
+O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" bitti gb-9 2>&1)"; RC=$?   # jeton okunamazsa uzlaştırma SESSİZ atlamaz: söyler, kart rc'si bozulmaz
+grep -q "uzlaştırma atlandı: defter jetonu okunamadı" <<<"$O"; g $? "G10d jeton okunamıyorsa otomatik uzlaştırma bunu SÖYLER (sessiz atlamaz; kart yine işlenir)"
 rm -f "$T/gorevler-kart.json"; unset KART_UZLASTIR_KOKLER
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?

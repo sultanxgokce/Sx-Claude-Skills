@@ -171,7 +171,6 @@ PY
 #    kart İŞLENMİŞ kalır (söylenir, rc'yi bozmaz). KART_UZLASTIR=0 kapatır; KART_UZLASTIR_KOKLER (boşlukla) kart dizinlerini değiştirir (sınav).
 uzlastir() {  # uzlastir <ajan>
   [ "${KART_UZLASTIR:-1}" = 0 ] && return 0
-  [ -r "$DEFTER_JY" ] || return 0
   local kok args=() kokler="${KART_UZLASTIR_KOKLER:-}"
   if [ -z "$kokler" ]; then kokler="$KD"; for kok in /config/projects/*/_agents/fabrika/kartlar; do [ -d "$kok" ] && kokler="$kokler $kok"; done; fi
   for kok in $kokler; do args+=(--kart-kok "$kok"); done

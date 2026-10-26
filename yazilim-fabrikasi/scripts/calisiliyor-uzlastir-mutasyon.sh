@@ -34,4 +34,6 @@ dene "UK1 kart açılışından sonra uzlaştırma çağrılmaz" $K $KT '    uzl
     exit $GRC' '    exit $GRC'
 dene "UK2 bitti/tıkandı sonrası uzlaştırma çağrılmaz" $K $KT '    uzlastir "$(python3' '    : "$(python3'
 dene "UK3 KART_UZLASTIR=0 anahtarı yok sayılır" $K $KT '[ "${KART_UZLASTIR:-1}" = 0 ] && return 0' ':'
+dene "UK4 jeton okunamayınca uzlaştırma sessiz atlar" $K $KT '  local kok args=() kokler=' '  [ -r "$DEFTER_JY" ] || return 0
+  local kok args=() kokler='
 echo "─────────────"; echo "MUTASYON: gecti=$gecti dusen=$dusen"; [ $dusen -eq 0 ]
