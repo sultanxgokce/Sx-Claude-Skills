@@ -1,0 +1,62 @@
+{
+  "is": "kapi-sari-sayim",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T19:42:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-t18",
+      "asama": "once",
+      "dosya": "olcum-kapi-t18-once.txt",
+      "sha256": "b5a972210caf776fb3aaa258bc85a1edd64ddbbd8e4494f0c1944c4d8fa7a05a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ss-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:30:15+03:00",
+      "sure_sn": 128.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dbbea8ed95a14532a7f371016db351a8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-t18",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-t18-sonra.txt",
+      "sha256": "1484facd9e60bbc136a94cce0994ce17e4c3c9dd6fdafbc92b44c2d138cde2c7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ss-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:42:23+03:00",
+      "sure_sn": 130.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "254367401acd4f039c02d84f6e086d0f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-t18-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-t18-mutant-sonra.txt",
+      "sha256": "5827ae90609cd257185f94915be01a5f3106c2f809064d083e20509c2a0f4288",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ss-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:34:48+03:00",
+      "sure_sn": 143.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-t18",
+      "beklenen": "kirmizi",
+      "olcum_id": "ea2e33fb5a2d45fa86de18a4b54fccdd"
+    }
+  ],
+  "imza": "a9da22dc87dec66047c1b32b577055c71d4d26e65de2cdd6b5d9b19c8bbf8d2c"
+}

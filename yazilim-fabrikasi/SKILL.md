@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.26.4
+version: 0.26.5
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);

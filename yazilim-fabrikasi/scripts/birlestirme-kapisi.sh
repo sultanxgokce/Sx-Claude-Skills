@@ -201,6 +201,9 @@ except Exception: pass
 c=[k for k in etkin_kayitlar(m) if k.get("tur")=="canli"]
 # geçersiz ilan edilen canlı kayıt yeşil SAYILMAZ, sarı gibi ENGELDİR — ilan kapıyı hiçbir zaman gevşetmez
 y=[k for k in c if k["etkin_renk"]=="yesil"]; s=[k for k in c if k["etkin_renk"] in ("sari","gecersiz")]
+# 🔴 #817 (RH8A3): bayat SARI sonraki YEŞİL kayıtla yerine geçtiyse ya da SARI iken geçersiz ilan edildiyse (ilan yeşili aklamaz, sarıyı emekli eder)
+#    sayımdan düşer. Yeşili geçersiz ilan edilmiş kayıt ENGEL kalır; aynı etiketin SONRAKİ yeşili yalnız işe bağlıysa (aşağıda) sarıyı yerine geçirir.
+s=[k for k in s if not (k["etkin_renk"]=="gecersiz" and k.get("renk")!="yesil")]
 bagli_l=[]; kopuk=[]
 for k in y:
     oz=P(k.get("zaman") or ""); son=P(((k.get("son_atesleme") or k.get("ilk_atesleme") or {}).get("saat_iso")) or "")
@@ -212,6 +215,11 @@ for k in y:
     elif son>oz+datetime.timedelta(minutes=5): neden=f"son ateşleme {son.isoformat(timespec='seconds')} ÖLÇÜMDEN SONRA ({oz.isoformat(timespec='seconds')}) — geleceğe tarihli, şüpheli"
     else: neden=None
     (bagli_l if neden is None else kopuk).append((k,neden))
+# yerine geçme: kendinden SONRA ölçülmüş, işe BAĞLI bir yeşil kayıt varsa bayat sarı sayılmaz (etiketi farklı olsa da: kapı "bağlı yeşil ateşleme var mı"yı sorar;
+#   geçersiz ilanlı yeşil bağlı yeşil olamaz → bagli_l'de yok). Sarıdan ÖNCE alınmış yeşil sarıyı düşürmez.
+def _z(k): return P(k.get("zaman") or "")
+yerine=[x for x in s if x["etkin_renk"]=="sari" and any(_z(kk) and _z(x) and _z(kk)>_z(x) for kk,_ in bagli_l)]
+s=[x for x in s if x not in yerine]
 print("cy="+str(len(bagli_l))); print("cs="+str(len(s))); print("ckz="+("1" if kz else "0"))
 if bagli_l:
     k=bagli_l[0][0]; ilk=k.get("ilk_atesleme") or {}

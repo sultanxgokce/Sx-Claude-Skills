@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "kapi-sari-sayim",
+  "pr": "477",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T19:43:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-sari-sayim",
+  "dal": "kapi-sari-sayim",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17525,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4885
+  },
+  "bas": "b7b918500c5f5c6dfd4222d9fb406b911e7e7763",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, kapı artık sonradan gelen işe bağlı yeşil kaydın geride bıraktığı sarıyı ve sarıyken geçersiz ilan edilen kaydı sayımdan düşürüyor; geçersiz yeşil ile yeşilden sonra gelen sarı ise engel kalıyor. Üretim kodu talebi doğrudan karşılıyor, 196 sınavın tamamı geçiyor ve dört mutasyon hedeflenen korumaların gerçekten sınandığını gösterdiği için yalnız rötuş dahi gerektirmeyen 5’tir.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümünde yeni davranışları ve koruma vakalarını içeren 9 sınav kırmızı, sonra ölçümünde 196 geçti ve 0 kaldı; ayrıca mutasyon kaydı dört ayrı bilinçli bozmanın 4/4 yakalandığını gösteriyor. Veriler sentetik ama senaryoya uygun ve zaman sırası, farklı etiket, geçersiz sarı, geçersiz yeşil karşı örneklerini kapsıyor."
+  }
+}

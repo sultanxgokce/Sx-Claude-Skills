@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ss-once.sh
+# rc=0 sure=128.9s zaman=2026-10-26T19:30:15+03:00
+--- stdout ---
+kirmizi=9
+  ✗ T15b uyarı iki canlı dosyayı adıyla sayıyor
+  ✗ T18b sonradan bağlı YEŞİL geldi (farklı etiket) → bayat sarı düşer, rc=0
+  ✗ T18e sarı kayıt GEÇERSİZ ilan edildi → sayımdan düşer, rc=0
+  ✗ T18g mutant 11 üretildi (yerine geçme kalktı)
+  ✗ T18i mutant 12 üretildi (sarı-geçersiz düşürme kalktı)
+  ✗ T18k mutant 13 üretildi (yerine geçme zaman sırası kalktı)
+  ✗ T18l mutant 13: sonraki sarı da yeşille aklanıyor → T18c bu mutantta düşerdi
+  ✗ T18m mutant 14 üretildi (geçersiz yeşil de düşüyor)
+  ✗ T18n mutant 14: geçersiz yeşil kapıyı GEÇİRİYOR → T18f bu mutantta düşerdi
+--- stderr ---
