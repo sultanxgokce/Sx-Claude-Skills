@@ -78,7 +78,8 @@ def koltuk_bos_dk(koltuklar, ajan, simdi):
 def zil(komut, kimden, kime, metin, tekrar):
     """Sahibine posta. En iyi gayret: başarısızlık söylenir, rc'yi bozmaz (uzlaştırma yazımı zaten oldu)."""
     try:
-        c = subprocess.run([komut, "gonder", kime, metin, "--kimden", kimden, "--aciliyet", "orta",
+        # aciliyet "genis" (rahat): bu bir bilgi mektubudur; postane 0.1.4 rahat mektup ölünce SERDAR'a zil çalmaz (…1SSZVC — 24 ölü uzlaştırma mektubu zil çalıyordu).
+        c = subprocess.run([komut, "gonder", kime, metin, "--kimden", kimden, "--aciliyet", "genis",
                             "--konu", "çalışılıyor uzlaştırması", "--tekrar", tekrar], capture_output=True, text=True, timeout=30)
         return c.returncode == 0
     except Exception:
