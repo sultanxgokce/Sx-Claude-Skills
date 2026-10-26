@@ -1,0 +1,23 @@
+{
+  "is": "begeni-dongusu-tur-kurali",
+  "cumle": "Fabrika gönder adımına 'begeni-dongusu' etiketli işlerin Sultan turlarını anlatan kural eklenir: Sultan turlarında tavan yok, tur satırı biçimi, kapanışı yalnız Sultan verir",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-26T09:26:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
