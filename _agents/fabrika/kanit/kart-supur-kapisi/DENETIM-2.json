@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "kart-supur-kapisi",
+  "pr": "469",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T15:55:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-supur-kapisi",
+  "dal": "kart-supur-kapisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20594,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8658
+  },
+  "bas": "5d5c9968dc8cc4608aa7f4d25353b837e2f17a9b",
+  "duzeltme_farki": {
+    "onceki_bas": "53eac28ca68545485988e253b8c47e9f60419e32",
+    "dosya": 7,
+    "bayt": 16253,
+    "tam_bayt": 33158
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, toplu süpürme kapısı kuru/uygula kiplerini, sınıflı kartı atlamayı, görev defterine dokunmamayı ve süpürülme damgasını korurken önceki B1’i `bitis=simdi`, B2’yi de bozuk JSON görülünce yazma başlamadan rc=3 ile çıkarak kapatmış. Görünen üretim farkında yeni bir kusur kanıtlanmadı; gerçek ölçüm 0/3’ten 3/3’e dönmüş ve mutasyon sınavı bozulmayı yakalamış, dolayısıyla üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm çifti önce 0/3 ve rc=1, sonra 3/3 ve rc=0 gösteriyor; mutasyon kaydı da bilerek bozulan kodu rc=1 ile yakalıyor. Ölçüm çıktısı yalnız toplu sonucu görünür kılıyor; kuru-koşu, sınıflı kart ve görev defteri davranışlarının ayrıntılı kanıtı kare/çıktıda yer almıyor, ancak sunulan diffteki S3-S14 sınavları bu kapıları açıkça denetliyor."
+  }
+}
