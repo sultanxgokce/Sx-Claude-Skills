@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.7.1
+version: 1.8.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -80,6 +80,20 @@ hâlidir; compact ya da kesinti olursa plan oradan geri okunur.
 🔴 **Bu adım ADIM 5'in yıllarca yazılı ama koşmayan yarısıydı** (ölçüldü 2026-10-02):
 belge *"yarım kalanı ertesi günün ölçümüne çıpalar"* diyordu, ama bunu yazan ya da okuyan
 tek satır yoktu. Kural vardı, kapısı yoktu.
+
+## ADIM 0-b — MADDELERİ DEFTERE YAZ (1.8.0 · Sultan 26 Eki: "kutular görev defterini kullanmıyor")
+
+Ölçüm (SERDAR, 26 Eki): filo görev üretiminin %93'ü merkezde; 10+ kutu bir haftada deftere hiç yazmadı — kutu işi yapıyor ama Sultan'ın
+ekranında "Sırada 0 · Çalışılıyor 0". Çıpa yazıldıktan sonra (yeni defter KURULMAZ, mevcut görev defteri):
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh            # KURU: neyi yazacağını basar
+bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh --uygula   # çıpadaki açık maddeleri kutunun deftere yazar
+```
+- Kaynak çıpadır (`- [ ]` satırları); yazım `gorev.sh ekle` ile, kutunun kendi jetonuyla; etiket özellik, aciliyet esnek (`--aciliyet` ile değişir), atanan = sen.
+- **İdempotent:** defterde aynı başlıkta açık görev (onay bekleyen dahil) varsa yazılmaz; ikinci koşu çift kayıt açmaz.
+- **Ölçemezse yazmaz:** çıpa ya da görev listesi okunamazsa rc 3 — "yazılacak bir şey yok" denmez. 200 karakterden uzun madde başlık değil nottur, reddedilir (kırpılmaz).
+- Plan **onaylandıktan sonra** koşulur (A06: onay üretilmez); onaylanmayan madde deftere gitmez.
+Sınavı: `bash scripts/deftere-yaz.test.sh` (D1-D15, hermetik: sahte gorev.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 
