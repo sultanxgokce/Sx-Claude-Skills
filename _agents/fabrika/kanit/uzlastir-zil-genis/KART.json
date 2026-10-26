@@ -1,0 +1,32 @@
+{
+  "is": "uzlastir-zil-genis",
+  "cumle": "Çalışılıyor uzlaştırıcısının sahibine zili rahat (genis) aciliyetle gider: bilgi mektubu, ölünce SERDAR'a zil çalmasın (görev …1SSZVC)",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-27T00:54:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: zil, zili",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5WDHMX949BS5BYV6R1SSZVC",
+  "tahmin_dk": 1,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-27T00:54:36+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
