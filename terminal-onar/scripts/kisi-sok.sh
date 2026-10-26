@@ -2,6 +2,7 @@
 # kisi-sok.sh — kisi-kur.sh'ın GERİ ALMA eşi (A5-2 · görev …A5Y3P). Host/konteyner KÖK işidir.
 #
 #   kisi-sok.sh [--kutu K] [--kisi aysenur] [--kullanici ayse] [--uid 2001] [--uygula] [--kok DİZİN]
+#   rc 4 = uygulamada bir adım BAŞARISIZ (diğerleri yine denenir; tekrar koşmak güvenli)
 #   VARSAYILAN = KURU KİP: ne yapacağını ADIM ADIM basar, hiçbir şeyi değiştirmez (rc 0). --uygula yalnız Sultan/host elinde, KÖK ile.
 #   --kok DİZİN: tüm yolları o dizin altına taşır ve süreç/kullanıcı/grup adımlarını ATLAR (sınav kum havuzu).
 # Söker (hepsi İDEMPOTENT; olmayan şey "zaten yok" basılır, hata sayılmaz):
@@ -33,7 +34,8 @@ P() { printf '%s%s' "$KOK" "$1"; }
 RUN="$(P /run/kisi)"; OPT="$(P /opt/kisi)"; IZIN="$(P /config/.terminal-onar/kisi/izin.json)"
 SOKET="$RUN/koprusu.sock"; TTYD_SOKET="$RUN/${KULLANICI}-ttyd.sock"
 n=0; adim() { n=$((n+1)); printf '\nADIM %d — %s\n' "$n" "$1"; }
-yap() { printf '  $ %s\n' "$*"; [ "$UYGULA" = 1 ] && "$@"; return 0; }
+HATA=0
+yap() { printf '  $ %s\n' "$*"; [ "$UYGULA" = 1 ] || return 0; "$@" && return 0; echo "  ✗ BAŞARISIZ (rc=$?): $*" >&2; HATA=$((HATA+1)); return 1; }
 [ "$UYGULA" = 1 ] && echo "kisi-sok: UYGULA kipi · kutu=$KUTU · kişi=$KISI · kullanıcı=$KULLANICI($UID_)" || echo "kisi-sok: KURU KİP (hiçbir şey değişmez) · kutu=$KUTU · kişi=$KISI · kullanıcı=$KULLANICI($UID_)"
 
 # süreç eşleme: komut satırı program adıyla BAŞLAYAN iki süreç (^ ile bağlı: başka bir komutun metninde bu adı geçirmesi eşleşme sayılmaz — bash -c "…koltuk-koprusu.py…" kendi kabuğunu öldürürdü); kendi kabuğumuz ve atalarımız hariç
@@ -45,17 +47,17 @@ adim "süreçler (ttyd-kisi, köprü)"
 if [ -n "$KOK" ]; then echo "  (kum havuzu: süreç adımı atlandı)"; else
   for d in "^ttyd -i $TTYD_SOKET( |\$)" "^python3 [^ ]*koltuk-koprusu\.py( |\$)"; do
     pids="$(sureckler "$d" | tr '\n' ' ')"
-    if [ -z "${pids// /}" ]; then echo "  ✓ zaten yok: ${d#^}"; else yap kill $pids; fi
+    if [ -z "${pids// /}" ]; then echo "  ✓ zaten yok: ${d#^}"; else yap kill $pids || true; fi
   done
 fi
 
 adim "soketler ve $RUN"
-for f in "$SOKET" "$TTYD_SOKET"; do [ -e "$f" ] && yap rm -f "$f" || echo "  ✓ zaten yok: $f"; done
-[ -d "$RUN" ] && yap rmdir --ignore-fail-on-non-empty "$RUN" || echo "  ✓ zaten yok: $RUN"
+for f in "$SOKET" "$TTYD_SOKET"; do if [ -e "$f" ]; then yap rm -f "$f" || true; else echo "  ✓ zaten yok: $f"; fi; done
+if [ -d "$RUN" ]; then yap rmdir --ignore-fail-on-non-empty "$RUN" || true; else echo "  ✓ zaten yok: $RUN"; fi
 
 adim "istemci kopyası $OPT"
-[ -e "$OPT/kisi-istemci.py" ] && yap rm -f "$OPT/kisi-istemci.py" || echo "  ✓ zaten yok: $OPT/kisi-istemci.py"
-[ -d "$OPT" ] && yap rmdir --ignore-fail-on-non-empty "$OPT" || true
+if [ -e "$OPT/kisi-istemci.py" ]; then yap rm -f "$OPT/kisi-istemci.py" || true; else echo "  ✓ zaten yok: $OPT/kisi-istemci.py"; fi
+if [ -d "$OPT" ]; then yap rmdir --ignore-fail-on-non-empty "$OPT" || true; fi
 
 adim "kullanıcı ve grup ($KULLANICI)"
 if [ -n "$KOK" ]; then echo "  (kum havuzu: kullanıcı adımı atlandı)"
@@ -63,9 +65,11 @@ elif ! getent passwd "$KULLANICI" >/dev/null 2>&1; then echo "  ✓ zaten yok"
 else
   [ "$(id -u "$KULLANICI")" = "$UID_" ] || { echo "  ✗ '$KULLANICI' başka uid ile var ($(id -u "$KULLANICI")) — DURDU, başkasının hesabı silinmez" >&2; exit 3; }
   if pgrep -u "$KULLANICI" >/dev/null 2>&1; then echo "  ✗ '$KULLANICI' çalışan süreci var — önce süreçler durmalı, DURDU" >&2; exit 3; fi
-  yap userdel "$KULLANICI"
-  getent group "$KULLANICI" >/dev/null 2>&1 && yap groupdel "$KULLANICI" || true
+  if yap userdel "$KULLANICI"; then
+    getent group "$KULLANICI" >/dev/null 2>&1 && yap groupdel "$KULLANICI" || true
+  else echo "  ✗ kullanıcı silinemedi — grup silinmedi (yarım durum bırakılmaz)" >&2; fi
 fi
 
 echo; [ -e "$IZIN" ] && echo "  ⚠ DOKUNULMADI (Sultan verisi): $IZIN" || true
+[ "$HATA" -eq 0 ] || { echo "kisi-sok: TAMAMLANAMADI — $HATA adım başarısız (yukarıdaki ✗ satırları); tekrar koşmak güvenli (idempotent)" >&2; exit 4; }
 [ "$UYGULA" = 1 ] && echo "kisi-sok: bitti." || echo "kisi-sok: KURU KİP bitti — hiçbir şey değişmedi. Gerçek söküm: Sultan/host elinde --uygula."

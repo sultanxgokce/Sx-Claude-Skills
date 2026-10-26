@@ -3,7 +3,7 @@
 set -u; D="$(cd "$(dirname "$0")" && pwd)"; G=0; K=0
 ok() { if [ "$2" = 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1  → $3"; fi; }
 T="$(mktemp -d)"; O="$(mktemp -d)"; DEKOY=""
-temizle() { [ -n "$DEKOY" ] && kill "$DEKOY" 2>/dev/null; find "$T" "$O" -mindepth 0 -delete 2>/dev/null; }
+temizle() { [ -n "$DEKOY" ] && kill "$DEKOY" 2>/dev/null; find "$T" "${T2:-/nonexistent}" "$O" -mindepth 0 -delete 2>/dev/null; }
 trap temizle EXIT
 bash "$D/kisi-kur.sh" --kutu demo --kok "$T" --uygula >/dev/null 2>&1
 echo '{"kisiler":[{"id":"aysenur","kutular":{"demo":["x-ana"]}}]}' > "$T/config/.terminal-onar/kisi/izin.json"
@@ -49,4 +49,19 @@ ok "S17 çalışan süreci olan kullanıcı SİLİNMEZ (rc 3, userdel çağrılm
 printf '#!/bin/sh\n[ "$1" = -u ] && [ "$2" = ayse ] && exit 1\nexec /usr/bin/pgrep "$@"\n' > "$SH/pgrep"
 PATH="$SH:$PATH" bash "$D/kisi-sok.sh" --kutu demo >"$O/c2" 2>&1; rc=$?
 ok "S17b süreci yoksa kuru kip 'userdel' adımını LİSTELER (çalıştırmaz)" "$([ "$rc" = 0 ] && grep -qE '^  \$ userdel ayse' "$O/c2" && [ ! -e "$O/userdel.log" ] && echo 0 || echo 1)" "rc=$rc $(tail -3 "$O/c2")"
+# S18: uygulamada komut hatası YUTULMAZ — rm başarısızsa rc 4, "TAMAMLANAMADI", "bitti" yok, "zaten yok" yalanı yok
+T2="$(mktemp -d)"; bash "$D/kisi-kur.sh" --kutu demo --kok "$T2" --uygula >/dev/null 2>&1; touch "$T2/run/kisi/koprusu.sock"
+SH2="$O/golge2"; mkdir -p "$SH2"; printf '#!/bin/sh\nexit 1\n' > "$SH2/rm"; chmod +x "$SH2/rm"
+PATH="$SH2:$PATH" bash "$D/kisi-sok.sh" --kutu demo --kok "$T2" --uygula >"$O/h" 2>&1; rc=$?
+ok "S18 rm başarısız → rc 4, TAMAMLANAMADI, 'bitti' basılmaz" "$([ "$rc" = 4 ] && grep -q 'TAMAMLANAMADI' "$O/h" && ! grep -q 'kisi-sok: bitti' "$O/h" && echo 0 || echo 1)" "rc=$rc $(tail -3 "$O/h")"
+ok "S18b başarısız rm 'zaten yok' diye gösterilmez" "$(grep 'koprusu.sock' "$O/h" | grep -q 'zaten yok' && echo 1 || echo 0)" "$(grep koprusu "$O/h")"
+# S19: userdel başarısızsa groupdel DENENMEZ (yarım durum bırakılmaz)
+SH3="$O/golge3"; mkdir -p "$SH3"
+printf '#!/bin/sh\n[ "$1" = passwd ] && { echo "ayse:x:2001:2001::/:/usr/sbin/nologin"; exit 0; }\n[ "$1" = group ] && { echo "ayse:x:2001:"; exit 0; }\nexec /usr/bin/getent "$@"\n' > "$SH3/getent"
+printf '#!/bin/sh\n[ "$1" = -u ] && [ -z "$2" ] && { echo 0; exit 0; }\n[ "$1" = -u ] && [ "$2" = ayse ] && { echo 2001; exit 0; }\nexec /usr/bin/id "$@"\n' > "$SH3/id"
+printf '#!/bin/sh\n[ "$1" = -u ] && exit 1\nexec /usr/bin/pgrep "$@"\n' > "$SH3/pgrep"
+printf '#!/bin/sh\nexit 1\n' > "$SH3/userdel"; printf '#!/bin/sh\necho groupdel-CAGRILDI >> "%s/groupdel.log"\n' "$O" > "$SH3/groupdel"
+chmod +x "$SH3"/*
+PATH="$SH3:$PATH" bash "$D/kisi-sok.sh" --kutu demo --uygula >"$O/g" 2>&1; rc=$?
+ok "S19 userdel başarısız → rc 4 ve groupdel çağrılmadı" "$([ "$rc" = 4 ] && [ ! -e "$O/groupdel.log" ] && grep -q 'grup silinmedi' "$O/g" && echo 0 || echo 1)" "rc=$rc $(tail -3 "$O/g")"
 echo; echo "$G geçti, $K kaldı"; [ "$K" = 0 ]

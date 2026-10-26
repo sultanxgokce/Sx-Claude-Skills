@@ -1,0 +1,29 @@
+$ bash terminal-onar/scripts/kisi-sok.test.sh
+# rc=0 sure=60.5s zaman=2026-10-26T21:47:36+03:00
+--- stdout ---
+  ✓ S1 kuru kip rc 0
+  ✓ S2 kuru kipte hiçbir şey değişmedi
+  ✓ S3 kuru çıktı KURU KİP diyor ve 4 adım sayıyor
+  ✓ S4 --uygula (kum havuzu) rc 0
+  ✓ S5 soketler, /run/kisi, istemci kopyası ve /opt/kisi kalktı
+  ✓ S6 izin dosyası DOKUNULMADI (Sultan verisi)
+  ✓ S7 çıktı izin dosyasının dokunulmadığını söylüyor
+  ✓ S8 ikinci koşu İDEMPOTENT (rc 0, 'zaten yok')
+  ✓ S9 düşük uid reddi
+  ✓ S10 geçersiz kullanıcı adı reddi
+  ✓ S11 kök olmadan --uygula reddi (rc 2)
+  ✓ S12 kullanıcı BAŞKA uid ile varsa DURUR (rc 3, kuru kipte bile)
+  ✓ S13 süreç eşleme: kuru kip sahte ttyd-kisi sürecini 'kill' olarak LİSTELER
+  ✓ S14 kuru kip süreci ÖLDÜRMEDİ
+  ✓ S15 betik kendi kabuğunu 'kill' listesine katmıyor
+  ✓ S16a tuzak sürecin komut satırı gerçekten metni taşıyor (fikstür geçerli)
+  ✓ S16 adı yalnız metinde geçen süreç 'kill' listesine GİRMEZ
+  ✓ S17 çalışan süreci olan kullanıcı SİLİNMEZ (rc 3, userdel çağrılmadı)
+  ✓ S17b süreci yoksa kuru kip 'userdel' adımını LİSTELER (çalıştırmaz)
+  ✓ S18 rm başarısız → rc 4, TAMAMLANAMADI, 'bitti' basılmaz
+  ✓ S18b başarısız rm 'zaten yok' diye gösterilmez
+  ✓ S19 userdel başarısız → rc 4 ve groupdel çağrılmadı
+
+22 geçti, 0 kaldı
+--- stderr ---
+terminal-onar/scripts/kisi-sok.test.sh: line 36: warning: command substitution: ignored null byte in input

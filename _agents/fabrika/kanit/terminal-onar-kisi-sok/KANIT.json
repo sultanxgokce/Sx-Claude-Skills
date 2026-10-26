@@ -1,7 +1,7 @@
 {
   "is": "terminal-onar-kisi-sok",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T19:15:58+03:00",
+  "guncelleme": "2026-10-26T21:47:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -90,7 +90,24 @@
       "gercek_olcum": "gercek-kisi-sok-sinavi",
       "beklenen": "kirmizi",
       "olcum_id": "6b8f1c5dd6ac4934ace71675c9c28cbe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kisi-sok-hata-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-kisi-sok-hata-yolu-sonra.txt",
+      "sha256": "3f1738c1d89b7b13df711b767f7111645dbf2deed317509f89d9cc1974a6e8ac",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kisi-sok.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T21:47:36+03:00",
+      "sure_sn": 60.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "357e2dca74a64668bdf111ff3b476e4c"
     }
   ],
-  "imza": "9eadc0ea8b618d52b432ba40afb09953272a134973f4c09b9cd7260359c9c4da"
+  "imza": "4304f771358e7dee813b0ef491d64acbe3c38bceba5c69598a18de7f5b86988a"
 }
