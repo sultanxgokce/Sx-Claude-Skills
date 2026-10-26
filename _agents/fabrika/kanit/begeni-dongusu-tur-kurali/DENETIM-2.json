@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "begeni-dongusu-tur-kurali",
+  "pr": "460",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T09:51:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-begeni-dongusu-tur-kurali",
+  "dal": "begeni-dongusu-tur-kurali",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21799,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10842
+  },
+  "bas": "d7000f23bafee5ac37cf9d3fc2c6ccdb5027d22d",
+  "duzeltme_farki": {
+    "onceki_bas": "8a63d0e1e21522df2e230f77a33d5b04c2ea173d",
+    "dosya": 8,
+    "bayt": 18377,
+    "tam_bayt": 18463
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gönder adımına, `begeni-dongusu` etiketli işlerde Sultan turunun iş geri dönüşü sayılmaması, zorunlu tur satırı biçimi ve kapanışın yalnız Sultan tarafından verilmesi kuralları eklenmiş; göz tavanının koda işlenmesi ise resmî daraltmayla ayrı karta bırakılmış. Önceki B1 bu kapsam daraltması ve metnin düzeltilmesiyle, B2 ise genişletilmiş önce/sonra ölçümü ile üç kritik ifadeyi silen mutasyonun sınav tarafından yakalanmasıyla kapanmış; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Kırmızı önce/yeşil sonra çifti başlığı, tur biçimini, yalnız Sultan kapanışını, bu işte tavan kodlaması bulunmadığı sınırını ve etiketsiz iş davranışını ayrı ayrı gösteriyor; mutasyon kaydı üç kritik ifadeyi bilerek silince sınavın rc=1 ile yakaladığını, gerçek kodun durumunun ise `gercek_olcum: kural-satiri` kaydından yeşil olduğunu kanıtlıyor. İş yalnız kural metni eklenmesini istediğinden metin varlığı ve seçici mutasyon bu kapsam için yeterli."
+  }
+}

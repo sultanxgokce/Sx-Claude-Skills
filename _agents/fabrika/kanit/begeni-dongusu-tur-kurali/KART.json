@@ -1,6 +1,6 @@
 {
   "is": "begeni-dongusu-tur-kurali",
-  "cumle": "Fabrika gönder adımına 'begeni-dongusu' etiketli işlerin Sultan turlarını anlatan kural eklenir: Sultan turlarında tavan yok, tur satırı biçimi, kapanışı yalnız Sultan verir",
+  "cumle": "Fabrika gönder adımına 'begeni-dongusu' etiketli işlerin Sultan turlarını anlatan kural metni eklenir: Sultan turu iş geri dönüşü sayılmaz, tur satırı biçimi, kapanışı yalnız Sultan verir; göz tavanının koda işlenmesi bu işte yok",
   "istedi": "SERDAR",
   "aldi": "HENDESE",
   "zaman": "2026-10-26T09:26:51+03:00",
@@ -15,9 +15,41 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-26T09:50:40+03:00",
+      "olay": "daralt",
+      "kalan_kart": "begeni-dongusu-tur-kurali-kalan",
+      "tur_sifir": 1
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
-  "sayi_uyarilari": []
+  "sayi_uyarilari": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "f30fc3e3 denetci tur 1: 3/H, vaat koda işlenmeden verilemiyor",
+      "gerekce": "daraltma: kalan bulgu yeni karta (begeni-dongusu-tur-kurali-kalan) — denetci.sh tavan sayımının begeni-dongusu etiketli işte Sultan turu sonrası göz turlarını saymaması (kod değişikliği)",
+      "zaman": "2026-10-26T09:50:40+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Fabrika gönder adımına 'begeni-dongusu' etiketli işlerin Sultan turlarını anlatan kural eklenir: Sultan turlarında tavan yok, tur satırı biçimi, kapanışı yalnız Sultan verir",
+      "zaman": "2026-10-26T09:50:40+03:00",
+      "kalan_kart": "begeni-dongusu-tur-kurali-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-26T09:50:40+03:00",
+      "kalan_kart": "begeni-dongusu-tur-kurali-kalan",
+      "kalan": "denetci.sh tavan sayımının begeni-dongusu etiketli işte Sultan turu sonrası göz turlarını saymaması (kod değişikliği)",
+      "tur_sifir": 1,
+      "oturum": "f30fc3e3 denetci tur 1: 3/H, vaat koda işlenmeden verilemiyor"
+    }
+  ]
 }
