@@ -1,0 +1,59 @@
+{
+  "is": "muhurdar-sicil-gecit-bagi",
+  "cumle": "sicil.sh supur geçidin çıkış kutusunu süpürüp her görev için teslim-isle koşar ve muhurdar.sh mühür kopyasını bırakır; geçit tarafı (kutuya yazım + doğrulayıcı) ayrı kartta (SERDAR 26 Eki 17:56 köprü biçimi TAMAM)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T08:46:47+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-22T08:46:47+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "muhurdar-sicil"
+    },
+    {
+      "zaman": "2026-10-26T18:32:28+03:00",
+      "olay": "daralt",
+      "kalan_kart": "muhurdar-sicil-gecit-yazim",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "koken": "muhurdar-sicil",
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "SERDAR-NOTES-26Eki-17:56",
+      "gerekce": "daraltma: kalan bulgu yeni karta (muhurdar-sicil-gecit-yazim) — Geçit (cloudtop) tarafı: hükmü çıkış kutusuna yazan kanca + Sultan kaydını doğrulayan betik; çıkış kutusu süpürmesinin kutuda zamanlanması",
+      "zaman": "2026-10-26T18:32:28+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Teslim geçidinin sicil.py teslim-isle çağrısı: BERİD G9/G10 geçidi (cloudtop #783) Sultan 'sağlanmadı' kararını işlerken sicile kendiliğinden düşsün; bugün köprü yalnız doğrudan çağrıyla sınanıyor.",
+      "zaman": "2026-10-26T18:32:28+03:00",
+      "kalan_kart": "muhurdar-sicil-gecit-yazim"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-26T18:32:28+03:00",
+      "kalan_kart": "muhurdar-sicil-gecit-yazim",
+      "kalan": "Geçit (cloudtop) tarafı: hükmü çıkış kutusuna yazan kanca + Sultan kaydını doğrulayan betik; çıkış kutusu süpürmesinin kutuda zamanlanması",
+      "tur_sifir": 0,
+      "oturum": "SERDAR-NOTES-26Eki-17:56"
+    }
+  ]
+}

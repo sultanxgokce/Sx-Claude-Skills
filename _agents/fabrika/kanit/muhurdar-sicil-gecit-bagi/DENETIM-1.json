@@ -1,0 +1,57 @@
+{
+  "tur": 1,
+  "is": "muhurdar-sicil-gecit-bagi",
+  "pr": "474",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T18:33:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-muhurdar-sicil-gecit-bagi",
+  "dal": "muhurdar-sicil-gecit-bagi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28728,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4281
+  },
+  "bas": "9f3d93a49d75fcd8c1dc81506dee75f60f2f5774",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Süpürme komutu teslim-isle köprüsünü çağırıyor, tekrarları izliyor ve muhurdar mühür dosyalarını ortak köke kopyalıyor; daraltılmış iş kartındaki doğru yüzey ele alınmış. Ancak kuyruk kimliği bağlanmamış, mühür kopyası atomik değil ve zaman aşımı yakalanmıyor; önce bu uygulama sorunları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Kuyruk satırındaki `gorev` ile `kaynak` birbirine bağlanmıyor; `kaynak: teslim:A` ile başka bir görevin mühür dizini seçilebilir. Kod yalnız kaynak biçimini denetliyor, ardından mühür yolunu bağımsız `gorev` alanından kuruyor; sınav da bu kimlik uyuşmazlığını kapsamıyor.",
+        "kanit": "Ayrıştırmada `TESLIM.match(kay)` var fakat `kay == \"teslim:\" + g` eşitliği yok; sonrasında `md = os.path.join(kok, g)` yapılırken teslim-isle çağrısına ayrı olarak `--kaynak kay` veriliyor. Test g yalnız biçimsiz kaynağı sınarken görev-kaynak çapraz eşleşmesini sınamıyor.",
+        "konum": "tescil/scripts/lib/sicil.py:cmd_supur; tescil/scripts/supur.test.sh:_sen testi g",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Mühür özeti ile gereklilik dosyası ortak görev dizinine iki ayrı `cp` işlemiyle yazılıyor; süpürme arada çalışırsa veya aynı görev yeniden mühürlenirse farklı koşulara ait dosyaları birlikte okuyabilir.",
+        "kanit": "Kopya bloğu önce `mkdir -p \"$_KOK/$IS\"`, sonra tek komutta iki kaynak dosyayı hedef dizine kopyalıyor; geçici dizine yazıp atomik yeniden adlandırma ya da süpürmeyle ortak kilit yok. Süpürme aynı dizindeki `muhur-ozet.json` ve `gereklilik.json` dosyalarını ayrı ayrı açıyor. Test j davranışı çalıştırmak yerine yalnız bu `cp` metnini grep ile arıyor.",
+        "konum": "tescil/scripts/muhurdar.sh:mühür kopyası bloğu; tescil/scripts/lib/sicil.py:cmd_supur; tescil/scripts/supur.test.sh:test j",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Doğrulayıcı veya teslim-isle 120 saniyeyi aşarsa süpürme kontrollü bir bekliyor/reddedildi sonucu üretmek yerine yakalanmamış `TimeoutExpired` ile kesilir.",
+        "kanit": "`subprocess.run(..., timeout=120)` çağrısını çevreleyen `try/except subprocess.TimeoutExpired` yok; mevcut sınavlarda zaman aşımı vakası bulunmuyor.",
+        "konum": "tescil/scripts/lib/sicil.py:cmd_supur subprocess.run çağrısı; tescil/scripts/supur.test.sh:a-j kapıları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce 0/2, sonra 2/2 ölçüm çifti değişikliğin temel senaryosunu gösteriyor; mutasyon kaydı da bozuk kodun sınavca yakalandığını doğruluyor. Bununla birlikte çıktı yalnız toplu 2/2 özetini veriyor ve test kodundaki kimlik eşleşmesi, atomik kopya ile zaman aşımı boşluklarını ölçmüyor; ayrıca mühür kopyası kapısı işlevsel sınav değil kaynak metni grep'idir."
+  }
+}
