@@ -1,0 +1,32 @@
+{
+  "is": "sync-kaynak-bayat-uyari",
+  "cumle": "sync-skills kaynak dalını ilan eder; kaynak origin/main'in gerisindeyse uyarı basar ve --apply bayat kaynaktan reddedilir, açık izinle geçilir",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-26T16:12:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M4ZX0V0BA8KCM1W762BHJS8W",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T16:12:48+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
