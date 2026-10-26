@@ -40,6 +40,7 @@ function sahteTtyd(yol) {
     c.on('data', (d) => {
       b += d;
       if (!b.includes('\r\n\r\n')) return;
+      s.sayac = (s.sayac || 0) + 1;   // TK: hangi ttyd'ye kaç istek düştü (kişi isteği abc ttyd'sine DÜŞMEMELİ)
       const istenen = b.split(' ')[1] || '';
       const ae = /\r\naccept-encoding:/i.test(b) ? '1' : '0';   // kapı accept-encoding'i sıyırdı mı (x-ae ile geri söylenir)
       const HTML = '<html><head><meta charset="utf-8"></head><body><div id="ttyd">ttyd</div><script>window.sahte=1</script></body></html>';
@@ -68,7 +69,7 @@ writeFileSync(KOLTUK_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
 async function kapiAc(taban, port, ek = {}) {
   const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
     env: { ...process.env, KAPI_PORT: String(port), KAPI_TABAN: taban, TO_KUTU: 'sinavkutu',
-           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'),
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'),
            TO_ANA_TMUX: 'sinavkutu-ana', KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, ...ek },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
@@ -88,6 +89,7 @@ const iste = (port, yol, { cerez, metot = 'GET', govde } = {}) =>
   });
 
 const ttyd = await sahteTtyd(join(T, 'ttyd.sock'));
+const ttydKisi = await sahteTtyd(join(T, 'ayse-ttyd.sock'));   // TK: kişi terminali (ttyd-kisi) — ayrı soket
 const P1 = 18771, P2 = 18772, P3 = 18773, P4 = 18774;
 const kapiTaban = await kapiAc('/sedir', P1);
 const kapiKok = await kapiAc('', P2);
@@ -164,6 +166,39 @@ console.log('\n── T · TABAN YOLU (kapı /sedir altında) ──');
   const tj = await tt.json();
   kapi('T14 ttyd vekili tabanlı yolu OLDUĞU GİBİ iletir (ttyd -b ile eşleşsin)',
     tj.ttyd === true && tj.yol === '/sedir/tty/', `→ ${JSON.stringify(tj)}`);
+}
+
+console.log('\n── TK · KİŞİ TERMİNALİ (/tty-k → ttyd-kisi · A5-3) ──');
+{
+  // kendi kapısı (P6): birinci kapıdaki giriş sayacı (dakikada 6 deneme) öteki bölümlerin girişleriyle dolmasın
+  const P6 = 18776; const kapiKisi = await kapiAc('/sedir', P6);
+  const ok = await iste(P6, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cerez = 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const yukselt = (port, yol, cz) => new Promise((coz) => { const s = net.connect(port, '127.0.0.1', () => s.write(`GET ${yol} HTTP/1.1\r\nHost: x\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\nSec-WebSocket-Version: 13\r\n${cz ? 'Cookie: ' + cz + '\r\n' : ''}\r\n`));
+    let g = ''; s.on('data', (d) => { g += d; if (/\r\n\r\n[\s\S]*\}/.test(g) || /^HTTP\/1\.1 (401|502)/.test(g)) { s.destroy(); coz(g); } }); s.on('end', () => coz(g)); s.on('error', () => coz(g)); setTimeout(() => { s.destroy(); coz(g); }, 4000); });
+  const g0 = await iste(P6, '/sedir/tty-k/');
+  kapi('TK1 girişsiz kişi terminali 401 (kapı oturumu ister)', g0.status === 401, `→ ${g0.status}`);
+  const a0 = ttyd.sayac || 0, k0 = ttydKisi.sayac || 0;
+  const s1 = await iste(P6, '/sedir/tty-k/', { cerez }); const j1 = await s1.json();
+  const s2 = await iste(P6, '/sedir/tty-k/token', { cerez }); const j2 = await s2.json();
+  const s3 = await iste(P6, '/sedir/tty-k', { cerez }); const j3 = await s3.json();
+  kapi('TK2 /tty-k/ kişi ttyd\'sine KÖKTEN gider (ttyd -b yok): / · /token · tabansız /tty-k → /', s1.status === 200 && j1.yol === '/' && j2.yol === '/token' && j3.yol === '/', `→ ${JSON.stringify([j1, j2, j3])}`);
+  kapi('TK3 üç kişi isteğinin hiçbiri abc ttyd\'sine düşmedi (kişi soketi 3, abc 0)', (ttydKisi.sayac || 0) - k0 === 3 && (ttyd.sayac || 0) - a0 === 0, `→ kişi +${(ttydKisi.sayac || 0) - k0} · abc +${(ttyd.sayac || 0) - a0}`);
+  const w1 = await yukselt(P6, '/sedir/tty-k/ws', cerez), w0 = await yukselt(P6, '/sedir/tty-k/ws', '');
+  kapi('TK4 soket yükseltmesi /tty-k/ws kişi ttyd\'sine /ws olarak gider · girişsiz 401', /"yol":"\/ws"/.test(w1) && /^HTTP\/1\.1 401/.test(w0), `→ ${w1.slice(0, 60).replace(/\s+/g, ' ')} | ${w0.slice(0, 20)}`);
+  const t1 = await iste(P6, '/sedir/tty/', { cerez }); const tj = await t1.json();
+  kapi('TK5 /tty/ vekili DEĞİŞMEDİ: abc ttyd\'sine tabanlı yol', tj.yol === '/sedir/tty/' && (ttyd.sayac || 0) - a0 === 1, `→ ${JSON.stringify(tj)}`);
+  // ttyd-kisi KURULU DEĞİL (soket yok): 502 ve abc ttyd'sine DÜŞMEZ
+  const P5 = 18775; const kapiYok = await kapiAc('/sedir', P5, { KAPI_TTYD_KISI_SOKET: join(T, 'yok-ttyd.sock') });
+  const ok5 = await iste(P5, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cz5 = 'kapi=' + ((ok5.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const a1 = ttyd.sayac || 0;
+  const y1 = await iste(P5, '/sedir/tty-k/', { cerez: cz5 }); const yj = await y1.json().catch(() => ({}));
+  const yw = await yukselt(P5, '/sedir/tty-k/ws', cz5);
+  kapi('TK6 ttyd-kisi yokken sayfa ve soket 502 (abc ttyd\'sine DÜŞMEZ: abc sayacı aynı) · hata metni kurulumu söyler', y1.status === 502 && /kurulu değil/.test(String(yj.hata)) && /^HTTP\/1\.1 502/.test(yw) && (ttyd.sayac || 0) === a1, `→ ${y1.status} ${JSON.stringify(yj)} | ${yw.slice(0, 20)} | abc ${(ttyd.sayac || 0) - a1}`);
+  const y2 = await iste(P5, '/sedir/tty/', { cerez: cz5 }); const y2j = await y2.json();
+  kapi('TK7 aynı kapıda /tty/ (abc) çalışmaya devam eder — kişi soketinin yokluğu Sultan terminalini kapatmaz', y2.status === 200 && y2j.yol === '/sedir/tty/', `→ ${y2.status}`);
+  kapiYok.kill(); kapiKisi.kill();
 }
 
 console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
@@ -368,7 +403,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   // Farklı kutu → farklı ad (A1 tautoloji değil)
   const p3 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
     env: { ...process.env, KAPI_PORT: '18781', KAPI_TABAN: '/akar', TO_KUTU: 'akar',
-           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, AKAR__TERMINAL_SIFRE: SIFRE },
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, AKAR__TERMINAL_SIFRE: SIFRE },
     stdio: ['ignore', 'ignore', 'ignore'] });
   let ak = '';
   for (let i = 0; i < 50; i++) {
@@ -420,7 +455,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   // kapatma anahtarı: KAPI_PANO=0 → vekil eski hâli (ekleme yok, accept-encoding geçer)
   const p0 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
     env: { ...process.env, KAPI_PORT: '18783', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_PANO: '0',
-           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok') }, stdio: 'ignore' });
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok') }, stdio: 'ignore' });
   let h7 = '', ae7 = '';
   for (let i = 0; i < 50; i++) {
     await new Promise((r) => setTimeout(r, 100));
@@ -447,7 +482,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
     + 'case "$2" in canli) echo "açıldı: $2"; exit 0;; merdiven) echo "K0 yetmedi; onarım merdiveni başlatıldı"; exit 3;; kayitsiz) echo "açılamadı: kayıtlı bir koltuk değil" >&2; exit 4;; *) echo "açılamadı: rc=1" >&2; exit 1;; esac\n');
   const p5 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
     env: { ...process.env, KAPI_PORT: '18785', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_KOLTUK_AC_BETIK: KA,
-           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18785/sedir/giris')).status === 200) break; } catch {} }
   const cerez = await giris(18785, '/sedir');
   const d = await iste(18785, '/sedir/koltuk/BASIRET', { cerez });
@@ -476,7 +511,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const KA3 = join(T, 'koltuk-ac-sahte3.sh');
   writeFileSync(KA3, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(join(T, 'ka3-defter')) + '\n[ "$1" = ac ] && [ "$2" = takili ] && [ "$3" != --zorla ] && { echo "takılı görünüyor: --zorla"; exit 5; }\nif [ "$1" = durum ]; then printf \'{"ad":"%s","durum":"takili","tmux":true,"claude":true,"hal":"calisiyor","son":1700000000,"rol":"ROLX","resume":true,"yol":"ekip-ac","ana":false}\\n\' "$2"; exit 0; fi\n[ "$2" = yavas ] && sleep 3\necho "açıldı: $2"; exit 0\n');
   const p7 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18789', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_KOLTUK_AC_BETIK: KA3, KAPI_AC_SURE_MS: '500',
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18789/sedir/giris')).status === 200) break; } catch {} }
   const c7 = await giris(18789, '/sedir');
   const t1 = await (await iste(18789, '/sedir/api/koltuk/BASIRET', { cerez: c7 })).json();
@@ -499,7 +534,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const KA2 = join(T, 'ka2.sh'); const DEF2 = join(T, 'ka2-defter');
   writeFileSync(KA2, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(DEF2) + '\nprintf \'{"ad":"%s","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"","resume":false,"yol":"yok","ana":false}\\n\' "$2"\n');
   const p6 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18787', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu',
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5, KAPI_KOLTUK_AC_BETIK: KA2 }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5, KAPI_KOLTUK_AC_BETIK: KA2 }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18787/sedir/giris')).status === 200) break; } catch {} }
   const cerez = await giris(18787, '/sedir');
   const j = await (await iste(18787, '/sedir/api/koltuklar', { cerez })).json();
@@ -532,7 +567,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   writeFileSync(K6, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
     + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\t\\nBASIRET\\t1760000100\\t1\\tajan\\tdis-olay\\tCI bekleniyor\\nkalfa\\t5\\t0\\tajan\\tbilinmiyor\\t\\n2026/85\\t7\\t1\\tajan\\tgirdi\\t\\n"\n');
   const p8 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18791', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: PROJE,
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18791/sedir/giris')).status === 200) break; } catch {} }
   kapi('KD0 girişsiz /api/kadro 401', (await iste(18791, '/sedir/api/kadro')).status === 401);
   const cerez = await giris(18791, '/sedir');
@@ -546,7 +581,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   p8.kill();
   // KD8 (2.24.0 · göz tur 1): tuz KULLANILAMAZSA (yaratılamaz dizin) kimlik null VE ekran null — adres adla KURULMAZ
   const p8b = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KOLTUK_TUZ: join(T, 'yok-dizin', 'tuz'), KAPI_PORT: '18798', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: PROJE,
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18798/sedir/giris')).status === 200) break; } catch {} }
   const c8b = await giris(18798, '/sedir'); const j8b = await (await iste(18798, '/sedir/api/kadro', { cerez: c8b })).json();
   const hepsi8b = [...(j8b.kisiler || []).map((x) => x.oturum).filter(Boolean), ...(j8b.kayitsiz || []), ...(j8b.altyapi || [])];
@@ -555,7 +590,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
     && (kl8b.koltuklar || []).length > 0 && kl8b.koltuklar.every((o) => o.kimlik === null && o.ekran === null) && !JSON.stringify(j8b).includes('?arg='), JSON.stringify(j8b.kayitsiz));
   p8b.kill();
   const p9 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18793', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: join(T, 'yok-proje'),
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_BOZUK }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: KOLTUK_BOZUK }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18793/sedir/giris')).status === 200) break; } catch {} }
   const c9 = await giris(18793, '/sedir');
   kapi('KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)', (await iste(18793, '/sedir/api/kadro', { cerez: c9 })).status === 500);
@@ -563,7 +598,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   // KD7: kayıt dosyası VAR ama okunamıyor → 500 (boş kayıtla "herkes kayıtsız" demez — göz tur 1)
   const KILIT = join(T, 'kilit-proje'); mkdirSync(join(KILIT, '_agents/handoff/aile-registry.yaml'), { recursive: true });   // yol var, okunamaz (dizin) — root'ta da (göz tur 2)
   const p10 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18795', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: KILIT,
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6 }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K6 }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18795/sedir/giris')).status === 200) break; } catch {} }
   const c10 = await giris(18795, '/sedir'); const r10 = await iste(18795, '/sedir/api/kadro', { cerez: c10 }); const j10 = await r10.json();
   kapi('KD7 kayıt var ama okunamıyor → 500 + hangi dosya', r10.status === 500 && /Kayıt okunamadı: .*aile-registry\.yaml/.test(j10.hata || ''), `→ ${r10.status} ${JSON.stringify(j10)}`);
@@ -576,7 +611,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
     return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
   const VERI = join(KOK, '../../tarif-kaydi/veri');
   const p11 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18797', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: join(T, 'yok-proje'),
-    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), TO_TARIF_DIZIN: VERI, TO_AJAN_KAYDI: join(T, 'yok/agent-registry.json') }, stdio: 'ignore' });
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), TO_TARIF_DIZIN: VERI, TO_AJAN_KAYDI: join(T, 'yok/agent-registry.json') }, stdio: 'ignore' });
   for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18797/sedir/giris')).status === 200) break; } catch {} }
   kapi('KT0 girişsiz /api/kadro/tarif ve /api/kadro/uzmanlik 401', (await iste(18797, '/sedir/api/kadro/tarif')).status === 401 && (await iste(18797, '/sedir/api/kadro/uzmanlik')).status === 401);
   const cerez = await giris(18797, '/sedir');
@@ -590,7 +625,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   p11.kill();
 }
 
-kapiTaban.kill(); kapiKok.kill(); ttyd.close();
+kapiTaban.kill(); kapiKok.kill(); ttyd.close(); ttydKisi.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);
 if (kalan) { console.log('BASARISIZ:'); basarisiz.forEach((a) => console.log('  · ' + a)); }

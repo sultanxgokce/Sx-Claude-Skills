@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "kapi-tty-k",
+  "pr": "476",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T18:46:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-tty-k",
+  "dal": "kapi-tty-k",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47925,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 109162
+  },
+  "bas": "a89c23492c194d0de00bc3ff763a242eabf127c0",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, /tty-k yolunu ayrı kişi ttyd soketine kökten vekillemiş; soket yokluğunda 502 verip abc ttyd'sine düşmeyi engellemiş ve mevcut /tty davranışını korumuş. Önce/sonra ölçümü hedeflenen beş arızanın kapandığını, 119 sınavın ve regresyon takımının geçtiğini gösterdiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; kapi-sinavi için kırmızı önce (114 geçti, hedefteki TK2–TK6 kaldı) ve yeşil sonra (119/119) ölçüm çifti var, ayrıca regresyon takımı yeşil. mutant-takimi dört bozmayı yakalıyor ancak manifest kaydında mutasyon:true alanı bulunmadığından rubriğin özel MUTASYON KANITI statüsünde değerlendirilemez; bu eksik, gerçek kodun yeşil sonra ölçümünü geçersiz kılmıyor. Sarı kayıt ve görsel kanıt yok; bu sunucu vekil değişikliği gerçekçi yerel HTTP, WebSocket ve ayrı Unix soketi sayaçlarıyla doğrudan ölçülmüş."
+  }
+}

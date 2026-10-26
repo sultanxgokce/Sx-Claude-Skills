@@ -1,0 +1,43 @@
+{
+  "is": "kapi-tty-k",
+  "cumle": "Kutu kapısı (terminal-onar): /tty-k/* yolu kişi ttyd'sine (/run/kisi/<kisi>-ttyd.sock, kişi adı kurulumdan, varsayılan ayse) vekillenir — sayfa, token, WebSocket; soket yoksa 502 ve abc ttyd'sine DÜŞMEZ; /tty/* vekili değişmez (A5-3 kapı tarafı, HEZARFEN sözleşmesi)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-26T18:24:39+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-26T18:24:39+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M5VFVWTV8TMK8Q520BYA5Y3P",
+  "tahmin_dk": 120,
+  "olcut": [],
+  "olcum_yeri": "yerel, 12 çekirdek",
+  "sayi_uyarilari": [
+    "502 ve"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T18:24:51+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
