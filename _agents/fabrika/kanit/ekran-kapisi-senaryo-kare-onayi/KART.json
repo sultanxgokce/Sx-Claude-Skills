@@ -1,0 +1,32 @@
+{
+  "is": "ekran-kapisi-senaryo-kare-onayi",
+  "cumle": "kart.sh ac iki kapı kazanır: dış yüzey ekran kartı senaryo kartı ve tık bütçesi olmadan, sürüm paketi kartı Sultan'ın kare onayı olmadan açılmaz; ölçüm: kapı sınavında bu iki yol önce 0/2 reddedilir, sonra 2/2",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-26T20:18:08+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5WD813JB48V06QKQKQQWRDT",
+  "tahmin_dk": 120,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T20:18:09+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

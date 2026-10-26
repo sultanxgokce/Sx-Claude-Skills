@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "ekran-kapisi-senaryo-kare-onayi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T20:49:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ekran-kapisi-senaryo-kare-onayi",
+  "dal": "ekran-kapisi-senaryo-kare-onayi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32430,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4768
+  },
+  "bas": "42c6570434c6bcce4d3dbabdf29f2171a6cfdd3e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İki kapı kart açılmadan çalıştırılmış; eksik girdiler reddediliyor, geçerli görünen girdiler karta yazılıyor ve gerçek ölçüm 12/23’ten 23/23’e çıkıyor. Ancak senaryo kapısı herhangi bir dosyadaki rakamlı “Tık bütçesi” satırını yeterli sayıyor; bunun gerçekten ui-tasarim-akisi Durak 2 senaryo kartı olduğunu doğrulamadan üretime hazır denemez.",
+    "bulgular": [
+      {
+        "ne": "Senaryo kapısı, dosyanın gerçekten istenen senaryo kartı türü olduğunu doğrulamıyor; rastgele bir dosyaya rakamlı “Tık bütçesi:” satırı koymak kapıyı açıyor. Önce senaryo kartına özgü, araçça doğrulanabilir bir kimlik/şema koşulu eklenmeli.",
+        "kanit": "Kontrol yalnız os.path.isfile(yol) ve `re.search(r\"Tık bütçesi...\", open(yol).read())` uyguluyor. T-EK fikstürü de yalnız `**Tık bütçesi:** 2 tık + 1 alan` içeren tek satırlık dosyayı başarılı senaryo sayıyor; Durak 2 veya senaryo kartı yapısı sınanmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:329; yazilim-fabrikasi/scripts/kart.test.sh:919",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "D1 metninin gerçekten Sultan’ın kare onayı olduğunu bu araç doğrulayamıyor; biçime uyan metin ajan tarafından üretilebilir. Bu, kod içi biçim kapısının kusuru olarak puanı düşürmedi fakat gerçek onay için harici doğrulama gerekir.",
+        "kanit": "Kod yalnız `re.fullmatch(...)`, sonuç sözcükleri ve 15 kelime sınırını denetliyor; eklenen SKILL.md açıklaması da “damganın gerçekten Sultan'dan geldiğini bilemez” sınırını açıkça kaydediyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:337; yazilim-fabrikasi/SKILL.md ekran kapısı maddesi",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan’ın sohbet/onay kaydı veya yetkili onay defteri"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek önce/sonra ölçümü kırmızı 12/23 ve yeşil 23/23, mutasyon kaydı da altı ayrı bozmanın sınavca yakalandığını gösteriyor. Bununla birlikte iş kartındaki özel “önce 0/2, sonra 2/2” ölçüm çifti doğrudan raporlanmamış; 23 kapılı toplu sonuçlar iki yolun olumsuz ve olumlu örneklerini sınav metninde gösterse de talep edilen çift kadar net değil."
+  }
+}
