@@ -66,14 +66,31 @@ assert k['kacirma']=='e' and k['neden']=='ton sert' and k['kaynak']=='teslim:gor
   # i · kutu verilmemişse kullanım hatası (ortam da yok)
   env -u SICIL_CIKIS_KUTUSU SICIL_DIZIN="$k/sicil" bash "$S" supur > "$k/c9" 2>&1; local r9=$?
   [ $r9 -eq 2 ] && grep -q "çıkış kutusu verilmedi" "$k/c9" && o="$o i"
-  # j · muhurdar.sh mühür kopyasını bırakır (kod kancası): kopya bloğu aynı kaynakta durur ve tatbikatı dışlar
-  grep -q 'cp "$OUT/muhur-ozet.json" "$OUT/gereklilik.json" "$_KOK/$IS/"' "$1/muhurdar.sh" && grep -q 'TATBIKAT\[\*\]' "$1/muhurdar.sh" && o="$o j"
+  # g2 · kaynak başka görevi gösteriyorsa (teslim:gorev_E ama gorev gorev_T) satır işlenmez, bozuk sayılır (rc 4); hiçbir şey yazılmaz
+  local k7="$T/k$RANDOM"; kur "$k7"; printf '{"gorev":"gorev_T","kaynak":"teslim:gorev_E"}\n' > "$k7/cikis.jsonl"
+  env SICIL_DIZIN="$k7/sicil" SICIL_KAYNAK_DOGRULA="$k7/dogrula.sh" SICIL_MUHUR_KOK="$k7/kok" bash "$S" supur --kutu "$k7/cikis.jsonl" > "$k7/c" 2>&1; local r10=$?
+  [ $r10 -eq 4 ] && grep -q "1 bozuk" "$k7/c" && ! grep -q isabet "$k7/sicil/01.008.yaml" && o="$o g2"
+  # j · muhur-kopya: iki dosya hedefe iner, ikinci koşu üstüne yazar (yeni mühür eskiyi değiştirir), kaynak dosya eksikse rc 3 ve hedefe dokunulmaz
+  local k8="$T/k$RANDOM" out="$T/o$RANDOM"; mkdir -p "$k8" "$out"; printf '{"a":1}' > "$out/muhur-ozet.json"; printf '{"b":1}' > "$out/gereklilik.json"
+  env SICIL_MUHUR_KOK="$k8" bash "$S" muhur-kopya --gorev gorev_K --out "$out" > "$k8/c1" 2>&1; local r11=$?
+  printf '{"a":2}' > "$out/muhur-ozet.json"; env SICIL_MUHUR_KOK="$k8" bash "$S" muhur-kopya --gorev gorev_K --out "$out" >/dev/null 2>&1
+  local eksik="$T/o$RANDOM"; mkdir -p "$eksik"; printf '{"z":9}' > "$eksik/muhur-ozet.json"
+  env SICIL_MUHUR_KOK="$k8" bash "$S" muhur-kopya --gorev gorev_K --out "$eksik" >/dev/null 2>&1; local r12=$?
+  [ $r11 -eq 0 ] && [ "$(cat "$k8/gorev_K/muhur-ozet.json")" = '{"a":2}' ] && [ "$(cat "$k8/gorev_K/gereklilik.json")" = '{"b":1}' ] && [ $r12 -eq 3 ] \
+    && [ "$(cat "$k8/gorev_K/muhur-ozet.json")" = '{"a":2}' ] && ! ls "$k8/gorev_K" | grep -q yeni && o="$o j"
+  # j2 · görev adı dizin kaçışı (../x) reddedilir, kökün dışına yazılmaz
+  env SICIL_MUHUR_KOK="$k8/kok2" bash "$S" muhur-kopya --gorev ../disari --out "$out" >/dev/null 2>&1; local r13=$?
+  [ $r13 -eq 2 ] && [ ! -e "$k8/disari" ] && o="$o j2"
+  # k · doğrulayıcı takılırsa süpürme zaman aşımını kontrollü söyler (bekliyor), yakalanmamış istisna ya da takılma yok
+  local k9="$T/k$RANDOM"; kur "$k9"; printf '#!/usr/bin/env bash\nsleep 5\n' > "$k9/dogrula.sh"; printf '{"gorev":"gorev_T","kaynak":"teslim:gorev_T"}\n' > "$k9/cikis.jsonl"
+  env SICIL_SUPUR_ZAMAN=1 SICIL_DIZIN="$k9/sicil" SICIL_KAYNAK_DOGRULA="$k9/dogrula.sh" SICIL_MUHUR_KOK="$k9/kok" timeout 20 bash "$S" supur --kutu "$k9/cikis.jsonl" > "$k9/c" 2>&1; local r14=$?
+  [ $r14 -eq 0 ] && grep -q "zaman aşımı" "$k9/c" && grep -q "1 bekliyor" "$k9/c" && ! grep -q Traceback "$k9/c" && o="$o k"
   echo "$o"
 }
 
 echo "── supur: çıkış kutusu → teslim-isle ──"
 SON="$(_sen "$HERE" | tail -1)"
-for x in a b c d e f g h i j; do
+for x in a b c d e f g g2 h i j j2 k; do
   case "$SON" in *" $x"*) g 0 "$x";; *) g 1 "$x";; esac
 done
 
@@ -86,6 +103,9 @@ PY
   local sonuc; sonuc="$(_sen "$M" | tail -1)"
   case "$sonuc" in *" $1"*) g 1 "mutant ($5) YAKALANMADI — $1 yine geçti";; *) g 0 "mutant ($5) yakalandı";; esac
 }
+mut g2 lib/sicil.py ' and kay == "teslim:" + g ' ' ' "kaynak başka görevi gösterebiliyor"
+mut k lib/sicil.py '        except subprocess.TimeoutExpired:' '        except KeyError:' "zaman aşımı yakalanmıyor"
+mut j2 lib/sicil.py '    if "/" in a["gorev"] or a["gorev"] in (".", ".."):' '    if False:' "görev adıyla dizin kaçışı"
 mut b lib/sicil.py '        if kay in islendi:' '        if False:' "işlenen kaynak tekrar işleniyor"
 mut c lib/sicil.py '            kaynaklar.setdefault(kay, g)' '            kaynaklar[kay + str(len(kaynaklar))] = g' "tekrar satırlar ayrı iş"
 mut d lib/sicil.py '        elif "satırlar yok" in p.stderr or p.returncode == 3:' '        elif False:' "eksik karar kısmi/reddedildi sayılıyor"

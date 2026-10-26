@@ -1,62 +1,62 @@
 {
   "is": "muhurdar-sicil-gecit-bagi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T18:32:15+03:00",
+  "guncelleme": "2026-10-26T18:43:12+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "supur-dogru",
       "asama": "once",
       "dosya": "olcum-supur-dogru-once.txt",
-      "sha256": "6fcb42271395ea34e817f59dc666e29815b9cd21d41ff607c656700c0b826a4b",
+      "sha256": "f39ccc0645ef662d1e10e56539ede00d272a4784e1739508857b1ec06a121bf9",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-once.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-26T18:32:14+03:00",
+      "zaman": "2026-10-26T18:43:12+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "24a3f790cc864c50850327829a0cae72"
+      "olcum_id": "ff3a3a6fe93941a1b677a6ea718f6103"
     },
     {
       "tur": "olcum",
       "etiket": "supur-dogru",
       "asama": "sonra",
       "dosya": "olcum-supur-dogru-sonra.txt",
-      "sha256": "8bf1268b100c3685ca5d7d8b724ce8aa4e14845bea32206aa4c48b37c2d2f73d",
+      "sha256": "b75cdc303081ed9aa8d63030fd50a703eeedf091eb000e63d57d06790e14b4f6",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T18:32:14+03:00",
+      "zaman": "2026-10-26T18:43:12+03:00",
       "sure_sn": 0.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c258da8a2c984bc1bc1f8af6ed283f24"
+      "olcum_id": "c16f3f89ba184fed9852154ee1d12093"
     },
     {
       "tur": "olcum",
       "etiket": "supur-mut",
       "asama": "sonra",
       "dosya": "olcum-supur-mut-sonra.txt",
-      "sha256": "093df84c96590876ad7e893af46364dd25a8069f3512d150a1903cc32337358b",
+      "sha256": "07c633f8b64217b4d5439ca6f2d0d5d84dc54337e329facb3f038b48b43391a9",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T18:32:15+03:00",
+      "zaman": "2026-10-26T18:43:12+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "supur-dogru",
       "beklenen": "kirmizi",
-      "olcum_id": "1b4f31a3a7bc4611b8ff54eef3a4c407"
+      "olcum_id": "064a3e4de0d54b0ba76198174f3842bf"
     }
   ],
-  "imza": "cdba2d0f2e0d28dfa597881dd1181e66d5c93c3dd1a4960afef0f7cfaa53ed9a"
+  "imza": "3538449dfcee4aac529ece3097a7dd9887182aa695e3882f1240e50170fbd2dc"
 }
