@@ -1,0 +1,25 @@
+{
+  "is": "iskan-komsu-pano",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T14:33:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "doganpano-onceki-sonraki-mutant",
+      "asama": "tek",
+      "dosya": "olcum-doganpano-onceki-sonraki-mutant-tek.txt",
+      "sha256": "09e55fc49b8a5b649286475b040197da0202ff98d0e2c13cea82bb646f779c75",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/ik-kanit.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T14:33:20+03:00",
+      "sure_sn": 531.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "66c40fc7bea342129c9cce7f6b16d1a8"
+    }
+  ],
+  "imza": "950a656e2f391beed47f06f838c565bc9de5839a6ee1a6afaa6de400146bd558"
+}
