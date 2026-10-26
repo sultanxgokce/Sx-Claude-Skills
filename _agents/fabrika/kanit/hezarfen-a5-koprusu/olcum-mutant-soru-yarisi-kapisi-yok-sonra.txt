@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kopru-sinavlari-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-yaris.sh
-# rc=1 sure=43.9s zaman=2026-10-26T15:16:34+03:00
+# rc=1 sure=35.8s zaman=2026-10-26T15:18:51+03:00
 --- stdout ---
 K1 liste: izinli ∩ görünür
   ✓ K1 yalnız demo-ana ve menu-ana (yasak-ana izinde yok, gorunmez görünmez)
@@ -47,12 +47,12 @@ K28 liste bayatken (soru ekrandan gitti) tuş GİTMEZ: doğrulama + gönderim te
   ✗ K28 soru ekranda yok → şık reddi (soru-degisti)  → None
   ✗ K28b tuş koltuğa gitmedi  → ('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n', '1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
   ✗ K28c aynı şık metni ama BAŞKA soru → reddi (iki koşul birlikte)  → None
-  ✗ K28d tmux biçim karakterli soru metni → koşul kurulamaz, tuş gitmez (kosul-kurulamadi)  → None
+  ✓ K28d tmux biçim karakterli soru metni → koşul kurulamaz, tuş gitmez (kosul-kurulamadi)
 K23 uid kapısı
   ✓ K23 izinli olmayan uid reddi
   ✓ K24 sokete 0660 kip
   ✓ K25 eylemler izli (mesaj/sik/ret)
   ✓ K26 iz günlüğü mesaj METNİNİ taşımaz
 
-38 geçti, 4 kaldı
+39 geçti, 3 kaldı
 --- stderr ---

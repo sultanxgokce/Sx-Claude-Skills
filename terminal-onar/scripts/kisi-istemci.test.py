@@ -29,10 +29,10 @@ def yaz(y, i, k=None):
 
 yaz(T + "/mesaj.sh", '#!/bin/sh\ncat > "' + T + '/mesaj.gelen"\necho ulak_T\n', 0o755)
 yaz(T + "/izin.json", json.dumps({"kisiler": [{"id": "aysenur", "kutular": {"demo": ["demo-ana", "menu-ana"]}}]}))
-SORU = json.dumps({"tur": "menu", "metin": "?", "siklar": [{"no": 1, "metin": "a"}, {"no": 2, "metin": "b"}]})
+SORU = json.dumps({"tur": "menu", "metin": "Devam?", "siklar": [{"no": 1, "metin": "a"}, {"no": 2, "metin": "b"}]})
 yaz(T + "/liste.tsv", "demo-ana\t1\t1\tajan\tcalisiyor\t\t\t\nmenu-ana\t1\t1\tajan\tsoru\t\t\t" + SORU + "\n")
 tmux("new-session", "-d", "-s", "demo-ana", "-x", "80", "-y", "24", "echo ISTEMCI-GORUR; sleep 600")
-tmux("new-session", "-d", "-s", "menu-ana", "-x", "80", "-y", "24", "cat")
+tmux("new-session", "-d", "-s", "menu-ana", "-x", "80", "-y", "24", "echo 'Devam?'; echo '1. a'; echo '2. b'; cat")
 kopru = subprocess.Popen([sys.executable, KOPRU], env=ENV, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 for _ in range(50):
     if os.path.exists(T + "/k.sock"):
@@ -87,7 +87,7 @@ try:
     ok("I7 q ile temiz çıkış (rc 0)", bitis)
     pid, fd = baslat("menu-ana"); oku(fd, 1.5)
     os.write(fd, b"2"); oku(fd, 1.0); time.sleep(0.3)
-    ok("I8 rakam → sunulan şık koltuğa gitti", "2" in tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout)
+    ok("I8 rakam → sunulan şık koltuğa gitti", any(l.strip() == "2" for l in tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout.splitlines()))
     os.write(fd, b"q"); oku(fd, 0.5)
     pid, fd = baslat("yasak-ana"); ekran = oku(fd, 2.0)
     ok("I9 izinsiz koltukta kullanıcı dilinde ret", "erişimin yok" in ekran, ekran[-200:])

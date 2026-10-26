@@ -1,7 +1,7 @@
 {
   "is": "hezarfen-a5-koprusu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T15:16:34+03:00",
+  "guncelleme": "2026-10-26T15:18:51+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,17 +25,17 @@
       "etiket": "kopru-sinavlari",
       "asama": "sonra",
       "dosya": "olcum-kopru-sinavlari-sonra.txt",
-      "sha256": "c21510d1b0c640d1ab8a27ce987577cf7f43d290c7214b7c5f256289710b32e0",
+      "sha256": "4bbb1f528c7156e1e24903636f34ca81902d677e6288ba81d6c5f802f88b7b6d",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/sonra.sh"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-26T15:15:50+03:00",
-      "sure_sn": 32.9,
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:18:15+03:00",
+      "sure_sn": 32.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e5221677ae644599873a79b4e7506f91"
+      "olcum_id": "2f33674717d2424f96a40b1eab1b3f17"
     },
     {
       "tur": "olcum",
@@ -102,21 +102,21 @@
       "etiket": "mutant-soru-yarisi-kapisi-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-soru-yarisi-kapisi-yok-sonra.txt",
-      "sha256": "d52a19520fa99de4705d1d531526f97901f78e6c6359fe6decd54c93c159218f",
+      "sha256": "81030c95a7f239da5c6f52771b47a144e757af49a2f8a006a4aaac8009741e33",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-yaris.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T15:16:34+03:00",
-      "sure_sn": 43.9,
+      "zaman": "2026-10-26T15:18:51+03:00",
+      "sure_sn": 35.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "kopru-sinavlari",
       "beklenen": "kirmizi",
-      "olcum_id": "d588c1bf82374fcd84520251632d7209"
+      "olcum_id": "36c79dd4c86b47b2aa0590d9f4ac4858"
     }
   ],
-  "imza": "97a675eed005d76738bb4a25c0ce1a18bf8695a99f2ec34951f7cd3f7e97394d"
+  "imza": "b8ec01eec93a7d21479f65d7902e5f4a555663599c8c1873e162025e90872244"
 }
