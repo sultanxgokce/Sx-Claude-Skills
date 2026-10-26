@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-kisi-sok",
+  "pr": "479",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T21:43:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kisi-sok",
+  "dal": "terminal-onar-kisi-sok",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30419,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12579
+  },
+  "bas": "2990611cf2deaeda04a546e3b7c9edc907df533a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen kuru/uygula söküm akışı, veri koruması, güvenlik kapıları ve geri alma belgelemesi yapılmış; gerçek ölçüm 19/19, mutasyon ölçümü 9/9 sonuç vermiş. Ancak uygulama kipinde kill/rm/rmdir/userdel/groupdel hatalarının tamamı başarıya çevrildiği için betik eksik sökümü rc=0 ve “bitti” diye bildirebilir; önce bu güvenilirlik kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Komut çalıştırma yardımcısı, uygulama kipindeki tüm komut hatalarını yutuyor. Böylece süreç durdurma, dosya kaldırma veya kullanıcı silme başarısız olsa bile betik devam edip rc=0 ve “bitti” verebilir; userdel başarısızken groupdel denenmesi de tutarsız sistem durumu riski yaratır.",
+        "kanit": "`yap() { ... [ \"$UYGULA\" = 1 ] && \"$@\"; return 0; }` açıkça alt komutun rc değerini koşulsuz sıfırlar. Aynı yardımcı kill, rm, rmdir, userdel ve groupdel çağrılarında kullanılıyor; son satır ise koşulsuz `kisi-sok: bitti.` basıyor. 19/19 ölçüm yalnız başarılı taklit/kum havuzu yolunu sınıyor; bu hata yollarına ilişkin sınav yok.",
+        "konum": "terminal-onar/scripts/kisi-sok.sh:39",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce kırmızı 6/19'dan sonra gerçek ölçümde 19/19 yeşile geçen bir ölçüm çifti, ayrıca gerçek kuru koşu ve dokuz mutantın dokuzunu yakalayan mutasyon kanıtı var. Kanıt talebin ana davranışlarını güçlü biçimde ölçüyor; fakat uygulama komutlarının başarısızlıklarının rc ve sonuca yansıtılması ölçülmemiş."
+  }
+}

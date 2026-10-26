@@ -1,0 +1,23 @@
+{
+  "is": "terminal-onar-kisi-sok",
+  "cumle": "terminal-onar: kisi-kur.sh'ın geri alma eşi kisi-sok.sh (köprü ve ttyd-kisi süreçlerini durdurur, /run/kisi ve istemci kopyasını kaldırır, ayse kullanıcı/grubunu siler; izin.json ve kişi verisine dokunmaz); varsayılan kuru, --uygula KÖK ister; kisi-kur başlığı gerçek betiği gösterir (A5-2)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-26T18:16:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

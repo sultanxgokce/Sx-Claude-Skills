@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-kisi-sok",
+  "pr": "479",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T21:48:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kisi-sok",
+  "dal": "terminal-onar-kisi-sok",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28907,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7218
+  },
+  "bas": "598c262268cfe2f35cefa67e87036a3ed18ab320",
+  "duzeltme_farki": {
+    "onceki_bas": "2990611cf2deaeda04a546e3b7c9edc907df533a",
+    "dosya": 6,
+    "bayt": 14996,
+    "tam_bayt": 36283
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan, istenen geri alma eşi yapılmış; kuru kip, KÖK kapısı, hedeflerin kaldırılması, kişi verisinin korunması ve hata yolları gerçek ölçümlerde doğrulanmış. Önceki turdaki B1 kapanmış: alt komut hataları artık rc=4 ve “TAMAMLANAMADI” ile bildiriliyor, userdel başarısızsa groupdel çalıştırılmıyor; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce 6/19 başarısız, sonra 19/19 başarılı ölçüm çifti; ayrıca bağımsız gerçek ölçüm 19/19, gerçek kutuda kuru koşu, hata yollarını kapsayan 22/22 sonuç ve dokuz mutantın tamamını yakalayan mutasyon kanıtı var. S18/S18b başarısız rm’nin rc=4, TAMAMLANAMADI ve yanlış “zaten yok” üretmemesini; S19 ise userdel hatasında groupdel’in çağrılmamasını doğrudan ölçerek önceki B1’in kapandığını kanıtlıyor."
+  }
+}
