@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/st-once.sh
+# rc=1 sure=176.3s zaman=2026-10-26T10:43:58+03:00
+--- stdout ---
+sultan-turu-kapilari=0/3
+--- stderr ---
+⏳ agir-sira: kanit-begeni-dongusu-tur-kurali-kalan-sultan-turu-kapilari 176 sn bekledi (yuva 2, load1 17.14)

@@ -1,0 +1,62 @@
+{
+  "is": "begeni-dongusu-tur-kurali-kalan",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T10:52:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sultan-turu-kapilari",
+      "asama": "once",
+      "dosya": "olcum-sultan-turu-kapilari-once.txt",
+      "sha256": "1e799c31c954e66f365b24eb523e1ee581ea8dc4ceaf4ed41e47904bfc7efbe6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/st-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T10:43:58+03:00",
+      "sure_sn": 176.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "26b27772d835437c808264dc8385c955"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sultan-turu-kapilari",
+      "asama": "sonra",
+      "dosya": "olcum-sultan-turu-kapilari-sonra.txt",
+      "sha256": "3e079a75b7f7f1d430aabaa5df3a5058e841c4ffd114f862a58c07d9c1a71511",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/st-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T10:52:58+03:00",
+      "sure_sn": 220.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f83843198df74f7fb2ee3981ed91688c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sultan-turu-kapilari-mutant",
+      "asama": "tek",
+      "dosya": "olcum-sultan-turu-kapilari-mutant-tek.txt",
+      "sha256": "7a90a15ecacec10ac6b1ed098f7b61371572ffe77c8b6be17fc28618dd420b1a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/st-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T10:52:58+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sultan-turu-kapilari",
+      "beklenen": "kirmizi",
+      "olcum_id": "1de5457b4d884c2da075c81354b388af"
+    }
+  ],
+  "imza": "0aad5cc9f23adcc08d267c611e5128db0c10730385584c86fc50f24eb0737e5b"
+}

@@ -705,4 +705,80 @@ m17 olcut-eski 'eski_olcut!=yeni_olcut:
     k.setdefault("olcut_gecmisi",[])' 'False:
     k.setdefault("olcut_gecmisi",[])' && { bash "$KT" ac is-mo4 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "CI, 2 çekirdek" >/dev/null 2>&1; bash "$M17" daralt is-mo4 --kalan "kalan: ölçüt başka karta taşındı, burada paralel koşu" --cumle "korpus paralel koşsun, süre ≤10 dk olsun" --oturum o5 --olcum-yeri "yerel, 12 çekirdek" >/dev/null 2>&1; python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert 'olcut_gecmisi' not in k" "$KU/is-mo4.json"; g $? "M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)"; }
 
+echo "════ T-SULTAN-TURU · beğeni döngüsü (BPV3A/2BXA6J): Sultan turu kaydedilir, göz tavanı sayacı o ana çekilir; şartlar araçta ════"
+STG="$T/st-gorevler"; mkdir -p "$STG" "$T/depo-st" && cd "$T/depo-st" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && export KANIT_DEPO="$T/depo-st"
+printf 'st-jeton\n' > "$T/st-jeton"
+python3 - "$T" "$STG" <<'PYS' &
+import sys, os, http.server, socketserver
+T,G=sys.argv[1:]
+class H(http.server.BaseHTTPRequestHandler):
+    def log_message(self,*a): pass
+    def do_GET(self):
+        if self.headers.get("x-defter-jeton")!="st-jeton": self.send_response(401); self.end_headers(); return
+        f=os.path.join(G,self.path.rsplit("/",1)[1]+".json")
+        if not os.path.exists(f): self.send_response(404); self.end_headers(); return
+        self.send_response(200); self.end_headers(); self.wfile.write(open(f,"rb").read())
+with socketserver.TCPServer(("127.0.0.1",0),H) as s:
+    open(os.path.join(T,"st-port"),"w").write(str(s.server_address[1])); s.serve_forever()
+PYS
+STSRV=$!; for i in $(seq 1 25); do [ -f "$T/st-port" ] && break; sleep 0.2; done
+export DEFTER_JETON_YOL="$T/st-jeton" DEFTER_UC="http://127.0.0.1:$(cat "$T/st-port")"
+GB=gorev_01BEGENIDONGUSUAAAAAAAAAA1; GE=gorev_01ETIKETSIZGOREVAAAAAAAAA2; GN=gorev_01TURSATIRSIZGOREVAAAAAAA3
+gor() { python3 - "$STG/$1.json" "$2" "$3" <<'PYG'
+import sys,json
+yol,etiket,adimlar=sys.argv[1:]
+json.dump({"ok":True,"kayit":{"id":yol.rsplit("/",1)[1][:-5],"canli":({"etiket":etiket} if etiket else {}),"adimlar":[{"deger":a} for a in json.loads(adimlar)]}},open(yol,"w"),ensure_ascii=False)
+PYG
+}
+gor $GB begeni-dongusu '["[tur 1] kare: https://k/1.png · Sultan: \"başlık küçük kalsın\""]'
+gor $GE "" '["[tur 1] kare: https://k/1.png · Sultan: \"başlık küçük kalsın\""]'
+gor $GN begeni-dongusu '["Sultan bir şeyler söyledi"]'
+GB2=gorev_01BASKAGORUNDUAAAAAAAAAA4
+gor $GB2 begeni-dongusu '["[tur 2] kare: https://k/2.png · Sultan: \"renk koyu olsun\""]'
+bash "$KT" ac is-st --is "beğeni döngüsü sınavı için ekran işi" --istedi Sultan --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+mkdir -p "$T/depo-st/_agents/fabrika/kanit/is-st"; for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":4,"dogru_sey":"H","bulgular":[]}}' > "$T/depo-st/_agents/fabrika/kanit/is-st/DENETIM-$i.json"; done
+KS="$T/depo-st/_agents/fabrika/kartlar/is-st.json"; say() { python3 -c "import json;print(len(json.load(open('$KS')).get('sultan_turlari') or []))"; }
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GE --tur 1 2>&1)"; RC=$?; [ $RC -ne 0 ] && [ "$(say)" = 0 ] && grep -q "etiketi 'begeni-dongusu' değil" <<<"$O"; g $? "🔴 etiketsiz görev: tur KAYDEDİLMEZ (ajan kendi işine etiket koyup tavanı aşamaz)"
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GN --tur 1 2>&1)"; RC=$?; [ $RC -ne 0 ] && [ "$(say)" = 0 ] && grep -q "görevde tur satırı yok" <<<"$O"; g $? "🔴 tur satırı yazılmamış görev: tur KAYDEDİLMEZ (kare + Sultan yorumu satırı şart)"
+O="$(bash "$KT" sultan-turu is-st --reis BANI --gorev $GB --tur 1 2>&1)"; RC=$?; [ $RC -ne 0 ] && [ "$(say)" = 0 ] && grep -q "kartın sahibi değil" <<<"$O"; g $? "başkasının reis'i reddedilir (yalnız sahip)"
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GB --tur 2 2>&1)"; RC=$?; [ $RC -ne 0 ] && [ "$(say)" = 0 ] && grep -q "sıradaki değil" <<<"$O"; g $? "atlanan tur numarası reddedilir (sıradaki 1)"
+O="$(bash "$KT" sultan-turu yok-kart --reis HENDESE --gorev $GB --tur 1 2>&1)"; [ $? -eq 3 ]; g $? "kart yoksa rc 3"
+O="$(DEFTER_UC=http://127.0.0.1:9 bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GB --tur 1 2>&1)"; RC=$?; [ $RC -eq 4 ] && [ "$(say)" = 0 ]; g $? "🔴 defter okunamazsa rc 4 ve HİÇBİR ŞEY değişmez (fail-closed)"
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev gorev_YOK00000000000000000009 --tur 1 2>&1)"; RC=$?; [ $RC -eq 4 ] && [ "$(say)" = 0 ]; g $? "görev defterde yoksa (404) rc 4, kayıt yok"
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GB --tur 1 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(say)" = 1 ] && grep -q "tur sıfırı 3" <<<"$O"; g $? "Sultan turu 1 kaydedildi, tur sıfırı = 3 (kanıt ağacındaki denetim sayısı)"
+python3 -c "import json;k=json.load(open('$KS'));t=k['sultan_turlari'][-1];assert t['tur']==1 and t['tur_sifir']==3 and t['gorev']=='$GB' and 'başlık küçük' in t['satir'] and k['gecmis'][-1]['olay']=='sultan-turu'"; g $? "karta tur, tur_sifir, görev ve Sultan satırı + geçmiş işlendi"
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GB --tur 1 2>&1)"; [ $? -ne 0 ] && [ "$(say)" = 1 ]; g $? "aynı tur ikinci kez kaydedilmez"
+O="$(bash "$KT" sultan-turu is-st --reis HENDESE --gorev $GB2 --tur 2 2>&1)"; RC=$?; [ $RC -ne 0 ] && [ "$(say)" = 1 ] && grep -q "görevine bağlı" <<<"$O"; g $? "🔴 kart ilk turun görevine bağlanır: başka beğeni görevinin satırıyla ikinci tur kaydedilmez"
+bash "$KT" ac is-st4 --is "başka kart aynı görevin turunu kullanmaya çalışır sınavı" --istedi Sultan --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo-st/_agents/fabrika/kanit/is-st4"; echo '{"tur":1,"sonuc":{"kod_puani":4,"dogru_sey":"H","bulgular":[]}}' > "$T/depo-st/_agents/fabrika/kanit/is-st4/DENETIM-1.json"
+O="$(bash "$KT" sultan-turu is-st4 --reis HENDESE --gorev $GB --tur 1 2>&1)"; RC=$?; [ $RC -ne 0 ] && grep -q "başka kartta" <<<"$O"; g $? "🔴 bir görevin turu tek karta ait: aynı görev ikinci kartta sayaç sıfırlayamaz"
+bash "$KT" ac is-st5 --is "kanıt dizini olmayan kartta sıfır ölçülemez sınavı" --istedi Sultan --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+O="$(bash "$KT" sultan-turu is-st5 --reis HENDESE --gorev $GB2 --tur 1 2>&1)"; RC=$?; [ $RC -eq 3 ] && grep -q "kanıt dizini bulunamadı" <<<"$O"; g $? "🔴 kanıt dizini yoksa tur sıfırı ölçülemez → rc 3, kayıt yok (sessiz sıfır YOK)"
+# denetçi sıfırı okur (3 → sayım sıfırdan): üç düşük tur sonra DÖRDÜNCÜ gelince tıkanmaz
+echo '{"tur":4,"sonuc":{"kod_puani":5,"dogru_sey":"E","bulgular":[]}}' > "$T/depo-st/_agents/fabrika/kanit/is-st/DENETIM-4.json"
+SG="$(python3 - "$KS" <<'PYD'
+import json,sys
+k=json.load(open(sys.argv[1])); d=k.get("daraltmalar") or []; st=k.get("sultan_turlari") or []
+print(max(int(d[-1].get("tur_sifir",0)) if d else 0, int(st[-1].get("tur_sifir",0)) if st else 0))
+PYD
+)"; [ "$SG" = 3 ]; g $? "denetçinin okuyacağı sıfır = 3 (daralt yok, Sultan turu var)"
+# MUTANTLAR: iki şart kapatılınca üstteki 🔴 kapılar düşmeli
+MS="$T/pkg-st"; mkdir -p "$MS"; cp "$HERE"/*.py "$HERE"/*.sh "$MS/" 2>/dev/null
+mst() { python3 - "$MS/kart.sh" "$1" "$2" <<'PYM'
+import sys; f,a,b=sys.argv[1:]; s=open(f,encoding="utf-8").read(); assert s.count(a)==1, "çapa bayat"; open(f,"w",encoding="utf-8").write(s.replace(a,b,1))
+PYM
+}
+mst 'if et!="begeni-dongusu": red(' 'if False: red(' || g 1 "mutant 1 kurulamadı (çapa bayat)"
+bash "$KT" ac is-st2 --is "ikinci beğeni döngüsü sınavı mutant için" --istedi Sultan --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo-st/_agents/fabrika/kanit/is-st2"; echo '{"tur":1,"sonuc":{"kod_puani":4,"dogru_sey":"H","bulgular":[]}}' > "$T/depo-st/_agents/fabrika/kanit/is-st2/DENETIM-1.json"
+O="$(bash "$MS/kart.sh" sultan-turu is-st2 --reis HENDESE --gorev $GE --tur 1 2>&1)"; [ $? -eq 0 ]; g $? "mutant (etiket şartı kaldırıldı): etiketsiz görevde tur KAYDEDİLİR → üstteki 🔴 etiket kapısı düşerdi"
+mst 'if not satir: red(' 'if False: red(' || g 1 "mutant 2 kurulamadı (çapa bayat)"
+mst '"satir":satir[-1].strip()' '"satir":(satir or [""])[-1].strip()' || g 1 "mutant 2b kurulamadı (çapa bayat)"
+bash "$KT" ac is-st3 --is "üçüncü beğeni döngüsü sınavı mutant için" --istedi Sultan --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo-st/_agents/fabrika/kanit/is-st3"; echo '{"tur":1,"sonuc":{"kod_puani":4,"dogru_sey":"H","bulgular":[]}}' > "$T/depo-st/_agents/fabrika/kanit/is-st3/DENETIM-1.json"
+O="$(bash "$MS/kart.sh" sultan-turu is-st3 --reis HENDESE --gorev $GN --tur 1 2>&1)"; [ $? -eq 0 ]; g $? "mutant (tur satırı şartı kaldırıldı): satırsız görevde tur KAYDEDİLİR → üstteki 🔴 satır kapısı düşerdi"
+mst 'if bagli and bagli!=gorev: red(' 'if False: red(' || g 1 "mutant 3 kurulamadı (çapa bayat)"
+O="$(bash "$MS/kart.sh" sultan-turu is-st --reis HENDESE --gorev $GB2 --tur 2 2>&1)"; [ $? -eq 0 ]; g $? "mutant (görev bağı kaldırıldı): başka görevin satırıyla tur KAYDEDİLİR → üstteki 🔴 bağ kapısı düşerdi"
+kill $STSRV 2>/dev/null; true
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

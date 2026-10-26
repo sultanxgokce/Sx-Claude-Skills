@@ -846,6 +846,22 @@ for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.pa
 SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "daraltma sonrası 3 düşük tur → yine rc=4 (sıfırlama tavanı kaldırmaz)"
 unset KANIT_DEPO; export KANIT_DEPO="$T"
 
+echo "════ T-SULTAN · Sultan turu kaydı (kart.sh sultan-turu) göz tur sayımını sıfırlar; daralt gibi (beğeni döngüsü, 2BXA6J) ════"
+bash "$HERE/kart.sh" ac is-stur --is "beğeni döngüsünde Sultan turları sonrası göz sayacı sıfırlanır" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$K" olcum is-stur olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-stur --diff "$T/d.patch" >/dev/null 2>&1; done
+python3 - "$T/_agents/fabrika/kartlar/is-stur.json" <<'PYK'
+import json,sys
+k=json.load(open(sys.argv[1])); k["sultan_turlari"]=[{"zaman":"2026-10-26T10:00:00+03:00","tur":1,"tur_sifir":2,"gorev":"gorev_X","reis":"SERDAR","satir":'[tur 1] kare: k.png · Sultan: "başlık küçük"'}]
+json.dump(k,open(sys.argv[1],"w"),ensure_ascii=False)
+PYK
+# Sultan turu YOKKEN üçüncü düşük tur tıkanırdı; kayıtlı olunca sayım 2'den sonra başlar: 3., 4., 5. tur koşar, altıncı (sıfırdan 4.) tıkanmadan önce ilerleme sorulur
+for i in 3 4; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-stur --diff "$T/d.patch" >/dev/null 2>&1; RC=$?; [ "$RC" -ne 4 ]; g $? "Sultan turu sonrası $((i-2)). göz turu tıkanmaz (rc=$RC)"; done
+CIKTI="$(SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-stur --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 4 ]; g $? "Sultan turundan sonra 3 düşük göz turu → yine rc=4 (sıfırlama tavanı kaldırmaz)"
+grep -q "DARALTILMIŞ: ilk 2 tur" <<<"$CIKTI"; g $? "denetçi sıfırı söyledi (ilk 2 tur sayılmıyor)"
+unset KANIT_DEPO; export KANIT_DEPO="$T"
+
 echo "════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════"
 bash "$K" olcum is-bol olc --asama tek -- echo 1 >/dev/null 2>&1
 python3 - "$T/bol.patch" <<'PY'
