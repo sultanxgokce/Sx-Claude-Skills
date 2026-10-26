@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "calisiliyor-uzlastir",
+  "pr": "461",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T11:03:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-calisiliyor-uzlastir",
+  "dal": "calisiliyor-uzlastir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25829,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 11344
+  },
+  "bas": "e944dc4f891ec2073b101b16fcdc2d87847428c6",
+  "duzeltme_farki": {
+    "onceki_bas": "96a5c89cfe629a2a414cc1dd9048d4b0f3fff57c",
+    "dosya": 10,
+    "bayt": 21198,
+    "tam_bayt": 66635
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Açık kartı olmayan ve ajan başına ikiyi aşan çalışılıyor görevleri uzlaştıran KURU-varsayılan araç, kart açma ve kapama yollarına kendiliğinden bağlanmış. Önceki turdaki sessiz jeton hatası kaldırılmış ve doğrudan entegrasyon sınavıyla kapatılmış; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. Önceki B1, kart.sh içindeki sessiz erken dönüşün kaldırılması ve G10d ölçümünün eksik jetonda uyarıyı doğrulamasıyla kapanmıştır; uzlaştırma sınavı 12/12, kart sınavı 319/319 yeşildir. Önce/sonra ölçüm çifti yoktur. Mutasyon çıktısı 14 mutantın yakalandığını gösterse de manifest kaydında `mutasyon: true` bulunmadığından rubriğe göre resmî MUTASYON KANITI sayılamaz; gerçek kodun durumu normal `uzlastir-sinavi` ve `kart-sinavi` kayıtlarıyla yeterince ölçülmüştür."
+  }
+}
