@@ -7,7 +7,7 @@ T = tempfile.mkdtemp(prefix="kopru-")
 os.makedirs(T + "/tmux", exist_ok=True)
 ENV = dict({k: v for k, v in os.environ.items() if k != "TMUX"}, TMUX_TMPDIR=T + "/tmux", KOPRU_SOKET=T + "/k.sock", KOPRU_KUTU="demo", KOPRU_KISI="aysenur",
            KOPRU_IZIN_DOSYA=T + "/izin.json", KOPRU_IZ=T + "/iz.jsonl", KOPRU_MESAJ_ARALIK="0.3",
-           KOPRU_LISTE_KOMUT="cat " + T + "/liste.tsv", KOPRU_MESAJ_KOMUT=T + "/mesaj.sh", KOPRU_IZIN_UID=str(os.getuid()))
+           KOPRU_LISTE_KOMUT=T + "/liste.sh", KOPRU_MESAJ_KOMUT=T + "/mesaj.sh", KOPRU_IZIN_UID=str(os.getuid()))
 sonuc = {"gecti": 0, "kaldi": 0}
 
 
@@ -30,6 +30,7 @@ def yaz(yol, icerik, kip=None):
         os.chmod(yol, kip)
 
 
+yaz(T + "/liste.sh", '#!/bin/sh\nif [ -e "' + T + '/degis" ]; then n=$(cat "' + T + '/sayac" 2>/dev/null || echo 0); n=$((n+1)); echo $n > "' + T + '/sayac"; if [ $n -ge 2 ]; then cat "' + T + '/liste2.tsv"; exit 0; fi; fi\ncat "' + T + '/liste.tsv"\n', 0o755)
 yaz(T + "/mesaj.sh", '#!/bin/sh\ncat > "' + T + '/mesaj.gelen"\necho "$1 $2" > "' + T + '/mesaj.arg"\necho ulak_TEST-1\n', 0o755)
 yaz(T + "/izin.json", json.dumps({"kisiler": [{"id": "aysenur", "kutular": {"demo": ["demo-ana", "menu-ana", "gorunmez"], "baska": ["baska-ana"]}}]}))
 tmux("new-session", "-d", "-s", "demo-ana", "-x", "80", "-y", "24", "echo MERHABA-KOLTUK; sleep 600")
@@ -174,6 +175,29 @@ try:
     cm.yolla(op="sik", no=1); r = cm.sonraki("ret")
     ok("K22 soru yokken şık reddi", bool(r) and r["neden"] == "menu-sorusu-yok", r)
     liste()
+
+    print("K27 iz yazılamıyorsa yan etkili eylem YAPILMAZ (göz tur 1)")
+    time.sleep(0.4)
+    os.rename(T + "/iz.jsonl", T + "/iz.eski"); os.mkdir(T + "/iz.jsonl")   # iz yolu bir dizin → open() OSError
+    if os.path.exists(T + "/mesaj.gelen"): os.remove(T + "/mesaj.gelen")
+    c.yolla(op="mesaj", metin="izsiz mesaj olmamalı"); r = c.sonraki("ret")
+    ok("K27 iz yazılamıyor → mesaj reddi (iz-yazilamadi)", bool(r) and r["neden"] == "iz-yazilamadi", r)
+    ok("K27b mesaj komutu ÇALIŞMADI", not os.path.exists(T + "/mesaj.gelen"))
+    cm.yolla(op="sik", no=1); r = cm.sonraki("ret")
+    ok("K27c iz yazılamıyor → şık reddi (iz-yazilamadi)", bool(r) and r["neden"] == "iz-yazilamadi", r)
+    os.rmdir(T + "/iz.jsonl"); os.rename(T + "/iz.eski", T + "/iz.jsonl")
+
+    print("K28 doğrulama ile gönderim arasında soru değişirse tuş GİTMEZ (göz tur 1)")
+    SORU2 = json.dumps({"tur": "menu", "metin": "BAŞKA SORU", "siklar": [{"no": 1, "metin": "x"}, {"no": 2, "metin": "y"}], "beri": 2})
+    yaz(T + "/liste2.tsv", "demo-ana\t1\t1\tajan\tcalisiliyor\t\t\t\nmenu-ana\t1\t1\tajan\tsoru\t\t\t" + SORU2 + "\nyasak-ana\t1\t1\tajan\tbos\t\t\t\n")
+    tmux("send-keys", "-t", "=menu-ana:", "C-u")
+    once = tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout
+    open(T + "/degis", "w").close(); open(T + "/sayac", "w").write("0")
+    cm.yolla(op="sik", no=1); r = cm.sonraki("ret"); time.sleep(0.4)
+    sonra = tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout
+    ok("K28 soru değişti → şık reddi (soru-degisti)", bool(r) and r["neden"] == "soru-degisti", r)
+    ok("K28b tuş koltuğa gitmedi", once == sonra, (once[-60:], sonra[-60:]))
+    os.remove(T + "/degis")
 
     print("K23 uid kapısı")
     kopru.terminate(); kopru.wait()

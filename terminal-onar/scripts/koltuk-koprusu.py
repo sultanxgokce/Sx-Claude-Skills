@@ -57,15 +57,21 @@ def eş_uid(baglanti):
 
 
 def iz_yaz(**alanlar):
+    """→ True = iz DİSKE yazıldı · False = yazılamadı (ya da KOPRU_IZ yok). Yan etkili eylemler (mesaj/şık) eylemden ÖNCE niyet izi ister
+    ve izsiz YAPILMAZ (fail-closed, göz tur 1); ret/bilgi izleri en iyi çaba."""
     yol = ortam("KOPRU_IZ")
     if not yol:
-        return
+        return False
     alanlar["zaman"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
     try:
         with open(yol, "a", encoding="utf-8") as f:
             f.write(json.dumps(alanlar, ensure_ascii=False) + "\n")
+            f.flush()
+            os.fsync(f.fileno())
+        return True
     except OSError:
-        print("koprusu: iz yazılamadı", file=sys.stderr)   # eylem düşmez ama sessiz de geçmez
+        print("koprusu: iz yazılamadı", file=sys.stderr)
+        return False
 
 
 def izin_listesi():
@@ -206,6 +212,8 @@ class Oturum(threading.Thread):
             return self.ret("mesaj-yolu-yok", "mesaj")
         if self.koltuk not in (izinli_gorunur() or {}):   # izin her eylemde yeniden bakılır (liste izleme sırasında daralmış olabilir)
             return self.ret("koltuk-izinli-degil", "mesaj")
+        if not iz_yaz(kisi=self.kisi, uid=self.uid, op="mesaj", koltuk=self.koltuk, sonuc="basliyor", uzunluk=len(metin)):
+            return self.ret("iz-yazilamadi", "mesaj")   # izsiz eylem YOK
         self.son_mesaj = simdi
         try:
             p = subprocess.run(shlex.split(komut) + [self.koltuk, self.kisi], input=metin, capture_output=True, text=True, timeout=20)
@@ -231,6 +239,14 @@ class Oturum(threading.Thread):
         sunulan = {s.get("no") for s in soru.get("siklar", []) if isinstance(s, dict)}
         if no not in sunulan:
             return self.ret("sik-sunulmadi", "sik")   # sunulmayan şık YOK
+        imza = json.dumps([soru.get("metin"), soru.get("siklar")], sort_keys=True)
+        iz2 = izinli_gorunur()   # 🔴 doğrulama ⟂ gönderim atomik DEĞİL: pencereyi send-keys'ten HEMEN önceki ikinci okumayla daralt (göz tur 1)
+        k2 = (iz2 or {}).get(self.koltuk)
+        s2 = k2 and k2.get("soru")
+        if not k2 or k2.get("hal") != "soru" or not isinstance(s2, dict) or json.dumps([s2.get("metin"), s2.get("siklar")], sort_keys=True) != imza:
+            return self.ret("soru-degisti", "sik")
+        if not iz_yaz(kisi=self.kisi, uid=self.uid, op="sik", koltuk=self.koltuk, sonuc="basliyor", no=no):
+            return self.ret("iz-yazilamadi", "sik")
         tus = ortam("KOPRU_SIK_TUS", "{no}").replace("{no}", str(no))
         p = subprocess.run([ortam("KOPRU_TMUX", "tmux"), "send-keys", "-t", "=" + self.koltuk + ":", tus], capture_output=True, text=True, timeout=10, env={k: v for k, v in os.environ.items() if k != "TMUX"})
         if p.returncode != 0:

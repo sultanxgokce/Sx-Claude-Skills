@@ -12,10 +12,14 @@ M = [
  ("M9 ham tuş eylemi eklendi", 'elif op == "mesaj":', 'elif op == "tus":\n            subprocess.run([ortam("KOPRU_TMUX","tmux"),"send-keys","-t","="+str(self.koltuk)+":",str(o.get("tus"))])\n        elif op == "mesaj":'),
  ("M10 iz mesaj metnini taşır", "uzunluk=len(metin),", "uzunluk=len(metin), metin=metin,"),
  ("M11 soket kipi gevşek", "os.umask(0o117)", "os.umask(0o000)"),
+ ("M16 mesajda niyet izi kapısı yok", 'if not iz_yaz(kisi=self.kisi, uid=self.uid, op="mesaj", koltuk=self.koltuk, sonuc="basliyor", uzunluk=len(metin)):', "if False:"),
+ ("M17 şıkta niyet izi kapısı yok", 'if not iz_yaz(kisi=self.kisi, uid=self.uid, op="sik", koltuk=self.koltuk, sonuc="basliyor", no=no):', "if False:"),
+ ("M18 şıkta ikinci doğrulama yok", 'or json.dumps([s2.get("metin"), s2.get("siklar")], sort_keys=True) != imza:', "or False:"),
+ ("M19 iz yazılamasa da True döner", "        print(\"koprusu: iz yazılamadı\", file=sys.stderr)\n        return False", "        print(\"koprusu: iz yazılamadı\", file=sys.stderr)\n        return True"),
  ("M12 izleme oturumsuz mesaj", 'if not self.koltuk:\n            return self.ret("once-izle", "mesaj")', "pass"),
  ("M13 sık mesaj sınırı yok", "if simdi - self.son_mesaj < MESAJ_ARALIK:", "if False:"),
  ("M14 boş liste = izin", "if iz is None:\n            return self.ret(\"koltuklar-olculemedi\", \"izle\")", "iz = iz or {}"),
- ("M15 iz kayıtsız", "def iz_yaz(**alanlar):\n    yol = ortam(\"KOPRU_IZ\")", "def iz_yaz(**alanlar):\n    return\n    yol = ortam(\"KOPRU_IZ\")"),
+ ("M15 iz kayıtsız", '    alanlar["zaman"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")', '    return True\n    alanlar["zaman"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")'),
 ]
 kacan = 0
 for ad, eski, yeni in M:

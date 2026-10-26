@@ -1,7 +1,7 @@
 {
   "is": "hezarfen-a5-koprusu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T14:24:11+03:00",
+  "guncelleme": "2026-10-26T15:02:54+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,17 +25,17 @@
       "etiket": "kopru-sinavlari",
       "asama": "sonra",
       "dosya": "olcum-kopru-sinavlari-sonra.txt",
-      "sha256": "4056d5b02292acf38abd449763204a1b22ff726cf6f950242e64f0ba5db08c3b",
+      "sha256": "b2ca578b0d98299613aca1bd49a6bffcfc286c3539d09e90a8b2b806664643b0",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T14:23:07+03:00",
-      "sure_sn": 31.3,
+      "zaman": "2026-10-26T15:02:00+03:00",
+      "sure_sn": 31.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b7701cebc7a74045861d331b513b75d8"
+      "olcum_id": "c7a1e9d62dda4fba8fce3ba589ab6d05"
     },
     {
       "tur": "olcum",
@@ -76,7 +76,47 @@
       "gercek_olcum": "kopru-sinavlari",
       "beklenen": "kirmizi",
       "olcum_id": "f6119836c3704c27a68c14104ad7aefe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-iz-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-iz-kapisi-yok-sonra.txt",
+      "sha256": "2780cfd65e5c7b4b58a6b4ff1b3c77eab4af2125a2931ba592483242e0789881",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-iz.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:02:27+03:00",
+      "sure_sn": 26.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kopru-sinavlari",
+      "beklenen": "kirmizi",
+      "olcum_id": "9bf9c10fbd894a048c14ce89db315a55"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-soru-yarisi-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-soru-yarisi-kapisi-yok-sonra.txt",
+      "sha256": "65f2cff9e60874ef53281fc4ff669fb495e1bd8ce59aa45517ba0ebd57b27228",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-yaris.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:02:54+03:00",
+      "sure_sn": 26.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kopru-sinavlari",
+      "beklenen": "kirmizi",
+      "olcum_id": "1c1cbd09540443e5a195a075aad68f4f"
     }
   ],
-  "imza": "3720ef038cf12495527fa1940d86eefea3de35ef51ac6c91a68e8770a1138617"
+  "imza": "f095be5bb6b925c82ae7133890dc15e744906a06e40c84290e5ed37e110b2f4e"
 }
