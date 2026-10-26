@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "iskan-sablon-otoguncelleme",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T22:26:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-iskan-sablon-otoguncelleme",
+  "dal": "iskan-sablon-otoguncelleme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10943,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4821
+  },
+  "bas": "109793cdc7c5cdcc1f40dc82b858520eaaacbbaf",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Yeni-proje compose şablonuna DISABLE_AUTOUPDATER=1 eklenmiş, sürüm yükseltilmiş ve üretilen bloğu birebir sınayan test konmuş. Araç imzalı önce/sonra ölçümü kırmızıdan yeşile dönüyor, mutasyon ölçümü de satır bozulduğunda sınavın yakaladığını gösteriyor; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır. Gerçek ölçüm çifti önce 0/1 ve rc=1 kırmızı, sonra 1/1 ve rc=0 yeşildir; ayrıca mutasyon kaydı bilerek bozulan kodu rc=1 ile yakalayarak eklenen sınavın ayırt edici olduğunu kanıtlıyor. Sarı kayıt yoktur; kare gerektirmeyen bu betik değişikliği için ölçüm çifti yeterlidir."
+  }
+}

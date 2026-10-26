@@ -209,6 +209,8 @@ SUM_AFTER="$(md5sum "$YP_FIXTURE")"
 [ "$SUM_BEFORE" = "$SUM_AFTER" ] && ok "yeni-proje --dry-run: dosya değişmedi" || bad "yeni-proje --dry-run: dosya DEĞİŞTİ (yazmamalıydı)"
 printf '%s' "$out" | grep -q "cloudtop-testproje" && printf '%s' "$out" | grep -q "8449" \
   && ok "yeni-proje --dry-run: önizleme container-adı+port içeriyor" || bad "yeni-proje --dry-run: beklenen içerik eksik"
+printf '%s' "$out" | grep -qx "      - DISABLE_AUTOUPDATER=1" \
+  && ok "yeni-proje: üretilen compose bloğu DISABLE_AUTOUPDATER=1 taşır (cloudtop CI kapısı: environment'ı olan her servis)" || bad "yeni-proje: üretilen blokta DISABLE_AUTOUPDATER=1 YOK (yeni kutu cloudtop main CI'ını kırar — #957)"
 find /tmp -maxdepth 1 -name "iskan-test-yp-dryrun.$$.yml" -delete 2>/dev/null
 
 # 13. yeni-proje --apply: GO-marker yokken exit=4, dosya SIFIR-değişir (negatif-kapı, G3-emsali)

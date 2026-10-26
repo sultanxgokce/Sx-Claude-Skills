@@ -522,6 +522,9 @@ _iskan_compose_blok() {
       - DOCKER_MODS=linuxserver/mods:universal-package-install
       # FAZ-6 generator-hizası: İSKÂN-container'ları ekip-hazır doğar (tmux=oturum, git=ekip-notify REPO_ROOT)
       - INSTALL_PACKAGES=tmux|git|python3|jq
+      # Claude Code kendi kendine güncellenmesin: çalışan ekip oturumları sürüm kaymasıyla kesilmesin (cloudtop scripts/claude-oto-guncelleme-kapat.sh;
+      # cloudtop CI sınavı environment'ı olan HER serviste bu satırı ister — şablonda yoksa yeni kutu main CI'ını kırar, #957 vakası)
+      - DISABLE_AUTOUPDATER=1
     volumes:
       # Konteyner açılış kancaları (LSIO /custom-cont-init.d) — git-tracked, salt-okur; tuğra
       # kimliği · resim-yapıştırma dinleyicisi · oda servisi/gözetmeni · crontab kalıcılığı ·

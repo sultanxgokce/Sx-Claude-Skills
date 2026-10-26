@@ -1,0 +1,64 @@
+{
+  "is": "iskan-sablon-otoguncelleme",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T22:24:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sablon-otoguncelleme",
+      "asama": "once",
+      "dosya": "olcum-iskan-sablon-otoguncelleme-once.txt",
+      "sha256": "009ca1d3d17558e00c5a03d2c69ecfed74fe7c84fd3a6d0742ba40f9e4b4f3f2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iskan.sh",
+        "/config/.claude/skills/iskan/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T22:24:39+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "faf7501521f94ca7b9c860cb522b28f7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sablon-otoguncelleme",
+      "asama": "sonra",
+      "dosya": "olcum-iskan-sablon-otoguncelleme-sonra.txt",
+      "sha256": "e6ea91c64767066f2ac1e9d0572bffaffa572b4aea2a786c8beae872f980f323",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iskan.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-iskan-sablon-otoguncelleme/iskan/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:24:40+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "db324f4d09774110aeda3c8f9895f4b1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sablon-mutant",
+      "asama": "tek",
+      "dosya": "olcum-iskan-sablon-mutant-tek.txt",
+      "sha256": "ccf96f2375fa1bc0dd387b4f260d860439444cd8be05686474f13bf4f6e61eba",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iskan-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:24:40+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "iskan-sablon-otoguncelleme",
+      "beklenen": "kirmizi",
+      "olcum_id": "1cb5c095362c4af7af274d66f861b8fb"
+    }
+  ],
+  "imza": "e0754277e699f959eb45d54f788153f8dbde4e53b9b59b52b8438f698b08c5d5"
+}
