@@ -666,4 +666,46 @@ CIKTI="$(ghk env FAKE_DAL=hendese/is-ck FAKE_DOSYALAR="$KD/is-ck/KANIT.json" bas
 CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' is-ck --pr 7")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17h iş adı elle verilmişse türetme DEVREYE GİRMEZ (açık ad kazanır)"
 
+echo "════ T18 · BAYAT SARI (#817, RH8A3): sonraki bağlı yeşil sarıyı yerine geçirir; sarı iken geçersiz ilan edilen sarı sayılmaz; yeşili geçersiz ve sonradan sarı ENGEL kalır ════"
+printf 'henüz log yok\n' > "$LGK/yok2.log"
+mk() { bash "$KT" ac "$1" --is "$2" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; bash "$K" olcum "$1" olc --asama tek -- echo 1 >/dev/null 2>&1; den "$1" 1 5 E; }
+mk is-s1 "zil-s1 cron'u her saat çalsın"
+bash "$K" canli is-s1 deneme-ilk --desen zil-s1 --kaynak "dosya:$LGK/yok2.log" >/dev/null 2>&1
+CIKTI="$(bash "$G" is-s1 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "canlı kanıt SARI" <<<"$CIKTI"; g $? "T18a önce: yalnız sarı canlı var → rc=1 (kapı hâlâ kilitli)"
+sleep 1; printf '%s zil-s1 çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-s1.log"
+bash "$K" canli is-s1 deneme-son --desen zil-s1 --kaynak "dosya:$LGK/zil-s1.log" >/dev/null 2>&1
+CIKTI="$(bash "$G" is-s1 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && ! grep -q "canlı kanıt SARI" <<<"$CIKTI"; g $? "T18b sonradan bağlı YEŞİL geldi (farklı etiket) → bayat sarı düşer, rc=0"
+mk is-s2 "zil-s2 cron'u her saat çalsın"
+sleep 1; printf '%s zil-s2 çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-s2.log"
+bash "$K" canli is-s2 deneme-ilk --desen zil-s2 --kaynak "dosya:$LGK/zil-s2.log" >/dev/null 2>&1
+bash "$K" canli is-s2 deneme-son --desen zil-yok --kaynak "dosya:$LGK/yok2.log" >/dev/null 2>&1
+CIKTI="$(bash "$G" is-s2 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "canlı kanıt SARI" <<<"$CIKTI"; g $? "T18c yeşil ÖNCE, sarı SONRA → sarı yerine geçilmedi, rc=1"
+mk is-s3 "buton rengi düzelsin"
+bash "$K" canli is-s3 deneme --desen zil-yok --kaynak "dosya:$LGK/yok2.log" >/dev/null 2>&1
+bash "$G" is-s3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18d önce: canlısız kartta sarı canlı kaydı da engel → rc=1"
+bash "$K" gecersiz is-s3 deneme --neden "yanlış kaynak dosyasına bakılmıştı, kayıt geçersiz" --kim M >/dev/null 2>&1
+bash "$G" is-s3 --sessiz >/dev/null 2>&1; g $? "T18e sarı kayıt GEÇERSİZ ilan edildi → sayımdan düşer, rc=0"
+mk is-s4 "buton rengi düzelsin"
+sleep 1; printf '%s zil-s4 çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-s4.log"
+bash "$K" canli is-s4 deneme --desen zil-s4 --kaynak "dosya:$LGK/zil-s4.log" >/dev/null 2>&1
+bash "$K" gecersiz is-s4 deneme --neden "kayıt başka sunucunun zil kaydıydı, geçersiz" --kim M >/dev/null 2>&1
+bash "$G" is-s4 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18f YEŞİL kayıt geçersiz ilan edildi → hâlâ ENGEL (ilan kapıyı gevşetmez), rc=1"
+# mutantlar (tam kopya; kontrol kopyası aynı sonucu vermeli)
+cp "$G" "$PKG/kontrol18.sh"
+M11="$PKG/mutant11.sh"; sed 's/^s=\[x for x in s if x not in yerine\]$/s=s/' "$G" > "$M11"
+! cmp -s "$G" "$M11"; g $? "T18g mutant 11 üretildi (yerine geçme kalktı)"
+bash "$M11" is-s1 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18h mutant 11: bayat sarı kilitliyor → T18b bu mutantta düşerdi"
+M12="$PKG/mutant12.sh"; sed '/^s=\[k for k in s if not (k\["etkin_renk"\]=="gecersiz"/d' "$G" > "$M12"
+! cmp -s "$G" "$M12"; g $? "T18i mutant 12 üretildi (sarı-geçersiz düşürme kalktı)"
+bash "$M12" is-s3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18j mutant 12: geçersiz sarı kilitliyor → T18e bu mutantta düşerdi"
+M13="$PKG/mutant13.sh"; sed 's/_z(kk)>_z(x) for kk,_ in bagli_l/True for kk,_ in bagli_l/' "$G" > "$M13"
+! cmp -s "$G" "$M13"; g $? "T18k mutant 13 üretildi (yerine geçme zaman sırası kalktı)"
+bash "$M13" is-s2 --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T18l mutant 13: sonraki sarı da yeşille aklanıyor → T18c bu mutantta düşerdi"
+M14="$PKG/mutant14.sh"; sed 's/(k\["etkin_renk"\]=="gecersiz" and k.get("renk")!="yesil")/(k["etkin_renk"]=="gecersiz")/' "$G" > "$M14"
+! cmp -s "$G" "$M14"; g $? "T18m mutant 14 üretildi (geçersiz yeşil de düşüyor)"
+bash "$M14" is-s4 --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T18n mutant 14: geçersiz yeşil kapıyı GEÇİRİYOR → T18f bu mutantta düşerdi"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
