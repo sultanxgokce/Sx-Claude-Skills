@@ -1,7 +1,7 @@
 {
   "is": "calisiliyor-zil",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T15:16:24+03:00",
+  "guncelleme": "2026-10-26T15:18:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -53,7 +53,42 @@
       "sure_sn": 63.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "cb105a02cf444d32a17e824895d97cd6"
+    },
+    {
+      "tur": "canli",
+      "etiket": "uzlastir-zil-canli",
+      "asama": "canli",
+      "dosya": "canli-uzlastir-zil-canli.txt",
+      "sha256": "27fa8e71846e080c03441ca973cbc4f372d8a15b2bdf54e19009bd4ebc2817bd",
+      "komut": [
+        "tail",
+        "-n",
+        "5",
+        "--",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/canli-cz.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/canli-cz.txt",
+      "kaynak_turu": "dosya",
+      "son": 5,
+      "desen": "gonderildi · HEZARFEN",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-26T12:18:19.883Z gonderildi · HEZARFEN · HEZARFEN → HEZARFEN · orta",
+        "saat": "2026-10-26T12:18:19.883Z",
+        "saat_iso": "2026-10-26T12:18:19+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-26T12:18:19.883Z gonderildi · HEZARFEN · HEZARFEN → HEZARFEN · orta",
+        "saat": "2026-10-26T12:18:19.883Z",
+        "saat_iso": "2026-10-26T12:18:19+00:00"
+      },
+      "zaman": "2026-10-26T15:18:42+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "5ec496177f694856ad297961a99c8c16"
     }
   ],
-  "imza": "6301127928036fae1e28efa1f898eb21e7329561b0df60b455e3377bca4d5055"
+  "imza": "a1b486d327304799d19bff3239f6b3f6d1e8a28ff5e722cd84d60fb7b8eefaf7"
 }
