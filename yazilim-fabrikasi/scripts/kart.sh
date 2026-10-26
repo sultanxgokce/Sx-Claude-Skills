@@ -37,6 +37,8 @@
 #   kart.sh acik-soru <AJAN|'*'> → ajanın (ya da '*' = depodaki HERKESİN) kartlarındaki cevapsız sorular; rc 0 yok · 3 var · 2 okunamayan kart (ÖLÇÜLEMEDİ) · cevapsız soru varken kart.sh bitti REDDEDER
 #   kart.sh izin-durum <iş> → "gerekmiyor|bekliyor|basla|dur<TAB>açıklama" (kart yok/bozuk rc 3 — fail-closed)
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
+#   kart.sh canli-ayarla <iş> --canli e|h --reis <AD=aldi> --gerekce "<≥20 karakter>"   AÇIK kartta canlı kanıt şartını SAHİP değiştirir:
+#          --reis kartın aldı alanıyla aynı olmalı (reis-dedi emsali; başkasının kararı gerekçede atıfla); karta canli_sebep + geçmiş satırı yazılır
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
 #   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti → göreve DİLİM adımı (durum kalır);
 #          görev de bitecekse kart.sh bitti … --gorev-bitti --kare <yol> --surum <sürüm> | --olcum "…" | --belge <yol> → 'onay bekliyor' + kanıt sınıfı (KF22R)
@@ -755,6 +757,30 @@ try: k=json.load(open(yol,encoding="utf-8"))
 except Exception as e: print("olculemedi\tkart okunamadı: %s" % e); raise SystemExit(3)
 d,a=izin_durumu(k); print(d+"\t"+a.replace("\n"," ").replace("\t"," "))
 raise SystemExit(3 if d=="olculemedi" else 0)
+PY
+    ;;
+  canli-ayarla)
+    # Kartı açarken canlı şartı yanlış türemişse (cümlede "cron" geçen belge işi) ya da bu alandan ÖNCE açılmış kartta: şartı sahibi gerekçeyle
+    # değiştirir. Eskiden kart dosyası elle düzenleniyordu — aktör de gerekçe de kayıtsızdı. Kapı yine canli-gerekir'den okur; bağımsız göz
+    # kartın canli_sebep satırında kararı ve gerekçesini görür. (BÂNİ'nin #352 gerçeklemesi daraltmada çıkmıştı; retro W42 Ö2.)
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    case "$CANLI" in e|h) ;; *) _hata "--canli e|h gerekiyor"; exit 1 ;; esac
+    [ -n "$REIS" ] || { _hata "--reis <AD> gerekiyor: canlı şartını yalnız kartın sahibi (aldı alanı) ayarlar (reis-dedi emsali)"; exit 1; }
+    GEREKCE="$(printf '%s' "$GEREKCE" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+    [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter (baş/son boşluk sayılmaz) — canlı şartını koymak ya da kaldırmak gerekçesiz olmaz; bağımsız göz görür"; exit 1; }
+    if [[ "$GEREKCE" == *"|"* || "$GEREKCE" == *$'\n'* ]]; then _hata "--gerekce içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi
+    python3 - "$KD/$IS.json" "$CANLI" "$GEREKCE" "$REIS" <<'PY' || exit 1
+import json,sys,datetime
+yol,cevap,gerekce,reis=sys.argv[1:]
+k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+if k.get("durum")!="acik":
+    print(f"✗ kart açık değil (durum: {k.get('durum')}) — kapanmış kartın canlı şartı sonradan değiştirilmez; bitmiş işe geriye dönük gerekçe yazılmaz", file=sys.stderr); raise SystemExit(1)
+if reis != k.get("aldi"):
+    print(f"✗ --reis '{reis}' kartın sahibi değil (kartta aldı: {k.get('aldi')}) — canlı şartını yalnız sahip ayarlar; başkasının kararı gerekçede atıfla", file=sys.stderr); raise SystemExit(1)
+k["canli_gerekir"]=(cevap=="e"); k["canli_sebep"]=f"sahip {reis} ayarladı (--canli {cevap}): {gerekce}"
+k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"canli-ayarla","reis":reis,"canli":cevap,"gerekce":gerekce})
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+print(f"✓ canlı şartı karta işlendi: {'GEREKİR' if cevap=='e' else 'istenmedi'} — {gerekce}")
 PY
     ;;
   canli-gerekir)

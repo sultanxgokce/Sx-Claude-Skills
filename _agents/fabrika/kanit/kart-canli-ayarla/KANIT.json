@@ -1,0 +1,62 @@
+{
+  "is": "kart-canli-ayarla",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T06:30:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "once",
+      "dosya": "olcum-kart-sinav-once.txt",
+      "sha256": "b9235ff10281a0d4ed3535826ddc8db0acdc617839b220980302a4557e95a639",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ayarla-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T06:26:09+03:00",
+      "sure_sn": 346.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "20a2463b10c1487b82aca20f61e830fb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "e2f97820782a4519bc452bb228cfe35fb672f55f2462d9d0eace593f453d7097",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ayarla-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T06:28:50+03:00",
+      "sure_sn": 147.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e4342e44a98a43b3a38c40feee561af7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-sahip",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sahip-sonra.txt",
+      "sha256": "0a9615bd69edf0fb3246f5d5873b70f87234e4b353eaa6b74c4a7c2481320b42",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ayarla-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T06:30:44+03:00",
+      "sure_sn": 113.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "b610d23f79b84ec8b932524c92e50f11"
+    }
+  ],
+  "imza": "1426d7d8c4730b2c1d032427b72e9660d29ff2747b3659340c88745918e346ea"
+}

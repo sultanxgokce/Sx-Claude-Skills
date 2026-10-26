@@ -122,6 +122,29 @@ python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cro
 MK="$T/pkg-kart"; mkdir -p "$MK"; cp "$HERE"/*.py "$HERE"/*.sh "$MK/"; sed -i 's/x\["etkin_renk"\]=="yesil"/x.get("renk")=="yesil"/' "$MK/kart.sh"
 grep -q 'x.get("renk")=="yesil"' "$MK/kart.sh"; g $? "mutant üretildi (kart.sh ham rengi okuyor)"
 CIKTI="$(bash "$MK/kart.sh" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI" && grep -q "kart bitti" <<<"$CIKTI"; g $? "mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi"
+# canli-ayarla (kart-canli-ayarla): açık kartta canlı şartını YALNIZ sahip, gerekçeyle değiştirir; karta ve geçmişe yazılır
+echo "── canli-ayarla: sahip kararı (aktör + gerekçe + açık kart) ──"
+GER="belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif"
+bash "$KT" canli-ayarla is-sunucu --canli h --reis BANI >/dev/null 2>&1; [ $? -eq 1 ]; g $? "canli-ayarla gerekçesiz reddeder"
+bash "$KT" canli-ayarla is-sunucu --canli h --reis BANI --gerekce "kısa" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "20 karakterden kısa gerekçe reddedilir"
+bash "$KT" canli-ayarla is-sunucu --canli h --reis BANI --gerekce "                         " >/dev/null 2>&1; [ $? -eq 1 ]; g $? "20 boşluktan oluşan gerekçe sayılmaz"
+bash "$KT" canli-ayarla is-sunucu --canli h --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--reis verilmeden reddedilir (aktör ölçülmeden şart kalkmaz)"
+bash "$KT" canli-ayarla is-sunucu --canli h --reis SERDAR --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "sahip olmayan ad (SERDAR ≠ aldı BANI) reddedilir"
+bash "$KT" canli-ayarla is-sunucu --canli evet --reis BANI --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--canli yalnız e|h"
+bash "$KT" canli-ayarla yok-boyle-kart --canli h --reis BANI --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 3 ]; g $? "kart yoksa rc=3 (ölçülemedi)"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-sunucu.json'));assert k['canli_gerekir'] is True and not any(x.get('olay')=='canli-ayarla' for x in k['gecmis'])"; g $? "reddedilen çağrılar kartı DEĞİŞTİRMEDİ (şart hâlâ E, geçmişe satır yok)"
+CIKTI="$(bash "$KT" canli-ayarla is-sunucu --canli h --reis BANI --gerekce "$GER" 2>&1)"; g $? "gerekçeli sahip kararı kabul"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-sunucu.json'));assert k['canli_gerekir'] is False and 'yanlış pozitif' in k['canli_sebep'] and 'BANI' in k['canli_sebep'] and k['gecmis'][-1]['olay']=='canli-ayarla' and k['gecmis'][-1]['reis']=='BANI'"; g $? "karta canli_sebep (ad + gerekçe) ve geçmiş satırı yazıldı"
+[ "$(bash "$KT" canli-gerekir is-sunucu | cut -f1)" = "H" ]; g $? "kapının okuduğu yüzey (canli-gerekir) yeni kararı H olarak okur"
+bash "$KT" ac is-ayarla-e --is "buton ekle" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+[ "$(bash "$KT" canli-gerekir is-ayarla-e | cut -f1)" = "H" ]; g $? "ön koşul: buton kartı canlı istemiyor"
+bash "$KT" canli-ayarla is-ayarla-e --canli e --reis BANI --gerekce "buton işi ama kurulum cron'la yayılıyor" >/dev/null 2>&1 && [ "$(bash "$KT" canli-gerekir is-ayarla-e | cut -f1)" = "E" ]; g $? "canli-ayarla e: canlı istemeyen kart canlı ister hâle gelir"
+bash "$KT" canli-ayarla is-cron --canli h --reis BANI --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "bitmiş kartın canlı şartı sonradan değiştirilmez (rc=1)"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_gerekir'] is True"; g $? "bitmiş kart değişmedi (şart hâlâ E)"
+MA="$T/pkg-ayarla"; mkdir -p "$MA"; cp "$HERE"/*.py "$HERE"/*.sh "$MA/"; sed -i '/^yol,cevap,gerekce,reis=sys.argv/,/^k\["canli_gerekir"\]/ s/^if reis != k.get("aldi"):$/if False:/' "$MA/kart.sh"
+[ "$(grep -c '^if False:$' "$MA/kart.sh")" = 1 ]; g $? "mutant üretildi (sahip denetimi kapatıldı; çapa tam bir yerde)"
+bash "$KT" ac is-ayarla-mut --is "sahip denetimi mutantı için kart" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli e >/dev/null 2>&1
+bash "$MA/kart.sh" canli-ayarla is-ayarla-mut --canli h --reis SERDAR --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant: sahip olmayan ad KABUL edilir — gerçek kart rc=1 verdi, yani sınav sahip denetimini ölçüyor"
 # canli-gerekir: kapının okuduğu tek yüzey; eski kartta (alan yok) cümleden türetir
 [ "$(bash "$KT" canli-gerekir is-cron | cut -f1)" = "E" ] && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "H" ]; g $? "canli-gerekir E/H okur"
 python3 - <<PY
