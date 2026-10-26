@@ -1,0 +1,46 @@
+{
+  "is": "retro-ek-ad-eslesmesi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T08:26:29+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "t20-kapilari",
+      "asama": "once",
+      "dosya": "olcum-t20-kapilari-once.txt",
+      "sha256": "2a2789ebbdcef134366fbd034d62f95948f882bd8bd8c53f8f6e14574b6884b0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/retro-say.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-retro-ek-ad-eslesmesi",
+        "eski"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T08:26:23+03:00",
+      "sure_sn": 235.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "efbbd36597dd4f4aa26ec14643b833cd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t20-kapilari",
+      "asama": "sonra",
+      "dosya": "olcum-t20-kapilari-sonra.txt",
+      "sha256": "f5108912ee74e5d764ed2f285f57e28cbcb4dfe488841c8c39e388c1a0728ebc",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/retro-say.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-retro-ek-ad-eslesmesi",
+        "yeni"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T08:26:29+03:00",
+      "sure_sn": 6.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "431bad489c5d4d8b89139e215498de5a"
+    }
+  ],
+  "imza": "3ac5da0ef675e783460425c45ad210108b75136eedf10749d4838219638950cd"
+}

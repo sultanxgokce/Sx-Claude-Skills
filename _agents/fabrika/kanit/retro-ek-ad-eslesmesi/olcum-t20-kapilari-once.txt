@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/retro-say.sh /config/projects/_wt/Sx-Claude-Skills-retro-ek-ad-eslesmesi eski
+# rc=0 sure=235.9s zaman=2026-10-26T08:26:23+03:00
+--- stdout ---
+t20_kirmizi=3
+t20_gecen=2
+toplam_kirmizi=3
+--- stderr ---
+⏳ agir-sira: kanit-retro-ek-ad-eslesmesi-t20-kapilari 231 sn bekledi (yuva 2, load1 4.97)

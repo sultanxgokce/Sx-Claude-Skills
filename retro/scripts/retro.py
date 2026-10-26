@@ -60,6 +60,21 @@ def norm(s):
     return re.sub(r"[^a-z0-9]", "", s.lower().replace("ı", "i"))
 
 
+def ad_esle(a, b):
+    """Aynı ajan mı? Tam eşleşme ya da biri ötekinin ek-adı (oturum adı 'kutu-ajan' ↔ kayıt adı 'ajan').
+    Boş ad hiçbir şeyle eşleşmez."""
+    na, nb = norm(a), norm(b)
+    if not na or not nb:
+        return False
+    if na == nb:
+        return True
+    for x, y in ((a, nb), (b, na)):
+        kuyruk = norm((x or "").replace("_", "-").rsplit("-", 1)[-1]) if "-" in (x or "").replace("_", "-") else ""
+        if kuyruk and kuyruk == y:
+            return True
+    return False
+
+
 def bugun():
     v = os.environ.get("RETRO_BUGUN")
     return date.fromisoformat(v) if v else date.today()
@@ -199,6 +214,7 @@ def kart_olc(kok, ajan, pzt, paz):
         return None
     acilan = bitti = tikandi = 0
     turlar, dokum, goz_dokum, okunamadi = [], [], [], []
+    baska_ad = set()
     for depo in dl:
         da = db = dt = dg = 0
         om = origin_main_okunur(depo); depo_ok = om is not False
@@ -207,7 +223,9 @@ def kart_olc(kok, ajan, pzt, paz):
                 k = json.load(open(yol, encoding="utf-8"))
             except Exception:
                 continue
-            if norm(k.get("aldi", "")) != norm(ajan):
+            if not ad_esle(k.get("aldi", ""), ajan):
+                if aralikta(tarih_cek(str(k.get("zaman", ""))), pzt, paz) or aralikta(tarih_cek(str(k.get("bitis", ""))), pzt, paz):
+                    baska_ad.add(str(k.get("aldi", "")).strip() or "(boş)")
                 continue
             z = tarih_cek(str(k.get("zaman", "")))
             b = tarih_cek(str(k.get("bitis", "")))
@@ -227,6 +245,7 @@ def kart_olc(kok, ajan, pzt, paz):
         if not depo_ok:
             okunamadi.append(os.path.basename(os.path.realpath(depo)))
     return {
+        "ad_eslesmedi": (sorted(baska_ad) if (acilan + bitti + tikandi) == 0 and baska_ad else []),
         "yol": "_agents/fabrika/kartlar", "depolar": dokum, "goz_depolar": goz_dokum, "okunamadi": okunamadi, "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
         "goz_turu": sum(turlar), "kart": len(turlar),
         "ort_tur": (round(sum(turlar) / len(turlar), 1) if turlar else None),
@@ -284,7 +303,10 @@ def olcum_tablosu(o):
         r.append(sat("NOTES mesaj satırı", "ÖLÇÜLEMEDİ: _agents/<ajan>/NOTES.md yok", "—"))
         r.append(sat("ders / zaman kaybı / tıkanma satırı", "ÖLÇÜLEMEDİ: kaynak yok", "—"))
     k = o["kart"]
-    if k:
+    if k and k.get("ad_eslesmedi"):
+        r.append(sat("kart açılan / bitti / tıkandı", "ÖLÇÜLEMEDİ: ad eşleşmedi (haftada başka adlı kart var: " + ", ".join(k["ad_eslesmedi"][:5]) + ")", f"`{k['yol']}` (aldı = ajan)"))
+        r.append(sat("bağımsız göz turu · ortalama tur/kart", "ÖLÇÜLEMEDİ: ad eşleşmedi", "—"))
+    elif k:
         r.append(sat("kart açılan / bitti / tıkandı", f"{k['acilan']} / {k['bitti']} / {k['tikandi']}",
                      f"`{k['yol']}` (aldı = ajan) · {len(k['depolar'])} depo: " + " · ".join(k["depolar"])))
         ort = "—" if k["ort_tur"] is None else str(k["ort_tur"])

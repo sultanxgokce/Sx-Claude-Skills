@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "retro-ek-ad-eslesmesi",
+  "pr": "459",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T08:29:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-retro-ek-ad-eslesmesi",
+  "dal": "retro-ek-ad-eslesmesi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11219,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3700
+  },
+  "bas": "5eb9942a432c08109acc3089c6826b9417350cb0",
+  "duzeltme_farki": {
+    "onceki_bas": "8bbbd3cc35297fe0c5e1bb33a3a2e30661a1f307",
+    "dosya": 3,
+    "bayt": 4494,
+    "tam_bayt": 12233
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kart sayımında kısa ad ile ekli oturum adı eşleştirilmiş, eşleşme olmadığında sıfır yerine ÖLÇÜLEMEDİ çıktısı verilmiş; önceki turdaki kapsam kayması da geri alınmıştır. Sağlam önce/sonra ölçümü hedef sınavların 3 kırmızıdan 0 kırmızıya geçtiğini gösterdiği ve kalan bir kusur kanıtlanmadığı için üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti T20 kapılarında 3 kırmızı/2 geçenden 0 kırmızı/5 geçene geçiş gösteriyor. Önceki B1 kapanmış: retro/scripts/retro.py:113 ve :267 karşılaştırmaları ad_esle kullanımından yeniden tam normalize eşitliğine çevrilerek kart sayımı dışındaki ajan dizini ve bekçi ölçümü davranış değişiklikleri kaldırılmış. Ölçüm çıktısı tek tek sınav adlarını değil toplu sayıları verse de önceki turda görülen hedefli beş sınav ve bu turdaki sağlam ölçüm çifti talebi destekliyor."
+  }
+}
