@@ -408,5 +408,15 @@ m_h_bozuk(){ local rc; cp "$T/havuz-merkez.md" "$HM"; sed -i 's/^- gorev_01M5M55
 m_h_bozuk "$R" && ok "M20 pozitif kontrol: oku silinmiş havuz satırında gerçek suzum kırmızı" || kirmizi "M20 pozitif kontrol: gerçek suzum çözülemeyen satırı geçiriyor"
 mut "M20 çözülemeyen satır sessizce atlanınca süzümden kaçar (göz #442 tur 1 · kapı yakalar)" 's/            bozuk.append(s.strip())/            pass/' m_h_bozuk
 
+echo "— T20 ek-ad eşlemesi: kayıttaki kısa ad (KALFA) ↔ oturum adı (nova-kalfa); eşleşme tutmazsa 0 değil ÖLÇÜLEMEDİ (W43 retro A1 · nova)"
+ek_satir(){ local K f; K="$(mktemp -d -p "$T")"; mkdir -p "$K/_agents/fabrika/kartlar"
+  printf '{"is":"ek-a","aldi":"KALFA","zaman":"2026-10-13T10:00:00+03:00","durum":"bitti","bitis":"2026-10-14T10:00:00+03:00"}' > "$K/_agents/fabrika/kartlar/ek-a.json"
+  python3 "$R" kutu "$1" --kok "$K" --koltuk e:0 >/dev/null 2>&1; f="$(ls "$K"/_agents/handoff/retro/2026-W42/*.md 2>/dev/null | head -1)"; [ -n "$f" ] && grep "^| kart açılan" "$f"; }
+icerir "$(ek_satir nova-kalfa)" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T20a oturum adı nova-kalfa → kayıttaki KALFA kartı sayılır"
+icerir "$(ek_satir KALFA)" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T20b kısa ad KALFA aynen çalışır (gerileme yok)"
+icerir "$(ek_satir nova-bani)" "ÖLÇÜLEMEDİ: ad eşleşmedi" "T20c hiçbir ad tutmuyorsa 0 değil ÖLÇÜLEMEDİ: ad eşleşmedi"
+icermez "$(ek_satir nova-bani)" "| 0 / 0 / 0 |" "T20d eşleşmeyen ad sessiz sıfır basmaz"
+icermez "$(ek_satir alfa)" "| 1 / 1 / 0 |" "T20e yanlış-pozitif yok: 'alfa' KALFA'nın içinde geçse de eşleşmez"
+
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]
