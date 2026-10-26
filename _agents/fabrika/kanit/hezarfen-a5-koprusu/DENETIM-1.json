@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "hezarfen-a5-koprusu",
+  "pr": "467",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T14:43:36+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-a5-koprusu",
+  "dal": "hezarfen-a5-koprusu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 76071,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9888
+  },
+  "bas": "fd68fbd1ec2cead8d37325936bdaa5a7cf24f0bf",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Koltuk köprüsü; izinli koltuğu salt okur izleme, mesaj gönderme ve sunulan menü şıkkını seçme sınırlarıyla kurulmuş, ham tuş ve UID kapıları da sınavlarla yakalanmış. Ancak denetim kaydı yazılamadığında eylemlerin devam etmesi ve şık doğrulamasıyla tuş gönderimi arasındaki yarış, yetkili eylemleri denetimsiz veya artık geçerli olmayan bağlamda çalıştırabildiği için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Denetim günlüğü fail-open: iz kaydı açılamasa bile mesaj ve şık eylemleri uygulanıyor; böylece iş kartındaki “denetimli eylem” güvencesi kayıt sistemi bozulduğunda kayboluyor.",
+        "kanit": "iz_yaz, open/write OSError aldığında yalnız stderr'e “iz yazılamadı” basıp dönüyor. mesaj() posta komutunu, sik() ise tmux send-keys işlemini bu kayıt sonucunu doğrulamadan tamamlıyor; mevcut K25 yalnız günlük yazılabildiği mutlu yolu ölçüyor.",
+        "konum": "terminal-onar/scripts/koltuk-koprusu.py:65",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Menü şıkkı doğrulaması ile tuşun gönderilmesi atomik değil; görünür durum sorgusundan sonra soru kapanır veya değişirse doğrulanmış rakam artık başka bir terminal bağlamına gönderilebilir.",
+        "kanit": "sik(), izinli_gorunur() çıktısından soru ve sunulan numarayı denetledikten sonra ayrı bir subprocess.run ile tmux send-keys çağırıyor. K19 sınavı yalnız sabit kalan sahte menüyü ölçüyor; durumun doğrulama ile gönderim arasında değiştiği vaka yok.",
+        "konum": "terminal-onar/scripts/koltuk-koprusu.py:258",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce ölçümü yalnız dosyaların bulunmadığını, sonra ölçümü dört sınav takımında toplam 67 geçiş ve sıfır kalanı gösteriyor. İki mutasyon kaydı beklenen kırmızıyı üretip UID ve ham-tuş kapılarının sınavlarca gerçekten yakalandığını kanıtlıyor; ancak günlük-yazma arızası ve menü durumu yarışı için ölçüm bulunmuyor."
+  }
+}
