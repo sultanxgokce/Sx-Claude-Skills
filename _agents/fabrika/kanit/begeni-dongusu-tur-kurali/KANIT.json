@@ -1,0 +1,62 @@
+{
+  "is": "begeni-dongusu-tur-kurali",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T09:50:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kural-satiri",
+      "asama": "once",
+      "dosya": "olcum-kural-satiri-once.txt",
+      "sha256": "afdc72583382f2cf9b69e24da6403e916982dc159ca7fbd5cc868e90b932e010",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T09:50:52+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7f56a7d8263341bca1d36409170dac7f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kural-satiri",
+      "asama": "sonra",
+      "dosya": "olcum-kural-satiri-sonra.txt",
+      "sha256": "2204489ae50fc2a7b375e87d93e96d8e8b65ff2ad2ba4cbac321a730c6ccfff1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T09:50:52+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f21ae729f0e24dddb4a7d27d8a9a36ab"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-baslik-silindi",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-baslik-silindi-sonra.txt",
+      "sha256": "dfe5beb510c36853a590fe2ca713fe0d4ac8b8c8cd803b0bb207c8f661226ffb",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T09:50:52+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kural-satiri",
+      "beklenen": "kirmizi",
+      "olcum_id": "e3fcb9fd64194ad795c7a619a521f15e"
+    }
+  ],
+  "imza": "4e3cd3750e41bfc6a92c16eee20d5440a5a09e698f0acc2fc6f01d034aac0409"
+}

@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "begeni-dongusu-tur-kurali",
+  "pr": "460",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T09:50:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-begeni-dongusu-tur-kurali",
+  "dal": "begeni-dongusu-tur-kurali",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17360,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4784
+  },
+  "bas": "8a63d0e1e21522df2e230f77a33d5b04c2ea173d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Gönder adımına tur satırı biçimi ve kapanışı yalnız Sultan’ın vermesi kuralı eklenmiş. Ancak iş kartının açıkça istediği “Sultan turlarında tavan yok” davranışı sağlanmamış; metin bizzat göz yeniden koşulursa turun tavana sayılacağını ve tavan dolunca daraltma gerektiğini söylüyor, bu yüzden önce ana çelişki çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sultan turları tavandan gerçekten muaf değil; eklenen kural, yeniden çalışan bağımsız gözün DENETIM-N sayımına gireceğini ve tavan dolabileceğini açıkça kabul ediyor. Bu, talepteki “Sultan turlarında tavan yok” hükmünün uygulanması değil, yalnızca belgesel bir istisna anlatımıdır.",
+        "kanit": "Diffte eklenen “Dürüst sınır” paragrafı: “denetci.sh ve kart.sh etiketi okumaz”, “Sultan turundan sonra göz yeniden koşulursa o göz turu tavana SAYILIR” ve “Tavan dolarsa ... kart.sh daralt”.",
+        "konum": "yazilim-fabrikasi/adimlar/4-gonder.md: eklenen 0.25.7 beğeni döngüsü bölümü",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Ölçüm, kuralın anlamını ve üç şartın davranışını sınamıyor; yalnız iki metin parçasının dosyada birer kez bulunduğunu sayıyor. Bu nedenle yeşil sonuç tavan muafiyetini, tur biçiminin doğrulanmasını veya yalnız Sultan’ın kapatabilmesini kanıtlamıyor.",
+        "kanit": "Sonra ölçümü yalnız “beğeni-kuralı-satırı=1 tur-biçimi-satırı=1” bildiriyor; mutasyon da yalnız başlık satırı silinince ilk sayacın sıfıra düştüğünü gösteriyor. Çıktılarda etiketli iş, DENETIM-N tavanı ya da kapatma yetkisi senaryosu yok.",
+        "konum": "olcum-kural-satiri-sonra.txt; olcum-mutasyon-baslik-silindi-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; kırmızı önce/yeşil sonra ölçüm çifti ile yeşil mutasyon kaydı mevcut, sarı kayıt yok. Ne var ki sınav yalnız metin varlığı sayıyor ve gerçekçi bir beğeni döngüsü akışını ölçmüyor; ayrıca üretim metninin kendisi ana talebin tavan kısmının uygulanmadığını açıkça gösteriyor."
+  }
+}

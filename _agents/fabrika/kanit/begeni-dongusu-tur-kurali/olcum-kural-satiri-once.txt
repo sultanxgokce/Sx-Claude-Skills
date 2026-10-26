@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bg-once.sh
+# rc=1 sure=0.1s zaman=2026-10-26T09:50:52+03:00
+--- stdout ---
+başlık=0 tur-biçimi=0 kapanış-Sultan=0 tavan-sınırı=0 etiketsiz-tavan=0 (origin/main)
+--- stderr ---
