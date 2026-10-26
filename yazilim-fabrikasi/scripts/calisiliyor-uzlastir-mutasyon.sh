@@ -28,6 +28,17 @@ dene "UM5 ad yazımı normalize edilmez (BERID ≠ BERİD)" $P $U 'return "".joi
 dene "UM6 KURU'da da yazar" $P $U 'if not s.uygula:' 'if False:'
 dene "UM7 yazım başarısızken rc 0" $P $U 'print("  ⚠ %s bekliyor'"'"'a çekilemedi (http %s)" % (g["id"], kod)); rc = 4' 'print("  ⚠ %s bekliyor'"'"'a çekilemedi (http %s)" % (g["id"], kod)); rc = 0'
 dene "UM8 en yeni iş bırakılır (sıra ters)" $P $U 'key=lambda g: g.get("son_adim", ""), reverse=True)' 'key=lambda g: g.get("son_adim", ""), reverse=False)'
+dene "UM9 çekilen görev için sahibine zil çalınmaz" $P $U 'if s.zil_komut and not zil(s.zil_komut, kimden, sahip,' 'if False and not zil(s.zil_komut, kimden, sahip,'
+dene "UM10 zil tekrar anahtarı yok (aynı görev tekrar zil çalar)" $P $U '"uzlastir-cek-%s-%s" % (g["id"], g.get("son_adim", ""))' '"%s" % os.urandom(4).hex()'
+dene "UM11 zil gitmezse rc 0 (sessiz geçer)" $P $U 'print("  ⚠ %s: sahibine zil gidemedi (posta)" % g["id"]); rc = 4' 'print("  ⚠ %s: sahibine zil gidemedi (posta)" % g["id"])'
+dene "UM12 koltuk eşiği yok sayılır (her boş koltuğa zil)" $P $U 'bos[0] >= s.koltuk_bos_dk' 'True'
+dene "UM13 hâl=bos şartı atlanır (çalışan koltuk da boş sayılır)" $P $U 'k["hal"] == "bos"' 'True'
+dene "UM14 koltuk-boş görevi kendiliğinden çeker (öneri değil)" $P $U 'print("  · koltuk %d dk'"'"'dır boş, çalışılıyor: %s" % (bos[0], liste))' 'print("  · koltuk %d dk'"'"'dır boş, çalışılıyor: %s" % (bos[0], liste)); [cagir(s.defter_uc, jeton, "PATCH", "/kayit/" + g["id"], {"yerine": {"gorev_durumu": "bekliyor", "not": "x"}, "gerekce": "x", "adimlar": ["x"]}) for g in kalan]'
+dene "UM15 koltuk listesi okunamazsa boş sayılır" $P $U 'if c.returncode != 0:
+        return None' 'if c.returncode != 0:
+        return []'
+dene "UM16 süpürme tür=ajan şartını atlar (ajan olmayan koltuk da taranır)" $P $U 'if k["tur"] == "ajan" and norm(k["ad"]) not in ajanlar' 'if norm(k["ad"]) not in ajanlar'
+dene "UM17 süpürmede koltuk listesi okunamazsa devam eder" $P $U 'print("  ⚠ süpürme atlandı: koltuk listesi okunamadı"); return 4' 'pass'
 dene "UM9 bekliyor'a notsuz çekilir (defter reddeder)" $P $U '{"yerine": {"gorev_durumu": "bekliyor", "not": not_}' '{"yerine": {"gorev_durumu": "bekliyor"}'
 dene "UM10 jeton okunamayınca sessiz geçer" $P $U 'print("  ⚠ uzlaştırma atlandı: defter jetonu okunamadı"); return 4' 'return 0'
 dene "UK1 kart açılışından sonra uzlaştırma çağrılmaz" $K $KT '    uzlastir "$ALDI"

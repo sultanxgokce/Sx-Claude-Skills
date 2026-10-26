@@ -1,0 +1,30 @@
+$ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
+# rc=0 sure=402.7s zaman=2026-10-26T13:04:02+03:00
+--- stdout ---
+  ✓ pozitif kontrol: dokunulmamış kopya YEŞİL
+  ✓ UM1 azami yok sayılır (fazlası çalışılıyor kalır) — kural ölünce sınav KIRMIZI
+  ✓ UM2 kartsız çalışılıyor görev dokunulmaz (X666) — kural ölünce sınav KIRMIZI
+  ✓ UM3 canlı-borçlu/bitti kart da açık sayılır — kural ölünce sınav KIRMIZI
+  ✓ UM4 başka ajanın görevi de çekilir — kural ölünce sınav KIRMIZI
+  ✓ UM5 ad yazımı normalize edilmez (BERID ≠ BERİD) — kural ölünce sınav KIRMIZI
+  ✓ UM6 KURU'da da yazar — kural ölünce sınav KIRMIZI
+  ✓ UM7 yazım başarısızken rc 0 — kural ölünce sınav KIRMIZI
+  ✓ UM8 en yeni iş bırakılır (sıra ters) — kural ölünce sınav KIRMIZI
+  ✓ UM9 çekilen görev için sahibine zil çalınmaz — kural ölünce sınav KIRMIZI
+  ✓ UM10 zil tekrar anahtarı yok (aynı görev tekrar zil çalar) — kural ölünce sınav KIRMIZI
+  ✓ UM11 zil gitmezse rc 0 (sessiz geçer) — kural ölünce sınav KIRMIZI
+  ✓ UM12 koltuk eşiği yok sayılır (her boş koltuğa zil) — kural ölünce sınav KIRMIZI
+  ✓ UM13 hâl=bos şartı atlanır (çalışan koltuk da boş sayılır) — kural ölünce sınav KIRMIZI
+  ✓ UM14 koltuk-boş görevi kendiliğinden çeker (öneri değil) — kural ölünce sınav KIRMIZI
+  ✓ UM15 koltuk listesi okunamazsa boş sayılır — kural ölünce sınav KIRMIZI
+  ✓ UM16 süpürme tür=ajan şartını atlar (ajan olmayan koltuk da taranır) — kural ölünce sınav KIRMIZI
+  ✓ UM17 süpürmede koltuk listesi okunamazsa devam eder — kural ölünce sınav KIRMIZI
+  ✓ UM9 bekliyor'a notsuz çekilir (defter reddeder) — kural ölünce sınav KIRMIZI
+  ✓ UM10 jeton okunamayınca sessiz geçer — kural ölünce sınav KIRMIZI
+  ✓ UK1 kart açılışından sonra uzlaştırma çağrılmaz — kural ölünce sınav KIRMIZI
+  ✓ UK2 bitti/tıkandı sonrası uzlaştırma çağrılmaz — kural ölünce sınav KIRMIZI
+  ✓ UK3 KART_UZLASTIR=0 anahtarı yok sayılır — kural ölünce sınav KIRMIZI
+  ✓ UK4 jeton okunamayınca uzlaştırma sessiz atlar — kural ölünce sınav KIRMIZI
+─────────────
+MUTASYON: gecti=23 dusen=0
+--- stderr ---
