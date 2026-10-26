@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.9.0
+version: 1.10.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -108,6 +108,21 @@ bash /config/.claude/skills/gunluk-plan/scripts/haftalik.sh --uygula   # raporu 
 - **Ölçemezse "sorun yok" demez:** liste okunamadı ya da boşsa rc 3. Kuru koşu varsayılan; mektup göndermek açık `--uygula` ister.
 - Rapor tek yola gider: ULAK mektubu (deftere ayrıca kayıt yazılmaz — yeni defter kurulmaz); zayıf noktayı bildirir, çözmez; merkeze bildirilecek olan budur. Kutu kendi payına düşeni (Z2 işleri) aynı turda ele alır.
 Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sahte ulak.sh).
+
+## ADIM 0-d — TARAMA: kod tabanı + web + endüstriden ölçülmüş İŞ ekle (1.10.0 · görev 0HC75A (b): "havuza, günde ≤3")
+
+Sıra boşsa ya da plan bittiyse kutu kendi kod tabanını, ilgili web kaynaklarını ve endüstri örneklerini tarar; bulduğu BİR işi şöyle ekler:
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh --baslik "<tek cümle, Sultan-dilinde>" --kaynak <dosya:satır|https://…> --kanit "<bu turda ölçtüğün>"            # KURU
+bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh … --uygula                                                                   # deftere yazar
+```
+- **Yeni havuz KURULMAZ:** yazım mevcut görev defterine `bulgu.sh yaz` ile gider (türü özellik); kayıt başlıkta `[tarama] ` işaretini taşır ve günlük tavan bu işaretten SAYILIR.
+- **Ölçmeden iş yazılmaz (değişmez 1):** `--kaynak` (dosya:satır ya da https adresi) ve `--kanit` (en az 20 karakter, bu turda ölçülen şey) ZORUNLU; kaynaksız ya da kanıtsız çağrı rc 2.
+- **Günde en çok 3:** bir kutuda bugün hareketi olan `[tarama] ` kaydı 3'e ulaştıysa dördüncüsü rc 2 ile reddedilir ("yarına"). Tavan değişmez; yalnız sınavda `GUNLUK_PLAN_TARAMA_TAVAN` ile düşürülür/yükseltilir.
+- **İdempotent:** aynı başlık (büyük-küçük harf ve noktalama farkı yok sayılır) defterde açıksa ya da BUGÜN kapandıysa yazılmaz; eski günde kapanmış başlık yeniden açılabilir.
+- **Ölçemezse yazmaz:** görev listesi okunamadı/boşsa ya da ajan kimliği çıkmıyorsa rc 3 — "tavan dolu değil" denmez. Başlık 160 karakteri aşarsa reddedilir (başlık değil nottur; ayrıntı `--kanit`'e).
+- Kuru koşu varsayılandır; `--uygula` yalnız yukarıdaki kapıları geçen çağrıyı yazar.
+Sınavı: `bash scripts/tarama-ekle.test.sh` (T1-T11, hermetik: sahte gorev.sh + sahte bulgu.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 
