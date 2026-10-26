@@ -1,0 +1,48 @@
+{
+  "tur": 3,
+  "is": "ekran-kapisi-senaryo-kare-onayi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T21:21:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ekran-kapisi-senaryo-kare-onayi",
+  "dal": "ekran-kapisi-senaryo-kare-onayi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32576,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 16008
+  },
+  "bas": "528750b26b9baec9333b31b8cf5b03b85e7053b1",
+  "duzeltme_farki": {
+    "onceki_bas": "d2d3500dd6f8202876ed20d7fdb93157b76bffad",
+    "dosya": 12,
+    "bayt": 32922,
+    "tam_bayt": 45075
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İki kapı talep edildiği yerde kurulmuş; senaryo başlığı ve yedi alanın doluluğu artık denetleniyor, sürüm paketi de biçimli kare onayı olmadan açılmıyor. Talepteki 0/2→2/2 ölçümü ve güçlendirilmiş 18/29→29/29 sınavı yeşil; kod tarafında yalnız rötuş değil, üretime engel bulgu kalmamış.",
+    "bulgular": [
+      {
+        "ne": "B2 açık kalıyor: biçime uyan D1 metninin gerçekten Sultan’ın verdiği kare onayı olduğu bu konteynerde doğrulanamaz; bu kod kusuru değildir ve puanı düşürmez.",
+        "kanit": "SKILL.md ekran kapısı maddesi aracın yalnız biçim ve varlık ölçtüğünü, damganın gerçekten Sultan’dan geldiğini bilemediğini açıkça söylüyor. Diffteki kart.sh denetimi de D1 metnini desenle doğruluyor; yetkili kaynağa bağlanan bir doğrulama göstermiyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md ekran kapısı maddesi; yazilim-fabrikasi/scripts/kart.sh: sürüm paketi kare-onay denetimi",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan’ın sohbet/onay kaydı veya yetkili onay defteri"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. B1 kapanmış: kod artık `· <ekran adı>` başlığını ve yedi alanın dolu/yer tutucusuz olmasını denetliyor; ek sınavlar adsız başlığı, boş Amaç alanını ve yer tutuculu Giriş alanını kapsıyor. Talebin ölçüm çifti doğrudan mevcut: iki-yol-reddi önce kırmızı 0/2, sonra yeşil 2/2; gerçek genel ölçüm 18/29’dan 29/29’a çıkıyor. Mutasyon kaydı dokuz bilinçli bozmanın dokuzunun da sınavı düşürdüğünü gösteriyor; içindeki başarısızlıklar beklenen mutasyon sonucudur."
+  }
+}
