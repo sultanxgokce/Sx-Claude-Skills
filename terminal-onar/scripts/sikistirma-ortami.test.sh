@@ -50,8 +50,8 @@ kapi "K1 başlatma 'doğdu' ile döndü (rc 0)" "0" "$rc"
 satir=$(grep 'send-keys' "$T/tmux.log" 2>/dev/null | grep -- '-l' | head -1)
 kapi "K1b yazılan satırda bellek öneğinden SONRA, komuttan ÖNCE 600k eşiği" "e" \
   "$(printf '%s' "$satir" | grep -q 'MALLOC_ARENA_MAX=2 CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude -n sinav' && echo e || echo h)"
-sifirla; EK=(TO_AUTOCOMPACT=500k); kos "$M" bash "$M/scripts/baslat-sinav.sh" sinav-ana "claude -n sinav" >/dev/null 2>&1
-EK=(); kapi "K2 değer tek yerden (TO_AUTOCOMPACT=500k satıra geçer)" "e" "$(grep -q 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=500k claude -n sinav' "$T/tmux.log" 2>/dev/null && echo e || echo h)"
+sifirla; EK=(TO_AUTOCOMPACT=500k CLAUDE_CODE_AUTO_COMPACT_WINDOW=900k); kos "$M" bash "$M/scripts/baslat-sinav.sh" sinav-ana "claude -n sinav" >/dev/null 2>&1
+EK=(); kapi "K2 standart SABİT: dış ortam başka değer verse de satırda 600k (kaçış yok)" "e" "$(grep -q 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude -n sinav' "$T/tmux.log" 2>/dev/null && ! grep -q '500k\|900k' "$T/tmux.log" && echo e || echo h)"
 # kurtarıcı aynı yardımcıdan geçer: onar.sh adım 4 claude_baslat'ı çağırır (statik, bayt-aynı yardımcı)
 kapi "K3 ana koltuk (iki dal) + kurtarıcı aynı claude_baslat ile açılır (ikinci başlatma yolu yok)" "3" "$(grep -c 'claude_baslat "\$' "$KOK/scripts/onar.sh")"
 
@@ -68,11 +68,13 @@ printf 'CLAUDE_CONFIG_DIR=%s/hesap/a\0PATH=x\0' "$T" > "$P/12/environ"          
 printf 'PATH=x\0' > "$P/13/environ"                                                              # ikisi de yok (kök ayar da yok)
 printf 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=900k\0CLAUDE_CONFIG_DIR=%s/hesap/a\0' "$T" > "$P/14/environ"  # ortam SAPMIŞ (ayar iyi olsa da)
 printf 'CLAUDE_CONFIG_DIR=%s/hesap/b\0' "$T" > "$P/15/environ"                                   # ortam yok, ayar 'auto'
+mkdir -p "$P/16" "$P/17"; printf 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=600\0CLAUDE_CONFIG_DIR=%s/hesap/a\0' "$T" > "$P/16/environ"   # '600' ≠ '600k' (göz tur 1)
+printf 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=600000\0CLAUDE_CONFIG_DIR=%s/hesap/a\0' "$T" > "$P/17/environ"                      # '600000' de standart yazım değil
 echo '{"autoCompactWindow":600000}' > "$T/hesap/a/settings.json"
 echo '{"autoCompactWindow":"auto"}' > "$T/hesap/b/settings.json"
 den() { EK=("TO_PROC=$P" "TO_CLAUDE_PIDLER=$1"); kos "$M" bash -c '. "$TO_BECERI_KOK/scripts/ortak.sh"; sikistirma_denetle' 2>/dev/null; }
 kapi "B1 ortam 600k + hesap ayarı 600000 → güncel" "güncel" "$(den "11 12")"
-kapi "B2 ortamsız+ayarsız · sapmış ortam · 'auto' ayar → üçü eşiksiz, sapma değeriyle" "3 koltuk eşiksiz: 13 14(ortam=900k) 15" "$(den "11 12 13 14 15")"
+kapi "B2 ortamsız+ayarsız · sapmış ortam · 'auto' ayar · '600' · '600000' → beşi eşiksiz, sapma değeriyle (yalnız tam '600k' açık)" "5 koltuk eşiksiz: 13 14(ortam=900k) 15 16(ortam=600) 17(ortam=600000)" "$(den "11 12 13 14 15 16 17")"
 kapi "B3 koşan claude yok → ölçülemedi (yeşil değil)" "ölçülemedi: koşan claude yok" "$(den "")"
 EK=("TO_PROC=$P" "TO_CLAUDE_PIDLER="); kos "$M" bash -c '. "$TO_BECERI_KOK/scripts/ortak.sh"; sikistirma_denetle' >/dev/null 2>&1; kapi "B3b … rc 3" "3" "$?"
 kapi "B4 bekçi her turda ölçer ve yalnız DEĞİŞİNCE günlüğe yazar (statik)" "e" \

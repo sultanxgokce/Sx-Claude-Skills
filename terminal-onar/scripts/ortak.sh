@@ -129,14 +129,15 @@ BELLEK_ENV="NODE_OPTIONS=--max-old-space-size=3072 MALLOC_ARENA_MAX=2"
 #    ortak → oraya YAZILMAZ, eşik OTURUMA ortamla verilir). Ölçüldü (claude 2.1.310): CLAUDE_CODE_AUTO_COMPACT_WINDOW ayar dosyasının
 #    üstüne çıkar, '600k' kabul eder, model penceresine kırpılır; ortam varken /autocompact değiştiremez — standart bilerek kilitlidir.
 #    claude_baslat (onar.sh) ana koltuğu ve kurtarıcıyı bu önekle yazar; bekçi her turda sikistirma_denetle ile ölçer.
-SIKISTIRMA_ENV="CLAUDE_CODE_AUTO_COMPACT_WINDOW=${TO_AUTOCOMPACT:-600k}"
-sikistirma_denetle() {  # → stdout: güncel · "N koltuk eşiksiz: pid…" · "ölçülemedi: …" (rc 3). Koşan her claude: ortam 600k YA DA hesap ayarı autoCompactWindow ≤ 600000
+#    Değer SABİTTİR (göz tur 1: kaçış kapısı standardı deler); bekçi ortamda yalnız tam '600k' yazımını açık sayar, başka her değer eşiksizdir.
+SIKISTIRMA_ENV="CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k"
+sikistirma_denetle() {  # → stdout: güncel · "N koltuk eşiksiz: pid…" · "ölçülemedi: …" (rc 3). Koşan her claude: ortam tam '600k' YA DA (ortam yokken) hesap ayarı autoCompactWindow ≤ 600000
   local proc="${TO_PROC:-/proc}" pids="${TO_CLAUDE_PIDLER-$(pgrep -x claude 2>/dev/null)}" p ortam v kd ayar n=0 eksik=""
   [ -n "$pids" ] || { echo "ölçülemedi: koşan claude yok"; return 3; }
   for p in $pids; do
     ortam=$(tr '\0' '\n' < "$proc/$p/environ" 2>/dev/null) || { eksik="$eksik $p(ortam okunamadı)"; n=$((n+1)); continue; }
     v=$(printf '%s\n' "$ortam" | sed -n 's/^CLAUDE_CODE_AUTO_COMPACT_WINDOW=//p' | head -1)
-    case "$v" in 600k|600K|600000|600) continue ;; esac   # standart değer → açık, ayara bakılmaz (ortam ayarın üstündedir)
+    [ "$v" = 600k ] && continue   # standart yazım → açık, ayara bakılmaz (ortam ayarın üstündedir); '600'/'600000'/'900k' gibi her sapma eşiksiz
     kd=$(printf '%s\n' "$ortam" | sed -n 's/^CLAUDE_CONFIG_DIR=//p' | head -1); ayar="${kd:-${HOME:-/config}/.claude}/settings.json"
     [ -z "$v" ] && python3 - "$ayar" <<'PY' 2>/dev/null && continue
 import json, sys

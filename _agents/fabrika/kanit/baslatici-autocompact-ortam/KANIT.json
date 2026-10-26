@@ -1,14 +1,14 @@
 {
   "is": "baslatici-autocompact-ortam",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T23:03:33+03:00",
+  "guncelleme": "2026-10-26T23:10:14+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "baslatici-ortami",
       "asama": "once",
       "dosya": "olcum-baslatici-ortami-once.txt",
-      "sha256": "3de6e686ec4cdfe8684b8a3f4ad19f7fc215c3b9cb62f9dfcb005812124fe7cf",
+      "sha256": "95020c69691eee45c285e3532b20273d615ec807407ceb816b7feaec743100eb",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh",
@@ -16,17 +16,17 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-26T23:03:28+03:00",
+      "zaman": "2026-10-26T23:10:10+03:00",
       "sure_sn": 0.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "fa595a32a2014daaada015bd8b00f763"
+      "olcum_id": "c93adf867cfc4677914ee3395fe6b25d"
     },
     {
       "tur": "olcum",
       "etiket": "baslatici-ortami",
       "asama": "sonra",
       "dosya": "olcum-baslatici-ortami-sonra.txt",
-      "sha256": "19a96145f1149595b844367bcf6be60f169a55e72b3b1dae92330826df503d85",
+      "sha256": "48d9f881d56f67a30694db274bb106960fc8459e54539645b22b53f523441d47",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-baslatici.sh",
@@ -34,37 +34,37 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:03:29+03:00",
+      "zaman": "2026-10-26T23:10:10+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e0da517b5e1145d399354f082347f68e"
+      "olcum_id": "ed9518316f91414eaccaaa91e74f40f3"
     },
     {
       "tur": "olcum",
       "etiket": "baslatici-mutasyon",
       "asama": "tek",
       "dosya": "olcum-baslatici-mutasyon-tek.txt",
-      "sha256": "bfcca231a27c8f290e9ca17a90d33056148978e1bf5059b2fc2c6a578e824b69",
+      "sha256": "c933d9e3d3977467d7ac2910a20585672b76966946998c5178e0172e0da5df1e",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/acw-sx-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:03:29+03:00",
+      "zaman": "2026-10-26T23:10:10+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "baslatici-ortami",
       "beklenen": "kirmizi",
-      "olcum_id": "a71ff4772a2c47ab94b40b339736f227"
+      "olcum_id": "8e9e77547ebf4240bbb9346404d1577b"
     },
     {
       "tur": "olcum",
       "etiket": "sinavlar",
       "asama": "tek",
       "dosya": "olcum-sinavlar-tek.txt",
-      "sha256": "f95955bf0ce976087aa24deff58d895c03606f0329e4370d4ab5363ae1572859",
+      "sha256": "a6baa5278095ac5b1507023dfbb5ae58e3f004270b3ee30db3dcfa3a3472c850",
       "komut": [
         "bash",
         "-c",
@@ -72,11 +72,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:03:33+03:00",
+      "zaman": "2026-10-26T23:10:14+03:00",
       "sure_sn": 4.1,
       "boru_denetimi": "temiz",
-      "olcum_id": "2316b927628048d49dbe64d32b1c2ae5"
+      "olcum_id": "3001fdd42cdc480fbdc87aa173ae057e"
     }
   ],
-  "imza": "dae62a9b51f112f71e96776a5da24f31a689db9c96bf0b50d001a3083b5cd8c2"
+  "imza": "b409c6abdc4e714de0610f27d1955b05d213f9e985eb5beb29b2a00e949888fe"
 }

@@ -118,7 +118,7 @@ Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "conta
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
 
 ## Durum (2026-10-26, yerli otomatik sıkıştırma 600k her koltuğun ortamında — v0.11.4 · BERİD, gorev_…880TAK, SERDAR 22:4x)
-- **`templates/baslat-claude.sh` ve `iskan.sh`'ın iki açılış satırı `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` ile açar** (ilk açılış da `--resume` da).
+- **`templates/baslat-claude.sh` ve `iskan.sh`'ın iki açılış satırı `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` ile açar** (ilk açılış da `--resume` da; değer sabit, dış ortam ezemez).
   Sultan: 600k (%60) tüm filoya, yeni oturumlarda açık, kontrol mekanizması olsun; SERDAR: ortak settings.json 13 kutuda ortak → oraya yazılmaz,
   eşik oturuma ortamla verilir. Ölçüldü (claude 2.1.310): ortam ayar dosyasının üstüne çıkar, `600k` kabul, model penceresine kırpılır.
   Bekçi: terminal-onar 2.28.0 `sikistirma_denetle` (kutu başına). Sınav: baslat-claude.test.sh 8) üç kapı. **Sınır:** 11 İSKÂN kutusundaki

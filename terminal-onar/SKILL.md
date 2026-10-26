@@ -10,10 +10,10 @@ Sultan: *"600k yani yüzde 60'ın üstünde compact otomatik olsun, tüm filoya;
 olsun, kontrol mekanizmamız olsun."* SERDAR'ın yolu: ortak `settings.json` 13 kutuda ortak → oraya **yazılmaz**; eşik **oturuma ortamla**
 verilir. Ölçüldü (claude 2.1.310 ikilisi): `CLAUDE_CODE_AUTO_COMPACT_WINDOW` ayar dosyasındaki `autoCompactWindow`'un üstüne çıkar,
 `600k` biçimini kabul eder, model penceresinden büyükse pencereye kırpılır; ortam varken `/autocompact` değiştiremez (standart bilerek kilitli).
-- `ortak.sh` `SIKISTIRMA_ENV` (`TO_AUTOCOMPACT`, varsayılan `600k`); `claude_baslat` tmux'a yazdığı satırda bellek öneğinin ardına koyar —
+- `ortak.sh` `SIKISTIRMA_ENV` (sabit `600k`; dış ortam/bayrak ezemez — göz tur 1: kaçış kapısı standardı deler); `claude_baslat` tmux'a yazdığı satırda bellek öneğinin ardına koyar —
   ana koltuk ve kurtarıcı aynı yardımcıdan geçer, ikinci başlatma yolu yok. Üye koltukları: Nexus `ekip-ac.sh` (aynı değişken), İSKÂN
   `baslat-claude.sh` şablonu (iskan 0.11.4) — her biri kendi deposunda, kopya kural yok.
-- `sikistirma_denetle` (ortak.sh): koşan her `claude` sürecinin ortamını okur — `600k` → açık; başka değer → **eşiksiz (ortam=…)**, ayar iyi olsa da
+- `sikistirma_denetle` (ortak.sh): koşan her `claude` sürecinin ortamını okur — tam `600k` yazımı → açık; başka her değer (`600`, `600000`, `900k`) → **eşiksiz (ortam=…)**, ayar iyi olsa da
   (ortam ayarın üstündedir); ortam yoksa hesabın `settings.json`'unda `autoCompactWindow` 100000–600000 → açık, yoksa/`auto` → eşiksiz.
   Koşan claude yoksa **ölçülemedi** (rc 3), yeşil değil. `bekci.sh` her turda koşar, yalnız sonuç değişince günlüğe yazar (`sikistirma.son`) —
   cloudtop'un saatlik `koltuk-autocompact-denetle.py`'si kendi kutusunu görür, kutu başına ölçüm buradadır.
@@ -605,7 +605,7 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
-- **2.28.0 (2026-10-26, BERİD · gorev_…880TAK):** `claude_baslat` satırına `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` (`SIKISTIRMA_ENV`, `TO_AUTOCOMPACT`); bekçide `sikistirma_denetle` (ortam → hesap ayarı → eşiksiz; claude yoksa ölçülemedi), yalnız değişince günlük; sınav `sikistirma-ortami.test.sh`.
+- **2.28.0 (2026-10-26, BERİD · gorev_…880TAK):** `claude_baslat` satırına `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` (`SIKISTIRMA_ENV`, sabit); bekçide `sikistirma_denetle` (ortam tam '600k' → hesap ayarı → eşiksiz; claude yoksa ölçülemedi), yalnız değişince günlük; sınav `sikistirma-ortami.test.sh`.
 - **2.27.0 (2026-10-26, BÂNİ · A5-3):** kapıda `/tty-k/*` → ttyd-kisi vekili (kökten yol, soket yoksa 502, abc ttyd'sine düşmez); `KAPI_KISI` · `KAPI_TTYD_KISI_SOKET`.
 - **2.26.0 (2026-10-26, HEZARFEN · A5-1):** koltuk köprüsü + kişi istemcisi + mesaj komutu + kuru kipli kurulum paketi; ham tuş eylemi yok; `ttyd-kisi` `-W` düzeltmesi.
 - **2.13.2 (2026-10-16, BÂNİ · tarayıcı sınavı artıkları):** `dim-okunur-sinav.mjs` tarayıcıyı `tarayici-bul.mjs` ile bulur (2.13.1 ile aynı kural; eski sabit yol ikilisiz pakette çöküyordu) ve `launch()` hatası ÖLÇÜLEMEDİ. `bekci-iz.test.sh`: sahte tmux/crontab PATH ile veriliyordu ama `ortak.sh` /usr/bin'i öne koyduğu için hiç kullanılmıyordu (ölçüldü: `command -v tmux` gerçek yolu veriyordu) — sınav artık betiklerin KOPYASINI koşturur, kopyanın ortak.sh'ı sahte kutuyu sona ekleyip öne alır, H1 kapısı bunu her koşuda ölçer (kurtarici-kapali.test deseni). Dim sınavına da #347 deseni: bayat kapı portu ön-kontrolü (ÖLÇÜLEMEDİ rc 4) + çıkışta ttyd/kapı/tmux temizliği (launch'ta çöken koşum kapılarını bırakıyordu, ölçüldü); temizlik iki sınavda SIGKILL ve çıkış kancası PORT KONTROLÜNDEN ÖNCE kayıtlı (#347'de kanca sonra kaydediliyordu, rc-4 çıkışı kancasızdı → ttyd kalıyordu; ölçüldü); kanıtta kapılı (önce/sonra bayat süreç 0). Davranış değişikliği yok; sınav dürüstlüğü.

@@ -158,8 +158,8 @@ sifirla; CLAUDE_CODE_AUTO_COMPACT_WINDOW= kos taze_ok >/dev/null; grep -q '^ACW=
   && ok "ilk açılışta CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k" || no "ilk açılışta eşik yok" "günlük: $(cagrilar)"
 sifirla; CLAUDE_CODE_AUTO_COMPACT_WINDOW= kos resume_ok >/dev/null; grep -q '^ACW=600k$' "$EV/cagri.log" \
   && ok "--resume yolunda da 600k (süreç özelliği, her yolda)" || no "--resume yolunda eşik yok" "günlük: $(cagrilar)"
-sifirla; ISKAN_AUTOCOMPACT=500k kos resume_ok >/dev/null; grep -q '^ACW=500k$' "$EV/cagri.log" \
-  && ok "değer tek yerden (ISKAN_AUTOCOMPACT)" || no "ISKAN_AUTOCOMPACT geçmedi" "günlük: $(cagrilar)"
+sifirla; ISKAN_AUTOCOMPACT=500k CLAUDE_CODE_AUTO_COMPACT_WINDOW=900k kos resume_ok >/dev/null; grep -q '^ACW=600k$' "$EV/cagri.log" \
+  && ok "standart SABİT: dış ortam başka değer verse de 600k (kaçış yok)" || no "dış ortam standardı ezdi" "günlük: $(cagrilar)"
 
 printf 'baslat-claude: GEÇTI=%s DUSTU=%s\n' "$G" "$D"
 [ "$D" -eq 0 ] || exit 1
