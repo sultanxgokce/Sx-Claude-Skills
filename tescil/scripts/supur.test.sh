@@ -85,12 +85,24 @@ assert k['kacirma']=='e' and k['neden']=='ton sert' and k['kaynak']=='teslim:gor
   local k9="$T/k$RANDOM"; kur "$k9"; printf '#!/usr/bin/env bash\nsleep 5\n' > "$k9/dogrula.sh"; printf '{"gorev":"gorev_T","kaynak":"teslim:gorev_T"}\n' > "$k9/cikis.jsonl"
   env SICIL_SUPUR_ZAMAN=1 SICIL_DIZIN="$k9/sicil" SICIL_KAYNAK_DOGRULA="$k9/dogrula.sh" SICIL_MUHUR_KOK="$k9/kok" timeout 20 bash "$S" supur --kutu "$k9/cikis.jsonl" > "$k9/c" 2>&1; local r14=$?
   [ $r14 -eq 0 ] && grep -q "zaman aşımı" "$k9/c" && grep -q "1 bekliyor" "$k9/c" && ! grep -q Traceback "$k9/c" && o="$o k"
+  # l · yarış: yazıcı kilidi tutarken mühürü yeniden yazıyorsa süpürme bekler ve YENİ mühürü okur (kilit özet okunmadan önce alınır)
+  local k10="$T/k$RANDOM"; kur "$k10"; printf '{"kart":"gorev_T","verdikt":"KALDI","g_dusen":["G1"],"muhurdar":"ESKI-MUHURDAR"}' > "$k10/kok/gorev_T/muhur-ozet.json"
+  printf '{"gorev":"gorev_T","kaynak":"teslim:gorev_T"}\n' > "$k10/cikis.jsonl"
+  python3 - "$k10/kok/gorev_T" <<'PY' &
+import fcntl, sys, time, os
+d = sys.argv[1]; k = open(os.path.join(d, ".kilit"), "a"); fcntl.flock(k, fcntl.LOCK_EX); open(os.path.join(d, ".hazir"), "w").close()
+time.sleep(1.5)
+open(os.path.join(d, "muhur-ozet.json"), "w").write('{"kart":"gorev_T","verdikt":"KALDI","g_dusen":["G1"],"muhurdar":"MUHURDAR1"}')
+PY
+  local yp=$!; for _ in $(seq 50); do [ -e "$k10/kok/gorev_T/.hazir" ] && break; sleep 0.1; done
+  env SICIL_DIZIN="$k10/sicil" SICIL_KAYNAK_DOGRULA="$k10/dogrula.sh" SICIL_MUHUR_KOK="$k10/kok" bash "$S" supur --kutu "$k10/cikis.jsonl" > "$k10/c" 2>&1; wait $yp
+  grep -q "1 işlendi" "$k10/c" && o="$o l"
   echo "$o"
 }
 
 echo "── supur: çıkış kutusu → teslim-isle ──"
 SON="$(_sen "$HERE" | tail -1)"
-for x in a b c d e f g g2 h i j j2 k; do
+for x in a b c d e f g g2 h i j j2 k l; do
   case "$SON" in *" $x"*) g 0 "$x";; *) g 1 "$x";; esac
 done
 
@@ -106,14 +118,13 @@ PY
 mut g2 lib/sicil.py ' and kay == "teslim:" + g ' ' ' "kaynak başka görevi gösterebiliyor"
 mut k lib/sicil.py '        except subprocess.TimeoutExpired:' '        except KeyError:' "zaman aşımı yakalanmıyor"
 mut j2 lib/sicil.py '    if "/" in a["gorev"] or a["gorev"] in (".", ".."):' '    if False:' "görev adıyla dizin kaçışı"
+mut l lib/sicil.py $'            fcntl.flock(kilit, fcntl.LOCK_SH)\n            try:\n                oz = json.load' $'            try:\n                oz = json.load' "süpürme özeti kilitsiz okuyor"
 mut b lib/sicil.py '        if kay in islendi:' '        if False:' "işlenen kaynak tekrar işleniyor"
 mut c lib/sicil.py '            kaynaklar.setdefault(kay, g)' '            kaynaklar[kay + str(len(kaynaklar))] = g' "tekrar satırlar ayrı iş"
 mut d lib/sicil.py '        elif "satırlar yok" in p.stderr or p.returncode == 3:' '        elif False:' "eksik karar kısmi/reddedildi sayılıyor"
 mut f lib/sicil.py '        if p.returncode == 0 or "zaten işlendi" in p.stderr:' '        if True:' "teslim-isle hatası işlenmiş sayılıyor"
 mut g lib/sicil.py '    return 4 if sayi["reddedildi"] or bozuk else 0' '    return 0' "bozuk satır sessiz geçiliyor"
-mut e lib/sicil.py '        except (OSError, ValueError, AssertionError):
-            sayi["bekliyor"]' '        except ValueError:
-            sayi["bekliyor"]' "mühür dizini yokluğu çöküyor"
+mut e lib/sicil.py $'        except OSError:\n            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür dizini yok' $'        except ValueError:\n            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür dizini yok' "mühür dizini yokluğu çöküyor"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

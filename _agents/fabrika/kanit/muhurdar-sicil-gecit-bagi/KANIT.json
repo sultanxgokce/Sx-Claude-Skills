@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-sicil-gecit-bagi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T18:43:12+03:00",
+  "guncelleme": "2026-10-26T18:53:30+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,38 +25,38 @@
       "etiket": "supur-dogru",
       "asama": "sonra",
       "dosya": "olcum-supur-dogru-sonra.txt",
-      "sha256": "b75cdc303081ed9aa8d63030fd50a703eeedf091eb000e63d57d06790e14b4f6",
+      "sha256": "49bff7573aaf6f5e397b5777f0f96d4eb5aa629095aee74371920024602a7bf9",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T18:43:12+03:00",
+      "zaman": "2026-10-26T18:53:30+03:00",
       "sure_sn": 0.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c16f3f89ba184fed9852154ee1d12093"
+      "olcum_id": "c843429cbdca4927834067e8025cbe76"
     },
     {
       "tur": "olcum",
       "etiket": "supur-mut",
       "asama": "sonra",
       "dosya": "olcum-supur-mut-sonra.txt",
-      "sha256": "07c633f8b64217b4d5439ca6f2d0d5d84dc54337e329facb3f038b48b43391a9",
+      "sha256": "d67a25012ff36964a5908e213b98af2644563e13ccd5ae9f7453f3bd92abf7e0",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T18:43:12+03:00",
+      "zaman": "2026-10-26T18:53:30+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "supur-dogru",
       "beklenen": "kirmizi",
-      "olcum_id": "064a3e4de0d54b0ba76198174f3842bf"
+      "olcum_id": "60c33206d160444989c6500cab53bc8b"
     }
   ],
-  "imza": "3538449dfcee4aac529ece3097a7dd9887182aa695e3882f1240e50170fbd2dc"
+  "imza": "ce5c1e6d4bb3de5b41bb5d3366333996910fe72372bd0823eb3b783756611de0"
 }

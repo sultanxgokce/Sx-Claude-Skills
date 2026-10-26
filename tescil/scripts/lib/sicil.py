@@ -451,19 +451,24 @@ def cmd_supur(argv):
         if kay in islendi:
             sayi["zaten"] += 1; continue
         md = os.path.join(kok, g)
+        # mühür kopyası yazılırken (muhur-kopya, özel kilit) HİÇBİR şey okunmaz: mühürdar adı, gereklilik ve özet aynı koşuya ait kalır —
+        #   kilit, özeti okumadan ÖNCE alınır ve teslim-isle bitene dek tutulur
         try:
-            oz = json.load(open(os.path.join(md, "muhur-ozet.json"), encoding="utf-8"))
-            assert os.path.exists(os.path.join(md, "gereklilik.json")) and oz.get("muhurdar")
-        except (OSError, ValueError, AssertionError):
-            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür dizini yok ya da mühürdarsız: {md})"); continue
-        # mühür kopyası yazılırken (muhur-kopya, özel kilit) okunmaz: iki dosya aynı koşuya ait kalır
-        kilit = open(os.path.join(md, ".kilit"), "a")
-        fcntl.flock(kilit, fcntl.LOCK_SH)
+            kilit = open(os.path.join(md, ".kilit"), "a")
+        except OSError:
+            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür dizini yok: {md})"); continue
         try:
-            p = subprocess.run([sys.executable, os.path.abspath(__file__), "teslim-isle", oz["muhurdar"], "--kaynak", kay, "--muhur-dir", md],
-                               capture_output=True, text=True, timeout=int(os.environ.get("SICIL_SUPUR_ZAMAN", "120")))
-        except subprocess.TimeoutExpired:
-            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (zaman aşımı — doğrulayıcı ya da teslim-isle yanıt vermedi)"); continue
+            fcntl.flock(kilit, fcntl.LOCK_SH)
+            try:
+                oz = json.load(open(os.path.join(md, "muhur-ozet.json"), encoding="utf-8"))
+                assert os.path.exists(os.path.join(md, "gereklilik.json")) and oz.get("muhurdar")
+            except (OSError, ValueError, AssertionError):
+                sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür özeti yok ya da mühürdarsız: {md})"); continue
+            try:
+                p = subprocess.run([sys.executable, os.path.abspath(__file__), "teslim-isle", oz["muhurdar"], "--kaynak", kay, "--muhur-dir", md],
+                                   capture_output=True, text=True, timeout=int(os.environ.get("SICIL_SUPUR_ZAMAN", "120")))
+            except subprocess.TimeoutExpired:
+                sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (zaman aşımı — doğrulayıcı ya da teslim-isle yanıt vermedi)"); continue
         finally:
             kilit.close()
         hata_metni = (p.stderr or "").strip().splitlines()[-1:] or [""]

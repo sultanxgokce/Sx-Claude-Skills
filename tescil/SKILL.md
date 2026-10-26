@@ -261,7 +261,7 @@ Mühürdarın isabeti **Sicil**'dir (S9: "karne" değil): personelin özlük dos
   `muhurdar.sh` her gerçek mühürde `~/.claude/tescil/muhur/<görev>/`e (`SICIL_MUHUR_KOK`) kopyalar (tatbikat hariç). Karar eksikse (kısmi teslim yok),
   mühür kopyası ya da doğrulayıcı yoksa satır kutuda **bekler** ve sonraki süpürmede denenir; bozuk satır ya da reddedilen karar sessiz geçilmez
   (rc 4). İşlenenler `<kutu>.islendi`de tutulur. **Dürüst sınır:** görev başına İLK tam karar sayılır (aynı kaynak iki kez yazılmaz); sonradan
-  değişen hüküm sicile yeniden girmez. Kutudaki `kaynak` görevle aynı kayda işaret etmeli (`teslim:<görev>`), yoksa satır bozuk sayılır; mühür kopyası `sicil.sh muhur-kopya` ile süpürmeyle ortak kilitte ve dosya dosya atomik yazılır; doğrulayıcı takılırsa (`SICIL_SUPUR_ZAMAN`, varsayılan 120 sn) satır bekler. Sınav: `scripts/supur.test.sh` (14 kapı + 8 mutant).
+  değişen hüküm sicile yeniden girmez. Kutudaki `kaynak` görevle aynı kayda işaret etmeli (`teslim:<görev>`), yoksa satır bozuk sayılır; mühür kopyası `sicil.sh muhur-kopya` ile süpürmeyle ortak kilitte ve dosya dosya atomik yazılır; doğrulayıcı takılırsa (`SICIL_SUPUR_ZAMAN`, varsayılan 120 sn) satır bekler. Sınav: `scripts/supur.test.sh` (15 kapı + 9 mutant).
 - **Mühür kaydı:** `muhurdar.sh` her mühürde mühürdarın siciline `tur: muhur` satırı yazar (özlük yoksa söyler, mühür
   düşmez; özlük VARKEN yazım düşerse sessiz değil: rc 5 + özette `sicil: dusmedi …`). Yazım süreçler arası kilitli, tek
   seferde (ya hepsi ya hiçbiri); aynı karar/satır iki kez yazılmaz. Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
