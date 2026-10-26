@@ -1,0 +1,32 @@
+{
+  "is": "fabrika-kapi-pr-is-adi",
+  "cumle": "yazilim-fabrikasi: birlestirme-kapisi.sh --pr N iş adını artık yalnız PR dal adından değil, PR'ın değiştirdiği TEK kanıt dizininden türetir (dal adı yedek; birden çok dizin varsa dal adıyla eşleşen, yoksa ÖLÇÜLEMEDİ); sınav fikstürü dal≠iş hem GEÇTİ hem KALDI yüzüyle (görev …THYFXG0, #884/#817/#960 sınıfı)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-26T18:30:39+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5WD64068X7W12Q2ZTHYFXG0",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T18:30:40+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
