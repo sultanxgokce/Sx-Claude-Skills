@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-supur.sh /config/projects/_wt/Sx-Claude-Skills-supur-dal-adi-varyanti/yazilim-fabrikasi/scripts/kart.sh yanlis
+# rc=0 sure=0.1s zaman=2026-10-26T22:01:26+03:00
+--- stdout ---
+supur-varyant-yanlis=2/2
+--- stderr ---

@@ -535,7 +535,7 @@ PY
     ;;
   supur)   # supur kuru|uygula [--aldi AD] — PR'ı BİRLEŞMİŞ açık/tıkandı kartları toplu kapatır (HSKJCE: elle kapatma 'KANIT YOK' damgalıyordu)
     # Kural: kuru yalnız listeler (hiçbir şey yazmaz); uygula kapatır. Eşleşme: kartta pr varsa O PR birleşmiş olmalı; yoksa dal adı = iş adı olan
-    #   BİRLEŞMİŞ PR aranır. SINIFLI kart atlanır (birleştirme kararı reis/Sultan kararıdır, süpürme onu vermez). Görev defterine DOKUNMAZ
+    #   BİRLEŞMİŞ PR aranır (dar varyant: 'ekip/ad' öneki ya da 'ad-2' soneki; altdize YOK, başka kartın kendi adı olan dal sayılmaz). SINIFLI kart atlanır (birleştirme kararı reis/Sultan kararıdır, süpürme onu vermez). Görev defterine DOKUNMAZ
     #   (görev kapanışı kanıt sınıfı ister, süpürme kanıt üretmez). Kapanan kart 'supuruldu' damgası taşır: gün sonu 'KANIT YOK' demez,
     #   'süpürüldü' der. PR listesi okunamadı / tavana dayandı / kart bozuk → ÖLÇÜLEMEDİ (rc 3): "listede yok" ≠ "birleşmedi".
     case "$IS" in kuru|uygula) ;; *) _hata "kullanım: kart.sh supur kuru|uygula [--aldi AD]  (kuru = yalnız listeler, uygula = kapatır)"; exit 1 ;; esac
@@ -543,7 +543,7 @@ PY
     SUP_JSON="$(cd "$DEPO" && "$GH_BIN" pr list --state merged --base main --limit "$SUP_TAVAN" --json number,headRefName,mergedAt 2>&1)"; SRC=$?
     [ "$SRC" -eq 0 ] || { _hata "birleşmiş PR listesi okunamadı (gh rc $SRC) — süpürme ÖLÇÜLEMEDİ, hiçbir kart değişmedi: ${SUP_JSON:0:200}"; exit 3; }
     SUP_JSON="$SUP_JSON" python3 - "$KD" "$IS" "$ALDI" "$SUP_TAVAN" <<'SUPPY'
-import json,os,sys,glob,datetime
+import json,os,sys,glob,datetime,re
 kd,mod,aldi,tavan=sys.argv[1:]; tavan=int(tavan)
 try: prler=json.loads(os.environ["SUP_JSON"])
 except Exception as e:
@@ -557,6 +557,20 @@ for p in prler:
     if p.get("mergedAt"):
         dal.setdefault(p["headRefName"],p); no[int(p["number"])]=p
 simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+adlar={os.path.basename(f)[:-5] for f in glob.glob(os.path.join(kd,"*.json"))}   # her kartın adı (durumundan bağımsız)
+sahipli=[]
+def dal_bul(ad):
+    # tam eşleşme; yoksa DAR varyant: 'ekip/ad' öneki ya da 'ad-<sayı>' soneki. Başka bir kartın kendi adı olan dal o kartındır (varyanta düşmez).
+    # Altdize eşlemesi YOK: 'x-kalan' kartı açık işin kalanıdır, 'x' dalının birleşmesi onu kapatmaz.
+    if ad in dal: return dal[ad],"dal-adi"
+    for h,pr_ in dal.items():
+        ad_h=h.split("/",1)[-1]
+        eslesir=ad_h==ad or re.fullmatch(re.escape(ad)+r"-\d+",ad_h)
+        if ({h,ad_h}-{ad}) & adlar:   # dal başka bir kartın adıysa o kartındır: süpürülmez, ama 'devam kartı olabilir' diye gösterilir
+            if eslesir: sahipli.append((ad,h,pr_["number"]))
+            continue
+        if eslesir: return pr_,"dal-adi-varyant"
+    return None,"dal-adi"
 kapanan=[]; sinifli=[]; bozuk=[]; bekleyen=0; yazilacak=[]
 for f in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try: k=json.load(open(f,encoding="utf-8"))
@@ -565,7 +579,7 @@ for f in sorted(glob.glob(os.path.join(kd,"*.json"))):
     if aldi and k.get("aldi")!=aldi: continue
     pn=str(k.get("pr") or "").strip().lstrip("#")
     if pn.isdigit(): p=no.get(int(pn)); yontem="kart-pr"
-    else: p=dal.get(k.get("is")); yontem="dal-adi"
+    else: p,yontem=dal_bul(k.get("is"))
     if not p: bekleyen+=1; continue
     if k.get("siniflar"): sinifli.append((k["is"],p["number"])); continue
     kapanan.append((k["is"],p["number"],p["mergedAt"],yontem,k.get("durum")))
@@ -584,6 +598,9 @@ bas="KAPATILDI" if mod=="uygula" else "KAPATILIRDI (kuru-koşu, hiçbir şey yaz
 print(f"supur {mod}: {len(kapanan)} kart {bas} · {bekleyen} kartın birleşmiş PR'ı yok (açık kalır) · {len(sinifli)} sınıflı kart atlandı")
 for is_,n,m,y,d in kapanan: print(f"  ✓ {is_} ← PR #{n} ({m[:10]}, {y}, önceki: {d})")
 for is_,n in sinifli: print(f"  · {is_} — PR #{n} birleşmiş ama kart SINIFLI: birleştirme kararı reis/Sultan'ındır, süpürülmez")
+vistel={x[0] for x in kapanan}
+for ad,h,n in sahipli:
+    if ad not in vistel: print(f"  ? {ad} — '{h}' dalı başka bir kartındır (PR #{n}); {ad}'in devamı olabilir ama süpürülmez, gözle bak")
 raise SystemExit(0)
 SUPPY
     exit $?

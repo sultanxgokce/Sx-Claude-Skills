@@ -896,6 +896,25 @@ PYH
 TK0="$(wc -c < "$TETIK_KAYIT")"; O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && [ "$(durum gorevli)" = bitti ] && [ "$(wc -c < "$TETIK_KAYIT")" = "$TK0" ] && ! grep -qi "defter" <<<"$O" && [ "$(python3 -c "import json;print(json.load(open('_agents/fabrika/kartlar/gorevli.json'))['gorev'])")" = gorev_SAHTE ]; g $? "S14 görevli kart süpürülür ama görev defterine/odaya DOKUNULMAZ (tetik yok, defter çağrısı yok, kart.gorev korunur)" "→ rc=$RC $O"
 O="$(bash "$KT" supur 2>&1)"; grep -q kullanım <<<"$O"; g $? "S12 kip verilmezse kullanım (kuru|uygula) — varsayılan YAZMA yok"
+# S15: dal adı DAR varyantlarla da eşlenir ('ekip/ad' öneki, 'ad-2' soneki); altdize ve başkasının kartı eşlenmez (HSKJCE revizyonu, MUHAKKİK: ≥4 birleşik PR kaçıyordu)
+for f in dal-birlesti dal-tikandi kartpr-birlesti acik-pr sinifli-birlesti zaten-bitti kartpr-yanlis mut-dal; do rm -f "$SD/_agents/fabrika/kartlar/$f.json"; done
+sk v-onek acik "" HENDESE '[]'; sk v-sayi tikandi "" HENDESE '[]'; sk x-kalan acik "" HENDESE '[]'; sk y acik "" HENDESE '[]'; sk z acik "" HENDESE '[]'; sk z-2 acik "" HENDESE '[]'
+cat > "$T/gh-varyant.json" <<'JS'
+[{"number":81,"headRefName":"mirahur/v-onek","mergedAt":"2026-10-20T10:00:00Z"},
+ {"number":82,"headRefName":"v-sayi-2","mergedAt":"2026-10-20T11:00:00Z"},
+ {"number":83,"headRefName":"x","mergedAt":"2026-10-20T12:00:00Z"},
+ {"number":84,"headRefName":"y-kalan","mergedAt":"2026-10-20T13:00:00Z"},
+ {"number":85,"headRefName":"z-2","mergedAt":"2026-10-20T14:00:00Z"},
+ {"number":86,"headRefName":"yy","mergedAt":"2026-10-20T15:00:00Z"}]
+JS
+export GH_SAHTE_CIKTI="$T/gh-varyant.json"
+O="$(bash "$KT" supur kuru 2>&1)"; grep -q "supur kuru: 3 kart KAPATILIRDI" <<<"$O" && grep -q "v-onek ← PR #81 .*dal-adi-varyant" <<<"$O" && grep -q "v-sayi ← PR #82 .*dal-adi-varyant" <<<"$O"; g $? "S15a 'ekip/ad' önekli ve 'ad-2' sonekli dal adı kartı eşler (yöntem dal-adi-varyant görünür)" "→ $O"
+bash "$KT" supur uygula >/dev/null 2>&1
+[ "$(durum v-onek)" = bitti ] && [ "$(durum v-sayi)" = bitti ]; g $? "S15b varyantla eşlenen iki kart kapanır"
+[ "$(durum x-kalan)" = acik ] && [ "$(durum y)" = acik ]; g $? "S15c altdize YOK: 'x-kalan' kartı 'x' dalıyla, 'y' kartı 'y-kalan' dalıyla kapanmaz"
+[ "$(durum z)" = acik ] && [ "$(durum z-2)" = bitti ]; g $? "S15d başka kartın kendi adı olan dal (z-2) o karta aittir: 'z' kartı varyanta düşüp kapanmaz"
+sk z acik "" HENDESE '[]'; O="$(bash "$KT" supur kuru 2>&1)"; grep -q "? z — 'z-2' dalı başka bir kartındır (PR #85)" <<<"$O"; g $? "S15e süpürülmeyen ama devam kartı olabilecek kart kuru çıktıda 'gözle bak' adayı olarak görünür" "→ $O"
+export GH_SAHTE_CIKTI="$T/gh-pr.json"
 # mutantlar: her kapı bozulunca ilgili sınav kırmızıya dönmeli
 SMUT="$T/pkg-supur"; mkdir -p "$SMUT"; cp "$HERE"/*.py "$HERE"/*.sh "$SMUT/" 2>/dev/null
 smut() { cp "$HERE/kart.sh" "$SMUT/kart.sh"; python3 - "$SMUT/kart.sh" "$1" "$2" <<'PYM'
@@ -914,6 +933,15 @@ smut 'if len(prler)>=tavan:' 'if False:'
 sifirla; KART_SUPUR_TAVAN=8 bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum mut-dal)" = bitti ]; g $? "mutant (tavan kapısı kalktı): eksik PR listesiyle yine süpürür → S10 düşerdi"
 smut 'if mod=="uygula":' 'if True:'
 sifirla; bash "$SMUT/kart.sh" supur kuru >/dev/null 2>&1; [ "$(durum mut-dal)" = bitti ]; g $? "mutant (kuru-koşu yazıyor): kuru kipte kart kapanır → S1 düşerdi"
+# S15 mutantları: varyant eşlemesinin üç kapısı
+vsifirla() { for f in v-onek v-sayi x-kalan y z z-2; do rm -f "$SD/_agents/fabrika/kartlar/$f.json"; done; sk v-onek acik "" HENDESE '[]'; sk v-sayi tikandi "" HENDESE '[]'; sk x-kalan acik "" HENDESE '[]'; sk y acik "" HENDESE '[]'; sk z acik "" HENDESE '[]'; sk z-2 acik "" HENDESE '[]'; export GH_SAHTE_CIKTI="$T/gh-varyant.json"; }
+smut 'eslesir=ad_h==ad or re.fullmatch(re.escape(ad)+r"-\d+",ad_h)' 'eslesir=False'
+vsifirla; bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum v-onek)" = acik ]; g $? "mutant (varyant eşlemesi kalktı): önekli dal kartı bulamaz → S15b düşerdi"
+smut 'eslesir=ad_h==ad or re.fullmatch(re.escape(ad)+r"-\d+",ad_h)' 'eslesir=ad in h or h in ad'
+vsifirla; bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum x-kalan)" = bitti ]; g $? "mutant (altdize eşleme): 'x-kalan' açık işi yanlış kapanır → S15c düşerdi"
+smut 'if ({h,ad_h}-{ad}) & adlar:   # dal başka bir kartın adıysa o kartındır: süpürülmez, ama '"'"'devam kartı olabilir'"'"' diye gösterilir' 'if False:'
+vsifirla; bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum z)" = bitti ]; g $? "mutant (kart sahipliği kalktı): z-2 dalı z kartını da kapatır → S15d düşerdi"
+export GH_SAHTE_CIKTI="$T/gh-pr.json"
 unset KANIT_DEPO; cd "$T"
 
 echo "════ T-EK · ekran kapısı: dış yüzey ekran kartı senaryo+tık bütçesi ister · sürüm paketi kartı kare onayı D1'siz açılmaz ════"

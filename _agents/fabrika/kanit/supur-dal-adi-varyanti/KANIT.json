@@ -1,0 +1,85 @@
+{
+  "is": "supur-dal-adi-varyanti",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T22:01:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "supur-varyant-eslesen",
+      "asama": "once",
+      "dosya": "olcum-supur-varyant-eslesen-once.txt",
+      "sha256": "3714d5cc2c93f067039485a1a5e858734a2d11fb0630036078178b33ab8381e1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-supur.sh",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts/kart.sh",
+        "eslesen"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T22:01:26+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e7acfe628acf4be9a9f515a181058040"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-varyant-eslesen",
+      "asama": "sonra",
+      "dosya": "olcum-supur-varyant-eslesen-sonra.txt",
+      "sha256": "acfadabd67c2313675ef25a3af64830c92c51a408a8187871fd0843ca0e53585",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-supur.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-supur-dal-adi-varyanti/yazilim-fabrikasi/scripts/kart.sh",
+        "eslesen"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:01:26+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6fa1a31d720d42d3a91f813c008827c4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-varyant-yanlis",
+      "asama": "sonra",
+      "dosya": "olcum-supur-varyant-yanlis-sonra.txt",
+      "sha256": "ee7a3476759022a8714d608285d5f6f784efab5a61e62bd07d9dbdc6b6eaa3f0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-supur.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-supur-dal-adi-varyanti/yazilim-fabrikasi/scripts/kart.sh",
+        "yanlis"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:01:26+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c706558a3f1f490381d4edb3b43336ef"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-varyant-altdize-mutant",
+      "asama": "tek",
+      "dosya": "olcum-supur-varyant-altdize-mutant-tek.txt",
+      "sha256": "81303653d6be4e21cf79da33a796d6a3bf0fde81d506b280795645e62358b764",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-supur-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:01:27+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "supur-varyant-yanlis",
+      "beklenen": "kirmizi",
+      "olcum_id": "3a0eb5930d14429d92a09e05a99204c2"
+    }
+  ],
+  "imza": "df6af00ec52d4121a0796a3323efe9557fcb459406642e126b7fa6671ea6a567"
+}
