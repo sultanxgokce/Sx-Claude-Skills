@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.30.0
+version: 2.31.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.31.0 · Arka plan işi süren koltuk artık "boş" görünmüyor — durum çubuğunun yeni yazımı tanınır (27 Eki · AZWHMF)
+Claude Code durum çubuğu arka plan kabuklarını artık `· 7 shells ·` diye yazıyor (`running` kelimesi YOK); 2.7.0'dan beri kalıp yalnız `N shells still running` biçimini arıyordu. Sonuç: arka planda sınav koşan koltuk (BERİD, 24 Eki) panelde "koltuğu boş görünüyor" çıkıyordu. `koltuk_hali` kalıbı iki yazımı da tanır (`N shell(s)` + isteğe `still running`, ardından `·` ya da satır sonu); düz metindeki "1 shell command" sayılmaz. Hâl `dis-olay` olur, ne = `7 shells`; panel metni zaten vardı (⏳ dış olay bekliyor), bekçi davranışı aynı. Yeni yazım yalnız solunda `·` olan durum çubuğu biçiminde tanınır (düz metin "... 2 shells" ve "- 2 shells" sayılmaz). Sınav D13h-l (yeni yazım, tekil, üç negatif); önce eski betikle D13h/i kırmızı.
 
 ## 🆕 2.30.0 · Yerli otomatik sıkıştırma eşiği başlatıcıdan — 600k her koltukta, bekçi ölçer (26 Eki · gorev_…880TAK · BERİD)
 Sultan: *"600k yani yüzde 60'ın üstünde compact otomatik olsun, tüm filoya; yeni açılacak tüm session'larda açık olsun, standardımız bu

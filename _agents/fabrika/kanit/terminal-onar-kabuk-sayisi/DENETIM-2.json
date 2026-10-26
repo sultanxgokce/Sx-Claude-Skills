@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-kabuk-sayisi",
+  "pr": "486",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T01:10:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kabuk-sayisi",
+  "dal": "terminal-onar-kabuk-sayisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16122,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6572
+  },
+  "bas": "d556ee55308791cf80ea0cc6247d499c3cd2bce4",
+  "duzeltme_farki": {
+    "onceki_bas": "85f970024caad9a4237fa178f642b9acaecabb96",
+    "dosya": 7,
+    "bayt": 11779,
+    "tam_bayt": 16386
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Durum çubuğundaki `· N shell(s) ·` yazımı arka plan işi olarak tanınmış; önceki turdaki sıradan satır sonu metninin yanlış eşleşmesi, yeni yazımı soldaki `·` işaretine bağlayarak kapatılmış. Olumlu, tekil ve üç negatif sınır vakası araç imzalı ölçümde 107/107 geçtiği için yalnız rötuş değil, üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı etiketli kırmızı önce/yeşil sonra ölçüm çifti eski kodda D13h-i vakalarının düştüğünü, yeni kodda 107 sınavın tamamının geçtiğini gösteriyor. Önceki B1 kapanmış: üretim kalıbı `running` içermeyen yeni yazımda soldaki `·` işaretini şart koşuyor; D13k satır sonunda düz `2 shells`, D13l ise `- 2 shells` biçiminin boş kaldığını doğrudan ölçüyor."
+  }
+}

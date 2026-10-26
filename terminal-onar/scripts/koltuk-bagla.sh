@@ -196,7 +196,8 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bil
     #   zamanlayıcı). "çalışıyor" DEĞİL (esc to interrupt yok), "boşta" da değil — Sultan onu takılı sanmasın. Kaynak: Claude Code
     #   alt çubuğundaki "N shells running" ya da son mesajdaki bekleme kalıbı. Ne beklediği KH_NE'ye düşer (rozet üstüne gelince).
     # 🔴 YALNIZ GÜNCEL iz (bağımsız göz tur 1): eski bir açıklama "bekleniyor" diyebilir; ölçü son 5 dolu satırdır (alt çubuk +
-    #    son mesajın kuyruğu). "N shells running" alt çubuk sinyalidir ve en güçlüsü; metin kalıpları da aynı pencerede aranır.
+    #    son mesajın kuyruğu). Alt çubuk iki yazımda gelir: "N shells still running" (eski) ve "· N shells ·" (yeni, 'running' YOK; 27 Eki canlıda ölçüldü:
+    #    kalıp yalnız eskiyi tanıyınca arka plan işi süren koltuk "boş" göründü, AZWHMF). "N shells running" alt çubuk sinyalidir ve en güçlüsü; metin kalıpları da aynı pencerede aranır.
     # 🔴 METİN KALIBI YALNIZ SON MESAJDA (bağımsız göz tur 3): son 5 satırda "CI bekleniyor" sonra "⏺ Bitti" + boş istem gelmişse
     #    bekleme BİTMİŞTİR; kalıp son ⏺ satırından itibaren aranır. Alt çubuk sinyali ("N shells running") mesaj değil durum
     #    çubuğudur, istemin altındadır — her yerde sayılır.
@@ -204,7 +205,7 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bil
     #    önce gelir, "N shells running" yalnız sayıdır — ad "ne bekliyor" diyorsa alanı da nedeni taşımalı. Hâl kararı (dis-olay)
     #    ikisinden biri varsa; alt çubuk sinyali hâl için en güçlü, metin için en zayıf.
     local kuyruk ne son kabuk; kuyruk="$(printf '%s\n' "$ekran" | tail -n 5)"
-    kabuk="$(printf '%s\n' "$kuyruk" | grep -iE '[0-9]+ (background )?shells?( still)? running' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
+    kabuk="$(printf '%s\n' "$kuyruk" | grep -iE '[0-9]+ (background )?shells? (still )?running|·[[:space:]]*[0-9]+ shells?[[:space:]]*(·|$)' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
     son="$(printf '%s\n' "$kuyruk" | awk '/⏺/{n=NR} END{print n+0}')"; [ "$son" -gt 0 ] || son=1
     ne="$(printf '%s\n' "$kuyruk" | tail -n +"$son" | grep -iE 'bekleniyor|bildirim gelince|CI [^ ]*bekl|bekleyici|arka plan(da)? (bekl|izl)|izleniyor' | tail -1 | sed 's/^[[:space:]]*//; s/^⏺[[:space:]]*//' | cut -c1-80)"
     [ -n "$ne" ] || ne="$kabuk"
