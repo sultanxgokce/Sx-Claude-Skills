@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-kisi-ttyd-yolu",
+  "pr": "484",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T23:16:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kisi-ttyd-yolu",
+  "dal": "terminal-onar-kisi-ttyd-yolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19754,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6644
+  },
+  "bas": "d7e0191e141b40afb5068f2ad4e0eabc0f231adb",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Betik ttyd yolunu çözüp bulunamadığında kurulumdan önce duruyor; önce/sonra ölçümü ile üç mutasyon da bu davranışların sınandığını gösteriyor. Ancak “tam yol” ve hedef kullanıcının gerçekten çalıştırabilmesi denetimleri kabuk izin biti varsayımına indirgenmiş; üretim öncesi bunlar düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "TTYD_BIN mutlak yol olmaya zorlanmıyor; örneğin çalıştırılabilir bir göreli yol kabul edilip üretilen komuta aynen yazılabilir, bu da iş kartındaki “tam yol” güvencesini bozar.",
+        "kanit": "TTYD=\"${TTYD_BIN:-...}\" değeri sonrasında yalnız -x ile sınanıyor; mutlak yol/canonicalization denetimi yok. Q10 yalnız TTYD_BIN=/usr/bin/true vakasını doğruluyor, göreli yolu sınamıyor.",
+        "konum": "terminal-onar/scripts/kisi-kur.sh:38-42; terminal-onar/scripts/kisi-kur.test.sh:26",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“ayse çalıştırabilir” denetimi yalnız dosya modunun son rakamındaki others-execute bitine bakıyor; üst dizinlerde geçiş izni ve ACL hesaba katılmadığından erişilemeyen bir dosyayı kabul edebilir, grup/ACL üzerinden çalıştırılabilen geçerli bir dosyayı da reddedebilir.",
+        "kanit": "Denetim `stat -c %a \"$TTYD\"` sonucunun `% 2` hesabından ibaret; test de yalnız chmod 700 dosyasını kapsıyor ve hedef kullanıcı bağlamında gerçek erişim sınaması yapmıyor.",
+        "konum": "terminal-onar/scripts/kisi-kur.sh:42; terminal-onar/scripts/kisi-kur.test.sh:29-31",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm önce 14/17 ve rc=1 iken sonra 17/17 ve rc=0 olmuş; ayrıca mutasyon kaydı üç bozukluğu da yakalamış. Ölçüm çifti talebin ana davranışını güçlü biçimde kanıtlıyor, fakat göreli TTYD_BIN ile gerçek kullanıcı/ACL-dizin erişimi vakalarını kapsamıyor."
+  }
+}
