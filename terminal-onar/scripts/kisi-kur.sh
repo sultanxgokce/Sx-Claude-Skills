@@ -35,6 +35,13 @@ if [ "$UYGULA" = 1 ] && [ -z "$KOK" ] && [ "$(id -u)" != 0 ]; then echo "kisi-ku
 P() { printf '%s%s' "$KOK" "$1"; }   # yol → kök önekli
 RUN="$(P /run/kisi)"; IZIN_DIR="$(P /config/.terminal-onar/kisi)"; IZIN="$IZIN_DIR/izin.json"
 SOKET="/run/kisi/koprusu.sock"; TTYD_SOKET="/run/kisi/${KULLANICI}-ttyd.sock"
+# ttyd'nin TAM yolu: `ayse` süreci çıplak adı kendi PATH'inde bulamaz (medigate'te ttyd yalnız /config/.local/bin'de; 26 Eki ölçümü) → yol çözülür, `ayse` çalıştırabilmeli
+TTYD="${TTYD_BIN:-$(command -v ttyd 2>/dev/null || true)}"
+if [ -z "$TTYD" ]; then for c in /config/.local/bin/ttyd /usr/local/bin/ttyd /usr/bin/ttyd; do [ -x "$c" ] && { TTYD="$c"; break; }; done; fi
+if [ -z "$KOK" ]; then
+  [ -n "$TTYD" ] && [ -x "$TTYD" ] || { echo "kisi-kur: ttyd bulunamadı (PATH, /config/.local/bin, /usr/local/bin) — kurulmadı; TTYD_BIN=<yol> ver" >&2; exit 3; }
+  [ $(( $(stat -c %a "$TTYD") % 2 )) -eq 1 ] || { echo "kisi-kur: $TTYD diğer kullanıcılara çalıştırılabilir değil — \`$KULLANICI\` çalıştıramaz, kurulmadı" >&2; exit 3; }
+fi
 n=0; adim() { n=$((n+1)); printf '\nADIM %d — %s\n' "$n" "$1"; }
 yap() {  # yap <komut...>: kuru kipte yalnız basar
   printf '  $ %s\n' "$*"
@@ -73,6 +80,6 @@ KOPRU_ENV="KOPRU_SOKET=$SOKET KOPRU_GRUP=$KULLANICI KOPRU_KULLANICI=$KULLANICI K
 [ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su abc -s /bin/bash -c \"env $KOPRU_ENV python3 $BECERI/koltuk-koprusu.py\" >>/config/.terminal-onar/kisi/koprusu.log 2>&1 &"
 
 adim "ttyd-kisi ($KULLANICI olarak, YAZILABİLİR -W, komut sabit: kisi-istemci)"
-[ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su $KULLANICI -s /bin/bash -c \"KOPRU_SOKET=$SOKET ttyd -i $TTYD_SOKET -U $KULLANICI:abc -a -W python3 /opt/kisi/kisi-istemci.py\" >>/tmp/ttyd-kisi.log 2>&1 &"
+[ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su $KULLANICI -s /bin/bash -c \"KOPRU_SOKET=$SOKET $TTYD -i $TTYD_SOKET -U $KULLANICI:abc -a -W python3 /opt/kisi/kisi-istemci.py\" >>/tmp/ttyd-kisi.log 2>&1 &"
 
 echo; [ "$UYGULA" = 1 ] && echo "kisi-kur: bitti." || echo "kisi-kur: KURU KİP bitti — hiçbir şey değişmedi. Gerçek kurulum: Sultan/host elinde --uygula."

@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kisi-kur-sinavi-* ===
+$ python3 /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ty-mut.py /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kisi-ttyd-yolu/terminal-onar/scripts
+# rc=1 sure=0.6s zaman=2026-10-26T23:15:29+03:00
+--- stdout ---
+YAKALANDI M1 tam yol yerine çıplak ttyd
+YAKALANDI M2 bulunamazsa devam eder
+YAKALANDI M3 çalıştırma biti denetimi yok
+mutant: 3/3 yakalandı
+--- stderr ---

@@ -2,6 +2,7 @@
 # kisi-kur.sh sınavı — KUM HAVUZU (--kok): gerçek sistemde kullanıcı/grup/dizin YARATMAZ. Kuru kip hiçbir şeyi değiştirmemeli.
 set -u; D="$(cd "$(dirname "$0")" && pwd)"; G=0; K=0
 ok() { if [ "$2" = 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1  → $3"; fi; }
+export TTYD_BIN=/usr/bin/true   # sahte ttyd: sınav makinesinde ttyd olmayabilir
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 bash "$D/kisi-kur.sh" --kutu demo --kok "$T" >"$T/cikti" 2>&1; rc=$?
 ok "Q1 kuru kip rc 0" "$rc" "rc=$rc"
@@ -22,4 +23,11 @@ ok "Q10 istemci kök sahipli kopya yeri hazır" "$([ -x "$T/opt/kisi/kisi-istemc
 bash "$D/kisi-kur.sh" --uid 5 >/dev/null 2>&1; ok "Q11 düşük uid reddi" "$([ $? = 1 ] && echo 0 || echo 1)" ""
 bash "$D/kisi-kur.sh" --kullanici 'a b' >/dev/null 2>&1; ok "Q12 geçersiz kullanıcı adı reddi" "$([ $? = 1 ] && echo 0 || echo 1)" ""
 [ "$(id -u)" != 0 ] && { bash "$D/kisi-kur.sh" --kutu demo --uygula >/dev/null 2>&1; ok "Q13 kök olmadan --uygula reddi (rc 2)" "$([ $? = 2 ] && echo 0 || echo 1)" ""; }
+# Q10-Q12: ttyd TAM yolu (26 Eki: medigate'te ttyd yalnız /config/.local/bin'de; çıplak ad `ayse` PATH'inde yok → ekran hiç başlamazdı)
+ok "Q10 ttyd komutu çözülen TAM yolla yazılır" "$(grep -q -- '/usr/bin/true -i /run/kisi/ayse-ttyd.sock' "$T/kuru" && echo 0 || echo 1)" "$(grep ttyd-kisi -A1 "$T/kuru" | tail -1 | cut -c1-160)"
+TTYD_BIN=/yok/ttyd bash "$D/kisi-kur.sh" --kutu demo >"$T/y" 2>&1; rc=$?
+ok "Q11 ttyd bulunamazsa rc 3, 'ttyd bulunamadı', hiçbir adım basılmadı" "$([ "$rc" = 3 ] && grep -q 'ttyd bulunamadı' "$T/y" && ! grep -q '^ADIM' "$T/y" && echo 0 || echo 1)" "rc=$rc $(head -2 "$T/y")"
+printf '#!/bin/sh\n' > "$T/ozel-ttyd"; chmod 700 "$T/ozel-ttyd"
+TTYD_BIN="$T/ozel-ttyd" bash "$D/kisi-kur.sh" --kutu demo >"$T/o" 2>&1; rc=$?
+ok "Q12 ttyd başkalarına çalıştırılabilir değilse rc 3 (ayse çalıştıramaz)" "$([ "$rc" = 3 ] && grep -q 'çalıştırılabilir değil' "$T/o" && echo 0 || echo 1)" "rc=$rc $(head -2 "$T/o")"
 echo; echo "$G geçti, $K kaldı"; [ "$K" = 0 ]

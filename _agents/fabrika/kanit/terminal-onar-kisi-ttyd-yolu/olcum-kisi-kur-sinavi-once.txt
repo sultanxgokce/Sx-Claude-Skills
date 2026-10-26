@@ -1,0 +1,23 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ty-once.sh
+# rc=1 sure=0.2s zaman=2026-10-26T23:15:37+03:00
+--- stdout ---
+  ✓ Q1 kuru kip rc 0
+  ✓ Q2 kuru kipte hiçbir dizin/dosya oluşmadı
+  ✓ Q3 çıktı KURU KİP diyor ve 5+ adım sayıyor
+  ✓ Q4 ttyd-kisi YAZILABİLİR (-W) ve sabit komut
+  ✓ Q5 abc'yi kişi grubuna EKLEMİYOR (usermod/gpasswd yok)
+  ✓ Q6 --uygula (kum havuzu) rc 0
+  ✓ Q6b kum havuzunda süreç başlatılmadı, gerçek yola yazılmadı
+  ✓ Q7 soket dizini 0750
+  ✓ Q8 izin iskeleti yazıldı ve JSON
+  ✓ Q9 var olan izin dosyasına DOKUNULMADI (Sultan yazar)
+  ✓ Q10 istemci kök sahipli kopya yeri hazır
+  ✓ Q11 düşük uid reddi
+  ✓ Q12 geçersiz kullanıcı adı reddi
+  ✓ Q13 kök olmadan --uygula reddi (rc 2)
+  ✗ Q10 ttyd komutu çözülen TAM yolla yazılır  → 
+  ✗ Q11 ttyd bulunamazsa rc 3, 'ttyd bulunamadı', hiçbir adım basılmadı  → rc=0 kisi-kur: KURU KİP (hiçbir şey değişmez) · kutu=demo · kişi=aysenur · kullanıcı=ayse(2001)
+  ✗ Q12 ttyd başkalarına çalıştırılabilir değilse rc 3 (ayse çalıştıramaz)  → rc=0 kisi-kur: KURU KİP (hiçbir şey değişmez) · kutu=demo · kişi=aysenur · kullanıcı=ayse(2001)
+
+14 geçti, 3 kaldı
+--- stderr ---
