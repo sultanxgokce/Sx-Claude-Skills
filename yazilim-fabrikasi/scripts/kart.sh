@@ -8,7 +8,7 @@
 #
 # Kullanım:
 #   kart.sh ac <iş> --is "tek cümle" --istedi <kim> --aldi <ajan> \
-#          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h]
+#          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h] [--senaryo <dosya>] [--kare-onay "<D1>"]
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
 #          [--sayi-olcum '<komut>']: cümlede "13 görev" gibi bir sayı iddiası varsa onu KAYNAĞINDAN sayan komut (yoksa UYARI, red değil)
 #   kart.sh goz-adim <iş> --not "<satır>"   (0.24.0) göz turunu göreve TEK adım yazar, durum değişmez (denetçi kendisi çağırır)
@@ -94,7 +94,9 @@ while [ $# -gt 0 ]; do case "$1" in
   --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
+  --senaryo) SENARYO="$2"; shift 2 ;; --kare-onay) KARE_ONAY="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
+SENARYO="${SENARYO:-}"; KARE_ONAY="${KARE_ONAY:-}"   # ekran kapısı (ac): senaryo kartı yolu · Sultan'ın kare onayı D1 damgası
 GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 
 # 🔴 GÖREV DURUMU (Sultan 20 Eki, gorev_…Y7J3Q "çalışılıyor görünümü güvenilmez"; ölçüm 21 Eki 00:00: koltukların 3'ü çalışıyor,
@@ -311,6 +313,42 @@ for b in dict.fromkeys(bul): print(b)
 PY
 }
 
+# 🔴 EKRAN KAPISI (gorev_01M5WD813JB48V06QKQKQQWRDT · M4PZV4 dersi): Sultan'a görünen ekran, planla başlar ve kare onayıyla ilerler.
+#    İki kapı, ikisi de kart AÇILMADAN ölçer ve kart CÜMLESİNDEN tetiklenir (kaçış bayrağı yok; "Kart cümlesinde olmayan kaçış yolu eklenmez"):
+#    (1) dış yüzey ekran kartı → --senaryo <dosya>: ui-tasarim-akisi Durak 2 senaryo kartı, "Tık bütçesi:" satırı DOLU (rakamlı, şablon yer tutucusu değil)
+#    (2) sürüm paketi kartı → --kare-onay "<D1 damgası>": Sultan'ın karelere onayı (YYYY-MM-DD Sultan: kare onay (sohbet · <ref> · "<≤15 kelime>" · beyan:<AJAN>))
+#    DÜRÜST SINIR: ikisi de BİÇİM ve VARLIK ölçer — damganın gerçekten Sultan'dan geldiğini araç bilemez (A06: ajan Sultan'ın sözünü üretmez, gördüğünü
+#    referansla aktarır; haftalık onay-parity örneklem denetler); senaryo kartının İÇERİĞİNİN doğru olduğunu da ölçmez, yalnız dolu olduğunu.
+ekran_kapisi() {  # → rc 0 uygun · rc 1 hata basılmış
+  local c rc
+  c="$(DIS="$DIS" python3 - "$IS_C" "$SENARYO" "$KARE_ONAY" "$DEPO" <<'PY'
+import os,re,sys
+cumle,senaryo,onay,depo=sys.argv[1:5]; dis=os.environ.get("DIS","")
+hata=[]
+if dis!="h" and re.search(r"ekran|sayfa|panel|arayüz|arayuz|görünüm|gorunum|pano",cumle,re.I):
+    if not senaryo:
+        hata.append("dış yüzey ekran kartı senaryo kartı ister: --senaryo <dosya> (ui-tasarim-akisi Durak 2 kartı; 'Tık bütçesi:' satırı dolu olmalı) — kart AÇILMADI")
+    else:
+        yol=senaryo if os.path.isabs(senaryo) else os.path.join(depo,senaryo)
+        if not os.path.isfile(yol): hata.append("--senaryo dosyası yok: %s — kart AÇILMADI" % senaryo)
+        else:
+            m=re.search(r"Tık bütçesi:\**[ \t]*(\S[^\n]*)",open(yol,encoding="utf-8").read())
+            if not m or m.group(1).lstrip().startswith("<") or not re.search(r"\d",m.group(1)):
+                hata.append("--senaryo kartında 'Tık bütçesi:' satırı boş ya da rakamsız (yazım: \"3 tık + 2 alan\") — kart AÇILMADI")
+if re.search(r"s[üu]r[üu]m\s+paket",cumle,re.I):
+    m=re.fullmatch(r'\d{4}-\d{2}-\d{2} Sultan: (.+?) \(sohbet · ([^·()]+?) · "([^"]+)" · beyan:([\w-]+)\)',onay.strip())
+    if not onay: hata.append("sürüm paketi kartı Sultan'ın kare onayı olmadan açılmaz: --kare-onay \"YYYY-MM-DD Sultan: kare onay (sohbet · <oturum-ref> · \\\"<≤15 kelime>\\\" · beyan:<AJAN>)\" — kart AÇILMADI")
+    elif not m: hata.append("--kare-onay D1 biçiminde değil (oturum-ref · tırnaklı kırpık · beyan:<AJAN> üç parça zorunlu) — kart AÇILMADI")
+    elif not (re.search(r"kare",m.group(1),re.I) and re.search(r"onay|uygun|kabul",m.group(1),re.I)): hata.append("--kare-onay sonucu bir kare onayı değil (sonuçta 'kare' ve 'onay|uygun|kabul' geçmeli) — kart AÇILMADI")
+    elif len(m.group(3).split())>15: hata.append("--kare-onay kırpığı 15 kelimeyi aşıyor — kart AÇILMADI")
+print("\n".join(hata)); raise SystemExit(1 if hata else 0)
+PY
+)"; rc=$?
+  [ "$rc" -le 1 ] || { _hata "ekran kapısı aracı düştü (rc=$rc) — kart AÇILMADI (ölçemediğine temiz denmez)"; return 1; }
+  [ "$rc" -eq 0 ] && return 0
+  while IFS= read -r c; do [ -n "$c" ] && _hata "$c"; done <<<"$c"; return 1
+}
+
 case "$CMD" in
   ac)
     [ -n "$IS" ] && [ -n "$IS_C" ] && [ -n "$ISTEDI" ] && [ -n "$ALDI" ] || { _hata "gerekli: <iş> --is --istedi --aldi"; exit 1; }
@@ -318,6 +356,7 @@ case "$CMD" in
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
     olcut_zorunlu "$IS_C" "AÇILMADI" || exit 1
+    ekran_kapisi || exit 1
     OLCUT="$(olcut_bul "$IS_C")"
     # 🔴 SULTAN'A ULAŞIM YOLU (göz 23 Eki tur 2 · fabrika-merge-reise): sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart
     #    AÇILMAZ (fail-closed, rc 1). Ölçüldü: eski araç "BAŞLAMA İZNİ SULTAN'A GİDER" basıp rc 0 dönüyordu; --oda yoksa tetik() sessizce
@@ -344,7 +383,7 @@ case "$CMD" in
     #    yayımlanır. Tetik sırasında süreç kesilirse görünür kart KALMAZ (izin isteği gitmemiş kart yok); başarısızlıkta yalnız KENDİ geçici
     #    dosyamız silinir — aynı kimlikle eşzamanlı açılan başkasının kartına dokunulmaz.
     KART_TMP="$KD/$IS.json.acilis-$$"
-    OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,datetime
 yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import KURAL_SURUMU
@@ -359,6 +398,8 @@ if siniflar:
     kart["baslama_izni"]={"durum":"bekliyor","istendi":simdi}; kart["kural_surumu"]=KURAL_SURUMU
 if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
 import os
+if os.environ.get("SENARYO"): kart["senaryo"]=os.environ["SENARYO"]
+if os.environ.get("KARE_ONAY"): kart["kare_onayi"]=os.environ["KARE_ONAY"]
 if os.environ.get("OLCUT") or os.environ.get("OLCUM_YERI"):
     kart["olcut"]=[x for x in os.environ.get("OLCUT","").splitlines() if x.strip()]; kart["olcum_yeri"]=os.environ.get("OLCUM_YERI","")
 sayilar=[u for u in suyari.splitlines() if u.strip()]

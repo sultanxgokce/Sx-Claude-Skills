@@ -32,8 +32,9 @@ CIKTI="$(bash "$KT" ac is-1 --is "buton ekle" --istedi Sultan --aldi MUAVIN --ge
 grep -q "ekipte biter" <<<"$CIKTI"; g $? "ekipte biter dedi"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-1.json'));assert k['sultan']==False and k['durum']=='acik'"; g $? "sultan=false"
 
+printf '**Tık bütçesi:** 2 tık + 1 alan\n' > "$T/senaryo-dolu.md"   # ekran kapısı fikstürü (T3 ve T-EK)
 echo "════ T3 · '?' cevabı → şüphede yukarı, Sultan'a gider ════"
-CIKTI="$(bash "$KT" ac is-2 --is "anasayfa görünümü" --istedi reis --aldi NAKKAS --geri-alinamaz h --para h --dis-yuzey '?' --yetki h --oda sinav-oda 2>&1)"
+CIKTI="$(bash "$KT" ac is-2 --is "anasayfa görünümü" --istedi reis --aldi NAKKAS --geri-alinamaz h --para h --dis-yuzey '?' --yetki h --oda sinav-oda --senaryo "$T/senaryo-dolu.md" 2>&1)"
 grep -q "SULTAN'A GİDER" <<<"$CIKTI"; g $? "SULTAN'A GİDER"
 grep -q "BAŞLAMA İZNİ" <<<"$CIKTI" && grep -q "veto penceresi" <<<"$CIKTI"; g $? "0.21.0: 'BAŞLAMA İZNİ … veto penceresi' der (iş bekletilmez)"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-2.json'));assert k['sultan'] and k['siniflar']==['dis_yuzey']"; g $? "sınıf dis_yuzey"
@@ -914,4 +915,36 @@ smut 'if mod=="uygula":' 'if True:'
 sifirla; bash "$SMUT/kart.sh" supur kuru >/dev/null 2>&1; [ "$(durum mut-dal)" = bitti ]; g $? "mutant (kuru-koşu yazıyor): kuru kipte kart kapanır → S1 düşerdi"
 unset KANIT_DEPO; cd "$T"
 
+echo "════ T-EK · ekran kapısı: dış yüzey ekran kartı senaryo+tık bütçesi ister · sürüm paketi kartı kare onayı D1'siz açılmaz ════"
+DEK="$T/depo-ek"; mkdir -p "$DEK"; ( cd "$DEK" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" ) >/dev/null 2>&1   # ekran kapısı kendi taze deposunda (önceki bölümler $T/depo'yu değiştirebilir)
+cd "$DEK"
+ek() { bash "$KT" ac "$1" --is "$2" --istedi reis --aldi NAKKAS --geri-alinamaz h --para h --dis-yuzey "$3" --yetki h --oda sinav-oda "${@:4}" 2>&1; }
+kvar() { [ -f "$DEK/_agents/fabrika/kartlar/$1.json" ]; }
+printf '**Tık bütçesi:** 2 tık + 1 alan\n' > "$T/senaryo-dolu.md"; printf '**Tık bütçesi:** <yukarıdaki kurala göre>\n' > "$T/senaryo-yertutucu.md"; printf '**Tık bütçesi:** çok az\n' > "$T/senaryo-rakamsiz.md"; printf '**Amaç:** x\n' > "$T/senaryo-satirsiz.md"
+D1OK='2026-10-26 Sultan: kare onay (sohbet · session_ornek1 · "kareler uygun, devam" · beyan:SERDAR)'
+ek ek-1 "yeni ana ekran" e >/dev/null; [ $? -eq 1 ]; g $? "E1 ekran kartı senaryosuz rc=1"
+kvar ek-1; [ $? -ne 0 ]; g $? "E1 kart yazılmadı"
+CIKTI="$(ek ek-1 "yeni ana ekran" e)"; grep -q "senaryo kartı ister" <<<"$CIKTI"; g $? "E1 mesaj senaryo kartını söyler"
+ek ek-2 "yeni panel" e --senaryo "$T/yok.md" >/dev/null; [ $? -eq 1 ]; g $? "E2 senaryo dosyası yoksa rc=1"
+ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-yertutucu.md" >/dev/null; [ $? -eq 1 ]; g $? "E3a tık bütçesi şablon yer tutucusu → rc=1"
+ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-rakamsiz.md" >/dev/null; [ $? -eq 1 ]; g $? "E3b tık bütçesi rakamsız → rc=1"
+ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-satirsiz.md" >/dev/null; [ $? -eq 1 ]; g $? "E3c senaryoda tık bütçesi satırı yok → rc=1"
+ek ek-4 "yeni ekran görünümü" e --senaryo "$T/senaryo-dolu.md" >/dev/null; g $? "E4 dolu senaryoyla kart açılır"
+python3 -c "import json;k=json.load(open('$DEK/_agents/fabrika/kartlar/ek-4.json'));assert k['senaryo'].endswith('senaryo-dolu.md')"; g $? "E4 senaryo yolu karta işlenir"
+ek ek-5 "yeni ekran" h >/dev/null; g $? "E5 dış yüzey değil (h) → senaryo istenmez"
+ek ek-6 "kablo uzunluğu ayarı" e >/dev/null; g $? "E6 ekran sözcüğü yok → senaryo istenmez"
+ek ek-7 "Yeni PANEL" '?' >/dev/null; [ $? -eq 1 ]; g $? "E7 '?' dış yüzey + büyük harfli sözcük de yakalanır"
+ek su-1 "merkez 1.91.0 sürüm paketi" h >/dev/null; [ $? -eq 1 ]; g $? "S1 sürüm paketi kartı kare onayı olmadan rc=1"
+kvar su-1; [ $? -ne 0 ]; g $? "S1 kart yazılmadı"
+ek su-2 "merkez 1.91.0 sürüm paketi" h --kare-onay "Sultan kare onayladı" >/dev/null; [ $? -eq 1 ]; g $? "S2 D1 biçiminde olmayan onay → rc=1"
+ek su-3 "merkez 1.91.0 sürüm paketi" h --kare-onay '2026-10-26 Sultan: başla (sohbet · session_ornek1 · "başla" · beyan:SERDAR)' >/dev/null; [ $? -eq 1 ]; g $? "S3 sonucu kare onayı olmayan D1 → rc=1"
+ek su-3 "merkez 1.91.0 sürüm paketi" h --kare-onay '2026-10-26 Sultan: onay (sohbet · session_ornek1 · "olur" · beyan:SERDAR)' >/dev/null; [ $? -eq 1 ]; g $? "S3b sonucu 'onay' ama 'kare' yok (başka şeye onay) → rc=1"
+ek su-3 "merkez 1.91.0 sürüm paketi" h --kare-onay '2026-10-26 Sultan: kare gördüm (sohbet · session_ornek1 · "gördüm" · beyan:SERDAR)' >/dev/null; [ $? -eq 1 ]; g $? "S3c sonucu 'kare' ama onay sözcüğü yok → rc=1"
+ek su-4 "merkez 1.91.0 sürüm paketi" h --kare-onay '2026-10-26 Sultan: kare onay (sohbet · session_ornek1 · "bir iki üç dört beş altı yedi sekiz dokuz on onbir oniki onüç ondört onbeş onaltı" · beyan:SERDAR)' >/dev/null; [ $? -eq 1 ]; g $? "S4 kırpık 15 kelimeyi aşarsa rc=1"
+ek su-5 "merkez 1.91.0 sürüm paketi" h --kare-onay "$D1OK" >/dev/null; g $? "S5 doğru D1 ile sürüm paketi kartı açılır"
+python3 -c "import json;k=json.load(open('$DEK/_agents/fabrika/kartlar/su-5.json'));assert 'kare onay' in k['kare_onayi']"; g $? "S5 onay damgası karta işlenir"
+ek su-6 "merkez 1.91.0 SÜRÜM PAKETİ" h >/dev/null; [ $? -eq 1 ]; g $? "S6 büyük harfli 'SÜRÜM PAKETİ' de yakalanır"
+ek su-7 "yeni sürüm notu yaz" h >/dev/null; g $? "S7 'sürüm paketi' demeyen kart onay istemez"
+
+cd "$T"
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

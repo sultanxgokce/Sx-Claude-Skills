@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-ekran-kapisi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-mut.sh
+# rc=1 sure=442.4s zaman=2026-10-26T20:48:30+03:00
+--- stdout ---
+mutant ekran koşulu söküldü -> ekran-kapisi=17/23
+mutant sürüm koşulu söküldü -> ekran-kapisi=17/23
+mutant rakam şartı söküldü -> ekran-kapisi=22/23
+mutant 'kare' sonuç şartı söküldü -> ekran-kapisi=22/23
+mutant kırpık tavanı söküldü -> ekran-kapisi=22/23
+mutant kapı çağrısı söküldü -> ekran-kapisi=11/23
+ekran-kapisi=22/23
+--- stderr ---

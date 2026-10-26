@@ -1,0 +1,62 @@
+{
+  "is": "ekran-kapisi-senaryo-kare-onayi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T20:48:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ekran-kapisi",
+      "asama": "once",
+      "dosya": "olcum-ekran-kapisi-once.txt",
+      "sha256": "34ea3b5109fce546e830e3d7cfad678619cbea98b11a8eb2a0ca9b1478b16b56",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T20:40:04+03:00",
+      "sure_sn": 64.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fab1219b0ad7424ab014916aaa7bbfea"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ekran-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-ekran-kapisi-sonra.txt",
+      "sha256": "b45a22feb73698541ab3ab0ccac1d471e9cd2ed14cfb02fa90290039e02e46d2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T20:41:08+03:00",
+      "sure_sn": 63.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "81cfcd9671b0424b9923ca9b3b9ac942"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ekran-kapisi-mutant",
+      "asama": "tek",
+      "dosya": "olcum-ekran-kapisi-mutant-tek.txt",
+      "sha256": "7dc2b0b5c7ba4191fef00229aa37d486deb1cab27caa1e1edab3ec3c5e7c189b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T20:48:30+03:00",
+      "sure_sn": 442.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "ekran-kapisi",
+      "beklenen": "kirmizi",
+      "olcum_id": "2eedd5a3c26a4eb28f8df9888ec9ec20"
+    }
+  ],
+  "imza": "6636f4ade84ae41c61934c6d1bae55e6060178dbe1105ef41ddc178c362a9b9e"
+}
