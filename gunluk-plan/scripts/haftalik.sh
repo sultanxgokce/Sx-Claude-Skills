@@ -51,6 +51,7 @@ for s in sys.stdin:
 if not sat: print("OLCULEMEDI"); sys.exit(0)
 kutu=kutu_arg or max(set(k for k,_,_,_ in sat),key=[k for k,_,_,_ in sat].count)
 sat=[x for x in sat if x[0]==kutu]
+if not sat: print("OLCULEMEDI"); sys.exit(0)   # var olmayan/görevsiz kutu: sıfır sayıyla "ZAYIF yok" DENMEZ
 kapali=("bitti","tamam"); acik=("acik","sira-bende","bekliyor","calisiliyor","onay-bekliyor")
 kapanan=[x for x in sat if x[1] in kapali and 0<=x[3]<=gun]
 iptal=[x for x in sat if x[1]=="iptal" and 0<=x[3]<=gun]

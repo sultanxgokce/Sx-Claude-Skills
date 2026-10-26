@@ -106,8 +106,8 @@ bash /config/.claude/skills/gunluk-plan/scripts/haftalik.sh --uygula   # raporu 
 - Kaynak tek: `gorev.sh liste` (kutunun kendi görevleri). Yeni defter/havuz KURULMAZ; `--hedef AD` alıcıyı, `--gun N` pencereyi (1-90) değiştirir.
 - Zayıf noktalar sayıyla ölçülür: **Z1** son N günde hiç iş kapanmadı ama açık iş var · **Z2** N günden uzundur hareketsiz açık/bekleyen iş (başlıkla, en çok 5) · **Z3** bekleyen iş, yürüyen ve açık işlerden fazla.
 - **Ölçemezse "sorun yok" demez:** liste okunamadı ya da boşsa rc 3. Kuru koşu varsayılan; mektup göndermek açık `--uygula` ister.
-- Rapor zayıf noktayı bildirir, çözmez; merkeze bildirilecek olan budur. Kutu kendi payına düşeni (Z2 işleri) aynı turda ele alır.
-Sınavı: `bash scripts/haftalik.test.sh` (H1-H12, hermetik: sahte gorev.sh + sahte ulak.sh).
+- Rapor tek yola gider: ULAK mektubu (deftere ayrıca kayıt yazılmaz — yeni defter kurulmaz); zayıf noktayı bildirir, çözmez; merkeze bildirilecek olan budur. Kutu kendi payına düşeni (Z2 işleri) aynı turda ele alır.
+Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sahte ulak.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 

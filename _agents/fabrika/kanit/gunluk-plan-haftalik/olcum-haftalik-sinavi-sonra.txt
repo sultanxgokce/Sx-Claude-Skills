@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-sonra.sh
-# rc=0 sure=0.6s zaman=2026-10-26T17:51:29+03:00
+# rc=0 sure=0.6s zaman=2026-10-26T17:53:45+03:00
 --- stdout ---
 == haftalik.sh ==
   ✓ H1 hiç kapanış yok + açık iş → Z1 (rc=0)
@@ -22,5 +22,6 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedb
   ✓ H13 tam 7 günlük açık iş Z2 DEĞİL (eşik dahil değil)
   ✓ H14 20 gün önce kapanan iş son hafta sayılmaz → Z1
   ✓ H15 tarihsiz liste → rc=3 ve temiz denmez
-== 20 geçti · 0 düştü ==
+  ✓ H16 var olmayan --kutu → rc=3 ve temiz denmez
+== 21 geçti · 0 düştü ==
 --- stderr ---

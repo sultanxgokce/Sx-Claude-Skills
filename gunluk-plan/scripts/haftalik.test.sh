@@ -88,5 +88,10 @@ printf 'gorev_Z code acik acil ozellik X tarihsiz satir\n' > "$T/liste"
 o="$(bash "$ARAC" 2>&1)"; rc=$?
 kapi "H15 tarihsiz liste → rc=3 ve temiz denmez" "3:0" "$rc:$(printf '%s\n' "$o" | grep -c 'ZAYIF yok\|^yok$')"
 
+# H16: listede olmayan --kutu → ölçülemedi (rc=3), 'ZAYIF yok' basılmaz (göz tur 1)
+{ satir A code acik "kod1" 2026-10-25; } > "$T/liste"
+o="$(bash "$ARAC" --kutu yokkutu 2>&1)"; rc=$?
+kapi "H16 var olmayan --kutu → rc=3 ve temiz denmez" "3:0" "$rc:$(printf '%s\n' "$o" | grep -c 'ZAYIF yok\|^yok$')"
+
 echo "== $G geçti · $D düştü =="
 [ "$D" -eq 0 ]
