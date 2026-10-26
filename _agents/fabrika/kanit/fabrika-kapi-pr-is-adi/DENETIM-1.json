@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "fabrika-kapi-pr-is-adi",
+  "pr": "475",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T18:43:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-kapi-pr-is-adi",
+  "dal": "fabrika-kapi-pr-is-adi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32861,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 25522
+  },
+  "bas": "2d141ac1cf9adf6e2dda8745de1ca995e562d7c4",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, --pr kullanımında iş adını PR’ın değiştirdiği kanıt dizinlerinden kurala uygun biçimde seçiyor; tek aday, çoklu aday, dal eşleşmesi, ölçülememe ve dal yedeği yolları sınanmış. Önce/sonra ölçümü, 182 kapılık gerçek tam sınav ve 6/6 mutasyon yakalama kaydı üretime hazır düzeyde güven veriyor; kanıtlanmış bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. T17 için kırmızı önce ölçümünde 4 başarısızlık, yeşil sonra ölçümünde 10/10 başarı bulunuyor; gerçek tam sınav 182 geçti · 0 kaldı sonucunu veriyor. Mutasyon kaydı gerçek ölçümü açıkça işaretliyor ve altı kasıtlı bozmanın tamamının sınavca yakalandığını gösteriyor. Talepteki dal≠iş senaryosunun hem GEÇTİ hem KALDI yüzü ile çoklu dizin ve yedek davranışları doğrudan ölçülmüş."
+  }
+}

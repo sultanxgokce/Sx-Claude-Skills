@@ -1,0 +1,18 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/kp-once.sh
+# rc=1 sure=7.9s zaman=2026-10-26T18:39:06+03:00
+--- stdout ---
+════ T14 · KANIT TEK KURALLA: iş alanı · PR başı · birincil aynı sırayla; birincilden --pr ile çağrı iş alanındaki kanıtı bulur (retro W42 ders M3) ════
+  ✓ 🔴 BİRİNCİLDEN çağrı iş alanındaki kanıtı buldu → GEÇTİ (15 Eki'de 'kanıt YOK' deyip kaçışa itmişti)
+  ✓ iş alanının içinden çağrı aynı kanıtı buldu (aynı kural, aynı sonuç)
+════ T17 · İŞ ADI PR'IN KANIT DİZİNİNDEN: dal ≠ iş (gorev …THYFXG0 · #884/#817/#960 sınıfı) — GEÇTİ ve KALDI yüzü ════
+  ✗ 🔴 T17a GEÇTİ yüzü: dal 'kanit-dali' ≠ iş 'is-asil' → iş PR'ın kanıt dizininden türedi, kart+kanıt+puan bulundu (rc=0)
+  ✗ 🔴 T17b KALDI yüzü: dal ≠ iş ama puan 3/E → kapı DOĞRU işi ölçüp KAPALI kalır (rc=1, 'kart YOK' değil)
+  ✗ T17c KALDI yüzü: PR iki kanıt dizinine dokunuyor, hiçbiri dal adı değil → ÖLÇÜLEMEDİ (rc=3, adaylar basılır)
+  ✗ T17d PR iki dizine dokunuyor ama biri dal adı → dal adı seçilir (rc=0)
+  ✓ T17e dosya listesi okunamadı → dal adı YEDEK olarak kullanılır (rc=0, türetme notu yok)
+  ✓ T17f PR hiçbir kanıt dizinine dokunmuyor → dal adı (eski davranış korunur)
+  ✓ T17g önekli dal (hendese/is-ck) = kanıt dizini → not düşmez, aynı iş (rc=0)
+  ✓ T17h iş adı elle verilmişse türetme DEVREYE GİRMEZ (açık ad kazanır)
+
+── SONUÇ: 6 geçti · 4 kaldı ──
+--- stderr ---

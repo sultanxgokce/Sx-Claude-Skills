@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-gercek-kapi-tam-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/kp-mut2.sh
+# rc=1 sure=44.7s zaman=2026-10-26T18:42:26+03:00
+--- stdout ---
+YAKALANDI M1 türetme söküldü (dal adı kalır)
+YAKALANDI M2 çok dizin + dal eşleşmesi yok: rc3 yerine dal adıyla devam
+YAKALANDI M3 dal eşleşmesi aranmaz
+YAKALANDI M4 aday sayımı hep 1: iki dizin tek sayılır
+YAKALANDI M5 türetme notu basılmaz
+YAKALANDI M6 açık verilen iş adı da türetmeyle ezilir
+mutant: 6/6 yakalandı
+--- stderr ---
