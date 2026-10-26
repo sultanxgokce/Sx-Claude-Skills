@@ -1,0 +1,23 @@
+{
+  "is": "terminal-onar-kisi-ttyd-yolu",
+  "cumle": "kisi-kur.sh ttyd'yi çıplak adla çağırıyor; medigate'te ttyd yalnız /config/.local/bin içinde olduğu için kişi ekranı hiç başlamazdı — betik ttyd'nin tam yolunu bulsun, bulamazsa kurmadan dursun",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-26T23:14:32+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

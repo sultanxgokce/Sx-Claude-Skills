@@ -1551,7 +1551,7 @@
     {
       "id": "terminal-onar",
       "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
-      "version": "2.28.0",
+      "version": "2.29.0",
       "type": "capability",
       "sync_dagitim": true,
       "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",
