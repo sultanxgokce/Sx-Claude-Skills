@@ -333,13 +333,15 @@ if dis!="h" and re.search(r"ekran|sayfa|panel|arayüz|arayuz|görünüm|gorunum|
         if not os.path.isfile(yol): hata.append("--senaryo dosyası yok: %s — kart AÇILMADI" % senaryo)
         else:
             ic=open(yol,encoding="utf-8").read()
-            eksik=[x for x in ("Amaç","Giriş","İlk bakışta","Ana akış","Tık bütçesi","Kenar durumlar","Kısıt kancaları") if not re.search(r"\*\*"+x+r":\*\*",ic)]
-            if eksik or not re.search(r"^#{2,4} E\d+\b",ic,re.M):
-                hata.append("--senaryo bir ui-tasarim-akisi Durak 2 senaryo kartı değil (başlık '### E# · <ekran>' ve yedi alan şart; eksik: %s) — kart AÇILMADI" % (", ".join(eksik) or "E# başlığı"))
-            else:
-                m=re.search(r"Tık bütçesi:\**[ \t]*(\S[^\n]*)",ic)
-                if not m or m.group(1).lstrip().startswith("<") or not re.search(r"\d",m.group(1)):
-                    hata.append("--senaryo kartında 'Tık bütçesi:' satırı boş ya da rakamsız (yazım: \"3 tık + 2 alan\") — kart AÇILMADI")
+            deger={}
+            for x in ("Amaç","Giriş","İlk bakışta","Ana akış","Tık bütçesi","Kenar durumlar","Kısıt kancaları"):
+                m=re.search(r"\*\*"+x+r":\*\*(.*?)(?=\n\*\*[^\n]*:\*\*|\Z)",ic,re.S)
+                if m and m.group(1).strip() and not m.group(1).strip().startswith("<"): deger[x]=m.group(1).strip()
+            eksik=[x for x in ("Amaç","Giriş","İlk bakışta","Ana akış","Tık bütçesi","Kenar durumlar","Kısıt kancaları") if x not in deger]
+            if eksik or not re.search(r"^#{2,4} E\d+ · \S",ic,re.M):
+                hata.append("--senaryo bir ui-tasarim-akisi Durak 2 senaryo kartı değil (başlık '### E# · <ekran adı>' ve yedi alanın HEPSİ dolu olmalı; eksik/boş: %s) — kart AÇILMADI" % (", ".join(eksik) or "E# · ekran adı başlığı"))
+            elif not re.search(r"\d",deger["Tık bütçesi"]):
+                hata.append("--senaryo kartında 'Tık bütçesi:' rakamsız (yazım: \"3 tık + 2 alan\") — kart AÇILMADI")
 if re.search(r"s[üu]r[üu]m\s+paket",cumle,re.I):
     m=re.fullmatch(r'\d{4}-\d{2}-\d{2} Sultan: (.+?) \(sohbet · ([^·()]+?) · "([^"]+)" · beyan:([\w-]+)\)',onay.strip())
     if not onay: hata.append("sürüm paketi kartı Sultan'ın kare onayı olmadan açılmaz: --kare-onay \"YYYY-MM-DD Sultan: kare onay (sohbet · <oturum-ref> · \\\"<≤15 kelime>\\\" · beyan:<AJAN>)\" — kart AÇILMADI")

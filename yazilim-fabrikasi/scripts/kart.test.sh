@@ -32,7 +32,7 @@ CIKTI="$(bash "$KT" ac is-1 --is "buton ekle" --istedi Sultan --aldi MUAVIN --ge
 grep -q "ekipte biter" <<<"$CIKTI"; g $? "ekipte biter dedi"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-1.json'));assert k['sultan']==False and k['durum']=='acik'"; g $? "sultan=false"
 
-kartgovde() { printf '### E1 · ornek ekran\n**Amaç:** x\n**Giriş:** y\n**İlk bakışta:** z\n**Ana akış:** 1. a\n%s\n**Kenar durumlar:** k\n**Kısıt kancaları:** q\n' "$1"; }
+kartgovde() { printf '### E1 · ornek ekran\n**Amaç:** x\n**Giriş:** y\n**İlk bakışta:** z\n**Ana akış:**\n1. a\n2. b\n%s\n**Kenar durumlar:** k\n**Kısıt kancaları:** q\n' "$1"; }   # Ana akış değeri sonraki satırlarda (şablondaki gibi)
 kartgovde '**Tık bütçesi:** 2 tık + 1 alan' > "$T/senaryo-dolu.md"   # ekran kapısı fikstürü (T3 ve T-EK): tam Durak 2 kartı
 echo "════ T3 · '?' cevabı → şüphede yukarı, Sultan'a gider ════"
 CIKTI="$(bash "$KT" ac is-2 --is "anasayfa görünümü" --istedi reis --aldi NAKKAS --geri-alinamaz h --para h --dis-yuzey '?' --yetki h --oda sinav-oda --senaryo "$T/senaryo-dolu.md" 2>&1)"
@@ -923,6 +923,7 @@ ek() { bash "$KT" ac "$1" --is "$2" --istedi reis --aldi NAKKAS --geri-alinamaz 
 kvar() { [ -f "$DEK/_agents/fabrika/kartlar/$1.json" ]; }
 kartgovde '**Tık bütçesi:** 2 tık + 1 alan' > "$T/senaryo-dolu.md"; kartgovde '**Tık bütçesi:** <yukarıdaki kurala göre>' > "$T/senaryo-yertutucu.md"; kartgovde '**Tık bütçesi:** çok az' > "$T/senaryo-rakamsiz.md"; kartgovde '' | grep -v '^$' > "$T/senaryo-satirsiz.md"
 printf '**Tık bütçesi:** 2 tık + 1 alan\n' > "$T/senaryo-sadece-satir.md"; kartgovde '**Tık bütçesi:** 2 tık' | grep -v 'Kenar durumlar' > "$T/senaryo-alan-eksik.md"; kartgovde '**Tık bütçesi:** 2 tık' | sed 's/^### E1/### Ornek/' > "$T/senaryo-baslik-yok.md"
+kartgovde '**Tık bütçesi:** 2 tık' | sed 's/^### E1 · ornek ekran/### E1/' > "$T/senaryo-ekran-adsiz.md"; kartgovde '**Tık bütçesi:** 2 tık' | sed 's/^\*\*Amaç:\*\* x/**Amaç:**/' > "$T/senaryo-bos-amac.md"; kartgovde '**Tık bütçesi:** 2 tık' | sed 's/^\*\*Giriş:\*\* y/**Giriş:** <nereden gelinir>/' > "$T/senaryo-yertutucu-alan.md"
 D1OK='2026-10-26 Sultan: kare onay (sohbet · session_ornek1 · "kareler uygun, devam" · beyan:SERDAR)'
 ek ek-1 "yeni ana ekran" e >/dev/null; [ $? -eq 1 ]; g $? "E1 ekran kartı senaryosuz rc=1"
 kvar ek-1; [ $? -ne 0 ]; g $? "E1 kart yazılmadı"
@@ -934,6 +935,9 @@ ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-satirsiz.md" >/dev/null; [ $? -eq 1
 ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-sadece-satir.md" >/dev/null; [ $? -eq 1 ]; g $? "E3d tek satırlık sahte dosya (rakamlı tık bütçesi ama senaryo kartı değil) → rc=1"
 ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-alan-eksik.md" >/dev/null; [ $? -eq 1 ]; g $? "E3e senaryo kartında zorunlu alan eksik (Kenar durumlar) → rc=1"
 ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-baslik-yok.md" >/dev/null; [ $? -eq 1 ]; g $? "E3f senaryo kartında E# başlığı yok → rc=1"
+ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-ekran-adsiz.md" >/dev/null; [ $? -eq 1 ]; g $? "E3g başlıkta ekran adı yok ('### E1' tek başına) → rc=1"
+ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-bos-amac.md" >/dev/null; [ $? -eq 1 ]; g $? "E3h Amaç alanı boş → rc=1"
+ek ek-3 "yeni sayfa" e --senaryo "$T/senaryo-yertutucu-alan.md" >/dev/null; [ $? -eq 1 ]; g $? "E3i Giriş alanı şablon yer tutucusu (<…>) → rc=1"
 ek ek-4 "yeni ekran görünümü" e --senaryo "$T/senaryo-dolu.md" >/dev/null; g $? "E4 dolu senaryoyla kart açılır"
 python3 -c "import json;k=json.load(open('$DEK/_agents/fabrika/kartlar/ek-4.json'));assert k['senaryo'].endswith('senaryo-dolu.md')"; g $? "E4 senaryo yolu karta işlenir"
 ek ek-5 "yeni ekran" h >/dev/null; g $? "E5 dış yüzey değil (h) → senaryo istenmez"
