@@ -5,12 +5,15 @@ set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 ARAC="${DEFTERE_YAZ:-$KOK/deftere-yaz.sh}"
 gecen=0; kalan=0
-ONAY="2026-01-02 Sultan: plan onaylandi (sohbet · oturum-sinav-1 · \"bugunku plan tamam\" · beyan:SINAV)"
+ONAY=""
 kapi(){ if [ "$2" = "$3" ]; then gecen=$((gecen+1)); echo "  ✓ $1"; else kalan=$((kalan+1)); echo "  ✗ $1 — beklenen=$2 gerçek=$3"; fi; }
 T=$(mktemp -d); trap 'rm -r -- "$T" 2>/dev/null' EXIT INT TERM
 export GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_TARIH="2026-01-02" GUNLUK_PLAN_AJAN="SINAV"
 export DEFTER_JETON_YOL="$T/jeton-yok" DEFTER_UC="http://127.0.0.1:9"
 export GUNLUK_PLAN_CIPA_SH="$KOK/cipa.sh"
+# onay referansı MEVCUT planın imzasını taşır (kuru koşu basar); plan değişince yeniden alınır
+yenile_onay(){ local i; i="$(bash "$ARAC" --kutu huma 2>/dev/null | sed -n 's/.*plan-imzası=\([0-9a-f]*\).*/\1/p')"
+  ONAY="2026-01-02 Sultan: plan onaylandi (sohbet · oturum-sinav-1 · \"bugunku plan tamam\" · beyan:SINAV · plan:$i)"; }
 
 # sahte gorev.sh: liste $T/liste.txt'i basar (LISTE_RC çıkış kodu), ekle satırı $T/ekle.log'a ekler ve (EKLE_RC) ile döner; ekleneni listeye de katar
 cat > "$T/gorev.sh" <<'EOF'
@@ -40,6 +43,7 @@ kapi "D3 kuru: 'yazardım' satırları (yeni + eski günde iptal olan = 2)" "2" 
 kapi "D4 kuru: açık, onay bekleyen VE bugün kapanan görevle aynı başlık (büyük/küçük harf, sıra numarası farkıyla) atlanır" "4" "$(printf '%s\n' "$c" | grep -c 'atlandı')"
 kapi "D4b kutu listeden türedi (huma)" "1" "$(printf '%s\n' "$c" | grep -c 'kutu=huma')"
 
+yenile_onay
 echo "── UYGULA: yazar, İKİNCİ koşu çift yazmaz"
 c="$(bash "$ARAC" --uygula --onay "$ONAY" 2>&1)"; rc=$?
 kapi "D5 uygula rc=0" "0" "$rc"
@@ -60,29 +64,41 @@ LISTE_RC=0 bash "$ARAC" --kutu huma >/dev/null 2>&1; kapi "D10b liste BOŞ → r
 echo "── ONAY KAPISI (A06/D1): onaysız plan deftere yazılmaz"
 printf 'gorev_01AAAAAAAAAAAAAAAAAAAAAAAA  huma       acik           esnek     ozellik  SINAV      Baska is  (son: 2026-01-02T08:00)\n' > "$T/liste.txt"
 bash "$KOK/cipa.sh" yaz --plan "1) Yeni onay sinavi is" >/dev/null 2>&1
+yenile_onay
 : > "$T/ekle.log"
 bash "$ARAC" --uygula >/dev/null 2>&1; r1=$?
 bash "$ARAC" --uygula --onay "onayladi" >/dev/null 2>&1; r2=$?
 bash "$ARAC" --uygula --onay "2026-01-02 Sultan: onay (sohbet · ref · beyan:SINAV)" >/dev/null 2>&1; r3=$?
+I="${ONAY##*plan:}"; I="${I%)}"
 kapi "D16 --onay'sız --uygula REDDEDİLİR (rc=2)" "2" "$r1"
 kapi "D17 biçimsiz onay (kırpık/ref eksik) REDDEDİLİR" "2:2" "$r2:$r3"
-bash "$ARAC" --uygula --onay "2026-01-02 Sultan: onay (sohbet · ref-1 · \"ab\" · beyan:SINAV)" >/dev/null 2>&1; kapi "D17b iki harflik kırpık (kanıt değil) REDDEDİLİR" "2" "$?"
+kisa="${ONAY/bugunku plan tamam/ab}"; bash "$ARAC" --uygula --onay "$kisa" >/dev/null 2>&1; kapi "D17b iki harflik kırpık (tarih+imza doğru, yalnız biçim kapısı yakalar) REDDEDİLİR" "2" "$?"
+beyansiz="${ONAY/ · beyan:SINAV/}"; bash "$ARAC" --uygula --onay "$beyansiz" >/dev/null 2>&1; kapi "D17g beyan parçası eksik (tarih+imza doğru) REDDEDİLİR" "2" "$?"
 kapi "D18 reddedilen koşuda ekle ÇAĞRILMAZ" "0" "$(wc -l < "$T/ekle.log" | tr -d ' ')"
-bash "$ARAC" >/dev/null 2>&1; kapi "D19 kuru koşu onaysız çalışır (rc=0)" "0" "$?"
+bash "$ARAC" >/dev/null 2>&1; eski="${ONAY/2026-01-02 Sultan/2026-01-01 Sultan}"; bash "$ARAC" --uygula --onay "$eski" >/dev/null 2>&1; kapi "D17c ESKİ tarihli onay REDDEDİLİR (bugün değil)" "2" "$?"
+yanlis="${ONAY/plan:$I/plan:00000000}"; bash "$ARAC" --uygula --onay "$yanlis" >/dev/null 2>&1; kapi "D17d başka planın imzasını taşıyan onay REDDEDİLİR" "2" "$?"
+bash "$KOK/cipa.sh" yaz --plan "1) Onaydan sonra degisen is" >/dev/null 2>&1; bash "$ARAC" --uygula --onay "$ONAY" >/dev/null 2>&1; kapi "D17e plan onaydan SONRA değişti → eski onay düşer" "2" "$?"
+kapi "D18b reddedilen koşularda ekle çağrılmadı" "0" "$(wc -l < "$T/ekle.log" | tr -d ' ')"
+bash "$KOK/cipa.sh" yaz --plan "1) Yeni onay sinavi is" >/dev/null 2>&1; yenile_onay
+bash "$ARAC" --uygula --onay "$ONAY" >/dev/null 2>&1; kapi "D17f doğru imza + bugün + biçim → KABUL (rc=0, 1 görev yazıldı)" "0:1" "$?:$(wc -l < "$T/ekle.log" | tr -d ' ')"
+: > "$T/ekle.log"
+kapi "D19 kuru koşu onaysız çalışır (rc=0)" "0" "$?"
 
 echo "── Hata ve sınırlar"
 cat > "$T/liste.txt" <<'EOF'
 gorev_01AAAAAAAAAAAAAAAAAAAAAAAA  huma       acik           esnek     ozellik  SINAV      Baska is  (son: 2026-01-02T08:00)
 EOF
 : > "$T/ekle.log"
+yenile_onay
 EKLE_RC=1 bash "$ARAC" --uygula --onay "$ONAY" >/dev/null 2>&1; kapi "D11 ekle başarısız → rc=1 (yazıldı denmez)" "1" "$?"
 bash "$KOK/cipa.sh" yaz --plan "1) $(printf 'x%.0s' $(seq 1 210))" >/dev/null 2>&1
+yenile_onay
 : > "$T/ekle.log"
 bash "$ARAC" --uygula --onay "$ONAY" >/dev/null 2>&1; rc=$?
 kapi "D12 200 karakter üstü madde REDDEDİLİR (rc=1), ekle çağrılmaz" "1:0" "$rc:$(wc -l < "$T/ekle.log" | tr -d ' ')"
 bash "$ARAC" --aciliyet yok >/dev/null 2>&1; kapi "D13 geçersiz aciliyet rc=2" "2" "$?"
 bash "$ARAC" --bilinmeyen >/dev/null 2>&1; kapi "D14 tanınmayan argüman rc=2" "2" "$?"
-bash "$KOK/cipa.sh" yaz --plan "1) Bir is" >/dev/null 2>&1; : > "$T/ekle.log"
+bash "$KOK/cipa.sh" yaz --plan "1) Bir is" >/dev/null 2>&1; yenile_onay; : > "$T/ekle.log"
 bash "$ARAC" --uygula --onay "$ONAY" --kutu tellal --kim ORNEK --aciliyet acil >/dev/null 2>&1
 kapi "D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer" "1" "$(grep -c -- '--kutu tellal --etiket ozellik --aciliyet acil --atanan ORNEK --kaynak-kim ORNEK' "$T/ekle.log")"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

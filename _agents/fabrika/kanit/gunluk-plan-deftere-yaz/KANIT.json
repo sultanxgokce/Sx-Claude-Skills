@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-deftere-yaz",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T16:58:15+03:00",
+  "guncelleme": "2026-10-26T17:04:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,55 +25,55 @@
       "etiket": "deftere-yaz-sinavi",
       "asama": "sonra",
       "dosya": "olcum-deftere-yaz-sinavi-sonra.txt",
-      "sha256": "6952b5ee3dc2ed298c3da8a951fcc0c7e4cf2ad28596b9e8bc0274b61a2ba51a",
+      "sha256": "b58f6ca155726baa632733154b2d35ac1e0a7d97cbbed2a94b5f70359899538a",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/dy-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T16:57:48+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-10-26T17:03:41+03:00",
+      "sure_sn": 2.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "3fcd02d85eca48518fc00a8c341b365c"
+      "olcum_id": "5cd92b9e83804b01988a259689b195bb"
     },
     {
       "tur": "olcum",
       "etiket": "deftere-yaz-mutantlar",
       "asama": "sonra",
       "dosya": "olcum-deftere-yaz-mutantlar-sonra.txt",
-      "sha256": "12df1de460eea939f376aa187dbaa143bde59bfb840ac4b372e49713ba083d0c",
+      "sha256": "05c3a0db2ef5824c9b630d3f18551b602ad599d3fe951ae947d7a2e92612c6c0",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/dy-mut2.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T16:58:09+03:00",
-      "sure_sn": 20.9,
+      "zaman": "2026-10-26T17:04:36+03:00",
+      "sure_sn": 55.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "deftere-yaz-sinavi",
       "beklenen": "kirmizi",
-      "olcum_id": "8163fabe85314ac2b81db57518742b8d"
+      "olcum_id": "77a008b12f3b4906a0ec190f4c4838fb"
     },
     {
       "tur": "olcum",
       "etiket": "gercek-defter-kuru",
       "asama": "sonra",
       "dosya": "olcum-gercek-defter-kuru-sonra.txt",
-      "sha256": "051cf644fcb9104a817abbc199d0790664d1e471a7c378dc26b19053d6c4da45",
+      "sha256": "b383a9c2fdedba59927293625774c2fb6106a7ab9665f617d7f35837e52ce8aa",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/dy-gercek.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T16:58:15+03:00",
-      "sure_sn": 5.8,
+      "zaman": "2026-10-26T17:04:43+03:00",
+      "sure_sn": 7.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "ef75c22bfb5e4453b2487bae068b6c67"
+      "olcum_id": "6c666cc7d3784bd4b48d20c91dfc9acf"
     }
   ],
-  "imza": "323f5ba1a596dac207c0989db30add5d9a6f9aa08a0ac1a27ca0ed2e0c037d05"
+  "imza": "ffbc50d102073294d2e0a7172786f7ea4c4a1840b46475f69514fe6c24fbe722"
 }

@@ -92,9 +92,9 @@ bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh --uygula --onay "
 - Kaynak çıpadır (`- [ ]` satırları); yazım `gorev.sh ekle` ile, kutunun kendi jetonuyla; etiket özellik, aciliyet esnek (`--aciliyet` ile değişir), atanan = sen.
 - **İdempotent:** defterde aynı başlıkta açık görev (onay bekleyen dahil) varsa yazılmaz; ikinci koşu çift kayıt açmaz.
 - **Ölçemezse yazmaz:** çıpa ya da görev listesi okunamazsa rc 3 — "yazılacak bir şey yok" denmez. 200 karakterden uzun madde başlık değil nottur, reddedilir (kırpılmaz).
-- **Onay kapısı (A06/D1):** `--uygula`, Sultan'ın plan onayını GÖRDÜĞÜNÜN referansını ister: `YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim>" · beyan:<AJAN>)`. Biçimsiz ya da eksik referansta rc 2, deftere hiçbir şey gitmez; onay ÜRETİLMEZ, gördüğün aktarılır. Kuru koşu onaysız çalışır.
+- **Onay kapısı (A06/D1):** `--uygula`, Sultan'ın plan onayını GÖRDÜĞÜNÜN referansını ister: `YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim>" · beyan:<AJAN> · plan:<imza>)`. Tarih BUGÜN, imza o anki planın imzasıdır (kuru koşu "plan-imzası=…" basar); plan onaydan sonra değişirse eski onay düşer. Biçimsiz, eski tarihli ya da başka planın referansında rc 2, deftere hiçbir şey gitmez; onay ÜRETİLMEZ, gördüğün aktarılır. Kuru koşu onaysız çalışır.
 - **Aynı gün aynı madde:** açık (onay bekleyen dahil) ya da BUGÜN kapanmış/iptal edilmiş aynı başlıklı görev varsa yazılmaz; eski günlerde kapanmış başlık yeni gün için yeniden açılabilir.
-Sınavı: `bash scripts/deftere-yaz.test.sh` (D1-D19, D17b, hermetik: sahte gorev.sh).
+Sınavı: `bash scripts/deftere-yaz.test.sh` (D1-D19, D17b-f, hermetik: sahte gorev.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 

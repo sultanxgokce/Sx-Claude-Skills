@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/dy-sonra.sh
-# rc=0 sure=1.4s zaman=2026-10-26T16:57:48+03:00
+# rc=0 sure=2.9s zaman=2026-10-26T17:03:41+03:00
 --- stdout ---
 ── KURU: neyi yazacağını basar, deftere yazmaz
   ✓ D1 kuru rc=0
@@ -19,8 +19,14 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedb
 ── ONAY KAPISI (A06/D1): onaysız plan deftere yazılmaz
   ✓ D16 --onay'sız --uygula REDDEDİLİR (rc=2)
   ✓ D17 biçimsiz onay (kırpık/ref eksik) REDDEDİLİR
-  ✓ D17b iki harflik kırpık (kanıt değil) REDDEDİLİR
+  ✓ D17b iki harflik kırpık (tarih+imza doğru, yalnız biçim kapısı yakalar) REDDEDİLİR
+  ✓ D17g beyan parçası eksik (tarih+imza doğru) REDDEDİLİR
   ✓ D18 reddedilen koşuda ekle ÇAĞRILMAZ
+  ✓ D17c ESKİ tarihli onay REDDEDİLİR (bugün değil)
+  ✓ D17d başka planın imzasını taşıyan onay REDDEDİLİR
+  ✓ D17e plan onaydan SONRA değişti → eski onay düşer
+  ✓ D18b reddedilen koşularda ekle çağrılmadı
+  ✓ D17f doğru imza + bugün + biçim → KABUL (rc=0, 1 görev yazıldı)
   ✓ D19 kuru koşu onaysız çalışır (rc=0)
 ── Hata ve sınırlar
   ✓ D11 ekle başarısız → rc=1 (yazıldı denmez)
@@ -28,5 +34,5 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedb
   ✓ D13 geçersiz aciliyet rc=2
   ✓ D14 tanınmayan argüman rc=2
   ✓ D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer
-── SONUÇ: 22 geçti · 0 kaldı ──
+── SONUÇ: 28 geçti · 0 kaldı ──
 --- stderr ---

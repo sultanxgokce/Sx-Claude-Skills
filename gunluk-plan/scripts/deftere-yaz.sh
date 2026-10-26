@@ -26,14 +26,6 @@ while [ $# -gt 0 ]; do
   esac
 done
 case "$ACIL" in cok-acil|acil|esnek|rahat) ;; *) echo "HATA: --aciliyet geçersiz: $ACIL" >&2; exit 2 ;; esac
-# ONAY KAPISI (A06/D1): --uygula, Sultan'ın planı onayladığının GÖRÜLDÜĞÜ referansı ister (ajan onay ÜRETMEZ, gördüğünü aktarır). Biçim:
-#   YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim kırpık>" · beyan:<AJAN>)  — üç parça da zorunlu, ref'siz beyan sayılmaz.
-if [ "$UYGULA" -eq 1 ]; then
-  if ! printf '%s' "$ONAY" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2} Sultan: .+ \(sohbet · [^·]+ · "[^"]{3,}" · beyan:[^)]+\)$'; then
-    echo "REDDEDİLDİ: --uygula için Sultan'ın plan onayı referansı şart (--onay '<YYYY-MM-DD Sultan: onay (sohbet · <oturum-ref> · \"<verbatim kırpık>\" · beyan:AJAN)>'). Onaysız plan deftere yazılmaz; kuru koşu onaysız çalışır." >&2
-    exit 2
-  fi
-fi
 [ -x "$GOREV" ] || [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
 [ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
 [ -n "$KIM" ] || KIM="$(bash "$CIPA" ajan 2>/dev/null | python3 -c 'import sys; print(sys.stdin.read().strip().upper())')"   # çıpa kimliği dosya adı için KATLANMIŞTIR; İ/Â'lı adlar için --kim ver
@@ -68,6 +60,20 @@ for s in sys.stdin:
 ' "$BUGUN")"
 ACIK_N=""; while IFS= read -r b; do [ -n "$b" ] && ACIK_N+="$(_norm "$b")"$'\n'; done <<<"$ACIK"
 
+# PLAN İMZASI: açık maddelerin (sıra numarasız, sırayla) sha256 ilk 8 hanesi. Kuru koşu basar; onay referansı BU imzayı ve BUGÜNÜN tarihini taşımak zorundadır —
+#   böylece onay yalnız gösterilen plana ve o güne bağlanır; çıpa sonradan değişirse onay düşer.
+PLAN_IMZA="$(printf '%s\n' "$CIPA_METNI" | sed -n 's/^- \[ \][[:space:]]*//p' | sed 's/^[0-9]\{1,2\}[).][[:space:]]*//' | sha256sum | cut -c1-8)"
+# ONAY KAPISI (A06/D1): --uygula, Sultan'ın BU planı BUGÜN onayladığının GÖRÜLDÜĞÜ referansı ister (ajan onay ÜRETMEZ, gördüğünü aktarır). Biçim:
+#   YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≥3 karakter verbatim kırpık>" · beyan:<AJAN> · plan:<imza>)  — tarih bugün, imza mevcut plan olmalı.
+if [ "$UYGULA" -eq 1 ]; then
+  if ! printf '%s' "$ONAY" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2} Sultan: .+ \(sohbet · [^·]+ · "[^"]{3,}" · beyan:[^·)]+ · plan:[0-9a-f]{8}\)$'; then
+    echo "REDDEDİLDİ: --uygula için Sultan'ın plan onayı referansı şart (--onay '<YYYY-MM-DD Sultan: onay (sohbet · <oturum-ref> · \"<verbatim kırpık>\" · beyan:AJAN · plan:$PLAN_IMZA)>'). Onaysız plan deftere yazılmaz; kuru koşu onaysız çalışır." >&2
+    exit 2
+  fi
+  [ "${ONAY%% *}" = "$BUGUN" ] || { echo "REDDEDİLDİ: onay tarihi bugün ($BUGUN) değil: ${ONAY%% *}" >&2; exit 2; }
+  case "$ONAY" in *"plan:$PLAN_IMZA)") ;; *) echo "REDDEDİLDİ: onay bu plana ait değil (şimdiki plan imzası: $PLAN_IMZA) — plan onaydan sonra değişmiş olabilir" >&2; exit 2 ;; esac
+fi
+
 yazilan=0; atlanan=0; reddedilen=0; hata=0; say=0
 while IFS= read -r sat; do
   m="$(printf '%s' "$sat" | sed -n 's/^- \[ \][[:space:]]*//p' | sed 's/^[0-9]\{1,2\}[).][[:space:]]*//')"   # "1) madde" sıra numarası başlığa girmez
@@ -86,6 +92,6 @@ while IFS= read -r sat; do
 done <<<"$CIPA_METNI"
 
 [ "$say" -gt 0 ] || { echo "çıpada açık madde yok (— ya hepsi kapandı ya çıpa boş)"; exit 0; }
-printf 'kutu=%s kim=%s %s: yazılan=%d atlanan=%d reddedilen=%d hata=%d\n' "$KUTU" "$KIM" "$([ "$UYGULA" -eq 1 ] && echo uygula || echo kuru)" "$yazilan" "$atlanan" "$reddedilen" "$hata"
+printf 'kutu=%s kim=%s %s: yazılan=%d atlanan=%d reddedilen=%d hata=%d plan-imzası=%s\n' "$KUTU" "$KIM" "$([ "$UYGULA" -eq 1 ] && echo uygula || echo kuru)" "$yazilan" "$atlanan" "$reddedilen" "$hata" "$PLAN_IMZA"
 [ "$hata" -eq 0 ] && [ "$reddedilen" -eq 0 ] || exit 1
 exit 0
