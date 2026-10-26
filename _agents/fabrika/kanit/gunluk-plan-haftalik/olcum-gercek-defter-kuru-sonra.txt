@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-gercek.sh
+# rc=0 sure=0.3s zaman=2026-10-26T17:53:53+03:00
+--- stdout ---
+Haftalık değerlendirme · kutu code · son 7 gün · kapanan=240 iptal=24 calisiliyor=4 bekliyor=52 acik=27 hareketsiz=1
+Zayıf noktalar:
+Z2 1 iş 7 günden uzundur hareketsiz: Koç sohbeti — ENİS ile mesajlaşma sistemi (web: kokpit/terminal içinde (8 gün)
+Z3 bekleyen iş (52) yürüyen ve açık işlerden (31) fazla
+(kuru koşu: SERDAR'e gönderilmedi — göndermek için --uygula)
+rc=0
+--- stderr ---
