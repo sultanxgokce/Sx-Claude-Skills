@@ -120,6 +120,17 @@ def izinli_gorunur():
     return {a: v for a, v in gor.items() if a in izin}
 
 
+_GUVENLI = re.compile(r"^[\w][\w .?!/-]*$", re.UNICODE)
+
+
+def _guvenli_parca(m):
+    """Ekran araması için soru/şık metninin ilk 30 karakteri; tmux biçim dizgisini bozabilecek karakter (# , } { ' " \\ ;) varsa '' (koşul kurulamaz → ret)."""
+    if not isinstance(m, str):
+        return ""
+    m = m.strip()[:30].rstrip()
+    return m if m and _GUVENLI.match(m) else ""
+
+
 def temizle_metin(m):
     if not isinstance(m, str):
         return ""
@@ -239,18 +250,28 @@ class Oturum(threading.Thread):
         sunulan = {s.get("no") for s in soru.get("siklar", []) if isinstance(s, dict)}
         if no not in sunulan:
             return self.ret("sik-sunulmadi", "sik")   # sunulmayan şık YOK
-        imza = json.dumps([soru.get("metin"), soru.get("siklar")], sort_keys=True)
-        iz2 = izinli_gorunur()   # 🔴 doğrulama ⟂ gönderim atomik DEĞİL: pencereyi send-keys'ten HEMEN önceki ikinci okumayla daralt (göz tur 1)
-        k2 = (iz2 or {}).get(self.koltuk)
-        s2 = k2 and k2.get("soru")
-        if not k2 or k2.get("hal") != "soru" or not isinstance(s2, dict) or json.dumps([s2.get("metin"), s2.get("siklar")], sort_keys=True) != imza:
-            return self.ret("soru-degisti", "sik")
+        # 🔴 DOĞRULAMA ⟂ GÖNDERİM ATOMİK (göz tur 1+2): iki ayrı süreç arasında soru değişebilir. Doğrulama ve gönderim TEK tmux komutunda yapılır:
+        #   `if-shell -F <pane> '#{&&:#{C:<no>. <şık>},#{C:<soru>}}' 'send-keys …'` — koşul tmux sunucusu içinde, gönderimle aynı işlemde değerlendirilir
+        #   (ekranda soru metni ve seçilen şık satırı hâlâ görünüyorsa gider). Koşul kurulamıyorsa (metin güvenli karakter dışı) GÖNDERİLMEZ (fail-closed).
+        sik_metin = next((x.get("metin") for x in soru.get("siklar", []) if isinstance(x, dict) and x.get("no") == no), "")
+        a, b = _guvenli_parca(sik_metin), _guvenli_parca(soru.get("metin"))
+        if not a or not b:
+            return self.ret("kosul-kurulamadi", "sik")
+        tmx = ortam("KOPRU_TMUX", "tmux"); env = {k: v for k, v in os.environ.items() if k != "TMUX"}
+        try:
+            pid = subprocess.run([tmx, "display-message", "-p", "-t", "=" + self.koltuk + ":", "#{pane_id}"], capture_output=True, text=True, timeout=10, env=env).stdout.strip()
+        except Exception:
+            pid = ""
+        if not re.match(r"^%[0-9]+$", pid):
+            return self.ret("tus-gonderilemedi", "sik")
         if not iz_yaz(kisi=self.kisi, uid=self.uid, op="sik", koltuk=self.koltuk, sonuc="basliyor", no=no):
             return self.ret("iz-yazilamadi", "sik")
         tus = ortam("KOPRU_SIK_TUS", "{no}").replace("{no}", str(no))
-        p = subprocess.run([ortam("KOPRU_TMUX", "tmux"), "send-keys", "-t", "=" + self.koltuk + ":", tus], capture_output=True, text=True, timeout=10, env={k: v for k, v in os.environ.items() if k != "TMUX"})
+        kosul = "#{&&:#{C:%d. %s},#{C:%s}}" % (no, a, b)
+        p = subprocess.run([tmx, "if-shell", "-F", "-t", pid, kosul, "send-keys -t %s %s" % (pid, shlex.quote(tus)), "kopru-kosul-tutmadi"],
+                           capture_output=True, text=True, timeout=10, env=env)
         if p.returncode != 0:
-            return self.ret("tus-gonderilemedi", "sik")
+            return self.ret("soru-degisti" if "kopru-kosul-tutmadi" in (p.stderr or "") else "tus-gonderilemedi", "sik")
         iz_yaz(kisi=self.kisi, uid=self.uid, op="sik", koltuk=self.koltuk, sonuc="tamam", no=no)
         self.gonder({"t": "tamam", "eylem": "sik", "no": no})
 

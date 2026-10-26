@@ -34,7 +34,7 @@ yaz(T + "/liste.sh", '#!/bin/sh\nif [ -e "' + T + '/degis" ]; then n=$(cat "' + 
 yaz(T + "/mesaj.sh", '#!/bin/sh\ncat > "' + T + '/mesaj.gelen"\necho "$1 $2" > "' + T + '/mesaj.arg"\necho ulak_TEST-1\n', 0o755)
 yaz(T + "/izin.json", json.dumps({"kisiler": [{"id": "aysenur", "kutular": {"demo": ["demo-ana", "menu-ana", "gorunmez"], "baska": ["baska-ana"]}}]}))
 tmux("new-session", "-d", "-s", "demo-ana", "-x", "80", "-y", "24", "echo MERHABA-KOLTUK; sleep 600")
-tmux("new-session", "-d", "-s", "menu-ana", "-x", "80", "-y", "24", "cat")
+tmux("new-session", "-d", "-s", "menu-ana", "-x", "80", "-y", "24", "echo Devam?; echo '1. Evet'; echo '2. Hayır'; cat")
 tmux("new-session", "-d", "-s", "yasak-ana", "-x", "80", "-y", "24", "sleep 600")
 SORU = json.dumps({"tur": "menu", "metin": "Devam?", "siklar": [{"no": 1, "metin": "Evet"}, {"no": 2, "metin": "Hayır"}], "beri": 1})
 
@@ -166,7 +166,7 @@ try:
     cm.yolla(op="sik", no=2); r = cm.sonraki("tamam")
     time.sleep(0.4)
     cap = tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout
-    ok("K19 sunulan şık tuşu koltuğa gitti", bool(r) and r["no"] == 2 and "2" in cap, (r, cap[-80:]))
+    ok("K19 sunulan şık tuşu koltuğa gitti", bool(r) and r["no"] == 2 and any(l.strip() == "2" for l in cap.splitlines()), (r, cap[-80:]))
     cm.yolla(op="sik", no=7); r = cm.sonraki("ret")
     ok("K20 sunulmayan şık reddi", bool(r) and r["neden"] == "sik-sunulmadi", r)
     cm.yolla(op="sik", no="2; rm"); r = cm.sonraki("ret")
@@ -187,17 +187,22 @@ try:
     ok("K27c iz yazılamıyor → şık reddi (iz-yazilamadi)", bool(r) and r["neden"] == "iz-yazilamadi", r)
     os.rmdir(T + "/iz.jsonl"); os.rename(T + "/iz.eski", T + "/iz.jsonl")
 
-    print("K28 doğrulama ile gönderim arasında soru değişirse tuş GİTMEZ (göz tur 1)")
-    SORU2 = json.dumps({"tur": "menu", "metin": "BAŞKA SORU", "siklar": [{"no": 1, "metin": "x"}, {"no": 2, "metin": "y"}], "beri": 2})
-    yaz(T + "/liste2.tsv", "demo-ana\t1\t1\tajan\tcalisiliyor\t\t\t\nmenu-ana\t1\t1\tajan\tsoru\t\t\t" + SORU2 + "\nyasak-ana\t1\t1\tajan\tbos\t\t\t\n")
-    tmux("send-keys", "-t", "=menu-ana:", "C-u")
+    print("K28 liste bayatken (soru ekrandan gitti) tuş GİTMEZ: doğrulama + gönderim tek tmux komutunda (göz tur 1+2)")
+    tmux("respawn-pane", "-k", "-t", "=menu-ana:", "cat")   # ekran temiz; ama liste komutu hâlâ 'soru' diyor (bayat okuma = yarışın ta kendisi)
+    time.sleep(0.6)
     once = tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout
-    open(T + "/degis", "w").close(); open(T + "/sayac", "w").write("0")
     cm.yolla(op="sik", no=1); r = cm.sonraki("ret"); time.sleep(0.4)
     sonra = tmux("capture-pane", "-p", "-t", "=menu-ana:").stdout
-    ok("K28 soru değişti → şık reddi (soru-degisti)", bool(r) and r["neden"] == "soru-degisti", r)
+    ok("K28 soru ekranda yok → şık reddi (soru-degisti)", bool(r) and r["neden"] == "soru-degisti", r)
     ok("K28b tuş koltuğa gitmedi", once == sonra, (once[-60:], sonra[-60:]))
-    os.remove(T + "/degis")
+    tmux("respawn-pane", "-k", "-t", "=menu-ana:", "echo \"Başka soru\"; echo \"1. Evet\"; cat")
+    time.sleep(0.6); cm.yolla(op="sik", no=1); r = cm.sonraki("ret")
+    ok("K28c aynı şık metni ama BAŞKA soru → reddi (iki koşul birlikte)", bool(r) and r["neden"] == "soru-degisti", r)
+    SORU_KOTU = json.dumps({"tur": "menu", "metin": "Sil #{x}?", "siklar": [{"no": 1, "metin": "Evet"}, {"no": 2, "metin": "Hayır"}], "beri": 3})
+    yaz(T + "/liste.tsv", "demo-ana\t1\t1\tajan\tcalisiyor\t\t\t\nmenu-ana\t1\t1\tajan\tsoru\t\t\t" + SORU_KOTU + "\n")
+    cm.yolla(op="sik", no=1); r = cm.sonraki("ret")
+    ok("K28d tmux biçim karakterli soru metni → koşul kurulamaz, tuş gitmez (kosul-kurulamadi)", bool(r) and r["neden"] == "kosul-kurulamadi", r)
+    liste()
 
     print("K23 uid kapısı")
     kopru.terminate(); kopru.wait()
