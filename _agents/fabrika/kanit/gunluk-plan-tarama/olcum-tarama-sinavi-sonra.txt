@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/tarama-ekle.test.sh
-# rc=0 sure=1.0s zaman=2026-10-26T23:56:17+03:00
+# rc=0 sure=1.1s zaman=2026-10-26T23:59:40+03:00
 --- stdout ---
 ── KURU koşu
   ✓ T1 kuru rc=0
@@ -20,6 +20,9 @@ $ bash gunluk-plan/scripts/tarama-ekle.test.sh
   ✓ T4c kanıtta ölçülmüş sayı yoksa rc 2 (serbest metin ölçüm değil)
   ✓ T4e https adresi açılmıyorsa (404) rc 2; ağ yoksa rc 3; HEAD reddedilip GET geçerse (405→206) kabul
   ✓ T4f sonu satır sonu olmayan dosyanın SON satırı geçerli (3), 4. satır değil
+  ✓ T4g kanıttaki sayı (99) kaynak satırında yok → rc 1, sebep söylenir, yazılmadı
+  ✓ T4h kaynak dosyası dünkü (ölçüm bu turda değil) → rc 1, sebep söylenir, yazılmadı
+  ✓ T4i sayı satırda tam sayı olarak geçmeli ('4' ≠ '42' içinde geçen 4) → rc 1
 ── KOPYA
   ✓ T6 açık / bugün kapanan / zaten [tarama] olan aynı başlık (büyük-küçük harf, noktalama farkı dahil) → rc 2, yazılmadı
   ✓ T6b eski günde kapanmış başlık yeniden yazılabilir
@@ -39,5 +42,5 @@ $ bash gunluk-plan/scripts/tarama-ekle.test.sh
   ✓ T12 sayım 'huma'da ama kayıt 'mmex'e düştüyse rc 1 ve açıkça söylenir (tavan çevresinden dolaşılamaz)
   ✓ T12b yazıldı ama defterde görünmüyorsa rc 1 ('kutu doğrulanamadı')
 
-30 geçti, 0 kaldı
+33 geçti, 0 kaldı
 --- stderr ---

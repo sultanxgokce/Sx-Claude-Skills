@@ -47,8 +47,9 @@ sifirla; c="$(bash "$ARAC" --baslik "Yeni tarama işi" --kaynak "$K" --kanit "$K
 kapi "T2 uygula rc=0 ve tek yaz çağrısı" "0:1" "$rc:$(yaz_say)"
 kapi "T2b başlık '[tarama] ' işaretli, etiket özellik, kim=SINAV" "yes" "$(grep -q '^yaz \[tarama\] Yeni tarama işi --kim SINAV --etiket ozellik' "$T/yaz.log" && echo yes || echo no)"
 kapi "T2c not kaynak ve kanıtı taşır" "yes" "$(grep -q "kaynak: $K · kanıt: $KN" "$T/yaz.log" && echo yes || echo no)"
-mkdir -p "$T/proje/ui/lib"; seq 1 50 > "$T/proje/ui/lib/x.ts"
-sifirla; ( cd "$T/proje" && bash "$ARAC" --baslik "Dosya kaynaklı iş" --kaynak "ui/lib/x.ts:42" --kanit "$KN" --kutu huma --uygula >/dev/null 2>&1 ); rc=$?
+mkdir -p "$T/proje/ui/lib"; seq 1 50 > "$T/proje/ui/lib/x.ts"; touch -d "2026-01-02 10:00" "$T/proje/ui/lib/x.ts"   # ölçüm dosyası BUGÜN (sınav tarihi) yazılmış
+KD="ölçülen satır 42 numaralı sayaç değeri"
+sifirla; ( cd "$T/proje" && bash "$ARAC" --baslik "Dosya kaynaklı iş" --kaynak "ui/lib/x.ts:42" --kanit "$KD" --kutu huma --uygula >/dev/null 2>&1 ); rc=$?
 kapi "T2d dosya:satır kaynağı kabul" "0:1" "$rc:$(yaz_say)"
 sifirla; bash "$ARAC" --baslik "Başka kim" --kaynak "$K" --kanit "$KN" --kutu huma --kim BASKA --uygula >/dev/null 2>&1
 kapi "T2e --kim ilk ajan değerini ezer" "yes" "$(grep -q -- '--kim BASKA' "$T/yaz.log" && echo yes || echo no)"
@@ -82,10 +83,19 @@ FAKE_HEAD=404 FAKE_GET=404 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit 
 FAKE_HEAD=000 FAKE_GET=000 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "$KN" --kutu huma --uygula >/dev/null 2>&1; r2=$?
 FAKE_HEAD=405 FAKE_GET=206 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "$KN" --kutu huma >/dev/null 2>&1; r3=$?
 kapi "T4e https adresi açılmıyorsa (404) rc 2; ağ yoksa rc 3; HEAD reddedilip GET geçerse (405→206) kabul" "2 3 0:0" "$r1 $r2 $r3:$(yaz_say)"
-printf 'bir\niki\nüç-son-satır-newlinesiz' > "$T/proje/ui/lib/y.ts"
-( cd "$T/proje" && bash "$ARAC" --baslik "Newlinesiz son satır" --kaynak "ui/lib/y.ts:3" --kanit "$KN" --kutu huma >/dev/null 2>&1 ); r1=$?
-( cd "$T/proje" && bash "$ARAC" --baslik "Newlinesiz aşkın" --kaynak "ui/lib/y.ts:4" --kanit "$KN" --kutu huma >/dev/null 2>&1 ); r2=$?
+printf 'bir\niki\nölçüm 7 adet son-satır-newlinesiz' > "$T/proje/ui/lib/y.ts"; touch -d "2026-01-02 10:00" "$T/proje/ui/lib/y.ts"; KY="son satırda 7 adet ölçüldü"
+( cd "$T/proje" && bash "$ARAC" --baslik "Newlinesiz son satır" --kaynak "ui/lib/y.ts:3" --kanit "$KY" --kutu huma >/dev/null 2>&1 ); r1=$?
+( cd "$T/proje" && bash "$ARAC" --baslik "Newlinesiz aşkın" --kaynak "ui/lib/y.ts:4" --kanit "$KY" --kutu huma >/dev/null 2>&1 ); r2=$?
 kapi "T4f sonu satır sonu olmayan dosyanın SON satırı geçerli (3), 4. satır değil" "0 2" "$r1 $r2"
+
+c="$( cd "$T/proje" && bash "$ARAC" --baslik "Sayı satırda yok" --kaynak "ui/lib/x.ts:42" --kanit "ölçülen satır 99 numaralı sayaç değeri" --kutu huma --uygula 2>&1 )"; r1=$?
+kapi "T4g kanıttaki sayı (99) kaynak satırında yok → rc 1, sebep söylenir, yazılmadı" "1:0:1" "$r1:$(yaz_say):$(grep -c "99' sayısı" <<<"$c")"
+touch -d "2026-01-01 10:00" "$T/proje/ui/lib/x.ts"
+c="$( cd "$T/proje" && bash "$ARAC" --baslik "Dünkü dosya" --kaynak "ui/lib/x.ts:42" --kanit "$KD" --kutu huma --uygula 2>&1 )"; r2=$?
+kapi "T4h kaynak dosyası dünkü (ölçüm bu turda değil) → rc 1, sebep söylenir, yazılmadı" "1:0:1" "$r2:$(yaz_say):$(grep -c "bugün (2026-01-02) yazılmamış" <<<"$c")"
+touch -d "2026-01-02 10:00" "$T/proje/ui/lib/x.ts"
+c="$( cd "$T/proje" && bash "$ARAC" --baslik "Kısmi sayı" --kaynak "ui/lib/x.ts:42" --kanit "ölçülen satır 4 numaralı sayaç değeri" --kutu huma --uygula 2>&1 )"; r3=$?
+kapi "T4i sayı satırda tam sayı olarak geçmeli ('4' ≠ '42' içinde geçen 4) → rc 1" 1 "$r3"
 
 echo "── KOPYA"
 { satir BBBBBBBBBBBBBBBBBBBBBBBB huma acik "Açık duran iş" 2026-01-01T08:00

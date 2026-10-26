@@ -38,7 +38,13 @@ case "$KAYNAK" in https://*)   # adres GERÇEKTEN açılıyor mu (HEAD, olmazsa 
 *)   # dosya:satır → dosya GERÇEKTEN var ve satır dosya içinde (çalışma dizinine ya da mutlak yola göre)
   f="${KAYNAK%:*}"; ln="${KAYNAK##*:}"
   [ -f "$f" ] || { echo "REDDEDİLDİ: --kaynak dosyası yok: '$f' (çalışma dizini: $PWD) — ölçmeden iş yazılmaz" >&2; exit 2; }
-  [ "$ln" -ge 1 ] && [ "$ln" -le "$(grep -c '' "$f")" ] || { echo "REDDEDİLDİ: --kaynak satırı dosyanın dışında: '$KAYNAK'" >&2; exit 2; } ;; esac
+  [ "$ln" -ge 1 ] && [ "$ln" -le "$(grep -c '' "$f")" ] || { echo "REDDEDİLDİ: --kaynak satırı dosyanın dışında: '$KAYNAK'" >&2; exit 2; }
+  # kanıtı ölçüm DOSYASINA bağla (SERDAR 26 Eki 23:58): (1) kanıttaki her sayı o dosyanın o satırında birebir geçer, (2) dosya BUGÜN yazılmış (ölçüm bu turda)
+  SATIR_METNI="$(sed -n "${ln}p" "$f")"
+  for sayi in $(printf '%s' "$KANIT" | grep -oE '[0-9]+'); do
+    printf '%s' "$SATIR_METNI" | grep -qwF -- "$sayi" || { echo "REDDEDİLDİ: kanıttaki '$sayi' sayısı $f dosyasının $ln. satırında geçmiyor — kanıt ölçüm dosyasına bağlı değil" >&2; exit 1; }
+  done
+  [ "$(date -r "$f" +%F)" = "$BUGUN" ] || { echo "REDDEDİLDİ: $f dosyası bugün ($BUGUN) yazılmamış (değişim: $(date -r "$f" +%F)) — ölçüm bu turda değil" >&2; exit 1; } ;; esac
 printf '%s' "$KANIT" | grep -q '[0-9]' || { echo "REDDEDİLDİ: --kanit ölçülmüş bir sayı taşımıyor (kaç dosya/satır/ms/adet?) — ölçmeden iş yazılmaz" >&2; exit 2; }
 [ "${#KANIT}" -ge 20 ] || { echo "REDDEDİLDİ: --kanit en az 20 karakter, bu turda ölçülen şeyi söylemeli (ölçmeden iş yazılmaz)" >&2; exit 2; }
 [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
