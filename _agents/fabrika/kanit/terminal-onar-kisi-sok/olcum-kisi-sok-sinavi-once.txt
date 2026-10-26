@@ -1,0 +1,30 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-once.sh
+# rc=1 sure=60.4s zaman=2026-10-26T19:02:43+03:00
+--- stdout ---
+  ✗ S1 kuru kip rc 0  → rc=127
+  ✓ S2 kuru kipte hiçbir şey değişmedi
+  ✗ S3 kuru çıktı KURU KİP diyor ve 4 adım sayıyor  → 0
+  ✗ S4 --uygula (kum havuzu) rc 0  → bash: /tmp/tmp.Axq55U4sZF/kisi-sok.sh: No such file or directory
+  ✗ S5 soketler, /run/kisi, istemci kopyası ve /opt/kisi kalktı  → /tmp/tmp.4fg7RQC4gb/opt:
+kisi
+
+/tmp/tmp.4fg7RQC4gb/run:
+kisi
+  ✓ S6 izin dosyası DOKUNULMADI (Sultan verisi)
+  ✗ S7 çıktı izin dosyasının dokunulmadığını söylüyor  → 
+  ✗ S8 ikinci koşu İDEMPOTENT (rc 0, 'zaten yok')  → rc=127
+  ✗ S9 düşük uid reddi  → 
+  ✗ S10 geçersiz kullanıcı adı reddi  → 
+  ✗ S11 kök olmadan --uygula reddi (rc 2)  → 
+  ✗ S12 kullanıcı BAŞKA uid ile varsa DURUR (rc 3, kuru kipte bile)  → rc=127
+  ✗ S13 süreç eşleme: kuru kip sahte ttyd-kisi sürecini 'kill' olarak LİSTELER  → 
+  ✓ S14 kuru kip süreci ÖLDÜRMEDİ
+  ✓ S15 betik kendi kabuğunu 'kill' listesine katmıyor
+  ✓ S16a tuzak sürecin komut satırı gerçekten metni taşıyor (fikstür geçerli)
+  ✓ S16 adı yalnız metinde geçen süreç 'kill' listesine GİRMEZ
+  ✗ S17 çalışan süreci olan kullanıcı SİLİNMEZ (rc 3, userdel çağrılmadı)  → rc=127 bash: /tmp/tmp.Axq55U4sZF/kisi-sok.sh: No such file or directory
+  ✗ S17b süreci yoksa kuru kip 'userdel' adımını LİSTELER (çalıştırmaz)  → rc=127 bash: /tmp/tmp.Axq55U4sZF/kisi-sok.sh: No such file or directory
+
+6 geçti, 13 kaldı
+--- stderr ---
+kisi-sok.test.sh: line 36: warning: command substitution: ignored null byte in input

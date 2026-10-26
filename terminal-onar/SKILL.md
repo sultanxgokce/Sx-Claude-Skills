@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.27.0
+version: 2.28.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -23,6 +23,7 @@ Ayşenur koltukları izleyebilir, ajana mesaj bırakabilir, menü sorusuna şık
 - `scripts/kisi-istemci.py` — kişinin terminali (ttyd'nin sabit komutu). `m` mesaj yaz · `1-9` şık · `q` çık; başka her tuş atılır. Ekranın alt satırı durum satırıdır.
 - `scripts/kisi-mesaj.sh` — köprünün varsayılan mesaj komutu: ULAK'a "insan, Sultan DEĞİL" etiketiyle bırakır (A06: onay alanlarına yazamaz). Alıcı koltuktan türer (`hedefler` dosyası öncelikli).
 - `scripts/kisi-kur.sh` — kutuya kurulum paketi. **KURU KİP varsayılan** (yalnız basar); `--uygula` KÖK ister ve host/Sultan elindedir. `--kok` kum havuzu. Kutu başına çalışır (medigate, açılacak nöbet kutusu; **code kapsam dışı**).
+- `scripts/kisi-sok.sh` — kisi-kur'ın GERİ ALMA eşi. **KURU KİP varsayılan**; `--uygula` KÖK ister. Söker: ttyd-kisi + köprü süreçleri, soketler, `/run/kisi`, istemci kopyası, `ayse` kullanıcı/grubu (uid beklenenle aynıysa ve çalışan süreci yoksa). **DOKUNMAZ:** `izin.json` (Sultan'ın koltuk listesi) ve köprü kütüğü. İdempotent. Sınavı: `kisi-sok.test.sh` (S1-S17b).
 - 🔴 **Tasarım düzeltmesi:** tasarım belgesi `ttyd-kisi`yi `-W`'siz (salt okur) yazıyordu; ttyd salt okurken tarayıcı tuşlarını istemciye İLETMEZ, `m`/rakam/`q` ölmez. Doğrusu `-W` AÇIK, güvence ttyd'de değil arkasındaki sürecin **kabuksuz** (`kisi-istemci.py`, nologin `ayse`) olmasındadır; ham tuş köprüde zaten yok.
 - Sınavlar (gerçek tmux, gerçek soket, gerçek SO_PEERCRED; 🔴 `TMUX` değişkeni temizlenir — içinden koşulan tmux'ta özel sunucu yerine gerçek sunucuya düşmüştü, ölçüldü): `koltuk-koprusu.test.py` · `kisi-istemci.test.py` · `kisi-mesaj.test.sh` · `kisi-kur.test.sh`; mutantlar `koltuk-koprusu.mutasyon.py`.
 - **Dürüst sınırlar:** (a) şık tuşu yalnız rakam gönderir (`KOPRU_SIK_TUS`); Claude Code'un menüsünün rakamla mı seçtiği A5-4 canlı kanıtında ölçülür. (b) Köprü ad dışı kimlik (`k…` adresi) çözmez — o A5-3 (kapı). (c) "Mesaj gönderen ajanı yönlendirir": bu Sultan'ın verdiği yetkidir (D1); sınır kabuk/kasa/izinli koltuk/iz.

@@ -1,0 +1,96 @@
+{
+  "is": "terminal-onar-kisi-sok",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T19:15:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kisi-sok-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kisi-sok-sinavi-once.txt",
+      "sha256": "f8ef1657d28faa9e6b501e0c08d5d23c391c18ccef79bf4200b922b20350e744",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T19:02:43+03:00",
+      "sure_sn": 60.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "25df37c48ec04283ad04316242e3a991"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kisi-sok-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kisi-sok-sinavi-sonra.txt",
+      "sha256": "fea37727e6a3d5b12e376b61d619b8355e3c7e1bf17feb4c4c01c0fcbfcd9236",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:03:43+03:00",
+      "sure_sn": 60.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8c6d6def890b4d2e81e1ccacd6f275f7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kisi-sok-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kisi-sok-sinavi-sonra.txt",
+      "sha256": "cebe08037d271a61635307e7be3bba305b86869bb0999548e001c3cb92289a3c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:04:44+03:00",
+      "sure_sn": 60.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "71ee0f19207b4230bc72bd88c258455d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kutu-kuru",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kutu-kuru-sonra.txt",
+      "sha256": "9f7fa4420f42cfa0eaa5fc23acbc062ceb9cddf0fabf454ce2f746d02a3a53ce",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:04:44+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a1565d1dba714a4796734375576493c1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kisi-sok-mutantlar",
+      "asama": "sonra",
+      "dosya": "olcum-kisi-sok-mutantlar-sonra.txt",
+      "sha256": "f877aa80c31ce8e82917f262e567e5187eb31f3ee57607915bebffd3fee70299",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-mut2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T19:15:58+03:00",
+      "sure_sn": 546.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gercek-kisi-sok-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "6b8f1c5dd6ac4934ace71675c9c28cbe"
+    }
+  ],
+  "imza": "9eadc0ea8b618d52b432ba40afb09953272a134973f4c09b9cd7260359c9c4da"
+}

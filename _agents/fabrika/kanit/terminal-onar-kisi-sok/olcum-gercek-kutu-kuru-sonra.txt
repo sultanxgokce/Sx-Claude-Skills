@@ -1,0 +1,23 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-gercek.sh
+# rc=0 sure=0.1s zaman=2026-10-26T19:04:44+03:00
+--- stdout ---
+kisi-sok: KURU KİP (hiçbir şey değişmez) · kutu=6a25475ebd9e · kişi=aysenur · kullanıcı=ayse(2001)
+
+ADIM 1 — süreçler (ttyd-kisi, köprü)
+  ✓ zaten yok: ttyd -i /run/kisi/ayse-ttyd.sock( |$)
+  ✓ zaten yok: python3 [^ ]*koltuk-koprusu\.py( |$)
+
+ADIM 2 — soketler ve /run/kisi
+  ✓ zaten yok: /run/kisi/koprusu.sock
+  ✓ zaten yok: /run/kisi/ayse-ttyd.sock
+  ✓ zaten yok: /run/kisi
+
+ADIM 3 — istemci kopyası /opt/kisi
+  ✓ zaten yok: /opt/kisi/kisi-istemci.py
+
+ADIM 4 — kullanıcı ve grup (ayse)
+  ✓ zaten yok
+
+kisi-sok: KURU KİP bitti — hiçbir şey değişmedi. Gerçek söküm: Sultan/host elinde --uygula.
+rc=0
+--- stderr ---
