@@ -1,0 +1,79 @@
+{
+  "is": "sync-kaynak-bayat-uyari",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T16:14:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bayat-apply",
+      "asama": "once",
+      "dosya": "olcum-bayat-apply-once.txt",
+      "sha256": "9741383aca313f55c343bcd4ad9f49e70f04c5e23e61e850fa1d9cb7a1af437a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/b-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T16:14:01+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "37fb91a2e11e4743bd8b37f5b97daedc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bayat-apply",
+      "asama": "sonra",
+      "dosya": "olcum-bayat-apply-sonra.txt",
+      "sha256": "9f76d4b79b1ac710c9b07fdd5703571cb880640b114a7a26005d0dc8e0ad12d6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/b-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T16:14:02+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d501d8bcc1834b058f96a116acfb266f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bayat-apply-mutant",
+      "asama": "tek",
+      "dosya": "olcum-bayat-apply-mutant-tek.txt",
+      "sha256": "d946dd9aba4f8568c91539e19383417698e85939c37394b269c5b561f53de413",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/b-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T16:14:02+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bayat-apply",
+      "beklenen": "kirmizi",
+      "olcum_id": "adef5f5b49564168b968032a07b18570"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-sync-sinavi-tek.txt",
+      "sha256": "3317a0b46107afdc4dbf0181593bc35969592a2b9dc40917f01508239e8b2052",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T16:14:04+03:00",
+      "sure_sn": 1.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d970565db36d40b89148598a3fe6cb5e"
+    }
+  ],
+  "imza": "b5a40aa91e75265fa930adcf173d787c36d98d038231c8e30c690d12e76f5df0"
+}

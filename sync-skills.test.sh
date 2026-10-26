@@ -94,5 +94,70 @@ chmod 644 "$R/hedef/deneme-skill/scripts/calis.sh"
 kapi "G10 dry-run onarmaz (yalnız --apply yazar)" $?
 
 
+echo "── kaynak dal ilanı + bayat kaynak koruması (BHJS8W) ──"
+# Git'li sahte kaynak: uzak (bare) + çalışma kopyası; ikinci klon uzağı ilerletir, kopya fetch eder → origin/main'in gerisinde.
+_git_kur() {  # → $R (git'li kaynak), $UZ (bare uzak)
+  UZ="$T/uzak$RANDOM"; git init -q --bare -b main "$UZ" 2>/dev/null
+  R="$T/gkaynak$RANDOM"; mkdir -p "$R"; cp "$SUT" "$R/"
+  mkdir -p "$R/deneme-skill/scripts" "$R/hedef"
+  printf -- '---\nname: deneme-skill\nversion: 1.0.0\n---\ngövde\n' > "$R/deneme-skill/SKILL.md"
+  printf '#!/usr/bin/env bash\necho merhaba\n' > "$R/deneme-skill/scripts/calis.sh"; chmod 755 "$R/deneme-skill/scripts/calis.sh"
+  printf '{"targets":{"_t":"%s/hedef"},"install":{"deneme-skill":["_t"]}}\n' "$R" > "$R/sync-targets.json"
+  printf 'hedef/\n' > "$R/.gitignore"
+  ( cd "$R" && git init -q -b main && git config user.email t@t && git config user.name T && git add -A && git commit -qm "chore: ilk" && git remote add origin "$UZ" && git push -q origin main ) >/dev/null 2>&1
+}
+_uzagi_ilerlet() {  # uzak main'e bir commit ekle, $R'ye fetch ettir (R yerel main'i geride kalır)
+  local K="$T/klon$RANDOM"; git clone -q "$UZ" "$K" 2>/dev/null
+  ( cd "$K" && git config user.email t@t && git config user.name T && echo yeni > yeni.txt && git add -A && git commit -qm "chore: uzak ilerledi" && git push -q origin main ) >/dev/null 2>&1
+  ( cd "$R" && git fetch -q origin ) >/dev/null 2>&1
+}
+
+# B1 · güncel kaynak: ilan basılır, uyarı YOK, --apply çalışır
+_git_kur
+O="$(cd "$R" && node sync-skills.mjs --apply 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "kaynak: main@" <<<"$O" && grep -q "0 commit geride" <<<"$O" && ! grep -q "KAYNAK BAYAT" <<<"$O" && [ -f "$R/hedef/deneme-skill/SKILL.md" ]
+kapi "B1 güncel kaynakta dal@sha ilan edilir, uyarı yok, --apply kurar" $?
+
+# B2 · bayat kaynak + --apply → RED rc 3, hiçbir şey kopyalanmaz
+_git_kur; _uzagi_ilerlet
+O="$(cd "$R" && node sync-skills.mjs --apply 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "KAYNAK BAYAT" <<<"$O" && grep -q "1 commit geride" <<<"$O" && grep -q "REDDEDİLDİ" <<<"$O" && [ ! -e "$R/hedef/deneme-skill" ]
+kapi "B2 origin/main'in gerisindeki kaynaktan --apply REDDEDİLİR (rc 3, hedefe dosya düşmez)" $?
+
+# B3 · bayat kaynak + kuru-koşu → uyarı basılır, hedefe yazmaz, RED yok
+O="$(cd "$R" && node sync-skills.mjs 2>&1)"; RC=$?
+grep -q "KAYNAK BAYAT" <<<"$O" && ! grep -q "REDDEDİLDİ" <<<"$O" && [ "$RC" -ne 3 ] && [ ! -e "$R/hedef/deneme-skill" ]
+kapi "B3 bayat kaynakta kuru-koşu UYARIR (sessiz 'güncel' yok) ama reddetmez" $?
+
+# B4 · bayat kaynak + SYNC_BAYAT_KABUL=1 → uyarı var, kurulum geçer
+O="$(cd "$R" && SYNC_BAYAT_KABUL=1 node sync-skills.mjs --apply 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "KAYNAK BAYAT" <<<"$O" && [ -f "$R/hedef/deneme-skill/SKILL.md" ]
+kapi "B4 SYNC_BAYAT_KABUL=1 ile bayat kaynak BİLEREK geçilir (uyarı yine basılır)" $?
+
+# B5 · çözülmemiş çakışma → bayat sayılır
+_git_kur
+( cd "$R" && git checkout -q -b yan && echo a > cak.txt && git add -A && git commit -qm "chore: yan a" && git checkout -q main && echo b > cak.txt && git add -A && git commit -qm "chore: main b" && git merge yan >/dev/null 2>&1 ) >/dev/null 2>&1
+O="$(cd "$R" && node sync-skills.mjs --apply 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "ÇÖZÜLMEMİŞ ÇAKIŞMA" <<<"$O" && [ ! -e "$R/hedef/deneme-skill" ]
+kapi "B5 çözülmemiş çakışması olan kaynaktan --apply REDDEDİLİR" $?
+
+# B6 · git olmayan ağaç (mevcut sahte sınav ağaçları): ölçülemedi denir, davranış eskisi gibi
+R="$(_kur 755 ok)"
+O="$(cd "$R" && node sync-skills.mjs --apply 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "git deposu olarak ölçülemedi" <<<"$O" && [ -f "$R/hedef/deneme-skill/SKILL.md" ]
+kapi "B6 git deposu olmayan kaynakta 'ölçülemedi' ilan edilir, kurulum eskisi gibi çalışır" $?
+
+# mutant: bayat kaynak koruması söküldü → B2 düşmeli
+MUT="$T/sync-mutant.mjs"; python3 - "$SUT" "$MUT" <<'PYM'
+import sys; s=open(sys.argv[1]).read(); a="if (APPLY && process.env.SYNC_BAYAT_KABUL !== '1') {"; assert s.count(a)==1
+open(sys.argv[2],"w").write(s.replace(a,"if (false) {"))
+PYM
+_git_kur; _uzagi_ilerlet; cp "$MUT" "$R/sync-skills.mjs"
+(cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+[ -e "$R/hedef/deneme-skill/SKILL.md" ]
+kapi "mutant (RED söküldü): bayat kaynaktan kurulum YAPILIR → B2 bu mutantta düşerdi" $?
+
+
+
 printf '\n%s geçti · %s kaldı\n' "$gecen" "$kalan"
 [ "$kalan" -eq 0 ]

@@ -23,7 +23,7 @@
 import { readFileSync, existsSync, mkdirSync, readdirSync, statSync, copyFileSync, rmSync, chmodSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { join, dirname, basename } from 'node:path';
+import { join, dirname, basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const REPO = dirname(fileURLToPath(import.meta.url));
@@ -161,6 +161,43 @@ function kipOnar(srcDir, dstDir) {
 
 // ── manifest ─────────────────────────────────────────────────────────────────
 const manifest = JSON.parse(readFileSync(join(REPO, 'sync-targets.json'), 'utf8'));
+
+// ── KAYNAK DAL İLANI (BHJS8W · 15 Eki ölçümü): bu betik hangi dalın çalışma ağacını kaynak aldığını SÖYLEMİYORDU. Ana checkout
+//    origin/main'in 398 commit gerisindeki bir dalda dururken koşulunca beceriler listede hiç görünmüyor, 'öksüz' sahte bulgusu çıkıyor,
+//    --apply ise bayat içeriği kuruluma kopyalayabiliyordu. Artık: kaynak (dal@sha) ilan edilir; origin/main'in gerisindeyse ya da çözülmemiş
+//    çakışma varsa kuru-koşuda UYARI, --apply'da RED (rc 3, hiçbir şey kopyalanmaz). Bilerek geçmek: SYNC_BAYAT_KABUL=1. Git deposu değilse
+//    (sahte sınav ağaçları, tarball) ilan "ölçülemedi" der, davranış eskisi gibi: ölçülemeyen "bayat" sayılmaz ama "güncel" de denmez.
+function kaynakDurumu() {
+  const g = (...a) => spawnSync('git', ['-C', REPO, ...a], { encoding: 'utf8' });
+  const top = g('rev-parse', '--show-toplevel');
+  if (top.status !== 0 || resolve(top.stdout.trim()) !== resolve(REPO)) return { olculdu: false };
+  const dal = (g('rev-parse', '--abbrev-ref', 'HEAD').stdout || '?').trim();
+  const sha = (g('rev-parse', '--short', 'HEAD').stdout || '?').trim();
+  const om = g('rev-parse', '--verify', '-q', 'origin/main');
+  let geride = null;
+  if (om.status === 0) { const c = g('rev-list', '--count', 'HEAD..origin/main'); if (c.status === 0) geride = parseInt(c.stdout.trim(), 10); }
+  const durum = g('status', '--porcelain').stdout || '';
+  const cakisma = durum.split('\n').filter((l) => /^(DD|AU|UD|UA|DU|AA|UU) /.test(l)).length;
+  const kirli = durum.split('\n').filter((l) => l.trim()).length;
+  return { olculdu: true, dal, sha, geride, cakisma, kirli };
+}
+const KAYNAK = kaynakDurumu();
+{
+  if (!KAYNAK.olculdu) console.log('  kaynak: git deposu olarak ölçülemedi (dal/sha bilinmiyor)');
+  else {
+    console.log(`  kaynak: ${KAYNAK.dal}@${KAYNAK.sha} · origin/main'e göre ${KAYNAK.geride === null ? 'ÖLÇÜLEMEDİ (origin/main yok)' : KAYNAK.geride + ' commit geride'} · ${KAYNAK.kirli} kirli dosya${KAYNAK.cakisma ? ` · ${KAYNAK.cakisma} ÇÖZÜLMEMİŞ ÇAKIŞMA` : ''}`);
+    const bayat = (KAYNAK.geride !== null && KAYNAK.geride > 0) || KAYNAK.cakisma > 0;
+    if (bayat) {
+      console.log('  ⚠ KAYNAK BAYAT: bu çalışma ağacı origin/main değil — "senkron hedefi değil / öksüz" bulguları ve kurulum içeriği GÜVENİLMEZ.');
+      console.log('    Doğru yol: origin/main\'den geçici worktree (git worktree add --detach <yol> origin/main) ve betiği oradan koştur.');
+      if (APPLY && process.env.SYNC_BAYAT_KABUL !== '1') {
+        console.log('  ✗ --apply bayat kaynaktan REDDEDİLDİ (hiçbir şey kopyalanmadı). Bilerek geçmek için SYNC_BAYAT_KABUL=1.\n');
+        process.exit(3);
+      }
+    }
+  }
+}
+
 const { targets, install } = manifest;
 
 console.log(`\n  sync-skills — ${APPLY ? (FORCE ? 'APPLY --force' : 'APPLY') : 'CHECK (dry-run)'}\n`);
