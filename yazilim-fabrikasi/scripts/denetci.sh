@@ -289,13 +289,14 @@ if [ -n "$_KY" ] && [ -r "$_KY" ]; then
   TUR_SIFIR="$(python3 - "$_KY" <<'PYTS'
 import json,sys
 try:
-    k=json.load(open(sys.argv[1],encoding="utf-8")); d=k.get("daraltmalar") or []
-    print(int(d[-1].get("tur_sifir",0)) if d else 0)
+    k=json.load(open(sys.argv[1],encoding="utf-8")); d=k.get("daraltmalar") or []; st=k.get("sultan_turlari") or []
+    # daralt (PCP7J) ve Sultan turu (kart.sh sultan-turu · beğeni döngüsü) AYNI sıfırlama mekanizması: ikisinin büyüğü
+    print(max(int(d[-1].get("tur_sifir",0)) if d else 0, int(st[-1].get("tur_sifir",0)) if st else 0))
 except Exception: print(0)
 PYTS
 )"
   case "$TUR_SIFIR" in ''|*[!0-9]*) TUR_SIFIR=0 ;; esac
-  [ "$TUR_SIFIR" -gt 0 ] && _bilgi "· kart DARALTILMIŞ: ilk $TUR_SIFIR tur eski cümleye ait, sayılmıyor (tavan ve ilerleme daraltmadan sonra başlar)"
+  [ "$TUR_SIFIR" -gt 0 ] && _bilgi "· kart DARALTILMIŞ: ilk $TUR_SIFIR tur eski cümleye ait, sayılmıyor (tavan ve ilerleme daraltmadan ya da kayıtlı Sultan turundan sonra başlar)"
 fi
 # ── SAYILI TUR (gorev WC3VBZAA · ölçülmüş vaka: cloudtop #635 DÖRT turunu "canlıda kurulu
 #    değil" bulgusuyla yaktı, kod kusursuzdu ve iş hiç ilerlemedi). Tavan ham tur sayısına değil,

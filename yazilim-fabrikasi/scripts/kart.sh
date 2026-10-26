@@ -39,6 +39,9 @@
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 #   kart.sh canli-ayarla <iş> --canli e|h --reis <AD=aldi> --gerekce "<≥20 karakter>"   AÇIK kartta canlı kanıt şartını SAHİP değiştirir:
 #          --reis kartın aldı alanıyla aynı olmalı (reis-dedi emsali; başkasının kararı gerekçede atıfla); karta canli_sebep + geçmiş satırı yazılır
+#   kart.sh sultan-turu <iş> --reis <AD=aldi> --gorev gorev_<kimlik> --tur <N>   BEĞENİ DÖNGÜSÜ: Sultan'ın N. "değiştir" turunu kaydeder, göz tavanı sayacını o ana çeker
+#          (daralt'ın tur_sifir'i ile aynı mekanizma; yeni kart yok). Şartlar araçta: görev etiketi 'begeni-dongusu' (defterden) · görevde
+#          [tur N] kare: <yol/url> · Sultan: "<yorum>" satırı · reis = kart sahibi · defter okunamazsa hiçbir şey değişmez. Mutlak 4. tavan kalkmaz.
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
 #   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti → göreve DİLİM adımı (durum kalır);
 #          görev de bitecekse kart.sh bitti … --gorev-bitti --kare <yol> --surum <sürüm> | --olcum "…" | --belge <yol> → 'onay bekliyor' + kanıt sınıfı (KF22R)
@@ -88,7 +91,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;; --gorev-bitti) GOREV_BITTI=1; shift ;; --kare) KARE="$2"; shift 2 ;; --surum) SURUM="$2"; shift 2 ;; --olcum) OLCUM="$2"; shift 2 ;; --belge) BELGE="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
-  --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
+  --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
@@ -794,6 +797,61 @@ k["canli_gerekir"]=(cevap=="e"); k["canli_sebep"]=f"sahip {reis} ayarladı (--ca
 k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"canli-ayarla","reis":reis,"canli":cevap,"gerekce":gerekce})
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"✓ canlı şartı karta işlendi: {'GEREKİR' if cevap=='e' else 'istenmedi'} — {gerekce}")
+PY
+    ;;
+  sultan-turu)
+    # 🔴 BEĞENİ DÖNGÜSÜ (BPV3A/2BXA6J, Sultan 24 Eki): Sultan bir işi "tamam" diyene dek tur tur götürür; her "şunu değiştir"den sonra gelen yeni
+    #    göz turları 3+1 tavanını yiyordu. Bu komut o turu KAYDEDER ve tavan sayacını o ana kadarki denetim sayısına çeker (daralt'ın tur_sifir
+    #    mekanizması; denetçi ve kapı iki sıfırın büyüğünü alır). Bedava tur değildir, dört şart ARACA bağlı (ajan beyanına değil):
+    #    (1) görevin etiketi 'begeni-dongusu' (defterden okunur; etiketi görevi AÇAN koyar) · (2) görevde sıradaki tur satırı yazılı:
+    #    [tur N] kare: <yol/url> · Sultan: "<yorum>" (N = bugüne dek kayıtlı Sultan turu + 1) · (3) reis = kartın sahibi · (4) defter okunamazsa
+    #    HİÇBİR ŞEY değişmez (fail-closed). Yeni kart, yeni PR yok: aynı iş sürer. Sultan'ın yorumunu ajan ÜRETMEZ; satır gördüğünü aktarır (A06/D1).
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    [ -n "$REIS" ] && [ -n "$GOREV" ] && [ -n "${TUR_N:-}" ] || { _hata "sultan-turu: --reis <AD> --gorev gorev_<kimlik> --tur <N> gerekiyor"; exit 1; }
+    [[ "$TUR_N" =~ ^[1-9][0-9]{0,2}$ ]] || { _hata "--tur pozitif tam sayı olmalı"; exit 1; }
+    [[ "$GOREV" =~ ^gorev_[A-Z0-9]{20,40}$ ]] || { _hata "--gorev geçerli bir görev kimliği değil (gorev_<ULID>)"; exit 1; }
+    [ -r "$DEFTER_JY" ] || { _hata "defter jetonu yok ($DEFTER_JY) — görevin etiketi ve tur satırı okunamadı, tur KAYDEDİLMEDİ (fail-closed)"; exit 4; }
+    cfg="$(mktemp)"; printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$DEFTER_JY")" > "$cfg"
+    GJ="$(mktemp)"
+    kod="$(curl -sS -m 15 --config "$cfg" -o "$GJ" -w '%{http_code}' "$DEFTER_U/kayit/$GOREV" 2>/dev/null)"; crc=$?
+    rm -f -- "$cfg"
+    if [ $crc -ne 0 ] || [ "$kod" != "200" ]; then rm -f -- "$GJ"; _hata "görev defterden okunamadı (http $kod, curl rc $crc) — tur KAYDEDİLMEDİ (fail-closed)"; exit 4; fi
+    DZ="$(kanit_agaci "$IS")"
+    # kanıt dizini yoksa sayım sessizce 0 olurdu ("sıfırlandı" sanılır, gerçekte etkisiz): reddet. Sayım denetçiyle AYNI ölçü: en büyük DENETIM-N indeksi.
+    kanit_var_mi "$DZ" || { rm -f -- "$GJ"; _hata "kartın kanıt dizini bulunamadı ($DZ) — tur sıfırı ölçülemedi, tur KAYDEDİLMEDİ (iş alanının İÇİNDEN çağır)"; exit 3; }
+    TS=$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sed -E 's/.*DENETIM-([0-9]+)\.json/\1/' | sort -n | tail -1); TS="${TS:-0}"
+    KARTLAR_DIZ="$KD" python3 - "$KD/$IS.json" "$GJ" "$REIS" "$TUR_N" "$TS" "$GOREV" <<'PY'; rc=$?; rm -f -- "$GJ"; [ $rc -eq 0 ] || exit 1
+import json,sys,datetime,re
+yol,gj,reis,tur,ts,gorev=sys.argv[1:]; tur=int(tur); ts=int(ts)
+k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+def red(m): print("✗ "+m, file=sys.stderr); raise SystemExit(1)
+if k.get("durum")!="acik": red(f"kart açık değil (durum: {k.get('durum')}) — kapanmış kartta Sultan turu kaydedilmez")
+if reis!=k.get("aldi"): red(f"--reis '{reis}' kartın sahibi değil (aldı: {k.get('aldi')}) — Sultan turunu yalnız sahip kaydeder")
+try: g=json.load(open(gj,encoding="utf-8")).get("kayit") or {}
+except Exception as e: red(f"görev kaydı okunamadı ({e}) — tur KAYDEDİLMEDİ")
+et=(g.get("canli") or {}).get("etiket")
+if et!="begeni-dongusu": red(f"görevin etiketi 'begeni-dongusu' değil (defterde: {et or 'yok'}) — etiketi görevi AÇAN koyar; ajan kendi işine etiket koyarak tavanı aşamaz, etiketsiz işte tavan aynen geçerli")
+onceki=k.get("sultan_turlari") or []
+# görev ↔ kart bağı: ajan başka (ya da kendi işinden bağımsız) bir beğeni görevinin satırıyla sayacı sıfırlayamaz
+bagli=k.get("gorev") or (onceki[0].get("gorev") if onceki else None)
+if bagli and bagli!=gorev: red(f"bu kartın Sultan turları {bagli} görevine bağlı, '{gorev}' değil — tüm turlar aynı görevden kaydedilir")
+import glob,os
+for f in glob.glob(os.path.join(os.environ.get("KARTLAR_DIZ",""),"*.json")):
+    if os.path.abspath(f)==os.path.abspath(yol): continue
+    try: o=json.load(open(f,encoding="utf-8"))
+    except Exception: continue
+    if any((t or {}).get("gorev")==gorev for t in (o.get("sultan_turlari") or [])): red(f"görev {gorev} Sultan turu kanıtı olarak başka kartta ({os.path.basename(f)}) zaten kullanıldı — bir görevin turları tek karta aittir")
+if tur!=len(onceki)+1: red(f"--tur {tur} sıradaki değil: kartta {len(onceki)} Sultan turu kayıtlı, sıradaki {len(onceki)+1}")
+kalip=re.compile(r"^\[tur "+str(tur)+r"\] kare: \S.* · Sultan: \".{3,}\"\s*$")
+satir=[a.get("deger","") for a in (g.get("adimlar") or []) if kalip.match((a.get("deger") or "").strip())]
+if not satir: red(f"görevde tur satırı yok: önce görev adımına tek satır yaz → [tur {tur}] kare: <yol/url> · Sultan: \"<kısa yorum>\" (kare olmadan tur kapanmaz; yorumu ajan üretmez, gördüğünü aktarır)")
+onceki_ts=int(onceki[-1]["tur_sifir"]) if onceki else 0
+if ts<onceki_ts: red(f"kanıt ağacında {ts} denetim var, önceki Sultan turu {onceki_ts} sayıda sıfırlamıştı — kanıt ağacı geriye gitmiş, tur KAYDEDİLMEDİ")
+k.setdefault("sultan_turlari",[]).append({"zaman":simdi,"tur":tur,"tur_sifir":ts,"gorev":gorev,"reis":reis,"satir":satir[-1].strip()[:300]})
+k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"sultan-turu","tur":tur,"tur_sifir":ts,"gorev":gorev})
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+print(f"✓ Sultan turu {tur} kaydedildi: {k['is']} (tur sıfırı {ts}) · denetçi bundan sonra yalnız bu turdan SONRAKİ göz turlarını tavana sayar")
+print("  · kapı bu turdan sonra en az bir 5/E göz turu ister; 4. tur mutlak tavanı kalkmaz")
 PY
     ;;
   canli-gerekir)

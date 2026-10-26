@@ -267,6 +267,27 @@ except SystemExit: pass
 except Exception as e: print("hata")
 PYD
 )"
+    # ── SULTAN TURU (kart.sh sultan-turu · beğeni döngüsü): son kayıtlı Sultan turundan sonra en az bir göz turu koşmuş olmalı — Sultan
+    #    "değiştir" dedikten sonra yapılan iş yeniden denetlenmeden birleşmez (tavan esnetilir, denetim esnetilmez).
+    st="$(python3 - "$KART" "$tur" <<'PYS'
+import json,sys
+try:
+    try: k=json.load(open(sys.argv[1],encoding="utf-8"))
+    except Exception: print("yok"); raise SystemExit   # kart okunamıyorsa onu canli-gerekir kapısı zaten ÖLÇÜLEMEDİ sayar (çift sayım yok)
+    st=k.get("sultan_turlari") or []
+    if not st: print("yok"); raise SystemExit
+    ts=int(st[-1].get("tur_sifir",0)); tur=int(sys.argv[2]) if str(sys.argv[2]).isdigit() else -1
+    print(f"{'tamam' if tur>ts else 'eski'} {ts} {st[-1].get('tur','?')}")
+except SystemExit: pass
+except Exception: print("hata")
+PYS
+)"
+    case "$st" in
+      yok) ;;
+      hata) _h "kartın Sultan turu kaydı OKUNAMADI — kapı ölçemedi"; olcemedi=$((olcemedi+1)) ;;
+      tamam\ *) set -- $st; _y "  · Sultan turu $3 kayıtlı (tur sıfırı $2) · son denetim bu turdan SONRA ✓" ;;
+      eski\ *) set -- $st; _h "Sultan turu $3 kayıtlı (tur sıfırı $2) ama son denetim (tur $tur) ondan ÖNCE — Sultan'ın istediği değişiklik denetlenmedi, birleştirme YOK"; eksik=$((eksik+1)) ;;
+    esac
     case "$dar" in
       yok) ;;
       hata) _h "kartın daraltma kaydı OKUNAMADI — kapı ölçemedi"; olcemedi=$((olcemedi+1)) ;;

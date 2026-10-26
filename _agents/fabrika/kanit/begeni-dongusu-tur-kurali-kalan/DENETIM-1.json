@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "begeni-dongusu-tur-kurali-kalan",
+  "pr": "463",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T10:57:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-begeni-dongusu-tur-kurali-kalan",
+  "dal": "begeni-dongusu-tur-kurali-kalan",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47288,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4811
+  },
+  "bas": "405e94dd3e7e60aa47ecd9289ea85eed3eba8193",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan turu araçla doğrulanıp karta kaydedilmiş, denetçi sayımı son daraltma veya Sultan turundan sonraki gözlerden başlatmış ve birleşme kapısı tur sonrası yeniden denetimi zorunlu kılmış. Önce 0/3, sonra 3/3 ölçümü ile mutasyonun 2/3'e düşmesi ana davranışı güçlü biçimde doğruluyor; yalnız denetçinin bilgi mesajında küçük bir adlandırma rötuşu kalmış.",
+    "bulgular": [
+      {
+        "ne": "Sultan turu nedeniyle sıfırlama yapıldığında bilgi mesajı kartı yanlış biçimde “DARALTILMIŞ” diye tanımlıyor; davranışı bozmuyor fakat teşhisi yanıltıyor.",
+        "kanit": "Değiştirilen bilgi satırı koşulu yalnız TUR_SIFIR>0; aynı değişiklik TUR_SIFIR'ı max(daraltmalar, sultan_turlari) olarak hesapladığı halde çıktı metni “kart DARALTILMIŞ” diyor. Eklenen T-SULTAN testi de Sultan turu senaryosunda bu metni özellikle arıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: TUR_SIFIR bilgi mesajı; yazilim-fabrikasi/scripts/denetci.test.sh: T-SULTAN son doğrulaması",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm çifti önce rc=1/kırmızı/0/3, sonra rc=0/yeşil/3/3 gösteriyor. Mutasyon kaydı doğru biçimde ayrı işaretlenmiş, gerçek ölçüme bağlı ve bozulan kodda 2/3 ile sınavın değişikliği yakaladığını gösteriyor; görsel kare gerektirmeyen betik davranışı için ölçüm çifti yeterli."
+  }
+}

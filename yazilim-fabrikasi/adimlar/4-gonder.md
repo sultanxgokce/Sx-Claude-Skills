@@ -32,12 +32,16 @@
      · Muafiyet sınırsız değil: üst üste **2**'den fazla yakmayan tur olursa iş "**kutuda
        ilerletilemiyor**" ile durur (rc=4) — bu bir kod tıkanması değildir ve çaresi "devam" değil
        **yüzeye gitmek**tir. Tavan: `DENETCI_KUTU_DISI_TAVAN`.
-   - **Beğeni döngüsünde Sultan turları iş geri dönüşü sayılmaz — yalnız metin kuralıdır** (0.25.7, görev …BPV3A / …2BXA6J, Sultan 24 Eki). Görevin etiketi `begeni-dongusu` ise
+   - **Beğeni döngüsünde Sultan turları iş geri dönüşü sayılmaz** (0.25.7 metin · 0.26.0 araç, görev …BPV3A / …2BXA6J, Sultan 24 Eki). Görevin etiketi `begeni-dongusu` ise
      (etiketi görevi AÇAN koyar; ajan kendi işine etiket koymaz, tavanı etiketle meşrulaştıramaz; etiketsiz işte tavan aynen geçerli) Sultan'ın "şunu değiştir" turları iş geri dönüşü sayılıp
      "yarım iş" diye ölçülmez. Her Sultan turu görev adımına tek satır yazılır: `[tur N] kare: <yol/url> · Sultan: "<kısa yorum>"`. Kare olmadan tur kapanmaz (adım 3 aynen);
      Sultan'ın yorumunu ajan ÜRETMEZ, gördüğünü aktarır (A06). Kapanışı yalnız Sultan verir: ajan görevde `gorev.sh bitti` ile işi onay bekliyor'a çeker, kapatamaz.
-     🔴 **Dürüst sınır:** `denetci.sh` ve `kart.sh` etiketi okumaz, `[tur N]` satırını doğrulamaz; tavan yine `DENETIM-N` dosyalarını sayar. Sultan turundan sonra göz yeniden koşulursa
-     o göz turu tavana SAYILIR. Tavan dolarsa çıkış yolu değişmedi: `kart.sh daralt` (Sultan'ın yeni istekleri yeni karta, tur sayacı sıfırlanır). Tasarım: Nexus `_agents/spec/begeni-dongusu-DESIGN.md`.
+     **Araç (0.26.0):** satır yazıldıktan sonra `kart.sh sultan-turu <iş> --reis <AD=aldi> --gorev gorev_<ULID> --tur <N>` turu karta işler. Araç görevi defterden OKUR ve
+     etiket `begeni-dongusu` değilse, sıradaki tur numarası tutmuyorsa ya da `[tur N]` satırı görevde yoksa kaydetmez; defter okunamazsa hiçbir şey değişmez (rc 4). Kayıttan sonra
+     `denetci.sh` göz tur sayımını o ana kadarki denetim sayısına çeker (`kart.sh daralt` ile aynı sıfırlama; ikisinin büyüğü geçerli) ve `birlestirme-kapisi.sh` son denetimin Sultan turundan
+     SONRA koştuğunu ister: Sultan değiştir dedikten sonra denetlenmemiş eski 5/E birleştirmez.
+     🔴 **Dürüst sınır:** tavan yine `DENETIM-N` dosyalarını sayar; Sultan turu yalnız sayımı o noktadan başlatır, 4. tur mutlak tavanı her Sultan turundan sonraki bölümde geçerlidir (toplam göz turu Sultan turu sayısıyla büyür, ayrı bir üst sınırı yoktur) ve etiketsiz işte hiçbir şey sıfırlanmaz. Araç satırı Sultan'ın yazdığını doğrulayamaz; yalnız etiketi, tur sırasını, satırın varlığını, kartın tek göreve bağlı olmasını ve görevin başka kartta kullanılmamış olmasını denetler. Görevi açan ve etiketi koyan Sultan'dır, o yüzden sahte tur Sultan'ın görev kaydına yazılmış bir satırı gerektirir.
+     Sultan turundan sonra göz yeniden koşulursa o göz turu yeni sayıma girer. Tavan dolarsa çıkış yolu değişmedi: `kart.sh daralt` (Sultan'ın yeni istekleri yeni karta). Tasarım: Nexus `_agents/spec/begeni-dongusu-DESIGN.md`.
    - Üçte 5'e ulaşamayan iş "**tıkandı + üç yol**" raporuyla gelir: devam et (gerekçe) · kapsamı daralt · geri al.
    - **Kapsamı daralt = hattın adımıdır, elle yeni kart/dal/PR açmak değil** (0.8.0, PCP7J): `kart.sh daralt <iş>
      --kalan "<kalan bulgu>" --cumle "<bu PR'ın yaptığı>" --oturum <ref>` → kalan bulgu aynı sahip ve sınıfla yeni karta,

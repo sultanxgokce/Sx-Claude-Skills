@@ -337,6 +337,33 @@ bash "$M13" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant: daraltm
 bash "$G" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "gerçek kapı aynı durumda hâlâ reddediyor"
 rm -f "$M13"
 
+echo "════ T13s · SULTAN TURU kaydı: Sultan 'değiştir' dedikten sonra denetlenmemiş 5/E birleştirmez (beğeni döngüsü, 2BXA6J) ════"
+kart is-st; bash "$K" olcum is-st olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-st 1 2 H; den is-st 2 2 H; den is-st 3 5 E
+bash "$G" is-st --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "Sultan turu kaydı yokken 3. tur 5/E → geçer (gerileme yok)"
+python3 - "$T/_agents/fabrika/kartlar/is-st.json" <<'PYK'
+import json,sys
+k=json.load(open(sys.argv[1])); k["sultan_turlari"]=[{"zaman":"2026-10-26T10:00:00+03:00","tur":1,"tur_sifir":3,"gorev":"gorev_X","reis":"M","satir":'[tur 1] kare: k.png · Sultan: "başlık küçük"'}]
+json.dump(k,open(sys.argv[1],"w"),ensure_ascii=False)
+PYK
+CIKTI="$(bash "$G" is-st 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "ondan ÖNCE" <<<"$CIKTI"; g $? "Sultan turundan sonra göz turu yokken eski 5/E GEÇMEZ (rc 1, sebep yazılı)"
+den is-st 4 5 E
+CIKTI="$(bash "$G" is-st 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "Sultan turu 1 kayıtlı" <<<"$CIKTI"; g $? "Sultan turundan SONRA 5/E tur → geçer, kayıt kapı çıktısında görünür"
+echo "════ T13t · MUTASYON: Sultan turu çiti kalkarsa eski 5/E geçer (kapı gerçek) ════"
+MST="$HERE/.mutst.tmp.sh"; python3 - "$G" "$MST" <<'PYM'
+import sys; s=open(sys.argv[1]).read()
+eski='denetlenmedi, birleştirme YOK"; eksik=$((eksik+1)) ;;\n    esac\n    case "$dar" in'
+assert eski in s, "mutasyon hedefi yok"
+open(sys.argv[2],"w").write(s.replace(eski,'denetlenmedi"; : ;;\n    esac\n    case "$dar" in'))
+PYM
+grep -q 'denetlenmedi"; : ;;' "$MST"; g $? "T13t mutant üretildi (Sultan turu çiti kaldırıldı)"
+rm -f "$T/_agents/fabrika/kanit/is-st/DENETIM-4.json"
+bash "$MST" is-st --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant: Sultan turu çiti kalkınca eski 5/E GEÇİYOR → T13s bu mutantta düşerdi"
+bash "$G" is-st --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "gerçek kapı aynı durumda hâlâ reddediyor"
+rm -f "$MST"
+
 echo "════ T14 · KANIT TEK KURALLA: iş alanı · PR başı · birincil aynı sırayla; birincilden --pr ile çağrı iş alanındaki kanıtı bulur (retro W42 ders M3) ════"
 # Gerçek düzen: çıplak origin · birincil klon (main) · iş alanı worktree (dal = iş adı) · PR başı origin'de refs/pull/<N>/head.
 # Kart birincilde (kart tek kaynak), kanıt ve DENETİM iş alanında — 15 Eki compact-kurali vakasının birebir kurulumu.
