@@ -333,7 +333,14 @@ if [ "$eksik" -gt 0 ]; then
   _y ""
   _h "BİRLEŞTİRME ENGELLENDİ — $eksik eksik."
   _y "  Yapılacak: kanıtı topla (kanit.sh), bağımsız göze gönder (denetci.sh), 5+E alınca tekrar dene."
-  _y '  Acil durumda: FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>" — kaçış deftere yazılır (sessiz atlama yasak).'
+  # FABRIKA_KAPISIZ'ı YALNIZ birleştirme kancası okur (scripts/hooks/birlestirme-kapisi.sh); kancası olmayan depoda (izole kutu) değişken
+  # hiçbir şey yapmaz — kapıya kaçış öğütlemek ajanı boşa yönlendirir. Orada gerçek yol: eksiği tamamlamak, karar gerekiyorsa kayıtlı karar.
+  if [ -x "$DEPO/scripts/hooks/birlestirme-kapisi.sh" ]; then
+    _y '  Acil durumda: FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>" — kaçış deftere yazılır (sessiz atlama yasak).'
+  else
+    _y '  Bu depoda birleştirme kancası kurulu değil: FABRIKA_KAPISIZ burada bir şey yapmaz. Eksik kalemi tamamla;'
+    _y '  karar gerekiyorsa kayıtlı yol: kart.sh sultan-dedi (Sultan sözü) ya da kart.sh reis-dedi (sınıfsız iş, reis kararı).'
+  fi
   exit 1
 fi
 _y ""; _y "✓ GEÇTİ — kanıt imzalı, bağımsız göz 5/5 + doğru şey E, kart yerinde."
