@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export FABRIKA_AILE_NOTIFY=-   # sahte işe gerçek zil çalmasın (SERDAR 26 Eki: 'is-o' zili)
 # istem-olcer.sh <fabrika dizini> — 188 satırlık bir sınav ölçümünün hangi kısmı göze (denetçi istemine) gidiyor?
 # Geçici depo + gerçek kanit.sh/denetci.sh (verilen fabrikadan) + sahte göz (istemi kopyalar, 5/E döner). Gerçek göz çağrılmaz.
 set -uo pipefail

@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/on-once.sh
+# rc=1 sure=136.0s zaman=2026-10-26T11:57:01+03:00
+--- stdout ---
+on-goz-otomatik-cagri=0/1
+--- stderr ---
+⏳ agir-sira: kanit-dalgic-gonder-baglama-on-goz-cagri 101 sn bekledi (yuva 2, load1 17.78)

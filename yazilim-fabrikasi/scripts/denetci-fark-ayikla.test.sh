@@ -8,6 +8,7 @@
 # HERMETİK: gerçek depoya, gerçek denetçiye (codex/claude) DOKUNMAZ — denetçi DENETCI_KOMUT
 # ile sahte bir betiktir ve aldığı istemi diske bırakır; kapılar o istemi okur.
 set -uo pipefail
+export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 cd "$(dirname "$0")"
