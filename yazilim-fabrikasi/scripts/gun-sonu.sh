@@ -48,7 +48,7 @@ out=[f"# GÜN SONU · {gun} · {len(g)} iş (kart defterinden üretildi, elle sa
 out.append(f"## Sultan'a gidenler ({len(sultan)})")
 for k in sultan: out.append(f"- [{k['durum']}] **{k['is']}** — {k['cumle']} · sınıf: {', '.join(k['siniflar'])} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else 'yok'}{' · PR '+k['pr'] if k.get('pr') else ''}")
 out.append(""); out.append(f"## İçeride bitirdiklerimiz ({len(icerde)}) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir")
-for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else '⚠ YOK'}{' · PR '+k['pr'] if k.get('pr') else ''}")
+for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else ('süpürüldü (PR birleşmiş, kanıt toplanmadı)' if k.get('supuruldu') else '⚠ YOK')}{' · PR '+k['pr'] if k.get('pr') else ''}")
 out.append(""); out.append(f"## Tıkananlar ({len(tik)})")
 for k in tik: out.append(f"- **{k['is']}** — {k['cumle']} · yol: {k['tikanma']['yol']} · neden: {k['tikanma']['neden']} · sahip {k['aldi']}")
 # 🔴 Kaçışlar Sultan'ın önüne gelir (23 Eyl kararı): sessiz delik olmaktan çıkar, kayda geçen istisna olur.

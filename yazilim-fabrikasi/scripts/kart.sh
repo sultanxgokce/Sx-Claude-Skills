@@ -485,6 +485,61 @@ PY
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"
     exit $GRC
     ;;
+  supur)   # supur kuru|uygula [--aldi AD] — PR'ı BİRLEŞMİŞ açık/tıkandı kartları toplu kapatır (HSKJCE: elle kapatma 'KANIT YOK' damgalıyordu)
+    # Kural: kuru yalnız listeler (hiçbir şey yazmaz); uygula kapatır. Eşleşme: kartta pr varsa O PR birleşmiş olmalı; yoksa dal adı = iş adı olan
+    #   BİRLEŞMİŞ PR aranır. SINIFLI kart atlanır (birleştirme kararı reis/Sultan kararıdır, süpürme onu vermez). Görev defterine DOKUNMAZ
+    #   (görev kapanışı kanıt sınıfı ister, süpürme kanıt üretmez). Kapanan kart 'supuruldu' damgası taşır: gün sonu 'KANIT YOK' demez,
+    #   'süpürüldü' der. PR listesi okunamadı / tavana dayandı / kart bozuk → ÖLÇÜLEMEDİ (rc 3): "listede yok" ≠ "birleşmedi".
+    case "$IS" in kuru|uygula) ;; *) _hata "kullanım: kart.sh supur kuru|uygula [--aldi AD]  (kuru = yalnız listeler, uygula = kapatır)"; exit 1 ;; esac
+    GH_BIN="${KART_GH:-gh}"; SUP_TAVAN="${KART_SUPUR_TAVAN:-3000}"
+    SUP_JSON="$(cd "$DEPO" && "$GH_BIN" pr list --state merged --base main --limit "$SUP_TAVAN" --json number,headRefName,mergedAt 2>&1)"; SRC=$?
+    [ "$SRC" -eq 0 ] || { _hata "birleşmiş PR listesi okunamadı (gh rc $SRC) — süpürme ÖLÇÜLEMEDİ, hiçbir kart değişmedi: ${SUP_JSON:0:200}"; exit 3; }
+    SUP_JSON="$SUP_JSON" python3 - "$KD" "$IS" "$ALDI" "$SUP_TAVAN" <<'SUPPY'
+import json,os,sys,glob,datetime
+kd,mod,aldi,tavan=sys.argv[1:]; tavan=int(tavan)
+try: prler=json.loads(os.environ["SUP_JSON"])
+except Exception as e:
+    print(f"✗ PR listesi JSON değil ({e}) — ÖLÇÜLEMEDİ, kart değişmedi",file=sys.stderr); raise SystemExit(3)
+if not isinstance(prler,list):
+    print("✗ PR listesi liste değil — ÖLÇÜLEMEDİ, kart değişmedi",file=sys.stderr); raise SystemExit(3)
+if len(prler)>=tavan:   # tavan okuması olay değil tavandır (sayfa boyu dersi): eksik liste 'birleşmedi' sanılmasın
+    print(f"✗ PR listesi tavana dayandı ({len(prler)}/{tavan}) — eksik olabilir, ÖLÇÜLEMEDİ, kart değişmedi (KART_SUPUR_TAVAN ile büyüt)",file=sys.stderr); raise SystemExit(3)
+dal={}; no={}
+for p in prler:
+    if p.get("mergedAt"):
+        dal.setdefault(p["headRefName"],p); no[int(p["number"])]=p
+simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+kapanan=[]; sinifli=[]; bozuk=[]; bekleyen=0; yazilacak=[]
+for f in sorted(glob.glob(os.path.join(kd,"*.json"))):
+    try: k=json.load(open(f,encoding="utf-8"))
+    except Exception: bozuk.append(os.path.basename(f)); continue
+    if k.get("durum") not in ("acik","tikandi"): continue
+    if aldi and k.get("aldi")!=aldi: continue
+    pn=str(k.get("pr") or "").strip().lstrip("#")
+    if pn.isdigit(): p=no.get(int(pn)); yontem="kart-pr"
+    else: p=dal.get(k.get("is")); yontem="dal-adi"
+    if not p: bekleyen+=1; continue
+    if k.get("siniflar"): sinifli.append((k["is"],p["number"])); continue
+    kapanan.append((k["is"],p["number"],p["mergedAt"],yontem,k.get("durum")))
+    yazilacak.append((f,k,p,yontem))
+if bozuk:   # atomik: okunamayan kart varken kısmi uygulama YOK ('ÖLÇÜLEMEDİ' sonrası durum değişmiş olmasın)
+    print(f"✗ {len(bozuk)} kart okunamadı ({', '.join(bozuk[:5])}) — süpürme ÖLÇÜLEMEDİ, HİÇBİR kart değişmedi (kartı onar ya da kaldır, yeniden koş)",file=sys.stderr); raise SystemExit(3)
+if mod=="uygula":
+    for f,k,p,yontem in yazilacak:
+        onceki=k.get("durum"); tk=k.pop("tikanma",None)
+        k["durum"]="bitti"; k["bitis"]=simdi; k["pr"]=str(p["number"])   # bitis = süpürme anı (gün sonu o gün kapanana bakar); birleşme zamanı damgada
+        k["supuruldu"]={"zaman":simdi,"pr":p["number"],"birlesti":p["mergedAt"],"yontem":yontem,"onceki_durum":onceki}
+        if tk: k["supuruldu"]["onceki_tikanma"]=tk
+        k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"supuruldu","pr":p["number"]})
+        json.dump(k,open(f,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+bas="KAPATILDI" if mod=="uygula" else "KAPATILIRDI (kuru-koşu, hiçbir şey yazılmadı)"
+print(f"supur {mod}: {len(kapanan)} kart {bas} · {bekleyen} kartın birleşmiş PR'ı yok (açık kalır) · {len(sinifli)} sınıflı kart atlandı")
+for is_,n,m,y,d in kapanan: print(f"  ✓ {is_} ← PR #{n} ({m[:10]}, {y}, önceki: {d})")
+for is_,n in sinifli: print(f"  · {is_} — PR #{n} birleşmiş ama kart SINIFLI: birleştirme kararı reis/Sultan'ındır, süpürülmez")
+raise SystemExit(0)
+SUPPY
+    exit $?
+    ;;
   goz-adim)   # goz-adim <iş> --not "<tek satır>" — bağımsız göz turunu göreve adım olarak yazar; durum DEĞİŞMEZ; görev bağı yoksa sessiz geçer
     [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 1; }
     [ -n "${NOT_:-}" ] || { _hata "gerekli: --not \"<tek satır>\""; exit 1; }

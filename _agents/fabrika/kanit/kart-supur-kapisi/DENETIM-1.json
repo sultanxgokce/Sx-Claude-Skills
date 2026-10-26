@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "kart-supur-kapisi",
+  "pr": "469",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T15:50:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-supur-kapisi",
+  "dal": "kart-supur-kapisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30418,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4256
+  },
+  "bas": "53eac28ca68545485988e253b8c47e9f60419e32",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Toplu süpürme kapısı; kuru/uygula kipleri, sınıflı kartı ve görev defterini atlama, PR eşleştirme ve süpürüldü damgasıyla istenen işi hedefliyor. Ancak kapanış zamanını süpürme anı yerine eski PR birleşme zamanına yazdığı için gün sonu görünümü amaçlanan kaydı kaçırabilir; ayrıca bozuk kartta kısmi uygulama yapıp rc=3 dönmesi güvenli toplu işlem davranışını zedeliyor, önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Süpürülen kartın `bitis` alanı süpürme zamanı yerine PR'ın geçmişteki birleşme zamanına yazılıyor; gün sonu raporu kapanış gününe göre süzüyorsa bugün süpürülen eski kart raporda görünmez. Testin S7 öncesinde `bitis` değerini elle bugüne çekmesi de gerçek uygulama davranışını sınamadığını gösteriyor.",
+        "kanit": "Üretim kodu `k[\"bitis\"]=p[\"mergedAt\"]` yazıyor; S7 testi ise gün sonunu çalıştırmadan önce `dal-birlesti.json` içindeki `bitis` alanını `datetime.datetime.now()` ile değiştiriyor. Sahte PR'ın `mergedAt` değeri 2026-10-20 iken manifest ölçümü 2026-10-26 tarihinde.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: supur Python bloğu; yazilim-fabrikasi/scripts/kart.test.sh: S7 hazırlığı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Bozuk bir kart bulunduğunda uygulama atomik davranmıyor: sağlam kartları önce kapatıyor, ardından rc=3 dönüyor. Bu, 'ÖLÇÜLEMEDİ' sonucuna rağmen durumun kısmen değişmiş olması demek ve toplu kapatmayı güvenle yeniden yöneten çağıranları yanıltabilir.",
+        "kanit": "Döngü içinde okunabilen her kart doğrudan `json.dump` ile değiştirilip en sonda `raise SystemExit(3 if bozuk else 0)` çalışıyor. S11 testi de aynı anda `rc=3` ve `aldi-c` kartının `bitti` olmasını özellikle bekliyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: supur Python bloğu; yazilim-fabrikasi/scripts/kart.test.sh: S11",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm önce 0/3 kırmızı, sonra 3/3 yeşil, mutasyon ölçümü de bozuk kodu yakalıyor. Buna rağmen ölçüm çıktısı yalnız toplu 3/3 sayısını gösteriyor; kuru-koşu, sınıflı kartı atlama, görev defterine dokunmama ve damga içeriğini ayrı ayrı görünür kılmıyor. Diff içindeki testler bu davranışları sınasa da S7 gerçek `bitis` davranışını elle değiştirerek örtüyor."
+  }
+}

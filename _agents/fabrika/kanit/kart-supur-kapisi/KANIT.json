@@ -1,0 +1,62 @@
+{
+  "is": "kart-supur-kapisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T15:53:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "supur-uygula",
+      "asama": "once",
+      "dosya": "olcum-supur-uygula-once.txt",
+      "sha256": "16c847f1e4b64e1004fd8be3d04f44721b14db57fa53e7192b93e33248a574e0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T15:48:46+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "00e9d6fe3c0f43418590a6929a227329"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-uygula",
+      "asama": "sonra",
+      "dosya": "olcum-supur-uygula-sonra.txt",
+      "sha256": "f19a6abfc54bd8016afab9c0d3bb770f80e8901517e2d64b1c01b739e96590ad",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:53:18+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "968bd818098e4a8488083d6d67389e7c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-uygula-mutant",
+      "asama": "tek",
+      "dosya": "olcum-supur-uygula-mutant-tek.txt",
+      "sha256": "7a661b3d94446208d151a54b5463a4d8dde031039898be5c0acdfce8825a26b6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:53:19+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "supur-uygula",
+      "beklenen": "kirmizi",
+      "olcum_id": "553083a6bd314e088cc4124534300298"
+    }
+  ],
+  "imza": "c093ef3697ed333d9d92773678d5a255a19b5000c2b6f4f4302a26c532630b0e"
+}

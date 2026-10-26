@@ -813,4 +813,105 @@ mst 'if bagli and bagli!=gorev: red(' 'if False: red(' || g 1 "mutant 3 kurulama
 O="$(bash "$MS/kart.sh" sultan-turu is-st --reis HENDESE --gorev $GB2 --tur 2 2>&1)"; [ $? -eq 0 ]; g $? "mutant (görev bağı kaldırıldı): başka görevin satırıyla tur KAYDEDİLİR → üstteki 🔴 bağ kapısı düşerdi"
 kill $STSRV 2>/dev/null; true
 
+echo "════ T-SUPUR · kart.sh supur: PR'ı birleşmiş açık/tıkandı kartları toplu kapatır (HSKJCE) ════"
+SD="$T/depo-supur"; mkdir -p "$SD/_agents/fabrika/kartlar"; ( cd "$SD" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" ) >/dev/null 2>&1
+sk() {  # sk <iş> <durum> <pr> <aldi> <siniflar-json>  → sahte kart
+  python3 - "$SD/_agents/fabrika/kartlar/$1.json" "$1" "$2" "$3" "$4" "$5" <<'PYK'
+import json,sys; f,is_,d,pr,a,sn=sys.argv[1:]
+k={"is":is_,"cumle":"süpürme sınavı kartı "+is_,"istedi":"S","aldi":a,"zaman":"2026-10-01T10:00:00+03:00","siniflar":json.loads(sn),"sultan":False,"durum":d,"gecmis":[]}
+if pr: k["pr"]=pr
+json.dump(k,open(f,"w"),ensure_ascii=False)
+PYK
+}
+sk dal-birlesti acik "" HENDESE '[]'; sk dal-tikandi tikandi "" MUAVIN '[]'; sk kartpr-birlesti acik "77" HENDESE '[]'
+sk acik-pr acik "" HENDESE '[]'; sk sinifli-birlesti acik "" HENDESE '["para"]'; sk zaten-bitti bitti "" HENDESE '[]'
+sk kartpr-yanlis acik "55" HENDESE '[]'   # dal adı birleşmiş bir PR'la eşleşse bile kartta pr varsa O PR sayılır (55 birleşmemiş)
+GHF="$T/gh-sahte.sh"; cat > "$GHF" <<'SH'
+#!/usr/bin/env bash
+[ -n "${GH_SAHTE_RC:-}" ] && { echo "gh: boom" >&2; exit "$GH_SAHTE_RC"; }
+cat "${GH_SAHTE_CIKTI:?}"
+SH
+chmod +x "$GHF"; export KART_GH="$GHF"
+cat > "$T/gh-pr.json" <<'JS'
+[{"number":71,"headRefName":"dal-birlesti","mergedAt":"2026-10-20T10:00:00Z"},
+ {"number":72,"headRefName":"dal-tikandi","mergedAt":"2026-10-21T10:00:00Z"},
+ {"number":77,"headRefName":"baska-dal","mergedAt":"2026-10-22T10:00:00Z"},
+ {"number":73,"headRefName":"sinifli-birlesti","mergedAt":"2026-10-20T11:00:00Z"},
+ {"number":74,"headRefName":"kartpr-yanlis","mergedAt":"2026-10-20T12:00:00Z"},
+ {"number":75,"headRefName":"acik-pr","mergedAt":null}]
+JS
+export GH_SAHTE_CIKTI="$T/gh-pr.json"
+durum() { python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('durum'))" "$SD/_agents/fabrika/kartlar/$1.json"; }
+cd "$SD"; export KANIT_DEPO="$SD"   # önceki bloklar KANIT_DEPO'yu başka depoya çevirmiş olabilir
+H0="$(cat _agents/fabrika/kartlar/*.json | sha256sum)"
+O="$(bash "$KT" supur kuru 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "supur kuru: 3 kart KAPATILIRDI" <<<"$O" && [ "$(cat _agents/fabrika/kartlar/*.json | sha256sum)" = "$H0" ]; g $? "S1 kuru-koşu 3 kartı SAYAR ama hiçbir kart dosyasını DEĞİŞTİRMEZ" "→ rc=$RC $O"
+grep -q "sinifli-birlesti.*SINIFLI" <<<"$O" && ! grep -q "✓ sinifli-birlesti" <<<"$O"; g $? "S2 sınıflı kart (PR birleşmiş) listelenir ama kapatılacaklar arasında DEĞİL"
+O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(durum dal-birlesti)" = bitti ] && [ "$(durum dal-tikandi)" = bitti ] && [ "$(durum kartpr-birlesti)" = bitti ]; g $? "S3 uygula: dal adı eşleşen (açık, tıkandı) ve kartta pr yazılı kart bitti olur" "→ rc=$RC $O"
+python3 - "$SD/_agents/fabrika/kartlar/dal-birlesti.json" <<'PYC'
+import json,sys; k=json.load(open(sys.argv[1]))
+assert k["pr"]=="71" and k["bitis"][:10]==__import__("datetime").date.today().isoformat() and k["supuruldu"]["birlesti"]=="2026-10-20T10:00:00Z", k
+assert k["supuruldu"]["pr"]==71 and k["supuruldu"]["yontem"]=="dal-adi", k
+assert k["gecmis"][-1]["olay"]=="supuruldu", k
+PYC
+g $? "S4 süpürülen kartta PR no, birleşme zamanı, 'supuruldu' damgası ve geçmiş satırı var"
+[ "$(durum acik-pr)" = acik ] && [ "$(durum sinifli-birlesti)" = acik ] && [ "$(durum kartpr-yanlis)" = acik ] && [ "$(durum zaten-bitti)" = bitti ]; g $? "S5 açık PR'lı · SINIFLI · kartta pr'ı birleşmemiş kart açık KALIR (dal adı birleşmiş PR'la eşleşse bile kart.pr öncelikli)"
+O="$(bash "$KT" supur uygula 2>&1)"; grep -q "supur uygula: 0 kart KAPATILDI" <<<"$O"; g $? "S6 ikinci koşu 0 kart kapatır (idempotent)"
+GS_O="$(bash "$GS" 2>&1)"; grep -q "dal-birlesti.*süpürüldü (PR birleşmiş, kanıt toplanmadı)" <<<"$GS_O" && ! grep -q "dal-birlesti.*⚠ YOK" <<<"$GS_O"; g $? "S7 gün sonu süpürülen kart için 'KANIT YOK' DEMEZ, 'süpürüldü' der" "→ $(grep dal-birlesti <<<"$GS_O" | head -1 | cut -c1-200)"
+sk aldi-a acik "" ALFA '[]'; sk aldi-b acik "" BETA '[]'
+python3 - "$T/gh-pr.json" <<'PYA'
+import json,sys; l=json.load(open(sys.argv[1])); l+= [{"number":81,"headRefName":"aldi-a","mergedAt":"2026-10-23T10:00:00Z"},{"number":82,"headRefName":"aldi-b","mergedAt":"2026-10-23T11:00:00Z"}]; json.dump(l,open(sys.argv[1],"w"))
+PYA
+bash "$KT" supur uygula --aldi ALFA >/dev/null 2>&1; [ "$(durum aldi-a)" = bitti ] && [ "$(durum aldi-b)" = acik ]; g $? "S8 --aldi yalnız o sahibin kartlarını süpürür"
+H1="$(cat _agents/fabrika/kartlar/*.json | sha256sum)"
+O="$(GH_SAHTE_RC=4 bash "$KT" supur uygula 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && [ "$(cat _agents/fabrika/kartlar/*.json | sha256sum)" = "$H1" ] && grep -q "ÖLÇÜLEMEDİ" <<<"$O"; g $? "S9 gh düşerse rc 3 ÖLÇÜLEMEDİ, hiçbir kart değişmez ('listede yok' = 'birleşmedi' DEĞİL)" "→ rc=$RC"
+O="$(KART_SUPUR_TAVAN=8 bash "$KT" supur uygula 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "tavana dayandı" <<<"$O" && [ "$(cat _agents/fabrika/kartlar/*.json | sha256sum)" = "$H1" ]; g $? "S10 PR listesi tavana dayanırsa (eksik olabilir) rc 3, kart değişmez" "→ rc=$RC"
+echo '{bozuk' > _agents/fabrika/kartlar/bozuk-kart.json; sk aldi-c acik "" GAMA '[]'
+python3 - "$T/gh-pr.json" <<'PYB'
+import json,sys; l=json.load(open(sys.argv[1])); l.append({"number":83,"headRefName":"aldi-c","mergedAt":"2026-10-23T12:00:00Z"}); json.dump(l,open(sys.argv[1],"w"))
+PYB
+O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && [ "$(durum aldi-c)" = acik ] && grep -q "bozuk-kart.json" <<<"$O" && grep -q "HİÇBİR kart değişmedi" <<<"$O"; g $? "S11 bozuk kart varsa ATOMİK: rc 3, okunabilen kart bile süpürülmez (kısmi uygulama yok)" "→ rc=$RC"
+rm -f _agents/fabrika/kartlar/bozuk-kart.json
+O="$(bash "$KT" supur uygula 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && [ "$(durum aldi-c)" = bitti ]; g $? "S11b bozuk kart kalkınca aynı koşu süpürür" "→ rc=$RC"
+python3 - <<'PYT'
+import json
+f="_agents/fabrika/kartlar/dal-tikandi.json"; k=json.load(open(f))
+assert "tikanma" not in k and k["supuruldu"]["onceki_durum"]=="tikandi", k
+PYT
+g $? "S13 tıkandı kartın tikanma alanı kapanışta temizlenir, damgaya taşınır (onceki_durum)"
+sk gorevli acik "" HENDESE '[]'; python3 - <<'PYG'
+import json
+f="_agents/fabrika/kartlar/gorevli.json"; k=json.load(open(f)); k["gorev"]="gorev_SAHTE"; json.dump(k,open(f,"w"))
+l=json.load(open("/dev/stdin")) if False else None
+PYG
+python3 - "$T/gh-pr.json" <<'PYH'
+import json,sys; l=json.load(open(sys.argv[1])); l.append({"number":95,"headRefName":"gorevli","mergedAt":"2026-10-25T10:00:00Z"}); json.dump(l,open(sys.argv[1],"w"))
+PYH
+TK0="$(wc -c < "$TETIK_KAYIT")"; O="$(bash "$KT" supur uygula 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(durum gorevli)" = bitti ] && [ "$(wc -c < "$TETIK_KAYIT")" = "$TK0" ] && ! grep -qi "defter" <<<"$O" && [ "$(python3 -c "import json;print(json.load(open('_agents/fabrika/kartlar/gorevli.json'))['gorev'])")" = gorev_SAHTE ]; g $? "S14 görevli kart süpürülür ama görev defterine/odaya DOKUNULMAZ (tetik yok, defter çağrısı yok, kart.gorev korunur)" "→ rc=$RC $O"
+O="$(bash "$KT" supur 2>&1)"; grep -q kullanım <<<"$O"; g $? "S12 kip verilmezse kullanım (kuru|uygula) — varsayılan YAZMA yok"
+# mutantlar: her kapı bozulunca ilgili sınav kırmızıya dönmeli
+SMUT="$T/pkg-supur"; mkdir -p "$SMUT"; cp "$HERE"/*.py "$HERE"/*.sh "$SMUT/" 2>/dev/null
+smut() { cp "$HERE/kart.sh" "$SMUT/kart.sh"; python3 - "$SMUT/kart.sh" "$1" "$2" <<'PYM'
+import sys; f,a,b=sys.argv[1:]; s=open(f,encoding="utf-8").read(); assert s.count(a)==1, "çapa bayat"; open(f,"w",encoding="utf-8").write(s.replace(a,b,1))
+PYM
+}
+sifirla() { for f in dal-birlesti dal-tikandi kartpr-birlesti sinifli-birlesti kartpr-yanlis; do :; done; sk sinifli-birlesti acik "" HENDESE '["para"]'; sk kartpr-yanlis acik "55" HENDESE '[]'; sk mut-dal acik "" HENDESE '[]'; }
+python3 - "$T/gh-pr.json" <<'PYC2'
+import json,sys; l=json.load(open(sys.argv[1])); l.append({"number":90,"headRefName":"mut-dal","mergedAt":"2026-10-24T10:00:00Z"}); json.dump(l,open(sys.argv[1],"w"))
+PYC2
+smut 'if k.get("siniflar"): sinifli.append((k["is"],p["number"])); continue' 'pass'
+sifirla; bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum sinifli-birlesti)" = bitti ]; g $? "mutant (sınıflı atlaması kalktı): SINIFLI kart süpürülür → S5 düşerdi"
+smut 'if pn.isdigit(): p=no.get(int(pn)); yontem="kart-pr"' 'if False: p=None; yontem="kart-pr"'
+sifirla; bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum kartpr-yanlis)" = bitti ]; g $? "mutant (kart.pr önceliği kalktı): pr'ı birleşmemiş kart dal adıyla süpürülür → S5 düşerdi"
+smut 'if len(prler)>=tavan:' 'if False:'
+sifirla; KART_SUPUR_TAVAN=8 bash "$SMUT/kart.sh" supur uygula >/dev/null 2>&1; [ "$(durum mut-dal)" = bitti ]; g $? "mutant (tavan kapısı kalktı): eksik PR listesiyle yine süpürür → S10 düşerdi"
+smut 'if mod=="uygula":' 'if True:'
+sifirla; bash "$SMUT/kart.sh" supur kuru >/dev/null 2>&1; [ "$(durum mut-dal)" = bitti ]; g $? "mutant (kuru-koşu yazıyor): kuru kipte kart kapanır → S1 düşerdi"
+unset KANIT_DEPO; cd "$T"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
