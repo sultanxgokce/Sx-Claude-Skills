@@ -1,0 +1,81 @@
+{
+  "is": "uzlastir-zil-genis",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T01:09:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "zil-aciliyeti",
+      "asama": "once",
+      "dosya": "olcum-zil-aciliyeti-once.txt",
+      "sha256": "7da0cab24ed65f2e20e7ad65376b92fbb5609466bbd5055ab54d8685191ed55e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/uzlastir-aciliyet-say.sh",
+        "main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T01:09:02+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cc854fad7c754968b2b13db843112fe0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "zil-aciliyeti",
+      "asama": "sonra",
+      "dosya": "olcum-zil-aciliyeti-sonra.txt",
+      "sha256": "ebf74bc1ce98eab10955d6fc3dc6612ac3b476c37ca5ea853af8fc4f5428537c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/uzlastir-aciliyet-say.sh",
+        "alan"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T01:09:04+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "01f9e15408db4dfab3d5741c0b797996"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "zil-mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-zil-mutasyon-tek.txt",
+      "sha256": "9529ac7259bdce1b114d8515991b901c48ed13f0f3cd26772e4bd03f85115460",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/uzlastir-aciliyet-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T01:09:06+03:00",
+      "sure_sn": 2.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "zil-aciliyeti",
+      "beklenen": "kirmizi",
+      "olcum_id": "27c7bb41a5ac46c1be20a9ff4e795777"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "9d2ea0dae5bd19b3438b7db2afe530e1873a40ece0c28e93ef1a0f7fe3126670",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T01:09:09+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "647cc9ced18d41559613fa7fefd9e332"
+    }
+  ],
+  "imza": "e17867436c87588497c9a055dc86c7c39e7c4ff2aa873a400f93c761a28df541"
+}

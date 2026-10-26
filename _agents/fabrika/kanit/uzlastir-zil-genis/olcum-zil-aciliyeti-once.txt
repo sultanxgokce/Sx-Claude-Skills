@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/uzlastir-aciliyet-say.sh main
+# rc=1 sure=1.5s zaman=2026-10-27T01:09:02+03:00
+--- stdout ---
+kaynak=main · zil satırı aciliyeti: --aciliyet orta (beklenen --aciliyet genis)
+--- stderr ---

@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-zil-aciliyeti-* ===
+$ bash /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/uzlastir-aciliyet-mut.sh
+# rc=1 sure=2.3s zaman=2026-10-27T01:09:06+03:00
+--- stdout ---
+kaynak=alan · zil satırı aciliyeti: --aciliyet orta (beklenen --aciliyet genis)
+geri kondu: 1 (1 olmalı)
+--- stderr ---
