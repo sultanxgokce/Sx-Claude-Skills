@@ -13,17 +13,27 @@ set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 CIPA="${GUNLUK_PLAN_CIPA_SH:-$KOK/cipa.sh}"
 GOREV="${GUNLUK_PLAN_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
-UYGULA=0; KUTU="${GUNLUK_PLAN_KUTU:-}"; KIM=""; ACIL="esnek"
+UYGULA=0; KUTU="${GUNLUK_PLAN_KUTU:-}"; KIM=""; ACIL="esnek"; ONAY=""
+BUGUN="${GUNLUK_PLAN_TARIH:-$(date +%F)}"
 while [ $# -gt 0 ]; do
   case "$1" in
     --uygula) UYGULA=1; shift ;;
     --kutu) KUTU="${2:-}"; shift 2 ;;
     --kim) KIM="${2:-}"; shift 2 ;;
     --aciliyet) ACIL="${2:-}"; shift 2 ;;
+    --onay) ONAY="${2:-}"; shift 2 ;;
     *) echo "tanınmayan argüman: $1" >&2; echo "kullanım: deftere-yaz.sh [--uygula] [--kutu K] [--kim AJAN] [--aciliyet cok-acil|acil|esnek|rahat]" >&2; exit 2 ;;
   esac
 done
 case "$ACIL" in cok-acil|acil|esnek|rahat) ;; *) echo "HATA: --aciliyet geçersiz: $ACIL" >&2; exit 2 ;; esac
+# ONAY KAPISI (A06/D1): --uygula, Sultan'ın planı onayladığının GÖRÜLDÜĞÜ referansı ister (ajan onay ÜRETMEZ, gördüğünü aktarır). Biçim:
+#   YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim kırpık>" · beyan:<AJAN>)  — üç parça da zorunlu, ref'siz beyan sayılmaz.
+if [ "$UYGULA" -eq 1 ]; then
+  if ! printf '%s' "$ONAY" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2} Sultan: .+ \(sohbet · [^·]+ · "[^"]{3,}" · beyan:[^)]+\)$'; then
+    echo "REDDEDİLDİ: --uygula için Sultan'ın plan onayı referansı şart (--onay '<YYYY-MM-DD Sultan: onay (sohbet · <oturum-ref> · \"<verbatim kırpık>\" · beyan:AJAN)>'). Onaysız plan deftere yazılmaz; kuru koşu onaysız çalışır." >&2
+    exit 2
+  fi
+fi
 [ -x "$GOREV" ] || [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
 [ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
 [ -n "$KIM" ] || KIM="$(bash "$CIPA" ajan 2>/dev/null | python3 -c 'import sys; print(sys.stdin.read().strip().upper())')"   # çıpa kimliği dosya adı için KATLANMIŞTIR; İ/Â'lı adlar için --kim ver
@@ -43,15 +53,19 @@ _norm() { python3 -c 'import sys,re,unicodedata
 t=unicodedata.normalize("NFKC",sys.argv[1]).replace("İ","i").replace("I","ı").lower()
 print(re.sub(r"\s+"," ",re.sub(r"[^\w\s]","",t)).strip())' "$1"; }
 
-# açık görev başlıkları (iptal/bitti/tamam olmayanlar; onay-bekleyen de açıktır): liste satırı = id kutu durum aciliyet etiket atanan BAŞLIK  (son: …)
+# engelleyen başlıklar: açıklar (onay-bekleyen dahil) + BUGÜN kapananlar: liste satırı = id kutu durum aciliyet etiket atanan BAŞLIK  (son: …)
 ACIK="$(printf '%s\n' "$LISTE" | python3 -c '
 import sys,re
+bugun=sys.argv[1]
 for s in sys.stdin:
     p=s.rstrip("\n").split(None,6)
     if len(p)<7 or not p[0].startswith("gorev_"): continue
-    if p[2] in ("iptal","bitti","tamam"): continue   # onay-bekliyor AÇIK sayılır: biten iş Sultan onayını beklerken aynı başlıkla ikinci kez açılmaz
+    m=re.search(r"\(son: (\d{4}-\d{2}-\d{2})",p[6]); son=m.group(1) if m else ""
+    # kapanmış görev yalnız BUGÜN kapandıysa aynı başlığı engeller (aynı gün aynı madde ikinci kez yazılmaz); eski kapanış yeni gün için yeniden açılabilir
+    # onay-bekliyor AÇIK sayılır: biten iş Sultan onayını beklerken aynı başlıkla ikinci kez açılmaz
+    if p[2] in ("iptal","bitti","tamam") and son!=bugun: continue
     print(re.sub(r"\s+\(son:.*$","",p[6]))
-')"
+' "$BUGUN")"
 ACIK_N=""; while IFS= read -r b; do [ -n "$b" ] && ACIK_N+="$(_norm "$b")"$'\n'; done <<<"$ACIK"
 
 yazilan=0; atlanan=0; reddedilen=0; hata=0; say=0

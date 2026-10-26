@@ -87,13 +87,14 @@ tek satır yoktu. Kural vardı, kapısı yoktu.
 ekranında "Sırada 0 · Çalışılıyor 0". Çıpa yazıldıktan sonra (yeni defter KURULMAZ, mevcut görev defteri):
 ```bash
 bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh            # KURU: neyi yazacağını basar
-bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh --uygula   # çıpadaki açık maddeleri kutunun deftere yazar
+bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh --uygula --onay "<D1 damgası>"   # çıpadaki açık maddeleri kutunun deftere yazar
 ```
 - Kaynak çıpadır (`- [ ]` satırları); yazım `gorev.sh ekle` ile, kutunun kendi jetonuyla; etiket özellik, aciliyet esnek (`--aciliyet` ile değişir), atanan = sen.
 - **İdempotent:** defterde aynı başlıkta açık görev (onay bekleyen dahil) varsa yazılmaz; ikinci koşu çift kayıt açmaz.
 - **Ölçemezse yazmaz:** çıpa ya da görev listesi okunamazsa rc 3 — "yazılacak bir şey yok" denmez. 200 karakterden uzun madde başlık değil nottur, reddedilir (kırpılmaz).
-- Plan **onaylandıktan sonra** koşulur (A06: onay üretilmez); onaylanmayan madde deftere gitmez.
-Sınavı: `bash scripts/deftere-yaz.test.sh` (D1-D15, hermetik: sahte gorev.sh).
+- **Onay kapısı (A06/D1):** `--uygula`, Sultan'ın plan onayını GÖRDÜĞÜNÜN referansını ister: `YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim>" · beyan:<AJAN>)`. Biçimsiz ya da eksik referansta rc 2, deftere hiçbir şey gitmez; onay ÜRETİLMEZ, gördüğün aktarılır. Kuru koşu onaysız çalışır.
+- **Aynı gün aynı madde:** açık (onay bekleyen dahil) ya da BUGÜN kapanmış/iptal edilmiş aynı başlıklı görev varsa yazılmaz; eski günlerde kapanmış başlık yeni gün için yeniden açılabilir.
+Sınavı: `bash scripts/deftere-yaz.test.sh` (D1-D19, D17b, hermetik: sahte gorev.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 
