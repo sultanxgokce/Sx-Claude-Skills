@@ -9,6 +9,8 @@ Alt-komutlar (sicil.sh çağırır):
   ders-bagla <mühürdar> --isabet-ts <ts> --ders D-NNN
   muhur  <mühürdar> --gorev G --verdikt V [--bassiz] [--el-kitabi-surum v]   (muhurdar.sh her mühürde KENDİSİ yazar)
   teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>             (geçit: Sultan'ın tek teslim kararı → bütün satırlar)
+  supur  [--kutu <çıkış-kutusu.jsonl>] [--muhur-kok <dizin>]                (geçidin çıkış kutusunu süpürür → her görev için teslim-isle)
+  muhur-kopya --gorev G --out <mühür-dizini> [--muhur-kok <dizin>]          (muhurdar.sh kendisi çağırır: mühür dosyalarını süpürmenin bulacağı yere kilitli ve atomik kopyalar)
 
 Kayıt yeri: personelin özlük dosyası `<SICIL_DIZIN>/<personel_no>.yaml` → `isabet:` bölümü (append-only; silinmez, ters
 kayıtla düzeltilir). Yeni defter KURULMAZ (S9). Satır §6 biçimidir + üç ek alan: `g_tur` (gereklilik türü — ders çıkarma
@@ -406,11 +408,119 @@ def cmd_teslim_isle(argv):
     return 0
 
 
+def varsayilan_muhur_kok():
+    return os.environ.get("SICIL_MUHUR_KOK") or os.path.join(os.path.expanduser("~"), ".claude", "tescil", "muhur")
+
+
+def cmd_supur(argv):
+    """Geçit Sultan'ın hükmünü çıkış kutusuna (JSONL) tek satır yazar: {"gorev":…, "kaynak":"teslim:<görev>"}. Burada her görev için,
+    mühür dizini (muhurdar.sh'in bıraktığı kopya) varsa ve Sultan'ın kararı tamamsa teslim-isle koşar. Sultan'ın hükmü YİNE yalnız
+    geçidin doğrulayıcısından gelir (SICIL_KAYNAK_DOGRULA, A06): kutudaki satır bir İŞARETTİR, hüküm kaynağı değildir.
+    İşlenen kaynaklar `<kutu>.islendi`ye yazılır; eksik karar / mühür yok / ölçülemedi satırı kutuda KALIR ve sonraki süpürmede yeniden denenir."""
+    import subprocess, fcntl
+    a, k = argv_al(argv, ("--kutu", "--muhur-kok"))
+    if k:
+        hata("kullanım: supur [--kutu <jsonl>] [--muhur-kok <dizin>]")
+    kutu = a.get("kutu") or os.environ.get("SICIL_CIKIS_KUTUSU")
+    if not kutu:
+        hata("çıkış kutusu verilmedi (--kutu ya da SICIL_CIKIS_KUTUSU)")
+    kok = a.get("muhur_kok") or varsayilan_muhur_kok()
+    if not os.path.exists(kutu):
+        print(f"✓ süpürme: çıkış kutusu yok ({kutu}) — yapılacak şey yok")
+        return 0
+    islendi_yol = kutu + ".islendi"
+    try:
+        islendi = set(x.strip() for x in open(islendi_yol, encoding="utf-8")) if os.path.exists(islendi_yol) else set()
+    except OSError as e:
+        hata(f"işlenenler listesi okunamadı: {e}", 3)
+    kaynaklar = {}   # kaynak → görev (ilk satır kazanır; aynı görevin tekrar satırları tek iş)
+    bozuk = 0
+    with open(kutu, encoding="utf-8") as h:
+        for ham in h:
+            if not ham.strip():
+                continue
+            try:
+                x = json.loads(ham); g, kay = x["gorev"], x["kaynak"]
+                assert isinstance(g, str) and isinstance(kay, str) and TESLIM.match(kay) and kay == "teslim:" + g   # kaynak ile görev AYNI kayda işaret eder
+            except (ValueError, KeyError, AssertionError, TypeError):
+                bozuk += 1; continue
+            kaynaklar.setdefault(kay, g)
+    sayi = {"islendi": 0, "zaten": 0, "bekliyor": 0, "reddedildi": 0}
+    ayrinti = []
+    for kay, g in kaynaklar.items():
+        if kay in islendi:
+            sayi["zaten"] += 1; continue
+        md = os.path.join(kok, g)
+        # mühür kopyası yazılırken (muhur-kopya, özel kilit) HİÇBİR şey okunmaz: mühürdar adı, gereklilik ve özet aynı koşuya ait kalır —
+        #   kilit, özeti okumadan ÖNCE alınır ve teslim-isle bitene dek tutulur
+        try:
+            kilit = open(os.path.join(md, ".kilit"), "a")
+        except OSError:
+            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür dizini yok: {md})"); continue
+        try:
+            fcntl.flock(kilit, fcntl.LOCK_SH)
+            try:
+                oz = json.load(open(os.path.join(md, "muhur-ozet.json"), encoding="utf-8"))
+                assert os.path.exists(os.path.join(md, "gereklilik.json")) and oz.get("muhurdar")
+            except (OSError, ValueError, AssertionError):
+                sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (mühür özeti yok ya da mühürdarsız: {md})"); continue
+            try:
+                p = subprocess.run([sys.executable, os.path.abspath(__file__), "teslim-isle", oz["muhurdar"], "--kaynak", kay, "--muhur-dir", md],
+                                   capture_output=True, text=True, timeout=int(os.environ.get("SICIL_SUPUR_ZAMAN", "120")))
+            except subprocess.TimeoutExpired:
+                sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor (zaman aşımı — doğrulayıcı ya da teslim-isle yanıt vermedi)"); continue
+        finally:
+            kilit.close()
+        hata_metni = (p.stderr or "").strip().splitlines()[-1:] or [""]
+        if p.returncode == 0 or "zaten işlendi" in p.stderr:
+            with open(islendi_yol, "a", encoding="utf-8") as w:
+                fcntl.flock(w, fcntl.LOCK_EX); w.write(kay + "\n")
+            sayi["islendi" if p.returncode == 0 else "zaten"] += 1
+        elif "satırlar yok" in p.stderr or p.returncode == 3:
+            sayi["bekliyor"] += 1; ayrinti.append(f"{g}: bekliyor ({hata_metni[0].lstrip('✗ ')})")
+        else:
+            sayi["reddedildi"] += 1; ayrinti.append(f"{g}: REDDEDİLDİ ({hata_metni[0].lstrip('✗ ')})")
+    for s_ in ayrinti:
+        print("  · " + s_)
+    print(f"✓ süpürme: {sayi['islendi']} işlendi · {sayi['zaten']} zaten işli · {sayi['bekliyor']} bekliyor · {sayi['reddedildi']} reddedildi"
+          + (f" · {bozuk} bozuk satır atlandı" if bozuk else ""))
+    return 4 if sayi["reddedildi"] or bozuk else 0
+
+
+def cmd_muhur_kopya(argv):
+    """muhurdar.sh her gerçek mühürde çağırır: muhur-ozet.json + gereklilik.json'u <kök>/<görev>/ altına, süpürmeyle ORTAK kilitle
+    (özel kilit) ve dosya dosya atomik yer değiştirerek kopyalar — süpürme iki ayrı koşunun dosyalarını birlikte okuyamaz."""
+    import fcntl, shutil
+    a, k = argv_al(argv, ("--gorev", "--out", "--muhur-kok"))
+    if k or not a.get("gorev") or not a.get("out"):
+        hata("kullanım: muhur-kopya --gorev G --out <mühür-dizini> [--muhur-kok <dizin>]")
+    kok = a.get("muhur_kok") or varsayilan_muhur_kok()
+    if "/" in a["gorev"] or a["gorev"] in (".", ".."):
+        hata(f"görev adı dizin adı olamaz: {a['gorev']}")
+    hedef = os.path.join(kok, a["gorev"])
+    kaynaklar = [os.path.join(a["out"], f) for f in ("muhur-ozet.json", "gereklilik.json")]
+    for f in kaynaklar:
+        if not os.path.isfile(f):
+            hata(f"mühür dosyası yok: {f}", 3)
+    try:
+        os.makedirs(hedef, exist_ok=True)
+        kilit = open(os.path.join(hedef, ".kilit"), "a")
+        fcntl.flock(kilit, fcntl.LOCK_EX)
+        for f in kaynaklar:
+            gecici = os.path.join(hedef, "." + os.path.basename(f) + f".yeni-{os.getpid()}")
+            shutil.copyfile(f, gecici)
+            os.replace(gecici, os.path.join(hedef, os.path.basename(f)))
+    except OSError as e:
+        hata(f"mühür kopyası yazılamadı ({hedef}): {e}", 3)
+    print(f"✓ mühür kopyası: {hedef}")
+    return 0
+
+
 def main():
     if len(sys.argv) < 2:
-        hata("kullanım: sicil.py isabet|durum|ders|ders-bagla|muhur|teslim-isle …")
+        hata("kullanım: sicil.py isabet|durum|ders|ders-bagla|muhur|teslim-isle|supur|muhur-kopya …")
     k = {"isabet": cmd_isabet, "durum": cmd_durum, "ders": cmd_ders, "ders-bagla": cmd_ders_bagla,
-         "muhur": cmd_muhur, "teslim-isle": cmd_teslim_isle}.get(sys.argv[1])
+         "muhur": cmd_muhur, "teslim-isle": cmd_teslim_isle, "supur": cmd_supur, "muhur-kopya": cmd_muhur_kopya}.get(sys.argv[1])
     if not k:
         hata(f"bilinmeyen alt komut: {sys.argv[1]}")
     return k(sys.argv[2:])

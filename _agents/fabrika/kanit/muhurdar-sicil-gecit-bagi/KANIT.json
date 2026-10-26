@@ -1,0 +1,62 @@
+{
+  "is": "muhurdar-sicil-gecit-bagi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T18:53:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "supur-dogru",
+      "asama": "once",
+      "dosya": "olcum-supur-dogru-once.txt",
+      "sha256": "f39ccc0645ef662d1e10e56539ede00d272a4784e1739508857b1ec06a121bf9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T18:43:12+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ff3a3a6fe93941a1b677a6ea718f6103"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-dogru",
+      "asama": "sonra",
+      "dosya": "olcum-supur-dogru-sonra.txt",
+      "sha256": "49bff7573aaf6f5e397b5777f0f96d4eb5aa629095aee74371920024602a7bf9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:53:30+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c843429cbdca4927834067e8025cbe76"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "supur-mut",
+      "asama": "sonra",
+      "dosya": "olcum-supur-mut-sonra.txt",
+      "sha256": "d67a25012ff36964a5908e213b98af2644563e13ccd5ae9f7453f3bd92abf7e0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/s-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T18:53:30+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "supur-dogru",
+      "beklenen": "kirmizi",
+      "olcum_id": "60c33206d160444989c6500cab53bc8b"
+    }
+  ],
+  "imza": "ce5c1e6d4bb3de5b41bb5d3366333996910fe72372bd0823eb3b783756611de0"
+}

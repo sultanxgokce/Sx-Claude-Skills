@@ -1,0 +1,40 @@
+{
+  "tur": 3,
+  "is": "muhurdar-sicil-gecit-bagi",
+  "pr": "474",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T18:55:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-muhurdar-sicil-gecit-bagi",
+  "dal": "muhurdar-sicil-gecit-bagi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22189,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7108
+  },
+  "bas": "21f697a5858603ef71c1be6c69fb1055c7355c8a",
+  "duzeltme_farki": {
+    "onceki_bas": "92287890846d8aadd1419b54683d61450d94d828",
+    "dosya": 7,
+    "bayt": 15911,
+    "tam_bayt": 40719
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: süpürme artık ortak kilidi mühür özetini okumadan önce alıyor, teslim-isle tamamlanana dek tutuyor ve yarış sınavı yeni mühürle işlenmeyi doğruluyor. Daraltılmış kartın kutu tarafındaki çıkış kutusu süpürme, görev başına teslim-isle ve mühür kopyası bağı için üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm önce 0/2 iken sonra 2/2 olmuş; mutasyon kaydı kilit kaldırıldığında sınavın 0/2 ve rc=1 ile bozukluğu yakaladığını gösteriyor. Önceki B1, sicil.py içinde LOCK_SH'nin özet okumasından önceye taşınması, kilidin teslim-isle sonuna kadar tutulması ve supur.test.sh içindeki yeni l yarış kapısı ile kapanmış; SKILL.md sayıları da 15 kapı + 9 mutant olarak güncellenmiş."
+  }
+}
