@@ -1,7 +1,7 @@
 {
   "is": "terminal-onar-kabuk-sayisi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T01:07:01+03:00",
+  "guncelleme": "2026-10-27T01:09:18+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,18 +26,18 @@
       "etiket": "yeni-kabuk-yazimi",
       "asama": "sonra",
       "dosya": "olcum-yeni-kabuk-yazimi-sonra.txt",
-      "sha256": "e3f86709cc0fef42f0e85cf69fc5269e8d2b31d1cb5d57a72a8b98799301eb23",
+      "sha256": "978b88c3ef097dd0046fe6f1145397b89b69e795f184b3935364c190e7b70141",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/kb-olc.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-27T01:07:01+03:00",
-      "sure_sn": 17.5,
+      "zaman": "2026-10-27T01:09:18+03:00",
+      "sure_sn": 20.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e39a1ce73ab54e11ac691ed179387815"
+      "olcum_id": "18453804fd8a4331b2435666e92ca178"
     }
   ],
-  "imza": "563e966b22b67fafda46ce4ae9409b7963d561ff8057930c36f385669c9836c7"
+  "imza": "2c418552ff29e721e4dee7556fa5c8bbe44d654d4453f3e910e69335d51dc98d"
 }

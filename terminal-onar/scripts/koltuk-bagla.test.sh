@@ -190,6 +190,12 @@ SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste10"
 { echo "⏺ Bitti."; echo "❯ "; echo "──────"; echo "  1 shell command denendi"; } > "$S/ekran-BASIRET"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste11"
 [ "$(grep -P '^BASIRET\t' "$S/liste11" | cut -f5)" = bos ] && ok "D13j NEGATİF: '1 shell command' (durum çubuğu değil, düz metin) dış olay SAYILMAZ → boş" || bad D13j "$(grep -P '^BASIRET\t' "$S/liste11" | cut -f5)"
+{ echo "⏺ Bitti."; echo "❯ "; echo "──────"; echo "  İki iş için 2 shells"; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste12"
+[ "$(grep -P '^BASIRET\t' "$S/liste12" | cut -f5)" = bos ] && ok "D13k NEGATİF: satır sonunda düz metin '... 2 shells' (solunda · yok, durum çubuğu değil) dış olay SAYILMAZ → boş" || bad D13k "$(grep -P '^BASIRET\t' "$S/liste12" | cut -f5)"
+{ echo "⏺ Bitti."; echo "❯ "; echo "──────"; echo "  - 2 shells"; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste13"
+[ "$(grep -P '^BASIRET\t' "$S/liste13" | cut -f5)" = bos ] && ok "D13l NEGATİF: madde işaretli '- 2 shells' satırı dış olay SAYILMAZ → boş" || bad D13l "$(grep -P '^BASIRET\t' "$S/liste13" | cut -f5)"
 printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"; rm -f "$S"/ekran-*
 
 echo "C · liste (tek kaynak)"

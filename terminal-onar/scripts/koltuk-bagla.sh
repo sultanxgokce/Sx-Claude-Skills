@@ -205,7 +205,7 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bil
     #    önce gelir, "N shells running" yalnız sayıdır — ad "ne bekliyor" diyorsa alanı da nedeni taşımalı. Hâl kararı (dis-olay)
     #    ikisinden biri varsa; alt çubuk sinyali hâl için en güçlü, metin için en zayıf.
     local kuyruk ne son kabuk; kuyruk="$(printf '%s\n' "$ekran" | tail -n 5)"
-    kabuk="$(printf '%s\n' "$kuyruk" | grep -iE '[0-9]+ (background )?shells?( still)?( running)?[[:space:]]*(·|$)' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
+    kabuk="$(printf '%s\n' "$kuyruk" | grep -iE '[0-9]+ (background )?shells? (still )?running|·[[:space:]]*[0-9]+ shells?[[:space:]]*(·|$)' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
     son="$(printf '%s\n' "$kuyruk" | awk '/⏺/{n=NR} END{print n+0}')"; [ "$son" -gt 0 ] || son=1
     ne="$(printf '%s\n' "$kuyruk" | tail -n +"$son" | grep -iE 'bekleniyor|bildirim gelince|CI [^ ]*bekl|bekleyici|arka plan(da)? (bekl|izl)|izleniyor' | tail -1 | sed 's/^[[:space:]]*//; s/^⏺[[:space:]]*//' | cut -c1-80)"
     [ -n "$ne" ] || ne="$kabuk"
