@@ -2355,6 +2355,17 @@ b="$(python3 "$SCRIPT_DIR/lib/compose_parse.py" --haric hic-olmayan-servis "$SCR
   && ok "compose_parse --haric: olmayan-servis = bayraksız çıktıyla BAYT-eş (davranış-koruması)" \
   || bad "compose_parse --haric: bayt-eşlik kırıldı"
 
+# 72a. compose_parse --haric TEKRARLANABİLİR (doğan projenin pano servisi de aday: iskan-host ek-teşhisi)
+out="$(python3 "$SCRIPT_DIR/lib/compose_parse.py" --haric alpha --haric beta "$SCRIPT_DIR/fixtures/compose-collision.yml" 2>/dev/null)"
+n_srv="$(printf '%s' "$out" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["services"]))' 2>/dev/null)"
+[ "$n_srv" = "0" ] \
+  && ok "compose_parse --haric alpha --haric beta: iki servis de düştü (tekrarlanabilir)" \
+  || bad "compose_parse --haric tekrarı kırık (kalan servis=$n_srv)"
+grep -q -- '--haric "\$cname" --haric "\$pano_cname" "\$repo_tmp"' "$SCRIPT_DIR/iskan-host.sh" \
+  && grep -q -- '--haric "\$cname" --haric "\$pano_cname" "\$host_tmp"' "$SCRIPT_DIR/iskan-host.sh" \
+  && ok "iskan-host ek-teşhisi: aday = servis + pano servisi (iki taraf)" \
+  || bad "iskan-host ek-teşhisi pano servisini aday saymıyor"
+
 # 72b. compose_block.py sil: (a) aday-bloğu (yorum+ayraç-boşluk dahil) çıkarınca base ile
 #      BAYT-eş · (b) olmayan-cname passthrough bayt-eş · (c) boş-girdi rc≠0 + boş-stdout (fail-closed)
 CB_TMP="$(mktemp)"; { _cs_base_yaml; _cs_aday_blok; } > "$CB_TMP"
