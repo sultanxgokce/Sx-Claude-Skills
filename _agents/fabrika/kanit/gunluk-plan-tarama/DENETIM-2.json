@@ -1,0 +1,55 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-tarama",
+  "pr": "485",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T23:54:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tarama",
+  "dal": "gunluk-plan-tarama",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34924,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 12007
+  },
+  "bas": "1dd98b0a2f4763b45ccdc8ab3a8fd189dd646655",
+  "duzeltme_farki": {
+    "onceki_bas": "38409256faa0ea4b96588b378048cf985dc1e0a8",
+    "dosya": 8,
+    "bayt": 28081,
+    "tam_bayt": 37858
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Mevcut görev defterine günde en çok üç tarama işi ekleyen adım kurulmuş; B1 sabit tavanla, B2 yazım sonrası kutu doğrulamasıyla kapanmış ve gerçek ölçüm 28/28 geçerken mutasyon sınavı 16/16 kusuru yakalamış. Ancak B3 yalnız kısmen kapanmış: sayı ve dosya-satır kapıları biçimi güçlendiriyor ama bir HTTPS kaynağı ile içinde herhangi bir rakam geçen serbest metin hâlâ ölçülmüş kanıt sayılabildiği için önce kanıtın gerçek ölçüm kaydına bağlanması çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki B3 kısmen açık: HTTPS kaynaklarının erişildiği ve kanıt metnindeki sayının gerçekten bu turdaki bir ölçümden geldiği doğrulanmıyor; herhangi bir HTTPS dizgesi ile en az 20 karakterlik ve rakam içeren metin yazım kapısını geçebilir.",
+        "kanit": "Üretim kodunda HTTPS dalı denetimsiz geçiliyor; kanıt için yalnız grep '[0-9]' ve uzunluk denetimi uygulanıyor. SKILL.md de betiğin HTTPS adresini ve kanıt cümlesinin doğruluğunu doğrulayamadığını açıkça söylüyor; T4c/T4d sadece rakam ve uzunluk biçimini sınıyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:30-38; gunluk-plan/SKILL.md:120; olcum-tarama-sinavi-sonra.txt:T4c-T4d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Dosya satır sınırı wc -l ile hesaplandığından, sonunda satır sonu karakteri bulunmayan son geçerli satır dosya dışında sanılarak reddedilebilir.",
+        "kanit": "Koşul satır numarasını doğrudan `wc -l < \"$f\"` sonucuyla karşılaştırıyor; wc -l satırları değil yeni satır karakterlerini sayar. T2d kaynağı `seq` ile üretildiği için sonu yeni satırlı dosyayı kapsıyor, yeni satırsız son satır vakası ölçülmüyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:34-36; gunluk-plan/scripts/tarama-ekle.test.sh:T2d,T4b",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümü 0/22, gerçek sonra ölçümü 28/28; mutasyon kaydı beklenen rc=1 ile 16/16 mutantın yakalandığını gösteriyor. B1, T7c ile ortam değişkeninin tavanı yükseltememesi ölçülerek kapanmış; B2, T11-T12b ile kutu tahmini ve yazım sonrası gerçek kutu doğrulaması ölçülerek kapanmış. B3 için yeni sınavlar yalnız dosya varlığı/satır aralığı ile kanıtta rakam ve uzunluğu kanıtlıyor; kanıtın gerçek bir ölçüm kaydına bağlı olduğunu kanıtlamıyor."
+  }
+}

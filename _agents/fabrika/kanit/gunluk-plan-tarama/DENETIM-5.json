@@ -1,0 +1,40 @@
+{
+  "tur": 5,
+  "is": "gunluk-plan-tarama",
+  "pr": "485",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T00:01:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tarama",
+  "dal": "gunluk-plan-tarama",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21410,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 5810
+  },
+  "bas": "cae087dc1852abbd00721d17da48e78f4edc6a73",
+  "duzeltme_farki": {
+    "onceki_bas": "ca97da5e0f4ecdfa519d1ca5b00da864b6268e69",
+    "dosya": 2,
+    "bayt": 5810,
+    "tam_bayt": 54540
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: daraltılmış iş kartı artık kaynağı bugün yazılmış ölçüm dosyasının dosya:satırıyla sınırlandırıyor ve kanıttaki sayıların o satırda birebir bulunmasını açıkça istiyor; sınav da tam bu bağı denetliyor. Gerçek ölçüm 33/33, mutasyon ölçümü 21/21 olduğundan PR bütünü üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek önce/sonra ölçüm çifti 0/22’den 33/33’e geçişi gösteriyor; gerçek son ölçüm rc=0, mutasyon kaydı ise beklenen rc=1 ile 21/21 bozukluğu yakalıyor. Önceki B1, üretim kodu değiştiği için değil iş kartı açıkça daraltılarak davranışla hizalandığı için kapanmış; T4g-T4i yeni talepteki kaynak-sayı bağını doğrudan ölçüyor."
+  }
+}

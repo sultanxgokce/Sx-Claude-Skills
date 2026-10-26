@@ -1,0 +1,48 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-tarama",
+  "pr": "485",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T23:57:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tarama",
+  "dal": "gunluk-plan-tarama",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26571,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9944
+  },
+  "bas": "36dbebe8cd7d31c773faf17c0c965cc7f0c949fd",
+  "duzeltme_farki": {
+    "onceki_bas": "1dd98b0a2f4763b45ccdc8ab3a8fd189dd646655",
+    "dosya": 8,
+    "bayt": 17786,
+    "tam_bayt": 44191
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Mevcut görev defterine günde en çok üç tarama işi ekleyen adım kurulmuş; HTTPS erişim kapısı ve yeni satırsız son satır denetimi eklenmiş, gerçek sınav 30/30 geçerken mutasyon sınavı 18/18 kusuru yakalamış. Ancak kanıt cümlesindeki sayının gerçekten bu turda yapılmış bir ölçümden geldiği hâlâ doğrulanmadığı için önce bu bağı kurmak gerekiyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kısmen kapanmış: HTTPS kaynağının açılması artık doğrulanıyor, fakat kanıt metnindeki sayının gerçekten bu turdaki bir ölçümden geldiği doğrulanmıyor; herhangi bir rakam içeren yeterince uzun serbest metin kapıyı geçebilir.",
+        "kanit": "Üretim kodu HTTPS için HEAD ve gerekirse aralıklı GET yapıyor; buna karşılık kanıt için yalnız `[0-9]` bulunması ve 20 karakter uzunluk aranıyor. SKILL.md de sayının gerçekten bu turda ölçüldüğünü betiğin doğrulayamadığını açıkça belirtiyor; T4c ve T4d yalnız rakam ile uzunluk biçimini sınıyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:30-43; gunluk-plan/SKILL.md:120; olcum-tarama-sinavi-sonra.txt:T4c-T4e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümü 0/22, gerçek sonra ölçümü 30/30; mutasyon kaydı beklenen rc=1 ile 18/18 mutantın yakalandığını gösteriyor. Önceki B1'in HTTPS erişimi bölümü T4e ile kapanmış, ölçümün gerçekliği bölümü açık kalmış; önceki B2 ise grep tabanlı satır sayımı ve T4f'nin yeni satırsız son satır ölçümüyle kapanmış."
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "is": "gunluk-plan-tarama",
+  "cumle": "Kutu, taramadan çıkan işi görev defterine ekler: kaynak BUGÜN yazılmış bir ölçüm dosyasının dosya:satır'ı (ya da açılan https adresi) olur ve kanıttaki sayılar o satırda birebir geçer; kanıt ölçüm dosyasına bağlıdır, doğruluğu değil bağı doğrulanır; günde en çok 3, aynı başlık yazılmaz, ölçemezse yazmaz",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-26T18:13:06+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-26T23:57:51+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gunluk-plan-tarama-kalan",
+      "tur_sifir": 3
+    },
+    {
+      "zaman": "2026-10-27T00:01:35+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gunluk-plan-tarama-kod-satiri",
+      "tur_sifir": 4
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5V5M4H7PQEY5PTZQS0HC75A",
+  "tahmin_dk": 120,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-26T18:13:06+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-26T18:30:40+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-26T19:21:26+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-26T23:50:31+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-26T23:54:32+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-26T23:57:31+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-27T00:01:09+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "hezarfen-tur3-tikandi",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gunluk-plan-tarama-kalan) — kanıt cümlesindeki sayının gerçekten bu turda ölçüldüğü betikçe doğrulanamıyor (serbest metin; kaynak varlığı ve sayı şartı denetleniyor)",
+      "zaman": "2026-10-26T23:57:51+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "serdar-23-58-tur4-daralt",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gunluk-plan-tarama-kod-satiri) — meşru ama bugün değişmemiş kod satırlarından çıkan tarama bulguları ölçüm dosyası olarak sunulamaz; kod tabanı satırı için ayrı kaynak türü (örn. git blame tarihi + satır içeriği özeti) sonraki iş",
+      "zaman": "2026-10-27T00:01:35+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gunluk-plan: kod tabanı + web + endüstri taramasından çıkan katma değeri yüksek işleri, ölçülmüş kaynak ve kanıtla mevcut görev defterine ekleyen adım; günde en çok 3, yeni havuz yok (görev 0HC75A dilim b)",
+      "zaman": "2026-10-26T23:57:51+03:00",
+      "kalan_kart": "gunluk-plan-tarama-kalan"
+    },
+    {
+      "cumle": "Kutu, kod tabanı ve web taramasından çıkan bir işi görev defterine ekler: kaynak (var olan dosya:satır ya da açılan https adresi) ve sayı taşıyan kanıt şart, günde en çok 3, aynı başlık yazılmaz, ölçemezse yazmaz; kanıt cümlesinin doğruluğu yazanın beyanıdır ve bu betikçe doğrulanamaz",
+      "zaman": "2026-10-27T00:01:35+03:00",
+      "kalan_kart": "gunluk-plan-tarama-kod-satiri"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-26T23:57:51+03:00",
+      "kalan_kart": "gunluk-plan-tarama-kalan",
+      "kalan": "kanıt cümlesindeki sayının gerçekten bu turda ölçüldüğü betikçe doğrulanamıyor (serbest metin; kaynak varlığı ve sayı şartı denetleniyor)",
+      "tur_sifir": 3,
+      "oturum": "hezarfen-tur3-tikandi"
+    },
+    {
+      "zaman": "2026-10-27T00:01:35+03:00",
+      "kalan_kart": "gunluk-plan-tarama-kod-satiri",
+      "kalan": "meşru ama bugün değişmemiş kod satırlarından çıkan tarama bulguları ölçüm dosyası olarak sunulamaz; kod tabanı satırı için ayrı kaynak türü (örn. git blame tarihi + satır içeriği özeti) sonraki iş",
+      "tur_sifir": 4,
+      "oturum": "serdar-23-58-tur4-daralt"
+    }
+  ]
+}
