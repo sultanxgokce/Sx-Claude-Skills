@@ -113,7 +113,7 @@ def ajan_dizini(kok, ajan):
         ad = os.path.basename(d)
         if ad in AJAN_DIZIN_DISI or not os.path.isdir(d):
             continue
-        if ad_esle(ad, ajan):
+        if norm(ad) == norm(ajan):
             return d
     return None
 
@@ -267,7 +267,7 @@ def bekci_olc(ajan, pzt, paz):
     n = 0
     for s in open(yol, encoding="utf-8", errors="replace"):
         p = s.split()
-        if len(p) < 3 or p[2] == "TUR" or not ad_esle(p[2], ajan):
+        if len(p) < 3 or p[2] == "TUR" or norm(p[2]) != norm(ajan):
             continue
         if aralikta(tarih_cek(p[0]), pzt, paz):
             n += 1
