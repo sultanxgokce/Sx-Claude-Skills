@@ -45,6 +45,39 @@ kart is-g duz
 FABRIKA_GOREV_SH="$T/gorev-sahte.sh" FABRIKA_AILE_NOTIFY="$T/zil-sahte.sh" bash "$GB" is-g --depo "$D" --pr 21 --sha ggg >/dev/null 2>&1
 [ "$(wc -l < "$GOREV_KAYIT")" -eq 1 ] && [ "$(wc -l < "$ZIL_KAYIT")" -eq 2 ]; g $? "G12 görevsiz kartta adım yazılmaz ama zil yine gider"
 
+echo "════ G2b · zil sonucu söylenir, yutulmaz (göz 1. tur bulgu 1) ════"
+cat > "$T/zil-bozuk.sh" <<'SH'
+#!/usr/bin/env bash
+echo "tmux: no server running" >&2; exit 7
+SH
+cat > "$T/zil-kuyruk.sh" <<'SH'
+#!/usr/bin/env bash
+echo "KUYRUK: SERDAR koltuğu boşalınca teslim edilecek"; exit 1
+SH
+chmod +x "$T/zil-bozuk.sh" "$T/zil-kuyruk.sh"; kart is-z1 duz; kart is-z2 duz; kart is-z3 duz
+O="$(FABRIKA_AILE_NOTIFY="$T/zil-bozuk.sh" bash "$GB" is-z1 --depo "$D" --sha z1 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "golge zili GÖNDERİLEMEDİ (aile-notify rc 7): tmux: no server running" <<<"$O"; g $? "G13 zil gerçekten düşerse (rc 7) stderr'e GÖNDERİLEMEDİ yazılır, kayıt kalır, rc=0" "→ $O"
+O="$(FABRIKA_AILE_NOTIFY="$T/zil-kuyruk.sh" bash "$GB" is-z2 --depo "$D" --sha z2 2>&1)"
+grep -q "zil: kuyrukta" <<<"$O" && ! grep -q "GÖNDERİLEMEDİ" <<<"$O"; g $? "G14 meşgul koltukta zil KUYRUĞA girer: 'kuyrukta' denir, sorun sayılmaz" "→ $O"
+O="$(FABRIKA_AILE_NOTIFY="$T/zil-sahte.sh" bash "$GB" is-z3 --depo "$D" --sha z3 2>&1)"; grep -q "zil: SERDAR'a gitti" <<<"$O"; g $? "G15 zil gittiyse 'SERDAR'a gitti' denir"
+
+echo "════ G2c · eşzamanlı kapı koşuları tek kayıt yazar (göz 1. tur bulgu 2) ════"
+kart is-y duz gorev_Y; : > "$GOREV_KAYIT"; : > "$ZIL_KAYIT"; rm -f "$FABRIKA_GOLGE_DEFTER"
+for n in 1 2 3 4 5 6; do GOLGE_SINAV_BEKLE=0.4 FABRIKA_GOREV_SH="$T/gorev-sahte.sh" FABRIKA_AILE_NOTIFY="$T/zil-sahte.sh" bash "$GB" is-y --depo "$D" --pr 40 --sha yyy >/dev/null 2>&1 & done; wait
+[ "$(grep -c '"is": "is-y"' "$FABRIKA_GOLGE_DEFTER")" -eq 1 ] && [ "$(wc -l < "$GOREV_KAYIT")" -eq 1 ] && [ "$(wc -l < "$ZIL_KAYIT")" -eq 1 ]; g $? "G16 altı eşzamanlı koşu (bakma–ekleme arası 0,4 sn gecikme): 1 satır, 1 görev adımı, 1 zil" "→ satır $(grep -c '"is": "is-y"' "$FABRIKA_GOLGE_DEFTER") adım $(wc -l < "$GOREV_KAYIT") zil $(wc -l < "$ZIL_KAYIT")"
+MK="$T/golge-kilitsiz.sh"; python3 - "$GB" "$MK" <<'PYK'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a="fcntl.flock(f,fcntl.LOCK_EX)"; assert s.count(a)==1
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,"pass"))
+PYK
+: > "$GOREV_KAYIT"; : > "$ZIL_KAYIT"; rm -f "$FABRIKA_GOLGE_DEFTER"
+for n in 1 2 3 4 5 6; do GOLGE_SINAV_BEKLE=0.4 FABRIKA_GOREV_SH="$T/gorev-sahte.sh" FABRIKA_AILE_NOTIFY="$T/zil-sahte.sh" bash "$MK" is-y --depo "$D" --pr 40 --sha yyy >/dev/null 2>&1 & done; wait
+[ "$(grep -c '"is": "is-y"' "$FABRIKA_GOLGE_DEFTER")" -gt 1 ]; g $? "G17 mutant (flock söküldü): aynı kayıt birden çok yazılır → G16 bu mutantta düşerdi" "→ satır $(grep -c '"is": "is-y"' "$FABRIKA_GOLGE_DEFTER")"
+MZ="$T/golge-zilyutan.sh"; python3 - "$GB" "$MZ" <<'PYZ'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='else printf \'⚠ golge zili GÖNDERİLEMEDİ'; assert s.count(a)==1
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'else true; printf \'\' #'))
+PYZ
+O="$(FABRIKA_AILE_NOTIFY="$T/zil-bozuk.sh" bash "$MZ" is-z1 --depo "$D" --sha z9 2>&1)"; ! grep -q "GÖNDERİLEMEDİ" <<<"$O"; g $? "G18 mutant (zil hatası yine yutuluyor): uyarı kayboluyor → G13 bu mutantta düşerdi"
+
 echo "════ G3 · rapor ════"
 cat > "$T/gh-sahte.sh" <<'SH'
 #!/usr/bin/env bash

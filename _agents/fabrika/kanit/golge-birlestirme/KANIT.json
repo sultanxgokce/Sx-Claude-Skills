@@ -1,7 +1,7 @@
 {
   "is": "golge-birlestirme",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T16:43:01+03:00",
+  "guncelleme": "2026-10-26T16:48:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,37 +25,37 @@
       "etiket": "golge-dogru",
       "asama": "sonra",
       "dosya": "olcum-golge-dogru-sonra.txt",
-      "sha256": "e866f813f676d30dee8359817662b32f81303950e2e1e62b9b51c4bb73f227cd",
+      "sha256": "3e6e68a42e4eb35ed88561daa32f2a667ce9cd34d650587bdf8f1c8f8ae66e75",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T16:42:25+03:00",
-      "sure_sn": 14.1,
+      "zaman": "2026-10-26T16:48:09+03:00",
+      "sure_sn": 3.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "78988cc293e74527a268d2fef3e6fe96"
+      "olcum_id": "b7f2971298fa4863b8367b66f961e3cb"
     },
     {
       "tur": "olcum",
       "etiket": "golge-mut",
       "asama": "sonra",
       "dosya": "olcum-golge-mut-sonra.txt",
-      "sha256": "0250120f62d1d8459037f1b4deb7bdd1bc58b295ad0580e4f691148e4669b334",
+      "sha256": "1c3d92a3d692515b58acc1359f219e4baf1fcb9726fac3b839978f60ee7afb27",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T16:42:35+03:00",
-      "sure_sn": 4.0,
+      "zaman": "2026-10-26T16:48:13+03:00",
+      "sure_sn": 3.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "golge-dogru",
       "beklenen": "kirmizi",
-      "olcum_id": "2cc127efcb8b462cb2e0000da40dce79"
+      "olcum_id": "53ed925de9734b99826c5687d0eb358a"
     },
     {
       "tur": "canli",
@@ -93,5 +93,5 @@
       "olcum_id": "f057bb3a1f9a43c2a1cd31f2dc12f52a"
     }
   ],
-  "imza": "3cff2e1263ff51a8dc7cdfb074db436d973ace5d1d237f893b719e069e42dfd6"
+  "imza": "b3831652eb963fa22de4f59821ba6de16c5ded72f8e3506323a7af1fb1c23e9a"
 }
