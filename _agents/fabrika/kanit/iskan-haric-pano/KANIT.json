@@ -1,0 +1,43 @@
+{
+  "is": "iskan-haric-pano",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T22:48:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinav-281",
+      "asama": "tek",
+      "dosya": "olcum-iskan-sinav-281-tek.txt",
+      "sha256": "f8dd565748ef6972a6ec1db5a02e57e36d250fd73d8ea51cab995a894d7bef8c",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:48:35+03:00",
+      "sure_sn": 28.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "32b10d7985f2481ebafec5c22ee92a70"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-arac-tekrari-reddeder",
+      "asama": "tek",
+      "dosya": "olcum-eski-arac-tekrari-reddeder-tek.txt",
+      "sha256": "150df058f70d46ab5ac358287f6afd9fcf421e7256399074aac24f9141029a7d",
+      "komut": [
+        "bash",
+        "-c",
+        "git show HEAD~1:iskan/scripts/lib/compose_parse.py > /tmp/cp-eski2.py; if python3 /tmp/cp-eski2.py --haric a --haric b iskan/scripts/fixtures/compose-collision.yml 2>/dev/null; then echo eski-kabul-etti; exit 1; else echo eski-reddetti; fi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T22:48:36+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "c6ea7077b9154371af4bf4c8333646ca"
+    }
+  ],
+  "imza": "7ca6793ecc9e6a259a70f716c8b10383840e76a10185ec321d719dc158891e7a"
+}

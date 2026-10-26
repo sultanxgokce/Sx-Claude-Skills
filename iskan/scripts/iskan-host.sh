@@ -144,9 +144,9 @@ _compose_senkron() { # <proje> <cname> <repo_dir> <kanit_dir>
       echo "(her satır ait-olduğu servis-adıyla etiketli — driftli servis raporda HEP görünür, mahrem dahil):"
       diff <(printf '%s\n' "$repo_komsu" | awk '/^  [A-Za-z0-9_-]+:[[:space:]]*$/ {srv=$1} {print (srv ? srv" | " : "") $0}') \
            <(printf '%s\n' "$host_komsu" | awk '/^  [A-Za-z0-9_-]+:[[:space:]]*$/ {srv=$1} {print (srv ? srv" | " : "") $0}') | head -60
-      echo "ek-teşhis (yapısal, compose_parse --haric ${cname} — mem_limit/env/image bu katmanda GÖRÜNMEZ):"
-      diff <(python3 "$COMPOSE_PARSE" --haric "$cname" "$repo_tmp" 2>/dev/null) \
-           <(python3 "$COMPOSE_PARSE" --haric "$cname" "$host_tmp" 2>/dev/null) | head -30
+      echo "ek-teşhis (yapısal, compose_parse --haric ${cname} --haric ${pano_cname} — mem_limit/env/image bu katmanda GÖRÜNMEZ):"
+      diff <(python3 "$COMPOSE_PARSE" --haric "$cname" --haric "$pano_cname" "$repo_tmp" 2>/dev/null) \
+           <(python3 "$COMPOSE_PARSE" --haric "$cname" --haric "$pano_cname" "$host_tmp" 2>/dev/null) | head -30
       echo "md5: repo-komşu=$komsu_repo_md5 · host-komşu=$komsu_host_md5 (tam-dosya: repo=$repo_md5 · host=$host_md5)"
       echo "muhtemel-neden: tamamlanmamış söküm (host'ta ölü tenant-bloğu) ya da host'ta origin/main'de-olmayan komşu-drift (MAHREM tenant'lar dahil) ya da elle host-düzenlemesi."
       echo "sonraki-adım: DUR — körü-körüne ezme YOK; uzlaştırma AYRI Sultan-onaylı adım (aile-notify --waiting ile SERDAR'a bildir)."

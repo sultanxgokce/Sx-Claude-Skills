@@ -1,0 +1,19 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-gercek-kisi-sok-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-mut2.sh
+# rc=1 sure=546.5s zaman=2026-10-26T19:15:58+03:00
+--- stdout ---
+YAKALANDI M1 kuru kip de çalıştırır
+YAKALANDI M2 izin dosyası da silinir
+YAKALANDI M3 uid kapısı kalkar
+YAKALANDI M5 kök kapısı kalkar
+YAKALANDI M6 çalışan süreç kapısı kalkar
+YAKALANDI M7 süreç adımı kuru kipte atlanır
+YAKALANDI M8 /run/kisi kalmaz bırakılır
+YAKALANDI M10 desen bağı kalkar (metinde geçen süreç eşleşir)
+YAKALANDI M9 istemci kopyası bırakılır
+mutant: 9/9 yakalandı
+--- stderr ---
+/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-mut.py:8: SyntaxWarning: invalid escape sequence '\$'
+  ("M7 süreç adımı kuru kipte atlanır",'for d in "^ttyd -i $TTYD_SOKET( |\$)" "^python3 [^ ]*koltuk-koprusu\.py( |\$)"; do','for d in "zzz-yok-$TTYD_SOKET"; do'),
+/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ks-mut.py:10: SyntaxWarning: invalid escape sequence '\$'
+  ("M10 desen bağı kalkar (metinde geçen süreç eşleşir)",'for d in "^ttyd -i $TTYD_SOKET( |\$)" "^python3 [^ ]*koltuk-koprusu\.py( |\$)"; do','for d in "ttyd -i $TTYD_SOKET" "koltuk-koprusu.py"; do'),

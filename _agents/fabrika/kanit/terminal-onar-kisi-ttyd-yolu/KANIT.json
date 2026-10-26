@@ -1,0 +1,63 @@
+{
+  "is": "terminal-onar-kisi-ttyd-yolu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T23:17:51+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kisi-kur-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kisi-kur-sinavi-sonra.txt",
+      "sha256": "8f20ca07f65836387369a4ba18a9a5c1d96fba349fc5ce95c924853c471c8bd4",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kisi-kur.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T23:17:49+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2248467150fa4840b851c8b7125e665d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kisi-kur-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-kisi-kur-mutant-sonra.txt",
+      "sha256": "ebe3054072afae6f0b314de580dc73168aa3fca89852044252231194dc677b87",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ty-mut.py",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kisi-ttyd-yolu/terminal-onar/scripts"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T23:17:51+03:00",
+      "sure_sn": 1.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kisi-kur-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "e00ed831b78e4514941b26b42df59262"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kisi-kur-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kisi-kur-sinavi-once.txt",
+      "sha256": "88df68ef4443c2dc3ce64cde576f96ceec8d5e5555a85621530e202ef07d4a43",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/ty-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T23:15:37+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dbb31c79cc6f46e1bd09d8e937f76d18"
+    }
+  ],
+  "imza": "f3349c4416a2eb586cea9162c90db4feb861b2d98c51e4f4804a8c1269b599ae"
+}

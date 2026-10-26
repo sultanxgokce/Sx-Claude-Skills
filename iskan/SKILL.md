@@ -121,7 +121,7 @@ Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_age
 - **`templates/baslat-claude.sh` ve `iskan.sh`'ın iki açılış satırı `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` ile açar** (ilk açılış da `--resume` da; değer sabit, dış ortam ezemez).
   Sultan: 600k (%60) tüm filoya, yeni oturumlarda açık, kontrol mekanizması olsun; SERDAR: ortak settings.json 13 kutuda ortak → oraya yazılmaz,
   eşik oturuma ortamla verilir. Ölçüldü (claude 2.1.310): ortam ayar dosyasının üstüne çıkar, `600k` kabul, model penceresine kırpılır.
-  Bekçi: terminal-onar 2.28.0 `sikistirma_denetle` (kutu başına). Sınav: baslat-claude.test.sh 8) üç kapı. **Sınır:** 11 İSKÂN kutusundaki
+  Bekçi: terminal-onar 2.30.0 `sikistirma_denetle` (kutu başına). Sınav: baslat-claude.test.sh 8) üç kapı. **Sınır:** 11 İSKÂN kutusundaki
   co-locate kopyalar bu şablondan yeniden indirilmedikçe eski kalır (kopya dağıtımı ayrı iş; bekçi eksik kutuyu "eşiksiz" gösterir).
 
 ## Durum (2026-10-26, komşu-bayt kapısı doğan projenin panosunu kayma saymaz — v0.11.2 · MİRAHUR, SERDAR 13:29)
