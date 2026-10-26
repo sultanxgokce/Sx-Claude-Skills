@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-haftalik",
+  "pr": "473",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T17:53:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-haftalik",
+  "dal": "gunluk-plan-haftalik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28208,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10894
+  },
+  "bas": "c231a4d989ba7dc94b583e9999e58f9a46ea2983",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Son haftayı görev listesinden ölçen, Z1-Z3 zayıflıklarını çıkaran ve açık onayla ULAK'a gönderen haftalık adım yapılmış; gerçek kuru koşu, 20 senaryo ve 8 mutasyonla ana davranış güçlü biçimde sınanmış. Ancak kullanıcı var olmayan bir `--kutu` seçerse araç ölçülemedi demek yerine sıfır değerlerle `ZAYIF yok` üretiyor; üretim öncesi bu yanlış-temiz sonucunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Var olmayan veya listede hiç görevi bulunmayan açık bir `--kutu` değeri yanlış biçimde temiz kutu olarak raporlanıyor; ölçüm yapılamadığı halde `ZAYIF yok` denebiliyor.",
+        "kanit": "Seçimden sonra `sat=[x for x in sat if x[0]==kutu]` boş kalabiliyor; devamında bütün listeler sıfır oluyor ve `if not z: print(\"ZAYIF yok\")` çalışıyor. H11 yalnız mevcut `nova` kutusunu seçiyor, boş eşleşme vakasını sınamıyor.",
+        "konum": "gunluk-plan/scripts/haftalik.sh:55",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti 2/20'den 20/20'ye geçişi gösteriyor; ayrıca gerçek defter üzerinde kuru koşu gerçekçi sayılar ve Z2/Z3 üretiyor. ULAK gönderimi gerçek merkeze yapılmamış olsa da hermetik sınavda tek gönderim, hedef değiştirme ve hata yolları ölçülmüş; 8/8 mutasyonun yakalanması sınavların ayırt edici olduğunu destekliyor."
+  }
+}
