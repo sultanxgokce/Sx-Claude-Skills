@@ -35,8 +35,14 @@ CIKTI="$(bash "$G" is-a 2>&1)"; RC=$?
 grep -q "DENETİM kaydı YOK" <<<"$CIKTI"; g $? "sebebi yazılı"
 # 🔴 rc'ye bakmak yetmiyor: bozuk tırnak yüzünden mesaj satırı yönlendirmeye dönüşmüştü ve rc aynı
 # kalıyordu (23 Eyl, bağımsız göz turu sırasında yakalandı). Artık METNİN BASILDIĞINI da iddia ediyoruz.
-grep -q 'FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>"' <<<"$CIKTI"; g $? "kaçış satırı bozulmadan basılıyor"
+grep -q 'kart.sh sultan-dedi' <<<"$CIKTI" && grep -q 'kart.sh reis-dedi' <<<"$CIKTI"; g $? "kancasız depoda gerçek yol yazılı (kart.sh sultan-dedi / reis-dedi)"
+! grep -q 'FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>"' <<<"$CIKTI" && grep -q 'FABRIKA_KAPISIZ burada bir şey yapmaz' <<<"$CIKTI"; g $? "🔴 kancası olmayan depoda kaçış satırı BASILMAZ, değişkenin işe yaramadığı söylenir (izole kutuyu yanlış yönlendirme)"
+mkdir -p "$T/scripts/hooks"; printf '#!/usr/bin/env bash\nexit 0\n' > "$T/scripts/hooks/birlestirme-kapisi.sh"; chmod +x "$T/scripts/hooks/birlestirme-kapisi.sh"
+CIKTI="$(bash "$G" is-a 2>&1)"
+grep -q 'FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>"' <<<"$CIKTI"; g $? "kaçış satırı bozulmadan basılıyor (kancalı depoda)"
+! grep -q 'FABRIKA_KAPISIZ burada bir şey yapmaz' <<<"$CIKTI"; g $? "kancalı depoda 'işe yaramaz' uyarısı YOK"
 grep -qv "No such file" <<<"$CIKTI"; g $? "yönlendirme hatası yok"
+rm -rf "$T/scripts/hooks"
 
 echo "════ T3 · puan 4 → engeller · 5 ama H → engeller ════"
 den is-a 1 4 E; bash "$G" is-a --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "4/5 → rc=1"
