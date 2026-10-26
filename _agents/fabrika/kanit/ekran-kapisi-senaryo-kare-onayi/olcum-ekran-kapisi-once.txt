@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-once.sh
+# rc=1 sure=64.7s zaman=2026-10-26T21:09:41+03:00
+--- stdout ---
+ekran-kapisi=18/29
+--- stderr ---

@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-sonra.sh
+# rc=0 sure=63.7s zaman=2026-10-26T21:10:45+03:00
+--- stdout ---
+ekran-kapisi=29/29
+--- stderr ---

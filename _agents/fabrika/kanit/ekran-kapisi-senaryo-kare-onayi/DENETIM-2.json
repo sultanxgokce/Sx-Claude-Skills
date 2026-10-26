@@ -1,0 +1,55 @@
+{
+  "tur": 2,
+  "is": "ekran-kapisi-senaryo-kare-onayi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T21:04:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ekran-kapisi-senaryo-kare-onayi",
+  "dal": "ekran-kapisi-senaryo-kare-onayi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32251,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 14655
+  },
+  "bas": "d2d3500dd6f8202876ed20d7fdb93157b76bffad",
+  "duzeltme_farki": {
+    "onceki_bas": "42c6570434c6bcce4d3dbabdf29f2171a6cfdd3e",
+    "dosya": 12,
+    "bayt": 31938,
+    "tam_bayt": 38959
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İki kapı istenen akışta uygulanmış; talep edilen 0/2→2/2 ölçüm çifti sağlanmış ve önceki tek satırlık sahte senaryo açığı kapatılmış. Ancak senaryo şeması yalnız alan adlarının bulunmasını denetliyor; başlık sözleşmesini tam uygulamıyor ve Tık bütçesi dışındaki alanların boş olmasına izin veriyor, bu yüzden önce bunları çözmeden üretime hazır denemez.",
+    "bulgular": [
+      {
+        "ne": "B1 kısmen kapandı: tek satırlık rastgele dosya artık reddediliyor, fakat senaryo kartı doğrulaması tarif edilen şemayı tam uygulamıyor. Başlık kontrolü `· <ekran>` bölümünü aramıyor; altı içerik alanı yalnız etiket varlığıyla geçiyor ve boş bırakılabiliyor.",
+        "kanit": "Kod başlığı yalnız `^#{2,4} E\\d+\\b` ile denetliyor ve yedi alan için yalnız `**Alan:**` eşleşmesi arıyor; doluluk/rakam kontrolü sadece `Tık bütçesi` alanına uygulanıyor. Buna karşı SKILL.md ve hata metni başlığı `### E# · <ekran>` olarak tarif ediyor, ayrıca SKILL.md aracın senaryo kartının 'dolu olduğunu' ölçtüğünü söylüyor. Eklenen sınavlar tek satır, eksik alan ve E# başlığı olmayan dosyayı kapsıyor; `## E1` başlığı ile boş Amaç/Giriş/Ana akış gibi alanları kapsamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:335-341; yazilim-fabrikasi/scripts/kart.test.sh:921-936; yazilim-fabrikasi/SKILL.md ekran kapısı maddesi",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 açık kalıyor: biçime uyan D1 metninin gerçekten Sultan’ın kare onayı olduğunu araç doğrulayamıyor. Bu kod kusuru olarak puanı düşürmez; gerçek onayın kaynağı dış yüzeyde doğrulanmalıdır.",
+        "kanit": "Değişiklik bu denetimi güçlendirmiyor; SKILL.md ve kart.sh yorumları aracın yalnız biçim ve varlık ölçtüğünü, damganın gerçekten Sultan’dan geldiğini bilemediğini açıkça kaydediyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:318-321; yazilim-fabrikasi/SKILL.md ekran kapısı maddesi",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan’ın sohbet/onay kaydı veya yetkili onay defteri"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Talepteki özel ölçüm çifti doğrudan mevcut: iki-yol-reddi önce kırmızı 0/2, sonra yeşil 2/2; genel gerçek ölçüm de 15/26’dan 26/26’ya çıkıyor. Mutasyon kaydı yedi bilinçli bozmanın sınav tarafından yakalandığını gösteriyor, ancak yukarıdaki boş alan ve eksik başlık biçimi vakaları mutasyonlarda ya da gerçek ölçüm ayrıntısında sınanmamış."
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "is": "ekran-kapisi-senaryo-kare-onayi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T21:20:57+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ekran-kapisi",
+      "asama": "once",
+      "dosya": "olcum-ekran-kapisi-once.txt",
+      "sha256": "58b7a7cffb2d35d9c0cc01546a853f819acbd3430041b04921fff6173f46496f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T21:09:41+03:00",
+      "sure_sn": 64.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b88b212b5e0d4c5a81946f48dd590c89"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ekran-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-ekran-kapisi-sonra.txt",
+      "sha256": "353b9ed6ecec71a25ba6ea4a8de2d92bb9cd314bdee9b14c2fad5fea15d6bbf5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T21:10:45+03:00",
+      "sure_sn": 63.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bc4f08515d3145638b216c9d95588352"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ekran-kapisi-mutant",
+      "asama": "tek",
+      "dosya": "olcum-ekran-kapisi-mutant-tek.txt",
+      "sha256": "db6a6ccb97e99f62eae43f9027009ba65d7c41362ae9ed06e30305a128a6ff7c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T21:20:57+03:00",
+      "sure_sn": 612.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "ekran-kapisi",
+      "beklenen": "kirmizi",
+      "olcum_id": "14610c722c2f4251a336116e0405e9a3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iki-yol-reddi",
+      "asama": "once",
+      "dosya": "olcum-iki-yol-reddi-once.txt",
+      "sha256": "802bf48b2ae1d01c06166180506497388b6b6fe5e035c72893244399a70441e6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iki-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T21:07:31+03:00",
+      "sure_sn": 65.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b7e2d6481a5c492eb36ff817b1422205"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iki-yol-reddi",
+      "asama": "sonra",
+      "dosya": "olcum-iki-yol-reddi-sonra.txt",
+      "sha256": "b492d709e2cfeb2a3cebea4f485242c75316087e03105b0252e957d9ccefcadd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iki-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T21:08:36+03:00",
+      "sure_sn": 64.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d8eba3188f204993b62bf03af0e4bde6"
+    }
+  ],
+  "imza": "86816cffea085ff991054dcefbd4bd33ab687399e1fb93e3a34fec7ff10fc3df"
+}
