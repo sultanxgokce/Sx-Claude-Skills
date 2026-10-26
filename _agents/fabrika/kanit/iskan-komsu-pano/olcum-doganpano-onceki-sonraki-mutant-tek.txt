@@ -1,0 +1,16 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/ik-kanit.sh
+# rc=0 sure=531.9s zaman=2026-10-26T14:33:20+03:00
+--- stdout ---
+== ÖNCE (origin/main iskan-host.sh, yeni sınavla): doğan-pano sınavı DÜŞMELİ
+eski rc=1 · == 277 geçti / 1 kaldı ==
+  FAIL - senkron doğan-pano (d0013): pano servisi komşu-drift sayılıyor (rc=5)
+== SONRA (bu dal)
+sınav rc=0 · == 278 geçti / 0 kaldı ==
+== MUTASYON
+  ✓ repo-pano-dislanmaz öldürüldü
+  ✓ host-pano-dislanmaz öldürüldü
+  ✓ her-pano-dislanir öldürüldü
+  ✓ pano-adi-bos öldürüldü
+mutasyon sorunu=0
+--- stderr ---
+⏳ agir-sira: kanit-iskan-komsu-pano-doganpano-onceki-sonraki-mutant 286 sn bekledi (yuva 1, load1 17.76)

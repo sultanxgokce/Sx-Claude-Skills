@@ -1,0 +1,23 @@
+{
+  "is": "iskan-komsu-pano",
+  "cumle": "İSKÂN compose senkronunun komşu-bayt kapısı doğan projenin pano servisini kayma saymaz, gerçek komşu drift'ini yine reddeder (ders d0013)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-26T13:32:00+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

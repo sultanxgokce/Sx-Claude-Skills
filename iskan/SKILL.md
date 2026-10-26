@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.11.1
+version: 0.11.2
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -116,6 +116,11 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-10-26, komşu-bayt kapısı doğan projenin panosunu kayma saymaz — v0.11.2 · MİRAHUR, SERDAR 13:29)
+- **Compose senkronu doğan projenin pano servisini (`cloudtop-pano-<proje>`) komşu sayıyordu** (ders d0013): munavebe doğumu
+  pano ek servisi yüzünden komşu-bayt kapısında rc=5 ile durdu. Artık pano, aday gibi iki taraftan da dışlanır ve
+  yutulan-satır denetimine girer; başka projenin panosu yine gerçek komşu sayılır ve reddedilir. Sınav: iskan.test.sh 69e/69f.
 
 ## Durum (2026-10-17, söküm iz-sıfır denetimi yorumları saymaz — v0.11.1 · BÂNİ, SERDAR 09:25)
 - **`sokum` ADIM-5 iz-sıfır assertion yorum satırlarını da sayıyordu** (`grep -ci`): s02 sökümünde `backup.sh` ve

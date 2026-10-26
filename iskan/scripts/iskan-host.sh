@@ -122,9 +122,13 @@ _compose_senkron() { # <proje> <cname> <repo_dir> <kanit_dir>
   # 4) KOMŞU-BAYT kapısı (LB-fix): aday İKİ taraftan METİN-düzeyi çıkarılır; kalan komşu-
   # metinler BAYT-eş DEĞİLSE yazım reddedilir — tam-dosya yazımı ancak komşulara bayt-etkisiz
   # olduğu KANITLANINCA koşar (mahrem-komşu ezme imkânsız; yapısal kapı buna kördü).
+  # d0013 (engelleyici, 23 Ağu): doğum projenin PANOSUNU da (cloudtop-pano-<proje>) compose'a ekler. Aday yalnız <cname> sanılırsa
+  # repo'daki pano bloğu "komşu" kalır, host'ta olmadığı için komşu-md5 tutmaz → her panolu doğum exit 5 ile durur.
+  # Doğan projenin pano servisi de ADAY'dır: iki taraftan birlikte çıkarılır. Başka projenin panosu aday SAYILMAZ (gerçek drift).
+  local pano_cname="cloudtop-pano-${proje}"
   local repo_komsu host_komsu
-  repo_komsu="$(python3 "$COMPOSE_BLOCK" sil "$cname" "$repo_tmp" 2>/dev/null)"
-  host_komsu="$(python3 "$COMPOSE_BLOCK" sil "$cname" "$host_tmp" 2>/dev/null)"
+  repo_komsu="$(python3 "$COMPOSE_BLOCK" sil "$cname" "$repo_tmp" 2>/dev/null | python3 "$COMPOSE_BLOCK" sil "$pano_cname" - 2>/dev/null)"
+  host_komsu="$(python3 "$COMPOSE_BLOCK" sil "$cname" "$host_tmp" 2>/dev/null | python3 "$COMPOSE_BLOCK" sil "$pano_cname" - 2>/dev/null)"
   if [ -z "$repo_komsu" ] || [ -z "$host_komsu" ]; then
     rm -f "$repo_tmp" "$host_tmp"
     echo "[kırmızı] COMPOSE-SENKRON: komşu-küme çıkarılamadı (compose_block boş çıktı — fail-closed) — apply REDDEDİLDİ, host'a dokunulmadı" | tee "$senkron_kanit" >&2
@@ -157,8 +161,8 @@ _compose_senkron() { # <proje> <cname> <repo_dir> <kanit_dir>
   # (sahte-attestasyon). `yutulan` iki taraftan yutulan bağlamı çıkarır; host'un yuttuğu bir
   # NON-BLANK satır repo'nunkinde YOKSA → host-only silme → fail-closed (körü-körüne silme YOK).
   local repo_yut host_yut yut_ihlal=""
-  repo_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$repo_tmp" 2>/dev/null)"
-  host_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$host_tmp" 2>/dev/null)"
+  repo_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$repo_tmp" 2>/dev/null; python3 "$COMPOSE_BLOCK" yutulan "$pano_cname" "$repo_tmp" 2>/dev/null)"
+  host_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$host_tmp" 2>/dev/null; python3 "$COMPOSE_BLOCK" yutulan "$pano_cname" "$host_tmp" 2>/dev/null)"
   while IFS= read -r yl; do
     [ -n "${yl//[[:space:]]/}" ] || continue   # whitespace-ayraç bu katmanda ölçülmez (nötr)
     printf '%s\n' "$repo_yut" | grep -qxF "$yl" || { yut_ihlal="$yl"; break; }

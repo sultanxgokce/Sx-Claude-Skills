@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "iskan-komsu-pano",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T14:54:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-iskan-komsu-pano",
+  "dal": "iskan-komsu-pano",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15307,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3132
+  },
+  "bas": "3a72035e2af86304f0a7c46a7d140167bdcfd78c",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Doğan projenin pano servisi aday kümesine iki tarafta da katılmış; başka projenin panosu ise gerçek komşu kayması olarak bırakılmış. Önceki sürümde hedef vaka rc=5 ile düşerken bu dalda 278/278 geçmesi ve ilgili karşı-örneklerin sınanması üretime hazır bir değişikliğe işaret ediyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek yeşil ölçümde önceki sürüm 277 geçti/1 kaldı, yeni dal 278 geçti/0 kaldı karşılaştırması bulunuyor. Çıktı gerçekçi compose senaryolarını kapsıyor ve başka proje panosu ile hostta mevcut pano karşı-örnekleri test kodunda açıkça görülüyor. MUTASYON bölümü yararlı ek güvence verse de manifest kaydında `mutasyon: true` ve ayrı `gercek_olcum` etiketi bulunmadığından rubriğin resmî mutasyon kanıtı olarak sayılamaz; puan, geçerli önce/sonra ölçümü ve üretim/test farkına dayanıyor."
+  }
+}
