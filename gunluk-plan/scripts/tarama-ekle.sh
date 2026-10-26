@@ -30,10 +30,15 @@ done
 [ -n "$BASLIK" ] || { echo "REDDEDİLDİ: --baslik şart (tek cümle, Sultan-dilinde)" >&2; exit 2; }
 [ "${#BASLIK}" -le 160 ] || { echo "REDDEDİLDİ: başlık 160 karakteri aşıyor (başlık değil nottur; ayrıntı --kanit'e)" >&2; exit 2; }
 printf '%s' "$KAYNAK" | grep -Eq '^(https://[^ ]+|[^ :]+:[0-9]+)$' || { echo "REDDEDİLDİ: --kaynak 'dosya:satır' ya da https adresi olmalı (ölçmeden iş yazılmaz): '$KAYNAK'" >&2; exit 2; }
-case "$KAYNAK" in https://*) ;; *)   # dosya:satır → dosya GERÇEKTEN var ve satır dosya içinde (çalışma dizinine ya da mutlak yola göre)
+case "$KAYNAK" in https://*)   # adres GERÇEKTEN açılıyor mu (HEAD, olmazsa 1 baytlık GET); 4xx/5xx → rc 2, ağ yok → rc 3 (ölçülemedi)
+  HK="$(curl -sL -m 10 --max-redirs 3 -o /dev/null -I -w '%{http_code}' "$KAYNAK" 2>/dev/null)"
+  case "$HK" in 2*|3*) ;; *) HK="$(curl -sL -m 10 --max-redirs 3 -o /dev/null -r 0-0 -w '%{http_code}' "$KAYNAK" 2>/dev/null)" ;; esac
+  case "$HK" in 2*|3*) ;; 000|"") echo "ÖLÇÜLEMEDİ: --kaynak adresine ulaşılamadı (ağ/zaman aşımı): $KAYNAK — açıldığı doğrulanamadan yazılmaz" >&2; exit 3 ;;
+    *) echo "REDDEDİLDİ: --kaynak adresi açılmıyor (HTTP $HK): $KAYNAK — ölçmeden iş yazılmaz" >&2; exit 2 ;; esac ;;
+*)   # dosya:satır → dosya GERÇEKTEN var ve satır dosya içinde (çalışma dizinine ya da mutlak yola göre)
   f="${KAYNAK%:*}"; ln="${KAYNAK##*:}"
   [ -f "$f" ] || { echo "REDDEDİLDİ: --kaynak dosyası yok: '$f' (çalışma dizini: $PWD) — ölçmeden iş yazılmaz" >&2; exit 2; }
-  [ "$ln" -ge 1 ] && [ "$ln" -le "$(wc -l < "$f" | tr -d ' ')" ] || { echo "REDDEDİLDİ: --kaynak satırı dosyanın dışında: '$KAYNAK'" >&2; exit 2; } ;; esac
+  [ "$ln" -ge 1 ] && [ "$ln" -le "$(grep -c '' "$f")" ] || { echo "REDDEDİLDİ: --kaynak satırı dosyanın dışında: '$KAYNAK'" >&2; exit 2; } ;; esac
 printf '%s' "$KANIT" | grep -q '[0-9]' || { echo "REDDEDİLDİ: --kanit ölçülmüş bir sayı taşımıyor (kaç dosya/satır/ms/adet?) — ölçmeden iş yazılmaz" >&2; exit 2; }
 [ "${#KANIT}" -ge 20 ] || { echo "REDDEDİLDİ: --kanit en az 20 karakter, bu turda ölçülen şeyi söylemeli (ölçmeden iş yazılmaz)" >&2; exit 2; }
 [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }

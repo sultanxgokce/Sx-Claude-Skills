@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-tarama-sinavi-* ===
 $ python3 /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/tp-mut.py /config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tarama/gunluk-plan/scripts
-# rc=1 sure=15.5s zaman=2026-10-26T23:53:29+03:00
+# rc=1 sure=20.8s zaman=2026-10-26T23:56:38+03:00
 --- stdout ---
 YAKALANDI M1 tavan sınırı bir fazla
 YAKALANDI M11 tavan ortamdan okunur
@@ -9,6 +9,8 @@ YAKALANDI M13 görünmeyen kayıt sorun sayılmaz
 YAKALANDI M14 kutu tahmin edilir
 YAKALANDI M15 kaynak dosyası aranmaz
 YAKALANDI M16 satır sınırı yok
+YAKALANDI M18 https adresi doğrulanmaz
+YAKALANDI M19 satır sayımı wc -l
 YAKALANDI M17 kanıtta sayı aranmaz
 YAKALANDI M2 kanıt uzunluğu şartı gevşek
 YAKALANDI M3 başlık tavanı kalkık
@@ -18,5 +20,5 @@ YAKALANDI M6 tavan sayımı bugün şartsız
 YAKALANDI M7 kuru koşu da yazar
 YAKALANDI M8 eski günde kapanan da kopya sayılır
 YAKALANDI M10 ajan kimliği yoksa devam
-mutant: 16/16 yakalandı
+mutant: 18/18 yakalandı
 --- stderr ---

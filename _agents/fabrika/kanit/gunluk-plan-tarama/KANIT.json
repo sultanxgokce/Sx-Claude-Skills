@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tarama",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T23:53:29+03:00",
+  "guncelleme": "2026-10-26T23:56:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -27,24 +27,24 @@
       "etiket": "tarama-sinavi",
       "asama": "sonra",
       "dosya": "olcum-tarama-sinavi-sonra.txt",
-      "sha256": "feacc33681377f2e6139294f8f3650b6ebbbc7931e4d1f5bebb3f4f637515916",
+      "sha256": "dc0d87336dcc59918c273ce501c3b71cbf0a8535c237af5043d34afdbd0e5492",
       "komut": [
         "bash",
         "gunluk-plan/scripts/tarama-ekle.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:53:13+03:00",
-      "sure_sn": 0.8,
+      "zaman": "2026-10-26T23:56:17+03:00",
+      "sure_sn": 1.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "ebce4352d17c4a49bb0c82bdda78f2a3"
+      "olcum_id": "16391ade6407473ead893a05fbb50de5"
     },
     {
       "tur": "olcum",
       "etiket": "tarama-mutant",
       "asama": "sonra",
       "dosya": "olcum-tarama-mutant-sonra.txt",
-      "sha256": "fa8872b1c89f686e138181f90998961a2dcd48beb313b5f1e27fc30b3bc73ffa",
+      "sha256": "3554ab50c8be13705a52197c910ac2b50751a9f98635c08dc3438089ccb39d71",
       "komut": [
         "python3",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/tp-mut.py",
@@ -52,14 +52,14 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T23:53:29+03:00",
-      "sure_sn": 15.5,
+      "zaman": "2026-10-26T23:56:38+03:00",
+      "sure_sn": 20.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "tarama-sinavi",
       "beklenen": "kirmizi",
-      "olcum_id": "44197244527146d0b42a6d37bb0e6989"
+      "olcum_id": "6a74e165469d497282b8c2a1462299c4"
     }
   ],
-  "imza": "ce43ba2657967dca3b81e4694a9235733eec5eda031f8e06616a535925ba0924"
+  "imza": "1dd24010a4dcd5ef4dbe33d3e96cdd6204c11c7ed272f3c454198d4fe11b5712"
 }

@@ -23,6 +23,12 @@ printf '%s\n' "$*" >> "$T/yaz.log"
 [ -n "${BULGU_YAZMA:-}" ] || printf 'gorev_01ZZZZZZZZZZZZZZZZZZZZZZ  %s  acik  esnek  ozellik  SINAV  %s  (son: 2026-01-02T09:00)\n' "${BULGU_KUTU:-huma}" "$2" >> "$T/liste.txt"
 EOF
 chmod +x "$T/gorev.sh" "$T/bulgu.sh"
+mkdir -p "$T/bin"; cat > "$T/bin/curl" <<'EOF'
+#!/usr/bin/env bash
+# sahte curl: -I çağrısında FAKE_HEAD, aksi halde (GET -r 0-0) FAKE_GET kodunu basar; "000" = ağ yok
+case " $* " in *" -I "*) printf '%s' "${FAKE_HEAD:-200}" ;; *) printf '%s' "${FAKE_GET:-200}" ;; esac
+EOF
+chmod +x "$T/bin/curl"; export PATH="$T/bin:$PATH"
 export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh" GUNLUK_PLAN_BULGU_SH="$T/bulgu.sh"
 liste() { cat > "$T/liste.txt"; cp "$T/liste.txt" "$T/taban.txt"; }
 satir() { printf 'gorev_01%s  %s  %s  esnek  ozellik  SINAV  %s  (son: %s)\n' "$1" "$2" "$3" "$4" "$5"; }   # id kutu durum başlık son
@@ -71,6 +77,15 @@ bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "sayı içermeyen ama yirmi
 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "3 adet" --kutu huma --uygula >/dev/null 2>&1; rk=$?
 kapi "T4d sayı var ama kanıt 20 karakterden kısa → rc 2" "2:0" "$rk:$(yaz_say)"
 kapi "T4c kanıtta ölçülmüş sayı yoksa rc 2 (serbest metin ölçüm değil)" "2:0" "$r1:$(yaz_say)"
+
+FAKE_HEAD=404 FAKE_GET=404 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "$KN" --kutu huma --uygula >/dev/null 2>&1; r1=$?
+FAKE_HEAD=000 FAKE_GET=000 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "$KN" --kutu huma --uygula >/dev/null 2>&1; r2=$?
+FAKE_HEAD=405 FAKE_GET=206 bash "$ARAC" --baslik "X işi" --kaynak "$K" --kanit "$KN" --kutu huma >/dev/null 2>&1; r3=$?
+kapi "T4e https adresi açılmıyorsa (404) rc 2; ağ yoksa rc 3; HEAD reddedilip GET geçerse (405→206) kabul" "2 3 0:0" "$r1 $r2 $r3:$(yaz_say)"
+printf 'bir\niki\nüç-son-satır-newlinesiz' > "$T/proje/ui/lib/y.ts"
+( cd "$T/proje" && bash "$ARAC" --baslik "Newlinesiz son satır" --kaynak "ui/lib/y.ts:3" --kanit "$KN" --kutu huma >/dev/null 2>&1 ); r1=$?
+( cd "$T/proje" && bash "$ARAC" --baslik "Newlinesiz aşkın" --kaynak "ui/lib/y.ts:4" --kanit "$KN" --kutu huma >/dev/null 2>&1 ); r2=$?
+kapi "T4f sonu satır sonu olmayan dosyanın SON satırı geçerli (3), 4. satır değil" "0 2" "$r1 $r2"
 
 echo "── KOPYA"
 { satir BBBBBBBBBBBBBBBBBBBBBBBB huma acik "Açık duran iş" 2026-01-01T08:00
