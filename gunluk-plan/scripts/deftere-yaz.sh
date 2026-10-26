@@ -70,6 +70,8 @@ if [ "$UYGULA" -eq 1 ]; then
     echo "REDDEDİLDİ: --uygula için Sultan'ın plan onayı referansı şart (--onay '<YYYY-MM-DD Sultan: onay (sohbet · <oturum-ref> · \"<verbatim kırpık>\" · beyan:AJAN · plan:$PLAN_IMZA)>'). Onaysız plan deftere yazılmaz; kuru koşu onaysız çalışır." >&2
     exit 2
   fi
+  _alinti="$(printf '%s' "$ONAY" | sed -n 's/^.* · "\([^"]*\)" · beyan:.*$/\1/p')"
+  [ "$(printf '%s' "$_alinti" | wc -w | tr -d ' ')" -le 15 ] || { echo "REDDEDİLDİ: onay alıntısı 15 kelimeyi aşıyor (verbatim KIRPIK istenir)" >&2; exit 2; }
   [ "${ONAY%% *}" = "$BUGUN" ] || { echo "REDDEDİLDİ: onay tarihi bugün ($BUGUN) değil: ${ONAY%% *}" >&2; exit 2; }
   case "$ONAY" in *"plan:$PLAN_IMZA)") ;; *) echo "REDDEDİLDİ: onay bu plana ait değil (şimdiki plan imzası: $PLAN_IMZA) — plan onaydan sonra değişmiş olabilir" >&2; exit 2 ;; esac
 fi

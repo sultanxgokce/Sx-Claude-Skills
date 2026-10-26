@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-deftere-yaz-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/dy-mut2.sh
-# rc=1 sure=55.2s zaman=2026-10-26T17:04:36+03:00
+# rc=1 sure=71.7s zaman=2026-10-26T17:09:27+03:00
 --- stdout ---
   ✓ W1 yakalandı
   ✓ W2 yakalandı
@@ -19,5 +19,7 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedb
   ✓ W15 yakalandı
   ✓ W16 yakalandı
   ✓ W17 yakalandı
-mutant 17 · kaçan 0
+  ✓ W19 yakalandı
+  ✓ W20 yakalandı
+mutant 19 · kaçan 0
 --- stderr ---

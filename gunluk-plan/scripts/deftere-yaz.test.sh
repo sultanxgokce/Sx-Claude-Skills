@@ -82,7 +82,10 @@ kapi "D18b reddedilen koşularda ekle çağrılmadı" "0" "$(wc -l < "$T/ekle.lo
 bash "$KOK/cipa.sh" yaz --plan "1) Yeni onay sinavi is" >/dev/null 2>&1; yenile_onay
 bash "$ARAC" --uygula --onay "$ONAY" >/dev/null 2>&1; kapi "D17f doğru imza + bugün + biçim → KABUL (rc=0, 1 görev yazıldı)" "0:1" "$?:$(wc -l < "$T/ekle.log" | tr -d ' ')"
 : > "$T/ekle.log"
-kapi "D19 kuru koşu onaysız çalışır (rc=0)" "0" "$?"
+c19="$(bash "$ARAC" 2>&1)"; rc19=$?
+kapi "D19 kuru koşu onaysız ÇALIŞIR (rc=0, 'kuru:' ve plan-imzası basar, ekle çağrılmaz)" "0:1:0" "$rc19:$(printf '%s\n' "$c19" | grep -c 'kuru: .*plan-imzası=[0-9a-f]\{8\}'):$(wc -l < "$T/ekle.log" | tr -d ' ')"
+uzun="${ONAY/bugunku plan tamam/bir iki uc dort bes alti yedi sekiz dokuz on onbir oniki onuc ondort onbes onalti}"; bash "$ARAC" --uygula --onay "$uzun" >/dev/null 2>&1; kapi "D17h 15 kelimeyi aşan alıntı REDDEDİLİR (tarih+imza doğru)" "2" "$?"
+on5="${ONAY/bugunku plan tamam/bir iki uc dort bes alti yedi sekiz dokuz on onbir oniki onuc ondort onbes}"; : > "$T/ekle.log"; bash "$ARAC" --uygula --onay "$on5" >/dev/null 2>&1; kapi "D17i tam 15 kelimelik alıntı KABUL (sınır dahil)" "0" "$?"
 
 echo "── Hata ve sınırlar"
 cat > "$T/liste.txt" <<'EOF'
