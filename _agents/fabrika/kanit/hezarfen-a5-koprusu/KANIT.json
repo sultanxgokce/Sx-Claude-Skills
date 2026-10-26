@@ -1,0 +1,122 @@
+{
+  "is": "hezarfen-a5-koprusu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T15:18:51+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kopru-sinavlari",
+      "asama": "once",
+      "dosya": "olcum-kopru-sinavlari-once.txt",
+      "sha256": "a3b943f5f5c1b5fd97f54594796fca901e2d919c13ab14175cf47adca16a605c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T14:22:32+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a1e43902235e42e1a626a02707874530"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kopru-sinavlari",
+      "asama": "sonra",
+      "dosya": "olcum-kopru-sinavlari-sonra.txt",
+      "sha256": "4bbb1f528c7156e1e24903636f34ca81902d677e6288ba81d6c5f802f88b7b6d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:18:15+03:00",
+      "sure_sn": 32.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2f33674717d2424f96a40b1eab1b3f17"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-uid-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-uid-kapisi-yok-sonra.txt",
+      "sha256": "2b0c3750bfdf6b9610c3cff8d80d3ce0f5eac60dcc3233a23d1b0d09ee95bdb4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-uid.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T14:23:45+03:00",
+      "sure_sn": 17.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kopru-sinavlari",
+      "beklenen": "kirmizi",
+      "olcum_id": "acb3089fc0594f8589dd012673a235fa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ham-tus-eklendi",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-ham-tus-eklendi-sonra.txt",
+      "sha256": "18f9884ac38e6b59dc357d9cbfd907918e17174a95579afa6e5b60d9f3da17ba",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-tus.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T14:24:11+03:00",
+      "sure_sn": 26.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kopru-sinavlari",
+      "beklenen": "kirmizi",
+      "olcum_id": "f6119836c3704c27a68c14104ad7aefe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-iz-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-iz-kapisi-yok-sonra.txt",
+      "sha256": "2780cfd65e5c7b4b58a6b4ff1b3c77eab4af2125a2931ba592483242e0789881",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-iz.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:02:27+03:00",
+      "sure_sn": 26.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kopru-sinavlari",
+      "beklenen": "kirmizi",
+      "olcum_id": "9bf9c10fbd894a048c14ce89db315a55"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-soru-yarisi-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-soru-yarisi-kapisi-yok-sonra.txt",
+      "sha256": "81030c95a7f239da5c6f52771b47a144e757af49a2f8a006a4aaac8009741e33",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/a5/mutkos-yaris.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T15:18:51+03:00",
+      "sure_sn": 35.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kopru-sinavlari",
+      "beklenen": "kirmizi",
+      "olcum_id": "36c79dd4c86b47b2aa0590d9f4ac4858"
+    }
+  ],
+  "imza": "b8ec01eec93a7d21479f65d7902e5f4a555663599c8c1873e162025e90872244"
+}

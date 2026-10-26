@@ -1,0 +1,40 @@
+{
+  "tur": 3,
+  "is": "hezarfen-a5-koprusu",
+  "pr": "467",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T15:21:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-a5-koprusu",
+  "dal": "hezarfen-a5-koprusu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38402,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8503
+  },
+  "bas": "a826ac6cd9ae81daa94032fb9efc912ddb749297",
+  "duzeltme_farki": {
+    "onceki_bas": "476b6e5f1e0bb6d2a89268cc175edd136a1b9ad0",
+    "dosya": 9,
+    "bayt": 23075,
+    "tam_bayt": 94378
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ayşenur için izinli koltuğu salt okur izleyen, ham tuş yolunu kapatan ve yalnız denetimli mesaj ile sunulan menü şıkkına izin veren köprü yapılmış; önceki turun doğrulama-gönderim yarışı tek tmux koşullu komutuyla kapanmış. Gerçek ölçüm dört takımda toplam 74 sınavı sıfır hatayla geçiriyor ve mutasyonlar UID, ham tuş, iz ve soru-yarışı kapılarını gerçekten sınadığından yalnız rötuş düzeyi sınırlar kalmış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümü sınav dosyalarının bulunmadığını, gerçek sonra ölçümü 42+9+9+14 olmak üzere 74 geçiş ve sıfır kalan olduğunu gösteriyor. Önceki tur B1 kapanmış: doğrulama ile gönderim artık aynı `tmux if-shell -F` komutunda; K28 bayat ekranı ve aynı şıklı başka soruyu reddediyor, ilgili mutasyon da bu kapı kaldırılınca sınavın kırıldığını gösteriyor. Diğer mutasyonlar UID kapısını, ham tuş yasağını ve iz yazılamadığında yan etkinin engellenmesini yakalıyor; mutasyonlardaki FAIL satırları beklenen sonuçtur. Kare yok, ancak bu terminal köprüsü için gerçekçi tmux verisiyle çalışan ölçüm çifti ve hedefli mutasyon kanıtı yeterli."
+  }
+}

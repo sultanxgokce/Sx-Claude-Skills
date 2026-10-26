@@ -1,0 +1,30 @@
+{
+  "is": "hezarfen-a5-koprusu",
+  "cumle": "Ayşenur için koltuk köprüsü: ham tuş yok, yalnız izinli koltuğu salt okur izleme ve iki denetimli eylem (mesaj gönder, menü şıkkı seç)",
+  "istedi": "Sultan",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-26T14:20:55+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-26T14:20:55+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "sayi_uyarilari": []
+}
