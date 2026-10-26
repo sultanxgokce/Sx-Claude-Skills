@@ -1,0 +1,57 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-tarama",
+  "pr": "485",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T23:50:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tarama",
+  "dal": "gunluk-plan-tarama",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30642,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8764
+  },
+  "bas": "38409256faa0ea4b96588b378048cf985dc1e0a8",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Mevcut görev defterine kaynak ve kanıt taşıyan tarama işi ekleme adımı kurulmuş; önce/sonra sınavı ve 10/10 mutasyon ölçümü ana davranışların sınandığını gösteriyor. Ancak günlük üç sınırı üretimde aşılabilir ve seçilen kutu yazım hedefine bağlanmadığı için önce bu uygulama sorunları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "“Günde en çok 3” sınırı üretim ortamında ortam değişkeniyle yükseltilebiliyor; böylece iş kartındaki değişmez üst sınır aşılabilir.",
+        "kanit": "T7c açıkça GUNLUK_PLAN_TARAMA_TAVAN=4 ile dördüncü yazımın başarılı olmasını bekliyor ve sonraki ölçümde sınav 22/22 geçiyor. Üretim kodu TAVAN değerini doğrulamadan ${GUNLUK_PLAN_TARAMA_TAVAN:-3} üzerinden alıyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:17; gunluk-plan/scripts/tarama-ekle.test.sh:T7c; olcum-tarama-sinavi-sonra.txt:T7c",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "--kutu seçimi yalnız listeyi saymakta kullanılıyor; gerçek yazma çağrısına kutu aktarılmıyor. Bu nedenle sınır bir kutu üzerinden ölçülürken kayıt başka/hedefi belirsiz bir defter yüzeyine yazılabilir ve --kutu ile tavan çevresinden dolaşılabilir.",
+        "kanit": "Sayım Python çağrısına $KUTU ile yapılıyor, fakat yazım çağrısı yalnız “bulgu.sh yaz … --kim … --etiket … --not …” içeriyor; --kutu veya eşdeğer hedef argümanı yok. T2 testi de yalnız başlık/kim/etiket/notu doğruluyor, hedef kutuyu sınamıyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:49-73; gunluk-plan/scripts/tarama-ekle.test.sh:T2-T2e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kaynak ve kanıtın gerçekten bu turda ölçüldüğü doğrulanmıyor; herhangi bir https metni ile 20 karakterlik serbest metin yazım kapısını geçiyor.",
+        "kanit": "Kaynak denetimi yalnız biçim regex’i, kanıt denetimi yalnız ${#KANIT} >= 20 koşulu. T2’de kullanılan kaynak example.com ve kanıt sabit bir metin; herhangi bir tarama ya da ölçüm çıktısıyla bağ kurulmadan yazım başarılı sayılıyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:30-31; gunluk-plan/scripts/tarama-ekle.test.sh:31-40",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce ölçümü 0/22, gerçek sonra ölçümü 22/22 ve mutasyon ölçümü 10/10 yakalama gösteriyor; dolayısıyla sınanan davranışlar için güçlü ölçüm çifti var. Ancak sınav, iş kartındaki değişmez küresel günlük tavanı tersine çevrilebilir kabul ediyor, yazım hedefi kutusunu doğrulamıyor ve “ölçülmüş kaynak/kanıt”ın gerçek ölçüme bağlılığını sınamıyor."
+  }
+}
