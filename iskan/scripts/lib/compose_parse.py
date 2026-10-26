@@ -5,7 +5,7 @@ Diske hiçbir şey yazmaz, hiçbir ağ/host çağrısı yapmaz — yalnız veril
 stdin'i) okur ve servis/volume/port haritasını JSON olarak stdout'a basar. `iskan-host.sh` bu
 JSON'u B1 (volume-path kesişim-guard) ve compose-diff için kullanır.
 
-Kullanım: compose_parse.py [--haric <servis-key>] <compose.yml|->
+Kullanım: compose_parse.py [--haric <servis-key>]... <compose.yml|->
   --haric: verilen servisi (compose `services:` anahtarı; İSKÂN-tenant'ında servis-key = cname,
   bkz iskan.sh yeni-proje üreteci) rapordan DÜŞÜRÜP raporu — kesişimler DAHİL — yeniden hesaplar.
   COMPOSE-SENKRON beklenen-delta kapısı bunu İKİ tarafa uygulayıp "fark yalnız-aday mı" sorusunu
@@ -32,12 +32,14 @@ def parse_volume_host_path(entry):
 
 
 def build_report(doc, haric=None):
+    # haric: tek servis-key ya da servis-key listesi (doğan projenin pano servisi de aday: iskan-host.sh)
+    haric = {haric} if isinstance(haric, str) else set(haric or ())
     services = (doc or {}).get("services") or {}
     out = {}
     volume_owner = {}
     intersections = []
     for name in sorted(services.keys()):
-        if haric is not None and name == haric:
+        if name in haric:
             continue  # --haric: servis rapora hiç girmez → kesişimler de onsuz yeniden hesaplanır
         cfg = services[name] or {}
         container_name = cfg.get("container_name", name)
@@ -60,15 +62,15 @@ def build_report(doc, haric=None):
 
 def main(argv):
     args = list(argv[1:])
-    haric = None
-    if args and args[0] == "--haric":
-        if len(args) != 3:
-            print("kullanım: compose_parse.py [--haric <servis-key>] <compose.yml|->", file=sys.stderr)
+    haric = []
+    while args and args[0] == "--haric":   # tekrarlanabilir: --haric A --haric B
+        if len(args) < 3:
+            print("kullanım: compose_parse.py [--haric <servis-key>]... <compose.yml|->", file=sys.stderr)
             return 2
-        haric = args[1]
+        haric.append(args[1])
         args = args[2:]
     if len(args) != 1:
-        print("kullanım: compose_parse.py [--haric <servis-key>] <compose.yml|->", file=sys.stderr)
+        print("kullanım: compose_parse.py [--haric <servis-key>]... <compose.yml|->", file=sys.stderr)
         return 2
     src = args[0]
     try:

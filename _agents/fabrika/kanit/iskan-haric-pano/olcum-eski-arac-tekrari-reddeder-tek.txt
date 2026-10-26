@@ -1,0 +1,5 @@
+$ bash -c git show HEAD~1:iskan/scripts/lib/compose_parse.py > /tmp/cp-eski2.py; if python3 /tmp/cp-eski2.py --haric a --haric b iskan/scripts/fixtures/compose-collision.yml 2>/dev/null; then echo eski-kabul-etti; exit 1; else echo eski-reddetti; fi
+# rc=0 sure=0.1s zaman=2026-10-26T22:48:36+03:00
+--- stdout ---
+eski-reddetti
+--- stderr ---
