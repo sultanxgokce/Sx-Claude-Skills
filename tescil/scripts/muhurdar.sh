@@ -147,6 +147,14 @@ PYS
     rc=5
   fi
 fi
+# mühür kopyası (WPZ5FK): geçit Sultan'ın hükmünü çıkış kutusuna yazınca `sicil.sh supur` mühür dizinini buradan bulur (kendi --out
+#   dizini her koşuda başka yerdedir). Yalnız sonuç dosyaları; yazılamazsa mühür düşmez, söylenir.
+_KOK="${SICIL_MUHUR_KOK:-$HOME/.claude/tescil/muhur}"
+if [ -n "$_VER" ] && [ "$_VER" != RED ] && [ -z "${TATBIKAT[*]:-}" ]; then
+  if ! { mkdir -p "$_KOK/$IS" && cp "$OUT/muhur-ozet.json" "$OUT/gereklilik.json" "$_KOK/$IS/"; } 2>/dev/null; then
+    echo "muhurdar: mühür kopyası $_KOK/$IS'e yazılamadı — geçit hükmü sicile kendiliğinden düşmez (elle teslim-isle --muhur-dir $OUT)" >&2
+  fi
+fi
 V="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["verdikt"], "· 👤 Sultanda:", " ".join(d.get("sultan_denemesi") or []) or "yok")' "$OUT/muhur-ozet.json" 2>/dev/null)"
 echo "muhurdar: $IS · mühürdar $MUHURDAR · yazan $YAZAN · verdikt $V${YARGIC:+ · yargıç $YARGIC}${BASSIZ[@]:+ · BAŞSIZ ŞAPKA}"
 exit "$rc"

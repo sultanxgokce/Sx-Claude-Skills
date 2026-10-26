@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.8.0
+version: 0.9.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -255,6 +255,13 @@ Mühürdarın isabeti **Sicil**'dir (S9: "karne" değil): personelin özlük dos
 - **Teslim köprüsü:** `sicil.sh teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>` — geçit Sultan'ın TEK teslim
   kararıyla bir kez çağırır; mühürdarca sınanan her satır için isabet yazılır (👤 satırı atlanır, düşen G'de mühür ✗); aynı
   karar iki kez işlenmez, kısmi karar ve başkasının mühürü reddedilir.
+- **Geçit köprüsü** (0.9.0 · kart muhurdar-sicil-gecit-bagi): geçit Sultan'ın hükmünü **çıkış kutusu dosyasına** (JSONL, `SICIL_CIKIS_KUTUSU`) tek satır
+  yazar — `{"gorev":…,"kaynak":"teslim:<görev>"}`; `sicil.sh supur` kutuyu süpürür ve her görev için `teslim-isle` koşar. Kutudaki satır bir
+  **işarettir**, hüküm kaynağı değildir: hüküm yine yalnız geçidin doğrulayıcısından (`SICIL_KAYNAK_DOGRULA`, A06) okunur. Mühür dizinini
+  `muhurdar.sh` her gerçek mühürde `~/.claude/tescil/muhur/<görev>/`e (`SICIL_MUHUR_KOK`) kopyalar (tatbikat hariç). Karar eksikse (kısmi teslim yok),
+  mühür kopyası ya da doğrulayıcı yoksa satır kutuda **bekler** ve sonraki süpürmede denenir; bozuk satır ya da reddedilen karar sessiz geçilmez
+  (rc 4). İşlenenler `<kutu>.islendi`de tutulur. **Dürüst sınır:** görev başına İLK tam karar sayılır (aynı kaynak iki kez yazılmaz); sonradan
+  değişen hüküm sicile yeniden girmez. Sınav: `scripts/supur.test.sh` (10 kapı + 6 mutant).
 - **Mühür kaydı:** `muhurdar.sh` her mühürde mühürdarın siciline `tur: muhur` satırı yazar (özlük yoksa söyler, mühür
   düşmez; özlük VARKEN yazım düşerse sessiz değil: rc 5 + özette `sicil: dusmedi …`). Yazım süreçler arası kilitli, tek
   seferde (ya hepsi ya hiçbiri); aynı karar/satır iki kez yazılmaz. Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
