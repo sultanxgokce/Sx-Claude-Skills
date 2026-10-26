@@ -79,10 +79,14 @@ kart "$T/k1" a BERİD acik gorev_A; kart "$T/k2" b BERİD acik gorev_B
 # Z1: bekliyor'a çekilen görev → sahibine TEK zil, tekrar anahtarı görev+son adım, metinde jeton yok
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "^gonder BERİD" "$T/zil.log" && grep -q "gorev_Y" "$T/zil.log" && grep -q -- "--tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30" "$T/zil.log" && ! grep -q "$GIZLI" "$T/zil.log"; g $? "Z1 çekilen görev için sahibine tek zil (kime=ajan, görev kimliği, --tekrar görev+son adım), jeton değeri zilde YOK"
-# Z1b: tekrar koşu — çekilen iş artık bekliyor (yazım sonrası defter hâli); sayı 0→1→1, ikinci koşu zil log'unu SİLMEDEN koşar, yeni zil ya da yazım yok
+# Z1b: 0 → N → N ölçüm zinciri — ilk koşudan ÖNCE zil sayısı 0 (ayrı kapı), ilk koşu 1, ikinci koşu zil log'unu SİLMEDEN koşar, hâlâ 1
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
+rm -f "$T/yazim.jsonl" "$T/zil.log"; N0=$(zl); g $([ "$N0" = 0 ]; echo $?) "Z1b-0 ilk koşudan önce zil sayısı 0"
+python3 "$U" --ajan BERİD --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --simdi 1000000 --uygula > "$T/cikti1" 2>&1; RC1=$?; N1=$(zl)
+g $([ "$RC1" = 0 ] && [ "$N1" = 1 ]; echo $?) "Z1b-N ilk koşu sonrası zil sayısı 1"
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD bekliyor 2026-10-26T10:30)"
-N1=$(zl); python3 "$U" --ajan BERİD --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --simdi 1000000 --uygula > "$T/cikti2" 2>&1; RC2=$?
-[ "$N1" = 1 ] && [ "$RC2" = 0 ] && [ "$(zl)" = 1 ]; g $? "Z1b aynı girdiyle tekrar koşu: zil sayısı 1 → 1 (ikinci koşu yeni zil çalmaz)"
+python3 "$U" --ajan BERİD --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --simdi 1000000 --uygula > "$T/cikti2" 2>&1; RC2=$?
+g $([ "$RC2" = 0 ] && [ "$(zl)" = "$N1" ]; echo $?) "Z1b-N2 aynı girdiyle tekrar koşu: zil sayısı 0 → 1 → 1 (ikinci koşu yeni zil çalmaz)"
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 # Z2: KURU zil çalmaz
 RC=$(kos); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "Z2 KURU (varsayılan): hiçbir zil çalmaz"

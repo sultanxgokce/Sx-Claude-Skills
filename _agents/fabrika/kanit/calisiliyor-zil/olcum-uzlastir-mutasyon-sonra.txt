@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
-# rc=0 sure=411.9s zaman=2026-10-26T14:13:54+03:00
+# rc=0 sure=258.9s zaman=2026-10-26T14:58:53+03:00
 --- stdout ---
   ✓ pozitif kontrol: dokunulmamış kopya YEŞİL
   ✓ UM1 azami yok sayılır (fazlası çalışılıyor kalır) — kural ölünce sınav KIRMIZI
