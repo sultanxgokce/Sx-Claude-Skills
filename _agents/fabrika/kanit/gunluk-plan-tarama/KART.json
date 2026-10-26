@@ -1,6 +1,6 @@
 {
   "is": "gunluk-plan-tarama",
-  "cumle": "gunluk-plan: kod tabanı + web + endüstri taramasından çıkan katma değeri yüksek işleri, ölçülmüş kaynak ve kanıtla mevcut görev defterine ekleyen adım; günde en çok 3, yeni havuz yok (görev 0HC75A dilim b)",
+  "cumle": "Kutu, kod tabanı ve web taramasından çıkan bir işi görev defterine ekler: kaynak (var olan dosya:satır ya da açılan https adresi) ve sayı taşıyan kanıt şart, günde en çok 3, aynı başlık yazılmaz, ölçemezse yazmaz; kanıt cümlesinin doğruluğu yazanın beyanıdır ve bu betikçe doğrulanamaz",
   "istedi": "SERDAR",
   "aldi": "HEZARFEN",
   "zaman": "2026-10-26T18:13:06+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-26T23:57:51+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gunluk-plan-tarama-kalan",
+      "tur_sifir": 3
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -47,6 +54,36 @@
       "zaman": "2026-10-26T23:54:32+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-26T23:57:31+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "hezarfen-tur3-tikandi",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gunluk-plan-tarama-kalan) — kanıt cümlesindeki sayının gerçekten bu turda ölçüldüğü betikçe doğrulanamıyor (serbest metin; kaynak varlığı ve sayı şartı denetleniyor)",
+      "zaman": "2026-10-26T23:57:51+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gunluk-plan: kod tabanı + web + endüstri taramasından çıkan katma değeri yüksek işleri, ölçülmüş kaynak ve kanıtla mevcut görev defterine ekleyen adım; günde en çok 3, yeni havuz yok (görev 0HC75A dilim b)",
+      "zaman": "2026-10-26T23:57:51+03:00",
+      "kalan_kart": "gunluk-plan-tarama-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-26T23:57:51+03:00",
+      "kalan_kart": "gunluk-plan-tarama-kalan",
+      "kalan": "kanıt cümlesindeki sayının gerçekten bu turda ölçüldüğü betikçe doğrulanamıyor (serbest metin; kaynak varlığı ve sayı şartı denetleniyor)",
+      "tur_sifir": 3,
+      "oturum": "hezarfen-tur3-tikandi"
     }
   ]
 }

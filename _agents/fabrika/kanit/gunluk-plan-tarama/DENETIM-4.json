@@ -1,0 +1,48 @@
+{
+  "tur": 4,
+  "is": "gunluk-plan-tarama",
+  "pr": "485",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T00:01:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tarama",
+  "dal": "gunluk-plan-tarama",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29533,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9197
+  },
+  "bas": "ca97da5e0f4ecdfa519d1ca5b00da864b6268e69",
+  "duzeltme_farki": {
+    "onceki_bas": "36dbebe8cd7d31c773faf17c0c965cc7f0c949fd",
+    "dosya": 8,
+    "bayt": 19256,
+    "tam_bayt": 49949
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Önceki B1’in serbest sayı açığı dosya kaynakları için teknik olarak kapatılmış ve gerçek ölçüm 33/33, mutasyon ölçümü 21/21 sonuç vermiş. Ancak çözüm iş kartındaki “var olan dosya:satır” kaynağını “bugün yazılmış ölçüm dosyası”na çevirerek meşru kod tabanı bulgularını reddediyor; önce bu talep sapmasını çözmek gerekiyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 yanlış yönde kapatılmış: dosya kaynağının bugün değiştirilmesi ve kanıttaki her sayının seçilen tek satırda bulunması zorunlu kılınıyor. İş kartı ise var olan bir dosya:satır kaynağını kabul ediyor ve kanıt cümlesinin doğruluğunun yazanın beyanı olup betikçe doğrulanamayacağını açıkça söylüyor; dolayısıyla bugün değişmemiş mevcut kod satırından çıkarılan geçerli bir tarama işi artık reddedilir.",
+        "kanit": "Üretim farkı `date -r \"$f\" +%F = $BUGUN` kapısını ve kanıttaki her sayı için kaynak satırında tam eşleşme şartını ekliyor. T4h de dünkü dosyanın rc=1 ile reddini başarı diye ölçüyor; buna karşılık iş kartının talebi açıkça “var olan dosya:satır” diyor ve ölçüm doğruluğunun bu betikçe doğrulanamayacağını belirtiyor.",
+        "konum": "gunluk-plan/scripts/tarama-ekle.sh:41-47; gunluk-plan/SKILL.md:120; olcum-tarama-sinavi-sonra.txt:T4g-T4i; İŞ KARTI.cumle",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek önce/sonra çifti 0/22’den 33/33’e geçişi, mutasyon kaydı da beklenen rc=1 ile 21/21 mutantın yakalandığını gösteriyor; fakat sınavlar değiştirilmiş davranışı doğruluyor, davranışın iş kartındaki hedefe uygun olduğunu değil."
+  }
+}
