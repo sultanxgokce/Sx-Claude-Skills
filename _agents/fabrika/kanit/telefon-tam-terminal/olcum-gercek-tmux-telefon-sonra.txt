@@ -1,0 +1,9 @@
+$ bash terminal-onar/scripts/telefon-kipi-olc.sh /config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal/terminal-onar/scripts/koltuk-bagla.sh
+# rc=0 sure=4.1s zaman=2026-10-26T10:49:10+03:00
+--- stdout ---
+koltuk, öneksiz (bugün)   : 200 50 → pencere 50
+koltuk, tel. önekli       : 200 50 ignore-size → pencere 200
+ana, argümansız (bugün)   : 200 50 → pencere 50
+ana, tel.                 : 200 50 ignore-size → pencere 200
+✓ gerçek tmux: öneksiz telefon pencereyi 50 sütuna indiriyor; tel. önekiyle (koltuk ve ana) pencere 200 sütunda kalıyor
+--- stderr ---

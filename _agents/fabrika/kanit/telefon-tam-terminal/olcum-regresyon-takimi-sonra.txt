@@ -1,0 +1,8 @@
+$ bash -c cd /config/projects/_wt/Sx-Claude-Skills-telefon-tam-terminal/terminal-onar/scripts && r=0; for t in kabuk-sekmesi.test.sh koltuk-ac.test.sh ../kapi/koltuk-fark.test.sh; do bash $t > /tmp/claude-1000/d4-reg.txt 2>&1; c=$?; echo "== $t rc=$c · $(tail -1 /tmp/claude-1000/d4-reg.txt)"; [ $c = 0 ] || r=1; done; node ../kapi/kadro.test.mjs > /tmp/claude-1000/d4-reg.txt 2>&1; c=$?; echo "== kadro.test.mjs rc=$c · $(tail -1 /tmp/claude-1000/d4-reg.txt)"; [ $c = 0 ] || r=1; exit $r
+# rc=0 sure=25.7s zaman=2026-10-26T10:49:36+03:00
+--- stdout ---
+== kabuk-sekmesi.test.sh rc=0 · ── SONUÇ: 24 geçti · 0 kaldı
+== koltuk-ac.test.sh rc=0 · GEÇEN: 45 · KALAN: 0
+== ../kapi/koltuk-fark.test.sh rc=0 · GEÇEN: 26 · KALAN: 0
+== kadro.test.mjs rc=0 · SONUÇ: 30 geçti · 0 kaldı
+--- stderr ---

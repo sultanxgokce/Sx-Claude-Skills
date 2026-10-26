@@ -1,0 +1,11 @@
+$ bash terminal-onar/scripts/telefon-kipi-olc.sh /tmp/tmp.zOWCaBY8Y8/terminal-onar/scripts/koltuk-bagla.sh
+# rc=1 sure=30.6s zaman=2026-10-26T10:49:06+03:00
+--- stdout ---
+koltuk, öneksiz (bugün)   : 200 50 → pencere 50
+koltuk, tel. önekli       : 200 → pencere 200
+ana, argümansız (bugün)   : 200 50 → pencere 50
+ana, tel.                 : 200 → pencere 200
+✗ tel.<koltuk> masaüstünü daralttı
+✗ tel. ana oturumu daralttı
+--- stderr ---
+⏳ agir-sira: kanit-telefon-tam-terminal-gercek-tmux-telefon 10 sn bekledi (yuva 2, load1 17.89)
