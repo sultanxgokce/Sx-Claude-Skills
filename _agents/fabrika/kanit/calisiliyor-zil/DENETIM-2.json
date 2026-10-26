@@ -1,0 +1,55 @@
+{
+  "tur": 2,
+  "is": "calisiliyor-zil",
+  "pr": "466",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T14:54:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-calisiliyor-zil",
+  "dal": "calisiliyor-zil",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25994,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 14076
+  },
+  "bas": "94686d14b6e09646c1f3ae78fe7c190b801ef195",
+  "duzeltme_farki": {
+    "onceki_bas": "38a2a066300369798b0f2aa672acd52805c53b03",
+    "dosya": 10,
+    "bayt": 20073,
+    "tam_bayt": 73619
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Uzlaştırıcı doğru kapılara bağlanmış; 60 dakika sınırı düzeltilmiş, tekrar koşu eklenmiş ve ana davranış sınavları yeşil. Ancak zil sayısının ilk koşudan önce gerçekten 0 olduğu açık bir ölçüm olarak kaydedilmediği için talep edilen 0→N→N ölçüm zinciri hâlâ tam kapanmış değil; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "B2 kısmen kapandı: ikinci koşuda zil sayısının 1→1 kaldığı ölçülüyor, fakat ilk zil öncesindeki 0 değeri ayrı bir doğrulama ve çıktı olarak ölçülmüyor.",
+        "kanit": "Z1 çıktısı yalnız ilk koşu sonunda tek zil bulunduğunu, Z1b ise `zil sayısı 1 → 1` kaldığını bildiriyor. Eklenen kaynakta da Z1b doğrulaması `N1=1`, `RC2=0` ve son sayının 1 olmasıyla başlıyor; ilk gönderimden önce `zl = 0` doğrulaması yok.",
+        "konum": "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh: Z1/Z1b; olcum-uzlastir-sinav-sonra.txt Z1/Z1b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek posta sağlayıcısında zil teslimi ve tekrar engellemenin uçtan uca davranışı bu konteynerde hâlâ ölçülmemiş.",
+        "kanit": "Z0, sahte posta aracının kullanıldığını ve gerçek `posta.sh` çağrısı yapılmadığını açıkça bildiriyor; iş kartında `canli_gerekir: true` ve sebep `zil`.",
+        "konum": "olcum-uzlastir-sinav-sonra.txt Z0; iş kartı `canli_gerekir`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı posta sağlayıcısı + yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; üç kayıt yeşil, sarı kayıt yok. B1 kapandı: üretim koşulu `>` oldu, K1b tam 60 dakikada zil olmadığını ve K1c 61 dakikada zil olduğunu ölçüyor. B2 yalnız kısmen kapandı: tekrar koşusu 1→1 ölçülmüş, ancak açık 0→1 ölçüm çifti yok. B3 kapanmadı ve kutu-dışıdır. `uzlastir-mutasyon` kaydı manifestte `mutasyon: true` taşımadığından özel MUTASYON KANITI sayılamaz; gerçek kodun durumu ayrı `uzlastir-sinav` kaydından okunabiliyor."
+  }
+}
