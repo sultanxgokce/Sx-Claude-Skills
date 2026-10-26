@@ -1,0 +1,26 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-sonra.sh
+# rc=0 sure=0.6s zaman=2026-10-26T17:51:37+03:00
+--- stdout ---
+== haftalik.sh ==
+  ✓ H1 hiç kapanış yok + açık iş → Z1 (rc=0)
+  ✓ H2 hareketsiz açık iş Z2'de başlık ve gün sayısıyla (kapanış varken Z1 yok)
+  ✓ H3 bekleyen > yürüyen+açık → Z3
+  ✓ H4 temiz kutu → 'ZAYIF yok'
+  ✓ H5 liste okunamadı → rc=3 ve 'yok' denmez
+  ✓ H5b liste boş → rc=3
+  ✓ H6 kuru koşu mektup GÖNDERMEZ
+  ✓ H7 --uygula SERDAR'a tek mektup gönderir, içinde Z2 var
+  ✓ H7b --hedef alıcıyı değiştirir
+  ✓ H8 gönderim hatası rc=1
+  ✓ H8b ulak.sh yoksa --uygula rc=3
+  ✓ H9 tanınmayan argüman rc=2
+  ✓ H10 --gun sayı değil rc=2
+  ✓ H10b --gun 0 rc=2
+  ✓ H10c --gun 91 rc=2
+  ✓ H11 kutu verilmezse en sık kutu; --kutu seçer
+  ✓ H12 11 günlük iş: gün=7 Z2 var, gün=14 yok
+  ✓ H13 tam 7 günlük açık iş Z2 DEĞİL (eşik dahil değil)
+  ✓ H14 20 gün önce kapanan iş son hafta sayılmaz → Z1
+  ✓ H15 tarihsiz liste → rc=3 ve temiz denmez
+== 20 geçti · 0 düştü ==
+--- stderr ---

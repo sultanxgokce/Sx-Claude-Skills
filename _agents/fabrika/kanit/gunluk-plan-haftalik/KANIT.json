@@ -1,0 +1,96 @@
+{
+  "is": "gunluk-plan-haftalik",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T17:51:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "haftalik-sinavi",
+      "asama": "once",
+      "dosya": "olcum-haftalik-sinavi-once.txt",
+      "sha256": "f8cee13e58bb0c7b3db9bc97598b968d84f0fefcc2e6118242405848935f7e92",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T17:51:29+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5798912fb09b40039887da9f05719f1c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "haftalik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-haftalik-sinavi-sonra.txt",
+      "sha256": "33f6e6ef47f401413703cfd090153963efc9a676e215983bbc8f8777ef8847c2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T17:51:29+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ac1b276e7abe44bf9046c285687d2b25"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-defter-kuru",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-defter-kuru-sonra.txt",
+      "sha256": "6adf42f4b0e549639f5d8ebfd7dd767aac927dee2cf966d49ba63dcc1027e855",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T17:51:30+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "607d6a1d5d5b458581cd0f9a8fd57fcd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-haftalik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-haftalik-sinavi-sonra.txt",
+      "sha256": "9bb1012569b941015e41f68d747ff9c039801a05ceae1491dcc0c0e89b588ec5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T17:51:37+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "65232d2e964c4c2d97cdca9ba0ebaf28"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "haftalik-mutantlar",
+      "asama": "sonra",
+      "dosya": "olcum-haftalik-mutantlar-sonra.txt",
+      "sha256": "5efe1ba29c7b71f9d8188ba90755c90f9e5fd189127a5179e773d6b6f48833fd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/vb/hf-mut2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T17:51:52+03:00",
+      "sure_sn": 4.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gercek-haftalik-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "464b9da69372452296ebc1938e6c841c"
+    }
+  ],
+  "imza": "7888cbb1d8972b6293134adee8c6b855aae8c1991f96481759a0e524aa146f33"
+}

@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.8.0
+version: 1.9.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -95,6 +95,19 @@ bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh --uygula --onay "
 - **Onay kapısı (A06/D1):** `--uygula`, Sultan'ın plan onayını GÖRDÜĞÜNÜN referansını ister: `YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim>" · beyan:<AJAN> · plan:<imza>)`. Tarih BUGÜN, imza o anki planın imzasıdır (kuru koşu "plan-imzası=…" basar); plan onaydan sonra değişirse eski onay düşer. Biçimsiz, eski tarihli ya da başka planın referansında rc 2, deftere hiçbir şey gitmez; onay ÜRETİLMEZ, gördüğün aktarılır. Kuru koşu onaysız çalışır.
 - **Aynı gün aynı madde:** açık (onay bekleyen dahil) ya da BUGÜN kapanmış/iptal edilmiş aynı başlıklı görev varsa yazılmaz; eski günlerde kapanmış başlık yeni gün için yeniden açılabilir.
 Sınavı: `bash scripts/deftere-yaz.test.sh` (D1-D19, D17b-i, hermetik: sahte gorev.sh).
+
+## ADIM 0-c — HAFTALIK DEĞERLENDİRME (1.9.0 · görev (c): "kutunun son bir haftasını değerlendirip zayıf noktaları merkeze bildirsin")
+
+Haftada bir (Pazartesi sabahı planında) ya da sıra boşken, kutunun görev defterindeki SON 7 GÜNÜ ölç:
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/haftalik.sh            # KURU: raporu basar, kimseye yazmaz
+bash /config/.claude/skills/gunluk-plan/scripts/haftalik.sh --uygula   # raporu merkeze (varsayılan SERDAR) ULAK ile gönderir
+```
+- Kaynak tek: `gorev.sh liste` (kutunun kendi görevleri). Yeni defter/havuz KURULMAZ; `--hedef AD` alıcıyı, `--gun N` pencereyi (1-90) değiştirir.
+- Zayıf noktalar sayıyla ölçülür: **Z1** son N günde hiç iş kapanmadı ama açık iş var · **Z2** N günden uzundur hareketsiz açık/bekleyen iş (başlıkla, en çok 5) · **Z3** bekleyen iş, yürüyen ve açık işlerden fazla.
+- **Ölçemezse "sorun yok" demez:** liste okunamadı ya da boşsa rc 3. Kuru koşu varsayılan; mektup göndermek açık `--uygula` ister.
+- Rapor zayıf noktayı bildirir, çözmez; merkeze bildirilecek olan budur. Kutu kendi payına düşeni (Z2 işleri) aynı turda ele alır.
+Sınavı: `bash scripts/haftalik.test.sh` (H1-H12, hermetik: sahte gorev.sh + sahte ulak.sh).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 
