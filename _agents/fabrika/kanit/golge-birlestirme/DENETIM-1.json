@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "golge-birlestirme",
+  "pr": "471",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T16:46:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-golge-birlestirme",
+  "dal": "golge-birlestirme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 39200,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 6642
+  },
+  "bas": "c9721edd7bd5527db456dcf068153c8ca6362790",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, sınıfsız ve kapıdan geçen işi gerçekten birleştirmeden deftere yazan, görev adımı ve SERDAR zili üreten gölge akış ile haftalık sahte-yeşil raporu kurulmuş; doğru hedef vurulmuş. Ancak zil teslimatı doğrulanmadan başarı sayılıyor ve aynı kayıt için eşzamanlı kapı koşularında tekilleştirme atomik değil; üretimden önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "SERDAR zili gönderilemese bile hata bütünüyle yutuluyor; böylece kartın “SERDAR'a zil yazar” şartı gerçekleşmeden gölge kayıt başarılı görünebilir.",
+        "kanit": "Bildirim çağrısı hem stdout/stderr'i /dev/null'a yönlendiriyor hem de `|| true` ile her hatayı başarıya çeviriyor. Canlı kanıt yalnız `golge-birlestirme.jsonl` içindeki tek ateşlemeyi gösteriyor; SERDAR teslimatını gösteren ayrı bir kayıt yok.",
+        "konum": "yazilim-fabrikasi/scripts/golge-birlestirme.sh:69",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Aynı iş/PR/SHA tekilleştirmesi eşzamanlı çalışmalarda güvenli değil; iki kapı süreci de kaydı yok görüp iki satır, iki görev adımı ve iki zil üretebilir, bu da haftalık sayımı şişirir.",
+        "kanit": "Dosyada mevcut kayıt araması ayrı bir Python sürecinde yapılıyor, ardından ekleme başka bir Python sürecinde kilitsiz `open(...,\"a\")` ile gerçekleştiriliyor. G3 ve G11 sınavları yalnız ardışık ikinci çalıştırmayı ölçüyor; eşzamanlı yarış sınavı bulunmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/golge-birlestirme.sh:39-55; yazilim-fabrikasi/scripts/golge.test.sh:G3,G11",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm önce 1/2 kırmızıdan sonra 2/2 yeşile dönüyor, mutasyon ölçümü de bozuk kodu rc=1 ile yakalıyor. Bununla birlikte ölçüm çıktısı yalnız toplam 2/2 sonucunu veriyor; görev adımı ve zil ayrıntısını göstermiyor. Canlı kayıt gerçekçi bir defter ateşlemesini kanıtlıyor fakat SERDAR zilinin teslimini veya görev adımını kanıtlamıyor; sarı kayıt yok."
+  }
+}

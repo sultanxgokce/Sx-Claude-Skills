@@ -1,0 +1,48 @@
+{
+  "tur": 2,
+  "is": "golge-birlestirme",
+  "pr": "471",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-26T16:51:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-golge-birlestirme",
+  "dal": "golge-birlestirme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29730,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8679
+  },
+  "bas": "9c27fe4d2dcef747e0bd95544cda0a40b0a007e2",
+  "duzeltme_farki": {
+    "onceki_bas": "c9721edd7bd5527db456dcf068153c8ca6362790",
+    "dosya": 8,
+    "bayt": 24334,
+    "tam_bayt": 45023
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turdaki iki uygulama kusuru kapatılmış: zil hatası artık görünür, eşzamanlı tekilleştirme de kilit altında yapılarak tek kayıt, tek görev adımı ve tek zil korunmuş. Gerçek ölçüm 1/2’den 2/2’ye dönmüş ve mutasyonlar düzeltmeleri yakalamış; kod üretime hazır, yalnız canlı SERDAR teslimatı bu kanıt paketinde doğrudan görülemiyor.",
+    "bulgular": [
+      {
+        "ne": "Canlı ateşleme gölge defterinde görülüyor ancak SERDAR zilinin gerçekten teslim edildiği bu konteynerde doğrulanamıyor.",
+        "kanit": "`golge-canli` kaydı `/config/.claude/fabrika/golge-birlestirme.jsonl` içinde 1 ateşleme gösteriyor; sunulan canlı satırda zil teslimatı veya kuyruk kaydı bulunmuyor. Kod tarafında başarısız teslimat artık stderr’e yazılıyor ve kuyruk sonucu ayrıştırılıyor, dolayısıyla bu bir kod kusuru değil canlı yüzey doğrulamasıdır.",
+        "konum": "kanıt:golge-canli; yazilim-fabrikasi/scripts/golge-birlestirme.sh:73-82",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "SERDAR’ın canlı bildirim yüzeyi veya aile-notify teslimat günlüğü"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm önce 1/2 kırmızıdan sonra 2/2 yeşile dönüyor; mutasyon kaydı rc=1 ile bozuk kodu beklenen biçimde yakalıyor. B1, zilin rc ve çıktısının görünür kılınması ile G13-G15/G18 sınavlarında; B2, bakma-ekleme işleminin `flock` altında atomikleştirilmesi ile G16-G17 sınavlarında kapanmış. Canlı kayıt gerçekçi bir defter ateşlemesini kanıtlıyor fakat SERDAR teslimatını doğrudan kanıtlamıyor."
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "is": "golge-birlestirme",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-26T16:48:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "golge-dogru",
+      "asama": "once",
+      "dosya": "olcum-golge-dogru-once.txt",
+      "sha256": "546b77d3f975ba07740ae203b09d733cec3cfb777558520b8ab45dcaac297d5c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T16:42:11+03:00",
+      "sure_sn": 94.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "52d4bbd85b124ddfb721391f80ce52fe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "golge-dogru",
+      "asama": "sonra",
+      "dosya": "olcum-golge-dogru-sonra.txt",
+      "sha256": "3e6e68a42e4eb35ed88561daa32f2a667ce9cd34d650587bdf8f1c8f8ae66e75",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T16:48:09+03:00",
+      "sure_sn": 3.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b7f2971298fa4863b8367b66f961e3cb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "golge-mut",
+      "asama": "sonra",
+      "dosya": "olcum-golge-mut-sonra.txt",
+      "sha256": "1c3d92a3d692515b58acc1359f219e4baf1fcb9726fac3b839978f60ee7afb27",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-26T16:48:13+03:00",
+      "sure_sn": 3.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "golge-dogru",
+      "beklenen": "kirmizi",
+      "olcum_id": "53ed925de9734b99826c5687d0eb358a"
+    },
+    {
+      "tur": "canli",
+      "etiket": "golge-canli",
+      "asama": "canli",
+      "dosya": "canli-golge-canli.txt",
+      "sha256": "9356271e42ac089292cf8a981ebc26410cbde8ba9b72933fa412fae891b5c9ae",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/.claude/fabrika/golge-birlestirme.jsonl"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/.claude/fabrika/golge-birlestirme.jsonl",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "golge-birlestirme",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "{\"zaman\": \"2026-10-26T16:43:01+03:00\", \"is\": \"golge-birlestirme\", \"pr\": \"\", \"sha\": \"canli-ilk-ateslem\", \"repo\": \"sultanxgokce/Sx-Claude-Skills\", \"aldi\": \"HENDESE\", \"gorev\": \"gorev_01M5JF573A5YPSMKFPCYTCBXPP\"}",
+        "saat": "2026-10-26T16:43:01+03:00",
+        "saat_iso": "2026-10-26T16:43:01+03:00"
+      },
+      "son_atesleme": {
+        "satir": "{\"zaman\": \"2026-10-26T16:43:01+03:00\", \"is\": \"golge-birlestirme\", \"pr\": \"\", \"sha\": \"canli-ilk-ateslem\", \"repo\": \"sultanxgokce/Sx-Claude-Skills\", \"aldi\": \"HENDESE\", \"gorev\": \"gorev_01M5JF573A5YPSMKFPCYTCBXPP\"}",
+        "saat": "2026-10-26T16:43:01+03:00",
+        "saat_iso": "2026-10-26T16:43:01+03:00"
+      },
+      "zaman": "2026-10-26T16:43:01+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "f057bb3a1f9a43c2a1cd31f2dc12f52a"
+    }
+  ],
+  "imza": "b3831652eb963fa22de4f59821ba6de16c5ded72f8e3506323a7af1fb1c23e9a"
+}

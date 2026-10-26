@@ -10,6 +10,8 @@ T="$(mktemp -d)"; ( cd "$T" && git init -q -b main ) >/dev/null 2>&1
 # Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; göz 23 Eki tur 2) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
 TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; chmod +x "$TETIK_SAHTE"
 export KANIT_DEPO="$T" FABRIKA_TETIK="$TETIK_SAHTE"
+# Gölge birleştirme (TCBXPP): kapı GEÇTİ verince kayıt/görev adımı/zil yazar — sınav gerçek deftere, gerçek göreve, gerçek SERDAR zilline DOKUNMAZ.
+export FABRIKA_GOLGE_DEFTER="$T/golge.jsonl" FABRIKA_GOREV_SH="$T/yok-gorev.sh" FABRIKA_AILE_NOTIFY=-
 kart() { bash "$KT" ac "$1" --is x --istedi S --aldi M --geri-alinamaz "${2:-h}" --para h --dis-yuzey h --yetki h --oda sinav-oda >/dev/null 2>&1; }
 den() { # den <iş> <tur> <puan> <E/H> [yazan] [denetci] [yedek] [yazan_model] [yedek_model]
   mkdir -p "$T/_agents/fabrika/kanit/$1"
@@ -585,5 +587,37 @@ cp "$HERE/../canli-dosyalar.txt" "$T/canli-dosyalar.txt" 2>/dev/null; mkdir -p "
 grep -q 'case "\$f" in \$kalip) break' "$MC"; g $? "T15f mutant üretildi (eşleşme artık işaretlenmiyor)"
 CIKTI="$(cd "$T" && CANLI_DOSYA_DEGISEN="$LIVE" bash "$MC" is-cd 2>&1)"
 ! grep -q "canlı-yazılan dosyaya dokunuyor" <<<"$CIKTI"; g $? "T15g mutant: uyarı kayboluyor → T15b bu mutantta düşerdi"
+
+echo "════ T16 · kapı GEÇTİ → sınıfsız işte 'birleştirirdim' kaydı (TCBXPP) ════"
+# (sahte depoda --pr verilmez: PR başı çekilemez, kapı ÖLÇÜLEMEDİ rc=3 verir; kayıt anahtarı iş+baş)
+hazir() { kart "$1" "${2:-h}"; bash "$K" olcum "$1" olc --asama tek -- echo 1 >/dev/null 2>&1; den "$1" 1 "${3:-5}" E; }
+satir() { grep -c "\"is\": \"$1\"" "$T/golge.jsonl" 2>/dev/null || true; }
+rm -f "$T/golge.jsonl"
+hazir is-g
+CIKTI="$(bash "$G" is-g 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "golge: birleştirirdim: 'is-g'" <<<"$CIKTI" && [ "$(satir is-g)" -eq 1 ]; g $? "T16a sınıfsız iş GEÇTİ → rc=0, 'birleştirirdim' basılır, deftere 1 satır" "→ rc=$RC"
+bash "$G" is-g >/dev/null 2>&1; [ "$(satir is-g)" -eq 1 ]; g $? "T16b aynı iş+baş ikinci koşuda ikinci satır YAZMAZ"
+hazir is-gp e
+CIKTI="$(bash "$G" is-gp 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "SINIF İŞİ" <<<"$CIKTI" && [ "$(satir is-gp)" -eq 0 ]; g $? "T16c SINIFLI iş (geri alınamaz=e) kapıyı GEÇER ama kayıt YOK (karar insanın)" "→ rc=$RC"
+hazir is-gx h 4
+bash "$G" is-gx >/dev/null 2>&1; [ "$(satir is-gx)" -eq 0 ]; g $? "T16d kapı GEÇMEZSE (puan 4) kayıt YOK"
+hazir is-ge
+CIKTI="$(FABRIKA_GOLGE=0 bash "$G" is-ge 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(satir is-ge)" -eq 0 ]; g $? "T16e FABRIKA_GOLGE=0 kapatır, kapı yine rc=0" "→ rc=$RC"
+hazir is-gf
+CIKTI="$(FABRIKA_GOLGE_DEFTER=/proc/yok/defter.jsonl bash "$G" is-gf 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "defter dizini açılamadı" <<<"$CIKTI"; g $? "T16f defter yazılamazsa kapı BOZULMAZ (rc=0), sorun söylenir" "→ rc=$RC"
+# mutant: sınıf koşulu söküldü → sınıflı iş de kayıt bırakır (T16c bu mutantta düşerdi). Mutant kapı, golge betiğiyle AYNI dizinde koşar.
+cp "$HERE/golge-birlestirme.sh" "$PKG/golge-birlestirme.sh"; chmod +x "$PKG/golge-birlestirme.sh"
+python3 - "$G" "$PKG/birlestirme-kapisi.sh" <<'PYM'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='if [ "$sultan" != "E" ] && [ "$sinif" = "yok" ] && [ -x'; assert s.count(a)==1
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'if [ -x'))
+PYM
+python3 - "$PKG/golge-birlestirme.sh" <<'PYG'
+import sys; p=sys.argv[1]; s=open(p,encoding="utf-8").read(); a='if k.get("siniflar") or k.get("sultan"): print("SINIFLI"); raise SystemExit'; assert s.count(a)==1
+open(p,"w",encoding="utf-8").write(s.replace(a,'pass'))
+PYG
+bash "$PKG/birlestirme-kapisi.sh" is-gp >/dev/null 2>&1; [ "$(satir is-gp)" -ge 1 ]; g $? "T16g mutant (kapı VE betikteki sınıf koşulu söküldü): sınıflı iş kayıt bırakır → T16c bu mutantta düşerdi"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
