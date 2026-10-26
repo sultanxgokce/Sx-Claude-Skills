@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=110.3s zaman=2026-10-26T13:05:52+03:00
+# rc=0 sure=339.7s zaman=2026-10-26T14:19:34+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -375,4 +375,4 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
 
 ── SONUÇ: 337 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-calisiliyor-zil-kart-sinav 40 sn bekledi (yuva 2, load1 17.77)
+⏳ agir-sira: kanit-calisiliyor-zil-kart-sinav 272 sn bekledi (yuva 1, load1 17.11)

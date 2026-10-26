@@ -1,59 +1,59 @@
 {
   "is": "calisiliyor-zil",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T13:05:52+03:00",
+  "guncelleme": "2026-10-26T14:19:34+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "uzlastir-sinav",
       "asama": "sonra",
       "dosya": "olcum-uzlastir-sinav-sonra.txt",
-      "sha256": "b5e7bc894753fdbbb96631077a5e1611f4c88d98678d52b41f51aa226fb45b7a",
+      "sha256": "f56c7d002b9580cd68f878396de95004f1ca56e0a27e37b6b5ac1c1f7e09f73c",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T12:57:19+03:00",
-      "sure_sn": 118.6,
+      "zaman": "2026-10-26T14:07:02+03:00",
+      "sure_sn": 9.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "691cddee05ec42fea9ff421d638eb2ac"
+      "olcum_id": "8b2c17a70c5d4370800fbc0bb60b17c4"
     },
     {
       "tur": "olcum",
       "etiket": "uzlastir-mutasyon",
       "asama": "sonra",
       "dosya": "olcum-uzlastir-mutasyon-sonra.txt",
-      "sha256": "8f88b41cc3f0390d7c1cd6b01d518df928adf9ec9ec20a0b1c63503f49c67d79",
+      "sha256": "d0bae30fd101837cdbc10eba0614619ccfdf4f808cae6842d313e534782fb9df",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T13:04:02+03:00",
-      "sure_sn": 402.7,
+      "zaman": "2026-10-26T14:13:54+03:00",
+      "sure_sn": 411.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "86affaebfcd44460ba8178d05253a04b"
+      "olcum_id": "806666d9e1ca41f7b0b0a3ce175108b0"
     },
     {
       "tur": "olcum",
       "etiket": "kart-sinav",
       "asama": "sonra",
       "dosya": "olcum-kart-sinav-sonra.txt",
-      "sha256": "8c8ab74362e2c31658891eb853d01e86a1e9a853843800f0dad288bb1d2a64d2",
+      "sha256": "cdf286195bc0c8acec767a863d16abf5a23864f7dbf8293e71d2d68e4ca2e3c6",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T13:05:52+03:00",
-      "sure_sn": 110.3,
+      "zaman": "2026-10-26T14:19:34+03:00",
+      "sure_sn": 339.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "521ee5a9ec644e028705fe0e4d5d36b1"
+      "olcum_id": "9fc0af71b0ba451792175e3fc47c40e3"
     }
   ],
-  "imza": "fbb6d9468d4156d86325925a5c52c06a3000dc1aee9be4b4d00aff4d0f69e477"
+  "imza": "411e8f5d310591a449691e1391b1fd0d6e28006b12ada16308cb039c92daba18"
 }

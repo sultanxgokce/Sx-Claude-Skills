@@ -115,7 +115,7 @@ def tek_ajan(s, ajan, jeton, gorevler, acik, koltuklar, simdi):
         bos = koltuk_bos_dk(koltuklar, ajan, simdi)
         kalan = [g for g in gorevler if (g.get("canli") or {}).get("gorev_durumu") == "calisiliyor"
                  and norm((g.get("canli") or {}).get("atanan")) == ajan and g["id"] not in cekilen]
-        if bos and bos[0] >= s.koltuk_bos_dk and kalan:
+        if bos and bos[0] > s.koltuk_bos_dk and kalan:
             liste = ", ".join("%s (%s)" % (g["id"], ad_sade(g)) for g in kalan[:5])
             print("  · koltuk %d dk'dır boş, çalışılıyor: %s" % (bos[0], liste))
             if s.uygula and s.zil_komut:

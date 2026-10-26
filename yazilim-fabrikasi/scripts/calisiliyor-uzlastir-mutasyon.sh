@@ -31,7 +31,8 @@ dene "UM8 en yeni iş bırakılır (sıra ters)" $P $U 'key=lambda g: g.get("son
 dene "UM9 çekilen görev için sahibine zil çalınmaz" $P $U 'if s.zil_komut and not zil(s.zil_komut, kimden, sahip,' 'if False and not zil(s.zil_komut, kimden, sahip,'
 dene "UM10 zil tekrar anahtarı yok (aynı görev tekrar zil çalar)" $P $U '"uzlastir-cek-%s-%s" % (g["id"], g.get("son_adim", ""))' '"%s" % os.urandom(4).hex()'
 dene "UM11 zil gitmezse rc 0 (sessiz geçer)" $P $U 'print("  ⚠ %s: sahibine zil gidemedi (posta)" % g["id"]); rc = 4' 'print("  ⚠ %s: sahibine zil gidemedi (posta)" % g["id"])'
-dene "UM12 koltuk eşiği yok sayılır (her boş koltuğa zil)" $P $U 'bos[0] >= s.koltuk_bos_dk' 'True'
+dene "UM12b koltuk eşiği dahil sayılır (tam 60 dk'ya zil)" $P $U 'bos[0] > s.koltuk_bos_dk' 'bos[0] >= s.koltuk_bos_dk'
+dene "UM12 koltuk eşiği yok sayılır (her boş koltuğa zil)" $P $U 'bos[0] > s.koltuk_bos_dk' 'True'
 dene "UM13 hâl=bos şartı atlanır (çalışan koltuk da boş sayılır)" $P $U 'k["hal"] == "bos"' 'True'
 dene "UM14 koltuk-boş görevi kendiliğinden çeker (öneri değil)" $P $U 'print("  · koltuk %d dk'"'"'dır boş, çalışılıyor: %s" % (bos[0], liste))' 'print("  · koltuk %d dk'"'"'dır boş, çalışılıyor: %s" % (bos[0], liste)); [cagir(s.defter_uc, jeton, "PATCH", "/kayit/" + g["id"], {"yerine": {"gorev_durumu": "bekliyor", "not": "x"}, "gerekce": "x", "adimlar": ["x"]}) for g in kalan]'
 dene "UM15 koltuk listesi okunamazsa boş sayılır" $P $U 'if c.returncode != 0:

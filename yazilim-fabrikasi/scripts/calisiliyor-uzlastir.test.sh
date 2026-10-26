@@ -79,6 +79,11 @@ kart "$T/k1" a BERİD acik gorev_A; kart "$T/k2" b BERİD acik gorev_B
 # Z1: bekliyor'a çekilen görev → sahibine TEK zil, tekrar anahtarı görev+son adım, metinde jeton yok
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "^gonder BERİD" "$T/zil.log" && grep -q "gorev_Y" "$T/zil.log" && grep -q -- "--tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30" "$T/zil.log" && ! grep -q "$GIZLI" "$T/zil.log"; g $? "Z1 çekilen görev için sahibine tek zil (kime=ajan, görev kimliği, --tekrar görev+son adım), jeton değeri zilde YOK"
+# Z1b: tekrar koşu — çekilen iş artık bekliyor (yazım sonrası defter hâli); sayı 0→1→1, ikinci koşu zil log'unu SİLMEDEN koşar, yeni zil ya da yazım yok
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD bekliyor 2026-10-26T10:30)"
+N1=$(zl); python3 "$U" --ajan BERİD --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --simdi 1000000 --uygula > "$T/cikti2" 2>&1; RC2=$?
+[ "$N1" = 1 ] && [ "$RC2" = 0 ] && [ "$(zl)" = 1 ]; g $? "Z1b aynı girdiyle tekrar koşu: zil sayısı 1 → 1 (ikinci koşu yeni zil çalmaz)"
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 # Z2: KURU zil çalmaz
 RC=$(kos); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "Z2 KURU (varsayılan): hiçbir zil çalmaz"
 # Z3: zil aracı başarısız → defter yazımı yine oldu, rc 4, söylenir
@@ -91,6 +96,11 @@ RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "gorev_C" "$T/zi
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
 printf 'berid\t%s\t1\tajan\tbos\t\tsultan-ana\t\n' "$((1000000-4000))" > "$T/koltuk.txt"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 0 ] && [ "$(zl)" = 1 ] && grep -q "dk'dır boş" "$T/zil.log" && grep -q -- "--tekrar uzlastir-koltuk-BERID-" "$T/zil.log"; g $? "K1 koltuk 66 dk boş + çalışılıyor görev: sahibine TEK öneri zili, görev bekliyor'a ÇEKİLMEZ (öneri, otomatik değil)"
+# K1b: sınır — tam 60 dk boş ("60 dk'dan UZUN" değil): zil yok; 61 dk: zil var
+printf 'berid\t%s\t1\tajan\tbos\t\tsultan-ana\t\n' "$((1000000-3600))" > "$T/koltuk.txt"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "K1b koltuk tam 60 dk boş: zil yok (eşik 'uzun', dahil değil)"
+printf 'berid\t%s\t1\tajan\tbos\t\tsultan-ana\t\n' "$((1000000-3660))" > "$T/koltuk.txt"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ]; g $? "K1c koltuk 61 dk boş: zil var"
 # K2: eşik altı / çalışıyor / girdi → zil yok
 printf 'berid\t%s\t1\tajan\tbos\t\tsultan-ana\t\n' "$((1000000-1800))" > "$T/koltuk.txt"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "K2 koltuk 30 dk boş (eşik 60 altı): zil yok"

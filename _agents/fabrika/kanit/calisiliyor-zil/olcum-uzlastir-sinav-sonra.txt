@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh
-# rc=0 sure=118.6s zaman=2026-10-26T12:57:19+03:00
+# rc=0 sure=9.3s zaman=2026-10-26T14:07:02+03:00
 --- stdout ---
 ════ calisiliyor-uzlastir ════
 PASS  U1 iki kartlı çalışılıyor (azami 2) dokunulmaz, deftere yazım YOK (kart ad yazımı BERID/BERİD eşit sayılır)
@@ -15,10 +15,13 @@ PASS  U8 defter bekliyor'u reddederse (409): rc 4, başarı denmez
 PASS  U9 --azami 0 geçersiz: rc 2
 PASS  U10 --azami 3 ile üç kartlı iş dokunulmaz (sayı kuraldan gelir, koda gömülü değil)
 PASS  Z1 çekilen görev için sahibine tek zil (kime=ajan, görev kimliği, --tekrar görev+son adım), jeton değeri zilde YOK
+PASS  Z1b aynı girdiyle tekrar koşu: zil sayısı 1 → 1 (ikinci koşu yeni zil çalmaz)
 PASS  Z2 KURU (varsayılan): hiçbir zil çalmaz
 PASS  Z3 zil gitmezse: bekliyor yazımı yapılmış kalır, rc 4 ve söylenir (sessiz geçmez)
 PASS  Z4 azami aşımı: yalnız çekilen (gorev_C) için zil
 PASS  K1 koltuk 66 dk boş + çalışılıyor görev: sahibine TEK öneri zili, görev bekliyor'a ÇEKİLMEZ (öneri, otomatik değil)
+PASS  K1b koltuk tam 60 dk boş: zil yok (eşik 'uzun', dahil değil)
+PASS  K1c koltuk 61 dk boş: zil var
 PASS  K2 koltuk 30 dk boş (eşik 60 altı): zil yok
 PASS  K2b koltuk hâli çalışıyor (eski son-etkinlik olsa da): zil yok — boşluk yalnız hâl=bos ile ölçülür
 PASS  K3 --koltuk-bos-dk 0: koltuk zili kapalı
@@ -28,6 +31,6 @@ PASS  S1 süpürme: koltuktaki iki ajanın kartsız görevleri kimse kart.sh ça
 PASS  S2 süpürme koltuk listesini okuyamazsa: rc 4, hiçbir şey yazılmaz, söylenir
 PASS  S3 ne --ajan ne --koltuklardan: rc 2
 PASS  Z0 sahte posta/koltuk aracı kullanıldı (gerçek posta.sh'e hiçbir çağrı gitmedi)
-── SONUÇ: PASS=26 FAIL=0 ──
+── SONUÇ: PASS=29 FAIL=0 ──
 --- stderr ---
-⏳ agir-sira: kanit-calisiliyor-zil-uzlastir-sinav 115 sn bekledi (yuva 2, load1 17.54)
+⏳ agir-sira: kanit-calisiliyor-zil-uzlastir-sinav 5 sn bekledi (yuva 1, load1 17.43)

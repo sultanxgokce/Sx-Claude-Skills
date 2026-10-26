@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
-# rc=0 sure=402.7s zaman=2026-10-26T13:04:02+03:00
+# rc=0 sure=411.9s zaman=2026-10-26T14:13:54+03:00
 --- stdout ---
   ✓ pozitif kontrol: dokunulmamış kopya YEŞİL
   ✓ UM1 azami yok sayılır (fazlası çalışılıyor kalır) — kural ölünce sınav KIRMIZI
@@ -13,6 +13,7 @@ $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
   ✓ UM9 çekilen görev için sahibine zil çalınmaz — kural ölünce sınav KIRMIZI
   ✓ UM10 zil tekrar anahtarı yok (aynı görev tekrar zil çalar) — kural ölünce sınav KIRMIZI
   ✓ UM11 zil gitmezse rc 0 (sessiz geçer) — kural ölünce sınav KIRMIZI
+  ✓ UM12b koltuk eşiği dahil sayılır (tam 60 dk'ya zil) — kural ölünce sınav KIRMIZI
   ✓ UM12 koltuk eşiği yok sayılır (her boş koltuğa zil) — kural ölünce sınav KIRMIZI
   ✓ UM13 hâl=bos şartı atlanır (çalışan koltuk da boş sayılır) — kural ölünce sınav KIRMIZI
   ✓ UM14 koltuk-boş görevi kendiliğinden çeker (öneri değil) — kural ölünce sınav KIRMIZI
@@ -26,5 +27,5 @@ $ bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh
   ✓ UK3 KART_UZLASTIR=0 anahtarı yok sayılır — kural ölünce sınav KIRMIZI
   ✓ UK4 jeton okunamayınca uzlaştırma sessiz atlar — kural ölünce sınav KIRMIZI
 ─────────────
-MUTASYON: gecti=23 dusen=0
+MUTASYON: gecti=24 dusen=0
 --- stderr ---
