@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iki-once.sh
+# rc=1 sure=65.0s zaman=2026-10-26T20:52:40+03:00
+--- stdout ---
+iki-yol-reddi=0/2
+--- stderr ---

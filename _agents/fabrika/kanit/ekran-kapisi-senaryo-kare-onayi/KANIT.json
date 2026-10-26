@@ -1,62 +1,96 @@
 {
   "is": "ekran-kapisi-senaryo-kare-onayi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-26T20:48:30+03:00",
+  "guncelleme": "2026-10-26T21:03:47+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "ekran-kapisi",
       "asama": "once",
       "dosya": "olcum-ekran-kapisi-once.txt",
-      "sha256": "34ea3b5109fce546e830e3d7cfad678619cbea98b11a8eb2a0ca9b1478b16b56",
+      "sha256": "a2ef55866471a50d84d30564d34e40af2c5e20cc9cafb848c0d707e6cfb3130f",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-once.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-26T20:40:04+03:00",
-      "sure_sn": 64.8,
+      "zaman": "2026-10-26T20:54:52+03:00",
+      "sure_sn": 68.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "fab1219b0ad7424ab014916aaa7bbfea"
+      "olcum_id": "abf7aff6d0944ec1b85a4f71c314b410"
     },
     {
       "tur": "olcum",
       "etiket": "ekran-kapisi",
       "asama": "sonra",
       "dosya": "olcum-ekran-kapisi-sonra.txt",
-      "sha256": "b45a22feb73698541ab3ab0ccac1d471e9cd2ed14cfb02fa90290039e02e46d2",
+      "sha256": "be4f770d3f2d91f75d557614e7bd24ec86e50e890594ba57dfd585734265475a",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-26T20:41:08+03:00",
-      "sure_sn": 63.8,
+      "zaman": "2026-10-26T20:55:58+03:00",
+      "sure_sn": 65.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "81cfcd9671b0424b9923ca9b3b9ac942"
+      "olcum_id": "42dcdd9f4549490b94f009351a662484"
     },
     {
       "tur": "olcum",
       "etiket": "ekran-kapisi-mutant",
       "asama": "tek",
       "dosya": "olcum-ekran-kapisi-mutant-tek.txt",
-      "sha256": "7dc2b0b5c7ba4191fef00229aa37d486deb1cab27caa1e1edab3ec3c5e7c189b",
+      "sha256": "d42255cbeff494f3d4c35e0e0c69445eb002a5d98c6aa4706a4ab8468ad9eefa",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-mut.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-26T20:48:30+03:00",
-      "sure_sn": 442.4,
+      "zaman": "2026-10-26T21:03:47+03:00",
+      "sure_sn": 469.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "ekran-kapisi",
       "beklenen": "kirmizi",
-      "olcum_id": "2eedd5a3c26a4eb28f8df9888ec9ec20"
+      "olcum_id": "8564fa0472e146a7bd9fe66c171e15fb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iki-yol-reddi",
+      "asama": "once",
+      "dosya": "olcum-iki-yol-reddi-once.txt",
+      "sha256": "5fb53536374b100bcdebc5f76ab5afe9d0e75447781737428b248b029583f5af",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iki-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-26T20:52:40+03:00",
+      "sure_sn": 65.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e3106327e28a416db91ba8eb81709b5d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iki-yol-reddi",
+      "asama": "sonra",
+      "dosya": "olcum-iki-yol-reddi-sonra.txt",
+      "sha256": "91a3e65758572121bb46318be23288379a1c5e75260222b7f1c9ee7ab5539b37",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/e-iki-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-26T20:53:44+03:00",
+      "sure_sn": 63.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7b745680bd134bedb385d44b827e2f04"
     }
   ],
-  "imza": "6636f4ade84ae41c61934c6d1bae55e6060178dbe1105ef41ddc178c362a9b9e"
+  "imza": "01a65b9a364527a09c7d0daf79222e89f77dc4a45ee71b3a7510dfeee4b98111"
 }
