@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # dumen.test.sh — dumen.mjs sınavı + MUTANTLAR (kapı gevşerse sınav kırmızıya dönmeli). Chromium yoksa ÖLÇÜLEMEDİ (rc 3), yeşil değil.
+# kabuk-testleri: sure=900
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 CH="${DUMEN_CHROME:-$(ls -d /config/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell 2>/dev/null | tail -1)}"
