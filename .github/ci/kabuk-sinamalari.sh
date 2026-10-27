@@ -11,7 +11,7 @@
 # bayatlarsa KIRMIZI, sınama başına süre tavanı (`# kabuk-testleri: sure=N`, varsayılan 300, tavan 900), arçelik sınavı ayrı işte.
 set -uo pipefail
 KOVA="${1:-}"
-case "$KOVA" in diploma|denetci|kalan) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|denetci|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
+case "$KOVA" in diploma|denetci|dumen|kalan) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|denetci|dumen|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
 cd "$(git rev-parse --show-toplevel 2>/dev/null || dirname "$0"/../..)" || exit 2
 
 # KARANTİNA — kapı ilk kurulurken KIRMIZI bulunan, ilgisiz sınamalar. Sessiz atlama YASAK: her satır adıyla loglanır.
@@ -29,6 +29,7 @@ kova() {   # kova <sınama yolu> → bu sınama hangi kovada
   case "$1" in
     ./tescil/scripts/diploma.test.sh)                  echo diploma ;;
     ./yazilim-fabrikasi/scripts/denetci.test.sh)       echo denetci ;;
+    ./dumen-surucu/scripts/dumen.test.sh)              echo dumen ;;   # gerçek Chromium + 10 mutant: paralel kovada ilgisiz sınamalara yük bindirip onları düşürdü (CI #40491126187)
     *)                                                 echo kalan ;;
   esac
 }

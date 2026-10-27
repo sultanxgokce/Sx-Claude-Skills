@@ -66,14 +66,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kova: [diploma, denetci, kalan]
+        kova: [diploma, denetci, dumen, kalan]
     steps:
       - uses: actions/checkout@v4
       # dumen-surucu sınavı gerçek headless Chromium + playwright-core ister; yoksa rc 3 (ÖLÇÜLEMEDİ) verir ve kova bunu kırmızı sayar
-      # (doğru olan da bu: ölçülemeyen yeşil değildir). Sınav `kalan` kovasında koşar → tarayıcı yalnız orada kurulur, önbellekten gelir,
+      # (doğru olan da bu: ölçülemeyen yeşil değildir). Sınav kendi `dumen` kovasında koşar (Chromium yükü kalan kovasındaki sınamaları düşürüyordu) → tarayıcı yalnız orada kurulur, önbellekten gelir,
       # kurulum denemesi 240 sn'de kesilir ve bir kez yeniden denenir (cloudtop ci-tarayici-kur deseni: kurulum bazen dakikalarca takılıyor).
       - name: Dümen sınavı tarayıcı önbelleği
-        if: matrix.kova == 'kalan'
+        if: matrix.kova == 'dumen'
         uses: actions/cache@v4
         with:
           path: |
@@ -81,7 +81,7 @@ jobs:
             ${{ runner.temp }}/pw
           key: playwright-1.59.1-chromium-headless-shell-${{ runner.os }}
       - name: Dümen sınavı için playwright-core + headless Chromium
-        if: matrix.kova == 'kalan'
+        if: matrix.kova == 'dumen'
         timeout-minutes: 10
         run: |
           set -uo pipefail
