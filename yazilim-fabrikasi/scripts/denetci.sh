@@ -64,6 +64,9 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   # göz tur 2 (#404): AGENT_NAME yok ve kart yoksa (iş adı verilmeden en erken çıkış) yazan bilinmez — zil hedefsiz gitmesin, reise gider
   local yazansiz=0
   if [ -z "$yazan" ]; then yazansiz=1; yazan="$reis"; printf '⚠ denetçi zilinde yazan bilinmiyor (AGENT_NAME yok, kart yok) → %s\n' "$reis" >&2; fi
+  # 0C915N göz tur 1: tur da çözülemediyse ve yazan bilinmiyorsa zil reise (SERDAR) giderdi ve söyleyecek bir şey taşımazdı → atlanır, sebep stderr'e.
+  #   Yazan BİLİNİYORSA ona giden kısa zil kalır: kanıt eksik/denetim açılmadı bilgisi onun işidir.
+  if [ -z "${TUR:-}" ] && [ "$yazansiz" = 1 ]; then printf '⚠ denetçi zili atlandı: tur çözülemedi ve yazan bilinmiyor (rc %s) — reise gidecek zil bilgi taşımazdı\n' "$rc" >&2; return 0; fi
   case "$rc" in 0) ne="GEÇTİ" ;; 1) ne="düzelt, yeniden gönder" ;; 2) ne="kanıt/kullanım eksiği — denetim açılmadı" ;;
                 3) ne="ÖLÇÜLEMEDİ"; [ "$ZAMAN_ASIMI" = 1 ] && ne="ZAMAN AŞIMI (${ZA} sn) — denetçi bitmedi" ;; 4) ne="TIKANDI — üç yol raporu" ;; *) ne="beklenmeyen çıkış" ;; esac
   local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"

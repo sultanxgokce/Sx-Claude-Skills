@@ -1,7 +1,7 @@
 {
   "is": "denetci-zil-bilgisiz",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T04:30:07+03:00",
+  "guncelleme": "2026-10-27T05:03:02+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,7 +25,7 @@
       "etiket": "bilgisiz-zil",
       "asama": "sonra",
       "dosya": "olcum-bilgisiz-zil-sonra.txt",
-      "sha256": "abe986a6245bf5a3fa3322d9e49540d66e8611e264b548abf6429b9e60579e6f",
+      "sha256": "7387438f2a7d4ce8fc6b9cde1aaf314783579943e5dc250466e54fe414d4597b",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/zil-say.sh",
@@ -33,11 +33,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-27T04:30:07+03:00",
+      "zaman": "2026-10-27T05:03:02+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "970ef69ce5e04142a206b98a00aa1a5c"
+      "olcum_id": "4849525d7e0e4cb3b601f4524baabe80"
     }
   ],
-  "imza": "a23b3f2a369fe84b9dafd38d22a0cc4291c767714d56b6a97a45d89de86c5f59"
+  "imza": "cfe0cb78d7224825e513c2d83865e2d0758cad3cbd30a6192ced9e4ab0f15c05"
 }
