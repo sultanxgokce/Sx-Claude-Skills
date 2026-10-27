@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-koltuk-esleme",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T02:11:44+03:00",
+  "guncelleme": "2026-10-28T02:12:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -330,7 +330,47 @@
       "gercek_olcum": "esleme-tur2",
       "beklenen": "kirmizi",
       "olcum_id": "0e711e3330bc42399665862529bf6fed"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "mutant-B2-tur2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-mutant-B2-tur2-sonra-7d7863376e04.txt",
+      "sha256": "222cc145b271cee65b36ddecd5f16330eea285b6d3b66009e4b95adcd1353538",
+      "hedef_dosya": "olcum-mutant-B2-tur2-sonra.txt",
+      "hedef_olcum_id": "d769079ac37049bb816df0cccb061a6f",
+      "hedef_sha256": "55d86c94736bd5e35a171750092a98afb5e53e41048718927c3342b9dd36314b",
+      "hedef_zaman": "2026-10-28T02:11:31+03:00",
+      "hedef_renk": "yesil",
+      "neden": "mutant üretilemedi (rc 2, çapa tutmadı); düzeltilmiş çapayla yeniden ölçüldü",
+      "kim": "MUAVIN",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T02:12:11+03:00",
+      "olcum_id": "f73dc199fc7149d2ada180faa721206b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-B2-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-B2-tur3-sonra.txt",
+      "sha256": "5c4590798e1684cc6a05056d0d90ae234edad7e837c6c2345b634fb938a4790f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ke.sh",
+        "B2"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T02:12:13+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "esleme-tur2",
+      "beklenen": "kirmizi",
+      "olcum_id": "62e6f5bb35074c34bdaf22232dbbc709"
     }
   ],
-  "imza": "4a61c8d56d2e6d25fb9158b409109bc7ae95ae2e57adb5dccd9b1a2ea9947c94"
+  "imza": "dc6404f463f1c9d81497c8b721b74bd65831571cd8ae2f855e0b513d8f2e4f7f"
 }
