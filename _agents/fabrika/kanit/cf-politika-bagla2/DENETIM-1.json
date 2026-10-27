@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "cf-politika-bagla2",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T11:55:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-cf-politika-bagla2",
+  "dal": "cf-politika-bagla2",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30016,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 6783
+  },
+  "dalgic": "uyumlu",
+  "bas": "d7a6b1269f4544c873bb0e1e250703fc9f834da5",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki komut eklenmiş; kuru kip varsayılanı, açık --uygula kapısı ve hedef politikayı seçerek geri alma sınavlarla doğrulanmış. Ancak politika listesinin tamlığı denetlenmediği ve yol bölümü de küçük harfe çevrildiği için yanlış no-op, yinelenen politika veya yanlış uygulama seçimi riski var; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Politika listesinde sayfalama/tamlık kapısı yok. Bağlama komutu sonraki sayfadaki mevcut eş politikayı göremeyip bir yenisini oluşturabilir; çözme komutu da hedefi göremeyip yanlış biçimde “zaten yok” diyebilir.",
+        "kanit": "App ve servis jetonu listelerinde result_info.total_count ile dönen uzunluğu karşılaştıran açık kapılar bulunurken, politika çağrısı yalnız GET sonucunu _pb_mevcut'a veriyor; per_page veya total_count denetimi yok. T16 test fikstürleri de yalnız küçük, sayfalanmamış politika listeleri kullanıyor.",
+        "konum": "cloudflare-erisim/scripts/cf.sh:510 ve cloudflare-erisim/scripts/cf.sh:540; cloudflare-erisim/scripts/cf.test.sh:T16a-T16m",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“TAM eşleşme” uygulaması yolun harf büyüklüğünü korumuyor: tüm app-domain[/yol] girdisi ve Cloudflare .domain değeri küçük harfe çevriliyor. URL yolları harf duyarlı olabildiğinden farklı uygulama yolları aynı hedef sayılabilir.",
+        "kanit": "_pb_coz içinde host=\"${1,,}\" kullanılıyor ve seçim `( .domain|ascii_downcase)==$d` ile yapılıyor; T16h yalnız yolun eksik olması durumunu sınıyor, büyük/küçük harf ayrımını sınamıyor.",
+        "konum": "cloudflare-erisim/scripts/cf.sh:470-478; cloudflare-erisim/scripts/cf.test.sh:T16h",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçüm 93/93 yeşil; üç mutasyon da bozuk kodu yakalıyor ve özellikle kuru kipte yazmama, seçici silme ile liste tamlığı sınavlarının duyarlı olduğunu gösteriyor. Buna karşılık kanıt yalnız çevrimdışı fikstür ölçümüdür; politika sayfalaması ve yol harf duyarlılığı için sınav/ölçüm bulunmuyor."
+  }
+}

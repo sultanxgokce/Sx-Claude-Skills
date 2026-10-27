@@ -1,0 +1,23 @@
+{
+  "is": "cf-politika-bagla2",
+  "cumle": "cloudflare-erisim becerisine makine kimliği jetonu için erişim politikası bağlayan ve geri alan iki komut eklenir; ikisi de kuru kip varsayılanlı, yazım açık uygula bayrağı ister",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-27T11:42:58+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
