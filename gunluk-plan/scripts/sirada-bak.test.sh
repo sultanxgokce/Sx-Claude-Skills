@@ -69,6 +69,17 @@ bash "$SB" --esik abc >/dev/null 2>&1; kapi "S15 bozuk eşik rc 2" "2" "$?"
 bash "$SB" --esik 0 >/dev/null 2>&1; kapi "S16 eşik 0 rc 2" "2" "$?"
 USTLEN_RC=1 bash "$SB" >/dev/null 2>&1; kapi "S17 ustlen reddedilirse rc 1 (sessiz başarı yok)" "1" "$?"
 GUNLUK_PLAN_AJAN="" AGENT_NAME="" bash "$SB" --kutu menzil >/dev/null 2>&1; kapi "S18 kim yokken başlatma rc 3" "3" "$?"
+echo "— başkasının işi üstlenilmez (kutu-düzeyi sayım ≠ koltuk-düzeyi başlatma)"
+liste_menzil; satir M0 menzil acik cok-acil ozellik SERDAR "serdarın işi (en acil, en üstte)" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
+c="$(bash "$SB" 2>&1)"; rc=$?
+kapi "S19 en üstteki iş BAŞKASINA atanmış: onu ÜSTLENMEZ, bana atanmış ilk işi üstlenir" "ustlen gorev_M2 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
+iceriyor "S19b sayım yine kutu-düzeyinde (4 iş) ve karar BAS" "SIRADA=4" "$c"
+: > "$T/liste.txt"; for i in 1 2 3; do satir "Y$i" menzil acik esnek ozellik SERDAR "serdarın işi $i" >> "$T/liste.txt"; done; rm -f "$T/ustlen.log"
+c="$(bash "$SB" --kutu menzil 2>&1)"; rc=$?
+kapi "S20 3 iş de başkasına atanmış: ustlen ÇAĞRILMAZ, rc 0" "yok:0" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$rc"
+iceriyor "S20b 'başkasının işi üstlenilmez' açıkça söylenir" "BASLAMADI=yok" "$c"
+satir Y4 menzil acik esnek ozellik - "sahipsiz iş" >> "$T/liste.txt"; rm -f "$T/ustlen.log"; bash "$SB" --kutu menzil >/dev/null 2>&1
+kapi "S21 sahipsiz ('-') iş başlatma adayıdır" "ustlen gorev_Y4 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
 echo "— deftere-yaz kutu türetme (menzil hatası)"
 liste_menzil; rm -r -- "$T/cipa" 2>/dev/null; bash "$KOK/cipa.sh" yaz --plan "1) ilk madde | 2) ikinci madde" >/dev/null 2>&1
 d="$(bash "$DY" 2>&1)"; iceriyor "D1 --kutu verilmeden menzil koltuğu 'kutu=menzil' çıkar (code DEĞİL)" "kutu=menzil" "$d"
