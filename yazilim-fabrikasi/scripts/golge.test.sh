@@ -103,9 +103,25 @@ grep -q "r2 PR #102 — birleşti, sonra GERİ ALINDI" <<<"$O" && grep -q "r3 PR
 grep -q "r5 PR #105 — listede yok" <<<"$O"; g $? "R4 listede olmayan PR 'ölçülemedi' (birleşmedi sayılmaz)"
 O="$(GH_RC=4 bash "$GR" 2>&1)"; RC=$?
 [ "$RC" -eq 3 ] && grep -q "SAHTE YEŞİL: 0 / 0" <<<"$O"; g $? "R5 gh düşerse rc 3 ve 'temiz' denmez (hepsi ölçülemedi)" "→ rc=$RC"
-O="$(GOLGE_TAVAN=5 bash "$GR" 2>&1)"; grep -q "ölçülemedi 5" <<<"$O"; g $? "R6 liste tavana dayanırsa (5/5) hükmedilmez, hepsi ölçülemedi (tavan okuması olay değil tavandır)"
+# tavan: liste 5/5'e dayanınca hüküm LİSTEDEN verilmez; PR numarasıyla tek tek sorulur (view) + Revert numarayla aranır (list --search)
+cat > "$T/gh-tekil.sh" <<'SH'
+#!/usr/bin/env bash
+[ "$2" = view ] && { [ -n "${GH_VIEW_RC:-}" ] && exit "$GH_VIEW_RC"; python3 -c "
+import json,sys; n=int(sys.argv[1]); l=json.load(open(sys.argv[2])); p=[x for x in l if x['number']==n]
+sys.exit(1) if not p else print(json.dumps(p[0]))" "$3" "$GH_CIKTI"; exit; }
+case " $* " in *" --search "*) python3 -c "
+import json,sys; print(json.dumps([x for x in json.load(open(sys.argv[1])) if x['title'].startswith('Revert')]))" "$GH_CIKTI" ;; *) cat "$GH_CIKTI" ;; esac
+SH
+chmod +x "$T/gh-tekil.sh"
+O="$(GOLGE_GH="$T/gh-tekil.sh" GOLGE_TAVAN=5 bash "$GR" 2>&1)"; grep -q "5 'birleştirirdim' kaydı · birleşti 1 · geri alındı 1 · birleşmeden kapandı 1 · hâlâ açık 1 · ölçülemedi 1" <<<"$O"; g $? "R6 liste tavana dayanınca (5/5) kayıtlar PR numarasıyla tek tek sorulur: R1 ile AYNI akıbet sayıları (eskiden hepsi ölçülemedi)"
+O="$(GOLGE_GH="$T/gh-tekil.sh" GOLGE_TAVAN=5 GH_VIEW_RC=4 bash "$GR" 2>&1)"; RC=$?; [ "$RC" -eq 3 ] && grep -q "ölçülemedi 5" <<<"$O"; g $? "R6b tavanda tek PR sorusu da düşerse hepsi ölçülemedi, rc 3 (yeşil denmez)" "→ rc=$RC"
 O="$(FABRIKA_GOLGE_DEFTER="$T/yok.jsonl" bash "$GR" 2>&1)"; RC=$?; [ "$RC" -eq 3 ]; g $? "R7 defter yoksa rc 3 (kayıt yok ≠ sıfır sahte yeşil)"
 O="$(bash "$GR" --gun 0 2>&1)"; grep -q "kayıt yok" <<<"$O"; g $? "R8 pencere dışı kayıtlar sayılmaz"
+MT="$T/rapor-tavan-mutant.sh"; python3 - "$GR" "$MT" <<'PYT'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='rev=json.load(open(rf,encoding="utf-8")) if os.path.exists(rf) else None'; assert s.count(a)==1
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'rev=[]'))
+PYT
+O="$(GOLGE_GH="$T/gh-tekil.sh" GOLGE_TAVAN=5 bash "$MT" 2>&1)"; ! grep -q "geri alındı 1" <<<"$O"; g $? "R6c mutant (tavan yolunda Revert araması söküldü): geri alınan PR kaçar → R6 bu mutantta düşerdi"
 # mutant: geri alma tespiti söküldü → R1/R2 düşmeli
 MR="$T/rapor-mutant.sh"; python3 - "$GR" "$MR" <<'PYM'
 import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='geri=birl and any('; assert s.count(a)==1

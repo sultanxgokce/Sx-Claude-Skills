@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/golge-rapor-tavan-tek-tek/tavan-olc.sh yeni
+# rc=0 sure=114.8s zaman=2026-10-27T13:40:35+03:00
+--- stdout ---
+golge raporu: 149 'birleştirirdim' kaydı · birleşti 121 · geri alındı 0 · birleşmeden kapandı 0 · hâlâ açık 0 · ölçülemedi 28
+SAHTE YEŞİL: 0 / 121 hükme varmış kayıt (açık ve ölçülemeyen hüküm sayılmaz)
+kalan=0 (tavan yüzünden ölçülemeyen kayıt)
+--- stderr ---
