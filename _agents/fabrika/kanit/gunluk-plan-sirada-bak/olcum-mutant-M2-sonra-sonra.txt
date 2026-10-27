@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh M2
+# rc=1 sure=1.7s zaman=2026-10-27T20:39:03+03:00
+--- stdout ---
+MUTANT M2 rc=1
+  ✗ S4 --basla YOKKEN ustlen çağrılmaz — beklenen=yok gerçek=var
+  ✗ S6 --basla: EN ÜSTTEKİ iş ustlen edilir (kim ve tahmin ile) — beklenen=ustlen gorev_M2 --kim MENZILCI --tahmin 30 gerçek=ustlen gorev_M2 -
+YAKALANDI
+--- stderr ---

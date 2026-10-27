@@ -1,0 +1,37 @@
+$ bash gunluk-plan/scripts/sirada-bak.test.sh
+# rc=0 sure=724.6s zaman=2026-10-27T20:33:52+03:00
+--- stdout ---
+— kutu-bul
+  ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
+  ✓ K2 başka koltuk kendi kutusunu bulur (MUAVIN→code, İ/I farkı yok sayılır)
+  ✓ K3 atanmış işi olmayan koltuk: rc 3, kutu UYDURULMAZ
+  ✓ K4 iki kutu eşit sayıda: tahmin yok, rc 3
+  ✓ K5 GUNLUK_PLAN_KUTU açık ayarı kazanır
+  ✓ K6 liste okunamazsa rc 3
+— sirada-bak
+  ✓ S1 menzil: Sırada=3 (acik+sira-bende; havuz/çalışılan/biten ve code işleri SAYILMAZ) rc 0
+  ✓ S2 eşik 3 ve 3 iş → KARAR=BAS
+  ✓ S3 acil iş listede ilk sırada
+  ✓ S4 --basla YOKKEN ustlen çağrılmaz
+  ✓ S5 öneri bugüne almanın SULTAN'ın olduğunu söyler
+  ✓ S6 --basla: EN ÜSTTEKİ iş ustlen edilir (kim ve tahmin ile)
+  ✓ S7 betik bugun_plani'na ASLA yazmaz (ustlen dışında çağrı yok)
+  ✓ S8 eşik 4 ve 3 iş → KARAR=SOR
+  ✓ S9 SOR iki şık verir
+  ✓ S10 SOR iken --basla ustlen ÇAĞIRMAZ
+  ✓ S11 Sırada 1 → SOR
+  ✓ S12 --kutu verilince boş kutu: SIRADA=0 → SOR
+  ✓ S13 liste okunamazsa rc 3 ('Sırada 0' DENMEZ)
+  ✓ S14 ölçülemeyende KARAR satırı basılmaz
+  ✓ S15 bozuk eşik rc 2
+  ✓ S16 eşik 0 rc 2
+  ✓ S17 ustlen reddedilirse rc 1 (sessiz başarı yok)
+  ✓ S18 kim yokken --basla rc 3
+— deftere-yaz kutu türetme (menzil hatası)
+  ✓ D1 --kutu verilmeden menzil koltuğu 'kutu=menzil' çıkar (code DEĞİL)
+  ✓ D2 'kutu=code' çıkmaz
+  ✓ D3 atanmışı olmayan koltuk --kutu'suz rc 3
+
+sonuç: 27 geçti · 0 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-gunluk-plan-sirada-bak-sirada-bak-sonra 723 sn bekledi (yuva 1, load1 17.80)

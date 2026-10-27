@@ -35,9 +35,9 @@ CIPA_METNI="$(bash "$CIPA" oku 2>/dev/null)" || { echo "ÖLÇÜLEMEDİ: çıpa o
 LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 [ "$LRC" -eq 0 ] && [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı (rc=$LRC) — 'yazılacak bir şey yok' DENMEZ" >&2; exit 3; }
 
-# kutu: açık ayar > listedeki en sık kutu sütunu (kutunun kendi jetonu yalnız kendi görevlerini listeler)
+# kutu: açık ayar > kutu-bul.sh (koltuğa ATANMIŞ işlerin kutusu). Eski "listedeki en sık kutu" kaldırıldı: liste kutuya özel değil, menzilde hep "code" çıktı (1.11.0)
 if [ -z "$KUTU" ]; then
-  KUTU="$(printf '%s\n' "$LISTE" | awk '$1 ~ /^gorev_/ {print $2}' | sort | uniq -c | sort -rn | awk 'NR==1 {print $2}')"
+  KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" --kim "$KIM" --liste /dev/stdin 2>/dev/null)" || KUTU=""
 fi
 [ -n "$KUTU" ] || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
 
@@ -85,9 +85,11 @@ while IFS= read -r sat; do
   n="$(_norm "$m")"
   if printf '%s' "$ACIK_N" | grep -qxF -- "$n"; then echo "  = atlandı (defterde açık): $m"; atlanan=$((atlanan+1)); continue; fi
   if [ "$UYGULA" -eq 1 ]; then
-    if bash "$GOREV" ekle "$m" --kutu "$KUTU" --etiket ozellik --aciliyet "$ACIL" --atanan "$KIM" --kaynak-kim "$KIM" --kaynak-nereden "günlük plan" >/dev/null 2>&1; then
+    # --ozet ZORUNLU: geçit Sultan-dili açılış özeti ister (400 ozet_acilista_gerekli); eskiden verilmiyordu, üç madde sessizce yazılamadı (mihenk/s08, 27 Eki)
+    OZET="${KIM} günlük planında bugün yapılacak diye yazdı → henüz başlanmadı → yapılınca bu iş defterde kapanır: ${m}"
+    if CIKTI="$(bash "$GOREV" ekle "$m" --kutu "$KUTU" --etiket ozellik --aciliyet "$ACIL" --atanan "$KIM" --kaynak-kim "$KIM" --kaynak-nereden "günlük plan" --ozet "$OZET" 2>&1)"; then
       echo "  ✓ yazıldı: $m"; yazilan=$((yazilan+1)); ACIK_N+="$n"$'\n'
-    else echo "  ✗ YAZILAMADI: $m"; hata=$((hata+1)); fi
+    else echo "  ✗ YAZILAMADI: $m"; echo "      sebep: $(printf '%s' "$CIKTI" | tr '\n' ' ' | cut -c1-300)"; hata=$((hata+1)); fi
   else
     echo "  ◻ yazardım: $m"; yazilan=$((yazilan+1))
   fi

@@ -1,0 +1,11 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh M3
+# rc=1 sure=1.2s zaman=2026-10-27T20:39:04+03:00
+--- stdout ---
+MUTANT M3 rc=1
+  ✗ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da) — beklenen=menzil gerçek=
+  ✗ K2 başka koltuk kendi kutusunu bulur (MUAVIN→code, İ/I farkı yok sayılır) — beklenen=code gerçek=
+  ✗ S1 menzil: Sırada=3 (acik+sira-bende; havuz/çalışılan/biten ve code işleri SAYILMAZ) rc 0 — beklenen=0:SIRADA=3 gerçek=3:
+  ✗ S2 eşik 3 ve 3 iş → KARAR=BAS — 'KARAR=BAS' yok: ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)
+YAKALANDI
+--- stderr ---

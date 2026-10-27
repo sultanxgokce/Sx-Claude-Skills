@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.10.1
+version: 1.11.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -126,6 +126,23 @@ bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh … --uygula     
 - **Ölçemezse yazmaz:** görev listesi okunamadı/boşsa ya da ajan kimliği çıkmıyorsa rc 3 — "tavan dolu değil" denmez. Başlık 160 karakteri aşarsa reddedilir (başlık değil nottur; ayrıntı `--kanit`'e).
 - Kuru koşu varsayılandır; `--uygula` yalnız yukarıdaki kapıları geçen çağrıyı yazar.
 Sınavı: `bash scripts/tarama-ekle.test.sh` (T1-T12b + T4g-T4i, hermetik: sahte gorev.sh + sahte bulgu.sh).
+
+## ADIM 0-e — ÖNCE SIRADA'YA BAK (1.11.0 · görev …VNB2E9, Sultan 27 Eki: "hiçbir kutuda /gunluk-plan şunu yapmıyor")
+
+Plan yazmadan, ADIM 1'den ÖNCE kutunun defterdeki **Sırada** listesine bak — boşuna sıfırdan plan yazma:
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --basla      # Sırada ≥ eşik ise en üstteki işi çalışılıyor yapar ve başlar
+bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh              # yalnız bak (KARAR=BAS | KARAR=SOR)
+```
+- **KARAR=BAS** (Sırada ≥ 3, eşik `--esik N` ile kutuya göre ayarlanır): sıradaki işler listelenir (acil önce); `--basla` EN ÜSTTEKİ işi `gorev.sh ustlen` ile üstlenir. Sultan'a tek cümle: *"Sırada N iş var, en üstteki ile başladım; bugüne almak ister misin?"*
+- **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok. Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Betik `--basla` ile bile üstlenmez.
+- 🔴 **"Bugüne al" Sultan'ındır.** Defterde `bugun_plani` alanını geçit yalnız Sultan ekranına yazdırır (A06; ajan yazarsa 403). Betik onu YAZMAZ, yalnız ÖNERİR. Yani "bugüne alındı" işareti Sultan'ın tıkıyla gelir; ajanın yaptığı iş "çalışılıyor" ve öneridir.
+- **Sırada** = ekranın tanımı: aynı kutuda `acik` ya da `sira-bende` (havuz · tasarlanıyor · bekliyor · çalışılıyor · onay-bekliyor · bitti · iptal SAYILMAZ).
+- **Ölçemezse karar vermez:** defter okunamadı ya da kutu çıkmadıysa rc 3 — "Sırada 0" DENMEZ, soru da sorulmaz.
+- **Kutu tahmin edilmez (`kutu-bul.sh`):** görev listesi kutuya özel DEĞİLDİR (herkes tüm kutuları görür); "listedeki en sık kutu" hep en kalabalık kutuyu (code) verirdi — menzil'de maddeler yanlış deftere gidecekti. Kutu = o koltuğa ATANMIŞ işlerin kutusu; atanmışı yoksa ya da iki kutu eşitse rc 3 ve `--kutu` istenir (`GUNLUK_PLAN_KUTU` ile de verilir). `deftere-yaz.sh` de aynı yolu kullanır.
+- **`deftere-yaz.sh` düzeltmesi (mihenk/s08):** `gorev.sh ekle` artık `--ozet` (Sultan-dili açılış özeti) taşır — geçit özetsiz açılışı 400 `ozet_acilista_gerekli` ile reddediyordu ve üç madde sessizce yazılamıyordu; reddedilen yazımın SEBEBİ artık ekrana basılır. Sınavın sahte `gorev.sh`'ı gerçek kapıyı taklit etmediği için bu hata yeşil sınavın arkasında kalmıştı.
+- **Paketlenmiş `gorev.sh`** cloudtop kanoniğiyle yeniden eşitlendi (D2 `--isteyen-oda`/`--teslim` sonrası Y7 kırmızıydı).
+Sınavı: `bash scripts/sirada-bak.test.sh` (K1-K6 · S1-S18 · D1-D3, hermetik) + `deftere-yaz.test.sh` (D19-D20).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 

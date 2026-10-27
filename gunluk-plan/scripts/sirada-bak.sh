@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# sirada-bak.sh — /gunluk-plan'ın İLK defter adımı (1.11.0 · görev …VNB2E9, Sultan 27 Eki): plan yazmadan ÖNCE kutunun defterdeki Sırada listesine bak.
+#   sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--basla]
+#   KARAR=BAS  → Sırada ≥ eşik: en üstteki iş(ler) listelenir; --basla verilirse EN ÜSTTEKİ iş `gorev.sh ustlen` ile çalışılıyor yapılır
+#   KARAR=SOR  → Sırada < eşik: Sultan'a TEK soru, iki şık (1 Sultan'la sohbet · 2 reis kendi başına: ADIM 0-d tarama-ekle)
+#   rc: 0 karar verildi · 2 kullanım · 3 ölçülemedi (defter okunamadı / kutu çıkmadı) — "Sırada 0" DENMEZ, ölçülemeyen SORU değil ÖLÇÜLEMEDİ'dir
+# Sırada = ekranın tanımı: aynı kutuda gorev_durumu acik ya da sira-bende (havuz/tasarlaniyor/bekliyor/calisiliyor/onay-bekliyor/bitti/iptal SAYILMAZ).
+# 🔴 "Bugüne al" Sultan'ındır: bugun_plani alanını geçit YALNIZ Sultan ekranına yazdırır (A06) — bu betik onu YAZMAZ, yalnız ÖNERİR.
+set -uo pipefail
+KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+GOREV="$(bash "$KOK/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"
+KUTU=""; KIM=""; ESIK="${GUNLUK_PLAN_SIRA_ESIK:-3}"; BASLA=0; TAHMIN="${GUNLUK_PLAN_TAHMIN_DK:-30}"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --kutu) KUTU="${2:-}"; shift 2 ;; --kim) KIM="${2:-}"; shift 2 ;; --esik) ESIK="${2:-}"; shift 2 ;; --basla) BASLA=1; shift ;;
+    *) echo "kullanım: sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--basla]" >&2; exit 2 ;;
+  esac
+done
+case "$ESIK" in ''|*[!0-9]*) echo "HATA: --esik pozitif tam sayı olmalı (verilen: '$ESIK')" >&2; exit 2 ;; esac
+[ "$ESIK" -ge 1 ] || { echo "HATA: --esik en az 1" >&2; exit 2; }
+[ -x "$GOREV" ] || [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
+[ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
+LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
+[ "$LRC" -eq 0 ] && [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı (rc=$LRC) — 'Sırada 0' DENMEZ" >&2; exit 3; }
+if [ -z "$KUTU" ]; then
+  KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" ${KIM:+--kim "$KIM"} --liste /dev/stdin 2>/dev/null)" || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
+fi
+SIRA="$(printf '%s\n' "$LISTE" | python3 -c '
+import sys
+kutu=sys.argv[1]; oncel={"cok-acil":0,"acil":1,"esnek":2,"rahat":3}; r=[]
+for i,s in enumerate(sys.stdin):
+    p=s.rstrip("\n").split(None,6)
+    if len(p)<7 or not p[0].startswith("gorev_"): continue   # id kutu durum aciliyet etiket atanan BAŞLIK
+    if p[1]!=kutu or p[2] not in ("acik","sira-bende"): continue
+    r.append((oncel.get(p[3],4),i,p[0],p[3],p[6].split("  (son:")[0]))
+for o,i,gid,ac,b in sorted(r): print("%s\t%s\t%s"%(gid,ac,b))
+' "$KUTU")"
+N=0; [ -n "$SIRA" ] && N=$(printf '%s\n' "$SIRA" | wc -l)
+echo "KUTU=$KUTU"; echo "SIRADA=$N"; echo "ESIK=$ESIK"
+if [ "$N" -ge "$ESIK" ]; then
+  echo "KARAR=BAS"
+  printf '%s\n' "$SIRA" | head -5 | awk -F'\t' '{printf "ISI=%s · %s · %s\n",$1,$2,$3}'
+  ILK="$(printf '%s\n' "$SIRA" | head -1 | cut -f1)"
+  if [ "$BASLA" -eq 1 ]; then
+    [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ustlen için ajan kimliği yok (--kim ver)" >&2; exit 3; }
+    if bash "$GOREV" ustlen "$ILK" --kim "$KIM" --tahmin "$TAHMIN" >/dev/null 2>&1; then echo "BASLADI=$ILK (çalışılıyor yapıldı · tahmin ${TAHMIN} dk)"; else echo "BASLAMADI=$ILK (ustlen reddedildi — defter durumunu kendin oku)" >&2; exit 1; fi
+  fi
+  echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — bugüne alma tıkı Sultan'ın (ekranda)"
+else
+  echo "KARAR=SOR"
+  echo "SORU=Bu kutuda planlanmış görev yok ($N iş sırada). Kendimize iş çıkarma seansı yapalım mı?"
+  echo "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)"
+fi
