@@ -1,0 +1,151 @@
+{
+  "is": "sultan-alarmi-beceri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T00:18:07+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "alarm-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-alarm-sonra-sonra.txt",
+      "sha256": "6e622aa8981a149c2a29251ce5d52ec4f49a4464f80dceb6347c1d3e03835012",
+      "komut": [
+        "bash",
+        "sultan-alarmi/scripts/alarm.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:02+03:00",
+      "sure_sn": 446.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b77fc09bbfd44eaa8c2f94a388b7aa80"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-A1-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-A1-sonra-sonra.txt",
+      "sha256": "321163bc072f4506461e41be8112dc22868d0257f5a3b523983d50b3c94cc2e7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh",
+        "A1"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:02+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "bd4c17769340463da6435169a40742f0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-A2-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-A2-sonra-sonra.txt",
+      "sha256": "145a36fb7047e64e9ffdef8f4dbe0497e9dd1821c8b9aee6bd9cde75138c3104",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh",
+        "A2"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:03+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "c6d0e2b8256c4c788e919df77be914cf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-A3-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-A3-sonra-sonra.txt",
+      "sha256": "3ca1541e7deb357757fd677aba77a6391e1c22d7f207cc0f90c28277a4592c97",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh",
+        "A3"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:04+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "c42f0f3fd8b948e28b40771ef0b88e9b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-A4-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-A4-sonra-sonra.txt",
+      "sha256": "2a0047415056eb44c7cd3022f8bf1bf29b05a99b76b4aa100b0839f5bc8d7fb1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh",
+        "A4"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:05+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "3b6b308663f24a23b14e7a21c8d023ed"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-A5-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-A5-sonra-sonra.txt",
+      "sha256": "87dab501872f1ef9718ada0a9ca036e7bc33ecc12e32f42848ba855f9f57e3af",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh",
+        "A5"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:06+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "f79b149a112541b99c12743f0681c751"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-A6-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-A6-sonra-sonra.txt",
+      "sha256": "e36c054c584913217954a705f8823955f4b49dffc0f61e4fd71bab1a5a85614a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh",
+        "A6"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:18:07+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "55cfb1ff6a8f4b7db4a9fbd2d6f206ee"
+    }
+  ],
+  "imza": "34c01d1a70f7d0ce912ae6680391d6364feb7cd3a05157f3abd7f1d1d0e023f2"
+}

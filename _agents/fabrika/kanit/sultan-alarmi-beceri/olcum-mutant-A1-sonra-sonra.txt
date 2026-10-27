@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-alarm-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh A1
+# rc=1 sure=0.8s zaman=2026-10-28T00:18:02+03:00
+--- stdout ---
+MUTANT A1 rc=1
+  ✗ G3 tekrar sınırı: aynı iş susar — 'sustu' yok: 🚨🔴 SULTAN ALARMI — Revak disk silme · SERDAR bekliyor · revak terminalinde ! ile
+  ✗ G3b susan alarm satırı yeniden basmaz — 'SULTAN ALARMI —' OLMAMALI: 🚨🔴 SULTAN ALARMI — Revak disk silme · SERDAR bekliyor · reva
+YAKALANDI
+--- stderr ---
