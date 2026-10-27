@@ -1,0 +1,85 @@
+{
+  "is": "tikandi-reis-komutu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T19:05:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinav-tek.txt",
+      "sha256": "68b83281578baa6819c0d7dcde0ae2c8421d0b0833e874654b19e1f3f4aae821",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T18:21:52+03:00",
+      "sure_sn": 1153.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b7885891191f4e2f8fa0471b8098798e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-mutlak-komut",
+      "asama": "tek",
+      "dosya": "olcum-mutant-mutlak-komut-tek.txt",
+      "sha256": "1b8d50ecbabac4bf52754d07c4d8f581b793a48325f766fa4f2cf871674c3f0c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut1/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T19:05:14+03:00",
+      "sure_sn": 2592.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "denetci-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "02706cf537e74bfab72cb632f4a915af"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-reis-adi-sabit",
+      "asama": "tek",
+      "dosya": "olcum-mutant-reis-adi-sabit-tek.txt",
+      "sha256": "58600b1c3e97f75876c77f05daf20feb1f21716075ed1c466a97b6cb174992ca",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut2/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T19:05:38+03:00",
+      "sure_sn": 2595.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "denetci-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "aee2fee98c4e469fa407c0835276fee5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-gecersiz-govde",
+      "asama": "tek",
+      "dosya": "olcum-mutant-gecersiz-govde-tek.txt",
+      "sha256": "bdce6a207bf15e2d9fe5bbe3524d82d37a43188e9fdfea8586a1c31cd9a6ccbd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut3/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T19:05:58+03:00",
+      "sure_sn": 2595.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "denetci-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "3f79ea7cfc1c44118610ff2edb5826d3"
+    }
+  ],
+  "imza": "2600e7cacebb3bd50820538a6f591af6245f16cc2d9a4268e1f8611aa44dacd1"
+}
