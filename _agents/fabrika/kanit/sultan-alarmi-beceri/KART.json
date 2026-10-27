@@ -1,0 +1,31 @@
+{
+  "is": "sultan-alarmi-beceri",
+  "cumle": "Sultan'ı bekleyen işleri tek biçimde kırmızı alarm olarak gösteren, telefona bildiren ve her kutuya senkron edilen global sultan-alarmi becerisini kur",
+  "istedi": "SERDAR",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-27T23:47:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "?",
+    "yetki": "?"
+  },
+  "siniflar": [
+    "dis_yuzey",
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-27T23:47:28+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "sayi_uyarilari": []
+}

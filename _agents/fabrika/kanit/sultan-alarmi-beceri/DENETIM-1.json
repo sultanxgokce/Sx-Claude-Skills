@@ -1,0 +1,65 @@
+{
+  "tur": 1,
+  "is": "sultan-alarmi-beceri",
+  "pr": "514",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T00:21:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-alarmi-beceri",
+  "dal": "sultan-alarmi-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35492,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 13197
+  },
+  "dalgic": "uyumsuz",
+  "bas": "fe98a9bf748be79f29bab76d13ed8baa01eedb9e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultan alarmının biçim, tarama, tekrar sınırı, yükseltme ve isteğe bağlı telefon davranışı uygulanmış; gerçek ölçüm 35 sınavın geçtiğini, altı mutasyonun da sınavca yakalandığını gösteriyor. Önce eşzamanlı gönderim yarışını ve eksik seçenek değerinde kilitlenme riskini çözmek gerekir; kutulara fiilî kurulum ve telefon teslimi ise ayrıca dış yüzeyde doğrulanmalıdır.",
+    "bulgular": [
+      {
+        "ne": "Eşzamanlı iki gönderim aynı durum dosyasını kilitsiz okuyup aynı sabit `durum.tsv.yeni` dosyasına yazar; tekrar sayacı kaybolabilir, taşıma çakışabilir ve aynı iş iki kez alarm üretebilir.",
+        "kanit": "`gonder` akışı `durum.tsv` dosyasını okuyup sayacı artırıyor, ardından kilit kullanmadan ortak `$DURUM.yeni` yoluna yazıp `mv` ediyor. Gerçek ölçümde eşzamanlı çağrı sınavı bulunmuyor; G3 yalnız ardışık tekrar ölçüyor.",
+        "konum": "sultan-alarmi/scripts/alarm.sh:56-61; olcum-alarm-sonra-sonra.txt G3-G3b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Değer isteyen bir seçenek son argüman olarak verilirse ayrıştırıcı ilerleyemeyebilir: `${2:-}` boş değer üretirken `shift 2` başarısız olur; `set -e` bulunmadığından aynı argümanla döngü sürebilir.",
+        "kanit": "`--is`, `--kim`, `--ne`, `--tekrar-dk` ve `--esik-gun` dalları değerin varlığını denetlemeden `shift 2` kullanıyor; dosya yalnız `set -uo pipefail` ile çalışıyor. Ölçüm B2 eksik alanı sınasa da eksik seçenek değerini sınamıyor.",
+        "konum": "sultan-alarmi/scripts/alarm.sh:8,21-24; sultan-alarmi/scripts/alarm.test.sh:35",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Becerinin bütün kutulara gerçekten kurulduğu ve senkron edildiği bu konteynerde doğrulanmamış; fark yalnız katalog, hedef tanımı ve kaynak dosyalarını gösteriyor.",
+        "kanit": "İş kartı “her kutuya senkron edilen global ... becerisini kur” diyor. Değişiklik `sync-targets.json` içinde `_global` hedefini ekliyor ve SKILL.md senkron komutunu tarif ediyor; manifestteki tek gerçek ölçüm yalnız `bash sultan-alarmi/scripts/alarm.test.sh`, kurulum/senkron ölçümü yok.",
+        "konum": "İŞ KARTI cumle; sync-targets.json:148; sultan-alarmi/SKILL.md:54-55; kanıt manifesti alarm-sonra",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sx global senkron yüzeyi ve hedef kutular"
+      },
+      {
+        "ne": "Gerçek ntfy hizmetine bildirim gönderimi ve telefonun bildirimi alması ölçülmemiş; sınav sahte curl ile yalnız istek kurulumunu doğruluyor.",
+        "kanit": "Sınav `SULTAN_ALARMI_CURL=\"$T/curl\"` ile sahte curl kullanıyor ve G5 yalnız kaydedilen argümanlarda öncelik ile `/alarm` yolunu sayıyor. SKILL.md de telefonun okunduğunu bilmediğini açıkça belirtiyor.",
+        "konum": "sultan-alarmi/scripts/alarm.test.sh:14-17,31,47; sultan-alarmi/SKILL.md:57",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı ntfy hizmeti ve Sultan'ın telefonu"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm `alarm-sonra` rc=0 ile 35/35 davranış sınavını geçiriyor, altı mutasyon kaydı da beklenen rc=1 ile sınavların seçili bozulmaları yakaladığını gösteriyor. Ancak önce/sonra ölçüm çifti yok; testler hermetik ve sahte verili olduğundan global kurulum, kutular arası senkron ve gerçek telefon teslimi kanıtlanmıyor."
+  }
+}
