@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "denetci-zil-bilgisiz",
+  "pr": "488",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T05:04:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-zil-bilgisiz",
+  "dal": "denetci-zil-bilgisiz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17528,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6381
+  },
+  "bas": "47c315b20499194dbef123caa3ebc148e14abfd1",
+  "duzeltme_farki": {
+    "onceki_bas": "1fe647b036e4a5d35f707b2c53b5ded7e9c82d3d",
+    "dosya": 6,
+    "bayt": 13186,
+    "tam_bayt": 17363
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki B1 kapanmış: tur ve yazan çözülemediğinde SERDAR’a gidecek bilgi taşımayan zil artık erken dönüşle engelleniyor, sebebi de stderr’e yazılıyor. İş adı eksikliği için mevcut koruma korunmuş, tur eksikliği için doğrudan sınav ve mutasyon sınavı eklenmiş; üretime engel bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; aynı etiketli önce/sonra ölçüm çifti kırmızıdan yeşile geçiyor ve bilgisiz_zil değeri 1’den 0’a iniyor. Ölçüm özeti hedef ve stderr ayrıntılarını tek başına göstermese de üretim farkındaki erken dönüş ile Z3f sınavı SERDAR’a bildirim gitmediğini ve sebebin stderr’e yazıldığını, M-Z3f ise koruma kaldırıldığında sınavın vakayı yakaladığını açıkça destekliyor."
+  }
+}

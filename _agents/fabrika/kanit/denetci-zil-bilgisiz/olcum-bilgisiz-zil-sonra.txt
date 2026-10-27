@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/zil-say.sh yazilim-fabrikasi/scripts/denetci.sh
+# rc=0 sure=0.0s zaman=2026-10-27T05:03:02+03:00
+--- stdout ---
+bilgisiz_zil=0
+--- stderr ---

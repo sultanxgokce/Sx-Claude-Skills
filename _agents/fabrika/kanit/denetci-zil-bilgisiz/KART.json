@@ -1,0 +1,31 @@
+{
+  "is": "denetci-zil-bilgisiz",
+  "cumle": "Denetçi bitiş zili, iş adı ya da tur çözülemediğinde bilgi taşımayan '? tur ?' zilini SERDAR'a göndermez; sebebi hata çıktısına yazar",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T03:57:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-27T03:57:17+03:00",
+      "olay": "canli-ayarla",
+      "reis": "HEZARFEN",
+      "canli": "h",
+      "gerekce": "Zil metni saf üretim: sınav sahte aile-notify ile üretilen metni ölçer; canlı ateşleme gerekmez"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "sahip HEZARFEN ayarladı (--canli h): Zil metni saf üretim: sınav sahte aile-notify ile üretilen metni ölçer; canlı ateşleme gerekmez",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
