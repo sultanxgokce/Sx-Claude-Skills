@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kapi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/dumen-mutant.sh /config/projects/_wt/Sx-Claude-Skills-dumen-surucu-beceri/dumen-surucu
+# rc=1 sure=2.7s zaman=2026-10-27T12:48:44+03:00
+--- stdout ---
+kirmizi_kapi=4
+--- stderr ---

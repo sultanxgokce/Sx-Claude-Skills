@@ -1,0 +1,65 @@
+{
+  "is": "dumen-surucu-beceri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T12:48:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi",
+      "asama": "once",
+      "dosya": "olcum-kapi-once.txt",
+      "sha256": "48cf88e82ca2c43a337db5def10680756f321d9e4d434184c223d3d765ed1df5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/dumen-say.sh",
+        "/yok/dumen-surucu"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T12:48:07+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dbe16bd8ae1e4dd4a5234446d36ac8c2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sonra.txt",
+      "sha256": "2cc1069a1cb5113da0d675daeac8591ba030b027a0fb45c9e20cf336b252bb6c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/dumen-say.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-dumen-surucu-beceri/dumen-surucu"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T12:48:20+03:00",
+      "sure_sn": 13.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1c3befbcb41a4755938c39e00e8675ab"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-failopen",
+      "asama": "tek",
+      "dosya": "olcum-mutant-failopen-tek.txt",
+      "sha256": "c4130b5d31dba3ec4f3e9657df9d6eee817238a42ebf1c8192b5ba75acd500e7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/dumen-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-dumen-surucu-beceri/dumen-surucu"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T12:48:44+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi",
+      "beklenen": "kirmizi",
+      "olcum_id": "66e3c683319a487081988e64d65ee372"
+    }
+  ],
+  "imza": "0eb50a7eba3929377dd7520d40c20513cd8f1f10dff4d1c71813c3f7a667df73"
+}
