@@ -11,7 +11,7 @@
 #   tarama-ekle.sh --baslik "<tek cümle, Sultan-dilinde>" --kaynak <dosya:satır|https://…> --kanit "<ölçüm>" [--uygula] [--kutu K] [--kim AJAN]
 #   rc: 0 tamam (kuru dahil) · 1 yazım hatası · 2 kullanım/ret (eksik kaynak-kanıt, uzun başlık, tavan dolu, kopya) · 3 ölçülemedi
 set -uo pipefail
-GOREV="${GUNLUK_PLAN_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
+GOREV="$(bash "$(dirname "${BASH_SOURCE[0]}")/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"   # yol çözümü tek yerde (gorev-yolu.sh)
 BULGU="${GUNLUK_PLAN_BULGU_SH:-/config/.claude/skills/bulgu/scripts/bulgu.sh}"
 TAVAN=3   # DEĞİŞMEZ: ortamdan/argümandan okunmaz (Sultan: günde ≤3)
 BUGUN="${GUNLUK_PLAN_TARIH:-$(date +%F)}"
