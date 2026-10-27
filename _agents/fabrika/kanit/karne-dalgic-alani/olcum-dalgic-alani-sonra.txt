@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/karne-dalgic-alani/dalgic-alani-olc.sh yazilim-fabrikasi/scripts
+# rc=0 sure=0.4s zaman=2026-10-27T08:10:04+03:00
+--- stdout ---
+dalgic-alani=2/2
+--- stderr ---

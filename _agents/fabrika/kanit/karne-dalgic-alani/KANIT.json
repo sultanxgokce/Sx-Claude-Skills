@@ -1,0 +1,86 @@
+{
+  "is": "karne-dalgic-alani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T08:10:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dalgic-alani",
+      "asama": "once",
+      "dosya": "olcum-dalgic-alani-once.txt",
+      "sha256": "bbc34801d8cf6a107ef7bf101f17b5da5ad574ff842af14ad3023af332e48f3e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/karne-dalgic-alani/dalgic-alani-olc.sh",
+        "/tmp/tmp.LcURpOMkZP"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T08:10:03+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9df00cd05a7142b389b23aaeb938383e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dalgic-alani",
+      "asama": "sonra",
+      "dosya": "olcum-dalgic-alani-sonra.txt",
+      "sha256": "9b5b9636a7ef33625e3f9412bb6203b16841af46d0c96ad96114e63768368bb4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/karne-dalgic-alani/dalgic-alani-olc.sh",
+        "yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T08:10:04+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f7bc541ebc4f42d3a06e3b71a942235b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-alan-sokuldu",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-alan-sokuldu-sonra.txt",
+      "sha256": "bab0605b2ea20d088145775ecc1fb09c71d2e3ed76ad8a25033ee080e1db5b2f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/karne-dalgic-alani/dalgic-alani-olc.sh",
+        "/tmp/tmp.SG3QUWUHho"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T08:10:19+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "dalgic-alani",
+      "beklenen": "kirmizi",
+      "olcum_id": "de42231c2ca84c1cb63cd8f873e231e0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-hep-uyumlu",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-hep-uyumlu-sonra.txt",
+      "sha256": "d5784f4fc53de7a5f43f0f78be5590d0a1f5b00403c7c2759f880d3d1711d4d4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/karne-dalgic-alani/dalgic-alani-olc.sh",
+        "/tmp/tmp.rYdG5cmm5B"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T08:10:23+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "dalgic-alani",
+      "beklenen": "kirmizi",
+      "olcum_id": "41224558d1cd4d1f98fe18abe698f70e"
+    }
+  ],
+  "imza": "73d42b16031b831bc20da9ef99ed24cdce0b02fc1784e9d278b06d2a2332d4ad"
+}

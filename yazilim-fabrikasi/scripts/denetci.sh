@@ -666,17 +666,20 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 #    (göz bağımsızlığı bozulmasın; rapor göze kendiliğinden GİTMEZ — yazan PR gövdesine koyarsa göz onu gövdeden okur, o yazanın kararı).
 #    UYUMSUZ/ÖLÇÜLEMEDİ büyük uyarı basar. Rapor her durumda ekrana yazılır (kontrol karakterleri süzülür, 4000 bayta kırpılır).
 #    Kapalı: DALGIC_KAPALI=1 (sınavlar), kartsız koşu. dalgic.sh yoksa (başka kutu) "atlandı" yazar. Ön-göz çıktısı $TMP altında kalır (EXIT'te silinir).
+# W42-E1 (7H1EBA): ön-göz sonucu DENETIM kaydına ve karneye "dalgic" alanı olarak yazılır (kapali|kartsiz|atlandi|uyumlu|uyumsuz|olculemedi);
+#    böylece ilk tur geçişi DALGIÇ'lı ve DALGIÇ'sız işler için ayrı ölçülür. Yalnız kayıttır: puana, tura, rc'ye dokunmaz.
+DALGIC_DURUM=kapali; [ "${DALGIC_KAPALI:-0}" = 1 ] || DALGIC_DURUM=kartsiz
 if [ "${DALGIC_KAPALI:-0}" != 1 ] && [ -n "$KART" ]; then
   DALGIC_BIN="${DALGIC_BIN:-}"
   if [ -z "$DALGIC_BIN" ]; then for _d in "$DEPO/_agents/dalgic/dalgic.sh" /config/projects/Nexus/_agents/dalgic/dalgic.sh; do if [ -r "$_d" ]; then DALGIC_BIN="$_d"; break; fi; done; fi
-  if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
+  if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then DALGIC_DURUM=atlandi; _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
   else
     DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$TMP/diff.patch" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
     DALGIC_OUT="$(tr -d '\000-\010\013-\037\177' < "$TMP/dalgic.ham" | head -c 4000)"
     case "$DALGIC_RC" in
-      0) _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;
-      1) _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor (bu rapor bağımsız göze KENDİLİĞİNDEN gitmez). Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:" ;;
-      *) _bilgi "· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=$DALGIC_RC) — UYUMLU sayılmaz; denetim yine sürer" ;;
+      0) DALGIC_DURUM=uyumlu; _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;
+      1) DALGIC_DURUM=uyumsuz; _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor (bu rapor bağımsız göze KENDİLİĞİNDEN gitmez). Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:" ;;
+      *) DALGIC_DURUM=olculemedi; _bilgi "· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=$DALGIC_RC) — UYUMLU sayılmaz; denetim yine sürer" ;;
     esac
     [ -z "$DALGIC_OUT" ] || { printf '%s\n' "$DALGIC_OUT" | sed 's/^/   | /'; _bilgi ""; }
   fi
@@ -909,9 +912,9 @@ PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
 KARE_KAYIT="$(for _k in "${KARELER[@]}"; do printf '%s\t%s\n' "$(basename "$_k")" "$(sha256sum "$_k" | cut -d' ' -f1)"; done)"
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" "$DEPO" "$DENETCI_DAL" "$DENETCI_BIRINCIL" "$BAS" "$DUZ_ONCEKI_BAS" "$DUZ_DOSYA" "$DUZ_BAYT" "$DUZ_TAM_BAYT" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" "$DEPO" "$DENETCI_DAL" "$DENETCI_BIRINCIL" "$BAS" "$DUZ_ONCEKI_BAS" "$DUZ_DOSYA" "$DUZ_BAYT" "$DUZ_TAM_BAYT" "$DALGIC_DURUM" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi,depo,dal,birincil,bas,duz_ob,duz_dosya,duz_bayt,duz_tam=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi,depo,dal,birincil,bas,duz_ob,duz_dosya,duz_bayt,duz_tam,dalgic=sys.argv[1:]
 kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
@@ -923,6 +926,7 @@ json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":d
            # Kanıt dökümleri farka ikinci kez girip kodu istemden dışarı itiyordu (PR #329 turu yandı).
            # Ayıklama kayıtta durur: "fark eksikti" ile "kanıt ayrı gitti" sonradan ayırt edilsin.
            "kanit_ayiklandi":{"dosya":int(ayik_dosya),"bayt":int(ayik_bayt)},
+           "dalgic":dalgic,   # ön-göz (DALGIÇ) durumu: karne.sh bunu satıra kopyalar
            "bas":(bas or None),   # incelenen baş: sonraki tur yalnız bu baştan bu yana değişeni görür (SYV3F)
            "duzeltme_farki":({"onceki_bas":duz_ob,"dosya":int(duz_dosya),"bayt":int(duz_bayt),"tam_bayt":int(duz_tam)} if duz_ob else None),
            "kareler":({"adet":len(kareler),"gorsel_verildi":kare_verilemedi!="1","liste":kareler} if kareler else None),   # --kare: göz kareyi GÖRDÜ mü (yedek gözde hayır)

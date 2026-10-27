@@ -44,7 +44,7 @@ if os.path.exists(defter):   # aynı turun satırı ikinci kez yazılmaz (denet�
 s=d["sonuc"]; gecti=(s["kod_puani"]==5 and s["dogru_sey"]=="E")
 satir={"olay":"denetim","is":is_,"pr":d.get("pr",""),"zaman":d["zaman"],"yazan":d["yazan"],"denetci":d["denetci"],
        "tur":d["tur"],"puan":s["kod_puani"],"dogru":s["dogru_sey"],"bulgu":len(s["bulgular"]),"gecti":gecti,
-       "sure_dk":round((t1-t0).total_seconds()/60,1),"kirildi":None}
+       "sure_dk":round((t1-t0).total_seconds()/60,1),"kirildi":None,"dalgic":d.get("dalgic")}
 open(defter,"a",encoding="utf-8").write(json.dumps(satir,ensure_ascii=False)+"\n")
 print(f"✓ karne: {is_} · tur {d['tur']} · {s['kod_puani']}/5 {s['dogru_sey']} · {'GEÇTİ' if gecti else 'geçmedi'} · {satir['sure_dk']} dk")
 PY
