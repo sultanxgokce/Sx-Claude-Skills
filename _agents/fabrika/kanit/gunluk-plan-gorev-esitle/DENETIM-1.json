@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-gorev-esitle",
+  "pr": "513",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T00:06:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kabuk-kalan-kovasi-tek.txt (kirmizi → gecersiz) — Kova 156 sınavdan 3 kırmızı: hafta-kapanis, seans/kendi-kopyam, yazilim-fabrikasi/agir-sira-sarma. Üçü de ANA DALDA (818167ac) aynı şekilde kırmızı (karşı ölçüm); bu dal yalnız gunluk-plan dosyalarına dokunur ve gunluk-plan'ın 8 sınavı yeşil. Ölçüm yanlış değil, bu dalın kapısı olarak kapsamı yanlış: önceden var olan kırmızılar ayrı bulgu. · BERİD · karşı kanıt: olcum-ana-dalda-onceden-kirmizi-tek.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-gorev-esitle",
+  "dal": "gunluk-plan-gorev-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40408,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 543922
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a2815f85c26dd43598348a1809703fd792cea16d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Beceri kopyasındaki görev komutu cloudtop kanoniğiyle bayt düzeyinde eşitlenmiş; sipariş bayrakları ile sıra, çatışma ve hakem komutları kutuya taşınmış. Önce/sonra eşitlik ölçümü ve hedef sınavın yeşile dönmesi talebi doğrudan doğruladığı, geçersiz kova kaydı da karşı ölçümle doğru ayrıştırıldığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve kanıt yeterli: eşitlik ölçümü önce farklı hash ve eksik komutları gösterirken sonra kanonik ile beceri kopyasını aynı 8a15b783d5686baa hashinde gösteriyor; --isteyen-oda 4, sira/catisma/hakem birer kez mevcut. gorev-yolu sınavı Y7 dahil 9/1'den 10/0'a dönmüş ve mutasyon kontrolleri bozuk kopyayı yakalıyor. Kırmızı kalan-kovası kaydı açıkça geçersiz ilan edilmiş; ana dal karşı ölçümü üç hatanın önceden var olduğunu doğruluyor. Sarı kayıt yok; görsel gerektirmeyen komut eşitleme işi için ölçüm çifti uygun."
+  }
+}
