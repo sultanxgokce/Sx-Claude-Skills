@@ -1811,7 +1811,7 @@
       "id": "dumen-surucu",
       "type": "workflow",
       "name": "Dümen'i kapıdan sür — eylem kapısı",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Ajanın Dümen Chrome'unu Playwright connectOverCDP ile sürmesinin tek yolu: her eylemden önce Dümen kimde okunur (Sultan'da ya da merkez cevapsızsa eylem yapılmaz), parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir, izole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir.",
       "tags": [
         "dumen",
