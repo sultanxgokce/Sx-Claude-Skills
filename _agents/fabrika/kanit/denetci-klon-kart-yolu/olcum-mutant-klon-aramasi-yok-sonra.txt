@@ -1,0 +1,15 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-klon-kart-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gece/mut-klon.sh
+# rc=1 sure=2.8s zaman=2026-10-27T10:51:32+03:00
+--- stdout ---
+MUTASYON: klon-aramasi-yok → denetci.sh (klon→birincil arama bloğu kapatıldı)
+  ✗ K1a klon tespiti ve kaynak SÖYLENDİ
+  ✗ K1b kart OKUNDU: kanıt dizinine KART.json kopyası birincil kartla bayt-eş, rc 0 · rc=2
+  ✗ K2a uyarı + KART_DEPO önerisi yazıldı
+  ✗ K2b kartsız denetim sürdü (5/E → rc 0) · rc=2
+  ✗ K3b uyarı var, kart OKUNMADI (KART.json yok) · rc=2
+  ✗ K4 verilen KART_DEPO ile kart okundu (KART.json var), arama/uyarı yok · rc=2
+  ✗ K5 uzak yok → klon uyarısı yok, rc 0 · rc=2
+SONUÇ: 5 geçti · 7 kaldı
+mutant sınav rc=1
+--- stderr ---

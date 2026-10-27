@@ -226,6 +226,7 @@ DZ="$DEPO/_agents/fabrika/kanit/$IS"
 #    Kart artık YALNIZ birincil depodan okunur; iş alanındaki kopya BAYAT sayılır ve HİÇ okunmaz (göz tur 1: "yoksa kopyayı oku"
 #    geri-dönüşü yanlış davranışı sürdürüyordu) — birincilde kart yokken alanda kopya varsa denetim rc=3 ile durur. Kanıt için kartın
 #    o anki hâli $DZ/KART.json'a kopyalanır — PR'a kart bununla gider, kartlar/ dizinindeki kopyayla değil; kopya yazılamazsa rc=3.
+_KART_DEPO_VERILDI="${KART_DEPO:-}"   # çağıran açıkça verdiyse klon araması yapılmaz (D4R78T)
 KART_DEPO="${KART_DEPO:-$(c="$(git -C "$DEPO" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && [ -n "$c" ] && dirname "$c")}"
 [ -n "$KART_DEPO" ] || KART_DEPO="$DEPO"
 # 🔴 BİRİNCİL KOPYADA YAZMA REDDİ (0.22.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): denetçi kaydı çağrıldığı ağacın
@@ -236,6 +237,26 @@ KART_DEPO="${KART_DEPO:-$(c="$(git -C "$DEPO" rev-parse --path-format=absolute -
 #    (ör. bitti sonrası kapanmış alan) ve alandan koşum eski davranışıyla aynı. Kayıt: DENETIM-N.json'a depo/dal/birincil alanı.
 DENETCI_BIRINCIL=0; _gd="$(git -C "$DEPO" rev-parse --path-format=absolute --git-dir 2>/dev/null)"; _gc="$(git -C "$DEPO" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
 [ -n "$_gd" ] && [ "$_gd" = "$_gc" ] && DENETCI_BIRINCIL=1
+# 🔴 KLON ≠ İŞ ALANI (D4R78T · SERDAR 26 Eki ölçümü: munavebe-dogum #957 `gh repo clone` ile açılan kopyadan koşuldu): klonda git-dir ==
+#    git-common-dir → KART_DEPO klonun kendisi oldu, kart orada yok, kart_yolu SESSİZCE boş döndü → sultan-dedi 'devam' kararı görünmedi,
+#    tur 4 rc 1 "kapı açılmadı" (KART_DEPO=/config/projects/cloudtop verilince düzeldi). Artık: birincil görünen kopyada kart yoksa ve
+#    çağıran KART_DEPO vermediyse, uzak deponun adıyla ${BIRINCIL_KOK:-/config/projects}/<ad> aranır — AYNI origin URL'si şart (adı aynı
+#    ilgisiz depo kart kaynağı olamaz) — bulunursa kart oradan okunur ve SÖYLENİR; bulunamazsa kartsız denetim sürer ama uyarı AÇIK yazılır
+#    (kartsız denetim meşru hâl: sınav · eski iş; sessiz boşluk değil). Uzak yoksa (yerel sınav deposu) hiçbir şey değişmez.
+KART_DEPO_KAYNAK="türetildi"; [ -n "$_KART_DEPO_VERILDI" ] && KART_DEPO_KAYNAK="verildi"
+if [ -z "$_KART_DEPO_VERILDI" ] && [ "$DENETCI_BIRINCIL" -eq 1 ] && [ ! -f "$KART_DEPO/_agents/fabrika/kartlar/$IS.json" ]; then
+  _uzak="$(git -C "$DEPO" remote get-url origin 2>/dev/null || true)"
+  if [ -n "$_uzak" ]; then
+    _ad="${_uzak%/}"; _ad="${_ad%.git}"; _ad="${_ad##*/}"; _ad="${_ad##*:}"; _aday="${BIRINCIL_KOK:-/config/projects}/$_ad"
+    if [ -n "$_ad" ] && [ -d "$_aday" ] && [ "$(cd "$_aday" 2>/dev/null && pwd -P)" != "$(cd "$DEPO" && pwd -P)" ] \
+       && [ "$(git -C "$_aday" remote get-url origin 2>/dev/null || true)" = "$_uzak" ] && [ -f "$_aday/_agents/fabrika/kartlar/$IS.json" ]; then
+      KART_DEPO="$_aday"; KART_DEPO_KAYNAK="klon→birincil"
+      _bilgi "ⓘ klon depodasın ($DEPO, iş alanı değil): kart birincil kopyadan okunuyor — $KART_DEPO (aynı uzak depo: $_ad)"
+    else
+      _bilgi "⚠ kart yok ($IS) ve bu kopya bir KLON olabilir (git-dir = git-common-dir, kart yok, uzak: $_ad): kart birincil kopyada durursa karar (sultan-dedi/reis-dedi) GÖRÜNMEZ. Birincil aday $_aday uymadı. Çözüm: KART_DEPO=/config/projects/<depo> bash $0 $IS …"
+    fi
+  fi
+fi
 if [ "$DENETCI_BIRINCIL" -eq 1 ]; then
   _alan="${IS_ALANI_KOK:-/config/projects/_wt}/$(basename "$DEPO")-$IS"
   if [ -d "$_alan" ] && git -C "$_alan" rev-parse --is-inside-work-tree >/dev/null 2>&1; then

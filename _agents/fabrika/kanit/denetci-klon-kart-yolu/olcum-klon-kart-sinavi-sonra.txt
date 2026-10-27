@@ -1,0 +1,24 @@
+$ bash yazilim-fabrikasi/scripts/denetci-klon-kart.test.sh
+# rc=0 sure=7.6s zaman=2026-10-27T10:51:29+03:00
+--- stdout ---
+  ✓ K0 kart birincilde (projects/depo-x) yazıldı
+════ K1 · klondan koşum: kart birincilden okunur ve söylenir, sultan-devam kapısı AÇILIR ════
+  ✓ K1a klon tespiti ve kaynak SÖYLENDİ
+  ✓ K1b kart OKUNDU: kanıt dizinine KART.json kopyası birincil kartla bayt-eş, rc 0 · rc=0
+  ✓ K1c 'kapı açılmadı' basılmadı
+════ K2 · birincil aday YOK → uyarı AÇIK, denetim kartsız sürer ════
+  ✓ K2a uyarı + KART_DEPO önerisi yazıldı
+  ✓ K2b kartsız denetim sürdü (5/E → rc 0) · rc=0
+════ K3 · adı aynı, origin'i FARKLI depo kart kaynağı SAYILMAZ ════
+  ✓ K3a farklı origin'li aynı ad kart kaynağı yapılmadı
+  ✓ K3b uyarı var, kart OKUNMADI (KART.json yok) · rc=0
+════ K4 · KART_DEPO verildiyse arama yok, verilen kullanılır ════
+  ✓ K4 verilen KART_DEPO ile kart okundu (KART.json var), arama/uyarı yok · rc=0
+════ K5 · uzak deposu olmayan yerel sınav deposu: davranış DEĞİŞMEZ (uyarı yok) ════
+  ✓ K5 uzak yok → klon uyarısı yok, rc 0 · rc=0
+════ K6 · mutant: birincil arama kaldırılınca K1 düşer ════
+  ✓ K6a mutant çökmedi (sahte yakalama değil)
+  ✓ K6b MUTASYON: birincil kullanılmazsa kart OKUNMAZ (KART.json yok) → K1b bu mutantta düşerdi · rc=2
+
+SONUÇ: 12 geçti · 0 kaldı
+--- stderr ---

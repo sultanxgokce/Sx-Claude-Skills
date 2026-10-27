@@ -1,0 +1,63 @@
+{
+  "is": "denetci-klon-kart-yolu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T10:52:05+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "klon-kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-klon-kart-sinavi-once.txt",
+      "sha256": "498525e5eda15bb909c9ae686fce057d90fa644f8e6496827d65a3394b63de1f",
+      "komut": [
+        "bash",
+        "-c",
+        "MUTANT_D=/config/.claude/skills/yazilim-fabrikasi/scripts/denetci.sh bash yazilim-fabrikasi/scripts/denetci-klon-kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T10:52:05+03:00",
+      "sure_sn": 7.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "90e0508abd3241f99562ebb9770ee71b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "klon-kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-klon-kart-sinavi-sonra.txt",
+      "sha256": "5506168d5f36134390a1c7c121182158a21ace22b0b45d5e004126010544c51c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-klon-kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T10:51:29+03:00",
+      "sure_sn": 7.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2bbdd955b066451bb3026b73c74fe83e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-klon-aramasi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-klon-aramasi-yok-sonra.txt",
+      "sha256": "769ae2986b1cf3e0b4faea928c711553bda1eb837a2b659c836840ecabf7c01c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gece/mut-klon.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T10:51:32+03:00",
+      "sure_sn": 2.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "klon-kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "dc56385813a54256af21fc6155d05191"
+    }
+  ],
+  "imza": "4eada60830651ac2b4c11c9c856d5023c931ac2518c116badedb6607e840a7ee"
+}
