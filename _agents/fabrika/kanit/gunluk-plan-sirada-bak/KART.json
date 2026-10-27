@@ -1,0 +1,23 @@
+{
+  "is": "gunluk-plan-sirada-bak",
+  "cumle": "gunluk-plan becerisi plan öncesi kutunun defterdeki Sırada listesine baksın: eşik kadar iş varsa en üstteki işi çalışılıyor yapıp başlasın ve Sultan'a bugüne alma önerisi sunsun, azsa Sultan'a iki şıklı iş çıkarma seansı sorusu sorsun; ayrıca --kutu verilmezse kutuyu kimlikten türetsin",
+  "istedi": "SERDAR",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-27T20:10:53+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
