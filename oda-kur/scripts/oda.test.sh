@@ -188,6 +188,11 @@ rmdir "$C/.claude/cekirdek-kayit.jsonl"; mv "$C/.claude/cekirdek-kayit.jsonl.yed
 ( ulimit -f 1; echo '{"a":888}' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "kayıt satırı yazılamıyor denemesi" >/dev/null ); R=$?
 [ "$R" -ne 0 ] && [ "$(KS)" = "$KS1" ] && [ "$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")" -eq "$SK" ] && ok "C22 kayıt satırı yazılamazsa dosya ESKİ içeriğine döner (geri alma), kayıt değişmez" || no "C22 kayıt yazılamayınca dosya geri alınmadı" "rc=$R"
 [ -z "$(find "$C" -name '.cekirdek-*' -not -path '*/.git/*' 2>/dev/null)" ] && ok "C23 geçici dosya artığı yok (ret ve geri alma sonrası)" || no "C23 artık geçici dosya kaldı"
+python3 -I -c "__import__('os').makedirs('$C/veri',exist_ok=True) or open('$C/veri/BUYUK.json','w').write('x'*3000)"
+KB1="$(sha256sum "$C/veri/BUYUK.json" | cut -d' ' -f1)"
+( ulimit -f 1; echo '{}' | cy "$T/jeton-serdar" "$C" "$C" veri/BUYUK.json --neden "disk dolu benzetimi: eski içerik sınırı aşıyor" >/dev/null ); R=$?
+[ "$R" -ne 0 ] && [ "$(sha256sum "$C/veri/BUYUK.json" | cut -d' ' -f1)" = "$KB1" ] && ok "C25 yazma sınırı eski içerikten küçükken de geri alma çalışır (eski dosya yeniden YAZILMAZ, sert bağ + yeniden adlandırma)" || no "C25 eski içerik yeniden yazılamayınca geri alma düştü" "rc=$R"
+[ -z "$(find "$C" -name '.cekirdek-*' -not -path '*/.git/*' 2>/dev/null)" ] && ok "C26 geri alma sonrası geçici/geri-alma artığı yok" || no "C26 artık dosya kaldı"
 printf '{"s":0}\n' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "eşzamanlı sınaması başlangıcı" >/dev/null
 SK2="$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")"; PIDS=""
 for n in 1 2 3 4 5 6 7 8; do ( printf '{"s":%s}\n' "$n" | ODA_CEKIRDEK_BEKLE_MS=60 cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "eşzamanlı yazım $n" >/dev/null ) & PIDS="$PIDS $!"; done
@@ -255,13 +260,14 @@ mut "cekirdek-yaz: siparişsiz işareti yok" "'siparis': siparis or None, 'sipar
 mut "cekirdek-yaz: neden zorunlu değil" "    if not neden or len(neden.strip()) < 10:" "    if False:"
 mut "kanca ret mesajı komutu göstermiyor" "yazma yalnız çekirdeğin komutundan: bash {CEKIRDEK_KOMUT}" "yazma yalnız çekirdeğin komutundan: ({CEKIRDEK_KOMUT[:0]}"
 mut "cekirdek-yaz: kilit yok (eşzamanlı zincir)" "        fcntl.flock(kilit, fcntl.LOCK_EX)" "        pass"
-mut "cekirdek-yaz: geri alma yok (kayıtsız değişiklik kalır)" "                if eski is None:
-                    os.close(geri[0]); os.unlink(geri[1])" "                if True:
-                    os.close(geri[0]); os.unlink(geri[1]); raise"
+mut "cekirdek-yaz: geri alma yok (kayıtsız değişiklik kalır)" "                    os.replace(geri, hedef)" "                    pass"
 mut "cekirdek-yaz: kayıt dosyası gerçekten açılmıyor (kayıtsız değişiklik)" "        kf = open(kyol, 'a', encoding=UTD)
         try:
             onceki = sha_dosya(hedef)" "        kf = open(os.devnull, 'a', encoding=UTD)
         try:
             onceki = sha_dosya(hedef)"
+mut "cekirdek-yaz: geri alma malzemesi hazırlanmaz (kayıt hatasında dosya yeni içerikte kalır)" "                        os.link(hedef, geri)
+                    except OSError:" "                        pass
+                    except OSError:"
 find "$M" -mindepth 1 -delete; rmdir "$M"
 [ "$MK" -eq 0 ] && echo "MUTANT: hepsi yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

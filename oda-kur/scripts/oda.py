@@ -474,15 +474,26 @@ def cekirdek_yaz(depo, yol, neden, siparis, dosya):
                     eski = f.read()
             eski_kip = os.stat(hedef).st_mode & 0o7777 if onceki is not None else None
             fd, gecici = tempfile.mkstemp(dir=os.path.dirname(hedef), prefix='.cekirdek-yaz-')
+            geri = None
             try:
                 with os.fdopen(fd, 'wb') as f:
                     f.write(icerik)
                 if eski_kip is not None:
                     os.chmod(gecici, eski_kip)
+                    # Geri alma malzemesi DEĞİŞİKLİKTEN ÖNCE hazır olur (göz tur 2): eski dosya sert bağla saklanır — veri yazmaz,
+                    # disk/kota dolu olsa da geri dönüş yeniden adlandırmadır. Sert bağ yoksa kopya yine değişiklikten ÖNCE yazılır (hata → dosya değişmeden ret).
+                    geri = os.path.join(os.path.dirname(hedef), '.cekirdek-geri-%d' % os.getpid())
+                    try:
+                        os.link(hedef, geri)
+                    except OSError:
+                        with open(geri, 'wb') as f:
+                            f.write(eski)
+                        os.chmod(geri, eski_kip)
                 os.replace(gecici, hedef)
             except BaseException:
-                if os.path.exists(gecici):
-                    os.unlink(gecici)
+                for k in (gecici, geri):
+                    if k and os.path.exists(k):
+                        os.unlink(k)
                 raise
             sonraki = sha_dosya(hedef)
             kayit = {
@@ -496,17 +507,14 @@ def cekirdek_yaz(depo, yol, neden, siparis, dosya):
                 kf.flush()
                 os.fsync(kf.fileno())
             except BaseException:
-                geri = tempfile.mkstemp(dir=os.path.dirname(hedef), prefix='.cekirdek-geri-')
                 if eski is None:
-                    os.close(geri[0]); os.unlink(geri[1])
                     if os.path.exists(hedef):
                         os.unlink(hedef)
                 else:
-                    with os.fdopen(geri[0], 'wb') as f:
-                        f.write(eski)
-                    os.chmod(geri[1], eski_kip)
-                    os.replace(geri[1], hedef)
+                    os.replace(geri, hedef)
                 raise
+            if geri and os.path.exists(geri):
+                os.unlink(geri)
         finally:
             kf.close()
     print(f'✓ çekirdek yazıldı: {rel} · kim {ajan} · {(onceki or "yeni")[:12]} → {sonraki[:12]}' + ('' if siparis else ' · SİPARİŞSİZ (çekirdek reisinin nabzında ayrı satır)'))
