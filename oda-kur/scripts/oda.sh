@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# oda.sh — kutu–oda modeli aracı (ince sarmalayıcı; mantık oda.py'de). Kullanım: oda.sh yeni|uret|dogrula|kanca …
+exec python3 -I "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/oda.py" "oda.sh" "$@"

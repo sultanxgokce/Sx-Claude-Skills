@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/oda-say.sh /yok/oda-kur
+# rc=0 sure=0.0s zaman=2026-10-27T14:46:25+03:00
+--- stdout ---
+kapi_gecen=0
+mutant_yakalanan=0
+--- stderr ---

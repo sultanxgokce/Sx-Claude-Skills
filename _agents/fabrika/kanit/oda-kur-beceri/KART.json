@@ -1,0 +1,46 @@
+{
+  "is": "oda-kur-beceri",
+  "cumle": "Oda modeli 4 inşası: Sx becerisi oda-kur — oda iskeleti, ortak ayardan oda settings üretimi, doğrulama, çekirdek/oda dışı yazımı durduran kanca",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T14:41:19+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-27T14:41:19+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M5YHE18D38W4AHJM65VPXA9W",
+  "tahmin_dk": 240,
+  "sayi_uyarilari": [
+    "4 inşası"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-27T14:41:23+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-27T14:54:28+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
