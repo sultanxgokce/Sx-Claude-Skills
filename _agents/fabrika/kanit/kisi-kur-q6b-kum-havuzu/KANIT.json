@@ -1,0 +1,42 @@
+{
+  "is": "kisi-kur-q6b-kum-havuzu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T09:48:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "q6b-bos-gunluk",
+      "asama": "once",
+      "dosya": "olcum-q6b-bos-gunluk-once.txt",
+      "sha256": "5f76e556622ae3bf1a0f4bf19267949ac2f1edc61bd5bffb6439090ef0dfa887",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/q6b-say.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T09:48:46+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d5aaa031868e48b1ab8139f5d40f6670"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "q6b-bos-gunluk",
+      "asama": "sonra",
+      "dosya": "olcum-q6b-bos-gunluk-sonra.txt",
+      "sha256": "15e342cdcdab0b45033c233a963220e9ae6a7912c3954fc8afa144818dd5aba9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/q6b-say.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:48:47+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bd4bd89ff8374aa8b68810ed93f6025f"
+    }
+  ],
+  "imza": "8a088206b213918b759473848e2a1c642f6bf259e2fb67148c1f53f7c2553ab7"
+}
