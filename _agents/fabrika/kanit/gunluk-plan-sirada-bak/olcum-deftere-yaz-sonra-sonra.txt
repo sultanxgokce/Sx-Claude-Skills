@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/deftere-yaz.test.sh
-# rc=0 sure=5.7s zaman=2026-10-27T20:33:58+03:00
+# rc=0 sure=5.8s zaman=2026-10-27T20:56:03+03:00
 --- stdout ---
 ── KURU: neyi yazacağını basar, deftere yazmaz
   ✓ D1 kuru rc=0

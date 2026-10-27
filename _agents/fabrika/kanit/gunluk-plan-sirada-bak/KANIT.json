@@ -1,41 +1,41 @@
 {
   "is": "gunluk-plan-sirada-bak",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T20:40:14+03:00",
+  "guncelleme": "2026-10-27T20:56:50+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sirada-bak-sonra",
       "asama": "sonra",
       "dosya": "olcum-sirada-bak-sonra-sonra.txt",
-      "sha256": "18c553b3218b205a431c2033c5b54f8cb5a29d05a0601fd1d2e8b05a32f45934",
+      "sha256": "d8859c71ca3aef5dc49bbf7c31a6df5e5c3cf66441abbbb627ebec2ba4473082",
       "komut": [
         "bash",
         "gunluk-plan/scripts/sirada-bak.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:33:52+03:00",
-      "sure_sn": 724.6,
+      "zaman": "2026-10-27T20:55:57+03:00",
+      "sure_sn": 655.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "99f2e33183434558967bc94143139a9c"
+      "olcum_id": "c9b17926edd54f87bf494cf00346dd7d"
     },
     {
       "tur": "olcum",
       "etiket": "deftere-yaz-sonra",
       "asama": "sonra",
       "dosya": "olcum-deftere-yaz-sonra-sonra.txt",
-      "sha256": "97c920fe2d8fc2eb8a0962b9b92df3a37458a47f800d9553a76af1748f87e2e5",
+      "sha256": "cbc755f5f7f6f8115413ebc65a8a6930042b76eaa5f43ef4c4afa6df74b2bab7",
       "komut": [
         "bash",
         "gunluk-plan/scripts/deftere-yaz.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:33:58+03:00",
-      "sure_sn": 5.7,
+      "zaman": "2026-10-27T20:56:03+03:00",
+      "sure_sn": 5.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "a26055b787e444da97093bee4b969ee5"
+      "olcum_id": "90daabf0a60f4eb78bed3fd2d7d8fbe8"
     },
     {
       "tur": "olcum",
@@ -59,7 +59,7 @@
       "etiket": "mutant-M1-sonra",
       "asama": "sonra",
       "dosya": "olcum-mutant-M1-sonra-sonra.txt",
-      "sha256": "b5c74fb198a2383273c584bb33aaf7bb9a68ae74e6742cddc55dba6308ea4ef0",
+      "sha256": "6db5d8c030083b784ef766f95f810bf3ece06a2de0bcd81ecf98f8c1fe5cabe6",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
@@ -67,20 +67,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:39:01+03:00",
-      "sure_sn": 1.6,
+      "zaman": "2026-10-27T20:56:39+03:00",
+      "sure_sn": 36.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sirada-bak-sonra",
       "beklenen": "kirmizi",
-      "olcum_id": "8fd6ff0b94f04350a0b50bd6641891e6"
+      "olcum_id": "81e8d7e186944c60ad1677bc77b3ba5c"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-M2-sonra",
       "asama": "sonra",
       "dosya": "olcum-mutant-M2-sonra-sonra.txt",
-      "sha256": "bc7a3e7456fb3755134b89ad3283b0466a1910c00898d5297ed1a577f26077a0",
+      "sha256": "d9895d38db222954125c2885b255ba0358500b77d57cac8792f08650f88fd5c7",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
@@ -88,20 +88,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:39:03+03:00",
-      "sure_sn": 1.7,
+      "zaman": "2026-10-27T20:56:40+03:00",
+      "sure_sn": 1.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sirada-bak-sonra",
       "beklenen": "kirmizi",
-      "olcum_id": "a79d35495c3e4d45afd59a08ea52b594"
+      "olcum_id": "83b94b48a58e4a95a494e76535d6a362"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-M3-sonra",
       "asama": "sonra",
       "dosya": "olcum-mutant-M3-sonra-sonra.txt",
-      "sha256": "5a646b54886a6cdeb1b19877bb3151fde951cdc772c5fbb8810f4b7265a8731f",
+      "sha256": "f3089c23788a4c37a06d513c286987e042ccd320ea424d2290be8678e707d6ff",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
@@ -109,20 +109,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:39:04+03:00",
-      "sure_sn": 1.2,
+      "zaman": "2026-10-27T20:56:41+03:00",
+      "sure_sn": 0.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sirada-bak-sonra",
       "beklenen": "kirmizi",
-      "olcum_id": "11ef21011719489b8066041ef7e90d19"
+      "olcum_id": "2a9fe336af894f63a36c9def8b9d9c15"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-M4-sonra",
       "asama": "sonra",
       "dosya": "olcum-mutant-M4-sonra-sonra.txt",
-      "sha256": "904742e6afcc2134a99ab860990579ad1edb837a60b8454f5a903918ab11b411",
+      "sha256": "37c5fee86bd7570ce6f5505cd9b1020851d520fbb62fa23034447aea8445c9d1",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
@@ -130,20 +130,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:39:42+03:00",
-      "sure_sn": 37.9,
+      "zaman": "2026-10-27T20:56:45+03:00",
+      "sure_sn": 4.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "deftere-yaz-sonra",
       "beklenen": "kirmizi",
-      "olcum_id": "1c87401d56b948fe9914f3462b9da9cd"
+      "olcum_id": "0259b116342142c79308e553b828f13d"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-M5-sonra",
       "asama": "sonra",
       "dosya": "olcum-mutant-M5-sonra-sonra.txt",
-      "sha256": "610f13203bbbbbbccbd65268f4c20ae9612539b2eba10e9345b09e9c27973c13",
+      "sha256": "a8ead077da4d388aa400f8f9811cbd0932c3b8d303945157c0d843bbbc9d3090",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
@@ -151,14 +151,14 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-27T20:40:14+03:00",
-      "sure_sn": 31.4,
+      "zaman": "2026-10-27T20:56:50+03:00",
+      "sure_sn": 4.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "deftere-yaz-sonra",
       "beklenen": "kirmizi",
-      "olcum_id": "f4b8b6e00c1e49fcb671f2cd8daf4128"
+      "olcum_id": "e8f4bd01014b4ef989057f3de92f6b3d"
     }
   ],
-  "imza": "e0f9a6d0be69eee59a5a36c704cc35b5934d8090967ffeb7d2ceb9f012709e9b"
+  "imza": "0d1268125c9aee3510559648a7da653792804df669387a3c267db65e24c3015f"
 }

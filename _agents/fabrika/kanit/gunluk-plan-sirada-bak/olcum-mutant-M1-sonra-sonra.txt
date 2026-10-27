@@ -1,11 +1,12 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sonra-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh M1
-# rc=1 sure=1.6s zaman=2026-10-27T20:39:01+03:00
+# rc=1 sure=36.2s zaman=2026-10-27T20:56:39+03:00
 --- stdout ---
 MUTANT M1 rc=1
   ✗ S2 eşik 3 ve 3 iş → KARAR=BAS — 'KARAR=BAS' yok: KUTU=menzil
   ✗ S3 acil iş listede ilk sırada — beklenen=ISI=gorev_M2 gerçek=
+  ✗ S4 VARSAYILAN koşuda en üstteki iş ustlen edilir (talep: başlasın) — beklenen=ustlen gorev_M2 --kim MENZILCI --tahmin 30 gerçek=
   ✗ S5 öneri bugüne almanın SULTAN'ın olduğunu söyler — 'tıkı Sultan'ın' yok: KUTU=menzil
-  ✗ S6 --basla: EN ÜSTTEKİ iş ustlen edilir (kim ve tahmin ile) — beklenen=ustlen gorev_M2 --kim MENZILCI --tahmin 30 gerçek=
 YAKALANDI
 --- stderr ---
+⏳ agir-sira: kanit-gunluk-plan-sirada-bak-mutant-M1-sonra 35 sn bekledi (yuva 1, load1 16.84)

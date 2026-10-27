@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # sirada-bak.sh — /gunluk-plan'ın İLK defter adımı (1.11.0 · görev …VNB2E9, Sultan 27 Eki): plan yazmadan ÖNCE kutunun defterdeki Sırada listesine bak.
-#   sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--basla]
-#   KARAR=BAS  → Sırada ≥ eşik: en üstteki iş(ler) listelenir; --basla verilirse EN ÜSTTEKİ iş `gorev.sh ustlen` ile çalışılıyor yapılır
+#   sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--bak]
+#   KARAR=BAS  → Sırada ≥ eşik: en üstteki iş(ler) listelenir ve EN ÜSTTEKİ iş `gorev.sh ustlen` ile çalışılıyor yapılır (varsayılan; --bak = yalnız bak, başlama)
 #   KARAR=SOR  → Sırada < eşik: Sultan'a TEK soru, iki şık (1 Sultan'la sohbet · 2 reis kendi başına: ADIM 0-d tarama-ekle)
 #   rc: 0 karar verildi · 2 kullanım · 3 ölçülemedi (defter okunamadı / kutu çıkmadı) — "Sırada 0" DENMEZ, ölçülemeyen SORU değil ÖLÇÜLEMEDİ'dir
 # Sırada = ekranın tanımı: aynı kutuda gorev_durumu acik ya da sira-bende (havuz/tasarlaniyor/bekliyor/calisiliyor/onay-bekliyor/bitti/iptal SAYILMAZ).
@@ -9,11 +9,11 @@
 set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 GOREV="$(bash "$KOK/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"
-KUTU=""; KIM=""; ESIK="${GUNLUK_PLAN_SIRA_ESIK:-3}"; BASLA=0; TAHMIN="${GUNLUK_PLAN_TAHMIN_DK:-30}"
+KUTU=""; KIM=""; ESIK="${GUNLUK_PLAN_SIRA_ESIK:-3}"; BASLA=1; TAHMIN="${GUNLUK_PLAN_TAHMIN_DK:-30}"
 while [ $# -gt 0 ]; do
   case "$1" in
-    --kutu) KUTU="${2:-}"; shift 2 ;; --kim) KIM="${2:-}"; shift 2 ;; --esik) ESIK="${2:-}"; shift 2 ;; --basla) BASLA=1; shift ;;
-    *) echo "kullanım: sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--basla]" >&2; exit 2 ;;
+    --kutu) KUTU="${2:-}"; shift 2 ;; --kim) KIM="${2:-}"; shift 2 ;; --esik) ESIK="${2:-}"; shift 2 ;; --bak) BASLA=0; shift ;;
+    *) echo "kullanım: sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--bak]" >&2; exit 2 ;;
   esac
 done
 case "$ESIK" in ''|*[!0-9]*) echo "HATA: --esik pozitif tam sayı olmalı (verilen: '$ESIK')" >&2; exit 2 ;; esac
@@ -42,10 +42,12 @@ if [ "$N" -ge "$ESIK" ]; then
   printf '%s\n' "$SIRA" | head -5 | awk -F'\t' '{printf "ISI=%s · %s · %s\n",$1,$2,$3}'
   ILK="$(printf '%s\n' "$SIRA" | head -1 | cut -f1)"
   if [ "$BASLA" -eq 1 ]; then
-    [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ustlen için ajan kimliği yok (--kim ver)" >&2; exit 3; }
+    [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ustlen için ajan kimliği yok (--kim ver ya da --bak)" >&2; exit 3; }
     if bash "$GOREV" ustlen "$ILK" --kim "$KIM" --tahmin "$TAHMIN" >/dev/null 2>&1; then echo "BASLADI=$ILK (çalışılıyor yapıldı · tahmin ${TAHMIN} dk)"; else echo "BASLAMADI=$ILK (ustlen reddedildi — defter durumunu kendin oku)" >&2; exit 1; fi
+    echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — bugüne alma tıkı Sultan'ın (ekranda)"
+  else
+    echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK. Başlayıp bugüne alayım mı?' — henüz BAŞLANMADI (--bak); bugüne alma tıkı Sultan'ın (ekranda)"
   fi
-  echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — bugüne alma tıkı Sultan'ın (ekranda)"
 else
   echo "KARAR=SOR"
   echo "SORU=Bu kutuda planlanmış görev yok ($N iş sırada). Kendimize iş çıkarma seansı yapalım mı?"
