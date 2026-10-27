@@ -1,0 +1,30 @@
+{
+  "is": "denetci-reis-sinifli",
+  "cumle": "denetci.sh reis kapısı sınıflı kartta da reis kararını okusun (Sultan 22 Eki: sınıflı işte ara kararlar reise geçti; parça2)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T01:10:19+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-28T01:10:19+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "sayi_uyarilari": []
+}
