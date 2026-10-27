@@ -35,6 +35,7 @@ bash "$AL" bicim --is "A" --kim "B" --ne "" >/dev/null 2>&1; ok "B3 boş alan rc
 bash "$AL" bicim --is "A" --kim "B" --ne "$(printf 'x%.0s' $(seq 161))" >/dev/null 2>&1; ok "B4 160+ karakter rc 2" "2" "$?"
 bash "$AL" bicim --is "A" --kim "B" --ne $'iki\nsatır' >/dev/null 2>&1; ok "B5 çok satır rc 2" "2" "$?"
 bash "$AL" bicim --is "A" --kim "B" --ne "token=abc123xyz" >/dev/null 2>&1; ok "B6 sır deseni rc 2" "2" "$?"
+for b in --is --kim --ne --tekrar-dk --esik-gun; do timeout 5 bash "$AL" bicim --is A --kim B --ne C "$b" >/dev/null 2>&1; ok "B7 son argüman '$b' değersiz: takılmaz, rc 2" "2" "$?"; done
 echo "— gönder"
 o="$(G)"; var "G1 terminal satırı basılır" "🚨🔴 SULTAN ALARMI — Revak disk silme · SERDAR bekliyor · revak terminalinde ! ile tek satır" "$o"
 ok "G2 --telefon yokken ağa çıkılmaz" "yok" "$([ -e "$T/curl.log" ] && echo var || echo yok)"
@@ -56,6 +57,11 @@ rm -r -- "$T/d"; for i in 1 2; do SULTAN_ALARMI_SIMDI=$((1800000000 + i*7200)) G
 o="$(SULTAN_ALARMI_SIMDI=$((1800000000 + 3*7200)) G)"; var "Y1c eşiğin TAM kendisinde (3.) yükseltilir" "TEKRAR 3 — YÜKSELTİLDİ" "$o"
 o="$(SULTAN_ALARMI_SIMDI=$((1800000000 + 3*7200)) G)"; var "Y1d 2. basışta yükseltme yok" "SULTAN ALARMI" "$(rm -r -- "$T/d"; SULTAN_ALARMI_SIMDI=1800000000 G >/dev/null; SULTAN_ALARMI_SIMDI=1800007200 G)"
 rm -r -- "$T/d"; o="$(SULTAN_ALARMI_SIMDI=1800007200 G)"; yok "Y2 ilk alarmda yükseltme YOK" "YÜKSELTİLDİ" "$o"
+echo "— eşzamanlılık"
+rm -r -- "$T/d"; for i in 1 2 3 4 5 6 7 8; do ( G >> "$T/par.out" 2>&1 ) & done; wait
+ok "E1 8 eşzamanlı gönderimde alarm TEK kez basılır" "1" "$(grep -c 'SULTAN ALARMI —' "$T/par.out")"
+ok "E1b kalan 7'si sustu" "7" "$(grep -c '^sustu' "$T/par.out")"
+ok "E1c sayaç 1" "1" "$(awk -F'\t' '{print $3}' "$T/d/durum.tsv")"
 echo "— tara"
 o="$(bash "$AL" tara)"; rc=$?
 var "T1 kapımda SENDE kartı aday" "ADAY|Kasa Erişimi|Sultan kapısı" "$o"

@@ -19,9 +19,9 @@ CMD="${1:-}"; [ -n "$CMD" ] && shift || kullanim
 
 IS=""; KIM=""; NE=""; TEL=0; KURU=0; TEKRAR_DK="$TEKRAR_DK_VARS"; ESIK_GUN=1
 while [ $# -gt 0 ]; do case "$1" in
-  --is) IS="${2:-}"; shift 2 ;; --kim) KIM="${2:-}"; shift 2 ;; --ne) NE="${2:-}"; shift 2 ;;
+  --is|--kim|--ne|--tekrar-dk|--esik-gun) [ $# -ge 2 ] || { echo "değer eksik: $1" >&2; exit 2; }
+     case "$1" in --is) IS="$2" ;; --kim) KIM="$2" ;; --ne) NE="$2" ;; --tekrar-dk) TEKRAR_DK="$2" ;; --esik-gun) ESIK_GUN="$2" ;; esac; shift 2 ;;
   --telefon) TEL=1; shift ;; --kuru) KURU=1; shift ;;
-  --tekrar-dk) TEKRAR_DK="${2:-}"; shift 2 ;; --esik-gun) ESIK_GUN="${2:-}"; shift 2 ;;
   *) [ "$CMD" = ders ] && [ -z "$IS" ] && { IS="$1"; shift; continue; }; echo "bilinmeyen: $1" >&2; kullanim ;;
 esac; done
 case "$TEKRAR_DK$ESIK_GUN" in *[!0-9]*|"") echo "sayı bekleniyor (--tekrar-dk/--esik-gun)" >&2; exit 2 ;; esac
@@ -50,12 +50,13 @@ bicim) satir_denetle || exit 2; metin; echo ;;
 gonder)
   satir_denetle || exit 2
   mkdir -p "$DIZIN"; ANAHTAR="$(printf '%s' "$IS" | tr 'A-ZÇĞİÖŞÜ' 'a-zçğiöşü' | sha1sum | cut -c1-16)"; DURUM="$DIZIN/durum.tsv"; touch "$DURUM"
+  exec 9>>"$DIZIN/durum.kilit"; flock 9   # okuma-karar-yazma tek kilitte: eşzamanlı iki gönderim aynı alarmı iki kez basmasın
   SON=0; SAY=0
   while IFS=$'\t' read -r k s c; do [ "$k" = "$ANAHTAR" ] && { SON="$s"; SAY="$c"; }; done < "$DURUM"
   if [ "$SAY" -gt 0 ] && [ $((SIMDI - SON)) -lt $((TEKRAR_DK * 60)) ]; then
     echo "sustu: '$IS' için alarm $(( (SIMDI - SON) / 60 )) dk önce basıldı (tekrar sınırı $TEKRAR_DK dk)"; kutuk "$SAY" - sustu; exit 0
   fi
-  SAY=$((SAY + 1)); { grep -v "^$ANAHTAR	" "$DURUM" 2>/dev/null; printf '%s\t%s\t%s\n' "$ANAHTAR" "$SIMDI" "$SAY"; } > "$DURUM.yeni" && mv "$DURUM.yeni" "$DURUM"
+  SAY=$((SAY + 1)); { grep -v "^$ANAHTAR	" "$DURUM" 2>/dev/null; printf '%s\t%s\t%s\n' "$ANAHTAR" "$SIMDI" "$SAY"; } > "$DURUM.yeni" && mv "$DURUM.yeni" "$DURUM"; flock -u 9
   M="$(metin)"; ONCELIK=4
   if [ "$SAY" -ge "$YUKSELT_N" ]; then M="$M · TEKRAR $SAY — YÜKSELTİLDİ"; ONCELIK=5; fi
   if [ -z "${NO_COLOR:-}" ]; then printf '\033[1;31m%s\033[0m\n' "$M"; else printf '%s\n' "$M"; fi
