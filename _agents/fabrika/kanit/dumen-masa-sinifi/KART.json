@@ -1,0 +1,41 @@
+{
+  "is": "dumen-masa-sinifi",
+  "cumle": "dumen-surucu masaüstü sınıfı: ajan masa bekçisi üzerinden ekranAl/tik/yaz/tus/kaydir kullanır; mod kapısı çift kilit; 423 hata değil Dümen Sultan'da",
+  "istedi": "SULTAN",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T18:39:11+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: bekçisi",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-27T18:39:11+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M5YZ6ZG08AZAWKP8NZ1F9Y2Y",
+  "tahmin_dk": 120,
+  "sayi_uyarilari": [
+    "423 hata"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-27T18:39:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
