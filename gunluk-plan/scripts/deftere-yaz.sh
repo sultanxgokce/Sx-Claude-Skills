@@ -38,7 +38,7 @@ LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 
 # kutu: açık ayar > kutu-bul.sh (koltuğa ATANMIŞ işlerin kutusu). Eski "listedeki en sık kutu" kaldırıldı: liste kutuya özel değil, menzilde hep "code" çıktı (1.11.0)
 if [ -z "$KUTU" ]; then
-  KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" --kim "$KIM" --liste /dev/stdin 2>/dev/null)" || KUTU=""
+  KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" --kim "$KIM" --cozulmus --liste /dev/stdin 2>/dev/null)" || KUTU=""
 fi
 [ -n "$KUTU" ] || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
 

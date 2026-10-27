@@ -103,5 +103,10 @@ liste_menzil
 cp "$T/l3.txt" "$T/liste.txt"; rm -r -- "$T/cipa" 2>/dev/null; GUNLUK_PLAN_AJAN=MOBILYACI bash "$KOK/cipa.sh" yaz --plan "1) ilk madde | 2) ikinci madde" >/dev/null 2>&1
 d="$(GUNLUK_PLAN_AJAN=MOBILYACI bash "$DY" 2>&1)"; iceriyor "Q9 deftere-yaz: koltuk adı çevrilir, kutu=mihenk" "kutu=mihenk" "$d"
 iceriyor "Q9b deftere-yaz: defter kaydı DEFTER adıyla yazılır (kim=NECCAR)" "kim=NECCAR" "$d"
+printf 'ZA\tZB\nZB\tZC\n' > "$T/zincir.tsv"; : > "$T/liste.txt"; for i in 1 2 3; do satir X$i kutux acik esnek o ZB "ZB işi $i" >> "$T/liste.txt"; satir Y$i kutuy acik esnek o ZC "ZC işi $i" >> "$T/liste.txt"; done
+rm -f "$T/ustlen.log"; zc="$(GUNLUK_PLAN_ESLEME="$T/zincir.tsv" GUNLUK_PLAN_AJAN=ZA bash "$SB" 2>&1)"
+iceriyor "Q10 zincirli tabloda TEK geçiş: ZA→ZB (ZC'ye varmaz), kutu=kutux" "KUTU=kutux" "$zc"
+kapi "Q10b ustlen ZB adıyla çağrılır (ZC DEĞİL)" "ustlen gorev_X1 --kim ZB --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
+rm -r -- "$T/cipa" 2>/dev/null; GUNLUK_PLAN_AJAN=ZA bash "$KOK/cipa.sh" yaz --plan "1) ilk madde | 2) ikinci madde" >/dev/null 2>&1; kapi "Q10c deftere-yaz da tek geçiş: kutu=kutux kim=ZB" "1" "$(GUNLUK_PLAN_ESLEME="$T/zincir.tsv" GUNLUK_PLAN_AJAN=ZA bash "$DY" 2>&1 | grep -c 'kutu=kutux kim=ZB')"
 echo
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]
