@@ -7,15 +7,24 @@ Karar belgesi: Nexus _agents/handoff/kutu-oda-kararlari-20261027.md (karar 9). G
   dogrula <depo>                                                iskelet + ayar tazeliği + hafıza ayrılığı (rc 0 temiz · 1 bulgu · 3 ölçülemedi)
   yol <depo> <oda>                                              açılış cwd'si: odanın mutlak klasörünü basar (koltuk başlatıcı `cd $(oda.sh yol …)` ile açar)
   kanca <oda_dizini> <ortak_json>                               PreToolUse kancası: stdin JSON, rc 2 = blok
+  cekirdek-yaz <depo> <yol> --neden "<tek cümle>" [--siparis gorev_<kimlik>] [--dosya <kaynak>]
+                                                                çekirdek ortak dosyaya TEK yazım yolu (Oda modeli 5 D4): içerik --dosya ya da stdin;
+                                                                kim = DEFTER_JETON_YOL jetonundan (defter /ben), beyan değil; jetonsuz süreç ret
 
 Depo düzeni:  <depo>/.claude/oda-ortak.json (ortak kaynak) · <depo>/<oda>/{CLAUDE.md, oda.json, hafiza/, .claude/{settings.json,skills,agents}}
 """
 import fnmatch
+import hashlib
 import json
 import os
 import re
 import shlex
+import subprocess
 import sys
+import tempfile
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
 
 ODA_AD = re.compile(r'^[a-z0-9][a-z0-9-]{0,40}$')
 UTD = 'utf-8'
@@ -330,7 +339,7 @@ def karar(arac, girdi, cwd, oda_dir, depo, ortak, oda_meta):
             continue
         rel = os.path.relpath(yol, os.path.realpath(depo))
         if glob_uyar(rel, ortak_veri):
-            return False, f'{rel}: ortak veri — okuma serbest, yazma yalnız çekirdeğin komutundan ({", ".join(ortak.get("cekirdek_komutlar", [])) or "tanımlı komut yok"})'
+            return False, f'{rel}: ortak veri — okuma serbest, yazma yalnız çekirdeğin komutundan: bash {CEKIRDEK_KOMUT} <depo> {rel} --neden "<tek cümle>" [--siparis gorev_<kimlik>] < yeni-icerik{" (ek komutlar: " + ", ".join(ortak.get("cekirdek_komutlar", [])) + ")" if ortak.get("cekirdek_komutlar") else ""}'
         if icinde(yol, oda_dir):
             continue
         if glob_uyar(rel, ek):
@@ -365,6 +374,114 @@ def kanca(oda_dir, ortak_yol):
     return 2
 
 
+CEKIRDEK_KOMUT = '/config/.claude/skills/oda-kur/scripts/oda.sh cekirdek-yaz'
+CEKIRDEK_KAYIT = os.path.join('.claude', 'cekirdek-kayit.jsonl')
+SIPARIS_BICIM = re.compile(r'^gorev_[0-9A-Za-z]{10,40}$')
+
+
+def sha_dosya(yol):
+    """Dosya yoksa None; varsa sha256 (önceki sha: yeni dosyada boş kalır, uydurulmaz)."""
+    try:
+        with open(yol, 'rb') as f:
+            return hashlib.sha256(f.read()).hexdigest()
+    except FileNotFoundError:
+        return None
+
+
+def defter_kimligi():
+    """Kim yazıyor? Ajanın beyanından DEĞİL: DEFTER_JETON_YOL dosyasındaki jetonla defterden (/ben) sorulur.
+    Fail-closed: yol değişkeni yok / dosya okunamaz / defter yanıt vermez / ajan kimliği boş → ret. Varsayılan jeton YOK
+    (27 Eki: ortak varsayılan jetona düşen koltuklar reis kimliğiyle yazabiliyordu). Jeton değeri hiçbir yere yazılmaz."""
+    jy = os.environ.get('DEFTER_JETON_YOL', '')
+    if not jy:
+        raise PermissionError('DEFTER_JETON_YOL yok: bu süreç defter kimliği taşımıyor — çekirdeğe yazılmaz')
+    try:
+        with open(jy, encoding=UTD) as f:
+            jeton = f.read().strip()
+    except OSError:
+        raise PermissionError('DEFTER_JETON_YOL okunamadı — çekirdeğe yazılmaz')
+    if not jeton:
+        raise PermissionError('jeton dosyası boş — çekirdeğe yazılmaz')
+    uc = os.environ.get('DEFTER_UC', 'http://cloudtop-defter:8791').rstrip('/')
+    try:
+        r = urllib.request.Request(uc + '/ben', headers={'x-defter-jeton': jeton})
+        with urllib.request.urlopen(r, timeout=10) as y:
+            d = json.loads(y.read().decode(UTD))
+    except urllib.error.HTTPError as e:
+        raise PermissionError(f'defter kimliği doğrulamadı (http {e.code}) — çekirdeğe yazılmaz')
+    except Exception:
+        raise PermissionError('defter kimliği sorulamadı (ulaşılamıyor/bozuk yanıt) — çekirdeğe yazılmaz')
+    ajan = d.get('ajan') if isinstance(d, dict) else None
+    kutu = d.get('kutu') if isinstance(d, dict) else None
+    if not (isinstance(ajan, str) and ajan.strip() and isinstance(kutu, str) and kutu.strip()):
+        raise PermissionError('jetonun ajan kimliği yok (kutu jetonu ayrı koltuğu ayırt etmez) — çekirdeğe yazılmaz')
+    return ajan.strip(), kutu.strip()
+
+
+def git_kok(dizin):
+    try:
+        c = subprocess.run(['git', '-C', dizin, 'rev-parse', '--show-toplevel'], capture_output=True, text=True, timeout=10)
+    except Exception:
+        return None
+    return os.path.realpath(c.stdout.strip()) if c.returncode == 0 and c.stdout.strip() else None
+
+
+def cekirdek_yaz(depo, yol, neden, siparis, dosya):
+    depo_r = os.path.realpath(depo)
+    # Ö7: yazım yalnız KUTU deposundan. Kutu deposu = oda-ortak.json'u taşıyan git kökü; ayrı depodaki oda (cwd başka depoda) yazamaz.
+    try:
+        ortak = ortak_oku(depo_r)
+    except Exception as e:
+        raise PermissionError(f'{depo}: kutu deposu değil ya da ortak ayar okunamadı ({e})')
+    if git_kok(depo_r) != depo_r:
+        raise PermissionError(f'{depo}: git kökü değil — kutu deposunun kökü verilmeli')
+    cwd_kok = git_kok(os.getcwd())
+    if cwd_kok != depo_r:
+        raise PermissionError(f'bu süreç kutu deposunda değil (cwd git kökü {cwd_kok or "yok"}, kutu deposu {depo_r}): ayrı depodaki oda çekirdeğe kendi deposundan yazamaz')
+    if not neden or len(neden.strip()) < 10:
+        raise ValueError('--neden ister (tek cümle, en az 10 karakter)')
+    if siparis and not SIPARIS_BICIM.match(siparis):
+        raise ValueError('--siparis gorev_<kimlik> biçiminde olmalı')
+    hedef = cozumle(yol, depo_r)
+    if not icinde(hedef, depo_r):
+        raise PermissionError(f'{yol}: kutu deposunun dışında')
+    rel = os.path.relpath(hedef, depo_r)
+    if not glob_uyar(rel, ortak.get('ortak_veri', [])):
+        raise PermissionError(f'{rel}: çekirdek ortak veri değil (ortak_veri globlarına uymuyor) — bu komut yalnız çekirdek dosyalar içindir')
+    ajan, kutu = defter_kimligi()
+    if dosya:
+        with open(dosya, 'rb') as f:
+            icerik = f.read()
+    else:
+        icerik = sys.stdin.buffer.read()
+    onceki = sha_dosya(hedef)
+    os.makedirs(os.path.dirname(hedef), exist_ok=True)
+    fd, gecici = tempfile.mkstemp(dir=os.path.dirname(hedef), prefix='.cekirdek-yaz-')
+    try:
+        with os.fdopen(fd, 'wb') as f:
+            f.write(icerik)
+        if os.path.exists(hedef):
+            os.chmod(gecici, os.stat(hedef).st_mode & 0o7777)
+        os.replace(gecici, hedef)
+    except BaseException:
+        if os.path.exists(gecici):
+            os.unlink(gecici)
+        raise
+    sonraki = sha_dosya(hedef)
+    kayit = {
+        'zaman': datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds'),
+        'kim': ajan, 'kutu': kutu, 'dosya': rel,
+        'onceki_sha': onceki, 'sonraki_sha': sonraki, 'neden': neden.strip(),
+        'siparis': siparis or None, 'siparissiz': not siparis,
+    }
+    kyol = os.path.join(depo_r, CEKIRDEK_KAYIT)
+    os.makedirs(os.path.dirname(kyol), exist_ok=True)
+    with open(kyol, 'a', encoding=UTD) as f:
+        f.write(json.dumps(kayit, ensure_ascii=False, sort_keys=True) + '\n')
+    print(f'✓ çekirdek yazıldı: {rel} · kim {ajan} · {(onceki or "yeni")[:12]} → {sonraki[:12]}' + ('' if siparis else ' · SİPARİŞSİZ (çekirdek reisinin nabzında ayrı satır)'))
+    return 0
+
+
 def main(a):
     a = a[0:1] + a[2:]   # a[1] = sarmalayıcı adı
     if len(a) < 2:
@@ -375,6 +492,23 @@ def main(a):
         if len(a) != 4:
             hata('kullanım: oda.sh kanca <oda_dizini> <ortak_json>', 2)
         return kanca(a[2], a[3])
+    if c == 'cekirdek-yaz':
+        r = a[2:]
+        if len(r) < 2:
+            hata('kullanım: oda.sh cekirdek-yaz <depo> <yol> --neden "<tek cümle>" [--siparis gorev_<kimlik>] [--dosya <kaynak>]  (içerik --dosya ya da stdin)', 2)
+        depo, yol, r = r[0], r[1], r[2:]
+        kw = {'--neden': '', '--siparis': '', '--dosya': ''}
+        while r:
+            if r[0] not in kw or len(r) < 2:
+                hata(f'bilinmeyen bayrak: {r[0]}', 2)
+            kw[r[0]] = r[1]
+            r = r[2:]
+        try:
+            return cekirdek_yaz(depo, yol, kw['--neden'], kw['--siparis'], kw['--dosya'])
+        except PermissionError as e:
+            hata(f'✗ RET (yazım yok): {e}', 1)
+        except (ValueError, OSError) as e:
+            hata(f'✗ RET (yazım yok): {e}', 2)
     if c == 'uret':
         if len(a) != 3:
             hata('kullanım: oda.sh uret <depo>', 2)

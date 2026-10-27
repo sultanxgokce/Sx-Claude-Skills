@@ -1,0 +1,25 @@
+{
+  "is": "oda5-cekirdek-yaz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T23:11:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "oda-sinav",
+      "asama": "tek",
+      "dosya": "olcum-oda-sinav-tek.txt",
+      "sha256": "c95399924ab768a267e8f0d6ae2bb2154bb44b980f48875c785d1dcf8981052d",
+      "komut": [
+        "bash",
+        "oda-kur/scripts/oda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T23:11:59+03:00",
+      "sure_sn": 832.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4133cd17ed434207bf2034880938cf4b"
+    }
+  ],
+  "imza": "0da42fa7f4a140cb20c4b319586a5d363292dfce056226adaaddbe3271b2a412"
+}

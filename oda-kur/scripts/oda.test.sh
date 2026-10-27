@@ -98,6 +98,95 @@ import json;m=json.load(open('$D/oda-a/oda.json'));m['ek_yazma']=['scripts/**'];
 kanca "$D" oda-a Write "{\"file_path\":\"$D/scripts/yardimci.sh\"}"; [ $? -eq 0 ] && ok "K20 oda.json ek_yazma ile açık tanınmış istisna SERBEST" || no "K20 ek_yazma çalışmıyor"
 kanca "$D" oda-b Write "{\"file_path\":\"$D/scripts/yardimci.sh\"}"; [ $? -eq 2 ] && ok "K21 aynı yol ek_yazma'sı olmayan odada DURDURULDU" || no "K21 istisna başka odaya sızdı"
 
+echo "── cekirdek-yaz (Oda modeli 5 D4): sahte defter /ben, jeton kimliği, kayıt, ret"
+cat > "$T/defter.py" <<'PYEOF'
+import http.server, json, sys
+JET = {'TOK-SERDAR': {'kutu': 'code', 'ajan': 'SERDAR'}, 'TOK-KUTU': {'kutu': 'code', 'ajan': ''}}
+class H(http.server.BaseHTTPRequestHandler):
+    def log_message(self, *a): pass
+    def do_GET(self):
+        k = JET.get(self.headers.get('x-defter-jeton', ''))
+        if self.path != '/ben' or k is None:
+            self.send_response(401); self.end_headers(); return
+        b = json.dumps({'ok': True, **k}).encode()
+        self.send_response(200); self.send_header('content-type', 'application/json'); self.end_headers(); self.wfile.write(b)
+s = http.server.HTTPServer(('127.0.0.1', 0), H)
+open(sys.argv[1], 'w').write(str(s.server_address[1]))
+s.serve_forever()
+PYEOF
+python3 -I "$T/defter.py" "$T/port" >/dev/null 2>&1 & DSUNUCU=$!
+for _ in $(seq 1 50); do [ -s "$T/port" ] && break; sleep 0.1; done
+export DEFTER_UC="http://127.0.0.1:$(cat "$T/port")"
+export ODA_TEST_VARSAYILAN_JETON="$T/jeton-serdar"   # yalnız mutant sınaması için: varsayılana düşen kod bunu bulur, doğru kod bakmaz
+printf 'TOK-SERDAR' > "$T/jeton-serdar"; printf 'TOK-KUTU' > "$T/jeton-kutu"; printf 'TOK-YOK' > "$T/jeton-yok"
+C="$T/cdepo"; kur_depo "$C"
+GT="git -c user.email=t@t -c user.name=t"
+( cd "$C" && git init -q . && git add -A && $GT commit -q -m ilk )
+cy() { # cy <jeton dosyası|-> <cwd> <argümanlar…> : stdin'den içerik
+  local J="$1" W="$2"; shift 2
+  if [ "$J" = - ]; then ( cd "$W" && env -u DEFTER_JETON_YOL bash "$ODA" cekirdek-yaz "$@" ) 2>&1; else ( cd "$W" && DEFTER_JETON_YOL="$J" bash "$ODA" cekirdek-yaz "$@" ) 2>&1; fi
+}
+KS() { sha256sum "$C/KAYIT.json" | cut -d' ' -f1; }
+ONCE="$(KS)"
+echo '{"a":2}' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "ortak sayaç güncellendi" --siparis gorev_01ABCDEFGHJKMNPQRST >/dev/null; R=$?
+SONRA="$(KS)"
+[ "$R" -eq 0 ] && [ "$(cat "$C/KAYIT.json")" = '{"a":2}' ] && [ "$ONCE" != "$SONRA" ] && ok "C1 jetonlu yazım dosyayı değiştirdi" || no "C1 yazım olmadı" "rc=$R"
+python3 -I -c "
+import json
+k=[json.loads(l) for l in open('$C/.claude/cekirdek-kayit.jsonl')]
+r=k[-1]
+assert len(k)==1 and r['kim']=='SERDAR' and r['kutu']=='code' and r['dosya']=='KAYIT.json'
+assert r['onceki_sha']=='$ONCE' and r['sonraki_sha']=='$SONRA' and r['neden']=='ortak sayaç güncellendi'
+assert r['siparis']=='gorev_01ABCDEFGHJKMNPQRST' and r['siparissiz'] is False and r['zaman']
+" && ok "C2 kayıt: kim (jetondan) · dosya · önceki/sonraki sha · neden · sipariş · zaman" || no "C2 kayıt eksik/yanlış"
+echo '{"a":3}' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "siparişsiz değişiklik denemesi" >/dev/null
+python3 -I -c "
+import json;r=[json.loads(l) for l in open('$C/.claude/cekirdek-kayit.jsonl')][-1];assert r['siparis'] is None and r['siparissiz'] is True" && ok "C3 siparişsiz yazım kayıtta AYRI işaretli (nabızda ayrı satır)" || no "C3 siparişsiz işaret yok"
+echo '{"a":9}' | cy "$T/jeton-serdar" "$C" "$C" veri/yeni/dosya.json --neden "yeni ortak veri dosyası" >/dev/null
+python3 -I -c "
+import json;r=[json.loads(l) for l in open('$C/.claude/cekirdek-kayit.jsonl')][-1];assert r['onceki_sha'] is None and r['dosya']=='veri/yeni/dosya.json'" && [ -f "$C/veri/yeni/dosya.json" ] && ok "C4 yeni dosya: önceki sha boş (uydurulmaz), ara dizin kurulur" || no "C4 yeni dosya hatalı"
+SAYI0="$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")"; S0="$(KS)"
+echo '{"a":666}' | cy - "$C" "$C" KAYIT.json --neden "jetonsuz süreç denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C5 Ö6 DEFTER_JETON_YOL yok: ret, yazım 0 (varsayılan jetona düşmez)" || no "C5 jetonsuz yazdı" "rc=$R"
+echo '{"a":666}' | cy "$T/yok-dosya" "$C" "$C" KAYIT.json --neden "jeton dosyası yok denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C6 jeton dosyası okunamaz: ret" || no "C6 okunamayan jetonla yazdı"
+echo '{"a":666}' | cy "$T/jeton-yok" "$C" "$C" KAYIT.json --neden "geçersiz jeton denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C7 defter jetonu tanımıyor (401): ret" || no "C7 geçersiz jetonla yazdı"
+echo '{"a":666}' | cy "$T/jeton-kutu" "$C" "$C" KAYIT.json --neden "ajan kimliksiz kutu jetonu" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C8 ajan kimliği olmayan kutu jetonu: ret (koltuk ayırt edilemez)" || no "C8 ajansız jetonla yazdı"
+echo '{"a":666}' | DEFTER_UC="http://127.0.0.1:1" cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "defter ulaşılamıyor denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C9 defter ulaşılamaz: ret (fail-closed)" || no "C9 defter yokken yazdı"
+OB="$T/baska"; mkdir -p "$OB"; ( cd "$OB" && git init -q . )
+echo '{"a":666}' | cy "$T/jeton-serdar" "$OB" "$C" KAYIT.json --neden "ayrı depodaki odadan deneme" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C10 Ö7 ayrı depodaki odadan (cwd başka git deposu): ret" || no "C10 ayrı depodan yazdı"
+echo '{"a":666}' | cy "$T/jeton-serdar" "$C" "$T" KAYIT.json --neden "kutu deposu olmayan yol verildi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && ok "C11 verilen depo kutu deposu değil (oda-ortak.json yok): ret" || no "C11 sahte depo kabul"
+echo x | cy "$T/jeton-serdar" "$C" "$C" ../kacis.txt --neden "depo dışına kaçış denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ ! -e "$T/kacis.txt" ] && ok "C12 depo dışı yol: ret" || no "C12 depo dışına yazdı"
+echo x | cy "$T/jeton-serdar" "$C" "$C" oda-a/kod.py --neden "çekirdek olmayan dosya denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ ! -e "$C/oda-a/kod.py" ] && ok "C13 ortak_veri dışı dosya: ret (komut yalnız çekirdek içindir)" || no "C13 çekirdek dışına yazdı"
+ln -s "$T" "$C/veri/kacak"
+echo x | cy "$T/jeton-serdar" "$C" "$C" veri/kacak/sym.txt --neden "sembolik bağ kaçışı denemesi" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ ! -e "$T/sym.txt" ] && ok "C14 sembolik bağla depo dışına kaçış: ret (realpath)" || no "C14 symlink ile kaçtı"
+echo x | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "kısa" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C15 nedensiz/çok kısa nedenle yazım yok" || no "C15 nedensiz yazdı"
+echo x | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "bozuk sipariş biçimi denemesi" --siparis "gorev_" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$S0" ] && ok "C16 bozuk sipariş kimliği: ret" || no "C16 bozuk siparişle yazdı"
+[ "$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")" -eq "$SAYI0" ] && ok "C17 reddedilen hiçbir yazım kayıt satırı bırakmadı" || no "C17 ret kayıt bıraktı"
+printf '%s' 'dosyadan içerik' > "$T/kaynak.txt"
+cy "$T/jeton-serdar" "$C" "$C" veri/dosyadan.txt --neden "içerik --dosya ile verildi" --dosya "$T/kaynak.txt" </dev/null >/dev/null; R=$?
+[ "$R" -eq 0 ] && [ "$(cat "$C/veri/dosyadan.txt")" = "dosyadan içerik" ] && ok "C18 --dosya ile içerik" || no "C18 --dosya çalışmadı"
+echo "── kanca ret mesajı komutu gösterir (Ö4)"
+MSG="$(python3 -I -c "import json;print(json.dumps({'tool_name':'Write','tool_input':{'file_path':'$C/KAYIT.json'},'cwd':'$C/oda-a'}))" | bash "$ODA" kanca "$C/oda-a" "$C/.claude/oda-ortak.json" 2>&1)"
+grep -q "cekirdek-yaz" <<<"$MSG" && grep -q -- "--neden" <<<"$MSG" && ok "C19 doğrudan yazım reddi komutu (cekirdek-yaz … --neden) gösteriyor" || no "C19 ret komutu göstermiyor" "$MSG"
+C2="$T/cdepo2"; kur_depo "$C2"
+python3 -I -c "
+import json;p='$C2/.claude/oda-ortak.json';d=json.load(open(p));d['ortak_veri']=['**'];json.dump(d,open(p,'w'))"
+( cd "$C2" && git init -q . && git add -A && $GT commit -q -m ilk )
+echo x | cy "$T/jeton-serdar" "$C2" "$C2" ../kacis2.txt --neden "glob her şeyi kapsarken depo dışı deneme" >/dev/null; R=$?
+[ "$R" -ne 0 ] && [ ! -e "$T/kacis2.txt" ] && ok "C20 ortak_veri '**' olsa bile depo dışı yol ret (kapı glob'dan bağımsız)" || no "C20 glob '**' iken depo dışına yazdı"
+kill "$DSUNUCU" 2>/dev/null; wait "$DSUNUCU" 2>/dev/null
+
 echo "SONUÇ: geçti=$G kaldı=$K"
 [ "$K" -eq 0 ] || exit 1
 [ "${ODA_MUTANT:-1}" = 0 ] && exit 0
@@ -135,5 +224,15 @@ mut "oda-özel parça kancayı ezebilir" "        if yasak:" "        if False:"
 mut "hafıza ayrılığı bozuk (hepsi aynı yol)" "ayar['autoMemoryDirectory'] = os.path.join(abs_oda, 'hafiza')" "ayar['autoMemoryDirectory'] = os.path.join(os.path.dirname(abs_oda), 'hafiza')"
 mut "uret yazmıyor (sessiz)" "        yaz_json(hedef, yeni)
         sonuc.append((oda, 'üretildi'))" "        sonuc.append((oda, 'üretildi'))"
+mut "cekirdek-yaz: env yoksa varsayılan jetona düşer" "jy = os.environ.get('DEFTER_JETON_YOL', '')" "jy = os.environ.get('DEFTER_JETON_YOL', os.environ.get('ODA_TEST_VARSAYILAN_JETON', ''))"
+mut "cekirdek-yaz: ajansız jetonu kabul eder" "if not (isinstance(ajan, str) and ajan.strip() and isinstance(kutu, str) and kutu.strip()):" "if not isinstance(kutu, str):"
+mut "cekirdek-yaz: defter ulaşılamazsa devam eder" "raise PermissionError('defter kimliği sorulamadı (ulaşılamıyor/bozuk yanıt) — çekirdeğe yazılmaz')" "return 'bilinmiyor', 'bilinmiyor'"
+mut "cekirdek-yaz: ayrı depo (cwd) denetimi yok" "    if cwd_kok != depo_r:" "    if False:"
+mut "cekirdek-yaz: ortak_veri glob denetimi yok" "    if not glob_uyar(rel, ortak.get('ortak_veri', [])):" "    if False:"
+mut "cekirdek-yaz: depo dışı yol denetimi yok" "    if not icinde(hedef, depo_r):" "    if False:"
+mut "cekirdek-yaz: önceki sha yazılmaz" "'onceki_sha': onceki," "'onceki_sha': None,"
+mut "cekirdek-yaz: siparişsiz işareti yok" "'siparis': siparis or None, 'siparissiz': not siparis," "'siparis': siparis or None, 'siparissiz': False,"
+mut "cekirdek-yaz: neden zorunlu değil" "    if not neden or len(neden.strip()) < 10:" "    if False:"
+mut "kanca ret mesajı komutu göstermiyor" "yazma yalnız çekirdeğin komutundan: bash {CEKIRDEK_KOMUT}" "yazma yalnız çekirdeğin komutundan: ({CEKIRDEK_KOMUT[:0]}"
 find "$M" -mindepth 1 -delete; rmdir "$M"
 [ "$MK" -eq 0 ] && echo "MUTANT: hepsi yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
