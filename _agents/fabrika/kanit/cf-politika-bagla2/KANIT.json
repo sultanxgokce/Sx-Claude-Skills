@@ -1,0 +1,142 @@
+{
+  "is": "cf-politika-bagla2",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T11:57:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "f6c5d52bf77efe453c5ac6e57dd5a96d68de02801f5db6905f2577cba7d24782",
+      "komut": [
+        "bash",
+        "cloudflare-erisim/scripts/cf.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:45:06+03:00",
+      "sure_sn": 25.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "92001a31825744bba5cee1225daea159"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kuru-yazar",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kuru-yazar-tek.txt",
+      "sha256": "c3e07a259143eddbd4214c52298d1cfb7e4ea531d3632716c8a67def45c90ff5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf/kuru-yazar/cf.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:53:23+03:00",
+      "sure_sn": 496.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "625bed4240cc454ba63826b5c6fb286f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-coz-tum-politika",
+      "asama": "tek",
+      "dosya": "olcum-mutant-coz-tum-politika-tek.txt",
+      "sha256": "ecad9ee2ae1ef139a9802f819e5a9b519ce648d375ec0f9857dcc3aff101514b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf/coz-tum-politika/cf.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:53:25+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "af7d1107f6ff48358516473bb11fefb4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-tamlik-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-tamlik-yok-tek.txt",
+      "sha256": "6c95c40b47c8da8d1de6ccc39b28f934d0abf9597f056f4dda9b895f6e7fcaaa",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf/tamlik-yok/cf.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:53:27+03:00",
+      "sure_sn": 2.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "0a4afa5ddb344e2f803b11be3034ee02"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur2",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tur2-tek.txt",
+      "sha256": "e0d93114f0d8515f1280972ec113de9b320b26102a5df32111db7514be7c13d5",
+      "komut": [
+        "bash",
+        "cloudflare-erisim/scripts/cf.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:56:51+03:00",
+      "sure_sn": 4.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6e908bcdfc3c4ef88f224399284741f3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-pol-tamlik-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-pol-tamlik-yok-tek.txt",
+      "sha256": "82afeb8cd9066b97ffafe50e5e2c3cd4d3149ecf98b9f6d3d11caafbceef073e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf2/pol-tamlik-yok/cf.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:57:14+03:00",
+      "sure_sn": 22.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-tur2",
+      "beklenen": "kirmizi",
+      "olcum_id": "bfe6e7fbb143468c9a4f7d5c67d00d95"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-yol-kucuk-harf",
+      "asama": "tek",
+      "dosya": "olcum-mutant-yol-kucuk-harf-tek.txt",
+      "sha256": "03a3b9f582d4613c0aca3e8f5737b6b0f8a146ec933cfe05ad9c54efbde09618",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf2/yol-kucuk-harf/cf.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:57:18+03:00",
+      "sure_sn": 4.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-tur2",
+      "beklenen": "kirmizi",
+      "olcum_id": "52855a424da14a1aa7b7cac668d69ea2"
+    }
+  ],
+  "imza": "c50f2faf38e82de01750aa06ffccc7c8a7696fd0f6dc8f79a82417a62d91848a"
+}

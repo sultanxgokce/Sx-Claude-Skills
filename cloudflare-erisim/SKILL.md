@@ -1,7 +1,7 @@
 ---
 name: cloudflare-erisim
 type: agent
-version: 1.5.0
+version: 1.6.0
 description: >
   Cloudflare erişimi gereken işleri (Access self-hosted app + policy, proxied DNS/tünel rotası,
   subdomain'i giriş-kapısı arkasına alma) PANELE GİRMEDEN, saf API (curl+jq) ile yapar. Kimlik yoksa
@@ -96,6 +96,14 @@ Varsayılan izin = `sultanxgokce@gmail.com` (değiştir: 2. argüman e-posta).
     host'ta `setup-tunnel.sh`. Yazmanın konteynerden yapılıp yapılamayacağı **açık soru**.
   · **niçin yazma yolu eklenmedi:** 28 canlı kural tek hatalı çağrıyla silinebilir; ayrı karar ister.
   Yeni subdomain'de Access+DNS bu skill'le biter; ingress **yazımı** için `ssh <host> '.../setup-tunnel.sh'`.
+
+## Servis jetonu politikası (1.6.0 · gorev Q4YE36)
+Makine kimliği (Access servis jetonu) bir app'e izin verecekse e-posta politikasına DOKUNULMAZ; ayrı bir `non_identity` politika eklenir.
+- `bash scripts/cf.sh politika-bagla <app-domain[/yol]> <servis-jetonu-adı> [--uygula]` — KURU varsayılan, yazım yalnız `--uygula`.
+- `bash scripts/cf.sh politika-coz <app-domain[/yol]> <servis-jetonu-adı> [--uygula]` — geri alma (yalnız o jetonun politikası silinir).
+- Kapılar: app `.domain` TAM eşleşme ve tam 1 · jeton adı tam 1 · her iki liste tam (total_count = dönen) · aynı jeton zaten bağlıysa no-op · 2 eş politikada DUR (toplu silme yok).
+- Jeton değeri (client_secret) hiç okunmaz/basılmaz. Token'da "Access: Service Tokens" okuma yetkisi gerekir.
+- Dış yüzeyi makineye açar: canlı yazım Sultan-eli betikten (`/config/sk`) çağrılır.
 
 ## Kalıcılık & sır-hijyeni
 - Token/anahtar YALNIZ `~/.config/cortex-access.env` (600) içinde; **değer asla stdout/log/chat/geçmişe düşmez**.

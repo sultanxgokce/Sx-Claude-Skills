@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "cf-politika-bagla2",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T11:58:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-cf-politika-bagla2",
+  "dal": "cf-politika-bagla2",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28741,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 9765
+  },
+  "dalgic": "uyumsuz",
+  "bas": "61d83916cc146bbf52d3ae945ab4f87e034b2dd2",
+  "duzeltme_farki": {
+    "onceki_bas": "d7a6b1269f4544c873bb0e1e250703fc9f834da5",
+    "dosya": 8,
+    "bayt": 19938,
+    "tam_bayt": 38397
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, istenen bağla ve çöz komutları kuru kip varsayılanı ve açık --uygula kapısıyla eklenmiş; önceki politika-listesi tamlığı ve yol harf duyarlılığı kusurları da bu turda kapanmış. Gerçek ölçüm 98/98 geçiyor ve dört ilgili mutasyon sınavların kusurları gerçekten yakaladığını gösteriyor; üretimi durduracak sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek kod ölçümü sinav-tur2 kaydında rc=0 ile 98/98; önceki B1, _pb_pol_al içindeki per_page=100 ve total_count=dönen kapısı ile T16n-T16p sınavlarında, B2 ise alan adı/yol ayrımı ve T16q-T16r sınavlarında kapanmış. Mutasyon kayıtlarının rc=1 olması beklenen sonuçtur: politika tamlığı ve yol harf duyarlılığı bozulunca sınavların düştüğünü doğruluyor. Kanıt çevrimdışı CLI ölçümüdür; kare yoktur, ancak bu değişiklik için gerçek ölçüm ile mutasyon karşılaştırması yeterlidir."
+  }
+}
