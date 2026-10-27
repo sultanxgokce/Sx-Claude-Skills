@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-sinav-kapi-sonra.txt
+hedef_sha256: f2bf68b707f0b6c51348b4c5a650c2a787394117ba9d7006640db9d7b7cde1fe
+hedef_zaman: 2026-10-27T16:23:14+03:00
+hedef_renk: kirmizi
+neden: ilk ölçüm turu bozuktu: önce kopyası yalnız terminal-onar'dı (KT1 gerçek tarifi bulamadı, çöküş portları tuttu), sonra'da dizin sütununun sonunda boşluk hatası yakalandı ve düzeltildi; hepsi -2 etiketiyle yeniden ölçüldü
+kim: BANI
+karsi: -
+zaman: 2026-10-27T17:05:52+03:00

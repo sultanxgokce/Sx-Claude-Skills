@@ -43,7 +43,7 @@ function skaler(line, key) {
 }
 // Dava Rafı (Parça B · SERDAR 16 Eki 16:26): son_calisma (dondurulurken yazılan epoch) · dondurma (kural = bekçi dondurdu) ·
 // bagla_ile (kayda E4 bağlamayla girdi → 'bağlamayı geri al' sunulur) · bagla_once (kişiye bağlamada önceki session_id).
-const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id', 'son_calisma', 'dondurma', 'bagla_ile', 'bagla_once'];
+const ALANLAR = ['tmux', 'oda', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id', 'son_calisma', 'dondurma', 'bagla_ile', 'bagla_once'];
 
 // YAML metni → üyeler. Satır tabanlı: `- id: X` blok açar; blok içindeki bilinen skalerler alınır. `uyeler:` dışı
 // `- id:` (ör. meta) yoktur; `tmux: null` → ''. Bilinmeyen anahtar yok sayılır (şema genişlemesi kırmaz).

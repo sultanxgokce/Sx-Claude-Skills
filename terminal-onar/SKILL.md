@@ -1,9 +1,15 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.32.2
+version: 2.33.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.33.0 · Koltuğun odası kapıdan okunur — çalışma klasöründen (27 Eki · görev …1ASZ · kutu–oda modeli 2 · SERDAR kararı A)
+- `/api/koltuklar` her koltuğa `oda` ekler: koltuğun çalışma dizininden yukarı çıkılır, ilk `oda.json` odayı verir (`oda-kur` düzeni). Yanıt kutunun odalarını da taşır: `odalar: [{ad, hedef, reis}]`.
+- Ekip kaydındaki `oda:` alanı yalnız **tutarlılık denetimi**: klasörle ayrışırsa (ya da koltuk oda klasöründe açılmamışsa) koltukta `oda_uyari` döner; oda yine klasörden gelir, kayıt oda uydurmaz. Bozuk `oda.json` sessizce odasız sayılmaz, uyarıda söylenir.
+- `koltuk-bagla.sh --liste` 9. sütun: etkin bölmenin çalışma dizini. Dizin API yanıtına **yazılmaz**.
+- Sınav: `kapi/sunucu.test.mjs` OD1–OD7 · `scripts/koltuk-bagla.test.sh` OD1–OD3. Merkezde oda başlıklı görünüm ayrı kartta (cloudtop).
 
 ## 🆕 2.32.0 · Boşta kalmış claude oturumlarını bulan araç artık her kutuda — Nexus'a bağlı değil (27 Eki · gorev …T6YWE6 · SERDAR 13:20)
 `scripts/bosta-oturum-tarama.py` yalnız Nexus'taydı (#1340); vekatip gibi izole kutular Nexus'u göremediği için aracı çalıştıramadı (vekatip'te 14 oturum/10 claude, 7 günden uzun boşta 2). Araç buraya taşındı ve kutuda çalışacak biçimde uyarlandı. Kuru koşu varsayılandır: `python3 scripts/bosta-oturum-tarama.py` yalnız listeler; `--zil` kapanıştan bir gün önce haber verir; `--kapat` zilden 24 saat sonra, 7 günden uzun boşta ve soru penceresi yokken kapatır.
