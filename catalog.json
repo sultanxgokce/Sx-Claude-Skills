@@ -1410,7 +1410,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.11.1",
+      "version": "1.11.2",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
