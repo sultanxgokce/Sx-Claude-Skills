@@ -13,12 +13,16 @@ export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek k
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
 # Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; göz 23 Eki tur 2) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
-TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; chmod +x "$TETIK_SAHTE"; export FABRIKA_TETIK="$TETIK_SAHTE"
+# 🧹 GEÇİCİ DİZİN SIZINTISI (SERDAR disk önceliği, gorev …DSSE): her koşu 4 dizin (içinde git deposu) + sahte tetik dosyası bırakıyordu;
+#    mutasyon koşumları bu betiği yeniden çağırdığından (mut_kos) bir sınav onlarca dizin sızdırıyordu. Hepsi ÇIKIŞTA silinir (erken çıkış dahil).
+TEMIZ=(); temizle() { local x; for x in "${TEMIZ[@]:-}"; do [ -n "$x" ] && find "$x" -delete 2>/dev/null; done; return 0; }
+trap temizle EXIT
+TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; TEMIZ+=("$TETIK_SAHTE"); chmod +x "$TETIK_SAHTE"; export FABRIKA_TETIK="$TETIK_SAHTE"
 kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e --oda sinav-oda >/dev/null 2>&1; }
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 
-T="$(mktemp -d)"; ( cd "$T" && git init -q -b main ) >/dev/null 2>&1
+T="$(mktemp -d)"; TEMIZ+=("$T"); ( cd "$T" && git init -q -b main ) >/dev/null 2>&1
 # 🔴 ZİL SIZINTI KİLİDİ (SERDAR 21:18 · #404): sınavdan SERDAR'a üç gerçek zil kaçtı ('BILINMEYEN iş-bitti is-zb') — Z3e sınav kipini
 #    ölçmek için FABRIKA_AILE_NOTIFY'ı boşaltıyor, 'sinav-kipi-gercek-zil' mutantı korumayı kapatınca denetçi gerçek aile-notify'ı buldu.
 #    Varsayılan zil aracı artık SAHTE: denetçinin keşfi önce PATH'e bakar, PATH başında bu sahte durur — hangi kapı aracı ezerse ezsin
@@ -511,7 +515,7 @@ fi
 export KANIT_DEPO="$T"
 echo "════ T-ISTEM · kapı istemin TAMAMINI ölçer: fark küçük ama istem eşiği aşarsa yine 'İŞİ BÖL', tur yakmaz (BÂNİ 21:59, #712 tur 4) ════"
 # kendi dizini: önceki bloklar $T içinden sahte denetçiyi ve d.patch'i silebiliyor (iç koşumda ölçüldü)
-TI="$(mktemp -d)"; ( cd "$TI" && git init -q -b main ) >/dev/null 2>&1
+TI="$(mktemp -d)"; TEMIZ+=("$TI"); ( cd "$TI" && git init -q -b main ) >/dev/null 2>&1
 printf '#!/usr/bin/env bash\ncp "$1" "${SAHTE_ISTEM_KOPYA:-/dev/null}"; printf "%%s" "$SAHTE_JSON"\n' > "$TI/sahte.sh"; chmod +x "$TI/sahte.sh"
 _T_ONCE="$T"; _DK_ONCE="${DENETCI_KOMUT:-}"; T="$TI"; export KANIT_DEPO="$TI" DENETCI_KOMUT="$TI/sahte.sh"
 # (a) fark minik, istemi ölçüm çıktısı şişiriyor (eski kapı burada kırpıp turu yakıyordu)
@@ -711,7 +715,7 @@ MUT_PARALEL="${MUT_PARALEL:-$(nproc 2>/dev/null || echo 2)}"
 # göz tur 1: sayı olmayan değer -gt/-lt'de düşer, iç döngü hiç dönmez, dış döngü SONSUZA dek sürerdi → sayı değilse 1 (sıralı, güvenli)
 [[ "$MUT_PARALEL" =~ ^[0-9]+$ ]] || { echo "  (uyarı) MUT_PARALEL sayı değil ('$MUT_PARALEL') → 1 (sıralı)"; MUT_PARALEL=1; }
 [ "$MUT_PARALEL" -gt 4 ] && MUT_PARALEL=4; [ "$MUT_PARALEL" -lt 1 ] && MUT_PARALEL=1
-MUT_ADLAR=(); MUT_DOSYALAR=(); MUT_BOLUMLER=(); MUT_RC_DIZ="$(mktemp -d)"
+MUT_ADLAR=(); MUT_DOSYALAR=(); MUT_BOLUMLER=(); MUT_RC_DIZ="$(mktemp -d)"; TEMIZ+=("$MUT_RC_DIZ")
 mut() { # mut <ad> <sed-ifadesi> [hedef] — mutantı ÜRETİR ve sıraya koyar; koşum mut_kos'ta (paralel)
   local hedef="${3:-$HERE/denetci.sh}" M="$HERE/.mutant-$1.sh"
   # 🔴 GEÇERSİZ MUTANT TUZAĞI (bağımsız göz 23 Eyl): sed ifadem hatalıydı, mutant üretilmedi ve
@@ -932,7 +936,7 @@ SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=50000 bash "$D" is-bol --diff "$T/bol
 echo "════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.22.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincilden koşum kayıt bırakmaz ════"
 # NİÇİN: denetçi DENETIM-N.json + KART.json'u çağrıldığı ağacın köküne yazar; iş alanı açıkken BİRİNCİL kopyadan `--pr N` ile koşulan son tur
 #        orada takipsiz kalıyordu (HENDESE 22 Eki: Nexus 9 + cloudtop 13 işte). Alan = IS_ALANI_KOK/<depo-adı>-<iş>; birincil = git-dir == git-common-dir.
-TP="$(mktemp -d)"; ( cd "$TP" && git init -q -b main && git -c user.email=t@t -c user.name=T commit -q --allow-empty -m "ilk" ) >/dev/null 2>&1
+TP="$(mktemp -d)"; TEMIZ+=("$TP"); ( cd "$TP" && git init -q -b main && git -c user.email=t@t -c user.name=T commit -q --allow-empty -m "ilk" ) >/dev/null 2>&1
 AKP="$TP/alanlar"; mkdir -p "$AKP"; WP="$AKP/$(basename "$TP")-is-p"; git -C "$TP" worktree add -q -b is-p "$WP" >/dev/null 2>&1; [ -d "$WP" ]; g $? "TP0 fikstür: birincil kopya + iş alanı"
 ( cd "$TP" && bash "$KT" ac is-p --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h ) >/dev/null 2>&1
 IS_ALANI_KOK="$AKP" KANIT_DEPO="$WP" bash "$K" olcum is-p olc --asama tek -- echo 1 >/dev/null 2>&1
