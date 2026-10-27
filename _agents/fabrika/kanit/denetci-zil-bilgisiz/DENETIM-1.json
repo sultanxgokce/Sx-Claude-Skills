@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "denetci-zil-bilgisiz",
+  "pr": "488",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T04:31:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-zil-bilgisiz",
+  "dal": "denetci-zil-bilgisiz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15792,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 2881
+  },
+  "bas": "1fe647b036e4a5d35f707b2c53b5ded7e9c82d3d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "İş adı yokken zil kesilmiş ve sebep stderr’e yazılmış; tur yokken de bilgi taşımayan yer tutucular kaldırılmış. Ancak talep iki bilinmezlik durumunu da kapsarken tur çözülemediğinde zil hâlâ SERDAR’a gidebilir ve sebep stderr’e yazılmaz; önce bu akışı ve doğrudan sınavını çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Tur çözülemediğinde hedefi bilinmeyen zil hâlâ SERDAR’a gönderilebilir; değişiklik yalnız mesajı bilgilendirici hale getiriyor, gönderimi engellemiyor ve sebebi stderr’e yazmıyor. Bu nedenle iş kartındaki “iş adı ya da tur çözülemediğinde … SERDAR’a göndermez; sebebi hata çıktısına yazar” talebi tam karşılanmamış.",
+        "kanit": "_zil içindeki yeni erken dönüş yalnız `[ -z \"${IS:-}\" ]` koşulunda çalışıyor. TUR boşluğu için eklenen satır sadece `m=\"${IS}: denetim açılmadı (tur yok) ...\"` atıyor; ardından mevcut hedef seçimi ve bildirim akışı sürüyor. Z3c sınavı da TUR yokken AGENT_NAME=HENDESE kullanarak yalnız HENDESE’ye giden metni doğruluyor; yazanın bilinmediği ve varsayılan hedefin SERDAR olduğu TUR-yok vakasını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:55 ve 70; yazilim-fabrikasi/scripts/denetci.test.sh:636",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; aynı etiketli önce/sonra ölçüm çifti kırmızıdan yeşile geçerek `bilgisiz_zil` sayısını 1’den 0’a indiriyor. Bununla birlikte ölçüm çıktısı yalnız toplam sayıyı gösteriyor; iş adı eksikliği ile tur eksikliğini, SERDAR hedefini ve tur-yok sebebinin stderr’e yazılmasını ayrı ayrı kanıtlamıyor, dolayısıyla talebin tamamı için yeterli değil."
+  }
+}
