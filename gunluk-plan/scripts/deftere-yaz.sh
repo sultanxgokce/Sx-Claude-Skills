@@ -12,7 +12,7 @@
 set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 CIPA="${GUNLUK_PLAN_CIPA_SH:-$KOK/cipa.sh}"
-GOREV="${GUNLUK_PLAN_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
+GOREV="$(bash "$(dirname "${BASH_SOURCE[0]}")/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"   # yol çözümü tek yerde (gorev-yolu.sh)
 UYGULA=0; KUTU="${GUNLUK_PLAN_KUTU:-}"; KIM=""; ACIL="esnek"; ONAY=""
 BUGUN="${GUNLUK_PLAN_TARIH:-$(date +%F)}"
 while [ $# -gt 0 ]; do

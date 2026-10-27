@@ -1,0 +1,62 @@
+{
+  "is": "gunluk-plan-gorev-sh-yolu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T10:51:39+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanoniksiz-kutu",
+      "asama": "once",
+      "dosya": "olcum-kanoniksiz-kutu-once.txt",
+      "sha256": "c914a1d65862b2a8b4024ad88026e1132a4fab70f85001bc24db466665babf42",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gorev-yolu-say.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T10:51:24+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7062744f7a434bee9afffb3fc8086a30"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanoniksiz-kutu",
+      "asama": "sonra",
+      "dosya": "olcum-kanoniksiz-kutu-sonra.txt",
+      "sha256": "0171242125f4650f59d08de0fd464fe8dd32e702c1310d2aa6fc58f05a95f011",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gorev-yolu-say.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T10:51:24+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5ef4d471bfcd43d98ffb433f18777882"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yol-sirasi-mutanti",
+      "asama": "sonra",
+      "dosya": "olcum-yol-sirasi-mutanti-sonra.txt",
+      "sha256": "488b815fe7c3a2655460e27f5da117c8182b5c00942df887a221486d1ea2a8c6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gorev-yolu-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T10:51:39+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kanoniksiz-kutu",
+      "beklenen": "kirmizi",
+      "olcum_id": "99296c93446147bf80b5c54047ec8c9e"
+    }
+  ],
+  "imza": "4deb393a0d2aa2fc41745bf9949d849e087f0dc8581334833760fce526b76ff8"
+}
