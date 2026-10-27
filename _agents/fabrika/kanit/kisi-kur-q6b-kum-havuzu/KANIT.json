@@ -1,7 +1,7 @@
 {
   "is": "kisi-kur-q6b-kum-havuzu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T09:48:47+03:00",
+  "guncelleme": "2026-10-27T09:52:48+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,18 +25,38 @@
       "etiket": "q6b-bos-gunluk",
       "asama": "sonra",
       "dosya": "olcum-q6b-bos-gunluk-sonra.txt",
-      "sha256": "15e342cdcdab0b45033c233a963220e9ae6a7912c3954fc8afa144818dd5aba9",
+      "sha256": "6c1cdc5cb570389f6f458deb426a132f6209850488f328ce126bef363a74edd5",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/q6b-say.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-27T09:48:47+03:00",
-      "sure_sn": 0.7,
+      "zaman": "2026-10-27T09:52:48+03:00",
+      "sure_sn": 0.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "bd4bd89ff8374aa8b68810ed93f6025f"
+      "olcum_id": "1217c32099bd402696693922afda0201"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "q6b-yazma-mutanti",
+      "asama": "sonra",
+      "dosya": "olcum-q6b-yazma-mutanti-sonra.txt",
+      "sha256": "5b55c8ba7ebaf6086471e190b76fd0339117051277d8827c27979ea1271906ec",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/q6b-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:52:48+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "q6b-bos-gunluk",
+      "beklenen": "kirmizi",
+      "olcum_id": "1d335d0f0a5b45c7bc0c0f377cd575ca"
     }
   ],
-  "imza": "8a088206b213918b759473848e2a1c642f6bf259e2fb67148c1f53f7c2553ab7"
+  "imza": "15ea99be7af9c649ba5596c4e1de39e0eeca344d664d387d44734c01fa4ed495"
 }

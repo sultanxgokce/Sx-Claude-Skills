@@ -11,10 +11,10 @@ ok "Q3 çıktı KURU KİP diyor ve 5+ adım sayıyor" "$(grep -q 'KURU KİP' "$T
 bash "$D/kisi-kur.sh" --kutu demo >"$T/kuru" 2>&1   # kum havuzsuz KURU kip: yalnız basar (süreç başlatma komutlarını görmek için)
 ok "Q4 ttyd-kisi YAZILABİLİR (-W) ve sabit komut" "$(grep -q -- '-a -W python3 /opt/kisi/kisi-istemci.py' "$T/kuru" && echo 0 || echo 1)" ""
 ok "Q5 abc'yi kişi grubuna EKLEMİYOR (usermod/gpasswd yok)" "$(grep -qE 'usermod|gpasswd|adduser abc' "$T/kuru" && echo 1 || echo 0)" ""
-GUNLUK_ONCE="$(stat -c '%s %Y' /tmp/ttyd-kisi.log 2>/dev/null || echo yok)"   # gerçek günlüğün önceki hâli (boyut+zaman | yok): canlı kutuda zaten bulunabilir
+GUNLUK_ONCE="$(stat -c '%s %y %i' /tmp/ttyd-kisi.log 2>/dev/null || echo yok)"   # gerçek günlüğün önceki hâli (boyut+zaman | yok): canlı kutuda zaten bulunabilir
 bash "$D/kisi-kur.sh" --kutu demo --kok "$T" --uygula >"$T/c2" 2>&1; rc=$?
 ok "Q6 --uygula (kum havuzu) rc 0" "$rc" "$(tail -3 "$T/c2")"
-GUNLUK_SONRA="$(stat -c '%s %Y' /tmp/ttyd-kisi.log 2>/dev/null || echo yok)"
+GUNLUK_SONRA="$(stat -c '%s %y %i' /tmp/ttyd-kisi.log 2>/dev/null || echo yok)"
 ok "Q6b kum havuzunda süreç başlatılmadı, gerçek yola yazılmadı (günlük önce/sonra AYNI)" "$([ "$GUNLUK_ONCE" = "$GUNLUK_SONRA" ] && grep -c 'süreç başlatma atlandı' "$T/c2" | grep -qx 2 && echo 0 || echo 1)" "önce=$GUNLUK_ONCE sonra=$GUNLUK_SONRA"
 ok "Q7 soket dizini 3770 (ayse ttyd soketini açabilsin, koprusu.sock'a dokunamasın)" "$([ "$(stat -c %a "$T/run/kisi")" = 3770 ] && echo 0 || echo 1)" "$(stat -c %a "$T/run/kisi" 2>&1)"
 ok "Q8 izin iskeleti yazıldı ve JSON" "$(python3 -c "import json,sys;j=json.load(open('$T/config/.terminal-onar/kisi/izin.json'));assert j['kisiler'][0]['kutular']['demo']==[]" 2>/dev/null && echo 0 || echo 1)" ""
