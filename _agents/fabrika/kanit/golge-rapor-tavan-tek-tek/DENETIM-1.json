@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "golge-rapor-tavan-tek-tek",
+  "pr": "502",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T13:42:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-golge-rapor-tavan-tek-tek",
+  "dal": "golge-rapor-tavan-tek-tek",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15851,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4339
+  },
+  "dalgic": "uyumlu",
+  "bas": "7e69f5820b602bab308c610e9dbb2655cf4122f4",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tavana dayanan depolarda liste sonucuna hükmetmek yerine her PR numarasıyla tekil sorgulanıyor ve Revert araması yine numarayla yapılıyor. Araç imzalı önce/sonra ölçümü tavandan kaynaklanan ölçülemeyen kayıtları 93'ten 0'a indirdiği, başarısız tekil sorgunun da yeşil sayılmadığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA doğrulaması verilmiş; sarı kayıt yok. Aynı etiketli ölçüm çifti eski kodda rc=1 ile tavandan kaynaklanan 93 kaydı, yeni kodda rc=0 ile 0 kaydı gösteriyor; ayrıca hükme varılan kayıt sayısı 28'den 121'e çıkarken sahte yeşil 0 kalıyor. Çıktı gerçekçi cloudtop ölçeğinde 148/149 kayıtla talebin hem tekil PR sorgusu hem de numaralı Revert araması sonucunu birlikte ölçüyor."
+  }
+}

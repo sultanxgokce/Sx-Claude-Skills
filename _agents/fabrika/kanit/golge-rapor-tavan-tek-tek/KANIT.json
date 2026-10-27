@@ -1,0 +1,44 @@
+{
+  "is": "golge-rapor-tavan-tek-tek",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T13:40:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "tavan-olculemeyen-kayit",
+      "asama": "once",
+      "dosya": "olcum-tavan-olculemeyen-kayit-once.txt",
+      "sha256": "235f8fda17f4fac858e810b650fd0267a2bf54bcf5069fb57f12ffcc252e5cff",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/golge-rapor-tavan-tek-tek/tavan-olc.sh",
+        "eski"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T13:38:35+03:00",
+      "sure_sn": 19.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d748ce2df6d14e3dbbc66d59bddc16c3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-olculemeyen-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-tavan-olculemeyen-kayit-sonra.txt",
+      "sha256": "8f281355ebb9b8c47116a57b923a50e812e497ef4ff7851c5c40a18a53f6fe89",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/golge-rapor-tavan-tek-tek/tavan-olc.sh",
+        "yeni"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T13:40:35+03:00",
+      "sure_sn": 114.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c1a489aff9294995a97041e4915e6f0d"
+    }
+  ],
+  "imza": "0e0209bdc1920fc3faf8a164e24e7f0ca16fed9fbe04244f8ad8c7b4bb26bf1a"
+}

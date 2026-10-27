@@ -41,6 +41,29 @@ while IFS= read -r repo; do
 done <<< "$REPOLAR"
 
 printf '%s\n' "$KAYITLAR" > "$TMP/kayit.jsonl"
+
+# Liste tavana dayandıysa (büyük depo) listeden hüküm VERİLMEZ; kaydın PR'ı numarasıyla tek tek sorulur (view) ve geri alma
+# PR'ı numarayla aranır. Tek PR sorusu tavana takılmaz; alınamayan kayıt yine "ölçülemedi" kalır (yeşil sayılmaz).
+python3 - "$TMP" "$TAVAN" > "$TMP/tekil.txt" <<'PY'
+import json,sys,os
+tmp,tavan=sys.argv[1],int(sys.argv[2]); gor=set()
+for l in open(os.path.join(tmp,"kayit.jsonl"),encoding="utf-8"):
+    if not l.strip(): continue
+    k=json.loads(l); r=k.get("repo") or ""; pr=str(k.get("pr") or "")
+    f=os.path.join(tmp,r.replace("/","_")+".json")
+    if not (r and pr.isdigit() and os.path.exists(f)): continue
+    try:
+        if len(json.load(open(f,encoding="utf-8")))>=tavan and (r,pr) not in gor: gor.add((r,pr)); print(r,pr)
+    except Exception: pass
+PY
+while read -r repo pr; do
+  [ -n "$pr" ] || continue
+  ad="$(printf '%s' "$repo" | tr '/' '_')_$pr"
+  if V="$($GH pr view "$pr" --repo "$repo" --json number,state,title,body,mergedAt 2>/dev/null)" && [ -n "$V" ]; then
+    printf '%s' "$V" > "$TMP/view_$ad.json"
+    if R="$($GH pr list --repo "$repo" --state all --limit 100 --search "Revert #$pr in:title,body" --json number,state,title,body,mergedAt 2>/dev/null)" && [ -n "$R" ]; then printf '%s' "$R" > "$TMP/rev_$ad.json"; fi
+  fi
+done < "$TMP/tekil.txt"
 python3 - "$TMP" "$TAVAN" <<'PY'
 import json,sys,os,re
 tmp,tavan=sys.argv[1],int(sys.argv[2])
@@ -56,11 +79,20 @@ for r in {k.get("repo") or "" for k in kay}:
 say={"birlesti":0,"acik":0,"kapandi":0,"geri":0,"olculemedi":0}; sahte=[]; goz=[]
 for k in kay:
     r=k.get("repo") or ""; pr=str(k.get("pr") or "")
-    if not pr.isdigit() or r not in liste or r in tavanda: say["olculemedi"]+=1; goz.append(f"  ? {k['is']} — ölçülemedi ({'PR no yok' if not pr.isdigit() else 'liste okunamadı/tavanda'})"); continue
-    p=next((x for x in liste[r] if str(x.get("number"))==pr),None)
+    if not pr.isdigit() or r not in liste: say["olculemedi"]+=1; goz.append(f"  ? {k['is']} — ölçülemedi ({'PR no yok' if not pr.isdigit() else 'liste okunamadı'})"); continue
+    if r in tavanda:
+        ad=r.replace("/","_")+"_"+pr; vf=os.path.join(tmp,"view_"+ad+".json"); rf=os.path.join(tmp,"rev_"+ad+".json")
+        try:
+            p=json.load(open(vf,encoding="utf-8")); rev=json.load(open(rf,encoding="utf-8")) if os.path.exists(rf) else None
+        except Exception: p=None
+        if not p or not isinstance(p,dict) or (rev is None and (p.get("mergedAt") or p.get("state")=="MERGED")):
+            say["olculemedi"]+=1; goz.append(f"  ? {k['is']} PR #{pr} — ölçülemedi (liste tavanda, tek PR sorusu da alınamadı)"); continue
+        hl=[p]+(rev or [])
+    else:
+        p=next((x for x in liste[r] if str(x.get("number"))==pr),None); hl=liste[r]
     if not p: say["olculemedi"]+=1; goz.append(f"  ? {k['is']} PR #{pr} — listede yok"); continue
     durum=p.get("state"); birl=bool(p.get("mergedAt")) or durum=="MERGED"
-    geri=birl and any((x.get("title") or "").lower().startswith("revert") and re.search(rf"#{pr}\b",(x.get("title") or "")+" "+(x.get("body") or "")) for x in liste[r])
+    geri=birl and any((x.get("title") or "").lower().startswith("revert") and re.search(rf"#{pr}\b",(x.get("title") or "")+" "+(x.get("body") or "")) for x in hl)
     if geri: say["geri"]+=1; sahte.append(f"  ✗ {k['is']} PR #{pr} — birleşti, sonra GERİ ALINDI")
     elif birl: say["birlesti"]+=1
     elif durum=="OPEN": say["acik"]+=1

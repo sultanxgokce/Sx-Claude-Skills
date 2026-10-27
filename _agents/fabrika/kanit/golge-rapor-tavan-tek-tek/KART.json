@@ -1,0 +1,25 @@
+{
+  "is": "golge-rapor-tavan-tek-tek",
+  "cumle": "Gölge raporu 1000 PR tavanına dayanan depoda (cloudtop) kayıtların hepsini 'ölçülemedi' sayıyor; tavana dayanan depoda kayıtlar PR numarasıyla tek tek sorulacak, Revert araması da numarayla yapılacak",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-27T13:34:38+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "1000 PR"
+  ]
+}
