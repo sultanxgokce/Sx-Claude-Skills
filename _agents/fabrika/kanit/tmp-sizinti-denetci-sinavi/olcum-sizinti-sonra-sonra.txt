@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/ol-sk.sh /config/projects/_wt/Sx-Claude-Skills-tmp-sizinti-denetci-sinavi/yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=1471.4s zaman=2026-10-27T23:08:37+03:00
+--- stdout ---
+birakilan=0
+--- stderr ---
