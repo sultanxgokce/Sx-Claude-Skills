@@ -26,7 +26,7 @@ KOMUT="$(grep -A1 'ttyd-kisi' "$T/kuru2" | grep '^  \$ ' | head -1 | sed 's/^  \
 bash -c "${KOMUT#bash -c }" ; sleep 2
 SOK="$T/r/ayse-ttyd.sock"
 ok "Q5c ttyd soketi OLUŞUR ve kapı (abc, 'other') için okunur-yazılır (0666; dizin 3770 diğerlerini zaten dışarıda tutar)" "$([ -S "$SOK" ] && [ "$(stat -c %a "$SOK")" = 666 ] && echo 0 || echo 1)" "$(ls -l "$SOK" 2>&1)"
-ok "Q5d günlük BÜYÜMÜYOR (sıkı döngü yok) ve ttyd süreci tek" "$([ -S "$SOK" ] && a=$(stat -c %s "$T/ttyd.log" 2>/dev/null || echo 0); sleep 2; b=$(stat -c %s "$T/ttyd.log" 2>/dev/null || echo 0); [ "$a" = "$b" ] && [ "$(pgrep -fc "$T/bin/sahte-ttyd -i")" -le 2 ] && echo 0 || echo 1)" "$(tail -2 "$T/ttyd.log" 2>&1)"
+ok "Q5d günlük BÜYÜMÜYOR (sıkı döngü yok) ve ttyd süreci tek" "$([ -S "$SOK" ] && a=$(stat -c %s "$T/ttyd.log" 2>/dev/null || echo 0); sleep 2; b=$(stat -c %s "$T/ttyd.log" 2>/dev/null || echo 0); [ "$a" = "$b" ] && [ "$(ps -eo args | grep -c "^bash $T/bin/sahte-ttyd -i")" = 1 ] && echo 0 || echo 1)" "$(tail -2 "$T/ttyd.log" 2>&1)"
 pkill -f "$T/bin/sahte-ttyd" 2>/dev/null; true
 GUNLUK_ONCE="$(stat -c '%s %y %i' /tmp/ttyd-kisi.log 2>/dev/null || echo yok)"   # gerçek günlüğün önceki hâli (boyut+zaman | yok): canlı kutuda zaten bulunabilir
 bash "$D/kisi-kur.sh" --kutu demo --kok "$T" --uygula >"$T/c2" 2>&1; rc=$?
