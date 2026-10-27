@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "oda-alani-layiha",
+  "pr": "505",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T15:09:36+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-alani-layiha",
+  "dal": "oda-alani-layiha",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20138,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 21188
+  },
+  "dalgic": "uyumlu",
+  "bas": "184662d85d42a2f7a5ff35ff75c069908840434f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İsteğe bağlı oda alanı eklenmiş; verilince yazma, geçersizi reddetme, değersiz bayrağı yakalama ve güncellemede eski değeri koruma davranışları gerçek ölçüm ile doğrulanmış. Ancak kabul regex’i gerçek kebab biçimini tam uygulamıyor; sondaki veya art arda tireleri kabul ettiği için önce bu uygulama sorununu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Oda doğrulaması gerçek kebab biçiminden daha gevşek: `a-` ve `a--b` gibi adlar kabul edilir; tire yalnız sözcükler arasında sınırlandırılmamış.",
+        "kanit": "Doğrulama `^[a-z][a-z0-9-]{1,30}$` kalıbını kullanıyor; karakter sınıfındaki `-` her sonraki konumda ve art arda geçebilir. OD3 yalnız `Bozuk Oda` örneğini sınıyor, bu sınır vakalarını kapsamıyor.",
+        "konum": "layiha/scripts/layiha-defteri.sh:245; layiha/scripts/layiha-defteri.test.sh:687",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 222/222 geçiyor, oda davranışları OD1–OD6 kapsamında sınanıyor; üç mutasyon da ilgili sınavların bozuk kodu yakaladığını gösteriyor. Bununla birlikte OD2 etiketi bayt-bayt aynılık dese de ölçüm yalnız `oda` alanının yokluğunu denetliyor; ayrıca kebab biçiminin tire sınırları için negatif örnek bulunmuyor."
+  }
+}
