@@ -87,13 +87,13 @@ jobs:
           set -uo pipefail
           PW="${RUNNER_TEMP}/pw"; mkdir -p "$PW"
           [ -f "$PW/node_modules/playwright-core/package.json" ] || (cd "$PW" && npm init -y >/dev/null && npm i playwright-core@1.59.1 --no-audit --no-fund)
-          CH="$(find "$HOME/.cache/ms-playwright" -name chrome-headless-shell -type f 2>/dev/null | head -1)"
+          CH="$(find "$HOME/.cache/ms-playwright" -name chrome-headless-shell -type f 2>/dev/null | head -1 || true)"
           if [ -z "$CH" ]; then
             for n in 1 2; do
               (cd "$PW" && timeout 240 npx playwright-core install --with-deps chromium-headless-shell) && break
               echo "::warning::tarayıcı kurulumu $n. deneme başarısız/zaman aşımı"
             done
-            CH="$(find "$HOME/.cache/ms-playwright" -name chrome-headless-shell -type f 2>/dev/null | head -1)"
+            CH="$(find "$HOME/.cache/ms-playwright" -name chrome-headless-shell -type f 2>/dev/null | head -1 || true)"
           fi
           [ -x "$CH" ] || { echo "::error::headless Chromium kurulamadı"; exit 1; }
           echo "DUMEN_CHROME=$CH" >> "$GITHUB_ENV"; echo "DUMEN_PLAYWRIGHT=$PW/node_modules/playwright-core" >> "$GITHUB_ENV"
