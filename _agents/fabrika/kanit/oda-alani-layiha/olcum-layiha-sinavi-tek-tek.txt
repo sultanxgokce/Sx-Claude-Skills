@@ -1,5 +1,5 @@
 $ bash -c cd layiha && exec bash scripts/layiha-defteri.test.sh
-# rc=0 sure=20.3s zaman=2026-10-27T15:06:07+03:00
+# rc=0 sure=8.0s zaman=2026-10-27T15:10:25+03:00
 --- stdout ---
 === G1 · sözdizimi ===
 PASS  G1 layiha-defteri.sh bash -n
@@ -259,13 +259,19 @@ PASS  OD2 --oda verilmezse alan HİÇ yazılmaz (bugünkü satırla bayt-aynı)
 PASS  OD3 biçim dışı oda rc 2
 PASS  OD3b sebep söylenir
 PASS  OD3c reddedilen kayıt deftere HİÇ yazılmaz
+PASS  OD3d sınır vakası 'a-' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası 'a--b' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası '-a' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası 'a-b-' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası 'x' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3e sınır vakaları deftere HİÇ yazılmadı
+PASS  OD3f sözcük arası tireli geçerli ad KABUL (ab-c-d1)
 PASS  OD4 değersiz --oda rc 2 (sessizce boş sayılmaz)
 PASS  OD4b sebep söylenir
 PASS  OD5 güncellemede --oda verilmezse ESKİ oda korunur
 PASS  OD6 güncellemede --oda verilirse değişir
-════════ SONUÇ: PASS=222 · FAIL=0 ════════
+════════ SONUÇ: PASS=229 · FAIL=0 ════════
 --- stderr ---
-⏳ agir-sira: kanit-oda-alani-layiha-layiha-sinavi-tek 10 sn bekledi (yuva 2, load1 7.22)
 UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
        Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
 UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
