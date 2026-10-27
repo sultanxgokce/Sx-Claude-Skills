@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kisi-kur-q6b-kum-havuzu",
+  "pr": "492",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T09:53:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-kur-q6b-kum-havuzu",
+  "dal": "kisi-kur-q6b-kum-havuzu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13978,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 7781
+  },
+  "dalgic": "uyumlu",
+  "bas": "e627cd402b855785fcd53c72164a45ffecfe743f",
+  "duzeltme_farki": {
+    "onceki_bas": "d8914e484b42ab7ae9bb85dd651b625633ac1a30",
+    "dosya": 6,
+    "bayt": 9830,
+    "tam_bayt": 14005
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, Q6b artık gerçek günlüğün yalnız varlığına değil, kum havuzu koşusundan önceki ve sonraki boyut, nanosaniyeli zaman ve inode imzalarının eşitliğine bakıyor. Önceki iki uygulama bulgusu da kapanmış: kaba zaman imzası güçlendirilmiş, kasıtlı yazma mutantının sınavı kırmızıya düşürdüğü araç imzalı ölçümle gösterilmiş; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçüm `q6b-bos-gunluk` için önce rc=1’den sonra rc=0’a geçen bir ölçüm çifti sunuyor; `gercek_olcum` aynı etiketi gösteriyor. B1, `%s %Y` yerine `%s %y %i` kullanılmasıyla kapanmış: zaman nanosaniye ayrıntısıyla ve inode ile ölçülüyor. B2, `mutasyon: true` olan `q6b-yazma-mutanti` kaydında bilerek bozulan kodun rc=1 vermesiyle kapanmış; buradaki kırmızı sonuç beklenen mutant yakalamasıdır, gerçek kodun yeşil durumu ayrı kayıttadır."
+  }
+}
