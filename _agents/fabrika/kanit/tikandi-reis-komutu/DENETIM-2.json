@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "tikandi-reis-komutu",
+  "pr": "507",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T00:39:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-tikandi-reis-komutu",
+  "dal": "tikandi-reis-komutu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38327,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 91278
+  },
+  "dalgic": "uyumlu",
+  "bas": "0c49d1390020cbd0afa36bf7881d5ede3c71d46f",
+  "duzeltme_farki": {
+    "onceki_bas": "64e7a49fd41a9479437f225846b7d200bbbaccee",
+    "dosya": 11,
+    "bayt": 96195,
+    "tam_bayt": 229418
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turun iki açığı da kapanmış: TIKANDI çıktısı gerçek iş adı ve kart sahibiyle reis karar komutunu, ardından `DENETCI_EK=--reis-devam` kullanan denetçi komutunu basıyor; karar yokken sıradaki 4. turun önce bu kararı istediğini açıkça söylüyor. Gerçek ölçüm 317/317 geçiyor ve beş hedefli mutasyon ilgili davranışların kaldırılmasını yakalıyor; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve tüm sha’lar tutuyor. Gerçek ölçüm `denetci-sinav` rc=0 ile 317 geçti · 0 kaldı: B1, `DENETCI_EK=--reis-devam` çıktısı ve ortam değişkeninin argümanla aynı davranmasıyla; B2, `4. tur ÖNCE bu komutu ister` çıktısıyla kapanmış. Beş mutasyon kaydı `mutasyon:true`, rc=1 ve yeşil; mutlak tavanda komut basmama, gerçek iş/sahip, geçersiz gövde, DENETCI_EK ve tur numarası korumalarının sınav tarafından gerçekten ölçüldüğünü gösteriyor. Sarı kayıt yok."
+  }
+}
