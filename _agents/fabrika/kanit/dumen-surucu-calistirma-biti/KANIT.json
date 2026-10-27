@@ -1,0 +1,44 @@
+{
+  "is": "dumen-surucu-calistirma-biti",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T12:56:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bit",
+      "asama": "once",
+      "dosya": "olcum-bit-once.txt",
+      "sha256": "c1725c20c07f90e755225883a77174b831a861493ec46f7199d28f6b5f494939",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/bit-say.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sxmain"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T12:56:55+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7f0546608cb849bbaa03273bf714c3db"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bit",
+      "asama": "sonra",
+      "dosya": "olcum-bit-sonra.txt",
+      "sha256": "1bb15572037e459cd5d947fee469e765772c215fd079b7ed24c6dfb4b3e9e07d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/bit-say.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-dumen-surucu-calistirma-biti"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T12:56:55+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4ef44447a7f14b1394a5f1a6a58639f0"
+    }
+  ],
+  "imza": "22927a7683983bfd39764ce05f04baab08261f2bfcd22a466f620c97afc1b6d4"
+}
