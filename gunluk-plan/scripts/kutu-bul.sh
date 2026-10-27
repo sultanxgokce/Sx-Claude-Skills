@@ -14,6 +14,7 @@ if [ -n "${GUNLUK_PLAN_KUTU:-}" ]; then printf '%s\n' "$GUNLUK_PLAN_KUTU"; exit 
 [ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
 [ -n "$KIM" ] || KIM="$(bash "$CIPA" ajan 2>/dev/null | python3 -c 'import sys; print(sys.stdin.read().strip())')"
 [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ajan kimliği çıkmadı (--kim ver)" >&2; exit 3; }
+[ -z "$KIM" ] || KIM="$(bash "$KOK/kimlik-coz.sh" "$KIM")" || { echo "ÖLÇÜLEMEDİ: koltuk adı defter adına çevrilemedi (koltuk-esleme.tsv)" >&2; exit 3; }   # koltuk adı → defter adı (tablo)
 if [ -n "$LISTE_DOSYA" ]; then LISTE="$(cat "$LISTE_DOSYA" 2>/dev/null)"; else LISTE="$(bash "$GOREV" liste 2>/dev/null)"; fi
 [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı" >&2; exit 3; }
 printf '%s\n' "$LISTE" | python3 -c '
