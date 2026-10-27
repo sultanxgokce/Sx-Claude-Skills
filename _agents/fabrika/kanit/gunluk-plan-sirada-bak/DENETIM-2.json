@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-sirada-bak",
+  "pr": "509",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T21:03:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-gorev-yolu-sonra-sonra.txt (yesil → gecersiz) — gorev.sh eşitlemesi denetçi tur 1 bulgusuyla PR kapsamından çıkarıldı; bu ölçüm o değişikliğe aitti ve artık PR'ın parçası değil (gorev-yolu.test.sh bu PR'da değişmedi) · MUAVIN",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-sirada-bak",
+  "dal": "gunluk-plan-sirada-bak",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57891,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 22530
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1290317cc6410a6029886a8a9bffe94ec6ed75a0",
+  "duzeltme_farki": {
+    "onceki_bas": "4e5dca6a42f7ee3b30574ec17361a532f8beb1c9",
+    "dosya": 15,
+    "bayt": 54473,
+    "tam_bayt": 48246
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki iki ana kusur kapanmış: eşik dolunca varsayılan akış en üst işi üstleniyor, yalnız-bak çıktısı gerçeğe uygun ve kart dışı `gorev.sh` ekleri geri çıkarılmış. İstenen iş yapılmış ve sınavlar güçlü; ancak eşik altındaki 1-2 mevcut işi kullanıcıya “planlanmış görev yok” diye sunan yanlış ifade üretim öncesi düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Eşik altında Sırada listesinde 1 veya 2 iş bulunabildiği halde soru metni “Bu kutuda planlanmış görev yok” diyor; karar dalı doğru olsa da Sultan'a verilen durum bilgisi kendi sayımıyla çelişiyor.",
+        "kanit": "Gerçek ölçümde S11, Sırada=1 durumunun KARAR=SOR dalına girdiğini doğruluyor. Üretim kodunun bu dalı ise değişmeksizin “Bu kutuda planlanmış görev yok ($N iş sırada)” yazıyor; dolayısıyla aynı çıktı hem iş olmadığını hem de N>0 olduğunu söylüyor.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh:49; olcum-sirada-bak-sonra-sonra.txt S11",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; geçersiz ilan edilen `gorev-yolu-sonra` kaydı değerlendirmeye katılmadı. Geçerli gerçek ölçümler 29/29 ve 32/32 yeşil; beş mutasyon da bozuk kodu beklenen biçimde yakalayarak özellikle varsayılan başlatma, `--bak`, kutu türetme ve `--ozet` kontrollerinin duyarlı olduğunu gösteriyor. Önce/sonra ölçüm çifti veya kullanıcı akışı karesi yok; buna karşın talebin çekirdek davranışları gerçekçi sahte görev verileriyle doğrudan sınanmış. Önceki B1, varsayılan üstlenme ve `--bak` ayrımıyla; B2 ise kart dışı oda/sipariş/çatışma/hakem kodlarının geri çıkarılmasıyla kapanmış."
+  }
+}
