@@ -1,0 +1,23 @@
+{
+  "is": "dumen-surucu-calistirma-biti",
+  "cumle": "dumen-surucu 0.1.0 betiği git'te çalıştırma bitsiz (100644) girdi; sync-skills duman testi düşüyor; sınav betiğine çalıştırma biti verilsin (0.1.1)",
+  "istedi": "HEZARFEN",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T12:56:25+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
