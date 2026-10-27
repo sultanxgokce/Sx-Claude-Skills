@@ -1,7 +1,7 @@
 ---
 name: oda-kur
 description: Kutu–oda modeli aracı — bir kutunun (tek depo) içinde amacı ayrı odalar kurar. Oda klasörü iskeleti (master prompt CLAUDE.md, oda.json hedef+reis+ölçü, hafiza/, .claude/skills+agents), kutu ortak ayarından HER odanın .claude/settings.json'unu üretir (izin, ayrı autoMemoryDirectory, yazma kancası), doğrular ve kod yazımını oda klasörüne, ortak veri yazımını çekirdeğin komutuna sınırlayan PreToolUse kancasını sağlar. Tetik "oda kur", "yeni oda", "odalara ayar üret", "oda doğrula", "oda kancası".
-version: 0.1.0
+version: 0.2.0
 ---
 
 # oda-kur — kutu–oda modeli: iskelet, ayar üretimi, yazma kancası
@@ -31,6 +31,11 @@ Karar: Nexus `_agents/handoff/kutu-oda-kararlari-20261027.md` (karar 9). Görev:
 - `dogrula <depo>` — iskeletin tamamı (CLAUDE.md, oda.json, hafiza/MEMORY.md, .claude/skills+agents), üretilmiş ayarın tazeliği (elle düzenleme/bayat → rc 1), hafıza ayrılığı. Hiç oda yoksa rc 3 ÖLÇÜLEMEDİ.
 - `yol <depo> <oda>` — açılış cwd'si: odanın mutlak klasörü. Koltuk başlatıcı `cd "$(oda.sh yol …)"` ile açar.
 - `kanca <oda_dizini> <ortak_json>` — PreToolUse kancası (üretilen ayar bunu bağlar). stdin JSON; rc 2 = durdur.
+- `cekirdek-yaz <depo> <yol> --neden "<tek cümle>" [--siparis gorev_<kimlik>] [--dosya <kaynak>]` — çekirdek ortak dosyaya TEK yazım yolu (Oda modeli 5 D4). İçerik `--dosya` ya da stdin.
+  - **Kim** ajanın beyanından değil, `DEFTER_JETON_YOL` dosyasındaki jetonla defterden (`GET /ben` → kutu + ajan) okunur. Yol değişkeni yok / dosya okunamaz / defter yanıt vermez / jetonda ajan kimliği yok → **ret, yazım 0** (varsayılan jetona düşülmez; 27 Eki olayı).
+  - **Yalnız kutu deposundan**: `<depo>` oda-ortak.json'u taşıyan git kökü olmalı ve komutu koşturan sürecin cwd'si aynı depoda olmalı; ayrı depodaki oda (kendi git deposu) yazamaz. Yol `ortak_veri` globlarına uymalı, depo dışına (sembolik bağ dahil) çıkamaz.
+  - **Kayıt** `<depo>/.claude/cekirdek-kayit.jsonl`: zaman · kim · kutu · dosya · önceki sha (yeni dosyada boş) · sonraki sha · neden · sipariş. `--siparis` yoksa `siparissiz: true` (çekirdek reisinin günlük nabzında ayrı satır). Reddedilen yazım kayıt bırakmaz. Yazım+kayıt tek işlem: kilit altında (eşzamanlı yazanlar sıraya girer, sha zinciri kopmaz), kayıt dosyası önce açılır, kayıt satırı yazılamazsa dosya eski içeriğine döner.
+  - Kanca doğrudan yazımı reddederken bu komutu gösterir.
 
 ## Kanca kuralları
 Write/Edit/MultiEdit/NotebookEdit ve Bash yazımı için (hedef yollar `realpath` ile çözülür → sembolik bağ kaçışı yok):
@@ -47,4 +52,4 @@ Fail-closed: kanca girdisi bozuksa, ortak ayar ya da `oda.json` okunamazsa DURDU
 - Kurulu kutularda ayarın üretilmesi pilot (TELLAL) ile.
 
 ## Sınav
-`bash scripts/oda.test.sh` — hermetik sahte iki odalı depo, 43 kapı + 15 mutant (ortak veri kuralı kapalı · oda dışı kuralı kapalı · realpath yok · bozuk girdi serbest · ortak ayar yoksa serbest · çekirdek komutu tüm zinciri izinli sayar · çekirdek eşleşmesi yalnız metin öneki · çekirdek parçada yönlendirme taranmaz · kanca komutu alıntısız · ek_yazma her odaya açık · oda-özel parça kancayı ezer · hafıza yolu ortak · uret yazmıyor · uret iskeleti kurmaz · doğrula MEMORY.md bakmaz). claude çağrılmaz.
+`bash scripts/oda.test.sh` — hermetik sahte iki odalı depo, 69 kapı (26'sı cekirdek-yaz, sahte defter /ben ile) + 29 mutant (ortak veri kuralı kapalı · oda dışı kuralı kapalı · realpath yok · bozuk girdi serbest · ortak ayar yoksa serbest · çekirdek komutu tüm zinciri izinli sayar · çekirdek eşleşmesi yalnız metin öneki · çekirdek parçada yönlendirme taranmaz · kanca komutu alıntısız · ek_yazma her odaya açık · oda-özel parça kancayı ezer · hafıza yolu ortak · uret yazmıyor · uret iskeleti kurmaz · doğrula MEMORY.md bakmaz). claude çağrılmaz.

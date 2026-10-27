@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "oda5-cekirdek-yaz",
+  "pr": "511",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T00:00:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda5-cekirdek-yaz",
+  "dal": "oda5-cekirdek-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30482,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 15375
+  },
+  "dalgic": "uyumlu",
+  "bas": "02494ef604694afc29eda825de7a3acd94059d57",
+  "duzeltme_farki": {
+    "onceki_bas": "2cc057040a83f6e325091a7a643f96696e5c7327",
+    "dosya": 7,
+    "bayt": 26346,
+    "tam_bayt": 52917
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun iki bulgusu için kayıt dosyasını önceden açma, kilitleme, geri alma ve eşzamanlı sha-zinciri sınavları eklenmiş; doğru hedef üzerinde çalışılmış. Ancak kayıt hatasından geri dönüş, eski içeriği aynı dosya sisteminde yeniden yazabilmeye bağlı olduğundan disk/kota türü gerçek bir yazma hatasında kayıtsız çekirdek değişikliği hâlâ kalabilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "B1 ancak dar hata koşulunda kapanmış: kayıt satırı yazılamayınca eski hedef güvenli biçimde elde tutulmuyor, bellekten yeni bir geçici dosyaya yeniden yazılmaya çalışılıyor. Kayıt hatasının nedeni disk doluluğu, kota veya hedef dosya sistemindeki genel yazma arızasıysa geri alma geçicisi de yazılamayabilir; eski hedef `os.replace` ile zaten kaldırıldığı için yeni çekirdek içeriği kayıtsız kalır. B2 kapanmış: kilit sha okuma, hedef değiştirme ve kayıt ekleme zincirinin tamamını seri hale getiriyor ve C24 bunu sekiz eşzamanlı yazımla ölçüyor.",
+        "kanit": "Üretim kodu önce `os.replace(gecici, hedef)` ile eski hedefi kaldırıyor; kayıt `write/flush/fsync` hatasında ise eski baytları `tempfile.mkstemp(...)` ile aynı hedef dizininde yeniden üretip `os.replace` etmeye çalışıyor. Bu geri alma yazımı ayrıca korunmuyor ve başarısızlığı halinde eski hedefe dönecek kalıcı bir dosya yok. C22 yalnız küçük bir KAYIT.json ve süreçte `ulimit -f 1` ile sınanıyor; genel disk/kota arızasında geri alma yazımının da başarısız olduğu vaka ölçülmüyor. Buna karşı C24 çıktısı sekiz eşzamanlı yazımda zincirin kopmadığını bildiriyor.",
+        "konum": "oda-kur/scripts/oda.py: cekirdek_yaz — hedefe ilk os.replace sonrası kayıt istisnasındaki `.cekirdek-geri-` yeniden yazımı; oda-kur/scripts/oda.test.sh:C22,C24",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki yeşil gerçek ölçüm rc=0, son ölçüm 67/67 kapı ve C21–C24 davranışlarını kapsıyor. Mutasyon bölümündeki ✗ satırları beklenen bozma kanıtıdır ve gerçek kod hatası değildir; tüm mutantlar yakalanmış. Önceki eşzamanlılık açığı güçlü biçimde ölçülmüş, fakat geri almanın kendisinin yazamadığı gerçekçi depolama arızası ölçülmediği için atomiklik iddiası tam kanıtlanmıyor."
+  }
+}

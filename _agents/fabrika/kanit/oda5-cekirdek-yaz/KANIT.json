@@ -1,0 +1,76 @@
+{
+  "is": "oda5-cekirdek-yaz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T00:21:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "oda-sinav",
+      "asama": "tek",
+      "dosya": "olcum-oda-sinav-tek.txt",
+      "sha256": "c95399924ab768a267e8f0d6ae2bb2154bb44b980f48875c785d1dcf8981052d",
+      "komut": [
+        "bash",
+        "oda-kur/scripts/oda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T23:11:59+03:00",
+      "sure_sn": 832.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4133cd17ed434207bf2034880938cf4b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oda-sinav-2",
+      "asama": "tek",
+      "dosya": "olcum-oda-sinav-2-tek.txt",
+      "sha256": "5760cd77bc1e165533bf6a8b3156a4a785cfa17668c03e37c4847c1e083ae96d",
+      "komut": [
+        "bash",
+        "oda-kur/scripts/oda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T23:23:32+03:00",
+      "sure_sn": 201.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9782a735017e426293b1fd97a1897014"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oda-sinav-3",
+      "asama": "tek",
+      "dosya": "olcum-oda-sinav-3-tek.txt",
+      "sha256": "23a9f49169bf84f4fcc052c7d468933b99de63f46480cd1ba22f6747aa63c401",
+      "komut": [
+        "bash",
+        "oda-kur/scripts/oda.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T00:06:07+03:00",
+      "sure_sn": 224.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "46a9b8d43da245e0b81d23bd591548b4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oda-sinav-4",
+      "asama": "tek",
+      "dosya": "olcum-oda-sinav-4-tek.txt",
+      "sha256": "183b8cc55c8749e5cbc5b350fec39a31cfebb8d9a2636dcc6e183bb2e224b111",
+      "komut": [
+        "bash",
+        "oda-kur/scripts/oda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:21:25+03:00",
+      "sure_sn": 672.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "19a0b1bea75e4019adf6f61545c7b88c"
+    }
+  ],
+  "imza": "95ae9e7104177c88c249a428fe2da3ee120267c6e5de92e8795e25e883654107"
+}
