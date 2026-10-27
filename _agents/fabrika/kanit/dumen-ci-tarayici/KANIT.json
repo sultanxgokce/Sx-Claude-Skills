@@ -1,0 +1,29 @@
+{
+  "is": "dumen-ci-tarayici",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T14:33:45+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ci-kovalari",
+      "asama": "tek",
+      "dosya": "olcum-ci-kovalari-tek.txt",
+      "sha256": "c6b9402335b0ab5595e3b968d87b3d8604187c55e47074e27d6509292895bccb",
+      "komut": [
+        "gh",
+        "pr",
+        "checks",
+        "501",
+        "--repo",
+        "sultanxgokce/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T14:33:45+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "894317ac1192482a861cd16fb0bbf244"
+    }
+  ],
+  "imza": "3cb2c55f83775f84dd870e54794f0a6ad3454d7b87996642cab09d0d537abf01"
+}
