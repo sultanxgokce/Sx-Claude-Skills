@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "oda-kur-beceri",
+  "pr": "503",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T14:54:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-kur-beceri",
+  "dal": "oda-kur-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47877,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 10495
+  },
+  "dalgic": "uyumlu",
+  "bas": "c94b84ff304a96f8af1d69fb1b0f591b15a875a6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Oda iskeleti, ortak ayardan settings üretimi, doğrulama ve yazma kancası talep edilen yönde kurulmuş; gerçek entegrasyon ile mutasyon ölçümleri de ana kapıların çalıştığını gösteriyor. Ancak çekirdek komutunun yalnız metinsel önekle güvenilir sayılması oda içindeki aynı adlı betiğe yetki kazandırabiliyor ve iskelet doğrulaması eksik kalıyor; üretimden önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Çekirdek komutu yetkilendirmesi gerçek çekirdek betiğini çözümlemek yerine komut metninin önekine bakıyor. Kanca oda cwd'sinde çalışırken ajan kendi odasında `scripts/ortak-yaz.sh` oluşturup `bash scripts/ortak-yaz.sh ...` metniyle çalıştırabilir; bu parça hiç hedef taramasına girmediğinden ortak veriye yazma sınırı aşılabilir. K14 sınavı komutu gerçekten çalıştırmadığı için bu kimlik/yol sorununu ölçmüyor.",
+        "kanit": "`bash_cekirdek_mi` yalnız `p == c` veya `p.startswith(c + ' ')` denetliyor; `karar` bu durumda `continue` ile parçayı tümden atlıyor. K14 ise yalnız kancanın rc=0 dönmesini sınıyor ve komutun depo kökündeki gerçek çekirdek betiğine çözüldüğünü doğrulamıyor.",
+        "konum": "oda-kur/scripts/oda.py:271; oda-kur/scripts/oda.py:285; oda-kur/scripts/oda.test.sh:80",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`dogrula`, belgelenen oda iskeletinin tamamını doğrulamıyor; `.claude/skills`, `.claude/agents` ve `hafiza/MEMORY.md` silinse bile temiz sonuç verebilir. Ayrıca `uret`, settings zaten aynıysa erken `continue` ettiği için eksik klasörleri yeniden kurmuyor.",
+        "kanit": "İskelet O1 sınavında `CLAUDE.md`, `oda.json`, `hafiza/`, `.claude/skills` ve `.claude/agents` olarak tanımlanmışken `dogrula` yalnız iki dosya ile `hafiza/` klasörünü denetliyor; `uret` içindeki `eski == yeni` dalı dizin oluşturma satırlarından önce dönüyor.",
+        "konum": "oda-kur/scripts/oda.py:111; oda-kur/scripts/oda.py:188; oda-kur/scripts/oda.test.sh:32",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Üretilen PreToolUse komutunda betik, oda ve ortak ayar yolları kabuk için alıntılanmıyor; boşluk veya kabuk metakarakteri taşıyan geçerli depo yollarında kanca kurulumu bozulabilir ya da komut ayrıştırması değişebilir.",
+        "kanit": "Kanca komutu doğrudan `f'bash {kanca_betik} kanca {abs_oda} {ortak_yol}'` ile kuruluyor; hiçbir argümanda kabuk alıntılama/kaçışlama yok. `yeni` depo yoluna ad kısıtı uygulamıyor.",
+        "konum": "oda-kur/scripts/oda.py:91",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 0 kapıdan 35 kapıya ve 0 mutanttan 10 mutanta geçişi gösteriyor; dört ayrı mutasyon kaydı da bozuk kodun sınavca yakalandığını doğruluyor. Gerçek Claude kanca ölçümü kendi oda/kardeş oda/ortak veri için rc=0 ve beklenen sonuçları veriyor; ancak Bash çekirdek-komut kimliği ile eksik iskelet senaryolarını ölçmüyor ve hermetik sınavdaki K14 komutu icra etmiyor."
+  }
+}
