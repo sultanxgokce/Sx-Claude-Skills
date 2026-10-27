@@ -1,9 +1,16 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.31.1
+version: 2.32.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.32.0 · Boşta kalmış claude oturumlarını bulan araç artık her kutuda — Nexus'a bağlı değil (27 Eki · gorev …T6YWE6 · SERDAR 13:20)
+`scripts/bosta-oturum-tarama.py` yalnız Nexus'taydı (#1340); vekatip gibi izole kutular Nexus'u göremediği için aracı çalıştıramadı (vekatip'te 14 oturum/10 claude, 7 günden uzun boşta 2). Araç buraya taşındı ve kutuda çalışacak biçimde uyarlandı. Kuru koşu varsayılandır: `python3 scripts/bosta-oturum-tarama.py` yalnız listeler; `--zil` kapanıştan bir gün önce haber verir; `--kapat` zilden 24 saat sonra, 7 günden uzun boşta ve soru penceresi yokken kapatır.
+- **Muaf (Sultan-eşli) liste:** `OT_MUAF` → `~/.filo/sultan-esli-koltuklar.txt` → Nexus kopyası. Liste **bulunamazsa ya da boşsa `--kapat` hiçbir şey kapatmaz** (rc 3, fail-closed). Kutuya listeyi Sultan'ın kararıyla kutu reisi yazar.
+- **Zil kanalı:** `OT_NOTIFY` → yanındaki `aile-notify.sh` → Nexus `aile-notify.sh` → PATH'teki `ulak gonder <OTURUM-BÜYÜK>`. Hiçbiri yoksa `--zil` ölçülemedi der (rc 3); başarısız zil deftere yazılmaz, yani kapatmaya ilerlemez.
+- **Dürüst sınır:** `ulak` yedeği oturum adını büyük harfe çevirir (ajan adı varsayımı); kutuda oturum adı ajan adından farklıysa zil ulaşmayabilir — o durumda `OT_NOTIFY` ile kutunun kendi komutu verilir. Soru penceresi tespiti `filo.py` yoksa ekrandaki desenle yapılır (daha kaba).
+- **Sınav:** `scripts/bosta-oturum-tarama.test.sh` 29 kapı (Nexus'tan gelen 21 + 8 yeni: muaf yok/boş → kapatma yok, varsayılan `~/.filo` listesi, zil kanalı yok → rc 3, `ulak` yedeği); dört mutant (muaf kapısı yok · zil kapısı yok · `ulak` küçük harf · varsayılan muaf yolu yok) sınavı kırdı. Gerçek kutuda kuru koşu çalıştı.
 
 ## 🆕 2.31.0 · Arka plan işi süren koltuk artık "boş" görünmüyor — durum çubuğunun yeni yazımı tanınır (27 Eki · AZWHMF)
 Claude Code durum çubuğu arka plan kabuklarını artık `· 7 shells ·` diye yazıyor (`running` kelimesi YOK); 2.7.0'dan beri kalıp yalnız `N shells still running` biçimini arıyordu. Sonuç: arka planda sınav koşan koltuk (BERİD, 24 Eki) panelde "koltuğu boş görünüyor" çıkıyordu. `koltuk_hali` kalıbı iki yazımı da tanır (`N shell(s)` + isteğe `still running`, ardından `·` ya da satır sonu); düz metindeki "1 shell command" sayılmaz. Hâl `dis-olay` olur, ne = `7 shells`; panel metni zaten vardı (⏳ dış olay bekliyor), bekçi davranışı aynı. Yeni yazım yalnız solunda `·` olan durum çubuğu biçiminde tanınır (düz metin "... 2 shells" ve "- 2 shells" sayılmaz). Sınav D13h-l (yeni yazım, tekil, üç negatif); önce eski betikle D13h/i kırmızı.
@@ -609,6 +616,7 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
+- **2.32.0 (2026-10-27, MİRAHUR · gorev …T6YWE6):** `bosta-oturum-tarama.py` + sınavı Nexus'tan taşındı; muaf liste/zil kanalı kutuya göre çözülür, muaf listesi yokken `--kapat` rc 3. Ayrıntı yukarıda.
 - **2.31.1 (2026-10-27, HEZARFEN · SERDAR 12:40 acil, medigate rc 5):** kişi-kur soket dizini 0750→3770 abc:ayse. `ayse` ttyd soketini 0750 dizinde açamıyordu (bind EACCES, `/tmp/ttyd-kisi.log` sıkı döngüyle saniyede onlarca MB büyüdü); yapışkan bit koprusu.sock'u koruyor, setgid soketi ayse grubuna veriyor. Köprü: abc `ayse` grubuna üye olmadığından `os.chown` EPERM verip köprüyü öldürüyordu → yutulur.
 - **2.30.0 (2026-10-26, BERİD · gorev_…880TAK; 2.28.0/2.29.0 BÂNİ kişi-sök/kişi-kur ile aynı gün):** `claude_baslat` satırına `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` (`SIKISTIRMA_ENV`, sabit); bekçide `sikistirma_denetle` (ortam tam '600k' → hesap ayarı → eşiksiz; claude yoksa ölçülemedi), yalnız değişince günlük; sınav `sikistirma-ortami.test.sh`.
 - **2.27.0 (2026-10-26, BÂNİ · A5-3):** kapıda `/tty-k/*` → ttyd-kisi vekili (kökten yol, soket yoksa 502, abc ttyd'sine düşmez); `KAPI_KISI` · `KAPI_TTYD_KISI_SOKET`.
