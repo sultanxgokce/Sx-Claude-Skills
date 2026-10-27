@@ -1,0 +1,23 @@
+{
+  "is": "gunluk-plan-koltuk-esleme",
+  "cumle": "Günlük plan becerisi koltuk adını defterdeki ada tablodan çevirsin, ortam değişkeni gerekmesin",
+  "istedi": "SERDAR",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-28T01:49:46+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
