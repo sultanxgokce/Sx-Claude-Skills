@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "dumen-surucu-beceri",
+  "pr": "498",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T12:54:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-surucu-beceri",
+  "dal": "dumen-surucu-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33571,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9041
+  },
+  "dalgic": "uyumlu",
+  "bas": "5c7ca18263b41c43753c03fae0e59be199ace492",
+  "duzeltme_farki": {
+    "onceki_bas": "d31be9cf44f741c00a1669d580f431584dbedaa7",
+    "dosya": 9,
+    "bayt": 29206,
+    "tam_bayt": 32621
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun iki kusuru da kapatılmış: ham Playwright/CDP nesneleri özel alanlara alınmış, durak bildirimi ise HTTP başarısını denetleyip başarısızlığı açıkça taşıyor. Talepteki eylem kapısı, durma noktası bildirimi ve olay eşleme davranışları ölçülmüş; üretime engel bir kusur görünmediği için 5.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı kayıt yoktur. Gerçek `kapi` önce/sonra ölçümü 0→18 geçen kapı ve 0→6 yakalanan mutant gösteriyor; ayrıca `mutasyon:true` kaydındaki rc=1, bozuk kodun beklendiği gibi yakalanmasıdır ve gerçek kod hatası değildir. Önceki B1, `#page/#cdp/#tarayici` özel alanları, dışarıdan ham nesne bulunmadığını ölçen D17 ve ilgili mutantla kapanmış; B2, `return r.ok`, `KapiHata.bildirildi=false`, uyarı satırı, D18 ve 5xx mutantıyla kapanmıştır. Görsel kare yoktur; ancak bu kod davranışı için gerçek headless Chromium kullanan önce/sonra ölçüm çifti ve mutasyon sınaması yeterli, hedefle uyumludur."
+  }
+}
