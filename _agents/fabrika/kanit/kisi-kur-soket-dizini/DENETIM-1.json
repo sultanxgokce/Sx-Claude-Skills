@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kisi-kur-soket-dizini",
+  "pr": "490",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T08:44:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-kur-soket-dizini",
+  "dal": "kisi-kur-soket-dizini",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14556,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 1716
+  },
+  "dalgic": "uyumlu",
+  "bas": "e68bb2877745866d513f80d6a7c49baf55eccb85",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Soket dizini ayse’nin yazabilmesi için grup yazılabilir, setgid ve yapışkan bitli 3770 kipine alınmış; köprünün yetkisiz grup değiştirme denemesi de artık süreci öldürmüyor. Değişiklik talebi doğrudan karşılıyor, ilgili iki davranış için regresyon sınavları eklenmiş ve üretimi engelleyen kanıtlı bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek ölçüm yeşil (rc=0) ve çıktı kisi_kur_kirmizi=0 ile kopru_kirmizi=0 bildiriyor. Diffte dizin kipi için Q7 ve chown PermissionError karşısında köprünün dinlemeye devam etmesi için K27d sınavları görülüyor; ancak çıktı yalnız toplu kırmızı sayılarını verdiğinden tek tek kapı sonuçları ve gerçek ayse kullanıcısıyla uçtan uca bağlama denemesi görünür değil. Önce/sonra kare ya da ölçüm çifti yok, fakat bu kabuk/Python davranış değişikliği için kod farkı ve otomatik regresyon ölçümü yeterli."
+  }
+}
