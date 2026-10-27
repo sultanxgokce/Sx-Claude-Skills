@@ -6,7 +6,7 @@
 #   --kok DİZİN: tüm yolları o dizin altına taşır ve kullanıcı/grup/sahiplik adımlarını ATLAR (sınav kum havuzu).
 # Kurulanlar (hepsi İDEMPOTENT):
 #   1 grup+kullanıcı   `ayse` (sistem, ev dizini YOK, kabuk nologin, grup `ayse`; abc bu gruba ÜYE DEĞİL — soket grup izniyle açılır)
-#   2 /run/kisi        0750 abc:ayse (köprü soketi burada: 0660 abc:ayse)
+#   2 /run/kisi        3770 abc:ayse (setgid: köprü soketi 0660 abc:ayse olur; yapışkan: ayse yalnız kendi ttyd soketini açıp silebilir; 0750'de ttyd bind EACCES verip sıkı döngüye giriyordu)
 #   3 izin dosyası     /config/.terminal-onar/kisi/izin.json (merkez-kisiler.json biçimi; YOKSA boş iskelet, VARSA dokunulmaz — Sultan yazar)
 #   4 köprü            abc olarak: koltuk-koprusu.py (KOPRU_SOKET=/run/kisi/koprusu.sock)
 #   4b istemci kopyası /opt/kisi/kisi-istemci.py (kök sahipli; ayse /config'e erişemez)
@@ -70,8 +70,9 @@ else
   yap useradd -r -M -N -g "$KULLANICI" -u "$UID_" -s /usr/sbin/nologin "$KULLANICI"
 fi
 
-adim "soket dizini $RUN (0750 abc:$KULLANICI)"
-if [ -n "$KOK" ]; then yap install -d -m 0750 "$RUN"; else yap install -d -m 0750 -o abc -g "$KULLANICI" "$RUN"; fi
+adim "soket dizini $RUN (3770 abc:$KULLANICI — ayse ttyd soketini burada açar; yapışkan bit koprusu.sock'u silmesini/değiştirmesini önler, grup biti köprü soketini ayse grubuna verir)"
+if [ -n "$KOK" ]; then yap install -d -m 0770 "$RUN"; else yap install -d -m 0770 -o abc -g "$KULLANICI" "$RUN"; fi
+yap chmod 3770 "$RUN"   # install -d özel bitleri düşürebilir → ayrı chmod'la sabitlenir
 
 adim "izin dosyası $IZIN (VARSA dokunulmaz)"
 if [ -e "$IZIN" ]; then echo "  ✓ var — dokunulmadı"; else

@@ -364,7 +364,11 @@ def dinle(yol):
         os.umask(eski)
     grup = ortam("KOPRU_GRUP")
     if grup:
-        os.chown(yol, -1, grp.getgrnam(grup).gr_gid)
+        try:
+            os.chown(yol, -1, grp.getgrnam(grup).gr_gid)
+        except PermissionError:
+            # abc `ayse` grubuna üye değil → chown EPERM verir ve köprü ölürdü; soket dizinin grup biti (setgid) grubu zaten verir
+            pass
     s.listen(8)
     return s
 

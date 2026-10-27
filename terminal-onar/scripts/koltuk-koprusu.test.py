@@ -220,6 +220,20 @@ try:
     iz = open(T + "/iz.jsonl").read()
     ok("K25 eylemler izli (mesaj/sik/ret)", '"op": "mesaj"' in iz and '"op": "sik"' in iz and '"sonuc": "ret"' in iz and "uid-izinli-degil" in iz)
     ok("K26 iz günlüğü mesaj METNİNİ taşımaz", "Merhaba" not in iz)
+    # K27: abc `ayse` grubuna üye değilse chown EPERM verir; köprü ölmemeli (medigate 27 Eki: köprü sessizce düşüp soket yetim kaldı)
+    import importlib.util
+    sp = importlib.util.spec_from_file_location("kopru_mod", KOPRU); mod = importlib.util.module_from_spec(sp); sp.loader.exec_module(mod)
+    eski_chown, eski_ortam = mod.os.chown, os.environ.get("KOPRU_GRUP")
+    def reddet(*a, **k): raise PermissionError(1, "Operation not permitted")
+    mod.os.chown = reddet; os.environ["KOPRU_GRUP"] = "root"
+    try:
+        s3 = mod.dinle(T + "/k3.sock"); dinledi = True; s3.close()
+    except PermissionError:
+        dinledi = False
+    finally:
+        mod.os.chown = eski_chown
+        os.environ.pop("KOPRU_GRUP", None) if eski_ortam is None else os.environ.__setitem__("KOPRU_GRUP", eski_ortam)
+    ok("K27d grup atama izni reddedilse de köprü dinlemeye başlar", dinledi)
 finally:
     kopru.poll() is None and kopru.terminate()
     tmux("kill-server")

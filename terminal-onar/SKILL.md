@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.31.0
+version: 2.31.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -609,6 +609,7 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
+- **2.31.1 (2026-10-27, HEZARFEN · SERDAR 12:40 acil, medigate rc 5):** kişi-kur soket dizini 0750→3770 abc:ayse. `ayse` ttyd soketini 0750 dizinde açamıyordu (bind EACCES, `/tmp/ttyd-kisi.log` sıkı döngüyle saniyede onlarca MB büyüdü); yapışkan bit koprusu.sock'u koruyor, setgid soketi ayse grubuna veriyor. Köprü: abc `ayse` grubuna üye olmadığından `os.chown` EPERM verip köprüyü öldürüyordu → yutulur.
 - **2.30.0 (2026-10-26, BERİD · gorev_…880TAK; 2.28.0/2.29.0 BÂNİ kişi-sök/kişi-kur ile aynı gün):** `claude_baslat` satırına `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` (`SIKISTIRMA_ENV`, sabit); bekçide `sikistirma_denetle` (ortam tam '600k' → hesap ayarı → eşiksiz; claude yoksa ölçülemedi), yalnız değişince günlük; sınav `sikistirma-ortami.test.sh`.
 - **2.27.0 (2026-10-26, BÂNİ · A5-3):** kapıda `/tty-k/*` → ttyd-kisi vekili (kökten yol, soket yoksa 502, abc ttyd'sine düşmez); `KAPI_KISI` · `KAPI_TTYD_KISI_SOKET`.
 - **2.26.0 (2026-10-26, HEZARFEN · A5-1):** koltuk köprüsü + kişi istemcisi + mesaj komutu + kuru kipli kurulum paketi; ham tuş eylemi yok; `ttyd-kisi` `-W` düzeltmesi.
