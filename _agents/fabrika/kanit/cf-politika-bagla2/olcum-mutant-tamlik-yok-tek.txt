@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf/tamlik-yok/cf.test.sh
+# rc=1 sure=2.3s zaman=2026-10-27T11:53:27+03:00
+--- stdout ---
+== cloudflare-erisim golden-testleri (offline) ==
+  ✗ FAIL: T16f jeton listesi eksik (total≠dönen) → DUR, yazım 0
+== 92 geçti · 1 düştü ==
+--- stderr ---
