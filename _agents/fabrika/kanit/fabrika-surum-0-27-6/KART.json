@@ -1,0 +1,23 @@
+{
+  "is": "fabrika-surum-0-27-6",
+  "cumle": "yazilim-fabrikasi sürümü 0.27.6'ya çıkar: #494 sürüm artırmadan birleşti, kutular senkronda 'içerik drift' görüp denetçi düzeltmesini kurmuyor",
+  "istedi": "BANI",
+  "aldi": "BANI",
+  "zaman": "2026-10-27T15:00:18+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
