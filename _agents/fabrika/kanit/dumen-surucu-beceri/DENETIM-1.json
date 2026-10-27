@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "dumen-surucu-beceri",
+  "pr": "498",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T12:50:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-surucu-beceri",
+  "dal": "dumen-surucu-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29115,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4553
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d31be9cf44f741c00a1669d580f431584dbedaa7",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Sultan/erişilemez modunda reddetme, durak sezgileri, olay eşleme ve mutasyon sınavları yazılmış; ancak sarmalayıcı, kapıyı atlatan ham Playwright/CDP nesnelerini doğrudan dışarı açıyor. İş kartının merkezindeki “eylem kapısı sarmalayıcı/tek yol” güvencesi bu nedenle sağlanmadığından ciddi hata var ve yapılan iş talebin güvenlik anlamını karşılamıyor.",
+    "bulgular": [
+      {
+        "ne": "Eylem kapısı kolayca atlanabiliyor: Dumen örneği `page`, `cdp` ve bağlantı sonrasında `tarayici` nesnelerini herkese açık tutuyor. Çağıran kod `d.page.fill(...)`, `d.page.evaluate(...)`, `d.cdp.send(...)` veya tarayıcı bağlamları üzerinden mod ve durma noktası denetimi olmadan Chrome'u sürebilir; bu, “ham page.evaluate / ham CDP verilmez” ve “tek yolu” iddialarını geçersiz kılıyor.",
+        "kanit": "Kurucu `Object.assign(this, { page, cdp, ... })` ile ham nesneleri açık alanlara koyuyor; `baglan` ayrıca `d.tarayici = tarayici` atıyor. Sınavın kendisi de bu kaçış yolunun kullanılabilir olduğunu `d.page.evaluate(...)` çağrılarıyla fiilen gösteriyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:21, dumen-surucu/scripts/dumen.mjs:32, dumen-surucu/scripts/dumen.test.mjs:35",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Durak bildiriminin başarısızlığı tamamen yutuluyor; HTTP 4xx/5xx yanıtları da başarı sayılıyor. Böylece eylem durdurulsa bile iş kartında istenen bildirim merkeze ulaşmadan kullanıcıya bildirilmiş izlenimi verilebilir.",
+        "kanit": "`durakBildir` yanıtın `ok` durumunu denetlemiyor ve tüm hataları boş `catch` ile yok sayıyor; hemen ardından `kapi` koşulsuz olarak “durdum” satırını yazıp yalnız yerel `KapiHata` fırlatıyor. D13 sadece başarılı sahte uçta gövde alanlarını ölçüyor; bildirim hatası veya başarısız HTTP yanıtı sınanmıyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:68-72, dumen-surucu/scripts/dumen.mjs:95-100, dumen-surucu/scripts/dumen.test.mjs:67",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm `kapi` önce/sonra çiftinde 0'dan 16 geçen kapı ve 4 yakalanan mutant gösteriyor. Mutasyon kaydındaki rc=1 beklenen sonuç ve bulgu değildir. Buna rağmen özet sayaçlar ile dört mutant, ham `page/cdp/tarayici` kaçışını ve bildirim arızasını sınamıyor; hatta test ham `d.page.evaluate` kullanarak ilk açığı doğruluyor. Görsel kare yok, fakat bu kod/güvenlik davranışı için çalıştırılmış ölçüm mevcut; ölçüm hedefinin kapsamı merkezi “tek kapı” iddiasını kanıtlamaya yetmiyor."
+  }
+}
