@@ -23,5 +23,9 @@ mut "durma noktası kapalı" "const neden = await this.durmaNoktasi(eylemAdi, he
 mut "durak bildirimi 4xx/5xx başarı sayılır" "return r.ok;" "return true;"
 mut "ham page dışarıya açık" "  olayKaydi() {" $'  get page() { return this.#page; }\n  olayKaydi() {'
 mut "parola gizleme yok" "deger:gizli(t)?'<gizli>':String(t.value??t.checked)" "deger:String(t.value??t.checked)"
+mut "durak bildirimi jetonsuz" "...(jeton ? { 'x-defter-jeton': jeton } : {})" "...{}"
+mut "soket düşünce 'sultanda' yerine ham hata" "if (mod && mod !== 'ajan') {" "if (false) {"
+mut "mod sultan iken yeniden bağlanır" $'    const mod = await this.modOku();\n    if (mod !== \'ajan\') {' $'    if (this.#kopuk) await this.#yenidenBagla().catch(() => {});\n    const mod = await this.modOku();\n    if (mod !== \'ajan\') {'
+mut "mod ajan olunca yeniden bağlanmaz" "if (this.#kopuk) await this.#yenidenBagla();   // mod ajan" "if (false) await this.#yenidenBagla();   // mod ajan"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 6/6 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 10/10 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

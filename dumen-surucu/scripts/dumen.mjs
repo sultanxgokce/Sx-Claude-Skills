@@ -6,6 +6,7 @@
 //   - Dinleyici izole dünyada (sayfa betiklerinden önce, window capture) kurulur; binding sayfaya görünmez.
 //     Dinleyici yalnız KAYIT/UYARIdır (sayfa sahte olay üretebilir → yanlış alarm; eylemi gizleyemez). Karar kapısı bu dosyadaki kapıdır.
 import { createRequire } from 'module';
+import { readFileSync } from 'fs';
 
 export class KapiHata extends Error {
   constructor(neden, ayrinti = '') { super(`dumen-kapi: ${neden}${ayrinti ? ' — ' + ayrinti : ''}`); this.neden = neden; }
@@ -20,6 +21,12 @@ export async function playwrightYukle() {
   throw new KapiHata('playwright-yok', 'DUMEN_PLAYWRIGHT=<playwright-core dizini> ver');
 }
 
+// Merkez durak ucu defter jetonu ister (x-defter-jeton). Jeton dosyadan okunur, ASLA yazdırılmaz/günlüğe girmez.
+function jetonOku() {
+  try { return readFileSync(process.env.DUMEN_DEFTER_JETON || '/config/defter-jeton', 'utf8').trim() || null; } catch { return null; }
+}
+const KOPMA = /(closed|disconnected|ECONNRESET|ECONNREFUSED|socket|Target page|Connection terminated)/i;
+
 const HASSAS_TUR = new Set(['password', 'tel']);
 const HASSAS_OTOTAMAM = /one-time-code|cc-(number|csc|exp)|current-password|new-password/i;
 const HASSAS_AD = /(otp|sms|parola|sifre|şifre|password|passwd|cvv|cvc|iban|kart.?no|card.?number)/i;
@@ -28,20 +35,35 @@ const ODEME_YOL = /(checkout|odeme|ödeme|payment|3d-?secure)/i;
 
 export class Dumen {
   // Ham nesneler ÖZELDİR (#): çağıran d.page / d.cdp / d.tarayici ile kapıyı atlayamaz. Zorlama yine de köprüdedir (SKILL.md).
-  #page; #cdp; #tarayici; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #pencereler = []; #sayac = 0;
-  constructor({ page, cdp, tarayici, merkez, zamanAsimiMs = 3000, yaz = (s) => console.log(s) }) {
-    this.#page = page; this.#cdp = cdp; this.#tarayici = tarayici; this.#merkez = merkez.replace(/\/$/, ''); this.#zamanAsimiMs = zamanAsimiMs; this.#yaz = yaz;
+  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0;
+  constructor({ cdpUrl, merkez, zamanAsimiMs = 3000, yaz = (s) => console.log(s) }) {
+    this.#cdpUrl = cdpUrl; this.#merkez = merkez.replace(/\/$/, ''); this.#zamanAsimiMs = zamanAsimiMs; this.#yaz = yaz;
   }
 
   static async baglan({ cdpUrl, merkez, zamanAsimiMs, yaz }) {
-    const { chromium } = await playwrightYukle();
-    const tarayici = await chromium.connectOverCDP(cdpUrl);
-    const ctx = tarayici.contexts()[0] || await tarayici.newContext();
-    const page = ctx.pages()[0] || await ctx.newPage();
-    const d = new Dumen({ page, cdp: await ctx.newCDPSession(page), tarayici, merkez, zamanAsimiMs, yaz });
-    await d.dinleyiciKur();
+    const d = new Dumen({ cdpUrl, merkez, zamanAsimiMs, yaz });
+    await d.#bagla();
     return d;
   }
+
+  async #bagla() {
+    const { chromium } = await playwrightYukle();
+    const tarayici = await chromium.connectOverCDP(this.#cdpUrl);
+    const ctx = tarayici.contexts()[0] || await tarayici.newContext();
+    const page = ctx.pages()[0] || await ctx.newPage();
+    this.#tarayici = tarayici; this.#page = page; this.#cdp = await ctx.newCDPSession(page);
+    tarayici.on('disconnected', () => { if (this.#tarayici === tarayici) this.#kopuk = true; });
+    this.#kopuk = false; this.#baglanmaSayisi++;
+    await this.dinleyiciKur();   // yeniden bağlanınca sayfa yeniden okunur (reload) — insan eylemi aktarılmaz
+  }
+
+  async #yenidenBagla() {
+    await this.#tarayici?.close().catch(() => {});
+    try { await this.#bagla(); } catch (e) { throw new KapiHata('baglanti-yok', String(e.message || e)); }
+  }
+
+  // salt-okur durum: kapıyı atlatmaz (ham nesne vermez)
+  durum() { return { kopuk: this.#kopuk, baglanmaSayisi: this.#baglanmaSayisi }; }
 
   async dinleyiciKur() {
     const kaynak = `(()=>{const gizli=t=>/password|tel/.test(t.type||'')||/one-time-code|cc-|password/i.test(t.autocomplete||'')||/(otp|sms|parola|sifre|şifre|password|cvv|cvc|iban|kart)/i.test((t.name||'')+(t.id||''));`
@@ -67,9 +89,10 @@ export class Dumen {
   async kapi(eylemAdi, hedef) {
     const mod = await this.modOku();
     if (mod !== 'ajan') {
-      this.#yaz("⏸ Dümen Sultan'da · bekliyorum");
+      this.#yaz("⏸ Dümen Sultan'da · bekliyorum");   // mod sultan iken köprü soketi düşer (okuma dahil): hata değil, bekleme; yeniden bağlanma YOK
       throw new KapiHata('sultanda', `mod=${mod}`);
     }
+    if (this.#kopuk) await this.#yenidenBagla();   // mod ajan'a döndü ve soket düşmüştü → ancak şimdi yeniden bağlan
     const neden = await this.durmaNoktasi(eylemAdi, hedef);
     if (neden) {
       const bildirildi = await this.durakBildir(neden);
@@ -100,7 +123,8 @@ export class Dumen {
   async durakBildir(neden) {
     // yalnız neden sözcüğü gider (şifre·sms·odeme·gonder) — alan değeri, adres, çerez ASLA. → true = merkez 2xx ile aldı
     try {
-      const r = await fetch(`${this.#merkez}/api/dumen/durak`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ neden }), signal: AbortSignal.timeout(this.#zamanAsimiMs) });
+      const jeton = jetonOku();
+      const r = await fetch(`${this.#merkez}/api/dumen/durak`, { method: 'POST', headers: { 'content-type': 'application/json', ...(jeton ? { 'x-defter-jeton': jeton } : {}) }, body: JSON.stringify({ neden }), signal: AbortSignal.timeout(this.#zamanAsimiMs) });
       return r.ok;
     } catch { return false; }   // bildirim ulaşmasa da eylem YAPILMAZ; ama çağıran "bildirildi" sanmaz
   }
@@ -109,6 +133,15 @@ export class Dumen {
     await this.kapi(ad, hedef);
     const p = { id: ++this.#sayac, ad, hedef, t0: Date.now() };
     try { return await fn(); }
+    catch (e) {
+      if (this.#kopuk || KOPMA.test(String(e && e.message))) {
+        this.#kopuk = true;
+        const mod = await this.modOku().catch(() => null);
+        if (mod && mod !== 'ajan') { this.#yaz("⏸ Dümen Sultan'da · bekliyorum"); throw new KapiHata('sultanda', `mod=${mod} (soket düştü)`); }
+        throw new KapiHata('baglanti-koptu', String(e.message || e));
+      }
+      throw e;
+    }
     finally { await new Promise((r) => setTimeout(r, 120)); p.t1 = Date.now(); this.#pencereler.push(p); }
   }
 

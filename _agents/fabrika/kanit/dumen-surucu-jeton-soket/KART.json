@@ -1,0 +1,23 @@
+{
+  "is": "dumen-surucu-jeton-soket",
+  "cumle": "dumen-surucu: durak bildirimine x-defter-jeton başlığı; mod sultan iken soket düşmesi hata değil 'Dümen Sultan'da', ajan olana dek yeniden bağlanma yok",
+  "istedi": "BÂNİ",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T13:20:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

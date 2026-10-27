@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "dumen-surucu-jeton-soket",
+  "pr": "500",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T13:30:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-surucu-jeton-soket",
+  "dal": "dumen-surucu-jeton-soket",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32899,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 9829
+  },
+  "dalgic": "uyumlu",
+  "bas": "2feb2aae95b434045dc7e4ff7724922450183d05",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Durak bildirimine jeton başlığı eklenmiş; Sultan modundaki kopma bekleme durumuna çevrilmiş ve yeniden bağlantı ajan moduna kadar ertelenmiş. Gerçek ölçüm 29 kapının tamamını geçiriyor, dört hedefli mutasyon da sınavlarca yakalanıyor; üretimi engelleyen kanıtlı kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçümde önce 20 geçen/1 kırmızı/sonuçsuz durumundan sonra 29 geçen/0 kırmızı/SONUÇ durumuna geçilmiş; gerçek headless Chromium kullanan sınav jeton başlığını, Sultan/ajan kopma davranışını ve yeniden bağlanmayı ölçüyor. Dört mutasyon kaydı beklenen rc=1 ile jeton, ham kopma, Sultan'da yeniden bağlanma ve ajan olunca bağlanmama bozukluklarının sınavlarca yakalandığını gösteriyor."
+  }
+}
