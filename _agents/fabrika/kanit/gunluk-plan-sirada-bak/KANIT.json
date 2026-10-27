@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-sirada-bak",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T20:56:50+03:00",
+  "guncelleme": "2026-10-27T20:57:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -158,7 +158,26 @@
       "gercek_olcum": "deftere-yaz-sonra",
       "beklenen": "kirmizi",
       "olcum_id": "e8f4bd01014b4ef989057f3de92f6b3d"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "gorev-yolu-sonra",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-gorev-yolu-sonra-sonra-f63689d98848.txt",
+      "sha256": "3962be061264f3fcd9a9d4f1bf4f077630058c0c2c81c3b5d6f77c4b5e92d70d",
+      "hedef_dosya": "olcum-gorev-yolu-sonra-sonra.txt",
+      "hedef_olcum_id": "f8733d04019c47a1a69b2fef716cd420",
+      "hedef_sha256": "976e2ddd82b089e272337570acab28be117160eabc7fc3b003992d0b45f3dfce",
+      "hedef_zaman": "2026-10-27T20:39:00+03:00",
+      "hedef_renk": "yesil",
+      "neden": "gorev.sh eşitlemesi denetçi tur 1 bulgusuyla PR kapsamından çıkarıldı; bu ölçüm o değişikliğe aitti ve artık PR'ın parçası değil (gorev-yolu.test.sh bu PR'da değişmedi)",
+      "kim": "MUAVIN",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-27T20:57:53+03:00",
+      "olcum_id": "81e4e7d234194e75aa3608470e51456b"
     }
   ],
-  "imza": "0d1268125c9aee3510559648a7da653792804df669387a3c267db65e24c3015f"
+  "imza": "3199f41dc2a7d543ed997830ba8a3a927a0a25b549d3348b34fdb6a767d067a5"
 }
