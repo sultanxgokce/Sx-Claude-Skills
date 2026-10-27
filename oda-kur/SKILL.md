@@ -34,7 +34,7 @@ Karar: Nexus `_agents/handoff/kutu-oda-kararlari-20261027.md` (karar 9). Görev:
 - `cekirdek-yaz <depo> <yol> --neden "<tek cümle>" [--siparis gorev_<kimlik>] [--dosya <kaynak>]` — çekirdek ortak dosyaya TEK yazım yolu (Oda modeli 5 D4). İçerik `--dosya` ya da stdin.
   - **Kim** ajanın beyanından değil, `DEFTER_JETON_YOL` dosyasındaki jetonla defterden (`GET /ben` → kutu + ajan) okunur. Yol değişkeni yok / dosya okunamaz / defter yanıt vermez / jetonda ajan kimliği yok → **ret, yazım 0** (varsayılan jetona düşülmez; 27 Eki olayı).
   - **Yalnız kutu deposundan**: `<depo>` oda-ortak.json'u taşıyan git kökü olmalı ve komutu koşturan sürecin cwd'si aynı depoda olmalı; ayrı depodaki oda (kendi git deposu) yazamaz. Yol `ortak_veri` globlarına uymalı, depo dışına (sembolik bağ dahil) çıkamaz.
-  - **Kayıt** `<depo>/.claude/cekirdek-kayit.jsonl`: zaman · kim · kutu · dosya · önceki sha (yeni dosyada boş) · sonraki sha · neden · sipariş. `--siparis` yoksa `siparissiz: true` (çekirdek reisinin günlük nabzında ayrı satır). Reddedilen yazım kayıt bırakmaz.
+  - **Kayıt** `<depo>/.claude/cekirdek-kayit.jsonl`: zaman · kim · kutu · dosya · önceki sha (yeni dosyada boş) · sonraki sha · neden · sipariş. `--siparis` yoksa `siparissiz: true` (çekirdek reisinin günlük nabzında ayrı satır). Reddedilen yazım kayıt bırakmaz. Yazım+kayıt tek işlem: kilit altında (eşzamanlı yazanlar sıraya girer, sha zinciri kopmaz), kayıt dosyası önce açılır, kayıt satırı yazılamazsa dosya eski içeriğine döner.
   - Kanca doğrudan yazımı reddederken bu komutu gösterir.
 
 ## Kanca kuralları

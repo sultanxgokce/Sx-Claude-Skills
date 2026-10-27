@@ -179,6 +179,26 @@ cy "$T/jeton-serdar" "$C" "$C" veri/dosyadan.txt --neden "içerik --dosya ile ve
 echo "── kanca ret mesajı komutu gösterir (Ö4)"
 MSG="$(python3 -I -c "import json;print(json.dumps({'tool_name':'Write','tool_input':{'file_path':'$C/KAYIT.json'},'cwd':'$C/oda-a'}))" | bash "$ODA" kanca "$C/oda-a" "$C/.claude/oda-ortak.json" 2>&1)"
 grep -q "cekirdek-yaz" <<<"$MSG" && grep -q -- "--neden" <<<"$MSG" && ok "C19 doğrudan yazım reddi komutu (cekirdek-yaz … --neden) gösteriyor" || no "C19 ret komutu göstermiyor" "$MSG"
+echo "── cekirdek-yaz: yazım+kayıt tek işlem (göz tur 1)"
+SK="$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")"; KS1="$(KS)"
+mv "$C/.claude/cekirdek-kayit.jsonl" "$C/.claude/cekirdek-kayit.jsonl.yedek"; mkdir "$C/.claude/cekirdek-kayit.jsonl"
+echo '{"a":777}' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "kayıt dosyası açılamıyor denemesi" >/dev/null; R=$?
+rmdir "$C/.claude/cekirdek-kayit.jsonl"; mv "$C/.claude/cekirdek-kayit.jsonl.yedek" "$C/.claude/cekirdek-kayit.jsonl"
+[ "$R" -ne 0 ] && [ "$(KS)" = "$KS1" ] && ok "C21 kayıt dosyası açılamıyor: ret VE çekirdek dosya DEĞİŞMEDİ (kayıtsız değişiklik yok)" || no "C21 kayıt açılamazken dosya değişti" "rc=$R"
+( ulimit -f 1; echo '{"a":888}' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "kayıt satırı yazılamıyor denemesi" >/dev/null ); R=$?
+[ "$R" -ne 0 ] && [ "$(KS)" = "$KS1" ] && [ "$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")" -eq "$SK" ] && ok "C22 kayıt satırı yazılamazsa dosya ESKİ içeriğine döner (geri alma), kayıt değişmez" || no "C22 kayıt yazılamayınca dosya geri alınmadı" "rc=$R"
+[ -z "$(find "$C" -name '.cekirdek-*' -not -path '*/.git/*' 2>/dev/null)" ] && ok "C23 geçici dosya artığı yok (ret ve geri alma sonrası)" || no "C23 artık geçici dosya kaldı"
+printf '{"s":0}\n' | cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "eşzamanlı sınaması başlangıcı" >/dev/null
+SK2="$(wc -l < "$C/.claude/cekirdek-kayit.jsonl")"; PIDS=""
+for n in 1 2 3 4 5 6 7 8; do ( printf '{"s":%s}\n' "$n" | ODA_CEKIRDEK_BEKLE_MS=60 cy "$T/jeton-serdar" "$C" "$C" KAYIT.json --neden "eşzamanlı yazım $n" >/dev/null ) & PIDS="$PIDS $!"; done
+wait $PIDS
+python3 -I -c "
+import json,hashlib
+k=[json.loads(l) for l in open('$C/.claude/cekirdek-kayit.jsonl')][$SK2-1:]
+assert len(k)==9, len(k)
+for a,b in zip(k,k[1:]): assert b['onceki_sha']==a['sonraki_sha'], 'zincir kopuk'
+assert k[-1]['sonraki_sha']==hashlib.sha256(open('$C/KAYIT.json','rb').read()).hexdigest(), 'son sha dosyayla uyuşmuyor'
+" && ok "C24 8 eşzamanlı yazım: kilit sıraya koyar, önceki/sonraki sha zinciri kopmaz, son sha dosyayla eşit" || no "C24 eşzamanlı yazımda sha zinciri bozuk"
 C2="$T/cdepo2"; kur_depo "$C2"
 python3 -I -c "
 import json;p='$C2/.claude/oda-ortak.json';d=json.load(open(p));d['ortak_veri']=['**'];json.dump(d,open(p,'w'))"
@@ -234,5 +254,14 @@ mut "cekirdek-yaz: önceki sha yazılmaz" "'onceki_sha': onceki," "'onceki_sha':
 mut "cekirdek-yaz: siparişsiz işareti yok" "'siparis': siparis or None, 'siparissiz': not siparis," "'siparis': siparis or None, 'siparissiz': False,"
 mut "cekirdek-yaz: neden zorunlu değil" "    if not neden or len(neden.strip()) < 10:" "    if False:"
 mut "kanca ret mesajı komutu göstermiyor" "yazma yalnız çekirdeğin komutundan: bash {CEKIRDEK_KOMUT}" "yazma yalnız çekirdeğin komutundan: ({CEKIRDEK_KOMUT[:0]}"
+mut "cekirdek-yaz: kilit yok (eşzamanlı zincir)" "        fcntl.flock(kilit, fcntl.LOCK_EX)" "        pass"
+mut "cekirdek-yaz: geri alma yok (kayıtsız değişiklik kalır)" "                if eski is None:
+                    os.close(geri[0]); os.unlink(geri[1])" "                if True:
+                    os.close(geri[0]); os.unlink(geri[1]); raise"
+mut "cekirdek-yaz: kayıt dosyası gerçekten açılmıyor (kayıtsız değişiklik)" "        kf = open(kyol, 'a', encoding=UTD)
+        try:
+            onceki = sha_dosya(hedef)" "        kf = open(os.devnull, 'a', encoding=UTD)
+        try:
+            onceki = sha_dosya(hedef)"
 find "$M" -mindepth 1 -delete; rmdir "$M"
 [ "$MK" -eq 0 ] && echo "MUTANT: hepsi yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

@@ -13,6 +13,7 @@ Karar belgesi: Nexus _agents/handoff/kutu-oda-kararlari-20261027.md (karar 9). G
 
 Depo düzeni:  <depo>/.claude/oda-ortak.json (ortak kaynak) · <depo>/<oda>/{CLAUDE.md, oda.json, hafiza/, .claude/{settings.json,skills,agents}}
 """
+import fcntl
 import fnmatch
 import hashlib
 import json
@@ -22,6 +23,7 @@ import shlex
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -454,30 +456,59 @@ def cekirdek_yaz(depo, yol, neden, siparis, dosya):
             icerik = f.read()
     else:
         icerik = sys.stdin.buffer.read()
-    onceki = sha_dosya(hedef)
-    os.makedirs(os.path.dirname(hedef), exist_ok=True)
-    fd, gecici = tempfile.mkstemp(dir=os.path.dirname(hedef), prefix='.cekirdek-yaz-')
-    try:
-        with os.fdopen(fd, 'wb') as f:
-            f.write(icerik)
-        if os.path.exists(hedef):
-            os.chmod(gecici, os.stat(hedef).st_mode & 0o7777)
-        os.replace(gecici, hedef)
-    except BaseException:
-        if os.path.exists(gecici):
-            os.unlink(gecici)
-        raise
-    sonraki = sha_dosya(hedef)
-    kayit = {
-        'zaman': datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds'),
-        'kim': ajan, 'kutu': kutu, 'dosya': rel,
-        'onceki_sha': onceki, 'sonraki_sha': sonraki, 'neden': neden.strip(),
-        'siparis': siparis or None, 'siparissiz': not siparis,
-    }
     kyol = os.path.join(depo_r, CEKIRDEK_KAYIT)
     os.makedirs(os.path.dirname(kyol), exist_ok=True)
-    with open(kyol, 'a', encoding=UTD) as f:
-        f.write(json.dumps(kayit, ensure_ascii=False, sort_keys=True) + '\n')
+    os.makedirs(os.path.dirname(hedef), exist_ok=True)
+    # Yazım + kayıt TEK işlem (göz tur 1): kilit altında; kayıt dosyası ÖNCE açılır (açılamıyorsa dosyaya dokunulmaz);
+    # kayıt satırı yazılamazsa dosya eski içeriğine döndürülür. Kilit aynı çekirdeğe eşzamanlı yazanları sıraya koyar → sha zinciri gerçek sırayı gösterir.
+    with open(kyol + '.kilit', 'a') as kilit:
+        fcntl.flock(kilit, fcntl.LOCK_EX)
+        kf = open(kyol, 'a', encoding=UTD)
+        try:
+            onceki = sha_dosya(hedef)
+            eski = None
+            if os.environ.get('ODA_CEKIRDEK_BEKLE_MS'):   # YALNIZ sınav kancası: kritik bölgeyi uzatır, kilit yoksa çakışma kesinleşir
+                time.sleep(int(os.environ['ODA_CEKIRDEK_BEKLE_MS']) / 1000)
+            if onceki is not None:
+                with open(hedef, 'rb') as f:
+                    eski = f.read()
+            eski_kip = os.stat(hedef).st_mode & 0o7777 if onceki is not None else None
+            fd, gecici = tempfile.mkstemp(dir=os.path.dirname(hedef), prefix='.cekirdek-yaz-')
+            try:
+                with os.fdopen(fd, 'wb') as f:
+                    f.write(icerik)
+                if eski_kip is not None:
+                    os.chmod(gecici, eski_kip)
+                os.replace(gecici, hedef)
+            except BaseException:
+                if os.path.exists(gecici):
+                    os.unlink(gecici)
+                raise
+            sonraki = sha_dosya(hedef)
+            kayit = {
+                'zaman': datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds'),
+                'kim': ajan, 'kutu': kutu, 'dosya': rel,
+                'onceki_sha': onceki, 'sonraki_sha': sonraki, 'neden': neden.strip(),
+                'siparis': siparis or None, 'siparissiz': not siparis,
+            }
+            try:
+                kf.write(json.dumps(kayit, ensure_ascii=False, sort_keys=True) + '\n')
+                kf.flush()
+                os.fsync(kf.fileno())
+            except BaseException:
+                geri = tempfile.mkstemp(dir=os.path.dirname(hedef), prefix='.cekirdek-geri-')
+                if eski is None:
+                    os.close(geri[0]); os.unlink(geri[1])
+                    if os.path.exists(hedef):
+                        os.unlink(hedef)
+                else:
+                    with os.fdopen(geri[0], 'wb') as f:
+                        f.write(eski)
+                    os.chmod(geri[1], eski_kip)
+                    os.replace(geri[1], hedef)
+                raise
+        finally:
+            kf.close()
     print(f'✓ çekirdek yazıldı: {rel} · kim {ajan} · {(onceki or "yeni")[:12]} → {sonraki[:12]}' + ('' if siparis else ' · SİPARİŞSİZ (çekirdek reisinin nabzında ayrı satır)'))
     return 0
 
