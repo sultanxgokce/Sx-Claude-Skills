@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.1.0
+version: 0.1.1
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
