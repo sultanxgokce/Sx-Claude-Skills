@@ -1,0 +1,59 @@
+{
+  "is": "dumen-masa-sinifi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T21:02:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "masa-sinav",
+      "asama": "tek",
+      "dosya": "olcum-masa-sinav-tek.txt",
+      "sha256": "c0d603d43c3aee10c866b8c538f4d5ec1ad6f6cb872d409eebb5cc89ddea5806",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/masa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T19:07:07+03:00",
+      "sure_sn": 3.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bce338fb4f354fbe850f749d08112751"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "masa-sinav-2",
+      "asama": "tek",
+      "dosya": "olcum-masa-sinav-2-tek.txt",
+      "sha256": "5356c36d360b3e3db6f018d23e218e053e1533afb583e29ee022930c6a2ed339",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/masa.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T20:58:20+03:00",
+      "sure_sn": 3.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e63719e6e8dd4077a2a19344f0f785fc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "masa-sinav-3",
+      "asama": "tek",
+      "dosya": "olcum-masa-sinav-3-tek.txt",
+      "sha256": "789494aa937caeb50c4c3e0d1db9f1a8304a83787a4380fc62dfd27bbd321451",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/masa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T21:02:11+03:00",
+      "sure_sn": 200.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8e831060389e47bf86bea04599e91ebd"
+    }
+  ],
+  "imza": "9940d79175155a04f11fbf62793517be3b2258d3907dd1ba9f791ca10759bdaf"
+}

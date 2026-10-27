@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "dumen-masa-sinifi",
+  "pr": "508",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T20:57:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-masa-sinifi",
+  "dal": "dumen-masa-sinifi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31916,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 4165
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e95ea903e953c83f58b892cd2da24be41d4c248c",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Masaüstü eylem sınıfı, merkez ve bekçi kilitleriyle birlikte istenen uçları kurmuş; hermetik sınav 29/29 ve mutant sınavı 10/10 yeşildir. Ancak hassas yazı, tek karakterli tuş ve sakıncalı tık kapıları merkez modunu okumadan çalıştığı için “her çağrıdan önce mod” sözleşmesi bozuluyor; Sultan kullanımında yanlış durak bildirimi üretilebildiğinden önce bu uygulanış düzeltilmelidir.",
+    "bulgular": [
+      {
+        "ne": "Hassas alan ve tık denetimleri merkez modu kontrolünden önce çalışıyor; mod Sultan iken bu çağrılar `sultanda` yerine `durak` döndürüp merkeze bildirim gönderebilir. Böylece belgelenen “her çağrıdan önce merkez modu” sırası tüm eylemlerde sağlanmıyor.",
+        "kanit": "`tik` satır 81, `yaz` satır 87 ve `tus` satır 96 önce `#durakKes` çağırıyor; merkez modu ancak sonrasında çağrılan `#istek` içinde satır 57'de okunuyor. Ölçüm D3 yalnız zararsız etiket/alan örneklerini kullanıyor ve bu sıra vakasını sınamıyor.",
+        "konum": "dumen-surucu/scripts/masa.mjs:57",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek bekçi ve ekranla uçtan uca çalışma henüz ölçülmemiş; canlı kurulum sonrası doğrulama gerekiyor.",
+        "kanit": "SKILL.md açıkça “Gerçek ekranda ölçülmedi: canlı kanıt kurulumdan ... sonra” diyor; manifestteki tek kayıt sahte merkez ve sahte HTTP bekçisi kullanan hermetik `masa-sinav` ölçümüdür.",
+        "konum": "dumen-surucu/SKILL.md:35",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı masaüstü bekçisi + Sultan-eli kurulum/yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek kayıt yeşil, rc=0 ve gerçek ölçümde 29/29 kapı ile 10/10 mutant yakalanmış. Buna karşılık gerçek masaüstü karesi veya canlı önce/sonra ölçümü yok; ayrıca manifest kaydı `mutasyon: true` olarak ayrı işaretlenmemiş olsa da mutantlar aynı başarılı sınavın içinde açıkça raporlanıyor."
+  }
+}
