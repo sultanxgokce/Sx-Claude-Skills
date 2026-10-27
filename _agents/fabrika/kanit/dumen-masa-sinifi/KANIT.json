@@ -1,7 +1,7 @@
 {
   "is": "dumen-masa-sinifi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T19:07:07+03:00",
+  "guncelleme": "2026-10-27T20:58:20+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -19,7 +19,24 @@
       "sure_sn": 3.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "bce338fb4f354fbe850f749d08112751"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "masa-sinav-2",
+      "asama": "tek",
+      "dosya": "olcum-masa-sinav-2-tek.txt",
+      "sha256": "5356c36d360b3e3db6f018d23e218e053e1533afb583e29ee022930c6a2ed339",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/masa.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T20:58:20+03:00",
+      "sure_sn": 3.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e63719e6e8dd4077a2a19344f0f785fc"
     }
   ],
-  "imza": "99ae79b0b5abee065da83e0e21fb206526e0e13d1fbc3820488b014b5fbae020"
+  "imza": "6e5102f801c7560d85a3ebf1e520d2f4e139788265208d87ead202f59de72e93"
 }

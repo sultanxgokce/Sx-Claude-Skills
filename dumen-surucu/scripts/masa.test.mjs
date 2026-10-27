@@ -59,6 +59,9 @@ ok('D3 mod sultan → KapiHata sultanda, bekçi HİÇ çağrılmadı', e instanc
 ok("D3 terminale tek satır: Dümen Sultan'da · bekliyorum", satirlar.includes("⏸ Dümen Sultan'da · bekliyorum"));
 for (const f of [() => m.tik(1, 1), () => m.yaz('x', { alan: 'Terminal' }), () => m.tus('ctrl+l'), () => m.kaydir(1, 1, 1), () => m.durum()]) await hata(f);
 ok('D3 tüm eylemler sultanda reddedildi, bekçiye istek yok', masaIstekleri.length === 0);
+sifirla(); mod = 'sultan';
+const hs = [await hata(() => m.yaz('x', { alan: 'Parola' })), await hata(() => m.tik(1, 1, { etiket: 'Ödemeyi onayla' })), await hata(() => m.tus('a', { alan: 'CVV' }))];
+ok("D3b mod sultan + hassas alan/tık: neden 'sultanda', merkeze durak bildirimi GİTMEDİ", hs.every((x) => x instanceof KapiHata && x.neden === 'sultanda') && duraklar.length === 0 && masaIstekleri.length === 0);
 sifirla(); merkezCevap = false;
 e = await hata(() => m.tik(1, 1));
 ok('D4 merkez cevapsız → fail-closed (merkez-cevapsiz), bekçi çağrılmadı', e instanceof KapiHata && e.neden === 'merkez-cevapsiz' && masaIstekleri.length === 0);

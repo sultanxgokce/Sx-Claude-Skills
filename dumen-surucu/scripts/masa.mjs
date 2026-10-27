@@ -45,6 +45,8 @@ export class Masa {
     } catch { return false; }
   }
 
+  async #modKapisi() { const mod = await this.modOku(); if (mod !== 'ajan') throw await this.#sultanda(`mod=${mod}`); }   // durak bildirimi de dahil HER eylemden önce: Sultan'dayken merkeze 'durak' gitmesin
+
   async #durakKes(neden) {
     const bildirildi = await this.durak(neden);
     this.#yaz(bildirildi ? `⏸ Masaüstü: ${neden} durağında durdum · Dümeni al` : `⏸ Masaüstü: ${neden} durağında durdum · ⚠ merkeze İLETİLEMEDİ, Sultan haberdar değil`);
@@ -79,16 +81,19 @@ export class Masa {
   durum() { return this.#istek('GET', '/durum'); }
   async ekranAl({ olcek = 1 } = {}) { return this.#istek('GET', `/ekran?olcek=${encodeURIComponent(olcek)}`); }   // PNG (Buffer)
   async tik(x, y, { dugme = 1, cift = false, etiket = '' } = {}) {
+    await this.#modKapisi();
     if (GONDER_ETIKET.test(etiket)) throw await this.#durakKes(/öde|ode|satın|satin|pay|purchase/i.test(etiket) ? 'odeme' : 'gonder');
     return this.#istek('POST', '/tik', { x, y, dugme, cift });
   }
   async kaydir(x, y, dy) { return this.#istek('POST', '/kaydir', { x, y, dy }); }
   async yaz(metin, { alan } = {}) {
+    await this.#modKapisi();
     if (typeof alan !== 'string' || !alan.trim()) throw new KapiHata('alan-belirtilmedi', "yaz(metin, { alan: '<hangi alana yazıyorsun>' }) — masaüstünde alan türü görünmez, ne yazdığını SEN söyle");
     if (HASSAS_ALAN.test(alan)) throw await this.#durakKes(/sms|otp|doğrulama|dogrulama|tek kullanımlık|one-time/i.test(alan) ? 'sms' : (/cvv|cvc|iban|kart|card|kredi/i.test(alan) ? 'odeme' : 'sifre'));
     return this.#istek('POST', '/yaz', { metin });
   }
   async tus(kombinasyon, { alan } = {}) {
+    await this.#modKapisi();
     // harf harf yazma `yaz`ın alan kapısını delmesin: tek karakterli tuş (ctrl/alt'sız) da hangi alana basıldığını söylemeden gitmez
     const parcalar = String(kombinasyon).split('+'); const duzenleyici = parcalar.slice(0, -1).some((x) => /^(ctrl|control|alt|super|meta|win)/i.test(x));
     if (parcalar[parcalar.length - 1].length === 1 && !duzenleyici) {
