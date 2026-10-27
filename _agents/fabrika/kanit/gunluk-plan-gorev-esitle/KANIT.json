@@ -1,0 +1,132 @@
+{
+  "is": "gunluk-plan-gorev-esitle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T00:03:06+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gorev-yolu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-gorev-yolu-sinavi-once.txt",
+      "sha256": "a0a04fd9b039a56227809e7e00a56469b99dea851857253590ade98ff1b5125e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-main/gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T23:20:46+03:00",
+      "sure_sn": 271.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "488849db837044a9aeb14a61d97cce41"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-yolu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-yolu-sinavi-sonra.txt",
+      "sha256": "94bb95f0ac486d26f82b7965cddecf719e97dbf046b349e1e51e0e1d093e4feb",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T23:20:47+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6148acb191a641e2b8270abb793e9b67"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "esitlik",
+      "asama": "once",
+      "dosya": "olcum-esitlik-once.txt",
+      "sha256": "661737d10dc7836954ea563e5f1dec4c22dedea978c81cbe81a8a38855079a97",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-esitlik.sh",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T23:20:48+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a5950a56935d4f9092568b4a651e8da6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "esitlik",
+      "asama": "sonra",
+      "dosya": "olcum-esitlik-sonra.txt",
+      "sha256": "2f95d47fe3431ae9c95dc9f03f23ec3baa38e18dc1005b911126b80c31206f04",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-esitlik.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-gorev-esitle"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T23:20:48+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "646de196fb89479aad20efd97f7b4425"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-kalan-kovasi",
+      "asama": "tek",
+      "dosya": "olcum-kabuk-kalan-kovasi-tek.txt",
+      "sha256": "87959db195c633eaee710174a0dc21779b5aad602e44a4acf65a99c2e4e8d128",
+      "komut": [
+        "bash",
+        ".github/ci/kabuk-sinamalari.sh",
+        "kalan"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T23:41:21+03:00",
+      "sure_sn": 1218.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "de6cc3fc4c82491ca1d65a5d5dea6854"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-dalda-onceden-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-ana-dalda-onceden-kirmizi-tek.txt",
+      "sha256": "a6dcd1c90a2f8ac2cd6b44f12b3e8a71611ca819601bbe01fe0f0ace5e4643aa",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-ana-dal-kirmizi.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T00:02:45+03:00",
+      "sure_sn": 1193.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d943671421e24c66b4a14c8a8f89084e"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kabuk-kalan-kovasi",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kabuk-kalan-kovasi-tek-a1d8b56832c4.txt",
+      "sha256": "449be89e431394f35169ecbc308a4f558c6fac232ca918b42657188d4d9a9fd5",
+      "hedef_dosya": "olcum-kabuk-kalan-kovasi-tek.txt",
+      "hedef_olcum_id": "de6cc3fc4c82491ca1d65a5d5dea6854",
+      "hedef_sha256": "87959db195c633eaee710174a0dc21779b5aad602e44a4acf65a99c2e4e8d128",
+      "hedef_zaman": "2026-10-27T23:41:21+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "Kova 156 sınavdan 3 kırmızı: hafta-kapanis, seans/kendi-kopyam, yazilim-fabrikasi/agir-sira-sarma. Üçü de ANA DALDA (818167ac) aynı şekilde kırmızı (karşı ölçüm); bu dal yalnız gunluk-plan dosyalarına dokunur ve gunluk-plan'ın 8 sınavı yeşil. Ölçüm yanlış değil, bu dalın kapısı olarak kapsamı yanlış: önceden var olan kırmızılar ayrı bulgu.",
+      "kim": "BERİD",
+      "karsi": "olcum-ana-dalda-onceden-kirmizi-tek.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T00:03:06+03:00",
+      "olcum_id": "ecd9a3c3b20047b3ad0c8316262a74f5"
+    }
+  ],
+  "imza": "0d125924bc37a8a92d85fe2c5f5c204eef6e05f73ca11609c61b6953a476b321"
+}

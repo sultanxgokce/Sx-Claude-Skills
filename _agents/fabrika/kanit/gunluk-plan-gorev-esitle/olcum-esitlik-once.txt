@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-esitlik.sh /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-main
+# rc=1 sure=0.8s zaman=2026-10-27T23:20:48+03:00
+--- stdout ---
+cloudtop 6a8e0234 kanonik: 8a15b783d5686baa · beceri kopyası: 40f6dc51cfe6623a
+--isteyen-oda  0
+^  sira)       0
+^  catisma)    0
+^  hakem)      0
+--- stderr ---

@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.11.1
+version: 1.11.2
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -110,6 +110,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/haftalik.sh --uygula   # raporu 
 Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sahte ulak.sh).
 
 > **1.10.1 (27 Eki, görev 0HC75A):** üç betik (`deftere-yaz` · `haftalik` · `tarama-ekle`) görev betiğini tek yerden bulur (`scripts/gorev-yolu.sh`): açık env → cloudtop kanoniği → BU BECERİNİN kendi kopyası (`scripts/gorev.sh` + `dugum-bak.py`) → PATH → `/config/.local/bin`. cloudtop deposunu görmeyen 9 kutuda plan maddeleri deftere yazılamıyordu. Paketlenmiş kopyanın cloudtop kanoniğinden sapmasını `gorev-yolu.test.sh` Y7 yakalar (kanonik her değiştiğinde buraya yeniden kopyalanır).
+> **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
 
 ## ADIM 0-d — TARAMA: kod tabanı + web + endüstriden ölçülmüş İŞ ekle (1.10.0 · görev 0HC75A (b): "havuza, günde ≤3")
 
