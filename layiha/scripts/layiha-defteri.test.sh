@@ -678,6 +678,25 @@ yok "G21h parkta 'Kayıt yazıldı' basılmadı" "$O21H" "Kayıt yazıldı"
 O21I="$(s21 "$K21/altinda.log" --slug hucresiz --konu "Hücresiz normal" --dokuman h.md 2>&1)"
 var "G21i normal yolda hücre uyarısı hâlâ basılıyor" "$O21I" "Kayıt yazıldı"
 
+# ── ODA · KUTU–ODA MODELİ (Oda modeli 1): isteğe bağlı oda alanı ──
+DO="$T/oda.jsonl"; : > "$DO"; so() { LAYIHA_DEFTER="$DO" HAT_ROOT="$T/OdaBir" bash "$SUT" "$@"; }
+oda_al() { python3 -c "
+import json,sys
+for l in open('$DO'):
+    r=json.loads(l)
+    if r.get('slug')==sys.argv[1]: print(r.get('oda','<ALAN-YOK>'))" "$1"; }
+so ekle --dogrula "grep -c . /dev/null" --slug od-dolu --konu "K" --dokuman a.md --oda agentic-os >/dev/null 2>&1; esit "OD1 --oda verilirse satıra yazılır" "agentic-os" "$(oda_al od-dolu)"
+so ekle --dogrula "grep -c . /dev/null" --slug od-bos --konu "K" --dokuman a.md >/dev/null 2>&1; esit "OD2 --oda verilmezse alan HİÇ yazılmaz (bugünkü satırla bayt-aynı)" "<ALAN-YOK>" "$(oda_al od-bos)"
+ONCE="$(wc -c < "$DO")"; OB="$(so ekle --dogrula "grep -c . /dev/null" --slug od-kotu --konu "K" --dokuman a.md --oda "Bozuk Oda" 2>&1)"; RB=$?
+esit "OD3 biçim dışı oda rc 2" "2" "$RB"; var "OD3b sebep söylenir" "$OB" "biçim dışı"; esit "OD3c reddedilen kayıt deftere HİÇ yazılmaz" "$ONCE" "$(wc -c < "$DO")"
+for kb in "a-" "a--b" "-a" "a-b-" "x"; do OK_="$(so ekle --dogrula "grep -c . /dev/null" --slug od-kenar --konu "K" --dokuman a.md --oda "$kb" 2>&1)"; RK=$?; esit "OD3d sınır vakası '$kb' (sonda/art arda/baştaki tire, tek karakter) reddedilir" "2" "$RK"; done
+esit "OD3e sınır vakaları deftere HİÇ yazılmadı" "$ONCE" "$(wc -c < "$DO")"
+so ekle --dogrula "grep -c . /dev/null" --slug od-iki --konu "K" --dokuman a.md --oda "ab-c-d1" >/dev/null 2>&1; esit "OD3f sözcük arası tireli geçerli ad KABUL (ab-c-d1)" "ab-c-d1" "$(oda_al od-iki)"
+OV="$(so ekle --dogrula "grep -c . /dev/null" --slug od-degersiz --konu "K" --dokuman a.md --oda 2>&1)"; RV=$?
+esit "OD4 değersiz --oda rc 2 (sessizce boş sayılmaz)" "2" "$RV"; var "OD4b sebep söylenir" "$OV" "değer ister"
+so ekle --dogrula "grep -c . /dev/null" --slug od-dolu --konu "K2" --dokuman a.md >/dev/null 2>&1; esit "OD5 güncellemede --oda verilmezse ESKİ oda korunur" "agentic-os" "$(oda_al od-dolu)"
+so ekle --dogrula "grep -c . /dev/null" --slug od-dolu --konu "K3" --dokuman a.md --oda pazar >/dev/null 2>&1; esit "OD6 güncellemede --oda verilirse değişir" "pazar" "$(oda_al od-dolu)"
+
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0

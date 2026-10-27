@@ -235,6 +235,19 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
 # Okuma tarafı (oku norm) alansız kaydı zaten "" sayar; "hiç sorulmadı"nın izi alan-yokluğudur.
 for _f in ("isteyen","yetki"):
     if not rec.get(_f): rec.pop(_f, None)
+# KUTU–ODA MODELİ (Oda modeli 1 · Sultan 27 Eki 2026): isteğe bağlı `oda` (kutu adıyla aynı kebab biçim). Verilmezse satıra HİÇ yazılmaz
+# (bugünküyle bayt-aynı); güncellemede verilmeyen alan ESKİ değeri korur (isteyen/yetki emsali). Değersiz bayrak sessizce boş sayılmaz.
+import re as _re
+_oda_ham = a.get("oda")
+if _oda_ham is not None:
+    _oda_yeni = _metin(_oda_ham)
+    if not _oda_yeni:
+        sys.stderr.write("HATA: --oda değer ister (oda adı, ör. agentic-os)\n"); sys.exit(2)
+    if not _re.fullmatch(r"(?=.{2,31}\Z)[a-z][a-z0-9]*(-[a-z0-9]+)*", _oda_yeni):
+        sys.stderr.write("HATA: oda biçim dışı: %r — küçük harf, rakam, SÖZCÜK ARASI tek tire; 2-31 karakter, harfle başlar (sonda/art arda tire yok)\n" % _oda_yeni); sys.exit(2)
+    rec["oda"] = _oda_yeni
+elif existing and existing.get("oda"):
+    rec["oda"] = existing["oda"]
 # ── K#4 META-FREEZE KAPISI (KATLAMA F1 · Sultan-kararı 2026-08-27 K#4+K#7 · diş 2026-09-07) ──
 # ÖLÇÜLDÜ 2026-09-07: kuzey-yıldızı (katlama-haftalik.sh) 28 Ağustos'tan beri her pazartesi
 # koşuyor ve "TAVAN AŞILDI" diyor (bu hafta %97, tavan %30); çıktısı bir kütüğe iniyor ve

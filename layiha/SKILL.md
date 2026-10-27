@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.15.1
+version: 1.16.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -231,6 +231,10 @@ geri-alınamaz biçimde deler. Kanıt: `scripts/hat-yolu.test.sh` (21 kapı; G2/
 - Defter per-container (İ1 yalnız-yerel); fleet-rollup gerekirse ayrı meta-iş.
 
 ## Sürüm notları
+- **1.16.0 (2026-10-27, Oda modeli 1 · kutu–oda modeli):** `ekle --oda <ad>` — isteğe bağlı `oda` alanı (kutu adıyla aynı kebab biçim). Verilmezse satıra HİÇ
+  yazılmaz (bugünkü satırla bayt-aynı); güncellemede verilmeyen alan ESKİ değeri korur; biçim dışı ya da değersiz `--oda` RC 2 ve deftere dokunmaz.
+  ⚠️ Ad çakışması: bu şemadaki `proje` alanı eski dilde "hangi oda" demekti (kutu içi proje); yeni `oda` kutu–oda modelindeki ODADIR — ikisi ayrı alandır.
+  Koltuğun odasını ekip kaydından varsayılan yazmak bu sürümde YOK (gorev.sh'taki gibi `GOREV_KOLTUK` çözümü layihaya taşınmadı); `--oda` açık verilir.
 - **1.15.0 (2026-09-07, KATLAMA F1 dişi):** `ekle` artık **K#4 META-FREEZE kapısından** geçer —
   haftalık kuzey-yıldızı (`katlama-haftalik.sh`) "TAVAN AŞILDI" diyorsa **yeni** kayıt PARKTA (RC=4 +
   reçete). Muaf: mevcut kaydı güncelleme · `--yetki sultan-emri` · ticari odalar (varsayılan yalnız

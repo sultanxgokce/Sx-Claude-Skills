@@ -1,0 +1,106 @@
+{
+  "is": "oda-alani-layiha",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T15:10:33+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "layiha-sinavi-tek",
+      "asama": "tek",
+      "dosya": "olcum-layiha-sinavi-tek-tek.txt",
+      "sha256": "581b6b5a78fcb1ae00344b2c6910bd04679e3d71fa4a9687d3f071bfc2e98867",
+      "komut": [
+        "bash",
+        "-c",
+        "cd layiha && exec bash scripts/layiha-defteri.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T15:10:25+03:00",
+      "sure_sn": 8.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "bf11bb021d354a58bd5b6def951b21a7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-layiha-bicim",
+      "asama": "tek",
+      "dosya": "olcum-mut-layiha-bicim-tek.txt",
+      "sha256": "ea1aab30c1f27a0d3e953a36183db8871871d3cca77e7b8f6f1b3d267d75d159",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-sx.sh",
+        "s|if not _re.match(r\"^\\[a-z\\]\\[a-z0-9-\\]{1,30}\\$\", _oda_yeni):|if False:|"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T15:06:15+03:00",
+      "sure_sn": 8.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "layiha-sinavi-tek",
+      "beklenen": "kirmizi",
+      "olcum_id": "80db25cea1b7467ea0cb3acb5d9798d2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-layiha-koru",
+      "asama": "tek",
+      "dosya": "olcum-mut-layiha-koru-tek.txt",
+      "sha256": "65e2ad41e9e02402d1cdf462842dbc6ff82a39ca05bd1bdcd1626f8d74a2677e",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-sx.sh",
+        "s|elif existing and existing.get(\"oda\"):|elif False:|"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T15:06:24+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "layiha-sinavi-tek",
+      "beklenen": "kirmizi",
+      "olcum_id": "60295096d750449ab1828c1d6176d65d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-layiha-degersiz",
+      "asama": "tek",
+      "dosya": "olcum-mut-layiha-degersiz-tek.txt",
+      "sha256": "a251fe78eff36c873c8da338e2c05626f2795b273dbec3d9cbd41f5b33176df0",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-sx.sh",
+        "s|    if not _oda_yeni:|    if False:|"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T15:06:32+03:00",
+      "sure_sn": 8.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "layiha-sinavi-tek",
+      "beklenen": "kirmizi",
+      "olcum_id": "78809df2b50049d0a2ac4d33f8d5e253"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-layiha-kebab",
+      "asama": "tek",
+      "dosya": "olcum-mut-layiha-kebab-tek.txt",
+      "sha256": "32a69552569b7a84d5586d8cc1bd35268417197e82d695392fbdea2cf820daa1",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-sx.sh",
+        "s|\\^(?=\\.{2,31}\\$)\\[a-z\\]\\[a-z0-9\\]\\*(-\\[a-z0-9\\]+)\\*\\$|^[a-z][a-z0-9-]{1,30}$|"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T15:10:33+03:00",
+      "sure_sn": 8.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "layiha-sinavi-tek",
+      "beklenen": "kirmizi",
+      "olcum_id": "92943570b2ed47c1afb2862fce0ee204"
+    }
+  ],
+  "imza": "b6f3bbf9f93130a114f6fd34a9bce692fc47fe044788eb864eadb7a218ce72ce"
+}
