@@ -1,0 +1,23 @@
+{
+  "is": "kisi-kur-q6b-kum-havuzu",
+  "cumle": "Kişi-kur sınavı kum havuzunun gerçek günlük dosyasına yazmadığını dosyanın varlığına değil önce/sonra farkına bakarak ölçsün",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T09:47:41+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

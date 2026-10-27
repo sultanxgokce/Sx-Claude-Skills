@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-gorev-sh-yolu",
+  "pr": "493",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T10:53:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-gorev-sh-yolu",
+  "dal": "gunluk-plan-gorev-sh-yolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64972,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4411
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4a4190d0d34c63f017ad2897f2f79477d1281d36",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Günlük plan, görev betiği yolunu tek çözücüde topluyor; üç yazıcı bu çözücüyü kullanıyor ve beceri kendi gorev.sh ile gerekli dugum-bak.py kopyasını taşıyor. Önce 0/3, sonra 3/3 ölçümü ve yol sırasını bozan mutasyonun yakalanması talebi doğrudan desteklediği için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm çifti kanoniksiz kutularda betiği bulma sonucunu 0/3'ten 3/3'e çıkarıyor, mutasyon kaydı da yol sırası bozulduğunda sınavın bunu yakaladığını gösteriyor. Kanıt gerçek deftere yazma işleminin uçtan uca çıktısını göstermiyor; ancak iş kartındaki temel değişiklik olan betiği taşıma ve üç çağrı noktasından bulma iddiasını doğrudan ve yeterli biçimde ölçüyor."
+  }
+}

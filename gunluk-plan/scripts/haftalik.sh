@@ -15,7 +15,7 @@
 #   Z3 bekleyen yığını: bekliyor durumundaki iş sayısı çalışılıyor+açık sayısından büyük
 set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-GOREV="${GUNLUK_PLAN_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
+GOREV="$(bash "$(dirname "${BASH_SOURCE[0]}")/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"   # yol çözümü tek yerde (gorev-yolu.sh)
 ULAK="${GUNLUK_PLAN_ULAK_SH:-/config/projects/Nexus/scripts/ulak.sh}"
 UYGULA=0; KUTU="${GUNLUK_PLAN_KUTU:-}"; KIM=""; HEDEF="SERDAR"; GUN=7
 BUGUN="${GUNLUK_PLAN_TARIH:-$(date +%F)}"

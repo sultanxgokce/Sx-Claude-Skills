@@ -311,7 +311,7 @@
       "id": "cloudflare-erisim",
       "type": "agent",
       "name": "Cloudflare Erişim (panele girmeden Access/DNS)",
-      "version": "1.2.0",
+      "version": "1.6.0",
       "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
       "prerequisites": {
         "system": [
@@ -1410,7 +1410,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.10.0",
+      "version": "1.10.1",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1551,7 +1551,7 @@
     {
       "id": "terminal-onar",
       "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
-      "version": "2.32.0",
+      "version": "2.32.2",
       "type": "capability",
       "sync_dagitim": true,
       "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",

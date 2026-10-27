@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-soket-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ttyd-mutant.sh /config/projects/_wt/Sx-Claude-Skills-kisi-ttyd-soket-grubu/terminal-onar abc
+# rc=0 sure=8.7s zaman=2026-10-27T12:27:49+03:00
+--- stdout ---
+  ✗ Q5b ttyd soketi KİŞİ grubuna ve
+  ✗ Q5c ttyd soketi OLUŞUR ve kapı (
+  ✗ Q5d günlük BÜYÜMÜYOR (sıkı 
+q5_gecen=0
+--- stderr ---

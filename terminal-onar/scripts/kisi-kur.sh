@@ -10,7 +10,7 @@
 #   3 izin dosyası     /config/.terminal-onar/kisi/izin.json (merkez-kisiler.json biçimi; YOKSA boş iskelet, VARSA dokunulmaz — Sultan yazar)
 #   4 köprü            abc olarak: koltuk-koprusu.py (KOPRU_SOKET=/run/kisi/koprusu.sock)
 #   4b istemci kopyası /opt/kisi/kisi-istemci.py (kök sahipli; ayse /config'e erişemez)
-#   5 ttyd-kisi        ayse olarak: ttyd -i /run/kisi/ayse-ttyd.sock -U ayse:abc -a -W … kisi-istemci.py   (komut SABİT, kabuk YOK)
+#   5 ttyd-kisi        ayse olarak: ttyd -i /run/kisi/ayse-ttyd.sock -U ayse:ayse -a -W … kisi-istemci.py   (komut SABİT, kabuk YOK)
 # 🔴 ttyd-kisi'de -W (yazılabilir) ZORUNLUDUR: istemci m/rakam/q tuşlarını ttyd'den alır; -W'siz ttyd girdiyi atar ve düğmeler ölür.
 #    Güvence ttyd'nin salt okurluğunda DEĞİL, arkasındaki sürecin KABUKSUZ ve `ayse` yetkisiz olmasındadır; ham tuş köprüde zaten yok.
 # 🔴 abc'ye `ayse` grubunu EKLEME: köprü soketine abc zaten sahip; abc'yi gruba katmak `ayse` dosyalarını abc'ye açar, tersi gerekmez.
@@ -92,6 +92,6 @@ KOPRU_ENV="KOPRU_SOKET=$SOKET KOPRU_GRUP=$KULLANICI KOPRU_KULLANICI=$KULLANICI K
 [ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su abc -s /bin/bash -c \"env $KOPRU_ENV python3 $BECERI/koltuk-koprusu.py\" >>/config/.terminal-onar/kisi/koprusu.log 2>&1 &"
 
 adim "ttyd-kisi ($KULLANICI olarak, YAZILABİLİR -W, komut sabit: kisi-istemci)"
-[ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su $KULLANICI -s /bin/bash -c \"KOPRU_SOKET=$SOKET $TTYD -i $TTYD_SOKET -U $KULLANICI:abc -a -W python3 /opt/kisi/kisi-istemci.py\" >>/tmp/ttyd-kisi.log 2>&1 &"
+[ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su $KULLANICI -s /bin/bash -c \"KOPRU_SOKET=$SOKET $TTYD -i $TTYD_SOKET -U $KULLANICI:$KULLANICI -a -W python3 /opt/kisi/kisi-istemci.py & P=\\\$!; i=0; while [ ! -S $TTYD_SOKET ] && [ \\\$i -lt 50 ]; do sleep 0.2; i=\\\$((i+1)); done; [ -S $TTYD_SOKET ] && chmod 0666 $TTYD_SOKET || echo 'ttyd soketi 10 sn icinde acilmadi' >&2; wait \\\$P\" >>/tmp/ttyd-kisi.log 2>&1 &"
 
 echo; [ "$UYGULA" = 1 ] && echo "kisi-kur: bitti." || echo "kisi-kur: KURU KİP bitti — hiçbir şey değişmedi. Gerçek kurulum: Sultan/host elinde --uygula."

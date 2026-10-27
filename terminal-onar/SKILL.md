@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.32.0
+version: 2.32.2
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -617,6 +617,8 @@ ssh yok, kayıtlar yerel, tek komut.
 
 ## Sürüm notları
 - **2.32.0 (2026-10-27, MİRAHUR · gorev …T6YWE6):** `bosta-oturum-tarama.py` + sınavı Nexus'tan taşındı; muaf liste/zil kanalı kutuya göre çözülür, muaf listesi yokken `--kapat` rc 3. Ayrıntı yukarıda.
+- **2.32.2 (2026-10-27, HEZARFEN · SERDAR 12:45 ACİL):** `kisi-kur.sh` ttyd-kisi `-U ayse:abc` ile açılıyordu; `ayse` `abc` grubunun üyesi olmadığı için lws soketi abc grubuna chown edemiyor (`failed to set … perms 2001:1000`) → milisaniyede bir yeniden denenen sıkı döngü, günlük dakikada MB büyüyor, `ayse-ttyd.sock` hiç kalıcı olmuyor. Şimdi `-U ayse:ayse` (grup `ayse` ve dizin 3770 setgid/yapışkan) + soket açılınca `chmod 0666` (kapıyı süren `abc` 'diğer' olarak okur/yazar; `/run/kisi` 3770 olduğundan 'diğer'ler dizine zaten giremez). `kisi-kur.test.sh` Q5b-d (soket gerçekten oluşur + günlük büyümez + 0666) + iki mutant.
+- **2.32.1 (2026-10-27, HEZARFEN · SERDAR 16:08):** `kisi-kur.test.sh` Q6b gerçek `/tmp/ttyd-kisi.log`'un VARLIĞINA bakıyordu; kök sahipli 0 baytlık günlüğü olan kutuda (medigate) 19/1 düşüyordu. Artık günlüğün boyut+zamanı kum havuzu koşusundan önce/sonra aynı mı diye ölçülür (var olan dosya sınavı bozmaz, gerçek yazma yine yakalanır).
 - **2.31.1 (2026-10-27, HEZARFEN · SERDAR 12:40 acil, medigate rc 5):** kişi-kur soket dizini 0750→3770 abc:ayse. `ayse` ttyd soketini 0750 dizinde açamıyordu (bind EACCES, `/tmp/ttyd-kisi.log` sıkı döngüyle saniyede onlarca MB büyüdü); yapışkan bit koprusu.sock'u koruyor, setgid soketi ayse grubuna veriyor. Köprü: abc `ayse` grubuna üye olmadığından `os.chown` EPERM verip köprüyü öldürüyordu → yutulur.
 - **2.30.0 (2026-10-26, BERİD · gorev_…880TAK; 2.28.0/2.29.0 BÂNİ kişi-sök/kişi-kur ile aynı gün):** `claude_baslat` satırına `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` (`SIKISTIRMA_ENV`, sabit); bekçide `sikistirma_denetle` (ortam tam '600k' → hesap ayarı → eşiksiz; claude yoksa ölçülemedi), yalnız değişince günlük; sınav `sikistirma-ortami.test.sh`.
 - **2.27.0 (2026-10-26, BÂNİ · A5-3):** kapıda `/tty-k/*` → ttyd-kisi vekili (kökten yol, soket yoksa 502, abc ttyd'sine düşmez); `KAPI_KISI` · `KAPI_TTYD_KISI_SOKET`.

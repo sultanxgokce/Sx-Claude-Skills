@@ -1,0 +1,11 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-cf/coz-tum-politika/cf.test.sh
+# rc=1 sure=2.0s zaman=2026-10-27T11:53:25+03:00
+--- stdout ---
+== cloudflare-erisim golden-testleri (offline) ==
+  ✗ FAIL: T16a kuru kip planı basar (non_identity, precedence=2)
+  ✗ FAIL: T16b tam 1 POST, PUT/DELETE yok
+  ✗ FAIL: T16j coz kuru: rc 0, silmez
+  ✗ FAIL: T16k coz --uygula: tam 1 DELETE ve YALNIZ jeton politikası (POLJ), e-posta politikası (POLE) değil
+== 87 geçti · 6 düştü ==
+--- stderr ---
