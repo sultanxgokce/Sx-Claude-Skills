@@ -1,0 +1,31 @@
+{
+  "is": "kisi-kur-soket-dizini",
+  "cumle": "Ayşenur koltuk köprüsü kurulumunda soket dizini ayse'ye yazılabilir olsun ve köprü grup atamasında ölmesin",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-27T08:40:43+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "e",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "dis_yuzey",
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-27T08:40:43+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "sayi_uyarilari": []
+}

@@ -1,0 +1,25 @@
+{
+  "is": "kisi-kur-soket-dizini",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T08:43:14+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kisi-kur-ve-kopru-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kisi-kur-ve-kopru-sinavi-tek.txt",
+      "sha256": "19b0de63e913a0de3310eec2c4fbf0324c463014dbaaf4567c6ac06b8c86debd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/kisi-say.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T08:43:14+03:00",
+      "sure_sn": 20.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "627ac4c6a4ff4d29b8304d7ff5ae223a"
+    }
+  ],
+  "imza": "4fba6b7091ac85c04385bbf688f46c83b5952cc54feb1116ccd7139fa038ee99"
+}
