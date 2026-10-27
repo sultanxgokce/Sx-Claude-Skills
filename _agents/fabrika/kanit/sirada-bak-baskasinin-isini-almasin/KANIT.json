@@ -1,0 +1,67 @@
+{
+  "is": "sirada-bak-baskasinin-isini-almasin",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T22:18:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sirada-bak-sonra-sonra.txt",
+      "sha256": "db41f96b1dcfd18c0601a9c7040481ee06b45727c7c65c941f85ab23c72d643b",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T22:17:09+03:00",
+      "sure_sn": 2367.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1177785aa33a47fe9ac36d852047124a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-M7-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-M7-sonra-sonra.txt",
+      "sha256": "08fc77427e731dbe67453bbba8637e16059c246a2640144fd7cf7a81d73a059d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
+        "M7"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T22:17:13+03:00",
+      "sure_sn": 4.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "f2cf1d1f2e8d4eac96dadd3b233eb7ce"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-M8-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-M8-sonra-sonra.txt",
+      "sha256": "a09166e38b7ec6f14292159286f4ca258a4804ae983a607c66915b1725b4ddb9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh",
+        "M8"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T22:18:04+03:00",
+      "sure_sn": 51.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "6c29418b450c48869a181675244bac64"
+    }
+  ],
+  "imza": "d8a857623cb3eebff2e4161cd258503d2fd8ef1d656ee4fc2522518137b99e86"
+}
