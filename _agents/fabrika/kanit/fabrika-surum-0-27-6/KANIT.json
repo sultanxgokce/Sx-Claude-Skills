@@ -1,0 +1,78 @@
+{
+  "is": "fabrika-surum-0-27-6",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T15:01:08+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "senkron-oteki-kutu",
+      "asama": "once",
+      "dosya": "olcum-senkron-oteki-kutu-once.txt",
+      "sha256": "61aacf2f3d6312a65b2c742850207516c049325afb26433709afe60c8c5d5a9a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/surum-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T15:00:50+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8fc38908088c4367a9ea0fd7ffcb0f6a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "senkron-oteki-kutu",
+      "asama": "sonra",
+      "dosya": "olcum-senkron-oteki-kutu-sonra.txt",
+      "sha256": "3353b588f62d303eb8b01c5431fc9309eee92dcf0bded6d076e5f9972d5232a3",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/surum-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T15:00:56+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "90b24b67e7174a1a978458c7685489d2"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "senkron-oteki-kutu",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-senkron-oteki-kutu-sonra-2f91677274e1.txt",
+      "sha256": "aafaae13008097a07ee90ddeb158959c01cef9297faac753184255074c324cd8",
+      "hedef_dosya": "olcum-senkron-oteki-kutu-sonra.txt",
+      "hedef_olcum_id": "90b24b67e7174a1a978458c7685489d2",
+      "hedef_sha256": "3353b588f62d303eb8b01c5431fc9309eee92dcf0bded6d076e5f9972d5232a3",
+      "hedef_zaman": "2026-10-27T15:00:56+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "ölçüm betiği git archive HEAD ile commit'lenmemiş sürüm artışını görmedi; commit sonrası yeniden ölçüldü",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-27T15:01:03+03:00",
+      "olcum_id": "5c35a285d9e148589bb6f4e1c04516ea"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "senkron-oteki-kutu-commitli",
+      "asama": "sonra",
+      "dosya": "olcum-senkron-oteki-kutu-commitli-sonra.txt",
+      "sha256": "addf7ce6e7f63afab5163ba9d04174abef9581c0477d4f1fbd857a82b61ed594",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/surum-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T15:01:08+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "139e7625c5b046be8c36748fabb6748b"
+    }
+  ],
+  "imza": "a2b5b97728d999a6c32cad839d0b0ecc4091a661f646f537e4e9417ed4c20fc7"
+}
