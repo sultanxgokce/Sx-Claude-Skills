@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-tarama-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh zil-kapisi-yok
+# rc=1 sure=1.2s zaman=2026-10-27T09:10:13+03:00
+--- stdout ---
+✗ K4 zil kanalı YOKSA --zil rc=3 (beklenen=3 gelen=4)
+geçti=28 kaldı=1
+--- stderr ---

@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-tarama-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh varsayilan-muaf-yok
+# rc=1 sure=1.2s zaman=2026-10-27T09:10:16+03:00
+--- stdout ---
+✗ K3 ~/.filo muaf listesi varken --kapat rc=0 (beklenen=0 gelen=3)
+✗ K3b varsayılan ~/.filo listesiyle kapatır (beklenen=kill-session -t =eski| gelen=)
+geçti=27 kaldı=2
+--- stderr ---

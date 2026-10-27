@@ -1,0 +1,128 @@
+{
+  "is": "bosta-oturum-global",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T09:10:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "tarama-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-tarama-sinavi-tek.txt",
+      "sha256": "89e581ef47b885ffef3b52cff7c263f5b84807fd8efa831619c6981e664a7b2f",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bosta-oturum-tarama.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:10:11+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "23e12d7f1bfa404e87bd6740ca727b3c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-muaf-kapisi-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-muaf-kapisi-yok-tek.txt",
+      "sha256": "8755f42def631dd677cce9ff4c2a9a7c4877b5f7b6869dea0c86905d27f58e3d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh",
+        "muaf-kapisi-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:10:12+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "tarama-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "95b1dd0e53b248549886b2262c1aedf3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-zil-kapisi-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-zil-kapisi-yok-tek.txt",
+      "sha256": "8b077f1ac612b98a63b64ef17db7366e09ed14ba177dd1d07a12012d7151dd93",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh",
+        "zil-kapisi-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:10:13+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "tarama-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "6f5259c38747478cabb1296a7482dbd8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ulak-kucuk-harf",
+      "asama": "tek",
+      "dosya": "olcum-mutant-ulak-kucuk-harf-tek.txt",
+      "sha256": "15b4fd726db879ab0799f3c25aebce561a0f1708e9cab7652bbacb4ff267f4c2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh",
+        "ulak-kucuk-harf"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:10:15+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "tarama-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "45bebf8fd92c4befba340c5d1850dda4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-varsayilan-muaf-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-varsayilan-muaf-yok-tek.txt",
+      "sha256": "037a47016248a17a7e608f42f452d575c5c8c366e7bb58fc201b92247a4bf54b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh",
+        "varsayilan-muaf-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:10:16+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "tarama-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "08c7a6c8f1e74afb9afa12bdff15b1b9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kutu-kuru",
+      "asama": "tek",
+      "dosya": "olcum-gercek-kutu-kuru-tek.txt",
+      "sha256": "ef9f5818943f1773db9bbdad480a33d0609b99a9e01054c698b190e451eee3ce",
+      "komut": [
+        "env",
+        "OT_DEFTER=/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/ot-defter.json",
+        "python3",
+        "terminal-onar/scripts/bosta-oturum-tarama.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T09:10:36+03:00",
+      "sure_sn": 5.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "04accaae8fa2430a8f7805757a0ea519"
+    }
+  ],
+  "imza": "54668ac7ea18d280d6f67795d6319ba0ac17558104ef221a6dfaff589dba8d99"
+}

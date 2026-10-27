@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-tarama-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/mut-bt.sh ulak-kucuk-harf
+# rc=1 sure=1.3s zaman=2026-10-27T09:10:15+03:00
+--- stdout ---
+✗ K5b ulak gonder ESKI (büyük harf) hedefiyle çağrıldı (beklenen=gonder ESKI gelen=gonder eski)
+geçti=28 kaldı=1
+--- stderr ---
