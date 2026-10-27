@@ -21,13 +21,18 @@ method="GET"; url=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -X) method="$2"; shift 2 ;;
-    -H|-d) shift 2 ;;
+    -d) printf '%s\n' "$2" >> "${CURL_BODY:-/dev/null}"; shift 2 ;;
+    -H) shift 2 ;;
     -sS|-s|-S) shift ;;
     *) url="$1"; shift ;;
   esac
 done
 printf '%s %s\n' "$method" "$url" >> "${CURL_LOG:?}"
 case "$method|$url" in
+  GET\|*"/access/service_tokens"*)       cat "${FIX_TOKS:?}" ;;
+  GET\|*"/access/apps/"*"/policies"*)    cat "${FIX_POLS:?}" ;;
+  POST\|*"/access/apps/"*"/policies"*)   cat "${FIX_POST_POL:-${FIX_DEL_APP:?}}" ;;
+  DELETE\|*"/access/apps/"*"/policies/"*) cat "${FIX_DEL_POL:-${FIX_DEL_APP:?}}" ;;
   GET\|*"/access/apps?per_page="*)        cat "${FIX_APPS:?}" ;;
   GET\|*"/dns_records?type=CNAME&name="*) cat "${FIX_DNS:?}" ;;
   DELETE\|*"/access/apps/"*)              cat "${FIX_DEL_APP:?}" ;;
@@ -79,6 +84,39 @@ cat > "$FIX/dns-2.json" <<'EOF'
   {"id":"REC2","type":"CNAME","name":"iskantest.mmepanel.com","content":"T2.cfargotunnel.com"}
 ],"result_info":{"total_count":2}}
 EOF
+cat > "$FIX/apps-teslim.json" <<'EOF'
+{"success":true,"result":[
+  {"id":"APPT","domain":"terminal.mmepanel.com/teslim","name":"terminal-teslim-servis"},
+  {"id":"APPX","domain":"baska-app.mmepanel.com","name":"baska"}
+],"result_info":{"total_count":2,"per_page":100}}
+EOF
+cat > "$FIX/toks-1.json" <<'EOF'
+{"success":true,"result":[{"id":"TOK1","name":"code-kare-al","client_id":"FAKE.access"},{"id":"TOK2","name":"baska-jeton"}],"result_info":{"total_count":2,"per_page":100}}
+EOF
+cat > "$FIX/toks-iki.json" <<'EOF'
+{"success":true,"result":[{"id":"TOK1","name":"code-kare-al"},{"id":"TOK9","name":"code-kare-al"}],"result_info":{"total_count":2}}
+EOF
+cat > "$FIX/toks-eksik.json" <<'EOF'
+{"success":true,"result":[{"id":"TOK1","name":"code-kare-al"}],"result_info":{"total_count":5}}
+EOF
+cat > "$FIX/pols-eposta.json" <<'EOF'
+{"success":true,"result":[{"id":"POLE","name":"Allow sultan","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]}]}
+EOF
+cat > "$FIX/pols-bagli.json" <<'EOF'
+{"success":true,"result":[
+  {"id":"POLE","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]},
+  {"id":"POLJ","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK1"}}]}]}
+EOF
+cat > "$FIX/pols-baska-jeton.json" <<'EOF'
+{"success":true,"result":[
+  {"id":"POLE","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]},
+  {"id":"POLB","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK2"}}]}]}
+EOF
+cat > "$FIX/pols-cift.json" <<'EOF'
+{"success":true,"result":[
+  {"id":"POLJ","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK1"}}]},
+  {"id":"POLK","decision":"non_identity","precedence":3,"include":[{"service_token":{"token_id":"TOK1"}}]}]}
+EOF
 printf '{"success":true,"result":{"id":"X"}}\n'                      > "$FIX/ok.json"
 printf '{"success":false,"errors":[{"message":"stub-DELETE-hatasi"}]}\n' > "$FIX/fail.json"
 
@@ -94,10 +132,11 @@ cf_kos(){  # cf_kos [EK_ENV=deger ...] -- <cf.sh argümanları...>  → rc; çı
   local -a ek=()
   while [ $# -gt 0 ] && [ "$1" != "--" ]; do ek+=("$1"); shift; done
   [ "${1:-}" = "--" ] && shift
-  : > "$LOG"
+  : > "$LOG"; : > "$TMP/curl.body"
   env PATH="$STUB:$PATH" CURL_LOG="$LOG" \
     CORTEX_ACCESS_ENV="$FAKE_ENV" CF_CACHE="$FAKE_CACHE" VAULT_CEK_BIN="$TMP/yok" \
     FIX_APPS="${FIX_APPS:-$FIX/apps-1.json}" FIX_DNS="${FIX_DNS:-$FIX/dns-1.json}" \
+    CURL_BODY="$TMP/curl.body" FIX_TOKS="${FIX_TOKS:-$FIX/toks-1.json}" FIX_POLS="${FIX_POLS:-$FIX/pols-eposta.json}" \
     FIX_DEL_APP="${FIX_DEL_APP:-$FIX/ok.json}" FIX_DEL_DNS="${FIX_DEL_DNS:-$FIX/ok.json}" \
     "${ek[@]}" \
     bash "$CF_SH" "$@" > "$CIKTI" 2>&1
@@ -236,6 +275,42 @@ cf_kos CF_CACHE="$FAKE_CACHE2" CORTEX_ACCESS_ENV="$FAKE_ENV2" FIX_ZONES="$FIX_ZO
 iddia "T14 zone-yok rc≠0" [ $rc -ne 0 ]
 iddia "T14 zone-yok mesaj" grep -q 'zone_id çözülemedi' "$CIKTI"
 iddia "T14 zone-yok DELETE=0" [ "$(del_say)" = "0" ]
+
+
+# T16 · politika-bagla / politika-coz (Q4YE36): kuru varsayılan · tam eşleşme · tamlık · idempotans · geri alma · yalnız kendi politikası
+APP_ARGS=(terminal.mmepanel.com/teslim code-kare-al)
+yaz_say(){ grep -c -E '^(POST|PUT|DELETE) ' "$LOG" 2>/dev/null || true; }
+cf_kos FIX_APPS="$FIX/apps-teslim.json" -- politika-bagla "${APP_ARGS[@]}"; rc=$?
+iddia "T16a kuru kip rc 0" [ $rc -eq 0 ]
+iddia "T16a kuru kip YAZMAZ (POST/PUT/DELETE=0)" [ "$(yaz_say)" = "0" ]
+iddia "T16a kuru kip planı basar (non_identity, precedence=2)" grep -q 'precedence=2' "$CIKTI"
+cf_kos FIX_APPS="$FIX/apps-teslim.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16b --uygula rc 0" [ $rc -eq 0 ]
+iddia "T16b tam 1 POST, PUT/DELETE yok" [ "$(grep -c '^POST ' "$LOG")" = "1" ] && [ "$(grep -c -E '^(PUT|DELETE) ' "$LOG")" = "0" ]
+iddia "T16b gövde: non_identity + service_token TOK1 + precedence 2" jq -e '.decision=="non_identity" and .precedence==2 and .include==[{"service_token":{"token_id":"TOK1"}}]' "$TMP/curl.body" >/dev/null
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-bagli.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16c zaten bağlı → no-op rc 0, yazım 0" [ $rc -eq 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-baska-jeton.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16d başka jetonun politikası bu jeton için sayılmaz → POST atar" [ $rc -eq 0 ] && [ "$(grep -c '^POST ' "$LOG")" = "1" ]
+iddia "T16d precedence başka politikaların max+1'i (3)" jq -e '.precedence==3' "$TMP/curl.body" >/dev/null
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_TOKS="$FIX/toks-iki.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16e aynı adlı 2 jeton → DUR rc≠0, yazım 0" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_TOKS="$FIX/toks-eksik.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16f jeton listesi eksik (total≠dönen) → DUR, yazım 0" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-capped.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16g app listesi eksik → DUR, yazım 0" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" -- politika-bagla terminal.mmepanel.com code-kare-al --uygula; rc=$?
+iddia "T16h domain TAM eşleşir (yol eksikse app bulunamaz → DUR, yazım 0)" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" -- politika-bagla "${APP_ARGS[@]}" --bilinmeyen; rc=$?
+iddia "T16i bilinmeyen bayrak reddi, yazım 0" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-bagli.json" -- politika-coz "${APP_ARGS[@]}"; rc=$?
+iddia "T16j coz kuru: rc 0, silmez" [ $rc -eq 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-bagli.json" -- politika-coz "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16k coz --uygula: tam 1 DELETE ve YALNIZ jeton politikası (POLJ), e-posta politikası (POLE) değil" [ "$(grep -c '^DELETE ' "$LOG")" = "1" ] && grep -q '/policies/POLJ$' "$LOG" && ! grep -q '/policies/POLE' "$LOG"
+cf_kos FIX_APPS="$FIX/apps-teslim.json" -- politika-coz "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16l coz: bağlı politika yoksa no-op (e-posta politikasına dokunmaz)" [ $rc -eq 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-cift.json" -- politika-coz "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16m coz: 2 eş politika → toplu silme YOK, DUR" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
 
 # T15 · sır-hijyeni: hiçbir test-çıktısında/curl-log'unda token-değeri geçmedi.
 # Kapsam-sınırı (dürüstlük): stub -H header-DEĞERLERİNİ loglamaz → oracle stdout/stderr + URL kanallarını
