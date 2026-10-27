@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "karne-dalgic-alani",
+  "pr": "489",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T08:11:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-karne-dalgic-alani",
+  "dal": "karne-dalgic-alani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22974,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 6371
+  },
+  "bas": "d08d234d82d81b72a3711355508b2483490c31fc",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Denetçi, DALGIÇ ön-göz durumunu bütün sonuç kollarında denetim kaydına yazıyor; karne de bu alanı satıra taşıyor ve eski kayıtlarda null ile geriye uyumu koruyor. Araç imzalı önce/sonra ölçümü 1/2’den 2/2’ye çıkmış, iki ayrı mutasyon da sınavın alan kaldırma ve sahte uyumluluk kusurlarını yakaladığını göstermiş; üretimi engelleyen sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı etiketli önce/sonra ölçüm çifti kırmızı rc=1 ve dalgic-alani=1/2’den yeşil rc=0 ve 2/2’ye geçişi gösteriyor; ayrıca iki mutasyon kaydı beklenen rc=1 ile sınavın bozuk kodu yakaladığını doğruluyor. Görsel kare gerektirmeyen betik/veri-akışı değişikliği için ölçüm kanıtı yeterli."
+  }
+}
