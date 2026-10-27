@@ -1,0 +1,62 @@
+{
+  "is": "gunluk-plan-betik-biti",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T11:34:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "once",
+      "dosya": "olcum-kabuk-biti-once.txt",
+      "sha256": "d1ea0e2775199b5e2d41a92db17904b88cb305d95d8c4a6e6c6251882afb8624",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T11:34:57+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b12535867f2f4c54b9a72e3ae94612cb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "5be541e650739e192cf3a51dfef0b63b6d920df7c4a4b26e1236a83d99a62cc0",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:34:57+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ef68064920424ec2b4b7622d9d66caf2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-gorev-sh-biti-dusur",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-gorev-sh-biti-dusur-sonra.txt",
+      "sha256": "1d8ffa76bc0423f4827cec4fc467e866b06e1594e836d93bded6e948a1cd24c9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gece/mut-bit.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-27T11:34:59+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kabuk-biti",
+      "beklenen": "kirmizi",
+      "olcum_id": "c0243925d50f47d3a5f0523a83a3af18"
+    }
+  ],
+  "imza": "4e577c499350f07ee24894982d08b1137485a97533a6079e6cbb0b0728824552"
+}

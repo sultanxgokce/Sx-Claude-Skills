@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kabuk-biti-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gece/mut-bit.sh
+# rc=1 sure=2.0s zaman=2026-10-27T11:34:59+03:00
+--- stdout ---
+MUTASYON: gorev-sh-biti-dusur → gunluk-plan/scripts/gorev.sh (100755 → 100644, indeks)
+  ✗ 🔴 çalıştırma biti olmayan beceri betiği YOK (sync-skills duman testi bu yüzden düşüyordu)
+     bitsiz:
+── SONUÇ: 2 geçti · 1 kaldı ──
+mutant sınav rc=1
+--- stderr ---
