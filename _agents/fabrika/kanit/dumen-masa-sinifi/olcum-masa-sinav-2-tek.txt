@@ -1,0 +1,55 @@
+$ bash dumen-surucu/scripts/masa.test.sh
+# rc=1 sure=3.6s zaman=2026-10-27T20:58:20+03:00
+--- stdout ---
+── ajan modu: eylemler doğru uca, doğru gövdeyle, jetonla gider
+  ✓ D1 ekranAl PNG Buffer döner (başlık doğru)
+  ✓ D1 istek GET /ekran?olcek=2 ve x-dumen-jeton = masa jetonu
+  ✓ D2 tik gövdesi {x,y,dugme,cift}
+  ✓ D2 yaz gövdesi {metin}
+  ✓ D2 tus/kaydir/durum doğru uçlara
+  ✓ D12 yazılan metin ve jeton çıktıya (yaz callback) GİRMEDİ
+── çift kilit: merkez modu
+  ✓ D3 mod sultan → KapiHata sultanda, bekçi HİÇ çağrılmadı
+  ✓ D3 terminale tek satır: Dümen Sultan'da · bekliyorum
+  ✓ D3 tüm eylemler sultanda reddedildi, bekçiye istek yok
+  ✓ D3b mod sultan + hassas alan/tık: neden 'sultanda', merkeze durak bildirimi GİTMEDİ
+  ✓ D4 merkez cevapsız → fail-closed (merkez-cevapsiz), bekçi çağrılmadı
+── çift kilit: bekçi tarafı
+  ✓ D5 merkez 'ajan' derken bekçi 423 → hata DEĞİL sultanda
+  ✓ D6 bağlantı koptu + merkez ajan → masa-koptu (gerçek kopma)
+  ✓ D6 bağlantı koptu + o sırada mod sultan → sultanda (soket düşmesi hata değil)
+  ✓ D10 bekçi 401 → masa-yetki
+  ✓ D10 bekçi 503 → masa-kapali
+  ✓ D9 bekçi 403 → yasak
+  ✓ D9 bekçi 400 → istek
+  ✓ D11 masa jeton dosyası yok → masa-jeton-yok, bekçi çağrılmadı
+── durma noktaları (ajan tarafı)
+  ✓ D7 alan söylenmeden yaz çalışmaz (alan-belirtilmedi), bekçi çağrılmadı
+  ✓ D7 parola alanı → durak sifre, bekçi çağrılmadı, merkeze bildirildi (defter jetonuyla)
+  ✓ D7 SMS kodu alanı → durak sms
+  ✓ D7 kart/CVV alanı → durak odeme
+  ✓ D8 "Ödemeyi onayla" tıkı → durak odeme, bekçi çağrılmadı
+  ✓ D8 "Tümünü sil" tıkı → durak gonder
+  ✓ D13 tek karakterli tuş alansız gitmez (harf harf şifre yazımı yaz kapısını delmesin)
+  ✓ D13 tek karakterli tuş + parola alanı → durak
+  ✓ D13 meşru tek karakter (alan Terminal), ctrl+l, Return geçer
+  ✓ D7 durak bildirimi yalnız neden taşır (metin/alan değeri yok)
+  ✓ D7 meşru alan geçer
+
+SONUÇ: 30 geçti · 0 kaldı
+── mutantlar (her biri sınavı KIRMALI)
+  ✗ merkez modu atlanır: ÇAPA bayat (mutant ÜRETİLEMEDİ)
+  ✓ merkez cevapsız → devam: yakalandı (1 kapı kırmızı)
+  ✓ bekçi 423 sultanda sayılmaz: yakalandı (1 kapı kırmızı)
+  ✓ soket düşünce mod bakılmaz: yakalandı (1 kapı kırmızı)
+  ✓ yaz: alan zorunlu değil: yakalandı (6 kapı kırmızı)
+  ✓ yaz: hassas alan kapısı yok: yakalandı (8 kapı kırmızı)
+  ✓ tık etiketi kapısı yok: yakalandı (5 kapı kırmızı)
+  ✓ tek karakterli tuş kapısı yok: yakalandı (3 kapı kırmızı)
+  ✓ bekçiye jetonsuz gider: yakalandı (1 kapı kırmızı)
+  ✓ durak bildirimi jetonsuz: yakalandı (1 kapı kırmızı)
+MUTANT: 1 kaçtı
+--- stderr ---
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AssertionError: çapa 2

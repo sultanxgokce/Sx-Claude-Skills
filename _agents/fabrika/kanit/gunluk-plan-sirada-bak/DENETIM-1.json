@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-sirada-bak",
+  "pr": "509",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T20:44:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-sirada-bak",
+  "dal": "gunluk-plan-sirada-bak",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64132,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 17707
+  },
+  "dalgic": "uyumlu",
+  "bas": "4e5dca6a42f7ee3b30574ec17361a532f8beb1c9",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sırada sayımı, kutuyu kimlikten türetme, eşik dalları ve mutasyonla sınav duyarlılığı kurulmuş; fakat eşik doluyken varsayılan akış işi başlatmıyor ve yine de Sultan'a “başladım” diyor. Ayrıca iş kartından bağımsız geniş `gorev.sh` değişiklikleri aynı farka karıştığı için önce davranış sözleşmesi düzeltilip kapsam ayrıştırılmalı.",
+    "bulgular": [
+      {
+        "ne": "Talep eşik kadar iş varsa en üstteki işi çalışılıyor yapıp başlamayı istiyor; uygulama bunu yalnız isteğe bağlı `--basla` ile yapıyor. Üstelik `--basla` verilmediğinde hiç üstlenme yapılmadığı sınanırken çıktı yine “en üstteki ... ile başladım” diyerek gerçeğe aykırı öneri üretiyor.",
+        "kanit": "Gerçek ölçümde S4 “--basla YOKKEN ustlen çağrılmaz” ve S5 “öneri ... söyler” birlikte yeşil. Üretim kodunda üstlenme `if [ \"$BASLA\" -eq 1 ]` koşuluna bağlıyken `ONERI=... ile başladım` satırı bu koşulun dışında basılıyor.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh:43; gunluk-plan/scripts/sirada-bak.sh:51; olcum-sirada-bak-sonra-sonra.txt S4-S5",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Değişiklik iş kartının dışına taşarak `gorev.sh` içine oda çözümleme, sipariş sırası, çatışma beyanı ve hakem akışları ekliyor; bunlar günlük planın Sırada kontrolü talebinin parçası değil ve teslimatın risk yüzeyini gereksiz büyütüyor.",
+        "kanit": "Diffte `_oda_coz` işlevi ile `ac`/`ekle`/`bulgu` oda alanları ve yeni `sira`, `catisma`, `hakem` fiilleri bulunuyor; iş kartında yalnız Sırada kontrolü, başlatma/öneri, iki şıklı soru ve `--kutu` türetme istenmiş.",
+        "konum": "gunluk-plan/scripts/gorev.sh:97; gunluk-plan/scripts/gorev.sh:129; gunluk-plan/scripts/gorev.sh:351",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçümler yeşil, beş mutasyon kaydı beklenen kırmızıları yakalıyor. Ancak yalnız sonra ölçümleri var, önce/sonra çifti ya da gerçekçi kullanıcı akışı karesi yok; ayrıca yeşil sınav S4-S5 çelişkisini doğrulamak yerine mevcut yanlış sözleşmeyi sabitliyor ve kapsam dışı `gorev.sh` eklerinin davranışını ölçmüyor."
+  }
+}

@@ -1410,7 +1410,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.10.1",
+      "version": "1.11.1",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1811,7 +1811,7 @@
       "id": "dumen-surucu",
       "type": "workflow",
       "name": "Dümen'i kapıdan sür — eylem kapısı",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "description": "Ajanın Dümen Chrome'unu Playwright connectOverCDP ile sürmesinin tek yolu: her eylemden önce Dümen kimde okunur (Sultan'da ya da merkez cevapsızsa eylem yapılmaz), parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir, izole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir.",
       "tags": [
         "dumen",

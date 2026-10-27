@@ -1,0 +1,43 @@
+$ bash gunluk-plan/scripts/deftere-yaz.test.sh
+# rc=0 sure=5.0s zaman=2026-10-27T21:04:59+03:00
+--- stdout ---
+── KURU: neyi yazacağını basar, deftere yazmaz
+  ✓ D1 kuru rc=0
+  ✓ D2 kuru: ekle çağrılmaz
+  ✓ D3 kuru: 'yazardım' satırları (yeni + eski günde iptal olan = 2)
+  ✓ D4 kuru: açık, onay bekleyen VE bugün kapanan görevle aynı başlık (büyük/küçük harf, sıra numarası farkıyla) atlanır
+  ✓ D4b kutu listeden türedi (huma)
+── UYGULA: yazar, İKİNCİ koşu çift yazmaz
+  ✓ D5 uygula rc=0
+  ✓ D6 iki görev yazıldı
+  ✓ D7 ekle bayrakları: kutu · atanan · özellik · günlük plan kaynağı
+  ✓ D8 ikinci koşu: hiçbir şey yazılmaz (idempotent)
+── ÖLÇÜLEMEYEN durum 'yazılacak bir şey yok' DENMEZ
+  ✓ D9 defter listesi okunamadı → rc=3
+  ✓ D10 çıpa yok → rc=3
+  ✓ D10b liste BOŞ → rc=3 (boş liste 'iş yok' değil, ölçülemedi)
+── ONAY KAPISI (A06/D1): onaysız plan deftere yazılmaz
+  ✓ D16 --onay'sız --uygula REDDEDİLİR (rc=2)
+  ✓ D17b iki harflik kırpık (tarih+imza doğru, yalnız biçim kapısı yakalar) REDDEDİLİR
+  ✓ D17g beyan parçası eksik (tarih+imza doğru) REDDEDİLİR
+  ✓ D17 biçimsiz onay (kırpık/ref eksik) REDDEDİLİR
+  ✓ D18 reddedilen koşuda ekle ÇAĞRILMAZ
+  ✓ D17c ESKİ tarihli onay REDDEDİLİR (bugün değil)
+  ✓ D17d başka planın imzasını taşıyan onay REDDEDİLİR
+  ✓ D17e plan onaydan SONRA değişti → eski onay düşer
+  ✓ D18b reddedilen koşularda ekle çağrılmadı
+  ✓ D17f doğru imza + bugün + biçim → KABUL (rc=0, 1 görev yazıldı)
+  ✓ D19 kuru koşu onaysız ÇALIŞIR (rc=0, 'kuru:' ve plan-imzası basar, ekle çağrılmaz)
+  ✓ D17h 15 kelimeyi aşan alıntı REDDEDİLİR (tarih+imza doğru)
+  ✓ D17i tam 15 kelimelik alıntı KABUL (sınır dahil)
+── Hata ve sınırlar
+  ✓ D11 ekle başarısız → rc=1 (yazıldı denmez)
+  ✓ D12 200 karakter üstü madde REDDEDİLİR (rc=1), ekle çağrılmaz
+  ✓ D13 geçersiz aciliyet rc=2
+  ✓ D14 tanınmayan argüman rc=2
+  ✓ D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer
+── AÇILIŞ ÖZETİ (mihenk/s08): ekle --ozet taşır, hata sebebi ekrana basılır
+  ✓ D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle)
+  ✓ D20 reddedilen yazım YAZILAMADI + sebep satırı basar
+── SONUÇ: 32 geçti · 0 kaldı ──
+--- stderr ---

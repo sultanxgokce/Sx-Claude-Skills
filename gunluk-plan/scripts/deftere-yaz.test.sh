@@ -21,7 +21,10 @@ cat > "$T/gorev.sh" <<'EOF'
 T="$(dirname "${BASH_SOURCE[0]}")"
 case "$1" in
   liste) [ "${LISTE_RC:-0}" -eq 0 ] || exit "$LISTE_RC"; cat "$T/liste.txt" ;;
-  ekle) printf '%s\n' "$*" >> "$T/ekle.log"; [ "${EKLE_RC:-0}" -eq 0 ] || exit "$EKLE_RC" ;;
+  ekle) printf '%s\n' "$*" >> "$T/ekle.log"
+        # gerçek geçidin açılış kapısı: --ozet yoksa 400 (mihenk/s08, 27 Eki — sahte betik bunu hiç sormuyordu, birim yeşil yol kırık kaldı)
+        case "$*" in *" --ozet "?*) ;; *) echo "HTTP 400 ozet_acilista_gerekli" >&2; exit 1 ;; esac
+        [ "${EKLE_RC:-0}" -eq 0 ] || exit "$EKLE_RC" ;;
 esac
 EOF
 chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"
@@ -71,9 +74,9 @@ bash "$ARAC" --uygula --onay "onayladi" >/dev/null 2>&1; r2=$?
 bash "$ARAC" --uygula --onay "2026-01-02 Sultan: onay (sohbet · ref · beyan:SINAV)" >/dev/null 2>&1; r3=$?
 I="${ONAY##*plan:}"; I="${I%)}"
 kapi "D16 --onay'sız --uygula REDDEDİLİR (rc=2)" "2" "$r1"
-kapi "D17 biçimsiz onay (kırpık/ref eksik) REDDEDİLİR" "2:2" "$r2:$r3"
 kisa="${ONAY/bugunku plan tamam/ab}"; bash "$ARAC" --uygula --onay "$kisa" >/dev/null 2>&1; kapi "D17b iki harflik kırpık (tarih+imza doğru, yalnız biçim kapısı yakalar) REDDEDİLİR" "2" "$?"
 beyansiz="${ONAY/ · beyan:SINAV/}"; bash "$ARAC" --uygula --onay "$beyansiz" >/dev/null 2>&1; kapi "D17g beyan parçası eksik (tarih+imza doğru) REDDEDİLİR" "2" "$?"
+kapi "D17 biçimsiz onay (kırpık/ref eksik) REDDEDİLİR" "2:2" "$r2:$r3"
 kapi "D18 reddedilen koşuda ekle ÇAĞRILMAZ" "0" "$(wc -l < "$T/ekle.log" | tr -d ' ')"
 bash "$ARAC" >/dev/null 2>&1; eski="${ONAY/2026-01-02 Sultan/2026-01-01 Sultan}"; bash "$ARAC" --uygula --onay "$eski" >/dev/null 2>&1; kapi "D17c ESKİ tarihli onay REDDEDİLİR (bugün değil)" "2" "$?"
 yanlis="${ONAY/plan:$I/plan:00000000}"; bash "$ARAC" --uygula --onay "$yanlis" >/dev/null 2>&1; kapi "D17d başka planın imzasını taşıyan onay REDDEDİLİR" "2" "$?"
@@ -104,4 +107,10 @@ bash "$ARAC" --bilinmeyen >/dev/null 2>&1; kapi "D14 tanınmayan argüman rc=2" 
 bash "$KOK/cipa.sh" yaz --plan "1) Bir is" >/dev/null 2>&1; yenile_onay; : > "$T/ekle.log"
 bash "$ARAC" --uygula --onay "$ONAY" --kutu tellal --kim ORNEK --aciliyet acil >/dev/null 2>&1
 kapi "D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer" "1" "$(grep -c -- '--kutu tellal --etiket ozellik --aciliyet acil --atanan ORNEK --kaynak-kim ORNEK' "$T/ekle.log")"
+echo "── AÇILIŞ ÖZETİ (mihenk/s08): ekle --ozet taşır, hata sebebi ekrana basılır"
+bash "$KOK/cipa.sh" yaz --plan "1) Ozetli is" >/dev/null 2>&1; yenile_onay; : > "$T/ekle.log"
+bash "$ARAC" --uygula --onay "$ONAY" --kutu huma >/dev/null 2>&1
+kapi "D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle)" "1" "$(grep -c -- '--ozet .*→ henüz başlanmadı → .*Ozetli is' "$T/ekle.log")"
+c="$(EKLE_RC=9 bash "$ARAC" --uygula --onay "$ONAY" --kutu huma 2>&1)"
+kapi "D20 reddedilen yazım YAZILAMADI + sebep satırı basar" "1:1" "$(printf '%s' "$c" | grep -c 'YAZILAMADI'):$(printf '%s' "$c" | grep -c 'sebep:')"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

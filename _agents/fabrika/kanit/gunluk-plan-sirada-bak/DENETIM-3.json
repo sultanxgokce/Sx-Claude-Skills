@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-sirada-bak",
+  "pr": "509",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T21:06:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-gorev-yolu-sonra-sonra.txt (yesil → gecersiz) — gorev.sh eşitlemesi denetçi tur 1 bulgusuyla PR kapsamından çıkarıldı; bu ölçüm o değişikliğe aitti ve artık PR'ın parçası değil (gorev-yolu.test.sh bu PR'da değişmedi) · MUAVIN",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-sirada-bak",
+  "dal": "gunluk-plan-sirada-bak",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31013,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 19650
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e089acc9bdc472a72008f59460620dc08d92009e",
+  "duzeltme_farki": {
+    "onceki_bas": "1290317cc6410a6029886a8a9bffe94ec6ed75a0",
+    "dosya": 13,
+    "bayt": 23745,
+    "tam_bayt": 54089
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Günlük plan artık kutuyu kimlikten türetiyor; eşik dolunca en üstteki Sırada işini başlatıp bugüne alma önerisi sunuyor, eşik altında ise iki şıklı iş çıkarma sorusu soruyor. Önceki turdaki çelişkili “planlanmış görev yok” sözü 1-2 iş varken gerçek sayı ve eşikle değiştirildi; geçerli gerçek ölçümler ve altı mutasyon sınavı çekirdek davranışları güçlü biçimde doğruladığından üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Geçersiz ilan edilen `gorev-yolu-sonra` kaydı değerlendirmeye katılmadı; geçerli gerçek ölçümler `sirada-bak-sonra` için 32/32, `deftere-yaz-sonra` için 32/32 yeşil. M1-M6 mutasyonlarının tamamı bozuk kodu beklenen kırmızı sonuçla yakaladı ve ilgili gerçek ölçümlere bağlı. Önceki tur B1 kapanmış: üretim kodu N=0 için “planlanmış görev yok” derken N>0 için gerçek sayı ile eşiği söylüyor; S11b, S11c ve S12b bunu doğrudan sınıyor. Önce/sonra ölçüm çifti veya kullanıcı akışı karesi yok, ancak talebin kabuk davranışları gerçekçi sahte görev verileriyle doğrudan ve mutasyon duyarlılığıyla ölçülmüş."
+  }
+}
