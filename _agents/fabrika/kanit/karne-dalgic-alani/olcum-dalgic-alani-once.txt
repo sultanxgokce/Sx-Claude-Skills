@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/karne-dalgic-alani/dalgic-alani-olc.sh /tmp/tmp.LcURpOMkZP
+# rc=1 sure=0.4s zaman=2026-10-27T08:10:03+03:00
+--- stdout ---
+dalgic-alani=1/2
+--- stderr ---

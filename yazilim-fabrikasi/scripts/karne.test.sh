@@ -33,5 +33,21 @@ grep -q "iş: 3" <<<"$CIKTI" && grep -q "5+E alan: 2" <<<"$CIKTI" && grep -q "KI
 grep -q "ortalama tur: 2.0" <<<"$CIKTI"; g $? "ortalama tur 2.0"
 echo "════ T5 · DENETIM yokken yaz rc=3 ════"
 bash "$KR" yaz yok-is >/dev/null 2>&1; [ $? -eq 3 ]; g $? "rc=3"
+echo "════ T6 · W42-E1: DENETIM kaydındaki dalgic alanı karne satırına geçer; alansız eski kayıt null kalır ════"
+den is-d 1 5 E 2; python3 - "$T/_agents/fabrika/kanit/is-d/DENETIM-1.json" <<'PY'
+import json,sys
+d=json.load(open(sys.argv[1])); d["dalgic"]="uyumlu"; json.dump(d,open(sys.argv[1],"w"),ensure_ascii=False)
+PY
+bash "$KR" yaz is-d >/dev/null 2>&1; g $? "yaz rc=0 (dalgic alanlı kayıt)"
+python3 - "$T/_agents/fabrika/karne.jsonl" <<'PY'
+import json,sys
+r={}
+for l in open(sys.argv[1]):
+    k=json.loads(l)
+    if k.get("olay")=="denetim": r[k["is"]]=k
+assert r["is-d"]["dalgic"]=="uyumlu", r["is-d"]
+assert "dalgic" in r["is-a"] and r["is-a"]["dalgic"] is None, r["is-a"]
+PY
+g $? "is-d karne satırında dalgic=uyumlu; alansız is-a satırında dalgic=null"
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

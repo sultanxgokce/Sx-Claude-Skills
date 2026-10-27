@@ -879,12 +879,16 @@ bash "$K" olcum is-on olc --asama tek -- echo 1 >/dev/null 2>&1
 for sonuc in 0 1 3; do printf '#!/usr/bin/env bash\necho "sahte dalgic rapor rc=%s"; exit %s\n' "$sonuc" "$sonuc" > "$T/dalgic-$sonuc.sh"; done
 on() { DALGIC_KAPALI= DALGIC_BIN="$1" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1; }
 CIKTI="$(on "$T/dalgic-0.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ön-göz (DALGIÇ): UYUMLU" <<<"$CIKTI"; g $? "ön-göz UYUMLU: bilgi satırı basıldı, denetim aynen geçti (rc 0)"
+grep -q '"dalgic": "uyumlu"' "$T/_agents/fabrika/kanit/is-on/DENETIM-1.json"; g $? "W42-E1: ön-göz UYUMLU → denetim kaydında dalgic=uyumlu"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 CIKTI="$(on "$T/dalgic-1.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ÖN-GÖZ (DALGIÇ): UYUMSUZ" <<<"$CIKTI" && grep -q "sahte dalgic rapor rc=1" <<<"$CIKTI"; g $? "🔴 ön-göz UYUMSUZ: büyük uyarı + rapor basıldı AMA denetim sürdü ve geçti (rc 0; göz bağımsız kalır)"
+grep -q '"dalgic": "uyumsuz"' "$T/_agents/fabrika/kanit/is-on/DENETIM-1.json"; g $? "W42-E1: ön-göz UYUMSUZ → denetim kaydında dalgic=uyumsuz (puan/rc değişmez, yukarıda rc 0)"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 CIKTI="$(on "$T/dalgic-3.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ÖLÇÜLEMEDİ (rc=3) — UYUMLU sayılmaz" <<<"$CIKTI"; g $? "ön-göz ÖLÇÜLEMEDİ: UYUMLU sayılmaz uyarısı, denetim sürer (rc 0)"
+grep -q '"dalgic": "olculemedi"' "$T/_agents/fabrika/kanit/is-on/DENETIM-1.json"; g $? "W42-E1: ön-göz ÖLÇÜLEMEDİ → denetim kaydında dalgic=olculemedi (uyumlu sayılmaz)"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 CIKTI="$(on "$T/yok-dalgic.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "dalgic.sh yok — ATLANDI" <<<"$CIKTI"; g $? "dalgic.sh yoksa 'ATLANDI' yazılır, denetim yine koşar (rc 0)"
+grep -q '"dalgic": "atlandi"' "$T/_agents/fabrika/kanit/is-on/DENETIM-1.json"; g $? "W42-E1: dalgic.sh yok → dalgic=atlandi"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 CIKTI="$(DALGIC_KAPALI=1 DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && ! grep -q "ön-göz\|ÖN-GÖZ" <<<"$CIKTI"; g $? "DALGIC_KAPALI=1: ön-göz hiç koşmaz"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
@@ -904,7 +908,7 @@ DALGIC_KAPALI= DALGIC_BIN="$T/dalgic-1.sh" SAHTE_ISTEM_KOPYA="$T/istem-acik.md" 
 # MUTASYON: UYUMSUZ kolu kaldırılırsa uyarı kaybolur → yukarıdaki 🔴 kapı düşerdi
 MO="$T/pkg-on"; mkdir -p "$MO"; cp "$HERE"/*.py "$HERE"/*.sh "$MO/" 2>/dev/null
 python3 - "$MO/denetci.sh" <<'PYM'
-import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='1) _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ'; assert s.count(a)==1; open(sys.argv[1],"w",encoding="utf-8").write(s.replace(a,'1) : ; _bilgi "ÖN-GÖZ-KAPALI',1))
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='1) DALGIC_DURUM=uyumsuz; _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ'; assert s.count(a)==1; open(sys.argv[1],"w",encoding="utf-8").write(s.replace(a,'1) : ; _bilgi "ÖN-GÖZ-KAPALI',1))
 PYM
 CIKTI="$(DALGIC_KAPALI= DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bash "$MO/denetci.sh" is-on --diff "$T/d.patch" 2>&1)"; ! grep -q "ÖN-GÖZ (DALGIÇ): UYUMSUZ" <<<"$CIKTI"; g $? "mutant (UYUMSUZ kolu söküldü): uyarı BASILMAZ → üstteki 🔴 kapı düşerdi"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
