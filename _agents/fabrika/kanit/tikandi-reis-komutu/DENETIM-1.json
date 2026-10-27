@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "tikandi-reis-komutu",
+  "pr": "507",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T19:07:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-tikandi-reis-komutu",
+  "dal": "tikandi-reis-komutu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34251,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 139383
+  },
+  "dalgic": "uyumsuz",
+  "bas": "64e7a49fd41a9479437f225846b7d200bbbaccee",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Tıkandı raporuna gerçek iş adı ve kart sahibiyle sıralı karar/denetim komutları eklenmiş, mutlak tavanda yanıltıcı komut da bastırılmamış. Ancak kartın açıkça istediği `DENETCI_EK=--reis-devam` biçimi uygulanmadığı ve 4. tur gerekçesi doğrudan sınanmadığı için önce bunları çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Talep edilen tam komut yerine denetçi doğrudan `--reis-devam` argümanıyla çağrılıyor; `DENETCI_EK=--reis-devam` hiç basılmıyor.",
+        "kanit": "İş kartı açıkça `DENETCI_EK=--reis-devam` isterken eklenen çıktı `bash $HERE/denetci.sh $IS${PR:+ --pr $PR} --reis-devam < /dev/null`; test de yalnız `denetci.sh is-r2 --reis-devam` arıyor. Yeşil gerçek ölçüm bu farklı biçimi kabul etmiş.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:tikandi_raporu; yazilim-fabrikasi/scripts/denetci.test.sh:7KKSJK",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“Reis kararı yokken 4. tur” gerekçesi kesin olarak üretilmiyor ve test edilmiyor; mesaj turu `${ONCEKI:-bu}` üzerinden kuruyor.",
+        "kanit": "Üretim satırı `... ${ONCEKI:-bu}. tur reddedilir` diyor; eklenen test yalnız `kartta yokken --reis-devam kapıyı AÇMAZ` parçasını arıyor, `4. tur` ifadesini doğrulamıyor. Gerçek ölçümün 315/315 yeşili bu eksik sınamayla alınmış.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:tikandi_raporu; yazilim-fabrikasi/scripts/denetci.test.sh:7KKSJK",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm `denetci-sinav` rc=0 ile 315/315 geçiyor. Üç mutasyon kaydı rc=1 ve yeşil olup bozulan kodun yakalandığını gösteriyor; ancak mutasyonlar iş kartındaki `DENETCI_EK` biçimini ve sabit `4. tur` gerekçesini hedeflemediğinden bu iki talep için kanıt yeterli değil."
+  }
+}
