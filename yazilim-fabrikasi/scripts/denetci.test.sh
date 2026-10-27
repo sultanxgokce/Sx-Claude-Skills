@@ -149,6 +149,8 @@ python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "🔴 sınıflı kartta reis kararı (araçla yazılmış) denetçinin tavanını bu sürümde AÇMIYOR (rc=1; ikinci kartta açılır)"
 grep -q "SINIFLI" <<<"$CIKTI"; g $? "sebebi yazılı: kart sınıflı, merci Sultan"
+CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" 2>&1)"
+grep -qF "kart.sh sultan-dedi is-r1 --karar devam" <<<"$CIKTI" && ! grep -qF "reis-dedi is-r1" <<<"$CIKTI"; g $? "🔴 7KKSJK: SINIFLI kartta tıkandı raporu sultan-dedi komutunu basıyor, reis-dedi'yi DEĞİL"
 grep -q "sultan-dedi" <<<"$CIKTI"; g $? "doğru yol gösterildi (sultan-dedi)"
 [ ! -f "$T/_agents/fabrika/kanit/is-r1/DENETIM-4.json" ]; g $? "denetim KOŞULMADI"
 ! grep -q "is=is-r1" "$T/_agents/fabrika/tavan-defteri.log" 2>/dev/null; g $? "deftere de yazılmadı"
@@ -162,6 +164,16 @@ CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"; 
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)"
 grep -q "reis-dedi" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" DENETCI_EK=--reis-devam bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "KARTTA gerekçeli reis" <<<"$CIKTI"; g $? "🔴 7KKSJK: DENETCI_EK=--reis-devam bayrakla AYNI işler (kartta karar yokken rc=1, aynı sebep; yok sayılsaydı rc=4)"
+# 7KKSJK: TIKANDI raporu devam yolunun TAM komutunu basar (gerçek iş adı + kartın sahibi + sıra); rc4 + "karar yok" tekrarı biter
+CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"
+grep -qF "kart.sh reis-dedi is-r2 --karar devam --reis MUAVIN --oturum <ref> --gerekce" <<<"$CIKTI"; g $? "🔴 7KKSJK: tıkandı raporu reis-dedi komutunu GERÇEK iş adı + kartın sahibiyle basıyor"
+grep -qF "DENETCI_EK=--reis-devam bash" <<<"$CIKTI" && grep -qF "denetci.sh is-r2" <<<"$CIKTI"; g $? "🔴 7KKSJK: ikinci adım DENETCI_EK=--reis-devam biçiminde, sırayla yazılı"
+grep -q "4\. tur ÖNCE bu komutu ister" <<<"$CIKTI"; g $? "🔴 7KKSJK: 'tur 3 tıkandı' → raporda '4. tur' (sıradaki tur) sebebiyle yazılı"
+
+grep -q "ÖNCE bu komutu ister: --reis-devam kapıyı AÇMAZ" <<<"$CIKTI"; g $? "🔴 7KKSJK: karar yokken rc 1 + önce-komut sebebi yazılı"
+! grep -q "sultan-dedi" <<<"$CIKTI"; g $? "7KKSJK: sınıfsız iş raporunda Sultan yolu dayatılmıyor"
 
 echo "════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan denetçi kartı BİRİNCİL depodan okur ════"
 # NİÇİN: kart.sh birincil depoya yazar; denetçi iş alanındaki BAYAT kopyayı okuyordu → reis-dedi işlenmişken kapı "karar YOK" dedi
@@ -237,7 +249,9 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-dev
 grep -q "REİS kararı" <<<"$CIKTI"; g $? "açılışın REİS kararıyla olduğu yazılı (Sultan kararı DEĞİL)"
 grep -q "muavin/d69a1b07" <<<"$CIKTI"; g $? "oturum referansı çıktıda"
 grep -q "TAVAN-ACILDI-REIS | is=is-r2 tur=4" "$T/_agents/fabrika/tavan-defteri.log"; g $? "defter satırı TAVAN-ACILDI-REIS (Sultan satırından ayırt edilir)"
-SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam >/dev/null 2>&1; [ $? -eq 4 ]; g $? "reis kararı MUTLAK tavanı (4) AÇMIYOR → tur5 rc=4"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
+[ "$RC" -eq 4 ]; g $? "reis kararı MUTLAK tavanı (4) AÇMIYOR → tur5 rc=4"
+! grep -qF "kart.sh reis-dedi is-r2" <<<"$CIKTI"; g $? "🔴 7KKSJK: mutlak tavanda reis-dedi komutu BASILMIYOR (açmayacak yolu göstermek yanıltır)"
 
 [ -s "$T/_agents/fabrika/tavan-defteri.log" ]; g $? "tavan defteri GERÇEKTEN yazıldı"
 grep -q "olur bir tur daha devam" "$T/_agents/fabrika/tavan-defteri.log"; g $? "Sultan'ın kırpık sözü defterde"
@@ -361,6 +375,18 @@ CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-gec.md" SAHTE_JSON="$(J 5 E "")" bash "$D" 
 grep -q "kanıt: sağlam.*1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-olc-tek.txt (yesil → gecersiz) — boru çıkış kodunu" <<<"$CIKTI"; g $? "puan satırındaki kanıt durumu geçersiz ilanı nedeniyle söylüyor"
 grep -q "durum: sağlam.*GEÇERSİZ ilan edildi" "$T/istem-gec.md"; g $? "istemdeki manifest başlığında da var (göz okur)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-gec/DENETIM-1.json'));assert 'GEÇERSİZ' in json.dumps(d,ensure_ascii=False)"; g $? "DENETIM kaydına da işlendi"
+
+echo "════ T9e · 7KKSJK-EK: GEÇERSİZ ilanlı kaydın GÖVDESİ isteme girmez (istem baytı düşer), geçerli kayıt tam girer ════"
+bash "$K" olcum is-gec2 yanlis --asama tek -- bash -c 'for i in $(seq 1 40); do echo "GOVDE_GECERSIZ_ISARETI_$((i+0)) $(head -c 180 /dev/zero | tr "\\0" x)"; done' >/dev/null 2>&1
+bash "$K" olcum is-gec2 dogru --asama tek -- bash -c 'for i in $(seq 1 40); do echo "GOVDE_GECERLI_ISARETI_$((i+0)) $(head -c 180 /dev/zero | tr "\\0" x)"; done' >/dev/null 2>&1
+SAHTE_ISTEM_KOPYA="$T/istem-g2a.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-gec2 --diff "$T/d.patch" >/dev/null 2>&1
+grep -q "GOVDE_GECERSIZ_ISARETI_40" "$T/istem-g2a.md" && grep -q "GOVDE_GECERLI_ISARETI_40" "$T/istem-g2a.md"; g $? "ilandan ÖNCE iki kaydın gövdesi de istemde (taban)"
+bash "$K" gecersiz is-gec2 yanlis --neden "boru çıkış kodunu maskeledi, yanlış ölçüm" --kim T >/dev/null 2>&1
+SAHTE_ISTEM_KOPYA="$T/istem-g2b.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-gec2 --diff "$T/d.patch" >/dev/null 2>&1
+! grep -q "GOVDE_GECERSIZ_ISARETI_[0-9]" "$T/istem-g2b.md"; g $? "🔴 7KKSJK-EK: GEÇERSİZ ilanlı kaydın gövdesi istemde YOK"
+grep -q "GOVDE_GECERLI_ISARETI_40" "$T/istem-g2b.md"; g $? "🔴 7KKSJK-EK: GEÇERLİ kaydın gövdesi hâlâ TAM istemde"
+grep -q "olcum-yanlis-tek.txt · ⛔ GEÇERSİZ ilan edildi: gövde isteme KONMADI" "$T/istem-g2b.md"; g $? "manifest tarafı: geçersiz kaydın adı ve ilan notu istemde kalıyor"
+[ "$(wc -c < "$T/istem-g2b.md")" -lt "$(wc -c < "$T/istem-g2a.md")" ]; g $? "🔴 7KKSJK-EK: istem baytı düştü"
 
 echo "════ T10 · bozuk manifest → rc=2 ════"
 python3 - <<PY
