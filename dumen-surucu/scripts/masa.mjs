@@ -54,8 +54,7 @@ export class Masa {
   }
 
   async #istek(yontem, yol, govde) {
-    const mod = await this.modOku();
-    if (mod !== 'ajan') throw await this.#sultanda(`mod=${mod}`);
+    await this.#modKapisi();
     const jeton = masaJetonOku(this.#jetonDosya);
     if (!jeton) throw new KapiHata('masa-jeton-yok', 'DUMEN_MASA_JETON dosyası okunamadı — kurulum eksik');
     let r;
