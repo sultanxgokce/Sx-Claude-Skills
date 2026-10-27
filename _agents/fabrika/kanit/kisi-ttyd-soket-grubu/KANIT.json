@@ -1,7 +1,7 @@
 {
   "is": "kisi-ttyd-soket-grubu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T12:27:49+03:00",
+  "guncelleme": "2026-10-27T12:28:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -66,23 +66,23 @@
       "etiket": "mutant-chmod",
       "asama": "tek",
       "dosya": "olcum-mutant-chmod-tek.txt",
-      "sha256": "1ea837b97cba9635866bf721d7b460b94dad94aec5c1f0046905e31ce9bdf1ed",
+      "sha256": "2cd46e3867238b2630e7e5a69d78715f24dc4a6dd92dadcd7833141fd3790588",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ttyd-mutant.sh",
         "/config/projects/_wt/Sx-Claude-Skills-kisi-ttyd-soket-grubu/terminal-onar",
         "chmod"
       ],
-      "rc": 2,
-      "renk": "yesil",
-      "zaman": "2026-10-27T12:27:49+03:00",
-      "sure_sn": 0.0,
+      "rc": 0,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T12:28:31+03:00",
+      "sure_sn": 9.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "soket",
       "beklenen": "kirmizi",
-      "olcum_id": "4b26b74abc2241eb875ba0e57471abaf"
+      "olcum_id": "d976f1e42f9e44e1b70f807be3eca087"
     }
   ],
-  "imza": "447846d4718ff6ea6e3a93205a46c91f0a753c530604f8e1e2377b4266e88d48"
+  "imza": "fc04c60f7ed73b1fd4fd509e5cb04119aedd0f06dcf7122b1e6ce837918615d1"
 }
