@@ -2,7 +2,7 @@
 // Çalıştır: DUMEN_CHROME=<chrome-headless-shell> node dumen.test.mjs   (dumen.mjs yolu: DUMEN_LIB, varsayılan yanı)
 import http from 'http';
 import { spawn } from 'child_process';
-import { mkdtempSync } from 'fs';
+import { mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 const LIB = process.env.DUMEN_LIB || new URL('./dumen.mjs', import.meta.url).pathname;
@@ -10,11 +10,15 @@ const { Dumen, KapiHata } = await import(LIB);
 const CHROME = process.env.DUMEN_CHROME;
 if (!CHROME) { console.log('ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi'); process.exit(3); }
 
-let mod = 'ajan'; let durakKod = 200; const duraklar = [];
+let mod = 'ajan'; let durakKod = 200; const duraklar = []; const durakBaslik = [];
+const JETON_DOSYA = join(mkdtempSync(join(tmpdir(), 'dumen-jeton-')), 'jeton'); const JETON = 'sahte-jeton-' + Math.random().toString(36).slice(2);
+writeFileSync(JETON_DOSYA, JETON + '\n'); process.env.DUMEN_DEFTER_JETON = JETON_DOSYA;
 const FORM = `<!doctype html><title>f</title><input id=t type=text><input id=d type=date><select id=s><option value=a>a</option><option value=b>b</option></select><input id=pw type=password><input id=otp type=text name=otp><button id=g>Tamam</button><button id=ode>Öde</button>`;
+let modSonra = null;   // /dumen/mod cevaplandıktan SONRA bir kez çalışır (kapı geçti, tam o sırada soket düşsün)
 const srv = http.createServer((q, r) => {
-  if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); return r.end(JSON.stringify({ mod, an: '' })); }
-  if (q.url === '/api/dumen/durak' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { duraklar.push(JSON.parse(b)); r.statusCode = durakKod; r.end('{}'); }); }
+  if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); r.end(JSON.stringify({ mod, an: '' })); if (modSonra) { const f = modSonra; modSonra = null; f(); } return; }
+  if (q.url === '/yavas') { return setTimeout(() => { r.setHeader('content-type', 'text/html; charset=utf-8'); r.end(FORM); }, 4000); }
+  if (q.url === '/api/dumen/durak' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { duraklar.push(JSON.parse(b)); durakBaslik.push(q.headers['x-defter-jeton'] || null); r.statusCode = durakKod; r.end('{}'); }); }
   r.setHeader('content-type', 'text/html; charset=utf-8'); r.end(FORM);
 });
 await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
@@ -85,6 +89,52 @@ await ham.evaluate(() => { const e = document.getElementById('pw'); e.value = 'i
 await new Promise((r) => setTimeout(r, 200));
 const sizan = JSON.stringify(d.olayKaydi());
 ok('D16 parola alanı değişimi KAYDEDİLDİ ama DEĞER yok (<gizli>)', sizan.includes('<gizli>') && !sizan.includes('insan-sifresi') && !sizan.includes('gizli-deger'), sizan.slice(-200));
+
+console.log('── durak bildirimi jeton başlığı');
+ok('D19 durak bildirimi x-defter-jeton başlığıyla gitti (her istek)', durakBaslik.length > 0 && durakBaslik.every((h) => h === JETON), JSON.stringify(durakBaslik.map((h) => h && h.slice(0, 6))));
+ok('D20 jeton değeri günlük satırlarında YOK', !satirlar.some((x) => x.includes(JETON)));
+
+console.log('── mod sultan iken soket düşer');
+const PORT2 = PORT + 100; const prof2 = mkdtempSync(join(tmpdir(), 'dumen-test2-'));
+const baslat = () => spawn(CHROME, [`--remote-debugging-port=${PORT2}`, `--user-data-dir=${prof2}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+const bekle = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT2}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
+let ch2 = baslat(); await bekle();
+const sat2 = [];
+const dS = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT2}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => sat2.push(s) });
+await dS.goto(MERKEZ + '/sayfa');
+mod = 'sultan';
+ch2.kill('SIGKILL'); await new Promise((r) => setTimeout(r, 600));   // köprü soketi düştü (Dümen Sultan'a geçti)
+const eK = await hata(() => dS.fill('#t', 'x'));
+ok('D21 sultan + soket düşük: eylem "sultanda" (ham bağlantı hatası DEĞİL)', eK instanceof KapiHata && eK.neden === 'sultanda', String(eK));
+const eK2 = await hata(() => dS.click('#g'));
+ok('D22 sultan iken tekrar denenince yine "sultanda", yeniden bağlanma YOK', eK2 instanceof KapiHata && eK2.neden === 'sultanda' && dS.durum().baglanmaSayisi === 1, JSON.stringify(dS.durum()));
+ok('D23 bekleme satırı yazıldı', sat2.some((x) => x.includes("Sultan'da")));
+ch2 = baslat(); await bekle();   // geri verildi: köprü ucu yeniden açıldı ama mod hâlâ sultan
+const eK3 = await hata(() => dS.fill('#t', 'x'));
+ok('D24 uç yeniden açıldı ama mod hâlâ sultan: yine bağlanmadı', eK3 instanceof KapiHata && eK3.neden === 'sultanda' && dS.durum().baglanmaSayisi === 1, JSON.stringify(dS.durum()));
+mod = 'ajan';
+const eR = await hata(async () => { await dS.goto(MERKEZ + '/sayfa'); await dS.fill('#t', 'geri-verildi'); });
+ok('D25 mod ajan olunca YENİDEN bağlandı ve eylem yapıldı', eR === null && dS.durum().baglanmaSayisi === 2 && dS.durum().kopuk === false, JSON.stringify(dS.durum()));
+await dS.kapat(); ch2.kill();
+
+console.log('── kapı geçtikten SONRA soket düşer (eylem sırasında)');
+const PORT3 = PORT + 200; const prof3 = mkdtempSync(join(tmpdir(), 'dumen-test3-'));
+const baslat3 = () => spawn(CHROME, [`--remote-debugging-port=${PORT3}`, `--user-data-dir=${prof3}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+const bekle3 = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT3}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
+let ch3 = baslat3(); await bekle3();
+const dZ = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT3}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {} });
+mod = 'ajan';
+modSonra = () => { mod = 'sultan'; setTimeout(() => ch3.kill('SIGKILL'), 300); };
+const eZ = await hata(() => dZ.goto(MERKEZ + '/yavas', { timeout: 6000 }));
+ok('D26 eylem sırasında Sultan aldı + soket düştü: "sultanda" (ham hata ya da baglanti-koptu DEĞİL)', eZ instanceof KapiHata && eZ.neden === 'sultanda', String(eZ));
+mod = 'ajan'; ch3 = baslat3(); await bekle3();
+ok('D27 geri verildi (mod ajan): kopukluk durumda görünür', dZ.durum().kopuk === true && dZ.durum().baglanmaSayisi === 1, JSON.stringify(dZ.durum()));
+const eR2 = await hata(() => dZ.goto(MERKEZ + '/sayfa'));
+ok('D28 mod ajan olunca bir sonraki eylemde yeniden bağlandı', eR2 === null && dZ.durum().kopuk === false && dZ.durum().baglanmaSayisi === 2, JSON.stringify(dZ.durum()));
+modSonra = () => { setTimeout(() => ch3.kill('SIGKILL'), 300); };   // mod ajan KALIR, soket yine düşer
+const eY = await hata(() => dZ.goto(MERKEZ + '/yavas', { timeout: 6000 }));
+ok('D29 mod ajan iken soket düşerse: açık hata "baglanti-koptu" (sessiz yutulmaz)', eY instanceof KapiHata && eY.neden === 'baglanti-koptu', String(eY));
+await dZ.kapat(); ch3.kill();
 
 console.log(`SONUÇ: geçti=${G} kaldı=${K}`);
 await ham.context().browser().close().catch(() => {}); await d.kapat(); await dM.kapat(); ch.kill(); srv.close();
