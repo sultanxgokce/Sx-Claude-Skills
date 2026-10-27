@@ -243,7 +243,7 @@ if _oda_ham is not None:
     _oda_yeni = _metin(_oda_ham)
     if not _oda_yeni:
         sys.stderr.write("HATA: --oda değer ister (oda adı, ör. agentic-os)\n"); sys.exit(2)
-    if not _re.match(r"^(?=.{2,31}$)[a-z][a-z0-9]*(-[a-z0-9]+)*$", _oda_yeni):
+    if not _re.fullmatch(r"(?=.{2,31}\Z)[a-z][a-z0-9]*(-[a-z0-9]+)*", _oda_yeni):
         sys.stderr.write("HATA: oda biçim dışı: %r — küçük harf, rakam, SÖZCÜK ARASI tek tire; 2-31 karakter, harfle başlar (sonda/art arda tire yok)\n" % _oda_yeni); sys.exit(2)
     rec["oda"] = _oda_yeni
 elif existing and existing.get("oda"):
