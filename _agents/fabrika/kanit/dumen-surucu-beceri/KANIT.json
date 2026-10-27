@@ -1,7 +1,7 @@
 {
   "is": "dumen-surucu-beceri",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T12:48:44+03:00",
+  "guncelleme": "2026-10-27T12:54:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "kapi",
       "asama": "sonra",
       "dosya": "olcum-kapi-sonra.txt",
-      "sha256": "2cc1069a1cb5113da0d675daeac8591ba030b027a0fb45c9e20cf336b252bb6c",
+      "sha256": "00d86bc3ac3125097810e3ff8fc725e9d58187a3ce4bc513c2dc440f3b39e12f",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/dumen-say.sh",
@@ -34,17 +34,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-27T12:48:20+03:00",
-      "sure_sn": 13.0,
+      "zaman": "2026-10-27T12:53:57+03:00",
+      "sure_sn": 23.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1c3befbcb41a4755938c39e00e8675ab"
+      "olcum_id": "60c13ec92d2b4dd0b133a2fc03942dfc"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-failopen",
       "asama": "tek",
       "dosya": "olcum-mutant-failopen-tek.txt",
-      "sha256": "c4130b5d31dba3ec4f3e9657df9d6eee817238a42ebf1c8192b5ba75acd500e7",
+      "sha256": "9bae88fb3bde365bdaaf4d5794fad086bf0fcd3c56ebfb2f883ebc23262b8a00",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/dumen-mutant.sh",
@@ -52,14 +52,14 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-27T12:48:44+03:00",
-      "sure_sn": 2.7,
+      "zaman": "2026-10-27T12:54:00+03:00",
+      "sure_sn": 2.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "kapi",
       "beklenen": "kirmizi",
-      "olcum_id": "66e3c683319a487081988e64d65ee372"
+      "olcum_id": "90d7340c418741a2bee31d5cff03f5a0"
     }
   ],
-  "imza": "0eb50a7eba3929377dd7520d40c20513cd8f1f10dff4d1c71813c3f7a667df73"
+  "imza": "e6e2c06465308eb7059f5718754ee8a98e55c7844e24f5e28b8c1f21c5edaaac"
 }

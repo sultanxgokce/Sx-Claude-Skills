@@ -19,6 +19,8 @@ MK=0
 mut "fail-open (mod ajan değilse devam)" "if (mod !== 'ajan') {" "if (false) {"
 mut "merkez cevapsız → devam" "throw new KapiHata('merkez-cevapsiz', String(e.message || e));" "return 'ajan';"
 mut "durma noktası kapalı" "const neden = await this.durmaNoktasi(eylemAdi, hedef);" "const neden = null;"
+mut "durak bildirimi 4xx/5xx başarı sayılır" "return r.ok;" "return true;"
+mut "ham page dışarıya açık" "  olayKaydi() {" $'  get page() { return this.#page; }\n  olayKaydi() {'
 mut "parola gizleme yok" "deger:gizli(t)?'<gizli>':String(t.value??t.checked)" "deger:String(t.value??t.checked)"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 4/4 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 6/6 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

@@ -9,9 +9,9 @@ version: 0.1.0
 Karar belgesi: Nexus `_agents/hezarfen/bilgi-havuzu/dumen-arastirma-20261027/KARAR.md` (Z8E7K7 devral/geri ver · JN1K8K bekçi kör noktası).
 
 ## Ne yapar
-`scripts/dumen.mjs` → `Dumen.baglan({cdpUrl, merkez})` ajana `goto/fill/selectOption/check/click/press` verir. **Ham `page.evaluate` ve ham CDP verilmez.** Her eylem:
+`scripts/dumen.mjs` → `Dumen.baglan({cdpUrl, merkez})` ajana `goto/fill/selectOption/check/click/press` verir. **Ham `page.evaluate` ve ham CDP verilmez** (`page`/`cdp`/`tarayici` özel alanlardır; `d.page` yoktur). Her eylem:
 1. `GET <merkez>/dumen/mod` — `ajan` değilse ya da merkez cevap vermezse **reddedilir**, terminale tek satır: `⏸ Dümen Sultan'da · bekliyorum` (`KapiHata.neden = sultanda | merkez-cevapsiz`).
-2. Durma noktası: parola/telefon/tek kullanımlık kod/kart alanı, ödeme sayfasında "Öde/Onayla/Gönder" düğmesi → eylem YAPILMAZ, `POST <merkez>/api/dumen/durak {neden}` (yalnız `sifre·sms·odeme`; alan değeri, adres, çerez ASLA), `⏸ Dümen: … alanında durdum · Dümeni al`.
+2. Durma noktası: parola/telefon/tek kullanımlık kod/kart alanı, ödeme sayfasında "Öde/Onayla/Gönder" düğmesi → eylem YAPILMAZ, `POST <merkez>/api/dumen/durak {neden}` (yalnız `sifre·sms·odeme`; alan değeri, adres, çerez ASLA; merkez 2xx dememişse `KapiHata.bildirildi=false` ve satır "merkeze İLETİLEMEDİ" der — eylem yine yapılmaz), `⏸ Dümen: … alanında durdum · Dümeni al`.
 3. Eylem penceresi kaydedilir; izole dünya dinleyicisi (`input`/`change`, window capture, sayfa betiklerinden önce) olayları toplar. Pencereye düşen olay = ajanın, düşmeyen = **insan ya da sayfa** (`yabanci()`). `isTrusted` ayırıcı DEĞİLDİR (ölçüldü: tarih/seçim false, metin/onay kutusu true, sayfanın sahte olayı false).
 4. Parola/OTP/kart alanlarının değeri olay kaydına `<gizli>` olarak girer.
 
@@ -26,9 +26,10 @@ try { await d.fill('#ad', 'Ayşe'); } catch (e) { if (e instanceof KapiHata) { /
 `playwright-core` bulunamazsa `DUMEN_PLAYWRIGHT=<playwright-core dizini>`.
 
 ## Dürüst sınırlar
+- Kapı **ajan tarafındadır** ve disiplinle çalışır: aynı süreçte `playwright-core`'u doğrudan içe aktaran kod kapıyı atlayabilir — gerçek zorlama köprüdedir.
 - Kapı **ajan tarafındadır**; Chrome'a giden yolu fiziksel kesen bekçi köprüdedir (BÂNİ B1). İkisi birlikte çift kilit.
 - Dinleyici sınavı Chromium headless shell 149 / playwright-core 1.59.1 ile; Dümen'in Chrome 150 / Playwright 1.61'inde yeniden koşulmalı.
 - Durma noktası sezgisi (alan türü/ad/ödeme yolu) yanlış negatif verebilir; son savunma bekçide (ağ kapısı).
 
 ## Sınav
-`bash scripts/dumen.test.sh` — sahte merkez + gerçek headless Chromium, 16 kapı + 4 mutant (fail-open · merkez cevapsız→devam · durma noktası kapalı · parola gizleme yok). Chromium yoksa rc 3 ÖLÇÜLEMEDİ.
+`bash scripts/dumen.test.sh` — sahte merkez + gerçek headless Chromium, 18 kapı + 6 mutant (fail-open · merkez cevapsız→devam · durma noktası kapalı · durak bildirimi 5xx'i başarı sayar · ham page dışarı açık · parola gizleme yok). Chromium yoksa rc 3 ÖLÇÜLEMEDİ.

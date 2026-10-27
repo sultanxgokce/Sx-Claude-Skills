@@ -10,11 +10,11 @@ const { Dumen, KapiHata } = await import(LIB);
 const CHROME = process.env.DUMEN_CHROME;
 if (!CHROME) { console.log('ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi'); process.exit(3); }
 
-let mod = 'ajan'; const duraklar = [];
+let mod = 'ajan'; let durakKod = 200; const duraklar = [];
 const FORM = `<!doctype html><title>f</title><input id=t type=text><input id=d type=date><select id=s><option value=a>a</option><option value=b>b</option></select><input id=pw type=password><input id=otp type=text name=otp><button id=g>Tamam</button><button id=ode>Öde</button>`;
 const srv = http.createServer((q, r) => {
   if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); return r.end(JSON.stringify({ mod, an: '' })); }
-  if (q.url === '/api/dumen/durak' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { duraklar.push(JSON.parse(b)); r.end('{}'); }); }
+  if (q.url === '/api/dumen/durak' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { duraklar.push(JSON.parse(b)); r.statusCode = durakKod; r.end('{}'); }); }
   r.setHeader('content-type', 'text/html; charset=utf-8'); r.end(FORM);
 });
 await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
@@ -27,9 +27,11 @@ for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT}/json/
 let G = 0, K = 0;
 const ok = (ad, kosul, ayrinti = '') => { if (kosul) { G++; console.log('  ✓ ' + ad); } else { K++; console.log('  ✗ ' + ad + (ayrinti ? '  → ' + ayrinti : '')); } };
 const satirlar = [];
+const { chromium } = await (await import(LIB)).playwrightYukle();
+const ham = (await chromium.connectOverCDP(`http://127.0.0.1:${PORT}`)).contexts()[0].pages()[0];   // TEST'in kendi bağlantısı: 'insan/sayfa' rolü + okuma
 const d = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => satirlar.push(s) });
 const hata = async (f) => { try { await f(); return null; } catch (e) { return e; } };
-const deger = (sel) => d.page.evaluate((s) => document.querySelector(s).value, sel);
+const deger = (sel) => ham.evaluate((s) => document.querySelector(s).value, sel);
 await d.goto(MERKEZ + '/sayfa');
 
 console.log('── mod ajan');
@@ -43,7 +45,7 @@ ok('D4 yabancı (eylem penceresi dışı) olay yok', d.yabanci().length === 0, J
 
 console.log('── sayfa sahte olay üretir → yabancı');
 await new Promise((r) => setTimeout(r, 300));
-await d.page.evaluate(() => { const e = document.getElementById('t'); e.value = 'sahte'; e.dispatchEvent(new Event('input', { bubbles: true })); });
+await ham.evaluate(() => { const e = document.getElementById('t'); e.value = 'sahte'; e.dispatchEvent(new Event('input', { bubbles: true })); });
 await new Promise((r) => setTimeout(r, 200));
 ok('D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)', d.yabanci().length === 1 && d.yabanci()[0].id === 't', JSON.stringify(d.yabanci()));
 
@@ -56,11 +58,10 @@ ok('D8 bekleme satırı terminale yazıldı', satirlar.some((s) => s.includes("S
 mod = 'ajan';
 
 console.log('── merkez cevapsız → fail-closed');
-const gercekMerkez = d.merkez; d.merkez = 'http://127.0.0.1:1';
-const eM = await hata(() => d.fill('#t', 'DEGISMEZ2'));
+const dM = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT}`, merkez: 'http://127.0.0.1:1', zamanAsimiMs: 800, yaz: () => {} });
+const eM = await hata(() => dM.fill('#t', 'DEGISMEZ2'));
 ok('D9 merkez cevapsız: eylem REDDEDİLDİ (fail-closed)', eM instanceof KapiHata && eM.neden === 'merkez-cevapsiz', String(eM));
-ok('D10 merkez cevapsız: alan DEĞİŞMEDİ', (await deger('#t')) === 'sahte');
-d.merkez = gercekMerkez;
+ok('D10 merkez cevapsız: alan DEĞİŞMEDİ (DEGISMEZ2 yazılmadı)', (await deger('#t')) !== 'DEGISMEZ2');
 
 console.log('── durma noktaları');
 const eP = await hata(() => d.fill('#pw', 'gizli-deger'));
@@ -72,13 +73,19 @@ await d.goto(MERKEZ + '/checkout');
 const eOde = await hata(() => d.click('#ode'));
 ok('D14 ödeme sayfasında "Öde" tıklaması durdu, durak=odeme', eOde instanceof KapiHata && duraklar.some((x) => x.neden === 'odeme'), `${eOde} ${JSON.stringify(duraklar)}`);
 await d.click('#g');
+ok('D17 ham nesneler DIŞARIYA AÇIK DEĞİL (d.page/d.cdp/d.tarayici/d.merkez yok)', d.page === undefined && d.cdp === undefined && d.tarayici === undefined && d.merkez === undefined);
+durakKod = 500; satirlar.length = 0; duraklar.length = 0;
+await d.goto(MERKEZ + '/sayfa');
+const e500 = await hata(() => d.fill('#pw', 'x'));
+ok('D18 durak ucu 500 verirse eylem yine YAPILMAZ ama bildirildi=false ve satır UYARIR', e500 instanceof KapiHata && e500.bildirildi === false && (await deger('#pw')) === '' && satirlar.some((x) => x.includes('İLETİLEMEDİ')), `${e500} ${satirlar.join('|')}`);
+durakKod = 200;
 ok('D15 ödeme sayfasında zararsız düğme tıklaması GEÇTİ (aşırı engelleme yok)', true);
 await d.goto(MERKEZ + '/sayfa');
-await d.page.evaluate(() => { const e = document.getElementById('pw'); e.value = 'insan-sifresi'; e.dispatchEvent(new Event('input', { bubbles: true })); });   // insan/sayfa parola alanını doldurdu
+await ham.evaluate(() => { const e = document.getElementById('pw'); e.value = 'insan-sifresi'; e.dispatchEvent(new Event('input', { bubbles: true })); });   // insan/sayfa parola alanını doldurdu
 await new Promise((r) => setTimeout(r, 200));
-const sizan = JSON.stringify(d.olaylar);
+const sizan = JSON.stringify(d.olayKaydi());
 ok('D16 parola alanı değişimi KAYDEDİLDİ ama DEĞER yok (<gizli>)', sizan.includes('<gizli>') && !sizan.includes('insan-sifresi') && !sizan.includes('gizli-deger'), sizan.slice(-200));
 
 console.log(`SONUÇ: geçti=${G} kaldı=${K}`);
-await d.kapat(); ch.kill(); srv.close();
+await ham.context().browser().close().catch(() => {}); await d.kapat(); await dM.kapat(); ch.kill(); srv.close();
 process.exit(K === 0 ? 0 : 1);
