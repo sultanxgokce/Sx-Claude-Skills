@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-senkron-oteki-kutu-sonra.txt
+hedef_sha256: 3353b588f62d303eb8b01c5431fc9309eee92dcf0bded6d076e5f9972d5232a3
+hedef_zaman: 2026-10-27T15:00:56+03:00
+hedef_renk: kirmizi
+neden: ölçüm betiği git archive HEAD ile commit'lenmemiş sürüm artışını görmedi; commit sonrası yeniden ölçüldü
+kim: BANI
+karsi: -
+zaman: 2026-10-27T15:01:03+03:00
