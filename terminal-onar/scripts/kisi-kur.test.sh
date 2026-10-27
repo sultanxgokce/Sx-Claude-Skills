@@ -11,6 +11,23 @@ ok "Q3 çıktı KURU KİP diyor ve 5+ adım sayıyor" "$(grep -q 'KURU KİP' "$T
 bash "$D/kisi-kur.sh" --kutu demo >"$T/kuru" 2>&1   # kum havuzsuz KURU kip: yalnız basar (süreç başlatma komutlarını görmek için)
 ok "Q4 ttyd-kisi YAZILABİLİR (-W) ve sabit komut" "$(grep -q -- '-a -W python3 /opt/kisi/kisi-istemci.py' "$T/kuru" && echo 0 || echo 1)" ""
 ok "Q5 abc'yi kişi grubuna EKLEMİYOR (usermod/gpasswd yok)" "$(grep -qE 'usermod|gpasswd|adduser abc' "$T/kuru" && echo 1 || echo 0)" ""
+# Q5b-Q5d: ttyd soketi (27 Eki medigate: -U ayse:abc → ayse abc üyesi değil, chown EPERM, ms başına sıkı döngü, soket hiç oluşmadı)
+ok "Q5b ttyd soketi KİŞİ grubuna verilir (-U ayse:ayse); abc grubuna chown istemez" "$(grep -q -- '-U ayse:ayse ' "$T/kuru" && ! grep -q -- '-U ayse:abc' "$T/kuru" && echo 0 || echo 1)" "$(grep -o -- '-U [a-z:]*' "$T/kuru" | head -2)"
+mkdir -p "$T/r" "$T/bin"
+cat > "$T/bin/sahte-ttyd" <<'SAHTE'
+#!/usr/bin/env bash
+# sahte ttyd: gerçek ttyd gibi soketi AÇAR ve 0660'a alır (grup izni); sahip grubu başkasına geçirmeyi denerse EPERM ile ölür
+case " $* " in *" -U "*:abc*) echo "lws_socket_bind: failed to set perms" >&2; exit 1;; esac
+python3 -I -c 'import socket,sys,os,time; s=socket.socket(socket.AF_UNIX); s.bind(sys.argv[1]); os.chmod(sys.argv[1],0o660); time.sleep(6)' "$2"
+SAHTE
+chmod +x "$T/bin/sahte-ttyd"; chmod 755 "$T" "$T/bin"
+TTYD_BIN="$T/bin/sahte-ttyd" bash "$D/kisi-kur.sh" --kutu demo >"$T/kuru2" 2>&1
+KOMUT="$(grep -A1 'ttyd-kisi' "$T/kuru2" | grep '^  \$ ' | head -1 | sed 's/^  \$ //; s#su ayse -s /bin/bash -c#bash -c#; s#/run/kisi#'"$T"'/r#g; s#>>/tmp/ttyd-kisi.log#>>'"$T"'/ttyd.log#')"
+bash -c "${KOMUT#bash -c }" ; sleep 2
+SOK="$T/r/ayse-ttyd.sock"
+ok "Q5c ttyd soketi OLUŞUR ve kapı (abc, 'other') için okunur-yazılır (0666; dizin 3770 diğerlerini zaten dışarıda tutar)" "$([ -S "$SOK" ] && [ "$(stat -c %a "$SOK")" = 666 ] && echo 0 || echo 1)" "$(ls -l "$SOK" 2>&1)"
+ok "Q5d günlük BÜYÜMÜYOR (sıkı döngü yok) ve ttyd süreci tek" "$([ -S "$SOK" ] && a=$(stat -c %s "$T/ttyd.log" 2>/dev/null || echo 0); sleep 2; b=$(stat -c %s "$T/ttyd.log" 2>/dev/null || echo 0); [ "$a" = "$b" ] && [ "$(pgrep -fc "$T/bin/sahte-ttyd -i")" -le 2 ] && echo 0 || echo 1)" "$(tail -2 "$T/ttyd.log" 2>&1)"
+pkill -f "$T/bin/sahte-ttyd" 2>/dev/null; true
 GUNLUK_ONCE="$(stat -c '%s %y %i' /tmp/ttyd-kisi.log 2>/dev/null || echo yok)"   # gerçek günlüğün önceki hâli (boyut+zaman | yok): canlı kutuda zaten bulunabilir
 bash "$D/kisi-kur.sh" --kutu demo --kok "$T" --uygula >"$T/c2" 2>&1; rc=$?
 ok "Q6 --uygula (kum havuzu) rc 0" "$rc" "$(tail -3 "$T/c2")"
