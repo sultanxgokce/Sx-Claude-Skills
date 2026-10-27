@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=1153.2s zaman=2026-10-27T18:21:52+03:00
+# rc=0 sure=1571.8s zaman=2026-10-27T23:05:59+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -63,8 +63,10 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ tıkandı raporu sınıfsız iş için reis yolunu da söylüyor
   ✓ 🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)
   ✓ ne yapılacağı komutla yazılı
+  ✓ 🔴 7KKSJK: DENETCI_EK=--reis-devam bayrakla AYNI işler (kartta karar yokken rc=1, aynı sebep; yok sayılsaydı rc=4)
   ✓ 🔴 7KKSJK: tıkandı raporu reis-dedi komutunu GERÇEK iş adı + kartın sahibiyle basıyor
-  ✓ 🔴 7KKSJK: ikinci adım (--reis-devam ile denetçi) sırayla yazılı
+  ✓ 🔴 7KKSJK: ikinci adım DENETCI_EK=--reis-devam biçiminde, sırayla yazılı
+  ✓ 🔴 7KKSJK: 'tur 3 tıkandı' → raporda '4. tur' (sıradaki tur) sebebiyle yazılı
   ✓ 🔴 7KKSJK: karar yokken rc 1 + önce-komut sebebi yazılı
   ✓ 7KKSJK: sınıfsız iş raporunda Sultan yolu dayatılmıyor
 ════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan denetçi kartı BİRİNCİL depodan okur ════
@@ -229,13 +231,13 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ M-Z3d iş-adı korkuluğu kalkarsa bilgisiz zil çalar (Z3d bunu yakalar; mutant yakalandı)
   ✓ M-Z3f tur-yok+yazan-yok korkuluğu kalkarsa reise bilgisiz zil çalar (Z3f bunu yakalar; mutant yakalandı)
   ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
-  ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
+  ✓ Z2a zaman aşımı → rc 3, beklemedi (2 sn < 6)
   ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
   ✓ Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)
   ✓ Z2d aşımda da koşuyor izi silindi
   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
-  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (3 sn < 6)
+  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (2 sn < 6)
   ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
   ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
   ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
@@ -296,7 +298,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 48 mutant · 4 paralel · 975 sn
+  (bilgi) 48 mutant · 4 paralel · 1314 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
@@ -483,5 +485,6 @@ toplam=44 geçen=44 düşen=0
   ✓ TP4c kanıt birincilde VARKEN gerçek betik yine rc 2, DENETIM yok (kapıyı kanıt değil birincil tespiti kapatıyor)
   ✓ TP4b MUTASYON: kapı sökülünce birincile DENETIM yazılır (kapı gerçekten kabloda)
 
-── SONUÇ: 315 geçti · 0 kaldı ──
+── SONUÇ: 317 geçti · 0 kaldı ──
 --- stderr ---
+⏳ agir-sira: kanit-tikandi-reis-komutu-denetci-sinav 65 sn bekledi (yuva 1, load1 9.74)

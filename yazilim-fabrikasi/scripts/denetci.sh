@@ -128,6 +128,11 @@ _sinirli() {
 }
 _bilgi() { printf '%s\n' "$*"; }
 
+# DENETCI_EK (7KKSJK): ek bayraklar ortamdan da verilebilir — `DENETCI_EK=--reis-devam bash denetci.sh <iş> --pr N` ile `denetci.sh <iş> --pr N --reis-devam`
+#   AYNI şeydir (gönder betikleri bayrağı tek ortam değişkeniyle iletir). Yetkiyi VERMEZ: --reis-devam/--sultan-devam yine karttaki kayıttan açılır.
+#   Boşlukla bölünür (bayrak değerleri boşluk içeremez); boşsa hiçbir şey eklenmez.
+# shellcheck disable=SD2086
+[ -z "${DENETCI_EK:-}" ] || set -- "$@" $DENETCI_EK
 KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -392,12 +397,12 @@ PY
   if [ "$sahip" = "SINIFLI" ]; then
     _bilgi "   ▶ Bu kart SINIFLI: DEVAM kararı Sultan'ındır (A06: onayı ajan üretmez, aldığını aktarır). ÖNCE:"
     _bilgi "       bash $HERE/kart.sh sultan-dedi $IS --karar devam --oturum <ref> --soz \"<verbatim>\" --beyan <AJAN> --gerekce \"<en az 20 karakter>\""
-    _bilgi "     SONRA (karar kartta yokken --sultan-devam kapıyı AÇMAZ, rc 1):"
-    _bilgi "       bash $HERE/denetci.sh $IS${PR:+ --pr $PR} --sultan-devam < /dev/null"
+    _bilgi "     SONRA (karar kartta yokken --sultan-devam kapıyı AÇMAZ, rc 1 — $((ONCEKI+1)). tur koşmaz):"
+    _bilgi "       DENETCI_EK=--sultan-devam bash $HERE/denetci.sh $IS${PR:+ --pr $PR} < /dev/null"
   else
-    _bilgi "   ▶ DEVAM diyorsan SIRA bu — önce karar karta işlenir, sonra denetçi koşar. Karar kartta yokken --reis-devam kapıyı AÇMAZ (rc 1) ve ${ONCEKI:-bu}. tur reddedilir:"
+    _bilgi "   ▶ DEVAM diyorsan SIRA bu — önce karar karta işlenir, sonra denetçi koşar. Reis kararı kartta yokken $((ONCEKI+1)). tur ÖNCE bu komutu ister: --reis-devam kapıyı AÇMAZ (rc 1) ve tur reddedilir:"
     _bilgi "     1) bash $HERE/kart.sh reis-dedi $IS --karar devam --reis ${sahip:-<AD>} --oturum <ref> --gerekce \"<niçin bir tur daha — en az 20 karakter>\""
-    _bilgi "     2) bash $HERE/denetci.sh $IS${PR:+ --pr $PR} --reis-devam < /dev/null"
+    _bilgi "     2) DENETCI_EK=--reis-devam bash $HERE/denetci.sh $IS${PR:+ --pr $PR} < /dev/null"
     _bilgi "     (--reis kartın aldı alanıyla aynı olmalı: bu kartta '${sahip}'. Mutlak tavan ($MUTLAK) bununla AÇILMAZ.)"
   fi
 }

@@ -160,11 +160,15 @@ CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"; 
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)"
 grep -q "reis-dedi" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" DENETCI_EK=--reis-devam bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "KARTTA gerekçeli reis" <<<"$CIKTI"; g $? "🔴 7KKSJK: DENETCI_EK=--reis-devam bayrakla AYNI işler (kartta karar yokken rc=1, aynı sebep; yok sayılsaydı rc=4)"
 # 7KKSJK: TIKANDI raporu devam yolunun TAM komutunu basar (gerçek iş adı + kartın sahibi + sıra); rc4 + "karar yok" tekrarı biter
 CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"
 grep -qF "kart.sh reis-dedi is-r2 --karar devam --reis MUAVIN --oturum <ref> --gerekce" <<<"$CIKTI"; g $? "🔴 7KKSJK: tıkandı raporu reis-dedi komutunu GERÇEK iş adı + kartın sahibiyle basıyor"
-grep -qF "denetci.sh is-r2 --reis-devam" <<<"$CIKTI"; g $? "🔴 7KKSJK: ikinci adım (--reis-devam ile denetçi) sırayla yazılı"
-grep -q "kartta yokken --reis-devam kapıyı AÇMAZ" <<<"$CIKTI"; g $? "🔴 7KKSJK: karar yokken rc 1 + önce-komut sebebi yazılı"
+grep -qF "DENETCI_EK=--reis-devam bash" <<<"$CIKTI" && grep -qF "denetci.sh is-r2" <<<"$CIKTI"; g $? "🔴 7KKSJK: ikinci adım DENETCI_EK=--reis-devam biçiminde, sırayla yazılı"
+grep -q "4\. tur ÖNCE bu komutu ister" <<<"$CIKTI"; g $? "🔴 7KKSJK: 'tur 3 tıkandı' → raporda '4. tur' (sıradaki tur) sebebiyle yazılı"
+
+grep -q "ÖNCE bu komutu ister: --reis-devam kapıyı AÇMAZ" <<<"$CIKTI"; g $? "🔴 7KKSJK: karar yokken rc 1 + önce-komut sebebi yazılı"
 ! grep -q "sultan-dedi" <<<"$CIKTI"; g $? "7KKSJK: sınıfsız iş raporunda Sultan yolu dayatılmıyor"
 
 echo "════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan denetçi kartı BİRİNCİL depodan okur ════"
