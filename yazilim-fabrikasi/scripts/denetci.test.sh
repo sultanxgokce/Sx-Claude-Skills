@@ -633,8 +633,14 @@ grep -qx 'DENETIM-1.kosuyor' "$T/z-ls" && grep -q "^pid=[0-9]" "$T/z-izi" && gre
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-z --diff "$T/zd.patch" >/dev/null 2>&1
 grep -q -- "MUAVIN denetçi: is-z tur 2: 5/E · bulgu 0 · rc 0 · GEÇTİ" "$ZL" && ! grep -q -- "--waiting" "$ZL"; g $? "Z3b rc 0 → yazana zil, reise yok"
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$ZS" AGENT_NAME=HENDESE bash "$D" is-yok --diff "$T/zd.patch" >/dev/null 2>&1
-grep -q -- "HENDESE denetçi: is-yok tur ?: —/— · bulgu — · rc 2" "$ZL"; g $? "Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır"
-: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$D" >/dev/null 2>&1; grep -q -- "SERDAR denetçi: ? tur ?: —/— · bulgu — · rc 1 · .* · yazan bilinmiyor" "$ZL"; g $? "Z3d iş adı bile yokken (en erken çıkış) zil çalar; yazan bilinmiyorsa hedefsiz değil reise (SERDAR)"
+grep -q -- "HENDESE denetçi: is-yok: denetim açılmadı (tur yok) · rc 2" "$ZL" && ! grep -q -- "tur ?: —/—" "$ZL"; g $? "Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır; '? tur ?: —/—' dolgusu YOK (0C915N)"
+: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$D" >/dev/null 2>"$T/z3d-err"; [ ! -s "$ZL" ]; g $? "Z3d iş adı yokken (en erken çıkış) reise zil ÇALMAZ: bilgi taşımayan '? tur ?' zili yok (0C915N)"
+grep -q "denetçi zili atlandı: iş adı verilmedi" "$T/z3d-err"; g $? "Z3d2 atlama sessiz değil: sebep stderr'e yazıldı"
+# M-Z3d mutantı: iş-adı korkuluğu kalkarsa bilgisiz zil geri gelir (Z3d düşer)
+DM="$T/denetci-mz3d.sh"; python3 -I -c "
+import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s; s=s.replace('if [ -z \"\${IS:-}\" ]; then printf', 'if false; then printf'); assert s!=o; open(sys.argv[2],'w',encoding='utf-8').write(s)" "$D" "$DM" && cp -r "$(dirname "$D")"/. "$T/mz3d-dizin/" 2>/dev/null; DM="$(dirname "$D")/.denetci-mz3d.sh"; python3 -I -c "
+import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s; s=s.replace('if [ -z \"\${IS:-}\" ]; then printf', 'if false; then printf'); assert s!=o; open(sys.argv[2],'w',encoding='utf-8').write(s)" "$D" "$DM"
+: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$DM" >/dev/null 2>&1; rm -f "$DM"; [ -s "$ZL" ]; g $? "M-Z3d iş-adı korkuluğu kalkarsa reise bilgisiz zil çalar (Z3d bunu yakalar; mutant yakalandı)"
 kartac is-zb; bash "$K" olcum is-zb olc --asama tek -- true >/dev/null 2>&1
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY= bash "$D" is-zb --diff "$T/zd.patch" > /dev/null 2> "$T/z-err"; [ ! -s "$ZL" ] && grep -q "sınav kipi" "$T/z-err"; g $? "Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir"
 # Z2 zaman aşımı: rc 3 · HAM'da ZAMAN AŞIMI · beklemeden biter · zil + reis (kendi işi: önceki turlar tavanı doldurmasın)
@@ -680,7 +686,7 @@ kartac is-zg; bash "$K" olcum is-zg olc --asama tek -- true >/dev/null 2>&1
 grep -A2 -- "^HENDESE denetçi:" "$ZL" | grep -qx "kimden=yok"; g $? "Z13a yazanın zili gönderen adı TAŞIMAZ (kuyrukta 'kendine' sayılıp düşmesin)"
 : > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>&1
 grep -A2 -- "^MUAVIN denetçi:" "$ZL" | grep -qx "kimden=yok" && ! grep -q -- "--done" "$ZL"; g $? "Z13b yazana --done (sahte iş-bitti) gitmez; düz ping kartın aldı'sına (MUAVIN)"
-: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$D" >/dev/null 2>&1; grep -A2 -- "^SERDAR denetçi:" "$ZL" | grep -qx "kimden=yok"; g $? "Z13c yazan bilinmiyorsa AILE_KIMDEN verilmez (reisin adı gönderen gibi görünmesin)"
+: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-yok-z13 >/dev/null 2>&1; grep -A2 -- "^SERDAR denetçi:" "$ZL" | grep -qx "kimden=yok"; g $? "Z13c yazan bilinmiyorsa AILE_KIMDEN verilmez (reisin adı gönderen gibi görünmesin)"
 bas_kuyruk="KUYRUK: MUAVIN koltuğu boşalınca teslim edilecek (aile-notify --bosalt · ömür 6 sa)"
 : > "$ZL"; SAHTE_ZIL_RC=1 SAHTE_ZIL_ERR="$bas_kuyruk" SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"
 grep -q "deftere yazıldı, MUAVIN koltuğu meşgul → kuyrukta" "$T/z-err" && ! grep -q "gönderilemedi" "$T/z-err"; g $? "Z13d ping meşgulde rc 1 + KUYRUK satırı → 'kuyrukta' denir, 'gönderilemedi' denmez"

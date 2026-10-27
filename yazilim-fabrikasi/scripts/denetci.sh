@@ -52,6 +52,9 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   [ -n "$an" ] || an="$(command -v aile-notify.sh 2>/dev/null)"
   [ -n "$an" ] || for k in "${DEPO:-}/scripts/aile-notify.sh" /config/projects/Nexus/scripts/aile-notify.sh; do [ -f "$k" ] && { an="$k"; break; }; done
   if [ -z "$an" ] || [ ! -f "$an" ]; then printf '⚠ denetçi bitiş zili ATLANDI: aile-notify bulunamadı (FABRIKA_AILE_NOTIFY ile ver) — rc %s\n' "$rc" >&2; return 0; fi
+  # 0C915N (SERDAR 27 Eki 03:1x): iş adı çözülemeyince zil 'denetçi: ? tur ?: —/—' diye bilgi taşımıyordu ve reise gidiyordu. İş adı yoksa
+  #   çağıranın kendi terminalinde gördüğü bir kullanım hatasıdır: zil ÇALINMAZ, sebep stderr'e yazılır (sessiz geçmez).
+  if [ -z "${IS:-}" ]; then printf '⚠ denetçi zili atlandı: iş adı verilmedi (rc %s) — kullanım hatası, zil bilgi taşımazdı\n' "$rc" >&2; return 0; fi
   k="${KART_DEPO:-}/_agents/fabrika/kartlar/${IS:-}.json"
   if [ -f "$k" ]; then
     [ -n "$yazan" ] || yazan="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("aldi") or "")' "$k" 2>/dev/null)"
@@ -64,6 +67,7 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   case "$rc" in 0) ne="GEÇTİ" ;; 1) ne="düzelt, yeniden gönder" ;; 2) ne="kanıt/kullanım eksiği — denetim açılmadı" ;;
                 3) ne="ÖLÇÜLEMEDİ"; [ "$ZAMAN_ASIMI" = 1 ] && ne="ZAMAN AŞIMI (${ZA} sn) — denetçi bitmedi" ;; 4) ne="TIKANDI — üç yol raporu" ;; *) ne="beklenmeyen çıkış" ;; esac
   local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
+  [ -z "${TUR:-}" ] && m="${IS}: denetim açılmadı (tur yok) · rc $rc · $ne"   # 0C915N: 'tur ?: —/— · bulgu —' dolgusu yok; yalnız bilinen söylenir
   [ "$yazansiz" = 1 ] && m="$m · yazan bilinmiyor"
   # HEZARFEN ölçümü (20:38, #404): denetçiyi koşturan ajanın kendi penceresine giden zil, aile-notify'ın self-loop korumasına
   #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
