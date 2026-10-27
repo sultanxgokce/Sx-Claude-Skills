@@ -10,6 +10,7 @@ iceriyor(){ case "$3" in *"$2"*) gecen=$((gecen+1)); echo "  ✓ $1" ;; *) kalan
 icermiyor(){ case "$3" in *"$2"*) kalan=$((kalan+1)); echo "  ✗ $1 — '$2' OLMAMALI: $3" ;; *) gecen=$((gecen+1)); echo "  ✓ $1" ;; esac; }
 T=$(mktemp -d); trap 'rm -r -- "$T" 2>/dev/null' EXIT INT TERM
 export GUNLUK_PLAN_AJAN="MENZILCI" GUNLUK_PLAN_TARIH="2026-01-02" GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_CIPA_SH="$KOK/cipa.sh"
+export GUNLUK_PLAN_ESLEME="$T/esleme.tsv"; printf "# yorum\nMOBILYACI\tNECCAR\n" > "$T/esleme.tsv"; KC="${KIMLIK_COZ:-$KOK/kimlik-coz.sh}"
 export DEFTER_JETON_YOL="$T/jeton-yok" DEFTER_UC="http://127.0.0.1:9"
 unset GUNLUK_PLAN_KUTU
 cat > "$T/gorev.sh" <<'EOS'
@@ -85,5 +86,27 @@ liste_menzil; rm -r -- "$T/cipa" 2>/dev/null; bash "$KOK/cipa.sh" yaz --plan "1)
 d="$(bash "$DY" 2>&1)"; iceriyor "D1 --kutu verilmeden menzil koltuğu 'kutu=menzil' çıkar (code DEĞİL)" "kutu=menzil" "$d"
 icermiyor "D2 'kutu=code' çıkmaz" "kutu=code" "$d"
 d="$(GUNLUK_PLAN_AJAN=YOKBOYLE bash "$DY" 2>&1)"; rc=$?; kapi "D3 atanmışı olmayan koltuk --kutu'suz rc 3" "3" "$rc"
+echo "— koltuk eşleme (kimlik-coz)"
+kapi "Q1 tablodaki koltuk defter adına çevrilir" "NECCAR" "$(bash "$KC" MOBILYACI 2>&1)"
+kapi "Q2 İ/I/ı katlı eşleşir (MOBİLYACI)" "NECCAR" "$(bash "$KC" MOBİLYACI 2>&1)"
+kapi "Q3 tabloda olmayan ad AYNEN döner" "MUAVİN" "$(bash "$KC" MUAVİN 2>&1)"
+kapi "Q4 tablo yoksa ad AYNEN döner" "MOBILYACI" "$(GUNLUK_PLAN_ESLEME="$T/yok.tsv" bash "$KC" MOBILYACI 2>&1)"
+printf 'X\tA\nX\tB\n' > "$T/celis.tsv"; GUNLUK_PLAN_ESLEME="$T/celis.tsv" bash "$KC" X >/dev/null 2>&1; kapi "Q5 aynı koltuk iki ada giderse rc 3 (tahmin yok)" "3" "$?"
+printf 'bozuk satir sekmesiz\nY\tZ\n' > "$T/bozuk.tsv"; q="$(GUNLUK_PLAN_ESLEME="$T/bozuk.tsv" bash "$KC" Y 2>&1)"
+iceriyor "Q6 bozuk satır atlanır ve söylenir" "satır 1 bozuk" "$q"; iceriyor "Q6b sağlam satır yine çalışır" "Z" "$q"
+: > "$T/l3.txt"; for i in 1 2 3; do satir N$i mihenk acik esnek o NECCAR "mihenk işi $i" >> "$T/l3.txt"; done
+kapi "Q7 kutu-bul: koltuk adıyla (MOBILYACI) NECCAR'ın kutusunu bulur" "mihenk" "$(bash "$KB" --kim MOBILYACI --liste "$T/l3.txt" 2>/dev/null)"
+kapi "Q7b tablo yokken aynı çağrı ÖLÇEMEZ (rc 3) — kapı çeviriden geliyor" "3" "$(GUNLUK_PLAN_ESLEME="$T/yok.tsv" bash "$KB" --kim MOBILYACI --liste "$T/l3.txt" >/dev/null 2>&1; echo $?)"
+cp "$T/l3.txt" "$T/liste.txt"; rm -f "$T/ustlen.log"; GUNLUK_PLAN_AJAN=MOBILYACI bash "$SB" >/dev/null 2>&1
+kapi "Q8 sirada-bak: ustlen DEFTER adıyla çağrılır (--kim NECCAR)" "ustlen gorev_N1 --kim NECCAR --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
+liste_menzil
+cp "$T/l3.txt" "$T/liste.txt"; rm -r -- "$T/cipa" 2>/dev/null; GUNLUK_PLAN_AJAN=MOBILYACI bash "$KOK/cipa.sh" yaz --plan "1) ilk madde | 2) ikinci madde" >/dev/null 2>&1
+d="$(GUNLUK_PLAN_AJAN=MOBILYACI bash "$DY" 2>&1)"; iceriyor "Q9 deftere-yaz: koltuk adı çevrilir, kutu=mihenk" "kutu=mihenk" "$d"
+iceriyor "Q9b deftere-yaz: defter kaydı DEFTER adıyla yazılır (kim=NECCAR)" "kim=NECCAR" "$d"
+printf 'ZA\tZB\nZB\tZC\n' > "$T/zincir.tsv"; : > "$T/liste.txt"; for i in 1 2 3; do satir X$i kutux acik esnek o ZB "ZB işi $i" >> "$T/liste.txt"; satir Y$i kutuy acik esnek o ZC "ZC işi $i" >> "$T/liste.txt"; done
+rm -f "$T/ustlen.log"; zc="$(GUNLUK_PLAN_ESLEME="$T/zincir.tsv" GUNLUK_PLAN_AJAN=ZA bash "$SB" 2>&1)"
+iceriyor "Q10 zincirli tabloda TEK geçiş: ZA→ZB (ZC'ye varmaz), kutu=kutux" "KUTU=kutux" "$zc"
+kapi "Q10b ustlen ZB adıyla çağrılır (ZC DEĞİL)" "ustlen gorev_X1 --kim ZB --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
+rm -r -- "$T/cipa" 2>/dev/null; GUNLUK_PLAN_AJAN=ZA bash "$KOK/cipa.sh" yaz --plan "1) ilk madde | 2) ikinci madde" >/dev/null 2>&1; kapi "Q10c deftere-yaz da tek geçiş: kutu=kutux kim=ZB" "1" "$(GUNLUK_PLAN_ESLEME="$T/zincir.tsv" GUNLUK_PLAN_AJAN=ZA bash "$DY" 2>&1 | grep -c 'kutu=kutux kim=ZB')"
 echo
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]

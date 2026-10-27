@@ -30,6 +30,7 @@ case "$ACIL" in cok-acil|acil|esnek|rahat) ;; *) echo "HATA: --aciliyet geçersi
 [ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
 [ -n "$KIM" ] || KIM="$(bash "$CIPA" ajan 2>/dev/null | python3 -c 'import sys; print(sys.stdin.read().strip().upper())')"   # çıpa kimliği dosya adı için KATLANMIŞTIR; İ/Â'lı adlar için --kim ver
 [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ajan kimliği çıkmadı (--kim ver)" >&2; exit 3; }
+[ -z "$KIM" ] || KIM="$(bash "$KOK/kimlik-coz.sh" "$KIM")" || { echo "ÖLÇÜLEMEDİ: koltuk adı defter adına çevrilemedi (koltuk-esleme.tsv)" >&2; exit 3; }   # koltuk adı → defter adı (tablo)
 
 CIPA_METNI="$(bash "$CIPA" oku 2>/dev/null)" || { echo "ÖLÇÜLEMEDİ: çıpa okunamadı — önce cipa.sh yaz" >&2; exit 3; }
 LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
@@ -37,7 +38,7 @@ LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 
 # kutu: açık ayar > kutu-bul.sh (koltuğa ATANMIŞ işlerin kutusu). Eski "listedeki en sık kutu" kaldırıldı: liste kutuya özel değil, menzilde hep "code" çıktı (1.11.0)
 if [ -z "$KUTU" ]; then
-  KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" --kim "$KIM" --liste /dev/stdin 2>/dev/null)" || KUTU=""
+  KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" --kim "$KIM" --cozulmus --liste /dev/stdin 2>/dev/null)" || KUTU=""
 fi
 [ -n "$KUTU" ] || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
 

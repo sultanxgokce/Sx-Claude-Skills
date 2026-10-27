@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-koltuk-esleme",
+  "pr": "516",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T02:10:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-koltuk-esleme",
+  "dal": "gunluk-plan-koltuk-esleme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29421,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 14519
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4a758c08acd35fbfe1ca681d9bba26e7d335f23b",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Koltuk adını varsayılan TSV tablosundan defter adına çeviren kapı eklenmiş ve üç akışa bağlanmış; talep edilen ortam değişkensiz eşleme yapılmış. Ancak ad bazı çağrı zincirlerinde yeniden çözüldüğü için zincirlenebilir bir tabloda yanlış kişiye dönüşebilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Kimlik çözümü tek geçişli olması gerekirken aynı ad çağrı zincirinde ikinci kez çözülebiliyor; örneğin A→B ve B→C satırları varsa A koltuğu nihayetinde C adına işlem yapabilir.",
+        "kanit": "sirada-bak.sh önce KIM'i kimlik-coz.sh ile çeviriyor; ardından kutu belirlemek için kullandığı kutu-bul.sh da aldığı KIM üzerinde kimlik-coz.sh çağırıyor. deftere-yaz.sh ile kutu-bul.sh zincirinde de aynı risk var. Q1-Q9 yalnız MOBILYACI→NECCAR tablosunu kullanıyor ve NECCAR anahtar olmadığı için yeniden eşleme vakasını sınamıyor.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh: KIM dönüşümü eklenen hunk; gunluk-plan/scripts/kutu-bul.sh: KIM dönüşümü eklenen hunk; gunluk-plan/scripts/deftere-yaz.sh: KIM dönüşümü eklenen hunk; gunluk-plan/scripts/sirada-bak.test.sh: Q1-Q9",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm esleme-sonra yeşil, 49/49 sınav geçiyor. Altı mutasyon kaydı beklenen kırmızı sonuçlarla sınavların ilgili bozulmaları yakaladığını gösteriyor ve bulgu sayılmıyor. Sarı kayıt yok; ancak önce ölçümü bulunmadığından tam bir önce/sonra ölçüm çifti yok ve yeniden eşleme senaryosu mevcut sınavlarda ölçülmemiş."
+  }
+}

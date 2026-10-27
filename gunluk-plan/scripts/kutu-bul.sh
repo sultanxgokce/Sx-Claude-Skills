@@ -8,12 +8,13 @@ set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 CIPA="${GUNLUK_PLAN_CIPA_SH:-$KOK/cipa.sh}"
 GOREV="$(bash "$KOK/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"
-KIM=""; LISTE_DOSYA=""
-while [ $# -gt 0 ]; do case "$1" in --kim) KIM="${2:-}"; shift 2 ;; --liste) LISTE_DOSYA="${2:-}"; shift 2 ;; *) echo "kullanım: kutu-bul.sh [--kim AJAN] [--liste dosya]" >&2; exit 2 ;; esac; done
+KIM=""; LISTE_DOSYA=""; COZULMUS=0
+while [ $# -gt 0 ]; do case "$1" in --kim) KIM="${2:-}"; shift 2 ;; --liste) LISTE_DOSYA="${2:-}"; shift 2 ;; --cozulmus) COZULMUS=1; shift ;; *) echo "kullanım: kutu-bul.sh [--kim AJAN] [--liste dosya]" >&2; exit 2 ;; esac; done
 if [ -n "${GUNLUK_PLAN_KUTU:-}" ]; then printf '%s\n' "$GUNLUK_PLAN_KUTU"; exit 0; fi
 [ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
 [ -n "$KIM" ] || KIM="$(bash "$CIPA" ajan 2>/dev/null | python3 -c 'import sys; print(sys.stdin.read().strip())')"
 [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ajan kimliği çıkmadı (--kim ver)" >&2; exit 3; }
+[ -z "$KIM" ] || [ "$COZULMUS" -eq 1 ] || KIM="$(bash "$KOK/kimlik-coz.sh" "$KIM")" || { echo "ÖLÇÜLEMEDİ: koltuk adı defter adına çevrilemedi (koltuk-esleme.tsv)" >&2; exit 3; }   # koltuk adı → defter adı (tablo)
 if [ -n "$LISTE_DOSYA" ]; then LISTE="$(cat "$LISTE_DOSYA" 2>/dev/null)"; else LISTE="$(bash "$GOREV" liste 2>/dev/null)"; fi
 [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı" >&2; exit 3; }
 printf '%s\n' "$LISTE" | python3 -c '
