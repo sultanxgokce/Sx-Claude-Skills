@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-deftere-yaz-sonra-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh M4
-# rc=1 sure=4.4s zaman=2026-10-27T20:56:45+03:00
+# rc=1 sure=6.2s zaman=2026-10-27T21:05:11+03:00
 --- stdout ---
 MUTANT M4 rc=1
   ✗ D5 uygula rc=0 — beklenen=0 gerçek=1

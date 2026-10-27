@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/sirada-bak.test.sh
-# rc=0 sure=655.5s zaman=2026-10-27T20:55:57+03:00
+# rc=0 sure=26.2s zaman=2026-10-27T21:04:54+03:00
 --- stdout ---
 — kutu-bul
   ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
@@ -22,7 +22,10 @@ $ bash gunluk-plan/scripts/sirada-bak.test.sh
   ✓ S9 SOR iki şık verir
   ✓ S10 SOR iken varsayılanda bile ustlen ÇAĞIRMAZ
   ✓ S11 Sırada 1 → SOR
+  ✓ S11b Sırada 1 iken 'planlanmış görev yok' DENMEZ (kendi sayımıyla çelişmez)
+  ✓ S11c Sırada 1 iken gerçek sayı ve eşik söylenir
   ✓ S12 --kutu verilince boş kutu: SIRADA=0 → SOR
+  ✓ S12b Sırada 0 iken 'planlanmış görev yok' denir
   ✓ S13 liste okunamazsa rc 3 ('Sırada 0' DENMEZ)
   ✓ S14 ölçülemeyende KARAR satırı basılmaz
   ✓ S15 bozuk eşik rc 2
@@ -34,6 +37,6 @@ $ bash gunluk-plan/scripts/sirada-bak.test.sh
   ✓ D2 'kutu=code' çıkmaz
   ✓ D3 atanmışı olmayan koltuk --kutu'suz rc 3
 
-sonuç: 29 geçti · 0 kaldı
+sonuç: 32 geçti · 0 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-gunluk-plan-sirada-bak-sirada-bak-sonra 655 sn bekledi (yuva 1, load1 17.24)
+⏳ agir-sira: kanit-gunluk-plan-sirada-bak-sirada-bak-sonra 25 sn bekledi (yuva 1, load1 17.60)

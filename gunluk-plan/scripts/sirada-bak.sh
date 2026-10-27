@@ -50,6 +50,7 @@ if [ "$N" -ge "$ESIK" ]; then
   fi
 else
   echo "KARAR=SOR"
-  echo "SORU=Bu kutuda planlanmış görev yok ($N iş sırada). Kendimize iş çıkarma seansı yapalım mı?"
+  if [ "$N" -eq 0 ]; then echo "SORU=Bu kutuda planlanmış görev yok. Kendimize iş çıkarma seansı yapalım mı?"
+  else echo "SORU=Bu kutuda sırada yalnız $N iş var (başlamak için en az $ESIK gerek). Kendimize iş çıkarma seansı yapalım mı?"; fi
   echo "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)"
 fi

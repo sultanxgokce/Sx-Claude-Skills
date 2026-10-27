@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh M6
+# rc=1 sure=1.3s zaman=2026-10-27T21:05:04+03:00
+--- stdout ---
+MUTANT M6 rc=1
+  ✗ S11b Sırada 1 iken 'planlanmış görev yok' DENMEZ (kendi sayımıyla çelişmez) — 'planlanmış görev yok' OLMAMALI: KUTU=menzil
+  ✗ S11c Sırada 1 iken gerçek sayı ve eşik söylenir — 'sırada yalnız 1 iş var (başlamak için en az 3 gerek)' yok: KUTU=menzil
+YAKALANDI
+--- stderr ---

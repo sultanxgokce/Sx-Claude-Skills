@@ -135,7 +135,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh          # Sırada
 bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --bak    # yalnız bak, başlama
 ```
 - **KARAR=BAS** (Sırada ≥ 3, eşik `--esik N` ile kutuya göre ayarlanır): sıradaki işler listelenir (acil önce); varsayılan koşu EN ÜSTTEKİ işi `gorev.sh ustlen` ile üstlenir (`--bak` yalnız bakar ve "başladım" demez). Sultan'a tek cümle: *"Sırada N iş var, en üstteki ile başladım; bugüne almak ister misin?"*
-- **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok. Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Bu dalda betik hiçbir işi üstlenmez.
+- **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok (ya da eşikten az: gerçek sayı söylenir). Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Bu dalda betik hiçbir işi üstlenmez.
 - 🔴 **"Bugüne al" Sultan'ındır.** Defterde `bugun_plani` alanını geçit yalnız Sultan ekranına yazdırır (A06; ajan yazarsa 403). Betik onu YAZMAZ, yalnız ÖNERİR. Yani "bugüne alındı" işareti Sultan'ın tıkıyla gelir; ajanın yaptığı iş "çalışılıyor" ve öneridir.
 - **Sırada** = ekranın tanımı: aynı kutuda `acik` ya da `sira-bende` (havuz · tasarlanıyor · bekliyor · çalışılıyor · onay-bekliyor · bitti · iptal SAYILMAZ).
 - **Ölçemezse karar vermez:** defter okunamadı ya da kutu çıkmadıysa rc 3 — "Sırada 0" DENMEZ, soru da sorulmaz.
