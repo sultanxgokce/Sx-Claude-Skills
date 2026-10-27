@@ -1,0 +1,13 @@
+$ bash kabuk-biti.test.sh
+# rc=1 sure=0.0s zaman=2026-10-27T11:34:57+03:00
+--- stdout ---
+  ✓ beceri betikleri bulundu (araç görüyor): 309 dosya
+  ✓ pozitif kontrol: en az bir 100755 betik var (306)
+  ✗ 🔴 çalıştırma biti olmayan beceri betiği YOK (sync-skills duman testi bu yüzden düşüyordu)
+     bitsiz:
+       gunluk-plan/scripts/gorev-yolu.sh
+       gunluk-plan/scripts/gorev-yolu.test.sh
+       gunluk-plan/scripts/gorev.sh
+     düzeltme: git update-index --chmod=+x <dosya>
+── SONUÇ: 2 geçti · 1 kaldı ──
+--- stderr ---

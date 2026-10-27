@@ -1,0 +1,25 @@
+{
+  "is": "gunluk-plan-betik-biti",
+  "cumle": "gunluk-plan 1.10.1 (#493) ile depoya giren gorev-yolu.sh, gorev-yolu.test.sh ve gorev.sh çalıştırma bitsiz (100644) girdi; kabuk-biti kapısı ana dalda her PR'ı kırmızı düşürüyor; üç dosyaya çalıştırma biti verilir (depo ve disk kipi), kapı yeşile döner (SERDAR 11:35)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-27T11:34:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "olcut": [],
+  "olcum_yeri": "yerel, 12 çekirdek",
+  "sayi_uyarilari": []
+}
