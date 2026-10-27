@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "oda-alani-layiha",
+  "pr": "505",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T16:10:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-alani-layiha",
+  "dal": "oda-alani-layiha",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19223,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 2896
+  },
+  "dalgic": "uyumsuz",
+  "bas": "510b71cce1023d7bbfd85b2245df3862ccfc107a",
+  "duzeltme_farki": {
+    "onceki_bas": "68fafe233cb7073434e738003232a2fd0c0bce27",
+    "dosya": 2,
+    "bayt": 3707,
+    "tam_bayt": 37759
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İsteğe bağlı oda alanı, kebab biçimi denetimi, alan verilmediğinde bayt-aynen davranış ve güncellemede eski odayı koruma talebe uygun biçimde uygulanmış. Önceki B1, `re.fullmatch` ve `\\Z` kullanımıyla kapanmış; gerçek ölçüm ile dört mutasyon ölçümü de davranışı güçlü biçimde sınadığı için üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçüm `layiha-sinavi-tek` rc=0, PASS=229/FAIL=0; OD3d–OD3f kebab sınırlarını, OD4 değersiz bayrağı, OD5 oda verilmeden güncellemede eski odayı korumayı ve OD6 verilen odayla değiştirmeyi ölçüyor. Önceki B1, `layiha/scripts/layiha-defteri.sh:245` satırındaki `re.fullmatch(r\"(?=.{2,31}\\Z)...\")` değişikliğiyle kapanıyor; böylece sondaki satır sonundan önce eşleşme yolu kalmıyor. `mut-layiha-bicim`, `mut-layiha-koru`, `mut-layiha-degersiz` ve `mut-layiha-kebab` kayıtlarının rc=1 olması sınavların bilerek bozulan kodu yakaladığını gösteriyor; bu kayıtlardaki FAIL satırları gerçek kod bulgusu değildir."
+  }
+}
