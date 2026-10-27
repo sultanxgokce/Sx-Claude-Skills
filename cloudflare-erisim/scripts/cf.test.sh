@@ -100,22 +100,34 @@ cat > "$FIX/toks-eksik.json" <<'EOF'
 {"success":true,"result":[{"id":"TOK1","name":"code-kare-al"}],"result_info":{"total_count":5}}
 EOF
 cat > "$FIX/pols-eposta.json" <<'EOF'
-{"success":true,"result":[{"id":"POLE","name":"Allow sultan","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]}]}
+{"success":true,"result":[{"id":"POLE","name":"Allow sultan","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]}],"result_info":{"total_count":1,"per_page":100}}
 EOF
 cat > "$FIX/pols-bagli.json" <<'EOF'
 {"success":true,"result":[
   {"id":"POLE","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]},
-  {"id":"POLJ","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK1"}}]}]}
+  {"id":"POLJ","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK1"}}]}],"result_info":{"total_count":2,"per_page":100}}
 EOF
 cat > "$FIX/pols-baska-jeton.json" <<'EOF'
 {"success":true,"result":[
   {"id":"POLE","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]},
-  {"id":"POLB","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK2"}}]}]}
+  {"id":"POLB","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK2"}}]}],"result_info":{"total_count":2,"per_page":100}}
 EOF
 cat > "$FIX/pols-cift.json" <<'EOF'
 {"success":true,"result":[
   {"id":"POLJ","decision":"non_identity","precedence":2,"include":[{"service_token":{"token_id":"TOK1"}}]},
-  {"id":"POLK","decision":"non_identity","precedence":3,"include":[{"service_token":{"token_id":"TOK1"}}]}]}
+  {"id":"POLK","decision":"non_identity","precedence":3,"include":[{"service_token":{"token_id":"TOK1"}}]}],"result_info":{"total_count":2,"per_page":100}}
+EOF
+cat > "$FIX/pols-eksik.json" <<'EOF'
+{"success":true,"result":[{"id":"POLE","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]}],"result_info":{"total_count":4,"per_page":100}}
+EOF
+cat > "$FIX/pols-totalyok.json" <<'EOF'
+{"success":true,"result":[{"id":"POLE","decision":"allow","precedence":1,"include":[{"email":{"email":"sultanxgokce@gmail.com"}}]}]}
+EOF
+cat > "$FIX/apps-buyuk-yol.json" <<'EOF'
+{"success":true,"result":[{"id":"APPT","domain":"terminal.mmepanel.com/Teslim","name":"buyuk-T"}],"result_info":{"total_count":1,"per_page":100}}
+EOF
+cat > "$FIX/apps-buyuk-host.json" <<'EOF'
+{"success":true,"result":[{"id":"APPT","domain":"Terminal.MMEPanel.com/teslim","name":"buyuk-host"}],"result_info":{"total_count":1,"per_page":100}}
 EOF
 printf '{"success":true,"result":{"id":"X"}}\n'                      > "$FIX/ok.json"
 printf '{"success":false,"errors":[{"message":"stub-DELETE-hatasi"}]}\n' > "$FIX/fail.json"
@@ -311,6 +323,16 @@ cf_kos FIX_APPS="$FIX/apps-teslim.json" -- politika-coz "${APP_ARGS[@]}" --uygul
 iddia "T16l coz: bağlı politika yoksa no-op (e-posta politikasına dokunmaz)" [ $rc -eq 0 ] && [ "$(yaz_say)" = "0" ]
 cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-cift.json" -- politika-coz "${APP_ARGS[@]}" --uygula; rc=$?
 iddia "T16m coz: 2 eş politika → toplu silme YOK, DUR" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-eksik.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16n politika listesi eksik (total≠dönen) → DUR, yazım 0" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-eksik.json" -- politika-coz "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16o coz: politika listesi eksik → yanlış 'zaten yok' DEMEZ, DUR" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ] && ! grep -q 'zaten yok' "$CIKTI"
+cf_kos FIX_APPS="$FIX/apps-teslim.json" FIX_POLS="$FIX/pols-totalyok.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16p total_count yoksa tamlık kanıtlanamaz → DUR (fail-closed)" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-buyuk-yol.json" -- politika-bagla "${APP_ARGS[@]}" --uygula; rc=$?
+iddia "T16q yol harf duyarlı: .../Teslim ≠ .../teslim → DUR, yazım 0" [ $rc -ne 0 ] && [ "$(yaz_say)" = "0" ]
+cf_kos FIX_APPS="$FIX/apps-buyuk-host.json" -- politika-bagla Terminal.MMEpanel.com/teslim code-kare-al --uygula; rc=$?
+iddia "T16r alan adı harf duyarsız: Terminal.MMEPanel.com/teslim eşleşir" [ $rc -eq 0 ] && [ "$(grep -c '^POST ' "$LOG")" = "1" ]
 
 # T15 · sır-hijyeni: hiçbir test-çıktısında/curl-log'unda token-değeri geçmedi.
 # Kapsam-sınırı (dürüstlük): stub -H header-DEĞERLERİNİ loglamaz → oracle stdout/stderr + URL kanallarını

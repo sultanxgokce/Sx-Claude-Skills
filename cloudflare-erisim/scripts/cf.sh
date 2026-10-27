@@ -468,16 +468,17 @@ cmd_ingress(){  # SALT-OKUR: tünelin yönlendirme kurallarını bas
 # Yalnız şunu yapar/geri alır: app'te include=[tek service_token] olan, decision=non_identity bir politika. E-posta politikasını,
 #   başka jeton politikalarını, app'in kendisini ASLA değiştirmez/silmez. Jeton DEĞERİ (client_secret) hiç okunmaz/basılmaz.
 _pb_coz(){  # _pb_coz <app-domain> <jeton-adı>  → APP_ID TOKEN_ID değişkenleri (tam eşleşme + tamlık + ≤1)
-  local host="${1,,}" tad="$2" apps total n_donen n_app toks n_tok
+  local host="${1%%/*}" yolk tad="$2" apps total n_donen n_app toks n_tok
+  yolk="${1#"$host"}"; host="${host,,}${yolk}"   # alan adı büyük/küçük harf duyarsız, YOL harf duyarlı
   load_ctx
   apps="$(api GET "/accounts/${ACCOUNT_ID}/access/apps?per_page=100")"
   ok "$apps" || { red "✗ Access app listesi alınamadı:"; errs "$apps"; exit 1; }
   total="$(echo "$apps" | jq -r '.result_info.total_count // empty')"; n_donen="$(echo "$apps" | jq -r '.result | length')"
   case "$total" in ''|*[!0-9]*) die "DUR: Access-app listesi tamlığı kanıtlanamadı (total_count yok) — hiçbir şey yazılmadı." ;; esac
   [ "$total" -eq "$n_donen" ] || die "DUR: Access-app listesi TAM değil (total_count=${total} ≠ dönen=${n_donen}) — hiçbir şey yazılmadı."
-  n_app="$(echo "$apps" | jq -r --arg d "$host" '[.result[]? | select((.domain|ascii_downcase)==$d)] | length')"
+  n_app="$(echo "$apps" | jq -r --arg d "$host" '[.result[]? | select((.domain|capture("^(?<h>[^/]*)(?<p>.*)$")|((.h|ascii_downcase)+.p))==$d)] | length')"
   [ "$n_app" = "1" ] || die "DUR: '$host' (.domain TAM-eş) için ${n_app} Access app — tam 1 olmalı; hiçbir şey yazılmadı."
-  APP_ID="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select((.domain|ascii_downcase)==$d) | .id // empty' | head -1)"
+  APP_ID="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select((.domain|capture("^(?<h>[^/]*)(?<p>.*)$")|((.h|ascii_downcase)+.p))==$d) | .id // empty' | head -1)"
   toks="$(api GET "/accounts/${ACCOUNT_ID}/access/service_tokens?per_page=100")"
   ok "$toks" || { red "✗ servis jetonu listesi alınamadı (token'da 'Access: Service Tokens' okuma yetkisi var mı?):"; errs "$toks"; exit 1; }
   total="$(echo "$toks" | jq -r '.result_info.total_count // empty')"; n_donen="$(echo "$toks" | jq -r '.result | length')"
@@ -498,6 +499,15 @@ _pb_arg(){  # _pb_arg <komut> "$@" → PB_HOST PB_TOKEN PB_UYGULA
     esac
   done
 }
+_pb_pol_al(){  # politika listesi (tamlık kapılı): PB_POLS — total_count = dönen değilse DUR (yanlış no-op / yinelenen politika önlenir)
+  local r total n
+  r="$(api GET "/accounts/${ACCOUNT_ID}/access/apps/${APP_ID}/policies?per_page=100")"
+  ok "$r" || { red "✗ politika listesi alınamadı:"; errs "$r"; exit 1; }
+  total="$(echo "$r" | jq -r '.result_info.total_count // empty')"; n="$(echo "$r" | jq -r '.result | length')"
+  case "$total" in ''|*[!0-9]*) die "DUR: politika listesi tamlığı kanıtlanamadı (total_count yok) — hiçbir şey yazılmadı." ;; esac
+  [ "$total" -eq "$n" ] || die "DUR: politika listesi TAM değil (total_count=${total} ≠ dönen=${n}) — hiçbir şey yazılmadı."
+  PB_POLS="$r"
+}
 _pb_mevcut(){  # app'teki, include'u TAM [service_token==TOKEN_ID] olan non_identity politika id'leri (satır satır)
   echo "$1" | jq -r --arg t "$TOKEN_ID" '.result[]? | select(.decision=="non_identity")
     | select((.include|length)==1 and (.include[0].service_token.token_id // "")==$t) | .id'
@@ -507,8 +517,7 @@ cmd_politika_bagla(){  # <app-domain[/yol]> <jeton-adı> [--uygula]  — kuru va
   [ -n "$PB_HOST" ] && [ -n "$PB_TOKEN" ] || die "kullanım: politika-bagla <app-domain[/yol]> <servis-jetonu-adı> [--uygula]"
   _pb_coz "$PB_HOST" "$PB_TOKEN"
   local pols mevcut maxp yeni_p body resp
-  pols="$(api GET "/accounts/${ACCOUNT_ID}/access/apps/${APP_ID}/policies")"
-  ok "$pols" || { red "✗ politika listesi alınamadı:"; errs "$pols"; exit 1; }
+  _pb_pol_al; pols="$PB_POLS"
   mevcut="$(_pb_mevcut "$pols")"
   if [ -n "$mevcut" ]; then
     ylw "• zaten bağlı: '$PB_TOKEN' → $PB_HOST (politika $(echo "$mevcut" | head -1)) — idempotent no-op"; return 0
@@ -534,8 +543,7 @@ cmd_politika_coz(){  # <app-domain[/yol]> <jeton-adı> [--uygula]  — bağla'n�
   [ -n "$PB_HOST" ] && [ -n "$PB_TOKEN" ] || die "kullanım: politika-coz <app-domain[/yol]> <servis-jetonu-adı> [--uygula]"
   _pb_coz "$PB_HOST" "$PB_TOKEN"
   local pols mevcut n resp
-  pols="$(api GET "/accounts/${ACCOUNT_ID}/access/apps/${APP_ID}/policies")"
-  ok "$pols" || { red "✗ politika listesi alınamadı:"; errs "$pols"; exit 1; }
+  _pb_pol_al; pols="$PB_POLS"
   mevcut="$(_pb_mevcut "$pols")"; n="$(printf '%s' "$mevcut" | grep -c . || true)"
   [ "$n" -le 1 ] || die "DUR: '$PB_TOKEN' için ${n} eş politika — toplu silme ASLA; elle bakın."
   if [ "$n" = "0" ]; then ylw "• zaten yok: '$PB_TOKEN' için bağlı politika yok — idempotent no-op"; return 0; fi
