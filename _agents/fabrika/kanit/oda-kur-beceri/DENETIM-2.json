@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "oda-kur-beceri",
+  "pr": "503",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T15:00:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-kur-beceri",
+  "dal": "oda-kur-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42325,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 12535
+  },
+  "dalgic": "uyumlu",
+  "bas": "add377a39b61d1f7bfc8e254f393c05a9e9c00c4",
+  "duzeltme_farki": {
+    "onceki_bas": "c94b84ff304a96f8af1d69fb1b0f591b15a875a6",
+    "dosya": 10,
+    "bayt": 31502,
+    "tam_bayt": 61003
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Oda iskeleti, ortak ayardan settings üretimi, doğrulama ve oda dışı yazımı durduran kanca talebe uygun biçimde tamamlanmış; önceki turun üç uygulama bulgusu da gerçek-yol eşlemesi, eksik iskelet denetimi/onarımı ve güvenli kabuk alıntılamasıyla kapanmış. Gerçek ölçüm 43 kapının geçtiğini, entegrasyonun iki turda doğru davrandığını ve 15 mutantın yakalandığını gösteriyor; yalnız rötuş düzeyinde dahi kanıtlanmış bir kusur kalmadığından üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti 0 kapı ve 0 mutanttan 43 geçen kapı ve 15 yakalanan mutanta ilerlemeyi ölçüyor. B1, gerçek çekirdek yolunu oda cwd'sine göre realpath ile doğrulayan kod, K22-K25 kapıları ve metin-önek mutantıyla; B2, doğrulamadaki skills/agents/MEMORY.md kontrolleri, ayar aynıyken dizin onarımı, O15-O16 kapıları ve iki mutantla; B3 ise shlex.quote üretimi, boşluk/metakarakter içeren gerçek kabuk çalıştırması O17 ve alıntısız mutantıyla kapanmış. Gerçek Claude kanca entegrasyonu iki ayrı yeşil ölçümde kendi oda yazımını geçirip kardeş oda ve ortak veri yazımlarını durduruyor; mutasyon kayıtlarındaki rc=1 ve ✗ satırları beklendiği üzere bozuk kodun sınavca yakalandığını gösteriyor."
+  }
+}
