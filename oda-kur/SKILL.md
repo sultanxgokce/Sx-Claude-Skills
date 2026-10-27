@@ -28,23 +28,23 @@ Karar: Nexus `_agents/handoff/kutu-oda-kararlari-20261027.md` (karar 9). Görev:
 ## Komutlar (`bash /config/.claude/skills/oda-kur/scripts/oda.sh …`)
 - `yeni <depo> <oda> --reis K --hedef "…" --olcu "…"` — iskelet + ayar üretimi. Üçü de zorunlu (oda = hedef + reis + ölçü). Ortak ayar yoksa boş varsayılan yazar.
 - `uret <depo>` — ortak ayardan her odanın settings.json'unu üretir; idempotent (ikinci koşu "aynı").
-- `dogrula <depo>` — iskelet, üretilmiş ayarın tazeliği (elle düzenleme/bayat → rc 1), hafıza ayrılığı. Hiç oda yoksa rc 3 ÖLÇÜLEMEDİ.
+- `dogrula <depo>` — iskeletin tamamı (CLAUDE.md, oda.json, hafiza/MEMORY.md, .claude/skills+agents), üretilmiş ayarın tazeliği (elle düzenleme/bayat → rc 1), hafıza ayrılığı. Hiç oda yoksa rc 3 ÖLÇÜLEMEDİ.
 - `yol <depo> <oda>` — açılış cwd'si: odanın mutlak klasörü. Koltuk başlatıcı `cd "$(oda.sh yol …)"` ile açar.
 - `kanca <oda_dizini> <ortak_json>` — PreToolUse kancası (üretilen ayar bunu bağlar). stdin JSON; rc 2 = durdur.
 
 ## Kanca kuralları
 Write/Edit/MultiEdit/NotebookEdit ve Bash yazımı için (hedef yollar `realpath` ile çözülür → sembolik bağ kaçışı yok):
 1. Hedef depo DIŞINDA → bu kancanın işi değil (serbest).
-2. `ortak_veri` globlarına uyuyorsa → DURDUR (okuma serbest, yazma yalnız `cekirdek_komutlar` önekiyle başlayan komuttan).
+2. `ortak_veri` globlarına uyuyorsa → DURDUR (okuma serbest, yazma yalnız çekirdeğin komutundan). Çekirdek komutu METİN öneki ile değil GERÇEK YOLLA tanınır: tanımdaki dosya-yolu depo köküne göre, komuttaki karşılığı kancanın cwd'sine göre `realpath` edilip eşit olmalı — odanın içinde aynı adlı sahte betik çekirdek sayılmaz. Bu yüzden oda cwd'sinden çekirdek betiği `bash ../scripts/ortak-yaz.sh …` ya da mutlak yolla çağrılır.
 3. Odanın kendi klasörü → serbest. `oda.json ek_yazma` globları → serbest (açık, kayıtlı istisna).
 4. Depo içi, oda dışı (kardeş oda, depo kökü `.claude/oda-ortak.json`, `.git/`) → DURDUR.
 Fail-closed: kanca girdisi bozuksa, ortak ayar ya da `oda.json` okunamazsa DURDURUR (sessizce serbest bırakmaz).
 
-**Dürüst sınır (Bash):** yalnız yönlendirme (`>`, `>>`), `tee`, `sed -i`, `cp/mv/install/ln` hedefleri taranır; zincirde (`;` `&&` `||` `|`) her parça ayrı değerlendirilir, çekirdek komutu zincirin başında olsa da ardındaki yazım durdurulur. `$DEĞİŞKEN`/`$(…)` içeren hedef, betik dosyasının içindeki yazım ve `python -c "open(…,'w')"` gibi dolaylı yazımlar GÖRÜNMEZ. Kanca kazayı önler, kasıtlı dolanmayı değil; kesin sınır için ortak veri dosyalarının işletim sistemi izni de kısılmalıdır (ayrı iş).
+**Dürüst sınır (Bash):** yalnız yönlendirme (`>`, `>>`), `tee`, `sed -i`, `cp/mv/install/ln` hedefleri taranır; zincirde (`;` `&&` `||` `|`) her parça ayrı değerlendirilir; yönlendirme hedefleri çekirdek komutunun parçasında bile taranır; çekirdek komutu zincirin başında olsa da ardındaki yazım durdurulur. Çekirdek betiğin KENDİ içinde ne yazdığı (ya da oda içine konan bir sahte betiğin içi) kancadan görünmez. `$DEĞİŞKEN`/`$(…)` içeren hedef, betik dosyasının içindeki yazım ve `python -c "open(…,'w')"` gibi dolaylı yazımlar GÖRÜNMEZ. Kanca kazayı önler, kasıtlı dolanmayı değil; kesin sınır için ortak veri dosyalarının işletim sistemi izni de kısılmalıdır (ayrı iş).
 
 ## Bu sürümde yok (açık)
 - Koltuk→oda eşlemesi ve koltuk başlatıcının `oda.sh yol` ile bağlanması: oda alanı kaydı (Oda modeli 1, MUAVİN) gelince bağlanır; `yol` komutu hazır.
 - Kurulu kutularda ayarın üretilmesi pilot (TELLAL) ile.
 
 ## Sınav
-`bash scripts/oda.test.sh` — hermetik sahte iki odalı depo, 35 kapı + 10 mutant (ortak veri kuralı kapalı · oda dışı kuralı kapalı · realpath yok · bozuk girdi serbest · ortak ayar yoksa serbest · çekirdek komutu tüm zinciri izinli sayar · ek_yazma her odaya açık · oda-özel parça kancayı ezer · hafıza yolu ortak · uret yazmıyor). claude çağrılmaz.
+`bash scripts/oda.test.sh` — hermetik sahte iki odalı depo, 43 kapı + 15 mutant (ortak veri kuralı kapalı · oda dışı kuralı kapalı · realpath yok · bozuk girdi serbest · ortak ayar yoksa serbest · çekirdek komutu tüm zinciri izinli sayar · çekirdek eşleşmesi yalnız metin öneki · çekirdek parçada yönlendirme taranmaz · kanca komutu alıntısız · ek_yazma her odaya açık · oda-özel parça kancayı ezer · hafıza yolu ortak · uret yazmıyor · uret iskeleti kurmaz · doğrula MEMORY.md bakmaz). claude çağrılmaz.

@@ -14,6 +14,7 @@ import fnmatch
 import json
 import os
 import re
+import shlex
 import sys
 
 ODA_AD = re.compile(r'^[a-z0-9][a-z0-9-]{0,40}$')
@@ -94,7 +95,7 @@ def oda_ayari(depo, oda, ortak, kanca_betik):
     ayar.setdefault('hooks', {})
     ayar['hooks']['PreToolUse'] = [{
         'matcher': KANCA_ESLES,
-        'hooks': [{'type': 'command', 'command': f'bash {kanca_betik} kanca {abs_oda} {ortak_yol}'}],
+        'hooks': [{'type': 'command', 'command': 'bash ' + ' '.join(shlex.quote(x) for x in (kanca_betik, 'kanca', abs_oda, ortak_yol))}],
     }]
     return ayar
 
@@ -117,14 +118,14 @@ def uret(depo):
                 eski = oku_json(hedef)
             except Exception:
                 eski = None
+        for alt in ('skills', 'agents'):
+            os.makedirs(os.path.join(depo, oda, '.claude', alt), exist_ok=True)   # ayar aynı olsa da iskelet eksiksiz kalır
+        os.makedirs(os.path.join(depo, oda, 'hafiza'), exist_ok=True)
         if eski == yeni:
             sonuc.append((oda, 'aynı'))
             continue
         yaz_json(hedef, yeni)
         sonuc.append((oda, 'üretildi'))
-        for alt in ('skills', 'agents'):
-            os.makedirs(os.path.join(depo, oda, '.claude', alt), exist_ok=True)
-        os.makedirs(os.path.join(depo, oda, 'hafiza'), exist_ok=True)
     return sonuc
 
 
@@ -208,8 +209,11 @@ def dogrula(depo):
             hafizalar.setdefault(beklenen['autoMemoryDirectory'], []).append(oda)
         except Exception as e:
             bulgu.append(f'{oda}: ayar üretilemedi ({e})')
-        if not os.path.isdir(os.path.join(k, 'hafiza')):
-            bulgu.append(f'{oda}: hafiza/ klasörü yok')
+        for alt in ('hafiza', os.path.join('.claude', 'skills'), os.path.join('.claude', 'agents')):
+            if not os.path.isdir(os.path.join(k, alt)):
+                bulgu.append(f'{oda}: {alt}/ klasörü yok (oda.sh uret)')
+        if not os.path.isfile(os.path.join(k, 'hafiza', 'MEMORY.md')):
+            bulgu.append(f'{oda}: hafiza/MEMORY.md yok')
     for yol, ol in hafizalar.items():
         if len(ol) > 1:
             bulgu.append(f'hafıza ortak: {", ".join(ol)} → {yol}')
@@ -251,11 +255,13 @@ def tirnak_sil(s):
     return s
 
 
-def bash_hedefleri(komut):
+def bash_hedefleri(komut, yalniz_yonlendirme=False):
     """Bash parçasındaki yazma HEDEFLERİ (best-effort: yönlendirme, tee, sed -i, cp/mv/install/ln son argüman)."""
     hed = []
     for m in YONLENDIR.finditer(komut):
         hed.append(tirnak_sil(m.group(1)))
+    if yalniz_yonlendirme:
+        return hed
     for m in TEE.finditer(komut):
         hed += [tirnak_sil(x) for x in re.findall(r'"[^"]+"|\'[^\']+\'|[^\s;&|<>()]+', m.group(2))]
     for m in SEDI.finditer(komut):
@@ -268,14 +274,39 @@ def bash_hedefleri(komut):
     return hed
 
 
-def bash_cekirdek_mi(parca, cekirdek):
-    p = parca.strip()
-    return any(p == c or p.startswith(c + ' ') for c in cekirdek)
+def bash_cekirdek_mi(parca, cekirdek, cwd, depo):
+    """Parça gerçekten çekirdeğin komutu mu? Tanımdaki dosya-yolu tokenları depo köküne göre çözülür; komuttaki karşılığı
+    cwd'ye göre çözülüp realpath ile EŞİT olmalı (oda içinde aynı adlı sahte betik çekirdek sayılmaz)."""
+    try:
+        tok = shlex.split(parca)
+    except ValueError:
+        return False
+    for c in cekirdek:
+        try:
+            ct = shlex.split(c)
+        except ValueError:
+            continue
+        if not ct or len(tok) < len(ct):
+            continue
+        eslesti = True
+        for t, k in zip(tok, ct):
+            kdosya = os.path.join(depo, k)
+            if os.path.isfile(kdosya):
+                if cozumle(t, cwd) != os.path.realpath(kdosya):
+                    eslesti = False
+                    break
+            elif t != k:
+                eslesti = False
+                break
+        if eslesti:
+            return True
+    return False
 
 
 def karar(arac, girdi, cwd, oda_dir, depo, ortak, oda_meta):
     """(izin_mi, neden)"""
     hedefler = []
+    kabuk = arac == 'Bash'   # kabuk hedeflerinde $DEĞİŞKEN/$(…) çözülemez; dosya aracı yollarında '$' düz karakterdir
     if arac in ('Write', 'Edit', 'MultiEdit'):
         hedefler = [girdi.get('file_path', '')]
     elif arac == 'NotebookEdit':
@@ -283,15 +314,16 @@ def karar(arac, girdi, cwd, oda_dir, depo, ortak, oda_meta):
     elif arac == 'Bash':
         komut = girdi.get('command', '') or ''
         for parca in ZINCIR.split(komut):
-            if not parca.strip() or bash_cekirdek_mi(parca, ortak.get('cekirdek_komutlar', [])):
+            if not parca.strip():
                 continue
-            hedefler += bash_hedefleri(parca)
+            # yönlendirme hedefleri HER parçada taranır; tee/sed -i/cp/mv hedefleri yalnız çekirdeğin gerçek komutu OLMAYAN parçada
+            hedefler += bash_hedefleri(parca, yalniz_yonlendirme=bash_cekirdek_mi(parca, ortak.get('cekirdek_komutlar', []), cwd, depo))
     else:
         return True, ''
     ortak_veri = ortak.get('ortak_veri', [])
     ek = oda_meta.get('ek_yazma', [])
     for h in hedefler:
-        if not h or h.startswith('/dev/') or h.startswith('&') or '$' in h or '`' in h:
+        if not h or (kabuk and (h.startswith('/dev/') or h.startswith('&') or '$' in h or '`' in h)):
             continue   # belirsiz/değişkenli hedef: best-effort kapsam dışı (belgelenmiş sınır)
         yol = cozumle(h, cwd)
         if not icinde(yol, depo):

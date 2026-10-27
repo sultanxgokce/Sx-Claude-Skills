@@ -15,7 +15,7 @@ kur_depo() {   # kur_depo <dizin> : iki odalı sahte depo + ortak ayar + ortak v
   cat > "$D/.claude/oda-ortak.json" <<J
 {"izin":{"allow":["Bash(git status)"],"deny":["Read(.env)"]},"ortak_veri":["veri/**","KAYIT.json"],"cekirdek_komutlar":["bash scripts/ortak-yaz.sh"]}
 J
-  echo '{"a":1}' > "$D/KAYIT.json"
+  echo '{"a":1}' > "$D/KAYIT.json"; printf '#!/bin/sh\nexit 0\n' > "$D/scripts/ortak-yaz.sh"
   bash "$ODA" yeni "$D" oda-a --reis SERDAR --hedef "A hedefi" --olcu "A ölçüsü" >/dev/null 2>&1
   bash "$ODA" yeni "$D" oda-b --reis BERID --hedef "B hedefi" --olcu "B ölçüsü" >/dev/null 2>&1
 }
@@ -54,6 +54,19 @@ bash "$ODA" yeni "$D" oda-c --reis X --hedef h >/dev/null 2>&1; [ $? -ne 0 ] && 
 E="$T/bos"; mkdir -p "$E/.claude"; echo '{}' > "$E/.claude/oda-ortak.json"; bash "$ODA" dogrula "$E" >/dev/null 2>&1; [ $? -eq 3 ] && ok "O13 hiç oda yoksa doğrula ÖLÇÜLEMEDİ (rc 3), yeşil değil" || no "O13 odasız depo temiz sayıldı"
 
 [ "$(bash "$ODA" yol "$D" oda-a 2>/dev/null)" = "$D/oda-a" ] && bash "$ODA" yol "$D" yok-oda >/dev/null 2>&1; [ $? -ne 0 ] && ok "O14 yol: var olan odanın mutlak klasörü basılır, olmayan oda rc≠0" || no "O14 yol komutu yanlış"
+rm_skills() { find "$1" -mindepth 1 -delete; rmdir "$1"; }
+rm_skills "$D/oda-b/.claude/skills"; rm "$D/oda-b/hafiza/MEMORY.md"
+bash "$ODA" dogrula "$D" >"$T/d.out" 2>&1; R=$?; [ $R -eq 1 ] && grep -q "oda-b: .claude/skills/ klasörü yok" "$T/d.out" && grep -q "oda-b: hafiza/MEMORY.md yok" "$T/d.out" && ok "O15 doğrula eksik iskeleti (skills/, MEMORY.md) KIRMIZI yakalar" || no "O15 eksik iskelet temiz sayıldı" "rc=$R $(cat "$T/d.out")"
+bash "$ODA" uret "$D" >/dev/null 2>&1; [ -d "$D/oda-b/.claude/skills" ] && ok "O16 ayar aynı olsa da uret eksik klasörü yeniden kurar" || no "O16 uret eksik klasörü kurmadı"
+echo "# oda-b odası hafızası" > "$D/oda-b/hafiza/MEMORY.md"
+BD="$T/boş luk;\$x/depo"; mkdir -p "$BD"; kur_depo "$BD"
+python3 -I -c "
+import json,shlex,subprocess
+c=json.load(open('$BD/oda-a/.claude/settings.json'))['hooks']['PreToolUse'][0]['hooks'][0]['command']
+t=shlex.split(c); assert len(t)==5 and t[2]=='kanca' and t[3].endswith('/oda-a') and t[4].endswith('oda-ortak.json'),t
+p=subprocess.run(c,shell=True,input=json.dumps({'tool_name':'Write','tool_input':{'file_path':'$BD/oda-b/x'},'cwd':'$BD/oda-a'}),capture_output=True,text=True)
+assert p.returncode==2 and 'oda-b/x' in p.stderr,(p.returncode,p.stderr)
+" && ok "O17 boşluk/;/\$ içeren depo yolunda kanca komutu alıntılı ve kabukta GERÇEKTEN çalışır" || no "O17 alıntılama kırık"
 echo "── kanca (Write/Edit/Bash)"
 kanca "$D" oda-a Write "{\"file_path\":\"$D/oda-a/kod.py\"}"; [ $? -eq 0 ] && ok "K1 kendi oda klasörüne yazma SERBEST" || no "K1" "$(cat "$T/kanca.err")"
 kanca "$D" oda-a Write "{\"file_path\":\"$D/oda-b/kod.py\"}"; R=$?; [ $R -eq 2 ] && grep -q "oda-b/kod.py" "$T/kanca.err" && ok "K2 kardeş odaya yazma DURDURULDU, mesaj yolu söyler" || no "K2 kardeş odaya yazılabildi" "rc=$R"
@@ -68,10 +81,16 @@ kanca "$D" oda-a Bash '{"command":"echo x > ../veri/a.json"}'; R=$?; [ $R -eq 2 
 kanca "$D" oda-a Bash '{"command":"echo x | tee -a ../oda-b/n.txt"}'; [ $? -eq 2 ] && ok "K11 tee ile kardeş odaya yazma DURDURULDU" || no "K11"
 kanca "$D" oda-a Bash '{"command":"sed -i s/a/b/ ../veri/musteri.json"}'; [ $? -eq 2 ] && ok "K12 sed -i ile ortak veriye yazma DURDURULDU" || no "K12"
 kanca "$D" oda-a Bash '{"command":"cp kod.py ../oda-b/kod.py"}'; [ $? -eq 2 ] && ok "K13 cp hedefi kardeş oda DURDURULDU" || no "K13"
-kanca "$D" oda-a Bash '{"command":"bash scripts/ortak-yaz.sh musteri ekle"}'; [ $? -eq 0 ] && ok "K14 çekirdeğin komutu (cekirdek_komutlar) SERBEST" || no "K14 çekirdek komut bloklandı" "$(cat "$T/kanca.err")"
-kanca "$D" oda-a Bash '{"command":"bash scripts/ortak-yaz.sh x && echo kotu > ../veri/z.json"}'; [ $? -eq 2 ] && ok "K15 çekirdek komutu zincirin başında olsa da ardındaki yazım DURDURULDU" || no "K15 zincir tüm komutu izinli saydı"
+kanca "$D" oda-a Bash '{"command":"bash ../scripts/ortak-yaz.sh musteri ekle"}'; [ $? -eq 0 ] && ok "K14 çekirdeğin komutu (cekirdek_komutlar) SERBEST" || no "K14 çekirdek komut bloklandı" "$(cat "$T/kanca.err")"
+kanca "$D" oda-a Bash '{"command":"bash ../scripts/ortak-yaz.sh x && echo kotu > ../veri/z.json"}'; [ $? -eq 2 ] && ok "K15 çekirdek komutu zincirin başında olsa da ardındaki yazım DURDURULDU" || no "K15 zincir tüm komutu izinli saydı"
 kanca "$D" oda-a Bash '{"command":"python3 kod.py 2>&1 > /dev/null"}'; [ $? -eq 0 ] && ok "K16 2>&1 ve /dev/null yanlış alarm vermez" || no "K16 yanlış alarm" "$(cat "$T/kanca.err")"
 kanca "$D" oda-a Bash '{"command":"echo x > kod.out"}'; [ $? -eq 0 ] && ok "K17 Bash ile kendi odaya yazma SERBEST" || no "K17"
+mkdir -p "$D/oda-a/scripts"; printf '#!/bin/sh\nexit 0\n' > "$D/oda-a/scripts/ortak-yaz.sh"
+kanca "$D" oda-a Bash '{"command":"bash scripts/ortak-yaz.sh cp a ../veri/b"}'; [ $? -eq 2 ] && ok "K22 oda İÇİNDE aynı adlı sahte betik çekirdek SAYILMAZ (gerçek yol eşleşmesi)" || no "K22 sahte betik çekirdek sayıldı"
+kanca "$D" oda-a Bash '{"command":"bash ../scripts/ortak-yaz.sh cp a ../veri/b"}'; [ $? -eq 0 ] && ok "K23 gerçek çekirdek betiği (cwd'den çözülen yol eşit) SERBEST" || no "K23 gerçek çekirdek bloklandı" "$(cat "$T/kanca.err")"
+kanca "$D" oda-a Bash '{"command":"bash ../scripts/ortak-yaz.sh x > ../veri/z"}'; [ $? -eq 2 ] && ok "K24 çekirdek komutunun ARDINA eklenen yönlendirme DURDURULDU" || no "K24 çekirdek parçada yönlendirme taranmadı"
+kanca "$D" oda-a Bash '{"command":"bash ../scripts/ortak-yaz.sh x && cp a ../veri/b"}'; [ $? -eq 2 ] && ok "K26 çekirdek komutunu izleyen && cp ... zincir parçası ayrı taranır, DURDURULDU" || no "K26 zincirde cp geçti"
+kanca "$D" oda-a Bash "{\"command\":\"bash $D/scripts/ortak-yaz.sh x\"}"; [ $? -eq 0 ] && ok "K25 çekirdek betiği MUTLAK yolla da tanınır" || no "K25 mutlak yol tanınmadı"
 printf '%s' 'bozuk' | bash "$ODA" kanca "$D/oda-a" "$D/.claude/oda-ortak.json" >/dev/null 2>&1; [ $? -eq 2 ] && ok "K18 bozuk kanca girdisi → GÜVENLİ TARAFTA durdurur (fail-closed)" || no "K18 bozuk girdi geçti"
 mv "$D/.claude/oda-ortak.json" "$D/.claude/oda-ortak.json.yedek"; kanca "$D" oda-a Write "{\"file_path\":\"$D/oda-a/kod.py\"}"; R=$?; mv "$D/.claude/oda-ortak.json.yedek" "$D/.claude/oda-ortak.json"; [ $R -eq 2 ] && ok "K19 ortak ayar kayıpsa durdurur (fail-closed), sessiz serbest bırakmaz" || no "K19 ortak ayarsız serbest bıraktı"
 python3 -I -c "
@@ -100,6 +119,18 @@ mut "ortak ayar yoksa serbest (fail-open)" "(oda.sh dogrula)', file=sys.stderr)
         return 0"
 mut "çekirdek komutu tüm zinciri izinli sayar" "        for parca in ZINCIR.split(komut):" "        for parca in [komut]:"
 mut "ek_yazma her odaya açık" "    ek = oda_meta.get('ek_yazma', [])" "    ek = ['**']"
+mut "çekirdek eşleşmesi yalnız metin öneki" "                if cozumle(t, cwd) != os.path.realpath(kdosya):" "                if t != k:"
+mut "çekirdek parçada yönlendirme taranmaz" "        hed.append(tirnak_sil(m.group(1)))
+    if yalniz_yonlendirme:
+        return hed" "        pass
+    if yalniz_yonlendirme:
+        return hed"
+mut "kanca komutu alıntısız" "'bash ' + ' '.join(shlex.quote(x) for x in (kanca_betik, 'kanca', abs_oda, ortak_yol))" "f'bash {kanca_betik} kanca {abs_oda} {ortak_yol}'"
+mut "uret ayar aynıysa iskeleti kurmaz" "        for alt in ('skills', 'agents'):
+            os.makedirs(os.path.join(depo, oda, '.claude', alt), exist_ok=True)   # ayar aynı olsa da iskelet eksiksiz kalır
+        os.makedirs(os.path.join(depo, oda, 'hafiza'), exist_ok=True)
+        if eski == yeni:" "        if eski == yeni:"
+mut "doğrula MEMORY.md kontrolü yok" "        if not os.path.isfile(os.path.join(k, 'hafiza', 'MEMORY.md')):" "        if False:"
 mut "oda-özel parça kancayı ezebilir" "        if yasak:" "        if False:"
 mut "hafıza ayrılığı bozuk (hepsi aynı yol)" "ayar['autoMemoryDirectory'] = os.path.join(abs_oda, 'hafiza')" "ayar['autoMemoryDirectory'] = os.path.join(os.path.dirname(abs_oda), 'hafiza')"
 mut "uret yazmıyor (sessiz)" "        yaz_json(hedef, yeni)
