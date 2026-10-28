@@ -87,6 +87,17 @@ kapi "D4a tur 2 koştu" 0 den d4 "$J5"
 iceren "D4b sebep: eski kayıt" "eski kayıt" "$KOK/son.out"
 iceren "D4c tam fark gitti" "degismeyen-dosya-icerigi" "$KOK/istem.md"
 
+echo "════ D4x · eski kayıt (bas yok) ama kaydı bir commit ekledi → baş atadan türetilir, yalnız yeni fark gider (gorev …DCX24C) ════"
+yap d4x; kanitla d4x; AX="$(git -C "$KOK/w" rev-parse HEAD)"; den d4x "$J4" >/dev/null 2>&1
+python3 -c "import json;p='$(kayit d4x 1)';d=json.load(open(p));d.pop('bas',None);json.dump(d,open(p,'w'))"
+git -C "$KOK/w" add "_agents/fabrika/kanit/d4x/DENETIM-1.json"; git -C "$KOK/w" commit -q -m "docs: d4x göz tur 1 kaydı"
+printf 'ilk-satir\nduzeltme-d4x\n' > "$KOK/w/kod-d4x.txt"; git -C "$KOK/w" commit -q -am d4xb; BX="$(git -C "$KOK/w" rev-parse HEAD)"; : > "$KOK/istem.md"
+kapi "D4xa tur 2 koştu" 0 den d4x "$J5"
+iceren "D4xb ekranda türetme söylendi" "incelenen baş ${AX:0:8} olarak türetildi" "$KOK/son.out"
+iceren "D4xc yalnız yeni fark gitti" "+duzeltme-d4x" "$KOK/istem.md"
+icermeyen "D4xd 🔴 değişmeyen dosya (tam fark) GİTMEDİ" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+dogru "D4xe kayıt: duzeltme_farki.onceki_bas=türetilen baş" "import json;d=json.load(open('$(kayit d4x 2)'));f=d['duzeltme_farki'];assert f and f['onceki_bas']=='$AX' and f['dosya']>=1"
+
 echo "════ D5 · --diff kipi: baş ölçülemez → bas boş ════"
 printf 'diff --git a/x b/x\n+satir\n' > "$KOK/d.patch"; kanitla d5
 kapi "D5a --diff ile koştu" 0 den d5 "$J5" --diff "$KOK/d.patch"

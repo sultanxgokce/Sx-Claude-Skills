@@ -1,0 +1,42 @@
+{
+  "is": "denetci-duzeltme-eski-kayit",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T21:06:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duz-fark-eski-kayit",
+      "asama": "once",
+      "dosya": "olcum-duz-fark-eski-kayit-once.txt",
+      "sha256": "d111a867f4bccb92c7d27f4db90f00938811022bc16b1ec58cef98fab2518a18",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T21:04:03+03:00",
+      "sure_sn": 16.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "aa033936108c42e4b8afc61e9dc3faea"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duz-fark-eski-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-duz-fark-eski-kayit-sonra.txt",
+      "sha256": "89f6a50ace3d371ace96149af66b65aeabad57915b59948591ca7a51659f0514",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T21:06:04+03:00",
+      "sure_sn": 121.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "996219ef88f24e438b6d752caa786306"
+    }
+  ],
+  "imza": "26603574012403658a964b420bc923bad37baf46d2c739e4efe1f5a0d51d390d"
+}

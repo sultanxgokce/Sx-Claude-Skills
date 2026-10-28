@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/sonra.sh
+# rc=0 sure=121.6s zaman=2026-10-28T21:06:04+03:00
+--- stdout ---
+════ D4x · eski kayıt (bas yok) ama kaydı bir commit ekledi → baş atadan türetilir, yalnız yeni fark gider (gorev …DCX24C) ════
+  ✓ D4xa tur 2 koştu
+  ✓ D4xb ekranda türetme söylendi
+  ✓ D4xc yalnız yeni fark gitti
+  ✓ D4xd 🔴 değişmeyen dosya (tam fark) GİTMEDİ
+  ✓ D4xe kayıt: duzeltme_farki.onceki_bas=türetilen baş
+── SONUÇ (düzeltme-farkı): 53 geçti · 0 kaldı ──
+--- stderr ---
