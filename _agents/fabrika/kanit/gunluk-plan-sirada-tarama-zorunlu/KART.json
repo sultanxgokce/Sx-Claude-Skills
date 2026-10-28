@@ -1,6 +1,6 @@
 {
   "is": "gunluk-plan-sirada-tarama-zorunlu",
-  "cumle": "gunluk-plan becerisinde sıra eşiğin altındaysa ADIM 0-d tarama zorunlu adım olsun: sirada-bak SOR kararında Sultan'ı beklemeden bir ölçülmüş tarama işi eklenir (tarama-ekle kuru varsayılan, günde 3 tavanı aynen)",
+  "cumle": "gunluk-plan sirada-bak SOR kararında ADIM 0-d taramayı zorunlu adım olarak basar ve SKILL'de yazar (tarama-ekle kuru varsayılan, günde 3 tavanı aynen); ölçülmüş iş bulunamazsa uydurulmaz",
   "istedi": "SERDAR",
   "aldi": "HEZARFEN",
   "zaman": "2026-10-28T09:13:19+03:00",
@@ -15,11 +15,43 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-28T09:25:05+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gunluk-plan-sirada-tarama-zorunlu-kalan",
+      "tur_sifir": 1
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
   "sayi_uyarilari": [
     "3 tavanı"
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "28-eki-hezarfen",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gunluk-plan-sirada-tarama-zorunlu-kalan) — sıra boşken kutuların defterine gerçekten açılış yazılıp yazılmadığının ölçülmesi: yarın sabah filo özetinde en az 3 kutuda bugün kayıt > 0 (MUHAKKİK ölçer; icra reislerin, betik komutu basar)",
+      "zaman": "2026-10-28T09:25:05+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gunluk-plan becerisinde sıra eşiğin altındaysa ADIM 0-d tarama zorunlu adım olsun: sirada-bak SOR kararında Sultan'ı beklemeden bir ölçülmüş tarama işi eklenir (tarama-ekle kuru varsayılan, günde 3 tavanı aynen)",
+      "zaman": "2026-10-28T09:25:05+03:00",
+      "kalan_kart": "gunluk-plan-sirada-tarama-zorunlu-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-28T09:25:05+03:00",
+      "kalan_kart": "gunluk-plan-sirada-tarama-zorunlu-kalan",
+      "kalan": "sıra boşken kutuların defterine gerçekten açılış yazılıp yazılmadığının ölçülmesi: yarın sabah filo özetinde en az 3 kutuda bugün kayıt > 0 (MUHAKKİK ölçer; icra reislerin, betik komutu basar)",
+      "tur_sifir": 1,
+      "oturum": "28-eki-hezarfen"
+    }
   ]
 }
