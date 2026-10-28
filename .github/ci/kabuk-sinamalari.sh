@@ -11,7 +11,10 @@
 # bayatlarsa KIRMIZI, sınama başına süre tavanı (`# kabuk-testleri: sure=N`, varsayılan 300, tavan 900), arçelik sınavı ayrı işte.
 set -uo pipefail
 KOVA="${1:-}"
-case "$KOVA" in diploma|denetci|dumen|kalan) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|denetci|dumen|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
+case "$KOVA" in diploma|denetci|dumen|kalan|diploma-1|diploma-2) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|diploma-1|diploma-2|denetci|dumen|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
+# diploma-k: diploma sınavı tek başına tavana dayandı (CI 28 Eki: 879–884 sn / 900) → iki runner'a bölünür; sınav kendi senaryolarını
+#   DIPLOMA_PARCA=k/2 ile paylaştırır (gerçek koşu 1. parçada). Düz `diploma` = bölünmemiş (yerel tek koşu).
+KURAL="$KOVA"; case "$KOVA" in diploma-*) KURAL=diploma; export DIPLOMA_PARCA="${KOVA#diploma-}/2" ;; esac
 cd "$(git rev-parse --show-toplevel 2>/dev/null || dirname "$0"/../..)" || exit 2
 
 # KARANTİNA — kapı ilk kurulurken KIRMIZI bulunan, ilgisiz sınamalar. Sessiz atlama YASAK: her satır adıyla loglanır.
@@ -53,7 +56,7 @@ mapfile -t TUM < <(find . -name '*.test.sh' -not -path './.git/*' -not -path './
 if [ "${#TUM[@]}" -eq 0 ]; then echo "::error::hiç *.test.sh bulunamadı — keşif bozuk"; exit 1; fi
 dusen=0; atlanan=0; KOS=(); BENIM=0
 for t in "${TUM[@]}"; do
-  [ "$(kova "$t")" = "$KOVA" ] || continue
+  [ "$(kova "$t")" = "$KURAL" ] || continue
   BENIM=$((BENIM+1))
   case "$KARANTINA" in *" $t "*) echo "::warning::KARANTİNA — atlandı: $t"; atlanan=$((atlanan+1)); continue ;; esac
   KOS+=("$t")

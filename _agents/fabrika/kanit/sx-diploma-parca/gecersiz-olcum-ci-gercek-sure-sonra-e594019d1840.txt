@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-ci-gercek-sure-sonra.txt
+hedef_sha256: b6c3422ab7bd2a5ca0b3dd1d5b9854d7b697f76a8f3e3fac94addf86b3e0bc8c
+hedef_zaman: 2026-10-28T09:41:08+03:00
+hedef_renk: kirmizi
+neden: ölçüm betiğinin ayrıştırma hatası: cut -d'·' çok baytlı ayraçla alan okuyamadı, sonuç alanı boş → kırmızı; süreler (291/361 sn, success) aynı kayıtta doğru — betik düzeltilip yeniden ölçüldü
+kim: BERİD
+karsi: olcum-ci-gercek-sure-2-sonra.txt
+zaman: 2026-10-28T09:41:20+03:00

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sx-diploma-parca",
+  "pr": "525",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:25:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-mutant-senaryo-duser-sonra.txt (kirmizi → gecersiz) — mutant betiği hiçbir satırı düşürmedi: awk köşeli parantez kümesi çok baytlı ✓/✗'yi eşleştiremedi (parça2 hâlâ 15) — mutant uygulanmadı, sınavın değil betiğin hatası; Python ile yeniden ölçüldü · BERİD · karşı kanıt: olcum-mutant-senaryo-duser-2-sonra.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca",
+  "dal": "sx-diploma-parca",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29034,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 21192
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d5cde91ca80c6857a8151f9b9abd5c2f380784d9",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, diploma sınavı CI matrisinde iki ayrı kovaya bölünmüş; gerçek koşu yalnız ilk parçada, mutantlar ise iki parçaya dağıtılmış. İki parça da 900 saniyelik tavanın oldukça altında yeşil bitiyor ve birleşim ile geçerli mutasyon ölçümü hiçbir senaryonun sessizce atlanmadığını gösterdiği için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve iddiaları doğrudan ölçüyor: bölünmemiş koşu 813,9 sn; parçalar 488,1 ve 504,1 sn. Parçalar 16/31 + 15/31 senaryoyu çalıştırıyor; birleşim kaydı kesişimi 0, eksiği yok gösteriyor. CI kova sınavı iki matris girdisini, DIPLOMA_PARCA aktarımını ve bölünmemiş kovasının kaldırıldığını doğruluyor. İlk mutasyon kaydı açıkça geçersiz ilan edilmiş ve kanıt sayılmamış; Python ile yenilenen mutasyon ölçümü bir senaryo düşürüldüğünde birleşim denetiminin rc=1 ile yakaladığını gösteriyor. Sarı kayıt yok."
+  }
+}

@@ -1,0 +1,13 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-ci.sh 40643777457
+# rc=0 sure=1.3s zaman=2026-10-28T09:41:19+03:00
+--- stdout ---
+koşu 40643777457 · baş f011059f · success
+lint · success · 11
+kabuk sınamaları (denetci) · success · 743
+kabuk sınamaları (dumen) · success · 140
+kabuk sınamaları (diploma-1) · success · 291
+kabuk sınamaları (diploma-2) · success · 361
+kabuk sınamaları (kalan) · success · 827
+arcelik-fatura-kesim sınavı · success · 6
+diploma parçası: 2 · eşik 600 sn · hepsi altında
+--- stderr ---

@@ -1,0 +1,6 @@
+$ bash -c DIPLOMA_PARCA=3/2 bash tescil/scripts/diploma.test.sh; r=$?; echo "rc=$r (2 beklenen)"; [ $r -eq 2 ]
+# rc=0 sure=0.1s zaman=2026-10-28T09:22:12+03:00
+--- stdout ---
+ÖLÇÜLEMEDİ: DIPLOMA_PARCA '3/2' biçimsiz (k/n, 1 ≤ k ≤ n)
+rc=2 (2 beklenen)
+--- stderr ---

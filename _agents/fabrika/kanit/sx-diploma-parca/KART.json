@@ -1,0 +1,32 @@
+{
+  "is": "sx-diploma-parca",
+  "cumle": "diploma sınavı CI'da iki ayrı koşucuya bölünür (mutantlar parçalara dağılır, gerçek koşu birinde); her parça süre tavanının rahatça altında biter, hiçbir senaryo atlanmaz",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-28T08:37:50+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5ZMVG30RKR4B73NYF96F7RF",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-28T08:37:50+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

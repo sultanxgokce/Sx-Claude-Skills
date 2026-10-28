@@ -66,6 +66,16 @@ L1="$(ignore_listesi "$LY")"
 ! grep -qE '\.md|SKILL' <<<"$L1"; g $? "K8c SKILL.md ve .md dosyaları CI'dan KAÇMAZ (sürüm frontmatter'ı lint'in konusu)"
 sed "s#      - '_agents/\*\*'#      - '_agents/**'\n      - '**/*.md'#" "$LY" > "$T/lint-mutant.yml"
 [ "$(ignore_listesi "$T/lint-mutant.yml" | wc -l)" -eq 2 ] && [ "$(ignore_listesi "$T/lint-mutant.yml" | tail -n 1)" = "**/*.md" ]; g $? "K8d ayıklayıcı mutantı görür: listeye '**/*.md' eklenince 2 madde okunur (K8b bu mutantta KIRMIZI olurdu)"
+echo "── K9 · diploma iki parçaya bölünür: diploma-1 / diploma-2 aynı sınamayı DIPLOMA_PARCA=1/2 · 2/2 ile koşar"
+yeni_depo d9; printf '#!/usr/bin/env bash\necho "PARCA=${DIPLOMA_PARCA:-yok}"; exit 0\n' > "$T/d9/tescil/scripts/diploma.test.sh"
+P1="$(kos "$T/d9" diploma-1)"; R1=$?; P2="$(kos "$T/d9" diploma-2)"; R2=$?; P0="$(kos "$T/d9" diploma)"; R0=$?
+[ $R1 -eq 0 ] && [ $R2 -eq 0 ] && grep -q "bu kovada 1 " <<<"$P1" && grep -q "bu kovada 1 " <<<"$P2"; g $? "K9a diploma-1 ve diploma-2 yeşil, ikisi de diploma sınamasını (tek sınama) bulur"
+grep -q "PARCA=1/2" <<<"$P1" && grep -q "PARCA=2/2" <<<"$P2"; g $? "K9b parçalar sınamaya DIPLOMA_PARCA=1/2 ve 2/2 geçirir"
+[ $R0 -eq 0 ] && grep -q "PARCA=yok" <<<"$P0"; g $? "K9c düz 'diploma' kovası bölünmez (DIPLOMA_PARCA verilmez → sınama hepsini koşar)"
+! grep -q "a/bir.test.sh" <<<"$P1$P2"; g $? "K9d parçalar diploma dışı sınama koşmaz"
+M9="$(sed -n 's/^ *kova: \[\(.*\)\].*/\1/p' "$HERE/../workflows/lint.yml" | tr -d ' ')"
+grep -q ',diploma-1,' <<<",$M9," && grep -q ',diploma-2,' <<<",$M9," && ! grep -q ',diploma,' <<<",$M9,"; g $? "K9e lint.yml matrisi diploma-1 + diploma-2 koşar, bölünmemiş diploma YOK (çift koşu olmasın): [$M9]"
+
 echo "── MUTASYON · kova kuralı her şeyi 'kalan'a atarsa diploma kovası KIRMIZI olur"
 yeni_depo dm; M="$T/kabuk-mutant.sh"
 python3 - "$K" "$M" <<'PYM'
