@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "bulgu-yaz-ozet-bayragi",
+  "pr": "520",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T06:41:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-bulgu-yaz-ozet-bayragi",
+  "dal": "bulgu-yaz-ozet-bayragi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37666,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 17957
+  },
+  "dalgic": "uyumlu",
+  "bas": "ce79a5a5a4c8bd2f817076fc3b060728ba953ca8",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`--gorev` yolu artık `--ozet` alıyor, özeti `ozet_sultan` olarak gönderiyor ve eksik ya da yalnız boşluk olan özeti deftere gitmeden anlaşılır rc 2 ile reddediyor. Gerçek ölçümde 51 sınavın tamamı geçti; iki mutasyon da talebin iki kritik davranışını sınavın gerçekten yakaladığını gösterdiği için üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm `bulgu-sonra` etiketiyle rc=0, yeşil ve 51/51 geçiş gösteriyor. O1–O4 kayıtları özetin taşınmasını, özetsiz ve boşluk özetli `--gorev` çağrılarının deftere ulaşmadan rc 2 vermesini, havuz yolunun değişmemesini ve değersiz bayrağın güvenli reddini ölçüyor. M1 ve M2 mutasyon kayıtları sarı değil; bilerek bozulan kodda ilgili sınavların başarısız olduğunu göstererek sınav duyarlılığını kanıtlıyor. Ayrı bir önce ölçümü yok, ancak gerçek-sonra ölçümü ile iki hedefli mutasyon birlikte bu değişiklik için yeterli teknik kanıt sağlıyor."
+  }
+}
