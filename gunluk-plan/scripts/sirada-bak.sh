@@ -51,9 +51,9 @@ if [ "$N" -ge "$ESIK" ]; then
   elif [ "$BASLA" -eq 1 ]; then
     [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ustlen için ajan kimliği yok (--kim ver ya da --bak)" >&2; exit 3; }
     if bash "$GOREV" ustlen "$ILK" --kim "$KIM" --tahmin "$TAHMIN" >/dev/null 2>&1; then echo "BASLADI=$ILK (çalışılıyor yapıldı · tahmin ${TAHMIN} dk)"; else echo "BASLAMADI=$ILK (ustlen reddedildi — defter durumunu kendin oku)" >&2; exit 1; fi
-    echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — bugüne alma tıkı Sultan'ın (ekranda)"
+    echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez"
   else
-    echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK. Başlayıp bugüne alayım mı?' — henüz BAŞLANMADI (--bak); bugüne alma tıkı Sultan'ın (ekranda)"
+    echo "ONERI=Sırada $N iş var; en üstteki $ILK. --bak yalnız baktı, BAŞLANMADI: üstlenmek senin (ajanın) işi, izin beklemez → gorev.sh ustlen $ILK ile başla. Sultan'ın tıkı yalnız 'bugüne al' (öncelik işareti) içindir; başlamanı geciktirmez"
   fi
 else
   echo "KARAR=SOR"
