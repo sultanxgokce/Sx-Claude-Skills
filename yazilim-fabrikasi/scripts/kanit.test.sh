@@ -570,9 +570,65 @@ _kd="$T/m25-kontrol"; mkdir -p "$_kd/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" 
 _m25 a 'if not any(k.get("tur") == "olcum" and k.get("etiket") == mut and not k.get("mutasyon") for k in m0["kayitlar"]):' 'if False:' "gerçek ölçüm bağı aranmıyor"
 _m25 j ' and not k.get("mutasyon") for k in m0["kayitlar"]' ' for k in m0["kayitlar"]' "mutasyon kaydı gerçek ölçüm sayılıyor"
 _m25 d '"=== MUTASYON KANITI: kod BİLEREK bozuldu' '"=== kod BİLEREK bozuldu' "dosya başı MUTASYON demiyor"
-_m25 e '("kirmizi" if p.returncode == 0 else "yesil")' '("yesil" if p.returncode == 0 else "kirmizi")' "renk ters çevrilmiyor"
+_m25 e '            renk = "yesil"' '            renk = "kirmizi"' "renk ters çevrilmiyor"
 _m25 h '        elif k.get("mutasyon"):' '        elif False:' "özet mutasyonu söylemiyor"
 _m25 b '        if mut == a.etiket:' '        if False:' "kendi etiketine bağlanabiliyor"
+
+echo "════ T26 · ÇÖKEN MUTANT ≠ YAKALANAN MUTANT (görev …2AX9GX, 29 Eki): rc≠0 yetmez, düşen kapı satırı (✗/FAIL/N kaldı/KALAN: N) şart ════"
+# NİÇİN: gorev-klasor-merkez'de mutant geçici kopyada ../docker-compose.defter.yml'i bulamayıp yığın iziyle çöktü (rc 1); kayıt
+#        "sınav bozuk kodu YAKALADI" diye YEŞİL yazıldı — sınav kodu hiç sınamamıştı. Çöküş ve kurulum hatası (rc 9) SARI "ölçülemedi"dir.
+_s26() {   # _s26 <kanit.py> <depo> → geçen kapı anahtarları
+  local py="$1" d="$2" z="$2/_agents/fabrika/kanit/is-m26" o="" r
+  mkdir -p "$d"; ( cd "$d" && git init -q -b main ) >/dev/null 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 gercek --asama tek -- bash -c 'echo "  ✓ K1"; exit 0' >/dev/null 2>&1
+  _r26() { python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']==sys.argv[2]][-1];print(k['renk'],k.get('dusen_kapi'))" "$z/KANIT.json" "$1" 2>/dev/null; }
+  # a · çöken mutant: yığın izi, rc 1, düşen kapı satırı yok → SARI, araç rc 3, sebep yazılı
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-cokus --asama tek --mutasyon gercek -- bash -c 'echo "Traceback (most recent call last):"; echo "FileNotFoundError: [Errno 2] ../docker-compose.defter.yml" >&2; exit 1' > "$d/oa" 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r26 m-cokus)" = "sari False" ] && grep -q "mutant ÇÖKTÜ" "$d/oa" && grep -q "düşen kapı satırı yok" "$d/oa" && ! grep -q "YAKALADI" "$d/oa" && o="$o a"
+  # b · rc 9 kurulum hatası: ✗ satırı olsa bile mutant hiç çalışmadı → SARI, araç rc 3
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-kurulum --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K1"; echo "mutasyon deseni tutmadı"; exit 9' > "$d/ob" 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r26 m-kurulum)" = "sari True" ] && grep -q "KURULAMADI (rc 9" "$d/ob" && ! grep -q "YAKALADI" "$d/ob" && o="$o b"
+  # c · gerçek düşen kapı satırı: dört biçim de yakalandı sayılır → YEŞİL, araç rc 0
+  local ok=1 e
+  for e in 'echo "  ✗ K1 kilit tutuyor"' 'echo "── SONUÇ: 5 geçti · 2 kaldı ──"' 'echo "KALAN: 2"' 'echo "FAIL  sinav/a.test.mjs"'; do
+    KANIT_DEPO="$d" python3 "$py" olcum is-m26 "m-dusen-$ok" --asama tek --mutasyon gercek -- bash -c "$e; exit 1" > "$d/oc" 2>&1; r=$?
+    { [ $r -eq 0 ] && [ "$(_r26 "m-dusen-$ok")" = "yesil True" ] && grep -q "YAKALADI" "$d/oc"; } || ok=0
+    [ "$ok" = 0 ] && break; ok=$((ok+1))
+  done
+  [ "$ok" = 5 ] && o="$o c"
+  # d/e · eski davranış korunur: rc 0 kırmızı (mutant kaçtı) · "0 kaldı" düşen kapı DEĞİL → sarı
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-kacan --asama tek --mutasyon gercek -- bash -c 'echo "── SONUÇ: 7 geçti · 0 kaldı ──"; exit 0' >/dev/null 2>&1; r=$?
+  [ $r -eq 0 ] && [ "$(_r26 m-kacan)" = "kirmizi False" ] && o="$o d"
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-sifir --asama tek --mutasyon gercek -- bash -c 'echo "── SONUÇ: 7 geçti · 0 kaldı ──"; exit 1' >/dev/null 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r26 m-sifir)" = "sari False" ] && o="$o e"
+  # f · mutasyonsuz ölçüm bu kapıdan GEÇMEZ: yığın izli rc 1 eskisi gibi kırmızı, dusen_kapi alanı yok
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 duz --asama tek -- bash -c 'echo "Traceback (most recent call last):"; exit 1' >/dev/null 2>&1; r=$?
+  [ $r -eq 0 ] && [ "$(_r26 duz)" = "kirmizi None" ] && o="$o f"
+  KANIT_DEPO="$d" python3 "$py" dogrula is-m26 >/dev/null 2>&1 && o="$o g"
+  echo "$o"
+}
+s26="$(_s26 "$HERE/kanit.py" "$T/d26")"
+_k25 a "$s26"; g $? "T26a çöken mutant (yığın izi, rc 1, düşen kapı satırı yok) → SARI 'ölçülemedi', araç rc 3, 'mutant ÇÖKTÜ' + sebep yazılı, YAKALADI denmez"
+_k25 b "$s26"; g $? "T26b rc 9 kurulum hatası → SARI, araç rc 3, 'KURULAMADI (rc 9' (✗ satırı olsa bile mutant hiç çalışmadı)"
+_k25 c "$s26"; g $? "T26c gerçek düşen kapı satırı (✗ · 'N kaldı' · 'KALAN: N' · FAIL) + rc≠0 → YEŞİL yakalandı, kayıtta dusen_kapi=true"
+_k25 d "$s26"; g $? "T26d eski davranış: rc 0 → kırmızı (mutant kaçtı)"
+_k25 e "$s26"; g $? "T26e '0 kaldı' düşen kapı değildir: rc 1 ama SARI"
+_k25 f "$s26"; g $? "T26f mutasyonsuz ölçüm bu kapıdan geçmez: yığın izli rc 1 eskisi gibi kırmızı, dusen_kapi alanı yok"
+_k25 g "$s26"; g $? "T26g manifest imzası sağlam (dogrula)"
+echo "── T26 · MUTASYON (tam kopyada, kontrol şartlı) ──"
+_m26() {   # _m26 <anahtar> <eski> <yeni> <açıklama>
+  local d="$T/m26-$1"; mkdir -p "$d/pkg"; cp "$HERE/kanit.sh" "$d/pkg/"
+  python3 - "$HERE/kanit.py" "$d/pkg/kanit.py" "$2" "$3" <<'PY'
+import sys; src,dst,eski,yeni=sys.argv[1:]; s=open(src,encoding='utf-8').read()
+assert s.count(eski)==1, "mutasyon deseni tek değil: "+eski; s=s.replace(eski,yeni); open(dst,'w',encoding='utf-8').write(s)
+PY
+  [ $? -eq 0 ] || { g 1 "T26 mutant $1: desen tutmadı ($4)"; return; }
+  local s; s="$(_s26 "$d/pkg/kanit.py" "$d/depo")"; ! _k25 "$1" "$s"; g $? "T26 mutant ($4) → '$1' kapısı düşüyor"
+}
+_kd26="$T/m26-kontrol"; mkdir -p "$_kd26/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" "$_kd26/pkg/"; [ "$(_s26 "$_kd26/pkg/kanit.py" "$_kd26/depo")" = "$s26" ] && [ -n "$s26" ]; g $? "T26 kontrol kopyası gerçek araçla aynı kapıları geçiyor"
+_m26 a '        dusen_kapi = bool(DUSEN_KAPI_RE.search(p.stdout + "\n" + p.stderr))' '        dusen_kapi = True' "düşen kapı satırı aranmıyor (eski davranış: rc≠0 = yakalandı)"
+_m26 b '        elif p.returncode in (3, 9) or not dusen_kapi:' '        elif p.returncode == 3 or not dusen_kapi:' "rc 9 kurulum hatası sarı sayılmıyor"
+_m26 e 'KALAN:\s*[1-9]|.*\b[1-9]\d*\s+kaldı\b' 'KALAN:\s*\d|.*\b\d+\s+kaldı\b' "'0 kaldı' düşen kapı sayılıyor"
 
 echo "════ T-UB · ÜÇ BOY (görev 4PZV4): tek komut → 1440/1280/390 her boy AYRI imzalı kayıt; bir boy düşerse komut yeşil DÖNMEZ ════"
 # 🔴 HERMETİK: varsayılan gelen klasörü (/config/evraklar/Sultan/0-Gelen) bu kutuda GERÇEKTEN var ve Sultan'ın cihazına senkronlanır —

@@ -1,0 +1,83 @@
+{
+  "is": "kanit-mutant-cokus",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T01:24:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "cokus-rengi",
+      "asama": "once",
+      "dosya": "olcum-cokus-rengi-once.txt",
+      "sha256": "d94f32521b0d7511e4c8f084797e5e935737fcf32bb7e2a4e7fa21c68402019d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kanit-eski.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T01:18:28+03:00",
+      "sure_sn": 161.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b9f773bed15b462b9c0c80e819a3b9d9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cokus-rengi",
+      "asama": "sonra",
+      "dosya": "olcum-cokus-rengi-sonra.txt",
+      "sha256": "03c926927a60484c2e82931637f461ef72a2cd18be4fff56abb1d5038626e37f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh",
+        "yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:18:29+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bad3bb88864d442fa2371653ae5bcd86"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-dusen-kapi-aranmaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-dusen-kapi-aranmaz-sonra.txt",
+      "sha256": "b2648cca9a4e53c737f80a48a08925ed1d52f8fab5b51b0c4c3c8f0d4112c8e9",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh",
+        "yazilim-fabrikasi/scripts/kanit-mutant-gecici.py"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:19:56+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "cokus-rengi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0f6ee89a335a4e688438942e876fa35a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-test",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-test-sonra.txt",
+      "sha256": "17f60c5d2474b16dcee572095c47731b8c8893cd6dd67ed1b933e48c6ec20118",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:24:25+03:00",
+      "sure_sn": 268.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cf800c461db14df1be737e533abe209a"
+    }
+  ],
+  "imza": "e9e014d957ddb14906f195065cafe425eeb37b6324a9d451e357318b3b3377ce"
+}
