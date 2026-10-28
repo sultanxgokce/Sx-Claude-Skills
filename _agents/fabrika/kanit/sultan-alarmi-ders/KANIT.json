@@ -1,0 +1,25 @@
+{
+  "is": "sultan-alarmi-ders",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T13:08:45+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "alarm-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-alarm-sinavi-sonra.txt",
+      "sha256": "d0c12bb257e772fb1e05f4f9c68a4e31b0d8d6d24af453863c91c204c16dcb07",
+      "komut": [
+        "bash",
+        "sultan-alarmi/scripts/alarm.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:08:45+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3559581dcc524f39ba60edc00ef33f4e"
+    }
+  ],
+  "imza": "7d7aababbe42e05dbd62c028a17ced8df54fd5e2b32e1829ecbf5ab58c12b18e"
+}
