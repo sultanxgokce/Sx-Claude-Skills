@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kabuk-sekmesi-canli",
+  "pr": "544",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T22:05:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-canli-11-kutu-kabuk-oturumu-sonra.txt (yesil → gecersiz) — göz tur 1: kutu listesi 11'di, terminal-onar'ın 14 kutuluk kanonik listesiyle yeniden ölçülür · BÂNİ;canli-canli-kabuk-11-kutu.txt (yesil → gecersiz) — göz tur 1: 11 kutuluk ölçümün canlı kaydı; 14 kutuyla yeniden · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi-canli",
+  "dal": "kabuk-sekmesi-canli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17970,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 16487
+  },
+  "dalgic": "olculemedi",
+  "bas": "d73e4558ced7eff31428095bf655f8b75f295f51",
+  "duzeltme_farki": {
+    "onceki_bas": "6ab226aad380f30be013ea8b960b00e6a09a47cf",
+    "dosya": 9,
+    "bayt": 16487,
+    "tam_bayt": 21906
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kanonik 14 kutunun tamamında <kutu>-kabuk oturumu ve kabuk.son=ok canlı ölçülmüş; önceki 11-kutu bulgusu kapanmış. Ancak görev …GT5BTK’nin “gorev.sh bitti --olcum” ile gerçekten onaya çekildiği gösterilmediği için önce bu uygulama eksiği çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmamış: görev …GT5BTK’nin istenen komutla onaya çekildiğine dair sonuç kanıtı yok.",
+        "kanit": "İş kartı hâlâ durum=acik; gorev_yazimlari yalnız “ac” ve “goz” olaylarını, sonuç olarak da “yazıldı” değerini gösteriyor. Manifestteki gorev-gt5btk-onay-bekliyor kaydı sadece bir dosyanın rc=0 ile kaydedildiğini bildiriyor; dosya gövdesi sunulmadığından “gorev.sh bitti --olcum” çağrısını veya görevin onay durumuna geçtiğini kanıtlamıyor.",
+        "konum": "iş kartı:durum/gecmis/gorev_yazimlari; manifest:gorev-gt5btk-onay-bekliyor",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Geçersiz ilan edilen iki 11-kutu kaydı doğru biçimde kanıt dışı bırakılmış; yeni yeşil ölçüm 14 ayrı kutu satırında oturum ve kabuk.son=ok değerlerini, ardından “TOPLAM kutu=14 eksik=0” sonucunu göstererek önceki B1’i kapatıyor. Buna karşılık yeşil dosya kaydı görevin onaya çekildiğini sınamıyor ve gövdesi de verilmemiş; önceki B2 kanıtsız kalıyor."
+  }
+}
