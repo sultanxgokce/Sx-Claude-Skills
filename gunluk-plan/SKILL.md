@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.12.1
+version: 1.13.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -136,6 +136,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh          # Sırada
 bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --bak    # yalnız bak, başlama
 ```
 - **KARAR=BAS** (Sırada ≥ 3, eşik `--esik N` ile kutuya göre ayarlanır): sıradaki işler listelenir (acil önce); varsayılan koşu EN ÜSTTEKİ işi `gorev.sh ustlen` ile üstlenir (`--bak` yalnız bakar ve "başladım" demez). Sultan'a tek cümle: *"Sırada N iş var, en üstteki ile başladım; bugüne almak ister misin?"*
+- 🔴 **KARAR=SOR ise ADIM 0-d ZORUNLU (1.13.0, görev 0HC75A, SERDAR 28 Eki):** betik `ZORUNLU=ADIM 0-d tarama …` satırını basar. Sultan'ın cevabı BEKLENMEZ: kutu o turda kod tabanından/webden/endüstriden en az BİR ölçülmüş iş bulur ve `tarama-ekle.sh … --uygula` ile deftere yazar (kaynak + kanıt kapıları ve günde en çok 3 tavanı AYNEN; `tarama-ekle.sh`'ın kuru varsayılanı değişmedi, `--uygula` bu adımın kendi açık bayrağıdır). Bulacak ölçülmüş iş yoksa bunu söyle (uydurma iş yazılmaz); tarama-ekle rc 2/3 verirse sebebi Sultan'a olduğu gibi bildir. Amaç: sıra boşken kutunun defterine açılış üretmek — filo özeti (`filo.sh gunluk-plan-ozet`) kutu başına bugünkü kayıt/[tarama] sayısını bu yüzden gösterir.
 - **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok (ya da eşikten az: gerçek sayı söylenir). Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Bu dalda betik hiçbir işi üstlenmez.
 - 🔴 **"Bugüne al" Sultan'ındır.** Defterde `bugun_plani` alanını geçit yalnız Sultan ekranına yazdırır (A06; ajan yazarsa 403). Betik onu YAZMAZ, yalnız ÖNERİR. Yani "bugüne alındı" işareti Sultan'ın tıkıyla gelir; ajanın yaptığı iş "çalışılıyor" ve öneridir.
 - **Başkasının işi üstlenilmez (1.11.1):** eşik kutu-düzeyinde sayılır ama başlatma adayı YALNIZ koltuğa atanmış ya da sahipsiz (`-`) iştir; en üstteki iş başkasınındaysa atlanır, hiçbiri uygun değilse `BASLAMADI=yok` basılır ve hiçbir iş üstlenilmez. Sınav S19-S21 bunu sahte listede kilitler.
