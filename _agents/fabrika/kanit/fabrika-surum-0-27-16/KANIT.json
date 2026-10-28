@@ -1,0 +1,26 @@
+{
+  "is": "fabrika-surum-0-27-16",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T02:05:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "surum-tutarli",
+      "asama": "tek",
+      "dosya": "olcum-surum-tutarli-tek.txt",
+      "sha256": "f5a87aebb653d12fb772057563c9f332e99aa91e4e21f0b14f85fba112d3c0da",
+      "komut": [
+        "bash",
+        "-c",
+        "a=$(grep -m1 \"^version:\" yazilim-fabrikasi/SKILL.md | awk \"{print \\$2}\"); b=$(python3 -c \"import json;print([x for x in json.load(open(\\\"catalog.json\\\"))[\\\"skills\\\"] if x[\\\"id\\\"]==\\\"yazilim-fabrikasi\\\"][0][\\\"version\\\"])\" 2>/dev/null || python3 -c \"import json,re;s=open(\\\"catalog.json\\\").read();print(re.search(r\\\"\\\\\\\"id\\\\\\\": \\\\\\\"yazilim-fabrikasi\\\\\\\"[^}]*?\\\\\\\"version\\\\\\\": \\\\\\\"([^\\\\\\\"]+)\\\\\\\"\\\",s,re.S).group(1))\"); n15=$(grep -c \"(0.27.15, 29 Eki\" yazilim-fabrikasi/SKILL.md); n16=$(grep -c \"(0.27.16, 29 Eki\" yazilim-fabrikasi/SKILL.md); echo \"SKILL.md=$a catalog=$b not_0.27.15=$n15 not_0.27.16=$n16 (main: not_0.27.15=2 → çakışma)\"; [ \"$a\" = 0.27.16 ] && [ \"$b\" = 0.27.16 ] && [ \"$n15\" = 1 ] && [ \"$n16\" = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T02:05:26+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "4c1b8849a1864956b0b6fa92b13353e4"
+    }
+  ],
+  "imza": "be6dec281e4d3ec105b33b79100b36787a9f713594ddd81e11a7c2bcfd8fa008"
+}
