@@ -1,0 +1,19 @@
+$ timeout 120 bash terminal-onar/scripts/kapi-eski-mi.test.sh
+# rc=0 sure=185.3s zaman=2026-10-28T16:21:41+03:00
+--- stdout ---
+── E4 süreç yok → ÖLÇÜLEMEDİ
+  ✓ E4 kapı süreci yok → rc 2 ve 'ÖLÇÜLEMEDİ'
+── E1 dosyalar süreçten eski
+  ✓ E1 kod dosyaları süreçten eski → rc 0 'kapı güncel'
+── E3 yalnız test dosyası yeni
+  ✓ E3 yalnız *.test.mjs süreçten yeni → rc 0 (kapı kodu sayılmaz)
+── E5 pano.js (sıcak tazelenen) süreçten yeni → kapı ESKİ sayılmaz
+  ✓ E5 yalnız pano.js (+ test dosyası) yeni → rc 0 (pano.js kod yaşına girmez)
+── E2 sunucu.mjs süreçten sonra değişti
+  ✓ E2 sunucu.mjs süreçten yeni → rc 1 · dosya adı ve onar.sh komutu basılır
+── MUTANT: karşılaştırma ters ('-gt' → '-lt') → E1/E2 kırmızıya dönmeli
+  ✓ MUTANT ters karşılaştırma E2 senaryosunda rc 1 VERMEZ (sınav kırmızıya dönerdi — mutant yakalandı)
+  ✓ MUTANT M2 pano.js dışlaması kalkınca E5 senaryosunda ölçer rc 0 VERMEZ (sınav kırmızıya dönerdi — mutant yakalandı)
+SONUÇ: 7 geçti · 0 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-kapi-yenile-eski-kod-eski-mi-sinav 181 sn bekledi (yuva 1, load1 17.31)

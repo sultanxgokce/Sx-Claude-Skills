@@ -1,0 +1,87 @@
+{
+  "is": "kapi-yenile-eski-kod",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T16:21:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "yenile-sinav",
+      "asama": "once",
+      "dosya": "olcum-yenile-sinav-once.txt",
+      "sha256": "6ea07f2070652fffa5da19ff170d0e73c7cb6a800cf2b1f82a0a02190efcd889",
+      "komut": [
+        "timeout",
+        "180",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ky-ana-OvzA/terminal-onar/scripts/kapi-yenile.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T16:18:28+03:00",
+      "sure_sn": 8.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "11422c8e94b84b7183cf1dabf5050d82"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yenile-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-yenile-sinav-sonra.txt",
+      "sha256": "d2233081bcd31c7d4620dc9f5b41f0915456cfda9be7b1d5f05f02d9d6f05c03",
+      "komut": [
+        "timeout",
+        "180",
+        "bash",
+        "terminal-onar/scripts/kapi-yenile.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T16:18:36+03:00",
+      "sure_sn": 7.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d7b25f837949450896f5272c74887dca"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-mi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-eski-mi-sinav-sonra.txt",
+      "sha256": "bd145ce24725ef314085c046c51e2564e320ddce77dd0fc026948d22a96e8558",
+      "komut": [
+        "timeout",
+        "120",
+        "bash",
+        "terminal-onar/scripts/kapi-eski-mi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T16:21:41+03:00",
+      "sure_sn": 185.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3ac0677e4c594aa4ab96215cb59a0ae4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kod-yasi-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kod-yasi-kapisi-yok-sonra.txt",
+      "sha256": "d69c82199c75d2299ef840d8abb07c28d75fe7e04b5abbc0b5e28af7fa50862c",
+      "komut": [
+        "timeout",
+        "180",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ky-mut-xbfd/terminal-onar/scripts/kapi-yenile.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T16:21:49+03:00",
+      "sure_sn": 7.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "yenile-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "520b4ddf61ad41e0befd098fff4c4fef"
+    }
+  ],
+  "imza": "57c55b974ae0f62de72a6ff973de27f23a40c9c1d88c151e938bc4538001cec2"
+}
