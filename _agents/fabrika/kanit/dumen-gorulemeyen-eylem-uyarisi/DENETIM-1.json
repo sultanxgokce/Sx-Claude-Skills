@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "dumen-gorulemeyen-eylem-uyarisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:08:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-gorulemeyen-eylem-uyarisi",
+  "dal": "dumen-gorulemeyen-eylem-uyarisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19333,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7406
+  },
+  "dalgic": "uyumlu",
+  "bas": "570875048ac178cff28dafc36437633bb90f6b02",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki uyarı türü, sınavları ve mutantları eklenmiş; gerçek ölçüm 36/36 ve mutant 13/13 geçiyor. Ancak eylem dışı değişiklik uyarısı olay anında basılmıyor, yalnız sonraki kapı çağrısında veya `uyarilar()` okununca üretiliyor; ayrıca görülemeyen-eylem sınıflaması eylem türünü doğrulamadığı için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Eylem dışı alan değişikliği terminal uyarısını kendiliğinden üretmiyor; `#yabanciTara()` yalnız yeni bir `kapi()` çağrısında veya tüketici `uyarilar()` metodunu çağırdığında çalışıyor. Son eylemden sonra oluşan değişiklikte bu iki çağrı da olmazsa talep edilen uyarı hiç basılmaz; sınav ise uyarıyı kontrol etmeden hemen önce `d.uyarilar()` çağırarak bu açığı örtüyor.",
+        "kanit": "Üretim farkında `#yabanciTara()` çağrıları yalnız `kapi()` başında ve `uyarilar()` içinde. Sınavda yabancı olaydan sonra `const yU = d.uyarilar()` çağrısı yapılıyor ve ancak ardından terminal satırı denetleniyor; olay sonrası çağrısız terminal uyarısı ölçülmüyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:90 ve eklenen #yabanciTara/uyarilar bölümü; dumen-surucu/scripts/dumen.test.mjs:D5b-D5c",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`gorulemeyen-eylem` kararı fill/selectOption veya gerçekten CDP Input bulunmamasıyla sınırlandırılmamış; herhangi bir eylem penceresindeki herhangi bir `isTrusted=false` olay uyarı üretiyor. Böylece click/press/goto sırasında sayfa kodunun ürettiği sentetik olay da yanlışlıkla 'köprüde GÖRÜNMEZ' sayılabilir.",
+        "kanit": "`#gorulemeyenTara(p)` filtresi yalnız zaman aralığı ve `o.trusted === false` koşullarını kullanıyor; `p.ad` için fill/selectOption denetimi veya CDP Input gözlemi yok. Mevcut D3b-D3d sınavları yalnız iki olumlu örnek ile metin-fill olumsuz örneğini kapsıyor; başka eylem içindeki sentetik olay ölçülmüyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:eklenen #gorulemeyenTara; dumen-surucu/scripts/dumen.test.mjs:D3b-D3d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü eski kodda `uyarilar` API'sinin bulunmadığını göstererek kırmızı, sonra ölçümü 36/36 ve 13/13 mutant sonucu ile yeşil veriyor. Bununla birlikte mutant kayıtları manifestte ayrı `mutasyon:true` olarak işaretlenmemiş; gerçek ve mutant koşuları tek yeşil kabuk ölçümünde birleşmiş. Kanıt temel olumlu akışı destekliyor fakat olay sonrası çağrısız uyarı ve diğer eylemlerde yanlış pozitif senaryolarını ölçmüyor."
+  }
+}

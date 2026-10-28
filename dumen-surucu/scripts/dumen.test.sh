@@ -27,5 +27,12 @@ mut "durak bildirimi jetonsuz" "...(jeton ? { 'x-defter-jeton': jeton } : {})" "
 mut "soket düşünce 'sultanda' yerine ham hata" "if (mod && mod !== 'ajan') {" "if (false) {"
 mut "mod sultan iken yeniden bağlanır" $'    const mod = await this.modOku();\n    if (mod !== \'ajan\') {' $'    if (this.#kopuk) await this.#yenidenBagla().catch(() => {});\n    const mod = await this.modOku();\n    if (mod !== \'ajan\') {'
 mut "mod ajan olunca yeniden bağlanmaz" "if (this.#kopuk) await this.#yenidenBagla();   // mod ajan" "if (false) await this.#yenidenBagla();   // mod ajan"
+mut "görülemeyen eylem uyarısı kapalı" "if (gor.length) this.#uyari('gorulemeyen-eylem'" "if (false) this.#uyari('gorulemeyen-eylem'"
+mut "eylem dışı değişiklik uyarısı kapalı" "this.#uyari('yabanci-olay'" "void ('yabanci-olay'"
+mut "eylem dışı uyarı yalnız kapıda (kendiliğinden yok)" "setTimeout(() => this.#yabanciTara(), 450).unref?.();" ""
+mut "görülemeyen uyarı eylem türünden bağımsız" "if (!/^(fill|selectOption)$/.test(p.ad)) return;" ""
+mut "metin alanı da görülemeyen sayılır" "o.trusted === false);
+    if (gor.length)" "true);
+    if (gor.length)"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 10/10 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 15/15 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

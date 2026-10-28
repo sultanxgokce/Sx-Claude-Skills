@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.2.0
+version: 0.3.0
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -17,6 +17,7 @@ Karar belgesi: Nexus `_agents/hezarfen/bilgi-havuzu/dumen-arastirma-20261027/KAR
 4. Parola/OTP/kart alanlarının değeri olay kaydına `<gizli>` olarak girer.
 
 Dinleyici yalnız **kayıt/uyarıdır**: sayfa sahte olay üretip yanlış alarm yaptırabilir; karar kapısı 1-2'dir.
+5. **Kör nokta uyarısı (0.3.0 · JN1K8K):** `fill`(tarih/renk/aralık)/`selectOption` değeri sayfa JS'iyle yazar, CDP `Input.*` üretmez → köprü bu eylemi GÖRMEZ. Eylem penceresindeki `isTrusted=false` olay için terminale `⚠ Dümen: … köprüde GÖRÜNMEZ` basılır, `uyarilar()` kaydı (`gorulemeyen-eylem`) tutulur. Eylem penceresi dışındaki alan değişimi için `⚠ … DIŞINDA alan değişti` (`yabanci-olay`, olay başına bir kez). Uyarı alan DEĞERİNİ taşımaz. Hâlâ yalnız uyarıdır: köprü tarafında yakalama (CDP çerçeve ayrıştırma) ve merkeze iletim yoktur.
 
 ## Kullanım
 ```js

@@ -1,0 +1,17 @@
+$ env DUMEN_CHROME=/config/.cache/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell DUMEN_LIB=/tmp/tmp.iFoewsAZGh/dumen.mjs node dumen-surucu/scripts/dumen.test.mjs
+# rc=1 sure=1.3s zaman=2026-10-28T09:03:09+03:00
+--- stdout ---
+── mod ajan
+  ✓ D1 mod ajan: metin alanı dolduruldu
+  ✓ D2 tarih ve seçim eylemleri sonuç verdi
+  ✓ D3 metin dışı alan değişimi dinleyiciyle YAKALANDI ve ajan eylemiyle eşleşti (isTrusted=false)
+  ✓ D4 yabancı (eylem penceresi dışı) olay yok
+--- stderr ---
+file:///config/projects/_wt/Sx-Claude-Skills-dumen-gorulemeyen-eylem-uyarisi/dumen-surucu/scripts/dumen.test.mjs:50
+const gorU = d.uyarilar().filter((u) => u.kod === 'gorulemeyen-eylem');
+               ^
+
+TypeError: d.uyarilar is not a function
+    at file:///config/projects/_wt/Sx-Claude-Skills-dumen-gorulemeyen-eylem-uyarisi/dumen-surucu/scripts/dumen.test.mjs:50:16
+
+Node.js v22.23.0
