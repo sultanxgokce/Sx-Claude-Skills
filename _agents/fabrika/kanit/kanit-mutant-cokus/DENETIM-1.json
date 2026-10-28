@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "kanit-mutant-cokus",
+  "pr": "551",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:26:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-mutant-cokus",
+  "dal": "kanit-mutant-cokus",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32412,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 30463
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e8725c25b2cc6858c7c2411d42207bf43e53d156",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Mutasyon ölçümü artık çöküşü ve rc 9 kurulum hatasını SARI, gerçek düşen kapıyı YEŞİL yazıyor; önce/sonra ölçümü ile 244/0 sınav sonucu ana talebi destekliyor. Ancak üretilen mutasyon kanıt dosyasının başlığı hâlâ her rc≠0 için “YAKALADI” diyor ve FAIL algısı belgelenenden dar; üretimden önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "SARI çöküş ve rc 9 kayıtlarının kanıt dosyasına hâlâ “rc≠0 = sınav bozuk kodu YAKALADI” başlığı yazılıyor; kayıt rengi doğru olsa da kanıt metni yeni kuralla doğrudan çelişiyor.",
+        "kanit": "`cmd_olcum` ölçüm dosyasını yazarken koşulsuz eski başlığı kullanıyor; hemen sonraki yeni renk mantığı ise düşen kapı yoksa veya rc 9 ise `renk = \"sari\"` seçiyor. T26 yalnız konsol çıktısında `YAKALADI` bulunmadığını denetliyor (`$d/oa`, `$d/ob`), kaydedilen ölçüm dosyasının başlığını denetlemiyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:369; yazilim-fabrikasi/scripts/kanit.test.sh:T26a-T26b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "FAIL kapısı, belgelenen “FAIL kelimesi” davranışından daha dar uygulanmış; yalnız satırın başındaki FAIL eşleşiyor.",
+        "kanit": "Belge ve yorum `FAIL kelimesi` derken düzenli ifade `^\\s*(✗|FAIL\\b|...)` biçiminde bütün seçenekleri satır başına bağlıyor. T26c de yalnız `FAIL  sinav/a.test.mjs` örneğini sınadığı için satır ortasındaki FAIL davranışı kanıtlanmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:DUSEN_KAPI_RE; yazilim-fabrikasi/scripts/kanit.test.sh:T26c",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; çöküş için kırmızı→yeşil önce/sonra ölçüm çifti, gerçek kod ölçümü ve mutantın kapıyı düşürdüğünü gösteren ayrı mutasyon kaydı var. Ana sınav 244 geçti/0 kaldı ve çöküş senaryosu gerçekçi hata çıktısı kullanıyor; sarı manifest kaydı yok, çünkü sarı sonuç senaryo içinde doğrulanmış alt ölçüm olarak gösteriliyor. Bununla birlikte rc 9 ve dört kapı biçiminin ayrıntılı T26 satırları kırpılmış genel sınav çıktısında görünmüyor; ayrıca sınav, kaydedilen mutasyon dosyasındaki çelişkili eski başlığı kapsamıyor."
+  }
+}

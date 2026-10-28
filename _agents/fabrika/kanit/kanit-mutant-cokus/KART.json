@@ -1,0 +1,35 @@
+{
+  "is": "kanit-mutant-cokus",
+  "cumle": "kanit.py --mutasyon kaydı: mutant betiği çöktüğünde ya da kurulamadığında (rc 9 kurulum hatası · düşen kapı satırı yok · yığın izi/çöküş) rc≠0'ı 'yakalandı' saymasın, SARI 'ölçülemedi' yazsın (rc 3); yakalandı yalnız çıktıda düşen kapı satırı (✗/FAIL/N kaldı/KALAN: N) varsa. Sınav: kanit.test.sh'e üç kapı (çöken mutant sarı · rc 9 sarı · gerçek düşen kapı yeşil) + eski davranış korunur.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T01:06:03+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M61J795B20TK2DPJA82AX9GX",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [
+    "9 kurulum",
+    "9 sarı"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T01:06:10+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
