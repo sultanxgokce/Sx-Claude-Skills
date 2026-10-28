@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-once.sh
+# rc=1 sure=697.3s zaman=2026-10-28T07:49:34+03:00
+--- stdout ---
+rc=1
+REDDEDİLMEDİ (kelimeler ayrı üye olabilir)
+--- stderr ---
+⏳ agir-sira: kanit-iskan-uye-ekle-gorev-bosluk-gorev-bosluk 696 sn bekledi (yuva 2, load1 17.48)

@@ -2304,6 +2304,8 @@ cmd_uye_ekle() {
   fi
   _ey_ad_hijyeni "$proje" "kayitsiz-proje" || exit 1
   _ey_ad_hijyeni "$uye" "gecersiz-uye-adi" || exit 1
+  # --gorev roster dizgisine "uye:gorev" olarak girer ve boşlukla bölünür: boşluklu metin her kelimeyi AYRI üye yapardı (fail-closed: kısa slug iste)
+  _ey_ad_hijyeni "$gorev" "gecersiz-gorev (kısa slug ver, örn. kasa-uzmani; boşluk/Türkçe harf yok)" || exit 1
 
   # ── HEDEF-SINIF AYRIMI (İ1): Nexus-ailesi evi (cloudtop-code) → CANLI-invoke YOK ─────────
   if [ "$proje" = "cloudtop-code" ] || [ "cloudtop-${proje}" = "cloudtop-code" ]; then

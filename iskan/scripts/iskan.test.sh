@@ -998,6 +998,9 @@ rc1=$?
 bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma >/dev/null 2>&1
 rc2=$?
 [ "$rc1" = "2" ] && [ "$rc2" = "2" ] && ok "uye-ekle: eksik-argüman/mod rc=2 (usage)" || bad "uye-ekle: usage rc beklenen 2, gelen $rc1/$rc2"
+# 30b. uye-ekle: boşluklu/geçersiz --gorev → kırmızı rc=1, "gecersiz-gorev" mesajı; hiçbir kelime ayrı üye olmaz
+gout="$(bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --gorev "hastane sistemi uzmani" --dry-run 2>&1)"; grc=$?
+[ "$grc" = "1" ] && echo "$gout" | grep -q "gecersiz-gorev" && ok "uye-ekle: boşluklu --gorev reddedildi (rc=1, gecersiz-gorev)" || bad "uye-ekle: boşluklu --gorev reddedilmedi (rc=$grc)"
 
 # 31. uye-ekle --dry-run (yeni-üye): plan-exit=3 + üye-adı + 'sultan-bildirim' satırı (G2 sözleşmesi)
 SUM_UE_BEFORE="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
