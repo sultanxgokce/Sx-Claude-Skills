@@ -29,7 +29,7 @@ dus() {  # $1 = sebep → onar.sh --web-yenile (kapı yeniden başlar, bağlant�
 # 2.34.0 (WHRJ · 28 Eki): pano.js'ten ÖNCE kapının KODU ölçülür. Kapı diskteki .mjs'lerden eski çalışıyorsa SIGHUP yetmez (yeni uçlar —
 #   /api/etiket, /tty-k/ — bellekte yoktur): tam yeniden başlatmaya düşülür ve söylenir. Ölçülemezse (süreç yok/yaş okunamadı) eski akış sürer.
 #   Ölçüldü: 28 Eki 11:33'te 2.33.0 diske indi; 13 kutuda kapı 23–24 Eki'den beri açıktı → Kadro etiket düğmesi yalnız code'da çıktı.
-set +e; eski_cikti=$(bash "$BETIK_DIZ/kapi-eski-mi.sh" 2>&1); eski_rc=$?; set -e
+eski_cikti=$(bash "$BETIK_DIZ/kapi-eski-mi.sh" 2>&1); eski_rc=$?   # betik -e açmaz (set -u); rc yalnız okunur
 if [ "$eski_rc" = 1 ]; then
   dosya=$(printf '%s' "$eski_cikti" | sed -n 's/^⚠ kapı ESKİ kodla çalışıyor: \([^ ]*\) .*/\1/p' | head -1)
   dus "kapı diskteki koddan ESKİ çalışıyor (${dosya:-kod} süreçten yeni; pano SIGHUP'ı yeni uçları getirmez)"

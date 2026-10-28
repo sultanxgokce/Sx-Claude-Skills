@@ -1,7 +1,7 @@
 {
   "is": "kapi-yenile-eski-kod",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T16:21:49+03:00",
+  "guncelleme": "2026-10-28T16:27:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -27,19 +27,17 @@
       "etiket": "yenile-sinav",
       "asama": "sonra",
       "dosya": "olcum-yenile-sinav-sonra.txt",
-      "sha256": "d2233081bcd31c7d4620dc9f5b41f0915456cfda9be7b1d5f05f02d9d6f05c03",
+      "sha256": "21e007d61c726926d0d687ae09e409e63d8c37d3029de203a0a4d067fac212b1",
       "komut": [
-        "timeout",
-        "180",
         "bash",
         "terminal-onar/scripts/kapi-yenile.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-28T16:18:36+03:00",
-      "sure_sn": 7.8,
+      "zaman": "2026-10-28T16:27:36+03:00",
+      "sure_sn": 8.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "d7b25f837949450896f5272c74887dca"
+      "olcum_id": "abefbde00b5b4e9e9428d7fc03060e82"
     },
     {
       "tur": "olcum",
@@ -83,5 +81,5 @@
       "olcum_id": "520b4ddf61ad41e0befd098fff4c4fef"
     }
   ],
-  "imza": "57c55b974ae0f62de72a6ff973de27f23a40c9c1d88c151e938bc4538001cec2"
+  "imza": "bfd81c046b90996689613a6fecdfd16f4d80d1d15f301c651a1854b23559df32"
 }

@@ -1,5 +1,5 @@
-$ timeout 180 bash terminal-onar/scripts/kapi-yenile.test.sh
-# rc=0 sure=7.8s zaman=2026-10-28T16:18:36+03:00
+$ bash terminal-onar/scripts/kapi-yenile.test.sh
+# rc=0 sure=8.0s zaman=2026-10-28T16:27:36+03:00
 --- stdout ---
 ── sahteler devrede mi (ortak.sh PATH tuzağı)
   ✓ H1 sahte curl/pgrep ortak.sh'tan sonra da öndedir
