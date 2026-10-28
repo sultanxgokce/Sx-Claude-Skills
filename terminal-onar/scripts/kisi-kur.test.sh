@@ -57,4 +57,5 @@ ok "Q14 dosya açık ama ÜST DİZİN kapalıysa rc 3 (geçiş izni yok)" "$([ "
 ok "Q15 göreli TTYD_BIN reddedilir (komuta mutlak yol yazılır)" "$([ "$rc" = 3 ] && grep -q 'mutlak yol olmalı' "$T/g" && echo 0 || echo 1)" "rc=$rc $(head -2 "$T/g")"
 ln -s "$PUB/ozel-ttyd" "$PUB/bag-ttyd"; TTYD_BIN="$PUB/bag-ttyd" bash "$D/kisi-kur.sh" --kutu demo >"$T/b" 2>&1
 ok "Q16 sembolik bağ çözülür: komuta GERÇEK dosyanın yolu yazılır" "$(grep -q -- "$PUB/ozel-ttyd -i /run/kisi" "$T/b" && ! grep -q 'bag-ttyd -i' "$T/b" && echo 0 || echo 1)" "$(grep ttyd-kisi -A1 "$T/b" | tail -1 | cut -c1-200)"
+ok "Q17 kuru kip kapı kodu ölçümünü anlatır (kapi-eski-mi.sh) ve hiçbir şey başlatmaz" "$(grep -q 'kapı kodu güncel mi' "$T/b" && grep -q 'kapi-eski-mi.sh' "$T/b" && echo 0 || echo 1)" "$(grep -c 'kapi-eski-mi' "$T/b")"
 echo; echo "$G geçti, $K kaldı"; [ "$K" = 0 ]

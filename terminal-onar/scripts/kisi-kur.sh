@@ -94,4 +94,12 @@ KOPRU_ENV="KOPRU_SOKET=$SOKET KOPRU_GRUP=$KULLANICI KOPRU_KULLANICI=$KULLANICI K
 adim "ttyd-kisi ($KULLANICI olarak, YAZILABİLİR -W, komut sabit: kisi-istemci)"
 [ -n "$KOK" ] && echo "  (kum havuzu: süreç başlatma atlandı)" || yap bash -c "setsid nohup su $KULLANICI -s /bin/bash -c \"KOPRU_SOKET=$SOKET $TTYD -i $TTYD_SOKET -U $KULLANICI:$KULLANICI -a -W python3 /opt/kisi/kisi-istemci.py & P=\\\$!; i=0; while [ ! -S $TTYD_SOKET ] && [ \\\$i -lt 50 ]; do sleep 0.2; i=\\\$((i+1)); done; [ -S $TTYD_SOKET ] && chmod 0666 $TTYD_SOKET || echo 'ttyd soketi 10 sn icinde acilmadi' >&2; wait \\\$P\" >>/tmp/ttyd-kisi.log 2>&1 &"
 
+adim "kapı kodu güncel mi (kişi terminali yolu /tty-k/ kapıda ancak yeni kodla var; eski kodlu kapı 404 verir — HADH10, 28 Eki)"
+if [ -n "$KOK" ]; then echo "  (kum havuzu: kapı ölçümü atlandı)"
+elif [ "$UYGULA" != 1 ]; then echo "  (kuru kip) kurulumdan sonra: bash $BECERI/kapi-eski-mi.sh — kapı diskteki koddan eskiyse uyarır (yeniden başlatmaz)"
+else
+  kapi_rc=0; bash "$BECERI/kapi-eski-mi.sh" | sed 's/^/  /' || kapi_rc=$?
+  [ "$kapi_rc" = 0 ] || echo "  ⚠ kurulum tamam ama kapı ($kapi_rc) — kişi terminali açılmadan önce yukarıdaki satırı çöz"
+fi
+
 echo; [ "$UYGULA" = 1 ] && echo "kisi-kur: bitti." || echo "kisi-kur: KURU KİP bitti — hiçbir şey değişmedi. Gerçek kurulum: Sultan/host elinde --uygula."

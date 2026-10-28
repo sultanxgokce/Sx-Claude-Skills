@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.32.2
+version: 2.33.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -222,6 +222,13 @@ kanon `crontab-abc`'nin açıklama yorumu bekçi satırına çevrildi, asıl sat
 ve olduğu gibi korunur; işaret yalnız yorum olmayan satırın **sonunda** sayılır (`BEKCI_DESEN` · `ACILIS_DESEN` — düzeltici,
 `bekci_kurulu` ve üç varlık denetimi aynı iki desenden okur). Sınav: `scripts/bekci-yorum.test.sh` (16 kapı + 2 mutant;
 kanonun gerçek yorum satırlarıyla). Eski davranışlar korunur: çift kopya tekilleşir, eski yollu satır kanoniğe çevrilir.
+
+## 🆕 2.33.0 · kişi terminali kurulumu kapının eski kodla çalıştığını ölçüp uyarır (28 Eki · HADH10 · SERDAR)
+**Ölçülen hata:** Ayşenur etime'ye tıklayınca `/medigate/tty-k/` 404 verdi — yol 27 Eki'de diske inmişti, medigate kapısı 23 Eki'den beri açıktı (eski kod). 2.17.0'daki "kurulunca kapı yeniden başlatılmalı" notu kapısız bir kuraldı; kurulum kapının yaşına hiç bakmıyordu.
+- **`scripts/kapi-eski-mi.sh`:** kapı sürecinin başlama anı ⟷ kapı dizinindeki `.mjs` dosyalarının (test ve `node_modules` hariç; `pano.js` hariç, o sıcak tazelenir) en yeni değişme anı. rc 0 güncel · **1 eski kodla çalışıyor** (dosya adı + `onar.sh --web-yenile` komutu basılır) · 2 ölçülemedi (kapı süreci yok — yeşil sayılmaz). Kendisi kapıyı BAŞLATMAZ: yeniden başlatma açık web terminallerini bir kez koparır, karar insanda.
+- **`kisi-kur.sh`:** son adım olarak bunu koşar (`--uygula` kipinde; kuru kipte ne yapacağını anlatır). Kapı eskiyse kurulum "tamam ama kapı eski" diye açıkça uyarır.
+- Dürüst sınır: dosya dokunulup içeriği değişmediyse de "eski" der (yanlış alarm yönü güvenli taraf); kapının HANGİ yolu bilmediğini değil, kodun süreçten yeni olduğunu ölçer.
+- Kanıt: `kapi-eski-mi.test.sh` (E1–E4 gerçek node süreciyle + ters-karşılaştırma mutantı) · `kisi-kur.test.sh` Q17.
 
 ## 🆕 2.17.0 · kadro kayıt kökü + kapat koruması (17 Eki · gorev_01M554PCYA0HWM6TM4KXY4E72V · SERDAR ACİL)
 **Ölçülen hata:** merkez kutusunda (code) Kadro "0 kişi · 8 kayıtsız" gösteriyordu. Kapı kaydı `$PROJE` altında arıyor; code'da
