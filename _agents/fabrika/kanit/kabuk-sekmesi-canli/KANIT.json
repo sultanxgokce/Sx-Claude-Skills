@@ -1,7 +1,7 @@
 {
   "is": "kabuk-sekmesi-canli",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T22:04:08+03:00",
+  "guncelleme": "2026-10-28T22:08:33+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -156,7 +156,77 @@
       "renk": "yesil",
       "zaman": "2026-10-28T22:04:08+03:00",
       "olcum_id": "dadce47fa50a403dac2753496f2b9e27"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-gt5btk-onay-durumu",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-gt5btk-onay-durumu-sonra.txt",
+      "sha256": "2edc907e2364e79f64c8e67f0de43dcbed166d23d7e70ebc15bcc651e941e5f6",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli/gorev-onay-durumu-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T22:07:20+03:00",
+      "sure_sn": 71.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2b2ad9de369f4f269713d436d9d6ef67"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-gt5btk-onay-durumu-2",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-gt5btk-onay-durumu-2-sonra.txt",
+      "sha256": "7e5454e175a1ff59c9f19d19c00caa0d45034dff00a96bcf8e7dd030a0783ecc",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli/gorev-onay-durumu-olc.sh"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T22:07:44+03:00",
+      "sure_sn": 5.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "da133e1d1a934cc6ab7e8c528c3d4e87"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "gorev-gt5btk-onay-durumu-2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-gorev-gt5btk-onay-durumu-2-sonra-e5214a932c74.txt",
+      "sha256": "0e2fdbe77df8f9c3075c396174ad2f29dc2213ad39fd242562ca89d7bf49d970",
+      "hedef_dosya": "olcum-gorev-gt5btk-onay-durumu-2-sonra.txt",
+      "hedef_olcum_id": "da133e1d1a934cc6ab7e8c528c3d4e87",
+      "hedef_sha256": "7e5454e175a1ff59c9f19d19c00caa0d45034dff00a96bcf8e7dd030a0783ecc",
+      "hedef_zaman": "2026-10-28T22:07:44+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "ölçer betiğinde kabuk tırnağı yorumdaki kesme işaretiyle kapandı (sözdizimi); düzeltildi, yeniden ölçülür",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T22:08:31+03:00",
+      "olcum_id": "e275743f4bf04733b9ed65fa57da3f55"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-gt5btk-onay-durumu-3",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-gt5btk-onay-durumu-3-sonra.txt",
+      "sha256": "2d93b7a6936b8b15fb294aed8f807edf68ef4ccbf41352c6e1dabdc95d24525f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli/gorev-onay-durumu-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:08:33+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0df559678c624f8d966c318bff7cafac"
     }
   ],
-  "imza": "6b85b4708b89c89118bc5edb6f0f6378ba62c816f6ed194697b95952d9a6609a"
+  "imza": "f464ca45e8972b9f0a998d73312d697ced16a3625853d5982d8797f86a8b7b12"
 }

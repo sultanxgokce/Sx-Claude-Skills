@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-gorev-gt5btk-onay-durumu-2-sonra.txt
+hedef_sha256: 7e5454e175a1ff59c9f19d19c00caa0d45034dff00a96bcf8e7dd030a0783ecc
+hedef_zaman: 2026-10-28T22:07:44+03:00
+hedef_renk: kirmizi
+neden: ölçer betiğinde kabuk tırnağı yorumdaki kesme işaretiyle kapandı (sözdizimi); düzeltildi, yeniden ölçülür
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-28T22:08:31+03:00

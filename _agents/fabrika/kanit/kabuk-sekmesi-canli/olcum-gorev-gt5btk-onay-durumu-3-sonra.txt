@@ -1,0 +1,12 @@
+$ bash _agents/fabrika/kanit/kabuk-sekmesi-canli/gorev-onay-durumu-olc.sh
+# rc=0 sure=1.3s zaman=2026-10-28T22:08:33+03:00
+--- stdout ---
+2026-10-28T22:08:33+03:00 görev gorev_01M5HCACPJNCTNGQF4C3GT5BTK
+durum: onay-bekliyor · 2026-10-28T19:03:55.666Z · code
+kanit: [olcum] önce=0 sonra=14 _agents/fabrika/kanit/kabuk-sekmesi-canli/olcum-canli-14-kutu-kabuk-oturumu-sonra.txt (Sx-Claude-Skills, 28 Eki 22:03: 14 kutunun 14'ünde <kutu>-kabuk tmux oturumu + kabuk.son=ok; önce: sabit kabuk sekmesi hiçbir kutuda yoktu) · [pr] #544
+atanan: BÂNİ
+ADIM 2026-10-28T18:59:18.551Z [🔎 göz] kart kabuk-sekmesi-canli · tur 1 · kod 3/5 · doğru şey H · bulgu 2
+ADIM 2026-10-28T19:03:55.666Z [bitirdi] BÂNİ · kanıt: [olcum] önce=0 sonra=14 _agents/fabrika/kanit/kabuk-sekmesi-canli/olcum-canli-14-kutu-kabuk-oturumu-sonra.txt (Sx-Claude-Skills, 28 Eki 22:03: 14 kutunun 14'ünde <kutu>-kabuk tmux oturumu + kabuk.son=ok; önce: sabit kabuk sekmesi hiçbir kutuda yoktu) · [pr] #544
+ADIM 2026-10-28T19:05:16.261Z [🔎 göz] kart kabuk-sekmesi-canli · tur 2 · kod 4/5 · doğru şey H · bulgu 1
+SONUÇ: onay-bekliyor + ölçüm kanıtı VAR
+--- stderr ---
