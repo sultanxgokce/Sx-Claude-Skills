@@ -1,0 +1,15 @@
+18:49:57 akar      ESKI etimes=442005 kod-bas=415833s surum=2.34.0
+18:49:57 huma      ESKI etimes=441984 kod-bas=415812s surum=2.34.0
+18:49:58 huzur     ESKI etimes=441974 kod-bas=415801s surum=2.34.0
+18:49:58 mihenk    ESKI etimes=441911 kod-bas=415738s surum=2.34.0
+18:49:58 mmex      ESKI etimes=441925 kod-bas=415752s surum=2.34.0
+18:49:59 nazir     ESKI etimes=441915 kod-bas=415741s surum=2.34.0
+18:49:59 revak     ESKI etimes=441898 kod-bas=415724s surum=2.34.0
+18:50:00 sedir     ESKI etimes=441889 kod-bas=415714s surum=2.34.0
+18:50:00 tellal    ESKI etimes=441881 kod-bas=415706s surum=2.34.0
+18:50:01 tez       ESKI etimes=441872 kod-bas=415696s surum=2.34.0
+18:50:01 nova      ESKI etimes=441909 kod-bas=415733s surum=2.34.0
+18:50:02 vekatip   ESKI etimes=332031 kod-bas=305854s surum=2.34.0
+18:50:02 medigate  ESKI etimes=34222 kod-bas=8045s surum=2.34.0
+18:50:02 code      guncel etimes=26141 surum=2.34.0
+2026-10-28 18:50:02 ÖZET: toplam=14 ESKİ=13 ölçülemedi=0
