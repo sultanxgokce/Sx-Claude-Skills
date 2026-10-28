@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-alarm-tur2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh A3
+# rc=1 sure=1.4s zaman=2026-10-28T00:25:24+03:00
+--- stdout ---
+MUTANT A3 rc=1
+  ✗ Y1c eşiğin TAM kendisinde (3.) yükseltilir — 'TEKRAR 3 — YÜKSELTİLDİ' yok: 🚨🔴 SULTAN ALARMI — Revak disk silme · SERDAR bekli
+YAKALANDI
+--- stderr ---

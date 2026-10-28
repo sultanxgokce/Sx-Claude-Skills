@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "sultan-alarmi-beceri",
+  "pr": "514",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T00:37:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-alarmi-beceri",
+  "dal": "sultan-alarmi-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41370,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 24995
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0f3895d10f7c7b581fa331873c8e8e8fd45f83d2",
+  "duzeltme_farki": {
+    "onceki_bas": "fe98a9bf748be79f29bab76d13ed8baa01eedb9e",
+    "dosya": 15,
+    "bayt": 29562,
+    "tam_bayt": 57634
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan alarmının eşzamanlı gönderim yarışı kilitle kapatılmış, değersiz seçenekler güvenli reddedilmiş ve gerçek ölçüm 43 sınavın tamamını geçmiştir. Kod üretime hazırdır; yalnız bütün kutulara fiilî senkron ile gerçek telefona teslim, kendi dış yüzeylerinde hâlâ doğrulanmalıdır.",
+    "bulgular": [
+      {
+        "ne": "Önceki B3 sürüyor: becerinin bütün hedef kutulara gerçekten kurulduğu ve senkron edildiği gösterilmemiştir.",
+        "kanit": "İş kartı “her kutuya senkron edilen global ... becerisini kur” diyor; iki gerçek ölçümün komutu yalnız `bash sultan-alarmi/scripts/alarm.test.sh` ve manifestte kurulum ya da hedef kutu senkronu kaydı yok.",
+        "konum": "İŞ KARTI cumle; kanıt manifesti alarm-sonra ve alarm-tur2",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sx global senkron yüzeyi ve hedef kutular"
+      },
+      {
+        "ne": "Önceki B4 sürüyor: canlı ntfy teslimi ve Sultan'ın telefonunda bildirimin alınması ölçülmemiştir.",
+        "kanit": "Gerçek ölçümde G5 ntfy isteğini sınadığını bildiriyor, ancak sunulan kayıtlar canlı hizmet veya telefon karesi/teslim ölçümü içermiyor; dolayısıyla uçtan uca telefon bildirimi kanıtlanmıyor.",
+        "konum": "olcum-alarm-tur2-sonra.txt G5-G5b; kanıt manifesti alarm-tur2",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı ntfy hizmeti ve Sultan'ın telefonu"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önceki B1, `alarm.sh` içindeki `flock` ile ve E1-E1c ölçümünde 8 eşzamanlı çağrının tek alarm, 7 susturma ve sayaç 1 üretmesiyle kapanmış; önceki B2, açık argüman sayısı denetimiyle ve beş B7 vakasının rc=2 vermesiyle kapanmıştır. Gerçek ölçüm iki turda rc=0 ve son turda 43/43'tür; A1-A8 mutasyonlarının beklenen rc=1 ile yakalanması sınav duyarlılığını destekler. Önce/sonra ölçüm çifti ve gerçek kullanıcı karesi yoktur; global senkron ile canlı telefon teslimi bu nedenle yalnız kutu-dışı kalır."
+  }
+}
