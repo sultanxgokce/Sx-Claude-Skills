@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kart-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh if KORU and olay in ("ac","gecti","tikandi"): if KORU and olay in ("ac","tikandi"):
+# rc=1 sure=77.9s zaman=2026-10-28T13:43:17+03:00
+--- stdout ---
+  ✗ G11c bitti göreve ac → durum yazılmaz (A06: 'bitti' insanındır, ajan geri açamaz); gb-11'in onay bekleyen görevi 'gecti'de de 'bekliyor'a ÇEKİLMEZ
+── SONUÇ: 397 geçti · 1 kaldı ──
+--- stderr ---

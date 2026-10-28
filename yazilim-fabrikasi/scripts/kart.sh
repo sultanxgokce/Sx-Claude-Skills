@@ -105,11 +105,31 @@ GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 #    (PR / kanıt dizini) · tıkandı → 'bekliyor' + not (tıkanma nedeni). Kutunun KENDİ defter jetonuyla yazar (bulgu.sh ile aynı yol;
 #    değer argv'ye/çıktıya düşmez). Defter yazamazsa kart YİNE işlenir ama bu söylenir, karta yazılır ve rc 4 döner — sessiz eksik yok.
 DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-http://cloudtop-defter:8791}"
+# 🔴 ONAY KORUMASI (görev …774ZHG · 28 Eki ölçümü: D3 görevi Sultan'ın onay kuyruğundan sessizce düştü): bağlı görev 'onay-bekliyor' ya da 'bitti'
+#    iken açılış (ac), başka işe geçiş (gecti) ve tıkanma (tikandi) görevin DURUMUNU yazmaz — yalnız adım düşer. Zincir şuydu: onay bekleyen göreve
+#    kart bağlandı → ac 'çalışılıyor' yazdı → kart bitti (dilim, durum yazılmaz) → uzlaştırma açık kartı olmayan 'çalışılıyor'u 'bekliyor'a çekti.
+#    Ajan 'onay-bekliyor'u ancak açık --gorev-bitti ile yazar; 'bitti' yalnız insanın (A06). Durum okunamazsa eski davranış (yazım zaten düşerdi).
+gorev_durum_oku() {  # gorev_durum_oku <gorev_id> → stdout: gorev_durumu ya da boş (okunamadı)
+  [ -r "$DEFTER_JY" ] || return 0
+  local cfg; cfg="$(mktemp)"; printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$DEFTER_JY")" > "$cfg"
+  curl -sS -m 10 --config "$cfg" "$DEFTER_U/kayit/$1" 2>/dev/null | python3 -c 'import sys,json
+try: print(((json.load(sys.stdin).get("kayit") or {}).get("canli") or {}).get("gorev_durumu") or "")
+except Exception: pass' 2>/dev/null
+  rm -f -- "$cfg"
+}
 gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
-  local kj="$1" olay="$2" govde cfg cevap rc sonuc
-  govde="$(DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+  local kj="$1" olay="$2" govde cfg cevap rc sonuc MEVCUT=""
+  case "$olay" in ac|gecti|tikandi) MEVCUT="$(gorev_durum_oku "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")")" ;; esac
+  govde="$(MEVCUT_DURUM="$MEVCUT" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
+md=os.environ.get("MEVCUT_DURUM","")
+KORU=md in ("onay-bekliyor","bitti")
+if KORU and olay in ("ac","gecti","tikandi"):
+    # ONAY KORUMASI: durum yazılmaz, yalnız adım (Sultan'ın kuyruğundaki iş yerinde kalır)
+    neler={"ac":"kart %s açıldı (tahmin %s dk)" % (is_,k.get("tahmin_dk")),"gecti":"kart %s açıkken başka işe geçti: %s" % (is_,os.environ.get("GECTI_KART","?")),
+           "tikandi":"kart %s tıkandı: %s" % (is_,((k.get("tikanma") or {}).get("neden","") or "tıkandı")[:300])}
+    print(json.dumps({"adimlar":["[▶ dilim] %s · %s — görev '%s', durumu KORUNUR (onay kuyruğundan düşmez)" % (kim,neler[olay],md)]},ensure_ascii=False)); sys.exit(0)
 if olay=="ac":
     y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk · sınıf: %s" % (kim,is_,k.get("tahmin_dk"),",".join(k.get("siniflar") or []) or "yok")   # 0.25.2: merkezin otomatik doğrulama devri sınıfsız işi buradan okur (sınıf bilinmiyorsa Doğrulat)
 elif olay=="bitti":
@@ -159,13 +179,15 @@ else:
     e=j.get("ek") if isinstance(j.get("ek"),dict) else j
     print("yazılamadı: http %s · %s%s" % (kod, j.get("hata") or "cevap okunamadı", (" · " + str(e.get("yerine"))[:160]) if e.get("yerine") else ""))')"; fi
   fi
-  GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
+  MEVCUT_DURUM="$MEVCUT" GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
 import json,sys,datetime
 p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
 k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
 d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor","goz":"göz adımı (durum değişmez)","gecti":"bekliyor (başka işe geçti)","daralt":"ölçüt adımı (görev durumu değişmez)"}[olay]
+md=os.environ.get("MEVCUT_DURUM","")
+if md in ("onay-bekliyor","bitti") and olay in ("ac","gecti","tikandi"): d="yalnız adım — görev '%s', durumu korundu" % md
 print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
 PY
   [ "$sonuc" = "yazıldı" ]

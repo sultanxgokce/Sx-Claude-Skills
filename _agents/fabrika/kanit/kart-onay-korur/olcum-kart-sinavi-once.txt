@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-once.sh
+# rc=1 sure=75.9s zaman=2026-10-28T13:39:25+03:00
+--- stdout ---
+  ✗ G11 🔴 onay-bekliyor göreve ac → PATCH'te 'yerine' YOK (durum yazılmaz), adım 'durumu KORUNUR' der
+  ✗ G11b rc 0, ekranda 'yalnız adım — durumu korundu'
+  ✗ G11c bitti göreve ac → durum yazılmaz (A06: 'bitti' insanındır, ajan geri açamaz); gb-11'in onay bekleyen görevi 'gecti'de de 'bekliyor'a ÇEKİLMEZ
+  ✗ G11d onay-bekliyor göreve tikandi → 'bekliyor' YAZILMAZ, yalnız adım (tıkanma nedeniyle)
+── SONUÇ: 394 geçti · 4 kaldı ──
+--- stderr ---
