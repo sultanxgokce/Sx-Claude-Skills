@@ -1,0 +1,23 @@
+{
+  "is": "dumen-uyari-gonder-sx",
+  "cumle": "Dümen becerisi (dumen-surucu) kör nokta uyarılarını (görünmeyen eylem, eylem dışı değişiklik) kutu jetonuyla merkeze POST eder; alan değeri gitmez, merkez cevap vermezse eylem durmaz",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T12:36:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
