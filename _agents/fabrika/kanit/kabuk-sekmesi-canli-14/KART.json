@@ -1,0 +1,25 @@
+{
+  "is": "kabuk-sekmesi-canli-14",
+  "cumle": "El kabuğu sekmesinin canlı kanıtı (temiz kart): terminal-onar kanonik listesindeki 14 kutunun 14'ünde <kutu>-kabuk tmux oturumu ve kabuk.son=ok ölçülür (ssh salt okur, iki yüzey), görev …GT5BTK'nin onay-bekliyor olduğu defterden ölçülür; kod Sx #415 ile 22 Eki birleşmişti, Sultan paketi 23 Eki koştu (eski kart kabuk-sekmesi-canli: geçersiz ilanlı yeşil canlı kaydı kapıyı kalıcı kilitledi)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-28T22:19:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canli, canlı, ssh",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "14 kutunun"
+  ]
+}
