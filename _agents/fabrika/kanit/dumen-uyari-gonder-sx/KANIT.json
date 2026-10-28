@@ -1,7 +1,7 @@
 {
   "is": "dumen-uyari-gonder-sx",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T13:06:18+03:00",
+  "guncelleme": "2026-10-28T13:17:50+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -28,18 +28,18 @@
       "etiket": "sinav-gercek",
       "asama": "sonra",
       "dosya": "olcum-sinav-gercek-sonra.txt",
-      "sha256": "1d2c1c728c58958070ea9916e24d490de9774bb52a4d6109e08c21b5f71cf533",
+      "sha256": "71bd58b24eef158ad06503fbd9a7d2c7d8580a8803d20e481df61565e0582451",
       "komut": [
         "bash",
         "dumen-surucu/scripts/dumen.test.sh"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-28T13:06:18+03:00",
-      "sure_sn": 101.3,
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:17:50+03:00",
+      "sure_sn": 216.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e3591671cbea486c9ba11e2f8bc867b5"
+      "olcum_id": "c75a1bef075443c8b06b91865891e6f5"
     }
   ],
-  "imza": "ad230c08cbaf61e25e85df9ba6dfb3ab6d1972e08573985c738ea03933f14556"
+  "imza": "d2e1b6f58aa9ccf36f8858bf65e49740e3fd5fcaf3a56b7dbad43237e82d2c6f"
 }

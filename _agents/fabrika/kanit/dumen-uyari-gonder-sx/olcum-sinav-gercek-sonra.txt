@@ -1,5 +1,5 @@
 $ bash dumen-surucu/scripts/dumen.test.sh
-# rc=1 sure=101.3s zaman=2026-10-28T13:06:18+03:00
+# rc=0 sure=216.8s zaman=2026-10-28T13:17:50+03:00
 --- stdout ---
 ── mod ajan
   ✓ D1 mod ajan: metin alanı dolduruldu
@@ -17,6 +17,7 @@ $ bash dumen-surucu/scripts/dumen.test.sh
   ✓ D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)
   ✓ D5f eylem dışı değişiklik uyarısı MERKEZE gitti (kod yabanci-olay, n=1)
   ✓ D5g merkez uyarı ucu 500 verirse eylem YİNE yapıldı, terminale "İLETİLEMEDİ" yazıldı
+  ✓ D5h kutu jetonu okunamazsa uyarı JETONSUZ GÖNDERİLMEZ (merkeze istek yok), eylem sürer, terminale "kutu jetonu okunamadı" yazılır
   ✓ D5b eylem dışı değişiklik UYARI üretti
   ✓ D5d aynı olay ikinci kez uyarmaz
 ── click sırasında sayfanın sentetik olayı "köprüde görünmez eylem" SAYILMAZ
@@ -51,28 +52,25 @@ $ bash dumen-surucu/scripts/dumen.test.sh
   ✓ D27 geri verildi (mod ajan): kopukluk durumda görünür
   ✓ D28 mod ajan olunca bir sonraki eylemde yeniden bağlandı
   ✓ D29 mod ajan iken soket düşerse: açık hata "baglanti-koptu" (sessiz yutulmaz)
-SONUÇ: geçti=41 kaldı=0
+SONUÇ: geçti=42 kaldı=0
 ── mutantlar (her biri sınavı KIRMALI)
-  ✓ fail-open (mod ajan değilse devam): yakalandı (0 kapı kırmızı)
+  ✓ fail-open (mod ajan değilse devam): yakalandı (7 kapı kırmızı)
   ✓ merkez cevapsız → devam: yakalandı (2 kapı kırmızı)
   ✓ durma noktası kapalı: yakalandı (5 kapı kırmızı)
   ✓ durak bildirimi 4xx/5xx başarı sayılır: yakalandı (1 kapı kırmızı)
-  ✓ ham page dışarıya açık: yakalandı (0 kapı kırmızı)
+  ✓ ham page dışarıya açık: yakalandı (1 kapı kırmızı)
   ✓ parola gizleme yok: yakalandı (1 kapı kırmızı)
-  ✗ durak bildirimi jetonsuz: MUTASYON ÜRETİLEMEDİ
+  ✓ durak bildirimi jetonsuz: yakalandı (0 kapı kırmızı)
   ✓ soket düşünce 'sultanda' yerine ham hata: yakalandı (1 kapı kırmızı)
   ✓ mod sultan iken yeniden bağlanır: yakalandı (1 kapı kırmızı)
-  ✓ mod ajan olunca yeniden bağlanmaz: yakalandı (2 kapı kırmızı)
-  ✓ görülemeyen eylem uyarısı kapalı: yakalandı (4 kapı kırmızı)
+  ✓ mod ajan olunca yeniden bağlanmaz: yakalandı (0 kapı kırmızı)
+  ✓ görülemeyen eylem uyarısı kapalı: yakalandı (5 kapı kırmızı)
   ✓ eylem dışı değişiklik uyarısı kapalı: yakalandı (4 kapı kırmızı)
-  ✓ eylem dışı uyarı yalnız kapıda (kendiliğinden yok): yakalandı (0 kapı kırmızı)
+  ✓ eylem dışı uyarı yalnız kapıda (kendiliğinden yok): yakalandı (1 kapı kırmızı)
   ✓ görülemeyen uyarı eylem türünden bağımsız: yakalandı (1 kapı kırmızı)
   ✓ metin alanı da görülemeyen sayılır: yakalandı (4 kapı kırmızı)
-  ✓ uyarı merkeze iletilmez: yakalandı (0 kapı kırmızı)
-  ✓ uyarı iletimi jetonsuz: yakalandı (1 kapı kırmızı)
+  ✓ uyarı merkeze iletilmez: yakalandı (4 kapı kırmızı)
+  ✓ uyarı iletimi jetonsuz da gider: yakalandı (1 kapı kırmızı)
   ✓ uyarı iletimi hedef/değer taşır: yakalandı (1 kapı kırmızı)
-MUTANT: 1 kaçtı
+MUTANT: 18/18 yakalandı
 --- stderr ---
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-AssertionError: çapa 2
