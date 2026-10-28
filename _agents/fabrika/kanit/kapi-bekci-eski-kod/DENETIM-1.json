@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "kapi-bekci-eski-kod",
+  "pr": "540",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T18:42:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-bekci-eski-kod",
+  "dal": "kapi-bekci-eski-kod",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26710,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7713
+  },
+  "dalgic": "uyumsuz",
+  "bas": "bb54178fc2b8f4025aaf3826a034ac1f3843d350",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Bekçi eski kapıyı saptayıp kod sürümü başına bir kez yeniliyor; güncel, ölçülemez, duraklatılmış ve başarısız yenileme yolları fikstürlü sınav ve mutantla güçlü biçimde kapsanmış. Ancak kartın açıkça istediği “günlüğe tek satır” yerine başarılı turda en az iki bekçi satırı ve ayrıca kapi-yenile çıktısı günlüğe yazılıyor; önce bu sözleşme düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Başarılı yenileme karttaki “günlüğe tek satır” şartını ihlal ediyor: işlem öncesi ve sonrası iki ayrı bekçi kaydı yazılıyor, ayrıca kapi-yenile.sh çıktısı da aynı günlüğe eklenebiliyor.",
+        "kanit": "Üretim farkında yenilemeden önce `gunluk \"...yeniliyor\"`, başarıdan sonra `gunluk \"...yenilendi\"` çağrıları var; komut da `>> \"$GUNLUK\" 2>&1` ile ek çıktı yazıyor. E1b sınavı bu uyumsuzluğu düzelteceğine iki ayrı satırı özellikle bekliyor: beklenen `1 1`.",
+        "konum": "terminal-onar/scripts/bekci.sh:14-17; terminal-onar/scripts/bekci-eski-kod.test.sh:39",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“13 kutuda ESKİ sayısı bekçi turundan sonra 0” canlı kabulü sunulan konteynerde doğrulanmamış.",
+        "kanit": "Gerçek ölçüm kaydı yalnız hermetik `sonra.sh` sınavını gösteriyor (`10 geçti · 0 kaldı`); çıktıda 13 kutunun tur öncesi/sonrası ESKİ sayım çifti yok. İş kartı ayrıca `canli_gerekir: true` diyor.",
+        "konum": "iş kartı kabul cümlesi; kanıt manifesti `sinav` kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "13 canlı kutu + erişim yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce kırmızı/sonra yeşil ölçüm çifti ile gerçek kod sonucu mevcut, mutant da eski-kod bloğu sökülünce sınavın kırıldığını gösteriyor. Hermetik sınav işlevsel dalları iyi kapsıyor; fakat tek-satır günlük sözleşmesini yanlış beklentiyle iki satır olarak onaylıyor ve 13 canlı kutudaki kabul ölçümünü içermiyor."
+  }
+}
