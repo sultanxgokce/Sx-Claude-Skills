@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "kabuk-sekmesi-canli-14",
+  "pr": "546",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T22:22:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi-canli-14",
+  "dal": "kabuk-sekmesi-canli-14",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10272,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12248
+  },
+  "dalgic": "olculemedi",
+  "bas": "488b91f855ed2c62d66729e2fbb83a316c8323da",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Canlı ölçüm 14 adın her birinde <kutu>-kabuk oturumu ile kabuk.son=ok gösteriyor ve görev kaydı onay-bekliyor durumunu doğruluyor. Ancak ölçümün kanonik terminal-onar listesini kullandığı, iki yüzeyi SSH ile salt okuduğu ve gerçek bir önce/sonra çifti ürettiği kanıtlanmadığından önce bu kanıt açıklıkları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "14 sonucun terminal-onar kanonik listesinden türetildiği ve iki yüzeyin SSH ile salt okunarak ölçüldüğü gösterilmiyor; yeşil sonuç bu hedeflerin gerçekten sınandığını tek başına kanıtlamaz.",
+        "kanit": "Çıktı yalnız 14 kutu adı, oturum ve kabuk.son değerlerini veriyor; manifestte komut bir dosya betiği ve boru_denetimi açıkça “dosya betiği içeriği denetlenmez” diyor. Ne çıktıda ne manifestte kanonik liste kaynağı, iki yüzey veya salt-okur SSH işlemi yer alıyor.",
+        "konum": "manifest:canli-14-kutu-kabuk-oturumu; olcum-canli-14-kutu-kabuk-oturumu-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Talepteki temiz canlı kanıt için ölçüm çifti yok; önce=0 bilgisi mevcut manifestte ölçülmüş bir önce kaydı değil, defter metnindeki eski kanıta yapılan aktarımdır.",
+        "kanit": "Manifestte üç kaydın tamamı sonra/canli aşamasında; gorev çıktısındaki “önce=0 sonra=14” satırı eski kabuk-sekmesi-canli dizinine metinsel gönderme yapıyor, fakat bu kartın manifestinde önce ölçümü bulunmuyor.",
+        "konum": "manifest:kayitlar; olcum-gorev-gt5btk-onay-durumu-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; 14/14 son durum ile onay-bekliyor durumu gerçek çıktılarla destekleniyor. Buna karşılık önce/sonra ölçüm çifti bulunmuyor ve dosya betiğinin kanonik liste, iki yüzey ve salt-okur SSH şartlarını gerçekten sınadığı görünür kanıtla doğrulanmıyor."
+  }
+}
