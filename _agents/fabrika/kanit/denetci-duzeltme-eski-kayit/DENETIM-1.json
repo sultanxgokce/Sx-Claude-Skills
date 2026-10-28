@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-duzeltme-eski-kayit",
+  "pr": "543",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T21:28:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-duzeltme-eski-kayit",
+  "dal": "denetci-duzeltme-eski-kayit",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21713,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3724
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a7849dc77b51deabd2555bf591c200e7c6e954ff",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Eski denetim kaydında baş bulunmadığında, kaydı ekleyen commit’in atası ile kayıt zamanından önceki commit değerlendirilerek güvenli biçimde eski baş türetilmiş; türetme olmazsa tam fark geri dönüşü korunmuş. Hedefli önce/sonra ölçümünde üç eksik kapının tamamı kapanıp 53/53 geçtiği ve değişiklik talebi doğrudan karşıladığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı sağlam manifest, aynı hedef için gerçekçi Git geçmişi kullanan önce/sonra ölçüm çifti içeriyor: önce 39 geçti/3 kaldı, sonra 53 geçti/0 kaldı. Sonraki ölçüm; türetme mesajını, yalnız yeni farkın gönderilmesini, değişmeyen dosyanın dışarıda kalmasını ve türetilen başın yeni kayda yazılmasını ayrı kapılarla doğruluyor; sarı kayıt yok. Mutasyon ölçümü bulunmuyor, ancak sunulan hedefli regresyon ve önce/sonra çifti bu değişiklik için yeterli."
+  }
+}
