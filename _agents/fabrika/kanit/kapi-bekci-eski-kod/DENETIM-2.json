@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kapi-bekci-eski-kod",
+  "pr": "540",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T18:48:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-bekci-eski-kod",
+  "dal": "kapi-bekci-eski-kod",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24851,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 15514
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d37a0da81acab5144c18e3f7512e81d6bc55bdf1",
+  "duzeltme_farki": {
+    "onceki_bas": "bb54178fc2b8f4025aaf3826a034ac1f3843d350",
+    "dosya": 10,
+    "bayt": 23236,
+    "tam_bayt": 29349
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "B1 kapanmış: başarılı veya başarısız yenileme artık ana günlüğe tek bekçi satırı yazıyor, yenileme çıktısını ayrı dosyaya yönlendiriyor ve fikstürlü gerçek ölçüm 10/10 geçiyor. Kod üretime hazır; yalnız B2 olan 13 canlı kutudaki ESKİ→0 kabul ölçümü bu konteynerin dışında bekliyor ve kod puanını ya da doğru-şey sonucunu düşürmüyor.",
+    "bulgular": [
+      {
+        "ne": "B2 kapanmamış: “13 kutuda ESKİ sayısı bekçi turundan sonra 0” canlı kabulü henüz doğrulanmamış.",
+        "kanit": "Manifestteki gerçek `sinav` ölçümü hermetik sonucu `10 geçti · 0 kaldı` olarak gösteriyor, fakat 13 kutunun bekçi turu öncesi/sonrası ESKİ sayım çifti bulunmuyor; iş kartında `canli_gerekir: true`, `canli_borc.odendi: null` ve canlı borç gerekçesi açıkça kayıtlı.",
+        "konum": "iş kartı kabul cümlesi ve `canli_borc`; kanıt manifesti `sinav` kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "13 canlı kutu + erişim yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra çifti gerçek kodun 4/10'dan 10/10'a çıktığını, mutant kaydı da eski-kod bloğu söküldüğünde sınavın kırıldığını gösteriyor. B1'in kapanışı hem üretim farkında tek `gunluk` çağrısı ve ayrı `kapi-yenile.son.log` yönlendirmesiyle hem de E1b ölçümüyle kanıtlıdır; canlı 13-kutu ölçüm çifti ise yoktur."
+  }
+}

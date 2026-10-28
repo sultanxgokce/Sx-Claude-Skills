@@ -15,7 +15,12 @@
   "kanit_nerede": "",
   "oda": "code",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-28T18:43:27+03:00",
+      "olay": "canli-borc"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "cümlede: bekci, bekçi, bekçisi",
   "kapsam_uyarilari": [],
@@ -30,6 +35,17 @@
       "zaman": "2026-10-28T18:34:42+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-28T18:42:35+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
-  ]
+  ],
+  "canli_borc": {
+    "zaman": "2026-10-28T18:43:27+03:00",
+    "yazan": "BANI",
+    "gerekce": "Kabul ölçütü (13 kutuda ESKİ → 0) yalnız birleşip ortak diske indikten sonra canlı kutularda ölçülebilir; PR kanıtı hermetik, canlı ölçüm hostsrv salt-okur ile görev WHRJ'ye yazılacak",
+    "odendi": null
+  }
 }
