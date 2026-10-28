@@ -1,0 +1,42 @@
+{
+  "is": "iskan-uye-ekle-gorev-bosluk",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T07:49:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gorev-bosluk",
+      "asama": "once",
+      "dosya": "olcum-gorev-bosluk-once.txt",
+      "sha256": "f37cc48963f32cc796d2302eb9456d4216fcbcb4a03d263407eca09043e2a655",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T07:49:34+03:00",
+      "sure_sn": 697.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8b5c6f79130f4a8eb70501cd5e1a39de"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-bosluk",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-bosluk-sonra.txt",
+      "sha256": "e5c99d794b162bde965952f0e3e111a74a0a6b358dc8b8c1850915d9c5965e36",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/g-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T07:49:35+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7684761054c34603b4a957bc13755c0f"
+    }
+  ],
+  "imza": "92107b5a27e276ec222a7101044594bec3791e80d56651317f59702c5d9f5a91"
+}
