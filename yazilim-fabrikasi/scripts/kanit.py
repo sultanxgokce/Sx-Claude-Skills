@@ -364,28 +364,53 @@ def cmd_olcum(a):
     sarili, sira_env = sira_komutu(a.komut, f"kanit-{a.is_adi}-{a.etiket}")
     p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
+    dusen_kapi = bool(DUSEN_KAPI_RE.search(p.stdout + "\n" + p.stderr)) if mut else None   # düşen kapı satırı var mı (yalnız mutasyonda anlamlı)
     with open(yol, "w", encoding="utf-8") as f:
         if mut:
+            if p.returncode == 0: hukum = "rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti)"
+            elif p.returncode == 9: hukum = "rc 9 = KURULUM HATASI, mutant hiç çalışmadı → ÖLÇÜLEMEDİ (yakalandı DEĞİL)"
+            elif p.returncode == 3: hukum = "rc 3 = ÖLÇÜLEMEDİ"
+            elif dusen_kapi: hukum = "rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI"
+            else: hukum = f"rc {p.returncode} ama düşen kapı satırı YOK (✗/FAIL/N kaldı/KALAN: N) = ÇÖKÜŞ ya da kurulum hatası → ÖLÇÜLEMEDİ (yakalandı DEĞİL)"
             f.write(f"=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; "
-                    f"rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-{mut}-* ===\n")
+                    f"{hukum}. Gerçek kod ölçümü: olcum-{mut}-* ===\n")
         f.write(f"$ {' '.join(a.komut)}\n# rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
     if mut:   # rc 3 yine ölçülemedi; bunun dışında renk TERS: kırmızı sınav beklenen sonuçtur
-        renk = "sari" if p.returncode == 3 else ("kirmizi" if p.returncode == 0 else "yesil")
+        # 🔴 ÇÖKEN MUTANT ≠ YAKALANAN MUTANT (görev …2AX9GX, 29 Eki · gorev-klasor-merkez emsali): mutant betiği geçici kopyada
+        #    `../docker-compose.defter.yml`'i bulamayıp yığın iziyle çöktü (rc 1), kayıt "sınav bozuk kodu YAKALADI" diye YEŞİL yazıldı
+        #    — sınav kodu hiç sınamamıştı. Yakalandı demek için rc≠0 YETMEZ: çıktıda DÜŞEN KAPI SATIRI (✗ / FAIL / N kaldı / KALAN: N)
+        #    olmalı. rc 9 = kurulum hatası (mutant hiç çalışmadı). Düşen kapı satırı olmayan rc≠0 → SARI "ölçülemedi" (rc 3).
+        if p.returncode == 0:
+            renk = "kirmizi"
+        elif p.returncode in (3, 9) or not dusen_kapi:
+            renk = "sari"
+        else:
+            renk = "yesil"
     else:
         renk = "sari" if p.returncode == 3 else ("yesil" if p.returncode == 0 else "kirmizi")
     kayit = {"tur": "olcum", "etiket": a.etiket, "asama": a.asama, "dosya": ad, "sha256": sha_dosya(yol),
              "komut": a.komut, "rc": p.returncode, "renk": renk, "zaman": simdi(), "sure_sn": round(sure, 1),
              "boru_denetimi": boru}
     if mut:
-        kayit.update({"mutasyon": True, "gercek_olcum": mut, "beklenen": "kirmizi"})
+        kayit.update({"mutasyon": True, "gercek_olcum": mut, "beklenen": "kirmizi", "dusen_kapi": dusen_kapi})
     kayit_ekle(depo, a.is_adi, kayit)
     if mut:
-        print(f"🧬 MUTASYON kaydı (gerçek ölçüm: {mut}) — " + ("sınav bozuk kodu YAKALADI" if renk == "yesil" else
-              ("mutant KAÇTI: sınav bozuk kodda da geçti" if renk == "kirmizi" else "ölçülemedi")))
+        if renk == "yesil": soz = "sınav bozuk kodu YAKALADI (düşen kapı satırı var)"
+        elif renk == "kirmizi": soz = "mutant KAÇTI: sınav bozuk kodda da geçti"
+        elif p.returncode == 9: soz = f"ölçülemedi: mutant KURULAMADI (rc 9 kurulum hatası) — sınav bozuk kodu hiç görmedi"
+        elif p.returncode == 3: soz = "ölçülemedi (rc 3)"
+        else: soz = (f"ölçülemedi: mutant ÇÖKTÜ ya da kurulamadı (rc {p.returncode}, düşen kapı satırı yok: ✗ / FAIL / N kaldı / KALAN: N "
+                     f"hiçbiri çıktıda değil) — rc≠0 tek başına 'yakalandı' sayılmaz; yığın izi/çöküş sınav değildir")
+        print(f"🧬 MUTASYON kaydı (gerçek ölçüm: {mut}) — {soz}")
     print(f"{'✓' if renk=='yesil' else ('◻' if renk=='sari' else '✗')} ölçüm kaydedildi: {ad} rc={p.returncode} renk={renk}")
     print(p.stdout, end="")
     if p.stderr: print(p.stderr, end="", file=sys.stderr)
     sys.exit(0 if renk != "sari" else 3)
+
+
+# 🧬 Mutasyon kaydında "yakalandı" kanıtı: düşen kapı satırı. ✗ ile başlayan satır · FAIL kelimesi · "N kaldı" (N≥1) · "KALAN: N" (N≥1).
+#    ✗ satır başında aranır; FAIL / N kaldı / KALAN: N satırın herhangi bir yerinde kelime olarak. "0 kaldı" / "KALAN: 0" / "FAILED" düşen kapı DEĞİLDİR. Yığın izi (Traceback, Error:) kapı değildir — o çöküştür, sınav değildir.
+DUSEN_KAPI_RE = re.compile(r"^\s*✗|\bFAIL\b|\bKALAN:\s*[1-9]|\b[1-9]\d*\s+kaldı\b", re.M)
 
 
 # ── ekran ────────────────────────────────────────────────────────────────────────

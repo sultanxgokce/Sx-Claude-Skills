@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh yazilim-fabrikasi/scripts/kanit.py
+# rc=0 sure=0.2s zaman=2026-10-29T01:18:29+03:00
+--- stdout ---
+🧬 MUTASYON kaydı (gerçek ölçüm: gercek) — ölçülemedi: mutant ÇÖKTÜ ya da kurulamadı (rc 1, düşen kapı satırı yok: ✗ / FAIL / N kaldı / KALAN: N hiçbiri çıktıda değil) — rc≠0 tek başına 'yakalandı' sayılmaz; yığın izi/çöküş sınav değildir
+◻ ölçüm kaydedildi: olcum-mutant-cokus-tek.txt rc=1 renk=sari
+Traceback (most recent call last):
+  File "gecit.test.mjs"
+SONUÇ: arac_rc=3 renk=sari dusen_kapi=False
+--- stderr ---
+Error: ENOENT: no such file or directory, open ../docker-compose.defter.yml

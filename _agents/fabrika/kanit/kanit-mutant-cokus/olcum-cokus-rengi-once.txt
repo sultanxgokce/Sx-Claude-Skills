@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kanit-eski.py
+# rc=1 sure=161.1s zaman=2026-10-29T01:18:28+03:00
+--- stdout ---
+🧬 MUTASYON kaydı (gerçek ölçüm: gercek) — sınav bozuk kodu YAKALADI
+✓ ölçüm kaydedildi: olcum-mutant-cokus-tek.txt rc=1 renk=yesil
+Traceback (most recent call last):
+  File "gecit.test.mjs"
+SONUÇ: arac_rc=0 renk=yesil dusen_kapi=None
+--- stderr ---
+⏳ agir-sira: kanit-kanit-mutant-cokus-cokus-rengi 161 sn bekledi (yuva 2, load1 17.59)
+Error: ENOENT: no such file or directory, open ../docker-compose.defter.yml
