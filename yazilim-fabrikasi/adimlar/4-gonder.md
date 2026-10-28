@@ -61,7 +61,7 @@
    - Sınıfsız iş → **kutu reisi** merge eder; şart: 5 + E + kanıt manifesti + CI yeşil. Deftere `kayit-damgasi`
      ile kanıt+puan+damga; gün sonu özetinde "içeride bitirdiklerimiz". (Geçiş: Nexus'ta ilk iki hafta yine
      Sultan'a sorulur — Sultan 22 Eyl.)
-   - **Gölge bildirimi sahibini değiştirmez (0.27.15, 28 Eki akşamı dersi):** "birleştirirdim, GERÇEKTEN birleştirilmedi" bildirimi (kapının gölge kaydı) işi sahibine bırakır; sınıfsız işte kapı geçti + CI yeşil + 5/E ise **işin sahibi kendisi birleştirir**, bildirimi bekleyip durmaz. Bildirim bayat olabilir (PR bu arada birleşmiş ya da kapanmış): hareket etmeden önce `gh pr view <N> --json state,mergedAt` ile durumu oku.
+   - **Gölge bildirimi sahibini değiştirmez (0.27.15, 28 Eki akşamı dersi):** "birleştirirdim, GERÇEKTEN birleştirilmedi" bildirimi (kapının gölge kaydı) işi sahibine bırakır; sınıfsız işte kapı geçti + CI yeşil + 5/E ise **işin sahibi kendisi birleştirir**, bildirimi bekleyip durmaz. (Bu cümle `golge-birlestirme.sh` çıktısında da yazılıdır ve `golge.test.sh` G19 ile ölçülür.) Bildirim bayat olabilir (PR bu arada birleşmiş ya da kapanmış): hareket etmeden önce `gh pr view <N> --json state,mergedAt` ile durumu oku.
    - CI kırmızı → merge yok, çıplak çıktıyla rapor.
 6. **Kapanış:** `is-alani.sh kapat` · kart "bitti" satırı + tetikli mesaj · `karne.sh` (F1) puanı deftere yazar.
 

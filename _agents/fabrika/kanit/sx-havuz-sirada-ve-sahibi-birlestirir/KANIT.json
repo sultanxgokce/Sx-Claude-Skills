@@ -1,7 +1,7 @@
 {
   "is": "sx-havuz-sirada-ve-sahibi-birlestirir",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T01:42:52+03:00",
+  "guncelleme": "2026-10-29T01:53:49+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -96,7 +96,81 @@
       "gercek_olcum": "sonra-sb",
       "beklenen": "kirmizi",
       "olcum_id": "0a02954d50cb4f318d43361e0d479f4d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "once-gb",
+      "asama": "once",
+      "dosya": "olcum-once-gb-once.txt",
+      "sha256": "94a2b0a2b4b42d02888b810da79feff74663a8b352759eef263b6ead2d550280",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/golge.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T01:52:07+03:00",
+      "sure_sn": 455.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9a24757e1fa8447297e697da11da63a6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sonra-gb",
+      "asama": "sonra",
+      "dosya": "olcum-sonra-gb-sonra.txt",
+      "sha256": "242dcc3fae5cbeb2b4a85222a80e8bd324127fbf2e39b9bf18aac6c73877d84f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/golge.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:52:11+03:00",
+      "sure_sn": 3.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "63c295d643cd4ccb83c0cb97a1ed4a22"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-gb-satir",
+      "asama": "tek",
+      "dosya": "olcum-mut-gb-satir-tek.txt",
+      "sha256": "02f3880b65720a04605efee5093e9f65ec7776ed12078e9aff441532dbaa9f5e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/golge.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:52:16+03:00",
+      "sure_sn": 5.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-gb",
+      "beklenen": "kirmizi",
+      "olcum_id": "14a5a78c36964033983b6373bee94c13"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-gb-oku",
+      "asama": "tek",
+      "dosya": "olcum-mut-gb-oku-tek.txt",
+      "sha256": "966b6e867ac64cff79af98f6a2ee9cbeec9873db380bbe3c747296c9a2ce296e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/golge.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:53:49+03:00",
+      "sure_sn": 93.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-gb",
+      "beklenen": "kirmizi",
+      "olcum_id": "9206b5c1c4c345bd87b77646ec058bc0"
     }
   ],
-  "imza": "36e141143bd835dd213f21e0ae5ce2ed8b684b658d7405e9b7b196ef1b75be5e"
+  "imza": "da712785b1a331bc0c5d648f235d308aa5a617ae3310cb9c8bdbf0c68cef0c9c"
 }

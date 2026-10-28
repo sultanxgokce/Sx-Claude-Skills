@@ -62,6 +62,7 @@ if [ "$RC" -eq 10 ]; then echo "· golge: '$IS' PR #${PR:--} aynı başla zaten 
 [ "$RC" -eq 0 ] || { echo "⚠ golge-birlestirme: defter satırı yazılamadı" >&2; exit 0; }
 MSG="birleştirirdim: '$IS'${PR:+ (PR #$PR)}${REPO:+ · $REPO} — 5/E + kapı temiz + sınıfsız; GERÇEKTEN birleştirilmedi (1 hafta yalnız bildirim)"
 echo "✓ golge: $MSG"
+echo "· sahibi sensin: gölge yalnız bildirimdir — kapı + CI yeşilse KENDİN birleştir, bildirimi bekleme. Önce durumu oku (bildirim bayat olabilir): gh pr view ${PR:-<N>} --json state,mergedAt"
 
 GS="${FABRIKA_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
 if [ -n "$GOREV" ] && [ -x "$GS" ]; then
