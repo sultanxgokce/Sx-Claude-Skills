@@ -1,7 +1,7 @@
 {
   "is": "kadro-etiket-kapi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T10:32:42+03:00",
+  "guncelleme": "2026-10-28T20:05:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -174,7 +174,31 @@
       "gercek_olcum": "etiket-uc",
       "beklenen": "kirmizi",
       "olcum_id": "a51279cb5cd74a3eb4d8603a19faba16"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "sultan-canli-form-20261028-2000",
+      "asama": "sonra",
+      "dosya": "dosya-sultan-canli-form-20261028-2000-sonra.jpg",
+      "sha256": "7f5c83c0cb1fa44f2b0393a8bf6265902a58da98d415910c61c84d414b3d9798",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kadro-kare/sultan-kadro-etiket-form-20261028-2000.jpg",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T20:05:19+03:00",
+      "olcum_id": "073590b32a4742c6a94346e59ed416bd"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "sultan-canli-kaydedildi-20261028-2000",
+      "asama": "sonra",
+      "dosya": "dosya-sultan-canli-kaydedildi-20261028-2000-sonra.jpg",
+      "sha256": "ad4a37d44cb712f583fd6d46957cbf2f838f07bcda3276f30f7c6e711cfb462b",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kadro-kare/sultan-kadro-etiket-kaydedildi-20261028-2000.jpg",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T20:05:19+03:00",
+      "olcum_id": "7e723d722e864cb5b74a83ddac4418cc"
     }
   ],
-  "imza": "cd0c778c8a3701a817ad2bf83baf1de9a66f64746f84018e1c7f0325cd0e60c9"
+  "imza": "0fff4fd6401e7878724995e366ebefd285bbf2b9cb192ce412c33d3c39675e40"
 }
