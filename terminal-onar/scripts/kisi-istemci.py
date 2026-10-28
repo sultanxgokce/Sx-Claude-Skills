@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """kisi-istemci.py — kısıtlı kişinin (ayse) terminali: koltuk-köprüsü istemcisi (A5-1). ttyd-kisi'nin SABİT komutu; kabuk YOK.
 
-Kullanım: kisi-istemci.py <koltuk>      (köprü soketi: KOPRU_SOKET, vars. /run/kisi/koprusu.sock)
+Kullanım: kisi-istemci.py [<koltuk>]    (köprü soketi: KOPRU_SOKET, vars. /run/kisi/koprusu.sock)
+Koltuk ADI VERİLMEZSE (ttyd-kisi komutu böyle başlatır; merkez kişi için ?arg='yı bilerek reddeder) köprüden izinli koltuklar listelenir:
+  tek koltuk → doğrudan ona bağlanır · birden çok → 1-9 ile seçilir (r yeniler, q çıkar) · hiç yoksa nedeni yazar ve r/q bekler.
+  Koltuk adı URL'den ALINMAZ: seçim yalnız köprünün kendi (izinli ∩ görünür) listesinden gelir — saldırı yüzeyi açılmaz.
 Ekran koltuğu SALT OKUR gösterir (alt satır hariç). Tuşlar yalnız burada yorumlanır, köprüye ham tuş GİTMEZ:
   m  → mesaj yaz (Enter gönderir · Esc vazgeçer)      1-9 → koltuk menü sorusu bekliyorsa o şıkkı seç      q → çık
 Başka her tuş atılır. (Güvenlik köprüdedir; bu istemci yalnız kullanım kolaylığı: köprü zaten başka eylem tanımaz.)
@@ -21,6 +24,9 @@ def boyut():
         return max(s, 3), max(c, 20)
     except OSError:
         return 24, 80
+
+
+HAL = {"calisiyor": "çalışıyor", "soru": "soru bekliyor", "bos": "boşta"}
 
 
 class Istemci:
@@ -75,6 +81,57 @@ class Istemci:
             return False
         return True
 
+    def liste_al(self):
+        """Köprüden izinli koltuk listesi: (koltuklar, None) ya da (None, kullanıcı dilinde neden)."""
+        self.yolla(op="liste")
+        while b"\n" not in self.gelen:
+            v = self.s.recv(65536)
+            if not v:
+                return None, "Köprü bağlantıyı kapattı."
+            self.gelen += v
+        l, self.gelen = self.gelen.split(b"\n", 1)
+        m = json.loads(l)
+        if m.get("t") == "liste":
+            return list(m.get("koltuklar") or []), None
+        return None, NEDEN.get(m.get("neden"), "Koltuk listesi alınamadı (%s)." % m.get("neden"))
+
+    def tek_tus(self):
+        v = os.read(0, 16)
+        return v.decode("utf-8", "ignore")[:1] if v else None
+
+    def menu(self):
+        """Argümansız açılış: izinli koltuğu seç. Seçilen koltuk adını ya da None (çıkış) döner."""
+        eski = termios.tcgetattr(0) if os.isatty(0) else None
+        try:
+            if eski:
+                tty.setraw(0)
+            while True:
+                kl, neden = self.liste_al()
+                sys.stdout.write("\x1b[2J\x1b[H")
+                if kl is None:
+                    sys.stdout.write("%s\r\n\r\n[r] yeniden dene · [q] çık\r\n" % neden)
+                elif not kl:
+                    sys.stdout.write("Bu hesaba şu an açık koltuk görünmüyor.\r\n\r\n[r] yenile · [q] çık\r\n")
+                elif len(kl) == 1:
+                    return kl[0]["ad"]
+                else:
+                    sys.stdout.write("Hangi koltuğa bağlanalım?\r\n\r\n")
+                    for i, k in enumerate(kl[:9], 1):
+                        sys.stdout.write("  %d  %s  (%s)\r\n" % (i, k["ad"], HAL.get(k.get("hal"), k.get("hal") or "?")))
+                    sys.stdout.write("\r\n[1-%d] seç · [r] yenile · [q] çık\r\n" % min(len(kl), 9))
+                sys.stdout.flush()
+                while True:
+                    ch = self.tek_tus()
+                    if ch is None or ch in ("q", "\x03"):
+                        return None
+                    if ch == "r":
+                        break
+                    if kl and ch in "123456789" and int(ch) <= min(len(kl), 9):
+                        return kl[int(ch) - 1]["ad"]
+        finally:
+            if eski:
+                termios.tcsetattr(0, termios.TCSADRAIN, eski)
+
     def calis(self):
         satir, sutun = boyut()
         self.yolla(op="izle", koltuk=self.koltuk, satir=satir - 1, sutun=sutun)
@@ -113,9 +170,13 @@ class Istemci:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit("kullanım: kisi-istemci.py <koltuk>")
+    if len(sys.argv) > 2:
+        sys.exit("kullanım: kisi-istemci.py [<koltuk>]")
     try:
-        Istemci(sys.argv[1]).calis()
+        ist = Istemci(sys.argv[1] if len(sys.argv) == 2 else None)
+        if ist.koltuk is None:
+            ist.koltuk = ist.menu()
+        if ist.koltuk is not None:
+            ist.calis()
     except OSError as e:
         sys.exit("Köprüye bağlanılamadı (%s). Biraz sonra yeniden dene." % e.strerror)

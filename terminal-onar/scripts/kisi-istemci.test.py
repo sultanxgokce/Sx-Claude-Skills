@@ -40,11 +40,11 @@ for _ in range(50):
     time.sleep(0.1)
 
 
-def baslat(koltuk):
+def baslat(koltuk=None):   # None = ARGÜMANSIZ: ttyd-kisi komutu istemciyi böyle başlatır (ttyd her bağlantıda pty içinde bu komutu çalıştırır)
     pid, fd = pty.fork()
     if pid == 0:
         os.environ.update(ENV); os.environ["TERM"] = "xterm"
-        os.execv(sys.executable, [sys.executable, ISTEMCI, koltuk])
+        os.execv(sys.executable, [sys.executable, ISTEMCI] + ([koltuk] if koltuk else []))
     fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", 24, 80, 0, 0))
     return pid, fd
 
@@ -92,6 +92,38 @@ try:
     pid, fd = baslat("yasak-ana"); ekran = oku(fd, 2.0)
     ok("I9 izinsiz koltukta kullanıcı dilinde ret", "erişimin yok" in ekran, ekran[-200:])
     os.write(fd, b"q"); oku(fd, 0.3)
+    # ── ARGÜMANSIZ AÇILIŞ (HADH10 · 28 Eki canlı: ttyd-kisi komutu koltuk taşımıyor, merkez ?arg='yı kişi için 403 yapıyor →
+    #    istemci 'kullanım' yazıp çıkıyor, ekran 'Press Enter to Reconnect' döngüsüne giriyordu; eski sınavlar hep argümanla başlattığı için görmedi)
+    def bitti_mi(pid, sn=6):
+        for _ in range(int(sn / 0.2)):
+            r = os.waitpid(pid, os.WNOHANG)
+            if r[0]:
+                return os.WEXITSTATUS(r[1])
+            time.sleep(0.2)
+        return None
+    pid, fd = baslat(); ekran = oku(fd, 2.5)
+    ok("I10 argümansız + iki izinli koltuk → menü (kullanım yazıp ÇIKMAZ): iki koltuk adı + seçim satırı", "demo-ana" in ekran and "menu-ana" in ekran and "[1-2] seç" in ekran and "kullanım" not in ekran and os.waitpid(pid, os.WNOHANG)[0] == 0, repr(ekran)[:500])
+    os.write(fd, b"z9"); ekran = oku(fd, 0.6)
+    ok("I11 menüde geçersiz tuş (z · listede olmayan 9) atılır, menü yerinde kalır", os.waitpid(pid, os.WNOHANG)[0] == 0 and "ISTEMCI-GORUR" not in ekran, repr(ekran)[:200])
+    os.write(fd, b"1"); ekran = oku(fd, 3)
+    ok("I12 menüde 1 → ilk koltuğa (demo-ana) bağlandı, ekranı görünür", "ISTEMCI-GORUR" in ekran and "mesaj gönder" in ekran, repr(ekran)[:400])
+    os.write(fd, b"q"); ok("I13 bağlandıktan sonra q temiz çıkış (rc 0)", bitti_mi(pid) == 0)
+    pid, fd = baslat(); oku(fd, 1.5); os.write(fd, b"2"); ekran = oku(fd, 2.5)
+    ok("I14 menüde 2 → ikinci koltuğa (menu-ana) bağlandı", "Devam?" in ekran, repr(ekran)[:300]); os.write(fd, b"q"); oku(fd, 0.4)
+    pid, fd = baslat(); oku(fd, 1.5); os.write(fd, b"q")
+    ok("I15 menüde q → çıkış rc 0 (koltuğa bağlanmadan)", bitti_mi(pid) == 0)
+    LISTE_ESKI = open(T + "/liste.tsv").read()
+    yaz(T + "/liste.tsv", "demo-ana\t1\t1\tajan\tcalisiyor\t\t\t\n")
+    pid, fd = baslat(); ekran = oku(fd, 3)
+    ok("I16 argümansız + TEK izinli koltuk → menüsüz, doğrudan o koltuğa bağlanır", "ISTEMCI-GORUR" in ekran and "Hangi koltuğa" not in ekran, repr(ekran)[:300]); os.write(fd, b"q"); oku(fd, 0.4)
+    yaz(T + "/liste.tsv", "")
+    pid, fd = baslat(); ekran = oku(fd, 2)
+    ok("I17 argümansız + hiç koltuk yok → nedeni yazar, ÇIKMAZ (r/q bekler)", "açık koltuk görünmüyor" in ekran and os.waitpid(pid, os.WNOHANG)[0] == 0, repr(ekran)[:300])
+    yaz(T + "/liste.tsv", "demo-ana\t1\t1\tajan\tcalisiyor\t\t\t\n"); os.write(fd, b"r"); ekran = oku(fd, 3)
+    ok("I18 koltuk görününce r → yeniler ve doğrudan bağlanır", "ISTEMCI-GORUR" in ekran, repr(ekran)[:300]); os.write(fd, b"q"); oku(fd, 0.4)
+    yaz(T + "/liste.tsv", LISTE_ESKI)
+    pid, fd = baslat("demo-ana"); ekran = oku(fd, 2.5)
+    ok("I19 koltuk adı VERİLİRSE eski yol aynen (menü yok)", "ISTEMCI-GORUR" in ekran and "Hangi koltuğa" not in ekran, repr(ekran)[:200]); os.write(fd, b"q"); oku(fd, 0.4)
 finally:
     kopru.terminate(); tmux("kill-server"); shutil.rmtree(T, ignore_errors=True)
 print("\n%d geçti, %d kaldı" % (sonuc["gecti"], sonuc["kaldi"])); sys.exit(1 if sonuc["kaldi"] else 0)

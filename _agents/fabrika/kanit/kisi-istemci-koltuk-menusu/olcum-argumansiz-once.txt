@@ -1,0 +1,25 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/mn-once.sh
+# rc=1 sure=23.1s zaman=2026-10-28T09:43:48+03:00
+--- stdout ---
+  ✓ I1 koltuk ekranı + yardım satırı görünüyor
+  ✓ I2 tanımsız tuşlar atıldı (mesaj yolu çalışmadı)
+  ✓ I3 tanımsız tuşlar koltuğa gitmedi
+  ✓ I4 m + yazı + Enter → mesaj köprüden geçti
+  ✓ I5 durum satırı 'mesaj gönderildi'
+  ✓ I6 Esc ile vazgeçilen mesaj gitmedi
+  ✓ I7 q ile temiz çıkış (rc 0)
+  ✓ I8 rakam → sunulan şık koltuğa gitti
+  ✓ I9 izinsiz koltukta kullanıcı dilinde ret
+  ✗ I10 argümansız + iki izinli koltuk → menü (kullanım yazıp ÇIKMAZ): iki koltuk adı + seçim satırı  → 'kullanım: kisi-istemci.py <koltuk>\r\n'
+  ✗ I11 menüde geçersiz tuş (z · listede olmayan 9) atılır, menü yerinde kalır  → 'z9'
+  ✗ I12 menüde 1 → ilk koltuğa (demo-ana) bağlandı, ekranı görünür  → ''
+--- stderr ---
+⏳ agir-sira: kanit-kisi-istemci-koltuk-menusu-argumansiz 10 sn bekledi (yuva 2, load1 17.87)
+Traceback (most recent call last):
+  File "/config/projects/_wt/Sx-Claude-Skills-kisi-istemci-koltuk-menusu/terminal-onar/scripts/kisi-istemci.test.py", line 110, in <module>
+    os.write(fd, b"q"); ok("I13 bağlandıktan sonra q temiz çıkış (rc 0)", bitti_mi(pid) == 0)
+                                                                          ^^^^^^^^^^^^^
+  File "/config/projects/_wt/Sx-Claude-Skills-kisi-istemci-koltuk-menusu/terminal-onar/scripts/kisi-istemci.test.py", line 99, in bitti_mi
+    r = os.waitpid(pid, os.WNOHANG)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ChildProcessError: [Errno 10] No child processes
