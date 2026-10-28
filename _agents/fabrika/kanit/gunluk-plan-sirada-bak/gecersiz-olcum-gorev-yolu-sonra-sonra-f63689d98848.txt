@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-gorev-yolu-sonra-sonra.txt
+hedef_sha256: 976e2ddd82b089e272337570acab28be117160eabc7fc3b003992d0b45f3dfce
+hedef_zaman: 2026-10-27T20:39:00+03:00
+hedef_renk: yesil
+neden: gorev.sh eşitlemesi denetçi tur 1 bulgusuyla PR kapsamından çıkarıldı; bu ölçüm o değişikliğe aitti ve artık PR'ın parçası değil (gorev-yolu.test.sh bu PR'da değişmedi)
+kim: MUAVIN
+karsi: -
+zaman: 2026-10-27T20:57:53+03:00

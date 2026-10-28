@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-layiha-sinavi-tek-* ===
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-sx.sh s|\^(?=\.{2,31}\$)\[a-z\]\[a-z0-9\]\*(-\[a-z0-9\]+)\*\$|^[a-z][a-z0-9-]{1,30}$|
+# rc=1 sure=8.5s zaman=2026-10-27T15:10:33+03:00
+--- stdout ---
+FAIL  OD3d sınır vakası 'a-' (sonda/art arda/baştaki tire, tek karakter) reddedilir — beklenen
+FAIL  OD3d sınır vakası 'a--b' (sonda/art arda/baştaki tire, tek karakter) reddedilir — beklen
+FAIL  OD3d sınır vakası 'a-b-' (sonda/art arda/baştaki tire, tek karakter) reddedilir — beklen
+MUTASYON rc=1
+--- stderr ---

@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-esleme-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ke.sh B4
+# rc=1 sure=2.0s zaman=2026-10-28T02:09:09+03:00
+--- stdout ---
+MUTANT B4 rc=1
+  ✗ Q9b deftere-yaz: defter kaydı DEFTER adıyla yazılır (kim=NECCAR) — 'kim=NECCAR' yok:   ◻ yazardım: ilk madde
+YAKALANDI
+--- stderr ---

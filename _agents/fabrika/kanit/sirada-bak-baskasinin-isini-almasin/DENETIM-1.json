@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "sirada-bak-baskasinin-isini-almasin",
+  "pr": "510",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T22:39:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-baskasinin-isini-almasin",
+  "dal": "sirada-bak-baskasinin-isini-almasin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19757,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8022
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7d6236718edbd48969cc3649acf8bc929b340b5f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sırada’nın tamamı kutu düzeyinde sayılıyor, fakat başlatma adayı yalnız koltuğa atanmış veya sahipsiz işlerden seçiliyor; uygun aday yoksa başkasının işi üstlenilmiyor. Gerçek ölçüm 37/37 geçti ve iki mutasyon sınavı hatalı davranışı yakaladı; yalnız belgedeki canlı ölçüm cümlesinin bu manifestte dayanağı yok.",
+    "bulgular": [
+      {
+        "ne": "SKILL.md içindeki “code kutusunda 27 işin yalnız 8’i...” canlı ölçüm iddiası, sunulan kanıt manifestinde ölçülmemiş.",
+        "kanit": "Manifestte gerçek ölçüm olarak yalnız sentetik test betiği `bash gunluk-plan/scripts/sirada-bak.test.sh` bulunuyor; çıktıda 37 test sonucu var, 27/8 canlı veri ölçümü yok.",
+        "konum": "gunluk-plan/SKILL.md:140; kanıt manifesti `sirada-bak-sonra`",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm 37/37 yeşil, M7 ve M8 mutasyon kayıtları da sınavın başkasının işini seçme ve kimliksiz başlatma bozulmalarını yakaladığını gösteriyor. Önce/sonra çifti yok, ancak hedef davranışın olumlu senaryoları ve mutasyon karşılıkları yeterince güçlü; yalnız belgelenen 27/8 canlı ölçümü manifestte yer almıyor."
+  }
+}

@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-esleme-tur2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ke.sh B2
+# rc=2 sure=0.0s zaman=2026-10-28T02:11:31+03:00
+--- stdout ---
+MUTASYON ÜRETİLEMEDİ: B2 kutu-bul.sh 0
+MUTANT ÜRETİLEMEDİ
+--- stderr ---

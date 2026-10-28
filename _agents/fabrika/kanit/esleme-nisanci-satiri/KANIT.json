@@ -1,0 +1,25 @@
+{
+  "is": "esleme-nisanci-satiri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T03:48:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "esleme-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-esleme-sonra-sonra.txt",
+      "sha256": "9316d66fad5d7229df8ddee9f5a1587d5442d633db4ae33d13472fb7bb14cfe2",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T03:48:13+03:00",
+      "sure_sn": 62.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "476fb5fc8b8c49ad8ff7b77a11a43ff4"
+    }
+  ],
+  "imza": "ad5312a12a7b874601c1c9f46f260bd5f760759babf8f39ce3937b7d326ac3fa"
+}

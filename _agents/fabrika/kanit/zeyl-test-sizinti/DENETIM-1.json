@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "zeyl-test-sizinti",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T06:15:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-zeyl-test-sizinti",
+  "dal": "zeyl-test-sizinti",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 7334,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 2842
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0b36658b3eda8c0f00bd5ffed5580912d964db66",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Geçici dizinler tek bir kök altında toplanmış ve EXIT tuzağıyla çıkışta silinecek biçimde düzenlenmiş. Araç imzalı önce/sonra ölçümü bırakılan dizin sayısının 12’den 0’a indiğini doğrudan gösterdiği için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. Aynı izole ölçüm önce rc=1 ile birakilan=12, sonra rc=0 ile birakilan=0 sonucunu veriyor; talepteki sızıntı iddiasını doğrudan ölçen yeterli bir ölçüm çifti mevcut."
+  }
+}

@@ -1,0 +1,293 @@
+$ bash -c cd layiha && exec bash scripts/layiha-defteri.test.sh
+# rc=0 sure=8.0s zaman=2026-10-27T15:10:25+03:00
+--- stdout ---
+=== G1 · sözdizimi ===
+PASS  G1 layiha-defteri.sh bash -n
+PASS  G1 layiha-filo.sh bash -n
+PASS  G1 kitaplık python-sözdizimi
+
+=== G2 · kimlik: yeni kayıt v + proje taşır ===
+PASS  G2 ekle rc=0
+PASS  G2 şema-sürümü yazıldı
+PASS  G2 proje (oda) yazıldı
+PASS  G2 kod atandı (K6: CELL_ID unset → s01 öneki)
+
+=== G3 · liste SALT-OKURDUR (eski sürüm dosyayı sessizce yeniden yazıyordu) ===
+PASS  G3 liste rc=0
+PASS  G3 üç listeden sonra defter BAYT-AYNI
+PASS  G3 eksik alanlı eski kayıt yine de listede (bellekte normalize)
+PASS  G3 eski kayda bellekte kod verildi
+
+=== G4 · tanınmayan bayrak SESSİZCE YUTULMAZ ===
+PASS  G4 --proje (yok böyle bir bayrak) rc=2
+PASS  G4 hata mesajı geçerli bayrakları sayıyor
+PASS  G4 gerçek bayrak hâlâ çalışıyor
+
+=== G5 · 'hangi çekmeceyi açtım' satırı ===
+PASS  G5 oda adı basılıyor
+PASS  G5 defter yolu basılıyor
+PASS  G5 porcelain özetinde defter yolu var
+
+=== G6 · İLERİ-SÜRÜM KAPISI: yeni şemalı defteri eski araç EZEMEZ ===
+PASS  G6 ileri-sürümlü deftere yazma rc=2
+PASS  G6 hata sürümü söylüyor
+PASS  G6 defter DEĞİŞMEDİ (hiçbir şey yazılmadı)
+PASS  G6 durum-flip de reddedildi
+
+=== G7 · eşzamanlı yazım: iki paralel ekle, iki kayıt da hayatta (flock + atomik) ===
+PASS  G7 iki kayıt da yazıldı
+PASS  G7 hiçbir satır yarım/bozuk değil
+
+=== G8 · K1: proje klasörü olmayan yerde ortak dizine YAZMAZ ===
+PASS  G8 git-siz dizinde ekle rc=2
+PASS  G8 git-siz dizinde liste rc=2
+PASS  G8 ortak dizinde layiha defteri OLUŞMADI
+
+=== G9 · mevcut davranış korundu (tescil disiplini regresyonu) ===
+PASS  G9 durum rc=0
+PASS  G9 insa-edildi otomatik tescil-kuyruğuna girdi
+PASS  G9 muhursuz TAM-tescil REDDEDİLDİ (sahte-tescil panzehiri)
+PASS  G9 HAFİF tescil gerekçeyle geçti
+PASS  G9 tescilli kayıt aktif listeden düştü
+PASS  G9 tescil sonrası şema-sürümü korundu
+
+=== G10 · FİLO görünümü (K3): her satırda oda adı, YALNIZ başlık ===
+PASS  G10 filo rc=0
+PASS  G10 birinci oda göründü
+PASS  G10 ikinci oda göründü
+PASS  G10 başlık basıldı
+PASS  G10 devam-cümlesi BASILMADI (yalnız başlık)
+PASS  G10 doküman yolu BASILMADI
+PASS  G10 İ1 sınırı alt-notta söyleniyor
+PASS  G10 toplam 2 layiha sayıldı
+PASS  G10 filo hiçbir deftere YAZMADI
+PASS  G10 filo tanınmayan bayrağı reddediyor
+
+=== G11 · kuyruk-değişmezi: inşa bitmiş kayıt tescil kuyruğu DIŞINDA kalamaz ===
+PASS  G11 elle bozulmuş kayıt kuyrukta göründü
+PASS  G11 muaf kayıt kuyruğa ÇEKİLMEDİ (verdikt ezilmiyor)
+PASS  G11 inşası bitmemiş kayıt kuyruğa girmedi
+PASS  G11 liste hâlâ salt-okur (dosya değişmedi)
+PASS  G11 muaf kayıt hâlâ muaf görünüyor
+
+=== G12 · simetrik kapı: inşa geri alınınca kayıt kuyrukta ASILI kalmaz ===
+PASS  G12 önce kuyruğa girdi
+PASS  G12 çıkış kullanıcıya SÖYLENİYOR
+PASS  G12 kuyruktan düştü
+PASS  G12 kayıt kaybolmadı (hepsi'nde duruyor)
+PASS  G12 muaf verdikti EZİLMEDİ
+
+=== G13 · kanıt kalıcılığı: damga vurulurken mühür depoya alınır ===
+PASS  G13 tescil rc=0
+PASS  G13 mühür depoya kopyalandı
+PASS  G13 özet de kopyalandı
+PASS  G13 dış kaynak SİLİNMEDİ (kopya, taşıma değil)
+PASS  G13 kayıt tescilli
+PASS  G13 mevcut kanıt üzerine YAZILMADI
+
+=== G14 · KANIT KAPISI (K7): 'insa-edildi' kanıtsız ilan edilemez ===
+PASS  G14a kanıtsız insa-edildi rc=2
+PASS  G14a reçete tek satırda basıldı
+PASS  G14a 'kanıtsız' dalı ayrıca ölçülüyor (biçim-dalına düşmüyor)
+PASS  G14a durum DEĞİŞMEDİ (yazma olmadı)
+PASS  G14a kuyruğa da GİRMEDİ
+PASS  G14b serbest-metin kanıt rc=2
+PASS  G14b var-olmayan dosya yolu rc=2
+PASS  G14b kısa/hex-olmayan sha rc=2
+PASS  G14c PR-ref kabul rc=0
+PASS  G14c kanıt kullanıcıya geri okundu
+PASS  G14c kanıt kayda yazıldı (insa_kanit)
+PASS  G14c kanıt porcelain 12. sütunda
+PASS  G14c kanıt insan-listesinde görünüyor
+PASS  G14d 7-hex commit sha kabul rc=0
+PASS  G14d sha kayda yazıldı
+PASS  G14d PR URL'i kabul rc=0
+PASS  G14d MEVCUT dosya yolu kabul rc=0
+PASS  G14e insa-bekliyor kanıtsız geçer
+PASS  G14e insa-ediliyor izinle geçer, kanıt İSTEMEZ
+PASS  G14f eski kayıt listelenirken rc=0 (hata YOK)
+PASS  G14f eski kayıt görünüyor
+PASS  G14f eski kayıtta boş 'kanıt:' satırı basılmıyor
+PASS  G14f liste hâlâ salt-okur — göç YOK
+PASS  G14f eski kayıt porcelain'de boş kanıt taşıyor
+PASS  G14g kanıtla geçen kayıt kuyruğa girdi
+PASS  G14g eski (alanı olmayan) kayıt da kuyrukta
+PASS  G14g geri alınan kayıt kuyruktan düştü
+PASS  G14h ekle --durum insa-edildi kanıtsız rc=2
+PASS  G14h kanıtla geçti
+PASS  G15a şema-dışı kayıt stderr'de duyuruluyor
+PASS  G15b uyarı DÜZELTME REÇETESİ veriyor
+PASS  G15c liste SATIRINDA da görünüyor (stderr yeterli değil)
+PASS  G15d sağlam kayıt ETKİLENMİYOR (yanlış-pozitif yok)
+PASS  G15e kapı SALT-OKUR — kayıt düzeltilmiyor, defter değişmiyor
+PASS  G15f şema-dışı kayıt hâlâ listede (gizlenmiyor, işaretleniyor)
+
+=== G16 · İŞ KAYDI: kim istedi · hangi izinle · geri alma (K2/K3/K5/K7-izin) ===
+PASS  G16a ekle --isteyen rc=0
+PASS  G16a isteyen kayda yazıldı (küçük harfe normalize)
+PASS  G16a yetki kayda yazıldı
+PASS  G16a isteyen verilmezse BOŞ kalır (ajan sayılmaz)
+PASS  G16b --isteyen'siz güncelleme eski değeri korudu
+PASS  G16c --sultan yalnız Sultan'ınkini verir
+PASS  G16c --sultan ajan işini vermez
+PASS  G16c --ajan yalnız ajanınkini verir
+PASS  G16c iki eksen birlikte (--aktif --ajan) çalışıyor
+PASS  G16c --isteyeni-bilinmeyen kimsiz kaydı verir
+PASS  G16d insan-çıktısı gizlenen kaydı duyuruyor
+PASS  G16d porcelain özetinde sayı var
+PASS  G16e izinsiz insa-ediliyor rc=2
+PASS  G16e reçete veriyor
+PASS  G16e yer-tutucu izin ('yok') reddedilir
+PASS  G16e geçerli izinle geçer
+PASS  G16e izin kayda yazıldı
+PASS  G16e izin listede görünüyor
+PASS  G16e --izin yanlış geçişte reddedilir
+PASS  G16f geri-al gerekçesiz rc=2
+PASS  G16f gerekçeli geri-al rc=0
+PASS  G16f durum geri döndü
+PASS  G16f kanıt temizlendi
+PASS  G16f kayıt SİLİNMEDİ (defterde duruyor)
+PASS  G16f tescil kuyruğundan çıktı
+PASS  G16f ters kayıt geçmişe düştü
+PASS  G16f eski kanıt ters-kayıtta SAKLI (silinmedi, taşındı)
+PASS  G16g verdiktli kayıt geri alınamaz rc=2
+PASS  G16g gerekçe MÜHÜRDAR'a yönlendiriyor
+PASS  G16g verdikt korundu
+PASS  G16h alanı olmayan eski kayıt rc=0
+PASS  G16h liste hâlâ SALT-OKUR (göç yok)
+PASS  G16h eski kayıt 'bilinmiyor' sınıfında
+
+=== G17 · NİZAM hücresi (L66-F2): kapalı küme AMA 'belirsiz' meşru ===
+PASS  G17 geçerli hücre rc=0
+PASS  G17 kanonik biçimde yazıldı
+PASS  G17 küme-dışı hücre rc=2
+PASS  G17 reçete gösterilir
+PASS  G17 reddedilen kayıt YAZILMADI
+PASS  G17 'belirsiz' kabul edilir
+PASS  G17 'belirsiz' kayda geçer
+PASS  G17 hücresiz kayıt yazılır (geriye-uyum)
+PASS  G17 hücresizlik yüksek sesle söylenir
+PASS  G17 boş, 'belirsiz'e ÇEVRİLMEZ
+PASS  G17 alansız eski kayıt okuma yolunu çökertmez
+PASS  G17 eski kayıt listede görünür
+
+=== G18 · K6 hücre öneki: yeni kod <CELL>-L## + eski öneksiz kod geri-uyumlu ===
+PASS  G18 CELL_ID unset → s01 öneki
+PASS  G18 CELL_ID=s04 → s04 öneki
+PASS  G18 eski öneksiz kod 'durum' ile çalışıyor rc=0
+PASS  G18 eski kod DEĞİŞMEDEN kaldı (önek eklenmedi)
+PASS  G18 karışık defterde numaralandırma çakışmıyor
+PASS  G18 liste yeni-önekli kodu gösteriyor
+PASS  G18 liste eski-öneksiz kodu da gösteriyor
+
+
+=== G19 · L35-F1 DOĞRULAMA KAPISI: yeni açık iş kendini nasıl sınayacağını yazar ===
+PASS  G19a --dogrula'sız yeni açık kayıt rc=2
+PASS  G19a red mesajı Sultan-dilinde (cümle değil komut ister)
+PASS  G19a reçete gösteriliyor
+PASS  G19a REDDEDİLEN kayıt deftere YAZILMADI
+PASS  G19b sır-desenli komut reddedildi rc=2 [cat ui/.env]
+PASS  G19b red sebebi söyleniyor [cat ui/.env]
+PASS  G19b sır-desenli komut reddedildi rc=2 [echo $OPENROUTER_API_KEY]
+PASS  G19b red sebebi söyleniyor [echo $OPENROUTER_API_KEY]
+PASS  G19b sır-desenli komut reddedildi rc=2 [printenv]
+PASS  G19b red sebebi söyleniyor [printenv]
+PASS  G19b sır-desenli komut reddedildi rc=2 [vault-cek get NEXUS_TOKEN]
+PASS  G19b red sebebi söyleniyor [vault-cek get NEXUS_TOKEN]
+PASS  G19b sır-komutlu kayıt deftere YAZILMADI
+PASS  G19c varlık-grep (-c) kabul edildi rc=0
+PASS  G19c komut kayda yazıldı
+PASS  G19c çıkış-kodu komutu kabul edildi rc=0
+PASS  G19c 'ui/.env' üzerinde -c'li varlık-grep MEŞRU
+PASS  G19d yer-tutucu ('yok') reddedildi rc=2
+PASS  G19e eski (dogrula'sız) kayıtla liste rc=0
+PASS  G19e eski kayıt listede GÖRÜNÜYOR
+PASS  G19e liste eski kaydı GÖÇ ETTİRMEDİ (defter bayt-aynı)
+PASS  G19e eski kaydın dogrula alanı diske YAZILMADI
+PASS  G19f eski kaydın güncellenmesi --dogrula İSTEMEZ rc=0
+PASS  G19g insa-edildi doğan kayıt --dogrula İSTEMEZ rc=0
+PASS  G19h komut insan-listesinde görünüyor
+PASS  G19h porcelain 16. sütun = dogrula
+
+=== G20 · K2 kapalı-biçim + K3 yetki-ekseni + K6 oda-öneki (Sultan-onaylı, 2026-08-27) ===
+PASS  G20a serbest-metin isteyen ('SERDAR') rc=2
+PASS  G20a reçete biçimi söylüyor
+PASS  G20a küme-dışı yetki rc=2
+PASS  G20a reddedilen kayıt deftere YAZILMADI
+PASS  G20b <oda>/<rol> isteyen rc=0
+PASS  G20b isteyen normalize saklandı
+PASS  G20b yetki saklandı
+PASS  G20c isteyen ALANI dosyada yok
+PASS  G20c yetki ALANI dosyada yok
+PASS  G20d yetki=sultan-emri --sultan'a düşer
+PASS  G20d ajan işi --sultan'a düşmez
+PASS  G20d mim-isi --ajan'da
+PASS  G20e sultan-emri satırında ⚜ rozeti
+PASS  G20e ajan satırında ⚙ rozeti
+PASS  G20f görünümde kod önekli: [s01-L13]
+PASS  G20f liste dosyadaki kodu DEĞİŞTİRMEDİ
+PASS  G20f porcelain ham kodu basıyor (kontrat korunur)
+PASS  G20g durum 's01-L13' öneksiz L13 kaydını buldu
+PASS  G20g dosyadaki kod alanı hâlâ 'L13' (append-only)
+PASS  G20g tescil de önekli girdiyle çalıştı
+PASS  G20h yabancı önek rc=2
+PASS  G20h uyarı 'bu defter … defteri' diyor
+PASS  G20h tescil'de de yabancı önek rc=2
+PASS  G20h geri-al'da da yabancı önek rc=2
+PASS  G20i reçete D1-damga biçimini örnekliyor
+PASS  G20i A06: aracın söz-üretmediği yazılı
+
+=== G21 · K#4 META-FREEZE KAPISI: tavan aşılmışsa yeni meta-iş PARKTA (diş 2026-09-07) ===
+PASS  G21a tavan aşılmışken yeni kayıt RC=4
+PASS  G21a defter boş kaldı (yazılmadı)
+PASS  G21a mesaj META-FREEZE
+PASS  G21a reçete --yetki sultan-emri
+PASS  G21a ölçüm satırı basıldı
+PASS  G21b sultan-emri muaf RC=0
+PASS  G21b kayıt yazıldı
+PASS  G21c mevcut kayıt güncellemesi muaf RC=0
+PASS  G21d ticari oda kapıya girmez RC=0
+PASS  G21e kütük yokken kapı uygulanmaz RC=0
+PASS  G21e ÖLÇÜLEMEDİ basıldı
+PASS  G21f bayat kütükte kapı uygulanmaz RC=0
+PASS  G21f bayatlık ÖLÇÜLEMEDİ olarak basıldı
+PASS  G21g tavan altındayken normal RC=0
+PASS  G21h parkta 'Kayıt yazıldı' basılmadı
+PASS  G21i normal yolda hücre uyarısı hâlâ basılıyor
+PASS  OD1 --oda verilirse satıra yazılır
+PASS  OD2 --oda verilmezse alan HİÇ yazılmaz (bugünkü satırla bayt-aynı)
+PASS  OD3 biçim dışı oda rc 2
+PASS  OD3b sebep söylenir
+PASS  OD3c reddedilen kayıt deftere HİÇ yazılmaz
+PASS  OD3d sınır vakası 'a-' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası 'a--b' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası '-a' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası 'a-b-' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3d sınır vakası 'x' (sonda/art arda/baştaki tire, tek karakter) reddedilir
+PASS  OD3e sınır vakaları deftere HİÇ yazılmadı
+PASS  OD3f sözcük arası tireli geçerli ad KABUL (ab-c-d1)
+PASS  OD4 değersiz --oda rc 2 (sessizce boş sayılmaz)
+PASS  OD4b sebep söylenir
+PASS  OD5 güncellemede --oda verilmezse ESKİ oda korunur
+PASS  OD6 güncellemede --oda verilirse değişir
+════════ SONUÇ: PASS=229 · FAIL=0 ════════
+--- stderr ---
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+HATA: 'insa-ediliyor' İZİNSİZ ilan edilemez (K7 · başlıyorum = izinli).
+      Reçete: layiha-defteri.sh durum s01-L02 insa-ediliyor --izin "Sultan onayı 2026-08-08"
+      (izin beyanı: kim/ne yetkilendirdi — D1-damga biçimi önerilir: "2026-08-27 Sultan: GO (sohbet · <oturum-ref> · \"<≤15-kelime kırpık>\" · beyan:<AJAN>)" · ör. "Sultan onayı 2026-08-08" · "L63 izin paketi md-4". A06: araç Sultan'ın sözünü ÜRETMEZ — bu alan ajanın GÖRDÜĞÜ onayın referans-beyanıdır)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)
+UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).
+       Kayıt yazıldı ama hücresi BİLİNMİYOR. hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: OTAG/MIZAN/MENZIL/KAPI · akış: DIVAN/LAYIHA/OLCUM (hiçbirine oturmuyorsa: belirsiz)

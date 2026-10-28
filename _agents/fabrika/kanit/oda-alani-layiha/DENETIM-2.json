@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "oda-alani-layiha",
+  "pr": "505",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T15:11:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-alani-layiha",
+  "dal": "oda-alani-layiha",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20766,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9090
+  },
+  "dalgic": "uyumlu",
+  "bas": "68fafe233cb7073434e738003232a2fd0c0bce27",
+  "duzeltme_farki": {
+    "onceki_bas": "184662d85d42a2f7a5ff35ff75c069908840434f",
+    "dosya": 7,
+    "bayt": 11883,
+    "tam_bayt": 34858
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İsteğe bağlı oda alanı, güncellemede koruma ve sözcükler arası tire kuralları uygulanmış; önceki turun `a-`/`a--b` bulgusu yeni kalıp ve sınır testleriyle kapanmış. Ancak Python’daki `$` davranışı nedeniyle sonunda tek satır sonu bulunan bir değer kabul edilebilir; üretime çıkmadan önce tam eşleşme kullanılmalı ve bu vaka sınanmalı.",
+    "bulgular": [
+      {
+        "ne": "Oda kalıbı mutlak tam eşleşme yapmıyor: Python `re.match` içinde `$`, dizinin sonundaki tek satır sonundan hemen önce de eşleşebildiğinden `ab\\n` gibi kebab olmayan bir değer kabul edilip satıra yazılabilir.",
+        "kanit": "Yeni doğrulama `r\"^(?=.{2,31}$)[a-z][a-z0-9]*(-[a-z0-9]+)*$\"` kalıbını `re.match` ile kullanıyor. Eklenen OD3d vakaları `a-`, `a--b`, `-a`, `a-b-` ve `x`; sonda satır sonu vakası ölçülmüyor.",
+        "konum": "layiha/scripts/layiha-defteri.sh:245; layiha/scripts/layiha-defteri.test.sh:692",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm rc=0 ve PASS=229/FAIL=0; OD1–OD6 istenen yazma, yokken alan eklememe, geçersizi reddetme ve güncellemede koruma/değiştirme davranışlarını kapsıyor. Dört mutasyonun rc=1 olması biçim, değersiz bayrak, eski odayı koruma ve tire sınırı sınavlarının bilerek bozulan kodu yakaladığını gösteriyor; mutasyonlardaki FAIL satırları gerçek kod bulgusu değildir. Önceki B1, yeni sözcük-arası-tire kalıbı ile OD3d–OD3f ölçümleri sayesinde kapanmıştır; buna karşın satır sonlu girdi için ölçüm yoktur."
+  }
+}

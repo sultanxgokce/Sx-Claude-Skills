@@ -1,0 +1,23 @@
+{
+  "is": "oda-alani-layiha",
+  "cumle": "Layiha defteri yazıcısı ekle komutu isteğe bağlı oda alanı alır: verilirse kebab biçimi denetlenir ve satıra yazılır, verilmezse satır bugünküyle bayt bayt aynı kalır ve güncellemede eski oda korunur",
+  "istedi": "SERDAR",
+  "aldi": "MUAVİN",
+  "zaman": "2026-10-27T15:04:11+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

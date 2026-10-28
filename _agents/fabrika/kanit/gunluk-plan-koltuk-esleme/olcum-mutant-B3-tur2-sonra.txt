@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-esleme-tur2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ke.sh B3
+# rc=1 sure=2.0s zaman=2026-10-28T02:11:33+03:00
+--- stdout ---
+MUTANT B3 rc=1
+  ✗ Q8 sirada-bak: ustlen DEFTER adıyla çağrılır (--kim NECCAR) — beklenen=ustlen gorev_N1 --kim NECCAR --tahmin 30 gerçek=
+  ✗ Q10 zincirli tabloda TEK geçiş: ZA→ZB (ZC'ye varmaz), kutu=kutux — 'KUTU=kutux' yok: ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)
+  ✗ Q10b ustlen ZB adıyla çağrılır (ZC DEĞİL) — beklenen=ustlen gorev_X1 --kim ZB --tahmin 30 gerçek=
+YAKALANDI
+--- stderr ---

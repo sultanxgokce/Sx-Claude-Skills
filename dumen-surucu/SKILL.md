@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.1.2
+version: 0.2.0
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -25,6 +25,14 @@ const d = await Dumen.baglan({ cdpUrl: 'http://127.0.0.1:9222', merkez: process.
 try { await d.fill('#ad', 'Ayşe'); } catch (e) { if (e instanceof KapiHata) { /* dur; mod ajana dönünce kaldığın yerden sür */ } }
 ```
 `playwright-core` bulunamazsa `DUMEN_PLAYWRIGHT=<playwright-core dizini>`.
+
+## Masaüstü (0.2.0 · görev …F9Y2Y) — terminal dahil tüm masaüstü
+`scripts/masa.mjs` → `new Masa({ merkez })` ajana `ekranAl / tik / yaz / tus / kaydir / durum` verir; hepsi masaüstü bekçisine (`masa-kopru.py`, `172.30.0.2:9224`) gider. Sözleşme: cloudtop `infra/dumen/SOZLESME.md` §5.
+- **Çift kilit:** her çağrıdan önce `GET <merkez>/dumen/mod`; `ajan` değilse/cevapsızsa eylem yapılmaz (`⏸ Dümen Sultan'da · bekliyorum`, `KapiHata.neden = sultanda | merkez-cevapsiz`). Bekçi ayrıca kendi mod dosyasından 423 döner; 423 ve `sultan` iken bağlantı düşmesi **hata değil "sultanda"**. Mod `ajan`a dönünce ajan `ekranAl()` ile sıfırdan okur.
+- **Durma noktası ajan tarafında** (masaüstünde alan türü görünmez): `yaz(metin, { alan })` **alan söylenmeden çalışmaz**; alan parola/SMS/kart/IBAN ise, `tik(x, y, { etiket })` etiketi öde/onayla/gönder/sil ise eylem YAPILMAZ, merkeze `durak` gider (`KapiHata.neden = durak`). Tek karakterli `tus` aynı kapıdan geçer (harf harf şifre yazımı delik olmasın).
+- Terminal kullanımı: `tus('ctrl+alt+t')` → `ekranAl()` ile terminali gör → `yaz('komut', { alan: 'Terminal' })` → `tus('Return')`.
+- Jeton: `/config/dumen-masa-jeton` (ya da `DUMEN_MASA_JETON`), dosyadan okunur, basılmaz. Yazılan metin ve ekran günlüğe girmez.
+- Sınav: `bash scripts/masa.test.sh` — sahte merkez + sahte bekçi, 29 kapı + 10 mutant (Chromium gerekmez). **Gerçek ekranda ölçülmedi:** canlı kanıt kurulumdan (Sultan-eli `masa-kopru-kur`) sonra.
 
 ## Dürüst sınırlar
 - Kapı **ajan tarafındadır** ve disiplinle çalışır: aynı süreçte `playwright-core`'u doğrudan içe aktaran kod kapıyı atlayabilir — gerçek zorlama köprüdedir.

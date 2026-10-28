@@ -991,7 +991,7 @@
       "id": "layiha",
       "type": "workflow",
       "name": "Layiha — araştır → kalıcı sabitle → inşayı sonraya bırak",
-      "version": "1.15.1",
+      "version": "1.16.0",
       "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt <CELL>-L## kodu — CELL_ID unset → s01, K6 2026-08-10; eski öneksiz L## kodlar geri-uyumlu — + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1). v1.2: bağımsız-tescil kapısı (insa-edildi≠tescilli; MÜHÜRDAR kör-tescil reuse; tescilli/reddi/muaf + tescil-bekleyen filtresi). K1-K7 (2026-08-27): isteyen/yetki alanları + liste --sultan/--ajan + oda-önekli kod kabulü + insa-ediliyor --izin ZORUNLU.",
       "prerequisites": {
         "system": [
@@ -1252,6 +1252,19 @@
       ]
     },
     {
+      "id": "sultan-alarmi",
+      "type": "agent",
+      "name": "sultan-alarmi — Sultan yüzünden duran işin tek biçimli alarmı",
+      "version": "0.1.0",
+      "description": "Sultan yüzünden duran iş için tek biçim: '🚨🔴 SULTAN ALARMI — <iş> · <kim duruyor> · <ne gerekiyor, tek tık>'. Terminal kırmızı satır, istenirse telefon (ntfy alarm konusu), tekrar sınırı ve yükseltme, kapımda + onay-bekliyor taraması, ders defteri. Telefon yalnız --telefon ile; Sultan ekrandaysa atlanır.",
+      "tags": [
+        "sultan",
+        "alarm",
+        "bildirim",
+        "onay"
+      ]
+    },
+    {
       "id": "defter-kapisi",
       "type": "agent",
       "name": "defter-kapisi — görev-yakalama + mailbox-yanıt prosedürü",
@@ -1410,7 +1423,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.10.1",
+      "version": "1.12.1",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1517,7 +1530,7 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.27.6",
+      "version": "0.27.7",
       "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2: sergi-beceri.py → sergi.mmepanel.com canlı (22 Eyl). F3: kart.sh (sınıf soruları araçta; kartsız iş alanı açılmaz) + gun-sonu.sh (özet defterden). Kapılar: ana-dal Edit/Write kilidi + birleştirme kapısı (kanıtsız/puansız iş birleşemez).",
       "prerequisites": {
         "system": [
@@ -1811,7 +1824,7 @@
       "id": "dumen-surucu",
       "type": "workflow",
       "name": "Dümen'i kapıdan sür — eylem kapısı",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "description": "Ajanın Dümen Chrome'unu Playwright connectOverCDP ile sürmesinin tek yolu: her eylemden önce Dümen kimde okunur (Sultan'da ya da merkez cevapsızsa eylem yapılmaz), parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir, izole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir.",
       "tags": [
         "dumen",
@@ -1824,7 +1837,7 @@
       "id": "oda-kur",
       "type": "workflow",
       "name": "Kutu–oda modeli — oda iskeleti, ayar üretimi, yazma kancası",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Bir kutunun (tek depo) içinde amacı ayrı odalar kurar: oda klasörü iskeleti, ortak ayardan her odanın settings.json'unu üretme (ayrı hafıza, izin, kanca), doğrulama ve kod yazımını oda klasörüne / ortak veri yazımını çekirdeğin komutuna sınırlayan PreToolUse kancası.",
       "tags": [
         "oda",

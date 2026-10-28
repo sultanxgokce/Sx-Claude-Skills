@@ -1,0 +1,11 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-alarm-tur2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh A8
+# rc=1 sure=1.4s zaman=2026-10-28T00:25:32+03:00
+--- stdout ---
+MUTANT A8 rc=1
+  ✗ B7 son argüman '--is' değersiz: takılmaz, rc 2 — beklenen=[2] gerçek=[1]
+  ✗ B7 son argüman '--kim' değersiz: takılmaz, rc 2 — beklenen=[2] gerçek=[1]
+  ✗ B7 son argüman '--ne' değersiz: takılmaz, rc 2 — beklenen=[2] gerçek=[1]
+  ✗ B7 son argüman '--tekrar-dk' değersiz: takılmaz, rc 2 — beklenen=[2] gerçek=[1]
+YAKALANDI
+--- stderr ---

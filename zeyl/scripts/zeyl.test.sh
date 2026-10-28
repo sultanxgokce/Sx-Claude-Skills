@@ -4,6 +4,8 @@
 #    ALTIN, BOŞ DEFTERİN ONURLU olduğunu ve alarm ÜRETMEDİĞİNİ kilitler — bu birimin
 #    en eski kanunu ve gevşemesi en pahalı olan taraf.
 set -uo pipefail
+# Geçici dizinler TEK kökün altında açılır (kur() $(...) alt kabuğunda koşar; dizi/liste ona ulaşmaz): çıkışta kök silinir. İzole ölçüm: önce 12 dizin bırakıyordu.
+_RAIZ="$(mktemp -d)"; trap 'find "$_RAIZ" -delete 2>/dev/null' EXIT; export TMPDIR="$_RAIZ"
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 gecen=0; kalan=0
 ok(){ if [ "$2" = "$3" ]; then echo "  ✅ $1"; gecen=$((gecen+1))

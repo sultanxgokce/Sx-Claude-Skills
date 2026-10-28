@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-layiha-sinavi-tek-* ===
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-sx.sh s|elif existing and existing.get("oda"):|elif False:|
+# rc=1 sure=8.7s zaman=2026-10-27T15:06:24+03:00
+--- stdout ---
+FAIL  OD5 güncellemede --oda verilmezse ESKİ oda korunur — beklenen [agentic-os] · gelen [<ALAN
+MUTASYON rc=1
+--- stderr ---

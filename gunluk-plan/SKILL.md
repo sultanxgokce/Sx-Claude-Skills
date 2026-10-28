@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.10.1
+version: 1.12.1
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -110,6 +110,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/haftalik.sh --uygula   # raporu 
 Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sahte ulak.sh).
 
 > **1.10.1 (27 Eki, görev 0HC75A):** üç betik (`deftere-yaz` · `haftalik` · `tarama-ekle`) görev betiğini tek yerden bulur (`scripts/gorev-yolu.sh`): açık env → cloudtop kanoniği → BU BECERİNİN kendi kopyası (`scripts/gorev.sh` + `dugum-bak.py`) → PATH → `/config/.local/bin`. cloudtop deposunu görmeyen 9 kutuda plan maddeleri deftere yazılamıyordu. Paketlenmiş kopyanın cloudtop kanoniğinden sapmasını `gorev-yolu.test.sh` Y7 yakalar (kanonik her değiştiğinde buraya yeniden kopyalanır).
+> **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
 
 ## ADIM 0-d — TARAMA: kod tabanı + web + endüstriden ölçülmüş İŞ ekle (1.10.0 · görev 0HC75A (b): "havuza, günde ≤3")
 
@@ -126,6 +127,24 @@ bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh … --uygula     
 - **Ölçemezse yazmaz:** görev listesi okunamadı/boşsa ya da ajan kimliği çıkmıyorsa rc 3 — "tavan dolu değil" denmez. Başlık 160 karakteri aşarsa reddedilir (başlık değil nottur; ayrıntı `--kanit`'e).
 - Kuru koşu varsayılandır; `--uygula` yalnız yukarıdaki kapıları geçen çağrıyı yazar.
 Sınavı: `bash scripts/tarama-ekle.test.sh` (T1-T12b + T4g-T4i, hermetik: sahte gorev.sh + sahte bulgu.sh).
+
+## ADIM 0-e — ÖNCE SIRADA'YA BAK (1.11.0 · görev …VNB2E9, Sultan 27 Eki: "hiçbir kutuda /gunluk-plan şunu yapmıyor")
+
+Plan yazmadan, ADIM 1'den ÖNCE kutunun defterdeki **Sırada** listesine bak — boşuna sıfırdan plan yazma:
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh          # Sırada ≥ eşik ise en üstteki işi çalışılıyor yapar ve başlar (KARAR=BAS | KARAR=SOR)
+bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --bak    # yalnız bak, başlama
+```
+- **KARAR=BAS** (Sırada ≥ 3, eşik `--esik N` ile kutuya göre ayarlanır): sıradaki işler listelenir (acil önce); varsayılan koşu EN ÜSTTEKİ işi `gorev.sh ustlen` ile üstlenir (`--bak` yalnız bakar ve "başladım" demez). Sultan'a tek cümle: *"Sırada N iş var, en üstteki ile başladım; bugüne almak ister misin?"*
+- **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok (ya da eşikten az: gerçek sayı söylenir). Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Bu dalda betik hiçbir işi üstlenmez.
+- 🔴 **"Bugüne al" Sultan'ındır.** Defterde `bugun_plani` alanını geçit yalnız Sultan ekranına yazdırır (A06; ajan yazarsa 403). Betik onu YAZMAZ, yalnız ÖNERİR. Yani "bugüne alındı" işareti Sultan'ın tıkıyla gelir; ajanın yaptığı iş "çalışılıyor" ve öneridir.
+- **Başkasının işi üstlenilmez (1.11.1):** eşik kutu-düzeyinde sayılır ama başlatma adayı YALNIZ koltuğa atanmış ya da sahipsiz (`-`) iştir; en üstteki iş başkasınındaysa atlanır, hiçbiri uygun değilse `BASLAMADI=yok` basılır ve hiçbir iş üstlenilmez. Sınav S19-S21 bunu sahte listede kilitler.
+- **Koltuk adı ↔ defter adı (1.12.0, `kimlik-coz.sh`):** çok kimlikli kutuda koltuk adı (tmux oturumu) ile defterdeki ad ayrışabilir (mihenk: koltuk MOBILYACI, işler NECCAR adına). Eşleme **koltuk başına tablodur** — `koltuk-esleme.tsv` (`<koltuk><TAB><defter adı>`, yalnız ad FARKLIYSA satır; `GUNLUK_PLAN_ESLEME` ile yolu değişir). `kutu-bul.sh`, `deftere-yaz.sh`, `sirada-bak.sh` adı bu tablodan çevirir; tabloda yoksa ad AYNEN kalır, bir koltuk iki ada giderse rc 3 (tahmin yok), bozuk satır atlanır ve söylenir. 🔴 `GUNLUK_PLAN_AJAN`'ı ortak ayara KALICI yazma: sekiz kimlikli kutuda hepsi tek kişi adına yazar. **1.12.1:** tabloya mihenk reisi eklendi (NISANCI → mihenk-ana; reis kendi koltuğunu ölçüp bildirdi, defterde 25 kaydı bu adla duruyor).
+- **Sırada** = ekranın tanımı: aynı kutuda `acik` ya da `sira-bende` (havuz · tasarlanıyor · bekliyor · çalışılıyor · onay-bekliyor · bitti · iptal SAYILMAZ).
+- **Ölçemezse karar vermez:** defter okunamadı ya da kutu çıkmadıysa rc 3 — "Sırada 0" DENMEZ, soru da sorulmaz.
+- **Kutu tahmin edilmez (`kutu-bul.sh`):** görev listesi kutuya özel DEĞİLDİR (herkes tüm kutuları görür); "listedeki en sık kutu" hep en kalabalık kutuyu (code) verirdi — menzil'de maddeler yanlış deftere gidecekti. Kutu = o koltuğa ATANMIŞ işlerin kutusu; atanmışı yoksa ya da iki kutu eşitse rc 3 ve `--kutu` istenir (`GUNLUK_PLAN_KUTU` ile de verilir). `deftere-yaz.sh` de aynı yolu kullanır.
+- **`deftere-yaz.sh` düzeltmesi (mihenk/s08):** `gorev.sh ekle` artık `--ozet` (Sultan-dili açılış özeti) taşır — geçit özetsiz açılışı 400 `ozet_acilista_gerekli` ile reddediyordu ve üç madde sessizce yazılamıyordu; reddedilen yazımın SEBEBİ artık ekrana basılır. Sınavın sahte `gorev.sh`'ı gerçek kapıyı taklit etmediği için bu hata yeşil sınavın arkasında kalmıştı.
+Sınavı: `bash scripts/sirada-bak.test.sh` (K1-K6 · S1-S18 · D1-D3, hermetik) + `deftere-yaz.test.sh` (D19-D20).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 

@@ -1,0 +1,16 @@
+# sultan-alarmi — AHÎ manifesti. version manifest'te YOK (tek evi SKILL.md frontmatter).
+#  · R-03 "zaten var mı": sultan-eli (insan komutu ölçümü) ve tıkanma gözcüsü (ajan tıkanması) farklı iştir; Sultan-yüzünden-duran-iş alarmı yalnız SERDAR nöbet isteminde yaşıyordu.
+#  · negatif-kapsam: Sultan'ın kararını/onayını ÜRETMEZ (A06); sır yazılamaz; defteri/kartı DEĞİŞTİRMEZ (yalnız okur); host'a ssh yok.
+#  · bölge-çakışma: yok. dış yüzey: telefon bildirimi (ntfy alarm konusu) yalnız --telefon ile.
+tier: kalfa
+name: sultan-alarmi
+generic_goal: "Sultan yüzünden duran işi tek biçimli, tekrar-sınırlı alarmla görünür kılma"
+activation:
+  onKeyword: sultan-alarmi
+requires_harness: ">=0"
+spec_version: "0.1"
+owner: SERDAR
+feedback:
+  owner: SERDAR
+install_targets:
+  - _global

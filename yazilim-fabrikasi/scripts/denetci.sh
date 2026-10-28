@@ -128,6 +128,11 @@ _sinirli() {
 }
 _bilgi() { printf '%s\n' "$*"; }
 
+# DENETCI_EK (7KKSJK): ek bayraklar ortamdan da verilebilir — `DENETCI_EK=--reis-devam bash denetci.sh <iş> --pr N` ile `denetci.sh <iş> --pr N --reis-devam`
+#   AYNI şeydir (gönder betikleri bayrağı tek ortam değişkeniyle iletir). Yetkiyi VERMEZ: --reis-devam/--sultan-devam yine karttaki kayıttan açılır.
+#   Boşlukla bölünür (bayrak değerleri boşluk içeremez); boşsa hiçbir şey eklenmez.
+# shellcheck disable=SD2086
+[ -z "${DENETCI_EK:-}" ] || set -- "$@" $DENETCI_EK
 KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -375,6 +380,31 @@ tikandi_raporu() {
   _bilgi "   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?"
   _bilgi "   2) KAPSAMI DARALT — kart.sh daralt <iş> --kalan \"<bulgu>\" --cumle \"<daraltılmış cümle>\" --oturum <ref>: kalan yeni karta, tur sayacı sıfırlanır, aynı dal/PR sürer"
   _bilgi "   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere"
+  # 7KKSJK: rapor yalnız yolu anlatıyordu; reis kararı karta işlenmeden 4. tur koşulup rc 4 ile reddediliyordu
+  # (bir günde 3 kez). Artık DEVAM yolunun TAM komutu basılır: gerçek iş adı, kartın sahibi, doğru sıra.
+  # Mutlak tavanda (arg 1) reis kararı kapıyı açmaz → komut basılmaz, yanıltmayız.
+  [ "${1:-}" = "mutlak" ] && return 0
+  local yol sahip
+  yol="$(kart_yolu 2>/dev/null)"
+  sahip="$(python3 - "${yol:-/nonexistent}" 2>/dev/null <<'PY'
+import json,sys
+try: k=json.load(open(sys.argv[1],encoding="utf-8"))
+except Exception: print("?"); raise SystemExit(0)
+print("SINIFLI" if (k.get("sultan") or k.get("siniflar")) else (k.get("aldi") or "?"))
+PY
+)"
+  _bilgi ""
+  if [ "$sahip" = "SINIFLI" ]; then
+    _bilgi "   ▶ Bu kart SINIFLI: DEVAM kararı Sultan'ındır (A06: onayı ajan üretmez, aldığını aktarır). ÖNCE:"
+    _bilgi "       bash $HERE/kart.sh sultan-dedi $IS --karar devam --oturum <ref> --soz \"<verbatim>\" --beyan <AJAN> --gerekce \"<en az 20 karakter>\""
+    _bilgi "     SONRA (karar kartta yokken --sultan-devam kapıyı AÇMAZ, rc 1 — $((ONCEKI+1)). tur koşmaz):"
+    _bilgi "       DENETCI_EK=--sultan-devam bash $HERE/denetci.sh $IS${PR:+ --pr $PR} < /dev/null"
+  else
+    _bilgi "   ▶ DEVAM diyorsan SIRA bu — önce karar karta işlenir, sonra denetçi koşar. Reis kararı kartta yokken $((ONCEKI+1)). tur ÖNCE bu komutu ister: --reis-devam kapıyı AÇMAZ (rc 1) ve tur reddedilir:"
+    _bilgi "     1) bash $HERE/kart.sh reis-dedi $IS --karar devam --reis ${sahip:-<AD>} --oturum <ref> --gerekce \"<niçin bir tur daha — en az 20 karakter>\""
+    _bilgi "     2) DENETCI_EK=--reis-devam bash $HERE/denetci.sh $IS${PR:+ --pr $PR} < /dev/null"
+    _bilgi "     (--reis kartın aldı alanıyla aynı olmalı: bu kartta '${sahip}'. Mutlak tavan ($MUTLAK) bununla AÇILMAZ.)"
+  fi
 }
 # 🔴 SULTAN KAPISI (23 Eyl 2026): tıkandı raporu "karar sınıf işiyse Sultan'ın" diyordu ama
 #    araçta o kararı kabul edecek kapı YOKTU — kural insana havale ediyor, araç insanı dinlemiyordu.
@@ -426,8 +456,8 @@ PY
 }
 # 🔴 REİS KAPISI (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu
 #    ama araçta yalnız Sultan yolu vardı — sınıfsız işin sahibi kendi kararını araca yazdıramıyor, kapı ya
-#    kapalı kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka). Bu kapı YALNIZ sınıfsız kartta açılır;
-#    sınıflı kartta reis kararı yok sayılır ve Sultan yolu gösterilir. Mutlak tavanı (4) yine AÇMAZ.
+#    kapalı kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka). 28 Eki (Sultan 22 Eki kararı, parça2): sınıflı kartta da açılır,
+#    AMA yalnız kart.sh'ın sınıflı karta yazdığı kayıtla (sinifli:true). Mutlak tavanı (4) yine AÇMAZ.
 reis_kapisi() {
   [ "$REIS_DEVAM" = "1" ] || return 1
   KARTYOL="$(kart_yolu)" || exit 3; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"   # göz tur 2: bayat kopya hatası (rc=3) bastırılmaz, "karar YOK" reddine dönüşmez
@@ -435,21 +465,19 @@ reis_kapisi() {
 import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
 except Exception: raise SystemExit(1)
-# sınıflı kart → bu yol KAPALI (merci Sultan). "sultan" bayrağı ya da sınıf listesi dolu ise reddet.
-if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)
+# sınıflı kart (28 Eki · Sultan 22 Eki kararı, parça2): ara kararlar reisin. Reis kararı yalnız kart.sh'ın sınıflı karta YAZDIĞI kayıtla (sinifli:true) kabul edilir;
+# elle düzenlenmiş/sınıf bilgisiz kayıt sınıflı kartta karar sayılmaz. Mutlak tavan (4) yine AÇILMAZ.
+SINIFLI=bool(k.get("sultan") or k.get("siniflar"))
 kk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")==sys.argv[2]]
 if not kk: raise SystemExit(1)
 x=kk[-1]
+if SINIFLI and x.get("sinifli") is not True: raise SystemExit(1)
 if not (x.get("reis") and x.get("oturum")): raise SystemExit(1)
 if len(x.get("gerekce") or "") < 20: raise SystemExit(1)
 def tmz(v): return " ".join(str(v).replace("|","/").split())
 print(f'reis={tmz(x["reis"])} oturum={tmz(x["oturum"])} gerekce="{tmz(x["gerekce"])}"')
 PY
 )"; prc=$?
-  if [ "$prc" -eq 3 ]; then
-    _hata "--reis-devam verildi ama kart SINIFLI — sınıf işinin kararı Sultan'ındır; reis kapısı AÇILMADI (yol: kart.sh sultan-dedi + --sultan-devam)."
-    return 2
-  fi
   if [ -z "$GEREKCE" ]; then
     _hata "--reis-devam verildi ama KARTTA gerekçeli reis 'devam' kararı YOK — kapı açılmadı."
     _bilgi "   Sınıfsız işin sahibi/reisi kararını önce kayda geçirir:"
@@ -482,7 +510,7 @@ if [ "$YAKMAYAN_ONCE" -gt "$KD_TAVAN" ]; then
   _bilgi "   3) GERİ AL — alanı kapat, ders deftere"
   exit 4
 fi
-if [ "$SAYILI" -ge "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu; exit 4; fi
+if [ "$SAYILI" -ge "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu mutlak; exit 4; fi
 if [ "$SAYILI" -ge "$TAVAN" ]; then
   if ilerliyor_mu; then _bilgi "· tur $TUR: tavan $TAVAN aşıldı ama iş İLERLİYOR (puan↑, bulgu↓) → +1 tur payı"
   else
@@ -493,8 +521,6 @@ if [ "$SAYILI" -ge "$TAVAN" ]; then
       [ "$rk" -eq 2 ] && exit 1
       if [ "$rk" -ne 0 ]; then
         _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu
-        _bilgi "   Sultan 'devam' dediyse: önce kart.sh sultan-dedi ile kayda geçir, sonra --sultan-devam"
-        _bilgi "   SINIFSIZ işte sahip/reis 'devam' diyorsa: kart.sh reis-dedi ile kayda geçir, sonra --reis-devam"
         exit 4
       fi
     fi
@@ -743,7 +769,10 @@ PY
 {
   printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
   # 🧬 mutasyon kaydının ilk satırını kanıt aracı yazar (kanit.py --mutasyon); başlık da söyler ki göz ✗ satırlarını bulgu sanmasın (FR7M76)
-  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { _mt=""; head -1 "$f" | grep -q '^=== MUTASYON KANITI' && _mt=" · 🧬 MUTASYON KANITI (kod bilerek bozuldu; ✗ satırları BEKLENEN, bulgu değil)"; printf -- '--- %s%s ---\n' "$(basename "$f")" "$_mt"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
+  # 7KKSJK-EK: GEÇERSİZ ilan edilmiş kaydın GÖVDESİ isteme girmez (kanıt sayılmaz; BÂNİ #1034 bu yüzden 107,9 KB > 100 tavana takıldı).
+  #   Manifest satırı (KANIT.json + durum satırındaki neden) kalır; göz neyin ilan edildiğini görür, dökümü görmez.
+  _GECERSIZ="$(printf '%s\n' "$KANIT_CIKTI" | sed -n 's/^⛔ GEÇERSİZ: \([^ ]*\) (.*/\1/p')"
+  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { if printf '%s\n' "$_GECERSIZ" | grep -qxF -- "$(basename "$f")"; then printf -- '--- %s · ⛔ GEÇERSİZ ilan edildi: gövde isteme KONMADI (kanıt sayılmaz; neden ve ilan eden kanıt durumunda yazılı) ---\n' "$(basename "$f")"; continue; fi; _mt=""; head -1 "$f" | grep -q '^=== MUTASYON KANITI' && _mt=" · 🧬 MUTASYON KANITI (kod bilerek bozuldu; ✗ satırları BEKLENEN, bulgu değil)"; printf -- '--- %s%s ---\n' "$(basename "$f")" "$_mt"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
 } > "$TMP/p-olcum.md"
 {
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
