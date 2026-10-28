@@ -1,0 +1,26 @@
+{
+  "is": "fabrika-surum-0-27-14",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T00:30:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "surum-tutarli",
+      "asama": "tek",
+      "dosya": "olcum-surum-tutarli-tek.txt",
+      "sha256": "0d4bb827ac3f691b0cf5348087f0b0854a289199c840425a381a771e932eabab",
+      "komut": [
+        "bash",
+        "-c",
+        "v=$(grep -m1 \"^version:\" yazilim-fabrikasi/SKILL.md | sed \"s/version: //\"); c=$(sed -n \"1533p\" catalog.json | grep -o \"[0-9]*\\.[0-9]*\\.[0-9]*\"); n=$(sed -n \"1525,1533p\" catalog.json | grep -c yazilim-fabrikasi); echo \"SKILL=$v katalog=$c adSatiri=$n\"; [ \"$v\" = 0.27.14 ] && [ \"$c\" = 0.27.14 ] && [ \"$n\" -ge 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T00:30:32+03:00",
+      "sure_sn": 45.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f5168155dacc4f45a9a75c3cc6d4a29f"
+    }
+  ],
+  "imza": "32329faeaca4f4f9908e2194cfd635ab76d5639079b1685770f0d6d4bc526ff6"
+}

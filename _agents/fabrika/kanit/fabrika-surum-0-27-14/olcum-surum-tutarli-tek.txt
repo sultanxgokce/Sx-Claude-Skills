@@ -1,0 +1,6 @@
+$ bash -c v=$(grep -m1 "^version:" yazilim-fabrikasi/SKILL.md | sed "s/version: //"); c=$(sed -n "1533p" catalog.json | grep -o "[0-9]*\.[0-9]*\.[0-9]*"); n=$(sed -n "1525,1533p" catalog.json | grep -c yazilim-fabrikasi); echo "SKILL=$v katalog=$c adSatiri=$n"; [ "$v" = 0.27.14 ] && [ "$c" = 0.27.14 ] && [ "$n" -ge 1 ]
+# rc=0 sure=45.2s zaman=2026-10-29T00:30:32+03:00
+--- stdout ---
+SKILL=0.27.14 katalog=0.27.14 adSatiri=1
+--- stderr ---
+⏳ agir-sira: kanit-fabrika-surum-0-27-14-surum-tutarli 46 sn bekledi (yuva 1, load1 17.23)
