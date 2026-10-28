@@ -1,7 +1,7 @@
 {
   "is": "sultan-alarmi-ders",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T13:08:45+03:00",
+  "guncelleme": "2026-10-28T13:10:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -19,7 +19,43 @@
       "sure_sn": 1.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "3559581dcc524f39ba60edc00ef33f4e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ders-drift",
+      "asama": "once",
+      "dosya": "olcum-ders-drift-once.txt",
+      "sha256": "6236a912908c4260c61bf100aad855ab3feed6a5ab42c9ee460ba9b3314ee70c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ders-drift.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/orig2"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:10:37+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1130c91ee2bb4a2fa32df4023e40a3c7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ders-drift",
+      "asama": "sonra",
+      "dosya": "olcum-ders-drift-sonra.txt",
+      "sha256": "006e77979bdfd33414f55a16449ef2a5268b7fa9e7a69606c8c2aa39f26e2a9b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ders-drift.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-sultan-alarmi-ders"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:10:38+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "736fb351c8a44f92aa405b47b4acdbbd"
     }
   ],
-  "imza": "7d7aababbe42e05dbd62c028a17ced8df54fd5e2b32e1829ecbf5ab58c12b18e"
+  "imza": "e25ae97741d95d4f240765e7fcc07eade38a5d60644302dd9962e1577d8ff887"
 }
