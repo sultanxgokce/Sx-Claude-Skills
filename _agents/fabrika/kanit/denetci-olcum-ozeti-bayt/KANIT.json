@@ -1,0 +1,65 @@
+{
+  "is": "denetci-olcum-ozeti-bayt",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T09:16:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinav-tek.txt",
+      "sha256": "25deb97f9529b65f102d994321d41514f0ab78500a4472ed6e3f7775a778debe",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T08:24:32+03:00",
+      "sure_sn": 1083.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b6591ef24de342aa9955e13efc8260c4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-bayt-kapisi-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-bayt-kapisi-yok-tek.txt",
+      "sha256": "1c1fa6070016d14c3ef509d8f086c50503548211f29cde01bb24caa33fe9d065",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/omut1/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T08:44:56+03:00",
+      "sure_sn": 1224.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "denetci-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "93433456ebe14f1e824f0efbc03e055b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-uzun-satir-kesilmez",
+      "asama": "tek",
+      "dosya": "olcum-mutant-uzun-satir-kesilmez-tek.txt",
+      "sha256": "a7f5582b76196ca594e1f1d58cf41630cbfc2bc939ec888098ee78de2691d777",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/omut2/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:16:49+03:00",
+      "sure_sn": 1912.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "denetci-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "99e608622fa845ac9aa7a6b58351023f"
+    }
+  ],
+  "imza": "d00755fc6bee8ef6b0a6d44aed96aaecc55f710b3a83635c171892c71adbf055"
+}

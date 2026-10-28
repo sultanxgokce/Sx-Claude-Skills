@@ -554,7 +554,7 @@ TI="$(mktemp -d)"; TEMIZ+=("$TI"); ( cd "$TI" && git init -q -b main ) >/dev/nul
 printf '#!/usr/bin/env bash\ncp "$1" "${SAHTE_ISTEM_KOPYA:-/dev/null}"; printf "%%s" "$SAHTE_JSON"\n' > "$TI/sahte.sh"; chmod +x "$TI/sahte.sh"
 _T_ONCE="$T"; _DK_ONCE="${DENETCI_KOMUT:-}"; T="$TI"; export KANIT_DEPO="$TI" DENETCI_KOMUT="$TI/sahte.sh"
 # (a) fark minik, istemi ölçüm çıktısı şişiriyor (eski kapı burada kırpıp turu yakıyordu)
-bash "$K" olcum is-ist buyuk-olcum --asama tek -- python3 -c 'print("x"*6000)' >/dev/null 2>&1   # boru yok: boru reddi (0.10.1) maskesiz boruyu kayda almaz
+bash "$K" olcum is-ist buyuk-olcum --asama tek -- python3 -c '[print(i, "x"*150) for i in range(100)]' >/dev/null 2>&1   # boru yok: boru reddi (0.10.1) maskesiz boruyu kayda almaz; 100 kısa satır: özet kuralı (60 satır/3 KB) sonrası da 5 KB üstü kalır (tek 6000 karakterlik satır artık 200'e kesilir)
 rm -f "$T/istem-ist.md"; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/ist1.patch"   # kendi farkı: d.patch önceki sınavlarda silinebiliyor
 CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-ist.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=2200 bash "$D" is-ist --diff "$T/ist1.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "fark küçük, istem > eşik → rc=1"
@@ -643,6 +643,14 @@ cmp -s "$T/oz-kisa.txt" "$T/oz-kisa.out" && cmp -s "$T/oz-kisa2.txt" "$T/oz-kisa
 printf 'satir-sonu-yok-olcum' > "$T/_agents/fabrika/kanit/is-son2/olcum-aa-yoksonu.txt"   # alfabede BAŞTA: ardından gerçek başlık gelsin (sonda kalınca sonraki blok zaten satır başıyla açılıyor → sahte yeşil)
 SAHTE_ISTEM_KOPYA="$T/istem-son3.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son2 --diff "$T/ist1.patch" >/dev/null 2>&1
 grep -qx "satir-sonu-yok-olcum" "$T/istem-son3.md" && grep -A1 -x "satir-sonu-yok-olcum" "$T/istem-son3.md" | grep -qx -- "--- olcum-orta-tek.txt ---"; g $? "O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)"
+# BÂNİ #506/teslim A: az satırlı ama çok BAYTLI ölçüm (26 KB'lık 60 satır) istemin dörtte birini yiyordu
+python3 -c "
+open('$T/oz-agir.txt','w').write('\n'.join(('  ✓ kapi %d ' % i) + 'x' * 900 for i in range(30)) + '\n  ✗ kirmizi-kapi\n── SONUÇ: 30 geçti · 1 kaldı ──\n')"
+printf 'a\nb\nc\n' > "$T/oz-hafif.txt"; python3 -c "open('$T/oz-hafif60.txt','w').write(''.join('kisa %d\n' % i for i in range(60)))"
+o14="$(bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-agir.txt")"
+[ "$(wc -c <<<"$o14")" -lt $(( $(wc -c < "$T/oz-agir.txt") / 3 )) ] && grep -qx '  ✗ kirmizi-kapi' <<<"$o14" && grep -qx '── SONUÇ: 30 geçti · 1 kaldı ──' <<<"$o14"; g $? "O14 🔴 az satırlı çok baytlı ölçüm kısalır ($(wc -c < "$T/oz-agir.txt") → $(wc -c <<<"$o14") bayt); ✗ ve SONUÇ satırı kalır"
+grep -q 'tam metin kanıt dizininde: oz-agir.txt' <<<"$o14" && grep -q 'uzun satır 200 karakterde kesildi' <<<"$o14"; g $? "O15 kesilen ölçümde 'tam metin kanıt dizininde: <dosya>' notu ve kesilen satır sayısı göze söylenir"
+bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-hafif60.txt" > "$T/oz-hafif60.out"; cmp -s "$T/oz-hafif60.txt" "$T/oz-hafif60.out"; g $? "O16 60 satır ve 3 KB altı ölçüm bayt bayt AYNEN (kısalma yalnız ağır kayıtta)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 fi   # IC_BOLUM=zil atlaması sonu
 if [ "${IC_BOLUM:-}" != zil ]; then
@@ -832,8 +840,10 @@ mut "sinav-kipi-gercek-zil" 's@^  if \[ -z "$an" \] \&\& { \[ -n "${DENETCI_KOMU
 MUT_BOLUM=
 mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; \[ -z@head -60 "$f"; [ -z@'
 mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)$@e = len(L)@'
-mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8$@SINIR, BAS, SON, HSON, SECME = 60, 300, 12, 10, 8@'
-mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …\]" % (atlanan, len(L))$@    not_ = "[…]"@'
+mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME, BAYT_ESIK, SATIR_GEN = 60, 20, 20, 10, 10, 3000, 200$@SINIR, BAS, SON, HSON, SECME, BAYT_ESIK, SATIR_GEN = 60, 300, 300, 10, 10, 3000, 200@'
+mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda; tam metin kanıt dizininde: %s …\]" % (atlanan, len(L), AD)$@    not_ = "[…]"@'
+mut "olcum-bayt-kapisi-yok" 's@^if len(L) <= SINIR and len(HAM.encode("utf-8")) <= BAYT_ESIK: sys.stdout.write(HAM); sys.exit()@if len(L) <= SINIR: sys.stdout.write(HAM); sys.exit()@'
+mut "olcum-uzun-satir-kesilmez" 's@^    if len(x) <= SATIR_GEN: return x$@    return x@'
 mut "olcum-ortadan-secmez" 's@^    orta = cik\[BAS:-SON\]; sec = \[x for x in orta if any(k in x for k in SECILIR)\]$@    orta = cik[BAS:-SON]; sec = []@'
 mut "olcum-secilen-de-sayilir" 's@^    atlanan = len(orta) - min(len(sec), SECME) .*$@    atlanan = len(orta)@'
 mut "olcum-ayirici-eklenmez" 's@ \[ -z "$(tail -c1 "$f")" \] || echo; }; done@ }; done@'
