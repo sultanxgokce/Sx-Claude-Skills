@@ -161,8 +161,9 @@ export class Dumen {
   // Merkeze (Dümen paneli + kütük) YALNIZ kod ve sayı gider — alan değeri, hedef, adres, çerez ASLA. Eylemi bekletmez; merkez cevap vermezse eylem etkilenmez, terminale UYARIR.
   #uyariIlet(kod, n) {
     const jeton = jetonOku();
+    if (!jeton) { this.#yaz('⚠ Dümen: uyarı merkeze İLETİLEMEDİ (kutu jetonu okunamadı) — yalnız burada görünür'); return; }   // jetonsuz istek GÖNDERİLMEZ
     const sayi = Math.min(Math.max(Number.isInteger(n) ? n : 1, 1), 999);
-    const p = fetch(`${this.#merkez}/api/dumen/uyari`, { method: 'POST', headers: { 'content-type': 'application/json', ...(jeton ? { 'x-defter-jeton': jeton } : {}) }, body: JSON.stringify({ kod, n: sayi }), signal: AbortSignal.timeout(this.#zamanAsimiMs) })
+    const p = fetch(`${this.#merkez}/api/dumen/uyari`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-defter-jeton': jeton }, body: JSON.stringify({ kod, n: sayi }), signal: AbortSignal.timeout(this.#zamanAsimiMs) })
       .then((r) => { if (!r.ok) this.#yaz(`⚠ Dümen: uyarı merkeze İLETİLEMEDİ (http ${r.status}) — yalnız burada görünür`); })
       .catch(() => { this.#yaz('⚠ Dümen: uyarı merkeze İLETİLEMEDİ (merkez cevapsız) — yalnız burada görünür'); });
     this.#iletimler.add(p); p.finally(() => this.#iletimler.delete(p));

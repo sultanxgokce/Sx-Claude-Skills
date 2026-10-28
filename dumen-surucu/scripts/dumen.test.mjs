@@ -73,6 +73,9 @@ uyariKod = 500; satirlar.length = 0; const oncekiG = uyariGelen.length;
 await d.fill('#d', '2026-11-01'); await d.iletimBekle();
 ok('D5g merkez uyarı ucu 500 verirse eylem YİNE yapıldı, terminale "İLETİLEMEDİ" yazıldı', (await deger('#d')) === '2026-11-01' && uyariGelen.length > oncekiG && satirlar.some((x) => x.includes('İLETİLEMEDİ')), satirlar.join(' | '));
 uyariKod = 200;
+const jetonYol = process.env.DUMEN_DEFTER_JETON; process.env.DUMEN_DEFTER_JETON = jetonYol + '.yok'; satirlar.length = 0; const oncekiJ = uyariGelen.length;
+await d.fill('#d', '2026-11-02'); await d.iletimBekle(); process.env.DUMEN_DEFTER_JETON = jetonYol;
+ok('D5h kutu jetonu okunamazsa uyarı JETONSUZ GÖNDERİLMEZ (merkeze istek yok), eylem sürer, terminale "kutu jetonu okunamadı" yazılır', uyariGelen.length === oncekiJ && (await deger('#d')) === '2026-11-02' && satirlar.some((x) => x.includes('kutu jetonu okunamadı')), satirlar.join(' | '));
 ok('D5b eylem dışı değişiklik UYARI üretti', yU.length === 1 && yU[0].hedef === 't', JSON.stringify(yU));
 ok('D5d aynı olay ikinci kez uyarmaz', d.uyarilar().filter((u) => u.kod === 'yabanci-olay').length === 1);
 
