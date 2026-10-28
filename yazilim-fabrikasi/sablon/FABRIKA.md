@@ -24,6 +24,7 @@ F=/config/.claude/skills/yazilim-fabrikasi
    Puan iki satır: KOD İYİ Mİ 0-5 · DOĞRU ŞEY Mİ E/H (talep ⟷ kanıt yan yana). Bulgu da kanıt ister.
    5 ve E değilse adım 2'ye dön. Tavan 3 tur; ilerleyen işe (puan↑, açık bulgu↓) +1; DÖRT mutlak.
    Tıkanınca: "tıkandı + üç yol" raporu (devam · daralt · geri al). Sonsuz döngü yok.
+   Daralt sonrası tur sayacı yeniden başlar (kart.sh daralt damgası); iki daraltmadan sonra üçüncüsü yok → geri al.
    Merge: sınıf işi SULTAN; sınıfsız iş kutu reisi → deftere kanıt+puan+damga. ($F/adimlar/4-gonder.md)
 
 Proje kuralları (test · lint · paket yöneticisi): BURAYA YAZILMAZ — deponun kendi dosyasından okunur, tahmin edilmez.
