@@ -1,0 +1,42 @@
+{
+  "is": "sayi-baslik-bicimi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T00:42:43+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-bicim",
+      "asama": "once",
+      "dosya": "olcum-kart-bicim-once.txt",
+      "sha256": "b738df89a6420b2c2a2fb1cd9f311b0a53e80a50156201d3be0015c28b9dcc88",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/kt-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T00:40:25+03:00",
+      "sure_sn": 111.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f6c2cc163cde42e2830f23f9f5359222"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-bicim",
+      "asama": "sonra",
+      "dosya": "olcum-kart-bicim-sonra.txt",
+      "sha256": "479744a5eb60912481153412247ee23a83fbcc74d2e718ecfa051e96d437060b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/kt-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T00:42:43+03:00",
+      "sure_sn": 137.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4cc7339c18d64b2986f7b058bf04faf6"
+    }
+  ],
+  "imza": "5648bb6d18aec7f9203c61eee7f81d219acbeb927b8b6ceebfe054a020ae8d72"
+}

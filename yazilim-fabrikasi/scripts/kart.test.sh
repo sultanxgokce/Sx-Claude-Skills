@@ -419,6 +419,15 @@ CIKTI="$(bash "$KT" ac is-s4 --is "13 görev kapansın" --istedi SERDAR --aldi H
 CIKTI="$(bash "$KT" ac is-s5 --is "13 görev kapansın" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sayi-olcum "seq 1 3000; echo SONUC: 13 görev" 2>&1)"
 SO="$(python3 -c "import json,sys;o=json.load(open(sys.argv[1]))['sayi_olcum'];print(o['kirpildi'],len(o['cikti']),o['cikti_bayt'],o['son_satirlar'][-1])" "$K13/_agents/fabrika/kartlar/is-s5.json" 2>&1)"
 [ "$SO" = "True 2000 13909 SONUC: 13 görev" ] && grep -q "ölçüm çıktısı 13909 bayt: karta ilk 2000 karakter + son 5 satır yazıldı (KIRPILDI)" <<<"$CIKTI"; g $? "uzun ölçüm çıktısı SESSİZ kesilmez: kartta kirpildi + tam boy + son satırlar (sonuç satırı korunur), ekranda uyarı ($SO) — göz #430 tur 1"
+echo "════ T13d · BİÇİM UYARISI (verim R2 · SERDAR 29 Eki): sayı iddiası tek ölçüt biçiminde değilse uyarır (red değil), biçimliyse susar ════"
+bu() { python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('sayi_bicim_uyarisi'))" "$K13/_agents/fabrika/kartlar/$1.json" 2>/dev/null || echo yok; }
+CIKTI="$(ac13 is-b1 "yöneticinin 13 görev listesi işlensin")"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(bu is-b1)" = "True" ]; g $? "biçimsiz sayı: kart AÇILDI (red yok), karta sayi_bicim_uyarisi=True yazıldı"
+grep -q "⚠ BİÇİM — başlıktaki sayı tek ölçüt olarak yazılsın: '<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)'" <<<"$CIKTI"; g $? "uyarı biçimi ve [ayri]/süre kuralını söylüyor"
+CIKTI="$(ac13 is-b2 "açık görev 13 → 0 (kaynak: gorev.sh liste, 29 Eki) olsun")"
+[ "$(bu is-b2)" = "False" ] && ! grep -q "⚠ BİÇİM" <<<"$CIKTI"; g $? "biçimli cümle (→ ve kaynak:) uyarı almaz"
+CIKTI="$(ac13 is-b3 "buton ekle")"; [ "$(bu is-b3)" = "False" ] && ! grep -q "⚠ BİÇİM" <<<"$CIKTI"; g $? "sayısız cümle uyarı almaz"
+CIKTI="$(ac13 is-b4 "açık görev 13 → 0 olsun")"; [ "$(bu is-b4)" = "True" ]; g $? "kaynaksız ok yetmez: '→' var ama 'kaynak:' yok → uyarı"
 echo "── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──"
 D="$T/pkg-sayi"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
 if python3 - "$D/kart.sh" <<'PYM'

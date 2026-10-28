@@ -1,0 +1,50 @@
+$ bash /tmp/claude-1000/kt-sonra.sh
+# rc=0 sure=137.6s zaman=2026-10-29T00:42:43+03:00
+--- stdout ---
+  ✗ kart açıldı
+  ✗ ekipte biter dedi
+  ✗ sultan=false
+  ✗ SULTAN'A GİDER
+  ✗ 0.21.0: 'BAŞLAMA İZNİ … veto penceresi' der (iş bekletilmez)
+  ✗ sınıf dis_yuzey
+  ✗ karta baslama_izni=bekliyor + istendi + kural_surumu 0.21.0 yazıldı
+  ✗ sınıfsız kartta alan YOK (bayt bayt eski davranış)
+  ✗ 🔴 reis_kararlari dolu, sultan_kararlari YOK (Sultan'ın alanına yazılmadı)
+  ✗ 🔴 kayıt reis_kararlari'nda sinifli:true + izin; sultan_kararlari OLUŞMADI
+  ✗ reddedilen denemeler karta hiçbir şey yazmadı
+  ✗ kartlı iş alanı açıldı
+  ✗ kart yalnız BİRİNCİL depoda, worktree'ye KOPYALANMADI (0.6.2 tek kaynak; kopya bayatlıyordu)
+  ✗ denetim geçti (kart otomatik okundu, --kart verilmedi)
+  ✗ birincil karta puan+kanıt+PR işlendi
+  ✗ Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış)
+  ✗ içeride bitenler 1 (is-1, 5/5 E)
+  ✗ açık iş 1 (kartsız kaçış kartı)
+  ✗ kaçış özete düşüyor
+  ✗ gerekçe görünüyor
+  ✗ dosyaya yazıldı
+  ✗ liste --acik çalışıyor
+  ✗ cron kartı açıldı
+  ✗ açılışta söylüyor
+  ✗ canli_gerekir=true, sebep cümledeki kelime
+  ✗ 'buton ekle' kartı canlı istemez
+  ✗ 'sunucu' kelimesi de yeter (ek: Sunucuda → sunucu)
+  ✗ --canli e kelime olmasa da zorunlu kılar
+  ✗ --canli h kelimeye rağmen kaldırır; kararı ve kelimeyi karta yazar (gizli değil)
+  ✗ açılışta 'istenmedi' uyarısı basılır (bağımsız göz görsün)
+  ✗ yeşil canlı kayıt varken uyarı yok
+  ✗ karta canli_kanit=var işlendi
+  ✗ karta canli_kanit=var İŞLENMEDİ (geçersiz yeşil sayılmaz)
+  ✗ mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi
+  ✗ reddedilen çağrılar kartı DEĞİŞTİRMEDİ (şart hâlâ E, geçmişe satır yok)
+  ✗ gerekçeli sahip kararı kabul
+  ✗ karta canli_sebep (ad + gerekçe) ve geçmiş satırı yazıldı
+  ✗ ön koşul: buton kartı canlı istemiyor
+  ✗ bitmiş kart değişmedi (şart hâlâ E)
+  ✗ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
+  ✗ alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)
+  ✗ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
+  ✗ 'hosting' / 'zilli' canlı saymaz (kelime sonu sınırı; yedek göz #354)
+  ✗ Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır
+── SONUÇ: 363 geçti · 44 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-sayi-baslik-bicimi-kart-bicim 56 sn bekledi (yuva 2, load1 17.77)

@@ -445,11 +445,17 @@ if skomut:
     if len(scikti)>TAVAN: kart["sayi_olcum"]["son_satirlar"]=scikti.rstrip().splitlines()[-5:]   # sonuç çoğu zaman sondadır
 kaynakli = bool(skomut) and src=="0"
 kart["sayi_uyarilari"]=[] if kaynakli else sayilar
+import re as _re
+# 🟡 BİÇİM UYARISI (verim R2 · SERDAR kararı 29 Eki, uyarı red değil): sayı iddiası taşıyan cümle tek ölçüt biçimine uymuyorsa
+#    ("<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)") 'kaldı' dönüşlerinin yarısı sayı tutmama + parça eksikti.
+kart["sayi_bicim_uyarisi"]=bool(sayilar) and not (_re.search(r"→",cumle) and _re.search(r"kaynak\s*:",cumle,_re.I))
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
 print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'BAŞLAMA İZNİ SULTAN\'A GİDER (veto penceresi: iş yürür; ara ve birleştirme kararları reisin)' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
 for u in kart["kapsam_uyarilari"]: print(f"  ⚠ KAPSAM — {u} (uyarı, red değil; karta yazıldı)")
 if kart["sayi_uyarilari"]:
     print("  ⚠ SAYI — cümlede kaynağı ölçülmemiş sayı: %s → kaynağından sayan komutu ver: kart.sh ac … --sayi-olcum '<komut>' (uyarı, red değil; karta yazıldı)" % " · ".join("'%s'" % u for u in kart["sayi_uyarilari"]))
+if kart["sayi_bicim_uyarisi"]:
+    print("  ⚠ BİÇİM — başlıktaki sayı tek ölçüt olarak yazılsın: '<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)'; çok parçalı başlıkta parçalar sayılabilir madde olsun ya da [ayri] ile ayrılsın; süre/aşama (1 hafta, FAZ 2) dolmadan bitti yazılmaz (uyarı, red değil; karta yazıldı)")
 if skomut:
     ilk=(scikti.strip().splitlines() or ["(çıktı yok)"])[0][:120]
     print(f"  · sayı kaynağı karta yazıldı (rc={src}): {ilk}" if kaynakli else f"  ⚠ SAYI — ölçüm komutu DÜŞTÜ (rc={src}) — sayı kaynaksız sayıldı: {ilk}")

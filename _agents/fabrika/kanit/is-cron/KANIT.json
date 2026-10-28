@@ -1,0 +1,98 @@
+{
+  "is": "is-cron",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T00:41:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "olc",
+      "asama": "tek",
+      "dosya": "olcum-olc-tek.txt",
+      "sha256": "1eb62d586ff2a6e2d7cd2f87aeee47591c7c8d6765dd58373037dc66829f627e",
+      "komut": [
+        "echo",
+        "1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T00:41:22+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1d7e5b371d3c43389bc045b260ce2143"
+    },
+    {
+      "tur": "canli",
+      "etiket": "zil",
+      "asama": "canli",
+      "dosya": "canli-zil.txt",
+      "sha256": "a982045835e785730a02e395684fbd58fadaf022854ae65c1d389b09469d236e",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/tmp.58Had4vakE/zil.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/tmp.58Had4vakE/zil.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "çaldı",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-28T21:41:23Z çaldı",
+        "saat": "2026-10-28T21:41:23Z",
+        "saat_iso": "2026-10-28T21:41:23+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28T21:41:23Z çaldı",
+        "saat": "2026-10-28T21:41:23Z",
+        "saat_iso": "2026-10-28T21:41:23+00:00"
+      },
+      "zaman": "2026-10-29T00:41:23+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "62d65b4aee7949dd8fdb97b2d5269adb"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "zil",
+      "asama": "tek",
+      "dosya": "gecersiz-canli-zil-801ee28b7e65.txt",
+      "sha256": "0b1e4bcfa2561b35a86563770361675b986aac3e0955b4b237e9b7d21ec38373",
+      "hedef_dosya": "canli-zil.txt",
+      "hedef_olcum_id": "acbae1ef5fd94261a472a16f5f543bc2",
+      "hedef_sha256": "fe1cc60b7ef333a7ca82b95ff6a5ff5c78959e85a86dec78ce24603c96d96472",
+      "hedef_zaman": "2026-10-29T00:38:54+03:00",
+      "hedef_renk": "yesil",
+      "neden": "log başka sunucunun zil satırıydı, bu iş değil",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T00:38:54+03:00",
+      "olcum_id": "7696e7375d224f10ad2e6e02568a1f9e"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "zil",
+      "asama": "tek",
+      "dosya": "gecersiz-canli-zil-d8259b381b69.txt",
+      "sha256": "f503024d3d995924e8f500ca5bfc4b223b7bd965007bef0e3ad0f78a8809e7b7",
+      "hedef_dosya": "canli-zil.txt",
+      "hedef_olcum_id": "62d65b4aee7949dd8fdb97b2d5269adb",
+      "hedef_sha256": "a982045835e785730a02e395684fbd58fadaf022854ae65c1d389b09469d236e",
+      "hedef_zaman": "2026-10-29T00:41:23+03:00",
+      "hedef_renk": "yesil",
+      "neden": "log başka sunucunun zil satırıydı, bu iş değil",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T00:41:23+03:00",
+      "olcum_id": "f4abe475fc374a7992b89cda0565de68"
+    }
+  ],
+  "imza": "c49ca6f2dff54ebcf7ff5a96a75abe7a1cebfc3b61228051d8ab19258bf93450"
+}
