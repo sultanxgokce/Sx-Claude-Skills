@@ -1,0 +1,25 @@
+{
+  "is": "gunluk-plan-sirada-tarama-zorunlu",
+  "cumle": "gunluk-plan becerisinde sıra eşiğin altındaysa ADIM 0-d tarama zorunlu adım olsun: sirada-bak SOR kararında Sultan'ı beklemeden bir ölçülmüş tarama işi eklenir (tarama-ekle kuru varsayılan, günde 3 tavanı aynen)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-28T09:13:19+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "3 tavanı"
+  ]
+}
