@@ -1,7 +1,7 @@
 {
   "is": "kapi-bekci-eski-kod",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T18:43:27+03:00",
+  "guncelleme": "2026-10-28T19:21:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -56,7 +56,77 @@
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "olcum_id": "bddda13c70e84befa8834a66dc76da46"
+    },
+    {
+      "tur": "canli",
+      "etiket": "kutular-once",
+      "asama": "canli",
+      "dosya": "canli-kutular-once.txt",
+      "sha256": "d606a2699e32dcab38d96b88a8b3dbac4a6b3162f731def449cdc4a703812c5f",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "_agents/fabrika/kanit/kapi-bekci-eski-kod/canli-kutular-once-kaynak.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:_agents/fabrika/kanit/kapi-bekci-eski-kod/canli-kutular-once-kaynak.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "ÖZET: toplam=14 ESKİ=13",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-28 18:50:02 ÖZET: toplam=14 ESKİ=13 ölçülemedi=0",
+        "saat": "2026-10-28 18:50:02",
+        "saat_iso": "2026-10-28T18:50:02+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28 18:50:02 ÖZET: toplam=14 ESKİ=13 ölçülemedi=0",
+        "saat": "2026-10-28 18:50:02",
+        "saat_iso": "2026-10-28T18:50:02+03:00"
+      },
+      "zaman": "2026-10-28T19:21:09+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "845a033e553042afb5d2aa4a74625d2c"
+    },
+    {
+      "tur": "canli",
+      "etiket": "kutular-sonra",
+      "asama": "canli",
+      "dosya": "canli-kutular-sonra.txt",
+      "sha256": "bfe8bfbd691be566a7785569f25451a958663df281bc7790bce9a2f0712e5aa0",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "_agents/fabrika/kanit/kapi-bekci-eski-kod/canli-kutular-sonra-kaynak.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:_agents/fabrika/kanit/kapi-bekci-eski-kod/canli-kutular-sonra-kaynak.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "ÖZET: toplam=14 ESKİ=3 ölçülemedi=0",
+      "en_az": 1,
+      "atesleme_sayisi": 2,
+      "ilk_atesleme": {
+        "satir": "2026-10-28 19:19:05 ÖZET: toplam=14 ESKİ=3 ölçülemedi=0",
+        "saat": "2026-10-28 19:19:05",
+        "saat_iso": "2026-10-28T19:19:05+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28 19:20:45 ÖZET: toplam=14 ESKİ=3 ölçülemedi=0",
+        "saat": "2026-10-28 19:20:45",
+        "saat_iso": "2026-10-28T19:20:45+03:00"
+      },
+      "zaman": "2026-10-28T19:21:09+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "2c7418f33f8d40b6ac266e9d5ee0e6a0"
     }
   ],
-  "imza": "ba4c3349c12ddc731dd34288dbc6ae72643ccb96d3be1a8e222352f0f6def6d0"
+  "imza": "9f971daecdaa2afcb8bb92e70ad9cb35b0db676b37fe3a4c68368f6b94488176"
 }

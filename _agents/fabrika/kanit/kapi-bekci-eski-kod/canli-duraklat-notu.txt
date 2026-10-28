@@ -1,0 +1,6 @@
+2026-10-28 19:21 BÂNİ · canlı ölçüm notu (hostsrv salt-okur, docker exec -u abc)
+Kurulum: sync-skills --skill terminal-onar --apply 19:17:05 (2.34.0 → 2.35.0). Kaynak daha yeni, drift yok. Kurulu kopya sınavı 10/0.
+Önce 18:49/18:50: 14 kutuda 13 ESKİ (yalnız code güncel).
+Sonra 19:19 ve 19:20 (iki bekçi turu): 11 kutu güncel (etimes 60–110 sn: akar huma huzur mihenk revak sedir tellal tez vekatip medigate code; code da yenilendi çünkü kurulum .mjs mtime'ını tazeledi → "eski" oldu, doğru davranış). Günlük örneği (huma 19:17:39): "bekçi: kapı eski kodla çalışıyordu → yenilendi (kod damgası 1793204224.91…)".
+3 kutu ESKİ kaldı: mmex (duraklat 12 Eki 21:23) · nazir (14 Eki 11:50) · nova (12 Eki 21:23) — bekçileri /config/.terminal-onar/duraklat ile BİLEREK duraklatılmış (SKILL.md "bekçisi duraklatılmış kutuya inmez", 20 Eki). Duraklat varken bekçi tasarım gereği hiçbir şey yapmaz (sınav E6). Kaldırmak host-yazmasıdır (Sultan/SERDAR eli) ya da /config/sk/kapilari-yenile.sh --apply.
+Kabul cümlesi "13 kutuda ESKİ → 0": ölçülen 13 → 3; kalan 3 bekçinin kapsamı dışında (duraklatılmış), bu PR'ın kodu onlara dokunamaz.

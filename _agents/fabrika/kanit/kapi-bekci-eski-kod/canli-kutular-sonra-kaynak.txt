@@ -1,0 +1,30 @@
+19:19:00 akar      guncel etimes=107 surum=2.35.0
+19:19:00 huma      guncel etimes=82 surum=2.35.0
+19:19:01 huzur     guncel etimes=61 surum=2.35.0
+19:19:01 mihenk    guncel etimes=100 surum=2.35.0
+19:19:01 mmex      ESKI etimes=443668 kod-bas=443551s surum=2.35.0
+19:19:02 nazir     ESKI etimes=443658 kod-bas=443540s surum=2.35.0
+19:19:02 revak     guncel etimes=82 surum=2.35.0
+19:19:02 sedir     guncel etimes=76 surum=2.35.0
+19:19:03 tellal    guncel etimes=92 surum=2.35.0
+19:19:03 tez       guncel etimes=68 surum=2.35.0
+19:19:04 nova      ESKI etimes=443652 kod-bas=443532s surum=2.35.0
+19:19:04 vekatip   guncel etimes=94 surum=2.35.0
+19:19:05 medigate  guncel etimes=67 surum=2.35.0
+19:19:05 code      guncel etimes=109 surum=2.35.0
+2026-10-28 19:19:05 ÖZET: toplam=14 ESKİ=3 ölçülemedi=0
+19:20:40 akar      guncel etimes=207 surum=2.35.0
+19:20:40 huma      guncel etimes=182 surum=2.35.0
+19:20:40 huzur     guncel etimes=161 surum=2.35.0
+19:20:42 mihenk    guncel etimes=201 surum=2.35.0
+19:20:42 mmex      ESKI etimes=443768 kod-bas=443550s surum=2.35.0
+19:20:42 nazir     ESKI etimes=443758 kod-bas=443540s surum=2.35.0
+19:20:43 revak     guncel etimes=182 surum=2.35.0
+19:20:43 sedir     guncel etimes=176 surum=2.35.0
+19:20:43 tellal    guncel etimes=192 surum=2.35.0
+19:20:44 tez       guncel etimes=168 surum=2.35.0
+19:20:44 nova      ESKI etimes=443752 kod-bas=443532s surum=2.35.0
+19:20:44 vekatip   guncel etimes=194 surum=2.35.0
+19:20:45 medigate  guncel etimes=167 surum=2.35.0
+19:20:45 code      guncel etimes=209 surum=2.35.0
+2026-10-28 19:20:45 ÖZET: toplam=14 ESKİ=3 ölçülemedi=0
