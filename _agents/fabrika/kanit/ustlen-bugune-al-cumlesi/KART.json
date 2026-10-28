@@ -1,0 +1,32 @@
+{
+  "is": "ustlen-bugune-al-cumlesi",
+  "cumle": "gunluk-plan sirada-bak iletisi: üstlenmek ajanın işi, bugüne almak Sultan'ın tıkı — tek cümlede ayrılsın",
+  "istedi": "SERDAR: ajanlar 'bugüne al Sultan'ın' cümlesini 'işe başlayamam' diye okuyor",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-28T14:33:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M60XSFCQ9D3KRSCVVTQF01BB",
+  "tahmin_dk": 45,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-28T14:33:15+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
