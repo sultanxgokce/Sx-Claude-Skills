@@ -10,7 +10,7 @@ const { Dumen, KapiHata } = await import(LIB);
 const CHROME = process.env.DUMEN_CHROME;
 if (!CHROME) { console.log('ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi'); process.exit(3); }
 
-let mod = 'ajan'; let durakKod = 200; const duraklar = []; const durakBaslik = [];
+let mod = 'ajan'; let uyariKod = 200; const uyariGelen = []; const uyariBaslik = []; let durakKod = 200; const duraklar = []; const durakBaslik = [];
 const JETON_DOSYA = join(mkdtempSync(join(tmpdir(), 'dumen-jeton-')), 'jeton'); const JETON = 'sahte-jeton-' + Math.random().toString(36).slice(2);
 writeFileSync(JETON_DOSYA, JETON + '\n'); process.env.DUMEN_DEFTER_JETON = JETON_DOSYA;
 const FORM = `<!doctype html><title>f</title><input id=t type=text><input id=d type=date><select id=s><option value=a>a</option><option value=b>b</option></select><input id=pw type=password><input id=otp type=text name=otp><button id=g>Tamam</button><button id=ode>Öde</button>`;
@@ -18,6 +18,7 @@ let modSonra = null;   // /dumen/mod cevaplandıktan SONRA bir kez çalışır (
 const srv = http.createServer((q, r) => {
   if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); r.end(JSON.stringify({ mod, an: '' })); if (modSonra) { const f = modSonra; modSonra = null; f(); } return; }
   if (q.url === '/yavas') { return setTimeout(() => { r.setHeader('content-type', 'text/html; charset=utf-8'); r.end(FORM); }, 4000); }
+  if (q.url === '/api/dumen/uyari' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { uyariGelen.push(JSON.parse(b)); uyariBaslik.push(q.headers['x-defter-jeton'] || null); r.statusCode = uyariKod; r.end('{}'); }); }
   if (q.url === '/api/dumen/durak' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { duraklar.push(JSON.parse(b)); durakBaslik.push(q.headers['x-defter-jeton'] || null); r.statusCode = durakKod; r.end('{}'); }); }
   r.setHeader('content-type', 'text/html; charset=utf-8'); r.end(FORM);
 });
@@ -52,6 +53,10 @@ ok('D3b fill(tarih) ve selectOption "köprüde GÖRÜNMEZ" uyarısı bastı (2 e
 ok('D3c uyarı terminale de yazıldı', satirlar.filter((x) => x.includes('GÖRÜNMEZ')).length === 2, satirlar.join(' | '));
 ok('D3d metin alanı fill\'i (Input.insertText, köprü görür) uyarı ÜRETMEDİ', !gorU.some((u) => u.hedef === '#t'), JSON.stringify(gorU));
 ok('D3e uyarı alan DEĞERİNİ taşımaz', !JSON.stringify(d.uyarilar()).includes('2026-10-27'));
+await d.iletimBekle();
+const gorG = uyariGelen.filter((u) => u.kod === 'gorulemeyen-eylem');
+ok('D3f görünmez eylem uyarısı MERKEZE gitti (2 eylem × kod+sayı), jeton başlığıyla', gorG.length === 2 && uyariBaslik.slice(0, 2).every((h) => h === JETON), JSON.stringify({ gorG, uyariBaslik }));
+ok('D3g merkeze yalnız {kod, n} gitti — hedef/değer/adres/çerez YOK', uyariGelen.every((u) => Object.keys(u).sort().join() === 'kod,n') && !JSON.stringify(uyariGelen).includes('2026-10-27') && !JSON.stringify(uyariGelen).includes('#d'), JSON.stringify(uyariGelen));
 
 console.log('── sayfa sahte olay üretir → yabancı');
 await new Promise((r) => setTimeout(r, 300));
@@ -62,6 +67,12 @@ ok('D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)', d.yabanci(
 await new Promise((r) => setTimeout(r, 800));   // HİÇBİR eylem/uyarilar() çağrısı yok: uyarı olay anında kendiliğinden gelmeli
 ok('D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)', satirlar.some((x) => x.includes('DIŞINDA')), satirlar.join(' | '));
 const yU = d.uyarilar().filter((u) => u.kod === 'yabanci-olay');
+await d.iletimBekle();
+ok('D5f eylem dışı değişiklik uyarısı MERKEZE gitti (kod yabanci-olay, n=1)', uyariGelen.some((u) => u.kod === 'yabanci-olay' && u.n === 1), JSON.stringify(uyariGelen));
+uyariKod = 500; satirlar.length = 0; const oncekiG = uyariGelen.length;
+await d.fill('#d', '2026-11-01'); await d.iletimBekle();
+ok('D5g merkez uyarı ucu 500 verirse eylem YİNE yapıldı, terminale "İLETİLEMEDİ" yazıldı', (await deger('#d')) === '2026-11-01' && uyariGelen.length > oncekiG && satirlar.some((x) => x.includes('İLETİLEMEDİ')), satirlar.join(' | '));
+uyariKod = 200;
 ok('D5b eylem dışı değişiklik UYARI üretti', yU.length === 1 && yU[0].hedef === 't', JSON.stringify(yU));
 ok('D5d aynı olay ikinci kez uyarmaz', d.uyarilar().filter((u) => u.kod === 'yabanci-olay').length === 1);
 

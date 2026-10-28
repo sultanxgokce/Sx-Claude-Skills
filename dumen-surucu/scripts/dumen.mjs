@@ -35,7 +35,7 @@ const ODEME_YOL = /(checkout|odeme|ödeme|payment|3d-?secure)/i;
 
 export class Dumen {
   // Ham nesneler ÖZELDİR (#): çağıran d.page / d.cdp / d.tarayici ile kapıyı atlayamaz. Zorlama yine de köprüdedir (SKILL.md).
-  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #uyarilar = []; #uyariVerilen = new Set(); #aktif = 0; #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0;
+  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #uyarilar = []; #uyariVerilen = new Set(); #aktif = 0; #iletimler = new Set(); #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0;
   constructor({ cdpUrl, merkez, zamanAsimiMs = 3000, yaz = (s) => console.log(s) }) {
     this.#cdpUrl = cdpUrl; this.#merkez = merkez.replace(/\/$/, ''); this.#zamanAsimiMs = zamanAsimiMs; this.#yaz = yaz;
   }
@@ -157,7 +157,17 @@ export class Dumen {
   // KÖR NOKTA (JN1K8K): fill(tarih/renk/aralık)/selectOption değeri sayfa JS'iyle yazar → CDP Input.* YOK, köprü bu eylemi GÖRMEZ.
   // O eylemin penceresine düşen isTrusted=false olay = "köprüde görünmeyen eylem": uyarı basılır (yalnız kayıt/uyarı; karar kapısı değil — KARAR.md).
   // Uyarıda alan DEĞERİ yok (parola gizleme dinleyicide; burada kimlik+tür+sayı).
-  #uyari(kod, ayrinti, ileti) { this.#uyarilar.push({ kod, ...ayrinti, t: Date.now() }); this.#yaz(ileti); }
+  #uyari(kod, ayrinti, ileti) { this.#uyarilar.push({ kod, ...ayrinti, t: Date.now() }); this.#yaz(ileti); this.#uyariIlet(kod, ayrinti.n); }
+  // Merkeze (Dümen paneli + kütük) YALNIZ kod ve sayı gider — alan değeri, hedef, adres, çerez ASLA. Eylemi bekletmez; merkez cevap vermezse eylem etkilenmez, terminale UYARIR.
+  #uyariIlet(kod, n) {
+    const jeton = jetonOku();
+    const sayi = Math.min(Math.max(Number.isInteger(n) ? n : 1, 1), 999);
+    const p = fetch(`${this.#merkez}/api/dumen/uyari`, { method: 'POST', headers: { 'content-type': 'application/json', ...(jeton ? { 'x-defter-jeton': jeton } : {}) }, body: JSON.stringify({ kod, n: sayi }), signal: AbortSignal.timeout(this.#zamanAsimiMs) })
+      .then((r) => { if (!r.ok) this.#yaz(`⚠ Dümen: uyarı merkeze İLETİLEMEDİ (http ${r.status}) — yalnız burada görünür`); })
+      .catch(() => { this.#yaz('⚠ Dümen: uyarı merkeze İLETİLEMEDİ (merkez cevapsız) — yalnız burada görünür'); });
+    this.#iletimler.add(p); p.finally(() => this.#iletimler.delete(p));
+  }
+  iletimBekle() { return Promise.allSettled([...this.#iletimler]); }   // yalnız sınav/kapanış için: giden uyarı iletimlerinin bitmesini bekler
   #gorulemeyenTara(p) {
     if (!/^(fill|selectOption)$/.test(p.ad)) return;   // yalnız değeri sayfa JS'iyle yazan eylemler; click/press/goto sırasında sayfanın sentetik olayı 'köprüde görünmez' DEĞİLDİR
     const gor = this.#olaylar.filter((o) => o.t >= p.t0 && o.t <= p.t1 + 50 && o.trusted === false);

@@ -1,0 +1,45 @@
+{
+  "is": "dumen-uyari-gonder-sx",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T13:06:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gercek",
+      "asama": "once",
+      "dosya": "olcum-sinav-gercek-once.txt",
+      "sha256": "ff4e42d04ef275a404a4d8c0ecb4bb88353b789c118500796b4fda059e8d5cbd",
+      "komut": [
+        "env",
+        "DUMEN_MUTANT=0",
+        "DUMEN_LIB=/tmp/claude-1000/dumen-eski-main.mjs",
+        "node",
+        "dumen-surucu/scripts/dumen.test.mjs"
+      ],
+      "rc": 3,
+      "renk": "sari",
+      "zaman": "2026-10-28T13:04:37+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4aeb6e0fc72240899e67f1619620318d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-gercek-sonra.txt",
+      "sha256": "1d2c1c728c58958070ea9916e24d490de9774bb52a4d6109e08c21b5f71cf533",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T13:06:18+03:00",
+      "sure_sn": 101.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e3591671cbea486c9ba11e2f8bc867b5"
+    }
+  ],
+  "imza": "ad230c08cbaf61e25e85df9ba6dfb3ab6d1972e08573985c738ea03933f14556"
+}

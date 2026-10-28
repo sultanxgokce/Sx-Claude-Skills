@@ -34,5 +34,8 @@ mut "görülemeyen uyarı eylem türünden bağımsız" "if (!/^(fill|selectOpti
 mut "metin alanı da görülemeyen sayılır" "o.trusted === false);
     if (gor.length)" "true);
     if (gor.length)"
+mut "uyarı merkeze iletilmez" "this.#yaz(ileti); this.#uyariIlet(kod, ayrinti.n); }" "this.#yaz(ileti); }"
+mut "uyarı iletimi jetonsuz" "...(jeton ? { 'x-defter-jeton': jeton } : {}) }, body: JSON.stringify({ kod, n: sayi })" "}, body: JSON.stringify({ kod, n: sayi })"
+mut "uyarı iletimi hedef/değer taşır" "body: JSON.stringify({ kod, n: sayi })" "body: JSON.stringify({ kod, n: sayi, hedef: this.#uyarilar.at(-1)?.hedef })"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 15/15 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 18/18 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
