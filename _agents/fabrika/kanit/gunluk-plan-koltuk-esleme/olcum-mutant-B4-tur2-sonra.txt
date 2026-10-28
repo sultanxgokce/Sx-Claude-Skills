@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-esleme-tur2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ke.sh B4
+# rc=1 sure=2.5s zaman=2026-10-28T02:11:35+03:00
+--- stdout ---
+MUTANT B4 rc=1
+  ✗ Q9 deftere-yaz: koltuk adı çevrilir, kutu=mihenk — 'kutu=mihenk' yok: ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)
+  ✗ Q9b deftere-yaz: defter kaydı DEFTER adıyla yazılır (kim=NECCAR) — 'kim=NECCAR' yok: ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)
+  ✗ Q10c deftere-yaz da tek geçiş: kutu=kutux kim=ZB — beklenen=1 gerçek=0
+YAKALANDI
+--- stderr ---

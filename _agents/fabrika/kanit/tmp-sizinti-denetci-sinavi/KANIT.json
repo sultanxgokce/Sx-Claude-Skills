@@ -1,0 +1,44 @@
+{
+  "is": "tmp-sizinti-denetci-sinavi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-27T23:08:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sizinti-once",
+      "asama": "once",
+      "dosya": "olcum-sizinti-once-once.txt",
+      "sha256": "3c0ef14e969a9bf1f1104f007ec85d389f29b54205481cd7f5e94a1aafdbe7a5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/ol-sk.sh",
+        "/tmp/tmp.ERKQd9jQoS/on/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-27T22:44:05+03:00",
+      "sure_sn": 1228.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "72ef17b308d14e4ca90498941caae9d2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sizinti-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sizinti-sonra-sonra.txt",
+      "sha256": "d6fac74790e93928a772fc4c9216258f0e5557e6f158e89d3dffdc3481ec0079",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/ol-sk.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-tmp-sizinti-denetci-sinavi/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-27T23:08:37+03:00",
+      "sure_sn": 1471.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "036cc9f56abe406b85a106d40abea5be"
+    }
+  ],
+  "imza": "0d7f360275bcd86e337eecb9ce40390ec3fd3243666f655fffd0651427b05279"
+}

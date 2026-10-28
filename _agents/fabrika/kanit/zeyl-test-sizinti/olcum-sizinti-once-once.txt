@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/ol-sk.sh /tmp/tmp.dY7HNjpWEf/zeyl/scripts/zeyl.test.sh
+# rc=1 sure=41.0s zaman=2026-10-28T06:14:02+03:00
+--- stdout ---
+birakilan=12
+--- stderr ---
+⏳ agir-sira: kanit-zeyl-test-sizinti-sizinti-once 40 sn bekledi (yuva 1, load1 17.29)

@@ -1,0 +1,11 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh M7
+# rc=1 sure=4.0s zaman=2026-10-27T22:17:13+03:00
+--- stdout ---
+MUTANT M7 rc=1
+  ✗ S19 en üstteki iş BAŞKASINA atanmış: onu ÜSTLENMEZ, bana atanmış ilk işi üstlenir — beklenen=ustlen gorev_M2 --kim MENZILCI --tahmin
+  ✗ S20 3 iş de başkasına atanmış: ustlen ÇAĞRILMAZ, rc 0 — beklenen=yok:0 gerçek=var:0
+  ✗ S20b 'başkasının işi üstlenilmez' açıkça söylenir — 'BASLAMADI=yok' yok: KUTU=menzil
+  ✗ S21 sahipsiz ('-') iş başlatma adayıdır — beklenen=ustlen gorev_Y4 --kim MENZILCI --tahmin 30 gerçek=ustlen gorev_Y1 --kim MENZILCI --tah
+YAKALANDI
+--- stderr ---

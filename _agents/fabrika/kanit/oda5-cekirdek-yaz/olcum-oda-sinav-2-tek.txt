@@ -1,0 +1,108 @@
+$ bash oda-kur/scripts/oda.test.sh
+# rc=0 sure=201.9s zaman=2026-10-27T23:23:32+03:00
+--- stdout ---
+── iskelet ve üretim
+  ✓ O1 oda iskeleti: CLAUDE.md · oda.json · hafiza/ · .claude/skills · .claude/agents
+  ✓ O2 master prompt hedef + reis + ölçü taşıyor
+  ✓ O3 ayar: hafıza oda başına AYRI, ortak izin her odada, kanca kendi odasına bağlı
+  ✓ O4 uret idempotent (ikinci koşu 'aynı')
+  ✓ O5 doğrula temiz (rc 0)
+  ✓ O6 elle düzenlenmiş ayar KIRMIZI (rc 1, hangi oda söylenir)
+  ✓ O7 uret elle düzenlemeyi geri sardı, doğrula yeşil
+  ✓ O8 oda-özel ayar hooks/autoMemoryDirectory ezemez (üretici reddeder)
+  ✓ O9 oda-özel izin ortakla BİRLEŞİR (ortak korunur)
+  ✓ O10 var olan oda yeniden kurulamaz
+  ✓ O11 geçersiz oda adı reddedildi
+  ✓ O12 ölçüsüz oda kurulmaz (oda = hedef + reis + ölçü)
+  ✓ O13 hiç oda yoksa doğrula ÖLÇÜLEMEDİ (rc 3), yeşil değil
+  ✓ O14 yol: var olan odanın mutlak klasörü basılır, olmayan oda rc≠0
+  ✓ O15 doğrula eksik iskeleti (skills/, MEMORY.md) KIRMIZI yakalar
+  ✓ O16 ayar aynı olsa da uret eksik klasörü yeniden kurar
+  ✓ O17 boşluk/;/$ içeren depo yolunda kanca komutu alıntılı ve kabukta GERÇEKTEN çalışır
+── kanca (Write/Edit/Bash)
+  ✓ K1 kendi oda klasörüne yazma SERBEST
+  ✓ K2 kardeş odaya yazma DURDURULDU, mesaj yolu söyler
+  ✓ K3 ortak veriye doğrudan Edit DURDURULDU
+  ✓ K4 kökteki ortak veri dosyası (KAYIT.json) DURDURULDU
+  ✓ K5 ajan ortak ayarı (.claude/oda-ortak.json) DEĞİŞTİREMEZ
+  ✓ K6 depo içi .git/ yazımı DURDURULDU
+  ✓ K7 depo DIŞINA yazma bu kancanın işi değil (serbest)
+  ✓ K8 sembolik bağ ile kardeş odaya kaçış DURDURULDU (realpath)
+  ✓ K9 ortak veriyi OKUMA serbest
+  ✓ K10 Bash yönlendirmesiyle ortak veriye yazma DURDURULDU
+  ✓ K11 tee ile kardeş odaya yazma DURDURULDU
+  ✓ K12 sed -i ile ortak veriye yazma DURDURULDU
+  ✓ K13 cp hedefi kardeş oda DURDURULDU
+  ✓ K14 çekirdeğin komutu (cekirdek_komutlar) SERBEST
+  ✓ K15 çekirdek komutu zincirin başında olsa da ardındaki yazım DURDURULDU
+  ✓ K16 2>&1 ve /dev/null yanlış alarm vermez
+  ✓ K17 Bash ile kendi odaya yazma SERBEST
+  ✓ K22 oda İÇİNDE aynı adlı sahte betik çekirdek SAYILMAZ (gerçek yol eşleşmesi)
+  ✓ K23 gerçek çekirdek betiği (cwd'den çözülen yol eşit) SERBEST
+  ✓ K24 çekirdek komutunun ARDINA eklenen yönlendirme DURDURULDU
+  ✓ K26 çekirdek komutunu izleyen && cp ... zincir parçası ayrı taranır, DURDURULDU
+  ✓ K25 çekirdek betiği MUTLAK yolla da tanınır
+  ✓ K18 bozuk kanca girdisi → GÜVENLİ TARAFTA durdurur (fail-closed)
+  ✓ K19 ortak ayar kayıpsa durdurur (fail-closed), sessiz serbest bırakmaz
+  ✓ K20 oda.json ek_yazma ile açık tanınmış istisna SERBEST
+  ✓ K21 aynı yol ek_yazma'sı olmayan odada DURDURULDU
+── cekirdek-yaz (Oda modeli 5 D4): sahte defter /ben, jeton kimliği, kayıt, ret
+  ✓ C1 jetonlu yazım dosyayı değiştirdi
+  ✓ C2 kayıt: kim (jetondan) · dosya · önceki/sonraki sha · neden · sipariş · zaman
+  ✓ C3 siparişsiz yazım kayıtta AYRI işaretli (nabızda ayrı satır)
+  ✓ C4 yeni dosya: önceki sha boş (uydurulmaz), ara dizin kurulur
+  ✓ C5 Ö6 DEFTER_JETON_YOL yok: ret, yazım 0 (varsayılan jetona düşmez)
+  ✓ C6 jeton dosyası okunamaz: ret
+  ✓ C7 defter jetonu tanımıyor (401): ret
+  ✓ C8 ajan kimliği olmayan kutu jetonu: ret (koltuk ayırt edilemez)
+  ✓ C9 defter ulaşılamaz: ret (fail-closed)
+  ✓ C10 Ö7 ayrı depodaki odadan (cwd başka git deposu): ret
+  ✓ C11 verilen depo kutu deposu değil (oda-ortak.json yok): ret
+  ✓ C12 depo dışı yol: ret
+  ✓ C13 ortak_veri dışı dosya: ret (komut yalnız çekirdek içindir)
+  ✓ C14 sembolik bağla depo dışına kaçış: ret (realpath)
+  ✓ C15 nedensiz/çok kısa nedenle yazım yok
+  ✓ C16 bozuk sipariş kimliği: ret
+  ✓ C17 reddedilen hiçbir yazım kayıt satırı bırakmadı
+  ✓ C18 --dosya ile içerik
+── kanca ret mesajı komutu gösterir (Ö4)
+  ✓ C19 doğrudan yazım reddi komutu (cekirdek-yaz … --neden) gösteriyor
+── cekirdek-yaz: yazım+kayıt tek işlem (göz tur 1)
+  ✓ C21 kayıt dosyası açılamıyor: ret VE çekirdek dosya DEĞİŞMEDİ (kayıtsız değişiklik yok)
+  ✓ C22 kayıt satırı yazılamazsa dosya ESKİ içeriğine döner (geri alma), kayıt değişmez
+  ✓ C23 geçici dosya artığı yok (ret ve geri alma sonrası)
+  ✓ C24 8 eşzamanlı yazım: kilit sıraya koyar, önceki/sonraki sha zinciri kopmaz, son sha dosyayla eşit
+  ✓ C20 ortak_veri '**' olsa bile depo dışı yol ret (kapı glob'dan bağımsız)
+SONUÇ: geçti=67 kaldı=0
+── mutantlar (her biri sınavı KIRMALI)
+  ✓ ortak veri kuralı kapalı: yakalandı (2 kapı kırmızı:   ✗ K3 ortak veriye ya   ✗ C19 ret komutu gö )
+  ✓ oda dışı kuralı kapalı: yakalandı (8 kapı kırmızı:   ✗ O17 alıntılama k   ✗ K2 kardeş odaya y   ✗ K5 ortak ayar yaz� )
+  ✓ realpath yok (symlink kaçışı): yakalandı (3 kapı kırmızı:   ✗ K8 symlink kaçı�   ✗ C14 symlink ile ka   ✗ C17 ret kayıt bı )
+  ✓ bozuk girdi serbest (fail-open): yakalandı (1 kapı kırmızı:   ✗ K18 bozuk girdi ge )
+  ✓ ortak ayar yoksa serbest (fail-open): yakalandı (1 kapı kırmızı:   ✗ K19 ortak ayarsız )
+  ✓ çekirdek komutu tüm zinciri izinli sayar: yakalandı (1 kapı kırmızı:   ✗ K26 zincirde cp ge )
+  ✓ ek_yazma her odaya açık: yakalandı (8 kapı kırmızı:   ✗ O17 alıntılama k   ✗ K2 kardeş odaya y   ✗ K5 ortak ayar yaz� )
+  ✓ çekirdek eşleşmesi yalnız metin öneki: yakalandı (2 kapı kırmızı:   ✗ K22 sahte betik ç   ✗ K23 gerçek çekir )
+  ✓ çekirdek parçada yönlendirme taranmaz: yakalandı (3 kapı kırmızı:   ✗ K10 yönlendirme g   ✗ K15 zincir tüm ko   ✗ K24 çekirdek par� )
+  ✓ kanca komutu alıntısız: yakalandı (1 kapı kırmızı:   ✗ O17 alıntılama k )
+  ✓ uret ayar aynıysa iskeleti kurmaz: yakalandı (7 kapı kırmızı:   ✗ O1 iskelet eksik   ✗ O5 doğrula temiz    ✗ oda-a: .claude/age )
+  ✓ doğrula MEMORY.md kontrolü yok: yakalandı (1 kapı kırmızı:   ✗ O15 eksik iskelet  )
+  ✓ oda-özel parça kancayı ezebilir: yakalandı (1 kapı kırmızı:   ✗ O8 oda-özel parç )
+  ✓ hafıza ayrılığı bozuk (hepsi aynı yol): yakalandı (3 kapı kırmızı:   ✗ O3 üretilen ayar    ✗ O5 doğrula temiz    ✗ O7 uret onarmadı )
+  ✓ uret yazmıyor (sessiz): yakalandı (7 kapı kırmızı:   ✗ O3 üretilen ayar    ✗ O4 idempotent değ   ✗ O5 doğrula temiz  )
+  ✓ cekirdek-yaz: env yoksa varsayılan jetona düşer: yakalandı (9 kapı kırmızı:   ✗ C5 jetonsuz yazdı   ✗ C6 okunamayan jeto   ✗ C7 geçersiz jeton )
+  ✓ cekirdek-yaz: ajansız jetonu kabul eder: yakalandı (6 kapı kırmızı:   ✗ C8 ajansız jetonl   ✗ C9 defter yokken y   ✗ C10 ayrı depodan  )
+  ✓ cekirdek-yaz: defter ulaşılamazsa devam eder: yakalandı (5 kapı kırmızı:   ✗ C9 defter yokken y   ✗ C10 ayrı depodan    ✗ C15 nedensiz yazd� )
+  ✓ cekirdek-yaz: ayrı depo (cwd) denetimi yok: yakalandı (4 kapı kırmızı:   ✗ C10 ayrı depodan    ✗ C15 nedensiz yazd�   ✗ C16 bozuk sipariş )
+  ✓ cekirdek-yaz: ortak_veri glob denetimi yok: yakalandı (2 kapı kırmızı:   ✗ C13 çekirdek dı�   ✗ C17 ret kayıt bı )
+  ✓ cekirdek-yaz: depo dışı yol denetimi yok: yakalandı (1 kapı kırmızı:   ✗ C20 glob '**' iken )
+  ✓ cekirdek-yaz: önceki sha yazılmaz: yakalandı (2 kapı kırmızı:   ✗ C2 kayıt eksik/ya   ✗ C24 eşzamanlı ya )
+  ✓ cekirdek-yaz: siparişsiz işareti yok: yakalandı (1 kapı kırmızı:   ✗ C3 siparişsiz iş )
+  ✓ cekirdek-yaz: neden zorunlu değil: yakalandı (3 kapı kırmızı:   ✗ C15 nedensiz yazd�   ✗ C16 bozuk sipariş   ✗ C17 ret kayıt bı )
+  ✓ kanca ret mesajı komutu göstermiyor: yakalandı (1 kapı kırmızı:   ✗ C19 ret komutu gö )
+  ✓ cekirdek-yaz: kilit yok (eşzamanlı zincir): yakalandı (1 kapı kırmızı:   ✗ C24 eşzamanlı ya )
+  ✓ cekirdek-yaz: geri alma yok (kayıtsız değişiklik kalır): yakalandı (1 kapı kırmızı:   ✗ C22 kayıt yazıla )
+  ✓ cekirdek-yaz: kayıt dosyası gerçekten açılmıyor (kayıtsız değişiklik): yakalandı (8 kapı kırmızı:   ✗ C1 yazım olmadı    ✗ C2 kayıt eksik/ya   ✗ C3 siparişsiz iş )
+MUTANT: hepsi yakalandı
+--- stderr ---
+⏳ agir-sira: kanit-oda5-cekirdek-yaz-oda-sinav-2 40 sn bekledi (yuva 2, load1 17.99)

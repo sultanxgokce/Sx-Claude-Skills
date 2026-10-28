@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "oda5-cekirdek-yaz",
+  "pr": "511",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-27T23:14:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda5-cekirdek-yaz",
+  "dal": "oda5-cekirdek-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34374,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 9118
+  },
+  "dalgic": "uyumlu",
+  "bas": "2cc057040a83f6e325091a7a643f96696e5c7327",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen çekirdek-yaz yolu, jetondan kimlik doğrulama, kapsam denetimleri, kayıt alanları ve Oda 4 ret yönlendirmesi yapılmış; iş kartındaki doğru hedefe gidilmiş. Ancak dosya yazımı ile denetim kaydı tek işlem değil: kayıt başarısızlığında kayıtsız değişiklik oluşabiliyor ve eşzamanlı yazımlarda sha zinciri gerçeği yansıtmayabiliyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Hedef dosya, denetim kaydı güvenceye alınmadan değiştiriliyor; kayıt dosyasını açma/yazma başarısız olursa komut hata verse de çekirdek dosya çoktan yazılmış kalır. Bu, her yazımın kim·zaman·sha·neden kaydı taşıması şartını ihlal eder ve üst katmandaki “RET (yazım yok)” mesajını da yanlış kılar.",
+        "kanit": "cekirdek_yaz içinde önce `os.replace(gecici, hedef)` çalışıyor; ancak bundan sonra `open(kyol, 'a')` ile kayıt ekleniyor. Kayıt aşamasındaki OSError main tarafından `✗ RET (yazım yok)` olarak sunuluyor. C1–C20 ölçümleri kayıt yolunun yazılamadığı vakayı sınamıyor.",
+        "konum": "oda-kur/scripts/oda.py: cekirdek_yaz — os.replace sonrası CEKIRDEK_KAYIT append; main OSError yakalaması",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yazım ve kayıt için kilit/seri hale getirme yok; iki eşzamanlı süreç aynı önceki sha'yı okuyup farklı içerikleri sırayla değiştirebilir, ardından kayıtları gerçek değiştirme sırasından farklı sırada ekleyebilir. Böylece kayıtların önceki/sonraki sha zinciri denetlenebilir bir tarihçe olmaktan çıkar.",
+        "kanit": "`onceki = sha_dosya(hedef)`, `os.replace(...)` ve kayıt dosyasına append ayrı ve kilitsiz adımlar. Sunulan C1–C20 sınavları yalnız sıralı çağrılar yapıyor; eşzamanlı iki `cekirdek-yaz` ölçümü bulunmuyor.",
+        "konum": "oda-kur/scripts/oda.py: cekirdek_yaz — onceki sha/replace/kayıt dizisi; oda-kur/scripts/oda.test.sh:C1-C20",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek gerçek ölçüm yeşil, rc=0 ve 63 kapının geçtiğini bildiriyor. Mutasyon satırlarındaki FAIL/✗ ifadeleri beklenen mutasyon kanıtıdır ve gerçek kod bulgusu değildir; ayrıca tüm mutantların yakalandığı gösterilmiş. İşlevsel kanıt güçlüdür, fakat yazım-kayıt atomikliği, kayıt hatası ve eşzamanlılık için ölçüm yoktur."
+  }
+}

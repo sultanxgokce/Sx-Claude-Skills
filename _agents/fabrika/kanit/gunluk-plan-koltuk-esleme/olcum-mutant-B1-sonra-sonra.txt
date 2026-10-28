@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-esleme-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ke.sh B1
+# rc=1 sure=1.8s zaman=2026-10-28T02:09:03+03:00
+--- stdout ---
+MUTANT B1 rc=1
+  ✗ Q1 tablodaki koltuk defter adına çevrilir — beklenen=NECCAR gerçek=MOBILYACI
+  ✗ Q2 İ/I/ı katlı eşleşir (MOBİLYACI) — beklenen=NECCAR gerçek=MOBİLYACI
+  ✗ Q6b sağlam satır yine çalışır — 'Z' yok: UYARI: koltuk-esleme satır 1 bozuk, atlandı
+YAKALANDI
+--- stderr ---

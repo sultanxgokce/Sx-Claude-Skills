@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kabuk-kalan-kovasi-tek.txt
+hedef_sha256: 87959db195c633eaee710174a0dc21779b5aad602e44a4acf65a99c2e4e8d128
+hedef_zaman: 2026-10-27T23:41:21+03:00
+hedef_renk: kirmizi
+neden: Kova 156 sınavdan 3 kırmızı: hafta-kapanis, seans/kendi-kopyam, yazilim-fabrikasi/agir-sira-sarma. Üçü de ANA DALDA (818167ac) aynı şekilde kırmızı (karşı ölçüm); bu dal yalnız gunluk-plan dosyalarına dokunur ve gunluk-plan'ın 8 sınavı yeşil. Ölçüm yanlış değil, bu dalın kapısı olarak kapsamı yanlış: önceden var olan kırmızılar ayrı bulgu.
+kim: BERİD
+karsi: olcum-ana-dalda-onceden-kirmizi-tek.txt
+zaman: 2026-10-28T00:03:06+03:00

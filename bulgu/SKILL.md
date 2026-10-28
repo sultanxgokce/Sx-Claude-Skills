@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.6.0
+version: 0.6.1
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -31,7 +31,7 @@ bunu söyler; not yazılamadıysa (ör. bekleyen görevi düzenleme yetkin yok) 
 günde ~25 artıyor, kimse çekmiyordu. Artık `yaz` kaydı **`gorev_durumu: havuz`** ile açar: görev ekranındaki Sırada
 sayısına girmez, Sırada cümlesinin sonunda "N bulgu havuzda, süzülmeyi bekliyor" diye ayrı sayılır; haftalık süzme
 (`/gunluk-plan` retrosu · `gorev.sh durum <id> acik "<gerekçe>"`) onu göreve çevirir ya da iptal eder.
-- `--gorev` → eskisi gibi `acik` (Sultan/reis talimatıyla açılan doğrudan İŞ için).
+- `--gorev` → eskisi gibi `acik` (Sultan/reis talimatıyla açılan doğrudan İŞ için). **0.6.1:** `--gorev` defterde açılışta Sultan özeti ister; `--ozet "<tek cümle: sebep → ne yapılacak → bitince ne olur>"` verilmezse komut deftere gitmeden rc 2 ile durur (eskiden defterden 400 `ozet_acilista_gerekli` dönüyordu). Havuz (varsayılan) özetsiz açılır.
 - `--dugum …` tek başına RED (rc 2): başka kutunun bekleyen işini tutan kayıt havuzda bekleyemez, ama tek istisna `--gorev`dir — `--dugum --gorev` birlikte verilir; sessizce `acik`a çevrilmez.
 - Jetonsuz kutuda (eski kutu defteri) havuz yoktur; komut bunu uyarıyla söyler, kayıt eski biçimde düşer.
 - Defter 1.18.0 öncesiyse `havuz` 400 ile reddedilir ve komut bunu basar (rc 1); sessizce `acik`a düşmez.

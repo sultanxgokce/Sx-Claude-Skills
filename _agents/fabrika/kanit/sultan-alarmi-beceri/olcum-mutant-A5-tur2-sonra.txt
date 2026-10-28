@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-alarm-tur2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sa.sh A5
+# rc=1 sure=1.2s zaman=2026-10-28T00:25:27+03:00
+--- stdout ---
+MUTANT A5 rc=1
+  ✗ G4 --kuru telefona GİTMEZ ama niyetini söyler — 'kuru: telefona gidecekti' yok: 🚨🔴 SULTAN ALARMI — Revak disk silme · SERDAR bekliy
+  ✗ G4b kuruda curl çağrılmaz — beklenen=[yok] gerçek=[var]
+  ✗ G5 --telefon: ntfy'ye gider (öncelik 4) — beklenen=[1:1] gerçek=[2:2]
+YAKALANDI
+--- stderr ---

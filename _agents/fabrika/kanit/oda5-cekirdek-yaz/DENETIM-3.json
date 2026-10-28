@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "oda5-cekirdek-yaz",
+  "pr": "511",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T00:25:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda5-cekirdek-yaz",
+  "dal": "oda5-cekirdek-yaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36903,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 25118
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4854b956e260d5ca91cf98a51903e89e106968b0",
+  "duzeltme_farki": {
+    "onceki_bas": "02494ef604694afc29eda825de7a3acd94059d57",
+    "dosya": 8,
+    "bayt": 33017,
+    "tam_bayt": 78249
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki B1 kapanmış: eski hedef değişiklikten önce sert bağla korunuyor, sert bağ kurulamazsa yedek kopyalama hedef değiştirilmeden tamamlanıyor; kayıt hatasında geri dönüş artık eski içeriği yeniden yazmaya bağlı değil. Son yeşil ölçüm 69/69 gerçek kapıyı geçirip yeni geri-alma vakalarını ve bütün mutantları yakaladığı için yalnız rötuş düzeyi risk kalmış, üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. En güncel kayıt oda-sinav-4 rc=0/yeşil; gerçek sınav sonucu 69 geçti, 0 kaldı ve C22, C23, C25, C26 geri-alma ile artık temizliğini ölçüyor. Önceki kırmızı oda-sinav-3, üretim kodu arızası değil mutasyon üretme çapasındaki geçici sınav kusuruydu; sonraki yeşil ölçümde düzeltilmiş ve tüm mutantlar yakalanmış. Çıktı gerçek davranış sınavları ile mutant bölümünü aynı ölçümde birleştiriyor; manifestte ayrı mutasyon kaydı bulunmaması sunum rötuşudur, fakat gerçek 69/69 sonucu açıkça ayrılmıştır."
+  }
+}

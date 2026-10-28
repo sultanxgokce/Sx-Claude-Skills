@@ -1,0 +1,34 @@
+{
+  "is": "tmp-sizinti-denetci-sinavi",
+  "cumle": "denetci.test.sh her koşuda 4 geçici dizin (içinde git deposu) bırakıyor; çıkışta siler. Disk önceliği, sızıntı görevi.",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-27T19:05:34+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5YP3RTWT4GRS4Z957NNDSSE",
+  "tahmin_dk": 40,
+  "sayi_uyarilari": [
+    "4 geçici"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-27T19:05:35+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
