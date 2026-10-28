@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "kabuk-sekmesi-canli",
+  "pr": "544",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T22:10:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 3 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-canli-11-kutu-kabuk-oturumu-sonra.txt (yesil → gecersiz) — göz tur 1: kutu listesi 11'di, terminal-onar'ın 14 kutuluk kanonik listesiyle yeniden ölçülür · BÂNİ;canli-canli-kabuk-11-kutu.txt (yesil → gecersiz) — göz tur 1: 11 kutuluk ölçümün canlı kaydı; 14 kutuyla yeniden · BÂNİ;olcum-gorev-gt5btk-onay-durumu-2-sonra.txt (kirmizi → gecersiz) — ölçer betiğinde kabuk tırnağı yorumdaki kesme işaretiyle kapandı (sözdizimi); düzeltildi, yeniden ölçülür · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi-canli",
+  "dal": "kabuk-sekmesi-canli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23974,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 17790
+  },
+  "dalgic": "olculemedi",
+  "bas": "9ac5945d6dbbe8886f208ebe4c8e6e5fcb673417",
+  "duzeltme_farki": {
+    "onceki_bas": "d73e4558ced7eff31428095bf655f8b75f295f51",
+    "dosya": 8,
+    "bayt": 17790,
+    "tam_bayt": 37600
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kanonik 14 kutunun 14’ünde <kutu>-kabuk tmux oturumu ile kabuk.son=ok canlı ölçülmüş ve görev …GT5BTK ölçüm kanıtıyla onay-bekliyor durumuna çekilmiş. Önceki uygulama bulgusu son yeşil sonuç ölçümüyle kapanmış; üretime engel bir kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; geçersiz ilan edilen üç kayıt kanıt sayılmadı. Geçerli 14-kutu ölçümü 14 ayrı kutuda iki hedef değeri ve “TOPLAM kutu=14 eksik=0” sonucunu gösteriyor; son görev ölçümü de “onay-bekliyor + ölçüm kanıtı VAR” sonucunu rc=0 ile doğruluyor. Daha eski kırmızı görev ölçümü sonradan düzeltilip yeniden ölçüldüğünden güncel yeşil sonucu geçersiz kılmıyor; önceki B1 kapanmıştır."
+  }
+}
