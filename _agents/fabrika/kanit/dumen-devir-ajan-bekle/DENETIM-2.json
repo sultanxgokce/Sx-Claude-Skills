@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "dumen-devir-ajan-bekle",
+  "pr": "531",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T11:27:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-devir-ajan-bekle",
+  "dal": "dumen-devir-ajan-bekle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40306,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 38459
+  },
+  "dalgic": "uyumlu",
+  "bas": "d7e8b58da9512d4c49a48cf9d41acde3b5b7db8b",
+  "duzeltme_farki": {
+    "onceki_bas": "66324a8810bd3b3202fac74c6f5689b31a1c21ab",
+    "dosya": 18,
+    "bayt": 45904,
+    "tam_bayt": 47042
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan'dayken sessizce bekleyen, merkez ajan olunca veya süre dolunca tek satırla biten ve süreç bitişini yerel olarak doğrulayan akış yapılmış. Önceki tek-satır kusuru kapanmış; sağlam gerçek ölçüm 12/12 geçiyor ve dokuz mutasyon yakalanıyor, yalnız canlı Dümen al/ver zilinin gerçek yüzeyde doğrulanması kutu-dışı borç olarak sürüyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmadı: gerçek arka plan bitişinin ajanı uyandırdığı canlı Dümen al/ver akışı henüz doğrulanmamış.",
+        "kanit": "İş kartında canli_gerekir=true ve canli_borc.odendi=null; borç gerekçesi gerçek ateşlemenin Sultan'ın kısa Dümen al/ver işlemiyle yapılacağını belirtiyor. olcum-bekle-sinav-tek.txt D8-D9 yalnız yerel gerçek süreçte beklemeyi ve mod ajana dönünce çıkışı ölçüyor.",
+        "konum": "iş kartı: canli_borc; olcum-bekle-sinav-tek.txt D8-D9",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı Dümen oturumu + Sultan'ın al/ver işlemi + ajanın arka plan koşucusu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önceki B1 kapanmış: üretim kodundaki başlangıç yazısı kaldırılmış, D2b/D3b/D9 tek-satır sözleşmesini ölçüyor ve gerçek ölçüm rc=0 ile 12/12 geçiyor. Dokuz mutasyon kaydının rc=1 olması sınavın bekleme, süre, cevapsızlık, sayaç, merkez adresi, jeton ve tek-satır bozulmalarını yakaladığını gösteriyor; canlı zil doğrulaması ise ölçüm çifti olmayan açık kutu-dışı borçtur."
+  }
+}
