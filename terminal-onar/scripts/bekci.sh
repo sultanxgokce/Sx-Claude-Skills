@@ -7,6 +7,19 @@ set -u
 # crontab satırına bakıp "ok" diyordu). İz duraklatmadan ÖNCE yazılır: duraklatılmış bekçi de canlıdır.
 date +%s > "$DURUM_DIZ/bekci.son" 2>/dev/null
 [ -f "$DURUM_DIZ/duraklat" ] && exit 0
+# 2.35.0 (kart kapi-bekci-eski-kod · görev …WHRJ): kapı DİSKTEKİ KODDAN ESKİ çalışıyorsa (kapi-eski-mi rc 1) BİR KEZ tam yeniden başlat
+#   (kapi-yenile.sh 2.34.0 kapısı → onar --web-yenile). Ölçüldü 28 Eki: 13 kutuda kapı 5 gün eski kodla açıktı, Kadro düğmesi gelmiyordu;
+#   beceri senkronu kodu indirir ama kimse süreci yenilemiyordu. Damga = en yeni .mjs'in mtime'ı; aynı kod için ikinci yenileme YOK
+#   (yenileme düşerse damga yazılmaz → bir sonraki dakikada yeniden denenir). Ölçülemiyorsa (rc 2: süreç yok/okunamadı) DOKUNMAZ.
+_ke="$(bash "$BETIK_DIZ/kapi-eski-mi.sh" 2>/dev/null)"; _kerc=$?
+if [ "$_kerc" = 1 ]; then
+  _kod_damga="$(find "$KAPI_DIZ" -name '*.mjs' -not -path '*/node_modules/*' -not -name '*.test.mjs' -printf '%T@\n' 2>/dev/null | sort -rn | head -1)"
+  if [ -n "$_kod_damga" ] && [ "$_kod_damga" != "$(cat "$DURUM_DIZ/kapi-kod.son" 2>/dev/null)" ]; then
+    # günlüğe TEK satır (kart şartı); kapi-yenile'nin kendi çıktısı ayrı dosyada (durum/kapi-yenile.son.log), ana günlüğü kirletmez
+    if bash "$BETIK_DIZ/kapi-yenile.sh" > "$DURUM_DIZ/kapi-yenile.son.log" 2>&1; then printf '%s' "$_kod_damga" > "$DURUM_DIZ/kapi-kod.son"; gunluk "bekçi: kapı eski kodla çalışıyordu → yenilendi (kod damgası $_kod_damga · $(printf '%s' "$_ke" | head -1))"
+    else gunluk "bekçi: kapı eski kodla çalışıyor, yenileme DÜŞTÜ (rc $? · ayrıntı kapi-yenile.son.log) — damga yazılmadı, bir sonraki dakikada yeniden denenir"; fi
+  fi
+fi
 # tmux bekçisi (2.19.1): her tur karşılaştırılır, eksik/eski ise kurulur. Onar yalnız arızada koştuğu için 2.19.0 sağlıklı
 # kutulara hiç inmiyordu (20 Eki: 18 kutudan yalnız code'da kurulu). Güncelse sessiz; kurulamazsa yazar, bekçi işine devam eder.
 # Kurulamayan sonuç (ör. yabancı dosya) her dakika tekrarlanır → yalnız DEĞİŞTİĞİNDE yazılır (göz tur 2: günde 1440 satır olurdu).
