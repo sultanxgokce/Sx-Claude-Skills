@@ -1,0 +1,18 @@
+2026-10-28T06:52:38+03:00 /durum 401-jeton-yanlis mod=-
+2026-10-28T06:52:44+03:00 /durum 401-jeton-yanlis mod=-
+2026-10-28T06:54:56+03:00 /durum 401-jeton-yanlis mod=-
+2026-10-28T06:55:03+03:00 baslat hazir mod=ajan dinle=172.30.0.2:9224 izin=172.30.0.3 jeton=var
+2026-10-28T06:55:06+03:00 /durum 401-jeton-yanlis mod=-
+2026-10-28T06:55:06+03:00 /durum 200 mod=ajan
+2026-10-28T06:55:06+03:00 /ekran 200 mod=ajan olcek=1 bayt=139664
+2026-10-28T06:55:22+03:00 /ekran 200 mod=ajan olcek=1 bayt=139664
+2026-10-28T06:55:22+03:00 /tus 200 mod=ajan kombinasyon=ctrl+alt+*
+2026-10-28T06:55:25+03:00 /ekran 200 mod=ajan olcek=1 bayt=82676
+2026-10-28T06:55:25+03:00 /yaz 200 mod=ajan uzunluk=44
+2026-10-28T06:55:25+03:00 /tus 200 mod=ajan kombinasyon=Return
+2026-10-28T06:55:27+03:00 /ekran 200 mod=ajan olcek=1 bayt=109261
+2026-10-28T07:00:38+03:00 /durum 423-sultanda mod=sultan
+2026-10-28T07:00:38+03:00 /ekran 423-sultanda mod=sultan
+2026-10-28T07:01:04+03:00 /yaz 200 mod=ajan uzunluk=46
+2026-10-28T07:01:04+03:00 /tus 200 mod=ajan kombinasyon=Return
+2026-10-28T07:01:06+03:00 /ekran 200 mod=ajan olcek=1 bayt=137104
