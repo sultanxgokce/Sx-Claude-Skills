@@ -743,31 +743,43 @@ fi
 #   Tavan aynı (dosya başı ≤ 60 satır), kısa dosya bayt bayt aynen.
 olcum_ozeti() {   # olcum_ozeti <ölçüm dosyası>
   python3 - "$1" <<'PY'
-import sys
+import os, sys
 HAM = open(sys.argv[1], encoding="utf-8", errors="replace").read()
 L = HAM.split("\n")
 if L and L[-1] == "": L.pop()
-SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8
-if len(L) <= SINIR: sys.stdout.write(HAM); sys.exit()   # bayt bayt AYNEN (ayırıcı satır sonunu çağıran ekler — göz #392 tur 5)
+# BÂNİ #506/teslim A: 60 satırlık ama 26 KB'lık (çok uzun satırlı) tek ölçüm istemin dörtte birini yiyordu. Artık "aynen" sınırı SATIR (60) VE BAYT (3000):
+#   ikisini de aşan kayıtta başlık + ilk/son 20 satır + ortadan SONUÇ/✗/FAIL/MUTASYON satırları gelir, uzun satır kısalır; tam metin kanıt dizininde durur (sha manifestte).
+SINIR, BAS, SON, HSON, SECME, BAYT_ESIK, SATIR_GEN = 60, 20, 20, 10, 10, 3000, 200
+AD = os.path.basename(sys.argv[1])
+if len(L) <= SINIR and len(HAM.encode("utf-8")) <= BAYT_ESIK: sys.stdout.write(HAM); sys.exit()   # bayt bayt AYNEN (ayırıcı satır sonunu çağıran ekler — göz #392 tur 5)
 # ATLANAN ORTADAN SEÇME (göz #392 tur 2): sonuç satırı her zaman en sonda değil (ardından 12'den fazla satır gelebilir) ve
 #   kırmızı kapı (✗) ortada kalırsa kırpma onu SAKLAR — göz "yeşil" sanır. Ortadan SONUÇ/✗ taşıyan satırlar (en çok 8) taşınır.
-SECILIR = ("SONUÇ", "SONUC", "✗", "Traceback")
+SECILIR = ("SONUÇ", "SONUC", "✗", "Traceback", "FAIL", "MUTASYON")
 e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)
 cik, err = L[:e], L[e:]
 if len(err) > HSON + 1: err = [err[0], "[… stderr'den %d satır atlandı …]" % (len(err) - 1 - HSON)] + err[-HSON:]
 if len(cik) > BAS + SON + 1:
     orta = cik[BAS:-SON]; sec = [x for x in orta if any(k in x for k in SECILIR)]
     atlanan = len(orta) - min(len(sec), SECME)          # seçilip gösterilenler atlanmış SAYILMAZ (göz #392 tur 3)
-    not_ = "[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …]" % (atlanan, len(L))
+    not_ = "[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda; tam metin kanıt dizininde: %s …]" % (atlanan, len(L), AD)
     if sec:
-        not_ = "[… %d satır atlandı (dosya %d satır); ortadan SONUÇ/✗ taşıyan %d satır%s: …]" % (
-            atlanan, len(L), len(sec), "" if len(sec) <= SECME else " (ilk %d'i)" % SECME)
+        not_ = "[… %d satır atlandı (dosya %d satır); ortadan SONUÇ/✗ taşıyan %d satır%s; tam metin kanıt dizininde: %s: …]" % (
+            atlanan, len(L), len(sec), "" if len(sec) <= SECME else " (ilk %d'i)" % SECME, AD)
     cik = cik[:BAS] + [not_] + sec[:SECME] + (["[… ölçümün SONU …]"] if sec else []) + cik[-SON:]
+kesilen = 0
+def kis(x):
+    global kesilen
+    if len(x) <= SATIR_GEN: return x
+    kesilen += 1
+    return x[:SATIR_GEN] + " […+%d kar]" % (len(x) - SATIR_GEN)
+cik = [x if x.startswith("[…") else kis(x) for x in cik]
+err = [x if x.startswith(("[…", "--- stderr")) else kis(x) for x in err]   # göz #526 tur 1: stderr satırları da aynı karakter sınırından geçer
+if kesilen: cik.append("[… %d uzun satır %d karakterde kesildi — tam metin kanıt dizininde: %s …]" % (kesilen, SATIR_GEN, AD))
 print("\n".join(cik + err))
 PY
 }
 {
-  printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
+  printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra ve 3 KB üstü olmayan ölçüm aynen; uzunda ilk 20 + atlanan ortadan SONUÇ/✗/FAIL/MUTASYON satırları + son 20, uzun satır kısalır; tam metin kanıt dizininde) =====\n'
   # 🧬 mutasyon kaydının ilk satırını kanıt aracı yazar (kanit.py --mutasyon); başlık da söyler ki göz ✗ satırlarını bulgu sanmasın (FR7M76)
   # 7KKSJK-EK: GEÇERSİZ ilan edilmiş kaydın GÖVDESİ isteme girmez (kanıt sayılmaz; BÂNİ #1034 bu yüzden 107,9 KB > 100 tavana takıldı).
   #   Manifest satırı (KANIT.json + durum satırındaki neden) kalır; göz neyin ilan edildiğini görür, dökümü görmez.
