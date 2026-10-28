@@ -1,0 +1,32 @@
+{
+  "is": "kisi-istemci-koltuk-menusu",
+  "cumle": "kisi-istemci.py argümansız açılışta izinli koltuk menüsü göstersin, tek koltukta doğrudan bağlansın",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-28T09:41:13+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M60KVJVGZ7S72PJBTYSMQCCH",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-28T09:41:13+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
