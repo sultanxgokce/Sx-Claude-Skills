@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "siradabak-aksan",
+  "pr": "530",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T10:53:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-siradabak-aksan",
+  "dal": "siradabak-aksan",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28319,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 22476
+  },
+  "dalgic": "uyumlu",
+  "bas": "f472c7fce8b6a8535ffb36d619208b388835b9d2",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Türkçe ü, ö, ç, ş, ğ harfleri kimlik karşılaştırmasında katlanmış; MUTEVELLI koltuğunun MÜTEVELLİ işlerini bulması ve defter adına doğru çözülmesi sağlanmış. Gerçek ölçüm 60/60 geçiyor ve üç ayrı mutasyon hedef davranışları bozduğunda sınavlar bunu yakalıyor; üretimi engelleyen kanıtlı bir kusur yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm etiketi aksan-sinav, rc=0 ve yeşil olarak 60 geçti · 0 kaldı sonucunu veriyor. Q11-Q13 doğrudan iş kartındaki kutu-bul, sirada-bak ve kimlik-coz davranışlarını gerçekçi MUTEVELLI/MÜTEVELLİ verisiyle ölçüyor; M1-M3 mutasyon kayıtları beklenen rc=1 ile sınavların üç kritik bozulmayı yakaladığını gösteriyor. Ayrı bir önce ölçümü yok, ancak hedef davranış için doğrudan sonra ölçümü ve mutasyon karşılaştırmaları yeterli; sarı kayıt bulunmuyor."
+  }
+}
