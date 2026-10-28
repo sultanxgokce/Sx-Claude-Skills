@@ -1,0 +1,24 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-sure.sh /config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca 2/2
+# rc=0 sure=504.1s zaman=2026-10-28T09:21:06+03:00
+--- stdout ---
+── parça 2/2: 15 / 31 senaryo · gerçek koşu: 1. parçada
+  ✓ parça 2/2 en az bir senaryo koşar (n senaryodan büyük olamaz)
+── mutasyonlar (paralel 4)
+  ✓ mutant alt-kume → kapı l düştü
+  ✓ mutant sicil-ayrimi-yok → kapı e düştü
+  ✓ mutant bayat-yok → kapı h2 düştü
+  ✓ mutant ad-katlama-yok → kapı k düştü
+  ✓ mutant defter-yok-yok → kapı m düştü
+  ✓ mutant son-kosu-yok → kapı o düştü
+  ✓ mutant telemetri-gercek → kapı e2 düştü
+  ✓ mutant bozuk-yutulur → kapı p düştü
+  ✓ mutant kararsiz-yutulur → kapı r düştü
+  ✓ mutant sicilsiz-gecerli → kapı h5 düştü
+  ✓ mutant kapat-dogrulamasiz → kapı p4 düştü
+  ✓ mutant satir-sonu-yok → kapı p3 düştü
+  ✓ mutant iz-yok → kapı s1 düştü
+  ✓ mutant pid-yeniden-gorulmez → kapı s2 düştü
+  ✓ mutant bozuk-iz-cokertir → kapı s6 düştü
+diploma.test: 16 geçti · 0 kaldı
+DUVAR 504 sn · parça 2/2 · rc 0
+--- stderr ---

@@ -5,6 +5,9 @@
 # kabuk-testleri: sure=900
 # Süre (CI #412: sıralı 24 senaryo × ~52 sn = 1245 sn, 600 sn tavanında kesildi): gerçek koşu ve her mutant AYRI süreçte, kendi
 #   geçici kökü ve sahte yargıçlarıyla paralel koşar (DIPLOMA_PAR, varsayılan min(nproc, 8)). Çocuk kip (--tek) mutant DOĞURMAZ.
+# Parça (CI 28 Eki: 4 çekirdekte 31 senaryo 879–884 sn, tavan 900 → rc 124): DIPLOMA_PARCA=k/n verilirse yalnız sıra numarası
+#   (gerçek = 0, mutantlar 1…) n'ye bölümünden k-1 kalan senaryolar koşar; gerçek koşu ve onun kapıları 1. parçadadır. Parçaların
+#   birleşimi tüm senaryolardır (her senaryo tam bir parçada). Verilmezse 1/1 = hepsi (yerel koşu değişmez). CI: diploma-1 · diploma-2.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KUME="$(cd "$HERE/../sinav" && pwd)"
@@ -234,16 +237,22 @@ PY
   echo "SONUC $(_sen "$d/scripts")"; exit 0
 fi
 
+PARCA="${DIPLOMA_PARCA:-1/1}"
+[[ "$PARCA" =~ ^([1-9][0-9]*)/([1-9][0-9]*)$ ]] && [ "${BASH_REMATCH[1]}" -le "${BASH_REMATCH[2]}" ] \
+  || { echo "ÖLÇÜLEMEDİ: DIPLOMA_PARCA '$PARCA' biçimsiz (k/n, 1 ≤ k ≤ n)"; exit 2; }
+PK="${BASH_REMATCH[1]}"; PN="${BASH_REMATCH[2]}"; SNO=0; KOSAN=0; GERCEK_BENDE=h
+_benim() { local i=$SNO; SNO=$((SNO+1)); [ $((i % PN)) -eq $((PK - 1)) ] && KOSAN=$((KOSAN+1)); }
 PAR="${DIPLOMA_PAR:-$(n=$(nproc 2>/dev/null || echo 2); [ "$n" -gt 8 ] && n=8; echo "$n")}"
 SIRA=()   # "ad|kapı" — sonuçlar bu sırayla okunur (çıktı paralel koşuya rağmen kararlı)
 _bas() {  # _bas <ad> [eski yeni] — çocuğu arka planda başlatır, PAR'ı aşmaz
   while [ "$(jobs -rp | wc -l)" -ge "$PAR" ]; do wait -n 2>/dev/null || :; done
   bash "${BASH_SOURCE[0]}" --tek "$@" > "$T/sonuc-$1.out" 2>&1 < /dev/null &
 }
-_mut() {  # _mut <ad> <hedef-kapı> <python-replace: eski> <yeni>
+_mut() {  # _mut <ad> <hedef-kapı> <python-replace: eski> <yeni> — bu parçanın değilse koşmaz, sırada yer almaz
+  local k=$KOSAN; _benim; [ "$KOSAN" -gt "$k" ] || return 0
   SIRA+=("$1|$2"); _bas "$1" "$3" "$4"
 }
-_bas gercek
+k0=$KOSAN; _benim; [ "$KOSAN" -gt "$k0" ] && { GERCEK_BENDE=e; _bas gercek; }
 _mut alt-kume l 'isabet = verdikt == "KALDI" and set(bek.get("kaldi") or []) <= set(dusen)' 'isabet = verdikt == "KALDI"'
 _mut eskalasyon-isabet d 'isabet = verdikt == "GECTI"' 'isabet = verdikt != "KALDI"'
 # sicil ayrımı: muhurdar.sh her mühürde sicile yazar (Sx #411) — koşulsuz ölçülür
@@ -284,10 +293,14 @@ _mut izsiz-silinir s4 '            with open(os.path.join(d, ".sahip"), encoding
                 pid, bas = f.read().split()' '            pid, bas = "1", "x"'
 wait
 _oku() { sed -n 's/^SONUC //p; s/^\(CAPA\)$/\1/p' "$T/sonuc-$1.out" | tail -1; }
+echo "── parça $PK/$PN: $KOSAN / $SNO senaryo · gerçek koşu: $([ $GERCEK_BENDE = e ] && echo bu parçada || echo "1. parçada")"
+[ "$KOSAN" -gt 0 ]; g $? "parça $PK/$PN en az bir senaryo koşar (n senaryodan büyük olamaz)"
+if [ $GERCEK_BENDE = e ]; then
 echo "── gerçek betikler"
 GER="$(_oku gercek)"
 [ -n "$GER" ] || { echo "  ✗ gerçek koşu sonuç basmadı:"; tail -5 "$T/sonuc-gercek.out"; }
 for k in $BEK; do case " $GER " in *" $k "*) g 0 "kapı $k" ;; *) g 1 "kapı $k" ;; esac; done
+fi
 echo "── mutasyonlar (paralel $PAR)"
 for x in "${SIRA[@]}"; do
   ad="${x%%|*}"; kp="${x#*|}"; c="$(_oku "$ad")"

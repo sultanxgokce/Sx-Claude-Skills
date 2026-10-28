@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-birlesim.sh /config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca/_agents/fabrika/kanit/sx-diploma-parca/olcum-diploma-sure-once.txt /config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca/_agents/fabrika/kanit/sx-diploma-parca/olcum-diploma-parca1-sonra.txt /config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca/_agents/fabrika/kanit/sx-diploma-parca/olcum-diploma-parca2-sonra.txt
+# rc=0 sure=65.1s zaman=2026-10-28T09:22:12+03:00
+--- stdout ---
+bölünmemiş 66 · parça1 51 · parça2 15 · kesişim 0
+birleşimde eksik: yok
+--- stderr ---
+⏳ agir-sira: kanit-sx-diploma-parca-birlesim 65 sn bekledi (yuva 2, load1 16.93)

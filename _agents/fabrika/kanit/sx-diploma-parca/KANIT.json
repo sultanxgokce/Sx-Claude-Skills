@@ -1,0 +1,179 @@
+{
+  "is": "sx-diploma-parca",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T09:23:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kova-kosucusu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kova-kosucusu-sinavi-sonra.txt",
+      "sha256": "2c98b5196f0ef5e8b1fd9032f3557752c12e81fdb84513024f45e03538566509",
+      "komut": [
+        "bash",
+        ".github/ci/kabuk-sinamalari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T08:40:30+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "56f9f26ab0de45caa723e09360692393"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "diploma-sure",
+      "asama": "once",
+      "dosya": "olcum-diploma-sure-once.txt",
+      "sha256": "bbd69b9c8ce6f97bb70db8072c6018dbaa26f3676482835e93f4a07416fd9045",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-sure.sh",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-once",
+        "-"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T08:54:34+03:00",
+      "sure_sn": 813.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f319cd919bf9462c93c9c324810d37c6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "diploma-parca1",
+      "asama": "sonra",
+      "dosya": "olcum-diploma-parca1-sonra.txt",
+      "sha256": "add763dc4a1f9c309d4da0d0d1181f0d75deb134c0dabb9e3f1cb117dfbdab0f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-sure.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca",
+        "1/2"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:02:42+03:00",
+      "sure_sn": 488.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "022e55a042f1439eb15eb020aaa5f4ae"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "diploma-parca2",
+      "asama": "sonra",
+      "dosya": "olcum-diploma-parca2-sonra.txt",
+      "sha256": "c1dd31c31d11bb3b74762d47d2e549092a7db30f317d6fbb4fe5a7720dbf20ac",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-sure.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca",
+        "2/2"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:21:06+03:00",
+      "sure_sn": 504.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8217167f83d547838a2b0c5e0d92e714"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesim",
+      "asama": "sonra",
+      "dosya": "olcum-birlesim-sonra.txt",
+      "sha256": "37e227a636c642b641ff7eb14b43b335d6bdbd8d05edafe91e9c9bc65fb7dc8f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-birlesim.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca/_agents/fabrika/kanit/sx-diploma-parca/olcum-diploma-sure-once.txt",
+        "/config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca/_agents/fabrika/kanit/sx-diploma-parca/olcum-diploma-parca1-sonra.txt",
+        "/config/projects/_wt/Sx-Claude-Skills-sx-diploma-parca/_agents/fabrika/kanit/sx-diploma-parca/olcum-diploma-parca2-sonra.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:22:12+03:00",
+      "sure_sn": 65.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "58642f1986504bc4b473a24623608c08"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-senaryo-duser",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-senaryo-duser-sonra.txt",
+      "sha256": "84b69de614ea5b83611f80457b253e89eafda03eb3f714a356b676f395868e5d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-mut.sh"
+      ],
+      "rc": 0,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T09:22:12+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "birlesim",
+      "beklenen": "kirmizi",
+      "olcum_id": "8686274f34864e5da3b25bc9a1fbc29c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bicimsiz-parca",
+      "asama": "tek",
+      "dosya": "olcum-bicimsiz-parca-tek.txt",
+      "sha256": "f5d57922b28160863bed89a6ffc27bfdc643441e78693019e3f35f60c01e23ae",
+      "komut": [
+        "bash",
+        "-c",
+        "DIPLOMA_PARCA=3/2 bash tescil/scripts/diploma.test.sh; r=$?; echo \"rc=$r (2 beklenen)\"; [ $r -eq 2 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:22:12+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7cf3583299ac4b3aa37dd973bd411d74"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-senaryo-duser-2",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-senaryo-duser-2-sonra.txt",
+      "sha256": "051fe591ae86e9f885d98d443b1b56cad0d9feb729cd50781892b7cac1616aed",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-mut2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:23:37+03:00",
+      "sure_sn": 55.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "birlesim",
+      "beklenen": "kirmizi",
+      "olcum_id": "68f2b25966ef4c9799fe35d5ac3c21b5"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "mutant-senaryo-duser",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-mutant-senaryo-duser-sonra-4dbfe37e5abd.txt",
+      "sha256": "75afa566060d0c7dffaa130f7a147b3f3d531c22c45be4d1e571f51d8c758003",
+      "hedef_dosya": "olcum-mutant-senaryo-duser-sonra.txt",
+      "hedef_olcum_id": "8686274f34864e5da3b25bc9a1fbc29c",
+      "hedef_sha256": "84b69de614ea5b83611f80457b253e89eafda03eb3f714a356b676f395868e5d",
+      "hedef_zaman": "2026-10-28T09:22:12+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "mutant betiği hiçbir satırı düşürmedi: awk köşeli parantez kümesi çok baytlı ✓/✗'yi eşleştiremedi (parça2 hâlâ 15) — mutant uygulanmadı, sınavın değil betiğin hatası; Python ile yeniden ölçüldü",
+      "kim": "BERİD",
+      "karsi": "olcum-mutant-senaryo-duser-2-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T09:23:38+03:00",
+      "olcum_id": "bd1d263d90b1443cb3d2f728a082fc25"
+    }
+  ],
+  "imza": "5ba4d33c66ae07e8af80e3b3030f549c43a9860a5a82aec0eb89a34af888722a"
+}

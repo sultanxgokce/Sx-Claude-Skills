@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mutant-senaryo-duser-sonra.txt
+hedef_sha256: 84b69de614ea5b83611f80457b253e89eafda03eb3f714a356b676f395868e5d
+hedef_zaman: 2026-10-28T09:22:12+03:00
+hedef_renk: kirmizi
+neden: mutant betiği hiçbir satırı düşürmedi: awk köşeli parantez kümesi çok baytlı ✓/✗'yi eşleştiremedi (parça2 hâlâ 15) — mutant uygulanmadı, sınavın değil betiğin hatası; Python ile yeniden ölçüldü
+kim: BERİD
+karsi: olcum-mutant-senaryo-duser-2-sonra.txt
+zaman: 2026-10-28T09:23:38+03:00
