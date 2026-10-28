@@ -1,0 +1,32 @@
+{
+  "is": "sx-havuz-sirada-ve-sahibi-birlestirir",
+  "cumle": "gunluk-plan sirada-bak havuzdaki kendi işi de başlatma adayı sayar; yazilim-fabrikasi 4-gonder: sınıfsız işi sahibi birleştirir, bayat bildirimde önce gh pr view",
+  "istedi": "SERDAR 29 Eki dersler 1-2 ve 6 (28 Eki akşamı çalışma-düzeni dersleri kalıcı becerilere)",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-29T01:40:54+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M62640RF4HRA4YB6Y8KX2Y5F",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T01:40:54+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
