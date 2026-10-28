@@ -1,0 +1,203 @@
+{
+  "is": "dumen-devir-ajan-bekle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T11:23:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bekle-sinav",
+      "asama": "tek",
+      "dosya": "olcum-bekle-sinav-tek.txt",
+      "sha256": "732b29f5dee27eae0068fb2f02ad1adf87e39e959374e0c113f16cb73eee9894",
+      "komut": [
+        "env",
+        "BEKLE_MUTANT=0",
+        "bash",
+        "dumen-surucu/scripts/dumen-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:22:47+03:00",
+      "sure_sn": 2.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9889d56883c24fcfbed51b1bd63c517e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-bekleme-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-bekleme-yok-tek.txt",
+      "sha256": "1eeb6d91390bde74df9a754a8e80b72a42524864833bf86fb647ae1f85a0aaee",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.PMGxTAZI9Q/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.PMGxTAZI9Q/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:22:49+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "67578dba15ee4a51be8d97ddfedffcb6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-cevapsiz-ajan",
+      "asama": "tek",
+      "dosya": "olcum-mutant-cevapsiz-ajan-tek.txt",
+      "sha256": "b08cf0013e7be9252907ad909e2a329c42e5d566e8e83f67e919463c5e602896",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.wqZrBx2MaE/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.wqZrBx2MaE/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:22:50+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "22706ada73c14578ac80bdc20565a6fd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-cevapsiz-tavan-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-cevapsiz-tavan-yok-tek.txt",
+      "sha256": "c3e31d4d471068612d4a9c81bfcb1a84dc03ac5be29b88f6e09da988a3934527",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.8jz898yeMs/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.8jz898yeMs/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:22:55+03:00",
+      "sure_sn": 4.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "efdf6f067e44405c8e01397e8ae31204"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-azami-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-azami-yok-tek.txt",
+      "sha256": "a7f968367a20fce05df70cba519d038b3be1ed8e2bccdf467a202fb5a1cd2f3a",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.4mm3pJuba2/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.4mm3pJuba2/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:23:03+03:00",
+      "sure_sn": 7.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "9cdbd0d2538847a4b9ab9ba809c164ce"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sure-dolunca-devam",
+      "asama": "tek",
+      "dosya": "olcum-mutant-sure-dolunca-devam-tek.txt",
+      "sha256": "87573726a656acb44f280892ee83f6bca2046ac4d9433b00a398c41abf610f4c",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.BkVa20NUJK/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.BkVa20NUJK/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:23:05+03:00",
+      "sure_sn": 2.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "0ca6ba79685c44049133bb07d739d5d3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kesinti-sayaci-sifirlanmaz",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kesinti-sayaci-sifirlanmaz-tek.txt",
+      "sha256": "f5e38c357c1523ae6fa3462ffa2516feb90caa13eb3ded9a785abcc26da0a1ef",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.boVQCsZNw5/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.boVQCsZNw5/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:23:07+03:00",
+      "sure_sn": 2.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "0f6725b5c30c42f4a08f4db27acc3530"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-jetonlu-istek",
+      "asama": "tek",
+      "dosya": "olcum-mutant-jetonlu-istek-tek.txt",
+      "sha256": "e1280af80c7e5f91418f2f5be386b33819ec4978625d98ee449e4f9c8973fca6",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.eIPsQ2R0UE/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.eIPsQ2R0UE/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:23:10+03:00",
+      "sure_sn": 2.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "f9fa37c6e08a4d3c831efbf72c129f27"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-merkezsiz-gecer",
+      "asama": "tek",
+      "dosya": "olcum-mutant-merkezsiz-gecer-tek.txt",
+      "sha256": "fe2382df05c04d25007011826515db76fe43133cecad1f2a78a2398a2a4463e8",
+      "komut": [
+        "env",
+        "BEKLE_LIB=/tmp/tmp.JL4eg0Ket3/dumen-bekle.mjs",
+        "node",
+        "/tmp/tmp.JL4eg0Ket3/dumen-bekle.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T11:23:18+03:00",
+      "sure_sn": 8.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bekle-sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "0e52c46b604148da83e3a795a4eed73c"
+    }
+  ],
+  "imza": "bfda449bd6e4e576b690cf5a11882b2557cf0cadf6b7c5dd7e0bed3fc6cb6a73"
+}
