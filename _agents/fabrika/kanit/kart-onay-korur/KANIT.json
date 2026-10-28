@@ -1,0 +1,165 @@
+{
+  "is": "kart-onay-korur",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T13:56:54+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "be0005d6a4ac1bfd1f74b2d6fed848fb9afe9239bf7473f84fc7b7c170190083",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T13:39:25+03:00",
+      "sure_sn": 75.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "36db9238d1f54a8b8e7b16d7fc62dff5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "b85ba3584bb64ebc994351e8ed821d7d4cb2a28156e65c9e78b1eb0ed26b3e34",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:51:37+03:00",
+      "sure_sn": 213.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f50ec2cc46364b1fb0f351c0f404aa58"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-koruma-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-koruma-yok-sonra.txt",
+      "sha256": "66e25c6224fb63db5cb64de5bb417e5411704961a3e4206aeec54544bb628f7d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
+        "KORU=md in (\"onay-bekliyor\",\"bitti\")",
+        "KORU=False"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:52:55+03:00",
+      "sure_sn": 77.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "248abd48f89742ffa79f510a5cc7bd54"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-gecti-korunmaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-gecti-korunmaz-sonra.txt",
+      "sha256": "e70df0323838a20e1cd78e233365dd1e1ace3734b37f9e76b3f378fdece93a24",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
+        "if KORU and olay in (\"ac\",\"gecti\",\"tikandi\"):",
+        "if KORU and olay in (\"ac\",\"tikandi\"):"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:54:17+03:00",
+      "sure_sn": 81.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "c9400a09b45440a9b7e0d93dfad6703a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-lint",
+      "asama": "tek",
+      "dosya": "olcum-surum-lint-tek.txt",
+      "sha256": "bd0c874d2163ac935cfcee4a00a8d3308c6406dcad1235b63f08e7c581aa933a",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:56:54+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "88570546b9f547edbc1d8bf57b4aa73c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-surum-kilidi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-surum-kilidi-yok-sonra.txt",
+      "sha256": "571e97e8e5e61b40528c8d6a045d174e869f546af91423585b69cd7d38e31dcf",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
+        "g[\"surum\"]=int(os.environ[\"MEVCUT_SURUM\"])",
+        "pass"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:55:36+03:00",
+      "sure_sn": 78.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "3c07b0f293494694a177ec9542df29b9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-yeniden-okumaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-yeniden-okumaz-sonra.txt",
+      "sha256": "fc381d8267e346f1de9e26502c417c56da7075cdf1ac30c1b871a16972e7722a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
+        "[ \"$deneme\" = 1 ] && [ -n \"$MSURUM\" ]",
+        "[ \"$deneme\" = 9 ] && [ -n \"$MSURUM\" ]"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:56:54+03:00",
+      "sure_sn": 78.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "0b59ad9e2a9b4943a4c911c94a6b9b5f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-defter-okuma",
+      "asama": "tek",
+      "dosya": "olcum-canli-defter-okuma-tek.txt",
+      "sha256": "fc7b64023ebe665713cc3f4114f25ba6f3001ac37dea583ee26a94462c9c4eb5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-canli-oku.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:56:54+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dd34643192e842aa86335f564f1cb8aa"
+    }
+  ],
+  "imza": "627703d1338967550d4ab087b18bb8259c83f5d77d564a2a119ab54291cc2560"
+}

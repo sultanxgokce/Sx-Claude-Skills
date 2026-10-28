@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kart-onay-korur",
+  "pr": "534",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T13:44:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-onay-korur",
+  "dal": "kart-onay-korur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35283,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 42894
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7488d8ca83860db867fa2df7042d00bcfa7d7447",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen koruma doğru olaylara uygulanmış; önce kırmızı, sonra 398/398 yeşil ölçüm ve iki etkili mutasyon kaydı da ana davranışın gerçekten sınandığını gösteriyor. Ancak durum okuma ile durum yazma iki ayrı istek olduğundan aradaki yarış penceresi Sultan'ın kuyruğunu hâlâ ezebilir; önce bunu atomik hâle getirin.",
+    "bulgular": [
+      {
+        "ne": "Koruma atomik değil: görev durumu ayrı bir GET ile okunuyor, ardından ayrı PATCH hazırlanıyor. GET sonrasında görev 'onay-bekliyor' veya 'bitti' olursa eski okuma temelinde durum yazılabilir ve kartın mutlak 'kuyruktan düşmez' güvencesi bozulur.",
+        "kanit": "`gorev_yaz` önce `MEVCUT=\"$(gorev_durum_oku ...)\"` ile GET sonucunu alıyor; daha sonra bu değere göre oluşturulan gövde ayrı PATCH isteğiyle gönderiliyor. G11–G11e sabit durumları ölçüyor, fakat GET ile PATCH arasında durum değişen bir eşzamanlılık vakası ölçülmemiş.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: gorev_durum_oku ve gorev_yaz içindeki ayrı GET/PATCH akışı; yazilim-fabrikasi/scripts/kart.test.sh: G11–G11e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 394/398 kırmızı, gerçek sonra ölçümü 398/398 yeşil ve sürüm lint'i yeşil. İki mutasyon kaydı beklenen kırmızıyı üreterek koruma şartının ve `gecti` kolunun sınav tarafından yakalandığını kanıtlıyor; ancak ölçüm çifti eşzamanlı GET/PATCH yarışını kapsamıyor."
+  }
+}

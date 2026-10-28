@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kart-onay-korur",
+  "pr": "534",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T13:57:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-onay-korur",
+  "dal": "kart-onay-korur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41515,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 18410
+  },
+  "dalgic": "uyumlu",
+  "bas": "aaa4bba739fcabf1fe0572daac982e46d9c36b1c",
+  "duzeltme_farki": {
+    "onceki_bas": "7488d8ca83860db867fa2df7042d00bcfa7d7447",
+    "dosya": 13,
+    "bayt": 37444,
+    "tam_bayt": 78317
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun atomiklik bulgusu kapanmış: yazım artık okunan sürümü iyimser kilit olarak taşıyor, 409 çatışmasında görevi yeniden okuyup gövdeyi yeniden kuruyor; böylece Sultan'ın arada onaya aldığı görev ezilmiyor. Gerçek ölçüm 401/401 yeşil, yarış senaryosu ile dört mutasyon da kritik korumaların gerçekten sınandığını gösteriyor; üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 394 geçti/4 kaldı iken gerçek sonra ölçümü 401 geçti/0 kaldı; G11f-G11g GET/PATCH yarışını doğrudan ölçüyor. Dört mutasyon kaydı koruma şartı, gecti kolu, sürüm kilidi ve çatışma sonrası yeniden okuma kaldırıldığında sınavın kırmızıya döndüğünü gösteriyor; sürüm lint'i de yeşil. Önceki B1, kart.sh içindeki sürümlü PATCH + 409'da tek yeniden okuma/yazım ve buna ait yarış ölçümüyle kapanmış."
+  }
+}

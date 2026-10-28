@@ -435,12 +435,19 @@ class H(http.server.BaseHTTPRequestHandler):
     def log_message(self,*a): pass
     def do_GET(self):   # uzlaştırma (DKYSHH/X666): görev listesi $T/gorevler-kart.json'dan; dosya yoksa 404 (eski sınavlar etkilenmez)
         f=os.path.join(T,"gorevler-kart.json")
+        if self.path.startswith("/kayit/"): f=os.path.join(T,"kayit-%s.json" % self.path.rsplit("/",1)[1])   # 774ZHG: tek kayıt (görev durumu) $T/kayit-<id>.json'dan; yoksa 404
         if self.headers.get("x-defter-jeton")!="kart-sinav-jeton" or not os.path.exists(f): self.send_response(404); self.end_headers(); return
         self.send_response(200); self.end_headers(); self.wfile.write(open(f,"rb").read())
     def do_PATCH(self):
         n=int(self.headers.get("content-length") or 0); b=json.loads(self.rfile.read(n) or b"{}")
         with open(os.path.join(T,"yazim.jsonl"),"a") as f: f.write(json.dumps({"yol":self.path,"jeton":self.headers.get("x-defter-jeton"),"govde":b},ensure_ascii=False)+"\n")
         if self.headers.get("x-defter-jeton")!="kart-sinav-jeton": self.send_response(401); self.end_headers(); return
+        kf=os.path.join(T,"kayit-%s.json" % self.path.rsplit("/",1)[1])   # 774ZHG: iyimser sürüm kilidi (canlı geçit gibi: surum tutmazsa 409)
+        if os.path.exists(kf):
+            d=json.load(open(kf))
+            if "yaris" in d: d=d["yaris"]; json.dump(d,open(kf,"w"))   # yarış: görev GET ile PATCH arasında değişti (Sultan onaya aldı)
+            if "surum" in b and b["surum"]!=d["kayit"].get("surum"):
+                self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi"}).encode()); return
         if self.path.endswith("gorev_KARTRED000000001"):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
             self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi","yerine":"görev bu arada değişti, yeniden dene"},ensure_ascii=False).encode()); return
         self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"kayit":{"id":self.path.rsplit("/",1)[1]}}).encode())
@@ -562,6 +569,61 @@ assert len(m)==1, l
 PY2
 O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" bitti gb-9 2>&1)"; RC=$?   # jeton okunamazsa uzlaştırma SESSİZ atlamaz: söyler, kart rc'si bozulmaz
 grep -q "uzlaştırma atlandı: defter jetonu okunamadı" <<<"$O"; g $? "G10d jeton okunamıyorsa otomatik uzlaştırma bunu SÖYLER (sessiz atlamaz; kart yine işlenir)"
+echo "════ T14c · ONAY KORUMASI (774ZHG): onay bekleyen ya da bitmiş göreve bağlı kart ac/gecti/tikandi'de DURUM yazmaz, yalnız adım ════"
+printf '{"kayit":{"canli":{"gorev_durumu":"onay-bekliyor"}}}' > "$T/kayit-gorev_KARTTEST00000011.json"
+printf '{"kayit":{"canli":{"gorev_durumu":"bitti"}}}' > "$T/kayit-gorev_KARTTEST00000012.json"
+N0=$(yz); O="$(KART_UZLASTIR=0 bash "$KT" ac gb-11 --is "onay bekleyen işe dilim" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000011 --tahmin 20 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G11 🔴 onay-bekliyor göreve ac → PATCH'te 'yerine' YOK (durum yazılmaz), adım 'durumu KORUNUR' der"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000011")]
+assert len(m)==1 and "yerine" not in m[0]["govde"], l
+a=m[0]["govde"]["adimlar"][0]; assert a.startswith("[▶ dilim] BANI · kart gb-11 açıldı") and "görev 'onay-bekliyor', durumu KORUNUR" in a, a
+PY2
+[ $RC -eq 0 ] && grep -q "yalnız adım — görev 'onay-bekliyor', durumu korundu" <<<"$O"; g $? "G11b rc 0, ekranda 'yalnız adım — durumu korundu'"
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-12 --is "bitmiş işe dilim" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000012 --tahmin 20 >/dev/null 2>&1
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G11c bitti göreve ac → durum yazılmaz (A06: 'bitti' insanındır, ajan geri açamaz); gb-11'in onay bekleyen görevi 'gecti'de de 'bekliyor'a ÇEKİLMEZ"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+for g in ("gorev_KARTTEST00000012","gorev_KARTTEST00000011"):
+    m=[x for x in l if x["yol"].endswith(g)]
+    assert len(m)==1 and "yerine" not in m[0]["govde"] and "durumu KORUNUR" in m[0]["govde"]["adimlar"][0], (g,l)
+assert "başka işe geçti: gb-12" in [x for x in l if x["yol"].endswith("gorev_KARTTEST00000011")][0]["govde"]["adimlar"][0]
+PY2
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" tikandi gb-11 --yol daralt --neden "onay beklerken tıkandı" >/dev/null 2>&1; RC=$?
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G11d onay-bekliyor göreve tikandi → 'bekliyor' YAZILMAZ, yalnız adım (tıkanma nedeniyle)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000011")]
+assert len(m)==1 and "yerine" not in m[0]["govde"] and "tıkandı: onay beklerken tıkandı" in m[0]["govde"]["adimlar"][0], l
+PY2
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" tikandi gb-12 --yol daralt --neden "bitmiş işte tıkandı" >/dev/null 2>&1
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G11d2 bitti göreve tikandi → 'bekliyor' YAZILMAZ (insanın 'bitti'si geri açılmaz)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000012")]
+assert len(m)==1 and "yerine" not in m[0]["govde"] and "görev 'bitti', durumu KORUNUR" in m[0]["govde"]["adimlar"][0], l
+PY2
+# YARIŞ (göz tur 1): GET 'çalışılıyor' surum 3 der, PATCH anında görev onaya alınmış (surum 4) → ilk yazım 409, yeniden okunur, yalnız adım düşer
+printf '{"kayit":{"surum":3,"canli":{"gorev_durumu":"calisiliyor"}},"yaris":{"kayit":{"surum":4,"canli":{"gorev_durumu":"onay-bekliyor"}}}}' > "$T/kayit-gorev_KARTTEST00000014.json"
+N0=$(yz); O="$(KART_UZLASTIR=0 bash "$KT" ac gb-14 --is "yarışta onaya alınan iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000014 --tahmin 20 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G11f 🔴 yarış: okunan sürüm yazıma girer (surum 3) → defter 409 → yeniden okunur, onay-bekliyor görülür, 2. yazım yalnız adım (durum EZİLMEZ)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000014")]
+assert len(m)==2, l
+assert m[0]["govde"]["surum"]==3 and m[0]["govde"]["yerine"]["gorev_durumu"]=="calisiliyor", m[0]
+assert "yerine" not in m[1]["govde"] and "görev 'onay-bekliyor', durumu KORUNUR" in m[1]["govde"]["adimlar"][0], m[1]
+PY2
+[ $RC -eq 0 ] && grep -q "durumu korundu" <<<"$O"; g $? "G11g yarış sonrası rc 0, ekranda 'durumu korundu'"
+rm -f "$T"/kayit-gorev_*.json
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-13 --is "durumu okunamayan iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000013 --tahmin 20 >/dev/null 2>&1
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G11e durum okunamazsa (404) eski davranış: ac 'çalışılıyor' yazar (koruma yalnız bilinen onay/bitti'de)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000013")]
+assert len(m)==1 and m[0]["govde"]["yerine"]["gorev_durumu"]=="calisiliyor", l
+PY2
 rm -f "$T/gorevler-kart.json"; unset KART_UZLASTIR_KOKLER UZLASTIR_ZIL_KOMUT UZLASTIR_KOLTUK_KOMUT
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
