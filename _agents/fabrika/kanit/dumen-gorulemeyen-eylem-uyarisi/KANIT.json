@@ -1,0 +1,45 @@
+{
+  "is": "dumen-gorulemeyen-eylem-uyarisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T09:05:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "uyari-once",
+      "asama": "once",
+      "dosya": "olcum-uyari-once-once.txt",
+      "sha256": "a6415f13a03fb6fa1d0369cfef4a6824c3cfeb516c5b19453206b020009dd38a",
+      "komut": [
+        "env",
+        "DUMEN_CHROME=/config/.cache/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell",
+        "DUMEN_LIB=/tmp/tmp.iFoewsAZGh/dumen.mjs",
+        "node",
+        "dumen-surucu/scripts/dumen.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T09:03:09+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "72142e8a631840bdbd05a0f92175c70e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-gercek-sonra.txt",
+      "sha256": "6fb217bf38348738b0542578e5f9d5966cb91be36b3f9549d7662b64ff2d75a7",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:05:49+03:00",
+      "sure_sn": 159.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d431c215c5834b5c8f055651e8c56a35"
+    }
+  ],
+  "imza": "647e717df648f6cc0cdb31e39bbeb765c461f31a613a2ceef5b31e2dd49ecc16"
+}

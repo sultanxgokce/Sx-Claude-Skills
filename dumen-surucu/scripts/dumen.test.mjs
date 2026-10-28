@@ -47,11 +47,22 @@ const tarihOlay = d.eslesmis().filter((o) => o.tur === 'date' || o.tur === 'sele
 ok('D3 metin dışı alan değişimi dinleyiciyle YAKALANDI ve ajan eylemiyle eşleşti (isTrusted=false)', tarihOlay.length >= 2 && tarihOlay.every((o) => o.trusted === false), JSON.stringify(tarihOlay));
 ok('D4 yabancı (eylem penceresi dışı) olay yok', d.yabanci().length === 0, JSON.stringify(d.yabanci()));
 
+const gorU = d.uyarilar().filter((u) => u.kod === 'gorulemeyen-eylem');
+ok('D3b fill(tarih) ve selectOption "köprüde GÖRÜNMEZ" uyarısı bastı (2 eylem)', gorU.length === 2 && gorU.some((u) => u.ad === 'fill' && u.hedef === '#d') && gorU.some((u) => u.ad === 'selectOption' && u.hedef === '#s'), JSON.stringify(gorU));
+ok('D3c uyarı terminale de yazıldı', satirlar.filter((x) => x.includes('GÖRÜNMEZ')).length === 2, satirlar.join(' | '));
+ok('D3d metin alanı fill\'i (Input.insertText, köprü görür) uyarı ÜRETMEDİ', !gorU.some((u) => u.hedef === '#t'), JSON.stringify(gorU));
+ok('D3e uyarı alan DEĞERİNİ taşımaz', !JSON.stringify(d.uyarilar()).includes('2026-10-27'));
+
 console.log('── sayfa sahte olay üretir → yabancı');
 await new Promise((r) => setTimeout(r, 300));
 await ham.evaluate(() => { const e = document.getElementById('t'); e.value = 'sahte'; e.dispatchEvent(new Event('input', { bubbles: true })); });
 await new Promise((r) => setTimeout(r, 200));
 ok('D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)', d.yabanci().length === 1 && d.yabanci()[0].id === 't', JSON.stringify(d.yabanci()));
+
+const yU = d.uyarilar().filter((u) => u.kod === 'yabanci-olay');
+ok('D5b eylem dışı değişiklik UYARI üretti', yU.length === 1 && yU[0].hedef === 't', JSON.stringify(yU));
+ok('D5c eylem dışı uyarı terminale yazıldı', satirlar.some((x) => x.includes('DIŞINDA')), satirlar.join(' | '));
+ok('D5d aynı olay ikinci kez uyarmaz', d.uyarilar().filter((u) => u.kod === 'yabanci-olay').length === 1);
 
 console.log('── mod sultan');
 mod = 'sultan'; satirlar.length = 0;
