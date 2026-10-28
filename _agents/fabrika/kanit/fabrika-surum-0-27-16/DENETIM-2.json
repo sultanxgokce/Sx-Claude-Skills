@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "fabrika-surum-0-27-16",
+  "pr": "553",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T02:08:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-surum-0-27-16",
+  "dal": "fabrika-surum-0-27-16",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14708,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9296
+  },
+  "dalgic": "olculemedi",
+  "bas": "35d9d42cb017035535ec15f27b997a09487e7827",
+  "duzeltme_farki": {
+    "onceki_bas": "f5e0925507bc211436e94282cf19c05370ef1b30",
+    "dosya": 5,
+    "bayt": 9296,
+    "tam_bayt": 18562
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Sultan’ım, sürüm tutarlılığı ile sync-skills’in önce DRIFT, sonra 0.27.16 güncellemesi göstermesi sağlam ölçümlerle kanıtlanmış; önceki bulgunun bu iki bölümü kapanmış. Ancak talebin son halkası olan kurulum sonrası kurulu kanit.py içinde DUSEN_KAPI_RE doğrulaması hâlâ yapılmadığı için önce bunu çözmek gerekir ve iş kartındaki kanıt talebi bütünüyle tamamlanmış değildir.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kısmen kapandı: sync-skills önce/sonra ölçümleri eklendi, fakat kurulum sonrası kurulu kanit.py içinde DUSEN_KAPI_RE bulunduğunu doğrulayan ölçüm hâlâ yok.",
+        "kanit": "`sync-kuru-kosu/once` çıktısı v0.27.15 için İÇERİK-DRIFT gösteriyor; `sync-kuru-kosu/sonra` çıktısı v0.27.15 → v0.27.16 güncellemesini gösteriyor. Buna karşılık sonraki ölçümün kendi metni, kurulumun birleşmeden sonra yapılacağını ve DUSEN_KAPI_RE sayımının 2AX9GX adımına yazılacağını söylüyor; manifestte kurulum veya kurulu dosyada DUSEN_KAPI_RE araması yapan başka kayıt yok.",
+        "konum": "kanıt manifesti:kayitlar[1-2] / olcum-sync-kuru-kosu-once.txt / olcum-sync-kuru-kosu-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı veya mutasyon kaydı yoktur. Sürüm tutarlılığı yeşil ölçülmüş, gerçekçi önce/sonra kuru-koşu çifti DRIFT’ten güncelleme görünümüne geçişi göstermiştir; kırmızı önce kaydı karşılaştırmanın beklenen başlangıç durumudur. Ancak iş kartının açıkça istediği kurulum sonrası kurulu kanit.py DUSEN_KAPI_RE ölçümü bulunmadığından kanıt zinciri eksiktir."
+  }
+}

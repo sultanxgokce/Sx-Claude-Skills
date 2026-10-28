@@ -1,0 +1,6 @@
+$ bash -c node sync-skills.mjs --skill yazilim-fabrikasi 2>&1 | grep -E 'yazilim-fabrikasi →|KAYNAK BAYAT' | head -3; node sync-skills.mjs --skill yazilim-fabrikasi 2>&1 | grep -E 'yazilim-fabrikasi → _global: .*(güncelle|0\.27\.15 → 0\.27\.16|0\.27\.16)' >/dev/null && { echo 'SONRA (bu dal, 0.27.16): sync-skills güncelleme görüyor — kurulum birleşince origin/main worktree ile yapılır, kurulu kanit.py DUSEN_KAPI_RE sayımı 2AX9GX adımına yazılır'; exit 0; }; echo 'güncelleme satırı görünmedi'; exit 1
+# rc=0 sure=0.4s zaman=2026-10-29T02:07:31+03:00
+--- stdout ---
+  ↑ yazilim-fabrikasi → _global: güncelle v0.27.15 → v0.27.16
+SONRA (bu dal, 0.27.16): sync-skills güncelleme görüyor — kurulum birleşince origin/main worktree ile yapılır, kurulu kanit.py DUSEN_KAPI_RE sayımı 2AX9GX adımına yazılır
+--- stderr ---

@@ -1,0 +1,5 @@
+$ bash -c a=$(grep -m1 "^version:" yazilim-fabrikasi/SKILL.md | awk "{print \$2}"); b=$(python3 -c "import json;print([x for x in json.load(open(\"catalog.json\"))[\"skills\"] if x[\"id\"]==\"yazilim-fabrikasi\"][0][\"version\"])" 2>/dev/null || python3 -c "import json,re;s=open(\"catalog.json\").read();print(re.search(r\"\\\"id\\\": \\\"yazilim-fabrikasi\\\"[^}]*?\\\"version\\\": \\\"([^\\\"]+)\\\"\",s,re.S).group(1))"); n15=$(grep -c "(0.27.15, 29 Eki" yazilim-fabrikasi/SKILL.md); n16=$(grep -c "(0.27.16, 29 Eki" yazilim-fabrikasi/SKILL.md); echo "SKILL.md=$a catalog=$b not_0.27.15=$n15 not_0.27.16=$n16 (main: not_0.27.15=2 → çakışma)"; [ "$a" = 0.27.16 ] && [ "$b" = 0.27.16 ] && [ "$n15" = 1 ] && [ "$n16" = 1 ]
+# rc=0 sure=0.0s zaman=2026-10-29T02:05:26+03:00
+--- stdout ---
+SKILL.md=0.27.16 catalog=0.27.16 not_0.27.15=1 not_0.27.16=1 (main: not_0.27.15=2 → çakışma)
+--- stderr ---

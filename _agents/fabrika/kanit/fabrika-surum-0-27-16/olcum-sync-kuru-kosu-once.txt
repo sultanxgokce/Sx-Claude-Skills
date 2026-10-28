@@ -1,0 +1,8 @@
+$ bash -c cd /config/projects/_wt/Sx-sync-main-once-tmp && node sync-skills.mjs --skill yazilim-fabrikasi 2>&1 | grep -A2 'yazilim-fabrikasi →' | head -4; cd /config/projects/_wt/Sx-sync-main-once-tmp && node sync-skills.mjs --skill yazilim-fabrikasi 2>&1 | grep -q 'yazilim-fabrikasi → _global: İÇERİK-DRIFT' && { echo 'ÖNCE (origin/main a9faf25c, 0.27.15): sync-skills kurulu kopyayı yenilemiyor — DRIFT'; exit 1; }; exit 0
+# rc=1 sure=0.4s zaman=2026-10-29T02:07:30+03:00
+--- stdout ---
+  ⚠ yazilim-fabrikasi → _global: İÇERİK-DRIFT — sürüm aynı (v0.27.15) ama içerik farklı
+     → kaynak a19379e6d7aa ≠ kurulu 0f74fdd31759. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+ÖNCE (origin/main a9faf25c, 0.27.15): sync-skills kurulu kopyayı yenilemiyor — DRIFT
+--- stderr ---
