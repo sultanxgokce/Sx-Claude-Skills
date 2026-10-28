@@ -1,0 +1,43 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ke-once.sh
+# rc=1 sure=7.7s zaman=2026-10-28T09:37:29+03:00
+--- stdout ---
+── E4 süreç yok → ÖLÇÜLEMEDİ
+  ✗ E4 kapı süreci yok → rc 2 ve 'ÖLÇÜLEMEDİ' — beklenen=2/1 gerçek=127/0
+── E1 dosyalar süreçten eski
+  ✗ E1 kod dosyaları süreçten eski → rc 0 'kapı güncel' — beklenen=0/1 gerçek=127/0
+── E3 yalnız test dosyası yeni
+  ✗ E3 yalnız *.test.mjs süreçten yeni → rc 0 (kapı kodu sayılmaz) — beklenen=0 gerçek=127
+── E2 sunucu.mjs süreçten sonra değişti
+  ✗ E2 sunucu.mjs süreçten yeni → rc 1 · dosya adı ve onar.sh komutu basılır — beklenen=1/1/1 gerçek=127/0/0
+── MUTANT: karşılaştırma ters ('-gt' → '-lt') → E1/E2 kırmızıya dönmeli
+  ✗ mutant üretilemedi (çapa tutmadı)
+  ✓ MUTANT ters karşılaştırma E2 senaryosunda rc 1 VERMEZ (sınav kırmızıya dönerdi — mutant yakalandı)
+SONUÇ: 1 geçti · 5 kaldı
+  ✓ Q1 kuru kip rc 0
+  ✓ Q2 kuru kipte hiçbir dizin/dosya oluşmadı
+  ✓ Q3 çıktı KURU KİP diyor ve 5+ adım sayıyor
+  ✓ Q4 ttyd-kisi YAZILABİLİR (-W) ve sabit komut
+  ✓ Q5 abc'yi kişi grubuna EKLEMİYOR (usermod/gpasswd yok)
+  ✓ Q5b ttyd soketi KİŞİ grubuna verilir (-U ayse:ayse); abc grubuna chown istemez
+  ✓ Q5c ttyd soketi OLUŞUR ve kapı (abc, 'other') için okunur-yazılır (0666; dizin 3770 diğerlerini zaten dışarıda tutar)
+  ✓ Q5d günlük BÜYÜMÜYOR (sıkı döngü yok) ve ttyd süreci tek
+  ✓ Q6 --uygula (kum havuzu) rc 0
+  ✓ Q6b kum havuzunda süreç başlatılmadı, gerçek yola yazılmadı (günlük önce/sonra AYNI)
+  ✓ Q7 soket dizini 3770 (ayse ttyd soketini açabilsin, koprusu.sock'a dokunamasın)
+  ✓ Q8 izin iskeleti yazıldı ve JSON
+  ✓ Q9 var olan izin dosyasına DOKUNULMADI (Sultan yazar)
+  ✓ Q10 istemci kök sahipli kopya yeri hazır
+  ✓ Q11 düşük uid reddi
+  ✓ Q12 geçersiz kullanıcı adı reddi
+  ✓ Q13 kök olmadan --uygula reddi (rc 2)
+  ✓ Q10 ttyd komutu çözülen TAM yolla yazılır
+  ✓ Q11 ttyd bulunamazsa rc 3, 'ttyd bulunamadı', hiçbir adım basılmadı
+  ✓ Q12 ttyd dosyası başkalarına çalıştırılabilir değilse rc 3 (ayse çalıştıramaz)
+  ✓ Q14 dosya açık ama ÜST DİZİN kapalıysa rc 3 (geçiş izni yok)
+  ✓ Q15 göreli TTYD_BIN reddedilir (komuta mutlak yol yazılır)
+  ✓ Q16 sembolik bağ çözülür: komuta GERÇEK dosyanın yolu yazılır
+  ✗ Q17 kuru kip kapı kodu ölçümünü anlatır (kapi-eski-mi.sh) ve hiçbir şey başlatmaz  → 0
+
+23 geçti, 1 kaldı
+--- stderr ---
+sed: can't read /tmp/tmp.R2gqQjt83W/calisma/scripts/kapi-eski-mi.sh: No such file or directory

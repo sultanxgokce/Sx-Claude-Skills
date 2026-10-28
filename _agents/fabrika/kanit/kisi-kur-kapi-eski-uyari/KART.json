@@ -1,0 +1,47 @@
+{
+  "is": "kisi-kur-kapi-eski-uyari",
+  "cumle": "terminal-onar kisi-kur.sh kapı eski kodla çalışıyorsa uyarsın",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-28T09:35:56+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M60KHXAZ6FY4WN2PK3A5SJMQ",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-28T09:35:56+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-28T09:38:57+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-28T09:41:13+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-28T09:42:02+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

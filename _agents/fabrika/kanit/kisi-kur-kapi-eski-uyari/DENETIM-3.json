@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "kisi-kur-kapi-eski-uyari",
+  "pr": "527",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:52:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-kur-kapi-eski-uyari",
+  "dal": "kisi-kur-kapi-eski-uyari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19406,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6615
+  },
+  "dalgic": "uyumsuz",
+  "bas": "dd2cfe8ed89dca8a1045f898d27111ccafaaccc5",
+  "duzeltme_farki": {
+    "onceki_bas": "f2ad3ee882f61fcb7b4fec593f7e13098a5e7d05",
+    "dosya": 6,
+    "bayt": 9737,
+    "tam_bayt": 30201
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı kodunun süreçten sonra değişip değişmediğini ölçen denetim ve kurulum sonundaki uyarı, eski kod ile ölçüm başarısızlığı senaryolarını ayıracak biçimde tamamlanmış. Önceki B1, E5’te gerçek zaman ayrımı ve M2 karşı-sınaması eklenerek kapanmış; araç imzalı önce/sonra ölçümü 7/7 hedef senaryosu ile 27/27 bütünleşik sınavın geçtiğini gösterdiğinden üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, kırmızı önce/yeşil sonra ölçüm çifti mevcut. Önceki B1 kapanmış: E5 artık pano.js dosyasını süreçten kesin biçimde sonra yazıyor ve M2, .js dosyaları kapsama alınırsa sınavın bunu yakaladığını gösteriyor; üretim ölçeri de yalnız *.mjs arayarak pano.js’i dışlıyor. Sonraki ölçüm E1-E5 ve süreç yok durumunda 7/7, kurulum bütününde Q17 ile Q18-0/1/2 dahil 27/27 geçiyor. Mutant kontrolleri manifestte ayrı mutasyon:true kaydı değildir; ancak gerçek sonraki ölçümün normal senaryoları da doğrudan geçtiği için sonuç yalnız mutant çıktısına dayanmıyor."
+  }
+}

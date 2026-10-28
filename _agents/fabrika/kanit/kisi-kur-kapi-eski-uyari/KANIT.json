@@ -1,0 +1,42 @@
+{
+  "is": "kisi-kur-kapi-eski-uyari",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T09:43:12+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-eski",
+      "asama": "once",
+      "dosya": "olcum-kapi-eski-once.txt",
+      "sha256": "e1f7478f71d57746e072a51469bec51aeb77bc29a69043e8b13693112b47dc45",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ke-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T09:37:29+03:00",
+      "sure_sn": 7.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e24293d62da04d21a4092698cdc55835"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-eski",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-eski-sonra.txt",
+      "sha256": "8a9b594a204ff588fe64890ff947130d79dece25f7deaaf725b859ce929ac92e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ke-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:43:12+03:00",
+      "sure_sn": 10.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1ba3611dd2554ae387c175eaa286347d"
+    }
+  ],
+  "imza": "a28a02aa3c823e68cba27b3aa945e9193a27c20b0d86c78cc298bbd7b82d07ff"
+}
