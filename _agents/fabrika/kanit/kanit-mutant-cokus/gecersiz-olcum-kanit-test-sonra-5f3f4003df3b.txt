@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kanit-test-sonra.txt
+hedef_sha256: 17f60c5d2474b16dcee572095c47731b8c8893cd6dd67ed1b933e48c6ec20118
+hedef_zaman: 2026-10-29T01:24:25+03:00
+hedef_renk: yesil
+neden: göz tur 1 sonrası kanit.py değişti (başlık hükmü + FAIL satır ortası); sınav yeniden ölçüldü: kanit-test-2
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-29T01:28:47+03:00

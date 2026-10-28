@@ -1,7 +1,7 @@
 {
   "is": "kanit-mutant-cokus",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T01:24:25+03:00",
+  "guncelleme": "2026-10-29T01:31:22+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -77,7 +77,61 @@
       "sure_sn": 268.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "cf800c461db14df1be737e533abe209a"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kanit-test",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kanit-test-sonra-5f3f4003df3b.txt",
+      "sha256": "51336f7690086818958d8822c0fbacb258ff4ce3dd65d57f4e5f35196c667dbf",
+      "hedef_dosya": "olcum-kanit-test-sonra.txt",
+      "hedef_olcum_id": "cf800c461db14df1be737e533abe209a",
+      "hedef_sha256": "17f60c5d2474b16dcee572095c47731b8c8893cd6dd67ed1b933e48c6ec20118",
+      "hedef_zaman": "2026-10-29T01:24:25+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1 sonrası kanit.py değişti (başlık hükmü + FAIL satır ortası); sınav yeniden ölçüldü: kanit-test-2",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T01:28:47+03:00",
+      "olcum_id": "b2acc0caf43a43d892990dabc80eb7f3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cokus-rengi-2",
+      "asama": "sonra",
+      "dosya": "olcum-cokus-rengi-2-sonra.txt",
+      "sha256": "eeaeab074b3ca696e5a41988eb5a895425c257061cf9d6ba7a3131858ddd10fd",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh",
+        "yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:28:47+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f312c14d1e8b4c0c95252e47c02ea8a4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-test-2",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-test-2-sonra.txt",
+      "sha256": "d88d2f904c8b4e7e853db5833d19b4880998175c87a0e30ea3d3d53d497a03b5",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:31:22+03:00",
+      "sure_sn": 139.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "86452cda7c214a0cbcbd88ae5415d02a"
     }
   ],
-  "imza": "e9e014d957ddb14906f195065cafe425eeb37b6324a9d451e357318b3b3377ce"
+  "imza": "1d202d445fc100d4d31a51d75bf41e3e4aaa4b744ce0253e35871fb819ce27c2"
 }
