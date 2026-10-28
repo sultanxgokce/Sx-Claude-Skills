@@ -775,6 +775,10 @@ sys.path.insert(0,hdir); from izin import izin_durumu, siniflimi, KURAL_SURUMU
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 if k.get("durum") not in ("acik","tikandi"):
     print(f"✗ kart durumu '{k.get('durum')}' — yalnız açık ya da tıkanmış kart daraltılır", file=sys.stderr); raise SystemExit(1)
+# 🔴 ÜST SINIR (SERDAR 28 Eki, Y0B2W8): iki daraltmadan sonra üçüncüsü yok → geri al. Sayaç sıfırlaması yalnız bu damgadan
+#    (daraltmalar[-1].tur_sifir) okunur; sınırsız daraltma "3 tur tavanı"nı sonsuza uzatırdı.
+if len(k.get("daraltmalar") or [])>=2:
+    print(f"✗ bu kart zaten {len(k['daraltmalar'])} kez daraltıldı — üçüncü daraltma yok; kart.sh tikandi {k['is']} --yol geri-al --neden \"…\" (ya da işi baştan, yeni kartla aç)", file=sys.stderr); raise SystemExit(1)
 # 0.21.0: daralt her kartta reis kararıyla; vetoda hiçbir kart değişmez; eski Sultan 'daralt' tüketilir
 sinifli=siniflimi(k); iz,iza=izin_durumu(k) if sinifli else ("gerekmiyor","")
 if sinifli and iz=="dur":   # VETO çiti · daralt

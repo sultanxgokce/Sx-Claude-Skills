@@ -1,0 +1,45 @@
+{
+  "is": "daralt-sayac-ve-ust-sinir",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T17:59:16+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gercek",
+      "asama": "tek",
+      "dosya": "olcum-gercek-tek.txt",
+      "sha256": "b09f2502b5208d679eae26c2f5101debdaeb2bac10ef053aa57c88a38eb27856",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T17:57:35+03:00",
+      "sure_sn": 81.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8d0c97c12aa0448f9caa1a3218ee9f24"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ust-sinir-yok",
+      "asama": "tek",
+      "dosya": "olcum-ust-sinir-yok-tek.txt",
+      "sha256": "451cd72b1c2f5e1947097e09b5e9f221f69676f09cac1d9f6c44973bb41cfd53",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ustsinir-mutant-2026151/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T17:59:16+03:00",
+      "sure_sn": 82.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gercek",
+      "beklenen": "kirmizi",
+      "olcum_id": "70965b2b57f3467ab1e9e3e16fe385cf"
+    }
+  ],
+  "imza": "fd44efa3ec9775949adcde6374ceeecec340e97d1e56098e517a7e7ee132b051"
+}
