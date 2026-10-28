@@ -1,7 +1,7 @@
 {
   "is": "sx-diploma-parca",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T09:23:38+03:00",
+  "guncelleme": "2026-10-28T09:41:20+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -173,7 +173,62 @@
       "renk": "ilan",
       "zaman": "2026-10-28T09:23:38+03:00",
       "olcum_id": "bd1d263d90b1443cb3d2f728a082fc25"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-gercek-sure",
+      "asama": "sonra",
+      "dosya": "olcum-ci-gercek-sure-sonra.txt",
+      "sha256": "b6c3422ab7bd2a5ca0b3dd1d5b9854d7b697f76a8f3e3fac94addf86b3e0bc8c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-ci.sh",
+        "40643777457"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T09:41:08+03:00",
+      "sure_sn": 31.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "abf11913a33445efa6314ab9960e7906"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-gercek-sure-2",
+      "asama": "sonra",
+      "dosya": "olcum-ci-gercek-sure-2-sonra.txt",
+      "sha256": "4f7184abf4873b0fba90cda834d3309404df0c33d3c4ea0f6f3687d9ae09826d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/dp-ci.sh",
+        "40643777457"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:41:19+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e6da667a131a445399cdc95cd293ded6"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "ci-gercek-sure",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-ci-gercek-sure-sonra-e594019d1840.txt",
+      "sha256": "497e4bcb17e72baf3fac09d96a45ea5e0606d51059314825c381b4952bb07806",
+      "hedef_dosya": "olcum-ci-gercek-sure-sonra.txt",
+      "hedef_olcum_id": "abf11913a33445efa6314ab9960e7906",
+      "hedef_sha256": "b6c3422ab7bd2a5ca0b3dd1d5b9854d7b697f76a8f3e3fac94addf86b3e0bc8c",
+      "hedef_zaman": "2026-10-28T09:41:08+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "ölçüm betiğinin ayrıştırma hatası: cut -d'·' çok baytlı ayraçla alan okuyamadı, sonuç alanı boş → kırmızı; süreler (291/361 sn, success) aynı kayıtta doğru — betik düzeltilip yeniden ölçüldü",
+      "kim": "BERİD",
+      "karsi": "olcum-ci-gercek-sure-2-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T09:41:20+03:00",
+      "olcum_id": "0e1b89774c8448d3833abb07349de4f6"
     }
   ],
-  "imza": "5ba4d33c66ae07e8af80e3b3030f549c43a9860a5a82aec0eb89a34af888722a"
+  "imza": "c0956c694ccc92053803b3d4e0063426b6af9f405cd756d75d263add943af0ce"
 }
