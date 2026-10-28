@@ -55,13 +55,14 @@ kapi "R5 kademe.sh" "3|1|e|0" "$(kos kademe.sh)"
 kapi "R6 kapi-yenile.sh (eskiden 'KAPI_DIZ: unbound variable')" "3|1|e|0" "$(kos kapi-yenile.sh)"
 kapi "R7 koltuk-ac.sh durum x (eskiden 'PROJE: unbound variable')" "3|1|e|0" "$(kos koltuk-ac.sh durum x)"
 kapi "R8 onar.sh (eskiden 'gunluk: command not found')" "3|1|e|0" "$(kos onar.sh)"
+kapi "R8b kapi-eski-mi.sh (kapı ölçer; makine kimlikli adla ölçmeye girmez)" "3|1|e|0" "$(kos kapi-eski-mi.sh)"
 kapi "R9 reddedilen betikler tmux/crontab/ttyd'ye dokunmadı, durum dizini açmadı, özel tmux sunucusunda oturum yok" "yok|yok|0" \
   "$([ -s "$T/yan-etki.log" ] && echo var || echo yok)|$([ -e "$T/durum" ] && echo var || echo yok)|$(env -u TMUX TMUX_TMPDIR="$T/tmux" tmux ls 2>/dev/null | grep -c . || true)"
 kapi "R0 önkoşul: ortak.sh makine kimliğini tek başına reddediyor (yoksa yukarıdaki betikler HİÇ koşturulmadı)" "e" "$RED_VAR"
 kapi "R10 kapsam tam: ortak.sh'ı yükleyen HER betik (kur.sh hariç — S-11 kendi yolu) bu sınavda" "" \
-  "$(cd "$S" && grep -l '^[^#]*\. .*ortak\.sh' *.sh | grep -v -e '\.test\.sh$' -e 'mutasyon\.sh$' | grep -vxE 'compact.sh|komut.sh|bekci.sh|durum.sh|kademe.sh|kapi-yenile.sh|koltuk-ac.sh|onar.sh|kur.sh|ortak.sh' | tr '\n' ' ')"
+  "$(cd "$S" && grep -l '^[^#]*\. .*ortak\.sh' *.sh | grep -v -e '\.test\.sh$' -e 'mutasyon\.sh$' | grep -vxE 'compact.sh|komut.sh|bekci.sh|durum.sh|kademe.sh|kapi-yenile.sh|koltuk-ac.sh|onar.sh|kapi-eski-mi.sh|kur.sh|ortak.sh' | tr '\n' ' ')"
 
-kapi "R10b R10'un aramasının kendisi ölçüldü: ortak.sh'ı yükleyen 9 betik bulunuyor (8 + kur.sh) — boş sonuç kör aramadan gelmiyor" "9" \
+kapi "R10b R10'un aramasının kendisi ölçüldü: ortak.sh'ı yükleyen 10 betik bulunuyor (9 + kur.sh) — boş sonuç kör aramadan gelmiyor" "10" \
   "$(cd "$S" && grep -l '^[^#]*\. .*ortak\.sh' *.sh | grep -v -e '\.test\.sh$' -e 'mutasyon\.sh$' | grep -c .)"
 
 echo "── P · pozitif kontrol: aynı düzenek, GEÇERLİ kutu adıyla yükleme geçer (red ölçümü kör değil)"
