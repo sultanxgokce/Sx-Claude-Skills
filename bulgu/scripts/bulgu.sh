@@ -13,7 +13,7 @@ k="${1:-}"; shift || true
 case "$k" in
   yaz)
     baslik="${1:-}"; shift || true
-    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>] [--gorev --ozet \"<tek cümle: sebep → ne yapılacak → bitince ne olur>\"]" >&2; exit 2; }
+    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>] [--gorev --ozet \"<tek cümle: sebep → ne yapılacak → bitince ne olur>\"]" >&2; echo "  başlıkta sayı varsa TEK ölçüt biçimi (SERDAR 29 Eki): '<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)'; çok parçalı başlık sayılabilir maddelere bölünür ya da [ayri] ile ayrılır; süre/aşama içeren başlık süresi dolmadan bitti yazılmaz" >&2; exit 2; }
     kim=""; notu=""; etiket="bug"; dugum=""; durum="havuz"; gorev=0; ozet=""
     while [ $# -gt 0 ]; do case "$1" in
       --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;

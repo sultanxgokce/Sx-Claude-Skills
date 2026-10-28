@@ -1,0 +1,56 @@
+{
+  "tur": 3,
+  "is": "sayi-baslik-bicimi",
+  "pr": "550",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:23:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sayi-baslik-bicimi",
+  "dal": "sayi-baslik-bicimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18968,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 4115
+  },
+  "dalgic": "olculemedi",
+  "bas": "f627ce114ee03ff2da6f028001e4c6f5627eb2db",
+  "duzeltme_farki": {
+    "onceki_bas": "a8178d7d8128ef03bf0f78d4c7765d909569ee19",
+    "dosya": 4,
+    "bayt": 6467,
+    "tam_bayt": 46536
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Başlıktaki çıplak “13 → 0” vakası artık yakalanıyor; önceki B1’in somut açığı kapanmış, fakat ölçüt adı denetimi keyfî ve gevşek uygulanmış. Sultan, önce görev ekleme yardımını tamamlayın ve ölçüt adı denetimini gerçek biçime bağlayın; talebin bütün yüzeyleri henüz karşılanmıyor.",
+    "bulgular": [
+      {
+        "ne": "B1’in verilen örneği kapandı, ancak yeni ölçüt adı denetimi hem geçerli kısa adları reddediyor hem de sayıdan önceki ilgisiz herhangi bir üç harfli sözcüğü ölçüt adı sayabiliyor.",
+        "kanit": "Kod, okun önündeki 60 karakter içinde herhangi bir yerde `[^[\\W\\d_]]{3,}` arıyor. Bu nedenle “iş 13 → 0” veya “PR 13 → 0” ölçüt adı taşımasına rağmen reddedilirken “bugün 13 → 0” gibi ölçüt adı bulunmayan bir ifade kabul edilir; eklenen tek sınav yalnız tamamen çıplak `13 → 0` vakasını kapsıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:454; yazilim-fabrikasi/scripts/kart.test.sh:439",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 kapanmadı: görev ekleme yardım metninin istenen sayı biçimini gösterdiğine dair üretim kodu değişikliği veya ölçüm kanıtı hâlâ yok.",
+        "kanit": "Düzeltme farkındaki üretim değişikliği yalnız `kart.sh` başlık doğrulamasına ait; görev ekleme yardım yüzeyine dokunan kod yok. İmzalı ölçümlerde de görev ekleme yardım metninin biçimi gösterdiğini sınayan bir satır bulunmuyor.",
+        "konum": "düzeltme farkı; ÖNCEKİ TUR B2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok, rc=0 önce/sonra ölçüm çifti var. Önceki B1’in çıplak sayı örneği kod ve yeni sınavla kapanmış görünüyor, ancak yeni sınavın sonucu “sonra” ölçüm çıktısında görünmüyor ve ölçüt adı denetiminin kısa/ilgisiz sözcük vakaları ölçülmemiş. Görev ekleme yardım yüzeyi de ölçümlerde hâlâ yok."
+  }
+}

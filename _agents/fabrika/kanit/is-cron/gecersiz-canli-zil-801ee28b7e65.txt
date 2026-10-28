@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: canli-zil.txt
+hedef_sha256: fe1cc60b7ef333a7ca82b95ff6a5ff5c78959e85a86dec78ce24603c96d96472
+hedef_zaman: 2026-10-29T00:38:54+03:00
+hedef_renk: yesil
+neden: log başka sunucunun zil satırıydı, bu iş değil
+kim: BANI
+karsi: -
+zaman: 2026-10-29T00:38:54+03:00

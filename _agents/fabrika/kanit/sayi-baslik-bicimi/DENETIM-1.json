@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "sayi-baslik-bicimi",
+  "pr": "550",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T00:54:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sayi-baslik-bicimi",
+  "dal": "sayi-baslik-bicimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27553,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 15819
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a506ec33d41ffbfe4e891eaf78dae5afadde5967",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Başlık açılışına uyarı ve bulgu kullanım metnine örnek eklenmiş; ancak biçim denetimi talep edilen tek ölçüt şemasını doğrulamak yerine yalnız “→” ile “kaynak:” varlığına bakıyor. Sultan, önce gerçek şema doğrulamasını ve görev ekleme yardım yüzeyindeki eksikliği çözün; mevcut hâli üretime hazır değil.",
+    "bulgular": [
+      {
+        "ne": "Biçim doğrulaması aşırı gevşek: şimdi/hedef sayıları, neyin sayıldığı, parantezli kaynak, gün ve tek ölçüt şartları doğrulanmıyor; örneğin “13 iş → x kaynak:” yanlış olduğu hâlde uyarısız geçer.",
+        "kanit": "Atama yalnız `bool(sayilar)` ile `→` ve `kaynak:` aramalarının birleşiminden oluşuyor; testler de yalnız bu iki işaretin bulunduğu olumlu örneği kapsıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:448; yazilim-fabrikasi/scripts/kart.test.sh:428",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Talepteki görev ekleme yardım metni gösterilmemiş; değişiklik yalnız bulgu komutunun başlıksız kullanım çıktısını ve beceri açıklamasını güncelliyor.",
+        "kanit": "Üretim farkında yardım metni değişen tek komut `bulgu/scripts/bulgu.sh` içindeki `bulgu.sh yaz` başlıksız kullanım kolu; görev ekleme komutuna ait yardım yüzeyinde değişiklik yok.",
+        "konum": "bulgu/scripts/bulgu.sh:16; üretim diffi",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yeni sınavlar yanlış biçimin önemli türlerini yakalamıyor; bu nedenle yeşil sonuç gerçek biçim sözleşmesini güvenceye almıyor.",
+        "kanit": "T13d yalnız biçimsiz sayı, `→`+`kaynak:` içeren örnek, sayısız başlık ve kaynaksız ok vakalarını sınıyor; eksik gün, sayısal olmayan hedef, birden çok ölçüt ve `[ayri]` davranışı için sınav yok.",
+        "konum": "yazilim-fabrikasi/scripts/kart.test.sh:422",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, önce/sonra ölçüm çifti var. Ancak görünen “önce” çıktısı yeni T13d davranışlarını zaten başarılı gösterirken “sonra” kırpılmış çıktıda bu satırlar görünmüyor; ayrıca ölçümler geniş test toplamlarını raporluyor ve talep edilen tam biçim ile görev yardım yüzeyini doğrudan kanıtlamıyor."
+  }
+}
