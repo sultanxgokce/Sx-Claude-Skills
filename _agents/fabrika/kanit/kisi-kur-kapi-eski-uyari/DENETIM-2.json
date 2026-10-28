@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kisi-kur-kapi-eski-uyari",
+  "pr": "527",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:42:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-kur-kapi-eski-uyari",
+  "dal": "kisi-kur-kapi-eski-uyari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21181,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8147
+  },
+  "dalgic": "uyumlu",
+  "bas": "f2ad3ee882f61fcb7b4fec593f7e13098a5e7d05",
+  "duzeltme_farki": {
+    "onceki_bas": "d244f64aac30579d8575410300a807f683907f73",
+    "dosya": 7,
+    "bayt": 13272,
+    "tam_bayt": 25783
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kurulum sonundaki kapı ölçümünün rc 1/2 sonucunu koruyup uyarması düzeltilmiş ve Q18 senaryolarıyla ölçülmüş; önceki B2 kapanmış. Ancak önceki B1’in üretim düzeltmesi farkta yok ve yeni E5 sınavı zaman ayrımı oluşturmadığından `pano.js` kusurunun kapandığını kanıtlamıyor; önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kapanmamış görünüyor: `pano.js` için yalnız sınav eklenmiş, fakat sunulan eksiksiz üretim kodu farkında `kapi-eski-mi.sh` değişikliği yok. Üstelik E5, `pano.js` yazılmadan önce zaman farkı oluşturmadığı için dosya gerçekten yaş hesabına katılsa bile aynı zaman damgası nedeniyle yanlış biçimde geçebilir.",
+        "kanit": "Düzeltme farkında `kapi-eski-mi.test.sh` içine E5 ekleniyor, ancak önceki bulgunun konumu olan `kapi-eski-mi.sh:17` için hiçbir üretim değişikliği bulunmuyor. E5 adımları `printf ... > pano.js` ardından doğrudan `kos` çağırırken, gerçek eskilik senaryosu E2 öncesinde açıkça `sleep 1` kullanıyor; dolayısıyla E5 dışlama davranışını güvenilir biçimde ayırt etmiyor.",
+        "konum": "terminal-onar/scripts/kapi-eski-mi.test.sh:30-32; terminal-onar/scripts/kapi-eski-mi.sh:17",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce/yeşil sonra ölçüm çifti var, sarı kayıt yok. B2 için Q18-1, Q18-2 ve Q18-0 gerçek rc aktarımını ölçüyor ve üretim farkındaki borusuz yakalama ile uyumlu; bu bulgu kapanmış. Buna karşılık E5 yeşil olsa da zaman ayrımı bulunmadığından `pano.js` istisnasını gerçekten ölçmüyor; ayrıca manifestteki ters-karşılaştırma bölümü mutasyon mantığı taşısa da `mutasyon: true` olarak ayrı kayıtlanmamış."
+  }
+}
