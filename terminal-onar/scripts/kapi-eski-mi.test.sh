@@ -28,7 +28,7 @@ echo "── E3 yalnız test dosyası yeni"
 touch "$T/calisma/kapi/yol.test.mjs"
 c=$(kos); r=$?; kapi "E3 yalnız *.test.mjs süreçten yeni → rc 0 (kapı kodu sayılmaz)" "0" "$r"
 echo "── E5 pano.js (sıcak tazelenen) süreçten yeni → kapı ESKİ sayılmaz"
-printf 'var pano = 1;\n' > "$T/calisma/kapi/pano.js"
+sleep 1; printf 'var pano = 1;\n' > "$T/calisma/kapi/pano.js"   # süreç başlayalı >3 sn: dosya GERÇEKTEN süreçten yeni (aynı-saniye muğlaklığı yok)
 c=$(kos); r=$?; kapi "E5 yalnız pano.js (+ test dosyası) yeni → rc 0 (pano.js kod yaşına girmez)" "0" "$r"
 echo "── E2 sunucu.mjs süreçten sonra değişti"
 sleep 1; touch "$T/calisma/kapi/sunucu.mjs"
@@ -39,6 +39,13 @@ sed 's/\[ "\$dosya_an" -gt "\$basla" \]/[ "$dosya_an" -lt "$basla" ]/' "$T/calis
 grep -q -- '-lt "\$basla"' "$T/calisma/scripts/kapi-eski-mi-mutant.sh" || { kalan=$((kalan+1)); echo "  ✗ mutant üretilemedi (çapa tutmadı)"; }
 cm=$(kos "$T/calisma/scripts/kapi-eski-mi-mutant.sh"); rm_=$?
 kapi "MUTANT ters karşılaştırma E2 senaryosunda rc 1 VERMEZ (sınav kırmızıya dönerdi — mutant yakalandı)" "yakalandi" "$([ "$rm_" != 1 ] && echo yakalandi || echo kacti)"
+
+# M2: pano.js dışlaması kalkarsa ('*.mjs' → '*.mjs' VEYA '*.js') E5 senaryosunda ölçer yanlış 'ESKİ' der → sınav kırmızıya dönmeli
+rm -f "$T/calisma/kapi/sunucu-yeni" ; touch -d '2 hours ago' "$T/calisma/kapi/sunucu.mjs"
+sed "s/-name '\*.mjs'/\\( -name '*.mjs' -o -name '*.js' \\)/" "$T/calisma/scripts/kapi-eski-mi.sh" > "$T/calisma/scripts/kapi-eski-mi-m2.sh"
+grep -q -- "-o -name '\*.js'" "$T/calisma/scripts/kapi-eski-mi-m2.sh" || { kalan=$((kalan+1)); echo "  ✗ M2 mutantı üretilemedi (çapa tutmadı)"; }
+cm2=$(kos "$T/calisma/scripts/kapi-eski-mi-m2.sh"); rm2=$?
+kapi "MUTANT M2 pano.js dışlaması kalkınca E5 senaryosunda ölçer rc 0 VERMEZ (sınav kırmızıya dönerdi — mutant yakalandı)" "yakalandi" "$([ "$rm2" != 0 ] && echo yakalandi || echo kacti)"
 
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

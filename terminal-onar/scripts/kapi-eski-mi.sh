@@ -14,6 +14,7 @@ pid=$(pgrep -u "$(id -u)" -f "node $KAPI_DIZ/sunucu.mjs" 2>/dev/null | head -1)
 gecen=$(ps -o etimes= -p "$pid" 2>/dev/null | tr -d ' ')
 [[ "$gecen" =~ ^[0-9]+$ ]] || { echo "kapı sürecinin yaşı okunamadı (pid $pid) — ÖLÇÜLEMEDİ"; exit 2; }
 basla=$(( $(date +%s) - gecen ))
+# pano.js'in dışlanması UZANTIDAN gelir: yalnız '*.mjs' aranır, pano.js bir '.js' dosyasıdır (E5 + mutant M2 bunu kilitler)
 en_yeni=$(find "$KAPI_DIZ" -name '*.mjs' -not -path '*/node_modules/*' -not -name '*.test.mjs' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1)
 [ -n "$en_yeni" ] || { echo "kapı kod dizininde .mjs bulunamadı ($KAPI_DIZ) — ÖLÇÜLEMEDİ"; exit 2; }
 dosya_an=${en_yeni%%.*}; dosya=${en_yeni#* }
