@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "dumen-devir-ajan-bekle",
+  "pr": "531",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T11:24:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-devir-ajan-bekle",
+  "dal": "dumen-devir-ajan-bekle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40603,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 23519
+  },
+  "dalgic": "uyumsuz",
+  "bas": "66324a8810bd3b3202fac74c6f5689b31a1c21ab",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Sultan'dayken bekleyen, mod ajana dönünce çıkan ve süre/merkez hatalarını kapalı biçimde ele alan süreç yapılmış; gerçek ölçüm 11/11 geçiyor ve sekiz mutasyon sınav tarafından yakalanıyor. Ancak iş kartındaki “biter ve tek satır basar” sözleşmesine karşı Sultan akışında başlangıç ve bitişte iki satır basılıyor; canlı arka plan zilinin gerçek yüzeyde ateşlenmesi de henüz ölçülmemiş.",
+    "bulgular": [
+      {
+        "ne": "Sultan'dan ajana dönüş akışı toplam iki satır basıyor; talep bitişte tek satır çıktısı istiyor.",
+        "kanit": "Gerçek ölçümde D2b başlangıçta “Sultan'da” satırının bir kez basıldığını, D9 ise çıkışta ayrıca “geri verildi” satırı basıldığını doğruluyor. Üretim kodunda satır 21 başlangıç mesajını, satır 20 dönüş mesajını yazar.",
+        "konum": "dumen-surucu/scripts/dumen-bekle.mjs:20",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek arka plan bitişinin ajanı uyandırdığı canlı Dümen al/ver akışında henüz doğrulanmamış.",
+        "kanit": "İş kartında canli_gerekir=true ve canli_borc.odendi=null; gerekçe gerçek ateşlemenin Sultan Dümeni alıp geri verirken yapılacağını söylüyor. Mevcut D8-D9 yalnız yerel child_process çıkışını ölçüyor.",
+        "konum": "iş kartı: canli_borc; olcum-bekle-sinav-tek.txt D8-D9",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı Dümen oturumu + Sultan'ın al/ver işlemi + ajanın arka plan koşucusu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 11/11 geçiyor, sekiz mutasyon kaydı rc=1 olup bozuk kodun yakalandığını gösteriyor. Hermetik süreç ölçümü güçlüdür; fakat canlı arka plan bildirim/zil doğrulaması iş kartında açık borçtur ve tek-satır talebiyle iki ayrı çıktı arasındaki uyumsuzluğu sınav başarı saymaktadır."
+  }
+}
