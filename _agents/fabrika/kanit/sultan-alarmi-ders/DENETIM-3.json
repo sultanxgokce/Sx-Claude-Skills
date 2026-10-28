@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "sultan-alarmi-ders",
+  "pr": "532",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T13:12:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-alarmi-ders",
+  "dal": "sultan-alarmi-ders",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14262,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5408
+  },
+  "dalgic": "olculemedi",
+  "bas": "a3b55c1711a9a8e6e29df05fe906ca68c260e1f9",
+  "duzeltme_farki": {
+    "onceki_bas": "c1358ba3fd69c420e99634fa9d356f3ddea9d643",
+    "dosya": 4,
+    "bayt": 5408,
+    "tam_bayt": 16131
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun B1 bulgusu, kurulu DERSLER.md ile kaynak DERSLER.md’nin aynı özete sahip olduğunu gösteren yeni ölçümle kapanmış; drift de 1→0 ölçülmüş ve ders ekleme sınavı geçmiştir. Talep edilen kurulu kopya içerik-drift’inin kapanması doğrudan kanıtlandığından üretime engel bir sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce/sonra drift çifti drift=1→0 gösteriyor, alarm sınavı 46/46 yeşil ve yeni kurulu-ders-eslesme ölçümü /config/.claude/skills/sultan-alarmi/DERSLER.md ile çalışma ağacındaki DERSLER.md için aynı 84d894e3abee özetini ve rc=0 sonucunu veriyor. Böylece önceki B1, yalnız çalışma ağacını ölçen kaydın kurulu kopyaya uzatılmasıyla kapanmıştır."
+  }
+}

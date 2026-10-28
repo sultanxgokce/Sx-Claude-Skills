@@ -1255,7 +1255,7 @@
       "id": "sultan-alarmi",
       "type": "agent",
       "name": "sultan-alarmi — Sultan yüzünden duran işin tek biçimli alarmı",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Sultan yüzünden duran iş için tek biçim: '🚨🔴 SULTAN ALARMI — <iş> · <kim duruyor> · <ne gerekiyor, tek tık>'. Terminal kırmızı satır, istenirse telefon (ntfy alarm konusu), tekrar sınırı ve yükseltme, kapımda + onay-bekliyor taraması, ders defteri. Telefon yalnız --telefon ile; Sultan ekrandaysa atlanır.",
       "tags": [
         "sultan",
