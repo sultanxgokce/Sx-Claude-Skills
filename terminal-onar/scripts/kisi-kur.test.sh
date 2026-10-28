@@ -58,4 +58,10 @@ ok "Q15 göreli TTYD_BIN reddedilir (komuta mutlak yol yazılır)" "$([ "$rc" = 
 ln -s "$PUB/ozel-ttyd" "$PUB/bag-ttyd"; TTYD_BIN="$PUB/bag-ttyd" bash "$D/kisi-kur.sh" --kutu demo >"$T/b" 2>&1
 ok "Q16 sembolik bağ çözülür: komuta GERÇEK dosyanın yolu yazılır" "$(grep -q -- "$PUB/ozel-ttyd -i /run/kisi" "$T/b" && ! grep -q 'bag-ttyd -i' "$T/b" && echo 0 || echo 1)" "$(grep ttyd-kisi -A1 "$T/b" | tail -1 | cut -c1-200)"
 ok "Q17 kuru kip kapı kodu ölçümünü anlatır (kapi-eski-mi.sh) ve hiçbir şey başlatmaz" "$(grep -q 'kapı kodu güncel mi' "$T/b" && grep -q 'kapi-eski-mi.sh' "$T/b" && echo 0 || echo 1)" "$(grep -c 'kapi-eski-mi' "$T/b")"
+for rcx in 1 2 0; do
+  printf '#!/usr/bin/env bash\necho "sahte ölçer rc=%s"\nexit %s\n' "$rcx" "$rcx" > "$T/olcer$rcx.sh"; chmod +x "$T/olcer$rcx.sh"
+  KISI_KUR_KAPI_ESKI_MI="$T/olcer$rcx.sh" bash "$D/kisi-kur.sh" --kutu demo --kok "$T" --uygula >"$T/ko$rcx" 2>&1
+  if [ "$rcx" = 0 ]; then ok "Q18-$rcx ölçer rc 0 → kurulum uyarısı YOK, ölçer çıktısı görünür" "$(grep -q 'sahte ölçer rc=0' "$T/ko$rcx" && ! grep -q 'kurulum tamam ama kapı' "$T/ko$rcx" && echo 0 || echo 1)" "$(grep -c 'kurulum tamam' "$T/ko$rcx")"
+  else ok "Q18-$rcx ölçer rc $rcx → '--uygula' altında 'kurulum tamam ama kapı ölçümü rc=$rcx' uyarısı basılır (boru rc'yi yutmaz)" "$(grep -q "kurulum tamam ama kapı ölçümü rc=$rcx" "$T/ko$rcx" && echo 0 || echo 1)" "$(grep -c 'kurulum tamam' "$T/ko$rcx")"; fi
+done
 echo; echo "$G geçti, $K kaldı"; [ "$K" = 0 ]

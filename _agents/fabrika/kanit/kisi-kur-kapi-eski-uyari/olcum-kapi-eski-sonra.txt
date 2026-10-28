@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ke-sonra.sh
-# rc=0 sure=8.0s zaman=2026-10-28T09:37:38+03:00
+# rc=0 sure=11.0s zaman=2026-10-28T09:40:08+03:00
 --- stdout ---
 ── E4 süreç yok → ÖLÇÜLEMEDİ
   ✓ E4 kapı süreci yok → rc 2 ve 'ÖLÇÜLEMEDİ'
@@ -7,11 +7,13 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810
   ✓ E1 kod dosyaları süreçten eski → rc 0 'kapı güncel'
 ── E3 yalnız test dosyası yeni
   ✓ E3 yalnız *.test.mjs süreçten yeni → rc 0 (kapı kodu sayılmaz)
+── E5 pano.js (sıcak tazelenen) süreçten yeni → kapı ESKİ sayılmaz
+  ✓ E5 yalnız pano.js (+ test dosyası) yeni → rc 0 (pano.js kod yaşına girmez)
 ── E2 sunucu.mjs süreçten sonra değişti
   ✓ E2 sunucu.mjs süreçten yeni → rc 1 · dosya adı ve onar.sh komutu basılır
 ── MUTANT: karşılaştırma ters ('-gt' → '-lt') → E1/E2 kırmızıya dönmeli
   ✓ MUTANT ters karşılaştırma E2 senaryosunda rc 1 VERMEZ (sınav kırmızıya dönerdi — mutant yakalandı)
-SONUÇ: 5 geçti · 0 kaldı
+SONUÇ: 6 geçti · 0 kaldı
   ✓ Q1 kuru kip rc 0
   ✓ Q2 kuru kipte hiçbir dizin/dosya oluşmadı
   ✓ Q3 çıktı KURU KİP diyor ve 5+ adım sayıyor
@@ -36,6 +38,9 @@ SONUÇ: 5 geçti · 0 kaldı
   ✓ Q15 göreli TTYD_BIN reddedilir (komuta mutlak yol yazılır)
   ✓ Q16 sembolik bağ çözülür: komuta GERÇEK dosyanın yolu yazılır
   ✓ Q17 kuru kip kapı kodu ölçümünü anlatır (kapi-eski-mi.sh) ve hiçbir şey başlatmaz
+  ✓ Q18-1 ölçer rc 1 → '--uygula' altında 'kurulum tamam ama kapı ölçümü rc=1' uyarısı basılır (boru rc'yi yutmaz)
+  ✓ Q18-2 ölçer rc 2 → '--uygula' altında 'kurulum tamam ama kapı ölçümü rc=2' uyarısı basılır (boru rc'yi yutmaz)
+  ✓ Q18-0 ölçer rc 0 → kurulum uyarısı YOK, ölçer çıktısı görünür
 
-24 geçti, 0 kaldı
+27 geçti, 0 kaldı
 --- stderr ---

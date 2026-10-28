@@ -1,7 +1,7 @@
 {
   "is": "kisi-kur-kapi-eski-uyari",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T09:37:38+03:00",
+  "guncelleme": "2026-10-28T09:40:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,18 +25,18 @@
       "etiket": "kapi-eski",
       "asama": "sonra",
       "dosya": "olcum-kapi-eski-sonra.txt",
-      "sha256": "bef223ce20c4b16a64306297fce0ce5b77e8218aa868c17698354c754da53022",
+      "sha256": "1806310069caaa6519eb2b2c83370fd28defb30fb707f5b8bd21c0eac6ac7f0b",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/ke-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-28T09:37:38+03:00",
-      "sure_sn": 8.0,
+      "zaman": "2026-10-28T09:40:08+03:00",
+      "sure_sn": 11.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "8956bf209f3b4df9b8d261285cabc83e"
+      "olcum_id": "f7a8b177cc514b7c8dc5d77f6c5ce101"
     }
   ],
-  "imza": "0e32647a7c343dafb7c4800999fa50717f63baf7db7cab41a411368c63260b67"
+  "imza": "bfad3740c4f9193795ddc833cd2546553ef71a3b72dfaaf1123b59f779309eac"
 }
