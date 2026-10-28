@@ -1,0 +1,42 @@
+{
+  "is": "kisi-istemci-koltuk-menusu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T09:51:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "argumansiz",
+      "asama": "once",
+      "dosya": "olcum-argumansiz-once.txt",
+      "sha256": "90d5cc76af6db768ec17a414ea5b32bfdec72515182a626522b3281311d4e513",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/mn-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T09:43:48+03:00",
+      "sure_sn": 23.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c67631e1b0934794bc730109c92d6e2a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "argumansiz",
+      "asama": "sonra",
+      "dosya": "olcum-argumansiz-sonra.txt",
+      "sha256": "34824cbe584ff2d010c2f8e5f7fed07ac920115de415bd7f828a2775d4bc3baf",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/mn-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T09:51:52+03:00",
+      "sure_sn": 483.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "09a61265e90f4237af4f02665058ab9c"
+    }
+  ],
+  "imza": "1c364e500bc6cdca7393b187120074b9a8a0a6411c268c2da414d189c51d72de"
+}

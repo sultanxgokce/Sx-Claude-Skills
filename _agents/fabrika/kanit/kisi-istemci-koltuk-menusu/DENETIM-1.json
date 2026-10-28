@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kisi-istemci-koltuk-menusu",
+  "pr": "528",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:53:36+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-istemci-koltuk-menusu",
+  "dal": "kisi-istemci-koltuk-menusu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18624,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5686
+  },
+  "dalgic": "uyumsuz",
+  "bas": "dd5d5b1c5b083ccc099478666ba88079622ca3d9",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Argümansız açılışa izinli koltuk menüsü eklenmiş; tek izinli koltukta doğrudan bağlantı kurulurken argümanlı eski yol da korunmuş. Araç imzalı önce/sonra ölçümü talebin ana dallarını gerçekçi PTY ve köprü akışıyla doğruladığı için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA değerleri tutuyor; sarı kayıt yok. Önce ölçümünde talebe ilişkin I10-I12 başarısızken sonra ölçümünde menü, geçersiz tuşlar, iki seçim, temiz çıkış, tek koltukta doğrudan bağlantı, boş liste-yenileme ve eski argümanlı yol dahil 19/19 sınav yeşil; bu, anlamlı bir önce/sonra ölçüm çiftidir."
+  }
+}
