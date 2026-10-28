@@ -1,0 +1,45 @@
+{
+  "is": "alarm-kuru-durum-yazmasin",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T06:15:05+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "alarm-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-alarm-sonra-sonra.txt",
+      "sha256": "4156e8e544743614a7305ba51ad0bca00fcaa0088333c3dfa3fd715eabecbc92",
+      "komut": [
+        "bash",
+        "sultan-alarmi/scripts/alarm.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T06:15:04+03:00",
+      "sure_sn": 36.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "02138d3238f9494196ee4b055c4b84c3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kuru-yazar",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kuru-yazar-sonra.txt",
+      "sha256": "006997dd2610e13521fe0e603cfcf9efd5f2aa6e71a34d5caabfe942f042ee4a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-ak.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T06:15:05+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "alarm-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "b3858b91f4314b39ba079574eb3f969a"
+    }
+  ],
+  "imza": "aa54f8b98046e4ad8dd373dca8a716d0ee24a8514406ccb13d4a789168578c69"
+}

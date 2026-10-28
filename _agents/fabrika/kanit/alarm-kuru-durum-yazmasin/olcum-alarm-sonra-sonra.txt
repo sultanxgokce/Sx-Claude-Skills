@@ -1,0 +1,59 @@
+$ bash sultan-alarmi/scripts/alarm.test.sh
+# rc=0 sure=36.3s zaman=2026-10-28T06:15:04+03:00
+--- stdout ---
+— biçim
+  ✓ B1 sabit biçim
+  ✓ B2 eksik alan rc 2
+  ✓ B3 boş alan rc 2
+  ✓ B4 160+ karakter rc 2
+  ✓ B5 çok satır rc 2
+  ✓ B6 sır deseni rc 2
+  ✓ B7 son argüman '--is' değersiz: takılmaz, rc 2
+  ✓ B7 son argüman '--kim' değersiz: takılmaz, rc 2
+  ✓ B7 son argüman '--ne' değersiz: takılmaz, rc 2
+  ✓ B7 son argüman '--tekrar-dk' değersiz: takılmaz, rc 2
+  ✓ B7 son argüman '--esik-gun' değersiz: takılmaz, rc 2
+— gönder
+  ✓ G1 terminal satırı basılır
+  ✓ G2 --telefon yokken ağa çıkılmaz
+  ✓ G3 tekrar sınırı: aynı iş susar
+  ✓ G3b susan alarm satırı yeniden basmaz
+  ✓ G4 --kuru telefona GİTMEZ ama niyetini söyler
+  ✓ G4b kuruda curl çağrılmaz
+  ✓ G4c kuru koşu durum KAYDI yazmaz
+  ✓ G4d kuru sonrası gerçek alarm SUSMAZ
+  ✓ G4e kuru sonrası gerçek alarm tekrar=1 sayılır
+  ✓ G5 --telefon: ntfy'ye gider (öncelik 4)
+  ✓ G5b kütükte gitti kaydı
+  ✓ G6 Sultan ekrandaysa telefon atlanır
+  ✓ G6b kütükte atlandı kaydı
+  ✓ G7 bildirim gitmediyse UYARI (sessiz başarı yok)
+  ✓ G7b kütükte hata kaydı
+— yükseltme
+  ✓ Y1 4. tekrarda YÜKSELTİLDİ
+  ✓ Y1b yükseltmede öncelik 5
+  ✓ Y1c eşiğin TAM kendisinde (3.) yükseltilir
+  ✓ Y1d 2. basışta yükseltme yok
+  ✓ Y2 ilk alarmda yükseltme YOK
+— eşzamanlılık
+  ✓ E1 8 eşzamanlı gönderimde alarm TEK kez basılır
+  ✓ E1b kalan 7'si sustu
+  ✓ E1c sayaç 1
+— tara
+  ✓ T1 kapımda SENDE kartı aday
+  ✓ T1b devredilmiş (🎯) kart aday DEĞİL
+  ✓ T2 eski onay-bekliyor (1 günden yaşlı) aday
+  ✓ T2b taze onay işi aday değil
+  ✓ T2c onay beklemeyen iş aday değil
+  ✓ T3 tarihsiz satır ADAYSIZ diye söylenir (sessiz atlanmaz)
+  ✓ T4 ölçülemeyen kaynaklar açıkça yazılır
+  ✓ T5 rc 0
+  ✓ T6 defter okunamazsa OKUNAMADI yazar
+  ✓ T6b biri okunduysa rc 0
+  ✓ T7 hiçbir kaynak okunamazsa rc 3 ('aday yok' DENMEZ)
+— ders
+  ✓ D1 ders tarihli satır olarak eklenir
+
+sonuç: 46 geçti · 0 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-alarm-kuru-durum-yazmasin-alarm-sonra 35 sn bekledi (yuva 2, load1 17.64)

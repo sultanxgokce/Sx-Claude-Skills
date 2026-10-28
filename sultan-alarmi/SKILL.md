@@ -1,7 +1,7 @@
 ---
 name: sultan-alarmi
 type: agent
-version: 0.1.0
+version: 0.1.1
 description: >
   Bir iş ya da ajan SULTAN yüzünden duruyorsa tek biçimli alarm basar: terminalde kırmızı satır, istenirse telefona bildirim,
   "ne gerekiyor, tek tık" cümlesiyle. Aynı iş için tekrar sınırı (varsayılan 60 dk) ve 3. tekrarda yükseltme vardır.

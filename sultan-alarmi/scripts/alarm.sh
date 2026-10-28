@@ -56,7 +56,10 @@ gonder)
   if [ "$SAY" -gt 0 ] && [ $((SIMDI - SON)) -lt $((TEKRAR_DK * 60)) ]; then
     echo "sustu: '$IS' için alarm $(( (SIMDI - SON) / 60 )) dk önce basıldı (tekrar sınırı $TEKRAR_DK dk)"; kutuk "$SAY" - sustu; exit 0
   fi
-  SAY=$((SAY + 1)); { grep -v "^$ANAHTAR	" "$DURUM" 2>/dev/null; printf '%s\t%s\t%s\n' "$ANAHTAR" "$SIMDI" "$SAY"; } > "$DURUM.yeni" && mv "$DURUM.yeni" "$DURUM"; flock -u 9
+  SAY=$((SAY + 1))
+  # kuru koşu DURUM yazmaz: yazarsa sonraki gerçek alarm "sustu" olur ve yükseltme sayacı kuruyla artar
+  [ "$KURU" -eq 1 ] || { { grep -v "^$ANAHTAR	" "$DURUM" 2>/dev/null; printf '%s\t%s\t%s\n' "$ANAHTAR" "$SIMDI" "$SAY"; } > "$DURUM.yeni" && mv "$DURUM.yeni" "$DURUM"; }
+  flock -u 9
   M="$(metin)"; ONCELIK=4
   if [ "$SAY" -ge "$YUKSELT_N" ]; then M="$M · TEKRAR $SAY — YÜKSELTİLDİ"; ONCELIK=5; fi
   if [ -z "${NO_COLOR:-}" ]; then printf '\033[1;31m%s\033[0m\n' "$M"; else printf '%s\n' "$M"; fi
