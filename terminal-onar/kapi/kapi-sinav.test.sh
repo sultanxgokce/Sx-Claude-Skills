@@ -17,6 +17,9 @@ echo "── kadro E2 kayıt yazıcısı (kadro-yaz.test.mjs)"
 node kadro-yaz.test.mjs || exit 1
 echo "── kadro E2 ucu uçtan uca (kadro-hal.test.mjs)"
 node kadro-hal.test.mjs || exit 1
+echo "── kadro etiketi: yazıcı (kadro-etiket.test.mjs) + uç uçtan uca (kadro-etiket-uc.test.mjs)"
+node kadro-etiket.test.mjs || exit 1
+node kadro-etiket-uc.test.mjs || exit 1
 echo "── kişi↔oturum kimlik eşleşmesi (kimlik.test.mjs)"
 node kimlik.test.mjs || exit 1
 echo "── kapı-yenile: SIGHUP ile pano.js bağlantı düşürmeden tazelenir (kapi-yenile.test.mjs)"

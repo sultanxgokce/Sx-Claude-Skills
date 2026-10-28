@@ -1,0 +1,32 @@
+{
+  "is": "kadro-etiket-kapi",
+  "cumle": "Kutu kapısı Kadro kayıtlarına Sultan etiketi tutar: kişi başına görünen ad, açıklama ve not ayrı dosyada yaşar (kayıt dosyası ve kimlik değişmez); GET /api/kadro kişinin etiketini taşır, POST /api/kadro/etiket yalnız Sultan oturumuyla tek alanı yazar ya da boş değerle siler, jetonla gelen istek ve kayıtta olmayan kimlik reddedilir",
+  "istedi": "Sultan",
+  "aldi": "BANI",
+  "zaman": "2026-10-28T10:27:34+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M60MG9SS3J9YRWRVPZXK2ZDV",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-28T10:27:34+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

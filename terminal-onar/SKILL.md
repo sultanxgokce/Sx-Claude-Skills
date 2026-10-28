@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.32.2
+version: 2.33.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -678,3 +678,4 @@ ssh yok, kayıtlar yerel, tek komut.
   turunda üç kutuda (code 135 · tellal 7 · mmex 1) dosyada ad=değer olmayan satırlar vardı; `. dosya` onları KOMUT gibi
   koşturdu ve "command not found" ile değer parçaları stderr'e düştü. Bozuk satırlar sayılır (`ORTAM_BOZUK_SATIR`), içeriği
   basılmaz. Sınav `sifre-yukle.test.sh` (6 kapı, hermetik); mutasyon: eski source yolu geri gelince E3/E4 kırmızı.
+- **2.33.0 (2026-10-28, BÂNİ · görev …ZDV · Sultan 28 Eki 09:49 "bir kayda not ekleyebileyim, isim ve açıklama ayrı ayrı düzenlenebilir olsun"):** Kadro etiketi. `kapi/kadro-etiket.mjs` Sultan'ın kayda koyduğu görünen ad · açıklama · notu kapının durum dizininde AYRI dosyada (`kadro-etiket.json`, izin 600) tutar; kayıt dosyası ve kimlik (id) hiç değişmez. `GET /api/kadro` kişinin `etiket`ini ve `etiket: true` ilanını taşır (dosya okunamazsa kadro düşmez, `etiket_okunamadi`). `POST /api/kadro/etiket {id, alan, deger}` yalnız Sultan oturumuyla (jeton 403), kimlik kayıtta olmalı (404), boş değer alanı siler, okunamayan dosyanın üstüne yazmaz (500). Günlüğe değer yazılmaz. Sınav: `kadro-etiket.test.mjs` (11) · `kadro-etiket-uc.test.mjs` (15, gerçek kapı süreci).

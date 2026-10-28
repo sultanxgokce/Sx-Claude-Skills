@@ -1,0 +1,25 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-etiket-uc-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-mutant.sh m4-gunluge-deger sunucu.mjs kadro-etiket-uc.test.mjs ${alan} ${sonuc && sonuc[alan] ? [...sonuc[alan]].length + ' karakter' : 'silindi'} ${alan} ${sonuc && sonuc[alan] ? [...sonuc[alan]].length + ' karakter ' + sonuc[alan] : 'silindi'}
+# rc=1 sure=0.6s zaman=2026-10-28T10:32:42+03:00
+--- stdout ---
+MUTASYON m4-gunluge-deger
+── KE-A · kimlik: yalnız Sultan oturumu
+  ✓ KE1 çerezsiz 401
+  ✓ KE2 x-kapi başlığı yoksa 403
+  ✓ KE3 jetonla gelen istek 403 (ajan yazamaz)
+  ✓ KE4 hiçbiri dosya yazmadı
+── KE-B · yazım ve okuma
+  ✓ KE5 GET /api/kadro etiket ucunu ilan eder, etiketsiz kişide alan yok
+  ✓ KE6 üç alan ayrı ayrı yazılır (200)
+  ✓ KE7 GET /api/kadro kişinin etiketini taşır (ad · açıklama · not), kimlik ve rol aynı
+  ✓ KE8 kayıt dosyası BAYT BAYT aynı (etiket kayda yazılmaz)
+  ✓ KE9 öteki kişiye etiket sızmaz
+  ✗ KE10 günlükte kimlik · alan · uzunluk var, DEĞER yok "t \"BASIRET\" not 24 karakter sabah raporunu o yazıyor\n2026-10-28T07:32:42.128Z etiket \"BASIRET\" ad 5 karakter Gözcü\n2026-10-28T07:32:42.133Z etiket \"BASIRET\" aciklama 21 karakter Kutunun nabzını tutar\n"
+  ✓ KE11 boş değer alanı siler, öteki alanlar kalır
+── KE-C · ret yolları
+  ✓ KE12 kayıtta olmayan kimlik 404 (uydurma kimliğe etiket yazılmaz)
+  ✓ KE13 bilinmeyen alan 400 · sınır aşımı 400
+  ✓ KE14 bozuk gövde 400
+  ✓ KE15 bozuk etiket dosyasında kadro DÜŞMEZ (etiket_okunamadi işaretli) ve yazım 500, dosya ezilmez
+SONUÇ: 14 geçti · 1 kaldı
+--- stderr ---
