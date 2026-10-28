@@ -1,0 +1,23 @@
+{
+  "is": "gun-sonu-saat-damgasi",
+  "cumle": "gun-sonu.sh çıktısının sonuna ISO saat damgalı 'çalıştı' satırı ekle; kanit.sh canli akşam cron'unun ilk gerçek ateşlemesini bu satırdan okuyup gun-sonu-aksam-cron canlı borcunu ödeyebilsin",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T23:53:54+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canli, canlı, cron, cron'",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

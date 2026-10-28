@@ -1,0 +1,25 @@
+{
+  "is": "gun-sonu-saat-damgasi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T23:54:39+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gercek",
+      "asama": "tek",
+      "dosya": "olcum-sinav-gercek-tek.txt",
+      "sha256": "3728fef15523c0483b68b5957a6468b1a5662e138107932b1890393da173b60d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T23:54:39+03:00",
+      "sure_sn": 24.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a720a66df20c46f0b56a8d17c1d92b5c"
+    }
+  ],
+  "imza": "8c07a586ec08bb47d6bee283315003820c1686ce34c559b32c05db9b12128470"
+}

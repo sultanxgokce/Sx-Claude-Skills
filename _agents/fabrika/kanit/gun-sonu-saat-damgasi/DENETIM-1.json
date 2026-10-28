@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "gun-sonu-saat-damgasi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T23:55:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-saat-damgasi",
+  "dal": "gun-sonu-saat-damgasi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21192,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 7974
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4ef042433ed5ce5c1a2a947980518bcbc15e9a55",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gün sonu çıktısının sonuna istenen biçimde ISO saat damgalı “çalıştı” satırı eklenmiş; yerel sınav ve satırı kaldıran mutant da kapının çalıştığını gösteriyor. Kod üretime hazır, fakat akşam cron’unun ilk gerçek ateşlemesi bu kutuda kanıtlanmadığından canlı borç henüz ayrı yüzeyde ölçülmeli.",
+    "bulgular": [
+      {
+        "ne": "Canlı akşam cron’unun ilk gerçek ateşlemesi ve kanit.sh tarafından bu satırdan okunması gösterilmemiş.",
+        "kanit": "Manifestteki tek kayıt yalnız `bash yazilim-fabrikasi/scripts/gun-sonu.test.sh` koşumudur; iş kartı ise `canli_gerekir: true` diyor ve ölçüm çıktısında gerçek cron ateşlemesine ait günlük/okuma kaydı yok.",
+        "konum": "KANIT MANİFESTİ: sinav-gercek; İŞ KARTI: canli_gerekir",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı akşam cron ortamı + günlük erişimi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, gerçek kod sınavı rc=0/yeşil ve G13 ile mutant kapısı mevcut. Ancak kanıt yerel sentetik sınavdır: canlı cron ateşlemesine ait önce/sonra kare, günlük dizisi veya ölçüm çifti bulunmadığından canlı borcun ödendiğini kanıtlamaz."
+  }
+}
