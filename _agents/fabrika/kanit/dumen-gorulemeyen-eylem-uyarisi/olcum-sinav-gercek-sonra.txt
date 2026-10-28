@@ -1,5 +1,5 @@
 $ bash dumen-surucu/scripts/dumen.test.sh
-# rc=0 sure=159.8s zaman=2026-10-28T09:05:49+03:00
+# rc=0 sure=185.7s zaman=2026-10-28T09:12:13+03:00
 --- stdout ---
 ── mod ajan
   ✓ D1 mod ajan: metin alanı dolduruldu
@@ -12,9 +12,11 @@ $ bash dumen-surucu/scripts/dumen.test.sh
   ✓ D3e uyarı alan DEĞERİNİ taşımaz
 ── sayfa sahte olay üretir → yabancı
   ✓ D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)
+  ✓ D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)
   ✓ D5b eylem dışı değişiklik UYARI üretti
-  ✓ D5c eylem dışı uyarı terminale yazıldı
   ✓ D5d aynı olay ikinci kez uyarmaz
+── click sırasında sayfanın sentetik olayı "köprüde görünmez eylem" SAYILMAZ
+  ✓ D5e click sırasındaki sentetik olay görülemeyen-eylem UYARISI üretmedi
 ── mod sultan
   ✓ D6 mod sultan: eylem REDDEDİLDİ
   ✓ D7 mod sultan: alan DEĞİŞMEDİ
@@ -45,7 +47,7 @@ $ bash dumen-surucu/scripts/dumen.test.sh
   ✓ D27 geri verildi (mod ajan): kopukluk durumda görünür
   ✓ D28 mod ajan olunca bir sonraki eylemde yeniden bağlandı
   ✓ D29 mod ajan iken soket düşerse: açık hata "baglanti-koptu" (sessiz yutulmaz)
-SONUÇ: geçti=36 kaldı=0
+SONUÇ: geçti=37 kaldı=0
 ── mutantlar (her biri sınavı KIRMALI)
   ✓ fail-open (mod ajan değilse devam): yakalandı (7 kapı kırmızı)
   ✓ merkez cevapsız → devam: yakalandı (2 kapı kırmızı)
@@ -59,6 +61,8 @@ SONUÇ: geçti=36 kaldı=0
   ✓ mod ajan olunca yeniden bağlanmaz: yakalandı (2 kapı kırmızı)
   ✓ görülemeyen eylem uyarısı kapalı: yakalandı (2 kapı kırmızı)
   ✓ eylem dışı değişiklik uyarısı kapalı: yakalandı (3 kapı kırmızı)
+  ✓ eylem dışı uyarı yalnız kapıda (kendiliğinden yok): yakalandı (1 kapı kırmızı)
+  ✓ görülemeyen uyarı eylem türünden bağımsız: yakalandı (1 kapı kırmızı)
   ✓ metin alanı da görülemeyen sayılır: yakalandı (3 kapı kırmızı)
-MUTANT: 13/13 yakalandı
+MUTANT: 15/15 yakalandı
 --- stderr ---

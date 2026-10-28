@@ -35,7 +35,7 @@ const ODEME_YOL = /(checkout|odeme|ödeme|payment|3d-?secure)/i;
 
 export class Dumen {
   // Ham nesneler ÖZELDİR (#): çağıran d.page / d.cdp / d.tarayici ile kapıyı atlayamaz. Zorlama yine de köprüdedir (SKILL.md).
-  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #uyarilar = []; #uyariVerilen = new Set(); #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0;
+  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #uyarilar = []; #uyariVerilen = new Set(); #aktif = 0; #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0;
   constructor({ cdpUrl, merkez, zamanAsimiMs = 3000, yaz = (s) => console.log(s) }) {
     this.#cdpUrl = cdpUrl; this.#merkez = merkez.replace(/\/$/, ''); this.#zamanAsimiMs = zamanAsimiMs; this.#yaz = yaz;
   }
@@ -72,7 +72,7 @@ export class Dumen {
     await this.#cdp.send('Runtime.enable');
     await this.#cdp.send('Page.enable');
     await this.#cdp.send('Runtime.addBinding', { name: '__dumenBekci', executionContextName: 'dumen-bekci' });
-    this.#cdp.on('Runtime.bindingCalled', (e) => { try { this.#olaylar.push({ ...JSON.parse(e.payload), t: Date.now() }); } catch { /* bozuk yük yok sayılır */ } });
+    this.#cdp.on('Runtime.bindingCalled', (e) => { try { this.#olaylar.push({ ...JSON.parse(e.payload), t: Date.now() }); setTimeout(() => this.#yabanciTara(), 450).unref?.(); } catch { /* bozuk yük yok sayılır */ } });
     await this.#cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: kaynak, worldName: 'dumen-bekci' });
     await this.#page.reload().catch(() => {});   // mevcut belgeye de uygulansın
   }
@@ -133,6 +133,7 @@ export class Dumen {
   async #uygula(ad, hedef, fn) {
     await this.kapi(ad, hedef);
     const p = { id: ++this.#sayac, ad, hedef, t0: Date.now() };
+    this.#aktif++;
     try { return await fn(); }
     catch (e) {
       if (this.#kopuk || KOPMA.test(String(e && e.message))) {
@@ -143,7 +144,7 @@ export class Dumen {
       }
       throw e;
     }
-    finally { await new Promise((r) => setTimeout(r, 120)); p.t1 = Date.now(); this.#pencereler.push(p); this.#gorulemeyenTara(p); }
+    finally { await new Promise((r) => setTimeout(r, 120)); p.t1 = Date.now(); this.#pencereler.push(p); this.#aktif--; this.#gorulemeyenTara(p); this.#yabanciTara(); }
   }
 
   goto(url, o) { return this.#uygula('goto', null, () => this.#page.goto(url, o)); }
@@ -158,10 +159,12 @@ export class Dumen {
   // Uyarıda alan DEĞERİ yok (parola gizleme dinleyicide; burada kimlik+tür+sayı).
   #uyari(kod, ayrinti, ileti) { this.#uyarilar.push({ kod, ...ayrinti, t: Date.now() }); this.#yaz(ileti); }
   #gorulemeyenTara(p) {
+    if (!/^(fill|selectOption)$/.test(p.ad)) return;   // yalnız değeri sayfa JS'iyle yazan eylemler; click/press/goto sırasında sayfanın sentetik olayı 'köprüde görünmez' DEĞİLDİR
     const gor = this.#olaylar.filter((o) => o.t >= p.t0 && o.t <= p.t1 + 50 && o.trusted === false);
     if (gor.length) this.#uyari('gorulemeyen-eylem', { ad: p.ad, hedef: p.hedef, n: gor.length }, `⚠ Dümen: ${p.ad} ${p.hedef || ''} köprüde GÖRÜNMEZ (sayfa JS'iyle yazıldı, CDP Input yok; ${gor.length} olay) — yalnız dinleyici kaydı`);
   }
   #yabanciTara() {
+    if (this.#aktif > 0) return;   // süren eylemin penceresi henüz kapanmadı: olay ona ait olabilir (eylem bitince yeniden taranır)
     for (const o of this.yabanci()) {
       const k = `${o.t}|${o.id}|${o.o}`;
       if (this.#uyariVerilen.has(k)) continue;

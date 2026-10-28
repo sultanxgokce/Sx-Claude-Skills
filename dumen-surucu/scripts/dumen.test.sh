@@ -29,8 +29,10 @@ mut "mod sultan iken yeniden bağlanır" $'    const mod = await this.modOku();\
 mut "mod ajan olunca yeniden bağlanmaz" "if (this.#kopuk) await this.#yenidenBagla();   // mod ajan" "if (false) await this.#yenidenBagla();   // mod ajan"
 mut "görülemeyen eylem uyarısı kapalı" "if (gor.length) this.#uyari('gorulemeyen-eylem'" "if (false) this.#uyari('gorulemeyen-eylem'"
 mut "eylem dışı değişiklik uyarısı kapalı" "this.#uyari('yabanci-olay'" "void ('yabanci-olay'"
+mut "eylem dışı uyarı yalnız kapıda (kendiliğinden yok)" "setTimeout(() => this.#yabanciTara(), 450).unref?.();" ""
+mut "görülemeyen uyarı eylem türünden bağımsız" "if (!/^(fill|selectOption)$/.test(p.ad)) return;" ""
 mut "metin alanı da görülemeyen sayılır" "o.trusted === false);
     if (gor.length)" "true);
     if (gor.length)"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 13/13 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 15/15 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

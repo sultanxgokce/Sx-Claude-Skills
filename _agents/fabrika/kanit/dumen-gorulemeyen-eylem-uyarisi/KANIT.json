@@ -1,7 +1,7 @@
 {
   "is": "dumen-gorulemeyen-eylem-uyarisi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T09:05:49+03:00",
+  "guncelleme": "2026-10-28T09:12:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -28,18 +28,18 @@
       "etiket": "sinav-gercek",
       "asama": "sonra",
       "dosya": "olcum-sinav-gercek-sonra.txt",
-      "sha256": "6fb217bf38348738b0542578e5f9d5966cb91be36b3f9549d7662b64ff2d75a7",
+      "sha256": "1265d9124371ecf0e17d4cd063e58ee507aff2b8449562205f2fd37baa7101d3",
       "komut": [
         "bash",
         "dumen-surucu/scripts/dumen.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-28T09:05:49+03:00",
-      "sure_sn": 159.8,
+      "zaman": "2026-10-28T09:12:13+03:00",
+      "sure_sn": 185.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "d431c215c5834b5c8f055651e8c56a35"
+      "olcum_id": "20eb230cf25e42a4be63b04023132bff"
     }
   ],
-  "imza": "647e717df648f6cc0cdb31e39bbeb765c461f31a613a2ceef5b31e2dd49ecc16"
+  "imza": "6e60c6888630598709c7db025639129f3437603c0e3ddbddd988c3e1a795ea23"
 }

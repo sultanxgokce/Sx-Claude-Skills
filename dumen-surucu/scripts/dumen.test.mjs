@@ -59,10 +59,17 @@ await ham.evaluate(() => { const e = document.getElementById('t'); e.value = 'sa
 await new Promise((r) => setTimeout(r, 200));
 ok('D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)', d.yabanci().length === 1 && d.yabanci()[0].id === 't', JSON.stringify(d.yabanci()));
 
+await new Promise((r) => setTimeout(r, 800));   // HİÇBİR eylem/uyarilar() çağrısı yok: uyarı olay anında kendiliğinden gelmeli
+ok('D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)', satirlar.some((x) => x.includes('DIŞINDA')), satirlar.join(' | '));
 const yU = d.uyarilar().filter((u) => u.kod === 'yabanci-olay');
 ok('D5b eylem dışı değişiklik UYARI üretti', yU.length === 1 && yU[0].hedef === 't', JSON.stringify(yU));
-ok('D5c eylem dışı uyarı terminale yazıldı', satirlar.some((x) => x.includes('DIŞINDA')), satirlar.join(' | '));
 ok('D5d aynı olay ikinci kez uyarmaz', d.uyarilar().filter((u) => u.kod === 'yabanci-olay').length === 1);
+
+console.log('── click sırasında sayfanın sentetik olayı "köprüde görünmez eylem" SAYILMAZ');
+await ham.evaluate(() => { const b = document.createElement('button'); b.id = 'sahteB'; b.textContent = 'x'; b.onclick = () => document.getElementById('t').dispatchEvent(new Event('input', { bubbles: true })); document.body.appendChild(b); });
+const once = d.uyarilar().filter((u) => u.kod === 'gorulemeyen-eylem').length;
+await d.click('#sahteB');
+ok('D5e click sırasındaki sentetik olay görülemeyen-eylem UYARISI üretmedi', d.uyarilar().filter((u) => u.kod === 'gorulemeyen-eylem').length === once, JSON.stringify(d.uyarilar()));
 
 console.log('── mod sultan');
 mod = 'sultan'; satirlar.length = 0;
