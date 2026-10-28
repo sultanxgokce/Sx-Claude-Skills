@@ -451,7 +451,9 @@ import re as _re
 _AY=r"(?:Oca|Şub|Mar|Nis|May|Haz|Tem|Ağu|Eyl|Eki|Kas|Ara)"
 def _bicim_eksikleri(c):
     e=[]
-    if not _re.search(r"\d+(?:[.,]\d+)?\s*%?\s*→\s*%?\s*\d+(?:[.,]\d+)?",c): e.append("şimdi → hedef iki SAYI olarak yok")
+    m=_re.search(r"\d+(?:[.,]\d+)?\s*%?\s*→\s*%?\s*\d+(?:[.,]\d+)?",c)
+    if not m: e.append("şimdi → hedef iki SAYI olarak yok")
+    elif not _re.search(r"[^\W\d_]{3,}",c[max(0,m.start()-60):m.start()]): e.append("ne sayıldığı yok (sayıdan önce ölçütün adı)")
     k=_re.search(r"\(\s*kaynak\s*:\s*([^)]*)\)",c,_re.I)
     if not k or not _re.search(r"\S",k.group(1).split(",")[0] if k else ""): e.append("(kaynak: <komut/ekran>, <gün>) parantezi yok")
     elif not _re.search(r"\d{1,2}\s+"+_AY+r"|20\d\d-\d\d-\d\d",k.group(1)): e.append("kaynağın günü yok")
