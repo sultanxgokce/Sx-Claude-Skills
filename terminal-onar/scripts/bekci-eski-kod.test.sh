@@ -18,7 +18,7 @@ chmod +x "$T/bin/"*
 M="$T/calisma"; mkdir -p "$M/kapi"; cp -r "$KOK/scripts" "$M/"; printf '// sahte kapı\n' > "$M/kapi/sunucu.mjs"
 printf '\nexport PATH="$TO_SAHTE_BIN:$PATH"\n' >> "$M/scripts/ortak.sh"
 # kuklalar: kapi-yenile çağrı sayar (KAPI_YENILE_RC ile düşürülebilir), durum.sh ok der (bekçi orada biter), dava-gunluk sessiz
-printf '#!/usr/bin/env bash\necho "yenile $(date +%%s)" >> "%s/yenile.log"; exit "${KAPI_YENILE_RC:-0}"\n' "$D" > "$M/scripts/kapi-yenile.sh"
+printf '#!/usr/bin/env bash\necho "yenile $(date +%%s)" >> "%s/yenile.log"; echo "yenile-cikti"; exit "${KAPI_YENILE_RC:-0}"\n' "$D" > "$M/scripts/kapi-yenile.sh"
 printf '#!/usr/bin/env bash\nexit 0\n' > "$M/scripts/durum.sh"; printf '#!/usr/bin/env bash\nexit 0\n' > "$M/scripts/dava-gunluk.sh"
 kos() { env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_CRONTAB="$T/bin/crontab" \
       TO_BECERI_KOK="$M" CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" KAPI_YENILE_RC="${KAPI_YENILE_RC:-0}" bash "$M/scripts/bekci.sh" >/dev/null 2>&1; echo $?; }
@@ -30,7 +30,7 @@ guncel_kur() { sifirla; echo 1234 > "$T/canli"; echo 60 > "$T/etimes"; touch -d 
 echo "── E eski kod → bir kez yenile"
 eski_kur; rc=$(kos)
 kapi "E1 kapı eski kodla → kapi-yenile 1 kez, rc 0" "1 0" "$(say) $rc"
-kapi "E1b günlük: 'eski kodla çalışıyor → yeniliyor' + 'yenilendi'" "1 1" "$(grep -c 'eski kodla çalışıyor' "$D/gunluk.log") $(grep -c 'kapı yenilendi' "$D/gunluk.log")"
+kapi "E1b günlüğe kapı için TEK bekçi satırı (öteki bekçi adımlarının satırları ayrı) ('eski kodla çalışıyordu → yenilendi'); kapi-yenile çıktısı ana günlükte DEĞİL, ayrı dosyada" "1 1 0 1" "$(grep -c 'bekçi: kapı' "$D/gunluk.log") $(grep -c 'eski kodla çalışıyordu → yenilendi' "$D/gunluk.log") $(grep -c '^yenile' "$D/gunluk.log") $(grep -c '^yenile' "$D/kapi-yenile.son.log")"
 kapi "E1c damga dosyası (kapi-kod.son) yazıldı, sayı" "e" "$([[ "$(cat "$D/kapi-kod.son" 2>/dev/null)" =~ ^[0-9]+(\.[0-9]+)?$ ]] && echo e || echo h)"
 echo 7300 > "$T/etimes"; rc=$(kos)
 kapi "E2 aynı kod, süreç hâlâ eski görünse de (yenileme kuklaydı) İKİNCİ yenileme YOK (damga)" "1" "$(say)"
@@ -45,7 +45,7 @@ eski_kur; printf 'sınav\n' > "$D/duraklat"; rc=$(kos)
 kapi "E6 duraklat varken eski kod bile olsa yenileme 0" "0" "$(say)"
 echo "── E yenileme düşerse"
 eski_kur; rc=$(KAPI_YENILE_RC=1 kos)
-kapi "E7 kapi-yenile düşerse damga YAZILMAZ, günlükte DÜŞTÜ; sonraki turda yeniden denenir (toplam 2)" "h 1 2" "$([ -f "$D/kapi-kod.son" ] && echo e || echo h) $(grep -c 'yenileme DÜŞTÜ' "$D/gunluk.log") $(KAPI_YENILE_RC=1 kos >/dev/null; say)"
+kapi "E7 kapi-yenile düşerse damga YAZILMAZ, günlükte TEK satır (DÜŞTÜ); sonraki turda yeniden denenir (toplam 2)" "h 1 2" "$([ -f "$D/kapi-kod.son" ] && echo e || echo h) $(grep -c 'bekçi: kapı' "$D/gunluk.log") $(KAPI_YENILE_RC=1 kos >/dev/null; say)"
 echo "── mutasyon"
 MU="$T/mut"; mkdir -p "$MU"; cp -r "$M/scripts" "$MU/"; cp -r "$M/kapi" "$MU/"
 python3 - "$MU/scripts/bekci.sh" <<'PY'

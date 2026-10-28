@@ -1,9 +1,9 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bekci-eski/sonra.sh
-# rc=0 sure=1.7s zaman=2026-10-28T18:40:24+03:00
+# rc=0 sure=1.6s zaman=2026-10-28T18:43:26+03:00
 --- stdout ---
 ── E eski kod → bir kez yenile
   ✓ E1 kapı eski kodla → kapi-yenile 1 kez, rc 0
-  ✓ E1b günlük: 'eski kodla çalışıyor → yeniliyor' + 'yenilendi'
+  ✓ E1b günlüğe kapı için TEK bekçi satırı (öteki bekçi adımlarının satırları ayrı) ('eski kodla çalışıyordu → yenilendi'); kapi-yenile çıktısı ana günlükte DEĞİL, ayrı dosyada
   ✓ E1c damga dosyası (kapi-kod.son) yazıldı, sayı
   ✓ E2 aynı kod, süreç hâlâ eski görünse de (yenileme kuklaydı) İKİNCİ yenileme YOK (damga)
   ✓ E3 kod yeniden değişti → yine bir kez yenile (toplam 2)
@@ -12,7 +12,7 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1d
   ✓ E5 süreç yok (ölçülemedi, rc 2) → DOKUNMAZ: yenileme 0, damga yok
   ✓ E6 duraklat varken eski kod bile olsa yenileme 0
 ── E yenileme düşerse
-  ✓ E7 kapi-yenile düşerse damga YAZILMAZ, günlükte DÜŞTÜ; sonraki turda yeniden denenir (toplam 2)
+  ✓ E7 kapi-yenile düşerse damga YAZILMAZ, günlükte TEK satır (DÜŞTÜ); sonraki turda yeniden denenir (toplam 2)
 ── mutasyon
   ✓ X1 MUTASYON: eski-kod bloğu kaldırılınca yenileme 0 (sınav bunu E1'de ısırır)
 

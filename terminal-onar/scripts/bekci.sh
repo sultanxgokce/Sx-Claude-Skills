@@ -15,9 +15,9 @@ _ke="$(bash "$BETIK_DIZ/kapi-eski-mi.sh" 2>/dev/null)"; _kerc=$?
 if [ "$_kerc" = 1 ]; then
   _kod_damga="$(find "$KAPI_DIZ" -name '*.mjs' -not -path '*/node_modules/*' -not -name '*.test.mjs' -printf '%T@\n' 2>/dev/null | sort -rn | head -1)"
   if [ -n "$_kod_damga" ] && [ "$_kod_damga" != "$(cat "$DURUM_DIZ/kapi-kod.son" 2>/dev/null)" ]; then
-    gunluk "bekçi: kapı eski kodla çalışıyor → yeniliyor ($(printf '%s' "$_ke" | head -1))"
-    if bash "$BETIK_DIZ/kapi-yenile.sh" >> "$GUNLUK" 2>&1; then printf '%s' "$_kod_damga" > "$DURUM_DIZ/kapi-kod.son"; gunluk "bekçi: kapı yenilendi (kod damgası $_kod_damga)"
-    else gunluk "bekçi: kapı yenileme DÜŞTÜ (rc $?) — damga yazılmadı, bir sonraki dakikada yeniden denenir"; fi
+    # günlüğe TEK satır (kart şartı); kapi-yenile'nin kendi çıktısı ayrı dosyada (durum/kapi-yenile.son.log), ana günlüğü kirletmez
+    if bash "$BETIK_DIZ/kapi-yenile.sh" > "$DURUM_DIZ/kapi-yenile.son.log" 2>&1; then printf '%s' "$_kod_damga" > "$DURUM_DIZ/kapi-kod.son"; gunluk "bekçi: kapı eski kodla çalışıyordu → yenilendi (kod damgası $_kod_damga · $(printf '%s' "$_ke" | head -1))"
+    else gunluk "bekçi: kapı eski kodla çalışıyor, yenileme DÜŞTÜ (rc $? · ayrıntı kapi-yenile.son.log) — damga yazılmadı, bir sonraki dakikada yeniden denenir"; fi
   fi
 fi
 # tmux bekçisi (2.19.1): her tur karşılaştırılır, eksik/eski ise kurulur. Onar yalnız arızada koştuğu için 2.19.0 sağlıklı
