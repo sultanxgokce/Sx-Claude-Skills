@@ -1,7 +1,7 @@
 {
   "is": "sultan-alarmi-ders",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T13:10:38+03:00",
+  "guncelleme": "2026-10-28T13:12:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -55,7 +55,24 @@
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "736fb351c8a44f92aa405b47b4acdbbd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulu-ders-eslesme",
+      "asama": "sonra",
+      "dosya": "olcum-kurulu-ders-eslesme-sonra.txt",
+      "sha256": "ecf67da3e4f8e285161ca83206e81ce1b38d857540c8aa9d89d73709a100d182",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/esles.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:12:09+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "792d67f550ee4e9989faaa19f1c3722e"
     }
   ],
-  "imza": "e25ae97741d95d4f240765e7fcc07eade38a5d60644302dd9962e1577d8ff887"
+  "imza": "b3677b636ea7118a107defded1c9000d2b965f47a8277c21db3642ffa7c7be2b"
 }
