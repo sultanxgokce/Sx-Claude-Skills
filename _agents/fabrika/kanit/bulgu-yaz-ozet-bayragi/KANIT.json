@@ -1,0 +1,67 @@
+{
+  "is": "bulgu-yaz-ozet-bayragi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T06:39:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-sonra-sonra.txt",
+      "sha256": "4dde9f900f55cb7de6140c51ecd014732b883755b3118efb7d34b355f49265ed",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T06:39:10+03:00",
+      "sure_sn": 12.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7a0783f5201645e48e19cc39fa6520fd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-M1",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-M1-sonra.txt",
+      "sha256": "80599b574ccd19380cc382ea36a2880ea4b62b5564e09ca6f956bfb68f2f33ce",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-bo.sh",
+        "M1"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T06:39:12+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bulgu-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "d6a7375594c24181a890a19db7312360"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-M2",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-M2-sonra.txt",
+      "sha256": "22001ca2490ab9a681bef624963cf72107ac8094916c5626a136ce505895fb6f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-bo.sh",
+        "M2"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T06:39:15+03:00",
+      "sure_sn": 2.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bulgu-sonra",
+      "beklenen": "kirmizi",
+      "olcum_id": "28a9027a836b42d3b4e2705350401497"
+    }
+  ],
+  "imza": "5b3b679fafca850500f12d92af0129ee6eef1ea7965a6ed171a41eba32fb08d5"
+}
