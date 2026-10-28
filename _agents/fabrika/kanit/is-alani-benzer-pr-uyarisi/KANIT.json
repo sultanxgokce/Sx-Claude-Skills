@@ -1,0 +1,42 @@
+{
+  "is": "is-alani-benzer-pr-uyarisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T00:22:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "benzer-pr-uyarisi",
+      "asama": "once",
+      "dosya": "olcum-benzer-pr-uyarisi-once.txt",
+      "sha256": "ec83b0eb74213590968f18deacd9368b80926bc6f80f66646343acab16c8b919",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/isa-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T00:22:47+03:00",
+      "sure_sn": 328.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f5f26ba64d1a465abac8cb6831f7012e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "benzer-pr-uyarisi",
+      "asama": "sonra",
+      "dosya": "olcum-benzer-pr-uyarisi-sonra.txt",
+      "sha256": "e9767bb2c31b52324ddad9a1f65e407e25c06902749704ce76dd92a2f08415e6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/isa-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T00:16:46+03:00",
+      "sure_sn": 4.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7a4d6138d24b498194ef0cf12b810517"
+    }
+  ],
+  "imza": "c3a81e0abd9786251750b1f63f065ec18a9a0d88f0154d888c7bae5fbbd03960"
+}

@@ -74,6 +74,39 @@ kapsam_kontrol() {
   return 0
 }
 
+# benzer_pr_uyar <iş> <kart> → her zaman 0 (YALNIZ UYARI). Dosya listesi verilmediğinde açık PR'lara iş adı + kart cümlesiyle bakar.
+#   NİÇİN (görev …Z2G): aynı iş iki kez inşa edildi (agent-dashboard #2 ve #3, 20 gün sonra hakem). Kapsam kontrolü yalnız
+#   --dosyalar ile çalışıyor ve kimse vermiyor. Sezgisel: ≥2 ortak anlamlı kök (ilk 5 harf, ≥5 harfli sözcük) → "DUR ve sor".
+#   Sezgi eksik de olabilir (ad farklı yazılmışsa kaçırır) → kesin çare --dosyalar; engellemez çünkü yanlış alarm işi durdurmasın.
+benzer_pr_uyar() {
+  local is="$1" kart="$2" json
+  command -v gh >/dev/null 2>&1 || { _bilgi "◻ benzer iş kontrolü YAPILAMADI — gh yok"; return 0; }
+  json="$(cd "$DEPO" && gh pr list --state open --limit 50 --json number,title,headRefName 2>/dev/null)" \
+    || { _bilgi "◻ benzer iş kontrolü YAPILAMADI — gh pr list düştü (yetki/ağ)"; return 0; }
+  python3 - "$is" "$kart" "$json" <<'PY' || true
+import json,re,sys
+is_,kart,raw=sys.argv[1:4]
+try: prs=json.loads(raw or "[]")
+except Exception: sys.exit(0)
+cumle=""
+try: cumle=json.load(open(kart,encoding="utf-8")).get("cumle","") or ""
+except Exception: pass
+DUR={"icin","için","olsun","gelsin","bitti","yapilsin","yapılsın","ile","gibi","kadar","sonra","once","önce","zaman","tekrar","olarak","dosya","dosyası","kural","kartı","iş"}
+def kok(m):
+    return {t[:5] for t in re.findall(r"[a-zçğıöşüA-ZÇĞİÖŞÜ0-9]+",m.lower().replace("i̇","i")) if len(t)>=5 and t not in DUR}
+benim=kok(is_.replace("-"," ")+" "+cumle)
+bulunan=[]
+for pr in prs:
+    if pr.get("headRefName")==is_: continue
+    ortak=benim & kok((pr.get("headRefName","")+" "+pr.get("title","")).replace("-"," "))
+    if len(ortak)>=2: bulunan.append((pr["number"],pr.get("headRefName",""),sorted(ortak)))
+for n,d,o in bulunan:
+    print(f"  ⚠ BENZER İŞ: açık PR #{n} ({d}) ortak kökler: {' '.join(o)} — aynı işi iki kez yazma: DUR, PR'a bak, gerekirse sor")
+if not bulunan: print(f"  ✓ benzer iş: {len(prs)} açık PR bakıldı, iş adı/cümle ile benzeyen yok (sezgisel; kesin çare --dosyalar)")
+PY
+  return 0
+}
+
 ac() {
   local is="" dosyalar="" kartsiz=0
   while [ $# -gt 0 ]; do
@@ -110,6 +143,7 @@ PY
     [ "$krc" -eq 2 ] && exit 2
   else
     _bilgi "· kapsam: dosya listesi verilmedi (--dosyalar a,b,c) — açık PR çakışmasına bakılmadı"
+    benzer_pr_uyar "$is" "$kart"
   fi
   local yol="$KOK/$DEPO_AD-$is"
   mkdir -p "$KOK"

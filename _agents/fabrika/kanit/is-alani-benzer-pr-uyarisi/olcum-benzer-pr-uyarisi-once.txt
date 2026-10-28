@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/isa-once.sh
+# rc=0 sure=328.5s zaman=2026-10-29T00:22:47+03:00
+--- stdout ---
+  ✗ benzer PR #2 adıyla uyarıldı
+  ✗ uyarı ne yapılacağını söylüyor
+  ✗ benzemeyen işte uyarı YOK, kaç PR'a bakıldığı yazılı
+  ✗ gh düşünce 'YAPILAMADI' denir (sessiz atlama yok)
+── SONUÇ: 49 geçti · 6 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-is-alani-benzer-pr-uyarisi-benzer-pr-uyarisi 326 sn bekledi (yuva 2, load1 14.52)
