@@ -216,4 +216,5 @@ if [ "$GELEN" -eq 1 ]; then
     else echo "→ gelen klasörüne YAZILAMADI: ${GELEN_HATA##*: }${GELEN_HATA:+ }($GELEN_DOSYA)"; fi
   fi
 fi
+echo "→ gün sonu çalıştı · $(date -Is) · gün $GUN"   # saat damgası: kanit.sh canli akşam cron'unun gerçek ateşlemesini bu satırdan okur
 exit "${RC_KAP:-0}"

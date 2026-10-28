@@ -252,6 +252,14 @@ if cmp -s "$G" "$MG12"; then g 1 "G12 MUTASYON üretilemedi (çapa tutmadı)"; e
   [ "$RM11" -ne 0 ] || ! grep -q "GÜN SONU · $GUN" <<<"$OM11"; g $? "G12 MUTASYON: eski ifade null bitişte çöker (sınav yakalar)"
 fi
 rm -f "$T/_agents/fabrika/kartlar/borclu.json"
+# G13: çıktının sonunda ISO saat damgalı "çalıştı" satırı var (kanit.sh canli akşam cron'unun ilk gerçek ateşlemesini buradan okur)
+OG13="$( cd "$T" && bash "$G" --gun "$GUN" 2>&1 )"
+grep -qE "^→ gün sonu çalıştı · [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2} · gün $GUN$" <<<"$OG13"; g $? "G13 çıktı ISO saat damgalı çalıştı satırı taşır"
+MG13="$T/mut-g13.sh"; grep -v "gün sonu çalıştı" "$G" > "$MG13"
+if cmp -s "$G" "$MG13"; then g 1 "G13 MUTASYON üretilemedi"; else
+  OM13="$( cd "$T" && bash "$MG13" --gun "$GUN" 2>&1 )"
+  ! grep -q "gün sonu çalıştı" <<<"$OM13"; g $? "G13 MUTASYON: damga satırı yoksa kanıt okunamaz (sınav yakalar)"
+fi
 kill "$DPID" 2>/dev/null; wait "$DPID" 2>/dev/null
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
