@@ -9,6 +9,8 @@
 #      dönene dek ≤5 sn bekler → "tazelendi, bağlantı kopmadı".
 #   3) Aksi hâlde (kapı yok · eski sürüm: SIGHUP onu öldürürdü · sha dönmedi) `onar.sh --web-yenile`'ye düşer ve bunu SÖYLER
 #      (bir kez kopar; sonraki yenilemeler sıcak olur). --kuru: hiçbir şey yapmaz, hangi yola gideceğini basar.
+#   0) 2.34.0: önce kapı KODU ölçülür (kapi-eski-mi.sh); kapı diskteki koddan eski çalışıyorsa doğrudan `onar.sh --web-yenile`'ye
+#      düşer — SIGHUP yalnız pano.js'i tazeler, yeni uçları (ör. /api/etiket) getirmez. Ölçülemezse (rc 2) aşağıdaki akış aynen sürer.
 # RC: 0 tazelendi/zaten güncel · 1 web-yenile'ye düşüldü ve o da düştü · 2 pano.js yok
 set -u
 . "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
@@ -24,6 +26,14 @@ dus() {  # $1 = sebep → onar.sh --web-yenile (kapı yeniden başlar, bağlant�
   [ $KURU = 1 ] && exit 0
   exec bash "$BETIK_DIZ/onar.sh" --web-yenile
 }
+# 2.34.0 (WHRJ · 28 Eki): pano.js'ten ÖNCE kapının KODU ölçülür. Kapı diskteki .mjs'lerden eski çalışıyorsa SIGHUP yetmez (yeni uçlar —
+#   /api/etiket, /tty-k/ — bellekte yoktur): tam yeniden başlatmaya düşülür ve söylenir. Ölçülemezse (süreç yok/yaş okunamadı) eski akış sürer.
+#   Ölçüldü: 28 Eki 11:33'te 2.33.0 diske indi; 13 kutuda kapı 23–24 Eki'den beri açıktı → Kadro etiket düğmesi yalnız code'da çıktı.
+eski_cikti=$(bash "$BETIK_DIZ/kapi-eski-mi.sh" 2>&1); eski_rc=$?   # betik -e açmaz (set -u); rc yalnız okunur
+if [ "$eski_rc" = 1 ]; then
+  dosya=$(printf '%s' "$eski_cikti" | sed -n 's/^⚠ kapı ESKİ kodla çalışıyor: \([^ ]*\) .*/\1/p' | head -1)
+  dus "kapı diskteki koddan ESKİ çalışıyor (${dosya:-kod} süreçten yeni; pano SIGHUP'ı yeni uçları getirmez)"
+fi
 sunulan=$(baslik)
 if [ "$sunulan" = "$disk" ]; then echo "kapı zaten güncel pano.js'i sunuyor (sha $disk)"; exit 0; fi
 # Pano köprüsü KAPI_PANO=0 ile kapalıysa kapı 'kapali' der: tazelenecek şey yok (bağımsız göz tur 1 — eskiden disk sha'sını kovalar, boşuna --web-yenile'ye düşerdi)

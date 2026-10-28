@@ -1,0 +1,42 @@
+$ timeout 180 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ky-ana-OvzA/terminal-onar/scripts/kapi-yenile.test.sh
+# rc=1 sure=8.1s zaman=2026-10-28T16:18:28+03:00
+--- stdout ---
+── sahteler devrede mi (ortak.sh PATH tuzağı)
+  ✓ H1 sahte curl/pgrep ortak.sh'tan sonra da öndedir
+── A · zaten güncel
+  ✓ A1 sunulan sha = disk sha → 'zaten güncel', rc 0
+  ✓ A1b SIGHUP gönderilmez, onar çağrılmaz
+  ✓ A2 pano köprüsü kapalı (KAPI_PANO=0 → başlık 'kapali') → 'tazelenecek şey yok', rc 0, SIGHUP/onar yok
+── B · sıcak tazeleme (yeni kapı: kapi.pid = canlı pid)
+  ✓ B1 rc 0 ve 'tazelendi … bağlantı kopmadı' der
+  ✓ B2 SIGHUP tam bir kez, doğru pid'e
+  ✓ B3 onar.sh --web-yenile ÇAĞRILMAZ
+  ✓ B4 günlük satırı sha ve pid taşır
+── C · düşüşler (bağlantı bir kez kopar, SÖYLENİR)
+  ✓ C1 kapı süreci yok → onar --web-yenile'ye düşer ve söyler
+  ✓ C2 🔴 kapi.pid yok (eski kapı) → SIGHUP GÖNDERİLMEZ (onu öldürürdü), web-yenile'ye düşer
+  ✓ C3 kapi.pid ≠ canlı pid (bayat) → SIGHUP yok, web-yenile
+  ✓ C4 SIGHUP sonrası sha dönmezse (5 sn) web-yenile'ye düşer, sebebi söyler
+  ✓ C5 SIGHUP kapıyı öldürdüyse beklemeden web-yenile'ye düşer ('öldü' der)
+── D · --kuru hiçbir şey yapmaz
+  ✓ D1 kuru: yolu söyler, SIGHUP/onar yok
+  ✓ D2 kuru + kapı yok: düşüşü söyler, onar ÇAĞRILMAZ
+── K · çağıran
+  ✓ K1 komut.sh kapi-yenile bu betiğe gider
+  ✓ K2 kapi-sinav.test.sh kapı tarafı sınavını (kapi-yenile.test.mjs) koşturur
+── MUTASYON (beklenen kırmızı): pid eşleşme kapısı sökülürse eski kapıya SIGHUP gider mi
+  ✓ X1 MUTANT eski kapıya SIGHUP gönderir ve onu öldürür (C2 bunu yakalar)
+── E · kapı diskteki koddan ESKİ çalışıyor (2.34.0 · WHRJ): SIGHUP yetmez, tam yeniden başlatma
+  ✗ E1 pano sha aynı olsa da kod süreçten yeni → 'ESKİ' der, SIGHUP YOK, onar --web-yenile bir kez — beklenen=e gerçek=h:kapı zaten güncel pano.js'i sunuyor (sha abcdef123456)
+  ✗ E1b günlüğe düşüş sebebi yazılır — beklenen=1 gerçek=0
+  ✗ E2 kuru kipte yolu söyler (web-yenile), onar ÇAĞRILMAZ, rc 0 — beklenen=e gerçek=h:kapı zaten güncel pano.js'i sunuyor (sha abcdef123456)
+  ✓ E3 kod süreçten eskiyse (güncel kapı) eski akış: 'zaten güncel', onar yok
+  ✓ E4 kod yaşı ÖLÇÜLEMEZSE (ps yaş vermez) sıcak tazeleme akışı aynen sürer (SIGHUP, bağlantı kopmadı)
+── MUTASYON (beklenen kırmızı): kod-yaşı kapısı sökülürse eski kodlu kapıya yalnız 'zaten güncel' denir mi
+  ✓ X2 MUTANT kod-yaşı kapısı yokken eski kodlu kapı 'zaten güncel' sayılır, onar çağrılmaz (E1 bunu yakalar)
+
+kapi-yenile.test: 21 geçti · 3 kaldı
+--- stderr ---
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+AssertionError

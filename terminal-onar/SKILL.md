@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.33.0
+version: 2.34.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -222,6 +222,12 @@ kanon `crontab-abc`'nin açıklama yorumu bekçi satırına çevrildi, asıl sat
 ve olduğu gibi korunur; işaret yalnız yorum olmayan satırın **sonunda** sayılır (`BEKCI_DESEN` · `ACILIS_DESEN` — düzeltici,
 `bekci_kurulu` ve üç varlık denetimi aynı iki desenden okur). Sınav: `scripts/bekci-yorum.test.sh` (16 kapı + 2 mutant;
 kanonun gerçek yorum satırlarıyla). Eski davranışlar korunur: çift kopya tekilleşir, eski yollu satır kanoniğe çevrilir.
+
+## 🆕 2.34.0 · kapı yenileme eski kodu görür: pano SIGHUP'ı yetmez, tam yeniden başlatır (28 Eki · WHRJ · Sultan canlı denemede yakaladı)
+**Ölçülen hata:** Sultan Kadro'da "Adı, açıklamayı ve notu düzenle" düğmesini code'da gördü, vekatip'te görmedi. 2.33.0 kodu 28 Eki 11:33'te 18 kutunun ortak diskine indi; kapı SÜRECİ yalnız code'da o saatten sonra açıldı — 13 kutuda kapı 23–24 Eki'den beri açıktı (ölçüm: `ps etimes` ⟷ `sunucu.mjs` mtime, hostsrv). Eski kapı `/api/etiket`'i bilmediği için merkez `etiket:true` demedi, düğme çıkmadı. `kapilari-yenile.sh` (Sultan eli) `kapi-yenile.sh`'ı çağırıyordu, o da yalnız pano.js sha'sına bakıp "zaten güncel" diyordu — kodun eskiliği hiçbir yolda ölçülmüyordu.
+- **`scripts/kapi-yenile.sh`:** pano sha'sından ÖNCE `kapi-eski-mi.sh` koşar. rc 1 (kapı diskteki `.mjs`'lerden eski) → SIGHUP değil, `onar.sh --web-yenile`'ye düşer ve sebebi söyler (web terminali bir kez kopar). rc 2 (ölçülemedi) ya da 0 → eski akış aynen (sıcak tazeleme, bağlantı kopmaz). `--kuru` hangi yola gideceğini basar, hiçbir şey yapmaz.
+- Böylece `/config/sk/kapilari-yenile.sh --apply` eski kodlu kutuları gerçekten tazeler; güncel kutuda davranış değişmez.
+- Kanıt: `kapi-yenile.test.sh` E1–E4 (sahte `ps` ile süreç yaşı; kod şimdi/3 sa önce; ölçülemeyen yaş) + X2 mutantı (kod-yaşı kapısı sökülünce eski kapı "zaten güncel" sayılır → E1 yakalar).
 
 ## 🆕 2.33.0 · kişi terminali kurulumu kapının eski kodla çalıştığını ölçüp uyarır (28 Eki · HADH10 · SERDAR)
 **Ölçülen hata:** Ayşenur etime'ye tıklayınca `/medigate/tty-k/` 404 verdi — yol 27 Eki'de diske inmişti, medigate kapısı 23 Eki'den beri açıktı (eski kod). 2.17.0'daki "kurulunca kapı yeniden başlatılmalı" notu kapısız bir kuraldı; kurulum kapının yaşına hiç bakmıyordu.
@@ -685,4 +691,5 @@ ssh yok, kayıtlar yerel, tek komut.
   turunda üç kutuda (code 135 · tellal 7 · mmex 1) dosyada ad=değer olmayan satırlar vardı; `. dosya` onları KOMUT gibi
   koşturdu ve "command not found" ile değer parçaları stderr'e düştü. Bozuk satırlar sayılır (`ORTAM_BOZUK_SATIR`), içeriği
   basılmaz. Sınav `sifre-yukle.test.sh` (6 kapı, hermetik); mutasyon: eski source yolu geri gelince E3/E4 kırmızı.
+- **2.34.0 (2026-10-28, BÂNİ · görev …WHRJ · Sultan 28 Eki 16:09 canlı deneme):** `kapi-yenile.sh` önce `kapi-eski-mi.sh` ile kapının KODUNU ölçer; kapı diskteki koddan eski çalışıyorsa pano SIGHUP'ı yerine `onar.sh --web-yenile`'ye düşer (yeni uçlar ancak böyle gelir). Ölçülemezse eski akış. Sınav E1–E4 + X2 mutantı.
 - **2.33.0 (2026-10-28, BÂNİ · görev …ZDV · Sultan 28 Eki 09:49 "bir kayda not ekleyebileyim, isim ve açıklama ayrı ayrı düzenlenebilir olsun"):** Kadro etiketi. `kapi/kadro-etiket.mjs` Sultan'ın kayda koyduğu görünen ad · açıklama · notu kapının durum dizininde AYRI dosyada (`kadro-etiket.json`, izin 600) tutar; kayıt dosyası ve kimlik (id) hiç değişmez. `GET /api/kadro` kişinin `etiket`ini ve `etiket: true` ilanını taşır (dosya okunamazsa kadro düşmez, `etiket_okunamadi`). `POST /api/kadro/etiket {id, alan, deger}` yalnız Sultan oturumuyla (jeton 403), kimlik kayıtta olmalı (404), boş değer alanı siler, okunamayan dosyanın üstüne yazmaz (500). Günlüğe değer yazılmaz. Sınav: `kadro-etiket.test.mjs` (11) · `kadro-etiket-uc.test.mjs` (15, gerçek kapı süreci).

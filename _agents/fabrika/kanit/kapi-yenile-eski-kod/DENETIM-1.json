@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kapi-yenile-eski-kod",
+  "pr": "536",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T16:26:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-yenile-eski-kod",
+  "dal": "kapi-yenile-eski-kod",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29919,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen eski-kod kapısı eklenmiş; eski süreç tam web yenilemeye düşüyor, kuru kip yolu söylüyor ve güncel/ölçülemeyen kapının eski davranışı korunuyor. Ancak yaş denetimi çevresindeki hata yönetimi betiğin geri kalanında istemeden `errexit` açıyor; önce bu davranış sızıntısı giderilmeli.",
+    "bulgular": [
+      {
+        "ne": "Yaş denetimi için geçici olması gereken hata yönetimi, betiğin geri kalanında kalıcı olarak `set -e` açıyor. Betik başlangıçta yalnız `set -u` kullanırken `set +e; ...; set -e` dizisi sonrasında `sunulan=$(baslik)` ve devamındaki mevcut akış artık herhangi bir sıfır-dışı komutta erken çıkabilir; bu, güncel kapı davranışının aynen korunması şartını riske atar.",
+        "kanit": "Değişiklikte başlangıç ayarı `set -u`; eklenen satır ise `set +e; eski_cikti=$(bash \"$BETIK_DIZ/kapi-eski-mi.sh\" 2>&1); eski_rc=$?; set -e`. Hemen ardından mevcut `sunulan=$(baslik)` akışı geliyor. Sunulan sınavlarda `baslik` veya sonraki mevcut komutların sıfır-dışı dönüşü sınanmıyor.",
+        "konum": "terminal-onar/scripts/kapi-yenile.sh: eklenen yaş-denetimi bloğu ve hemen sonrasındaki `sunulan=$(baslik)`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Gerçek ölçüm çifti önce 21/24 geçişten sonra 24/24 geçişe dönüyor; E1–E4 talebin eski, güncel, kuru ve ölçülemeyen yollarını kapsıyor. Mutasyon kaydı beklenen rc=1 ile kod-yaşı kapısı söküldüğünde sınavın kırmızıya döndüğünü gösteriyor; içindeki üç başarısız satır gerçek kod bulgusu değil. Bununla birlikte sınav, eklenen `set -e`nin eski hata yollarına etkisini ölçmüyor."
+  }
+}

@@ -92,6 +92,31 @@ env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav
   CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" bash "$M/scripts/kapi-yenile.sh" >/dev/null 2>&1
 kapi "X1 MUTANT eski kapıya SIGHUP gönderir ve onu öldürür (C2 bunu yakalar)" "e" "$([ -f "$T/hup" ] && [ ! -f "$T/canli" ] && echo e || echo h)"
 
+echo "── E · kapı diskteki koddan ESKİ çalışıyor (2.34.0 · WHRJ): SIGHUP yetmez, tam yeniden başlatma"
+# sahte ps: '-o etimes= -p <pid>' → $T/etimes (süreç yaşı sn); kapi-eski-mi.sh gerçek find/date ile sunucu.mjs'in yaşını kıyaslar
+printf '#!/usr/bin/env bash\ncase "$*" in *etimes*) cat "%s/etimes" 2>/dev/null ;; *) /usr/bin/ps "$@" ;; esac\n' "$T" > "$T/bin/ps"; chmod +x "$T/bin/ps"
+eski_kur() { sifirla; echo 1234 > "$T/canli"; echo 1234 > "$D/kapi.pid"; cp "$T/disk-sha" "$T/sunulan"; echo 7200 > "$T/etimes"; touch "$T/calisma/kapi/sunucu.mjs"; }   # süreç 2 sa önce, kod ŞİMDİ
+eski_kur; c=$(kos); rc=$?
+kapi "E1 pano sha aynı olsa da kod süreçten yeni → 'ESKİ' der, SIGHUP YOK, onar --web-yenile bir kez" "e" "$(grep -q 'diskteki koddan ESKİ' <<<"$c" && [ ! -f "$T/hup" ] && [ "$(onar_sayisi)" = 1 ] && echo e || echo "h:$c")"
+kapi "E1b günlüğe düşüş sebebi yazılır" "1" "$(grep -c 'kapi-yenile: kapı diskteki koddan ESKİ' "$D/gunluk.log")"
+eski_kur; rm -f "$D/onar.log"; c=$(kos --kuru); rc=$?
+kapi "E2 kuru kipte yolu söyler (web-yenile), onar ÇAĞRILMAZ, rc 0" "e" "$([ $rc = 0 ] && grep -q 'ESKİ.*web-yenile' <<<"$c" && [ "$(onar_sayisi)" = 0 ] && echo e || echo "h:$c")"
+eski_kur; find "$T/calisma/kapi" -name '*.mjs' -exec touch -d '3 hours ago' {} +; c=$(kos); rc=$?
+kapi "E3 kod süreçten eskiyse (güncel kapı) eski akış: 'zaten güncel', onar yok" "e" "$([ $rc = 0 ] && grep -q 'zaten güncel' <<<"$c" && [ "$(onar_sayisi)" = 0 ] && echo e || echo "h:$c")"
+eski_kur; rm -f "$T/etimes"; find "$T/calisma/kapi" -name '*.mjs' -exec touch -d '3 hours ago' {} +; printf 'eskieski0000' > "$T/sunulan"; : > "$T/hup-olur"; c=$(kos); rc=$?
+kapi "E4 kod yaşı ÖLÇÜLEMEZSE (ps yaş vermez) sıcak tazeleme akışı aynen sürer (SIGHUP, bağlantı kopmadı)" "e" "$([ $rc = 0 ] && grep -q 'bağlantı kopmadı' <<<"$c" && echo e || echo "h:$c")"
+
+echo "── MUTASYON (beklenen kırmızı): kod-yaşı kapısı sökülürse eski kodlu kapıya yalnız 'zaten güncel' denir mi"
+M2="$T/mutant2"; mkdir -p "$M2"; cp -r "$T/calisma/scripts" "$T/calisma/kapi" "$M2/"
+python3 - "$M2/scripts/kapi-yenile.sh" <<'PY'
+import sys; p=sys.argv[1]; s=open(p,encoding='utf-8').read()
+a='if [ "$eski_rc" = 1 ]; then'; assert s.count(a)==1; s=s.replace(a,'if false; then'); open(p,'w',encoding='utf-8').write(s)
+PY
+eski_kur
+cm=$(env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T" TO_DURUM_DIZ="$D" TO_BECERI_KOK="$M2" \
+  CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" bash "$M2/scripts/kapi-yenile.sh" 2>&1)
+kapi "X2 MUTANT kod-yaşı kapısı yokken eski kodlu kapı 'zaten güncel' sayılır, onar çağrılmaz (E1 bunu yakalar)" "e" "$(grep -q 'zaten güncel' <<<"$cm" && [ "$(onar_sayisi)" = 0 ] && echo e || echo h)"
+
 echo
 echo "kapi-yenile.test: $gecen geçti · $kalan kaldı"
 [ "$kalan" = 0 ]
