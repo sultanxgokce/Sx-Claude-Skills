@@ -1,7 +1,7 @@
 {
   "is": "denetci-rc3-sebep-ve-cift-zil",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T17:14:42+03:00",
+  "guncelleme": "2026-10-28T17:31:52+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -70,7 +70,42 @@
       "gercek_olcum": "gercek",
       "beklenen": "kirmizi",
       "olcum_id": "3b604b0ccbe143abb3a3482156087d97"
+    },
+    {
+      "tur": "canli",
+      "etiket": "kilit-red-zilsiz",
+      "asama": "canli",
+      "dosya": "canli-kilit-red-zilsiz.txt",
+      "sha256": "b2d98ef3bb97d6bf03e3a0230d7570dd7f667efe09c2705a3eec269ae266233c",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil/_agents/fabrika/kanit/denetci-rc3-sebep-ve-cift-zil/canli-kilit-red.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil/_agents/fabrika/kanit/denetci-rc3-sebep-ve-cift-zil/canli-kilit-red.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "denetçi zili çalınmadı",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-28T17:31:52+0300 · denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak",
+        "saat": "2026-10-28T17:31:52+0300",
+        "saat_iso": "2026-10-28T17:31:52+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28T17:31:52+0300 · denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak",
+        "saat": "2026-10-28T17:31:52+0300",
+        "saat_iso": "2026-10-28T17:31:52+03:00"
+      },
+      "zaman": "2026-10-28T17:31:52+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "d817e837cc0249129fa8d619822884d4"
     }
   ],
-  "imza": "5e8c1dc591f7f658c6563c155fff25109cb0a19c98bc64af40f735ac45e27a1c"
+  "imza": "cbbabfe65f56585e559fcd40d437c981111ba1350799d66056862f16077ec8a1"
 }

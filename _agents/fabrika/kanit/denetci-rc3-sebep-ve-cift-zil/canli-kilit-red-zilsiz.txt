@@ -1,0 +1,9 @@
+$ tail -n 2000 -- /config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil/_agents/fabrika/kanit/denetci-rc3-sebep-ve-cift-zil/canli-kilit-red.log
+# kaynak=dosya:/config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil/_agents/fabrika/kanit/denetci-rc3-sebep-ve-cift-zil/canli-kilit-red.log tur=dosya desen=denetçi zili çalınmadı en_az=1 son=2000 atesleme=1 rc=0 sure=0.0s zaman=2026-10-28T17:31:52+03:00
+--- stdout ---
+2026-10-28T17:31:52+0300 canlı kilit reddi 2026-10-28T17:31:36+03:00 · kurulu denetci.sh 0.27.10 · GERÇEK aile-notify (FABRIKA_AILE_NOTIFY verilmedi)
+2026-10-28T17:31:52+0300 ✗ bu işte başka denetçi koşuyor: DENETIM-9.kosuyor (pid 1522997, 2026-10-28T17:31:36+03:00) — bitmesini bekle
+2026-10-28T17:31:52+0300 · denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak
+2026-10-28T17:31:52+0300 rc=3
+2026-10-28T17:31:52+0300 aile-sinyal.log satır: önce=12616 sonra=12616
+--- stderr ---

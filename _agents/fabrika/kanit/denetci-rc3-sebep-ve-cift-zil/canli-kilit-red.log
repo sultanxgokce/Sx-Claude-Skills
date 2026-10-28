@@ -1,0 +1,5 @@
+2026-10-28T17:31:52+0300 canlı kilit reddi 2026-10-28T17:31:36+03:00 · kurulu denetci.sh 0.27.10 · GERÇEK aile-notify (FABRIKA_AILE_NOTIFY verilmedi)
+2026-10-28T17:31:52+0300 ✗ bu işte başka denetçi koşuyor: DENETIM-9.kosuyor (pid 1522997, 2026-10-28T17:31:36+03:00) — bitmesini bekle
+2026-10-28T17:31:52+0300 · denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak
+2026-10-28T17:31:52+0300 rc=3
+2026-10-28T17:31:52+0300 aile-sinyal.log satır: önce=12616 sonra=12616
