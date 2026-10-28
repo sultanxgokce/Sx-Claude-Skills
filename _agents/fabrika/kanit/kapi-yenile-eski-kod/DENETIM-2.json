@@ -1,0 +1,36 @@
+{
+  "tur": 2,
+  "is": "kapi-yenile-eski-kod",
+  "pr": "536",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T16:28:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-yenile-eski-kod",
+  "dal": "kapi-yenile-eski-kod",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33249,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen kapı eklenmiş: eski kodla çalışan süreç SIGHUP almadan tam web yenilemeye düşüyor, kuru kip yolu söylüyor; güncel ve ölçülemeyen yollar eski davranışı koruyor. Önceki turdaki `set -e` sızıntısı kaldırılmış, gerçek önce/sonra ölçümü ile hedefli mutasyon da düzeltmeyi yakalıyor; üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Gerçek ölçüm önce 21 geçti/3 kaldı durumundan sonra 24 geçti/0 kaldı durumuna dönüyor; E1–E4 eski kod, günlük sebebi, kuru kip, güncel kapı ve ölçülemeyen yaş yollarını doğruluyor. Mutasyon kaydındaki üç ✗ beklenen sonuçtur: kod-yaşı kapısı bilerek kaldırılınca sınav rc=1 ile bozukluğu yakalıyor ve `gercek_olcum` doğru kayda işaret ediyor. Önceki B1 kapanmış: güncel farkta `set +e; ...; set -e` yok, dönüş kodu betiğin mevcut `set -u` düzeni bozulmadan okunuyor."
+  }
+}
