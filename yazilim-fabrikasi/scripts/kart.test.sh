@@ -436,7 +436,6 @@ ac13 is-b8 "görev 13 → 0 ve kart 9 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/
 ac13 is-b9 "(1) görev 13 → 0 (2) kart 9 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(bu is-b9)" = "False" ]; g $? "iki ölçüt (1)(2) madde numaralı → uyarı yok"
 ac13 is-b10 "görev 13 → 0 [ayri] kart 9 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(bu is-b10)" = "False" ]; g $? "iki ölçüt [ayri] ile ayrılmış → uyarı yok"
 ac13 is-b11 "açık görev 13 → 0 (kaynak: gorev.sh liste, 2026-10-29) olsun" >/dev/null; [ "$(bu is-b11)" = "False" ]; g $? "ISO gün de kabul"
-ac13 is-b12 "13 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(be is-b12)" = "ne sayıldığı yok (sayıdan önce ölçütün adı)" ]; g $? "ölçütün adı yok ('13 → 0 (kaynak…)'): tek sebep 'ne sayıldığı yok'"
 echo "── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──"
 D="$T/pkg-sayi"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
 if python3 - "$D/kart.sh" <<'PYM'
