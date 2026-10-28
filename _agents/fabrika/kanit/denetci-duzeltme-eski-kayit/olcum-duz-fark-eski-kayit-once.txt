@@ -1,0 +1,12 @@
+$ bash /tmp/claude-1000/once.sh
+# rc=0 sure=16.6s zaman=2026-10-28T21:04:03+03:00
+--- stdout ---
+════ D4x · eski kayıt (bas yok) ama kaydı bir commit ekledi → baş atadan türetilir, yalnız yeni fark gider (gorev …DCX24C) ════
+  ✓ D4xa tur 2 koştu
+  ✗ D4xb ekranda türetme söylendi ('incelenen baş 4b282668 olarak türetildi' /tmp/tmp.NOMxS0etRg/son.out içinde yok)
+  ✓ D4xc yalnız yeni fark gitti
+  ✗ D4xd 🔴 değişmeyen dosya (tam fark) GİTMEDİ ('degismeyen-dosya-icerigi' var, olmamalı)
+  ✗ D4xe kayıt: duzeltme_farki.onceki_bas=türetilen baş
+── SONUÇ (düzeltme-farkı): 39 geçti · 3 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-denetci-duzeltme-eski-kayit-duz-fark-eski-kayit 5 sn bekledi (yuva 2, load1 10.65)

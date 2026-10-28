@@ -580,6 +580,19 @@ if [ -n "$PR" ] && [ -z "$DIFF" ]; then BAS="$PR_SHA"
 elif [ -z "$DIFF" ]; then BAS="$(git -C "$DEPO" rev-parse -q --verify HEAD 2>/dev/null)"; fi
 if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
   _ob="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('bas') or '')" "$DZ/DENETIM-$ONCEKI.json" 2>/dev/null)"
+  #    Eski kayıt (bas alanı yok, 0.18.1) hâlâ süren işte tam farkı yeniden gönderip 100 KB tavanına takılıyordu (gorev …DCX24C,
+  #    Sx #437: istem 118.737 bayt). Baş, kaydı depoya ekleyen commit'in atasından türetilir; kayıt zamanından önceki son
+  #    commit'le karşılaştırılıp ESKİ olanı alınır — yanlışta fark gereğinden büyük olur, hiçbir değişiklik göze gitmeden kalmaz.
+  if [ -z "$_ob" ]; then
+    _rel="${DZ#"$DEPO"/}/DENETIM-$ONCEKI.json"
+    _kc="$(git -C "$DEPO" log --diff-filter=A --format=%H -1 -- "$_rel" 2>/dev/null)"
+    _a="$([ -n "$_kc" ] && git -C "$DEPO" rev-parse -q --verify "$_kc^" 2>/dev/null)"
+    _kz="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('zaman') or '')" "$DZ/DENETIM-$ONCEKI.json" 2>/dev/null)"
+    _b=""; [ -n "$_kz" ] && _b="$(git -C "$DEPO" rev-list -1 --first-parent --before="$_kz" "$BAS" 2>/dev/null)"
+    if [ -n "$_a" ] && [ -n "$_b" ] && git -C "$DEPO" merge-base --is-ancestor "$_b" "$_a" 2>/dev/null; then _ob="$_b"
+    elif [ -n "$_a" ]; then _ob="$_a"; fi
+    [ -n "$_ob" ] && _bilgi "· önceki kayıtta baş yok (eski kayıt) → incelenen baş ${_ob:0:8} olarak türetildi (kaydı ekleyen commit'in atası / kayıt zamanı; yaklaşık, fark gereğinden büyük olabilir)"
+  fi
   if [ -z "$_ob" ]; then _bilgi "· düzeltme farkı hesaplanamadı: önceki tur kaydı incelediği başı yazmamış (eski kayıt) → tam fark gider"
   elif ! git -C "$DEPO" cat-file -e "$_ob^{commit}" 2>/dev/null || ! git -C "$DEPO" cat-file -e "$BAS^{commit}" 2>/dev/null; then
     _bilgi "· düzeltme farkı hesaplanamadı: önceki baş (${_ob:0:8}) ya da bu baş bu depoda bulunamadı → tam fark gider"
