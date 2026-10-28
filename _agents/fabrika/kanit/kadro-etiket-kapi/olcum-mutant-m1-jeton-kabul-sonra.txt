@@ -1,0 +1,25 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-etiket-uc-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-mutant.sh m1-jeton-kabul sunucu.mjs kadro-etiket-uc.test.mjs if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — etiketi Sultan ekrandan yazar.' }); 
+# rc=1 sure=0.5s zaman=2026-10-28T10:32:40+03:00
+--- stdout ---
+MUTASYON m1-jeton-kabul
+── KE-A · kimlik: yalnız Sultan oturumu
+  ✓ KE1 çerezsiz 401
+  ✓ KE2 x-kapi başlığı yoksa 403
+  ✗ KE3 jetonla gelen istek 403 (ajan yazamaz) 
+  ✗ KE4 hiçbiri dosya yazmadı 
+── KE-B · yazım ve okuma
+  ✗ KE5 GET /api/kadro etiket ucunu ilan eder, etiketsiz kişide alan yok {"id":"BASIRET","rol":"gözcü","mod":"","hal_kayit":"bilinmiyor","tmux":"BASIRET","oturum":{"ad":"BASIRET","claude":true,"hal":"bos","ne":"","son":5,"tur":"ajan","kimlik":"kf905c4d500cee418","ekran":"/sedir/tty/?arg=kf905c4d500cee418"},"grup":"calisan","geri_acilir":false,"etiket":{"not":"x","zaman":"2026-10-28T07:32:40.703Z"}}
+  ✓ KE6 üç alan ayrı ayrı yazılır (200)
+  ✓ KE7 GET /api/kadro kişinin etiketini taşır (ad · açıklama · not), kimlik ve rol aynı
+  ✓ KE8 kayıt dosyası BAYT BAYT aynı (etiket kayda yazılmaz)
+  ✓ KE9 öteki kişiye etiket sızmaz
+  ✓ KE10 günlükte kimlik · alan · uzunluk var, DEĞER yok
+  ✓ KE11 boş değer alanı siler, öteki alanlar kalır
+── KE-C · ret yolları
+  ✓ KE12 kayıtta olmayan kimlik 404 (uydurma kimliğe etiket yazılmaz)
+  ✓ KE13 bilinmeyen alan 400 · sınır aşımı 400
+  ✓ KE14 bozuk gövde 400
+  ✓ KE15 bozuk etiket dosyasında kadro DÜŞMEZ (etiket_okunamadi işaretli) ve yazım 500, dosya ezilmez
+SONUÇ: 12 geçti · 3 kaldı
+--- stderr ---

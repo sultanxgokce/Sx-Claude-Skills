@@ -22,6 +22,7 @@ import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL }
 import { tarifOku, uzmanlikOku } from './tarif.mjs';
 import { bugunOku } from './bugun.mjs';
 import { kadroYazKilitAltinda, KadroHata, davaEkle, kisiyeBagla, baglaGeriAl, DOSYA_NO, kisaAdGecerli } from './kadro-yaz.mjs';
+import { etiketOku, etiketYaz, EtiketHata } from './kadro-etiket.mjs';
 import { dosyaKilit } from './kilit.mjs';
 import { koltukKimlik } from './koltuk-kimlik.mjs';   // ad dışı kimlik (2.24.0 · P4GT2W): adres adı değil kimliği taşır
 import { oturumKimlikleri, oturumDizinleri } from './kimlik.mjs';   // kişi↔oturum eşleşmesinin kimlik ayağı (salt-okur)
@@ -538,8 +539,11 @@ const sunucu = http.createServer(async (req, res) => {
         if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
         const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX, kimlikler: kimlikler() });
         const ekranla = (o) => o ? { ...o, ...ekranAdresi(o.ad) } : null;
+        // ETİKET (2.33.0 · görev …ZDV): Sultan'ın kayda koyduğu görünen ad · açıklama · not — ayrı dosyadan; okunamazsa kadro düşmez, işaretlenir
+        const et = etiketOku(DURUM_DIZ), etiketli = (k) => Object.hasOwn(et.etiketler, k.id) ? { etiket: et.etiketler[k.id] } : {};
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
-          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla),
+          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum), ...etiketli(k) })), kayitsiz: kd.kayitsiz.map(ekranla),
+          etiket: true, ...(et.okunamadi ? { etiket_okunamadi: true } : {}),   // etiket: bu kapı etiket ucunu taşıyor (merkez düzenleme alanını buna bakarak açar)
           altyapi: kd.altyapi.map(ekranla), eylemler: true,   // eylemler: bu kapı E2 ucunu taşıyor (merkez düğmeleri buna bakar)
           // Dava Rafı (Parça B2): kayıt kökünde dava_kurali varsa raf alanı; bagla: bu kapı E4 (kayda bağla) eylemini taşıyor
           ...(kayit.dava_kurali ? { davalar: davaOzet(kd.kisiler, kayit.dava_kurali) } : {}), bagla: true });
@@ -552,6 +556,24 @@ const sunucu = http.createServer(async (req, res) => {
       //    o çerezi yalnız kutu parolası ya da merkez üretir; merkezin önünde Access + merkez parolası). Jeton taşıyan istek REDDEDİLİR:
       //    bu kapının jeton yolu yok; jetonla gelen istek bir ajandır ve "bir gün jeton kabul edilir" diye sessizce açılmasın.
       // 🔴 ALTYAPI oturumları (ana · dash* · ttyd-* · kapi-* · *-kurtarici · imglistener*) hiçbir eylemle kapatılamaz: 403, tmux'a dokunulmaz.
+      // ── KADRO ETİKETİ (2.33.0 · görev …ZDV · Sultan 28 Eki): bir kayda görünen ad · açıklama · not — kayıt dosyasına DEĞİL ayrı dosyaya
+      //    (kadro-etiket.mjs). Hal ucuyla aynı kimlik kuralı: yalnız Sultan oturumu (çerez + x-kapi), jetonla gelen istek ajandır → 403.
+      //    Kimlik kayıtta olmalı (uydurma kimliğe etiket yazılmaz → 404). Günlüğe değer YAZILMAZ (not mahremdir): yalnız kimlik · alan · uzunluk.
+      if (y === '/api/kadro/etiket' && req.method === 'POST') {
+        if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — etiketi Sultan ekrandan yazar.' });
+        let g; try { g = JSON.parse((await govde(req, 8192)).toString('utf8') || '{}'); } catch (e) { return json(res, e.kod === 413 ? 413 : 400, { hata: e.kod === 413 ? 'Çok büyük.' : 'Geçersiz istek.' }); }
+        const id = String(g.id || ''), alan = String(g.alan || '');
+        const kayit = kayitOku(PROJE);
+        if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
+        if (!kayit.uyeler.some((u) => u.id === id)) return json(res, 404, { hata: 'Bu kimlik kayıtta yok.' });
+        const birak = await kadroKilit();
+        try {
+          const sonuc = etiketYaz(DURUM_DIZ, id, alan, g.deger);
+          try { fs.appendFileSync(path.join(DURUM_DIZ, 'kadro-hal.log'), `${new Date().toISOString()} etiket ${JSON.stringify(id)} ${alan} ${sonuc && sonuc[alan] ? [...sonuc[alan]].length + ' karakter' : 'silindi'}\n`); } catch {}
+          return json(res, 200, { tamam: true, id, etiket: sonuc });
+        } catch (e) { if (e instanceof EtiketHata) return json(res, e.kod, { hata: e.message }); throw e; }
+        finally { birak(); }
+      }
       if (y === '/api/kadro/hal' && req.method === 'POST') {
         if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — kadro kararını Sultan ekrandan verir.' });
         let g; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { return json(res, 400, { hata: 'Geçersiz istek.' }); }

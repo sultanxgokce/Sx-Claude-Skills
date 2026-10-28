@@ -1,0 +1,180 @@
+{
+  "is": "kadro-etiket-kapi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T10:32:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "etiket-uc",
+      "asama": "once",
+      "dosya": "olcum-etiket-uc-once.txt",
+      "sha256": "3c3fda422276d07afc0a88383789f4e1d49d18aa17103a7ad7d89919bb0061b4",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-once/terminal-onar/kapi && node kadro-etiket-uc.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T10:31:35+03:00",
+      "sure_sn": 10.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "fe60ed241e914d048708b0b8f5dbddc0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "etiket-uc",
+      "asama": "sonra",
+      "dosya": "olcum-etiket-uc-sonra.txt",
+      "sha256": "25f5507b3e01e918e686c5d36981fad9be87f37364b52b273e9ee53b2446a340",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node kadro-etiket-uc.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:31:35+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f1244393e64244efaa910829e0f249db"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "etiket-birim",
+      "asama": "sonra",
+      "dosya": "olcum-etiket-birim-sonra.txt",
+      "sha256": "fa57e95814e618d5db8225eb9db740dc3693e3005b807685895007b849cfc0b9",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node kadro-etiket.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:31:36+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f6dd4de0680f4bdfa0a01288195ab7dd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-sonra.txt",
+      "sha256": "76e18b929c7da18e73cfbfb7eff00f5be4902bd43dc86b39c364f149094520c6",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && bash kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:32:21+03:00",
+      "sure_sn": 45.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "65cb41bc6522475a9ad4f7c06a9076ca"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-m1-jeton-kabul",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-m1-jeton-kabul-sonra.txt",
+      "sha256": "baed3819e82bcb692386745fd6b816f0bf5fea2c3c1a858b69a071f7a685c1fc",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-mutant.sh",
+        "m1-jeton-kabul",
+        "sunucu.mjs",
+        "kadro-etiket-uc.test.mjs",
+        "if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — etiketi Sultan ekrandan yazar.' });",
+        ""
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:32:40+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "etiket-uc",
+      "beklenen": "kirmizi",
+      "olcum_id": "b2ccb708ed4c4ba8b25072a748cb03c6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-m2-kimlik-sinanmaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-m2-kimlik-sinanmaz-sonra.txt",
+      "sha256": "512fdcfb71013010183c9130615a33f71ba08adc6e8256a092fdecdda9a59e07",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-mutant.sh",
+        "m2-kimlik-sinanmaz",
+        "sunucu.mjs",
+        "kadro-etiket-uc.test.mjs",
+        "if (!kayit.uyeler.some((u) => u.id === id)) return json(res, 404, { hata: 'Bu kimlik kayıtta yok.' });",
+        ""
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:32:41+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "etiket-uc",
+      "beklenen": "kirmizi",
+      "olcum_id": "3d4facb47c01412a8d37bf37aaa66f6d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-m3-bozuk-dosya-ezilir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-m3-bozuk-dosya-ezilir-sonra.txt",
+      "sha256": "6c7f2f3188aae0405af8214b447bee21d48ee905851ce35eb4e3520c2c267c75",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-mutant.sh",
+        "m3-bozuk-dosya-ezilir",
+        "kadro-etiket.mjs",
+        "kadro-etiket.test.mjs",
+        "if (okunamadi) throw new EtiketHata(500",
+        "if (false) throw new EtiketHata(500"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:32:41+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "etiket-birim",
+      "beklenen": "kirmizi",
+      "olcum_id": "0f5a34c8bd5c4b058c10d9d99639e5fe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-m4-gunluge-deger",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-m4-gunluge-deger-sonra.txt",
+      "sha256": "372089bb53ce0eb5a7fb817453c29653735e2ba21ec87d8b6560a8f06131b50e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-mutant.sh",
+        "m4-gunluge-deger",
+        "sunucu.mjs",
+        "kadro-etiket-uc.test.mjs",
+        "${alan} ${sonuc && sonuc[alan] ? [...sonuc[alan]].length + ' karakter' : 'silindi'}",
+        "${alan} ${sonuc && sonuc[alan] ? [...sonuc[alan]].length + ' karakter ' + sonuc[alan] : 'silindi'}"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T10:32:42+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "etiket-uc",
+      "beklenen": "kirmizi",
+      "olcum_id": "a51279cb5cd74a3eb4d8603a19faba16"
+    }
+  ],
+  "imza": "cd0c778c8a3701a817ad2bf83baf1de9a66f64746f84018e1c7f0325cd0e60c9"
+}

@@ -1,0 +1,16 @@
+$ bash -c cd terminal-onar/kapi && node kadro-etiket.test.mjs
+# rc=0 sure=0.1s zaman=2026-10-28T10:31:36+03:00
+--- stdout ---
+  ✓ E1 dosya yokken okuma boş ve okunamadı değil
+  ✓ E2 not yazılır, kayıt döner (zaman damgalı)
+  ✓ E3 üç alan AYRI ayrı yazılır, biri ötekini ezmez
+  ✓ E4 boş değer yalnız o alanı siler (ad gitti, açıklama ve not duruyor)
+  ✓ E5 son alan da silinince kayıt tümden kalkar (dönen null)
+  ✓ E6 bilinmeyen alan 400
+  ✓ E7 prototip kimlikleri 400 (__proto__ · constructor)
+  ✓ E8 sınırlar karakterle sayılır (ad 40 · açıklama 200 · not 1000): tam sınır geçer, bir fazlası 400
+  ✓ E9 ad ve açıklama tek satır (satır sonu boşluk olur), not satır sonunu taşır, denetim karakteri atılır
+  ✓ E10 okunamayan dosyanın ÜSTÜNE yazılmaz: 500 ve dosya bayt bayt aynı
+  ✓ E11 yazım atomik: geçici dosya kalmaz, dosya izni 600
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---

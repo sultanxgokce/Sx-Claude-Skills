@@ -1,0 +1,23 @@
+$ bash -c cd terminal-onar/kapi && node kadro-etiket-uc.test.mjs
+# rc=0 sure=0.5s zaman=2026-10-28T10:31:35+03:00
+--- stdout ---
+── KE-A · kimlik: yalnız Sultan oturumu
+  ✓ KE1 çerezsiz 401
+  ✓ KE2 x-kapi başlığı yoksa 403
+  ✓ KE3 jetonla gelen istek 403 (ajan yazamaz)
+  ✓ KE4 hiçbiri dosya yazmadı
+── KE-B · yazım ve okuma
+  ✓ KE5 GET /api/kadro etiket ucunu ilan eder, etiketsiz kişide alan yok
+  ✓ KE6 üç alan ayrı ayrı yazılır (200)
+  ✓ KE7 GET /api/kadro kişinin etiketini taşır (ad · açıklama · not), kimlik ve rol aynı
+  ✓ KE8 kayıt dosyası BAYT BAYT aynı (etiket kayda yazılmaz)
+  ✓ KE9 öteki kişiye etiket sızmaz
+  ✓ KE10 günlükte kimlik · alan · uzunluk var, DEĞER yok
+  ✓ KE11 boş değer alanı siler, öteki alanlar kalır
+── KE-C · ret yolları
+  ✓ KE12 kayıtta olmayan kimlik 404 (uydurma kimliğe etiket yazılmaz)
+  ✓ KE13 bilinmeyen alan 400 · sınır aşımı 400
+  ✓ KE14 bozuk gövde 400
+  ✓ KE15 bozuk etiket dosyasında kadro DÜŞMEZ (etiket_okunamadi işaretli) ve yazım 500, dosya ezilmez
+SONUÇ: 15 geçti · 0 kaldı
+--- stderr ---

@@ -1,0 +1,20 @@
+$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ke-once/terminal-onar/kapi && node kadro-etiket-uc.test.mjs
+# rc=1 sure=10.5s zaman=2026-10-28T10:31:35+03:00
+--- stdout ---
+── KE-A · kimlik: yalnız Sultan oturumu
+  ✓ KE1 çerezsiz 401
+  ✓ KE2 x-kapi başlığı yoksa 403
+  ✗ KE3 jetonla gelen istek 403 (ajan yazamaz) 
+  ✓ KE4 hiçbiri dosya yazmadı
+── KE-B · yazım ve okuma
+  ✗ KE5 GET /api/kadro etiket ucunu ilan eder, etiketsiz kişide alan yok {"id":"BASIRET","rol":"gözcü","mod":"","hal_kayit":"bilinmiyor","tmux":"BASIRET","oturum":{"ad":"BASIRET","claude":true,"hal":"bos","ne":"","son":5,"tur":"ajan","kimlik":"k95c38ad70643af18","ekran":"/sedir/tty/?arg=k95c38ad70643af18"},"grup":"calisan","geri_acilir":false}
+  ✗ KE6 üç alan ayrı ayrı yazılır (200) {"s":404,"j":{"hata":"Yok."}}
+  ✗ KE7 GET /api/kadro kişinin etiketini taşır (ad · açıklama · not), kimlik ve rol aynı {"id":"BASIRET","rol":"gözcü","mod":"","hal_kayit":"bilinmiyor","tmux":"BASIRET","oturum":{"ad":"BASIRET","claude":true,"hal":"bos","ne":"","son":5,"tur":"ajan","kimlik":"k95c38ad70643af18","ekran":"/sedir/tty/?arg=k95c38ad70643af18"},"grup":"calisan","geri_acilir":false}
+  ✓ KE8 kayıt dosyası BAYT BAYT aynı (etiket kayda yazılmaz)
+  ✓ KE9 öteki kişiye etiket sızmaz
+  ✗ KE10 günlükte kimlik · alan · uzunluk var, DEĞER yok ""
+  ✗ KE11 boş değer alanı siler, öteki alanlar kalır 
+── KE-C · ret yolları
+  ✗ sınav çöktü: ENOENT: no such file or directory, open '/tmp/kadro-etiket-uc-zJ9tTy/durum/kadro-etiket.json'
+--- stderr ---
+⏳ agir-sira: kanit-kadro-etiket-kapi-etiket-uc 10 sn bekledi (yuva 2, load1 17.11)
