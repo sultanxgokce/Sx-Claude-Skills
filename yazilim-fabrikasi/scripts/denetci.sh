@@ -25,7 +25,8 @@ SEMA="$HERE/../sablon/denetim-sema.json"
 ISTEM="$HERE/../adimlar/denetci-istem.md"
 TAVAN=3; MUTLAK=4
 
-_hata() { printf '✗ %s\n' "$*" >&2; }
+SON_HATA=""; KILIT_RED=0   # SON_HATA: bitiş zilinin 'sebep' parçası (rc 3 'ölçülemedi' tek başına sebebi söylemiyordu); KILIT_RED: başka denetçi koşuyor reddi
+_hata() { SON_HATA="$*"; printf '✗ %s\n' "$*" >&2; }
 # 🔴 SESSİZ BİTİŞ YOK (SERDAR ACİL 21 Eki 19:49, Sultan: "işler sessizce duruyor"): bir günde iki ajan bitmiş göz turunu
 #    1'er saat fark etmedi, biri HİÇ başlamamış denetçinin DENETIM-N.json'unu 1 saat bekledi. Kök üçlü: bitince haber yok,
 #    zaman aşımı yok, başladığının izi yok. Çare: (1) başlarken DENETIM-<tur>.kosuyor izi (pid + başlangıç), bitince silinir;
@@ -46,6 +47,9 @@ _zil_cal() {   # _zil_cal <komut…> → rc (aile-notify meşgul koltukta zili k
 }
 _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
+  # 5 kez rc 3 (SERDAR 28 Eki): 'başka denetçi koşuyor' reddi ölçülemedi DEĞİL — öteki koşum kendi bitiş zilini çalacak; reddedilen koşumun zili
+  #   aynı turu 'ÖLÇÜLEMEDİ' diye ilan edip reise --waiting da yolluyordu. Sebep stderr'de (_hata), zil çalınmaz.
+  [ "$KILIT_RED" = 1 ] && { printf '· denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak\n' >&2; return 0; }
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
   if [ -z "$an" ] && { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ] || [ -n "${SAHTE_ISTEM_KOPYA:-}" ]; }; then   # sınav kipi (sahte göz/sahte json): gerçek zil ARANMAZ, yalnız açıkça verilen çalar
     printf '· sınav kipi (DENETCI_KOMUT/SAHTE_JSON): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
@@ -72,6 +76,7 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
   [ -z "${TUR:-}" ] && m="${IS}: denetim açılmadı (tur yok) · rc $rc · $ne"   # 0C915N: 'tur ?: —/— · bulgu —' dolgusu yok; yalnız bilinen söylenir
   [ "$yazansiz" = 1 ] && m="$m · yazan bilinmiyor"
+  case "$rc" in 2|3|4) [ -n "$SON_HATA" ] && m="$m · sebep: $(printf '%s' "$SON_HATA" | tr '\n\t' '  ' | cut -c1-140)" ;; esac   # sebep zile girer: 'ölçülemedi' tek başına teşhis değil
   # HEZARFEN ölçümü (20:38, #404): denetçiyi koşturan ajanın kendi penceresine giden zil, aile-notify'ın self-loop korumasına
   #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
   #   meşgul koltukta zil kuyruğa girer (ölçüldü: kanıt olcum-gercek-zil-sonra). Bedeli: gönderen "BILINMEYEN" görünür — aile-notify
@@ -303,14 +308,14 @@ for _iz in "$DZ"/DENETIM-*.kosuyor; do
   #   Eski biçimli izde (pid_kimlik yok) yalnız canlılık sayılır — temkinli: yanlışlıkla başkasının denetimini ezmekten iyidir.
   _kim_iz="$(sed -n 's/^pid_kimlik=//p' "$_iz" | head -1)"
   if [ -n "$_pid" ] && kill -0 "$_pid" 2>/dev/null && { [ -z "$_kim_iz" ] || [ "$_kim_iz" = "$(_pid_kimlik "$_pid")" ]; }; then
-    _hata "bu işte başka denetçi koşuyor: $(basename "$_iz") (pid $_pid, $(sed -n 's/^baslangic=//p' "$_iz")) — bitmesini bekle"; exit 3
+    _hata "bu işte başka denetçi koşuyor: $(basename "$_iz") (pid $_pid, $(sed -n 's/^baslangic=//p' "$_iz")) — bitmesini bekle"; KILIT_RED=1; exit 3
   fi
   _bilgi "⚠ bayat koşuyor izi silindi: $(basename "$_iz") (pid ${_pid:-?} yaşamıyor ya da başka sürece geçmiş — denetçi zil çalmadan öldü)"; rm -f "$_iz"
 done
 KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"
 # noclobber: denetimle yazım arasındaki dar aralıkta ikinci denetçi gelirse izi ezmez, ölçülemedi der
 if ! ( set -C; printf 'pid=%s\npid_kimlik=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(_pid_kimlik "$$")" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" ) 2>/dev/null; then
-  if [ -e "$KOSUYOR" ]; then KOSUYOR=""; _hata "bu işte başka denetçi aynı anda başladı (DENETIM-$TUR.kosuyor) — bitmesini bekle"; exit 3; fi
+  if [ -e "$KOSUYOR" ]; then KOSUYOR=""; _hata "bu işte başka denetçi aynı anda başladı (DENETIM-$TUR.kosuyor) — bitmesini bekle"; KILIT_RED=1; exit 3; fi
   KOSUYOR=""
 fi
 # ── DARALTMA SIFIRI (PCP7J, 18 Eki 2026): kart daraltıldıysa (kart.sh daralt) daraltmadan ÖNCEKİ turlar yeni
