@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "ustlen-bugune-al-cumlesi",
+  "pr": "535",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T14:35:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ustlen-bugune-al-cumlesi",
+  "dal": "ustlen-bugune-al-cumlesi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20088,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 12230
+  },
+  "dalgic": "uyumsuz",
+  "bas": "12baded6d7a33d1b815365ee56da930c363e0ce5",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sırada-bak iletisi, üstlenmenin ajanın işi ve “bugüne al” tıkının Sultan'ın işi olduğunu tek cümlede açıkça ayırmış. Gerçek ölçüm 63/63 geçiyor, mutasyon ölçümü de eski izin soran metni yakaladığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; gerçek ölçüm yeşil ve 63 geçti · 0 kaldı. Mutasyon kaydı eski “alayım mı” davranışını bilerek geri getirip S5c-S5e sınavlarında yakalıyor; böylece yeni sınavların değişikliğe duyarlı olduğu da kanıtlanmış. Önce/sonra görseli yok, ancak bu metin/betik değişikliği için gerçek ölçüm ile mutasyon çifti yeterli ve sarı kayıt bulunmuyor."
+  }
+}

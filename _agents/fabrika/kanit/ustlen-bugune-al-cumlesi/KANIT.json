@@ -1,0 +1,45 @@
+{
+  "is": "ustlen-bugune-al-cumlesi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T14:33:56+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sirada-bak-sinavi-sonra.txt",
+      "sha256": "930e0b029bc3b70c68d62984ad834642ae7d370cffe1f9bf4ebd1246b95683c3",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T14:33:47+03:00",
+      "sure_sn": 2.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "11a1d3993b3a40e59639baea6431b07c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-eski-izin-sorar",
+      "asama": "sonra",
+      "dosya": "olcum-mut-eski-izin-sorar-sonra.txt",
+      "sha256": "fa80810d7f152e34be268ed4e8616bdef5185bfede821cc834c7198f698e8db8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-sb.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T14:33:56+03:00",
+      "sure_sn": 2.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "0f0cca702e9c4b62be45316c672d6f10"
+    }
+  ],
+  "imza": "355583a7dc34482e6c8b73422d37a7e27c9a117212df53ebd3b4f16679c5212e"
+}
