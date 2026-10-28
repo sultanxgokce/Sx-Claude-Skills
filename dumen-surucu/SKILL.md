@@ -44,10 +44,10 @@ try { await d.fill('#ad', 'Ayşe'); } catch (e) { if (e instanceof KapiHata) { /
 ## Sultan'dayken bekle — geri verince uyan (0.4.0 · görev …9JMK89)
 `⏸ Dümen Sultan'da · bekliyorum` satırını görünce BEKLEMEYİ arka plana bırak: Bash'te `run_in_background:true` ile
 `node scripts/dumen-bekle.mjs --merkez "$DUMEN_MERKEZ"` (varsayılan: en çok 120 dk, 10 sn aralık; `--azami-dk`, `--aralik-sn`).
-Komut yalnız `GET <merkez>/dumen/mod` okur (jeton yok, yazma yok); mod `ajan` olunca `▶ Dümen geri verildi … devam edebilirsin` basıp rc 0 ile biter — arka plan komutunun bitişi seni uyandırır.
+Komut yalnız `GET <merkez>/dumen/mod` okur (jeton yok, yazma yok); bekleme sırasında hiçbir şey basmaz; mod `ajan` olunca tek satır `▶ Dümen geri verildi … devam edebilirsin` basıp rc 0 ile biter — arka plan komutunun bitişi seni uyandırır.
 Çıkış kodları: **0** ajanda (zaten ya da geri verildi) · **3** süre doldu, Dümen hâlâ Sultan'da (SERDAR'a haber ver ya da yeniden bekle) · **4** merkez art arda 6 okumada cevap vermedi — kimde olduğu bilinmiyor, ÖLÇÜLEMEDİ (devam sayılmaz) · **2** merkez adresi yok.
 Merkez ajana doğrudan zil çalamaz (tmux yolu yok); uyanma yolu bu bekleyicidir. Sultan'a süre hatırlatması merkez tarafındadır (cloudtop terminal-merkez), bu beceride değil.
 
 ## Sınav
-`bash scripts/dumen-bekle.test.sh` — sahte merkez + GERÇEK süreç (Sultan'dayken çıkmaz, geri verilince rc 0 ile çıkar), 11 kapı + 8 mutant.
+`bash scripts/dumen-bekle.test.sh` — sahte merkez + GERÇEK süreç (Sultan'dayken çıkmaz, geri verilince rc 0 ile çıkar), 12 kapı + 9 mutant.
 `bash scripts/dumen.test.sh` — sahte merkez + gerçek headless Chromium, 29 kapı + 10 mutant (fail-open · merkez cevapsız→devam · durma noktası kapalı · durak bildirimi 5xx'i başarı sayar · ham page dışarı açık · parola gizleme yok · jetonsuz bildirim · soket düşünce ham hata · sultan iken yeniden bağlanma · ajan olunca bağlanmama). Chromium yoksa rc 3 ÖLÇÜLEMEDİ.

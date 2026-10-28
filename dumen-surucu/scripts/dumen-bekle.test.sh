@@ -24,6 +24,7 @@ mut "kesinti sayacı sıfırlanmaz" "      cevapsiz = 0;
 " "
 "
 mut "jeton başlığı gönderir" "okuyucu(\`\${uc}/dumen/mod\`, { signal" "okuyucu(\`\${uc}/dumen/mod\`, { headers: { 'x-defter-jeton': 'x' }, signal"
+mut "bekleme başında satır basar (tek satır bozulur)" "    ilk = false;" "    if (ilk) yaz('bekliyorum'); ilk = false;"
 mut "merkezsiz sessiz geçer" "if (!uc) { yaz('✗ merkez adresi yok (--merkez ya da DUMEN_MERKEZ)'); return 2; }" ""
 find "$T" -mindepth 1 -delete; rmdir "$T"
 [ "$MK" -eq 0 ] && echo "MUTANT: $MS/$MS yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

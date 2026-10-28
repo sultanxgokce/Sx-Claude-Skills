@@ -1,21 +1,22 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-bekle-sinav-* ===
-$ env BEKLE_LIB=/tmp/tmp.4mm3pJuba2/dumen-bekle.mjs node /tmp/tmp.4mm3pJuba2/dumen-bekle.test.mjs
-# rc=1 sure=7.7s zaman=2026-10-28T11:23:03+03:00
+$ env BEKLE_LIB=/tmp/tmp.zejhNJyEpM/dumen-bekle.mjs node /tmp/tmp.zejhNJyEpM/dumen-bekle.test.mjs
+# rc=1 sure=7.7s zaman=2026-10-28T11:26:37+03:00
 --- stdout ---
 ════ D · Dümen bekleme ════
   ✓ D1 mod zaten ajan → rc 0, "zaten ajanda" (bekleme yok)
   ✓ D2 Sultan'dayken bekler, geri verilince rc 0 + "geri verildi" (≥250 ms bekledi)
-  ✓ D2b bekleme başında "Sultan'da" tek kez söylenir
+  ✓ D2b TEK SATIR: bekleme sırasında sessiz, bitişte toplam 1 satır
   ✗ SINIR [] 6 sn içinde bitmedi (sonsuz bekleme) 
   ✗ SINIR [] 6 sn içinde bitmedi (sonsuz bekleme) 
   ✗ SINIR ["azamiMs"] 6 sn içinde bitmedi (sonsuz bekleme) 
-  ✗ D3 süre dolunca rc 3, "devam edebilirsin" DEMEZ (Dümen hâlâ Sultan'da) rc=-1 ⏸ Dümen Sultan'da · geri verilince haber vereceğim
+  ✗ D3b süre dolunca da TEK SATIR []
+  ✗ D3 süre dolunca rc 3, "devam edebilirsin" DEMEZ (Dümen hâlâ Sultan'da) rc=-1 
   ✓ D4 merkez art arda cevapsız → rc 4 (ÖLÇÜLEMEDİ), "devam" VARSAYILMAZ
   ✓ D5 üç cevapsızlık tavanı aşmaz: 4. okumada ajan → rc 0 (kısa kesinti bekleyişi bozmaz)
   ✓ D5b kesintiler art arda değilse sayaç sıfırlanır: 3+3 cevapsız araya Sultan girince rc 0
   ✓ D6 merkez adresi yok → rc 2
   ✓ D7 yalnız GET /dumen/mod: başka yol yok, jeton başlığı yok
   ✓ D8 gerçek süreç: Sultan'dayken ÇIKMAZ (ajan uyanmaz)
-  ✓ D9 gerçek süreç: geri verilince rc 0 ile çıkar ve "geri verildi" basar (uyandırma anı)
-── SONUÇ: 10 geçti · 4 kaldı ──
+  ✓ D9 gerçek süreç: geri verilince rc 0 ile çıkar ve TEK satır "geri verildi" basar (uyandırma anı)
+── SONUÇ: 10 geçti · 5 kaldı ──
 --- stderr ---

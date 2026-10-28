@@ -26,10 +26,10 @@ let rc = await kos({}); kapi('D1 mod zaten ajan → rc 0, "zaten ajanda" (beklem
 mod = 'sultan'; setTimeout(() => { mod = 'ajan'; }, 300); const t0 = Date.now();
 rc = await kos({}); const gecti = Date.now() - t0;
 kapi('D2 Sultan\'dayken bekler, geri verilince rc 0 + "geri verildi" (≥250 ms bekledi)', rc === 0 && gecti >= 250 && /geri verildi/.test(yazilar.join('\n')) && !/zaten ajanda/.test(yazilar.join('\n')), `rc=${rc} sure=${gecti} ${yazilar}`);
-kapi('D2b bekleme başında "Sultan\'da" tek kez söylenir', yazilar.filter((s) => /Sultan'da/.test(s)).length === 1, JSON.stringify(yazilar));
+kapi('D2b TEK SATIR: bekleme sırasında sessiz, bitişte toplam 1 satır', yazilar.length === 1, JSON.stringify(yazilar));
 
 mod = 'sultan';
-rc = await kos({ azamiMs: 400 }); kapi('D3 süre dolunca rc 3, "devam edebilirsin" DEMEZ (Dümen hâlâ Sultan\'da)', rc === 3 && !/devam edebilirsin/.test(yazilar.join('\n')) && /hâlâ Sultan/.test(yazilar.join('\n')), `rc=${rc} ${yazilar}`);
+rc = await kos({ azamiMs: 400 }); kapi('D3b süre dolunca da TEK SATIR', yazilar.length === 1, JSON.stringify(yazilar)); kapi('D3 süre dolunca rc 3, "devam edebilirsin" DEMEZ (Dümen hâlâ Sultan\'da)', rc === 3 && !/devam edebilirsin/.test(yazilar.join('\n')) && /hâlâ Sultan/.test(yazilar.join('\n')), `rc=${rc} ${yazilar}`);
 
 cevap = false; mod = 'ajan';
 rc = await kos({}); kapi('D4 merkez art arda cevapsız → rc 4 (ÖLÇÜLEMEDİ), "devam" VARSAYILMAZ', rc === 4 && !/devam edebilirsin/.test(yazilar.join('\n')) && /ÖLÇÜLEMEDİ/.test(yazilar.join('\n')), `rc=${rc} ${yazilar}`);
@@ -55,7 +55,7 @@ await new Promise((s) => setTimeout(s, 600));
 kapi('D8 gerçek süreç: Sultan\'dayken ÇIKMAZ (ajan uyanmaz)', bitti === null, `bitti=${bitti}`);
 mod = 'ajan';
 await sinir(new Promise((s) => { const t = setInterval(() => { if (bitti !== null) { clearInterval(t); s(); } }, 30); }), 'gerçek süreç');
-kapi('D9 gerçek süreç: geri verilince rc 0 ile çıkar ve "geri verildi" basar (uyandırma anı)', bitti === 0 && /geri verildi/.test(cikti), `bitti=${bitti} cikti=${cikti}`);
+kapi('D9 gerçek süreç: geri verilince rc 0 ile çıkar ve TEK satır "geri verildi" basar (uyandırma anı)', bitti === 0 && /geri verildi/.test(cikti) && cikti.trim().split('\n').length === 1, `bitti=${bitti} cikti=${cikti}`);
 merkez.close();
 console.log(`── SONUÇ: ${gecen} geçti · ${kalan} kaldı ──`);
 process.exit(kalan === 0 ? 0 : 1);
