@@ -2,7 +2,7 @@
 # sirada-bak.sh — /gunluk-plan'ın İLK defter adımı (1.11.0 · görev …VNB2E9, Sultan 27 Eki): plan yazmadan ÖNCE kutunun defterdeki Sırada listesine bak.
 #   sirada-bak.sh [--kutu K] [--kim AJAN] [--esik N] [--bak]
 #   KARAR=BAS  → Sırada ≥ eşik: en üstteki iş(ler) listelenir ve EN ÜSTTEKİ iş `gorev.sh ustlen` ile çalışılıyor yapılır (varsayılan; --bak = yalnız bak, başlama)
-#   KARAR=SOR  → Sırada < eşik: Sultan'a TEK soru, iki şık (1 Sultan'la sohbet · 2 reis kendi başına: ADIM 0-d tarama-ekle)
+#   KARAR=SOR  → Sırada < eşik: Sultan'a TEK soru, iki şık (1 Sultan'la sohbet · 2 reis kendi başına: ADIM 0-d tarama-ekle) + ZORUNLU=ADIM 0-d satırı (cevap beklenmez, 1.13.0)
 #   rc: 0 karar verildi · 2 kullanım · 3 ölçülemedi (defter okunamadı / kutu çıkmadı) — "Sırada 0" DENMEZ, ölçülemeyen SORU değil ÖLÇÜLEMEDİ'dir
 # Sırada = ekranın tanımı: aynı kutuda gorev_durumu acik ya da sira-bende (havuz/tasarlaniyor/bekliyor/calisiliyor/onay-bekliyor/bitti/iptal SAYILMAZ).
 # 🔴 "Bugüne al" Sultan'ındır: bugun_plani alanını geçit YALNIZ Sultan ekranına yazdırır (A06) — bu betik onu YAZMAZ, yalnız ÖNERİR.
@@ -60,4 +60,6 @@ else
   if [ "$N" -eq 0 ]; then echo "SORU=Bu kutuda planlanmış görev yok. Kendimize iş çıkarma seansı yapalım mı?"
   else echo "SORU=Bu kutuda sırada yalnız $N iş var (başlamak için en az $ESIK gerek). Kendimize iş çıkarma seansı yapalım mı?"; fi
   echo "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)"
+  # 1.13.0 (HC75A, SERDAR 28 Eki): eşik altında ADIM 0-d ZORUNLU — Sultan'ın cevabı beklenmez; sıra boşken kutu defterine açılış üretir. Tarama-ekle kuru varsayılan kalır, günlük 3 tavanı onun kapısıdır.
+  echo "ZORUNLU=ADIM 0-d tarama: Sultan'ın cevabını BEKLEMEDEN bir ölçülmüş iş ekle (günde en çok 3): bash $KOK/tarama-ekle.sh --baslik \"<tek cümle>\" --kaynak <dosya:satır|https://…> --kanit \"<bu turda ölçtüğün>\" --uygula"
 fi

@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-sirada-tarama-zorunlu",
+  "pr": "523",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:24:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-sirada-tarama-zorunlu",
+  "dal": "gunluk-plan-sirada-tarama-zorunlu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18788,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 11370
+  },
+  "dalgic": "uyumsuz",
+  "bas": "34d3ed11e4f9b1d4a096fb3e5ed063af6b75344a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sırada eşik altındayken Sultan'ı beklemeyen zorunlu tarama talimatı ve günlük 3 tavanı çıktıya eklenmiş. Ama talep ölçülmüş bir işin gerçekten eklenmesini isterken kod yalnız komut metni basıyor; önce bu icra ve sonucunu ölçen sınav tamamlanmalı.",
+    "bulgular": [
+      {
+        "ne": "SOR dalı tarama-ekle'yi çalıştırıp iş eklemiyor; yalnız kullanıcıya/ajana çalıştırılacak komutu yazdırıyor. Bu nedenle iş kartındaki “bir ölçülmüş tarama işi eklenir” davranışı uygulanmış ve kanıtlanmış değil.",
+        "kanit": "Üretim farkındaki SOR dalının tek yeni işlemi `echo \"ZORUNLU=... tarama-ekle.sh ... --uygula\"`; gerçek bir `tarama-ekle.sh` çağrısı veya sonucunun denetimi yok. S9b-S9d sınavları da yalnız çıktı içinde metin arıyor; gerçek ölçümde 56/56 geçmesi deftere kayıt oluştuğunu göstermiyor.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh:63; gunluk-plan/scripts/sirada-bak.test.sh:60",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm yeşil, mutasyon da zorunlu çıktı satırları kaldırılınca sınavın bozuk kodu yakaladığını gösteriyor. Ancak kanıt yalnız talimat metninin üretildiğini ölçüyor; gerçekçi bir SOR koşusunda taramanın yapıldığına, ölçülmüş aday bulunduğuna ve tarama-ekle üzerinden deftere en fazla günlük 3 sınırı korunarak kayıt eklendiğine dair önce/sonra kayıt veya ölçüm çifti yok."
+  }
+}
