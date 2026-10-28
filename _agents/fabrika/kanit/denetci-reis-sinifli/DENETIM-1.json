@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-reis-sinifli",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T02:00:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-reis-sinifli",
+  "dal": "denetci-reis-sinifli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23135,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 73194
+  },
+  "dalgic": "uyumlu",
+  "bas": "fddc722ddbb8f0cb5ef9fb93cf93dbb0ddeafecc",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sınıflı kartta araçla yazılmış ve `sinifli:true` taşıyan reis kararı artık reis kapısını açıyor; işaretsiz kayıt ise kabul edilmiyor. Gerçek ölçüm 320/320 geçiyor ve mutasyon ölçümü işaret denetimi kaldırıldığında sınavın bozuk kodu yakaladığını gösteriyor; üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `sinav-gercek` ölçümü rc=0 ve 320 geçti · 0 kaldı sonucunu veriyor; `mutant-isaret-kontrolu` ise bilerek bozulan kodda rc=1, 315 geçti · 5 kaldı üreterek yeni davranışın sınav tarafından gerçekten ölçüldüğünü kanıtlıyor. Ayrı önce/sonra kare yok, ancak bu kabuk betiği değişikliği için gerçek ölçüm ile mutasyon ölçümü birlikte yeterli."
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "is": "denetci-reis-sinifli",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T01:59:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-yesil",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinav-yesil-tek.txt",
+      "sha256": "0e81a1ed36a79c0a3a3553b07ff7fb6db5b96f16f1ca0e37146d36c47a179b07",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c \"\" /tmp/claude-1000/reis-test.out >/dev/null; grep -q \"^rc=0\" /tmp/claude-1000/reis-test.out && ! grep -qE \"^\\s*✗\" /tmp/claude-1000/reis-test.out"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T01:28:00+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "6c3ca5cd54524af580c27ed45ae66a86"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gercek",
+      "asama": "tek",
+      "dosya": "olcum-sinav-gercek-tek.txt",
+      "sha256": "a4afb7b1e982f75132c630bb68343e3fcf203ebe88546bbd347883a0d1c9d27c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T01:42:57+03:00",
+      "sure_sn": 888.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "adc70fb9decc4c948a5f2c41f393bc6a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinavda-mutant-yakalandi",
+      "asama": "tek",
+      "dosya": "olcum-sinavda-mutant-yakalandi-tek.txt",
+      "sha256": "8f8d07a8aaa50f89dde02f9e940774ee043f85ea0ea2fe03a1d33ab0db4242a0",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c \"KIRMIZI yapıyor\" /tmp/claude-1000/reis-test.out >/dev/null; grep -q \"reis-sinifli-isaret-kontrolunu-kaldir. sınavı KIRMIZI\" /tmp/claude-1000/reis-test.out"
+      ],
+      "rc": 0,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T01:43:14+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-gercek",
+      "beklenen": "kirmizi",
+      "olcum_id": "39f9393ceb994cf49afdc13b1337017a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-isaret-kontrolu",
+      "asama": "tek",
+      "dosya": "olcum-mutant-isaret-kontrolu-tek.txt",
+      "sha256": "a185d827ef5e3aefadcba1eaaf046e9eb5300e5f868437ad8c58f71d5666fd6f",
+      "komut": [
+        "bash",
+        "/tmp/tmp.LZ44nILi5D/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T01:59:38+03:00",
+      "sure_sn": 970.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-gercek",
+      "beklenen": "kirmizi",
+      "olcum_id": "c38c2ced3730494496688023c7867e85"
+    }
+  ],
+  "imza": "1d9b58985b97dab8b0a3881924d1a34f90db83cb4e267717797d7a8b41cb3b54"
+}

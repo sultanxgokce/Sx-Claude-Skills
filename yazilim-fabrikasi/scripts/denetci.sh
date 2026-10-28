@@ -456,8 +456,8 @@ PY
 }
 # 🔴 REİS KAPISI (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu
 #    ama araçta yalnız Sultan yolu vardı — sınıfsız işin sahibi kendi kararını araca yazdıramıyor, kapı ya
-#    kapalı kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka). Bu kapı YALNIZ sınıfsız kartta açılır;
-#    sınıflı kartta reis kararı yok sayılır ve Sultan yolu gösterilir. Mutlak tavanı (4) yine AÇMAZ.
+#    kapalı kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka). 28 Eki (Sultan 22 Eki kararı, parça2): sınıflı kartta da açılır,
+#    AMA yalnız kart.sh'ın sınıflı karta yazdığı kayıtla (sinifli:true). Mutlak tavanı (4) yine AÇMAZ.
 reis_kapisi() {
   [ "$REIS_DEVAM" = "1" ] || return 1
   KARTYOL="$(kart_yolu)" || exit 3; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"   # göz tur 2: bayat kopya hatası (rc=3) bastırılmaz, "karar YOK" reddine dönüşmez
@@ -465,21 +465,19 @@ reis_kapisi() {
 import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
 except Exception: raise SystemExit(1)
-# sınıflı kart → bu yol KAPALI (merci Sultan). "sultan" bayrağı ya da sınıf listesi dolu ise reddet.
-if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)
+# sınıflı kart (28 Eki · Sultan 22 Eki kararı, parça2): ara kararlar reisin. Reis kararı yalnız kart.sh'ın sınıflı karta YAZDIĞI kayıtla (sinifli:true) kabul edilir;
+# elle düzenlenmiş/sınıf bilgisiz kayıt sınıflı kartta karar sayılmaz. Mutlak tavan (4) yine AÇILMAZ.
+SINIFLI=bool(k.get("sultan") or k.get("siniflar"))
 kk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")==sys.argv[2]]
 if not kk: raise SystemExit(1)
 x=kk[-1]
+if SINIFLI and x.get("sinifli") is not True: raise SystemExit(1)
 if not (x.get("reis") and x.get("oturum")): raise SystemExit(1)
 if len(x.get("gerekce") or "") < 20: raise SystemExit(1)
 def tmz(v): return " ".join(str(v).replace("|","/").split())
 print(f'reis={tmz(x["reis"])} oturum={tmz(x["oturum"])} gerekce="{tmz(x["gerekce"])}"')
 PY
 )"; prc=$?
-  if [ "$prc" -eq 3 ]; then
-    _hata "--reis-devam verildi ama kart SINIFLI — sınıf işinin kararı Sultan'ındır; reis kapısı AÇILMADI (yol: kart.sh sultan-dedi + --sultan-devam)."
-    return 2
-  fi
   if [ -z "$GEREKCE" ]; then
     _hata "--reis-devam verildi ama KARTTA gerekçeli reis 'devam' kararı YOK — kapı açılmadı."
     _bilgi "   Sınıfsız işin sahibi/reisi kararını önce kayda geçirir:"
