@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kart-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh g["surum"]=int(os.environ["MEVCUT_SURUM"]) pass
+# rc=1 sure=78.9s zaman=2026-10-28T13:55:36+03:00
+--- stdout ---
+  ✗ G11f 🔴 yarış: okunan sürüm yazıma girer (surum 3) → defter 409 → yeniden okunur, onay-bekliyor görülür, 2. yazım yalnız adım (durum EZİLMEZ)
+  ✗ G11g yarış sonrası rc 0, ekranda 'durumu korundu'
+── SONUÇ: 399 geçti · 2 kaldı ──
+--- stderr ---

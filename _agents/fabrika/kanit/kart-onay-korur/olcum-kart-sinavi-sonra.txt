@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=77.2s zaman=2026-10-28T13:40:42+03:00
+# rc=0 sure=213.1s zaman=2026-10-28T13:51:37+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -265,6 +265,9 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ G11b rc 0, ekranda 'yalnız adım — durumu korundu'
   ✓ G11c bitti göreve ac → durum yazılmaz (A06: 'bitti' insanındır, ajan geri açamaz); gb-11'in onay bekleyen görevi 'gecti'de de 'bekliyor'a ÇEKİLMEZ
   ✓ G11d onay-bekliyor göreve tikandi → 'bekliyor' YAZILMAZ, yalnız adım (tıkanma nedeniyle)
+  ✓ G11d2 bitti göreve tikandi → 'bekliyor' YAZILMAZ (insanın 'bitti'si geri açılmaz)
+  ✓ G11f 🔴 yarış: okunan sürüm yazıma girer (surum 3) → defter 409 → yeniden okunur, onay-bekliyor görülür, 2. yazım yalnız adım (durum EZİLMEZ)
+  ✓ G11g yarış sonrası rc 0, ekranda 'durumu korundu'
   ✓ G11e durum okunamazsa (404) eski davranış: ac 'çalışılıyor' yazar (koruma yalnız bilinen onay/bitti'de)
   ✓ G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)
 ════ T15 · KANIT AĞACI: bitti/daralt birincil checkout'tan çağrılınca kanıtı kartın İŞ ALANINDAN okur ve nereden okuduğunu söyler; hiçbir yerde yoksa uyarır (Nexus #1223: daralt tur_sifir=0 yazmıştı) ════
@@ -437,5 +440,6 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ S6 büyük harfli 'SÜRÜM PAKETİ' de yakalanır
   ✓ S7 'sürüm paketi' demeyen kart onay istemez
 
-── SONUÇ: 398 geçti · 0 kaldı ──
+── SONUÇ: 401 geçti · 0 kaldı ──
 --- stderr ---
+⏳ agir-sira: kanit-kart-onay-korur-kart-sinavi 131 sn bekledi (yuva 1, load1 17.19)

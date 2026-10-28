@@ -1,7 +1,7 @@
 {
   "is": "kart-onay-korur",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T13:43:17+03:00",
+  "guncelleme": "2026-10-28T13:56:54+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,24 +25,24 @@
       "etiket": "kart-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kart-sinavi-sonra.txt",
-      "sha256": "a19bc8b992e1bec1d2fb51d7c7b448283edb20be9e9a5854d92cbbaa96680af6",
+      "sha256": "b85ba3584bb64ebc994351e8ed821d7d4cb2a28156e65c9e78b1eb0ed26b3e34",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-28T13:40:42+03:00",
-      "sure_sn": 77.2,
+      "zaman": "2026-10-28T13:51:37+03:00",
+      "sure_sn": 213.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "ec335d7b8055411295501f88eb9d8d51"
+      "olcum_id": "f50ec2cc46364b1fb0f351c0f404aa58"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-koruma-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-koruma-yok-sonra.txt",
-      "sha256": "f05731df4a3fdeec2a4814cbe8e40ee958a613539729c75699670d61b77f128e",
+      "sha256": "66e25c6224fb63db5cb64de5bb417e5411704961a3e4206aeec54544bb628f7d",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
@@ -51,20 +51,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-28T13:41:59+03:00",
-      "sure_sn": 76.6,
+      "zaman": "2026-10-28T13:52:55+03:00",
+      "sure_sn": 77.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "kart-sinavi",
       "beklenen": "kirmizi",
-      "olcum_id": "f822a1efa6a640b0b09315a62289dfb7"
+      "olcum_id": "248abd48f89742ffa79f510a5cc7bd54"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-gecti-korunmaz",
       "asama": "sonra",
       "dosya": "olcum-mutant-gecti-korunmaz-sonra.txt",
-      "sha256": "d8e1f30b648490985ae87083a7a122193906d0e47c3ce017a09714cf5febab04",
+      "sha256": "e70df0323838a20e1cd78e233365dd1e1ace3734b37f9e76b3f378fdece93a24",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
@@ -73,20 +73,20 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-28T13:43:17+03:00",
-      "sure_sn": 77.9,
+      "zaman": "2026-10-28T13:54:17+03:00",
+      "sure_sn": 81.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "kart-sinavi",
       "beklenen": "kirmizi",
-      "olcum_id": "e15a05eead2849dd8ac0b5e14936c336"
+      "olcum_id": "c9400a09b45440a9b7e0d93dfad6703a"
     },
     {
       "tur": "olcum",
       "etiket": "surum-lint",
       "asama": "tek",
       "dosya": "olcum-surum-lint-tek.txt",
-      "sha256": "c7fc6fba2d481085444851b2371e007ab881463763e3f333ad295ebcf46dcaa1",
+      "sha256": "bd0c874d2163ac935cfcee4a00a8d3308c6406dcad1235b63f08e7c581aa933a",
       "komut": [
         "node",
         "ahi/schema/version-lint.mjs",
@@ -94,11 +94,72 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-28T13:43:17+03:00",
+      "zaman": "2026-10-28T13:56:54+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "88570546b9f547edbc1d8bf57b4aa73c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-surum-kilidi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-surum-kilidi-yok-sonra.txt",
+      "sha256": "571e97e8e5e61b40528c8d6a045d174e869f546af91423585b69cd7d38e31dcf",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
+        "g[\"surum\"]=int(os.environ[\"MEVCUT_SURUM\"])",
+        "pass"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:55:36+03:00",
+      "sure_sn": 78.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "3c07b0f293494694a177ec9542df29b9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-yeniden-okumaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-yeniden-okumaz-sonra.txt",
+      "sha256": "fc381d8267e346f1de9e26502c417c56da7075cdf1ac30c1b871a16972e7722a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-mut.sh",
+        "[ \"$deneme\" = 1 ] && [ -n \"$MSURUM\" ]",
+        "[ \"$deneme\" = 9 ] && [ -n \"$MSURUM\" ]"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:56:54+03:00",
+      "sure_sn": 78.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "0b59ad9e2a9b4943a4c911c94a6b9b5f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-defter-okuma",
+      "asama": "tek",
+      "dosya": "olcum-canli-defter-okuma-tek.txt",
+      "sha256": "fc7b64023ebe665713cc3f4114f25ba6f3001ac37dea583ee26a94462c9c4eb5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/ko-canli-oku.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T13:56:54+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "40f98009924b48d4a4bba132ccee1494"
+      "olcum_id": "dd34643192e842aa86335f564f1cb8aa"
     }
   ],
-  "imza": "8907eb18eb1f3d7d42d03511db03be244a00bfb472f9bac439fee46f53fa3671"
+  "imza": "627703d1338967550d4ab087b18bb8259c83f5d77d564a2a119ab54291cc2560"
 }

@@ -109,18 +109,21 @@ DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-ht
 #    iken açılış (ac), başka işe geçiş (gecti) ve tıkanma (tikandi) görevin DURUMUNU yazmaz — yalnız adım düşer. Zincir şuydu: onay bekleyen göreve
 #    kart bağlandı → ac 'çalışılıyor' yazdı → kart bitti (dilim, durum yazılmaz) → uzlaştırma açık kartı olmayan 'çalışılıyor'u 'bekliyor'a çekti.
 #    Ajan 'onay-bekliyor'u ancak açık --gorev-bitti ile yazar; 'bitti' yalnız insanın (A06). Durum okunamazsa eski davranış (yazım zaten düşerdi).
-gorev_durum_oku() {  # gorev_durum_oku <gorev_id> → stdout: gorev_durumu ya da boş (okunamadı)
+gorev_durum_oku() {  # gorev_durum_oku <gorev_id> → stdout: "<gorev_durumu> <surum>" ya da boş (okunamadı)
   [ -r "$DEFTER_JY" ] || return 0
   local cfg; cfg="$(mktemp)"; printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$DEFTER_JY")" > "$cfg"
   curl -sS -m 10 --config "$cfg" "$DEFTER_U/kayit/$1" 2>/dev/null | python3 -c 'import sys,json
-try: print(((json.load(sys.stdin).get("kayit") or {}).get("canli") or {}).get("gorev_durumu") or "")
+try: k=json.load(sys.stdin).get("kayit") or {}; print(((k.get("canli") or {}).get("gorev_durumu") or "-") + " " + str(k.get("surum") or ""))
 except Exception: pass' 2>/dev/null
   rm -f -- "$cfg"
 }
 gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
-  local kj="$1" olay="$2" govde cfg cevap rc sonuc MEVCUT=""
-  case "$olay" in ac|gecti|tikandi) MEVCUT="$(gorev_durum_oku "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")")" ;; esac
-  govde="$(MEVCUT_DURUM="$MEVCUT" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+  local kj="$1" olay="$2" govde cfg cevap rc sonuc MEVCUT="" MSURUM="" oku deneme
+  # Okuma ile yazma arasında görev değişirse (Sultan o an onaya aldıysa) eski okumayla durum EZİLMESİN: okunan sürüm yazıma eklenir (defterin
+  # iyimser kilidi, 409 surum_catismasi) ve çatışmada BİR kez yeniden okunup gövde yeniden kurulur (göz tur 1 bulgusu, 774ZHG).
+  for deneme in 1 2; do
+  case "$olay" in ac|gecti|tikandi) oku="$(gorev_durum_oku "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")")"; MEVCUT="${oku%% *}"; MSURUM="${oku#* }"; [ "$MEVCUT" = "-" ] && MEVCUT=""; [[ "$MSURUM" =~ ^[0-9]+$ ]] || MSURUM="" ;; esac
+  govde="$(MEVCUT_DURUM="$MEVCUT" MEVCUT_SURUM="$MSURUM" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 md=os.environ.get("MEVCUT_DURUM","")
@@ -161,7 +164,9 @@ elif olay=="daralt":
 else:
     nd=(k.get("tikanma") or {}).get("neden","") or "tıkandı"
     y={"gorev_durumu":"bekliyor","not":"kart %s tıkandı: %s" % (is_,nd[:300])}; ne="[⏳ bekliyor] %s · kart %s tıkandı (%s): %s" % (kim,is_,(k.get("tikanma") or {}).get("yol",""),nd[:300])
-print(json.dumps({"adimlar":[ne]} if y is None else {"yerine":y,"gerekce":ne,"adimlar":[ne]},ensure_ascii=False))
+g={"adimlar":[ne]} if y is None else {"yerine":y,"gerekce":ne,"adimlar":[ne]}
+if y is not None and olay in ("ac","gecti","tikandi") and os.environ.get("MEVCUT_SURUM"): g["surum"]=int(os.environ["MEVCUT_SURUM"])   # iyimser kilit: okuduğumuz sürüm değiştiyse defter 409 döner
+print(json.dumps(g,ensure_ascii=False))
 PY
 )" || return 4
   if [ ! -r "$DEFTER_JY" ]; then sonuc="yazılamadı: bu kutuda defter jetonu yok ($DEFTER_JY)"
@@ -179,6 +184,8 @@ else:
     e=j.get("ek") if isinstance(j.get("ek"),dict) else j
     print("yazılamadı: http %s · %s%s" % (kod, j.get("hata") or "cevap okunamadı", (" · " + str(e.get("yerine"))[:160]) if e.get("yerine") else ""))')"; fi
   fi
+  [ "$deneme" = 1 ] && [ -n "$MSURUM" ] && [[ "$sonuc" == "yazılamadı: http 409 · surum_catismasi"* ]] || break
+  done
   MEVCUT_DURUM="$MEVCUT" GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
 import json,sys,datetime
 p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
