@@ -1,7 +1,7 @@
 {
   "is": "kabuk-sekmesi-canli-14",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T22:21:30+03:00",
+  "guncelleme": "2026-10-28T22:23:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -71,7 +71,77 @@
       "sure_sn": 0.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "0c6661b8a587495a9051da8bda6161a0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "negatif-kontrol-munavebe-kabuk-yok",
+      "asama": "once",
+      "dosya": "olcum-negatif-kontrol-munavebe-kabuk-yok-once.txt",
+      "sha256": "ba0bd9e6b8d3215f7f712ac8a30c626aa3a400f2c0898805045956c0a6c7e1df",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli-14/canli-kabuk-olc.sh",
+        "--negatif"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:23:51+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "694b95ceb68040e9abb01576f1b9190c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-14-kutu-kabuk-oturumu-2",
+      "asama": "sonra",
+      "dosya": "olcum-canli-14-kutu-kabuk-oturumu-2-sonra.txt",
+      "sha256": "1e3270f3ef53d8ad92e4636c6d0ee18fb3297782ecc2fc9a1bed1dfdeab26c10",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli-14/canli-kabuk-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:23:55+03:00",
+      "sure_sn": 4.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "20fdaa2781dd41d380dd808b79298dab"
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-kabuk-14-kutu-2",
+      "asama": "canli",
+      "dosya": "canli-canli-kabuk-14-kutu-2.txt",
+      "sha256": "30b3d97b3695e58cc039bf6805643806300aac8d48a814a831bd0bca7d1675a2",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli-14/olcum-canli-14-kutu-kabuk-oturumu-2-sonra.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:_agents/fabrika/kanit/kabuk-sekmesi-canli-14/olcum-canli-14-kutu-kabuk-oturumu-2-sonra.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "TOPLAM kutu=14 eksik=0",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-28T22:23:55+03:00 TOPLAM kutu=14 eksik=0",
+        "saat": "2026-10-28T22:23:55+03:00",
+        "saat_iso": "2026-10-28T22:23:55+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28T22:23:55+03:00 TOPLAM kutu=14 eksik=0",
+        "saat": "2026-10-28T22:23:55+03:00",
+        "saat_iso": "2026-10-28T22:23:55+03:00"
+      },
+      "zaman": "2026-10-28T22:23:55+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "145a0476aff24331bb3299958e310f4b"
     }
   ],
-  "imza": "50ff0c2537f193ad9a147bd5a65f331c34da00d76e044c2fd198db2338e32452"
+  "imza": "56e91915ec64933b6106155f904ba101a56c4363b2c61329dc91ee12f135419d"
 }
