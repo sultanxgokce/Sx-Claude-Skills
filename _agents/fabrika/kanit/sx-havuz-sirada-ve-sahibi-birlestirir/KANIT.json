@@ -1,0 +1,102 @@
+{
+  "is": "sx-havuz-sirada-ve-sahibi-birlestirir",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T01:42:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "once-sb",
+      "asama": "once",
+      "dosya": "olcum-once-sb-once.txt",
+      "sha256": "77cb86d050a1a897ca283615f88839532afe1cd08d6ca05857bf5317f3962fcd",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T01:42:40+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c79c5d33ba9a4aaeb57f5584a22a2c50"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sonra-sb",
+      "asama": "sonra",
+      "dosya": "olcum-sonra-sb-sonra.txt",
+      "sha256": "ed54efda6f9b3724a79947b6ea90cb09544bd2ff37598eeea5fb1433f1b7e0ee",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:42:43+03:00",
+      "sure_sn": 2.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a0e407d0dded4b2e993497596bad99f1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-dal",
+      "asama": "tek",
+      "dosya": "olcum-mut-dal-tek.txt",
+      "sha256": "af80f5d14ee8cc8853238730bdf23144d7e1ad2a450c534ed842b2a89b6861fe",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:42:46+03:00",
+      "sure_sn": 2.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-sb",
+      "beklenen": "kirmizi",
+      "olcum_id": "04458160b8ee47fcb0d1fd43bd05c7dd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-ben",
+      "asama": "tek",
+      "dosya": "olcum-mut-ben-tek.txt",
+      "sha256": "f1eb021e49084ef4ba1a41b9b225c211144fc01d20e661bd20ef48de0ef80920",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:42:49+03:00",
+      "sure_sn": 3.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-sb",
+      "beklenen": "kirmizi",
+      "olcum_id": "d7c979b641f54122bdb607e83a5633d7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-sirada",
+      "asama": "tek",
+      "dosya": "olcum-mut-sirada-tek.txt",
+      "sha256": "a888b01b3e59d832e3d6342962cb3eeb25896253e09b3c3c8f5c4e0ab8dd7d24",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:42:52+03:00",
+      "sure_sn": 2.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-sb",
+      "beklenen": "kirmizi",
+      "olcum_id": "0a02954d50cb4f318d43361e0d479f4d"
+    }
+  ],
+  "imza": "36e141143bd835dd213f21e0ae5ce2ed8b684b658d7405e9b7b196ef1b75be5e"
+}
