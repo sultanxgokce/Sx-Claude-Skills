@@ -1,0 +1,25 @@
+{
+  "is": "zeyl-test-sizinti",
+  "cumle": "zeyl.test.sh geçici dizinlerini çıkışta siler (izole ölçüm: 12 dizin bırakıyor)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T06:13:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "12 dizin"
+  ]
+}
