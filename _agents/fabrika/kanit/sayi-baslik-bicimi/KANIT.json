@@ -1,42 +1,42 @@
 {
   "is": "sayi-baslik-bicimi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T00:42:43+03:00",
+  "guncelleme": "2026-10-29T01:04:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kart-bicim",
       "asama": "once",
       "dosya": "olcum-kart-bicim-once.txt",
-      "sha256": "b738df89a6420b2c2a2fb1cd9f311b0a53e80a50156201d3be0015c28b9dcc88",
+      "sha256": "7caa1c252b7a11475d42dd59e2c2c0f9d67bd67f69c6f819410c9545392c9b80",
       "komut": [
         "bash",
         "/tmp/claude-1000/kt-once.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T00:40:25+03:00",
-      "sure_sn": 111.0,
+      "zaman": "2026-10-29T01:03:23+03:00",
+      "sure_sn": 278.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f6c2cc163cde42e2830f23f9f5359222"
+      "olcum_id": "46ba24dd86de4c90a23946e2dc510477"
     },
     {
       "tur": "olcum",
       "etiket": "kart-bicim",
       "asama": "sonra",
       "dosya": "olcum-kart-bicim-sonra.txt",
-      "sha256": "479744a5eb60912481153412247ee23a83fbcc74d2e718ecfa051e96d437060b",
+      "sha256": "49fa6280b8e372a8b27855a67679cbc7212226780a17c83bbaafa9d930f279d2",
       "komut": [
         "bash",
         "/tmp/claude-1000/kt-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T00:42:43+03:00",
-      "sure_sn": 137.6,
+      "zaman": "2026-10-29T01:04:53+03:00",
+      "sure_sn": 89.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "4cc7339c18d64b2986f7b058bf04faf6"
+      "olcum_id": "77618181a9454c55a1b4d1ec135bc0c5"
     }
   ],
-  "imza": "5648bb6d18aec7f9203c61eee7f81d219acbeb927b8b6ceebfe054a020ae8d72"
+  "imza": "9d9e08e1505df66621c4a48b5c30574a86416a925be797adf058ad4f14e00811"
 }

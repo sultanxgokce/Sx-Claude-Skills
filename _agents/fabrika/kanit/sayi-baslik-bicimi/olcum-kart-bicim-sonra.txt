@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/kt-sonra.sh
-# rc=0 sure=137.6s zaman=2026-10-29T00:42:43+03:00
+# rc=0 sure=89.9s zaman=2026-10-29T01:04:53+03:00
 --- stdout ---
   ✗ kart açıldı
   ✗ ekipte biter dedi
@@ -45,6 +45,5 @@ $ bash /tmp/claude-1000/kt-sonra.sh
   ✗ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
   ✗ 'hosting' / 'zilli' canlı saymaz (kelime sonu sınırı; yedek göz #354)
   ✗ Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır
-── SONUÇ: 363 geçti · 44 kaldı ──
+── SONUÇ: 370 geçti · 44 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-sayi-baslik-bicimi-kart-bicim 56 sn bekledi (yuva 2, load1 17.77)

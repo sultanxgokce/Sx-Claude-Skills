@@ -1,59 +1,59 @@
 {
   "is": "is-cron",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T00:41:23+03:00",
+  "guncelleme": "2026-10-29T01:03:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "olc",
       "asama": "tek",
       "dosya": "olcum-olc-tek.txt",
-      "sha256": "1eb62d586ff2a6e2d7cd2f87aeee47591c7c8d6765dd58373037dc66829f627e",
+      "sha256": "bb3d831a61c7916260e1f3d33c36f6bef00078af98459a330152c94387c64606",
       "komut": [
         "echo",
         "1"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T00:41:22+03:00",
+      "zaman": "2026-10-29T01:03:25+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1d7e5b371d3c43389bc045b260ce2143"
+      "olcum_id": "02f6443a8f7f4cf991d9c2f8cae9c5fb"
     },
     {
       "tur": "canli",
       "etiket": "zil",
       "asama": "canli",
       "dosya": "canli-zil.txt",
-      "sha256": "a982045835e785730a02e395684fbd58fadaf022854ae65c1d389b09469d236e",
+      "sha256": "1ff32527caeecdff9235c84610f673f30787c8c78f7424eb149bc08779670be6",
       "komut": [
         "tail",
         "-n",
         "2000",
         "--",
-        "/tmp/tmp.58Had4vakE/zil.log"
+        "/tmp/tmp.kr3S4rzSNz/zil.log"
       ],
       "rc": 0,
       "renk": "yesil",
-      "kaynak": "dosya:/tmp/tmp.58Had4vakE/zil.log",
+      "kaynak": "dosya:/tmp/tmp.kr3S4rzSNz/zil.log",
       "kaynak_turu": "dosya",
       "son": 2000,
       "desen": "çaldı",
       "en_az": 1,
       "atesleme_sayisi": 1,
       "ilk_atesleme": {
-        "satir": "2026-10-28T21:41:23Z çaldı",
-        "saat": "2026-10-28T21:41:23Z",
-        "saat_iso": "2026-10-28T21:41:23+00:00"
+        "satir": "2026-10-28T22:03:25Z çaldı",
+        "saat": "2026-10-28T22:03:25Z",
+        "saat_iso": "2026-10-28T22:03:25+00:00"
       },
       "son_atesleme": {
-        "satir": "2026-10-28T21:41:23Z çaldı",
-        "saat": "2026-10-28T21:41:23Z",
-        "saat_iso": "2026-10-28T21:41:23+00:00"
+        "satir": "2026-10-28T22:03:25Z çaldı",
+        "saat": "2026-10-28T22:03:25Z",
+        "saat_iso": "2026-10-28T22:03:25+00:00"
       },
-      "zaman": "2026-10-29T00:41:23+03:00",
+      "zaman": "2026-10-29T01:03:25+03:00",
       "sure_sn": 0.0,
-      "olcum_id": "62d65b4aee7949dd8fdb97b2d5269adb"
+      "olcum_id": "84175e6c7bac4922aa66336a7db45b1a"
     },
     {
       "tur": "gecersiz",
@@ -92,7 +92,45 @@
       "renk": "ilan",
       "zaman": "2026-10-29T00:41:23+03:00",
       "olcum_id": "f4abe475fc374a7992b89cda0565de68"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "zil",
+      "asama": "tek",
+      "dosya": "gecersiz-canli-zil-79fbc9d94043.txt",
+      "sha256": "bf351bfb63669dfd73653966013292622975c4149ea8a3182d015ecad53e551e",
+      "hedef_dosya": "canli-zil.txt",
+      "hedef_olcum_id": "ec38300038a8446cbe2eecca501c02a3",
+      "hedef_sha256": "6da031e49b4b4614121602f065c50bbb1d867c97ce54e03324c933e2177cf942",
+      "hedef_zaman": "2026-10-29T01:01:58+03:00",
+      "hedef_renk": "yesil",
+      "neden": "log başka sunucunun zil satırıydı, bu iş değil",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T01:01:58+03:00",
+      "olcum_id": "326abb1db77a4276b0d83dd167723bfb"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "zil",
+      "asama": "tek",
+      "dosya": "gecersiz-canli-zil-60c55ffc2f0a.txt",
+      "sha256": "373128123d6ff5012f8c1a6c8ad4aa95ae5cc7c1ecb3c0741ee67e7e21cf1ff0",
+      "hedef_dosya": "canli-zil.txt",
+      "hedef_olcum_id": "84175e6c7bac4922aa66336a7db45b1a",
+      "hedef_sha256": "1ff32527caeecdff9235c84610f673f30787c8c78f7424eb149bc08779670be6",
+      "hedef_zaman": "2026-10-29T01:03:25+03:00",
+      "hedef_renk": "yesil",
+      "neden": "log başka sunucunun zil satırıydı, bu iş değil",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T01:03:26+03:00",
+      "olcum_id": "f95bf554f18346ecaa73e64f71d0873d"
     }
   ],
-  "imza": "c49ca6f2dff54ebcf7ff5a96a75abe7a1cebfc3b61228051d8ab19258bf93450"
+  "imza": "e8fa6ca0c802a6ab0c724eb9f34b8ada04ae7cb297e4b98bbfd0fc1b530022d1"
 }

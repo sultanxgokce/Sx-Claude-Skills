@@ -448,13 +448,24 @@ kart["sayi_uyarilari"]=[] if kaynakli else sayilar
 import re as _re
 # 🟡 BİÇİM UYARISI (verim R2 · SERDAR kararı 29 Eki, uyarı red değil): sayı iddiası taşıyan cümle tek ölçüt biçimine uymuyorsa
 #    ("<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)") 'kaldı' dönüşlerinin yarısı sayı tutmama + parça eksikti.
-kart["sayi_bicim_uyarisi"]=bool(sayilar) and not (_re.search(r"→",cumle) and _re.search(r"kaynak\s*:",cumle,_re.I))
+_AY=r"(?:Oca|Şub|Mar|Nis|May|Haz|Tem|Ağu|Eyl|Eki|Kas|Ara)"
+def _bicim_eksikleri(c):
+    e=[]
+    if not _re.search(r"\d+(?:[.,]\d+)?\s*%?\s*→\s*%?\s*\d+(?:[.,]\d+)?",c): e.append("şimdi → hedef iki SAYI olarak yok")
+    k=_re.search(r"\(\s*kaynak\s*:\s*([^)]*)\)",c,_re.I)
+    if not k or not _re.search(r"\S",k.group(1).split(",")[0] if k else ""): e.append("(kaynak: <komut/ekran>, <gün>) parantezi yok")
+    elif not _re.search(r"\d{1,2}\s+"+_AY+r"|20\d\d-\d\d-\d\d",k.group(1)): e.append("kaynağın günü yok")
+    if len(_re.findall(r"\d+(?:[.,]\d+)?\s*%?\s*→",c))>1 and not _re.search(r"\[ayri\]|\(\d{1,2}\)",c): e.append("birden çok ölçüt: parçalar (1)(2) madde olsun ya da [ayri] ile ayrılsın")
+    return e
+kart["sayi_bicim_eksikleri"]=_bicim_eksikleri(cumle) if (sayilar or _re.search(r"\d+(?:[.,]\d+)?\s*%?\s*→",cumle)) else []   # sayı iddiası ("13 görev") ya da "N →" yazımı
+kart["sayi_bicim_uyarisi"]=bool(kart["sayi_bicim_eksikleri"])
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
 print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'BAŞLAMA İZNİ SULTAN\'A GİDER (veto penceresi: iş yürür; ara ve birleştirme kararları reisin)' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
 for u in kart["kapsam_uyarilari"]: print(f"  ⚠ KAPSAM — {u} (uyarı, red değil; karta yazıldı)")
 if kart["sayi_uyarilari"]:
     print("  ⚠ SAYI — cümlede kaynağı ölçülmemiş sayı: %s → kaynağından sayan komutu ver: kart.sh ac … --sayi-olcum '<komut>' (uyarı, red değil; karta yazıldı)" % " · ".join("'%s'" % u for u in kart["sayi_uyarilari"]))
 if kart["sayi_bicim_uyarisi"]:
+    print("  ⚠ BİÇİM — eksik: %s" % " · ".join(kart["sayi_bicim_eksikleri"]))
     print("  ⚠ BİÇİM — başlıktaki sayı tek ölçüt olarak yazılsın: '<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)'; çok parçalı başlıkta parçalar sayılabilir madde olsun ya da [ayri] ile ayrılsın; süre/aşama (1 hafta, FAZ 2) dolmadan bitti yazılmaz (uyarı, red değil; karta yazıldı)")
 if skomut:
     ilk=(scikti.strip().splitlines() or ["(çıktı yok)"])[0][:120]

@@ -1,25 +1,25 @@
 {
   "is": "is-sunucu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T00:41:24+03:00",
+  "guncelleme": "2026-10-29T01:03:27+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "olc",
       "asama": "tek",
       "dosya": "olcum-olc-tek.txt",
-      "sha256": "9d7b581ef082083ffdf2517fda706d40289037b5fee7af6f6e16eaa2296a3e29",
+      "sha256": "65cee7c3f9f5f861e2eded311b2e8601e54bb754c82e595073a9f19934d19550",
       "komut": [
         "echo",
         "1"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T00:41:24+03:00",
+      "zaman": "2026-10-29T01:03:27+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "24e503a815ba43ae8cc34a1c2087d9d3"
+      "olcum_id": "7977218ae370428f885454d17f0070e4"
     }
   ],
-  "imza": "f1af5a4549952af074d550a3fbb6536f357079004a977a5079f3b50136652104"
+  "imza": "521e664e3e4083a5f2d67d7771abeedb229ddfcccc17e6eb269b8ce3f0cc231f"
 }

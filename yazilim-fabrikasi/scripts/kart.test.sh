@@ -428,6 +428,14 @@ CIKTI="$(ac13 is-b2 "açık görev 13 → 0 (kaynak: gorev.sh liste, 29 Eki) ols
 [ "$(bu is-b2)" = "False" ] && ! grep -q "⚠ BİÇİM" <<<"$CIKTI"; g $? "biçimli cümle (→ ve kaynak:) uyarı almaz"
 CIKTI="$(ac13 is-b3 "buton ekle")"; [ "$(bu is-b3)" = "False" ] && ! grep -q "⚠ BİÇİM" <<<"$CIKTI"; g $? "sayısız cümle uyarı almaz"
 CIKTI="$(ac13 is-b4 "açık görev 13 → 0 olsun")"; [ "$(bu is-b4)" = "True" ]; g $? "kaynaksız ok yetmez: '→' var ama 'kaynak:' yok → uyarı"
+be() { python3 -c "import json,sys;print(' | '.join(json.load(open(sys.argv[1])).get('sayi_bicim_eksikleri',[])))" "$K13/_agents/fabrika/kartlar/$1.json" 2>/dev/null || echo yok; }
+ac13 is-b5 "13 iş → x (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(bu is-b5)" = "True" ] && grep -q "şimdi → hedef iki SAYI" <<<"$(be is-b5)"; g $? "hedef sayı değil ('13 iş → x'): biçimli SAYILMAZ, eksik 'iki SAYI' diye söylenir"
+ac13 is-b6 "açık görev 13 → 0 (kaynak: gorev.sh liste)" >/dev/null; [ "$(be is-b6)" = "kaynağın günü yok" ]; g $? "gün eksik: yalnız 'kaynağın günü yok' (tek, doğru sebep)"
+ac13 is-b7 "açık görev 13 → 0 kaynak: gorev.sh liste, 29 Eki" >/dev/null; grep -q "parantezi yok" <<<"$(be is-b7)"; g $? "parantezsiz kaynak biçimli sayılmaz"
+ac13 is-b8 "görev 13 → 0 ve kart 9 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(be is-b8)" = "birden çok ölçüt: parçalar (1)(2) madde olsun ya da [ayri] ile ayrılsın" ]; g $? "iki ölçüt, madde/[ayri] yok → 'birden çok ölçüt' uyarısı"
+ac13 is-b9 "(1) görev 13 → 0 (2) kart 9 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(bu is-b9)" = "False" ]; g $? "iki ölçüt (1)(2) madde numaralı → uyarı yok"
+ac13 is-b10 "görev 13 → 0 [ayri] kart 9 → 0 (kaynak: gorev.sh liste, 29 Eki)" >/dev/null; [ "$(bu is-b10)" = "False" ]; g $? "iki ölçüt [ayri] ile ayrılmış → uyarı yok"
+ac13 is-b11 "açık görev 13 → 0 (kaynak: gorev.sh liste, 2026-10-29) olsun" >/dev/null; [ "$(bu is-b11)" = "False" ]; g $? "ISO gün de kabul"
 echo "── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──"
 D="$T/pkg-sayi"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
 if python3 - "$D/kart.sh" <<'PYM'

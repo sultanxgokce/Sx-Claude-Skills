@@ -1,7 +1,11 @@
 $ bash /tmp/claude-1000/kt-once.sh
-# rc=0 sure=111.0s zaman=2026-10-29T00:40:25+03:00
+# rc=0 sure=278.5s zaman=2026-10-29T01:03:23+03:00
 --- stdout ---
+  ✗ kart açıldı
+  ✗ ekipte biter dedi
   ✗ sultan=false
+  ✗ SULTAN'A GİDER
+  ✗ 0.21.0: 'BAŞLAMA İZNİ … veto penceresi' der (iş bekletilmez)
   ✗ sınıf dis_yuzey
   ✗ karta baslama_izni=bekliyor + istendi + kural_surumu 0.21.0 yazıldı
   ✗ sınıfsız kartta alan YOK (bayt bayt eski davranış)
@@ -13,22 +17,28 @@ $ bash /tmp/claude-1000/kt-once.sh
   ✗ denetim geçti (kart otomatik okundu, --kart verilmedi)
   ✗ birincil karta puan+kanıt+PR işlendi
   ✗ Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış)
+  ✗ içeride bitenler 1 (is-1, 5/5 E)
   ✗ açık iş 1 (kartsız kaçış kartı)
   ✗ kaçış özete düşüyor
   ✗ gerekçe görünüyor
   ✗ dosyaya yazıldı
   ✗ liste --acik çalışıyor
+  ✗ cron kartı açıldı
+  ✗ açılışta söylüyor
   ✗ canli_gerekir=true, sebep cümledeki kelime
   ✗ 'buton ekle' kartı canlı istemez
   ✗ 'sunucu' kelimesi de yeter (ek: Sunucuda → sunucu)
   ✗ --canli e kelime olmasa da zorunlu kılar
   ✗ --canli h kelimeye rağmen kaldırır; kararı ve kelimeyi karta yazar (gizli değil)
+  ✗ açılışta 'istenmedi' uyarısı basılır (bağımsız göz görsün)
   ✗ yeşil canlı kayıt varken uyarı yok
   ✗ karta canli_kanit=var işlendi
   ✗ karta canli_kanit=var İŞLENMEDİ (geçersiz yeşil sayılmaz)
   ✗ mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi
   ✗ reddedilen çağrılar kartı DEĞİŞTİRMEDİ (şart hâlâ E, geçmişe satır yok)
+  ✗ gerekçeli sahip kararı kabul
   ✗ karta canli_sebep (ad + gerekçe) ve geçmiş satırı yazıldı
+  ✗ ön koşul: buton kartı canlı istemiyor
   ✗ bitmiş kart değişmedi (şart hâlâ E)
   ✗ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
   ✗ alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)
@@ -40,6 +50,13 @@ $ bash /tmp/claude-1000/kt-once.sh
   ✗ biçimli cümle (→ ve kaynak:) uyarı almaz
   ✗ sayısız cümle uyarı almaz
   ✗ kaynaksız ok yetmez: '→' var ama 'kaynak:' yok → uyarı
-── SONUÇ: 368 geçti · 39 kaldı ──
+  ✗ hedef sayı değil ('13 iş → x'): biçimli SAYILMAZ, eksik 'iki SAYI' diye söylenir
+  ✗ gün eksik: yalnız 'kaynağın günü yok' (tek, doğru sebep)
+  ✗ parantezsiz kaynak biçimli sayılmaz
+  ✗ iki ölçüt, madde/[ayri] yok → 'birden çok ölçüt' uyarısı
+  ✗ iki ölçüt (1)(2) madde numaralı → uyarı yok
+  ✗ iki ölçüt [ayri] ile ayrılmış → uyarı yok
+  ✗ ISO gün de kabul
+── SONUÇ: 358 geçti · 56 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-sayi-baslik-bicimi-kart-bicim 15 sn bekledi (yuva 2, load1 17.97)
+⏳ agir-sira: kanit-sayi-baslik-bicimi-kart-bicim 190 sn bekledi (yuva 1, load1 17.91)
