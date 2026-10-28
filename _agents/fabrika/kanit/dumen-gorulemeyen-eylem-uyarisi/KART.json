@@ -1,0 +1,23 @@
+{
+  "is": "dumen-gorulemeyen-eylem-uyarisi",
+  "cumle": "dumen-surucu: fill/selectOption köprüde GÖRÜNMEYEN eylem (CDP Input yok) ve eylem dışı alan değişimi için uyarı bassın + sınav + mutant (JN1K8K, MUHAKKİK geri çevirdi)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T08:40:41+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
