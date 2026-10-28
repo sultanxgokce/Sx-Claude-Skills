@@ -1,0 +1,5 @@
+$ env DUMEN_MUTANT=0 DUMEN_LIB=/tmp/claude-1000/dumen-eski-main.mjs node dumen-surucu/scripts/dumen.test.mjs
+# rc=3 sure=0.1s zaman=2026-10-28T13:04:37+03:00
+--- stdout ---
+ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi
+--- stderr ---

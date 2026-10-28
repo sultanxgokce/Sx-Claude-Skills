@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "dumen-uyari-gonder-sx",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T13:06:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-uyari-gonder-sx",
+  "dal": "dumen-uyari-gonder-sx",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21821,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7562
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2ff32bdd675ca31103a6858ab1a5a66295ba0bfb",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kör nokta uyarıları merkeze yalnız kod ve sayı ile, eylemi bekletmeden gönderilmiş; istenen işin özü doğru yapılmış. Lakin sınav kırmızı bitiyor ve jeton bulunmadığında bile jetonsuz POST atılıyor; önce bunları çözmeden üretime hazır diyemem.",
+    "bulgular": [
+      {
+        "ne": "Kutu jetonu yoksa iletim durmuyor; istek jeton başlığı olmadan merkeze gönderiliyor. İş kartı iletimin “kutu jetonuyla” yapılmasını istiyor, mevcut sınav ise yalnız jetonun bulunduğu yolu doğruluyor.",
+        "kanit": "Üretim kodunda başlık koşullu kurulmuş: `...(jeton ? { 'x-defter-jeton': jeton } : {})`; D3f sınavı jeton dosyasını önceden oluşturup yalnız bu durumda başlığı denetliyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:#uyariIlet; dumen-surucu/scripts/dumen.test.mjs:D3f",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Teslimatın gerçek sınav komutu başarılı değil; mutasyon koşucusu bir mutasyonu üretemediği için tüm ölçüm rc=1 ile kapanıyor. Fonksiyonel 41 sınavın geçmesi değerli olsa da üretim kapısı kırmızı bırakılmış.",
+        "kanit": "Sonra ölçümü `rc=1`, `renk=kirmizi`; çıktı `SONUÇ: geçti=41 kaldı=0`, ardından `✗ durak bildirimi jetonsuz: MUTASYON ÜRETİLEMEDİ`, `MUTANT: 1 kaçtı` ve `AssertionError: çapa 2` diyor.",
+        "konum": "olcum-sinav-gercek-sonra.txt; manifest kaydı sinav-gercek/sonra",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır. Önce kaydı sarı/rc=3 olduğu için başlangıç davranışını ölçmez; sonra kaydı gerçek ölçümdür fakat kırmızı/rc=1 biter. Sonraki çıktıda talebin ana davranışlarını doğrulayan 41 başarılı sınav ve ilgili üç yakalanmış mutasyon bulunuyor, ancak ölçüm çifti yeşil değildir ve jetonsuz çalışma yolu doğrudan sınanmamıştır."
+  }
+}
