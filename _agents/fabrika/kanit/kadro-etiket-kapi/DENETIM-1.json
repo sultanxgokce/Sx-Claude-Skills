@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kadro-etiket-kapi",
+  "pr": "529",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T10:33:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kadro-etiket-kapi",
+  "dal": "kadro-etiket-kapi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38358,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kadro etiketi ayrı ve 600 izinli dosyada tutulmuş; GET birleşimi, yalnız Sultan oturumuna açık tek-alan POST yazımı, boş değerle silme, jeton ve kayıtsız kimlik reddi tamamlanmış. Önce/sonra ölçümü, tam kapı sınavı ve dört mutasyon ölçümü kritik davranışları doğruladığından üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. etiket-uc ölçümü önce kırmızıdan sonra 15/15 yeşile dönüyor, birim ölçümü 11/11 ve bütün kapı sınavı 119/119 geçiyor. Dört mutasyon da jeton reddi, kayıt kimliği denetimi, bozuk dosyayı ezmeme ve günlükte değeri gizleme sınavlarının bilerek bozulan kodu yakaladığını gösteriyor; gerçek kod durumu ilgili gercek_olcum kayıtlarında yeşil."
+  }
+}
