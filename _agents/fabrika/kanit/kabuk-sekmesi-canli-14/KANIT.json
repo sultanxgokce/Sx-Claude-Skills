@@ -1,0 +1,77 @@
+{
+  "is": "kabuk-sekmesi-canli-14",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T22:21:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "canli-14-kutu-kabuk-oturumu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-14-kutu-kabuk-oturumu-sonra.txt",
+      "sha256": "79ff332491af3ea5ad7ffeeb83ecdbacfd2c088e4f9d89a303ab35fa031399a1",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli-14/canli-kabuk-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:21:29+03:00",
+      "sure_sn": 104.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "830631a8700149cfa0d1a8b4d0adb06e"
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-kabuk-14-kutu",
+      "asama": "canli",
+      "dosya": "canli-canli-kabuk-14-kutu.txt",
+      "sha256": "2cdbcc59e64c8d542aba2c5155c5df7f573de55e96f8710bf2970cadb764b65d",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli-14/olcum-canli-14-kutu-kabuk-oturumu-sonra.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:_agents/fabrika/kanit/kabuk-sekmesi-canli-14/olcum-canli-14-kutu-kabuk-oturumu-sonra.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "TOPLAM kutu=14 eksik=0",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-28T22:21:29+03:00 TOPLAM kutu=14 eksik=0",
+        "saat": "2026-10-28T22:21:29+03:00",
+        "saat_iso": "2026-10-28T22:21:29+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28T22:21:29+03:00 TOPLAM kutu=14 eksik=0",
+        "saat": "2026-10-28T22:21:29+03:00",
+        "saat_iso": "2026-10-28T22:21:29+03:00"
+      },
+      "zaman": "2026-10-28T22:21:29+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "a7eea5ad82454bada58e703bb474908d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-gt5btk-onay-durumu",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-gt5btk-onay-durumu-sonra.txt",
+      "sha256": "56f2ef916b80dca549af542720e8081f67ebc3a48c81a917cca80d4e54385cfa",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli-14/gorev-onay-durumu-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:21:30+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0c6661b8a587495a9051da8bda6161a0"
+    }
+  ],
+  "imza": "50ff0c2537f193ad9a147bd5a65f331c34da00d76e044c2fd198db2338e32452"
+}
