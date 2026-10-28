@@ -133,11 +133,24 @@ grep -q "DUR, PR'a bak" <<<"$CIKTI"; g $? "uyarı ne yapılacağını söylüyor
 CIKTI="$( cd "$T/depo" && PATH="$BENZ:$PATH" bash "$IS" ac kapsam-raporu-yeni --kartsiz 2>&1 )"; RC=$?
 grep -q "benzeyen yok" <<<"$CIKTI" && ! grep -q "BENZER İŞ" <<<"$CIKTI"; g $? "benzemeyen işte uyarı YOK, kaç PR'a bakıldığı yazılı"
 ( cd "$T/depo" && bash "$IS" kapat kapsam-raporu-yeni ) >/dev/null 2>&1
+BOZ3="$T/bozuk3-bin"; mkdir -p "$BOZ3"; printf '#!/usr/bin/env bash\necho "bozuk{"\n' > "$BOZ3/gh"; chmod +x "$BOZ3/gh"
+BOZ4="$T/bozuk4-bin"; mkdir -p "$BOZ4"; cat > "$BOZ4/gh" <<'GH4'
+#!/usr/bin/env bash
+python3 -c 'import json;print(json.dumps([{"number":i,"title":"x","headRefName":"y"} for i in range(50)]))'
+GH4
+chmod +x "$BOZ4/gh"
 BOZ2="$T/bozuk2-bin"; mkdir -p "$BOZ2"; printf '#!/usr/bin/env bash\nexit 1\n' > "$BOZ2/gh"; chmod +x "$BOZ2/gh"
 CIKTI="$( cd "$T/depo" && PATH="$BOZ2:$PATH" bash "$IS" ac benzer-gh-yok --kartsiz 2>&1 )"; RC=$?
 [ "$RC" -eq 0 ]; g $? "gh düşünce alan yine açılır"
 grep -q "benzer iş kontrolü YAPILAMADI" <<<"$CIKTI"; g $? "gh düşünce 'YAPILAMADI' denir (sessiz atlama yok)"
 ( cd "$T/depo" && bash "$IS" kapat benzer-gh-yok ) >/dev/null 2>&1
+CIKTI="$( cd "$T/depo" && PATH="$BOZ3:$PATH" bash "$IS" ac benzer-json-bozuk --kartsiz 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ]; g $? "gh bozuk JSON dönerse alan yine açılır"
+grep -q "gh yanıtı çözülemedi" <<<"$CIKTI"; g $? "bozuk JSON sessiz geçilmez, 'YAPILAMADI' denir"
+( cd "$T/depo" && bash "$IS" kapat benzer-json-bozuk ) >/dev/null 2>&1
+CIKTI="$( cd "$T/depo" && PATH="$BOZ4:$PATH" bash "$IS" ac benzer-tavan --kartsiz 2>&1 )"
+grep -q "tavana (50) ulaştı" <<<"$CIKTI"; g $? "50 açık PR tavanına ulaşılınca söylenir"
+( cd "$T/depo" && bash "$IS" kapat benzer-tavan ) >/dev/null 2>&1
 CIKTI="$( cd "$T/depo" && PATH="$BENZ:$PATH" bash "$IS" ac dosyali-benzer-yok --kartsiz --dosyalar z.txt 2>&1 )"
 ! grep -q "BENZER İŞ\|benzer iş" <<<"$CIKTI"; g $? "--dosyalar verilince benzer-iş sezgisi koşmaz (kesin kontrol var)"
 ( cd "$T/depo" && bash "$IS" kapat dosyali-benzer-yok ) >/dev/null 2>&1

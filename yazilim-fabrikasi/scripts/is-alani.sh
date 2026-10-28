@@ -83,11 +83,12 @@ benzer_pr_uyar() {
   command -v gh >/dev/null 2>&1 || { _bilgi "◻ benzer iş kontrolü YAPILAMADI — gh yok"; return 0; }
   json="$(cd "$DEPO" && gh pr list --state open --limit 50 --json number,title,headRefName 2>/dev/null)" \
     || { _bilgi "◻ benzer iş kontrolü YAPILAMADI — gh pr list düştü (yetki/ağ)"; return 0; }
-  python3 - "$is" "$kart" "$json" <<'PY' || true
+  python3 - "$is" "$kart" "$json" <<'PY'
 import json,re,sys
 is_,kart,raw=sys.argv[1:4]
 try: prs=json.loads(raw or "[]")
-except Exception: sys.exit(0)
+except Exception:
+    print("  ◻ benzer iş kontrolü YAPILAMADI — gh yanıtı çözülemedi (açık PR'lara bakılmadı)"); sys.exit(0)
 cumle=""
 try: cumle=json.load(open(kart,encoding="utf-8")).get("cumle","") or ""
 except Exception: pass
@@ -98,12 +99,15 @@ benim=kok(is_.replace("-"," ")+" "+cumle)
 bulunan=[]
 for pr in prs:
     if pr.get("headRefName")==is_: continue
-    ortak=benim & kok((pr.get("headRefName","")+" "+pr.get("title","")).replace("-"," "))
-    if len(ortak)>=2: bulunan.append((pr["number"],pr.get("headRefName",""),sorted(ortak)))
+    ortak=benim & kok((str(pr.get("headRefName",""))+" "+str(pr.get("title",""))).replace("-"," "))
+    if len(ortak)>=2: bulunan.append((pr.get("number","?"),pr.get("headRefName",""),sorted(ortak)))
 for n,d,o in bulunan:
     print(f"  ⚠ BENZER İŞ: açık PR #{n} ({d}) ortak kökler: {' '.join(o)} — aynı işi iki kez yazma: DUR, PR'a bak, gerekirse sor")
 if not bulunan: print(f"  ✓ benzer iş: {len(prs)} açık PR bakıldı, iş adı/cümle ile benzeyen yok (sezgisel; kesin çare --dosyalar)")
+if len(prs)>=50: print("  ⚠ açık PR sayısı tavana (50) ulaştı — daha eski açık PR'lar bakılmadı olabilir")
 PY
+  local prc=$?
+  [ "$prc" -eq 0 ] || _bilgi "  ◻ benzer iş kontrolü YAPILAMADI — iç hata (rc=$prc); açık PR'lara bakılmadı"
   return 0
 }
 
@@ -142,7 +146,7 @@ PY
     kapsam_kontrol "$dosyalar"; local krc=$?
     [ "$krc" -eq 2 ] && exit 2
   else
-    _bilgi "· kapsam: dosya listesi verilmedi (--dosyalar a,b,c) — açık PR çakışmasına bakılmadı"
+    _bilgi "· kapsam: dosya listesi verilmedi (--dosyalar a,b,c) — dosya çakışmasına bakılmadı; yalnız ad/cümle benzerliği aranıyor:"
     benzer_pr_uyar "$is" "$kart"
   fi
   local yol="$KOK/$DEPO_AD-$is"
