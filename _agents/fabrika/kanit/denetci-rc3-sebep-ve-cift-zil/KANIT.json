@@ -1,0 +1,76 @@
+{
+  "is": "denetci-rc3-sebep-ve-cift-zil",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T17:14:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gercek",
+      "asama": "tek",
+      "dosya": "olcum-gercek-tek.txt",
+      "sha256": "a604c4ef625a2218cd4d1fb02bab2566242d4c29e86c7ed0092a55d92d154fd4",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T17:11:45+03:00",
+      "sure_sn": 34.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b10406d413734fda935c3a2fe85f3991"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kilit-red-zil-calar",
+      "asama": "tek",
+      "dosya": "olcum-kilit-red-zil-calar-tek.txt",
+      "sha256": "db8f1b865a42b4167c661d204e336bdf098a932ed7f90f4fdd37d45e39f68184",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil/yazilim-fabrikasi/scripts/.mutant-kilit.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T17:13:23+03:00",
+      "sure_sn": 39.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gercek",
+      "beklenen": "kirmizi",
+      "olcum_id": "d4c990584a72467692a65a874783191c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sebep-zile-girmez",
+      "asama": "tek",
+      "dosya": "olcum-sebep-zile-girmez-tek.txt",
+      "sha256": "dfa411c9f790f0afbef6ce976a701f1f81d9e30bc9141ce69eed53da14a5b2c5",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil/yazilim-fabrikasi/scripts/.mutant-sebep.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T17:14:42+03:00",
+      "sure_sn": 78.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gercek",
+      "beklenen": "kirmizi",
+      "olcum_id": "3b604b0ccbe143abb3a3482156087d97"
+    }
+  ],
+  "imza": "5e8c1dc591f7f658c6563c155fff25109cb0a19c98bc64af40f735ac45e27a1c"
+}

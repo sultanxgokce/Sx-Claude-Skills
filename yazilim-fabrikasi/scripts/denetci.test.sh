@@ -726,6 +726,12 @@ kartac is-zc; bash "$K" olcum is-zc olc --asama tek -- true >/dev/null 2>&1; DZC
 sleep 30 & canli=$!; printf 'pid=%s\npid_kimlik=%s\nbaslangic=2026-01-01T00:00:00\n' "$canli" "$(ps -o lstart= -p "$canli" | sed 's/^ *//')" > "$DZC/DENETIM-1.kosuyor"
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
 [ $RC -eq 3 ] && grep -q "başka denetçi koşuyor" "$T/z-err" && grep -q "pid=$canli" "$DZC/DENETIM-1.kosuyor" && ! ls "$DZC"/DENETIM-*.json >/dev/null 2>&1; g $? "Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz"
+# Z9b (28 Eki, bugün 5 kez rc 3): reddedilen ikinci koşum 'ÖLÇÜLEMEDİ' zili ÇALMAZ (yazana da reise de) — öteki koşum kendi zilini çalar
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
+[ $RC -eq 3 ] && [ ! -s "$ZL" ] && grep -q "denetçi zili çalınmadı: başka koşum sürüyor" "$T/z-err"; g $? "Z9b kilit reddi rc 3 verir ama zil ÇALMAZ (yazana ve reise), sebep stderr'de"
+# Z12: gerçek ölçülemedi zili sebebi taşır (yalnız 'ÖLÇÜLEMEDİ' teşhis değildi)
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZY" DENETCI_ZAMAN_ASIMI=1 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-za --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?
+[ $RC -eq 3 ] && grep -q -- "rc 3 · ZAMAN AŞIMI.* · sebep: .*ZAMAN AŞIMI" "$ZL"; g $? "Z9c rc 3 zili sebep satırını taşır (· sebep: …)"
 kartac is-zr; bash "$K" olcum is-zr olc --asama tek -- true >/dev/null 2>&1; DZR="$T/_agents/fabrika/kanit/is-zr"
 printf 'pid=%s\npid_kimlik=Thu Jan  1 00:00:00 2026\nbaslangic=2026-01-01T00:00:00\n' "$canli" > "$DZR/DENETIM-1.kosuyor"
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-zr --diff "$T/zd.patch" >"$T/z-out" 2>&1; RC=$?
@@ -820,7 +826,7 @@ mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
 mut "tavan-ayiklamaya-bagli" 's@^if \[ "$ISTEM_BAYT" -gt "$BOL_SINIR" \]; then@if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] \&\& [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then@'
 mut "mutasyon-basligi-yok" 's@head -1 "$f" | grep -q .^=== MUTASYON KANITI. \&\& _mt=@false \&\& _mt=@'
-MUT_BOLUM=zil   # aşağıdaki 16 zil mutantı yalnız T-ZIL'le ölçülür (iç koşum IC_BOLUM=zil)
+MUT_BOLUM=zil   # aşağıdaki 18 zil mutantı yalnız T-ZIL'le ölçülür (iç koşum IC_BOLUM=zil)
 mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE bash "$an" "$yazan"@env bash "$an" "$yazan"@'
 mut "pid-kimligi-bakilmaz" 's@ \&\& { \[ -z "$_kim_iz" \] || \[ "$_kim_iz" = "$(_pid_kimlik "$_pid")" \]; }; then@; then@'
 mut "yazansiz-zil-hedefsiz" 's@^  if \[ -z "$yazan" \]; then yazansiz=1; yazan="$reis";@  if false; then :;@'
@@ -836,6 +842,8 @@ mut "asim-137-cevrilmez" 's@ \&\& r=124$@@'
 mut "sure-dogrulanmaz" 's@ZA=900 ;; esac@: ;; esac@'
 mut "bayat-iz-silinmez" 's@; rm -f "$_iz"$@@'
 mut "canli-iz-ezilir" '/başka denetçi koşuyor/s@; exit 3$@@'
+mut "kilit-red-zil-calar" 's@KILIT_RED=1; exit 3@exit 3@'
+mut "sebep-zile-girmez" 's@^  case "$rc" in 2|3|4) \[ -n "$SON_HATA" \]@  case "$rc" in 9) [ -n "$SON_HATA" ]@'
 mut "asim-ham-yazilmaz" 's@^if \[ "$DRC" -eq 124 \]; then$@if false; then@'
 mut "kosuyor-silinmez" 's@^  \[ -n "$KOSUYOR" \] \&\& rm -f "$KOSUYOR"$@  :@'
 mut "kosuyor-yazilmaz" 's@^KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"$@KOSUYOR=""@'
