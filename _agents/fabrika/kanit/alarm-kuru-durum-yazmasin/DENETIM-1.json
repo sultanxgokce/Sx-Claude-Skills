@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "alarm-kuru-durum-yazmasin",
+  "pr": "518",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T06:20:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-alarm-kuru-durum-yazmasin",
+  "dal": "alarm-kuru-durum-yazmasin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15027,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7403
+  },
+  "dalgic": "uyumlu",
+  "bas": "7363488a1de4060e844c9600398b46e5f30e2094",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kuru gönderimde sayaç yalnız bellekte hesaplanıyor, durum dosyasına yazma atlanıyor; sonraki gerçek alarm susmuyor ve tekrar sayısı 1 kalıyor. Gerçek ölçümde 46/46 sınav geçti, ayrıca mutasyon ölçümü eski kusurlu davranışın ilgili iki sınav tarafından yakalandığını gösterdiği için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. gercek_olcum olan alarm-sonra kaydı rc=0 ile G4c, G4d ve G4e dahil 46/46 geçiyor; mutasyon kaydı ise durum yazma geri getirildiğinde G4c ve G4d'nin beklendiği gibi kaldığını göstererek sınavın kusura duyarlı olduğunu kanıtlıyor. Klasik önce/sonra ölçüm çifti yok, ancak gerçek ölçüm ile mutasyon ölçümü talepteki gerilemeyi doğrudan ve yeterli biçimde kapsıyor."
+  }
+}

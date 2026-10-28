@@ -1,0 +1,30 @@
+{
+  "is": "alarm-kuru-durum-yazmasin",
+  "cumle": "alarm.sh gonder --kuru tekrar sınırı kaydını yazıyor: kuru koşu sonrası gerçek alarm susuyor ve yükseltme sayacı kuru koşuyla artıyor; kuru koşu durum yazmasın",
+  "istedi": "SULTAN",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-28T06:13:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "?",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-28T06:13:29+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "sayi_uyarilari": []
+}
