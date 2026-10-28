@@ -1,7 +1,7 @@
 {
   "is": "kabuk-sekmesi-canli",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T21:56:57+03:00",
+  "guncelleme": "2026-10-28T22:04:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -54,7 +54,109 @@
       "zaman": "2026-10-28T21:56:57+03:00",
       "sure_sn": 0.0,
       "olcum_id": "c97a68501d144c1c940927324d347b1b"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "canli-11-kutu-kabuk-oturumu",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-canli-11-kutu-kabuk-oturumu-sonra-6cdaf31a4390.txt",
+      "sha256": "29534e43d3105d144ecde11420a990e5c4ab37b13db8c46d973279803b4de43d",
+      "hedef_dosya": "olcum-canli-11-kutu-kabuk-oturumu-sonra.txt",
+      "hedef_olcum_id": "0d02d0c4aa8e47e080246ebc74f0f7fd",
+      "hedef_sha256": "08f413dc479f463a78f844ff3ff60821b7bbcad42e07124786df68d5743ad092",
+      "hedef_zaman": "2026-10-28T21:56:30+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: kutu listesi 11'di, terminal-onar'ın 14 kutuluk kanonik listesiyle yeniden ölçülür",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T22:00:23+03:00",
+      "olcum_id": "2dbd2e9178f246ee9c15048f9e1c98d3"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "canli-kabuk-11-kutu",
+      "asama": "tek",
+      "dosya": "gecersiz-canli-canli-kabuk-11-kutu-b79746b8da9c.txt",
+      "sha256": "5c32584d8f99d22b83efb48f15cae4a0366b940976cd432597d4bb62487f94a2",
+      "hedef_dosya": "canli-canli-kabuk-11-kutu.txt",
+      "hedef_olcum_id": "c97a68501d144c1c940927324d347b1b",
+      "hedef_sha256": "34fffae1a8b9d19570004dd7cc453a45bb9fdc333f3d16f573e8efcea7fd9c67",
+      "hedef_zaman": "2026-10-28T21:56:57+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: 11 kutuluk ölçümün canlı kaydı; 14 kutuyla yeniden",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-28T22:00:23+03:00",
+      "olcum_id": "5f0f3808857946e6a5a459905397a10f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-14-kutu-kabuk-oturumu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-14-kutu-kabuk-oturumu-sonra.txt",
+      "sha256": "e021283c49b3d32c302e8b08de7f12373d6a4284127854285c9a3db2adb00ef7",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli/canli-kabuk-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:03:21+03:00",
+      "sure_sn": 178.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1174474f073b402b96458b73d589c72a"
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-kabuk-14-kutu",
+      "asama": "canli",
+      "dosya": "canli-canli-kabuk-14-kutu.txt",
+      "sha256": "58376418fdbda15c4aaffef830003df382410a1b3200ea04aaf04e9cbd643284",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "_agents/fabrika/kanit/kabuk-sekmesi-canli/olcum-canli-14-kutu-kabuk-oturumu-sonra.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:_agents/fabrika/kanit/kabuk-sekmesi-canli/olcum-canli-14-kutu-kabuk-oturumu-sonra.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "TOPLAM kutu=14 eksik=0",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-28T22:03:21+03:00 TOPLAM kutu=14 eksik=0",
+        "saat": "2026-10-28T22:03:21+03:00",
+        "saat_iso": "2026-10-28T22:03:21+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-28T22:03:21+03:00 TOPLAM kutu=14 eksik=0",
+        "saat": "2026-10-28T22:03:21+03:00",
+        "saat_iso": "2026-10-28T22:03:21+03:00"
+      },
+      "zaman": "2026-10-28T22:03:44+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "59b8613d959c4fe589e3a7f39b1d1b17"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "gorev-gt5btk-onay-bekliyor",
+      "asama": "sonra",
+      "dosya": "dosya-gorev-gt5btk-onay-bekliyor-sonra.txt",
+      "sha256": "11c3c69deb453b8a53745df910bcb0b5b73ab4c297d55aa6300979265c743610",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gorev-gt5btk-onay.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T22:04:08+03:00",
+      "olcum_id": "dadce47fa50a403dac2753496f2b9e27"
     }
   ],
-  "imza": "d60b010acf2f968b7f93b33f044c49aa4093500cf12c7dc9edae9fa9b05917e1"
+  "imza": "6b85b4708b89c89118bc5edb6f0f6378ba62c816f6ed194697b95952d9a6609a"
 }

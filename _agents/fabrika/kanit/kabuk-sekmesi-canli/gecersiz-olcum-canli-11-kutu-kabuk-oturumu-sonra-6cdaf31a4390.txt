@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-canli-11-kutu-kabuk-oturumu-sonra.txt
+hedef_sha256: 08f413dc479f463a78f844ff3ff60821b7bbcad42e07124786df68d5743ad092
+hedef_zaman: 2026-10-28T21:56:30+03:00
+hedef_renk: yesil
+neden: göz tur 1: kutu listesi 11'di, terminal-onar'ın 14 kutuluk kanonik listesiyle yeniden ölçülür
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-28T22:00:23+03:00

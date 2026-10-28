@@ -2,7 +2,7 @@
 # canli-kabuk-olc.sh — her kutuda el kabuğu sekmesi (<kutu>-kabuk tmux oturumu) var mı? İki yüzey: tmux ls (süreç) + /config/.terminal-onar/kabuk.son (bekçi damgası).
 # Salt okur (ssh hostsrv → docker exec -u abc). Çıkış: her kutu bir satır; rc 0 = probe edilen her kutuda ikisi de VAR, aksi 1. Pozitif kontrol: <kutu>-ana oturumu da sayılır (tmux ls çalışıyor mu?).
 set -u
-KUTULAR="code vekatip akar mmex huma sedir tellal mihenk nova nazir medigate"
+KUTULAR="akar huma huzur mihenk mmex nazir revak sedir tellal tez nova vekatip medigate code"   # terminal-onar canlı-kutular listesiyle aynı 14 kutu (kapi-bekci-eski-kod kanıtı)
 eksik=0; n=0
 for k in $KUTULAR; do
   out=$(ssh -o ConnectTimeout=10 hostsrv "docker exec -u abc cloudtop-$k sh -c 'tmux ls 2>/dev/null | cut -d: -f1 | tr \"\\n\" \" \"; printf \"|\"; cat /config/.terminal-onar/kabuk.son 2>/dev/null || printf yok'" 2>/dev/null)

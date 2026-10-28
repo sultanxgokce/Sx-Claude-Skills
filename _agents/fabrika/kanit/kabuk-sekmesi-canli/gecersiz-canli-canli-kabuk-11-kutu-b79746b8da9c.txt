@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: canli-canli-kabuk-11-kutu.txt
+hedef_sha256: 34fffae1a8b9d19570004dd7cc453a45bb9fdc333f3d16f573e8efcea7fd9c67
+hedef_zaman: 2026-10-28T21:56:57+03:00
+hedef_renk: yesil
+neden: göz tur 1: 11 kutuluk ölçümün canlı kaydı; 14 kutuyla yeniden
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-28T22:00:23+03:00
