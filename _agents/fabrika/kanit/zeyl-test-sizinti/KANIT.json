@@ -1,0 +1,44 @@
+{
+  "is": "zeyl-test-sizinti",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T06:14:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sizinti-once",
+      "asama": "once",
+      "dosya": "olcum-sizinti-once-once.txt",
+      "sha256": "4c95277a4cff834c9ba5d8ac0d7808e5423d769d0c0c7fdce97b080c6575d6a9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/ol-sk.sh",
+        "/tmp/tmp.dY7HNjpWEf/zeyl/scripts/zeyl.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T06:14:02+03:00",
+      "sure_sn": 41.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "74565b72e6ac4fcf8c5324fef288d046"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sizinti-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sizinti-sonra-sonra.txt",
+      "sha256": "6d8576a6781753ad906469e17c4da171e9401ddbebc85ec622c5592c28aab905",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/ol-sk.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-zeyl-test-sizinti/zeyl/scripts/zeyl.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T06:14:03+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a1d2d1ac65f049e9aa676d7c85343b2c"
+    }
+  ],
+  "imza": "b0348b065dbe678a211276272825842f055cc81934a3c9949c612be833058eb4"
+}
