@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "gun-sonu-bitis-bos",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T22:03:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-bitis-bos",
+  "dal": "gun-sonu-bitis-bos",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22589,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 7808
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e826b257422fed836c534b6cb606349bc586f53f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Boş `bitis` değeri güvenli biçimde boş metne çevrilmiş ve eski ifadenin hatasını yakalayan sınav yeşil ölçümle doğrulanmış. Ancak iş kartının açıkça istediği kurulu kopya güncellemesi değişiklikte ve ölçümde yok; önce kurulum yapılıp kurulu kopya ayrıca sınanmalı.",
+    "bulgular": [
+      {
+        "ne": "Talebin “kurulu kopya” kısmı karşılanmamış veya en azından kanıtlanmamış; yalnız depo içindeki üretim betiği değiştirilip sınanmış.",
+        "kanit": "Üretim farkında yalnız `yazilim-fabrikasi/scripts/gun-sonu.sh` değişiyor; tek ölçüm komutu da `bash yazilim-fabrikasi/scripts/gun-sonu.test.sh` ile depo kopyasını çalıştırıyor. Kurulum komutu, kurulu hedefte dosya farkı/hash ölçümü veya kurulu betiği çağıran ikinci ölçüm bulunmuyor.",
+        "konum": "İŞ KARTI `cumle`; diff `yazilim-fabrikasi/scripts/gun-sonu.sh`; manifest `sinav-gercek` komutu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm yeşil, rc=0 ve G12 ile null bitiş regresyonunu, G12 mutasyonu ile sınavın eski hatayı yakaladığını gösteriyor. Buna karşılık önce/sonra veya kurulu kopyaya yönelik ayrı bir ölçüm yok; mevcut kanıt yalnız depo kodu ve depo sınavı için yeterli."
+  }
+}

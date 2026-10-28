@@ -1,0 +1,57 @@
+{
+  "is": "gun-sonu-bitis-bos",
+  "cumle": "gun-sonu.sh kartlarda bitis=null (canlı borçlu kart) görünce çökmesin; boş bitişi boş metin say, çöken özetin sınavı ve mutantı depoda",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T21:54:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-28T22:03:58+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gun-sonu-bitis-bos-kurulum",
+      "tur_sifir": 1
+    }
+  ],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canlı",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "27 ve"
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "MİRAHUR",
+      "oturum": "d26a1038-c462-43e7-8057-360eceeaec18",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gun-sonu-bitis-bos-kurulum) — gun-sonu.sh düzeltmesi birleştikten sonra kurulu kopyaya yalnız bu beceri için kurulur ve gerçek akşam özeti koşturularak doğrulanır",
+      "zaman": "2026-10-28T22:03:58+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gun-sonu.sh kartlarda bitis=null (canlı borçlu kart) görünce çöküyor; akşam özeti 27 ve 28 Eki üretilmedi — boş bitişi boş metin say, çöken özetin sınavı + kurulu kopya",
+      "zaman": "2026-10-28T22:03:58+03:00",
+      "kalan_kart": "gun-sonu-bitis-bos-kurulum"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-28T22:03:58+03:00",
+      "kalan_kart": "gun-sonu-bitis-bos-kurulum",
+      "kalan": "gun-sonu.sh düzeltmesi birleştikten sonra kurulu kopyaya yalnız bu beceri için kurulur ve gerçek akşam özeti koşturularak doğrulanır",
+      "tur_sifir": 1,
+      "oturum": "d26a1038-c462-43e7-8057-360eceeaec18"
+    }
+  ]
+}

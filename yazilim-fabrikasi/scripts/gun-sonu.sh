@@ -33,7 +33,7 @@ if os.path.exists(karne):
             r=json.loads(l)
             if r.get("olay")=="denetim": den[r["is"]]=r
 def bugun(k):  # o gün açılmış YA DA o gün kapanmış
-    return k["zaman"][:10]==gun or (k.get("bitis","")[:10]==gun)
+    return k["zaman"][:10]==gun or ((k.get("bitis") or "")[:10]==gun)
 g=[k for k in kartlar if bugun(k)]
 sultan=[k for k in g if k["sultan"]]
 icerde=[k for k in g if not k["sultan"] and k["durum"]=="bitti"]
