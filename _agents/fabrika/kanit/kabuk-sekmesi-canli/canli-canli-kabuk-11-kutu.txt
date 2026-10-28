@@ -1,0 +1,21 @@
+$ tail -n 2000 -- _agents/fabrika/kanit/kabuk-sekmesi-canli/olcum-canli-11-kutu-kabuk-oturumu-sonra.txt
+# kaynak=dosya:_agents/fabrika/kanit/kabuk-sekmesi-canli/olcum-canli-11-kutu-kabuk-oturumu-sonra.txt tur=dosya desen=TOPLAM kutu=11 eksik=0 en_az=1 son=2000 atesleme=1 rc=0 sure=0.0s zaman=2026-10-28T21:56:57+03:00
+--- stdout ---
+$ bash _agents/fabrika/kanit/kabuk-sekmesi-canli/canli-kabuk-olc.sh
+# rc=0 sure=514.2s zaman=2026-10-28T21:56:30+03:00
+--- stdout ---
+2026-10-28T21:56:25+03:00 code VAR  kabuk-oturumu=code-kabuk kabuk.son=ok
+2026-10-28T21:56:25+03:00 vekatip VAR  kabuk-oturumu=vekatip-kabuk kabuk.son=ok
+2026-10-28T21:56:26+03:00 akar VAR  kabuk-oturumu=akar-kabuk kabuk.son=ok
+2026-10-28T21:56:26+03:00 mmex VAR  kabuk-oturumu=mmex-kabuk kabuk.son=ok
+2026-10-28T21:56:27+03:00 huma VAR  kabuk-oturumu=huma-kabuk kabuk.son=ok
+2026-10-28T21:56:27+03:00 sedir VAR  kabuk-oturumu=sedir-kabuk kabuk.son=ok
+2026-10-28T21:56:28+03:00 tellal VAR  kabuk-oturumu=tellal-kabuk kabuk.son=ok
+2026-10-28T21:56:28+03:00 mihenk VAR  kabuk-oturumu=mihenk-kabuk kabuk.son=ok
+2026-10-28T21:56:29+03:00 nova VAR  kabuk-oturumu=nova-kabuk kabuk.son=ok
+2026-10-28T21:56:29+03:00 nazir VAR  kabuk-oturumu=nazir-kabuk kabuk.son=ok
+2026-10-28T21:56:30+03:00 medigate VAR  kabuk-oturumu=medigate-kabuk kabuk.son=ok
+2026-10-28T21:56:30+03:00 TOPLAM kutu=11 eksik=0
+--- stderr ---
+⏳ agir-sira: kanit-kabuk-sekmesi-canli-canli-11-kutu-kabuk-oturumu 508 sn bekledi (yuva 2, load1 17.76)
+--- stderr ---
