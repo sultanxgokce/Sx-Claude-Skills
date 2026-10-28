@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.12.0
+version: 1.12.1
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -139,7 +139,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --bak    # yalnız
 - **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok (ya da eşikten az: gerçek sayı söylenir). Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Bu dalda betik hiçbir işi üstlenmez.
 - 🔴 **"Bugüne al" Sultan'ındır.** Defterde `bugun_plani` alanını geçit yalnız Sultan ekranına yazdırır (A06; ajan yazarsa 403). Betik onu YAZMAZ, yalnız ÖNERİR. Yani "bugüne alındı" işareti Sultan'ın tıkıyla gelir; ajanın yaptığı iş "çalışılıyor" ve öneridir.
 - **Başkasının işi üstlenilmez (1.11.1):** eşik kutu-düzeyinde sayılır ama başlatma adayı YALNIZ koltuğa atanmış ya da sahipsiz (`-`) iştir; en üstteki iş başkasınındaysa atlanır, hiçbiri uygun değilse `BASLAMADI=yok` basılır ve hiçbir iş üstlenilmez. Sınav S19-S21 bunu sahte listede kilitler.
-- **Koltuk adı ↔ defter adı (1.12.0, `kimlik-coz.sh`):** çok kimlikli kutuda koltuk adı (tmux oturumu) ile defterdeki ad ayrışabilir (mihenk: koltuk MOBILYACI, işler NECCAR adına). Eşleme **koltuk başına tablodur** — `koltuk-esleme.tsv` (`<koltuk><TAB><defter adı>`, yalnız ad FARKLIYSA satır; `GUNLUK_PLAN_ESLEME` ile yolu değişir). `kutu-bul.sh`, `deftere-yaz.sh`, `sirada-bak.sh` adı bu tablodan çevirir; tabloda yoksa ad AYNEN kalır, bir koltuk iki ada giderse rc 3 (tahmin yok), bozuk satır atlanır ve söylenir. 🔴 `GUNLUK_PLAN_AJAN`'ı ortak ayara KALICI yazma: sekiz kimlikli kutuda hepsi tek kişi adına yazar.
+- **Koltuk adı ↔ defter adı (1.12.0, `kimlik-coz.sh`):** çok kimlikli kutuda koltuk adı (tmux oturumu) ile defterdeki ad ayrışabilir (mihenk: koltuk MOBILYACI, işler NECCAR adına). Eşleme **koltuk başına tablodur** — `koltuk-esleme.tsv` (`<koltuk><TAB><defter adı>`, yalnız ad FARKLIYSA satır; `GUNLUK_PLAN_ESLEME` ile yolu değişir). `kutu-bul.sh`, `deftere-yaz.sh`, `sirada-bak.sh` adı bu tablodan çevirir; tabloda yoksa ad AYNEN kalır, bir koltuk iki ada giderse rc 3 (tahmin yok), bozuk satır atlanır ve söylenir. 🔴 `GUNLUK_PLAN_AJAN`'ı ortak ayara KALICI yazma: sekiz kimlikli kutuda hepsi tek kişi adına yazar. **1.12.1:** tabloya mihenk reisi eklendi (NISANCI → mihenk-ana; reis kendi koltuğunu ölçüp bildirdi, defterde 25 kaydı bu adla duruyor).
 - **Sırada** = ekranın tanımı: aynı kutuda `acik` ya da `sira-bende` (havuz · tasarlanıyor · bekliyor · çalışılıyor · onay-bekliyor · bitti · iptal SAYILMAZ).
 - **Ölçemezse karar vermez:** defter okunamadı ya da kutu çıkmadıysa rc 3 — "Sırada 0" DENMEZ, soru da sorulmaz.
 - **Kutu tahmin edilmez (`kutu-bul.sh`):** görev listesi kutuya özel DEĞİLDİR (herkes tüm kutuları görür); "listedeki en sık kutu" hep en kalabalık kutuyu (code) verirdi — menzil'de maddeler yanlış deftere gidecekti. Kutu = o koltuğa ATANMIŞ işlerin kutusu; atanmışı yoksa ya da iki kutu eşitse rc 3 ve `--kutu` istenir (`GUNLUK_PLAN_KUTU` ile de verilir). `deftere-yaz.sh` de aynı yolu kullanır.
