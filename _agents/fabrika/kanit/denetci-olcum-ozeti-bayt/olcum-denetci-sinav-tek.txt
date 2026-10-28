@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=1083.4s zaman=2026-10-28T08:24:32+03:00
+# rc=0 sure=1432.9s zaman=2026-10-28T10:20:12+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -221,6 +221,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)
   ✓ O14 🔴 az satırlı çok baytlı ölçüm kısalır (27503 → 6665 bayt); ✗ ve SONUÇ satırı kalır
   ✓ O15 kesilen ölçümde 'tam metin kanıt dizininde: <dosya>' notu ve kesilen satır sayısı göze söylenir
+  ✓ O17 stderr'deki uzun satır da 200 karaktere kesilir (6000 karakterlik tek stderr satırı istemi şişirmez), sondaki satır korunur
   ✓ O16 60 satır ve 3 KB altı ölçüm bayt bayt AYNEN (kısalma yalnız ağır kayıtta)
 ════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════
   ✓ M1 istemde mutasyon ölçümünün başlığı MUTASYON KANITI der, gerçek ölçümünki demez
@@ -243,7 +244,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ Z2d aşımda da koşuyor izi silindi
   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
-  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (2 sn < 6)
+  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (3 sn < 6)
   ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
   ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
   ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
@@ -302,11 +303,12 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'olcum-tavan-asilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-atlanan-sayisiz' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-bayt-kapisi-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-stderr-satiri-kesilmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-uzun-satir-kesilmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 50 mutant · 4 paralel · 914 sn
+  (bilgi) 51 mutant · 4 paralel · 1206 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
@@ -493,5 +495,5 @@ toplam=44 geçen=44 düşen=0
   ✓ TP4c kanıt birincilde VARKEN gerçek betik yine rc 2, DENETIM yok (kapıyı kanıt değil birincil tespiti kapatıyor)
   ✓ TP4b MUTASYON: kapı sökülünce birincile DENETIM yazılır (kapı gerçekten kabloda)
 
-── SONUÇ: 325 geçti · 0 kaldı ──
+── SONUÇ: 327 geçti · 0 kaldı ──
 --- stderr ---

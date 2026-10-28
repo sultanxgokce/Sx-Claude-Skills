@@ -773,6 +773,7 @@ def kis(x):
     kesilen += 1
     return x[:SATIR_GEN] + " […+%d kar]" % (len(x) - SATIR_GEN)
 cik = [x if x.startswith("[…") else kis(x) for x in cik]
+err = [x if x.startswith(("[…", "--- stderr")) else kis(x) for x in err]   # göz #526 tur 1: stderr satırları da aynı karakter sınırından geçer
 if kesilen: cik.append("[… %d uzun satır %d karakterde kesildi — tam metin kanıt dizininde: %s …]" % (kesilen, SATIR_GEN, AD))
 print("\n".join(cik + err))
 PY

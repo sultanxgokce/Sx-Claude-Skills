@@ -650,6 +650,9 @@ printf 'a\nb\nc\n' > "$T/oz-hafif.txt"; python3 -c "open('$T/oz-hafif60.txt','w'
 o14="$(bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-agir.txt")"
 [ "$(wc -c <<<"$o14")" -lt $(( $(wc -c < "$T/oz-agir.txt") / 3 )) ] && grep -qx '  ✗ kirmizi-kapi' <<<"$o14" && grep -qx '── SONUÇ: 30 geçti · 1 kaldı ──' <<<"$o14"; g $? "O14 🔴 az satırlı çok baytlı ölçüm kısalır ($(wc -c < "$T/oz-agir.txt") → $(wc -c <<<"$o14") bayt); ✗ ve SONUÇ satırı kalır"
 grep -q 'tam metin kanıt dizininde: oz-agir.txt' <<<"$o14" && grep -q 'uzun satır 200 karakterde kesildi' <<<"$o14"; g $? "O15 kesilen ölçümde 'tam metin kanıt dizininde: <dosya>' notu ve kesilen satır sayısı göze söylenir"
+python3 -c "open('$T/oz-stderr.txt','w').write(''.join('s %d\n' % i for i in range(70)) + '--- stderr ---\n' + 'E' * 6000 + '\nson-stderr\n')"
+o17="$(bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-stderr.txt")"
+[ "$(awk '{ if (length($0) > m) m = length($0) } END { print m }' <<<"$o17")" -lt 400 ] && grep -qx 'son-stderr' <<<"$o17" && grep -q 'uzun satır 200 karakterde kesildi' <<<"$o17"; g $? "O17 stderr'deki uzun satır da 200 karaktere kesilir (6000 karakterlik tek stderr satırı istemi şişirmez), sondaki satır korunur"
 bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-hafif60.txt" > "$T/oz-hafif60.out"; cmp -s "$T/oz-hafif60.txt" "$T/oz-hafif60.out"; g $? "O16 60 satır ve 3 KB altı ölçüm bayt bayt AYNEN (kısalma yalnız ağır kayıtta)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 fi   # IC_BOLUM=zil atlaması sonu
@@ -843,6 +846,7 @@ mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---
 mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME, BAYT_ESIK, SATIR_GEN = 60, 20, 20, 10, 10, 3000, 200$@SINIR, BAS, SON, HSON, SECME, BAYT_ESIK, SATIR_GEN = 60, 300, 300, 10, 10, 3000, 200@'
 mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda; tam metin kanıt dizininde: %s …\]" % (atlanan, len(L), AD)$@    not_ = "[…]"@'
 mut "olcum-bayt-kapisi-yok" 's@^if len(L) <= SINIR and len(HAM.encode("utf-8")) <= BAYT_ESIK: sys.stdout.write(HAM); sys.exit()@if len(L) <= SINIR: sys.stdout.write(HAM); sys.exit()@'
+mut "olcum-stderr-satiri-kesilmez" 's@^err = \[x if x.startswith(("\[…", "--- stderr")) else kis(x) for x in err\].*$@err = err@'
 mut "olcum-uzun-satir-kesilmez" 's@^    if len(x) <= SATIR_GEN: return x$@    return x@'
 mut "olcum-ortadan-secmez" 's@^    orta = cik\[BAS:-SON\]; sec = \[x for x in orta if any(k in x for k in SECILIR)\]$@    orta = cik[BAS:-SON]; sec = []@'
 mut "olcum-secilen-de-sayilir" 's@^    atlanan = len(orta) - min(len(sec), SECME) .*$@    atlanan = len(orta)@'

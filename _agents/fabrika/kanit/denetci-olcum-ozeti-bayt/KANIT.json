@@ -1,24 +1,24 @@
 {
   "is": "denetci-olcum-ozeti-bayt",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-28T09:16:49+03:00",
+  "guncelleme": "2026-10-28T10:20:12+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "denetci-sinav",
       "asama": "tek",
       "dosya": "olcum-denetci-sinav-tek.txt",
-      "sha256": "25deb97f9529b65f102d994321d41514f0ab78500a4472ed6e3f7775a778debe",
+      "sha256": "cdb2de316cf06e9cf09570de887cdb9d416d0cbf494852ffb68fe4444964fb4e",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/denetci.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-28T08:24:32+03:00",
-      "sure_sn": 1083.4,
+      "zaman": "2026-10-28T10:20:12+03:00",
+      "sure_sn": 1432.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b6591ef24de342aa9955e13efc8260c4"
+      "olcum_id": "809c95ccb7164605be7825ebddee37dc"
     },
     {
       "tur": "olcum",
@@ -61,5 +61,5 @@
       "olcum_id": "99e608622fa845ac9aa7a6b58351023f"
     }
   ],
-  "imza": "d00755fc6bee8ef6b0a6d44aed96aaecc55f710b3a83635c171892c71adbf055"
+  "imza": "2e36ff8e6155fcd014f59cb29d093370778dfcf4297c8cb0fc200f1bbeafec33"
 }
