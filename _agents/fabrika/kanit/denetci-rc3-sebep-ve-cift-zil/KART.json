@@ -1,0 +1,27 @@
+{
+  "is": "denetci-rc3-sebep-ve-cift-zil",
+  "cumle": "Denetçi 'başka denetçi koşuyor' reddinde ve öteki erken çıkışlarda rc 3 zili sebep taşımıyor ve yanlış 'ölçülemedi' diyor; sebep zile girsin, kilit reddi zil çalmasın",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-28T16:45:53+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: zil, zili",
+  "kapsam_uyarilari": [],
+  "olcut": [],
+  "olcum_yeri": "yerel, 12 çekirdek",
+  "sayi_uyarilari": [
+    "3 zili"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-rc3-sebep-ve-cift-zil",
+  "pr": "537",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T17:16:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-rc3-sebep-ve-cift-zil",
+  "dal": "denetci-rc3-sebep-ve-cift-zil",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36188,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 13705
+  },
+  "dalgic": "uyumlu",
+  "bas": "98ee73d15bc3617dc2f5577ececc55c3b3d50ae6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kilit reddinde rc 3 korunurken zil tamamen susturulmuş; diğer rc 2/3/4 çıkışlarında son hata 140 karakterle zile sebep olarak eklenmiş. Gerçek ölçüm yeşil, iki hedefli mutasyon da sınavın her iki davranış bozulmasını yakaladığını gösteriyor; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kod ölçümü rc=0 ile Z9b kilit reddinde zil çalmadığını ve Z9c rc 3 zilinde sebep bulunduğunu doğruluyor; iki ayrı mutasyon ölçümü de sırasıyla bu korumalar kaldırıldığında rc=1 ile sınavın bozuk kodu yakaladığını gösteriyor. Önce/sonra kare gerektiren bir ekran işi değil; gerçek ölçüm ile hedefli mutasyon çifti talep edilen davranışlar için yeterli."
+  }
+}
