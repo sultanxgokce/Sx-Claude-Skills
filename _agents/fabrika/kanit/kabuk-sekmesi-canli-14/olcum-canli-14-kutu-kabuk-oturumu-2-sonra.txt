@@ -1,0 +1,21 @@
+$ bash _agents/fabrika/kanit/kabuk-sekmesi-canli-14/canli-kabuk-olc.sh
+# rc=0 sure=4.5s zaman=2026-10-28T22:23:55+03:00
+--- stdout ---
+2026-10-28T22:23:51+03:00 KAYNAK LİSTE: /config/projects/Sx-Claude-Skills/_agents/fabrika/kanit/kapi-bekci-eski-kod/canli-kutular-olc.sh → 'akar huma huzur mihenk mmex nazir revak sedir tellal tez nova vekatip medigate code' (kutu sayısı 14) · kip: pozitif (her kutuda kabuk beklenir)
+2026-10-28T22:23:51+03:00 YÜZEY 1: süreç — ssh hostsrv 'docker exec -u abc cloudtop-<kutu> tmux ls' (salt okur) · YÜZEY 2: bekçi damgası — /config/.terminal-onar/kabuk.son (salt okur) · POZİTİF KONTROL: aynı tmux ls <kutu>-ana oturumunu görüyor mu
+2026-10-28T22:23:51+03:00 akar VAR  yüzey1=tmux:akar-kabuk yüzey2=kabuk.son:ok ana=akar-ana
+2026-10-28T22:23:51+03:00 huma VAR  yüzey1=tmux:huma-kabuk yüzey2=kabuk.son:ok ana=huma-ana
+2026-10-28T22:23:52+03:00 huzur VAR  yüzey1=tmux:huzur-kabuk yüzey2=kabuk.son:ok ana=huzur-ana
+2026-10-28T22:23:52+03:00 mihenk VAR  yüzey1=tmux:mihenk-kabuk yüzey2=kabuk.son:ok ana=mihenk-ana
+2026-10-28T22:23:52+03:00 mmex VAR  yüzey1=tmux:mmex-kabuk yüzey2=kabuk.son:ok ana=mmex-ana
+2026-10-28T22:23:53+03:00 nazir VAR  yüzey1=tmux:nazir-kabuk yüzey2=kabuk.son:ok ana=nazir-ana
+2026-10-28T22:23:53+03:00 revak VAR  yüzey1=tmux:revak-kabuk yüzey2=kabuk.son:ok ana=revak-ana
+2026-10-28T22:23:53+03:00 sedir VAR  yüzey1=tmux:sedir-kabuk yüzey2=kabuk.son:ok ana=sedir-ana
+2026-10-28T22:23:54+03:00 tellal VAR  yüzey1=tmux:tellal-kabuk yüzey2=kabuk.son:ok ana=tellal-ana
+2026-10-28T22:23:54+03:00 tez VAR  yüzey1=tmux:tez-kabuk yüzey2=kabuk.son:ok ana=tez-ana
+2026-10-28T22:23:54+03:00 nova VAR  yüzey1=tmux:nova-kabuk yüzey2=kabuk.son:ok ana=nova-ana
+2026-10-28T22:23:54+03:00 vekatip VAR  yüzey1=tmux:vekatip-kabuk yüzey2=kabuk.son:ok ana=vekatip-ana
+2026-10-28T22:23:55+03:00 medigate VAR  yüzey1=tmux:medigate-kabuk yüzey2=kabuk.son:ok ana=medigate-ana
+2026-10-28T22:23:55+03:00 code VAR  yüzey1=tmux:code-kabuk yüzey2=kabuk.son:ok ana=code-ana
+2026-10-28T22:23:55+03:00 TOPLAM kutu=14 eksik=0
+--- stderr ---

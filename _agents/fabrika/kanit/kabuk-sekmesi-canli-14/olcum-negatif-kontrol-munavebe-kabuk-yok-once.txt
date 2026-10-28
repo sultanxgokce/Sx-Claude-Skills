@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/kabuk-sekmesi-canli-14/canli-kabuk-olc.sh --negatif
+# rc=0 sure=0.3s zaman=2026-10-28T22:23:51+03:00
+--- stdout ---
+2026-10-28T22:23:50+03:00 KAYNAK LİSTE: /config/projects/Sx-Claude-Skills/_agents/fabrika/kanit/kapi-bekci-eski-kod/canli-kutular-olc.sh → 'akar huma huzur mihenk mmex nazir revak sedir tellal tez nova vekatip medigate code' (kutu sayısı 1) · kip: NEGATİF KONTROL (kabuk beklenmez)
+2026-10-28T22:23:50+03:00 YÜZEY 1: süreç — ssh hostsrv 'docker exec -u abc cloudtop-<kutu> tmux ls' (salt okur) · YÜZEY 2: bekçi damgası — /config/.terminal-onar/kabuk.son (salt okur) · POZİTİF KONTROL: aynı tmux ls <kutu>-ana oturumunu görüyor mu
+2026-10-28T22:23:51+03:00 munavebe YOK  yüzey1=tmux-kabuk:0 yüzey2=kabuk.son:yok ana=munavebe-ana
+2026-10-28T22:23:51+03:00 TOPLAM kutu=1 beklenmedik-VAR=0
+--- stderr ---

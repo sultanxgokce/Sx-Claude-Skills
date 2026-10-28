@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "gun-sonu-bitis-bos",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T22:07:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-bitis-bos",
+  "dal": "gun-sonu-bitis-bos",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14120,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3449
+  },
+  "dalgic": "olculemedi",
+  "bas": "acb9c4d74c86874c7c975b80c76eb2c1dc953e31",
+  "duzeltme_farki": {
+    "onceki_bas": "e826b257422fed836c534b6cb606349bc586f53f",
+    "dosya": 2,
+    "bayt": 3449,
+    "tam_bayt": 23962
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Boş `bitis=null` kartın özeti çökertmediği ve eski ifadenin aynı vakada yakalandığı sağlam, yeşil ölçümle gösterilmiş. Önceki kurulu-kopya bulgusu ayrı kurulum kartına resmen daraltıldığı için bu kartın kapsamında kapanmış; üretime engel uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; `sinav-gercek` kaydı rc=0/yeşil, G12 gerçek null-bitiş vakasının çökmediğini ve G12 MUTASYON eski ifadenin çöktüğünü sınavın yakaladığını gösteriyor. Sarı kayıt yok. Kurulu kopya/canlı akşam özeti ölçümü bu manifestte bulunmuyor, ancak iş kartındaki daraltma kararıyla bu işten çıkarılıp `gun-sonu-bitis-bos-kurulum` kartına taşınmış; önceki B1 bu nedenle kapanmıştır."
+  }
+}

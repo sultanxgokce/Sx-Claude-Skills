@@ -1,0 +1,25 @@
+{
+  "is": "gun-sonu-bitis-bos",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T21:58:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gercek",
+      "asama": "tek",
+      "dosya": "olcum-sinav-gercek-tek.txt",
+      "sha256": "97bd6b7789efcd94b2020aad14a9640ca2c7bf719bb7c4f07f62a27a579875f8",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T21:58:44+03:00",
+      "sure_sn": 77.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4e0b6485932948dd9757a77ae2ce211b"
+    }
+  ],
+  "imza": "6c25b87e2351927d1c8a13739042e546d9b3da9268a1899e0631687a33f5d6b4"
+}

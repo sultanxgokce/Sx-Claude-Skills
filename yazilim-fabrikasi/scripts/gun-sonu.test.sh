@@ -238,6 +238,20 @@ MG2="$T/mutant-gelen2.sh"; sed 's@  if \[ ! -d "$GELEN_DIZ" \]; then echo "→ g
 if cmp -s "$MG2" "$G"; then g 1 "G10 mutant FARKSIZ (çapa bayat)"; else
   OMG2="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-yok" bash "$MG2" --gun "$GUN" --gelen 2>&1 )"; ! grep -q 'YAZILAMADI' <<<"$OMG2"; g $? "G10 MUTASYON: sessiz yutma satırı düşürüyor (G5 bunu yakalar)"
 fi
+# G12: canlı borçlu kartın bitişi null olur (kart.sh canli-borc bitis=null yazar) — özet ÇÖKMEMELİ (zaman ESKİ gün olmalı: bugünse "or" kısa devre yapar ve bitis hiç okunmaz; canlı vaka: bosta-oturum-tarama, 27-28 Eki akşam özetleri üretilmedi)
+cat > "$T/_agents/fabrika/kartlar/borclu.json" <<KART
+{"is":"borclu","cumle":"canlı borçlu kart","istedi":"sinav","aldi":"sinav",
+ "zaman":"2020-01-01T09:00:00+03:00","sinif_cevaplari":{},"siniflar":[],"sultan":false,
+ "durum":"canli-borclu","bitis":null,"gecmis":[],"pr":"","puan":null,"kanit_var":false}
+KART
+OG12="$( cd "$T" && bash "$G" --gun "$GUN" 2>&1 )"; RG12=$?
+[ "$RG12" -eq 0 ] && grep -q "GÜN SONU · $GUN" <<<"$OG12"; g $? "G12 bitişi null kart özeti çökertmez"
+MG12="$T/mut-g11.sh"; sed 's/((k.get("bitis") or "")\[:10\]==gun)/(k.get("bitis","")[:10]==gun)/' "$G" > "$MG12"
+if cmp -s "$G" "$MG12"; then g 1 "G12 MUTASYON üretilemedi (çapa tutmadı)"; else
+  OM11="$( cd "$T" && bash "$MG12" --gun "$GUN" 2>&1 )"; RM11=$?
+  [ "$RM11" -ne 0 ] || ! grep -q "GÜN SONU · $GUN" <<<"$OM11"; g $? "G12 MUTASYON: eski ifade null bitişte çöker (sınav yakalar)"
+fi
+rm -f "$T/_agents/fabrika/kartlar/borclu.json"
 kill "$DPID" 2>/dev/null; wait "$DPID" 2>/dev/null
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
