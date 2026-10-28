@@ -1,6 +1,6 @@
 {
   "is": "sayi-baslik-bicimi",
-  "cumle": "Başlıkta sayı tek ölçüt biçiminde yazılsın: kart açılırken sayı iddiası bu biçime uymuyorsa uyarı basılsın, bulgu ve görev ekleme yardım metni biçimi göstersin",
+  "cumle": "kart.sh ac başlıktaki sayı 'iki sayı + ok + (kaynak: <komut/ekran>, <gün>)' biçimine uymuyorsa uyarsın; bulgu.sh yardımı biçimi göstersin; ölçüt adı sezgiseldir, doğrulanmaz (bilinen sınır)",
   "istedi": "SERDAR",
   "aldi": "HENDESE",
   "zaman": "2026-10-29T00:35:53+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-29T01:27:58+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sayi-baslik-yardim-metni",
+      "tur_sifir": 3
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -37,6 +44,36 @@
       "zaman": "2026-10-29T01:12:30+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T01:23:47+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sayi-baslik-yardim-metni) — görev ekleme --ozet yardım metni sayı biçimini göstersin (gorev.sh yardım başlığına BAŞLIKTA SAYI satırı cloudtop #1134'te birleşti; kalan doğrulama ayrı kartta)",
+      "zaman": "2026-10-29T01:27:58+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Başlıkta sayı tek ölçüt biçiminde yazılsın: kart açılırken sayı iddiası bu biçime uymuyorsa uyarı basılsın, bulgu ve görev ekleme yardım metni biçimi göstersin",
+      "zaman": "2026-10-29T01:27:58+03:00",
+      "kalan_kart": "sayi-baslik-yardim-metni"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-29T01:27:58+03:00",
+      "kalan_kart": "sayi-baslik-yardim-metni",
+      "kalan": "görev ekleme --ozet yardım metni sayı biçimini göstersin (gorev.sh yardım başlığına BAŞLIKTA SAYI satırı cloudtop #1134'te birleşti; kalan doğrulama ayrı kartta)",
+      "tur_sifir": 3,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF"
     }
   ]
 }
