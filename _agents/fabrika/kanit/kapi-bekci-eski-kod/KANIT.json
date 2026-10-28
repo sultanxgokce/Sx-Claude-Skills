@@ -1,0 +1,62 @@
+{
+  "is": "kapi-bekci-eski-kod",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-28T18:40:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "b800f4450f9b28233bc905f57913a345afbea5248d3e8fdb33d662c5b1f30ab4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bekci-eski/once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-28T18:40:22+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fda3163d16634bc7b6b1457435e8e095"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "0f2ada8c90d7aaa21fae1ff897a5f7641932084cdac4c7c5ed5f925c02a2dabf",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bekci-eski/sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-28T18:40:24+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cc3e0b68583d4f61b3d01de77d08d51a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-x1-eski-kod-blogu-sokuldu",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-x1-eski-kod-blogu-sokuldu-sonra.txt",
+      "sha256": "e12aaa4890463d2fa3618a50158ef628f5438bad21b4c251f0719e7ba1748f5e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bekci-eski/mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-28T18:40:38+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "20e4a51c956745e2b76ac1743c5c0ee2"
+    }
+  ],
+  "imza": "114c975ee1d8981dc4fc15ed8fa4eb4da448780226321ddb8cdc6fdd28730323"
+}
