@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/isa-once.sh
+# rc=0 sure=33.6s zaman=2026-10-29T00:31:20+03:00
+--- stdout ---
+  ✗ benzer PR #2 adıyla uyarıldı
+  ✗ uyarı ne yapılacağını söylüyor
+  ✗ benzemeyen işte uyarı YOK, kaç PR'a bakıldığı yazılı
+  ✗ gh düşünce 'YAPILAMADI' denir (sessiz atlama yok)
+  ✗ bozuk JSON sessiz geçilmez, 'YAPILAMADI' denir
+  ✗ 50 açık PR tavanına ulaşılınca söylenir
+  ✗ 🔴 PR birleşmiş + kart açık → kart 'bitti' (pr 42) · kanıt alanın İÇİNDEN görüldü · alan kapandı (acik  )
+  ✗ kapanış ne yaptığını söylüyor
+── SONUÇ: 50 geçti · 8 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-is-alani-benzer-pr-uyarisi-benzer-pr-uyarisi 25 sn bekledi (yuva 2, load1 17.69)

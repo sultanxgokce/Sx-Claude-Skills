@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "is-alani-benzer-pr-uyarisi",
+  "pr": "548",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T00:29:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-is-alani-benzer-pr-uyarisi",
+  "dal": "is-alani-benzer-pr-uyarisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19459,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3003
+  },
+  "dalgic": "uyumsuz",
+  "bas": "9dfb9be9d9fb5b77b680d796792a7c2bfea97129",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Dosya listesi yokken açık PR’ları iş adı ve kart cümlesinden türetilen köklerle karşılaştıran uyarı eklenmiş; bu, iş kartındaki doğru ihtiyaca yöneliyor. Ancak kullanıcıya kontrol yapılmadığını söyleyen çelişkili çıktı, Python tarafındaki hataların sessizce yutulması ve son ölçümde hâlâ iki sınavın kalması nedeniyle önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Dosya listesi verilmediğinde önce “açık PR çakışmasına bakılmadı” deniyor, hemen ardından açık PR benzerlik kontrolü çalıştırılıyor; aynı komutun çıktısı kendi kendisiyle çelişiyor.",
+        "kanit": "`else` kolunda `_bilgi \"· kapsam: dosya listesi verilmedi ... — açık PR çakışmasına bakılmadı\"` satırının hemen ardından `benzer_pr_uyar \"$is\" \"$kart\"` çağrısı var.",
+        "konum": "yazilim-fabrikasi/scripts/is-alani.sh:143",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Benzerlik denetiminin Python bölümündeki beklenmeyen hatalar sessizce başarıya çevriliyor; böyle bir durumda ne uyarı ne de “YAPILAMADI” bilgisi basılır.",
+        "kanit": "Python çağrısı `python3 ... <<'PY' || true` biçiminde; ayrıca yalnız JSON ayrıştırma hatası `sys.exit(0)` ile sessizce sonlanıyor. Örneğin bir PR kaydında `number` bulunmaması `pr[\"number\"]` satırında hata üretir ve dıştaki `|| true` bunu görünmez kılar.",
+        "konum": "yazilim-fabrikasi/scripts/is-alani.sh:88-104",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Değişiklik sonrası ölçüm bütünüyle temiz değil; sınav toplamında iki kapı hâlâ geçmiyor ve bunların ilgisiz olduğu gösterilmemiş.",
+        "kanit": "Sonra ölçümü `── SONUÇ: 53 geçti · 2 kaldı ──` diyor. Manifest kaydı yeşil/rc=0 olsa da ölçümün kendi sonuç satırı iki kalan sınav bulunduğunu gösteriyor.",
+        "konum": "olcum-benzer-pr-uyarisi-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra ölçüm çifti mevcut. Önceki dört hedef başarısızlığı sonrasında toplam geçen sayı 49’dan 53’e çıkmış, fakat son ölçüm hâlâ “2 kaldı” diyor; ayrıca kalan iki sınavın adları verilmediği için regresyon dışı oldukları doğrulanamıyor. Mutasyon kaydı ve gerçekçi canlı PR karesi yok; test sahte `gh` verisiyle davranışı ölçüyor."
+  }
+}

@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/isa-sonra.sh
+# rc=0 sure=40.1s zaman=2026-10-29T00:32:01+03:00
+--- stdout ---
+  ✗ 🔴 PR birleşmiş + kart açık → kart 'bitti' (pr 42) · kanıt alanın İÇİNDEN görüldü · alan kapandı (acik  )
+  ✗ kapanış ne yaptığını söylüyor
+── SONUÇ: 56 geçti · 2 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-is-alani-benzer-pr-uyarisi-benzer-pr-uyarisi 35 sn bekledi (yuva 2, load1 17.18)
