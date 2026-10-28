@@ -1,7 +1,7 @@
 {
   "is": "fabrika-surum-0-27-16",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T02:07:31+03:00",
+  "guncelleme": "2026-10-29T02:09:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -56,7 +56,25 @@
       "sure_sn": 0.4,
       "boru_denetimi": "temiz",
       "olcum_id": "6bc37b4136fe4188bea4bef530be631d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulu-dusen-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-kurulu-dusen-kapi-sonra.txt",
+      "sha256": "82c16e477f41a38739c3d5b990b55710bf7fb5c4ec190b0a111c5b0a38164736",
+      "komut": [
+        "bash",
+        "-c",
+        "I=/config/.claude/skills/yazilim-fabrikasi; v=$(grep -m1 \"^version:\" $I/SKILL.md | awk \"{print \\$2}\"); n=$(grep -c \"DUSEN_KAPI_RE\" $I/scripts/kanit.py); echo \"kurulu SKILL.md version=$v · kurulu kanit.py DUSEN_KAPI_RE sayımı=$n (bekleniyor ≥2: tanım + kullanım) · kaynak: bu dal (0.27.16 = origin/main a9faf25c + sürüm)\"; bash _agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh $I/scripts/kanit.py 2>/dev/null | grep -E \"SONUÇ|✓|✗\" || bash /config/projects/Sx-Claude-Skills/_agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh $I/scripts/kanit.py | grep -E \"SONUÇ|✓|✗\"; [ \"$v\" = 0.27.16 ] && [ \"$n\" -ge 2 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T02:09:35+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "672d6b16988c40049d4726621c3eba9f"
     }
   ],
-  "imza": "4962ec99f1ead5776d4f65d9b6787200b4ea605cc32ecd4ce22b0cf230df66f2"
+  "imza": "0c7fd71c1865038eedb4b64c51a8ab5a426964d921973e61c923cdff8022ce96"
 }
