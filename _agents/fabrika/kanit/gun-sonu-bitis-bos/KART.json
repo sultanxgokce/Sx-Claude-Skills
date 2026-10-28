@@ -1,0 +1,25 @@
+{
+  "is": "gun-sonu-bitis-bos",
+  "cumle": "gun-sonu.sh kartlarda bitis=null (canlı borçlu kart) görünce çöküyor; akşam özeti 27 ve 28 Eki üretilmedi — boş bitişi boş metin say, çöken özetin sınavı + kurulu kopya",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-28T21:54:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canlı",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "27 ve"
+  ]
+}
