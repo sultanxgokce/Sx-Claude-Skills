@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "kabuk-sekmesi-canli",
+  "pr": "544",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T21:59:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi-canli",
+  "dal": "kabuk-sekmesi-canli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 8197,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7363
+  },
+  "dalgic": "olculemedi",
+  "bas": "6ab226aad380f30be013ea8b960b00e6a09a47cf",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Canlı ölçüm, 11 kutuda <kutu>-kabuk oturumu ile kabuk.son=ok bulunduğunu araç imzalı kanıta yazmış. İş kartı 12/12 kutu ve görevin onaya çekilmesini istediği hâlde kanıt 11/11 ile sınırlı ve onay olayı gösterilmediği için önce bu eksikler çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "İstenen 12 kutudan yalnız 11'i ölçülmüş; 12/12 kabul ölçütü karşılanmıyor.",
+        "kanit": "Ölçümde 11 kutu satırının ardından “TOPLAM kutu=11 eksik=0” yazıyor; canlı kayıt da desen olarak aynı “TOPLAM kutu=11 eksik=0” satırını bir kez yakalıyor.",
+        "konum": "olcum-canli-11-kutu-kabuk-oturumu-sonra.txt; manifest:canli-kabuk-11-kutu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Görev …GT5BTK'nin bu kanıtla onaya çekildiğine dair kanıt yok.",
+        "kanit": "İş kartında durum “acik”; geçmiş boş ve görev yazımlarındaki tek olay “ac”, sonuç “yazıldı”. Manifest kayıtları yalnız 11 kutuluk ölçüm ile bu ölçüm dosyasının canlı kuyruk kaydını içeriyor.",
+        "konum": "iş kartı:durum/gecmis/gorev_yazimlari; kanıt manifesti:kayitlar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil. Ancak canlı kayıt, aynı ölçüm dosyasındaki 11 kutuluk toplam satırını yeniden yakalıyor: 12. kutuya ilişkin ölçüm yok, bağımsız önce/sonra ölçüm çifti yok ve görevin onaya çekildiğini gösteren kayıt yok."
+  }
+}
