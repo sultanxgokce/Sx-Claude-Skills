@@ -1,0 +1,25 @@
+{
+  "is": "denetci-olcum-ozeti-bayt",
+  "cumle": "denetçi istemine giren ölçüm gövdesi bayt tavanıyla özetlensin: 3 KB üstü kayıtta başlık + ilk/son 20 satır + ✗/SONUÇ/MUTASYON satırları, uzun satır kısalır, 'tam metin kanıt dizininde' notu (BÂNİ #506 ve teslim A istem tavanı)",
+  "istedi": "BÂNİ",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-28T06:39:43+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "20 satır"
+  ]
+}

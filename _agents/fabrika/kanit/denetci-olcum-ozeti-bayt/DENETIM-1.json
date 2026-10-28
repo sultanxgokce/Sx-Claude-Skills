@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "denetci-olcum-ozeti-bayt",
+  "pr": "526",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:30:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-olcum-ozeti-bayt",
+  "dal": "denetci-olcum-ozeti-bayt",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37479,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 107361
+  },
+  "dalgic": "uyumsuz",
+  "bas": "6b8eff7fd0a6879ebd249e7eefb88f7d026b6ad4",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, 3 KB eşiği, ilk/son 20 satır, önemli satırların taşınması, uzun stdout satırlarının kesilmesi ve tam metin notu eklenmiş; gerçek ölçüm 325/325 geçiyor. Ancak stderr satırları karakter kısaltmasından tamamen kaçtığı için ağır bir hata satırı denetçi istemini yine şişirebilir; önce bu uygulama açığını kapatın.",
+    "bulgular": [
+      {
+        "ne": "Uzun satır kısaltması yalnız stdout bölümüne uygulanıyor; stderr sonundaki en fazla 10 satır hiçbir karakter sınırı olmadan isteme ekleniyor. Tek bir çok uzun stderr satırı 3 KB özetleme amacını bozabilir.",
+        "kanit": "Üretim farkında `cik = [x if x.startswith(\"[…\") else kis(x) for x in cik]` yalnız `cik` listesini kısaltıyor; ardından `print(\"\\n\".join(cik + err))` ile `err` değişmeden basılıyor. stderr işlemi yalnız satır sayısını `HSON` ile sınırlıyor. O14–O16 sınavları da yalnız stdout ağırlıklı `oz-agir.txt` vakasını ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: olcum_ozeti içindeki `err` kırpma, `cik` kısaltma ve son `print` satırları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; gerçek ölçüm `denetci-sinav` rc=0, 325 geçti/0 kaldı. O14, 27.503 baytlık girdinin 6.665 bayta indiğini ve ✗/SONUÇ satırlarının kaldığını; O15 tam metin notunu doğruluyor. İki mutasyon kaydı yeşil olsa da çıktılarındaki `orijinalden FARKSIZ (çapa bayatlamış)` satırları mutasyon çapalarının güvenilirliğini zedeliyor; ayrıca stderr uzun satır vakası ölçülmemiş."
+  }
+}
