@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "dumen-gorulemeyen-eylem-uyarisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-28T09:23:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-gorulemeyen-eylem-uyarisi",
+  "dal": "dumen-gorulemeyen-eylem-uyarisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21968,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 9025
+  },
+  "dalgic": "uyumlu",
+  "bas": "7790230b3709ced0849b2c971e3e1429a043f0f1",
+  "duzeltme_farki": {
+    "onceki_bas": "570875048ac178cff28dafc36437633bb90f6b02",
+    "dosya": 7,
+    "bayt": 16096,
+    "tam_bayt": 25357
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun iki uygulama sorunu da kapatılmış: eylem dışı değişiklik artık çağrısız ve kendiliğinden uyarılıyor; görülemeyen-eylem sınıflaması fill/selectOption ile sınırlandırılıp click yanlış pozitifi engellenmiş. Gerçek ölçüm 37/37, mutant koşusu 15/15 geçiyor; eldeki fark ve kanıtta üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce ölçümü eski kodda `uyarilar()` API'sinin bulunmadığını, yeşil sonra ölçümü gerçek kodda 37/37 sonucu gösteriyor. B1, D5c ile sonraki kapı veya `uyarilar()` çağrısı olmadan terminal çıktısı beklenerek; B2 ise D5e ile click sırasında sentetik olayın yanlış uyarı üretmediği sınanarak doğrudan ölçülmüş. Çıktı ayrıca 15/15 mutantın yakalandığını gösteriyor; ancak mutantlar manifestte ayrı `mutasyon:true` kayıtları değil, gerçek ölçümle aynı kabuk kaydında raporlanmış."
+  }
+}
