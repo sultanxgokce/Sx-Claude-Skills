@@ -29,7 +29,7 @@ fi
 SIRA="$(printf '%s\n' "$LISTE" | python3 -c '
 import sys
 import unicodedata
-def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u")
+def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u").replace("ü","u").replace("ö","o").replace("ç","c").replace("ş","s").replace("ğ","g")
 kutu=sys.argv[1]; kim=n(sys.argv[2]); oncel={"cok-acil":0,"acil":1,"esnek":2,"rahat":3}; r=[]
 for i,s in enumerate(sys.stdin):
     p=s.rstrip("\n").split(None,6)

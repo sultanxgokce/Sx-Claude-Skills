@@ -11,7 +11,7 @@ AD="${1:-}"; [ -n "$AD" ] || { echo "kullanım: kimlik-coz.sh <koltuk-adı>" >&2
 [ -r "$TABLO" ] || { printf '%s\n' "$AD"; exit 0; }
 python3 - "$TABLO" "$AD" <<'PY'
 import sys,unicodedata
-def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u")
+def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u").replace("ü","u").replace("ö","o").replace("ç","c").replace("ş","s").replace("ğ","g")
 tablo,ad=sys.argv[1],sys.argv[2]; bul=set()
 for i,s in enumerate(open(tablo,encoding="utf-8"),1):
     s=s.rstrip("\n")

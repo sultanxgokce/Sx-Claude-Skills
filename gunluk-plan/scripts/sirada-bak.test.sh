@@ -112,5 +112,12 @@ rm -f "$T/ustlen.log"; zc="$(GUNLUK_PLAN_ESLEME="$T/zincir.tsv" GUNLUK_PLAN_AJAN
 iceriyor "Q10 zincirli tabloda TEK geçiş: ZA→ZB (ZC'ye varmaz), kutu=kutux" "KUTU=kutux" "$zc"
 kapi "Q10b ustlen ZB adıyla çağrılır (ZC DEĞİL)" "ustlen gorev_X1 --kim ZB --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
 rm -r -- "$T/cipa" 2>/dev/null; GUNLUK_PLAN_AJAN=ZA bash "$KOK/cipa.sh" yaz --plan "1) ilk madde | 2) ikinci madde" >/dev/null 2>&1; kapi "Q10c deftere-yaz da tek geçiş: kutu=kutux kim=ZB" "1" "$(GUNLUK_PLAN_ESLEME="$T/zincir.tsv" GUNLUK_PLAN_AJAN=ZA bash "$DY" 2>&1 | grep -c 'kutu=kutux kim=ZB')"
+# Q11-Q13: ü ö ç ş ğ katı — koltuk MUTEVELLI, defterde MÜTEVELLİ (akar kutusu, MÜTEVELLİ 28 Eki 2026 ölçümü)
+: > "$T/liste.txt"; for i in 1 2 3; do satir A$i akar acik esnek o MÜTEVELLİ "akar işi $i" >> "$T/liste.txt"; done
+kapi "Q11 kutu-bul: ASCII koltuk (MUTEVELLI) aksanlı defter adını (MÜTEVELLİ) bulur" "akar" "$(bash "$KB" --kim MUTEVELLI --liste "$T/liste.txt" 2>/dev/null)"
+rm -f "$T/ustlen.log"; q12="$(GUNLUK_PLAN_ESLEME="$T/yok.tsv" GUNLUK_PLAN_AJAN=MUTEVELLI bash "$SB" 2>&1)"
+iceriyor "Q12 sirada-bak: tablosuz bile MÜTEVELLİ işleri koltuğa atanmış sayılır (BASLAMADI=yok DEĞİL)" "KUTU=akar" "$q12"
+icermiyor "Q12b 'bana atanmış ya da sahipsiz iş yok' çıkmaz" "bana atanmış ya da sahipsiz iş yok" "$q12"
+kapi "Q13 kimlik-coz: ü ö ç ş ğ katlı eşleşir (tablo satırı MUTEVELLİ koltuğu → MÜTEVELLİ)" "MÜTEVELLİ" "$(printf 'MÜTEVELLİ\tMÜTEVELLİ\n' > "$T/e2.tsv"; GUNLUK_PLAN_ESLEME="$T/e2.tsv" bash "$KC" MUTEVELLI 2>&1)"
 echo
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]

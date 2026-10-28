@@ -19,7 +19,7 @@ if [ -n "$LISTE_DOSYA" ]; then LISTE="$(cat "$LISTE_DOSYA" 2>/dev/null)"; else L
 [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı" >&2; exit 3; }
 printf '%s\n' "$LISTE" | python3 -c '
 import sys,unicodedata,collections
-def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u")   # kimlik karşılaştırması: İ/I/ı/i ve şapkalar aynı sayılır (çıpa kimliği katlanmış gelir)
+def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u").replace("ü","u").replace("ö","o").replace("ç","c").replace("ş","s").replace("ğ","g")   # kimlik karşılaştırması: İ/I/ı/i ve şapkalar aynı sayılır (çıpa kimliği katlanmış gelir)
 kim=n(sys.argv[1]); say=collections.Counter()
 for s in sys.stdin:
     p=s.rstrip("\n").split(None,6)
