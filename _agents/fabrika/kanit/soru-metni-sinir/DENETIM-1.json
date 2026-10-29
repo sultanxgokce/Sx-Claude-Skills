@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "soru-metni-sinir",
+  "pr": "569",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T14:12:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-soru-metni-sinir",
+  "dal": "soru-metni-sinir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32897,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 19308
+  },
+  "dalgic": "uyumsuz",
+  "bas": "79cfe2c6d01a00a30e6f357514116e4b9bad1767",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, çözümleyici yeni ● mesaj ve şık olmayan ❯ istem sınırlarını tanıyor, ☐/✔ sekme başlığını ayıklıyor; canlı akar/MÜTEVELLİ fikstürü de eski konuşmayı soru metninden çıkarıyor. Önce 30/33 olan sınavın sonra 33/33 olması ve iki ayrı mutantın kapıya düşmesi değişikliği üretime hazır düzeyde doğruluyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümünde Y1, Y1b ve Y2 başarısızken sonra ölçümünde 33 geçti · 0 kaldı; böylece istenen eski satır 3 → 0 ölçüm çifti mevcut. İstem sınırı ve sekme süzme davranışlarını ayrı ayrı bozan iki mutasyon da rc=1 ile yakalanmış ve gerçek kod ölçümü olarak yeşil sinav-sonra kaydına bağlanmış. Canlı vakadan kurulmuş gerçekçi fikstür Y1-Y3’te asıl soru metnini, eski konuşmanın dışlanmasını, şıkları ve kutu içi ❯ şık gerilemesini sınamış."
+  }
+}
