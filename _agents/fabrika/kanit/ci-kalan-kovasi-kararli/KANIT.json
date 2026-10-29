@@ -1,7 +1,7 @@
 {
   "is": "ci-kalan-kovasi-kararli",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T08:20:16+03:00",
+  "guncelleme": "2026-10-29T08:25:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -182,7 +182,117 @@
       "sure_sn": 9.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "c8100cfa72a1405bb51898d00a8cdc09"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-sure-kiyas",
+      "asama": "tek",
+      "dosya": "olcum-tavan-sure-kiyas-tek.txt",
+      "sha256": "0b4db62ce82d1eefad58f268df74ec4dcb7afaab461539196dff449b39d976a9",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:23:03+03:00",
+      "sure_sn": 8.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dabf38b410a04561b851691c2b2cb60d"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "tavan-sure-kiyas",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-tavan-sure-kiyas-tek-c025f632e5dd.txt",
+      "sha256": "2f5292b9e11f8a4d479fd0c55eecbc4a373c564edb7e3db401b183f80d97b269",
+      "hedef_dosya": "olcum-tavan-sure-kiyas-tek.txt",
+      "hedef_olcum_id": "dabf38b410a04561b851691c2b2cb60d",
+      "hedef_sha256": "0b4db62ce82d1eefad58f268df74ec4dcb7afaab461539196dff449b39d976a9",
+      "hedef_zaman": "2026-10-29T08:23:03+03:00",
+      "hedef_renk": "yesil",
+      "neden": "sahte yeşil: günlük ayrıştırması 0 sn okudu (desen tutmadı), betik boş veriyi geçti saydı — EKSİK VERİ ÖNCE SINA dersi; düzeltilip yeniden ölçülüyor",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T08:23:29+03:00",
+      "olcum_id": "2e923f41bf9a4a53853853d76622cd5a"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "ci-kalan-3-kosu",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-ci-kalan-3-kosu-tek-fb33299734cc.txt",
+      "sha256": "fc2369e3623acf126e1fbea070a6c9303fb62669bd49ab5a632c41fa60e53cee",
+      "hedef_dosya": "olcum-ci-kalan-3-kosu-tek.txt",
+      "hedef_olcum_id": "c8100cfa72a1405bb51898d00a8cdc09",
+      "hedef_sha256": "dbbcef5f90b20ae6d69c60f929f15e905bde24672a460f8b83ab1d31feba4137",
+      "hedef_zaman": "2026-10-29T08:20:16+03:00",
+      "hedef_renk": "yesil",
+      "neden": "aşım sayısı BOŞ günlükte ölçülmüştü: gh api logs kaçış dizisi yüzünden içerik vermedi, grep -c 0 dedi — pozitif kontrolsüz sahte yeşil; düzeltilip yeniden ölçülüyor",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T08:24:12+03:00",
+      "olcum_id": "0e8dea41f2dd42bbb789e88c4520cce5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kalan-3-kosu-2",
+      "asama": "tek",
+      "dosya": "olcum-ci-kalan-3-kosu-2-tek.txt",
+      "sha256": "5455fbd3423caf0fab628d00efeb766144978d36729c1b6b3a4de59479ae6b16",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/ci-kalan-3-kosu.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:24:21+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d87689c8033c4c8e93dfacdd37c58d82"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-sure-kiyas-2",
+      "asama": "tek",
+      "dosya": "olcum-tavan-sure-kiyas-2-tek.txt",
+      "sha256": "582fabbb84ab0ff2a05c0a6527bdd2743d093421f8b88ca77fa298d32403c1ed",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh",
+        "40819805097"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T08:24:29+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8da9bd0882834126be931190c9c17ccb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-sure-kiyas-3",
+      "asama": "tek",
+      "dosya": "olcum-tavan-sure-kiyas-3-tek.txt",
+      "sha256": "a49e6c231aa56e29154290f5764312f195d3ec08fa9c30a41920a1627f96d53a",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:25:19+03:00",
+      "sure_sn": 9.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1b1063e32c6e4d079abb06a832d2a560"
     }
   ],
-  "imza": "e5815d1f181a53ff22a5f02d71bc8dc3c8b192c76739a48a024e3b3be38f2c1f"
+  "imza": "d5121d41460d0728c44197d1f3218b35436cd0645d9fbec95cddce698633994e"
 }

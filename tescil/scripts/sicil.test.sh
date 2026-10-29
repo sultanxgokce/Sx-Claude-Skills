@@ -2,7 +2,7 @@
 # sicil.test.sh — Mühürdarlık sicil · ders çıkarma · askı (G11 · S9 · S10) sınavı. HERMETİK: geçici sicil dizini, el kitabı
 # kopyası, tarif kaydı ve SAHTE doğrulayıcı (geçidin yerine: Sultan'ın kayıtlı kararlarını fikstürden basar); gerçek özlük
 # dosyalarına DOKUNMAZ. Senaryo fonksiyonda; mutant kopyada hedef anahtar düşer.
-# kabuk-testleri: sure=480   (yerelde 154 sn ölçüldü — 23 mutant tam senaryoyu koşar; CI payı)
+# kabuk-testleri: sure=600   (yerelde 154 sn; CI kalan kovası paralel 4: 223–331 sn ölçüldü 29 Eki, 3 koşu — 480 yalnız 1,45× pay bırakıyordu; 600 ≈ 1,8×)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null' EXIT
