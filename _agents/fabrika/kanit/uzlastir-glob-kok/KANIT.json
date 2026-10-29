@@ -1,0 +1,130 @@
+{
+  "is": "uzlastir-glob-kok",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T06:51:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "e6510322aa243bc4344a5fd59a1f578f51e3acbdd6266385b67f0c8bc1b09014",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/once2/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T06:42:40+03:00",
+      "sure_sn": 3.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "339dff3423b0404495164480d774d10c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "4f2af08dda7a55edffe04e076d0910151e6470b2992574121a245251bf0f7c92",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:42:44+03:00",
+      "sure_sn": 3.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "85f06553767c4c78b0651eadd01736b3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tek.txt",
+      "sha256": "49482061f9a3dea761482120532b664a437b501c8620cd7e9fcfdb9797150951",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:51:14+03:00",
+      "sure_sn": 510.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c429ce9ee721467fad7f7be6183b9a50"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cron-okunamadi",
+      "asama": "once",
+      "dosya": "olcum-cron-okunamadi-once.txt",
+      "sha256": "a440f1d3629893d3663d620c2a23f76c09be123cc7829266fe6a1938cb2881fe",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -c okunamadı _agents/fabrika/kanit/uzlastir-glob-kok/cron-komutu-kuru-ESKI-0.27.20.log); echo \"okunamadi_satiri=$n (eski betik, cron komut satırı, KURU)\"; [ \"$n\" = 0 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T06:51:44+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "518f48ae46294f5ca8a69c45e9ba8149"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cron-okunamadi",
+      "asama": "sonra",
+      "dosya": "olcum-cron-okunamadi-sonra.txt",
+      "sha256": "f4ac0e43abbfef68c40132b33bd8da3698d9b2146b04d485ccf64f62c967a95c",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -c okunamadı _agents/fabrika/kanit/uzlastir-glob-kok/cron-komutu-kuru-YENI.log); echo \"okunamadi_satiri=$n (yeni betik, cron komut satırı, KURU)\"; [ \"$n\" = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:51:44+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1d78bf48a3b841e0826e1fa1d51ed9cf"
+    },
+    {
+      "tur": "canli",
+      "etiket": "cron-komutu-kuru",
+      "asama": "canli",
+      "dosya": "canli-cron-komutu-kuru.txt",
+      "sha256": "2c085a52f7fe02f2fc39099e8b2767626c3cb48edbe1d883f59e8bf60c645e16",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-glob-kuru.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-glob-kuru.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "çalışılıyor uzlaştırması",
+      "en_az": 1,
+      "atesleme_sayisi": 10,
+      "ilk_atesleme": {
+        "satir": "2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: MIRAHUR için fazla/sahipsiz çalışılıyor görev yok",
+        "saat": "2026-10-29T03:42:58Z",
+        "saat_iso": "2026-10-29T03:42:58+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: SERDAR için fazla/sahipsiz çalışılıyor görev yok",
+        "saat": "2026-10-29T03:42:58Z",
+        "saat_iso": "2026-10-29T03:42:58+00:00"
+      },
+      "zaman": "2026-10-29T06:51:44+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "8a2490773ead4092a24fa4347e430ff1"
+    }
+  ],
+  "imza": "c90d17ff98d527983e2d6db21f555632a4e5967a249391918e6bfedc36b64bc8"
+}
