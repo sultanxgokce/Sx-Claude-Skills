@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "hasat-tazelik-seansli",
+  "pr": "577",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T00:28:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-tazelik-seansli",
+  "dal": "hasat-tazelik-seansli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34406,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 13393
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e08a70200682a5705428a9d68683e483f7c906e2",
+  "duzeltme_farki": {
+    "onceki_bas": "7c0344bcc06b1a3c1162f97eaede04f887d73419",
+    "dosya": 8,
+    "bayt": 28080,
+    "tam_bayt": 59347
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Havuz tazeliği taze/bayat/boş/ölçülemedi olarak ölçülüyor, kuru havuz Meşveret’e yönlendiriliyor ve KARAR=SOR dalında kayıt kayıt onaylanan Seanslı Hasat üçüncü şık olarak sunuluyor. Önceki turdaki gelecek tarih kusuru kapatılmış, yeni sınır ve çökme kapıları gerçek ölçümde 108/108 geçmiş, mutant da yedi kapıyı düşürmüş; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti 79/79’dan 108/108’e genişleyen yeşil gerçek ölçümü gösteriyor. Önceki B1, `yas<0` kaydını ölçülemez sınıfına alan kod ile T10/T10b sınavları sayesinde kapanmış; T11 pencere sınırını, T12 hesap aracının çıktı vermemesi durumunu ölçüyor. Mutasyon kaydı gerçek kod sonucu değildir; taze sayımı bilerek bozulduğunda 101 geçti/7 kaldı ve rc=1 üreterek sınavların kusuru yakaladığını doğruluyor."
+  }
+}
