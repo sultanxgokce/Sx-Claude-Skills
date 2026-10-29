@@ -1,7 +1,7 @@
 {
   "is": "iskan-sinavi-sigpipe",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T04:35:00+03:00",
+  "guncelleme": "2026-10-29T04:38:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -78,7 +78,45 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "bab91523a8d34c36a45652f986fd28fd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinavi-v3",
+      "asama": "tek",
+      "dosya": "olcum-iskan-sinavi-v3-tek.txt",
+      "sha256": "8fcc71f955a35eacc7236de2fb0241178aa64279bf28b949c2bb4afd8256e9e1",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T04:38:17+03:00",
+      "sure_sn": 63.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "31669c46d5214f368df1a28aacc1c6b1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-v3-hep-gecer",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-v3-hep-gecer-sonra.txt",
+      "sha256": "0514cadef98fbdd84ed347bc13e82d74263ea4f59a392751d102dbff33bde1e7",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T04:38:43+03:00",
+      "sure_sn": 25.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "iskan-sinavi-v3",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "687a999e17774a45ac7bbbbbb7f21752"
     }
   ],
-  "imza": "d164c84993601338922579db74853e0fe584009c54ce16dc419ef9a9b860e561"
+  "imza": "06771c037df40802dee045badd4dce41e3fa48283fc87773ec8e22a37e344a80"
 }
