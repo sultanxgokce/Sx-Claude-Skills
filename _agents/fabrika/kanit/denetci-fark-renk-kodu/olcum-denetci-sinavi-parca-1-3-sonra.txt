@@ -1,0 +1,10 @@
+$ bash -c DENETCI_PARCA=1/3 bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E "^\(parça|  ✗|SONUÇ|\(bilgi\)"; exit ${PIPESTATUS[0]}
+# rc=0 sure=596.3s zaman=2026-10-29T04:32:52+03:00
+--- stdout ---
+(parça 1/3 · gerçek koşu: e · mutantlar: sıra no mod 3 = 0)
+  ✓ O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 satırda kalıyordu)
+  ✓ O14 🔴 az satırlı çok baytlı ölçüm kısalır (27503 → 6665 bayt); ✗ ve SONUÇ satırı kalır
+  (bilgi) 17 mutant · 4 paralel · 388 sn
+── SONUÇ (fark-kendisi): 37 geçti · 0 kaldı ──
+── SONUÇ: 295 geçti · 0 kaldı ──
+--- stderr ---

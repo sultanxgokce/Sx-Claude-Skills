@@ -551,8 +551,27 @@ elif [ -n "$PR" ]; then
   if [ -n "$PR_SHA" ] && [ -n "$YEREL_BAS" ] && [ "$YEREL_BAS" != "$PR_SHA" ]; then
     _hata "PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başından (${PR_SHA:0:8}) FARKLI — itilmemiş ya da çekilmemiş commit var; göz GitHub'daki farkı puanlardı. Önce it/çek, sonra koştur"; exit 3
   fi
-  (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }
-  FARK_KAYNAK="gh pr diff $PR (baş ${PR_BAS:0:8})"
+  # 🔴 KAÇIŞ KODLU FARK (görev …Z9SZF3, 29 Eki): gh 2.98 `pr diff` farkta terminal kaçış dizisi görünce (ölçüm dosyasına düşen ANSI
+  #    renk — Playwright hata çıktısı — ya da onu temizleyen sed kalıbının METNİ) çıktıyı reddediyor ("pass --allow-escape-sequences")
+  #    → denetçi "gh pr diff düştü" rc 3, tur alınamıyordu (26 Eki: aynı PR'da üç kez). Fark ekrana değil dosyaya gider: bayrakla ham
+  #    alınır, kaçış dizileri (CSI + çıplak ESC baytı) BURADA süzülür. gh yine düşerse git yolu: PR başı origin'den (pull/N/head) çekilir,
+  #    ana hat...baş üç-nokta farkı alınır (kanıt dosyaları zaten farktan ayıklanır). İkisi de yoksa rc 3 ve iki sebep birden söylenir.
+  FARK_KAYNAK_NOT=""
+  if ! (cd "$DEPO" && gh pr diff "$PR" --allow-escape-sequences > "$TMP/diff.ham" 2>"$TMP/diff.err"); then
+    ANA_PR="$(git -C "$DEPO" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"
+    if [ -n "$PR_SHA" ] && git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null && git -C "$DEPO" fetch -q origin 2>/dev/null \
+       && git -C "$DEPO" rev-parse --verify -q "$PR_SHA^{commit}" >/dev/null 2>&1 && git -C "$DEPO" diff "$ANA_PR...$PR_SHA" > "$TMP/diff.ham" 2>/dev/null; then
+      FARK_KAYNAK_NOT=" · gh pr diff düştü ($(head -c 120 "$TMP/diff.err" | tr '\n' ' ')) → git $ANA_PR...${PR_SHA:0:8}"
+    else
+      _hata "gh pr diff $PR düştü ($(head -c 200 "$TMP/diff.err" | tr '\n' ' ')) ve git yolu da alınamadı (origin pull/$PR/head çekilemedi ya da fark alınamadı)"; exit 3
+    fi
+  fi
+  python3 - "$TMP/diff.ham" "$TMP/diff.patch" <<'PY' || { _hata "fark kaçış dizilerinden süzülemedi"; exit 3; }
+import sys, re; h, o = sys.argv[1:]; b = open(h, 'rb').read(); ESC = bytes([27])
+b = re.sub(ESC + rb'\[[0-9;?]*[ -/]*[@-~]', b'', b); b = b.replace(ESC, b'')   # CSI dizileri (renk, imleç) + çıplak ESC baytı
+open(o, 'wb').write(b)
+PY
+  FARK_KAYNAK="gh pr diff $PR (baş ${PR_BAS:0:8}, kaçış dizileri süzüldü)$FARK_KAYNAK_NOT"
 else
   ANA="$(git -C "$DEPO" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"
   git -C "$DEPO" fetch -q origin 2>/dev/null || { _hata "git fetch origin düştü — ana hat ($ANA) ölçülemedi"; exit 3; }

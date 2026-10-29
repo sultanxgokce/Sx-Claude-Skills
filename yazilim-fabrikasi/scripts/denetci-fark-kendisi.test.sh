@@ -37,7 +37,22 @@ SAHTE="$KOK/sahte.sh"; printf '#!/usr/bin/env bash\ncp "$1" "$SAHTE_ISTEM_KOPYA"
 export DENETCI_KOMUT="$SAHTE" SAHTE_ISTEM_KOPYA="$KOK/istem.md"
 export SAHTE_JSON='{"kod_puani":5,"dogru_sey":"E","ozet":"o","bulgular":[],"kanit_gorusu":"k"}'
 SAHTEGH="$KOK/bin"; mkdir -p "$SAHTEGH"
-printf '#!/usr/bin/env bash\ncase "$1 $2" in\n "pr view") printf "%%s\\n" "$FAKE_PR_VIEW";;\n "pr diff") printf "diff --git a/gh.txt b/gh.txt\\n+gh-farki\\n";;\n *) exit 9;;\nesac\n' > "$SAHTEGH/gh"; chmod +x "$SAHTEGH/gh"
+# sahte gh: FAKE_GH_ESC=1 → gerçek gh 2.98 gibi davranır: bayraksız `pr diff` kaçış dizisi var diye düşer, bayrakla ESC baytlı farkı basar;
+#   FAKE_GH_FAIL=1 → `pr diff` her hâlde düşer (git yolu sınanır). ESC baytı printf ile üretilir (metin olarak kaçış kalıbı YAZILMAZ — gh onu da reddeder).
+cat > "$SAHTEGH/gh" <<'GH'
+#!/usr/bin/env bash
+E="$(printf '\033')"
+case "$1 $2" in
+ "pr view") printf "%s\n" "$FAKE_PR_VIEW";;
+ "pr diff") [ -n "${FAKE_GH_FAIL:-}" ] && { echo "sahte gh: pr diff düştü" >&2; exit 1; }
+    if [ -n "${FAKE_GH_ESC:-}" ]; then
+      [[ " $* " == *" --allow-escape-sequences "* ]] || { echo "the diff contains terminal escape sequences; pass --allow-escape-sequences" >&2; exit 1; }
+      printf 'diff --git a/gh.txt b/gh.txt\n+esc-farki %s[2mrenkli%s[22m son\n' "$E" "$E"
+    else printf 'diff --git a/gh.txt b/gh.txt\n+gh-farki\n'; fi;;
+ *) exit 9;;
+esac
+GH
+chmod +x "$SAHTEGH/gh"
 kanitla() { KANIT_DEPO="$KOK/w" bash "$K" olcum "$1" o --asama tek -- true >/dev/null 2>&1; }
 den() { local is="$1"; shift; ( cd "$KOK/w" && KANIT_DEPO="$KOK/w" bash "$D" "$is" --kart "$KOK/kart.md" "$@" < /dev/null ); }
 
@@ -82,6 +97,18 @@ git -C "$KOK/w" checkout -q -b denetleyen-dal; kanitla f5f
 FAKE_PR_VIEW="0000000000000000000000000000000000000000 is-dal" PATH="$SAHTEGH:$PATH" kapi "F5f BAŞKA dalda durulurken bile PR dalının (is-dal) yerel başı ≠ PR başı → rc=3 (göz tur 1)" 3 den f5f --pr 7
 git -C "$KOK/w" checkout -q is-dal; git -C "$KOK/w" branch -q -D denetleyen-dal
 
+echo "════ F8 · kaçış kodlu fark (Z9SZF3): gh bayraksız reddeder → bayrakla alınır ve ESC süzülür; gh hep düşerse git yolu; o da yoksa rc=3 ════"
+kanitla f8; : > "$KOK/istem.md"; FAKE_GH_ESC=1 FAKE_PR_VIEW="$BAS is-dal" PATH="$SAHTEGH:$PATH" kapi "F8a farkta ESC baytı var → gh bayrakla alındı, denetim GEÇTİ (rc 3 değil)" 0 den f8 --pr 7
+iceren "F8b istemde gh farkı var (esc-farki)" "esc-farki" "$KOK/istem.md"
+icermeyen "F8c isteme giden farkta ESC baytı YOK (süzüldü)" "$(printf '\033')" "$KOK/istem.md"
+iceren "F8d fark kaynağı 'kaçış dizileri süzüldü' der" "kaçış dizileri süzüldü" "$KOK/son.out"
+git -C "$KOK/w" push -q origin is-dal 2>/dev/null; git -C "$KOK/o.git" update-ref refs/pull/9/head "$BAS"
+kanitla f8e; : > "$KOK/istem.md"; FAKE_GH_FAIL=1 FAKE_PR_VIEW="$BAS is-dal" PATH="$SAHTEGH:$PATH" kapi "F8e gh pr diff hep düşer, origin pull/9/head var → git yolu, GEÇTİ" 0 den f8e --pr 9
+iceren "F8f istemde git farkı var (benim-isim)" "benim-isim" "$KOK/istem.md"
+iceren "F8g fark kaynağı git yolunu söyler" "→ git origin/main" "$KOK/son.out"
+kanitla f8h; FAKE_GH_FAIL=1 FAKE_PR_VIEW="$BAS is-dal" PATH="$SAHTEGH:$PATH" kapi "F8h gh düşer ve pull/10/head yok → rc=3" 3 den f8h --pr 10
+iceren "F8i iki sebep birden söyleniyor" "git yolu da alınamadı" "$KOK/son.out"
+
 echo "════ F6 · boş fark → DUR rc=3 ════"
 git -C "$KOK/w" checkout -q -b bos-dal origin/main 2>/dev/null; kanitla f6
 kapi "F6a dal = ana hat → fark boş, rc=3" 3 den f6
@@ -106,6 +133,9 @@ PY
   mut kir '[ "$KIRLI" -eq 0 ] ||' 'true ||' "F4a"
   mut bos '[ -s "$TMP/diff.patch" ] ||' 'true ||' "F6a"
   mut tavan-defteri '|tavan-defteri\.log$)' ')' "F4c"
+  mut esc-bayragi 'gh pr diff "$PR" --allow-escape-sequences >' 'gh pr diff "$PR" >' "F8a"
+  mut esc-suzgeci "b = re.sub(ESC + rb'\\[[0-9;?]*[ -/]*[@-~]', b'', b); b = b.replace(ESC, b'')" "pass" "F8c"
+  mut git-yolu 'git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null &&' 'false &&' "F8e"
 fi
 
 echo ""; echo "── SONUÇ (fark-kendisi): $GECEN geçti · $DUSEN kaldı ──"
