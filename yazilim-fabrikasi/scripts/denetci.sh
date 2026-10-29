@@ -76,7 +76,10 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
   [ -z "${TUR:-}" ] && m="${IS}: denetim açılmadı (tur yok) · rc $rc · $ne"   # 0C915N: 'tur ?: —/— · bulgu —' dolgusu yok; yalnız bilinen söylenir
   [ "$yazansiz" = 1 ] && m="$m · yazan bilinmiyor"
-  case "$rc" in 2|3|4) [ -n "$SON_HATA" ] && m="$m · sebep: $(printf '%s' "$SON_HATA" | tr '\n\t' '  ' | cut -c1-140)" ;; esac   # sebep zile girer: 'ölçülemedi' tek başına teşhis değil
+  # 🔴 KHTY2E (30 Eki 00:07): 'cut -c' BAYT keser — Türkçe harf ortadan bölünüp ('göz' → 'g\xc3') kırık bayt zil yoluyla ulak postasına
+  #    girdi, SERDAR'ın posta kutusu tamamen okunamaz oldu. Kesim HARF sınırında; SON_HATA'nın kendisindeki kırık bayt (ör. head -c'li
+  #    gh hatası) yerine-koyma işaretine döner → zil hiçbir zaman geçersiz UTF-8 taşımaz (locale'e bağlı ${var:0:140} kullanılmaz).
+  case "$rc" in 2|3|4) [ -n "$SON_HATA" ] && m="$m · sebep: $(printf '%s' "$SON_HATA" | tr '\n\t' '  ' | python3 -I -c 'import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().decode("utf-8", "replace")[:140].encode("utf-8"))')" ;; esac   # sebep zile girer: 'ölçülemedi' tek başına teşhis değil
   # HEZARFEN ölçümü (20:38, #404): denetçiyi koşturan ajanın kendi penceresine giden zil, aile-notify'ın self-loop korumasına
   #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
   #   meşgul koltukta zil kuyruğa girer (ölçüldü: kanıt olcum-gercek-zil-sonra). Bedeli: gönderen "BILINMEYEN" görünür — aile-notify
