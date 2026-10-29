@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/denetci-sinav-sure-tavani/ci-denetci-kovasi.sh main 4
+# rc=1 sure=11.8s zaman=2026-10-29T02:48:37+03:00
+--- stdout ---
+b7db9693 2026-10-28T23:25:25Z (denetci)=failure 905s
+a9faf25c 2026-10-28T23:03:23Z (denetci)=failure 905s
+a9a7b2ce 2026-10-28T22:47:06Z (denetci)=failure 906s
+5bfc1fa9 2026-10-28T22:17:21Z (denetci)=failure 908s
+denetci işi: toplam=4 kırmızı=4 (dal=main, son 4 koşu)
+--- stderr ---

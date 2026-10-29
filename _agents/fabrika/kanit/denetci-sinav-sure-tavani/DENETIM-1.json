@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "denetci-sinav-sure-tavani",
+  "pr": "554",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T03:22:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-sinav-sure-tavani",
+  "dal": "denetci-sinav-sure-tavani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30901,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 97741
+  },
+  "dalgic": "uyumsuz",
+  "bas": "b801280e0ee8eb8b41334bbda57ac7059d36ac41",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Denetçi kovası üç CI işine bölünmüş, mutantlar round-robin dağıtılmış ve parçaların toplam 331 kapıyı koruduğu gösterilmiş. Yön doğru ve yerel parça süreleri 10 dakikanın altında; ancak istenen bölüm-bazlı önce ölçümü yok, CI sonrası yeşil de henüz dış yüzeyde doğrulanmamış.",
+    "bulgular": [
+      {
+        "ne": "İş kartının özellikle istediği değişiklik-öncesi, bölüm başına saat damgalı süre ölçümü sunulmamış; mevcut bölüm/parça sürelerinin tümü “sonra” aşamasında.",
+        "kanit": "Manifestte tek “once” kaydı ci-denetci-kovasi olup yalnız dört main işinin 905–908 sn toplam durumunu gösteriyor; bölüm sürelerini veren yerel-tam-kosu-saat-damgali, yerel-parca-ozeti ve kapi-toplami kayıtlarının tamamı “asama”: “sonra”.",
+        "konum": "kanıt manifesti: ci-denetci-kovasi ve yerel-*-sonra kayıtları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kartın istediği değişiklik-sonrası CI yeşili bu kanıtta yok; yerel ölçümler hedef için umut verici olsa da GitHub koşucusundaki gerçek iş süresini ve yeşil sonucu doğrulamıyor.",
+        "kanit": "Sonrası kayıtlarında CI koşusu bulunmuyor; gerçek parça-2 yerel ölçümü 473 sn ve özet parça süreleri 574/332/354 sn. “ci-denetci-kovasi” kaydı yalnız değişiklik öncesindeki dört kırmızı main koşusunu gösteriyor.",
+        "konum": "olcum-parca-2-3-kosusu-sonra.txt; olcum-kapi-toplami-sonra.txt; olcum-ci-denetci-kovasi-once.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "GitHub Actions CI + depo çalıştırma yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti toplam hedef için tamamlanmamış: önce yalnız CI geçmişi, sonra yalnız yerel parça ölçümleri var. Kapı korunumu 331→331 olarak ölçülmüş; parça-2 gerçek koşumu yeşil ve mutasyon kaydı beklenen kırmızıyı yakalıyor, fakat değişiklik-sonrası CI yeşili bulunmuyor."
+  }
+}

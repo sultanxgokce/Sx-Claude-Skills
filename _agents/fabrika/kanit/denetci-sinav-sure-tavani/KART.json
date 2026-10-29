@@ -1,0 +1,48 @@
+{
+  "is": "denetci-sinav-sure-tavani",
+  "cumle": "Sx CI 'kabuk sınamaları (denetci)' kovası main'de kırmızı: denetci.test.sh 900 sn süre tavanında kesiliyor (rc 124, düşen kapı yok; son 3 main koşusu kırmızı, son yeşil 15m07s). Önce ölç: bölüm başına süre (saat damgalı koşu); sonra en ağır bölümleri ya kovaya böl (CI matrisinde ayrı iş) ya da fikstürü kısalt; hedef: denetci kovası CI'da ≤ 10 dk, kapı sayısı düşmez (sınav sayısı önce=sonra). Kanıt: önce/sonra süre ölçümü + CI yeşil.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T02:28:16+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M62BFTHDA3Z5K7RQFH14Q15C",
+  "tahmin_dk": 90,
+  "olcut": [
+    "≤ 10 dk"
+  ],
+  "olcum_yeri": "CI, 2 çekirdek (GitHub ubuntu koşucusu · kabuk sınamaları matrisi · denetci kovası iş süresi)",
+  "sayi_uyarilari": [
+    "3 main"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T02:28:20+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T03:22:04+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

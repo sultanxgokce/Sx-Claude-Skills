@@ -1,0 +1,14 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-parca-2-3-kosusu-* ===
+$ bash -c T0=$(date +%s); DENETCI_PARCA=2/3 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-parca-i3Is/scripts/denetci.test.sh > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-parca-i3Is/cikti.log 2>&1; rc=$?; echo "MUTANT (iç koşum parçayı miras alır, 1/1'e çekilmez) DENETCI_PARCA=2/3 rc=$rc sure=$(( $(date +%s) - T0 ))s"; grep -E '^\(parça|SONUÇ|\(bilgi\)|  ✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-parca-i3Is/cikti.log | head -8; exit $rc
+# rc=1 sure=0.5s zaman=2026-10-29T03:18:31+03:00
+--- stdout ---
+MUTANT (iç koşum parçayı miras alır, 1/1'e çekilmez) DENETCI_PARCA=2/3 rc=1 sure=1s
+(parça 2/3 · gerçek koşu: h · mutantlar: sıra no mod 3 = 1)
+  ✗ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
+  ✗ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+  ✗ mutant 'yedek-gozu-kaldir' sınavı KIRMIZI yapıyor
+  ✗ mutant 'kart-yolu-harici-kalir' sınavı KIRMIZI yapıyor
+  ✗ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+  ✗ mutant 'istem-yerine-fark-olculur' sınavı KIRMIZI yapıyor
+  ✗ mutant 'istem-parca-dokumu-yok' sınavı KIRMIZI yapıyor
+--- stderr ---

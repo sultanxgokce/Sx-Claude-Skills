@@ -1,0 +1,165 @@
+{
+  "is": "denetci-sinav-sure-tavani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T03:49:43+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ci-denetci-kovasi",
+      "asama": "once",
+      "dosya": "olcum-ci-denetci-kovasi-once.txt",
+      "sha256": "ca6317cc95fb2d322786d9d7315c23ce37dadcf802a3e36a5f23ac36898521e1",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-sinav-sure-tavani/ci-denetci-kovasi.sh",
+        "main",
+        "4"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T02:48:37+03:00",
+      "sure_sn": 11.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5b0f87f4548644afb80dad215288bd02"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "yerel-tam-kosu-saat-damgali",
+      "asama": "sonra",
+      "dosya": "dosya-yerel-tam-kosu-saat-damgali-sonra.log",
+      "sha256": "6f2c3c20dde273356c1bec5c2f39d8c5d976772b4c9031ccd7de9d03e81735c9",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-denetci-sinav-sure-tavani/_agents/fabrika/kanit/denetci-sinav-sure-tavani/yerel-tam-kosu-saat-damgali.log",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:10:05+03:00",
+      "olcum_id": "5c9d835ea9b946448079173806eeb59b"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "yerel-parca-ozeti",
+      "asama": "sonra",
+      "dosya": "dosya-yerel-parca-ozeti-sonra.txt",
+      "sha256": "e71b417314c0e13344f8def201136c87195f65da0e089d13cf56968305e0421c",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-denetci-sinav-sure-tavani/_agents/fabrika/kanit/denetci-sinav-sure-tavani/yerel-parca-ozeti.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:10:05+03:00",
+      "olcum_id": "28df8cb207b24eb2a441fc04ae75ec2e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-toplami",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-toplami-sonra.txt",
+      "sha256": "a107b9048bf4dc3e8e79ffb5b0da4e2dac82b95d47a28d4ec86a3bf92a169da9",
+      "komut": [
+        "bash",
+        "-c",
+        "d=_agents/fabrika/kanit/denetci-sinav-sure-tavani; t=0; for k in 1 2 3; do n=$(grep -oE \"SONUÇ: [0-9]+ geçti\" $d/yerel-parca-$k-3.log | tail -1 | grep -oE \"[0-9]+\"); s=$(grep -oE \"sure=[0-9]+s\" $d/yerel-parca-ozeti.txt | sed -n \"${k}p\"); echo \"parça $k/3: $n geçti · $s · $(grep -oE \"\\(bilgi\\) [0-9]+ mutant\" $d/yerel-parca-$k-3.log)\"; t=$((t+n)); done; echo \"parçaların toplamı=$t · son yeşil main (440393d0, bölünmemiş) SONUÇ: 331 geçti · yerel tam koşu T1–T11 öncesi 107 sn, 53 mutant 999 sn (4 paralel)\"; [ \"$t\" -eq 331 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:10:05+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f731f43aba8e4ad687061f7c6044052c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "parca-2-3-kosusu",
+      "asama": "sonra",
+      "dosya": "olcum-parca-2-3-kosusu-sonra.txt",
+      "sha256": "ac33d7ff57f26d40cf12b22a74fa6f90e5d437fb03afb192c775a7f17cb0ddbb",
+      "komut": [
+        "bash",
+        "-c",
+        "T0=$(date +%s); DENETCI_PARCA=2/3 bash yazilim-fabrikasi/scripts/denetci.test.sh > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/parca2-kanit.log 2>&1; rc=$?; echo \"DENETCI_PARCA=2/3 rc=$rc sure=$(( $(date +%s) - T0 ))s\"; grep -E \"^\\(parça|SONUÇ|\\(bilgi\\)\" /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/parca2-kanit.log; exit $rc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:18:01+03:00",
+      "sure_sn": 473.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f708757a02bb4d44ba69819903ab7924"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ic-kosum-parca-miras",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-ic-kosum-parca-miras-sonra.txt",
+      "sha256": "6cb4d724c8c834c1aa4dd6788a03269943182fbca2496da69df63ff5491ea754",
+      "komut": [
+        "bash",
+        "-c",
+        "T0=$(date +%s); DENETCI_PARCA=2/3 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-parca-i3Is/scripts/denetci.test.sh > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-parca-i3Is/cikti.log 2>&1; rc=$?; echo \"MUTANT (iç koşum parçayı miras alır, 1/1'e çekilmez) DENETCI_PARCA=2/3 rc=$rc sure=$(( $(date +%s) - T0 ))s\"; grep -E '^\\(parça|SONUÇ|\\(bilgi\\)|  ✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-parca-i3Is/cikti.log | head -8; exit $rc"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:18:31+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "parca-2-3-kosusu",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0d61125def2846e986546aeb60f2f478"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-denetci-kovasi",
+      "asama": "sonra",
+      "dosya": "olcum-ci-denetci-kovasi-sonra.txt",
+      "sha256": "456bf92814e59a282f9e8ad21dfc114f5528444648d0a3308e5b91d28b38f000",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-sinav-sure-tavani/ci-denetci-kovasi.sh",
+        "denetci-sinav-sure-tavani",
+        "1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:33:39+03:00",
+      "sure_sn": 3.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1ec441ac00de4a9d934bec581d534498"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bolum-sureleri",
+      "asama": "sonra",
+      "dosya": "olcum-bolum-sureleri-sonra.txt",
+      "sha256": "cff43d6f2d3bad5bf89fa967e5277aa268b3e8e924fd37c4dfc44c2b806dafff",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-sinav-sure-tavani/bolum-sureleri.sh",
+        "yazilim-fabrikasi/scripts/denetci.test.sh",
+        "1/3"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:49:26+03:00",
+      "sure_sn": 934.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d2450b33d41141cb99992703baa9938d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bolum-sureleri",
+      "asama": "once",
+      "dosya": "olcum-bolum-sureleri-once.txt",
+      "sha256": "b34b9b7dbdfae3c0ba50bbd0113a57d6aae5a72bc0ae77103bec21f85e64b636",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-sinav-sure-tavani/bolum-sureleri.sh",
+        "/config/projects/_wt/Sx-denetci-once-tmp/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T03:49:43+03:00",
+      "sure_sn": 1617.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "92352318622b4d38ae68a1220dc7a210"
+    }
+  ],
+  "imza": "8b5add769ae41b153ccba339009885b72a1a84cc3c78d818a98f519cf4bf4fa7"
+}

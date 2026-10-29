@@ -1,0 +1,23 @@
+(parça 2/3 · gerçek koşu: h · mutantlar: sıra no mod 3 = 1)
+════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yedek-gozu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-yolu-harici-kalir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+  ✓ mutant 'istem-yerine-fark-olculur' sınavı KIRMIZI yapıyor
+  ✓ mutant 'istem-parca-dokumu-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'mutasyon-basligi-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yazansiz-zil-hedefsiz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'zil-kuyruk-okunmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'reis-zili-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'asim-137-cevrilmez' sınavı KIRMIZI yapıyor
+  ✓ mutant 'canli-iz-ezilir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'asim-ham-yazilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'sinav-kipi-gercek-zil' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-tavan-asilir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-stderr-satiri-kesilmez' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
+  (bilgi) 18 mutant · 4 paralel · 332 sn
+
+── SONUÇ: 18 geçti · 0 kaldı ──

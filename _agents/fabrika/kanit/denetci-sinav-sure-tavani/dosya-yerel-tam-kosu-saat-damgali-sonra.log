@@ -1,0 +1,314 @@
+0 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
+0   ✓ kanıtsız adım 4 açılmadı (rc=2)
+0   ✓ DENETIM yazılmadı
+0 ════ T2 · kanıt var, 3/H → rc=1, tur 1 ════
+1   ✓ rc=1 (adım 2'ye dön)
+1   ✓ DENETIM-1.json araç yazdı, tur=1, alanlar doğru
+1 ════ T3 · 5/E → rc=0 GEÇTİ, tur 2 ════
+1   ✓ rc=0
+1   ✓ GEÇTİ ve tur 2 yazılı
+1 ════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════
+3   ✓ G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)
+4   ✓ G-b 5/E turu: ikinci satır tur 2 · 5/5 · E · bulgu 0 (rc 0 değişmedi)
+4   ✓ G-c kartsız iş (kart.json yok): göz adımı çağrılmaz
+4   ✓ G-d kart aracı düşerse turun sonucu DEĞİŞMEZ (rc 0) ama uyarı söylenir
+4 ════ T4 · 5 ama H → geçmez (doğru şey sütunu puanı ezer) ════
+5   ✓ 5/H → rc=1
+5 ════ T5 · yazan=denetleyen reddedilir (K1) ════
+5   ✓ aynı model → rc=1
+5   ✓ denetim koşulmadı
+5 ════ T6 · tavan: üç düşük tur ilerlemeden → 3. turda tıkandı (rc=4), 4. çağrı reddedilir ════
+6   ✓ tur1 rc=1
+6   ✓ tur2 rc=1
+6   ✓ tur3 ilerlemeyince rc=4
+6   ✓ tıkandı + üç yol raporu
+7   ✓ 4. çağrı koşulmadı (rc=4)
+7   ✓ DENETIM-4 yazılmadı
+7 ════ T7 · ilerleyen iş +1 tur alır; 4 mutlak ════
+8   ✓ tur3 ilerliyor → rc=1 (tıkandı değil)
+8   ✓ +1 tur payı yazılı
+8   ✓ tur4 (pay) 5/E → GEÇTİ
+8   ✓ payın gerekçesi yazılı
+8   ✓ tur5 mutlak tavan → rc=4
+8 ════ T7b · 🚪 SULTAN KAPISI: karar KARTTAN okunur, serbest metinle açılmaz ════
+11   ✓ puan düşünce tur3 tıkandı (rc=4)
+12   ✓ 🔴 kartta karar yokken bayrak kapıyı AÇMIYOR (rc=1)
+12   ✓ sebebi yazılı
+12   ✓ ne yapılacağı komutla yazılı
+12   ✓ denetim KOŞULMADI
+12   ✓ deftere de yazılmadı
+12   ✓ --beyan eksikken kart kaydı REDDEDİLDİ
+12   ✓ --oturum eksikken REDDEDİLDİ
+12   ✓ 🔴 --gerekce eksikken REDDEDİLDİ
+12   ✓ 20 karakterden kısa gerekçe REDDEDİLDİ
+12   ✓ tam D1 kaydı (gerekçeli) karta işlendi
+12   ✓ karttaki kararla tur4 koştu ve GEÇTİ
+12   ✓ tavanın açıldığını SÖYLÜYOR (sessiz değil)
+12   ✓ oturum referansı çıktıda görünüyor
+12   ✓ GEREKÇE de çıktıda görünüyor (niçin bir tur daha)
+12 ════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta da (araçla yazılmış kayıtla) ════
+15   ✓ sınıflı iş tur3 tıkandı (rc=4)
+15   ✓ 0.21.0: SINIFLI karta reis kararı kart.sh ile YAZILDI (denetçinin bunu okuması ikinci kartta: fabrika-merge-reise-parca2)
+15   ✓ kayıt reis_kararlari'nda sinifli:true; sultan_kararlari YOK (A06)
+16   ✓ 🔴 7KKSJK: SINIFLI kartta tıkandı raporu sultan-dedi komutunu basıyor, reis-dedi'yi DEĞİL
+16   ✓ doğru yol gösterildi (sultan-dedi)
+16   ✓ denetim KOŞULMADI
+16   ✓ deftere de yazılmadı
+16   ✓ 🔴 sınıflı kartta sinifli:true İŞARETSİZ (elle düzenlenmiş) reis kaydı karar sayılmaz (rc=1)
+16   ✓ o durumda deftere yazılmadı
+16   ✓ 🔴 sınıflı kartta araçla yazılmış reis kararı tavanı AÇAR (rc=0)
+16   ✓ açılış ekrana yazıldı
+16   ✓ açılış tavan defterine yazıldı
+19   ✓ sınıfsız iş tur3 tıkandı (rc=4)
+20   ✓ tıkandı raporu sınıfsız iş için reis yolunu da söylüyor
+20   ✓ 🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)
+20   ✓ ne yapılacağı komutla yazılı
+20   ✓ 🔴 7KKSJK: DENETCI_EK=--reis-devam bayrakla AYNI işler (kartta karar yokken rc=1, aynı sebep; yok sayılsaydı rc=4)
+20   ✓ 🔴 7KKSJK: tıkandı raporu reis-dedi komutunu GERÇEK iş adı + kartın sahibiyle basıyor
+20   ✓ 🔴 7KKSJK: ikinci adım DENETCI_EK=--reis-devam biçiminde, sırayla yazılı
+20   ✓ 🔴 7KKSJK: 'tur 3 tıkandı' → raporda '4. tur' (sıradaki tur) sebebiyle yazılı
+20   ✓ 🔴 7KKSJK: karar yokken rc 1 + önce-komut sebebi yazılı
+20   ✓ 7KKSJK: sınıfsız iş raporunda Sultan yolu dayatılmıyor
+20 ════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan denetçi kartı BİRİNCİL depodan okur ════
+20   ✓ iş alanı (worktree) açıldı
+23   ✓ reis kararı BİRİNCİL karta işlendi (kart.sh)
+24   ✓ iş alanındaki kopya BAYAT (reis kararı yok) — eski araç bunu okur, kapıyı kapalı sanırdı
+24   ✓ 🔴 iş alanından koşan --reis-devam kapıyı BİRİNCİL karttan AÇTI (elle kopyalama yok, rc=0)
+24   ✓ denetçi istemindeki iş kartı da BİRİNCİL kart (reis kararı görünüyor)
+24   ✓ kartın anlık kopyası kanıt dizinine düştü (KART.json) — PR'a kart bununla gider, kartlar/ kopyasıyla değil
+24   ✓ KART.json kanıt manifestini BOZMAZ (sonraki koşum kanıt kapısında düşmüyor)
+24   ✓ iş alanında kart kopyası HİÇ yokken de birincil kart okunur (kapı 'karar YOK' demez)
+26   ✓ 🔴 birincilde kart YOKKEN alandaki kopya OKUNMAZ: rc=3 + 'OKUNMAZ' (eski geri-dönüş kapandı)
+26   ✓ denetçiye istem HİÇ gitmedi, kayıt yazılmadı (bayat kartla puanlama yok)
+30   ✓ 🔴 tavanda --reis-devam + bayat kopya: rc=3 'OKUNMAZ' (kapı reddi 'karar yok' DEĞİL — hata bastırılmıyor)
+31   ✓ aynı durumda --sultan-devam da rc=3 'OKUNMAZ'
+31   ✓ 🔴 KART.json yazılamayınca rc=3 + 'YAZILAMADI', kayıt yok (sahte başarı yok)
+31   ✓ dizin yazılabilir olunca KART.json düşer ve tur 1 geçer (rc=0)
+31   ✓ 🔴 --kart dosyası yoksa rc=3 + 'okunamadı' (kartsız sessiz puanlama kapandı)
+31   ✓ 🔴 birincil kart varken FARKLI --kart: rc=3 'TEK kaynak', istem gitmedi (atlama kapandı)
+32   ✓ --kart birincil kartın kendisiyse geçer (rc=0)
+32   ✓ kopya birincilden saptıysa (içerik farklı) yine rc=3
+33   ✓ 🔴 aynı içerikli harici --kart: geçer ama OKUNAN YOL birincil kartın yolu (kullanılan değişken ekranda, istem birincilden)
+33   ✓ KART.json da birincil yoldan yazıldı
+33   ✓ --reis eksikken REDDEDİLDİ
+33   ✓ --oturum eksikken REDDEDİLDİ
+33   ✓ kısa gerekçe REDDEDİLDİ
+33   ✓ 🔴 kartın sahibi olmayan ad REDDEDİLDİ (aldi MUAVIN)
+33   ✓ 🔴 küme dışı karar REDDEDİLDİ
+33   ✓ '|' içeren alan REDDEDİLDİ (defter ayracı)
+33   ✓ tam reis kaydı karta işlendi
+33   ✓ 🔴 kayıt reis_kararlari'nda; sultan_kararlari'na HİÇ dokunulmadı (A06)
+33   ✓ karttaki reis kararıyla tur4 koştu ve GEÇTİ
+33   ✓ açılışın REİS kararıyla olduğu yazılı (Sultan kararı DEĞİL)
+33   ✓ oturum referansı çıktıda
+33   ✓ defter satırı TAVAN-ACILDI-REIS (Sultan satırından ayırt edilir)
+33   ✓ reis kararı MUTLAK tavanı (4) AÇMIYOR → tur5 rc=4
+33   ✓ 🔴 7KKSJK: mutlak tavanda reis-dedi komutu BASILMIYOR (açmayacak yolu göstermek yanıltır)
+33   ✓ tavan defteri GERÇEKTEN yazıldı
+33   ✓ Sultan'ın kırpık sözü defterde
+33   ✓ beyan eden ajan defterde (kim aktardı)
+33   ✓ gerekçe defterde (Sultan gün sonunda niçin'i görür)
+37   ✓ 🔴 deftere yazılamıyorsa kapı AÇILMIYOR
+37   ✓ sebebi yazılı
+40   ✓ 🔴 yazma başarılı ama satır kaybolduysa kapı AÇILMIYOR
+40   ✓ kaybolduğunu söylüyor
+44   ✓ 🔴 elle yazılmış GEREKÇESİZ kart kapıyı AÇMIYOR
+44   ✓ sebebi yazılı
+44   ✓ elle yazılmış KISA gerekçe de AÇMIYOR
+44   ✓ 🔴 '|' içeren alan kartta REDDEDİLDİ
+44   ✓ satır sonu içeren alan REDDEDİLDİ
+48   ✓ elle yazılmış kirli kartla kapı açıldı (gerekçe tam)
+48   ✓ 🔴 defterde damgasız (enjekte) satır YOK
+48   ✓ enjekte edilen ayraçlar temizlenmiş
+51   ✓ 🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)
+51   ✓ mutlak olduğunu söylüyor
+51 ════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ════
+52   ✓ JSON değil → rc=3
+52   ✓ ham çıktı saklandı
+52   ✓ puan 9 → rc=3 (şema dışı)
+52 ════ T9 · istem: kart + manifest + diff + rubrik içeriyor ════
+52   ✓ kart · manifest · diff · rubrik · ölçüm çıktısı istemde
+52 ════ T9b · Türkçe metin + KESME İŞARETİ çıktıyı kırmıyor (23 Eyl canlı hatası) ════
+53   ✓ rc=1 (3/H) — kesme işaretli metinde de karar verildi
+53   ✓ puan satırı basıldı
+53   ✓ özet kesme işaretiyle birlikte basıldı
+53   ✓ bulgu satırı basıldı
+53   ✓ kayıt dosyası doğru yazıldı
+53 ════ T9c · KIRPMA KAYDI: kırpılan tur DENETIM json'da kirpildi.oldu=true + bayt + eşik; kırpılmayan tur false (NÂZIR/RASATÇI 8 Eki) ════
+53   ✓ kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı
+53   ✓ küçük istemde kırpma uyarısı YOK
+54   ✓ 🔴 ayıklama kapalıyken de istem tavanı aşılınca İŞİ BÖL (rc 1) — kırpık istem gönderilmez
+54   ✓ denetçiye istem gitmedi, tur yakılmadı (DENETIM-2 yok)
+54   ✓ kırpma uyarısı hiçbir yerde yok (kırpma yolu kalktı)
+54 ════ T9d · GEÇERSİZ ilan (4K938) göze söylenir: kanıt durumu satırında, istemde ve DENETIM kaydında ════
+54   ✓ puan satırındaki kanıt durumu geçersiz ilanı nedeniyle söylüyor
+54   ✓ istemdeki manifest başlığında da var (göz okur)
+54   ✓ DENETIM kaydına da işlendi
+54 ════ T9e · 7KKSJK-EK: GEÇERSİZ ilanlı kaydın GÖVDESİ isteme girmez (istem baytı düşer), geçerli kayıt tam girer ════
+55   ✓ ilandan ÖNCE iki kaydın gövdesi de istemde (taban)
+55   ✓ 🔴 7KKSJK-EK: GEÇERSİZ ilanlı kaydın gövdesi istemde YOK
+55   ✓ 🔴 7KKSJK-EK: GEÇERLİ kaydın gövdesi hâlâ TAM istemde
+55   ✓ manifest tarafı: geçersiz kaydın adı ve ilan notu istemde kalıyor
+55   ✓ 🔴 7KKSJK-EK: istem baytı düştü
+55 ════ T10 · bozuk manifest → rc=2 ════
+55   ✓ elle boyanmış manifestle denetim açılmaz
+55 ════ Y · YEDEK GÖZ (Sultan Y0006): auto kipinde codex yoksa/düşerse yazandan farklı yeni Claude oturumu ════
+56   ✓ Y0 🔴 yazanın modeli hiçbir yüzeyden ÖLÇÜLEMEZSE yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)
+56   ✓ Y0b bildirim yokken AYAR DOSYASINDAKİ model yazanın modeli sayılır (opus) → yedek sonnet, kaynak kayıtta; iş DURMAZ
+57   ✓ Y0c oturum sürecinin komut satırındaki --model (sonnet) ayar dosyasını EZER → yedek haiku, kaynak=oturum-komutu
+57   ✓ Y1 codex yokken auto kipi DURMAZ: yazan modeli bildirilince yedek claude puanlar (5/E → rc=0)
+57   ✓ Y1b kayıtta yedek='codex yok' ve denetçi adında YEDEK GÖZ (codex puanı sanılmaz)
+57   ✓ Y1c ekranda da söylenir (sessiz yedek yok)
+58   ✓ Y6 🔴 yedek göz yazanla AYNI modelde koşmaz: farklı kademe (sonnet) + yeni oturum, kayda yazılı (K1 yeniden)
+58   ✓ Y6b yedek kademesi DENETCI_YEDEK_MODEL ile seçilir
+58   ✓ Y6c kayıtta yazan_model ve yedek_model ikisi de dolu (yedek koşumunda boş olamaz)
+58   ✓ Y6d yazanla aynı yedek istenirse merdiven onu ATLAR (haiku→sonnet), aynı modelle koşmaz
+59   ✓ Y7 yazan sonnet ise varsayılan yedek sonnet OLMAZ → merdivende haiku; ikisi de kayıtta
+59   ✓ Y7b istenen yedek (haiku) yazanın modeline (claude-haiku-4-5) eşitse atlanır → sonnet (ad eşlemesi alt-dizgiyle)
+60   ✓ Y7c --model doluyken DENETCI_YEDEK_MODEL devre dışı kalmaz (yedek tercihi önce gelir)
+60   ✓ Y2 açık --denetci codex isteğinde codex yoksa eski sert davranış: rc=3
+60   ✓ Y5 DENETCI_YEDEK=0 ile yedek kapalı: rc=3
+60   ✓ Y3 codex iki denemede de düşerse (2 çağrı sayıldı) yedek claude devralır, rc=0
+60   ✓ Y3b kayıtta yedek='codex düştü…'
+61   ✓ Y4 codex bir kez düşüp toparlarsa yedek YOK: ikinci deneme codex (2 çağrı)
+61   ✓ Y4b kayıtta yedek=null, denetçi codex (Y1b tautoloji değil)
+61 ════ Y8 · codex STDIN KAPALI: çağıranın stdin'i hiç kapanmasa da denetçi biter (15 Eki, 68 dk asılı kaldı) ════
+61   ✓ 🔴 stdin 30 sn açık boruyken denetçi 10 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil
+61 ════ K · KARE ════
+61   ✓ K1 --kare dosyası yoksa rc=2, denetim AÇILMAZ (sessiz atlama yok)
+61   ✓ K2 uzantısı .png ama içi görsel değil → rc=2 (imza ölçülür, ad değil)
+61   ✓ K2b 🔴 imzası doğru ama KESİK PNG → rc=2 (yapı ölçülür, ilk baytlar değil — göz #331 tur 1)
+61   ✓ K2c 🔴 JPEG başlığı + düz metin (EOI/SOF yok) → rc=2
+61   ✓ K2d 🔴 SOI + serpiştirilmiş SOF işareti + EOI ama bölüm yapısı yok → rc=2 (göz #331 tur 2)
+61   ✓ K2e 🔴 CRC'leri doğru IHDR+IEND, piksel verisi (IDAT) yok → rc=2
+61   ✓ K2f 🔴 IDAT açılıyor ama boyutu 2×2 RGB'ye tutmuyor → rc=2
+62   ✓ K2g 🔴 Adam7 geçişli PNG, akış 1 bayt kısa → rc=2 (göz #331 tur 3)
+62   ✓ K2h 🔴 JPEG SOS'tan hemen sonra EOI (piksel verisi yok) → rc=2 (göz #331 tur 3)
+62   ✓ K2i ALTIN: doğru Adam7 geçişli PNG kapıdan GEÇER ve denetim tamamlanır (kapı katılaşıp gerçek görseli reddetmesin)
+62   ✓ K3 9 kare → rc=2 (tavan 8)
+62   ✓ K4 istemde 'KARELER (2 adet …)' + ad + sha (göz neye bakacağını bilir)
+62   ✓ K5 DENETIM kaydı kareleri taşır: adet · ad · sha256 · görsel verildi
+63   ✓ K6 🔴 kareler codex'e GÖRSEL ek olarak gider (argv'de -i <kare> ×2)
+63   ✓ K7 yedek göz (claude -p) kareyi GÖREMEZ → kayıtta gorsel_verildi=false (görmüş sanılmaz)
+63 ════ T-ISTEM · kapı istemin TAMAMINI ölçer: fark küçük ama istem eşiği aşarsa yine 'İŞİ BÖL', tur yakmaz (BÂNİ 21:59, #712 tur 4) ════
+64   ✓ fark küçük, istem > eşik → rc=1
+64   ✓ 'İŞİ BÖL' istemin TAMAMINI ve gerçek eşiği söylüyor
+64   ✓ parça parça bayt dökümü basıldı
+64   ✓ şişen parça (ölçüm) ve ona uygun yol söylendi
+64   ✓ tur yakılmadı, denetçi hiç çağrılmadı
+64   ✓ kurulum: fark (3052) tek başına eşiğin (6958) ALTINDA
+64   ✓ fark eşik altında ama istem eşik üstünde → İŞİ BÖL (rc=1)
+64   ✓ tur yakılmadı (DENETIM-2 yok)
+65   ✓ istem tetiğe sığıyor → denetim koştu (rc=0)
+65   ✓ sığan istem kırpılmadı (kirpildi.oldu=false)
+65   ✓ istemde bütün başlıklar eski sırasıyla var (iş kartı · manifest · ölçüm · fark · önceki tur)
+65 ════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölçüm aynen; uzun stderr sonucu itmez ════
+65   ✓ O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 satırda kalıyordu)
+65   ✓ O2 kaç satırın atlandığı ve dosya boyu söylendi
+65   ✓ O3 baş korunur, orta atlanır, son gelir
+65   ✓ O4 tavan aynı: dosya başı ≤ 60 satır (42)
+65   ✓ O5 kısa ölçüm aynen, işaretsiz
+65   ✓ O6 uzun stderr stdout'un sonucunu dışarı itmez; stderr'in de sonu gelir
+66   ✓ O7 🔴 ortadaki KIRMIZI kapı kırpmada saklanmaz (göze gider)
+66   ✓ O8 sonuç satırının ardından 12'den çok satır gelse de sonuç gider (orta atlanırken seçilir)
+66   ✓ O9 seçmeyle de tavan aşılmaz (45 ≤ 60)
+66   ✓ O10 atlandı sayısı GERÇEK atlanan: bildirilen 60 = 100 − gösterilen 40
+66   ✓ O11 seçme varken de sayı doğru: 73 = 114 − 41 (seçilen satır atlanmış sayılmaz)
+66   ✓ O12 kısa dosya bayt bayt AYNEN (satır sonuyla biten de bitmeyen de; göz #392 tur 5)
+66   ✓ O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)
+67   ✓ O14 🔴 az satırlı çok baytlı ölçüm kısalır (27503 → 6665 bayt); ✗ ve SONUÇ satırı kalır
+67   ✓ O15 kesilen ölçümde 'tam metin kanıt dizininde: <dosya>' notu ve kesilen satır sayısı göze söylenir
+67   ✓ O17 stderr'deki uzun satır da 200 karaktere kesilir (6000 karakterlik tek stderr satırı istemi şişirmez), sondaki satır korunur
+67   ✓ O16 60 satır ve 3 KB altı ölçüm bayt bayt AYNEN (kısalma yalnız ağır kayıtta)
+67 ════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════
+70   ✓ M1 istemde mutasyon ölçümünün başlığı MUTASYON KANITI der, gerçek ölçümünki demez
+70   ✓ M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)
+70 ════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════
+73   ✓ Z1a koşarken DENETIM-1.kosuyor izi var (pid + başlangıç)
+73   ✓ Z1b bitince iz silindi
+73   ✓ Z3a rc 1 → yazana zil (puan · bulgu · rc; yazan = kartın aldı'sı)
+74   ✓ Z3b rc 0 → yazana zil, reise yok
+74   ✓ Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır; '? tur ?: —/—' dolgusu YOK (0C915N)
+74   ✓ Z3d iş adı yokken (en erken çıkış) reise zil ÇALMAZ: bilgi taşımayan '? tur ?' zili yok (0C915N)
+74   ✓ Z3d2 atlama sessiz değil: sebep stderr'e yazıldı
+74   ✓ Z3f tur yok + yazan yok: reise bilgisiz zil ÇALMAZ, sebep stderr'e yazıldı
+75   ✓ M-Z3d iş-adı korkuluğu kalkarsa bilgisiz zil çalar (Z3d bunu yakalar; mutant yakalandı)
+75   ✓ M-Z3f tur-yok+yazan-yok korkuluğu kalkarsa reise bilgisiz zil çalar (Z3f bunu yakalar; mutant yakalandı)
+77   ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
+81   ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
+81   ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
+81   ✓ Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)
+81   ✓ Z2d aşımda da koşuyor izi silindi
+86   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
+87   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
+91   ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (2 sn < 6)
+93   ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
+95   ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
+98   ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
+98   ✓ Z9b kilit reddi rc 3 verir ama zil ÇALMAZ (yazana ve reise), sebep stderr'de
+99   ✓ Z9c rc 3 zili sebep satırını taşır (· sebep: …)
+102   ✓ Z11 pid canlı ama başka sürece verilmiş (başlangıç anı tutmuyor) → bayat sayılır, denetim koşar
+102   ✓ Z10 yazanın zili TMUX kimliği soyularak çağrılır (kendi penceresine giden zil self-loop'ta atlanmaz — HEZARFEN ölçümü)
+105   ✓ Z13a yazanın zili gönderen adı TAŞIMAZ (kuyrukta 'kendine' sayılıp düşmesin)
+106   ✓ Z13b yazana --done (sahte iş-bitti) gitmez; düz ping kartın aldı'sına (MUAVIN)
+106   ✓ Z13c yazan bilinmiyorsa AILE_KIMDEN verilmez (reisin adı gönderen gibi görünmesin)
+107   ✓ Z13d ping meşgulde rc 1 + KUYRUK satırı → 'kuyrukta' denir, 'gönderilemedi' denmez
+107   ✓ Z13e kuyruğa ALINMAYAN zil (kendine) 'kuyrukta' sayılmaz — düştüğü söylenir
+107   ✓ Z12 sızıntı kilidi: T-ZIL boyunca hiçbir çağrı varsayılan zil aracına düşmedi (gerçek koltuğa yol yok)
+107 ════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════
+1106   ✓ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'gerekce-zorunlulugunu-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'karti-okumayi-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'reis-sinifli-isaret-kontrolunu-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'mutlak-tavani-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'yedek-gozu-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kart-tek-kaynagi-kaldir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'codex-stdin-acik' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kart-yolu-harici-kalir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kart-secenegi-tek-kaynagi-asar' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kapi-kart-hatasini-bastirir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'gecersiz-goze-soylenmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'istem-yerine-fark-olculur' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'istem-bol-tur-yakar' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'istem-en-buyuk-ilk-parca' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'istem-parca-dokumu-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'istem-karti-dusurur' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'tavan-ayiklamaya-bagli' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'mutasyon-basligi-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'zil-tmux-soyulmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'pid-kimligi-bakilmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'yazansiz-zil-hedefsiz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'zil-kimden-geri' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'zil-done-geri' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'zil-kuyruk-okunmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kuyruk-hata-sanilir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'zil-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'reis-zili-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'zaman-asimi-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kill-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'asim-137-cevrilmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'sure-dogrulanmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'bayat-iz-silinmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'canli-iz-ezilir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kilit-red-zil-calar' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'sebep-zile-girmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'asim-ham-yazilmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kosuyor-silinmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'kosuyor-yazilmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'sinav-kipi-gercek-zil' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-sonu-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-stderr-ayrilmaz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-tavan-asilir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-atlanan-sayisiz' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-bayt-kapisi-yok' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-stderr-satiri-kesilmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-uzun-satir-kesilmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
+1106   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
+1106   (bilgi) 53 mutant · 4 paralel · 999 sn
+1106 denetci.test.sh: line 868: syntax error near unexpected token `('
+1106 denetci.test.sh: line 868: `mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda; tam metin kanıt dizininde: %s …\]" % (atlanan, len(L), AD)$@    not_ = "[…]"@''
