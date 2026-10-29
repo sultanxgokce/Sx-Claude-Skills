@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-claude-yolu.sh
+# rc=0 sure=0.1s zaman=2026-10-29T10:36:28+03:00
+--- stdout ---
+bekçinin seçtiği claude dizini: /tmp/tmp.SdZMRin3f1/nvm/v22.23.1/bin
+claude ikilisi bayt: 2097152
+--- stderr ---

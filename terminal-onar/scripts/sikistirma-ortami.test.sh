@@ -39,7 +39,7 @@ EK=()   # ek ortam atamaları (dizi: boşluklu değer bölünmesin)
 kos() { # kos <çalışma dizini> <komut…>  (ek ortam: EK dizisi)
   local m="$1"; shift
   env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" TO_BEKCI_YOK=1 \
-      TO_BECERI_KOK="$m" CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" TO_BEKLE_ADIM=0.01 ${EK[@]+"${EK[@]}"} "$@"
+      TO_NVM_KOK="$T/nvm-yok" TO_BECERI_KOK="$m" CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" TO_BEKLE_ADIM=0.01 ${EK[@]+"${EK[@]}"} "$@"
 }
 sifirla() { rm -f "$T/tmux.log" "$T/durum/dogdu"; }
 
@@ -51,7 +51,13 @@ satir=$(grep 'send-keys' "$T/tmux.log" 2>/dev/null | grep -- '-l' | head -1)
 kapi "K1b yazılan satırda bellek öneğinden SONRA, komuttan ÖNCE 600k eşiği" "e" \
   "$(printf '%s' "$satir" | grep -q 'MALLOC_ARENA_MAX=2 CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude -n sinav' && echo e || echo h)"
 sifirla; EK=(TO_AUTOCOMPACT=500k CLAUDE_CODE_AUTO_COMPACT_WINDOW=900k); kos "$M" bash "$M/scripts/baslat-sinav.sh" sinav-ana "claude -n sinav" >/dev/null 2>&1
-EK=(); kapi "K2 standart SABİT: dış ortam başka değer verse de satırda 600k (kaçış yok)" "e" "$(grep -q 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude -n sinav' "$T/tmux.log" 2>/dev/null && ! grep -q '500k\|900k' "$T/tmux.log" && echo e || echo h)"
+EK=()
+kapi "K2 standart SABİT: dış ortam başka değer verse de satırda 600k (kaçış yok)" "e" "$(grep -q 'CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k claude -n sinav' "$T/tmux.log" 2>/dev/null && ! grep -q '500k\|900k' "$T/tmux.log" && echo e || echo h)"
+# JRCK8J: kutuda geçerli bir claude bulunursa satır MUTLAK yolla yazılır (panenin bayat PATH'ine güvenilmez)
+mkdir -p "$T/nvm-var/v1/bin" "$T/nvm-var/v1/lib"; head -c 2097152 /dev/zero > "$T/nvm-var/v1/lib/claude.exe"; chmod +x "$T/nvm-var/v1/lib/claude.exe"; ln -s ../lib/claude.exe "$T/nvm-var/v1/bin/claude"
+sifirla; EK=(TO_NVM_KOK="$T/nvm-var"); kos "$M" bash "$M/scripts/baslat-sinav.sh" sinav-ana "claude -n sinav --permission-mode auto" >/dev/null 2>&1; EK=()
+kapi "K1c geçerli claude varsa satır MUTLAK yolla başlar ('claude' çıplak kelime değil)" "e" \
+  "$(grep -q "600k $T/nvm-var/v1/bin/claude -n sinav" "$T/tmux.log" 2>/dev/null && echo e || echo h)"
 # kurtarıcı aynı yardımcıdan geçer: onar.sh adım 4 claude_baslat'ı çağırır (statik, bayt-aynı yardımcı)
 kapi "K3 ana koltuk (iki dal) + kurtarıcı aynı claude_baslat ile açılır (ikinci başlatma yolu yok)" "3" "$(grep -c 'claude_baslat "\$' "$KOK/scripts/onar.sh")"
 

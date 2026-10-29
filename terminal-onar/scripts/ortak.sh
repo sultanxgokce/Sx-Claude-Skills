@@ -154,9 +154,28 @@ export TZ=Europe/Istanbul  # cron UTC koşar; günlük yerel saatle yazılsın
 # 🔴 NODE YOLU DİNAMİK BULUNUR — sürüm elle yazılıydı ve SEDİR bunu kendi dersinde
 #    "beceride dinamik bulunmalı" diye işaretlemişti. Elle yazılan sürüm, node
 #    yükseltildiği gün cron'u SESSİZCE öldürür: bekçi koşar, claude bulunamaz, iş yapmaz.
+# 🔴 CLAUDE YOLU "ÇALIŞAN" OLANDIR (JRCK8J · 29 Eki, vekatip): nvm'de iki sürüm yan yanaydı; eski olanda claude.exe
+#    16 Eki'den beri 500 baytlık "native binary not installed" kabuğuydu. Bekçi `command -v node`la bayat PATH'ten eski
+#    sürümü seçti, koltuk "Permission denied" ile açılmadı (vekatip reisi düştü). Glob da artan sırada gezdiği için
+#    eski sürümü ilk bulurdu. Ölçüt: claude bir DOSYA, çalıştırılabilir ve ≥1 MB (kabuk/stub değil). Sıra: PATH'teki →
+#    nvm sürümleri YENİDEN eskiye (sort -V). Hiçbiri tutmazsa boş döner (çağıran açılamadı der, tahmin etmez).
+_claude_gecerli_mi() {  # $1 = claude yolu → gerçek ikili mi (symlink çözülür)
+  local f; f="$(readlink -f -- "$1" 2>/dev/null)" || return 1
+  [ -f "$f" ] && [ -x "$f" ] && [ "$(stat -c %s -- "$f" 2>/dev/null || echo 0)" -ge 1048576 ]
+}
+claude_yolu() {
+  local c d
+  c="$(command -v claude 2>/dev/null)" && _claude_gecerli_mi "$c" && { echo "$c"; return 0; }
+  for d in $(printf '%s\n' "${TO_NVM_KOK:-/config/.nvm/versions/node}"/*/bin | sort -rV); do
+    _claude_gecerli_mi "$d/claude" && { echo "$d/claude"; return 0; }
+  done
+  return 1
+}
 _node_yolu() {
-  local d; d="$(command -v node 2>/dev/null)" && { dirname "$d"; return 0; }
-  for d in /config/.nvm/versions/node/*/bin; do [ -x "$d/node" ] && { echo "$d"; return 0; }; done
+  local c d
+  c="$(claude_yolu 2>/dev/null)" && { dirname "$c"; return 0; }
+  d="$(command -v node 2>/dev/null)" && { dirname "$d"; return 0; }
+  for d in $(printf '%s\n' "${TO_NVM_KOK:-/config/.nvm/versions/node}"/*/bin | sort -rV); do [ -x "$d/node" ] && { echo "$d"; return 0; }; done
   return 1
 }
 export PATH="$(_node_yolu 2>/dev/null):/config/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH"

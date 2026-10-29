@@ -1,0 +1,20 @@
+$ bash terminal-onar/scripts/claude-yolu.test.sh
+# rc=0 sure=0.2s zaman=2026-10-29T10:36:28+03:00
+--- stdout ---
+── 1) claude_yolu çalışan ikiliyi seçer
+  ✓ Y1 bayat PATH eski (kabuk) sürümü gösterirken YENİ sürüm seçilir
+  ✓ Y2 PATH'te claude yokken en yeni geçerli sürüm seçilir
+  ✓ Y3 PATH zaten geçerli olanı gösteriyorsa o korunur
+  ✓ Y4 yeni sürümde claude yoksa kabuğa DÜŞMEZ (boş döner)
+  ✓ Y4b … ve rc 1 (ölçülemedi, uydurma yol yok)
+── 2) PATH'e giren node dizini claude'un dizini
+  ✓ N1 _node_yolu claude'un geçerli olduğu sürümü verir
+── 3) çağıranlar gerçekten kullanıyor
+  ✓ C1 onar.sh claude_baslat komutu mutlak yola çevirir
+  ✓ C2 koltuk-ac.sh dava yolu claude_yolu ile çözer
+── 4) mutant: ölçüt kaldırılırsa sınav DÜŞER
+  ✓ M1 mutant gerçekten uygulandı
+  ✓ M1b mutantta bayat PATH kabuğu seçer (Y1 bunu yakalar)
+
+SONUÇ: 10 geçti · 0 kaldı
+--- stderr ---

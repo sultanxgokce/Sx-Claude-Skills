@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-claude-yolu.sh
+# rc=0 sure=20.1s zaman=2026-10-29T10:36:28+03:00
+--- stdout ---
+bekçinin seçtiği claude dizini: /tmp/tmp.QUvlQWBiP9/nvm/v22.23.0/bin
+claude ikilisi bayt: 500
+--- stderr ---
+⏳ agir-sira: kanit-koltuk-claude-yolu-bekci-claude-ikilisi 20 sn bekledi (yuva 1, load1 16.83)
