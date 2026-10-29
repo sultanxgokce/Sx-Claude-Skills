@@ -1,7 +1,7 @@
 {
   "is": "mesveret-seansi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T00:03:28+03:00",
+  "guncelleme": "2026-10-30T00:07:33+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,7 +25,7 @@
       "etiket": "sinav-mutant-sayac",
       "asama": "sonra",
       "dosya": "olcum-sinav-mutant-sayac-sonra.txt",
-      "sha256": "f2645b91b717b6361bf9c594c18f13d9083f0f8d8a7182d42adbc0b98657ea09",
+      "sha256": "96f03b6a04047934adaab7d4415e1dd6e7264367eaa109d7647faa8fa994f9aa",
       "komut": [
         "bash",
         "mesveret/scripts/mesveret.test.sh",
@@ -34,14 +34,14 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T00:03:28+03:00",
-      "sure_sn": 0.4,
+      "zaman": "2026-10-30T00:07:33+03:00",
+      "sure_sn": 1.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "0e289eb3ec164a45837885af5b93f9e3"
+      "olcum_id": "1c2292ea734245f4bfb6d39cb517953a"
     },
     {
       "tur": "olcum",
@@ -61,7 +61,24 @@
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "da216c4f1a5c4596ba69655274d0dbc5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "9e161f327796dbfd79824634682a36728dd6601bc6a610507c8a4c1ad9f09fbc",
+      "komut": [
+        "bash",
+        "mesveret/scripts/mesveret.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:07:32+03:00",
+      "sure_sn": 16.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bebaab482a594c8f98d21c914a62cb8a"
     }
   ],
-  "imza": "608ff87cf4492cd0f95e11845fb486d7a7d03b974dd07b8f7429a69b6804fde1"
+  "imza": "285955fab0ebce1369156587399d9edd864765c622f2ec425038b6fb9692a5c0"
 }

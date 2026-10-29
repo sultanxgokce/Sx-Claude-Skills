@@ -95,10 +95,11 @@ mesveret.sh liste                                       → seanslar
 Çıkış kodları: 0 tamam · 2 kullanım · 3 Bulgu Defteri kurulu değil / seans yok · 4 kayıt yazıldı ama önem adımı yazılamadı.
 
 ## Sınav
-`bash scripts/mesveret.test.sh` — hermetik (sahte `bulgu.sh` ve sahte `gorev.sh`): seans açılır · madde kaydı havuza
+`bash scripts/mesveret.test.sh` — hermetik (sahte `bulgu.sh` ve sahte `gorev.sh`): seans açılır · madde kaydı havuza gider, kimliksiz kayıt reddedilir
 gider ve seans dosyasına işlenir · önem sözsüz REDDEDİLİR (A06) · önem sözle D1 adımı yazar · bitir özeti doğru sayar ·
 defter kurulu değilse rc 3 ve dosyaya yazılmaz · 1 mutant (madde sayacı bozulunca özet kırmızı).
 
 ## Sürüm notları
 - **0.1.0 (30 Eki 2026, SERDAR — Kuzey Yıldızı gece inşası):** ilk sürüm. Şablon · kayıt · önem (D1) · özet · hermetik sınav.
+  Göz tur 1 düzeltmeleri: havuza işlenmeyen önem seansa da işlenmez (rc 4) · her madde sonrası A/B/C şablonu yeniden açılır · kayıt kimliği okunamazsa madde yazılmaz (rc 3).
   Sınır: Nişan Paneli henüz yok (C şıkkı görüntü yolunu elle alır); `sultan_onem` alanı defterde henüz yok (adım olarak işlenir).

@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ bash mesveret/scripts/mesveret.test.sh --mutant sayac
-# rc=1 sure=0.4s zaman=2026-10-30T00:03:28+03:00
+# rc=1 sure=1.3s zaman=2026-10-30T00:07:33+03:00
 --- stdout ---
 MUTASYON: madde sayacı hep 1
 ✓ M1 seans açılır (rc 0, kimlik mes_…)
@@ -10,10 +10,13 @@ MUTASYON: madde sayacı hep 1
 ✓ M2c önem sorusu basıldı
 ✓ M3 A06: söz/oturum yok → rc 2, adım yazılmadı
 ✓ M4 önem D1 adımı gorev.sh'a gitti
+✓ M4b önemden sonra Madde 2 şablonu AYNEN açılır
+✓ M4c gorev.sh yoksa rc 4 ve seans önemi değişmez (3 kalır)
 ✓ M5 özet: 2 madde · önemi sorulmayan 1
 ✗ M5c durum 2. maddeyi 2 numarayla listeler (sayaç)
 ✓ M5b durum bitti, liste gösterir
 ✓ M6 bulgu.sh yoksa rc 3 ve seansa madde eklenmez
+✓ M6b görev kimliği okunamazsa rc 3, madde seansa eklenmez
 ✓ M7 bilinmeyen seans rc 3
-== 11 geçti · 1 kaldı
+== 14 geçti · 1 kaldı
 --- stderr ---

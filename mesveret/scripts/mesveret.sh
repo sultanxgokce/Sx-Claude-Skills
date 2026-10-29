@@ -27,6 +27,8 @@ K
   exit 2
 }
 seans_yolu() { echo "$KOK/$1.json"; }
+# Değişmez 1: her madde AYNI şablonla açılır — şablon tek yerde yaşar
+sablon() { echo "🔎 **Madde $1'i çalışıyoruz**" >&2; echo "A) Sen anlat · B) Ben önereyim · C) Etkileşimli gidelim" >&2; }
 seans_var() { [ -f "$(seans_yolu "$1")" ] || { echo "⛔ seans yok: $1 ($KOK)" >&2; exit 3; }; }
 py() { python3 - "$@"; }
 
@@ -47,8 +49,7 @@ p,id,oda,konu,t=sys.argv[1:6]
 json.dump({"seans":id,"acilis":t,"oda":oda,"konu":konu,"maddeler":[],"durum":"acik"},open(p,"w"),ensure_ascii=False,indent=1)
 PY
     echo "$id"
-    echo "🔎 **Madde 1'i çalışıyoruz**" >&2
-    echo "A) Sen anlat · B) Ben önereyim · C) Etkileşimli gidelim" >&2
+    sablon 1
     ;;
   madde)
     [ $# -ge 2 ] || kullanim; seans="$1"; baslik="$2"; shift 2
@@ -81,6 +82,7 @@ PY
     cikti=$("$BULGU" "${args[@]}" 2>&1); rc=$?
     if [ $rc -ne 0 ]; then echo "⛔ Bulgu Havuzu'na yazılamadı (rc=$rc): $cikti" >&2; exit 3; fi
     gid=$(printf '%s\n' "$cikti" | grep -oE 'gorev_[0-9A-Z]+' | head -1)
+    [ -n "$gid" ] || { echo "⛔ Bulgu Havuzu kayıt kimliği okunamadı (bulgu.sh çıktısı: ${cikti:0:120}) — madde seansa YAZILMADI" >&2; exit 3; }
     py "$(seans_yolu "$seans")" "$no" "$baslik" "$gid" "$etiket" "$gorsel" "$(now)" <<'PY'
 import json,sys
 p,no,baslik,gid,etiket,gorsel,t=sys.argv[1:8]
@@ -115,6 +117,8 @@ PY
     if [ -n "$GOREV" ] && [ -f "$GOREV" ]; then
       bash "$GOREV" adim "$gid" "$d1" >/dev/null 2>&1 || rc=4
     else rc=4; fi
+    # Havuza işlenmeyen önem seansa da işlenmez: durum/özet havuzla ayrışmasın (göz tur 1, bulgu 1)
+    if [ $rc -eq 4 ]; then echo "⚠ önem görevin adımına İŞLENEMEDİ ($gid) — gorev.sh yok ya da reddetti; seansta 'sorulmadı' kaldı, yeniden dene" >&2; exit 4; fi
     py "$(seans_yolu "$seans")" "$no" "$onem" "$soz" "$oturum" <<'PY'
 import json,sys
 p,no,onem,soz,ot=sys.argv[1:6]
@@ -123,9 +127,8 @@ for m in d["maddeler"]:
     if m["no"]==int(no): m["onem"]=int(onem); m["onem_soz"]=soz; m["onem_oturum"]=ot
 json.dump(d,open(p,"w"),ensure_ascii=False,indent=1)
 PY
-    if [ $rc -eq 4 ]; then echo "⚠ önem seansa yazıldı ama görevin adımına İŞLENEMEDİ ($gid) — gorev.sh yok ya da reddetti" >&2; exit 4; fi
     echo "madde $no önem $onem → $gid (D1 adımı yazıldı)"
-    echo "Madde $((no+1))'e geçelim mi?" >&2
+    sablon "$((no+1))"
     ;;
   durum)
     [ $# -ge 1 ] || kullanim; seans_var "$1"

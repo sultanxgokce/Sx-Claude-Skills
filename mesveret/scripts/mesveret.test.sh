@@ -44,6 +44,10 @@ kapi "M3 A06: söz/oturum yok → rc 2, adım yazılmadı" $([ $rc = 2 ] && [ ! 
 # M4 önem sözle D1 adımı yazar
 bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "bu çok önemli" --oturum session_TEST >/dev/null 2>&1; rc=$?
 kapi "M4 önem D1 adımı gorev.sh'a gitti" $([ $rc = 0 ] && grep -q 'adim gorev_01TEST1 D1 2026-10-30 Sultan: önem 3 (sohbet · session_TEST · "bu çok önemli" · beyan:SERDAR)' "$T/log/gorev.args" && echo 1 || echo 0)
+kapi "M4b önemden sonra Madde 2 şablonu AYNEN açılır" $(bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "bu çok önemli" --oturum session_TEST 2>&1 >/dev/null | grep -q "Madde 2'i çalışıyoruz" && bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "x y" --oturum s 2>&1 >/dev/null | grep -q "A) Sen anlat · B) Ben önereyim · C) Etkileşimli gidelim" && echo 1 || echo 0)
+# M4c adım yazılamazsa önem seansa İŞLENMEZ, rc 4
+MESVERET_GOREV="$T/yok-gorev.sh" bash "$BET_KOS" onem "$S" 1 --onem 2 --soz "orta" --oturum s >/dev/null 2>&1; rc=$?
+kapi "M4c gorev.sh yoksa rc 4 ve seans önemi değişmez (3 kalır)" $([ $rc = 4 ] && bash "$BET_KOS" durum "$S" | grep -q "^  1\. .* önem 3$" && echo 1 || echo 0)
 # M5 ikinci madde + bitir özeti
 bash "$BET_KOS" madde "$S" "Yaş rozeti kademeleri belirsiz" --kim SERDAR --etiket ozellik >/dev/null 2>&1
 oz=$(bash "$BET_KOS" bitir "$S" 2>/dev/null)
@@ -53,6 +57,10 @@ kapi "M5b durum bitti, liste gösterir" $(bash "$BET_KOS" liste | grep -q "$S	bi
 # M6 defter kurulu değilse yazılmaz
 MESVERET_BULGU="$T/yok.sh" bash "$BET_KOS" madde "$S" "Hiç yazılmamalı bu madde" --kim SERDAR --etiket bug >/dev/null 2>&1; rc=$?
 kapi "M6 bulgu.sh yoksa rc 3 ve seansa madde eklenmez" $([ $rc = 3 ] && [ "$(bash "$BET_KOS" durum "$S" | grep -c '^  ')" = 2 ] && echo 1 || echo 0)
+# M6b bulgu.sh kimlik basmazsa rc 3, seansa yazılmaz
+printf '#!/usr/bin/env bash\necho "kayıt alındı ama kimlik yok"\n' > "$T/kimliksiz.sh"; chmod +x "$T/kimliksiz.sh"
+MESVERET_BULGU="$T/kimliksiz.sh" bash "$BET_KOS" madde "$S" "Kimliksiz madde yazılmamalı" --kim SERDAR --etiket bug >/dev/null 2>&1; rc=$?
+kapi "M6b görev kimliği okunamazsa rc 3, madde seansa eklenmez" $([ $rc = 3 ] && [ "$(bash "$BET_KOS" durum "$S" | grep -c '^  ')" = 2 ] && echo 1 || echo 0)
 # M7 seans yok
 bash "$BET_KOS" durum mes_yok >/dev/null 2>&1; kapi "M7 bilinmeyen seans rc 3" $([ $? = 3 ] && echo 1 || echo 0)
 
