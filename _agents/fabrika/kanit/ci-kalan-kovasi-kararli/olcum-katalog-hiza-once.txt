@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/hiza-once
+# rc=1 sure=0.1s zaman=2026-10-29T07:41:34+03:00
+--- stdout ---
+✗ tescil SKILL.md=0.9.0 catalog=0.3.0 (DRİFT)
+✓ oda-kur SKILL.md=0.2.0 catalog=0.2.0
+✓ yazilim-fabrikasi SKILL.md=0.27.22 catalog=0.27.22
+--- stderr ---

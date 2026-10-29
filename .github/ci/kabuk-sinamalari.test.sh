@@ -58,6 +58,9 @@ O="$(kos "$T/d10" kalan)"; R=$?
 printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=abc\nexit 0\n' > "$T/d10/a/bir.test.sh"
 O="$(kos "$T/d10" kalan)"
 grep -q "a/bir.test.sh 'kabuk-testleri:' başlığı var ama sure=N okunamadı" <<<"$O"; g $? "K10b beyan var ama okunamıyor (sure=abc) → UYARI satırı (sessiz varsayılan yok)"
+printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1 2\nsleep 4\n' > "$T/d10/a/bir.test.sh"; printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1abc\nsleep 4\n' > "$T/d10/a/uc.test.sh"
+O="$(kos "$T/d10" kalan)"
+grep -q "a/bir.test.sh 'kabuk-testleri:' başlığı var ama sure=N okunamadı" <<<"$O" && grep -q "a/uc.test.sh 'kabuk-testleri:' başlığı var ama sure=N okunamadı" <<<"$O" && grep -q "a/bir.test.sh (4[0-9]* ms)" <<<"$O" && grep -q "a/uc.test.sh (4[0-9]* ms)" <<<"$O"; g $? "K10c 'sure=1 2' ve 'sure=1abc' 1 sn SAYILMAZ (göz tur 1): okunamadı uyarısı + varsayılan 300 (4 sn'lik sınama geçer)"
 echo "── K7 · bilinmeyen kova"
 O="$(kos "$T/d1" yok)"; R=$?
 [ "$R" -eq 2 ]; g $? "K7 bilinmeyen kova adı → rc 2"
@@ -94,10 +97,19 @@ O="$( cd "$T/dm" && bash "$M" diploma 2>&1 )"; R=$?
 echo "── MUTASYON · sure_sec eski kalıba dönerse (satır sonu şart) K10 kırmızı olur"
 M2="$T/kabuk-mutant2.sh"
 python3 - "$K" "$M2" <<'PYM'
-import sys; s=open(sys.argv[1],encoding="utf-8").read(); a=r"\([^0-9].*\)\{0,1\}$"; assert s.count(a)==1, "sure kalıbı"
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a=r"\( \{1,\}[^0-9 ].*\)\{0,1\}$"; assert s.count(a)==1, "sure kalıbı"
 open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a," *$",1))
 PYM
 yeni_depo dm2; printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1   (açıklama)\nsleep 4\n' > "$T/dm2/a/iki.test.sh"
 O="$( cd "$T/dm2" && bash "$M2" kalan 2>&1 )"; R=$?
 [ "$R" -eq 0 ] && grep -q "a/iki.test.sh (4[0-9]* ms)" <<<"$O"; g $? "M2 eski kalıp: açıklamalı beyan okunmaz, 300 varsayılanıyla 4 sn'lik sınama YEŞİL geçer → K10 bu mutantta KIRMIZI olurdu"
+echo "── MUTASYON · kuyruk gevşerse ('[^0-9].*' — boşluk şartsız) 'sure=1 2' 1 sn sayılır, K10c kırmızı olur"
+M3="$T/kabuk-mutant3.sh"
+python3 - "$K" "$M3" <<'PYM'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a=r"\( \{1,\}[^0-9 ].*\)\{0,1\}$"; assert s.count(a)==1, "kuyruk kalıbı"
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,r"\([^0-9].*\)\{0,1\}$",1))
+PYM
+yeni_depo dm3; printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1abc\nsleep 4\n' > "$T/dm3/a/iki.test.sh"
+O="$( cd "$T/dm3" && bash "$M3" kalan 2>&1 )"; R=$?
+[ "$R" -ne 0 ] && grep -q "a/iki.test.sh KIRMIZI rc=124 (süre tavanı 1sn" <<<"$O"; g $? "M3 gevşek kuyruk: 'sure=1abc' 1 sn sayıldı ve sınama rc=124 → K10c bu mutantta KIRMIZI olurdu"
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

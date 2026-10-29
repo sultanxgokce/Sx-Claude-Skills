@@ -1,7 +1,7 @@
 {
   "is": "ci-kalan-kovasi-kararli",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T07:30:27+03:00",
+  "guncelleme": "2026-10-29T07:43:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -55,7 +55,60 @@
       "sure_sn": 11.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "90f87626387043149f306743d9bca909"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "once",
+      "dosya": "olcum-katalog-hiza-once.txt",
+      "sha256": "714fa6bdd284e888158e090c717c9858b18a2cfbe8fd962485ab086ff5662b5e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/hiza-once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T07:41:34+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ff19b35db6a1435dbf2e1a10aee2133f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "6459b56bc1e1f1964cb729134c95ccc23ace0dfe202c33847a0feceb1151705d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:41:34+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bbe82e11f3f84151aab748b6e22cbafa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kosucu-sinavi-tur2",
+      "asama": "tek",
+      "dosya": "olcum-kosucu-sinavi-tur2-tek.txt",
+      "sha256": "dd6c776da13a6b7ac273ab72ca7f123ecb72d86b904797077ad29f60d08fdfe4",
+      "komut": [
+        "bash",
+        ".github/ci/kabuk-sinamalari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:43:36+03:00",
+      "sure_sn": 31.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "92419730a6774203bd3ea3baf30ad836"
     }
   ],
-  "imza": "b45664a03648ef0b5f5315f8a33b4b4a65ce6d0625eb74e199fcd8321537f050"
+  "imza": "18b4191643daa5a4cd525780a36e3b243e38d414400972d18932e291ed99efdd"
 }
