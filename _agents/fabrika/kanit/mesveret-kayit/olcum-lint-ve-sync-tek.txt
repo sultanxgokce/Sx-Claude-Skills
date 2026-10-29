@@ -1,0 +1,10 @@
+$ bash -c set -o pipefail; node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs . && node ahi/schema/katalog-surum-hiza.mjs . && node sync-skills.mjs --skill mesveret | tail -2
+# rc=0 sure=0.3s zaman=2026-10-30T00:42:31+03:00
+--- stdout ---
+✓ repo-parity temiz (catalog 84 ↔ sync-targets 74)
+✓ install-listesi 74 skill: SKILL.md + version tam
+katalog↔SKILL.md: girdi 84 · sapma 0 · ölçülemedi 0
+✓ sapma 0
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---
