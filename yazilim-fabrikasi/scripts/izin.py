@@ -37,7 +37,7 @@ def soz_zamani_coz(ham, an):
         return None, None, "bozuk biçim (%r) — ISO-8601 ister, ör. 2026-10-28T20:25:00+03:00" % ham
     if z.tzinfo is None:
         z = z.replace(tzinfo=an.tzinfo)   # saat dilimi yoksa bu kutunun dilimi (oturum kaydı yerel saattedir)
-    if z > an + datetime.timedelta(seconds=60):
+    if z > an:   # hoşgörü YOK (göz #562 tur 1): kart 'gelecekteki zaman reddedilir' der; 30 sn sonrası da gelecektir
         return None, None, "gelecekte (%s > şimdi %s) — söz henüz söylenmemiş olamaz" % (z.isoformat(timespec="seconds"), an.isoformat(timespec="seconds"))
     return z.isoformat(timespec="seconds"), "soz", None
 

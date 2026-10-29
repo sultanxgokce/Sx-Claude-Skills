@@ -1,18 +1,8 @@
-$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-sonra.k6m3/yazilim-fabrikasi/scripts && timeout 900 bash kart.test.sh 2>&1 | grep -E '✗|SONUÇ|V20|mutant .(soz|gelecek|kunye)'; exit ${PIPESTATUS[0]}
-# rc=0 sure=121.7s zaman=2026-10-29T10:17:17+03:00
+$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-sonra.QYY0/yazilim-fabrikasi/scripts && timeout 900 bash kart.test.sh 2>&1 | grep -E '✗|SONUÇ|V20e|mutant .gelecek'; exit ${PIPESTATUS[0]}
+# rc=0 sure=98.4s zaman=2026-10-29T10:24:38+03:00
 --- stdout ---
-════ V20 · --soz-zamani: Sultan damgası sözün saatini taşır (görev …F6EWHF · kart sultan-dedi-soz-zamani) ════
-  ✓ V20a --soz-zamani: zaman = sözün saati, yazildi = şimdi, kaynak soz; baslama_izni aynı; çıktı saati söyler
-  ✓ V20b izin künyesi sözün saatini gösterir (göz/kapı/gün sonu aynı künyeyi okur)
-  ✓ V20c bayraksız: zaman = yazım saati, kaynak yazim (eski davranış korunur, çıktı bunu söyler)
-  ✓ V20c2 saat dilimsiz ISO kabul: kutunun dilimi eklenir, kaynak soz
-  ✓ V20d bozuk biçim rc 1, sebep söylenir
   ✓ V20e gelecekteki saat rc 1 (söz henüz söylenmemiş olamaz)
-  ✓ V20f --soz-zamani içinde '|' rc 1 (defter ayracı)
-  ✓ V20g reddedilen üç denemede kayıt ÜRETİLMEDİ (sayı aynı)
-── V20 · MUTASYON (tam kopya): bayrak yok sayılırsa ya da gelecek çiti kalkarsa sınav KIRMIZI ──
-  ✓ mutant 'soz-zamani-yok': bayrak yok sayılınca V20a kapısı KIRMIZI
-  ✓ mutant 'gelecek-citi-yok': gelecek saat kabul edilince V20e kapısı KIRMIZI (rc 0 döndü)
-  ✓ mutant 'kunye-saatsiz': künyeden saat düşünce V20b kapısı KIRMIZI
-── SONUÇ: 425 geçti · 0 kaldı ──
+  ✓ V20e2 30 saniye sonrası da rc 1 — hoşgörü yok (göz #562 tur 1)
+  ✓ mutant 'gelecek-citi-yok': 30 sn sonrası kabul edilince V20e2 kapısı KIRMIZI (rc 0 döndü)
+── SONUÇ: 426 geçti · 0 kaldı ──
 --- stderr ---
