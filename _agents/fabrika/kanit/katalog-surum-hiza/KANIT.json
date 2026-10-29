@@ -1,0 +1,176 @@
+{
+  "is": "katalog-surum-hiza",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T11:02:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "once",
+      "dosya": "olcum-katalog-hiza-once.txt",
+      "sha256": "93ab9c3f1197ead125ee1aa4e04524c9422a8f787a12421f8a2eaafb99b41b3c",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T10:43:53+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f6ba3f1603084ef394a89e825fe61a0a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "2fbb115b915f00d0e51a64b5f98a3cce8aaff79cbd605ffcf6841d5b582066d3",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:49+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c3da918483d34637babef79b7c00eaef"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "f1f1dd224f569993cd6d39e4ba603f994d0c6082ff36e504d59c2d665c0baf4c",
+      "komut": [
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:50+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8d9d4ca60c7f42c695cd97bae9190122"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kiyas-gevsek",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kiyas-gevsek-tek.txt",
+      "sha256": "d76503d0d7658a059e0918bbc1929d73f8e50a2287e180ec6f04c0ebcb64bace",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/kiyas-gevsek.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:51+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "41f7fa87cb6f4f6084b263dc80948e3d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-duzelt-yazmaz",
+      "asama": "tek",
+      "dosya": "olcum-mutant-duzelt-yazmaz-tek.txt",
+      "sha256": "b20107f3e139de76420646a4fc44f9b4191ce1cb0d5f7b00a379e0e174630cf0",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/duzelt-yazmaz.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:52+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "809d259f67364350b16872db8d985d3e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-olculemedi-yesil",
+      "asama": "tek",
+      "dosya": "olcum-mutant-olculemedi-yesil-tek.txt",
+      "sha256": "e7f4bac30858c5db84eb7dd77e8fa57fe7a0927da670c431ec18feb9f67ab008",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/olculemedi-yesil.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:53+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "188f074c182649b7bccaedabfb6af2b4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sinir-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-sinir-yok-tek.txt",
+      "sha256": "3220388d943d1aa67544c4fdcec6eb374f4e728962affedfa30ce9d2a099d230",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/sinir-yok.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:54+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "ab73be32246047db871dac76fed40db5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-derinlik-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-derinlik-yok-tek.txt",
+      "sha256": "ab4a0dc945d284ba9070d85359c64a45cc1a02fab7331ff3246211455a838251",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/derinlik-yok.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:55+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "8debb2ebcc394d63b7927cc82d10aebb"
+    }
+  ],
+  "imza": "453ab8aa2bc8e7cf266d20cc24783e5076dbc6fe4c92da6f3a48e7f8a983d835"
+}

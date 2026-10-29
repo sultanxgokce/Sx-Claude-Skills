@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "katalog-surum-hiza",
+  "pr": "565",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T10:58:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-katalog-surum-hiza",
+  "dal": "katalog-surum-hiza",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 46766,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 26142
+  },
+  "dalgic": "olculemedi",
+  "bas": "3c886534bac5868e62ef353b172e4c295ecd0e88",
+  "duzeltme_farki": {
+    "onceki_bas": "2a62e27c893f3a46431d951bf74129c77857bab3",
+    "dosya": 11,
+    "bayt": 42182,
+    "tam_bayt": 60679
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turun B1 ve B2 kusurları nesne sınırları, JSON tabanlı kimlik eşleme, H9–H10 sınavları ve mutantlarla kapanmış; gerçek ölçüm de kataloğu 23 sapmadan sıfıra indirmiş. Ancak düzeltici bir girdinin ilk iç içe `version` anahtarını üst düzey sürüm sanabildiği için önce bu eşlemeyi sağlamlaştırmak, ayrıca karttaki on yedi–ölçümdeki yirmi üç sayı ayrılığını düzeltmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "`--duzelt`, girdi nesnesi içinde üst düzey `version` yerine daha önce gelen iç içe bir nesnenin `version` alanını değiştirebilir. Ölçüm ayrıştırılmış girdinin üst düzey `s.version` değerini kıyaslarken yazım aşaması nesne parçasındaki ilk `version` eşleşmesini seçiyor; bu durumda yanlış alan yazılır ve gerçek sapma kalır.",
+        "kanit": "Ölçüm koşulu üst düzey `s.version` kullanıyor; düzeltme ise `const parca = metin.slice(a[0], a[1]); const m = /\"version\"\\s*:\\s*\"[^\"]*\"/.exec(parca);` ile ilk eşleşmeyi alıyor. H9 nesne sınırını, H10 alan sırası ve boşluğu ölçüyor; üst düzey sürümden önce iç içe `version` bulunan vaka sınanmıyor.",
+        "konum": "ahi/schema/katalog-surum-hiza.mjs:45-46,75-78; ahi/schema/katalog-surum-hiza.test.sh H9-H10",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önceki B3 kapanmadı: iş kartı başlangıçta on yedi sapma olduğunu söylüyor, araç imzalı önce ölçümü ise yirmi üç sapma buluyor. Kod açıklaması farkı eski elle sayımın path alanı olmayan girdileri kaçırmasıyla açıklasa da talep ile ölçüm hâlâ sayısal olarak uyuşmuyor.",
+        "kanit": "İş kartında `bugünkü on yedi sapma sıfıra çekilir`; önce ölçümünde `girdi 82 · sapma 23 · ölçülemedi 0`, sonra ölçümünde `sapma 0` yazıyor. Yeni kod yorumu da `23'ü farklı (ilk elle sayım 17 demişti...)` diyerek ayrılığı doğruluyor.",
+        "konum": "iş kartı cumle; olcum-katalog-hiza-once.txt; olcum-katalog-hiza-sonra.txt; ahi/schema/katalog-surum-hiza.mjs:5",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti 23→0 ölçüyor, gerçek sınav rc=0 ile 18/18 geçiyor; dört mutasyon kaydı da beklenen kırmızıyı üreterek kıyas, diske yazma, ölçülemeyen kayıt ve nesne sınırı kapılarını doğruluyor. Önceki B1 H9 ve M4 ile, B2 H10 ile kapanmış; B3 açık kalmış. Kanıt matrisi iç içe `version` alanının üst düzey sürümden önce geldiği biçimi kapsamıyor."
+  }
+}
