@@ -1,0 +1,39 @@
+{
+  "is": "kanit-boru-dongu",
+  "cumle": "kanit.sh boru denetimi döngü ve blok içindeki boruyu da görür: bash -c 'for …; do X | tail -1 || exit 1; done' gibi, ölçülen komutun çıkış kodunu süzgecin yuttuğu betikler artık reddedilir (ya da --boru-izin ister); mevcut temiz/izinli yollar değişmez; sınav + mutant.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T06:36:30+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M62VK90H26XXN6H07H16QY2D",
+  "tahmin_dk": 2,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T06:36:35+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T06:41:25+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
