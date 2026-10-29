@@ -1,0 +1,18 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash duzen/scripts/alt-ajan-istem.test.sh --mutant sir
+# rc=1 sure=0.3s zaman=2026-10-30T01:42:39+03:00
+--- stdout ---
+=== MUTASYON: sır süzgeci kapatıldı (geçici kopya) — A5 KIRMIZI BEKLENİR ===
+  ✓ A1 kimlik yok → rc 3 + 'kimlik yok' + '/ise-alim', stdout boş
+  ✓ A2 ELLE verbatim alınır, üretilmiş bölge alınmaz (rc 0)
+  ✓ A3 oda+amir registry'den (yorum ve tırnak temizlenmiş), ad ŞAKİRD
+  ✗ A5 sır süzme: parola/token/sifre satırı basılmaz, '[sır satırı süzüldü]' ≥3, sade satır kalır → süzülen: 0
+  ✓ A6 kart cümlesi JSON'dan okunur + reisin --is cümlesi de var
+  ✓ A8 --dosyalar/--sure basılır; 'reiste kalır' sabit satırı var
+  ✓ A9 el-defteri çıktısı istemde (SAHTE-DEFTER-SATIRI), ⚠ uyarı yok
+  ✓ A4 defter yok (rc 3) → istem yine üretilir rc 0, 'defter boş, ilk görev' + ⚠ uyarı satırı
+  ✓ A4b el-defteri başka rc (7) → 'ölçülemedi' der, 'defter boş' DEMEZ, rc 0
+  ✓ A7 ne --is ne --kart → rc 2, stdout boş
+  ✓ A6b kart bulunamazsa ⚠ uyarı + --is ile devam, rc 0
+== 10 geçti · 1 düştü ==
+--- stderr ---

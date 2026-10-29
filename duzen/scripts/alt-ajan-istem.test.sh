@@ -4,7 +4,7 @@
 # A3 oda+amir aile-registry'den doğru (kanallar _agents/<slug>/ eşlemesi; yorum/alıntı temizlenir) · A4 defter yok (sahte el-defteri rc 3)
 # → rc 0, "defter boş, ilk görev" + ⚠ uyarı · A4b başka rc → "ölçülemedi", "defter boş" demez · A5 sır süzme: parola/token/sifre satırı
 # basılmaz, "[sır satırı süzüldü]" yazılır · A6 kart cümlesi kart JSON'dan (cumle alanı) · A6b kart yoksa ⚠ + --is ile devam
-# A7 ne --is ne --kart → rc 2 · A8 --sure/--dosyalar basılır, sabit "reiste kalır" satırı var · A9 el-defteri rc 0 çıktısı istemde
+# A7 ne --is ne --kart → rc 2 · A10 değersiz seçenek rc 2 (döngü yok) · A11 --kart ../ reddi · A8 --sure/--dosyalar basılır, sabit "reiste kalır" satırı var · A9 el-defteri rc 0 çıktısı istemde
 # Mutant (gömülü + `--mutant sir`): sır süzgeci kapatılmış GEÇİCİ kopyada A5 kırmızı. `--mutant sir` bütün süiti mutanta karşı koşar
 # ve onun rc'sini döner (beklenen KIRMIZI) — kanit.sh olcum --mutasyon <gerçek etiket> bununla kaydedilir.
 set -uo pipefail
@@ -93,6 +93,12 @@ kos sakird >"$T/o7" 2>"$T/e7"; rc=$?
 ok "A7 ne --is ne --kart → rc 2, stdout boş" "$([ $rc -eq 2 ] && [ ! -s "$T/o7" ] && grep -q 'iş yok' "$T/e7" && echo 0 || echo 1)" "→ rc=$rc"
 O6="$(kos sakird --is "x" --kart yok-kart 2>/dev/null)"; rc=$?
 ok "A6b kart bulunamazsa ⚠ uyarı + --is ile devam, rc 0" "$([ $rc -eq 0 ] && grep -q '^⚠ kart bulunamadı' <<<"$O6" && grep -q 'Reisin cümlesi: x' <<<"$O6" && echo 0 || echo 1)" "→ rc=$rc"
+
+timeout 5 bash "$R" sakird --is >"$T/o10" 2>"$T/e10"; rc=$?
+ok "A10 değersiz seçenek (--is sonda) → rc 2 + 'bir değer ister', döngüye girmez (göz tur 1)" "$([ $rc -eq 2 ] && grep -q 'bir değer ister' "$T/e10" && [ ! -s "$T/o10" ] && echo 0 || echo 1)" "→ rc=$rc (124 = zaman aşımı/döngü)"
+printf '{"cumle":"DIZIN-DISI-KART"}\n' > "$T/disari.json"
+kos sakird --is "x" --kart "../../../../$(basename "$T")/disari" >"$T/o11" 2>"$T/e11"; rc=$?
+ok "A11 --kart ../ yolu reddedilir → rc 2, dizin dışı JSON isteme girmez (göz tur 1)" "$([ $rc -eq 2 ] && ! grep -q 'DIZIN-DISI-KART' "$T/o11" && grep -q 'kart iş adı' "$T/e11" && echo 0 || echo 1)" "→ rc=$rc"
 
 if [ -z "${AJAN_BETIK:-}" ]; then
   echo "── mutasyon (gömülü): süzgeç kapatılınca A5 düşmeli"

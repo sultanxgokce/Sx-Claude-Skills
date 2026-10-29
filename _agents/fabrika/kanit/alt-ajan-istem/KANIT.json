@@ -1,0 +1,175 @@
+{
+  "is": "alt-ajan-istem",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T01:46:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "c681e6c22467ab8d46dd247a031c25405b8a0907c5364e893f509168cb9db7b9",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:42:34+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8a6c385b9d1c4606a4d3e0aebeb869b7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-mutant-sir",
+      "asama": "tek",
+      "dosya": "olcum-sinav-mutant-sir-tek.txt",
+      "sha256": "7e1a9fa40ff225cb459768f8554a55bcb827c904f58647799158596bb7b9e7f5",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh",
+        "--mutant",
+        "sir"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:42:39+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0605e7145cd54190a7c3db4f708d1370"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-uclusu",
+      "asama": "tek",
+      "dosya": "olcum-lint-uclusu-tek.txt",
+      "sha256": "1c1c0a6387660b41801e306b2f73cfd42f71d8c02526f3519974f060da2b5d5c",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs . && node ahi/schema/katalog-surum-hiza.mjs . && bash kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:42:44+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f1f92eeaccd54e5c822942429730a151"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nexus-sakird-gercek",
+      "asama": "tek",
+      "dosya": "olcum-nexus-sakird-gercek-tek.txt",
+      "sha256": "f4abc9a318f68ac5d62a156b7a3a175d151448197544670127cd8519a97b6c53",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/alt-ajan-istem-nexus-olcum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:43:03+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6f53bbc725124d34aab783a25f4333ef"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nexus-9-slug-tarama",
+      "asama": "tek",
+      "dosya": "olcum-nexus-9-slug-tarama-tek.txt",
+      "sha256": "07173843d91cf46f797979d9e5ad66cd6d8efcbe8502cbe2f34ea9ddfc8a6df0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/alt-ajan-istem-9-slug.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:43:20+03:00",
+      "sure_sn": 5.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "99d6fb31d1814498998968df7d80d75d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur2",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tur2-tek.txt",
+      "sha256": "9d649db5abe5ec885c4f1dddf049b2e8dca2c30c463d2dee7e7deb6644cfe5fb",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:45:50+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "db33b2accb1d4c01bc8da63f55d0eee8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur2-mutant-sir",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tur2-mutant-sir-tek.txt",
+      "sha256": "0e3d3759ad6e92e5e918b82d34b2c248cb50dee61a0ecf4b5c56b369110e0fdc",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh",
+        "--mutant",
+        "sir"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:45:50+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "152a463529f34077b93afe75439f5af6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-uclusu-tur2",
+      "asama": "tek",
+      "dosya": "olcum-lint-uclusu-tur2-tek.txt",
+      "sha256": "e0d7d016310e6d4573624e450db07ee236b12ada878a3ae6e5bd6208e598780b",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs . && node ahi/schema/katalog-surum-hiza.mjs . && bash kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:45:57+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "c613f802d0d14fa5befd0193fd66f986"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nexus-9-slug-tarama-tur2",
+      "asama": "tek",
+      "dosya": "olcum-nexus-9-slug-tarama-tur2-tek.txt",
+      "sha256": "2f929bfdbb5d61657cc79cd9171472db69f9e8a38780c9d682df2cb9adfc4b31",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/alt-ajan-istem-9-slug.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:46:04+03:00",
+      "sure_sn": 6.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3bf133e0219049ebb3e77f5d3be81990"
+    }
+  ],
+  "imza": "b9e881483887518b6673a91c2022179b785f626346bfc78fbba739229c15e3df"
+}

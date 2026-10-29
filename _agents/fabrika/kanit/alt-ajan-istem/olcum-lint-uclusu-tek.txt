@@ -1,0 +1,12 @@
+$ bash -c node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs . && node ahi/schema/katalog-surum-hiza.mjs . && bash kabuk-biti.test.sh
+# rc=0 sure=0.1s zaman=2026-10-30T01:42:44+03:00
+--- stdout ---
+✓ repo-parity temiz (catalog 84 ↔ sync-targets 74)
+✓ install-listesi 74 skill: SKILL.md + version tam
+katalog↔SKILL.md: girdi 84 · sapma 0 · ölçülemedi 0
+✓ sapma 0
+  ✓ beceri betikleri bulundu (araç görüyor): 336 dosya
+  ✓ pozitif kontrol: en az bir 100755 betik var (336)
+  ✓ 🔴 çalıştırma biti olmayan beceri betiği YOK (sync-skills duman testi bu yüzden düşüyordu)
+── SONUÇ: 3 geçti · 0 kaldı ──
+--- stderr ---

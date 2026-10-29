@@ -25,13 +25,14 @@ export LC_ALL=C.UTF-8
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SLUG=""; IS=""; KART=""; DOSYALAR=""; SURE=""; DEPO=""
+deger() { [ $# -ge 2 ] || { echo "alt-ajan-istem: $1 bir değer ister (eksik verildi)" >&2; exit 2; }; }   # göz tur 1: değersiz seçenek sonsuz döngüye giriyordu
 while [ $# -gt 0 ]; do
   case "$1" in
-    --is) IS="${2:-}"; shift 2 ;;
-    --kart) KART="${2:-}"; shift 2 ;;
-    --dosyalar) DOSYALAR="${2:-}"; shift 2 ;;
-    --sure) SURE="${2:-}"; shift 2 ;;
-    --depo) DEPO="${2:-}"; shift 2 ;;
+    --is) deger "$@"; IS="$2"; shift 2 ;;
+    --kart) deger "$@"; KART="$2"; shift 2 ;;
+    --dosyalar) deger "$@"; DOSYALAR="$2"; shift 2 ;;
+    --sure) deger "$@"; SURE="$2"; shift 2 ;;
+    --depo) deger "$@"; DEPO="$2"; shift 2 ;;
     -h|--help) sed -n '2,24p' "$0"; exit 0 ;;
     --*) echo "alt-ajan-istem: bilinmeyen seçenek: $1" >&2; exit 2 ;;
     *) [ -z "$SLUG" ] && SLUG="$1" || { echo "alt-ajan-istem: tek slug beklenir ('$SLUG' ve '$1')" >&2; exit 2; }; shift ;;
@@ -40,6 +41,7 @@ done
 [ -n "$SLUG" ] || { echo "alt-ajan-istem: slug yok (kullanım: alt-ajan-istem.sh <slug> --is \"…\")" >&2; exit 2; }
 [[ "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "alt-ajan-istem: slug küçük harf/rakam/tire olmalı: '$SLUG'" >&2; exit 2; }
 [ -n "$IS" ] || [ -n "$KART" ] || { echo "alt-ajan-istem: iş yok (--is \"<tek cümle>\" ya da --kart <iş>)" >&2; exit 2; }
+if [ -n "$KART" ]; then [[ "$KART" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "alt-ajan-istem: --kart iş adı küçük harf/rakam/tire olmalı: '$KART' (kart dizini dışına yol kabul edilmez)" >&2; exit 2; }; fi   # göz tur 1: ../ ile dizin dışı JSON okunabiliyordu
 if [ -n "$SURE" ]; then [[ "$SURE" =~ ^[1-9][0-9]*$ ]] || { echo "alt-ajan-istem: --sure dakika sayısı olmalı: '$SURE'" >&2; exit 2; }; fi
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
