@@ -1,0 +1,12 @@
+$ bash -c MUTANT_D=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/eski-denetci-z2nX/denetci.sh bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh 2>&1 | grep -E '✗|F8a|F8e|SONUÇ'; exit ${PIPESTATUS[0]}
+# rc=1 sure=7.9s zaman=2026-10-29T04:19:02+03:00
+--- stdout ---
+  ✗ F8a farkta ESC baytı var → gh bayrakla alındı, denetim GEÇTİ (rc 3 değil) (rc=3, beklenen=0)
+  ✗ F8b istemde gh farkı var (esc-farki) ('esc-farki' /tmp/tmp.8A730fKT9I/istem.md içinde yok)
+  ✗ F8d fark kaynağı 'kaçış dizileri süzüldü' der ('kaçış dizileri süzüldü' /tmp/tmp.8A730fKT9I/son.out içinde yok)
+  ✗ F8e gh pr diff hep düşer, origin pull/9/head var → git yolu, GEÇTİ (rc=3, beklenen=0)
+  ✗ F8f istemde git farkı var (benim-isim) ('benim-isim' /tmp/tmp.8A730fKT9I/istem.md içinde yok)
+  ✗ F8g fark kaynağı git yolunu söyler ('→ git origin/main' /tmp/tmp.8A730fKT9I/son.out içinde yok)
+  ✗ F8i iki sebep birden söyleniyor ('git yolu da alınamadı' /tmp/tmp.8A730fKT9I/son.out içinde yok)
+── SONUÇ (fark-kendisi): 21 geçti · 7 kaldı ──
+--- stderr ---
