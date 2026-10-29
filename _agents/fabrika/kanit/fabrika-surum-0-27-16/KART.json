@@ -1,0 +1,44 @@
+{
+  "is": "fabrika-surum-0-27-16",
+  "cumle": "yazilim-fabrikasi sürümü 0.27.16: Sx #551 (kanit-mutant-cokus) ile #549/#552 (sayı-başlık biçimi) aynı 0.27.15 numarasıyla birleşti; sync-skills kurulu kopyayı 'İÇERİK-DRIFT — sürüm aynı ama içerik farklı' deyip yenilemiyor, kurulu kanit.py'de DUSEN_KAPI_RE yok. SKILL.md version + catalog.json 0.27.16, 2AX9GX sürüm notu 0.27.16'ya taşınır; kanıt: sync-skills kuru koşu önce DRIFT / sonra 'güncelleme var', kurulumdan sonra kurulu kanit.py DUSEN_KAPI_RE içerir. Kod değişikliği yok.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T02:04:42+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M61J795B20TK2DPJA82AX9GX",
+  "tahmin_dk": 20,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T02:04:47+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T02:06:35+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T02:08:55+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

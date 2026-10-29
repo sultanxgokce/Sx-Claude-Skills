@@ -1,0 +1,9 @@
+$ bash -c I=/config/.claude/skills/yazilim-fabrikasi; v=$(grep -m1 "^version:" $I/SKILL.md | awk "{print \$2}"); n=$(grep -c "DUSEN_KAPI_RE" $I/scripts/kanit.py); echo "kurulu SKILL.md version=$v · kurulu kanit.py DUSEN_KAPI_RE sayımı=$n (bekleniyor ≥2: tanım + kullanım) · kaynak: bu dal (0.27.16 = origin/main a9faf25c + sürüm)"; bash _agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh $I/scripts/kanit.py 2>/dev/null | grep -E "SONUÇ|✓|✗" || bash /config/projects/Sx-Claude-Skills/_agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh $I/scripts/kanit.py | grep -E "SONUÇ|✓|✗"; [ "$v" = 0.27.16 ] && [ "$n" -ge 2 ]
+# rc=0 sure=0.1s zaman=2026-10-29T02:09:35+03:00
+--- stdout ---
+kurulu SKILL.md version=0.27.16 · kurulu kanit.py DUSEN_KAPI_RE sayımı=2 (bekleniyor ≥2: tanım + kullanım) · kaynak: bu dal (0.27.16 = origin/main a9faf25c + sürüm)
+🧬 MUTASYON kaydı (gerçek ölçüm: gercek) — ölçülemedi: mutant ÇÖKTÜ ya da kurulamadı (rc 1, düşen kapı satırı yok: ✗ / FAIL / N kaldı / KALAN: N hiçbiri çıktıda değil) — rc≠0 tek başına 'yakalandı' sayılmaz; yığın izi/çöküş sınav değildir
+SONUÇ: arac_rc=3 renk=sari dusen_kapi=False
+BAŞLIK: === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 1 ama düşen kapı satırı YOK (✗/FAIL/N kaldı/KALAN: N) = ÇÖKÜŞ ya da kurulum hatası → ÖLÇÜLEMEDİ (yakalandı DEĞİL). Gerçek kod ölçümü: olcum-gercek-* ===
+  ✓ çöken mutant SARI
+--- stderr ---

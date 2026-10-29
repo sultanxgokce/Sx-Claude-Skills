@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "iskan-sinavi-sigpipe",
+  "pr": "555",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T04:36:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-iskan-sinavi-sigpipe",
+  "dal": "iskan-sinavi-sigpipe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23991,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 110250
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a099bd3617763b64218a75ac965e89bc7b589a96",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Pipefail altında erken çıkan `grep -q` yüzünden oluşan SIGPIPE, borulu girdiyi önce bütünüyle tüketen tek bir `grep` yardımcısıyla hedeflenmiş; gerçek ölçümlerde iki koşu da 282/282 yeşil, iki mutasyon da kapıyı düşürüyor. Ancak yardımcı bütün betikteki borulu `grep` çağrılarını küresel olarak gölgeliyor ve komut ikamesi/here-string nedeniyle girdinin son satır sonlarını değiştiriyor; üretime hazır demeden önce bu semantik sapma daraltılmalı.",
+    "bulgular": [
+      {
+        "ne": "Küresel `grep` gölgelemesi borulu girdiyi bayt olarak korumuyor: `_g=\"$(cat)\"` sondaki satır sonlarını siler, `<<<\"$_g\"` ise bir satır sonu ekler. Böylece yalnız SIGPIPE kalıbı değil, betikteki tüm FIFO-stdin `grep` çağrılarının girdisi değişebilir; yardımcı hedef kalıba daraltılmalı veya girdiyi değiştirmeden sonuna kadar tüketen bir yöntem kullanılmalı.",
+        "kanit": "Eklenen işlev doğrudan `_g=\"$(cat)\"; command grep \"$@\" <<<\"$_g\"` uyguluyor ve betik kapsamındaki `grep` adını bütünüyle gölgeliyor. Gerçek ölçümlerin 282/282 geçmesi mevcut vakaları doğruluyor fakat bu kabuk dönüşümünün satır-sonu semantiğini koruduğunu sınamıyor.",
+        "konum": "iskan/scripts/iskan.test.sh:10",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek kod iki ayrı yeşil ölçümde rc=0 ve 282/282 geçti; mutasyon kayıtları rc=1 ile kapının bozuk kodu yakaladığını gösteriyor. Buna karşılık önce/sonra ölçüm çifti veya doğrudan SIGPIPE vakasını tekrarlı/yük altında ölçen görünür bir hedef satırı yok; tüm-suite yeşili ve geniş etkili mutasyonlar çözümün semantik olarak eksiksiz olduğuna tek başına yetmiyor."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "is": "is-sunucu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T01:03:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "olc",
+      "asama": "tek",
+      "dosya": "olcum-olc-tek.txt",
+      "sha256": "65cee7c3f9f5f861e2eded311b2e8601e54bb754c82e595073a9f19934d19550",
+      "komut": [
+        "echo",
+        "1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T01:03:27+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7977218ae370428f885454d17f0070e4"
+    }
+  ],
+  "imza": "521e664e3e4083a5f2d67d7771abeedb229ddfcccc17e6eb269b8ce3f0cc231f"
+}

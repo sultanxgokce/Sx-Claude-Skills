@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "sayi-baslik-bicimi",
+  "pr": "550",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:12:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sayi-baslik-bicimi",
+  "dal": "sayi-baslik-bicimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22954,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 21700
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a8178d7d8128ef03bf0f78d4c7765d909569ee19",
+  "duzeltme_farki": {
+    "onceki_bas": "a506ec33d41ffbfe4e891eaf78dae5afadde5967",
+    "dosya": 17,
+    "bayt": 27903,
+    "tam_bayt": 42453
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Başlık açılışındaki doğrulama belirgin biçimde sıkılaştırılmış ve önceki sınav açığı yeni vakalarla kapatılmış; ancak “neyin sayıldığı” hâlâ doğrulanmıyor ve görev ekleme yardım metni hâlâ kanıtlanmış değil. Sultan, önce bu iki uygulama eksiğini çözün; talebin üç yüzeyinden biri eksik kaldığı için yapılan iş henüz doğru şeyin tamamı değil.",
+    "bulgular": [
+      {
+        "ne": "B1 kısmen kapandı: iki sayılı ok, parantezli kaynak, gün ve çoklu ölçüt ayrımı artık denetleniyor; fakat biçimin “<ne sayılıyor>” bölümü doğrulanmadığından “13 → 0 (kaynak: ekran, 29 Eki)” gibi ölçütün adı olmayan bir başlık geçerli sayılır.",
+        "kanit": "`_bicim_eksikleri` ilk koşulda yalnız `sayı → sayı` desenini arıyor; okun öncesinde sayılan nesneyi isteyen hiçbir koşul yok. Eklenen sınavlarda da ölçüt adı bulunmayan olumlu/olumsuz vaka yer almıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:452; yazilim-fabrikasi/scripts/kart.test.sh:432",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 kapanmadı: talepteki görev ekleme yardım metninin biçimi gösterdiğine dair bu düzeltme farkında kod veya ölçüm kanıtı yok.",
+        "kanit": "Verilen üretim farkında yardım metnine ilişkin yalnız `kart.sh` uyarısı değişiyor; görev ekleme komutuna ait dosyada değişiklik yok. Önceki turda görev yardım yüzeyinin eksik olduğu saptanmıştı ve bu tur farkı o yüzeye dokunmuyor.",
+        "konum": "düzeltme farkı; ÖNCEKİ TUR B2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, rc=0 iki ölçüm kaydı ve önce/sonra çifti var. B3 kapanmış görünüyor: ölçümün önce çıktısı sayısal olmayan hedef, eksik gün, parantezsiz kaynak, çoklu ölçüt, madde/[ayri] ve ISO gün vakalarını başarılı gösteriyor; diffte de bunların sınavları mevcut. Bununla birlikte ölçümler görev ekleme yardım yüzeyini göstermiyor ve ölçüt adı olmayan başlığı sınamıyor; ayrıca “sonra” çıktısında hedef sınav satırları görünmediğinden talebin tamamı için doğrudan son-durum kanıtı eksik."
+  }
+}

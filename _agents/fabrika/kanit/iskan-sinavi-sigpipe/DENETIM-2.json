@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "iskan-sinavi-sigpipe",
+  "pr": "555",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T04:39:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-iskan-sinavi-sigpipe",
+  "dal": "iskan-sinavi-sigpipe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37085,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 57643
+  },
+  "dalgic": "uyumlu",
+  "bas": "b9076cbd799c873cd9d29b4d8e0c89a85570474e",
+  "duzeltme_farki": {
+    "onceki_bas": "a099bd3617763b64218a75ac965e89bc7b589a96",
+    "dosya": 5,
+    "bayt": 58755,
+    "tam_bayt": 167956
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki bayt-semantik kusuru kapanmış: yardımcı artık borulu girdiyi geçici dosyada sonuna kadar tüketiyor, `grep`e bayt değiştirmeden veriyor ve üç gerçek koşu 282/282 geçiyor. Talep edilen SIGPIPE önlemi doğru yerde yapılmış ve üretime hazır; yalnız geçici dosyanın kesinti/hata yolunda temizlenmesi küçük bir rötuş olarak kalıyor.",
+    "bulgular": [
+      {
+        "ne": "Geçici dosya yalnız normal dönüş yolunda siliniyor; `cat` sırasında kesinti/sinyal veya yardımcıdan erken çıkış olursa dosya kalabilir. İşlev içinde `trap` tabanlı temizlik bu küçük kaynak sızıntısını kapatır.",
+        "kanit": "Eklenen yardımcı `_f=\"$(mktemp)\"; cat >\"$_f\"; command grep ...; rm -f \"$_f\"` sırasını kullanıyor; temizlik yalnız `command grep` sonrasında çalışıyor ve kesinti yolu için `trap` yok.",
+        "konum": "iskan/scripts/iskan.test.sh:10",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek kod üç ayrı ölçümde rc=0 ve 282/282 geçti, mutasyon kayıtları rc=1 ile sınav kapısının bozuk kodu yakaladığını gösteriyor. Önceki B1 doğrudan farkla kapanmış: komut ikamesi/here-string kaldırılıp geçici dosya kullanıldığı için sondaki satır sonları dahil girdi baytları korunuyor. Bununla birlikte görünür çıktıda doğrudan SIGPIPE vakasını adlandıran tekrarlı/yük-altı hedef satırı veya eski-yeni ölçüm çifti yok; güvence esas olarak üç başarılı tam-suite koşusu ve mutasyonlardan geliyor."
+  }
+}

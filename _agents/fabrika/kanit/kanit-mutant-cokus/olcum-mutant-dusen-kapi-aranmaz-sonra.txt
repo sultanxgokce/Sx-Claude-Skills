@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-cokus-rengi-* ===
+$ bash _agents/fabrika/kanit/kanit-mutant-cokus/cokus-senaryo.sh yazilim-fabrikasi/scripts/kanit-mutant-gecici.py
+# rc=1 sure=0.2s zaman=2026-10-29T01:19:56+03:00
+--- stdout ---
+🧬 MUTASYON kaydı (gerçek ölçüm: gercek) — sınav bozuk kodu YAKALADI (düşen kapı satırı var)
+✓ ölçüm kaydedildi: olcum-mutant-cokus-tek.txt rc=1 renk=yesil
+Traceback (most recent call last):
+  File "gecit.test.mjs"
+SONUÇ: arac_rc=0 renk=yesil dusen_kapi=True
+  ✗ çöken mutant SARI değil (renk=yesil arac_rc=0) — rc≠0 yakalandı sayıldı
+--- stderr ---
+Error: ENOENT: no such file or directory, open ../docker-compose.defter.yml

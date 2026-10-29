@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "sayi-baslik-bicimi",
+  "pr": "550",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:30:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sayi-baslik-bicimi",
+  "dal": "sayi-baslik-bicimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20216,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3892
+  },
+  "dalgic": "uyumsuz",
+  "bas": "56117be20f4adc5e1700c7cb76adddc0a9d7fc6b",
+  "duzeltme_farki": {
+    "onceki_bas": "f627ce114ee03ff2da6f028001e4c6f5627eb2db",
+    "dosya": 4,
+    "bayt": 6328,
+    "tam_bayt": 49705
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ölçüt adı denetimi kaldırılarak B1, kartın açıkça belirttiği “ölçüt adı doğrulanmaz” sınırına uygun biçimde kapatılmış; görev ekleme yardımı ise daraltma kararıyla ayrı karta taşındığından B2 artık bu işin kusuru değildir. Sultan, PR bütünü için üretimi engelleyen sorun görünmüyor; yalnız son ölçümün hedef sınamalarını açıkça göstermemesi kanıt sunumunda küçük bir eksiklik bırakıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok, rc=0 önce/sonra ölçüm çifti var. Önce ölçümü biçimsiz sayı, geçerli biçim, eksik kaynak/gün ve çoklu ölçüt vakalarını gerçekçi örneklerle gösteriyor; kod farkı da ölçüt adı sezgisini kaldırarak B1’i doğrudan kapatıyor. Ancak sonra çıktısında hedef sayı-biçimi sınamaları görünmediği için düzeltmenin son başta çalıştığına dair ölçüm kanıtı açık değildir; ayrıca önceki B2, 2026-10-29T01:27:58+03:00 daraltma kaydıyla `sayi-baslik-yardim-metni` kartına taşınmıştır."
+  }
+}

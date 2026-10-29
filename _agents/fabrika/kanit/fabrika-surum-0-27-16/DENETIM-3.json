@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "fabrika-surum-0-27-16",
+  "pr": "553",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T02:10:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-surum-0-27-16",
+  "dal": "fabrika-surum-0-27-16",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18024,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7420
+  },
+  "dalgic": "olculemedi",
+  "bas": "e0dc09b3742af9960ce5debcdde05cd540a31b02",
+  "duzeltme_farki": {
+    "onceki_bas": "35d9d42cb017035535ec15f27b997a09487e7827",
+    "dosya": 4,
+    "bayt": 7420,
+    "tam_bayt": 24750
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, sürüm kaynakları ve sürüm notu 0.27.16’ya taşınmış; kuru koşu DRIFT’ten güncelleme görünümüne geçmiş ve kurulu kopyada DUSEN_KAPI_RE iki kez ölçülmüştür. Önceki B1 bu turdaki kurulu dosya ölçümüyle kapanmıştır; talebin bütün halkaları kanıtlandığından iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. Gerçekçi önce/sonra kuru-koşu çifti v0.27.15 İÇERİK-DRIFT durumundan v0.27.16 güncellemesine geçişi gösteriyor; ayrıca kurulu SKILL.md sürümü 0.27.16 ve kurulu kanit.py içindeki DUSEN_KAPI_RE sayısı 2 olarak bağımsız koşulla doğrulanıyor. Kurulu-dusen-kapi çıktısındaki mutasyon denemesi sarıdır ve mutantın yakalandığını kanıtlamaz; ancak iş kartı mutant sınavının sonucunu değil kurulu dosyada DUSEN_KAPI_RE bulunmasını istediğinden, bu sarı yan ölçüm hedef kanıtını geçersiz kılmaz."
+  }
+}

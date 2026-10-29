@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kanit-mutant-cokus",
+  "pr": "551",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:33:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kanit-test-sonra.txt (yesil → gecersiz) — göz tur 1 sonrası kanit.py değişti (başlık hükmü + FAIL satır ortası); sınav yeniden ölçüldü: kanit-test-2 · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-mutant-cokus",
+  "dal": "kanit-mutant-cokus",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30713,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 33920
+  },
+  "dalgic": "uyumsuz",
+  "bas": "00ae105a470b7d60e8a54e37dd32bfe64a4432a6",
+  "duzeltme_farki": {
+    "onceki_bas": "e8725c25b2cc6858c7c2411d42207bf43e53d156",
+    "dosya": 9,
+    "bayt": 41913,
+    "tam_bayt": 81454
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Mutant çökmesi ve rc 9 artık yakalanmış sayılmayıp SARI/rc 3 yazılıyor; gerçek düşen kapı ise YEŞİL kalıyor ve önceki iki uygulama bulgusu bu turda kapanmış. Yeniden alınan gerçek ölçüm ile 244/0 sınavı değişikliği destekliyor; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; eski kanit-test kaydı açıkça geçersiz ilan edilmiş ve değerlendirmeye katılmamış. Çöküş davranışı için kırmızı→yeşil önce/sonra çifti, güncel cokus-rengi-2 gerçek ölçümü ve kapıyı düşüren ayrı mutasyon kaydı var; güncel kanit-test-2 ölçümü 244 geçti/0 kaldı. Önceki B1, koşula göre yazılan ölçüm başlığı ve bunu doğrudan denetleyen T26a-T26b ile; B2 ise satır ortasındaki FAIL eşleşmesi ve gerçekçi T26c örneğiyle kapanmış. Rc 9 ayrıntısı kırpılmış ölçüm bölümünde görünmese de üretim farkındaki kapı ve yeniden ölçülen bütün sınav bunu kapsıyor; sarı alt kayıt manifestte ayrı üst düzey kayıt değil, senaryo çıktısında rc 3/renk=sari olarak doğrulanıyor."
+  }
+}

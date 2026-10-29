@@ -1,0 +1,41 @@
+{
+  "is": "denetci-fark-renk-kodu",
+  "cumle": "Bağımsız göz (denetci.sh --pr N) PR farkını 'gh pr diff' ile alıyor; kanıt dosyasında (ölçüm çıktısı) ANSI renk/kaçış kodu ya da onun metni varsa gh 2.98 farkı reddediyor, denetçi 'gh pr diff düştü' deyip rc 3 ÖLÇÜLEMEDİ veriyor, tur alınamıyor. Düzeltme: gh pr diff düşerse (ya da hep) fark git ile alınır (origin pull/N/head çekilir, origin/main...baş üç-nokta farkı), kaçış baytları süzülür, kanıt dosyaları zaten farktan ayıklanıyor; denetçi aynı girdiyle rc 0/1 döner. Sınav: denetci.test.sh'e kanıt dosyasında kaçış baytı olan PR senaryosu (sahte gh ile) → fark alınır, rc 3 değil; mutant (git yolu kaldırılınca) rc 3.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T04:11:43+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M61C3BF73Y9EME174QZ9SZF3",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [
+    "2.98 farkı",
+    "3 ÖLÇÜLEMEDİ",
+    "3 değil"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T04:11:48+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
