@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "katalog-surum-hiza",
+  "pr": "565",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T11:07:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-katalog-surum-hiza",
+  "dal": "katalog-surum-hiza",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 43582,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 25549
+  },
+  "dalgic": "uyumsuz",
+  "bas": "398485f5be4622e7417f2006661cb8559c9a09b8",
+  "duzeltme_farki": {
+    "onceki_bas": "3c886534bac5868e62ef353b172e4c295ecd0e88",
+    "dosya": 12,
+    "bayt": 34237,
+    "tam_bayt": 72597
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turun uygulama kusuru üst düzey `version` alanını derinlik bilinciyle seçen düzeltme, H11 sınavı ve M5 mutantıyla kapanmış; gerçek sınav 20/20 geçiyor ve katalog ölçümü 23 sapmadan sıfıra iniyor. Üretime engel kod kusuru görünmüyor; yalnız karttaki on yedi başlangıç sayısı ile araç ölçümündeki yirmi üç arasındaki kayıt ayrılığı rötuş olarak açık.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmadı: iş kartı başlangıçta on yedi sapma bulunduğunu söylüyor, sağlam araç ölçümü ise yirmi üç sapma gösteriyor; sonuç sıfıra indirilmiş olsa da kartın sayısal kabul kaydı gerçekle hizalı değil.",
+        "kanit": "İş kartında `bugünkü on yedi sapma sıfıra çekilir`; `olcum-katalog-hiza-once.txt` içinde `girdi 82 · sapma 23 · ölçülemedi 0`, sonraki ölçümde ise `sapma 0` yazıyor.",
+        "konum": "iş kartı cumle; olcum-katalog-hiza-once.txt; olcum-katalog-hiza-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra çifti 23→0 sonucunu ölçüyor; gerçek sınav rc=0 ile 20/20 geçiyor. Önceki B1, `ustVersionKonumu` değişikliği ile H11 ve `mutant-derinlik-yok` kanıtında kapanmış; diğer dört mutant da beklenen kırmızı kapıları düşürüyor. Önceki B2 olan 17→23 sayı ayrılığı ise açık kalıyor."
+  }
+}
