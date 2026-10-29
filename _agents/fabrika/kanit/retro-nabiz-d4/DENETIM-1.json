@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "retro-nabiz-d4",
+  "pr": "568",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T12:09:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-retro-nabiz-d4",
+  "dal": "retro-nabiz-d4",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33887,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 62623
+  },
+  "dalgic": "uyumsuz",
+  "bas": "380e413234d229761097e96f19fb8578ee9c3c73",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İş Nabzı D4 satırı, ajan/hafta süzgeçleri, ortalama süre hesabı ve eksik kütük sonucu eklenmiş; gerçek sınav kırmızıdan yeşile dönmüş, iki mutant da kapıya düşmüş. Ancak kartın açıkça istediği “kütük okunamazsa ÖLÇÜLEMEDİ” davranışı yalnız dosyanın yokluğu için uygulanıyor; mevcut fakat açılamayan kütük üretim akışını istisnayla düşüreceğinden önce bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Mevcut fakat okunamayan bekçi kütüğü ÖLÇÜLEMEDİ üretmek yerine akışı çökertir; kod yalnız dosyanın varlığını denetliyor ve open hatalarını karşılamıyor.",
+        "kanit": "nabiz_olc içinde `if not os.path.exists(yol): return None` sonrasında `for s in open(...)` doğrudan çağrılıyor; PermissionError, IsADirectoryError ve benzeri okuma hataları yakalanmıyor. T2m de yalnız `$T/yok.log` ile dosyanın bulunmaması vakasını sınıyor.",
+        "konum": "retro/scripts/retro.py:289; retro/scripts/retro.test.sh:87",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm çifti rc=1/kırmızıdan rc=0/yeşile geçişi gösteriyor, T2l gerçekçi çoklu ajan ve hafta dışı verisiyle 2 iş · 60 dk sonucunu, T2m ise yalnız kayıp dosya sonucunu ölçüyor. M7 ve M8 mutasyon kayıtları rc=1 ve düşen_kapi=true ile ajan ve hafta süzgeçlerinin bozulmasını yakalıyor; fakat mevcut olup açılamayan kütük vakasına ölçüm bulunmuyor."
+  }
+}
