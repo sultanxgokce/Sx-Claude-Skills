@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "ci-kalan-kovasi-kararli",
+  "pr": "560",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T07:39:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ci-kalan-kovasi-kararli",
+  "dal": "ci-kalan-kovasi-kararli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26697,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8773
+  },
+  "dalgic": "uyumsuz",
+  "bas": "31f99195761c028e16400cc5a2ad0a756f210274",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Süre açıklamalarını okuyacak koşucu değişikliği ve dört ağır sınama için yükseltilmiş tavanlar yazılmış; yerel koşucu sınavı da yeşil. Ancak ayrıştırıcı malformed beyanları sessizce kabul edebiliyor ve kartın asıl kabul ölçütü olan main üzerinde ardışık üç yeşil koşu kanıtlanmadığı için iş henüz üretime hazır ve tamamlanmış değil.",
+    "bulgular": [
+      {
+        "ne": "Yeni süre kalıbı, sayıdan sonraki herhangi bir rakam-dışı kuyruğu kabul ediyor; örneğin `sure=1 2` veya `sure=1abc` değeri 1 saniye sayılarak uyarısız uygulanabilir. K10b yalnız `sure=abc` vakasını sınadığı için bu sessiz yanlış ayrıştırmayı yakalamıyor.",
+        "kanit": "Üretim kalıbı `sure=([0-9]{1,5})([^0-9].*)?` biçiminde; K10b girdisi yalnız `# kabuk-testleri: sure=abc`. Ölçümde K10/K10b yeşil olsa da rakamla başlayıp bozuk kuyruk taşıyan bir vaka yok.",
+        "konum": ".github/ci/kabuk-sinamalari.sh:sure_sec ve .github/ci/kabuk-sinamalari.test.sh:K10-K10b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kartın açık kabul ölçütü olan main dalında ardışık üç yeşil koşu gösterilmemiş; verilen tek yeşil kayıt yerel `kabuk-sinamalari.test.sh` koşusudur.",
+        "kanit": "Manifestte yalnız `tavan-okuma` önce/sonra ve bir adet `kosucu-sinavi` kaydı var. `kosucu-sinavi` komutu `bash .github/ci/kabuk-sinamalari.test.sh`; GitHub main koşularına ait üç kayıt, koşu kimliği veya süre dizisi yok.",
+        "konum": "kanıt manifesti:kayitlar; iş kartı: `main'de ardışık 3 koşu yeşil`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "GitHub Actions main dalı + koşu kayıtlarına erişim"
+      },
+      {
+        "ne": "Değişiklik, kartın CI kalan kovası kapsamı dışında `catalog.json` içindeki tescil sürümünü 0.3.0'dan 0.9.1'e sıçratıyor; bunun bu iş için gerekçesi veya sınavı sunulmamış.",
+        "kanit": "Diffte `catalog.json` tescil girdisi `0.3.0` → `0.9.1`; aynı diffte `tescil/SKILL.md` yalnız `0.9.0` → `0.9.1`. Kart yalnız kalan kovasının süre kararlılığını istiyor.",
+        "konum": "catalog.json:tescil sürümü; tescil/SKILL.md:version",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra tavan-okuma çifti, açıklamalı 480 beyanlarının artık 480 uygulandığını ve yerel koşucu sınavının 24/0 geçtiğini gösteriyor. Buna karşılık yük altındaki gerçek süreler yalnız kaynak yorumlarında yazılı, manifestte ölçüm çifti değil; ayrıca main üzerinde ardışık üç yeşil CI koşusu bulunmuyor."
+  }
+}
