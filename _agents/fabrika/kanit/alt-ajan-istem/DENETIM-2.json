@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "alt-ajan-istem",
+  "pr": "579",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T01:55:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-alt-ajan-istem",
+  "dal": "alt-ajan-istem",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31005,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 24415
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a06449e5108998adbed4de851dfe4aa26ec4e324",
+  "duzeltme_farki": {
+    "onceki_bas": "e2fa0b8e2274588941b7298d93b9d3133bf5e690",
+    "dosya": 14,
+    "bayt": 29033,
+    "tam_bayt": 52680
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Koltuksuz alt personel için kimlik, el defteri, iş ve kuralları tek komutla birleştiren üretici tamamlanmış; önceki turdaki değersiz seçenek döngüsü ile kart dizini dışına çıkış kusurları kapatılmış. Gerçek ve sahte verili sınavlar, dokuz gerçek slug taraması, depo denetimleri ve sır süzgeci mutasyonu yeşil olduğundan üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. B1, `deger` denetimi ve A10 ölçümüyle kapanmış: sonda değersiz `--is` artık rc=2 veriyor ve zaman aşımına uğramıyor; B2, `KART` slug doğrulaması ve A11 ölçümüyle kapanmış: `../` reddediliyor ve dizin dışındaki içerik çıktıya taşınmıyor. Gerçek ölçüm `sinav-tur2` 14/14 geçiyor; mutasyon kaydındaki beklenen A5 düşüşü sınavın bozuk sır süzgecini yakaladığını gösteriyor. Dokuz gerçek slug iki turda rc=0, ŞAKİRD gerçek çıktısı kimlik ve ELLE içeriğini gösteriyor, lint üçlüsü de iki turda temiz; CLI işi için kare yerine bu ölçümler yeterlidir."
+  }
+}

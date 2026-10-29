@@ -1,10 +1,10 @@
 ---
 name: duzen
-description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.0.0
+description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
+version: 1.1.0
 ---
 
-# /duzen — filo düzen paketi (1.0.0 · iskelet)
+# /duzen — filo düzen paketi (1.1.0 · iskelet + alt ajan istem üreticisi)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -75,10 +75,34 @@ tarafına dokunmaz; o geçiş ayrı iş).
 |---|---|---|
 | `el-defteri.sh [--ajan AD] [--n 25]` | Koltuğun el defterini tek metin basar: bugünkü ÇIPA · son KONUM · son N not · açık işler (gorev.sh). Alt ajan istemine eklenir. Defter yoksa **"el defteri yok" rc 3** (uydurmaz); gorev.sh yoksa "ölçülemedi" yazar | `el-defteri.test.sh` E1-E7 + 2 mutant |
 | `append-note.sh` | Nexus `scripts/append-note.sh`'ın **birebir** kopyası: Read'siz güvenli ekleme, ajan defterinde ÇIPA başlığı + saat damgasını ARAÇ yazar. 19 kutu aynı not aracını alır | `append-note-paritesi.test.sh` P1-P4 (P4 = Nexus kopyasıyla md5 eşitliği) |
+| `alt-ajan-istem.sh <slug> --is "…" [--kart İŞ] [--dosyalar a,b] [--sure DK] [--depo KÖK]` | **Koltuksuz alt personel** (BENNÂ · MÜZEHHİP · ŞAKİRD · ÇAPAR · TATAR · MESSÂH · MEREMMETÇİ · MÜCERRİB · MÜTEFENNİN) için reisin Agent aracına yapıştıracağı **tek istem metnini** basar (yalnız stdout, dosyaya yazmaz). Altı blok: kimlik (`AGENT.md` `## ELLE` verbatim; ekipc üretilmiş ORTAK-TEMEL alınmaz) · reis/oda/yetki (aile-registry `oda:`+`amir:`; "birleştirme · canlı · host · sır reiste" sabit) · el defteri (`el-defteri.sh`; defter yoksa "defter boş, ilk görev" + ⚠, istem yine çıkar) · iş (`--is`; `--kart` varsa kartın `cumle`si önde) · dosyalar+süre · sabit kurallar (hat · Sultan-dili · kanıt · ölçmeden hüküm yok · scratchpad öneki · rerun yok). Slug'ın AGENT.md'si yoksa **rc 3 "kimlik yok: önce /ise-alim"**. `token|sifre|şifre|parola` geçen satır basılmaz → `[sır satırı süzüldü]` | `alt-ajan-istem.test.sh` A1-A9 + mutant `sir` (gömülü ve `--mutant sir`) |
 | `surum.sh goster` · `surum.sh denetle [--depo KÖK] [--kurulu DİZİN]` | Paket sürümü · kutudaki kurulu sürüm kaynakla aynı mı · `ekipc` işaretli AGENT.md'lerde hash tutuyor mu (EL-DEĞMİŞ) ve gömülü çekirdek birebir mi (BAYAT). **Yalnız raporlar, yazmaz** (`--kuru` varsayılan ve tek kip) | `surum.test.sh` S1-S9 + 2 mutant |
 
 İlk ölçüm (29 Eki, Nexus): ekipc işaretli 18 kimlik → 17 GÜNCEL, 1 BAYAT (HEZARFEN); işaretsiz 18 kimlik
 (pakete dahil mi — Sultan kararı).
+
+## Alt ajan istemi — reis koltuksuz personele nasıl iş verir (1.1.0)
+
+Kuzey Yıldızı 3.3: koltuksuz personel reisin oturumundan **Agent aracıyla** doğar ve sıfır bağlamla başlar; eksik el defteriyle
+telafi edilir. 3.3/3.8'e göre **el defterlerini BÂNİ yönetir, kendiliğinden gelişir** — bu araç defteri YAZMAZ, yalnız okur ve istem üretir.
+
+```
+bash /config/.claude/skills/duzen/scripts/alt-ajan-istem.sh sakird --is "X PR'ının sınavını yaz-koştur-mutasyonla" \
+     --kart sinav-x --dosyalar "scripts/x.test.sh" --sure 60 --depo /config/projects/Nexus > /tmp/istem.txt
+```
+Çıktı Agent aracının `prompt` alanına olduğu gibi yapıştırılır. Reis için üç kural: (1) istemde ⚠ satırı varsa önce onu oku
+(defter yok · kayıt yok · kart yok) — araç uydurmadı, eksik olanı söyledi; (2) `--dosyalar` vermezsen alt ajan iş alanını kendi
+sınırlar — merkez/UI/canlı-yazılan dosyalar yine dışarıdadır (ÇIRAK `cirak-istem.sh` sınır denetimi bu sürümde **genelleştirilmedi**,
+o ÇIRAK'a özgü kalır); (3) istem **sır değeri taşımaz** — AGENT.md/NOTES'ta `token|sifre|şifre|parola` geçen satır süzülür; süzülen
+satırın işaretçisi gerekiyorsa reis sözle verir.
+
+Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`yi okur, yoksa `is`e düşer.
+
+## Sürüm notları
+
+- **1.1.0** (30 Eki 2026, SERDAR gece inşası): `alt-ajan-istem.sh` + sınavı. 9 koltuksuz alt personel (Nexus #1414) için istem
+  üretici. Yalnız stdout; el defterini yazmaz. Sultan kararı bekleyenler değişmedi.
+- **1.0.0** (29 Eki 2026): iskelet — çekirdek metinler · el-defteri.sh · append-note.sh paritesi · surum.sh.
 
 ## Sürüm artınca ne olur
 
