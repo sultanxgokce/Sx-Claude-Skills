@@ -182,14 +182,6 @@ class Oturum(threading.Thread):
         satir, sutun = int(o.get("satir") or 24), int(o.get("sutun") or 80)
         satir, sutun = max(2, min(satir, 500)), max(10, min(sutun, 1000))
         self.koltuk = ad
-        # Pencere boyu: tmux.conf 'window-size smallest' iken 80x24 bir istemci daha varsa geniş kişi ekranı noktalı kalıyordu.
-        # Masaüstü bağlanışıyla (koltuk-bagla.sh) aynı ayar: pencere SON etkin istemcinin boyuna uyar. Başarısızsa izleme yine açılır.
-        tmx = ortam("KOPRU_TMUX", "tmux"); env = {k: v for k, v in os.environ.items() if k != "TMUX"}
-        try:
-            for w in subprocess.run([tmx, "list-windows", "-t", "=" + ad, "-F", "#{window_id}"], capture_output=True, text=True, timeout=10, env=env).stdout.split():
-                subprocess.run([tmx, "set-option", "-w", "-t", w, "window-size", "latest"], capture_output=True, timeout=10, env=env)
-        except Exception:
-            pass
         pid, fd = pty.fork()
         if pid == 0:   # çocuk: SALT OKUR tmux istemcisi (-r) · girdi asla ona yazılmaz
             try:

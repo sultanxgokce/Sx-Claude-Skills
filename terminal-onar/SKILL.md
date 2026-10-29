@@ -86,8 +86,8 @@ geçirip bağlanır.
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
 
-## 🆕 2.36.2 · Kişi terminali: geniş ekran noktalı kalmaz, boş sohbette 'yazmak için m' ipucu (29 Eki · görev …MH786T4 · kart kisi-istemci-bos-sohbet-ipucu)
-Köprü izlemeyi açmadan önce koltuğun pencere ayarını `window-size latest` yapar (masaüstü bağlanışıyla aynı) — küçük bir rakip istemci kişinin geniş ekranını 80 sütuna sıkıştırıp noktalı bırakmaz. İstemci, soru yokken basılan rakamda 'Seçilecek soru yok. Yazmak için [m] tuşuna bas.' yazar ve alt satırda yalnız bu ret görünür (her basışta yinelenir). Sınav: `kisi-istemci.test.py` I3b/I3c/I3d.
+## 🆕 2.36.2 · Kişi terminali: boş sohbette 'yazmak için m' ipucu (29 Eki · görev …MH786T4 · kart kisi-istemci-bos-sohbet-ipucu)
+İstemci, soru yokken basılan rakamda 'Seçilecek soru yok. Yazmak için [m] tuşuna bas.' yazar; alt satırda yalnız bu ret görünür ve her basışta yinelenir. Sınav: `kisi-istemci.test.py` I3b/I3c.
 
 ## 🆕 2.36.1 · Koltuk sorusunun metnine eski konuşma karışmaz (29 Eki · görev …0E6H · kart soru-metni-sinir)
 **Ölçülen hata:** merkez 1.145.0 canlıda Sultan'ın "Senden bekleyen"inde akar/MÜTEVELLİ'nin sorusu şöyle göründü: *"● User answered Claude's

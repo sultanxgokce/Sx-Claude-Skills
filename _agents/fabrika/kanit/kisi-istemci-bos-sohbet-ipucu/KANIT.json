@@ -1,7 +1,7 @@
 {
   "is": "kisi-istemci-bos-sohbet-ipucu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T17:46:28+03:00",
+  "guncelleme": "2026-10-29T17:54:50+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,7 +38,81 @@
       "sure_sn": 58.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "f34ef8459ef44befbe150a66b93efb8b"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kirmizi-vaka-sayisi",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kirmizi-vaka-sayisi-once-baab336688b3.txt",
+      "sha256": "5ab8244a1722715c32d21ea5847b111b61013f8c957cea67a72539b0de51a1dc",
+      "hedef_dosya": "olcum-kirmizi-vaka-sayisi-once.txt",
+      "hedef_olcum_id": "a66096f194e440cbbb6d6bf6a5f80eb8",
+      "hedef_sha256": "9d25439c3aa1f96a44dc8c19c512e01f6aef7ce1a4f32bbc17acc0fa18b3aa13",
+      "hedef_zaman": "2026-10-29T17:45:29+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: pencere değişikliği ayrı karta taşındı, bu ölçüm I3d içeriyordu",
+      "kim": "HENDESE",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T17:53:26+03:00",
+      "olcum_id": "2432248b8adc46629a4c5fa569110c06"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kirmizi-vaka-sayisi",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kirmizi-vaka-sayisi-sonra-6edef70d8d9d.txt",
+      "sha256": "a562188354f10e479fe564e101af762d945091893b3662e339a6bc1cc00e2123",
+      "hedef_dosya": "olcum-kirmizi-vaka-sayisi-sonra.txt",
+      "hedef_olcum_id": "f34ef8459ef44befbe150a66b93efb8b",
+      "hedef_sha256": "380e389b034610179910a6561183690cc2be129b17f0bb457eeeae31bfce4bbd",
+      "hedef_zaman": "2026-10-29T17:46:28+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: pencere değişikliği ayrı karta taşındı, bu ölçüm I3d içeriyordu",
+      "kim": "HENDESE",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T17:53:26+03:00",
+      "olcum_id": "0bebd39a897d4b72b33ac0542847fa0c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ipucu-kirmizi-vaka",
+      "asama": "once",
+      "dosya": "olcum-ipucu-kirmizi-vaka-once.txt",
+      "sha256": "c1e95ba3603810259aa9dc6cf3de7256ab75be236555c739e72357fcc17436a6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kisi-ipucu.sh",
+        "eski"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T17:54:11+03:00",
+      "sure_sn": 39.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9d5e943b3e324b87a18b3bfac9428f2d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ipucu-kirmizi-vaka",
+      "asama": "sonra",
+      "dosya": "olcum-ipucu-kirmizi-vaka-sonra.txt",
+      "sha256": "c31d8db69566a9913520cd9716c0b8410f35b27ac7222cb3e58f3ee42a059f45",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kisi-ipucu.sh",
+        "yeni"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T17:54:50+03:00",
+      "sure_sn": 39.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "eae0d81d60c949349e122dd312f9820f"
     }
   ],
-  "imza": "109123cdbea68974ba8ba0487d4690d803b47727e53bf7e878f18653d011eca6"
+  "imza": "6cb96e5b0ce69163080a6d9b32fb842192ce0014c0332fbaf6a4b29df778f609"
 }
