@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kisi-pencere-latest",
+  "pr": "571",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T18:04:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-pencere-kirmizi-vaka-once.txt (yesil → gecersiz) — ölçüm betiği var olmayan dizine bakıyordu, sınav koşmadı (sahte yeşil) · HENDESE;olcum-pencere-kirmizi-vaka-sonra.txt (yesil → gecersiz) — ölçüm betiği var olmayan dizine bakıyordu, sınav koşmadı (sahte yeşil) · HENDESE",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-pencere-latest",
+  "dal": "kisi-pencere-latest",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17387,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 9371
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e376d249c25fed6d1951288fc8113d1bc733a7a2",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kişi köprüsü izlemeyi açmadan önce oturumun pencerelerini `window-size latest` yapıyor; böylece 105 sütunluk kişi istemcisi, küçük rakip istemci yüzünden daralmıyor. Geçerli önce/sonra ölçümü aynı I3d vakasının önce kaldığını, değişiklikten sonra geçtiğini gösterdiği için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam. İlk iki yeşil ölçüm sonradan sahte yeşil gerekçesiyle geçersiz ilan edilmiş ve değerlendirmeye alınmamıştır; geçerli `pencere-i3d` ölçüm çifti gerçekçi 60 sütunluk rakip ve 105 sütunluk kişi istemcisi vakasında önce `✗`/`kirmizi-vaka=1`, sonra `✓`/`kirmizi-vaka=0` göstermektedir."
+  }
+}

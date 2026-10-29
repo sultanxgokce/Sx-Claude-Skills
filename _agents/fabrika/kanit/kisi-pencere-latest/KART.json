@@ -1,0 +1,39 @@
+{
+  "is": "kisi-pencere-latest",
+  "cumle": "Kişi terminalinde geniş ekran küçük rakip istemci yüzünden 80 sütuna sıkışıp noktalı kalmaz; köprü izlemeden önce pencereyi window-size latest yapar",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-29T17:55:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M63ZZN9K7P4R7GCD4MH786T4",
+  "tahmin_dk": 30,
+  "sayi_uyarilari": [
+    "80 sütuna"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T17:55:36+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
