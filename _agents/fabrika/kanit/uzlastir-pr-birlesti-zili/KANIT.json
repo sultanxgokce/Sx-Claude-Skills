@@ -1,7 +1,7 @@
 {
   "is": "uzlastir-pr-birlesti-zili",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T06:03:35+03:00",
+  "guncelleme": "2026-10-29T06:17:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -106,7 +106,42 @@
       "sure_sn": 426.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "8874a0b9d21c4556a4211a86a634e7df"
+    },
+    {
+      "tur": "canli",
+      "etiket": "uzlastir-pr-kuru-gercek",
+      "asama": "canli",
+      "dosya": "canli-uzlastir-pr-kuru-gercek.txt",
+      "sha256": "fc6f352ff179edbeee4e7c5b6442312bb9ac11fe734ae799bc2d0fd4044541b2",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-uzlastir-pr.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-uzlastir-pr.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "çalışılıyor uzlaştırması: BANI",
+      "en_az": 1,
+      "atesleme_sayisi": 2,
+      "ilk_atesleme": {
+        "satir": "2026-10-29T06:16:17+03:00   ✓ çalışılıyor uzlaştırması: BANI için fazla/sahipsiz çalışılıyor görev yok",
+        "saat": "2026-10-29T06:16:17+03:00",
+        "saat_iso": "2026-10-29T06:16:17+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: BANI için fazla/sahipsiz çalışılıyor görev yok",
+        "saat": "2026-10-29T06:16:45+03:00",
+        "saat_iso": "2026-10-29T06:16:45+03:00"
+      },
+      "zaman": "2026-10-29T06:17:00+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "cdfac514a58d47db90955fbb720f827c"
     }
   ],
-  "imza": "2cba467e7d98a2473d03ebfcb9853d8ac133eddc45b0dff35a6438712680a6f6"
+  "imza": "975ab0ea7db3baa3352101d9c16d949ee97fe6c97d66792240d9f10302768094"
 }

@@ -1,0 +1,17 @@
+$ tail -n 2000 -- /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-uzlastir-pr.log
+# kaynak=dosya:/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-uzlastir-pr.log tur=dosya desen=çalışılıyor uzlaştırması: BANI en_az=1 son=2000 atesleme=2 rc=0 sure=0.0s zaman=2026-10-29T06:17:00+03:00
+--- stdout ---
+2026-10-29T06:16:17+03:00   ✓ çalışılıyor uzlaştırması: BANI için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:17+03:00   · koltuk 360 dk'dır boş, çalışılıyor: gorev_01M5WHYGB8TFFFZ9KMK1TP00WX (Çalışılıyor uzlaştırıcısı: işin PR'ı birleşince sahibine 'bekliyor/ona)
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: MIRAHUR için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: BANI için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   · koltuk 360 dk'dır boş, çalışılıyor: gorev_01M5WHYGB8TFFFZ9KMK1TP00WX (Çalışılıyor uzlaştırıcısı: işin PR'ı birleşince sahibine 'bekliyor/ona)
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: BASIRET için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: BERID için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: CODE-ANA için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: HENDESE için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: HEZARFEN için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: MUAVIN için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: MUHAKKIK için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T06:16:45+03:00   ✓ çalışılıyor uzlaştırması: SERDAR için fazla/sahipsiz çalışılıyor görev yok
+--- stderr ---
