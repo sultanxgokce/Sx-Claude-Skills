@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.15.0
+version: 1.16.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -91,6 +91,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/deftere-yaz.sh --uygula --onay "
 ```
 - Kaynak çıpadır (`- [ ]` satırları); yazım `gorev.sh ekle` ile, kutunun kendi jetonuyla; etiket özellik, aciliyet esnek (`--aciliyet` ile değişir), atanan = sen.
 - **İdempotent:** defterde aynı başlıkta açık görev (onay bekleyen dahil) varsa yazılmaz; ikinci koşu çift kayıt açmaz.
+- **Kimlikli madde ve ikiz kapısı (1.16.0, …GJRBF1T8):** maddede `gorev_…` ya da `görev …XXXXXX` varsa yeni kayıt açılmaz, o kayda `gorev.sh adim` ile "bugünün planında" adımı yazılır (kimlik defterde yoksa ya da son-ek birden çok kayda uyuyorsa ✗, tahmin yok). Kimliksiz maddede açık bir kaydın başlığıyla kelime örtüşmesi ≥ %60 ise **İKİZ OLABİLİR**: yazılmaz, rc 1, maddenin kimliğiyle yazılması istenir. Özet satırı `bağlanan=` ve `ikiz=` sayar. Sınav D21-D25.
 - **Ölçemezse yazmaz:** çıpa ya da görev listesi okunamazsa rc 3 — "yazılacak bir şey yok" denmez. 200 karakterden uzun madde başlık değil nottur, reddedilir (kırpılmaz).
 - **Onay kapısı (A06/D1):** `--uygula`, Sultan'ın plan onayını GÖRDÜĞÜNÜN referansını ister: `YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime verbatim>" · beyan:<AJAN> · plan:<imza>)`. Tarih BUGÜN, imza o anki planın imzasıdır (kuru koşu "plan-imzası=…" basar); plan onaydan sonra değişirse eski onay düşer. Biçimsiz, eski tarihli ya da başka planın referansında rc 2, deftere hiçbir şey gitmez; onay ÜRETİLMEZ, gördüğün aktarılır. Kuru koşu onaysız çalışır.
 - **Aynı gün aynı madde:** açık (onay bekleyen dahil) ya da BUGÜN kapanmış/iptal edilmiş aynı başlıklı görev varsa yazılmaz; eski günlerde kapanmış başlık yeni gün için yeniden açılabilir.
@@ -136,6 +137,7 @@ Plan yazmadan, ADIM 1'den ÖNCE kutunun defterdeki **Sırada** listesine bak —
 bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh          # Sırada ≥ eşik ise en üstteki işi çalışılıyor yapar ve başlar (KARAR=BAS | KARAR=SOR)
 bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --bak    # yalnız bak, başlama
 ```
+- **MADDE= satırları (1.16.0):** her `ISI=` satırının yanında plan maddesi biçimi basılır — `görev …XXXXXX tamamlanacak: <başlık> (sahip: <sen|başkası>)`; plana bunlar kopyalanır, deftere-yaz kimliği görüp ikiz açmaz (bkz. ADIM 3 madde biçimi).
 - **KARAR=BAS** (Sırada ≥ 3, eşik `--esik N` ile kutuya göre ayarlanır): sıradaki işler listelenir (acil önce); varsayılan koşu EN ÜSTTEKİ işi `gorev.sh ustlen` ile üstlenir (`--bak` yalnız bakar ve "başladım" demez). Sultan'a tek cümle: *"Sırada N iş var, en üstteki ile başladım; bugüne almak ister misin?"*
 - 🔴 **KARAR=SOR ise ADIM 0-d ZORUNLU (1.13.0, görev 0HC75A, SERDAR 28 Eki):** betik `ZORUNLU=ADIM 0-d tarama …` satırını basar. Sultan'ın cevabı BEKLENMEZ: kutu o turda kod tabanından/webden/endüstriden en az BİR ölçülmüş iş bulur ve `tarama-ekle.sh … --uygula` ile deftere yazar (kaynak + kanıt kapıları ve günde en çok 3 tavanı AYNEN; `tarama-ekle.sh`'ın kuru varsayılanı değişmedi, `--uygula` bu adımın kendi açık bayrağıdır). Bulacak ölçülmüş iş yoksa bunu söyle (uydurma iş yazılmaz); tarama-ekle rc 2/3 verirse sebebi Sultan'a olduğu gibi bildir. Amaç: sıra boşken kutunun defterine açılış üretmek — filo özeti (`filo.sh gunluk-plan-ozet`) kutu başına bugünkü kayıt/[tarama] sayısını bu yüzden gösterir.
 - **KARAR=SOR** (Sırada < eşik): Sultan'a iki şıklı TEK soru — *"Bu kutuda planlanmış görev yok (ya da eşikten az: gerçek sayı söylenir). Kendimize iş çıkarma seansı yapalım mı? (1) Sultan'la sohbet ederek (2) Reis kendi başına taransın (önerim: ADIM 0-d)"*. Bu dalda betik hiçbir işi üstlenmez.
@@ -214,6 +216,14 @@ Günün kalanı (en çok 3): 1) … · 2) … · 3) …
 Bugün değil: <iş> (<niçin>) · <iş> (<niçin>)
 ```
 ````
+
+🔴 **Madde biçimi — sırada duran iş kimliğiyle yazılır (1.16.0, görev …GJRBF1T8 · Sultan 29 Eki 11:28: "sırada bekleyen işlerden görev
+numarasını alıp şu görev tamamlanacak şeklinde yaz"):** plan maddesi defterde zaten duran bir işse madde **o işin kimliğini taşır**:
+`görev …XXXXXX tamamlanacak: <cümle> (sahip: AD)` (son altı karakter yeter; tam `gorev_…` de olur). `sirada-bak.sh` bu satırları hazır basar
+(`MADDE=`), çıpaya olduğu gibi kopyalanır. Niçin: 29 Eki'de 5 maddenin 4'ü sırada duran işin **ikizi** olarak açıldı — `deftere-yaz` yalnız
+birebir başlığa bakıyordu. Artık kimlikli maddede **yeni kayıt açılmaz**, o kayda "bugünün planında" adımı yazılır; kimliksiz maddede benzer
+başlıklı açık kayıt varsa (kelime örtüşmesi ≥ %60) **ikiz uyarısı**: yazılmaz, rc 1, kimliğiyle yazılması istenir. Yalnız defterde olmayan
+yepyeni iş kimliksiz yazılır.
 
 İşaretler sabittir: ✅ kapandı · 🟡 yarım · ⬜ açık · ⏸ ertelendi (yalnız Sultan D1 ile) · ➖ geri alındı.
 Sahip sütunu çıpadaki `(sahip: <AD>)`den, kanıt sütunu `--kanit`ten gelir; "sen" / "ikimiz" de sahip olabilir.

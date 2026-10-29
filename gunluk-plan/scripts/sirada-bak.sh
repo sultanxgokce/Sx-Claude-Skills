@@ -55,6 +55,9 @@ if [ "$N" -ge "$ESIK" ] || [ "$HAVUZDAN" -eq 1 ]; then
   echo "KARAR=BAS"
   [ "$HAVUZDAN" -eq 0 ] || echo "NEDEN=Sırada $N iş var (eşik $ESIK) ama havuzda sana düşen $H iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)"
   printf '%s\n' "$SIRA" | head -5 | awk -F'\t' '{printf "ISI=%s · %s · %s\n",$1,$2,$3}'
+  # 1.16.0 (GJRBF1T8 · Sultan 29 Eki): aynı işler doğrudan PLAN MADDESİ biçiminde — çıpaya kopyalanır, deftere-yaz kimliği görür ve ikiz açmaz.
+  #   Biçim: görev …<son 6> tamamlanacak: <başlık> (sahip: <atanan | sen>)  — kimlik son-ek olarak taşınır, deftere-yaz tam kimliğe çözer.
+  printf '%s\n' "$SIRA" | head -5 | awk -F'\t' -v kim="${KIM:-sen}" '{printf "MADDE=görev …%s tamamlanacak: %s (sahip: %s)\n", substr($1,length($1)-5), $3, ($4=="1" ? kim : "başkası")}'
   ILK="$(printf '%s\n' "$SIRA" | awk -F'\t' '$4=="1" {print $1; exit}')"
   if [ -z "$ILK" ]; then
     echo "BASLAMADI=yok (sıradaki $NB işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)"

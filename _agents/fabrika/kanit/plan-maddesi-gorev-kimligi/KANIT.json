@@ -1,0 +1,149 @@
+{
+  "is": "plan-maddesi-gorev-kimligi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T11:44:05+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-deftere-yaz",
+      "asama": "once",
+      "dosya": "olcum-sinav-deftere-yaz-once.txt",
+      "sha256": "c341f8babdb92b0ecfa2f13e69bdf6730a83d571be60382ad72a99c312407572",
+      "komut": [
+        "env",
+        "DEFTERE_YAZ=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-plan/eski-deftere-yaz.sh",
+        "bash",
+        "gunluk-plan/scripts/deftere-yaz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T11:44:02+03:00",
+      "sure_sn": 6.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8414558884a34a2c84bc50bac55aefe0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-deftere-yaz",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-deftere-yaz-sonra.txt",
+      "sha256": "0317721b4b67e33c2e6e425f5c17f8b818a2ae301090bd563d0494deb481c317",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/deftere-yaz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:42:48+03:00",
+      "sure_sn": 25.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "82204effb18145eea79326e36836d91a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sirada-bak",
+      "asama": "once",
+      "dosya": "olcum-sinav-sirada-bak-once.txt",
+      "sha256": "0aa4c133d1819e0456b3cccaa2f1a964ff5c2ddb52b4dc6a0cb88dac22a51898",
+      "komut": [
+        "env",
+        "SIRADA_BAK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-plan/eski-sirada-bak.sh",
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T11:44:05+03:00",
+      "sure_sn": 3.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d29db2c40136450e9823ee60b6bfad6d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sirada-bak",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sirada-bak-sonra.txt",
+      "sha256": "2304fbdee96273a5731ea6c6b563a175775078a9d79ac73d0791cc00526346c5",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:42:55+03:00",
+      "sure_sn": 3.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "87651691d1324a08988d116c74cc0e7f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ikiz-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-ikiz-yok-tek.txt",
+      "sha256": "1b606c0bcda8b1896696c28cef89018f95078af22bde4079f1d38fe5e392519e",
+      "komut": [
+        "env",
+        "DEFTERE_YAZ=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-plan/mut-ikiz-yok.sh",
+        "bash",
+        "gunluk-plan/scripts/deftere-yaz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:43:05+03:00",
+      "sure_sn": 9.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-deftere-yaz",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "2373afca63df46ea8a39085d030f3975"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sonek-coklu",
+      "asama": "tek",
+      "dosya": "olcum-mutant-sonek-coklu-tek.txt",
+      "sha256": "6799dd3fde72c753614e48a008c2b5cf0cefd5ea5de552ac4e9deaced5757ecd",
+      "komut": [
+        "env",
+        "DEFTERE_YAZ=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-plan/mut-sonek-coklu.sh",
+        "bash",
+        "gunluk-plan/scripts/deftere-yaz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:43:16+03:00",
+      "sure_sn": 10.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-deftere-yaz",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "3932981e87df4f4e85f66d0d78ac23d9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-madde-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-madde-yok-tek.txt",
+      "sha256": "bfa63daa39fec98a9d3f408d638b2f6102b50a65dd9295ad582c680e6072b7e3",
+      "komut": [
+        "env",
+        "SIRADA_BAK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-plan/mut-madde-yok.sh",
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:43:20+03:00",
+      "sure_sn": 3.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-sirada-bak",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7c08584420f3420c949f4e3bbe8f949a"
+    }
+  ],
+  "imza": "c1dae65a2c620e477df18d0fe598ac66dce07e4779acd200406f1fb95c3e839b"
+}

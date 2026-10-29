@@ -1,0 +1,36 @@
+{
+  "is": "plan-maddesi-gorev-kimligi",
+  "cumle": "gunluk-plan: plan maddesi sırada duran görevin kimliğini taşır ('görev …XXXXXX tamamlanacak: <cümle> (sahip: AD)'); deftere-yaz kimlikli maddede yeni kayıt açmaz, o kayda 'bugünün planında' adımı yazar; kimliksiz maddede benzer başlıklı açık kayıt varsa (kelime örtüşmesi yüzde altmış ve üstü) ikiz uyarısı verir, yazmaz, rc bir; sirada-bak çıktısı doğrudan plan maddesi biçiminde satır basar; sınav + mutant (görev GJRBF1T8)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T11:37:25+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M63CGM1Y1NB7M1S1GJRBF1T8",
+  "tahmin_dk": 3,
+  "olcut": [],
+  "olcum_yeri": "yerel, 12 çekirdek — gunluk-plan/scripts/deftere-yaz.test.sh + sirada-bak.test.sh (hermetik, sahte gorev.sh)",
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T11:37:30+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
