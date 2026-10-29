@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-duzeltme-farki-sinavi-once.txt
+hedef_sha256: f75aed8a2c3963ee47383a69ccae55ee82ad060b18be5a58828e0fe08b72bb46
+hedef_zaman: 2026-10-29T18:38:33+03:00
+hedef_renk: kirmizi
+neden: eski denetci.sh betik klasörü dışına tek başına kopyalandı; yardımcı betikleri bulamadı, her senaryo rc=2 — ölçülen şey eski kod değil eksik kurulumdu
+kim: BANI
+karsi: -
+zaman: 2026-10-29T18:38:46+03:00

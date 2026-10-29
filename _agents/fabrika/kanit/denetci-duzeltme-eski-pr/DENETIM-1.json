@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "denetci-duzeltme-eski-pr",
+  "pr": "573",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T18:51:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 3 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-duzeltme-farki-sinavi-once.txt (kirmizi → gecersiz) — eski denetci.sh betik klasörü dışına tek başına kopyalandı; yardımcı betikleri bulamadı, her senaryo rc=2 — ölçülen şey eski kod değil eksik kurulumdu · BANI;olcum-duzeltme-farki-sinavi-eski-kod-once.txt (kirmizi → gecersiz) — sınav metni sonradan değişti (D11b); önce/sonra aynı sınavla yeniden alınıyor (etiket duzeltme-farki-v2) · BANI;olcum-duzeltme-farki-sinavi-eski-kod-sonra.txt (kirmizi → gecersiz) — D11b beklentisi kaldırılan ikinci koşula göre yazılmıştı; sınav düzeltildi, yeniden ölçülüyor · BANI",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-duzeltme-eski-pr",
+  "dal": "denetci-duzeltme-eski-pr",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30869,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 38647
+  },
+  "dalgic": "uyumlu",
+  "bas": "8f7db2b5508d6d983bc78378bd3daa2f335786a0",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Squash sonrası önceki başın yeni PR geçmişinde olmadığı D10 vakası düzeltilmiş ve sınavla korunmuş. Ancak kartın ikinci koşulu olan “önceki baş ana dala çoktan girdiyse düzeltme farkı kurma” uygulanmamış; D11 bunun tersini özellikle doğru kabul ettiği için önce bu sözleşme uyuşmazlığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki turun başı ana dala birleştirme commit’iyle girmiş ve yeni PR başının atası olmuşsa kod yine düzeltme farkı kuruyor; iş kartı bu durumda düzeltme farkı kurmayıp PR’ın kendi farkını göndermesini istiyor. Sınav da talebi doğrulamak yerine ters davranışı sabitliyor.",
+        "kanit": "Üretim kodundaki yeni kapı yalnız `merge-base --is-ancestor \"$ـob\" \"$BAS\"` başarısız olduğunda devreye giriyor. Sonra ölçümündeki D11b açıkça “önceki baş ata → düzeltme turu normal kuruldu” sonucunu ✓ sayıyor; buna karşı iş kartı “...ya da ana dala çoktan girmişse düzeltme farkı kurmaz” diyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:618; yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh:147; olcum-duzeltme-farki-v2-sonra.txt D11b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Geçersiz ilan edilen üç kayıt değerlendirmeye katılmadı; geçerli v2 çifti aynı sınavla önce 48/3, sonra 63/0 ölçüyor ve mutant D10c kapıyı sınamanın yakaladığını gösteriyor. Buna rağmen yeşil sonuç hedef doğruluğunu kanıtlamıyor: D11 beklentisi iş kartının “ana dala çoktan girmişse düzeltme farkı kurma” şartıyla çelişiyor."
+  }
+}

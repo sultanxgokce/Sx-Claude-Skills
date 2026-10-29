@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-duzeltme-farki-sinavi-eski-kod-once.txt
+hedef_sha256: 741038d04c49c68ea05ca3affdd24a7bcfc049070c39219741df5592794e9944
+hedef_zaman: 2026-10-29T18:39:17+03:00
+hedef_renk: kirmizi
+neden: sınav metni sonradan değişti (D11b); önce/sonra aynı sınavla yeniden alınıyor (etiket duzeltme-farki-v2)
+kim: BANI
+karsi: -
+zaman: 2026-10-29T18:43:05+03:00

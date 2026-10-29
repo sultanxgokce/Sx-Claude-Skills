@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-duzeltme-farki-sinavi-eski-kod-sonra.txt
+hedef_sha256: 3da35a01e77ccaa54514a0822125d23efec15ecba407d125970ec2735d5e8f1a
+hedef_zaman: 2026-10-29T18:42:46+03:00
+hedef_renk: kirmizi
+neden: D11b beklentisi kaldırılan ikinci koşula göre yazılmıştı; sınav düzeltildi, yeniden ölçülüyor
+kim: BANI
+karsi: -
+zaman: 2026-10-29T18:42:56+03:00

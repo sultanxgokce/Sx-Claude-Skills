@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "denetci-duzeltme-eski-pr",
+  "pr": "573",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T18:55:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 5 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-duzeltme-farki-sinavi-once.txt (kirmizi → gecersiz) — eski denetci.sh betik klasörü dışına tek başına kopyalandı; yardımcı betikleri bulamadı, her senaryo rc=2 — ölçülen şey eski kod değil eksik kurulumdu · BANI;olcum-duzeltme-farki-sinavi-eski-kod-once.txt (kirmizi → gecersiz) — sınav metni sonradan değişti (D11b); önce/sonra aynı sınavla yeniden alınıyor (etiket duzeltme-farki-v2) · BANI;olcum-duzeltme-farki-sinavi-eski-kod-sonra.txt (kirmizi → gecersiz) — D11b beklentisi kaldırılan ikinci koşula göre yazılmıştı; sınav düzeltildi, yeniden ölçülüyor · BANI;olcum-duzeltme-farki-v2-once.txt (kirmizi → gecersiz) — göz tur 1: kartın ikinci koşulu (önceki baş ana hatta girmişse) geri kondu, D11 sınavı değişti; v3 ile yeniden ölçülüyor · BANI;olcum-duzeltme-farki-v2-sonra.txt (yesil → gecersiz) — göz tur 1: kartın ikinci koşulu (önceki baş ana hatta girmişse) geri kondu, D11 sınavı değişti; v3 ile yeniden ölçülüyor · BANI",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-duzeltme-eski-pr",
+  "dal": "denetci-duzeltme-eski-pr",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37758,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 21385
+  },
+  "dalgic": "uyumlu",
+  "bas": "5a8259678311039fa3876cb602fc6cd3f3bdac12",
+  "duzeltme_farki": {
+    "onceki_bas": "8f7db2b5508d6d983bc78378bd3daa2f335786a0",
+    "dosya": 10,
+    "bayt": 32411,
+    "tam_bayt": 71979
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki B1 kapatılmış: önceki baş yeni PR’ın geçmişinde değilse veya ana hatta zaten bulunuyorsa düzeltme farkı kurulmayıp PR’ın kendi farkı gönderiliyor. Geçerli v3 ölçüm çifti iki talep koşulunu ve bunların mutantlarını ayrı ayrı yakaladığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; geçersiz ilan edilen beş kayıt değerlendirmeye katılmadı. Geçerli v3 çifti aynı sınavla önce 47/5 ve sonra 65/0 ölçüyor; D10 squash durumunu, D11 önceki başın ana hatta girmiş olması durumunu doğruluyor, ayrıca `eski-bas-atasi-degil` ve `eski-bas-ana-hatta` mutantlarının ilgili kapıları düşürmesi sınavın değişikliği gerçekten ölçtüğünü gösteriyor."
+  }
+}

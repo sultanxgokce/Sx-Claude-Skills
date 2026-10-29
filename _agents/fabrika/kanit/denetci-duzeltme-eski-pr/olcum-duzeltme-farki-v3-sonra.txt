@@ -1,0 +1,84 @@
+$ bash yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
+# rc=0 sure=184.8s zaman=2026-10-29T18:55:02+03:00
+--- stdout ---
+════ D1 · tur 1: tam fark gider, kayıt incelediği başı (bas) yazar ════
+  ✓ D1a tur 1 koştu (4/E → rc 1)
+  ✓ D1b istemde değişmeyecek dosya var (tam fark)
+  ✓ D1c DENETIM-1.bas = incelenen baş
+════ D2 · tur 2 (yeni commit + ana hat dala birleşti): yalnız A..B farkı, PR dosyalarıyla sınırlı; önceki bulgular sayılı ════
+  ✓ D2a tur 2 koştu (5/E → rc 0)
+  ✓ D2b ekranda DÜZELTME TURU satırı
+  ✓ D2c istemde düzeltme notu
+  ✓ D2d istemde yeni satır var
+  ✓ D2e değişmeyen dosya istemde YOK (yalnız yeni fark)
+  ✓ D2f ana hattan gelen başkasının dosyası farka girmedi
+  ✓ D2g önceki bulgu ayrı satırda sayıldı
+  ✓ D2i kutu-dışı önceki bulgu da sayıldı, sınıfıyla (göz #436 tur 2)
+  ✓ D2h DENETIM-2: bas=B, duzeltme_farki.onceki_bas=A, dosya=1
+════ D3 · baş değişmedi → fark BOŞ gider, istem bunu söyler (göz #436 tur 1: boş kümede tam farka dönülmez) ════
+  ✓ D3a tur 2 aynı başla koştu
+  ✓ D3b ekranda: YENİ DEĞİŞİKLİK YOK → fark BOŞ
+  ✓ D3c 🔴 tam fark GİTMEDİ
+  ✓ D3d istem farkın BOŞ olduğunu ve niçin söylüyor
+  ✓ D3e önceki bulgu yine sayıldı
+  ✓ D3f kayıt: duzeltme_farki.dosya=0
+════ D3x · yeni commit var ama yalnız PR DIŞI dosyada (ana hat birleşmesi) → fark BOŞ ════
+  ✓ D3xa tur 2 koştu
+  ✓ D3xb ekranda YENİ DEĞİŞİKLİK YOK
+  ✓ D3xc ne tam fark ne başkasının dosyası gitti
+════ D4 · önceki kayıt bas taşımıyor (eski kayıt) → tam fark, sebebi ekranda ════
+  ✓ D4a tur 2 koştu
+  ✓ D4b sebep: eski kayıt
+  ✓ D4c tam fark gitti
+════ D4x · eski kayıt (bas yok) ama kaydı bir commit ekledi → baş atadan türetilir, yalnız yeni fark gider (gorev …DCX24C) ════
+  ✓ D4xa tur 2 koştu
+  ✓ D4xb ekranda türetme söylendi
+  ✓ D4xc yalnız yeni fark gitti
+  ✓ D4xd 🔴 değişmeyen dosya (tam fark) GİTMEDİ
+  ✓ D4xe kayıt: duzeltme_farki.onceki_bas=türetilen baş
+════ D5 · --diff kipi: baş ölçülemez → bas boş ════
+  ✓ D5a --diff ile koştu
+  ✓ D5b DENETIM-1.bas = null
+════ D6 · istem 100 KB'ı aşınca HER denetçide gönderim durur (sahte denetçi, eşik dikişi YOK) ════
+  ✓ D6a ~100 KB üstü istem → rc 1 (İŞİ BÖL)
+  ✓ D6b sınır 100000 olarak söyleniyor
+  ✓ D6c tur yakılmadı, denetçiye istem gitmedi
+  ✓ D6e 🔴 ayıklama KAPALIYKEN de durur (göz #436 tur 1)
+  ✓ D6d DENETCI_ISTEM_TAVAN=200000 ile aynı iş denetlenir (rc 0)
+════ D7 · boşluklu + Türkçe harfli dosya adı: git'in kaçışladığı yol düzeltme farkına girer (göz #436 tur 2) ════
+  ✓ D7a tur 2 koştu
+  ✓ D7b 🔴 özel adlı dosyanın değişikliği göze gitti
+  ✓ D7c kayıt: duzeltme_farki.dosya=1 (boş fark sanılmadı)
+════ D9 · düzeltme commit'i bir PR dosyasını ana dal hâline TAMAMEN geri alırsa o geri alma göze gider (göz #436 tur 3) ════
+  ✓ D9a tur 2 koştu
+  ✓ D9b 🔴 geri alma (silinen satır) göze gitti
+  ✓ D9c kayıt: duzeltme_farki.dosya=1
+════ D10 · aynı kartın İKİNCİ PR'ı, önceki PR squash ile birleşti: eski baştan fark kurulmaz, başkasının işi göze gitmez (gorev …QNQX33 · cloudtop #1167) ════
+  ✓ D10a ikinci PR'da tur 2 koştu
+  ✓ D10b ekranda sebep: önceki baş bu başın geçmişinde yok
+  ✓ D10c 🔴 arada ana hatta başkasının yaptığı değişiklik göze GİTMEDİ
+  ✓ D10d bu PR'ın kendi değişikliği göze gitti
+  ✓ D10e kayıt: duzeltme_farki yok (PR farkı gitti)
+════ D11 · önceki PR birleştirme commit'iyle ana hatta girdi (baş atadır ama ana hatta zaten var) → yine PR'ın kendi farkı ════
+  ✓ D11a ikinci PR'da tur 2 koştu
+  ✓ D11b önceki baş ana hatta girmiş → düzeltme farkı KURULMADI, sebep ekranda
+  ✓ D11c 🔴 başkasının değişikliği göze GİTMEDİ
+  ✓ D11d bu PR'ın kendi değişikliği göze gitti
+  ✓ D11e kayıt: duzeltme_farki yok (PR farkı gitti)
+════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════
+  ✓ mutant 'duzeltme-yok' → D2e düştü, kontrol D1a geçti
+  ✓ mutant 'dosya-siniri-yok' → D2f düştü, kontrol D1a geçti
+  ✓ mutant 'yol-kacisli-okunur' → D7b düştü, kontrol D1a geçti
+  ✓ mutant 'geri-alinan-dosya-duser' → D9b düştü, kontrol D1a geçti
+  ✓ mutant 'kutu-disi-ayiklanir' → D2i düştü, kontrol D1a geçti
+  ✓ mutant 'bas-yazilmaz' → D1c düştü, kontrol D1a geçti
+  ✓ mutant 'onceki-bulgu-sayilmaz' → D2g düştü, kontrol D1a geçti
+  ✓ mutant 'tavan-yalniz-codex' → D6a düştü, kontrol D1a geçti
+  ✓ mutant 'tavan-ayiklamaya-bagli' → D6e düştü, kontrol D1a geçti
+  ✓ mutant 'bos-farkta-tam-fark' → D3c düştü, kontrol D1a geçti
+  ✓ mutant 'eski-bas-atasi-degil' → D10c düştü, kontrol D1a geçti
+  ✓ mutant 'eski-bas-ana-hatta' → D11b düştü, kontrol D1a geçti
+  ✓ mutant 'tavan-120k' → D6a düştü, kontrol D1a geçti
+
+── SONUÇ (düzeltme-farkı): 65 geçti · 0 kaldı ──
+--- stderr ---

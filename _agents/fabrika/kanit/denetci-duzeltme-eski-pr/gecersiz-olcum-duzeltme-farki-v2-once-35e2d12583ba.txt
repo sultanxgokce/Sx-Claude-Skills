@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-duzeltme-farki-v2-once.txt
+hedef_sha256: cb09a5c972cfcae782e3481dde8d6d11ac4ee1c088969b6c27d97d3a27023a4e
+hedef_zaman: 2026-10-29T18:43:21+03:00
+hedef_renk: kirmizi
+neden: göz tur 1: kartın ikinci koşulu (önceki baş ana hatta girmişse) geri kondu, D11 sınavı değişti; v3 ile yeniden ölçülüyor
+kim: BANI
+karsi: -
+zaman: 2026-10-29T18:51:46+03:00
