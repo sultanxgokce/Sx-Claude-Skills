@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "supurme-zil-tekrar-gunluk",
+  "pr": "574",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T21:56:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-supurme-zil-tekrar-gunluk",
+  "dal": "supurme-zil-tekrar-gunluk",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27857,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4820
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f45d511ae1b9d3471adf0f5bca18891f14a9745f",
+  "duzeltme_farki": {
+    "onceki_bas": "1c4249d299d5fc7f9df3300b1839b902fe7bedc6",
+    "dosya": 4,
+    "bayt": 9489,
+    "tam_bayt": 33719
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Postanenin aynı tekrar anahtarı için verdiği “zaten vardı” yanıtı yeni zil sayılmıyor; günlük ayrı “zil yinelendi” satırı yazıyor. Düzeltme turu yalnız belgeyi başarısız gönderim davranışıyla uyumlu biçimde netleştirmiş; kod ölçümleri üretime hazır, fakat canlı günlükteki 5 → 0 sonucu hâlâ kutu dışında doğrulanmayı bekliyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki tur B1 kapanmadı: canlı süpürme günlüğünde yinelenen denemelerin yeni zil sayılmasının gerçekten 5’ten 0’a indiği hâlâ gösterilmemiş.",
+        "kanit": "Zil günlüğü sınavı sahte posta aracını kullandığını Z0 ile açıkça söylüyor; gerçek postane ölçümü yalnız ilk gönderimde “gönderildi”, ikincide “aynı mesaj zaten vardı” çıktısını gösteriyor. Bu turdaki fark yalnız SKILL.md açıklamasını değiştiriyor ve yeni bir canlı cron günlüğü ölçümü sunmuyor.",
+        "konum": "olcum-zil-gunlugu-sonra.txt: Z0; olcum-gercek-postane-tekrar-tek.txt; yazilim-fabrikasi/SKILL.md değişikliği",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı süpürme cron günlüğü + erişim yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Z1j önce FAIL=1 iken sonra PASS=45/FAIL=0 olmuş; mutasyon kaydı bilerek bozulan davranışın Z1j kapısında yakalandığını, gerçek postane ölçümü de yanıt biçimini doğruluyor. Kod davranışı için ölçüm çifti güçlü ve yeterli; canlı 5 → 0 iddiası içinse canlı günlükten önce/sonra ölçümü bulunmuyor."
+  }
+}
