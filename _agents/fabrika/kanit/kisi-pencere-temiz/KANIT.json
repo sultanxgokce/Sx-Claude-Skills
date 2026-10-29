@@ -1,0 +1,44 @@
+{
+  "is": "kisi-pencere-temiz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T18:43:00+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "pencere-i3d",
+      "asama": "once",
+      "dosya": "olcum-pencere-i3d-once.txt",
+      "sha256": "3690c9981b9539accdcf08d82dda18276a7ca169adfa45f8964cc1277c00bef1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kisi-pencere3.sh",
+        "eski"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T18:42:18+03:00",
+      "sure_sn": 42.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "25d63a5092c547709fc82baaaedc944d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pencere-i3d",
+      "asama": "sonra",
+      "dosya": "olcum-pencere-i3d-sonra.txt",
+      "sha256": "24db4b3f64fb9656be654b26611ee79c5e4ba1b921aa80c538d44237e2af4dce",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kisi-pencere3.sh",
+        "yeni"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T18:43:00+03:00",
+      "sure_sn": 42.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9e7a945b8e544bd69653b1219df7e6ab"
+    }
+  ],
+  "imza": "d65d9c7d165a6ea47e3afe41b58f1d5ceca7317830a679d286a74ab3dea0ab7e"
+}

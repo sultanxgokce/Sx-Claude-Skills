@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kisi-pencere-temiz",
+  "pr": "572",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T18:51:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-pencere-temiz",
+  "dal": "kisi-pencere-temiz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13604,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3093
+  },
+  "dalgic": "uyumlu",
+  "bas": "564c7b510e762180c0a9198675c08fbc7156701e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Köprü izleme istemcisi açılmadan önce oturumun pencereleri `window-size latest` ayarına geçiriliyor; gerçekçi küçük rakip istemci senaryosunda önce 105 sütuna çıkamayan pencere değişiklikten sonra 105 sütuna çıkıyor. Üretim davranışı ve I3d regresyon sınavı talebi karşılıyor; yalnız sürüm notundaki kart/görev kimliği verilen iş kartıyla uyuşmayan küçük bir izlenebilirlik rötuşu var.",
+    "bulgular": [
+      {
+        "ne": "Sürüm notu yanlış kart ve görev kimliğine bağlanmış; mevcut iş `kisi-pencere-temiz` ve görev `gorev_01M644MCCSG29S0QMEKWMQPPDY` iken notta `kisi-pencere-latest` ile `…MH786T4` yazıyor.",
+        "kanit": "İş kartındaki `is` ve `gorev` alanları ile eklenen 2.36.3 sürüm notunun başlığı doğrudan çelişiyor.",
+        "konum": "terminal-onar/SKILL.md:89",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı I3d senaryosunun önce/sonra ölçüm çifti gerçekçi 60 sütunluk rakip ve 105 sütunluk kişi istemcisiyle verilmiş: önce ✗ ve `toplam-kaldi=1`, sonra ✓ ve `toplam-kaldi=0`. Ölçüm komutlarının rc=0 olması tek başına başarı kanıtı değildir, ancak açık sınav satırları ve sayaç değişimi iddiayı ölçüyor; mutasyon kaydı yok."
+  }
+}
