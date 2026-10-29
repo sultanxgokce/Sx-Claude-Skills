@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "hasat-tazelik-seansli",
+  "pr": "577",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T00:14:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-tazelik-seansli",
+  "dal": "hasat-tazelik-seansli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 39297,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 29128
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7c0344bcc06b1a3c1162f97eaede04f887d73419",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Havuz tazeliği sayımı, kuru havuzda Meşveret önerisi ve Seanslı Hasat’ın üçüncü şıkkı eklenmiş; gerçek ölçüm 104/104 geçiyor ve mutant taze sayımını bozunca kapı düşüyor. Önce gelecekteki tarihlerin taze sayılması kusurunu çözün; bunun dışında talebin ana akışı ve 1.17.0 sürümlemesi yerinde.",
+    "bulgular": [
+      {
+        "ne": "Gelecek tarihli havuz kaydı taze kabul ediliyor; negatif yaş için doğrulama yok. Saat/tarih kayması veya bozuk veri, gerçekte ölçülememesi gereken kaydı TAZELIK=VAR yapabilir.",
+        "kanit": "Python hesabında `yas=(bg-t).days` sonrasında doğrudan `if yas<=gun: taze+=1` uygulanıyor; `yas < 0` denetimi bulunmuyor. Sonraki T1–T9 sınavlarında gelecek tarih vakası da yok.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh: TZ_PY içindeki yaş ve taze hesabı; gunluk-plan/scripts/sirada-bak.test.sh T1–T9",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçümü 79/79’dan 104/104’e çıkışı gösteriyor, gerçek ölçüm yeşil; mutasyon kaydı da taze sayımı bilerek bozulduğunda 6 sınavın düştüğünü doğruluyor. CLI betiği için ölçüm çifti yeterli ve gerçekçi fikstürler var; ancak gelecek tarih sınır vakası ölçülmemiş."
+  }
+}

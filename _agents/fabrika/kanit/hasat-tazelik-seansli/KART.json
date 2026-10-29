@@ -1,0 +1,25 @@
+{
+  "is": "hasat-tazelik-seansli",
+  "cumle": "gunluk-plan sirada-bak.sh havuzun tazeliğini ölçer (taze/bayat/boş, ölçemezse ÖLÇÜLEMEDİ) ve kuruysa Meşveret seansı önerir; KARAR=SOR dalına üçüncü şık Seanslı Hasat eklenir (kayıt kayıt sorulur: kabul · başka sun · düzeltmeyle kabul), SKILL.md 1.17.0",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-29T23:50:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/hasat-tazelik-seansli (sınav sayısı önce/sonra + mutant)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
