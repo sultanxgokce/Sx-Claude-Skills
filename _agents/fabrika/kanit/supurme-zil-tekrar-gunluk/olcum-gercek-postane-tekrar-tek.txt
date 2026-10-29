@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/postane-tekrar.sh
+# rc=0 sure=0.2s zaman=2026-10-29T21:36:38+03:00
+--- stdout ---
+✓ gönderildi: msg_01M64F696XVCXWXTRDZX6WA1AW · BERİD �
+= aynı mesaj zaten vardı: msg_01M64F696XVCXWXTRDZX6WA1AW �
+--- stderr ---

@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "supurme-zil-tekrar-gunluk",
+  "pr": "574",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T21:53:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-supurme-zil-tekrar-gunluk",
+  "dal": "supurme-zil-tekrar-gunluk",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30736,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 18111
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1c4249d299d5fc7f9df3300b1839b902fe7bedc6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Postanenin aynı tekrar anahtarı yanıtı artık yeni zil gibi yazılmıyor; ayrı “zil yinelendi” satırına ayrılıyor. Önce/sonra sınavı, gerçek postane yanıtı ve mutasyon kapısı davranışı güçlü biçimde doğruluyor; yalnız canlı süpürme günlüğündeki 5 → 0 sonucu bu kutuda ölçülmemiş.",
+    "bulgular": [
+      {
+        "ne": "Canlı süpürme günlüğünde yinelenen denemelerin yeni zil sayılmasının gerçekten 5’ten 0’a indiği gösterilmemiş.",
+        "kanit": "Manifestteki zil-gunlugu ölçümü sahte posta aracını kullanıyor (Z0); gercek-postane-tekrar ölçümü yalnız postanenin “aynı mesaj zaten vardı” yanıtını gösteriyor. Canlı cron/süpürme günlüğünden son ölçüm yok.",
+        "konum": "olcum-zil-gunlugu-sonra.txt: Z0; olcum-gercek-postane-tekrar-tek.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı süpürme cron günlüğü + erişim yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Z1j önce kırmızı sonra yeşil; mutasyon ölçümü bozuk kodun aynı kapıda yakalandığını, gercek-postane-tekrar ölçümü de gerçek yanıt biçimini doğruluyor. Kod davranışı için ölçüm çifti yeterli; ancak iş kartındaki canlı 5 → 0 sonucu ayrıca canlı günlük ölçümü gerektiriyor."
+  }
+}
