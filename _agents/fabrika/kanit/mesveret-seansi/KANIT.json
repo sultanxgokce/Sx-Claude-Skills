@@ -1,0 +1,67 @@
+{
+  "is": "mesveret-seansi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T00:03:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "a84f7dd5d5e66f1828855ed74056e36d942a9c9c319702095654f5c12f6ee0c2",
+      "komut": [
+        "bash",
+        "mesveret/scripts/mesveret.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:03:28+03:00",
+      "sure_sn": 568.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b719663e05c142749b588ba71049f636"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-mutant-sayac",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-mutant-sayac-sonra.txt",
+      "sha256": "f2645b91b717b6361bf9c594c18f13d9083f0f8d8a7182d42adbc0b98657ea09",
+      "komut": [
+        "bash",
+        "mesveret/scripts/mesveret.test.sh",
+        "--mutant",
+        "sayac"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:03:28+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0e289eb3ec164a45837885af5b93f9e3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-paritesi",
+      "asama": "tek",
+      "dosya": "olcum-lint-paritesi-tek.txt",
+      "sha256": "9a6c960c1fbfd483f241df27c2acf7a520788945b28f9e5330b100ea5801cbcb",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:03:28+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "da216c4f1a5c4596ba69655274d0dbc5"
+    }
+  ],
+  "imza": "608ff87cf4492cd0f95e11845fb486d7a7d03b974dd07b8f7429a69b6804fde1"
+}

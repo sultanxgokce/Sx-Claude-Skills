@@ -1,0 +1,18 @@
+$ bash mesveret/scripts/mesveret.test.sh
+# rc=0 sure=568.9s zaman=2026-10-30T00:03:28+03:00
+--- stdout ---
+✓ M1 seans açılır (rc 0, kimlik mes_…)
+✓ M1b şablon basıldı (Madde 1 · A/B/C)
+✓ M2 madde kaydedildi rc 0 + görev kimliği
+✓ M2b bulgu.sh --oda seanstan alındı + not seans kimliğini taşır
+✓ M2c önem sorusu basıldı
+✓ M3 A06: söz/oturum yok → rc 2, adım yazılmadı
+✓ M4 önem D1 adımı gorev.sh'a gitti
+✓ M5 özet: 2 madde · önemi sorulmayan 1
+✓ M5c durum 2. maddeyi 2 numarayla listeler (sayaç)
+✓ M5b durum bitti, liste gösterir
+✓ M6 bulgu.sh yoksa rc 3 ve seansa madde eklenmez
+✓ M7 bilinmeyen seans rc 3
+== 12 geçti · 0 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-mesveret-seansi-sinav 568 sn bekledi (yuva 2, load1 16.26)
