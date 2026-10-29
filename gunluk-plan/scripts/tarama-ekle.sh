@@ -13,6 +13,7 @@
 set -uo pipefail
 GOREV="$(bash "$(dirname "${BASH_SOURCE[0]}")/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"   # yol çözümü tek yerde (gorev-yolu.sh)
 BULGU="${GUNLUK_PLAN_BULGU_SH:-/config/.claude/skills/bulgu/scripts/bulgu.sh}"
+BEN="${GUNLUK_PLAN_BEN_SH:-$(dirname "${BASH_SOURCE[0]}")/jeton-kutusu.sh}"   # jetonun kutusu (geçit /ben) — yazmadan ÖNCE sorulur (NMAGXX8C)
 TAVAN=3   # DEĞİŞMEZ: ortamdan/argümandan okunmaz (Sultan: günde ≤3)
 BUGUN="${GUNLUK_PLAN_TARIH:-$(date +%F)}"
 UYGULA=0; BASLIK=""; KAYNAK=""; KANIT=""; KUTU="${GUNLUK_PLAN_KUTU:-}"; KIM=""
@@ -59,6 +60,11 @@ if [ -z "$KUTU" ]; then   # tahmin YOK: liste tek kutuyu gösteriyorsa o; birden
   KUTU="$KUTULAR"
 fi
 [ -n "$KUTU" ] || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
+# Jetonun kutusu sayılan kutuyla AYNI mı? Yazım jetonun kutusuna gider; --kutu başka bir kutuysa tavan orada sayılır, kayıt buraya düşer.
+# Eskiden bu fark yazımdan SONRA görülüyordu (kayıt yanlış kutuya düşmüş oluyordu, 27 Eki ölçümü); artık yazmadan ÖNCE: fark → rc 2, sorulamadı → rc 3.
+JK="$(bash "$BEN" 2>/dev/null)"; BRC=$?
+[ "$BRC" -eq 0 ] && [ -n "$JK" ] || { echo "ÖLÇÜLEMEDİ: jetonun kutusu sorulamadı (rc=$BRC) — kaydın hangi kutuya düşeceği bilinmeden yazılmaz" >&2; exit 3; }
+[ "$JK" = "$KUTU" ] || { echo "REDDEDİLDİ: --kutu '$KUTU' ama bu jeton '$JK' kutusuna yazar — tavan ile kayıt ayrı kutuya düşerdi; o kutunun koltuğundan koş ya da --kutu $JK" >&2; exit 2; }
 
 # sayım: bu kutuda bugün hareketi olan "[tarama] " kayıtları + kopya denetimi (açık ya da bugün kapanan aynı başlık)
 SONUC="$(printf '%s\n' "$LISTE" | python3 -I -c '
@@ -86,7 +92,7 @@ SAY="${SONUC% *}"; KOPYA="${SONUC#* }"
 if [ "$UYGULA" -eq 1 ]; then
   [ -f "$BULGU" ] || { echo "ÖLÇÜLEMEDİ: bulgu.sh yok ($BULGU)" >&2; exit 3; }
   if bash "$BULGU" yaz "[tarama] $BASLIK" --kim "$KIM" --etiket ozellik --not "kaynak: $KAYNAK · kanıt: $KANIT" >/dev/null 2>&1; then
-    # yazım jetonun kutusuna gider: sayımın yapıldığı kutuyla aynı mı? (--kutu ile tavan çevresinden dolaşılamaz)
+    # yazım sonrası geri okuma (ikinci çit): kayıt gerçekten sayılan kutuda mı görünüyor
     L2="$(bash "$GOREV" liste 2>/dev/null)"
     YK="$(printf '%s\n' "$L2" | awk -v b="[tarama] $BASLIK" '$1 ~ /^gorev_/ { i=index($0,b); if (i>0) {print $2; exit} }')"
     if [ -z "$YK" ]; then echo "  ✗ YAZILDI ama defterde göremedim — kutu doğrulanamadı: [tarama] $BASLIK" >&2; exit 1; fi

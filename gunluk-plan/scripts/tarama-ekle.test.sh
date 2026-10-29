@@ -22,7 +22,12 @@ printf '%s\n' "$*" >> "$T/yaz.log"
 [ "${BULGU_RC:-0}" -eq 0 ] || exit "${BULGU_RC}"
 [ -n "${BULGU_YAZMA:-}" ] || printf 'gorev_01ZZZZZZZZZZZZZZZZZZZZZZ  %s  acik  esnek  ozellik  SINAV  %s  (son: 2026-01-02T09:00)\n' "${BULGU_KUTU:-huma}" "$2" >> "$T/liste.txt"
 EOF
-chmod +x "$T/gorev.sh" "$T/bulgu.sh"
+cat > "$T/ben.sh" <<'EOF'
+#!/usr/bin/env bash
+# sahte jeton-kutusu: BEN_RC≠0 ise ölçülemedi, yoksa BEN_KUTU (varsayılan huma) basar
+[ "${BEN_RC:-0}" -eq 0 ] || exit "$BEN_RC"; printf '%s\n' "${BEN_KUTU:-huma}"
+EOF
+chmod +x "$T/gorev.sh" "$T/bulgu.sh" "$T/ben.sh"; export GUNLUK_PLAN_BEN_SH="$T/ben.sh"
 mkdir -p "$T/bin"; cat > "$T/bin/curl" <<'EOF'
 #!/usr/bin/env bash
 # sahte curl: -I çağrısında FAKE_HEAD, aksi halde (GET -r 0-0) FAKE_GET kodunu basar; "000" = ağ yok
@@ -97,6 +102,13 @@ touch -d "2026-01-02 10:00" "$T/proje/ui/lib/x.ts"
 c="$( cd "$T/proje" && bash "$ARAC" --baslik "Kısmi sayı" --kaynak "ui/lib/x.ts:42" --kanit "ölçülen satır 4 numaralı sayaç değeri" --kutu huma --uygula 2>&1 )"; r3=$?
 kapi "T4i sayı satırda tam sayı olarak geçmeli ('4' ≠ '42' içinde geçen 4) → rc 1" 1 "$r3"
 
+echo "── KUTU ≠ JETON (NMAGXX8C): yazmadan ÖNCE ret"
+sifirla; c="$(bash "$ARAC" --baslik "Yanlış kutu" --kaynak "$K" --kanit "$KN" --kutu nexus --uygula 2>&1)"; r1=$?
+kapi "T13 --kutu nexus, jeton huma → rc 2, bulgu.sh HİÇ çağrılmadı, sebep iki kutuyu söyler" "2:0:1" "$r1:$(yaz_say):$(grep -c "'nexus' ama bu jeton 'huma'" <<<"$c")"
+sifirla; c="$(BEN_RC=3 bash "$ARAC" --baslik "Kutu sorulamadı" --kaynak "$K" --kanit "$KN" --kutu huma --uygula 2>&1)"; r2=$?
+kapi "T13b jetonun kutusu sorulamazsa rc 3 (ölçülemedi), yazılmadı — 'aynı kutu' sayılmaz" "3:0:1" "$r2:$(yaz_say):$(grep -c 'jetonun kutusu sorulamadı' <<<"$c")"
+sifirla; bash "$ARAC" --baslik "Kuru yanlış kutu" --kaynak "$K" --kanit "$KN" --kutu nexus >/dev/null 2>&1; r3=$?
+kapi "T13c kuru koşuda da fark rc 2 (yazardım denmez)" 2 "$r3"
 echo "── KOPYA"
 { satir BBBBBBBBBBBBBBBBBBBBBBBB huma acik "Açık duran iş" 2026-01-01T08:00
   satir CCCCCCCCCCCCCCCCCCCCCCCC huma bitti "Bugün biten iş" 2026-01-02T07:30
@@ -140,7 +152,7 @@ echo "── KUTU ADI ve YAZIM KUTUSU"
 sifirla; c="$(bash "$ARAC" --baslik "Kutu seç" --kaynak "$K" --kanit "$KN" --uygula 2>&1)"; rc=$?
 kapi "T11 liste birden çok kutu gösterip --kutu verilmezse TAHMİN YOK: rc 3, yazılmadı" "3:0" "$rc:$(yaz_say)"
 { satir G1 mmex acik "Bir" 2026-01-02T01:00; satir G2 mmex acik "İki" 2026-01-02T01:00; } | liste
-sifirla; c="$(BULGU_KUTU=mmex bash "$ARAC" --baslik "Kutu seç" --kaynak "$K" --kanit "$KN" --uygula 2>&1)"; rc=$?
+sifirla; c="$(BEN_KUTU=mmex BULGU_KUTU=mmex bash "$ARAC" --baslik "Kutu seç" --kaynak "$K" --kanit "$KN" --uygula 2>&1)"; rc=$?
 kapi "T11b liste tek kutu gösteriyorsa o kutu (mmex) sayılır ve kayıt orada doğrulanır" "0:yes" "$rc:$(grep -q 'kutu mmex' <<<"$c" && echo yes || echo no)"
 { satir G1 huma acik "Bir" 2026-01-02T01:00; satir G2 mmex acik "İki" 2026-01-02T01:00; } | liste
 sifirla; c="$(BULGU_KUTU=mmex bash "$ARAC" --baslik "Başka kutuya düşer" --kaynak "$K" --kanit "$KN" --kutu huma --uygula 2>&1)"; rc=$?
