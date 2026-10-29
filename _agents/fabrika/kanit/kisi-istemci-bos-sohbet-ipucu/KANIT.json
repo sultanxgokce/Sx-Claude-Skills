@@ -1,0 +1,44 @@
+{
+  "is": "kisi-istemci-bos-sohbet-ipucu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T17:46:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kirmizi-vaka-sayisi",
+      "asama": "once",
+      "dosya": "olcum-kirmizi-vaka-sayisi-once.txt",
+      "sha256": "9d25439c3aa1f96a44dc8c19c512e01f6aef7ce1a4f32bbc17acc0fa18b3aa13",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kisi-pencere.sh",
+        "eski"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T17:45:29+03:00",
+      "sure_sn": 42.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a66096f194e440cbbb6d6bf6a5f80eb8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kirmizi-vaka-sayisi",
+      "asama": "sonra",
+      "dosya": "olcum-kirmizi-vaka-sayisi-sonra.txt",
+      "sha256": "380e389b034610179910a6561183690cc2be129b17f0bb457eeeae31bfce4bbd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kisi-pencere.sh",
+        "yeni"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T17:46:28+03:00",
+      "sure_sn": 58.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f34ef8459ef44befbe150a66b93efb8b"
+    }
+  ],
+  "imza": "109123cdbea68974ba8ba0487d4690d803b47727e53bf7e878f18653d011eca6"
+}
