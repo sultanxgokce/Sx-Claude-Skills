@@ -1,0 +1,26 @@
+{
+  "is": "mesveret-kayit",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T00:42:31+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "lint-ve-sync",
+      "asama": "tek",
+      "dosya": "olcum-lint-ve-sync-tek.txt",
+      "sha256": "9806160a61ca81d3c6844a6ed8c8ee13e95a0ab4e7dfd36bff3431f1dc4796b0",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs . && node ahi/schema/katalog-surum-hiza.mjs . && node sync-skills.mjs --skill mesveret | tail -2"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:42:31+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7642c2583baa4058b545c503983090a8"
+    }
+  ],
+  "imza": "1a85574b2c8a0ab429563a7dfb091649417097a0fc18d1cb59ebf5f7b8b69524"
+}

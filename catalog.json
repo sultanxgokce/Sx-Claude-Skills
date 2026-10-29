@@ -1867,6 +1867,21 @@
         "global"
       ],
       "family": "kutu-ici koordinasyon"
+    },
+    {
+      "id": "mesveret",
+      "type": "agent",
+      "name": "mesveret — Meşveret Seansı: Sultan'la madde madde bulgu toplama",
+      "version": "0.1.0",
+      "description": "Sultan tek komutla reisle bulgu toplama seansı açar; sabit emojili şablon (A sen anlat · B ben önereyim · C etkileşimli), her maddede Sultan önemi (1-3) sorulur ve D1 olarak işlenir; kayıt Bulgu Havuzu'na (merkezî görev defteri, havuz) düşer; Hasat tazelik denetimi KURU dediğinde önerilir. Kuzey Yıldızı 1.2.",
+      "tags": [
+        "sultan",
+        "bulgu",
+        "havuz",
+        "hasat",
+        "seans",
+        "kuzey-yildizi"
+      ]
     }
   ]
 }
