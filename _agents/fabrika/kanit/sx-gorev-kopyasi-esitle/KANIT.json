@@ -1,0 +1,42 @@
+{
+  "is": "sx-gorev-kopyasi-esitle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T01:55:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gorev-yolu-y7",
+      "asama": "once",
+      "dosya": "olcum-gorev-yolu-y7-once.txt",
+      "sha256": "fa68b749465c6f848fb3eebd517c974ae9963ef4031a3d6ed51d179179674654",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T01:47:54+03:00",
+      "sure_sn": 291.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "05160a46c4304bcea829cd88f67b98a0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-yolu-y7",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-yolu-y7-sonra.txt",
+      "sha256": "de65674daedb26c5f128a867306ca4c0e9e1eb0e9d2eb167fffb682b3f4ffd31",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:55:40+03:00",
+      "sure_sn": 397.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e141dbf868a54da4a08d4a24a623bdd6"
+    }
+  ],
+  "imza": "f51ac57d7bce3c5329e5bb6f87728ba2acec1a870bdac12a8747d3c88660d550"
+}

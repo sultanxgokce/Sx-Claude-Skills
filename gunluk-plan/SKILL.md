@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.17.0
+version: 1.17.1
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -112,6 +112,7 @@ Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sa
 
 > **1.10.1 (27 Eki, görev 0HC75A):** üç betik (`deftere-yaz` · `haftalik` · `tarama-ekle`) görev betiğini tek yerden bulur (`scripts/gorev-yolu.sh`): açık env → cloudtop kanoniği → BU BECERİNİN kendi kopyası (`scripts/gorev.sh` + `dugum-bak.py`) → PATH → `/config/.local/bin`. cloudtop deposunu görmeyen 9 kutuda plan maddeleri deftere yazılamıyordu. Paketlenmiş kopyanın cloudtop kanoniğinden sapmasını `gorev-yolu.test.sh` Y7 yakalar (kanonik her değiştiğinde buraya yeniden kopyalanır).
 > **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
+> **1.17.1 (30 Eki, görev …Y5DY7):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (cloudtop #1184 sonrası) yeniden eşitlendi — oda süzgeci (`liste --oda/--odasiz/--kutu`), `oda`, `oda-dagit` (+`scripts/oda-dagit.py`, Y7 kapısı onu da bayt-eşit ister), `bulgu --puan/--gerekce/--gorsel`, `puan`, `gorsel`, `dogan`. Cloudtop'u görmeyen kutular bu komutları ancak bu sürümle görür.
 
 ## ADIM 0-d — TARAMA: kod tabanı + web + endüstriden ölçülmüş İŞ ekle (1.10.0 · görev 0HC75A (b): "havuza, günde ≤3")
 

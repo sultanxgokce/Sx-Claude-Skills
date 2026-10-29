@@ -5,6 +5,7 @@
 #            (ac ve durum aynı bayrakları alır; tohum'da 6. sütun eylem)
 #   gorev.sh ac "<başlık>" [--kapi dis-kurum|hukuk|ticari|karar] [--sahip sultan|<kutu>] [--ust <gorev_id>] [--durum acik|sira-bende|bekliyor] [--not "<neyi bekliyor>"]
 #   gorev.sh ac "<ne lazım>" --kutu <B> --oda <istenen oda> --isteyen-oda <senin odan> --teslim YYYY-MM-DD --dugum <x>   → SİPARİŞ (Oda modeli 5 D2): üçü birlikte; --oda açıkça yazılır, --isteyen-oda verilmezse koltuğunun odası
+#   BAŞLIKTA SAYI (verim R2 · SERDAR 29 Eki): tek ölçüt biçimi "<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)"; çok parçalı başlık sayılabilir (1)(2) maddelere bölünür ya da [ayri] ile ayrılır; süre/aşama içeren başlık süresi dolmadan bitti yazılmaz; bitti --olcum "sonra" kapanışta canlıdan okunur: sonra=M (kaynak: <komut/ekran>, <gün>)
 #            (--durum bekliyor → --not ZORUNLU: defter neyi beklediği yazılmamış 'bekliyor'u reddeder · G12)
 #   gorev.sh adim <gorev_id> "<ne yapıldı>" [--dugum <kutu>:<gorev_id>]  → adım EKLENİR (silinmez, değişmez; aynı metin ikinci kez eklenmez)
 #   gorev.sh yildiz-oner <gorev_id> [--geri]  → ⭐ ÖNERİR (yıldızı yalnız Sultan koyar, A06) · gorev.sh not-okudum <gorev_id> → Sultan'ın "ajana" notunu okudum damgası
@@ -21,6 +22,12 @@
 #            (bekliyor → gerekçe "neyi bekliyor" sayılır ve `not` alanına da yazılır)
 #            (sira-bende → kayıtta kapı türü yoksa --kapi ZORUNLU: defter kapı türsüz 'sıra sende'yi reddeder · G12 mavisi)
 #   gorev.sh liste                                      → görebildiğin görevler (kendi kutununkiler; gorev_gorur rolüyle hepsi)
+#   gorev.sh bulgu … [--puan 1-10 --gerekce "…"] [--gorsel https://…|/yol]   → 1.50.0 bulgu havuzu alanları (puan yalnız reis jetonu; Sultan önemi yalnız ekran)
+#   gorev.sh puan <gorev_id> <1-10> "<gerekçe>"            → reis puanı tashihi (reis/insan) · gorev.sh gorsel <id> <adres> · gorev.sh dogan <bulgu_id> <gorev_id> (doğan görev bağı, çoğul)
+#   gorev.sh liste [--oda <oda>|--odasiz] [--kutu <kutu>]  → ODA SÜZGECİ (Kuzey Yıldızı 3.6): sütun sırası AYNI (5 betik split(None,6) okur); oda satır SONUNA '  oda: <ad>' olarak eklenir
+#   gorev.sh oda <gorev_id> <oda>                         → ODA ATAMA: odasız göreve oda yazar (düz PATCH); aynı oda → 'zaten'; FARKLI oda varsa REDDEDER
+#                                                           (oda defterde tashih alanı değil — değişim çatışma açardı; ayrı dilim)
+#   gorev.sh oda-dagit [--kutu <kutu>] [--uygula --beklenen N --geri-al <dosya>]  → ODASIZ görevleri ATANAN koltuğun ekip-kaydı odasına eşler; KURU varsayılan
 #   gorev.sh sira --oda <oda> [--kutu <kutu>]            → ODA SİPARİŞ SIRASI (Oda 5 D3a · defter 1.39.0): açık siparişler + Sultan'ın o odadaki işleri, tek sıra
 #            anahtarıyla (☀ Sultan sınıfı → Sultan'ın aciliyeti → istem sırası); teslim sırayı değiştirmez, geçmişse ⏰ geç. Kutu verilmezse senin kutun.
 #   gorev.sh catisma <y1> <y2> "<neden ikisi birden yetişmez ≥10>"  → ÇATIŞMA BEYANI (Oda 5 D3b · defter 1.40.0 · sözleşme §3.2): aynı odada iki açık sipariş,
@@ -142,7 +149,8 @@ case "${1:-}" in
       [ -n "$ISTEYEN" ] || { echo "sipariş isteyen odayı ister: --isteyen-oda <senin odan> (koltuğunun odası ekip kaydında bulunamadı)" >&2; exit 2; }
     fi
     DUGUM="$(_dugum_coz "$DUGUM")" || exit 1
-    [ -n "$B" ] || { echo "kullanım: gorev.sh ac \"<başlık>\" [--kapi …] [--sahip …] [--ust …] [--durum …] [--not …] [--kaynak sultan|ajan]" >&2; exit 2; }
+    [ -n "$B" ] || { echo "kullanım: gorev.sh ac \"<başlık>\" [--kapi …] [--sahip …] [--ust …] [--durum …] [--not …] [--kaynak sultan|ajan]
+başlıkta sayı varsa tek ölçüt: <ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)" >&2; exit 2; }
     G="$(python3 -c 'import sys,json; d={"tur":"gorev","adlar":[sys.argv[1]],"kapi":sys.argv[2],"sahip":sys.argv[3],"gorev_durumu":sys.argv[5]}
 if sys.argv[4]: d["ust_gorev_id"]=sys.argv[4]
 if sys.argv[6].strip(): d["not"]=sys.argv[6].strip()
@@ -164,7 +172,8 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KAPI" "$SAHIP" "$UST" "$DURUM" "
       --kaynak-sinif) KSINIF="${2:-}"; shift 2;; --kaynak-rapor) KRAPOR="${2:-}"; shift 2;; --dugum) DUGUM="${2:-}"; shift 2;; --ozet) OZET="${2:-}"; shift 2;; --oda) [ -n "${2:-}" ] || { echo "--oda değer ister (oda adı, ör. agentic-os)" >&2; exit 2; }; ODA="$2"; shift 2;;
       *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
     DUGUM="$(_dugum_coz "$DUGUM")" || exit 1
-    [ -n "$B" ] && [ -n "$KUTU" ] || { echo "kullanım: gorev.sh ekle \"<başlık>\" --kutu <kutu> [--etiket …] [--aciliyet …] [--atanan …] [--kaynak-kim …] [--kaynak-nereden …] [--eski-no …]" >&2; exit 2; }
+    [ -n "$B" ] && [ -n "$KUTU" ] || { echo "kullanım: gorev.sh ekle \"<başlık>\" --kutu <kutu> [--etiket …] [--aciliyet …] [--atanan …] [--kaynak-kim …] [--kaynak-nereden …] [--eski-no …]
+başlıkta sayı varsa tek ölçüt: <ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)" >&2; exit 2; }
     # KAYNAK SINIFI (defter 1.27.0 · gorev_01M5FBXAM080SEVNNFPJP21Q93): ekle komutu sınıfı AÇIKÇA yazar ama kuralı istemcide KOPYALAMAZ —
     #   sunucuya sorar (GET /kaynak-sinif; tek kural: gecit.mjs kaynakSinifTuret = kaynak-goc.py sinif()). --kaynak-nereden verilmediyse
     #   nereden "ekle komutu"dur (bulgu komutu emsali — bu komutu bir ajan koşar) → sınıf ajan; --kaynak-kim Sultan → sultan; nereden
@@ -275,7 +284,7 @@ print(",".join(sorted({n for a in ad for n in re.findall(r"\((\d{1,2})\)",a)}, k
     # BAŞLIK BAYAT UYARISI (tarama kaydı …E466J · SERDAR 27 Eki: bugün 3 kabul 'başlıktaki sayı ⟷ --olcum' uyuşmazlığından KALDI):
     #   --olcum verilmişse görev başlığındaki sayılar ölçümdeki sayılarla kıyaslanır; ölçümde karşılığı olmayan başlık sayısı varsa
     #   uyarı basılır ve ayrı bir adım olarak kayda düşer. ENGELLEMEZ (rc/PATCH değişmez); başlık okunamazsa sessiz geçer, "temiz" demez.
-    BAYAT=""
+    BAYAT=""; KAYNAK_UY=""
     if [ -n "$OLCUM" ]; then
       BAYAT="$(_cagir GET "/kayit/$ID" 2>/dev/null | python3 -c '
 import sys,json,re
@@ -292,28 +301,55 @@ ov={float(x) for x in os_}   # 30 ⟷ 30.0 ⟷ 30,0 aynı değer (göz tur 1 bul
 yok=[x for x in bs if float(x) not in ov]
 if yok: print("başlık bayat: başlıkta %s, ölçümde %s" % (",".join(dict.fromkeys(yok)), ",".join(dict.fromkeys(sorted(os_,key=float))) or "yok"))' "$OLCUM")"
       [ -z "$BAYAT" ] || echo "⚠ $BAYAT — başlığı güncelle ya da başlığın sayısını ölçümle açıkla (kapatmayı engellemez)" >&2
+      # KAYNAK+GÜN UYARISI (verim R2 · SERDAR kararı 29 Eki, uyarı red değil): 'sonra' kapanışta CANLIDAN okunur; ölçümde kaynağı ve günü
+      #   yoksa 15 'kaldı'nın 8'indeki gibi eski ölçümden kopyalanmış olabilir. İstenen yazım: "sonra=M (kaynak: <komut/ekran>, <gün>)".
+      AYR='(Oca|Şub|Mar|Nis|May|Haz|Tem|Ağu|Eyl|Eki|Kas|Ara)'
+      printf '%s' "$OLCUM" | grep -qiE "sonra *= *-?[0-9]+([.,][0-9]+)? *\( *kaynak *: *[^,)]*[^,)[:space:]][^,)]*, *([0-9]{1,2} $AYR|20[0-9]{2}-[0-9]{2}-[0-9]{2})[^)]*\)" \
+        || { KAYNAK_UY="ölçümde 'sonra' için dolu kaynak ve gün yok: sonra kapanışta canlıdan okunmalı — önce=N sonra=M (kaynak: <komut/ekran>, <gün>)"; echo "⚠ $KAYNAK_UY (kapatmayı engellemez)" >&2; }
     fi
     # ✓ bitti İNSANIN tikidir (K3/A06): kutu 'onay-bekliyor' + kanıt adımını TEK istekte yazar; Sultan ekranı ✓ verir.
-    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"gorev_durumu":"onay-bekliyor","kanit":sys.argv[2]},"gerekce":"%s bitirdi; Sultan onayı bekler" % sys.argv[1],"adimlar":["[bitirdi] %s · kanıt: %s" % (sys.argv[1], sys.argv[2])]+(["[uyarı] "+sys.argv[3]] if sys.argv[3] else [])},ensure_ascii=False))' "$KIM" "$SINIF" "$BAYAT")"
+    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"gorev_durumu":"onay-bekliyor","kanit":sys.argv[2]},"gerekce":"%s bitirdi; Sultan onayı bekler" % sys.argv[1],"adimlar":["[bitirdi] %s · kanıt: %s" % (sys.argv[1], sys.argv[2])]+(["[uyarı] "+sys.argv[3]] if sys.argv[3] else [])},ensure_ascii=False))' "$KIM" "$SINIF" "$BAYAT${KAYNAK_UY:+${BAYAT:+ · }$KAYNAK_UY}")"
     _cagir PATCH "/kayit/$ID" "$G" | _sonuc 200 '"👀 onay bekliyor · %s — ✓ bitti yalnız Sultan ekranından" % j["kayit"]["id"]' ;;
   bulgu)
     # K1 (Sultan 14 Eki): bulgu = türü bug/özellik olan GÖREV. İmza bulgu.sh yaz ile BİREBİR (başlık · --kim · --not) + isteğe bağlı --etiket;
     # kutu = jetonun kutusu (beyan edilemez), kaynak_nereden = "bulgu komutu". Sx'teki bulgu.sh bu fiile ince köprü olur.
-    shift; B="${1:-}"; shift || true; KIM=""; NOTU=""; ETIKET="bug"; ODA=""
-    while [ $# -gt 0 ]; do case "$1" in --oda) [ -n "${2:-}" ] || { echo "--oda değer ister (oda adı, ör. agentic-os)" >&2; exit 2; }; ODA="$2"; shift 2;; --kim) KIM="${2:-}"; shift 2;; --not) NOTU="${2:-}"; shift 2;; --etiket) ETIKET="${2:-}"; shift 2;; *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
+    shift; B="${1:-}"; shift || true; KIM=""; NOTU=""; ETIKET="bug"; ODA=""; PUAN=""; GEREKCE=""; GORSEL=""
+    # 1.50.0 (bulgu havuzu alanları · …G4SVH): --puan 1-10 --gerekce "…" (yalnız reis jetonu; gerekçesiz puan defterde 400) · --gorsel https://…|/yol. Sultan önemi buradan YAZILMAZ (A06, yalnız ekran).
+    while [ $# -gt 0 ]; do case "$1" in --oda) [ -n "${2:-}" ] || { echo "--oda değer ister (oda adı, ör. agentic-os)" >&2; exit 2; }; ODA="$2"; shift 2;;
+      --puan) [ -n "${2:-}" ] || { echo "--puan değer ister (1-10)" >&2; exit 2; }; PUAN="$2"; shift 2;; --gerekce) [ -n "${2:-}" ] || { echo "--gerekce değer ister" >&2; exit 2; }; GEREKCE="$2"; shift 2;;
+      --gorsel) [ -n "${2:-}" ] || { echo "--gorsel değer ister (https://… ya da /yol)" >&2; exit 2; }; GORSEL="$2"; shift 2;; --kim) KIM="${2:-}"; shift 2;; --not) NOTU="${2:-}"; shift 2;; --etiket) ETIKET="${2:-}"; shift 2;; *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
     [ -n "$B" ] && [ -n "$KIM" ] || { echo "kullanım: gorev.sh bulgu \"<tek cümle başlık>\" --kim <AJAN> [--not \"<kanıt>\"] [--etiket bug|ozellik]" >&2; exit 2; }
     # 1.27.0: havuz AÇIKÇA (Sultan D1 21 Eki: bulgu Sırada listesine düşmez — imzaya bel bağlanmaz) · sınıf SUNUCUDAN sorulur ve açıkça yazılır
     #   (kural tek yerde; kim Sultan → sultan, ajan adı → ajan); uç cevap vermezse (eski defter) sınıf gönderilmez ve söylenir.
     KSINIF="$(_sinif_sor "$KIM" "bulgu komutu")"
     [ -n "$KSINIF" ] || echo "not: kaynak sınıfı sunucudan alınamadı (eski defter?) — sınıfsız gönderildi; defter 1.27.0 kendi türetir" >&2
+    [ -n "$PUAN" ] && [ -z "$GEREKCE" ] && { echo "--puan gerekçesiz yazılmaz: --gerekce \"<tek cümle>\" ekle" >&2; exit 2; }
     G="$(python3 -c 'import sys,json
-b,kim,notu,et,ks,od=sys.argv[1:7]
+b,kim,notu,et,ks,od,pu,ge,go=sys.argv[1:10]
 d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","gorev_durumu":"havuz"}   # kutu: sunucu jetondan türetir
 if ks: d["kaynak_sinif"]=ks
 if od: d["oda"]=od
+if pu: d["reis_puan"]=pu; d["reis_puan_gerekce"]=ge
+if go: d["gorsel"]=go
 if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
-print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF" "$(_oda_coz "$ODA")")"
+print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF" "$(_oda_coz "$ODA")" "$PUAN" "$GEREKCE" "$GORSEL")"
     _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s — %s (açan: %s)" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu") or j["kayit"].get("ekleyen_kutu"), j["kayit"]["canli"].get("etiket"), j["kayit"]["adlar"][0]["deger"], j["kayit"]["canli"].get("kaynak_kim"))' ;;
+  puan)
+    # 1.50.0: reisin puanı (1-10) + tek cümle gerekçe — TASHİH (eski puan damgasıyla kalır); yalnız reis jetonu/insan (defter 403 reis_alani)
+    [ $# -ge 4 ] && [ -n "${4:-}" ] || { echo "kullanım: gorev.sh puan <gorev_id> <1-10> \"<gerekçe ≥5>\"" >&2; exit 2; }
+    printf '%s' "$3" | grep -Eq '^([1-9]|10)$' || { echo "puan 1-10 arası rakam olmalı" >&2; exit 2; }
+    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"reis_puan":sys.argv[1],"reis_puan_gerekce":sys.argv[2]},"gerekce":"reis puanı: "+sys.argv[2]},ensure_ascii=False))' "$3" "$4")"
+    _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"reis puanı: %s/10 — %s" % (j["kayit"]["canli"].get("reis_puan"), j["kayit"]["canli"].get("reis_puan_gerekce"))' ;;
+  gorsel)
+    # 1.50.0: işaretli görüntünün adresi (https://… ya da kök yol) — tashih; biçim kapısı defterde
+    [ $# -ge 3 ] && [ -n "${3:-}" ] || { echo "kullanım: gorev.sh gorsel <gorev_id> <https://…|/yol>" >&2; exit 2; }
+    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"gorsel":sys.argv[1]},"gerekce":"görsel bağlandı: "+sys.argv[1]},ensure_ascii=False))' "$3")"
+    _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"görsel: %s" % j["kayit"]["canli"].get("gorsel")' ;;
+  dogan)
+    # 1.50.0: bulgudan DOĞAN görev bağı — çoğul, eklenir (silinmez); doğan görev var olmalı (defter 404 dogan_gorev_yok). Ekranda rozet + açılır kart (dilim 3).
+    [ $# -ge 3 ] && [ -n "${3:-}" ] || { echo "kullanım: gorev.sh dogan <bulgu_id> <dogan_gorev_id>" >&2; exit 2; }
+    G="$(python3 -c 'import sys,json; print(json.dumps({"dogan_gorevler":[sys.argv[1]],"adimlar":["[doğan görev] "+sys.argv[1]]},ensure_ascii=False))' "$3")"
+    _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"doğan görevler: %s" % ", ".join(x["deger"] for x in j["kayit"].get("dogan_gorevler",[]))' ;;
   adim)
     [ $# -ge 3 ] && [ -n "$(printf '%s' "$3" | tr -d '[:space:]')" ] || { echo "kullanım: gorev.sh adim <gorev_id> \"<ne yapıldı>\" [--dugum <kutu>:<gorev_id>] — boş adım yazılmaz" >&2; exit 2; }
     DUGUM=""; if [ "${4:-}" = "--dugum" ]; then DUGUM="${5:-}"; [ -n "$DUGUM" ] || { echo "--dugum değer ister: <kutu>:gorev_<kimlik>" >&2; exit 2; }; DUGUM="$(_dugum_coz "$DUGUM")" || exit 1; elif [ -n "${4:-}" ]; then echo "bilinmeyen: $4" >&2; exit 2; fi
@@ -350,7 +386,29 @@ if len(t)!=2 or t[1]!="200": print("ÖLÇÜLEMEDİ defter http=%s" % (t[1] if le
 open(sys.argv[2],"w",encoding="utf-8").write(t[0])' "$DG.ham" "$DG"; r=$?; rm -f "$DG.ham"; [ $r = 0 ] || exit 3
     python3 "$(dirname "${BASH_SOURCE[0]}")/dugum-bak.py" "$DG" "$2" "${DUGUM_BAK_SIMDI:-}"; exit $? ;;
   liste)
-    _cagir GET /gorevler | _sonuc 200 '"\n".join("%s  %-10s %-14s %-9s %-8s %-10s %s  (son: %s)" % (g["id"], g["canli"].get("kutu") or g.get("ekleyen_kutu",""), g["canli"].get("gorev_durumu",""), g["canli"].get("aciliyet","-"), g["canli"].get("etiket","-"), g["canli"].get("atanan","-"), g["adlar"][0]["deger"], g.get("son_adim","")[:16]) for g in j["gorevler"]) or "görev yok"' ;;
+    shift; LODA=""; LKUTU=""; LODASIZ=0
+    while [ $# -gt 0 ]; do case "$1" in
+      --oda) [ -n "${2:-}" ] || { echo "--oda değer ister (oda adı)" >&2; exit 2; }; LODA="$2"; shift 2;;
+      --kutu) [ -n "${2:-}" ] || { echo "--kutu değer ister" >&2; exit 2; }; LKUTU="$2"; shift 2;;
+      --odasiz) LODASIZ=1; shift;;
+      *) echo "bilinmeyen: $1 (kullanım: gorev.sh liste [--oda <oda>|--odasiz] [--kutu <kutu>])" >&2; exit 2;; esac; done
+    [ -n "$LODA" ] && [ "$LODASIZ" = 1 ] && { echo "--oda ile --odasiz birlikte olmaz" >&2; exit 2; }
+    # süzgeç istemcide (tek defter, oda süzgeci — Kuzey Yıldızı 3.6). Sütun sırası değişmez (kutu-bul/sirada-bak/deftere-yaz/haftalik/tarama-ekle split(None,6) ile okur); oda satır sonuna eklenir. Boş sonuç 'görev yok'
+    export GL_ODA="$LODA" GL_KUTU="$LKUTU" GL_ODASIZ="$LODASIZ"   # boru: önek ataması yalnız ilk komuta geçer, süzgeç _sonuc'ta koşar → export
+    _cagir GET /gorevler | _sonuc 200 '"\n".join("%s  %-10s %-14s %-9s %-8s %-10s %s  (son: %s)%s" % (g["id"], g["canli"].get("kutu") or g.get("ekleyen_kutu",""), g["canli"].get("gorev_durumu",""), g["canli"].get("aciliyet","-"), g["canli"].get("etiket","-"), g["canli"].get("atanan","-"), g["adlar"][-1]["deger"], g.get("son_adim","")[:16], ("  oda: %s" % g["canli"]["oda"]) if isinstance(g["canli"].get("oda"),str) and g["canli"]["oda"] else "") for g in j["gorevler"] if (not __import__("os").environ.get("GL_KUTU") or (g["canli"].get("kutu") or g.get("ekleyen_kutu",""))==__import__("os").environ["GL_KUTU"]) and (not __import__("os").environ.get("GL_ODA") or g["canli"].get("oda")==__import__("os").environ["GL_ODA"]) and (__import__("os").environ.get("GL_ODASIZ")!="1" or not g["canli"].get("oda"))) or "görev yok"' ;;
+  oda)
+    [ $# -ge 3 ] && [ -n "${3:-}" ] || { echo "kullanım: gorev.sh oda <gorev_id> <oda>" >&2; exit 2; }
+    printf '%s' "$3" | grep -Eq '^[a-z][a-z0-9-]{1,30}$' || { echo "oda adı küçük harf/rakam/tire (2-31), ör. agentic-os" >&2; exit 2; }
+    # mevcut odayı oku: odasız → düz PATCH (ilk canlı değer, çatışma yok) · aynı → zaten · farklı → RED (oda tashih listesinde değil; düz PATCH ikinci canlı değer = çatışma açardı)
+    MEV="$(_cagir GET "/kayit/$2" | _sonuc 200 'json.dumps(j["kayit"]["canli"].get("oda"))')" || { echo "$MEV"; exit 1; }
+    case "$MEV" in
+      "\"$3\"") echo "zaten $3 odasında · değişiklik yok"; exit 0;;
+      null|'""') ;;
+      *) echo "KIRMIZI görev zaten başka odada: $MEV → oda değişimi bu komutla yapılmaz (defterde oda tashih alanı değil; ikinci değer çatışma açar). Önce o odanın reisiyle uzlaş, sonra ayrı dilim." >&2; exit 1;;
+    esac
+    _cagir PATCH "/kayit/$2" "$(python3 -c 'import sys,json; print(json.dumps({"oda":sys.argv[1]}))' "$3")" | _sonuc 200 '"oda yazıldı: %s/%s · durum: %s" % (j["kayit"]["canli"].get("kutu") or j["kayit"].get("ekleyen_kutu",""), j["kayit"]["canli"].get("oda"), j["kayit"]["canli"].get("gorev_durumu","acik"))' ;;
+  oda-dagit)
+    shift; DEFTER_UC="$UC" DEFTER_JETON_YOL="$JY" python3 "$(dirname "${BASH_SOURCE[0]}")/oda-dagit.py" "$@" ;;
   sira)
     shift; ODA=""; KQ=""
     while [ $# -gt 0 ]; do case "$1" in --oda|--kutu) [ $# -ge 2 ] && [ -n "$2" ] || { echo "$1 bir değer ister" >&2; exit 2; }; [ "$1" = --oda ] && ODA="$2" || KQ="$2"; shift 2;; *) echo "bilinmeyen: $1 (sira --oda <oda> [--kutu <kutu>])" >&2; exit 2;; esac; done

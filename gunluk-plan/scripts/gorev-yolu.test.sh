@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # gorev-yolu.test.sh — günlük planın görev betiğini bulma sırası + paketlenmiş kopyanın bütünlüğü (0HC75A: 9 kutuda betik yoktu).
 # Y1 açık env KESİN · Y2 olmayan env yoluna sessizce düşmez · Y3 kanonik varsa o · Y4 kanonik yoksa becerinin kendi kopyası (PATH'teki eskiden ÖNCE)
-# Y5 hiçbiri yoksa rc 3 · Y6 paketlenmiş kopya sözdizimi geçerli ve dugum-bak.py yanında · Y7 cloudtop kanoniği varsa bayt eşit (drift)
+# Y5 hiçbiri yoksa rc 3 · Y6 paketlenmiş kopya sözdizimi geçerli ve dugum-bak.py yanında · Y7 cloudtop kanoniği varsa bayt eşit (gorev.sh · dugum-bak.py · oda-dagit.py, drift)
 # Mutantlar: sıra bozulursa Y4 kırmızı.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="${YOL_BETIK:-$HERE/gorev-yolu.sh}"
@@ -20,7 +20,7 @@ env0 GUNLUK_PLAN_CLOUDTOP_GOREV=/yok/kanonik PATH="/usr/bin:/bin" bash "$T/bos/g
 bash -n "$HERE/gorev.sh" 2>/dev/null; a=$?; ok "Y6 paketlenmiş gorev.sh sözdizimi geçerli ve dugum-bak.py yanında" "$([ "$a" -eq 0 ] && [ -f "$HERE/dugum-bak.py" ] && echo 0 || echo 1)"
 KAN=/config/projects/cloudtop/infra/defter-gecit/gorev
 if [ -f "$KAN/gorev.sh" ]; then
-  cmp -s "$KAN/gorev.sh" "$HERE/gorev.sh" && cmp -s "$KAN/dugum-bak.py" "$HERE/dugum-bak.py"; ok "Y7 paketlenmiş kopya cloudtop kanoniğiyle bayt eşit (drift yok; sapmışsa kanoniği buraya yeniden kopyala)" "$?"
+  cmp -s "$KAN/gorev.sh" "$HERE/gorev.sh" && cmp -s "$KAN/dugum-bak.py" "$HERE/dugum-bak.py" && cmp -s "$KAN/oda-dagit.py" "$HERE/oda-dagit.py" && [ -x "$HERE/oda-dagit.py" ]; ok "Y7 paketlenmiş kopya cloudtop kanoniğiyle bayt eşit (gorev.sh · dugum-bak.py · oda-dagit.py +x; sapmışsa kanoniği buraya yeniden kopyala)" "$?"
 else echo "  · Y7 atlandı: cloudtop kanoniği bu kutuda yok (eşitlik ölçülemedi)"; fi
 if [ -z "${YOL_BETIK:-}" ]; then
   echo "── mutasyon"
