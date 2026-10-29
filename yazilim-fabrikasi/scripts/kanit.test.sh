@@ -377,6 +377,7 @@ bash "$K" olcum is-boru dongupf --asama tek -- bash -c 'set -o pipefail; for i i
 _alan dongupf "temiz"; g $? "T20z8b … ve boru_denetimi=temiz"
 bash "$K" olcum is-boru kosul --asama tek -- bash -c 'if false | grep -q x; then echo var; fi; exit 0' >/dev/null 2>&1; _alan kosul "temiz"; g $? "T20z9 'if X | grep -q …' KOŞUL borusu denetlenmez: temiz (boru oradaki testtir)"
 bash "$K" olcum is-boru kosulve --asama tek -- bash -c 'if false | grep -q x && true; then echo var; fi; exit 0' >/dev/null 2>&1; _alan kosulve "temiz"; g $? "T20z9b koşul içinde '&&' ile bağlı boru da KOŞULDUR: temiz (KOŞUL kümesi bunu korur)"
+bash "$K" olcum is-boru dosetkapat --asama tek -- bash -c 'set -o pipefail; for i in 1; do set +o pipefail; false | tail -1 || exit 1; done' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z12 blok başındaki 'do set +o pipefail' de sayılır (göz tur 1): dışarıda açık pipefail döngüde kapatılmış, boru reddedildi"
 bash "$K" olcum is-boru veand --asama tek -- bash -c 'false | grep -q x && echo var; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z10 ortadaki 'X | grep -q … && …' (rc'yi && tüketir, pipefail yok) reddedildi"
 bash "$K" olcum is-boru ortaboru --asama tek -- bash -c 'ls / | head -1; false; exit $?' >/dev/null 2>&1; _alan ortaboru "temiz"; g $? "T20z11 rc'si tüketilmeyen ortadaki boru ('ls | head; false') maske değil: temiz"
 echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
@@ -403,6 +404,8 @@ _mut 'if ic and ic[0] not in KOSUL and tuketen:' 'if False:'
 _mutkos m13 'for i in 1; do false | tail -1 || exit 1; done'; [ $? -eq 0 ]; g $? "T21m mutant (blok içi boru kuralı yok — QY2D öncesi hâl) döngüdeki maskeyi kabul ediyor → T20z6 bu mutantta düşerdi"
 _mut 'if ic and ic[0] not in KOSUL and tuketen:' 'if ic and tuketen:'
 _mutkos m14 'if false | grep -q x && true; then echo var; fi; exit 0'; [ $? -eq 1 ]; g $? "T21n mutant (koşul borusu da reddediliyor) 'if X | grep -q && …' koşulunu reddeder → T20z9b bu mutantta düşerdi"
+_mut 'if ic and ic[0] == "set":' 'if bolum and bolum[0] == "set":'
+_mutkos m16 'set -o pipefail; for i in 1; do set +o pipefail; false | tail -1 || exit 1; done'; [ $? -eq 0 ]; g $? "T21p mutant (set yalnız bölüm başında aranıyor — tur 1 hâli) 'do set +o pipefail' kapatmasını kaçırır → T20z12 bu mutantta düşerdi"
 _mut 'tuketen = t if t in ("||", "&&") else (sonraki if sonraki in BLOK_SON else None)' 'tuketen = t if t in ("||", "&&") else None'
 _mutkos m15 'for i in 1; do false | tail -1; done'; [ $? -eq 0 ]; g $? "T21o mutant (blok sonu rc'yi tüketmez sayılıyor) 'do X | tail; done' kabul → T20z7 bu mutantta düşerdi"
 _mut 'if t == "--" or not (t.startswith("-") or t.startswith("+")):' 'if t == "--":'

@@ -1,7 +1,7 @@
 {
   "is": "kanit-boru-dongu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T06:45:12+03:00",
+  "guncelleme": "2026-10-29T06:51:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -55,7 +55,24 @@
       "sure_sn": 33.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "ba74f15309c942a49934903f50ec1b3a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur2",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tur2-tek.txt",
+      "sha256": "607502b1e72e0bd6c5cc694bdaefa3b7c3605b695ea477824d6f3fc3403abc24",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:51:00+03:00",
+      "sure_sn": 33.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f12173be01dc4e8a99c760ee254fe15c"
     }
   ],
-  "imza": "54894f85b8862906fd2c10d55527c5291e0cc2f1217b7fa0269580e5d5c77c94"
+  "imza": "02b10d889fe88f39bd8c7b3b117fbe353dc332000037420edf259849fda914ec"
 }

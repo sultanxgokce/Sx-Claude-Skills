@@ -324,13 +324,13 @@ def boru_denetimi(komut):
     bolum = []
     for k, t in enumerate(govde + [";"]):
         if t in AYIRAC:
-            if bolum and bolum[0] == "set":
-                pipefail = _pipefail_etkisi(bolum[1:], pipefail)
+            ic = list(bolum)               # bölüm başındaki blok anahtarları soyulur: `do set +o pipefail` de bir set'tir (göz tur 1)
+            while ic and ic[0] in BLOK_BAS:
+                ic = ic[1:]
+            if ic and ic[0] == "set":
+                pipefail = _pipefail_etkisi(ic[1:], pipefail)
             # (d) blok içi boru: rc'si `||`/`&&` ile ya da blok sonunda tüketiliyor, pipefail kapalı → süzgecin rc'si ölçülen işin yerine geçer
-            if "|" in bolum and not pipefail:
-                ic = list(bolum)
-                while ic and ic[0] in BLOK_BAS:
-                    ic = ic[1:]
+            if "|" in ic and not pipefail:
                 sonraki = next((x for x in jet[k + 1:] if x not in AYIRAC), None)   # son bölüm (`done`) govde dışında: jet taranır
                 tuketen = t if t in ("||", "&&") else (sonraki if sonraki in BLOK_SON else None)
                 if ic and ic[0] not in KOSUL and tuketen:
