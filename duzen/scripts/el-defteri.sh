@@ -15,6 +15,7 @@
 # rc: 0 basıldı · 2 kullanım hatası · 3 el defteri yok (NOTES.md bulunamadı)
 # Çıktı tavanı ~40 satır: notlar N + ÇIPA 1 + KONUM 1 + açık iş ≤8 + başlıklar.
 set -uo pipefail
+export LC_ALL=C.UTF-8   # Türkçe karakterli ad/desen: C yerelinde sed y// ve grep -w bozulur (CI/kutu yerelinden bağımsız)
 
 AJAN="${AGENT_NAME:-}"; N=25; DEPO=""
 while [ $# -gt 0 ]; do
@@ -58,7 +59,7 @@ if [ -z "$GOREV" ]; then
   done
 fi
 if [ -n "$GOREV" ] && [ -f "$GOREV" ]; then
-  ISLER="$(bash "$GOREV" liste 2>/dev/null | grep -F -- "$AJAN" | grep -Ev '\b(iptal|bitti)\b' | head -8 | cut -c1-200)"
+  ISLER="$(bash "$GOREV" liste 2>/dev/null | grep -wF -- "$AJAN" | grep -Ev '\b(iptal|bitti)\b' | head -8 | cut -c1-200)"
   if [ -n "$ISLER" ]; then printf '%s\n' "$ISLER"; else echo "(defterde $AJAN adına açık iş yok)"; fi
 else
   echo "(açık işler ölçülemedi: gorev.sh bulunamadı)"

@@ -5,6 +5,7 @@
 # S6 hash gövdeyle tutmuyor → EL-DEĞMİŞ rc 1 · S7 ne kurulu ne işaretli kimlik → rc 3 ÖLÇÜLEMEDİ · S8 --uygula yok rc 2 (yazma yolu yok)
 # S9 hiçbir dosyaya yazmaz (sahte depo md5'leri değişmez) · mutant: BAYAT'ı GÜNCEL sayan kopya S5 kırmızı
 set -uo pipefail
+export LC_ALL=C.UTF-8   # Türkçe karakterli ad/desen: C yerelinde sed y// ve grep -w bozulur (CI/kutu yerelinden bağımsız)
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="${SURUM_BETIK:-$HERE/surum.sh}"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null; find "$HERE" -maxdepth 1 -name ".mutant-surum-$$-*" -delete 2>/dev/null' EXIT
 G=0; K=0

@@ -1,0 +1,10 @@
+$ bash duzen/scripts/append-note-paritesi.test.sh
+# rc=0 sure=0.3s zaman=2026-10-30T00:09:18+03:00
+--- stdout ---
+  ✓ P1 paketlenmiş append-note.sh var ve sözdizimi geçerli
+  ✓ P2 ajan defterine ÇIPA başlığı + saat damgası yazar
+  ✓ P3 var olmayan dosyayı AÇMAZ (rc 1)
+  ✓ P4a paket kopyası çivili md5 ile EŞİT (587441c0508bb91fd2a90e0db4668c3e)
+  · P4b atlandı: Nexus kanoniği bu kutuda yok — canlı eşitlik ölçülemedi, çivili eşitlik (P4a) ölçüldü
+== 4 geçti · 0 düştü ==
+--- stderr ---

@@ -1,12 +1,12 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/lint-kapilari.sh
-# rc=0 sure=0.8s zaman=2026-10-30T00:02:01+03:00
+# rc=0 sure=1.3s zaman=2026-10-30T00:09:29+03:00
 --- stdout ---
 ✓ repo-parity temiz (catalog 83 ↔ sync-targets 73)
 ✓ install-listesi 73 skill: SKILL.md + version tam
 katalog↔SKILL.md: girdi 83 · sapma 0 · ölçülemedi 0
 ✓ sapma 0
 ✓ sync-skills.mjs sözdizimi
-  kaynak: duzen-paketi-v1@49ba81cc · origin/main'e göre 0 commit geride · 4 kirli dosya
+  kaynak: duzen-paketi-v1@debc6495 · origin/main'e göre 0 commit geride · 8 kirli dosya
 
   sync-skills — CHECK (dry-run)
 

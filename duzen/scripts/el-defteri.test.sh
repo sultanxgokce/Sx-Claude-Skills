@@ -4,6 +4,7 @@
 # E4 --n son N satır · E5 açık işler: koltuğun satırları gelir, iptal/bitti elenir · E6 gorev.sh yoksa "ölçülemedi", rc 0
 # E7 çıktı tavanı (≤45 satır) · mutant: defter-yok rc 3 → 0 olursa E1 kırmızı
 set -uo pipefail
+export LC_ALL=C.UTF-8   # Türkçe karakterli ad/desen: C yerelinde sed y// ve grep -w bozulur (CI/kutu yerelinden bağımsız)
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="${EL_BETIK:-$HERE/el-defteri.sh}"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null; find "$HERE" -maxdepth 1 -name ".mutant-el-$$-*" -delete 2>/dev/null' EXIT
 G=0; K=0
@@ -32,6 +33,7 @@ printf 'gorev_2  code  iptal  -  -  BÂNİ   iptal iş\n'
 printf 'gorev_3  code  bitti  -  -  BÂNİ   biten iş\n'
 printf 'gorev_4  code  acik   -  -  SERDAR başkasının işi\n'
 printf 'gorev_5  code  calisiliyor - - BÂNİ   iş beş\n'
+printf 'gorev_6  code  acik   -  -  BÂNİCİK alt dize tuzağı\n'
 EOF
 chmod +x "$T/bin/gorev.sh"
 kos() { DUZEN_SIMDI=$SIMDI DUZEN_GOREV_SH="$T/bin/gorev.sh" bash "$R" --depo "$T/depo" "$@"; }
@@ -43,7 +45,7 @@ KB="$(sed -n '/^## Son KONUM/,/^## Son [0-9]/p' <<<"$O")"
 ok "E3 son KONUM bölümünde en yeni KONUM var, eskisi yok" "$(grep -q 'KONUM 29 Eki: iş duzen' <<<"$KB" && ! grep -q 'KONUM eski' <<<"$KB" && echo 0 || echo 1)"
 O3="$(kos --ajan BÂNİ --n 2)"
 ok "E4 --n 2 son iki satır (not c, not d) gelir; not a gelmez" "$(grep -q 'not c' <<<"$O3" && grep -q 'not d' <<<"$O3" && ! grep -q 'not a' <<<"$O3" && echo 0 || echo 1)"
-ok "E5 açık işler: BÂNİ'nin acik+calisiliyor satırları; iptal/bitti ve SERDAR yok" "$(grep -q 'iş bir' <<<"$O" && grep -q 'iş beş' <<<"$O" && ! grep -q 'iptal iş' <<<"$O" && ! grep -q 'biten iş' <<<"$O" && ! grep -q 'başkasının' <<<"$O" && echo 0 || echo 1)"
+ok "E5 açık işler: BÂNİ'nin acik+calisiliyor satırları; iptal/bitti, SERDAR ve alt dize (BÂNİCİK) yok" "$(grep -q 'iş bir' <<<"$O" && grep -q 'iş beş' <<<"$O" && ! grep -q 'iptal iş' <<<"$O" && ! grep -q 'biten iş' <<<"$O" && ! grep -q 'başkasının' <<<"$O" && ! grep -q 'alt dize' <<<"$O" && echo 0 || echo 1)"
 O6="$(DUZEN_SIMDI=$SIMDI DUZEN_GOREV_SH="$T/yok/gorev.sh" bash "$R" --depo "$T/depo" --ajan BÂNİ)"; rc=$?
 ok "E6 gorev.sh yoksa 'ölçülemedi' yazar, rc 0 (defter yine basılır)" "$([ $rc -eq 0 ] && grep -q 'ölçülemedi' <<<"$O6" && grep -q 'not d' <<<"$O6" && echo 0 || echo 1)" "→ rc=$rc"
 S=$(wc -l <<<"$O"); ok "E7 çıktı tavanı ≤45 satır (ölçülen $S)" "$([ "$S" -le 45 ] && echo 0 || echo 1)"
