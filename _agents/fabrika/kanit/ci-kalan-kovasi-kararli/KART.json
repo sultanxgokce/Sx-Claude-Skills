@@ -48,6 +48,16 @@
       "zaman": "2026-10-29T07:39:33+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T07:48:24+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T08:02:03+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
