@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "denetci-zil-harf-siniri",
+  "pr": "581",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T02:00:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-zil-harf-siniri",
+  "dal": "denetci-zil-harf-siniri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28390,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 13773
+  },
+  "dalgic": "uyumlu",
+  "bas": "97df5d4dceb85479dee948417373cf44260b5f5d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sebep metni bayt yerine Unicode harfi sınırında 140 karaktere kesilmiş, bozuk UTF-8 girdi de güvenli biçimde dönüştürülmüş; hedeflenen davranış için önce/sonra ve mutasyon ölçümleri başarılıdır. Kod üretime hazır görünüyor; yalnız gerçek zil/ulak hattındaki uçtan uca sonuç bu konteynerde ölçülmemiştir ve bu, kod puanını düşürmez.",
+    "bulgular": [
+      {
+        "ne": "Gerçek zil/ulak hattında gönderilen iletinin geçerli UTF-8 kaldığı uçtan uca canlı ölçüm bulunmuyor.",
+        "kanit": "Z3e açıkça sınav kipinde gerçek zilin aranmadığını söylüyor; kartta ayrıca canli_gerekir=true ve canli_sebep=\"cümlede: zil\" kayıtlı. Sunulan ölçümler DENETCI_KOMUT/FABRIKA_AILE_NOTIFY sahteleriyle çalışıyor.",
+        "konum": "olcum-zil-sebep-sonra.txt · Z3e; iş kartı · canli_gerekir/canli_sebep; denetci.test.sh: Z9d",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı zil/ulak ortamı + yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı sınav önce rc=1 ile Z9d2–Z9d3'te düşüyor, sonra rc=0 ile geçiyor. Mutasyon kaydı eski bayt kesimini geri getirince aynı iki kapının düştüğünü gösteriyor; gerçek kod durumu gercek_olcum=\"zil-sebep\" çiftinden okunmuş. Ölçüm hedef davranışı güçlü biçimde kanıtlıyor, ancak gerçek canlı zil/ulak teslimi kutu dışında kalıyor."
+  }
+}
