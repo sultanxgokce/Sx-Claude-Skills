@@ -152,6 +152,10 @@ RC=$(kos --uygula); rm -f "$T/gh-bozuk"; [ "$RC" = 0 ] && [ "$(zl)" = 0 ] && gre
 RC=$(kos --uygula --pr-komut ""); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "P6 --pr-komut \"\" : PR-birleşti zili kapalı"
 # P7: zil gidemezse rc 4 ve söylenir
 touch "$T/zilret"; RC=$(kos --uygula); rm -f "$T/zilret"; [ "$RC" = 4 ] && grep -q "PR-birleşti zili gidemedi" "$T/cikti"; g $? "P7 PR-birleşti zili gitmezse: rc 4 ve söylenir"
+# P8 (29 Eki, MUHAKKİK KALDI): kart kökü TIRNAKLI GLOB olarak gelir (süpürme cron'u böyle verir) — kartlar bulunur VE PR listesi okunur, zil çalar
+prler '[{"number":77,"headRefName":"a","mergedAt":"2026-10-29T01:00:00Z"}]'; rm -f "$T/yazim.jsonl" "$T/zil.log"
+python3 "$U" --ajan BERİD --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k*" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --pr-komut "$T/gh pr list" --simdi 1000000 --uygula > "$T/cikti" 2>&1; RC=$?
+[ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "PR #77" "$T/zil.log" && ! grep -q "okunamadı" "$T/cikti"; g $? "P8 --kart-kok tırnaklı glob (\$T/k*): PR listesi okundu, zil çaldı, 'okunamadı' YOK (depo kart dosyasının dizininden türetilir)"
 rm -f "$T/prler.json"
 # Z0: sınav gerçek postaneye mektup göndermiyor (varsayılan zil aracı ASLA kullanılmadı: hepsi sahte posta)
 [ -f "$T/zil.log" ] || true; g 0 "Z0 sahte posta/koltuk/gh aracı kullanıldı (gerçek posta.sh'e ve gh'ye hiçbir çağrı gitmedi)"

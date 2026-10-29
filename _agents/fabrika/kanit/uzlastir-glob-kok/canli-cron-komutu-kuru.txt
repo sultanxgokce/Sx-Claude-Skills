@@ -1,0 +1,14 @@
+$ tail -n 2000 -- /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-glob-kuru.log
+# kaynak=dosya:/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-glob-kuru.log tur=dosya desen=çalışılıyor uzlaştırması en_az=1 son=2000 atesleme=10 rc=0 sure=0.0s zaman=2026-10-29T06:51:44+03:00
+--- stdout ---
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: MIRAHUR için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: BANI için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: BASIRET için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: BERID için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: CODE-ANA için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: HENDESE için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: HEZARFEN için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: MUAVIN için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: MUHAKKIK için fazla/sahipsiz çalışılıyor görev yok
+2026-10-29T03:42:58Z   ✓ çalışılıyor uzlaştırması: SERDAR için fazla/sahipsiz çalışılıyor görev yok
+--- stderr ---

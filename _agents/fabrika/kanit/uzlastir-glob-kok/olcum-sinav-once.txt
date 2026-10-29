@@ -1,0 +1,47 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/once2/calisiliyor-uzlastir.test.sh
+# rc=1 sure=3.5s zaman=2026-10-29T06:42:40+03:00
+--- stdout ---
+════ calisiliyor-uzlastir ════
+PASS  U1 iki kartlı çalışılıyor (azami 2) dokunulmaz, deftere yazım YOK (kart ad yazımı BERID/BERİD eşit sayılır)
+PASS  U2 KURU (varsayılan): fazla olan en eski (gorev_C) söylenir, deftere YAZILMAZ
+PASS  U2b --uygula: yalnız en eski (gorev_C) bekliyor + 'başka işe geçti' notu (defter notsuz bekliyor'u reddeder)
+PASS  U3 açık kartı olmayan çalışılıyor görev (gorev_Y) bekliyor'a çekilir, kartlı olan (gorev_A) kalır
+PASS  U4 kartı canlı-borçlu/bitti olan görev açık kart sayılmaz (kapanan iş çalışılıyor görünmez)
+PASS  U5 başka ajanın çalışılıyor işi ve bizim bekliyor/acik işlerimiz dokunulmaz
+PASS  U6 jeton DEĞERİ ne çıktıda ne deftere giden gövdede
+PASS  U6b jeton yok: rc 4 ve söylenir (sessiz geçmez)
+PASS  U7 defter erişilemez: rc 4 ve söylenir
+PASS  U8 defter bekliyor'u reddederse (409): rc 4, başarı denmez
+PASS  U9 --azami 0 geçersiz: rc 2
+PASS  U10 --azami 3 ile üç kartlı iş dokunulmaz (sayı kuraldan gelir, koda gömülü değil)
+PASS  Z1 çekilen görev için sahibine tek zil (kime=ajan, görev kimliği, --tekrar görev+son adım, aciliyet GENİS — rahat bilgi mektubu), jeton değeri zilde YOK
+PASS  Z1b-0 ilk koşudan önce zil sayısı 0
+PASS  Z1b-N ilk koşu sonrası zil sayısı 1
+PASS  Z1b-N2 aynı girdiyle tekrar koşu: zil sayısı 0 → 1 → 1 (ikinci koşu yeni zil çalmaz)
+PASS  Z2 KURU (varsayılan): hiçbir zil çalmaz
+PASS  Z3 zil gitmezse: bekliyor yazımı yapılmış kalır, rc 4 ve söylenir (sessiz geçmez)
+PASS  Z4 azami aşımı: yalnız çekilen (gorev_C) için zil
+PASS  K1 koltuk 66 dk boş + çalışılıyor görev: sahibine TEK öneri zili, görev bekliyor'a ÇEKİLMEZ (öneri, otomatik değil)
+PASS  K1b koltuk tam 60 dk boş: zil yok (eşik 'uzun', dahil değil)
+PASS  K1c koltuk 61 dk boş: zil var
+PASS  K2 koltuk 30 dk boş (eşik 60 altı): zil yok
+PASS  K2b koltuk hâli çalışıyor (eski son-etkinlik olsa da): zil yok — boşluk yalnız hâl=bos ile ölçülür
+PASS  K3 --koltuk-bos-dk 0: koltuk zili kapalı
+PASS  K3b yalnız BAŞKA ajanın koltuğu boş: bizim için zil yok
+PASS  K4 koltuk listesi okunamadı: koltuk zili YOK (ölçülemedi ≠ boş), kartsız görev yine çekilir
+PASS  S1 süpürme: koltuktaki iki ajanın kartsız görevleri kimse kart.sh çalıştırmadan bekliyor'a çekilir (ajan olmayan koltuk atlanır)
+PASS  S2 süpürme koltuk listesini okuyamazsa: rc 4, hiçbir şey yazılmaz, söylenir
+PASS  S3 ne --ajan ne --koltuklardan: rc 2
+PASS  P1 kart a'nın PR #77 birleşmiş + gorev_A çalışılıyor: sahibine TEK öneri zili (kart.sh bitti tarifi, --tekrar görev+PR), görev ÇEKİLMEZ; açık PR'lı (mergedAt boş) gorev_B'ye zil YOK
+PASS  P2 KURU (varsayılan): zil çalmaz, yalnız yazar (gorev_A · PR #77)
+PASS  P3 yalnız 'ab'/'xa' birleşmiş: altdize eşlemesi YOK → zil yok
+PASS  P3b 'ekip/a' öneki eşleşir (#82)
+PASS  P3c 'a-12' soneki a'ya (#83), 'b' kendi kartı b'ye (#84) gider; iki görev iki ayrı zil
+PASS  P4 kartta pr=90 yazılı: dal adı değil o PR aranır (#90), aynı adlı dal #91 sayılmaz
+PASS  P5 gh okunamadı: zil yok, çıktı 'okunamadı … ÖLÇÜLEMEDİ' der (uydurma 'birleşmedi' yok)
+PASS  P6 --pr-komut "" : PR-birleşti zili kapalı
+PASS  P7 PR-birleşti zili gitmezse: rc 4 ve söylenir
+FAIL  P8 --kart-kok tırnaklı glob ($T/k*): PR listesi okundu, zil çaldı, 'okunamadı' YOK (depo kart dosyasının dizininden türetilir)
+PASS  Z0 sahte posta/koltuk/gh aracı kullanıldı (gerçek posta.sh'e ve gh'ye hiçbir çağrı gitmedi)
+── SONUÇ: PASS=40 FAIL=1 ──
+--- stderr ---

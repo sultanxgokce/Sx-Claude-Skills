@@ -37,7 +37,7 @@ def cagir(uc, jeton, yontem, yol, govde=None):
         return 0, {}
 
 def acik_kartlar(kokler, ajan):
-    """→ {gorev: {"ad", "pr", "kok", "adlar"}} ajanın AÇIK kartları (adlar: o kökteki BÜTÜN kart adları, dal eşlemesinde 'başkasının adı' süzgeci)."""
+    """→ {gorev: {"ad", "pr", "kok", "adlar"}} ajanın AÇIK kartları (kok = kart dosyasının dizini, glob kök değil) (adlar: o kökteki BÜTÜN kart adları, dal eşlemesinde 'başkasının adı' süzgeci)."""
     acik = {}
     for kok in kokler:
         adlar = {os.path.basename(f)[:-5] for f in glob.glob(os.path.join(kok, "*.json"))}
@@ -45,7 +45,9 @@ def acik_kartlar(kokler, ajan):
             try: k = json.load(open(f, encoding="utf-8"))
             except Exception: continue
             if k.get("durum") == "acik" and k.get("gorev") and norm(k.get("aldi")) == ajan:
-                acik[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k.get("pr"), "kok": kok, "adlar": adlar}
+                # kok: kart DOSYASININ gerçek dizini — --kart-kok tırnaklı glob gelebilir (süpürme cron'u: "/config/projects/*/_agents/fabrika/kartlar");
+                # glob dizgisinden depo türetilemez (QY2D-sonrası KALDI, 29 Eki): canlıda 'PR listesi okunamadı' basıyordu
+                acik[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k.get("pr"), "kok": os.path.dirname(os.path.abspath(f)), "adlar": adlar}
     return acik
 
 def acik_gorevler(kokler, ajan):
