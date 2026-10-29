@@ -7,6 +7,9 @@
 #
 # Bu test canlı ssh/hostsrv gerektirmez (ISKAN_SSH_HOST bilinçli-bozuk-host'a işaret eder).
 set -uo pipefail
+# grep boruda stdin'i bayt bayt (geçici dosyaya) SONUNA kadar okur: `printf "$out" | grep -q` pipefail altında grep ilk eşleşmede çıkınca printf'e SIGPIPE
+# gider, boru rc=141 olur ve doğru eşleşme "yok" sayılırdı (CI'da 29 Eki 01:25 'kur --dry-run: eksik adım' — rastgele, yüke bağlı).
+grep() { if [ -p /dev/stdin ]; then local _f _rc; _f="$(mktemp)"; cat >"$_f"; command grep "$@" <"$_f"; _rc=$?; rm -f "$_f"; return $_rc; else command grep "$@"; fi; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PASS=0; FAIL=0

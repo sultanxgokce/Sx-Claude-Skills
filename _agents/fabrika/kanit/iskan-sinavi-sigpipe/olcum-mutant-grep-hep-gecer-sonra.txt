@@ -1,0 +1,304 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-iskan-sinavi-v2-* ===
+$ bash iskan/scripts/iskan.test.sh
+# rc=1 sure=25.0s zaman=2026-10-29T04:35:00+03:00
+--- stdout ---
+== iskan.test.sh ==
+  ok - compose-clean: kesişim=0
+  ok - compose-collision: kesişim=1 tespit edildi (B1)
+  ok - compose_parse: stdin('-') dosya-argümanıyla bayt-eş
+  ok - iskan-host.sh --dry-run: host-erişilemez durumda da rc=3
+  ok - iskan-host.sh --dry-run: erişilemeyen-host 'doğrulanmadı' diliyle raporlandı
+  ok - iskan-host.sh: argümansız çağrı rc=2 (usage)
+  FAIL - iskan-host port-çözüm: origin/main okumadı (WT-blok= port='8449' 8449 beklenirdi)
+  ok - iskan-host port-çözüm: origin/main'de-olmayan container → boş (negatif)
+  ok - seans-getir --apply: GO-marker yokken guard-exit=4
+  ok - seans-getir: bilinmeyen-container doğrulanmadı+exit=3
+  FAIL - seans-getir fixture: TESTALIVE (canlı) yanlışlıkla kapalı-üye listelendi
+  ok - seans-getir fixture: TESTDEAD tespit edildi + 0-aday→degraded-replay AÇIK-etiketli
+  ok - seans-getir fixture: kuru-koşu exit=3
+  ok - legacy-imza: tek-dosya tek-anlamlı eşleşme (session-id=aaa)
+  ok - legacy-imza: 2-dosya belirsiz-eşleşme doğru sayıldı (SUSPECT-adayı)
+  ok - legacy-imza: boş-dizin → 0-aday
+  ok - legacy-imza: 60-satır-sonrası geç-mention YAKALANMADI (whole-file-grep-tuzağı kapalı)
+  ok - acquire_role_lock: ikinci-eşzamanlı-kilit reddedildi (flock, G6)
+  ok - yeni-proje --dry-run: plan-exit=3
+  ok - yeni-proje --dry-run: dosya değişmedi
+  ok - yeni-proje --dry-run: önizleme container-adı+port içeriyor
+  ok - yeni-proje: üretilen compose bloğu DISABLE_AUTOUPDATER=1 taşır (cloudtop CI kapısı: environment'ı olan her servis)
+  ok - yeni-proje --apply: GO-marker yokken exit≠0 (4)
+  ok - yeni-proje --apply: GO-marker yokken dosya SIFIR-değişti
+  ok - yeni-proje --apply: GO-marker'lı başarılı, rc=0
+  ok - yeni-proje --apply: sonuç geçerli-YAML
+  ok - yeni-proje --apply: mevcut satırlara dokunulmadı (append-only, baş-değişmedi)
+  ok - yeni-proje --apply: yeni servis-bloğu eklendi
+  ok - yeni-proje --apply: mount-paketi (ortak .claude + DEFAULT_WORKSPACE) compose-blokta (B2-fix)
+  FAIL - yeni-proje --apply: ortak-projects mount'u sızmış (EY_HOST_PROJ'u gölgeler)
+  ok - yeni-proje --apply: setup-testproje.sh üretildi (İNCE-SARMALAYICI, bash -n temiz — B1-fix)
+  ok - yeni-proje --apply: setup-script pozisyon-hint'i türetilmiş (adım 6/8 — numeratör+payda parametrik, magic-6 yok)
+  ok - yeni-proje --apply: setup-tunnel 3-dokunuş (değişken + ingress + route-dns, bash -n temiz — P-Y2)
+  ok - yeni-proje --apply: pano kurucusu ÇAĞRILDI (L32 F3 — çağıran vardı)
+  ok - yeni-proje --apply: pano --zincir kipiyle çağrıldı (compose+nginx aynı PR'a)
+  ok - yeni-proje --apply: pano doğru slug ile çağrıldı
+  ok - yeni-proje --apply: pano kurucusu YOKKEN doğum düşmedi (fail-soft)
+  ok - yeni-proje --apply: pano yokluğu SESSİZ değil (uyarı basılıyor)
+  ok - yeni-proje --apply: ISKAN_PANO=0 kurucuyu HİÇ çağırmıyor
+  ok - yeni-proje --apply: ingress-çifti catch-all 404'ün ÖNCESİNDE (sıra korunmuş)
+  ok - yeni-proje ⟷ sokum SİMETRİ: tünel-dokunuşu _sokum_satir_cikar ile bayt-eş geri alındı
+  ok - yeni-proje --apply: aynı-ad ikinci-kez İDEMPOTENT-geçiş (rc=0)
+  ok - yeni-proje --apply: idempotent-geçişte ÜÇ dosya da DEĞİŞMEDİ
+  ok - yeni-proje --apply: idempotent-geçiş açıkça beyan edildi
+  ok - yeni-proje --apply: ÜÇLÜ-TAMAMLAYICI — silinen setup-script idempotent-geçişte yeniden üretildi
+  ok - yeni-proje --dry-run: mevcut-blokta plan-exit=3 (idempotent-önizleme)
+  ok - yeni-proje --apply: mevcut-blokta bile GO'suz exit≠0 (4)
+  ok - yeni-proje 'my-proj': tireli-isim apply çalıştı (MY_PROJ_HOSTNAME + raw-ad yorum-etiketi)
+  ok - yeni-proje 'my-proj' ⟷ sokum SİMETRİ: TİRELİ-isimde bayt-eş geri alındı (LB-1 fix)
+  FAIL - yeni-proje 'my-proj': söküm sonrası tanımsız MY_PROJ_HOSTNAME referansı kaldı
+  ok - yeni-proje charset-gate: 5 enjeksiyon/traversal adı fail-closed rc=1 + SIFIR-dosya (LB-2 fix)
+  ok - yeni-proje '9proj': rakam-başı harf-başı-kapısında RED + SIFIR-dokunuş (re-verify MAJOR fix, yalancı-yeşil yok)
+  ok - yeni-proje 'proj9': harf-başı+rakam-içeren meşru-ad hâlâ geçer (over-block yok)
+  ok - yeni-proje --apply: tünel-dosyası yokken fail-closed RED + SIFIR-dokunuş (yarım-üçlü önlendi)
+  ok - yeni-proje --apply: çıpasız-mevcut tünel-dosyası → RED + SIFIR-dokunuş (MAJOR-3 fix, varlık-only kapatıldı)
+  ok - B1 allowlist: ortak .claude kesişimi bilinçli-köprü sayıldı (yeni-kesişim: 0, mount-paketi kendi kapısına takılmıyor)
+  ok - B1 allowlist: allowlist kapatılınca aynı kesişim yine RED-adayı (guard hâlâ dişli)
+  ok - _iskan_b1_check: mevcut-path'i tekrar-kullanan aday-blok YENİ-kesişim olarak tespit edildi (1)
+  ok - iskan-host.sh --apply: GO-marker yokken exit≠0 (host'a hiç değmeden erken-guard)
+  ok - iskan-host.sh --apply: REPO-KANIT yokken RED (rc=1, host'a değmeden)
+  ok - cf-yayin --dry-run: plan-exit=3
+  ok - cf-yayin --dry-run: dosya değişmedi
+  ok - cf-yayin --dry-run: önizleme hostname+onboard+sert-kapı içeriyor
+  ok - cf-yayin --apply: GO-marker yokken guard-exit=4 (CF'e/host'a sıfır-dokunuş)
+  ok - cf-yayin --apply: REPO-KANIT yokken RED (rc=1, host'a değmeden)
+  ok - _cf_yedi_hostname_temiz_mi: 302/401/403=temiz · 502=kirli · 000=kirli (sert-kapı sınıflandırması)
+  ok - ekip-yerlestir: argümansız rc=2 (usage)
+  ok - ekip-yerlestir --dry-run: plan-exit=3
+  ok - ekip-yerlestir --dry-run: roster-adları (denekAlfa+denekBeta) önizlemede görünür
+  ok - ekip-yerlestir --dry-run: scaffold + rezerv-uuid adımları önizlemede görünür
+  FAIL - ekip-yerlestir roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=1)
+  ok - A323/0.10.3 VARSAYILAN: anahtarsız koşum → rc=1 + 'uye-dusme-reddi' + düşen üye adıyla SARI satır (fail-closed)
+  ok - A323/0.10.3 uyar modu: ISKAN_EY_DUSME=uyar → SARI uyarı + 'uyari-modu' satırı, dry-run rc=3 korundu
+  ok - A323/0.10.3 bilinmeyen değer: ISKAN_EY_DUSME=bozuk → rc=2 yapılandırma hatası (sessizce 'uyar' sayılmaz)
+  ok - A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'
+  FAIL - A323 altın bozuk (rc=3)
+  ok - A323 apply+ret: rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi (md5 eş)
+  ok - A323/0.10.3 apply VARSAYILAN (anahtarsız): rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi
+  ok - A323 apply (uyar modu): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)
+  FAIL - A323 kayıt-biçimi: üretici çıktısı altından sapıyor
+1,22c1
+< proje: eytest
+< container_adi: cloudtop-eytest
+< hostname: eytest.mmepanel.com
+< port: 9449
+< config_dir: /opt/cloudtop/config-eytest
+< repo_yolu: /config/projects/eytest
+< ekip_registry_pointer: _agents/handoff/ekip-registry.yaml
+  ok - ekip-yerlestir --apply: bilinmeyen-proje rc≠0 + 'kayitsiz-proje' marker
+  ok - ekip-yerlestir --apply: 'eytes' (önek/case-farkı) reddedildi rc=1 (K4 fuzzy-yasak)
+  ok - ekip-yerlestir --apply: 'EYTEST' (önek/case-farkı) reddedildi rc=1 (K4 fuzzy-yasak)
+  ok - ekip-yerlestir --apply: host-erişilemezken rc=1 (mutasyonsuz erken-kırmızı)
+  ok - ekip-yerlestir: kayıtlı rezerv-uuid YENİDEN-KULLANILIR (origin/main'den okundu, yeniden-üretilmedi)
+  ok - ekip-yerlestir: kayıtsız-üye (denekBeta) için 'yeni' uuid-kaynağı raporlanır
+  ok - baslat-claude.sh: claude yokken dürüst-kırmızı (rc=1 + 'claude-binary yok' marker)
+  ok - baslat-claude.sh: rol-kayıtsız → rc≠0 (1)
+  ok - baslat-claude.sh: claude-varken rezerve-id+rol+permission-mode ile exec (K3 disiplini)
+  ok - ekip-pong: argümansız/modsuz rc=2 (usage)
+  ok - ekip-pong --dry-run: plan-exit=3 + her seat --kimlik-plan satırı (SAHTE-YEŞİL YOK ibaresi)
+  ok - ekip-pong roster-kaynaksız: dürüst-kırmızı rc=1 + marker (kur dry-run doğrulanmadı-sürdürür)
+  FAIL - ekip-pong --apply hepsi-yeşil: sözleşme kırık (rc=0)
+  ok - ekip-pong --apply seat-ölü: fail-closed rc=1 (bir seat KIRMIZI → zincir DURur)
+  ok - ekip-pong --apply ölçülemedi: unknown≠fail (rc=0 + [doğrulanmadı], seat-KIRMIZI değil)
+  ok - ekip-pong --apply script-yok: [doğrulanmadı] non-blocking rc=0 (unknown≠fail)
+  FAIL - ekip-pong charset-hijyeni: injection-panzehiri kırık (rc=1)
+  ok - ekip-pong --no-ping: plan 'PONG'suz' işaretli (post-claude re-verify yolu)
+  FAIL - ekip-pong yalnız-boşluk roster: sahte-yeşil kör-noktası açık (rc=1)
+  FAIL - ekip-pong tümü-ölçülemedi: pozitif-kanıt kapısı kırık (rc=0)
+  ok - ekip-pong karışık yeşil≥1: 'geçildi' basılır (pozitif-kanıt alt-sınırı, aşırı-sıkı değil)
+  ok - ekip-pong yalnız-boşluk roster --dry-run: erken fail-closed rc=1 (hem-mod guard)
+  ok - uye-ekle: eksik-argüman/mod rc=2 (usage)
+  ok - uye-ekle: boşluklu --gorev reddedildi (rc=1, gecersiz-gorev)
+  ok - uye-ekle --dry-run: plan-exit=3
+  ok - uye-ekle --dry-run: üye-adı + 'sultan-bildirim' satırı önizlemede
+  ok - uye-ekle --dry-run: dosya değişmedi
+  ok - uye-ekle --dry-run: mevcut-üyede de rc=3 + sultan-bildirim koşulsuz + çakışma-önizlemesi
+  ok - uye-ekle: Nexus-hedef 'cloudtop-code' rc≠0 + 'ise-alim' yönlendirme-marker'ı (İ1, canlı-invoke YOK)
+  ok - uye-ekle: Nexus-hedef 'code' rc≠0 + 'ise-alim' yönlendirme-marker'ı (İ1, canlı-invoke YOK)
+  ok - uye-ekle --apply: bilinmeyen-proje rc≠0 + 'kayitsiz-proje' marker
+  ok - uye-ekle --apply: 'uetes' (önek/case-farkı) reddedildi rc=1 (K4 fuzzy-yasak)
+  ok - uye-ekle --apply: 'UETEST' (önek/case-farkı) reddedildi rc=1 (K4 fuzzy-yasak)
+  ok - uye-ekle --apply: mevcut-üye rc≠0 + 'uye-zaten-var' (çakışma-koruması, G4b)
+  ok - uye-ekle --settings-file '/config/.claude/izin.json' reddedildi (rc=2)
+  ok - uye-ekle --settings-file '/config/projects/uetest/../x.json' reddedildi (rc=2)
+  ok - uye-ekle --settings-file '/config/projects/uetest/a.txt' reddedildi (rc=2)
+  ok - uye-ekle --settings-file: dry-run planında izin dosyası + kayıt kaynağı görünür (rc=3)
+  FAIL - _ey_reg_mevcut_oku: yabancı kiracı kaydı KABUL edildi (kaynak=repo-eski)
+  ok - _ey_reg_mevcut_oku: aynı kiracının kaydı kabul edildi (uuid yeniden-kullanılabilir)
+  ok - registry-üretimi: KOD'un bypassPermissions kipi korundu
+  FAIL - registry-üretimi: alanı olmayan KOD'a settings_file eklendi
+  ok - registry-üretimi: DAR'ın izin dosyası korundu
+  ok - registry-üretimi: yeni üyeye bayraktaki izin dosyası yazıldı (kip default)
+  ok - uye-ekle --apply: host-erişilemezken rc=1 + repo-dosya değişmedi (mutasyonsuz erken-kırmızı)
+  ok - _ey_ekip_roster_oku: 3-üye roster doğru çözüldü (yonetici-etiketi dahil)
+  ok - _ue_kahya_adaptor: KÂHYA-şema → K2 üye-bloğu dönüşümü tam (5 anahtar)
+  ok - evergreen-kaydet --dry-run: rc=3 + evergreen-onizleme + yazımsız (md5 önce=sonra)
+  ok - evergreen-kaydet --dry-run: EKLENECEK satır-diff'i görünür
+  FAIL - evergreen-kaydet --apply: yazım eksik (rc=0 ing= acc=)
+  ok - evergreen-kaydet --apply: .bak güvenlik-yedekleri BAŞARIDA temizlendi (working-tree debris-siz)
+  ok - evergreen-kaydet --apply 2.koşu: idempotent no-op (rc=0 + 'mevcut' + md5 değişmez)
+  ok - evergreen-kaydet: kayıtsız-proje rc≠0 + 'kayitsiz-proje' + yazımsız
+  ok - evergreen-kaydet: bash -n kapısı düştü → rc=1 + backup.sh .bak-restore (byte-eş geri)
+  ok - yeni-proje --port: override-port compose-önizlemede + kaynak-beyanı + rc=3 + yazımsız
+  ok - yeni-proje ISKAN_PORT: env-override arg'la eş-davranış (rc=3 + 8448)
+  ok - yeni-proje --port: sayısal-olmayan değer rc=2
+  ok - yeni-proje --port: kullanımda-olan porta override rc=1 (çakışma-kapısı) + yazımsız
+  FAIL - yeni-proje (override'sız): golden-davranış BOZULDU (rc=3)
+  ok - provizyon --apply: GO-marker yokken rc=4 + stderr'de marker-adı (FAZ-4 konvansiyonu)
+  ok - provizyon dry-run: offline'da rc=3 + doğrulanmadı-dili + plan-satırı
+  ok - provizyon: projesiz çağrı rc=2 (usage)
+  FAIL - ekip-yerlestir ISKAN_EY_ROSTER: override sözleşmesi kırık (rc=3, üye=)
+  ok - mount-çözümü: paylaşımlı-mount → mount'un kendisi (gölgelenme-panzehiri)
+  ok - mount-çözümü: tek-mount eski-davranış korunuyor (config-<ad>/projects/<ad>)
+  ok - sokum dry-run (DEFAULT): rc=3 + servis-scoped down-planı + md5-değişmez
+  FAIL - sokum marker-yok: GO-kapısı kırık (rc=4 ssh-çağrı=)
+  ok - sokum kayitsiz-proje: rc≠0 + 'kayitsiz' marker + md5-değişmez (fail-closed)
+  ok - sokum zaten-sokuk: kayıt-yok + arşiv-var → rc=0 idempotent ('zaten-sokuk' sinyali)
+  ok - sokum dry-run: plan ADIM-8 kur-durum-temizliğini içeriyor (P1d)
+  ok - sokum zaten-sokuk dry-run: bayat kur-izi UYARILIR ama SİLİNMEZ (dry-run yazmaz)
+  ok - sokum zaten-sokuk --apply: bayat kur-izi (v2 pin-blok DAHİL) tek-rm ile TEMİZLENDİ (P1d + PR-C)
+  FAIL - sokum zaten-sokuk --apply: 'dokunulmadı' çelişkisi sürüyor
+  ok - sokum zaten-sokuk --apply: rm-başarısızlığı SESSİZ yutulmuyor → kırmızı + rc≠0 (MAJOR fix, ADIM-8 simetrisi)
+  ok - sokum KISMİ-SÖKÜM (fix-2): config-dir VAR → rc=1 REDDET + kur-state KORUNDU (false-zaten-sokuk kapandı)
+  ok - kur: projesiz/bilinmeyen-bayrak rc=2 (usage)
+  ok - kur 3-Çit: 'mihenk' reddedildi (rc=1 + marker + durum-dosyası yok)
+  ok - kur 3-Çit: 'huma' reddedildi (rc=1 + marker + durum-dosyası yok)
+  ok - kur --dry-run: plan-exit=3
+  ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)
+  ok - kur --dry-run: hiçbir yazma yok (fixture md5 değişmez + durum-dosyası doğmadı)
+  ok - kur --dry-run: DURAK-1 (cloudtop-PR merge durağı) planda görünür
+  ok - kur GO'suz: adım-1 exit=4 iletildi + GO-durağı Sultan-dilinde raporlandı
+  FAIL - kur GO'suz: GO-durak mesajı magic-7 kalıntısı basıyor (adım 1/7, header 1/8 ile çelişir)
+  FAIL - kur GO'suz: DUR sözleşmesi kırık
+  ok - kur DURAK-1: merge-öncesi zincir İNSAN-durağında durdu (exit=0 adım-tamam)
+  ok - kur durum-dosyası: son-tamamlanan='yeni-proje' yazıldı (git-DIŞI state, satır-1 sözleşmesi)
+  ok - kur --durum: salt-oku durum-raporu (son-tamamlanan + sıradaki + md5 değişmez)
+  ok - kur --durum: durum-dosyası yokken 'hiç koşulmamış — baştan' (rc=0)
+  FAIL - kur --devam: state-resume kırık (rc=0)
+  FAIL - kur --devam ilerleme: sözleşme kırık (rc=4)
+  ok - kur --devam ilerleme: durum-dosyası 'durak1-cloudtop-pr'a ilerledi (GO-sonrası kaldığı yerden)
+  FAIL - kur slug-kapısı: RED sözleşmesi kırık (rc=1)
+  ok - kur slug-kapısı: --benimse bilinçli-devralma → zincir sürdü (adım-1 GO-durağına vardı)
+  ok - kur slug-kapısı: GO-durağı resume-komutu --benimse'yi taşıdı (rıza kalıcı, MAJOR fix)
+  ok - kur slug-kapısı: dry-run REDDETMEZ — uyarı basar + tam-zincir önizlenir (salt-oku)
+  FAIL - kur slug-kapısı: --dry-run --benimse mesajı yanıltıcı (rc=3)
+  FAIL - kur slug-kapısı: --durum muafiyet/not sözleşmesi kırık (rc=0)
+  ok - roster charset-kapısı: temiz-roster geçer (2 üye, yönetici doğru)
+  ok - roster charset-kapısı: 6 injection/charset-fixture'ın hepsi fail-closed reddedildi
+  ok - ekip-yerlestir: kötü-karakterli ISKAN_EY_ROSTER çağrı-yerinde de fail-closed (rc=1)
+  ok - _kur_durak1_probe no-fetch: FETCH_HEAD yazılmadı + origin/main doğru okundu (rc=0) — --durum salt-oku (MINOR fix)
+  ok - _kur_durak1_probe (fetch'li): FETCH_HEAD yazıldı — kontrast kanıtı (zincir/devam/dry-run fetch'i korur)
+  ok - env-pin yazıcı: satır-1='yeni-proje' + 4 allowlist-pini state'e yazıldı (600, roster-değeri dosyada — sır-değil)
+  FAIL - env-pin K1: GO state'e sızdı (yapısal garanti kırık)
+  FAIL - env-pin round-trip: --devam pin-yüklemesi kırık (rc=0, satır: '')
+  ok - env-pin dry-run: plan-exit=3 + mevcut v2-state md5-değişmez (yazım yok)
+  FAIL - env-pin K3 tamper: GO-pin kapısı delik (rc=1)
+  ok - env-pin --durum tamper: rapor basıldı + sonda kırmızı GO-pin tespiti + rc=1 (sahte-yeşil yok)
+  FAIL - env-pin deny-sınıfı-2: PROD_HOSTS pini sessiz geçti (rc=1 — mahrem-regresyon riski)
+  FAIL - env-pin fail-safe: malforme-GO sessiz-atlandı (rc=1 — kısmi-tamper onurlandırıldı)
+  FAIL - env-pin eski-format: geriye-uyum kırık (rc=0)
+  ok - env-pin eski-format: --durum rc=0 + rapor (salt-oku sözleşmesi temiz state'te DEĞİŞMEDİ)
+  FAIL - env-pin precedence: öncelik-sırası kırık (rc=0)
+  FAIL - env-pin tazeleme: bayat pin state'te kaldı (rc=0)
+  FAIL - env-pin pin-iptal: set-ama-boş semantiği kırık (rc=0 — bayat-roster panzehiri yok)
+  FAIL - harita V1: F1-imzası kırmızısı kırık (rc=1)
+  ok - harita V1 dry-run: aynı ayrışma BİLGİ-dilinde [uyarı] + rc=0 (plan-exit sözleşmesi korunur)
+  ok - harita V1 rafine: iki taraf AÇIK → [uyarı]+devam, zincir adım-1'e ilerledi (meşru worktree-PR deseni bloklanmadı)
+  FAIL - harita V2: worktree kırmızısı kırık (rc=1)
+  ok - harita V2 eşiği: son=provizyon→kırmızı · son=cf-yayin→bilgi+rc=0 ('<cf-yayin' eşiği birebir)
+  FAIL - yeni-proje default mem_limit sözleşmesi kırık (rc=3)
+  ok - yeni-proje --mem-limit 512m: WARN basıldı + rc=3 korundu (hard-fail değil)
+  FAIL - yeni-proje --mem-limit 4g: yanlış-uyarı (rc=3)
+  ok - iskan-host kapasite: avail 4096MB + 42G → SIĞAR satırı basıldı (rc=3 korunur)
+  ok - iskan-host kapasite: avail 1024MB + 6G → SIĞMAZ + disk-DAR uyarıları (dry-run karar vermez, rc=3)
+  ok - iskan-host kapasite: erişilemez-host → dürüst 'doğrulanamadı' (sahte-verdikt yok)
+  FAIL - iskan-host kapasite: bozuk-eşik sözleşmesi kırık (rc=3)
+  FAIL - iskan-host kapasite: taşan-eşik hâlâ ham-hata/sahte-SIĞMAZ üretiyor (rc=3)
+  ok - senkron dry-run: plan-çıktısında COMPOSE-SENKRON satırı var (rc=3 korunur)
+  FAIL - senkron GO-yok: kapı kırık (rc=4 ssh-çağrı=)
+  FAIL - senkron bayt-eş: no-op kapısı kırık (rc=0 bak=0)
+  FAIL - senkron SIRA-goldeni: kapı-sırası bozuk (senkron= r4=)
+  ok - senkron eksi-cname: YAZIM oldu + host==origin/main BAYT-eş (md5) + .bak-TS + re-verify + komşu-BAYT + yutulan-simetri kanıt-dili
+  ok - senkron R2-notu: aday-çalışırken yazım → kanıtta zorunlu 'recreate ayrı Sultan-alanı' notu
+  ok - senkron idempotent re-run: ikinci koşu no-op (.bak artmadı)
+  FAIL - senkron komşu-bayt-drift (LB): komşu-BAYT kapısı kırık — komşu ezilebilirdi (rc=5)
+  ok - senkron aday-bayat-blok: drift yalnız-adayda (512m) → host EZİLDİ, origin/main bayt-eş (sahte-no-op yok)
+  FAIL - senkron MAHREM-komşu-drift (LB): mahrem-komşu sessiz-ezme deliği AÇIK (rc=5)
+  FAIL - senkron asimetrik-yutma (MAJOR-1): host-only aday-bitişik yorum sessizce silinebilir (rc=5)
+  ok - senkron doğan-pano (d0013): cloudtop-pano-<proje> komşu-drift sayılmadı → YAZIM oldu + host==origin/main BAYT-eş
+  ok - senkron başka-pano (d0013 negatif): başka projenin panosu komşu-drift → rc=5 + yazım=0
+  ok - senkron host-pano-var (d0013): host'ta kalan pano iki tarafta da dışlandı → YAZIM oldu + bayt-eş
+  FAIL - senkron komşu-fark: beklenen-delta kapısı kırık (rc=5)
+  ok - senkron boş-host: rc=5 + 'bootstrap işidir, İSKÂN-doğumu değil' dili + dosya doğmadı
+  FAIL - compose_parse --haric: düşürme/yeniden-hesap kırık (int=0 alpha-var=1)
+  ok - compose_parse --haric: olmayan-servis = bayraksız çıktıyla BAYT-eş (davranış-koruması)
+  ok - compose_parse --haric alpha --haric beta: iki servis de düştü (tekrarlanabilir)
+  ok - iskan-host ek-teşhisi: aday = servis + pano servisi (iki taraf)
+  ok - compose_block sil: aday-blok (İSKÂN-yorum + ayraç-boşluk dahil) çıktı → base BAYT-eş
+  ok - compose_block sil: olmayan-cname → passthrough BAYT-eş (host'ta-aday-yok simetrisi)
+  ok - compose_block sil: boş-girdi → rc≠0 + boş-stdout (çağıran fail-closed'a bağlar)
+  FAIL - compose_block yutulan: asimetrik-yutma tespiti kırık
+  ok - compose_block yutulan: aday-yok → boş çıktı + rc=0 (host'ta-aday-yok simetrisi)
+  ok - compose_block sil: YAML-anchor'lı header (&sk) → passthrough BAYT-eş (bilinen-sınır, davranış-dok)
+  FAIL - iskan-host 3-Çit: mahrem-apply hâlâ geçiyor (rc=1 ssh-çağrı=)
+  ok - iskan-host 3-Çit: 'mihenk' de REDDEDİLDİ (rc=1 — 5'li izole-aile tam)
+  FAIL - iskan-host ad-hijyeni: regex-meta proje-adı kapıyı geçti (rc=1)
+  ok - iskan-host ad-hijyeni: '../x' (path-traversal) + 'a b' (boşluk) REDDEDİLDİ (güvenlik korundu)
+  FAIL - charset paritesi KIRIK: apply/kur charset ayrıştı (kur= host=)
+  ok - charset paritesi: kur-kabul-eden adlar (ISKANTEST/proje2/a-b) apply charset-kapısını da geçer
+  FAIL - izole-liste paritesi KIRIK: iskan.sh= vs iskan-host.sh=
+  FAIL - sokum 3-Çit: mahrem-tenant sökümü hâlâ geçiyor (rc=1 ssh-çağrı=)
+  ok - sokum 3-Çit: dry-run modda da ateşler (mihenk, rc=1 — her-mod kapısı)
+  FAIL - sokum arşiv-yolu tarih-bazlı geri-döndü (ts_var= ts_bare=) — aynı-gün çakışır (cycle-2 bulgu-1)
+  FAIL - fix-3 host-compose: blok-çıkarma/komşu-koruma kırık (rc=0)
+  ok - fix-3 host-compose: blok-yok → rc=2 no-op (idempotent, dosya değişmez)
+  ok - fix-3 host-compose: aday-bitişik token'sız yorum → rc=5 fail-closed (host-drift, dosya değişmez)
+  FAIL - fix-3 host-compose: ADIM-5b wiring eksik (çağrı= adım= plan=)
+  ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti
+  FAIL - cycle-4 .bak-temizlik wiring: eksik (def= call=)
+  FAIL - FIX#2 registry redirect: hedef yanlış (RB_HAS= RA_absent=1)
+  FAIL - FIX#2 registry default: repo-dir'e yazılmadı
+  FAIL - FIX#2 evergreen redirect: hedef yanlış (rc=0 B_ing= B_bkp= A_inv_eş=Y)
+  FAIL - FIX#2 wiring eksik (pin= harita= derive=)
+  ok - FIX#2 wiring: registry dağıtan her komut Tier-C hedefini önce türetiyor
+  ok - DERS-A pick_port: kardeş compose'daki dolu port atlandı (8449+8450 dolu → 8451)
+  ok - DERS-A şeffaflık: kaç compose dosyası tarandığı basılıyor
+  ok - DERS-A override-kapısı: kardeş-compose'da bağlı porta override rc=1 (çakışma yakalandı)
+  ok - DERS-A golden: kardeş yokken eski davranış korunuyor (8449 dolu → 8450)
+  FAIL - DERS-A2 origin/main-okuma: bayat kopya okundu → çakışan port seçildi (rc=3)
+  ok - DERS-A2 şeffaflık: kaynak-tercihi (origin/main) beyan ediliyor
+  ok - DERS-A2 golden: git-dışı dosyada çalışma-kopyası okunur (davranış değişmedi)
+  ok - DERS-A3: diskte-yok/origin'de-var kardeş + iç-port 80 sayıldı (8449+8450 dolu → 8451)
+  ok - DERS-A3 keşif: origin/main'deki kardeş sayıldı (2 dosya)
+  ok - DERS-A3 override: iç-portu 80 olan kutunun host-portuna override rc=1
+  ok - DERS-B R5: canlı-kutu hash'i compose ile uyuşmuyorsa apply rc=5 (sahte-yeşil kapandı)
+  ok - DERS-B R5: reçete basılıyor (rm -f + force-recreate; yıkıcı adım Sultan-eli)
+  ok - DERS-B R5: red anında host-compose BAYT-değişmez (sıfır-dokunuş)
+  ok - DERS-B R5: hash ölçülemedi → fail-closed rc=5 (unknown ≠ uyumlu)
+  ok - DERS-B port-kapısı: 'docker port' boşsa kırmızı + okunur teşhis (http_code=000 değil)
+  ok - DERS-D tazelik: bayat working-tree'ye apply rc=1 + SIFIR-yazım (sessiz-geri-alma kapandı)
+  ok - DERS-D tazelik: çare (git pull / taze worktree) reçetesi basılıyor
+  ok - DERS-D tazelik: dry-run'da UYARI + akış devam (rc=3 korunur)
+  ok - DERS-D tazelik: ISKAN_EG_BAYAT_KABUL=1 ile bilinçli geçiş çalışıyor + kayda geçiyor
+  FAIL - İZ-YORUM-1 backup.sh: ham= etkin=
+  FAIL - İZ-YORUM-2 registry yorumu sayıldı: 
+  FAIL - İZ-YORUM-3 etkin iz kaçtı: 
+  FAIL - İZ-YORUM-4: 
+  FAIL - İZ-YORUM-5 stdin yolu: 
+  FAIL - İZ-YORUM-6 olmayan dosya: 
+  FAIL - İZ-YORUM-7 tırnak içi '#':  (beklenen 4)
+== 212 geçti / 70 kaldı ==
+--- stderr ---
+iskan/scripts/iskan.test.sh: line 1224: [: : integer expression expected
+iskan/scripts/iskan.test.sh: line 2452: [: : integer expression expected
+iskan/scripts/iskan.test.sh: line 2488: [: : integer expression expected
+iskan/scripts/iskan.test.sh: line 2573: [: : integer expression expected
+iskan/scripts/iskan.test.sh: line 2621: [: : integer expression expected
+iskan/scripts/iskan.test.sh: line 2626: [: : integer expression expected
+iskan/scripts/iskan.test.sh: line 2644: [: : integer expression expected
