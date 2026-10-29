@@ -1,5 +1,5 @@
 $ bash retro/scripts/retro.test.sh
-# rc=0 sure=6.1s zaman=2026-10-29T12:07:07+03:00
+# rc=0 sure=5.8s zaman=2026-10-29T12:11:25+03:00
 --- stdout ---
 — T1 hafta
   ✓ T1a hafta kimliği sabit tarihten (rc=0)
@@ -17,6 +17,7 @@ $ bash retro/scripts/retro.test.sh
   ✓ T2i ölçülemeyen kaynak sarı, 0 değil
   ✓ T2l D4: bu ajanın haftada kırmızıya düşen 2 işi, ort. kalma 60 dk (SERDAR'ın işi ve geçen hafta sayılmaz)
   ✓ T2m D4: kütük yoksa ÖLÇÜLEMEDİ, 0 değil
+  ✓ T2n D4: kütük VAR ama okunamıyor (dizin) → ÖLÇÜLEMEDİ, çökme yok (göz tur 1)
   ✓ T2j koltuk beyanı
   ✓ T2k iz özeti
   ✓ T2l ikinci kutu rc=4 (ezmez) (rc=4)
@@ -207,6 +208,7 @@ $ bash retro/scripts/retro.test.sh
   ✓ M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar): mutant ısırıldı
   ✓ M7 D4 ajan süzgeci kalkınca başkasının kırmızısı sayılır (NB ajanı 0 olmalı; kapı yakalar): mutant ısırıldı
   ✓ M8 D4 hafta süzgeci kalkınca geçen haftanın işi sayılır (3 iş; kapı yakalar): mutant ısırıldı
+  ✓ M10 D4 okuma hatası yakalanmazsa okunamayan kütük aracı çökertir (kapı yakalar): mutant ısırıldı
   ✓ M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar): mutant ısırıldı
   ✓ M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar): mutant ısırıldı
   ✓ M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar): mutant ısırıldı
@@ -238,5 +240,5 @@ $ bash retro/scripts/retro.test.sh
   ✓ T20d eşleşmeyen ad sessiz sıfır basmaz
   ✓ T20e yanlış-pozitif yok: 'alfa' KALFA'nın içinde geçse de eşleşmez
 
-GECEN=221 DUSEN=0
+GECEN=223 DUSEN=0
 --- stderr ---

@@ -1,7 +1,7 @@
 {
   "is": "retro-nabiz-d4",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T12:07:20+03:00",
+  "guncelleme": "2026-10-29T12:11:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,17 +25,17 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "1b32c30358971e5938e16e3ba24cfd08552857bf98515f17a18242724b4a040e",
+      "sha256": "18b69013024d2bd7f51d7bf0a35f5561c0bf6d4ebb7c8189a173f4a28636018e",
       "komut": [
         "bash",
         "retro/scripts/retro.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T12:07:07+03:00",
-      "sure_sn": 6.1,
+      "zaman": "2026-10-29T12:11:25+03:00",
+      "sure_sn": 5.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "503658f8df724b2eb7496b0772e6cf33"
+      "olcum_id": "0e66c2d4173b4990abab6d6af423bd24"
     },
     {
       "tur": "olcum",
@@ -78,7 +78,28 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "40865b6d8890408099b402ad5a83393b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-okuma-hatasi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-okuma-hatasi-tek.txt",
+      "sha256": "db3437a9a0fd87621b61b78c0884f66214bec9144ce27af3d17b207a0ad0b36b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-retro/m10/retro.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T12:11:31+03:00",
+      "sure_sn": 5.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "17943ccfe90d443d9b896cd4979426e7"
     }
   ],
-  "imza": "237ad871e516102c7afeb9efc00de32295ca0bb4f99e38cc80ef81eca14a1f83"
+  "imza": "1f6d6dbdceb4c75fccaf8c9e1c4354473300d4b737afe196278042044fd12e3b"
 }

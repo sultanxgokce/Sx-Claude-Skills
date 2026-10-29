@@ -86,6 +86,8 @@ icerir "$(cat "$D")" "| Sultan-eli adımı | ÖLÇÜLEMEDİ: tanımlı kaynak yo
 icerir "$(cat "$D")" "| İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma | 2 · 60 dk |" "T2l D4: bu ajanın haftada kırmızıya düşen 2 işi, ort. kalma 60 dk (SERDAR'ın işi ve geçen hafta sayılmaz)"
 RETRO_BEKCI_LOG="$T/yok.log" python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; icerir "$(cat "$D")" "| İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma | ÖLÇÜLEMEDİ: bekçi kütüğü yok |" "T2m D4: kütük yoksa ÖLÇÜLEMEDİ, 0 değil"
 python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1
+mkdir -p "$T/kutuk-dizin"; RETRO_BEKCI_LOG="$T/kutuk-dizin" python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; icerir "$(cat "$D")" "| İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma | ÖLÇÜLEMEDİ: bekçi kütüğü yok |" "T2n D4: kütük VAR ama okunamıyor (dizin) → ÖLÇÜLEMEDİ, çökme yok (göz tur 1)"
+python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1
 icerir "$(cat "$D")" "_koltuk: bani:0" "T2j koltuk beyanı"
 icerir "$CIKTI" "iz: VAR" "T2k iz özeti"
 kapi "T2l ikinci kutu rc=4 (ezmez)" 4 python3 "$R" kutu BÂNİ
@@ -380,6 +382,8 @@ m_nabiz(){ local Y="$KOK/_agents/handoff/retro/2026-W42/NB.md"; rm -f "$Y"; pyth
 mut "M7 D4 ajan süzgeci kalkınca başkasının kırmızısı sayılır (NB ajanı 0 olmalı; kapı yakalar)" 's/        if not m or norm(m.group(2)) != norm(ajan):/        if not m:/' m_nabiz
 m_hafta(){ python3 "$1" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; grep -qF "| 2 · 60 dk |" "$D"; }
 mut "M8 D4 hafta süzgeci kalkınca geçen haftanın işi sayılır (3 iş; kapı yakalar)" 's/        if not aralikta(t.date(), pzt, paz):/        if False:/' m_hafta
+m_okunamaz(){ RETRO_BEKCI_LOG="$T/kutuk-dizin" python3 "$1" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; local rc=$?; python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; [ "$rc" -eq 0 ]; }
+mut "M10 D4 okuma hatası yakalanmazsa okunamayan kütük aracı çökertir (kapı yakalar)" 's/    except OSError:   # var ama okunamıyor/    except ValueError:   # var ama okunamıyor/' m_okunamaz
 python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1
 mut "M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar)" 's/    return bool((n and n\["satir"\] > 0)/    return True or bool((n and n["satir"] > 0)/' m_iz
 m_elle(){ local rc; cp "$T/merkez-elle.md" "$M"; python3 "$1" merkez --yenile >/dev/null 2>&1; grep -qF "## Kaçış ve tıkanma" "$M" && grep -qF "vekil ölçütü önce adıyla ölç" "$M" && grep -qF "önek araç başlığına benzer" "$M" && cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M"); rc=$?; cp "$T/merkez-elle.md" "$M"; return $rc; }

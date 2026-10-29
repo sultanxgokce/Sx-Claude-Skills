@@ -10,7 +10,7 @@ version: 1.4.0
 Kutu ölçüm tablosuna satır: **İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma** — kaynak boşta bekçisinin kütüğü
 (`/config/.filo/bosta-bekcisi.log`, `RETRO_BEKCI_LOG`): D3 her turda kırmızı iş başına `NABIZ gorev=… ajan=… renk=kirmizi` satırı yazar.
 Sayı = o hafta bu ajanın kırmızı görülen farklı iş sayısı; süre = işin haftadaki ilk–son kırmızı kaydı arası (tur aralıklı örneklem; tek kayıt
-0 dk), ortalaması. Kütük yoksa **ÖLÇÜLEMEDİ**, 0 değil. "Düşüyorsa kurgu çalışıyor" ölçüsü budur; haftalık retroda kıyaslanır. Sınav T2l-T2m, mutant M7-M8.
+0 dk), ortalaması. Kütük yoksa ya da okunamıyorsa **ÖLÇÜLEMEDİ**, 0 değil. "Düşüyorsa kurgu çalışıyor" ölçüsü budur; haftalık retroda kıyaslanır. Sınav T2l-T2n, mutant M7-M8, M10.
 
 ## 🆕 1.3.0 · merkez havuzu da süzer — görev defterindeki 'havuz' kayıtları MERKEZ.md'ye (23 Eki · 11F0Z0 · Sultan D1 21 Eki "Eleme turu + bulgu kapısı")
 Bulgular 22 Eki'den beri merkezî Görev Defteri'ne **'havuz'** durumunda düşer (`bulgu` 0.5.0) ve haftalık süzmede görev olur; retro

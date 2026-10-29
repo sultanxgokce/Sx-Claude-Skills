@@ -265,7 +265,11 @@ def bekci_olc(ajan, pzt, paz):
     if not os.path.exists(yol):
         return None
     n = 0
-    for s in open(yol, encoding="utf-8", errors="replace"):
+    try:
+        satirlar = open(yol, encoding="utf-8", errors="replace").read().splitlines()
+    except OSError:   # var ama okunamıyor: ÖLÇÜLEMEDİ (göz tur 1 — aynı sınıf hata D4'te de vardı)
+        return None
+    for s in satirlar:
         p = s.split()
         if len(p) < 3 or p[2] == "TUR" or norm(p[2]) != norm(ajan):
             continue
@@ -285,7 +289,11 @@ def nabiz_olc(ajan, pzt, paz):
     if not os.path.exists(yol):
         return None
     isler = {}
-    for s in open(yol, encoding="utf-8", errors="replace"):
+    try:
+        satirlar = open(yol, encoding="utf-8", errors="replace").read().splitlines()
+    except OSError:   # var ama okunamıyor (izin · dizin · kopuk bağ): ÖLÇÜLEMEDİ — çökme de "0 iş" de değil (göz tur 1)
+        return None
+    for s in satirlar:
         m = NABIZ_RE.search(s)
         if not m or norm(m.group(2)) != norm(ajan):
             continue
