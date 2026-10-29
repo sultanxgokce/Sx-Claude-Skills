@@ -1,5 +1,5 @@
 $ bash ahi/schema/katalog-surum-hiza.test.sh
-# rc=0 sure=1.5s zaman=2026-10-29T10:49:04+03:00
+# rc=0 sure=1.0s zaman=2026-10-29T10:55:16+03:00
 --- stdout ---
 ── H1-H3 · hizalı katalog, path biçimleri
   ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
@@ -12,17 +12,21 @@ $ bash ahi/schema/katalog-surum-hiza.test.sh
   ✓ H5b bozuk JSON → rc 2
   ✓ H5c argümansız → rc 2
 ── H6 · --duzelt
-  ✓ H6a iki sapma düzeltildi, geri okuma hizalı, rc 0
+  ✓ H6a iki sapma düzeltildi, tüm katalog yeniden ölçüldü sapma 0, rc 0
   ✓ H6b yeniden ölçüm: sapma 0
   ✓ H6c yalnız iki version satırı değişti; biçim, sıra ve öteki alanlar aynen (a 1.0.0 dokunulmadı)
 ── H7 · --duzelt ölçülemeyene dokunmaz
   ✓ H7 sapan düzeltildi, ölçülemeyen c aynen kaldı, rc 3 söylendi
+── H9-H10 · --duzelt girdi sınırı ve yazım bağımsızlığı
+  ✓ H9 version'sız sapan girdi DOKUNULMADI (rc 1), komşu b kendi aralığında düzeltildi, c aynen
+  ✓ H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0
 ── H8 · gerçek depo
   ✓ H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)
 ── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı
   ✓ M1 kıyas gevşeyince H2 KIRMIZI (mutant sapmayı görmez, rc 0 döner)
   ✓ M2 düzeltme diske yazmayınca H6b KIRMIZI (yeniden ölçüm sapma bulur)
   ✓ M3 ölçülemeyen 'sapma yok' sayılınca H4 KIRMIZI (rc 0 döndü)
+  ✓ M4 girdi sınırı kalkınca H9 KIRMIZI (a'nın düzeltmesi komşu b'nin version'ına yazıldı)
 
-SONUÇ: 15 geçti · 0 kaldı
+SONUÇ: 18 geçti · 0 kaldı
 --- stderr ---

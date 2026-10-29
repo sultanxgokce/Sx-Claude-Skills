@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/duzelt-yazmaz.mjs bash ahi/schema/katalog-surum-hiza.test.sh
-# rc=1 sure=0.6s zaman=2026-10-29T10:49:06+03:00
+# rc=1 sure=0.9s zaman=2026-10-29T10:55:18+03:00
 --- stdout ---
 ── H1-H3 · hizalı katalog, path biçimleri
   ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
@@ -13,12 +13,12 @@ $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7
   ✓ H5b bozuk JSON → rc 2
   ✓ H5c argümansız → rc 2
 ── H6 · --duzelt
-  ✗ H6a iki sapma düzeltildi, geri okuma hizalı, rc 0   ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
+  ✗ H6a iki sapma düzeltildi, tüm katalog yeniden ölçüldü sapma 0, rc 0   ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
   ✗ SAPMA c: katalog 0.0.9 ≠ SKILL.md 0.1.0
 katalog↔SKILL.md: girdi 3 · sapma 2 · ölçülemedi 0
-  ✎ b: 2.0.0 → 2.3.4
   ✎ c: 0.0.9 → 0.1.0
-  düzeltildi: 2/2 · geri okuma: 2 girdi HÂLÂ sapık
+  ✎ b: 2.0.0 → 2.3.4
+  düzeltildi: 2/2 · yeniden ölçüm (tüm katalog): 2 sapma HÂLÂ var
   ✗ H6b yeniden ölçüm: sapma 0 
   ✗ H6c yalnız iki version satırı değişti; biçim, sıra ve öteki alanlar aynen (a 1.0.0 dokunulmadı) diff dışı satır: 0
 ── H7 · --duzelt ölçülemeyene dokunmaz
@@ -26,7 +26,18 @@ katalog↔SKILL.md: girdi 3 · sapma 2 · ölçülemedi 0
   ◻ ÖLÇÜLEMEDİ c: c/SKILL.md yok
 katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 1
   ✎ b: 2.0.0 → 2.3.4
-  düzeltildi: 1/1 · geri okuma: 1 girdi HÂLÂ sapık
+  düzeltildi: 1/1 · yeniden ölçüm (tüm katalog): 1 sapma HÂLÂ var
+── H9-H10 · --duzelt girdi sınırı ve yazım bağımsızlığı
+  ✗ H9 version'sız sapan girdi DOKUNULMADI (rc 1), komşu b kendi aralığında düzeltildi, c aynen   ✗ SAPMA a: katalog (yok) ≠ SKILL.md 1.0.0
+  ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
+katalog↔SKILL.md: girdi 3 · sapma 2 · ölçülemedi 0
+  ✎ b: 2.0.0 → 2.3.4
+  ✗ a: girdide "version" anahtarı yok — DOKUNULMADI (elle ekle)
+  düzeltildi: 1/2 · dokunulmadı 1 · yeniden ölçüm (tüm katalog): 2 sapma HÂLÂ var
+  ✗ H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0   ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
+katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 0
+  ✎ b: 2.0.0 → 2.3.4
+  düzeltildi: 1/1 · yeniden ölçüm (tüm katalog): 1 sapma HÂLÂ var
 ── H8 · gerçek depo
   ✓ H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)
 ── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı
@@ -34,6 +45,7 @@ katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 1
 ÇAPA 0
   ✗ M2 mutant kurulamadı 
   ✓ M3 ölçülemeyen 'sapma yok' sayılınca H4 KIRMIZI (rc 0 döndü)
+  ✗ M4 girdi sınırı kalkınca H9 KIRMIZI (a'nın düzeltmesi komşu b'nin version'ına yazıldı) 
 
-SONUÇ: 10 geçti · 5 kaldı
+SONUÇ: 10 geçti · 8 kaldı
 --- stderr ---

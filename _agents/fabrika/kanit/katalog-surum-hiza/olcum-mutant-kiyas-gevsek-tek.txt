@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/kiyas-gevsek.mjs bash ahi/schema/katalog-surum-hiza.test.sh
-# rc=1 sure=0.6s zaman=2026-10-29T10:49:05+03:00
+# rc=1 sure=0.7s zaman=2026-10-29T10:55:17+03:00
 --- stdout ---
 ── H1-H3 · hizalı katalog, path biçimleri
   ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
@@ -14,7 +14,7 @@ $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7
   ✓ H5b bozuk JSON → rc 2
   ✓ H5c argümansız → rc 2
 ── H6 · --duzelt
-  ✗ H6a iki sapma düzeltildi, geri okuma hizalı, rc 0 katalog↔SKILL.md: girdi 3 · sapma 0 · ölçülemedi 0
+  ✗ H6a iki sapma düzeltildi, tüm katalog yeniden ölçüldü sapma 0, rc 0 katalog↔SKILL.md: girdi 3 · sapma 0 · ölçülemedi 0
 ✓ sapma 0
   ✓ H6b yeniden ölçüm: sapma 0
   ✗ H6c yalnız iki version satırı değişti; biçim, sıra ve öteki alanlar aynen (a 1.0.0 dokunulmadı) diff dışı satır: 0
@@ -22,6 +22,13 @@ $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7
   ✗ H7 sapan düzeltildi, ölçülemeyen c aynen kaldı, rc 3 söylendi   ◻ ÖLÇÜLEMEDİ c: c/SKILL.md yok
 katalog↔SKILL.md: girdi 3 · sapma 0 · ölçülemedi 1
 ◻ 1 girdi ölçülemedi (SKILL.md yok/versiyonsuz) — "sapma yok" denemez
+── H9-H10 · --duzelt girdi sınırı ve yazım bağımsızlığı
+  ✗ H9 version'sız sapan girdi DOKUNULMADI (rc 1), komşu b kendi aralığında düzeltildi, c aynen   ✗ SAPMA a: katalog (yok) ≠ SKILL.md 1.0.0
+katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 0
+  ✗ a: girdide "version" anahtarı yok — DOKUNULMADI (elle ekle)
+  düzeltildi: 0/1 — dosyaya dokunulmadı
+  ✗ H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0 katalog↔SKILL.md: girdi 3 · sapma 0 · ölçülemedi 0
+✓ sapma 0
 ── H8 · gerçek depo
   ✓ H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)
 ── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı
@@ -29,6 +36,7 @@ katalog↔SKILL.md: girdi 3 · sapma 0 · ölçülemedi 1
   ✗ M1 mutant kurulamadı 
   ✗ M2 düzeltme diske yazmayınca H6b KIRMIZI (yeniden ölçüm sapma bulur) 
   ✓ M3 ölçülemeyen 'sapma yok' sayılınca H4 KIRMIZI (rc 0 döndü)
+  ✓ M4 girdi sınırı kalkınca H9 KIRMIZI (a'nın düzeltmesi komşu b'nin version'ına yazıldı)
 
-SONUÇ: 9 geçti · 6 kaldı
+SONUÇ: 10 geçti · 8 kaldı
 --- stderr ---
