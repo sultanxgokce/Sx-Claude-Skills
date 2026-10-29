@@ -1,7 +1,7 @@
 {
   "is": "uzlastir-zil-genis",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-27T01:09:09+03:00",
+  "guncelleme": "2026-10-29T10:41:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -75,7 +75,42 @@
       "sure_sn": 2.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "647cc9ced18d41559613fa7fefd9e332"
+    },
+    {
+      "tur": "canli",
+      "etiket": "zil-genis-canli",
+      "asama": "canli",
+      "dosya": "canli-zil-genis-canli.txt",
+      "sha256": "de9dbce724cce8aa02daced19f7c41c27864decb8320a2a04a03508f8e528df2",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/.filo/supurme-cron.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/.filo/supurme-cron.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "zil → .* aciliyet genis .*posta rc 0",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-29T07:37:22Z   · zil → HEZARFEN · aciliyet genis · tekrar uzlastir-cek-gorev_01M5M9MJX7DT6XPX2Q757JS8A2-2026-10-29T07:36:58.478Z · posta rc 0",
+        "saat": "2026-10-29T07:37:22Z",
+        "saat_iso": "2026-10-29T07:37:22+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-29T07:37:22Z   · zil → HEZARFEN · aciliyet genis · tekrar uzlastir-cek-gorev_01M5M9MJX7DT6XPX2Q757JS8A2-2026-10-29T07:36:58.478Z · posta rc 0",
+        "saat": "2026-10-29T07:37:22Z",
+        "saat_iso": "2026-10-29T07:37:22+00:00"
+      },
+      "zaman": "2026-10-29T10:41:17+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "577198e58ab14985bcce0a77c125d2ce"
     }
   ],
-  "imza": "e17867436c87588497c9a055dc86c7c39e7c4ff2aa873a400f93c761a28df541"
+  "imza": "70491c3f1cbe263f0507128d2304f0bc9184746f50409a3fdbf4ca30b5ed4779"
 }
