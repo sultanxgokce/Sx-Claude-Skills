@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "mesveret-kayit",
+  "pr": "578",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T00:43:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-mesveret-kayit",
+  "dal": "mesveret-kayit",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 7288,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 1952
+  },
+  "dalgic": "olculemedi",
+  "bas": "0c51f9c19bb04941f79e41981af629af942cbd9a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Mesveret, kataloğa sürümlü bir ajan olarak ve dağıtım hedeflerine `_global` üzerinden eklenmiş; talep edilen kayıt işi yapılmış. Katı şema, sürüm, katalog hizası ve mesveret’e özel eşitleme ölçümü yeşil olduğundan üretimi engelleyen sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek yeşil ölçümün rc=0 sonucu katı depo doğrulamasını, sürüm denetimini, katalog↔SKILL.md hizasını ve `sync-skills.mjs --skill mesveret` çağrısını kapsıyor. Görsel kare bu kayıt değişikliği için gerekli değil; ancak ölçüm kuru çalışma niteliğinde ve paketin kutulara fiilen kurulmuş olduğunu değil, `_global` dağıtımına hazır ve eşitleme tarafından tanınır olduğunu kanıtlıyor."
+  }
+}
