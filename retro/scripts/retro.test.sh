@@ -43,6 +43,13 @@ k is-d MIRAHUR 2026-10-14T10:00:00+03:00 acik ""
 echo '{}' > "$KOK/_agents/fabrika/kanit/is-a/DENETIM-1.json"; echo '{}' > "$KOK/_agents/fabrika/kanit/is-a/DENETIM-2.json"; echo '{}' > "$KOK/_agents/fabrika/kanit/is-b/DENETIM-1.json"
 printf '2026-10-15T14:34:31Z | KAPISIZ | a\n2026-10-01T14:34:31Z | KAPISIZ | eski\n' > "$KOK/_agents/fabrika/kacis-defteri.log"
 printf '2026-10-17T14:49:02+03:00 bosta-bekcisi BERİD 16 dk boş\n2026-10-17T14:49:02+03:00 bosta-bekcisi BÂNİ 20 dk boş\n2026-10-17T14:49:02+03:00 bosta-bekcisi TUR uye=6\n' > "$T/bekci.log"
+# İş Nabzı D4 (JHX20YPE): NABIZ satırları — BÂNİ: iş A 3 kayıt (10:00→12:00 = 120 dk) + iş B tek kayıt (0 dk) → 2 iş · ort 60 dk; SERDAR'ın işi ve geçen haftanın işi sayılmaz
+printf '%s\n' '2026-10-15T10:00:00+03:00 bosta-bekcisi NABIZ gorev=gorev_01AAAAAAAAAAAAAAAAAAAAAAAA ajan=BÂNİ renk=kirmizi sessiz=190 toplam=300 tahmin=60 zil=gonderildi' \
+  '2026-10-15T11:00:00+03:00 bosta-bekcisi NABIZ gorev=gorev_01AAAAAAAAAAAAAAAAAAAAAAAA ajan=BÂNİ renk=kirmizi sessiz=250 toplam=360 tahmin=60 zil=tavan' \
+  '2026-10-15T12:00:00+03:00 bosta-bekcisi NABIZ gorev=gorev_01AAAAAAAAAAAAAAAAAAAAAAAA ajan=BÂNİ renk=kirmizi sessiz=310 toplam=420 tahmin=60 zil=tavan' \
+  '2026-10-16T09:00:00+03:00 bosta-bekcisi NABIZ gorev=gorev_01BBBBBBBBBBBBBBBBBBBBBBBB ajan=BÂNİ renk=kirmizi sessiz=200 toplam=200 tahmin=30 zil=gonderildi' \
+  '2026-10-16T09:00:00+03:00 bosta-bekcisi NABIZ gorev=gorev_01CCCCCCCCCCCCCCCCCCCCCCCC ajan=SERDAR renk=kirmizi sessiz=200 toplam=200 tahmin=30 zil=gonderildi' \
+  '2026-10-05T09:00:00+03:00 bosta-bekcisi NABIZ gorev=gorev_01DDDDDDDDDDDDDDDDDDDDDDDD ajan=BÂNİ renk=kirmizi sessiz=200 toplam=200 tahmin=30 zil=gonderildi' >> "$T/bekci.log"
 printf 'uyeler:\n  - id: SERDAR\n    tmux: "serdar:0"\n  - id: BÂNİ\n    tmux: "bani:0"\n  - id: MİRAHUR\n  - id: BASİRET\n' > "$RETRO_REGISTRY"
 # Havuz köprüsü (11F0Z0): `bulgu.sh havuz-cek` BİÇİMİNDE sahte köprüler (eşlemenin kendisi bulgu.test.sh'ta ölçülür).
 #   bulgu-bos.sh  → varsayılan: 0 ham (1 acik + 1 bozuk satır) — T6-T9 akışı havuzsuz kalır
@@ -76,6 +83,9 @@ icerir "$(cat "$D")" "| bağımsız göz turu · ortalama tur/kart | 3 · 1.5 |"
 icerir "$(cat "$D")" "| kaçış (KUTU GENELİ, ajan ayrımı yok) | 1 |" "T2g kaçış hafta içi 1, etiketi kutu geneli"
 icerir "$(cat "$D")" "| boşta bekçisi zili | 1 |" "T2h bekçi zili yalnız bu ajan, TUR satırı değil"
 icerir "$(cat "$D")" "| Sultan-eli adımı | ÖLÇÜLEMEDİ: tanımlı kaynak yok |" "T2i ölçülemeyen kaynak sarı, 0 değil"
+icerir "$(cat "$D")" "| İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma | 2 · 60 dk |" "T2l D4: bu ajanın haftada kırmızıya düşen 2 işi, ort. kalma 60 dk (SERDAR'ın işi ve geçen hafta sayılmaz)"
+RETRO_BEKCI_LOG="$T/yok.log" python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; icerir "$(cat "$D")" "| İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma | ÖLÇÜLEMEDİ: bekçi kütüğü yok |" "T2m D4: kütük yoksa ÖLÇÜLEMEDİ, 0 değil"
+python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1
 icerir "$(cat "$D")" "_koltuk: bani:0" "T2j koltuk beyanı"
 icerir "$CIKTI" "iz: VAR" "T2k iz özeti"
 kapi "T2l ikinci kutu rc=4 (ezmez)" 4 python3 "$R" kutu BÂNİ
@@ -366,6 +376,11 @@ sed -i 's/^- Ö1) kart.sh canli-ayarla sahip doğrulamalı ve zaman damgalı$/- 
 kapi "M4-önkoşul: metin değişti → gerçek araç BAYAT (kırmızı)" 1 python3 "$R" suzum
 m_bayat(){ python3 "$1" suzum >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar)" 's/            if e and e\[0\] != t.strip():/            if False:/' m_bayat
+m_nabiz(){ local Y="$KOK/_agents/handoff/retro/2026-W42/NB.md"; rm -f "$Y"; python3 "$1" kutu NB --koltuk nb:0 >/dev/null 2>&1; local rc=1; grep -qF "| İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma | 0 · — |" "$Y" && rc=0; rm -f "$Y"; return $rc; }
+mut "M7 D4 ajan süzgeci kalkınca başkasının kırmızısı sayılır (NB ajanı 0 olmalı; kapı yakalar)" 's/        if not m or norm(m.group(2)) != norm(ajan):/        if not m:/' m_nabiz
+m_hafta(){ python3 "$1" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1; grep -qF "| 2 · 60 dk |" "$D"; }
+mut "M8 D4 hafta süzgeci kalkınca geçen haftanın işi sayılır (3 iş; kapı yakalar)" 's/        if not aralikta(t.date(), pzt, paz):/        if False:/' m_hafta
+python3 "$R" kutu BÂNİ --koltuk bani:0 --yenile >/dev/null 2>&1
 mut "M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar)" 's/    return bool((n and n\["satir"\] > 0)/    return True or bool((n and n["satir"] > 0)/' m_iz
 m_elle(){ local rc; cp "$T/merkez-elle.md" "$M"; python3 "$1" merkez --yenile >/dev/null 2>&1; grep -qF "## Kaçış ve tıkanma" "$M" && grep -qF "vekil ölçütü önce adıyla ölç" "$M" && grep -qF "önek araç başlığına benzer" "$M" && cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M"); rc=$?; cp "$T/merkez-elle.md" "$M"; return $rc; }
 mut "M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar)" 's/            elle = merkez_elle_ham(eski)/            elle = ""/' m_elle

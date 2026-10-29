@@ -1,10 +1,16 @@
 ---
 name: retro
 description: Haftalık retro — araç ajanın haftasını ÖLÇER (NOTES · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri), ajan 5 başlığı kendi gözüyle YORUMLAR (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<YYYY-Www>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır (süzüm kanıtı); görev defterindeki 'havuz' kayıtları da (bulgu.sh havuz-cek köprüsü) aynı damga kuralıyla "Havuz süzümü" bölümüne girer. Tetik: "/retro", "haftalık retro", "haftanın dersleri", "retro yaz", "merkez retrosu".
-version: 1.3.0
+version: 1.4.0
 ---
 
 # /retro — haftalık retro (araç ölçer · ajan yorumlar · merkez toplar · süzüm kanıtlanır)
+
+## 🆕 1.4.0 · İş Nabzı D4 — kırmızıya düşen iş · ortalama kırmızıda kalma (29 Eki · görev …JHX20YPE · tasarım is-nabzi §4 madde 4)
+Kutu ölçüm tablosuna satır: **İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma** — kaynak boşta bekçisinin kütüğü
+(`/config/.filo/bosta-bekcisi.log`, `RETRO_BEKCI_LOG`): D3 her turda kırmızı iş başına `NABIZ gorev=… ajan=… renk=kirmizi` satırı yazar.
+Sayı = o hafta bu ajanın kırmızı görülen farklı iş sayısı; süre = işin haftadaki ilk–son kırmızı kaydı arası (tur aralıklı örneklem; tek kayıt
+0 dk), ortalaması. Kütük yoksa **ÖLÇÜLEMEDİ**, 0 değil. "Düşüyorsa kurgu çalışıyor" ölçüsü budur; haftalık retroda kıyaslanır. Sınav T2l-T2m, mutant M7-M8.
 
 ## 🆕 1.3.0 · merkez havuzu da süzer — görev defterindeki 'havuz' kayıtları MERKEZ.md'ye (23 Eki · 11F0Z0 · Sultan D1 21 Eki "Eleme turu + bulgu kapısı")
 Bulgular 22 Eki'den beri merkezî Görev Defteri'ne **'havuz'** durumunda düşer (`bulgu` 0.5.0) ve haftalık süzmede görev olur; retro

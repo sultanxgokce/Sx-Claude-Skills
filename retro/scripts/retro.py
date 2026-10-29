@@ -34,7 +34,7 @@ import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta
 
-SURUM = "1.3.0"
+SURUM = "1.4.0"
 AJAN_DIZIN_DISI = {"handoff", "fabrika", "spec", "orchestration", "codex", "decisions", "runbooks", "ekip-os-base"}
 DERS_RE = re.compile(r"ders|zaman kayb|zorluk|tıkand|tikand|boşa|bosa", re.I)
 TARIH_RE = re.compile(r"(20\d\d-\d\d-\d\d)")
@@ -274,6 +274,34 @@ def bekci_olc(ajan, pzt, paz):
     return {"yol": yol, "sayi": n}
 
 
+NABIZ_RE = re.compile(r"bosta-bekcisi NABIZ gorev=(\S+) ajan=(\S+) renk=kirmizi")
+
+
+def nabiz_olc(ajan, pzt, paz):
+    """İş Nabzı D4 (görev …JHX20YPE · tasarım is-nabzi-tasarim-20261021 §4 madde 4): boşta bekçisinin kütüğündeki NABIZ satırlarından
+    (D3 her turda kırmızı iş başına bir satır yazar) o hafta bu ajanın KIRMIZIYA DÜŞEN iş sayısı ve kırmızıda ORTALAMA kalma süresi.
+    Süre = işin haftadaki ilk ve son kırmızı kaydı arası (kütük tur aralıklı örneklemdir; tek kayıt = 0 dk). Kütük yoksa None (ÖLÇÜLEMEDİ)."""
+    yol = os.environ.get("RETRO_BEKCI_LOG", "/config/.filo/bosta-bekcisi.log")
+    if not os.path.exists(yol):
+        return None
+    isler = {}
+    for s in open(yol, encoding="utf-8", errors="replace"):
+        m = NABIZ_RE.search(s)
+        if not m or norm(m.group(2)) != norm(ajan):
+            continue
+        try:
+            t = datetime.fromisoformat(s.split()[0])
+        except ValueError:
+            continue
+        if not aralikta(t.date(), pzt, paz):
+            continue
+        a = isler.setdefault(m.group(1), [t, t])
+        a[0] = min(a[0], t); a[1] = max(a[1], t)
+    sureler = [int((b - a).total_seconds() // 60) for a, b in isler.values()]
+    ort = round(sum(sureler) / len(sureler)) if sureler else None
+    return {"yol": yol, "is": len(isler), "ort_dk": ort, "isler": sorted(isler)}
+
+
 def olc(kok, ajan, hafta):
     pzt, paz = hafta_araligi(hafta)
     return {
@@ -282,6 +310,7 @@ def olc(kok, ajan, hafta):
         "kart": kart_olc(kok, ajan, pzt, paz),
         "kacis": kacis_olc(kok, pzt, paz),
         "bekci": bekci_olc(ajan, pzt, paz),
+        "nabiz": nabiz_olc(ajan, pzt, paz),
     }
 
 
@@ -320,6 +349,13 @@ def olcum_tablosu(o):
     r.append(sat("kaçış (KUTU GENELİ, ajan ayrımı yok)", str(c["sayi"]) if c else "ÖLÇÜLEMEDİ: kaçış defteri yok", f"`{c['yol']}`" if c else "—"))
     b = o["bekci"]
     r.append(sat("boşta bekçisi zili", str(b["sayi"]) if b else "ÖLÇÜLEMEDİ: bekçi günlüğü yok", f"`{b['yol']}`" if b else "—"))
+    nb = o.get("nabiz")
+    if nb:
+        ort = "—" if nb["ort_dk"] is None else f"{nb['ort_dk']} dk"
+        r.append(sat("İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma", f"{nb['is']} · {ort}",
+                     f"`{nb['yol']}` NABIZ satırları (D3 kütüğü; süre = haftadaki ilk–son kırmızı kaydı arası, tur aralıklı örneklem)"))
+    else:
+        r.append(sat("İş Nabzı D4 · kırmızıya düşen iş · ort. kırmızıda kalma", "ÖLÇÜLEMEDİ: bekçi kütüğü yok", "—"))
     r.append(sat("Sultan-eli adımı", "ÖLÇÜLEMEDİ: tanımlı kaynak yok", "—"))
     return "\n".join(r)
 

@@ -1,0 +1,84 @@
+{
+  "is": "retro-nabiz-d4",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T12:07:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "dccb8395246db2d71fa5db8b108da7d38958291c08190c355c3cd0000d4626bc",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-retro/retro.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T12:07:01+03:00",
+      "sure_sn": 5.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6d391d41e6e4441c894059f95e519a07"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "1b32c30358971e5938e16e3ba24cfd08552857bf98515f17a18242724b4a040e",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T12:07:07+03:00",
+      "sure_sn": 6.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "503658f8df724b2eb7496b0772e6cf33"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ajan-suzgeci",
+      "asama": "tek",
+      "dosya": "olcum-mutant-ajan-suzgeci-tek.txt",
+      "sha256": "3461dfeb1da963174f174089a79c5054512be90e4e26f604365cc17c3f59c515",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-retro/m7/retro.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T12:07:14+03:00",
+      "sure_sn": 7.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "150a55cbf20c4bb58dbe0bf4cdf1fa29"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-hafta-suzgeci",
+      "asama": "tek",
+      "dosya": "olcum-mutant-hafta-suzgeci-tek.txt",
+      "sha256": "61919f639eef032821850d39d99c8e20619807a726b768d2b68b7b311209964c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-retro/m8/retro.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T12:07:20+03:00",
+      "sure_sn": 6.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "40865b6d8890408099b402ad5a83393b"
+    }
+  ],
+  "imza": "237ad871e516102c7afeb9efc00de32295ca0bb4f99e38cc80ef81eca14a1f83"
+}
