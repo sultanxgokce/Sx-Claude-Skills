@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # oda.test.sh — oda-kur sınavı. HERMETİK: geçici sahte iki odalı depo, ağ yok, claude çağrılmaz.
 # Mutant kipi: kanca/üretici gevşerse sınav KIRMIZI olmalı (ODA_MUTANT=0 ile kapatılır).
-# kabuk-testleri: sure=300
+# kabuk-testleri: sure=480   (CI kalan kovası paralel 4: 152–250 sn ölçüldü, 29 Eki; 300 yük altında dar)
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ODA="$HERE/oda.sh"

@@ -40,7 +40,13 @@ kova() {   # kova <sınama yolu> → bu sınama hangi kovada
 }
 sure_sec() {
   local t="$1" n
-  n="$(head -15 "$t" 2>/dev/null | sed -n 's/^# *kabuk-testleri: *sure=\([0-9]\{1,5\}\) *$/\1/p' | head -1)"
+  # Sayıdan sonra EN AZ BİR BOŞLUK + rakamla başlamayan açıklama gelebilir (`sure=480   (yerelde 154 sn …)`); `sure=1 2` / `sure=1abc`
+  # okunmaz → uyarı (göz tur 1: gevşek kuyruk sessiz yanlış ayrıştırırdı). Eski kalıp satır sonunu şart koşuyordu, sicil.test.sh'ın
+  # 480 beyanı SESSİZCE 300'e düşüyordu ve CI'da paralelde 300 sn'de kesiliyordu (görev …WRVA, 29 Eki). Beyan var ama okunamıyorsa UYARI.
+  n="$(head -15 "$t" 2>/dev/null | sed -n 's/^# *kabuk-testleri: *sure=\([0-9]\{1,5\}\)\( \{1,\}[^0-9 ].*\)\{0,1\}$/\1/p' | head -1)"
+  if [ -z "$n" ] && head -15 "$t" 2>/dev/null | grep -q '^# *kabuk-testleri:'; then
+    echo "::warning::$t 'kabuk-testleri:' başlığı var ama sure=N okunamadı — varsayılan $KABUK_SURE_VARSAYILAN uygulandı" >&2
+  fi
   if [ -z "$n" ] || [ "$n" -lt 1 ]; then echo "$KABUK_SURE_VARSAYILAN"; return 0; fi
   if [ "$n" -gt "$KABUK_SURE_TAVAN" ]; then echo "::warning::$t sure=$n istedi, tavan $KABUK_SURE_TAVAN uygulandı" >&2; echo "$KABUK_SURE_TAVAN"; return 0; fi
   echo "$n"

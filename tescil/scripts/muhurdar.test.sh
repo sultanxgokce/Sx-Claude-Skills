@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# kabuk-testleri: sure=480   (CI kalan kovası paralel 4: 157–247 sn ölçüldü, 29 Eki; varsayılan 300 yük altında dar)
 # muhurdar.test.sh — Mühürdarlık · Tescil usulü (G8) sınavı: muhurdar.sh + tescil-run/gereklilik/muhur/kor-istem.
 # HERMETİK: geçici git deposu (iş ağacı), sahte yargıçlar (PATH başında codex/claude), gerçek ağ/model çağrısı YOK.
 # Senaryo fonksiyonda; geçen kapıların anahtarını basar. Gerçek betiklerde hepsi geçer; mutant kopyada hedef anahtar düşer.

@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh 40819805097
+# rc=0 sure=8.2s zaman=2026-10-29T08:23:03+03:00
+--- stdout ---
+sınav                                                      d1     d2     d3  enuzun  tavan oran
+./tescil/scripts/sicil.test.sh                               0      0      0       0    480 480.0
+./yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh          0      0      0       0    300 300.0
+./oda-kur/scripts/oda.test.sh                                0      0      0       0    480 480.0
+./tescil/scripts/muhurdar.test.sh                            0      0      0       0    480 480.0
+./yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh      0      0      0       0    300 300.0
+--- stderr ---

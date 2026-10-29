@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "ci-kalan-kovasi-kararli",
+  "pr": "560",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T08:22:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-katalog-hiza-once.txt (kirmizi → gecersiz) — tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET · BÂNİ;olcum-katalog-hiza-sonra.txt (yesil → gecersiz) — tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ci-kalan-kovasi-kararli",
+  "dal": "ci-kalan-kovasi-kararli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29759,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 17326
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7bcd171b94260affdd44306d16db1bf3cdabe734",
+  "duzeltme_farki": {
+    "onceki_bas": "03d4349738e353a48a5ad64552841c5189908722",
+    "dosya": 10,
+    "bayt": 18548,
+    "tam_bayt": 52819
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Süre açıklamalı beyanla doğru okunuyor, önceki kapsam kayması geri alınmış ve PR CI için üç ardışık başarılı kalan-kovası işi gösterilmiş. Ana talep doğru yönde karşılanmış; ancak ağır sınav tavanlarının ölçülen sınav sürelerinden türetildiğini gösteren ölçüm çifti hâlâ yok, önce bunu kanıtlayın.",
+    "bulgular": [
+      {
+        "ne": "Ağır sınavların tavanlarının ölçülen sürelere göre ayarlandığı doğrulanamıyor; sunulan ölçüm yalnız beyan edilen tavan ile uygulanan tavanın eşitliğini sınıyor, gerçek sınav süresi ile seçilen tavanı yan yana koymuyor.",
+        "kanit": "`tavan-okuma` sonrasında sicil, oda ve mühürdar için yalnız `beyan=480 uygulanan=480`, ağır-sıra-sarma için `beyan=300 uygulanan=300` yazıyor. Manifestte gerçek ağır sınav sürelerini önce/sonra tavanlarla karşılaştıran başka kayıt bulunmuyor; üç CI işi de yalnız bütün kovanın 636, 458 ve 633 saniyelik toplamlarını veriyor.",
+        "konum": "olcum-tavan-okuma-sonra.txt; olcum-ci-kalan-3-kosu-tek.txt; kanıt manifesti:kayitlar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; geçersiz ilan edilen iki katalog kaydı kanıt sayılmadı. Önceki B1, katalog sürümünün 0.9.1'den 0.3.0'a geri alınması ve driftin ayrı göreve bırakılmasıyla kapanmış; bu düzeltme iş dışı hizalamayı PR'dan çıkarıyor. Önceki B2, `ci-kalan-3-kosu` ölçümündeki üç ayrı iş kimliğinin success olması ve paralel aşım-yeniden ölçüm sayısının üçünde de 0 çıkmasıyla kapanmış. Süre ayrıştırması için kırmızı/yeşil önce-sonra çifti, K10/K10b/K10c sınavları ve ilgili mutasyonlar güçlü; eksik kalan parça, ağır sınavların ölçülen gerçek süreleri ile seçilen tavanların ölçüm çiftidir."
+  }
+}

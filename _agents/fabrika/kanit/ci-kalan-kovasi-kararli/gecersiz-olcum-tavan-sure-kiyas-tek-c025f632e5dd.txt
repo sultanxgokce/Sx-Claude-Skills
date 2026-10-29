@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-tavan-sure-kiyas-tek.txt
+hedef_sha256: 0b4db62ce82d1eefad58f268df74ec4dcb7afaab461539196dff449b39d976a9
+hedef_zaman: 2026-10-29T08:23:03+03:00
+hedef_renk: yesil
+neden: sahte yeşil: günlük ayrıştırması 0 sn okudu (desen tutmadı), betik boş veriyi geçti saydı — EKSİK VERİ ÖNCE SINA dersi; düzeltilip yeniden ölçülüyor
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-29T08:23:29+03:00
