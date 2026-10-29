@@ -200,11 +200,17 @@ def kayit_ekle(depo, is_adi, kayit):
 #      (a) `|| true` / `|| :`  — nerede olursa olsun açık maskedir;
 #      (b) son komut echo/printf/true/: VE öncesinde başka komut var  — çıkış kodu artık ölçülen işin değil, o komutun;
 #      (c) son komut boru (`a | b`) ve o noktada pipefail AÇIK değil  — çıkış kodu boru SONUNDAKİ süzgecin.
+#      (d) BLOK İÇİ boru (görev QY2D, 29 Eki): `for …; do X | tail -1 || exit 1; done` — boru son komut değil ama çıkış kodunu
+#          `||`/`&&` ya da bloğun sonu (`done`/`fi`/`}`) tüketiyor; pipefail kapalıysa X düşse de süzgecin 0'ı geçer, `|| exit 1`
+#          hiç tetiklenmez, betik 0 ile biter → yeşil kayıt. `if X | grep -q …` / `while …` KOŞULU denetlenmez (boru oradaki testtir).
 #    Ayrıştırılamayan betik (heredoc, dengesiz tırnak) REDDEDİLMEZ; kayda `boru_denetimi: ayrıştırılamadı` düşer — denetçi görür.
 #    Dosya betiği (`bash x.sh`) içeriği denetlenmez; kayda `kapsam-dışı` düşer (sınır dürüstçe beyan edilir).
 KABUKLAR = {"bash", "sh", "dash", "zsh", "ksh"}
 MASKE_SON = {"echo", "printf", "true", ":", "set"}   # son komut `set …` da 0 döner, öncekinin rc'sini yutar
 AYIRAC = {";", "&&", "||", "&", ";;"}
+BLOK_BAS = {"do", "then", "else", "{", "(", "elif"}          # bölüm başındaki blok anahtarları (QY2D): `do X | tail` → X | tail
+BLOK_SON = {"done", "fi", "}", ")", "esac", "else", "elif"}  # bölümü izleyen blok sonu: borunun rc'si bloğun rc'si olur
+KOSUL = {"if", "elif", "while", "until", "!"}                # koşul borusu (`if X | grep -q`) denetlenmez — boru oradaki testtir
 ONEKLER = {"command", "builtin", "exec", "time", "nohup", "noglob"}
 # Kabuğu ÇALIŞTIRAN sarmalayıcılar (göz tur 3): kabuk yalnız argv başında ya da bu zincirin arkasında kabuktur;
 # `printf bash -c …` içindeki `bash` bir VERİDİR, çalışmaz. Sarmalayıcının seçenekleri (`-…`), VAR=değer ve süre/sayı
@@ -314,11 +320,22 @@ def boru_denetimi(komut):
     # Başlangıç kabuk argümanından (`bash -o pipefail -c`, `bash -euo pipefail -c`); sonra son komuttan ÖNCEKİ her `set` komutu
     # `-…o pipefail` ile açar, `+…o pipefail` ile kapatır. Son komutun kendisi sayılmaz.
     pipefail = _pipefail_etkisi(komut[1:i], False)
+    govde = jet[:len(jet) - len(son)]
     bolum = []
-    for t in jet[:len(jet) - len(son)] + [";"]:
+    for k, t in enumerate(govde + [";"]):
         if t in AYIRAC:
             if bolum and bolum[0] == "set":
                 pipefail = _pipefail_etkisi(bolum[1:], pipefail)
+            # (d) blok içi boru: rc'si `||`/`&&` ile ya da blok sonunda tüketiliyor, pipefail kapalı → süzgecin rc'si ölçülen işin yerine geçer
+            if "|" in bolum and not pipefail:
+                ic = list(bolum)
+                while ic and ic[0] in BLOK_BAS:
+                    ic = ic[1:]
+                sonraki = next((x for x in jet[k + 1:] if x not in AYIRAC), None)   # son bölüm (`done`) govde dışında: jet taranır
+                tuketen = t if t in ("||", "&&") else (sonraki if sonraki in BLOK_SON else None)
+                if ic and ic[0] not in KOSUL and tuketen:
+                    suzgec = ic[len(ic) - 1 - ic[::-1].index("|") + 1] if ic[-1] != "|" else "?"
+                    return "maske", f"blok içindeki boru (`… | {suzgec}`) pipefail'siz ve çıkış kodunu `{tuketen}` tüketiyor — ölçülen komut düşse de süzgecin 0'ı geçer"
             bolum = []
         else:
             bolum.append(t)
