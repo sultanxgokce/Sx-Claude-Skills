@@ -11,10 +11,12 @@
 # bayatlarsa KIRMIZI, sınama başına süre tavanı (`# kabuk-testleri: sure=N`, varsayılan 300, tavan 900), arçelik sınavı ayrı işte.
 set -uo pipefail
 KOVA="${1:-}"
-case "$KOVA" in diploma|denetci|dumen|kalan|diploma-1|diploma-2) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|diploma-1|diploma-2|denetci|dumen|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
+case "$KOVA" in diploma|denetci|dumen|kalan|diploma-1|diploma-2|denetci-1|denetci-2|denetci-3) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|diploma-1|diploma-2|denetci|denetci-1|denetci-2|denetci-3|dumen|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
 # diploma-k: diploma sınavı tek başına tavana dayandı (CI 28 Eki: 879–884 sn / 900) → iki runner'a bölünür; sınav kendi senaryolarını
 #   DIPLOMA_PARCA=k/2 ile paylaştırır (gerçek koşu 1. parçada). Düz `diploma` = bölünmemiş (yerel tek koşu).
-KURAL="$KOVA"; case "$KOVA" in diploma-*) KURAL=diploma; export DIPLOMA_PARCA="${KOVA#diploma-}/2" ;; esac
+# denetci-k: denetci sınavı da tavana çarptı (CI 28-29 Eki: 53 mutant × tam süit, 900 sn'de rc 124, son 3 main koşusu kırmızı) → üç runner'a
+#   bölünür; sınav DENETCI_PARCA=k/3 ile paylaştırır (gerçek koşu 1. parçada, mutantlar round-robin). Düz `denetci` = bölünmemiş.
+KURAL="$KOVA"; case "$KOVA" in diploma-*) KURAL=diploma; export DIPLOMA_PARCA="${KOVA#diploma-}/2" ;; denetci-*) KURAL=denetci; export DENETCI_PARCA="${KOVA#denetci-}/3" ;; esac
 cd "$(git rev-parse --show-toplevel 2>/dev/null || dirname "$0"/../..)" || exit 2
 
 # KARANTİNA — kapı ilk kurulurken KIRMIZI bulunan, ilgisiz sınamalar. Sessiz atlama YASAK: her satır adıyla loglanır.

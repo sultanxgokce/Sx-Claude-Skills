@@ -1,0 +1,8 @@
+$ bash -c T0=$(date +%s); DENETCI_PARCA=2/3 bash yazilim-fabrikasi/scripts/denetci.test.sh > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/parca2-kanit.log 2>&1; rc=$?; echo "DENETCI_PARCA=2/3 rc=$rc sure=$(( $(date +%s) - T0 ))s"; grep -E "^\(parça|SONUÇ|\(bilgi\)" /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/parca2-kanit.log; exit $rc
+# rc=0 sure=473.3s zaman=2026-10-29T03:18:01+03:00
+--- stdout ---
+DENETCI_PARCA=2/3 rc=0 sure=473s
+(parça 2/3 · gerçek koşu: h · mutantlar: sıra no mod 3 = 1)
+  (bilgi) 18 mutant · 4 paralel · 473 sn
+── SONUÇ: 18 geçti · 0 kaldı ──
+--- stderr ---

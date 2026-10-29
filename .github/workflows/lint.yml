@@ -66,7 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kova: [diploma-1, diploma-2, denetci, dumen, kalan]   # diploma iki parça: tek parça 879–884 sn ile 900 tavanına dayandı (28 Eki)
+        kova: [diploma-1, diploma-2, denetci-1, denetci-2, denetci-3, dumen, kalan]   # diploma iki parça: tek parça 879–884 sn ile 900 tavanına dayandı (28 Eki) · denetci üç parça: 53 mutant × tam süit 900 tavanını aştı (29 Eki, …Q15C)
     steps:
       - uses: actions/checkout@v4
       # dumen-surucu sınavı gerçek headless Chromium + playwright-core ister; yoksa rc 3 (ÖLÇÜLEMEDİ) verir ve kova bunu kırmızı sayar

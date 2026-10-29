@@ -1,0 +1,5 @@
+parca 1/3 rc=0 sure=574s ── SONUÇ: 295 geçti · 0 kaldı ──   (bilgi) 17 mutant · 4 paralel · 357 sn
+parca 2/3 rc=0 sure=332s ── SONUÇ: 18 geçti · 0 kaldı ──   (bilgi) 18 mutant · 4 paralel · 332 sn
+parca 3/3 rc=0 sure=354s ── SONUÇ: 18 geçti · 0 kaldı ──   (bilgi) 18 mutant · 4 paralel · 354 sn
+
+[exited with code 0]

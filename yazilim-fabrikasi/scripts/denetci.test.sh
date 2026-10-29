@@ -21,6 +21,18 @@ TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"
 kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e --oda sinav-oda >/dev/null 2>&1; }
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
+# ⏱️ PARÇA (görev …Q15C, 29 Eki · CI 28-29 Eki: denetci kovası 900 sn tavanında rc 124, son 3 main koşusu kırmızı; son yeşil 15m07s):
+#    53 mutantın her biri süiti yeniden koşturur; tek runner'a sığmıyor. DENETCI_PARCA=k/n (diploma deseni): gerçek koşu sıra 0 →
+#    yalnız 1. parçada; mutantlar sıra numarasıyla parçalara ROUND-ROBIN dağılır (mut() kendi parçasında değilse sıraya girmez).
+#    İç koşum (IC_KOSUM: bir mutantın süiti) HER ZAMAN tam süittir — parça ortamdan miras alınsa da burada 1/1'e çekilir; yoksa
+#    mutant "yakalandı" sanılır (hiçbir kapı koşmadı, kalan=0 → yeşil). Verilmezse 1/1 = bölünmemiş (yerel tek koşu, eski davranış).
+PARCA="${DENETCI_PARCA:-1/1}"; [ -n "${IC_KOSUM:-}" ] && PARCA=1/1
+[[ "$PARCA" =~ ^([1-9][0-9]*)/([1-9][0-9]*)$ ]] && [ "${BASH_REMATCH[1]}" -le "${BASH_REMATCH[2]}" ] \
+  || { echo "ÖLÇÜLEMEDİ: DENETCI_PARCA '$PARCA' biçimsiz (k/n, 1 ≤ k ≤ n)"; exit 2; }
+PK="${BASH_REMATCH[1]}"; PN="${BASH_REMATCH[2]}"; SNO=0
+_benim() { local i=$SNO; SNO=$((SNO+1)); [ $((i % PN)) -eq $((PK - 1)) ]; }
+GERCEK_BENDE=h; _benim && GERCEK_BENDE=e
+[ "$PN" -gt 1 ] && echo "(parça $PK/$PN · gerçek koşu: $GERCEK_BENDE · mutantlar: sıra no mod $PN = $((PK-1)))"
 
 T="$(mktemp -d)"; TEMIZ+=("$T"); ( cd "$T" && git init -q -b main ) >/dev/null 2>&1
 # 🔴 ZİL SIZINTI KİLİDİ (SERDAR 21:18 · #404): sınavdan SERDAR'a üç gerçek zil kaçtı ('BILINMEYEN iş-bitti is-zb') — Z3e sınav kipini
@@ -43,7 +55,7 @@ B='{"ne":"n","kanit":"k","konum":"x:1","agirlik":"uygulama"}'
 
 # ⏱️ IC_BOLUM=zil (#404 CI: süit 748 sn ölçüldü, kabuk tavanı 700 — zil mutantları TÜM süiti yeniden koşuyordu): zil mutantlarının
 #    iç koşumu yalnız T-ZIL'i koşar; T-ZIL kendi işlerini, sahtelerini ve patch'ini kurar, aşağıdaki bölümlere dayanmaz.
-if [ "${IC_BOLUM:-}" != zil ]; then
+if [ "${IC_BOLUM:-}" != zil ] && [ "$GERCEK_BENDE" = e ]; then
 echo "════ T1 · kanıt yok → rc=2, denetim dosyası yok ════"
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-a --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 2 ]; g $? "kanıtsız adım 4 açılmadı (rc=2)"
 [ ! -f "$T/_agents/fabrika/kanit/is-a/DENETIM-1.json" ]; g $? "DENETIM yazılmadı"
@@ -656,7 +668,7 @@ o17="$(bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-stderr.txt")"
 bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-hafif60.txt" > "$T/oz-hafif60.out"; cmp -s "$T/oz-hafif60.txt" "$T/oz-hafif60.out"; g $? "O16 60 satır ve 3 KB altı ölçüm bayt bayt AYNEN (kısalma yalnız ağır kayıtta)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 fi   # IC_BOLUM=zil atlaması sonu
-if [ "${IC_BOLUM:-}" != zil ]; then
+if [ "${IC_BOLUM:-}" != zil ] && [ "$GERCEK_BENDE" = e ]; then
 echo "════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════"
 kartac is-mutk; bash "$K" olcum is-mutk gercek --asama tek -- bash -c 'echo "  ✓ K5 kilit tutuyor"; exit 0' >/dev/null 2>&1
 bash "$K" olcum is-mutk mut-k5 --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K5 kilit tutuyor"; exit 1' >/dev/null 2>&1
@@ -667,7 +679,7 @@ grep -qx -- "--- olcum-mut-k5-tek.txt · 🧬 MUTASYON KANITI (kod bilerek bozul
 grep -q '^=== MUTASYON KANITI: kod BİLEREK bozuldu' "$T/istem-mut.md" && grep -q '"MUTASYON KANITI" başlıklı ölçüm' "$T/istem-mut.md"; g $? "M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)"
 fi
 # zil dışı mutantların iç koşumu T-ZIL'i atlar (onlar T-ZIL'den önce de ölüyordu; iç koşum 50 → 39 sn) — yalnız zil mutantları ve dış koşum girer
-if [ -z "${IC_KOSUM:-}" ] || [ "${IC_BOLUM:-}" = zil ]; then
+if { [ -z "${IC_KOSUM:-}" ] || [ "${IC_BOLUM:-}" = zil ]; } && [ "$GERCEK_BENDE" = e ]; then
 echo "════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════"
 ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\nprintf "tmux=%%s pane=%%s\\n" "${TMUX:-yok}" "${TMUX_PANE:-yok}" >> "%s"\nprintf "kimden=%%s\\n" "${AILE_KIMDEN:-yok}" >> "%s"\n[ -n "${SAHTE_ZIL_ERR:-}" ] && printf "%%s\\n" "$SAHTE_ZIL_ERR" >&2\nexit "${SAHTE_ZIL_RC:-0}"\n' "$ZL" "$ZL" "$ZL" > "$ZS"; chmod +x "$ZS"
 printf "diff --git a/x b/x\n+zil\n" > "$T/zd.patch"; ZK="$T/zil-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s" "$SAHTE_JSON"\n' > "$ZK"; chmod +x "$ZK"; _DK_ZIL="$DENETCI_KOMUT"; export DENETCI_KOMUT="$ZK";   # önceki bölümler ortak sahteyi silebiliyor — bu bölüm kendi sahtesiyle
@@ -769,6 +781,7 @@ MUT_PARALEL="${MUT_PARALEL:-$(nproc 2>/dev/null || echo 2)}"
 [ "$MUT_PARALEL" -gt 4 ] && MUT_PARALEL=4; [ "$MUT_PARALEL" -lt 1 ] && MUT_PARALEL=1
 MUT_ADLAR=(); MUT_DOSYALAR=(); MUT_BOLUMLER=(); MUT_RC_DIZ="$(mktemp -d)"; TEMIZ+=("$MUT_RC_DIZ")
 mut() { # mut <ad> <sed-ifadesi> [hedef] — mutantı ÜRETİR ve sıraya koyar; koşum mut_kos'ta (paralel)
+  _benim || return 0   # PARÇA: bu mutant başka parçanın (sıra no mod PN) — burada ne üretilir ne sayılır
   local hedef="${3:-$HERE/denetci.sh}" M="$HERE/.mutant-$1.sh"
   # 🔴 GEÇERSİZ MUTANT TUZAĞI (bağımsız göz 23 Eyl): sed ifadem hatalıydı, mutant üretilmedi ve
   #    sınav "kırmızı" verdi — ama kırmızının sebebi davranış değişikliği değil, bozuk sed'di.
@@ -861,6 +874,7 @@ mut "olcum-secilen-de-sayilir" 's@^    atlanan = len(orta) - min(len(sec), SECME
 mut "olcum-ayirici-eklenmez" 's@ \[ -z "$(tail -c1 "$f")" \] || echo; }; done@ }; done@'
 mut_kos
 
+if [ "$GERCEK_BENDE" = e ]; then   # PARÇA: gerçek koşunun kalan bölümleri (ayrı-dosya sınavları · T-DARALT · T-SULTAN · T-ONGOZ · T-BOL · TP) yalnız 1. parçada
 # ── KANIT-AYIKLAMA KAPILARI (gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
 # Gövde AYRI dosyadadır (denetci-fark-ayikla.test.sh) çünkü bu dosya o sırada açık PR #327'nin
 # elindeydi; 30 kapıyı buraya yazmak onun değişikliğini ezerdi. Ama "test yazmak onu koşturmaz":
@@ -1017,4 +1031,5 @@ SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-p --d
 SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$MPD/denetci.sh" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -ne 2 ] && [ -f "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ]; g $? "TP4b MUTASYON: kapı sökülünce birincile DENETIM yazılır (kapı gerçekten kabloda)"
 git -C "$TP" worktree remove --force "$WP" >/dev/null 2>&1; find "$TP" -mindepth 1 -delete 2>/dev/null; rmdir "$TP" 2>/dev/null
+fi   # PARÇA: gerçek koşu sonu
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]   # (göz tur 2) rc kalan sayısına bağlı: kırmızı sınav yeşil çıkış kodu veremez
