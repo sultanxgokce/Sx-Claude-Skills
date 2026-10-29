@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-katalog-hiza-once.txt
+hedef_sha256: 714fa6bdd284e888158e090c717c9858b18a2cfbe8fd962485ab086ff5662b5e
+hedef_zaman: 2026-10-29T07:41:34+03:00
+hedef_renk: kirmizi
+neden: tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-29T07:51:55+03:00

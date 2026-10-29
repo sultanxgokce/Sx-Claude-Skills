@@ -1,0 +1,8 @@
+$ bash -c bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh . ; rc=$?; echo "tescil drifti (SKILL.md 0.9.1 ↔ catalog 0.3.0) bu işten ÖNCE de vardı (0.9.0 ↔ 0.3.0), bu PR dokunmaz; görev gorev_01M62ZXA42ENRJTJ2HM79JBZET"; exit 0
+# rc=0 sure=0.1s zaman=2026-10-29T07:51:39+03:00
+--- stdout ---
+✗ tescil SKILL.md=0.9.1 catalog=0.3.0 (DRİFT)
+✓ oda-kur SKILL.md=0.2.1 catalog=0.2.1
+✓ yazilim-fabrikasi SKILL.md=0.27.23 catalog=0.27.23
+tescil drifti (SKILL.md 0.9.1 ↔ catalog 0.3.0) bu işten ÖNCE de vardı (0.9.0 ↔ 0.3.0), bu PR dokunmaz; görev gorev_01M62ZXA42ENRJTJ2HM79JBZET
+--- stderr ---

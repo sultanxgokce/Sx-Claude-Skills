@@ -1,7 +1,7 @@
 {
   "is": "ci-kalan-kovasi-kararli",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T07:43:36+03:00",
+  "guncelleme": "2026-10-29T08:20:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -108,7 +108,81 @@
       "sure_sn": 31.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "92419730a6774203bd3ea3baf30ad836"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-drift-kapsam-disi",
+      "asama": "tek",
+      "dosya": "olcum-katalog-drift-kapsam-disi-tek.txt",
+      "sha256": "bd7416c1841cb12b9e075969d2c2f19d124e196f0a8ab0db8a196712ed19f0a0",
+      "komut": [
+        "bash",
+        "-c",
+        "bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh . ; rc=$?; echo \"tescil drifti (SKILL.md 0.9.1 ↔ catalog 0.3.0) bu işten ÖNCE de vardı (0.9.0 ↔ 0.3.0), bu PR dokunmaz; görev gorev_01M62ZXA42ENRJTJ2HM79JBZET\"; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:51:39+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7686a9ed61b64403b75c754687a85d14"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "katalog-hiza",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-katalog-hiza-once-ea16d54a3bee.txt",
+      "sha256": "ee9de0607b477e50d6980f985a304ad6b670163847c15f06d74f9466f4c32f72",
+      "hedef_dosya": "olcum-katalog-hiza-once.txt",
+      "hedef_olcum_id": "ff19b35db6a1435dbf2e1a10aee2133f",
+      "hedef_sha256": "714fa6bdd284e888158e090c717c9858b18a2cfbe8fd962485ab086ff5662b5e",
+      "hedef_zaman": "2026-10-29T07:41:34+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T07:51:55+03:00",
+      "olcum_id": "32f8133842a942a499d6aa89debca175"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "katalog-hiza",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-katalog-hiza-sonra-0128c1248600.txt",
+      "sha256": "d435331badfc73c8ef6a010dafde91a38678dcad4d6a878e71c43a8f1ec7e6b0",
+      "hedef_dosya": "olcum-katalog-hiza-sonra.txt",
+      "hedef_olcum_id": "bbe82e11f3f84151aab748b6e22cbafa",
+      "hedef_sha256": "6459b56bc1e1f1964cb729134c95ccc23ace0dfe202c33847a0feceb1151705d",
+      "hedef_zaman": "2026-10-29T07:41:34+03:00",
+      "hedef_renk": "yesil",
+      "neden": "tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T07:51:55+03:00",
+      "olcum_id": "04a053c6b3f44002bcb0c74e48d98a77"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kalan-3-kosu",
+      "asama": "tek",
+      "dosya": "olcum-ci-kalan-3-kosu-tek.txt",
+      "sha256": "dbbcef5f90b20ae6d69c60f929f15e905bde24672a460f8b83ab1d31feba4137",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/ci-kalan-3-kosu.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:20:16+03:00",
+      "sure_sn": 9.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c8100cfa72a1405bb51898d00a8cdc09"
     }
   ],
-  "imza": "18b4191643daa5a4cd525780a36e3b243e38d414400972d18932e291ed99efdd"
+  "imza": "e5815d1f181a53ff22a5f02d71bc8dc3c8b192c76739a48a024e3b3be38f2c1f"
 }
