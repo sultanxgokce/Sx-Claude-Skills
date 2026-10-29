@@ -34,7 +34,7 @@ kart() { # kart <dizin> <is> <aldi> <durum> <gorev>
   printf '{"is":"%s","aldi":"%s","durum":"%s","gorev":"%s"}' "$2" "$3" "$4" "$5" > "$1/$2.json"; }
 yz() { [ -f "$T/yazim.jsonl" ] && wc -l < "$T/yazim.jsonl" || echo 0; }
 # sahte posta (zil aracı) ve sahte koltuk listesi: gerçek postaneye mektup GİTMEZ (ilk sürümde sınav gerçek posta gönderdi — U-Z0 bunu kilitler)
-printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s/zil.log"\n[ -f "%s/zilret" ] && exit 1\nexit 0\n' "$T" "$T" > "$T/posta"; chmod +x "$T/posta"
+printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s/zil.log"\n[ -f "%s/zilret" ] && exit 1\n[ -f "%s/zilvar" ] && { echo "= aynı mesaj zaten vardı: msg_X · sahte"; exit 0; }\necho "✓ gönderildi: msg_Y · sahte"\nexit 0\n' "$T" "$T" "$T" > "$T/posta"; chmod +x "$T/posta"   # zilvar: postanenin tekil tekrar anahtarı cevabı (posta.mjs)
 printf '#!/usr/bin/env bash\n[ -f "%s/koltuk-bozuk" ] && exit 3\ncat "%s/koltuk.txt" 2>/dev/null\nexit 0\n' "$T" "$T" > "$T/koltuk.sh"; chmod +x "$T/koltuk.sh"
 : > "$T/koltuk.txt"
 zl() { [ -f "$T/zil.log" ] && wc -l < "$T/zil.log" || echo 0; }
@@ -86,6 +86,8 @@ RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "^gonder BERİD"
 grep -q "zil → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · posta rc 0" "$T/cikti" && [ "$(grep -c "zil → " "$T/cikti")" = 1 ] && ! grep -q "$GIZLI" "$T/cikti"; g $? "Z1g zil günlük satırı: kime BERİD · aciliyet genis · tekrar anahtarı · posta rc 0 (tek satır, jeton yok)"
 touch "$T/zilret"; RC=$(kos --uygula); rm -f "$T/zilret"; grep -q "zil → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · posta rc 1" "$T/cikti"; g $? "Z1h posta düşünce günlük satırı 'posta rc 1' der (sessiz değil)"
 RC=$(kos --uygula --zil-komut "$T/yok-boyle-posta"); grep -q "zil → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · posta ÇALIŞMADI (FileNotFoundError)" "$T/cikti"; g $? "Z1i posta aracı yoksa günlük satırı 'posta ÇALIŞMADI' der"
+# Z1j (…XGGM6): postane aynı tekrar anahtarına '= aynı mesaj zaten vardı' derse günlük 'zil →' YAZMAZ, 'zil yinelendi →' yazar (yeni mektup yok)
+touch "$T/zilvar"; RC=$(kos --uygula); rm -f "$T/zilvar"; [ "$RC" = 0 ] && grep -q "zil yinelendi → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · postane: zaten vardı (yeni mektup yok)" "$T/cikti" && ! grep -q "  · zil → " "$T/cikti"; g $? "Z1j postane 'zaten vardı' derse günlük 'zil yinelendi' yazar, 'zil →' yazmaz (rc 0)"
 # Z1b: 0 → N → N ölçüm zinciri — ilk koşudan ÖNCE zil sayısı 0 (ayrı kapı), ilk koşu 1, ikinci koşu zil log'unu SİLMEDEN koşar, hâlâ 1
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 rm -f "$T/yazim.jsonl" "$T/zil.log"; N0=$(zl); g $([ "$N0" = 0 ]; echo $?) "Z1b-0 ilk koşudan önce zil sayısı 0"

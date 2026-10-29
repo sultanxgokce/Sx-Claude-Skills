@@ -1,0 +1,80 @@
+{
+  "is": "supurme-zil-tekrar-gunluk",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T21:36:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "zil-gunlugu",
+      "asama": "once",
+      "dosya": "olcum-zil-gunlugu-once.txt",
+      "sha256": "0634257e738c8fc9b43bfb479e54b173bc256852311523ec02a516357f8c6ed9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-ana-1793298972/yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T21:36:19+03:00",
+      "sure_sn": 7.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b60806ce91ca4dd8bbd61c84cc3ed2ac"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "zil-gunlugu",
+      "asama": "sonra",
+      "dosya": "olcum-zil-gunlugu-sonra.txt",
+      "sha256": "73d0d61c684604189ebac7a96a9f1528fa764ff2c89548f6bb293def7b4f4430",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T21:36:33+03:00",
+      "sure_sn": 14.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f6cae69da6d74664be6ee57e73050e31"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-yinelenen-ayrilmaz",
+      "asama": "tek",
+      "dosya": "olcum-mutant-yinelenen-ayrilmaz-tek.txt",
+      "sha256": "7885173d7e8dd443f83757e20506c78cf8aff1b78b06b83b4d48fa4a05718f94",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-ana-1793298972/yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T21:36:38+03:00",
+      "sure_sn": 4.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "zil-gunlugu",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "9b609cad92b741449d729296e35dfd3c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-postane-tekrar",
+      "asama": "tek",
+      "dosya": "olcum-gercek-postane-tekrar-tek.txt",
+      "sha256": "36f71957159395efa93f43a2fec59d716deeba923c1ccc1b51565bb153a608ed",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/postane-tekrar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T21:36:38+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ca6e67c4a9a34e43947d1a9509d8e6f6"
+    }
+  ],
+  "imza": "0d933167aa707ce1a61d473c9476611e03e46a75c78dd5fcea12144a8cbf2de6"
+}

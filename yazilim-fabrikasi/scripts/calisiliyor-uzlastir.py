@@ -131,7 +131,13 @@ def zil(komut, kimden, kime, metin, tekrar):
     try:
         c = subprocess.run([komut, "gonder", kime, metin, "--kimden", kimden, "--aciliyet", ZIL_ACILIYET,
                             "--konu", "çalışılıyor uzlaştırması", "--tekrar", tekrar], capture_output=True, text=True, timeout=30)
-        print("  · zil → %s · aciliyet %s · tekrar %s · posta rc %d" % (kime, ZIL_ACILIYET, tekrar, c.returncode))
+        # Postane (kimden, tekrar) tekil: aynı anahtarla ikinci gönderim YENİ mektup açmaz, '= aynı mesaj zaten vardı' döner (posta.mjs).
+        #   Eskiden bu da 'zil →' diye yazılıyordu: 29 Eki süpürme günlüğünde 17 zil satırının 5'i yeni mektup değildi ve günlük canlı
+        #   kanıt olarak okunuyor (görev …XGGM6). Ayrı satır: 'zil yinelendi →' — 'zil →' artık yalnız gerçekten açılan mektup.
+        if c.returncode == 0 and (c.stdout or "").lstrip().startswith("= aynı mesaj zaten vardı"):
+            print("  · zil yinelendi → %s · aciliyet %s · tekrar %s · postane: zaten vardı (yeni mektup yok)" % (kime, ZIL_ACILIYET, tekrar))
+        else:
+            print("  · zil → %s · aciliyet %s · tekrar %s · posta rc %d" % (kime, ZIL_ACILIYET, tekrar, c.returncode))
         return c.returncode == 0
     except Exception as e:
         print("  · zil → %s · aciliyet %s · tekrar %s · posta ÇALIŞMADI (%s)" % (kime, ZIL_ACILIYET, tekrar, type(e).__name__))
