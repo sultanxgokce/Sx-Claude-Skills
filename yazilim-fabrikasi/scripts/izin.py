@@ -19,9 +19,27 @@ def siniflimi(k):
 
 
 def _ref(x):
-    """Sultan kaydının izlenebilir künyesi (oturum · söz) — A06: söz üretilmez, aktarılır."""
-    o = str(x.get("oturum") or "?"); s = str(x.get("soz") or "?")
-    return "oturum %s · söz \"%s\"" % (o, s[:60])
+    """Sultan kaydının izlenebilir künyesi (oturum · söz · sözün saati) — A06: söz üretilmez, aktarılır.
+    Saat kayıttaki "zaman"dır: --soz-zamani ile sözün saati, yoksa yazım saati (görev …F6EWHF)."""
+    o = str(x.get("oturum") or "?"); s = str(x.get("soz") or "?"); z = str(x.get("zaman") or "")[:16]
+    return "oturum %s · söz \"%s\"%s" % (o, s[:60], (" · söz saati %s" % z) if z else "")
+
+
+def soz_zamani_coz(ham, an):
+    """--soz-zamani çözümü → (zaman ISO, kaynak 'soz'|'yazim', hata|None). Boş → yazım saati. Bozuk ya da gelecekteki saat → hata (kayıt üretilmez)."""
+    import datetime
+    ham = (ham or "").strip()
+    if not ham:
+        return an.isoformat(timespec="seconds"), "yazim", None
+    try:
+        z = datetime.datetime.fromisoformat(ham.replace("Z", "+00:00"))
+    except ValueError:
+        return None, None, "bozuk biçim (%r) — ISO-8601 ister, ör. 2026-10-28T20:25:00+03:00" % ham
+    if z.tzinfo is None:
+        z = z.replace(tzinfo=an.tzinfo)   # saat dilimi yoksa bu kutunun dilimi (oturum kaydı yerel saattedir)
+    if z > an:   # hoşgörü YOK (göz #562 tur 1): kart 'gelecekteki zaman reddedilir' der; 30 sn sonrası da gelecektir
+        return None, None, "gelecekte (%s > şimdi %s) — söz henüz söylenmemiş olamaz" % (z.isoformat(timespec="seconds"), an.isoformat(timespec="seconds"))
+    return z.isoformat(timespec="seconds"), "soz", None
 
 
 def izin_durumu(k):

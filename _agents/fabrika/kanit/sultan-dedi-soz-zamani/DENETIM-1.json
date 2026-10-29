@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "sultan-dedi-soz-zamani",
+  "pr": "562",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T10:22:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-dedi-soz-zamani",
+  "dal": "sultan-dedi-soz-zamani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30007,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5438
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a02bfe54e1cadaedc68678d917e5e56523a35e6f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Bayrak, ayrı yazım saati, söz saati künyesi, bozuk zaman reddi, geriye uyumluluk ve sürüm artışı uygulanmış; araç imzalı önce/sonra ölçümü ile mutantlar ana davranışları doğruluyor. Ancak talep gelecekteki her zamanı reddet derken kod 60 saniyeye kadar geleceği kabul ediyor ve sınav yalnız iki saat sonrasını ölçüyor; önce bu şart ve sınav düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Gelecekteki zaman koşulu talebe aykırı biçimde 60 saniyelik tolerans tanıyor; şimdi ile 60 saniye sonrası arasındaki bir değer kayıt üretebilir.",
+        "kanit": "Kod geleceği `if z > an + datetime.timedelta(seconds=60)` ile reddediyor; dolayısıyla örneğin `an + 30 saniye` reddedilmez. İş kartı ise istisnasız “gelecekteki ... zaman reddedilir” diyor. V20e yalnız `date -d '+2 hours'` değerini sınadığı için bu sınırı yakalamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/izin.py:soz_zamani_coz; yazilim-fabrikasi/scripts/kart.test.sh:V20e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 416/425 ve ilgili dokuz kapının kırmızı olduğunu, sonra ölçümü 425/425 ve V20 kapılarının yeşil olduğunu gösteren gerçek bir ölçüm çifti var. Üç mutant bayrağın yok sayılması, gelecek çitinin kaldırılması ve künyeden saatin düşürülmesini yakalıyor; fakat gerçek ölçümde 1–60 saniye gelecekteki değer için kapı bulunmadığından açık kalan şart kanıtlanmamış."
+  }
+}

@@ -1,0 +1,15 @@
+$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-once.H9AJ/yazilim-fabrikasi/scripts && timeout 900 bash kart.test.sh 2>&1 | grep -E '✗|SONUÇ' | cut -c1-150; exit ${PIPESTATUS[0]}
+# rc=1 sure=85.6s zaman=2026-10-29T10:26:15+03:00
+--- stdout ---
+  ✗ V20a --soz-zamani: zaman = sözün saati, yazildi = şimdi, kaynak soz; baslama_izni aynı; çıktı saati söyler
+  ✗ V20b izin künyesi sözün saatini gösterir (göz/kapı/gün sonu aynı künyeyi okur)
+  ✗ V20c bayraksız: zaman = yazım saati, kaynak yazim (eski davranış korunur, çıktı bunu söyler)
+  ✗ V20c2 saat dilimsiz ISO kabul: kutunun dilimi eklenir, kaynak soz
+  ✗ V20d bozuk biçim rc 1, sebep söylenir
+  ✗ V20e gelecekteki saat rc 1 (söz henüz söylenmemiş olamaz)
+  ✗ V20e2 30 saniye sonrası da rc 1 — hoşgörü yok (göz #562 tur 1)
+  ✗ mutant 'soz-zamani-yok' KURULAMADI — çapa izin.py içinde 0 kez geçiyor (1 olmalı): return z.isoformat(timespec="seconds"), "soz", None
+  ✗ mutant 'gelecek-citi-yok' KURULAMADI — çapa izin.py içinde 0 kez geçiyor (1 olmalı): if z > an:
+  ✗ mutant 'kunye-saatsiz' KURULAMADI — çapa izin.py içinde 0 kez geçiyor (1 olmalı): return "oturum %s · söz \"%s\"%s" % (o, s[:60], (" · 
+── SONUÇ: 416 geçti · 10 kaldı ──
+--- stderr ---

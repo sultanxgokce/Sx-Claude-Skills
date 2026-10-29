@@ -1,0 +1,8 @@
+$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-sonra.QYY0/yazilim-fabrikasi/scripts && timeout 900 bash kart.test.sh 2>&1 | grep -E '✗|SONUÇ|V20e|mutant .gelecek'; exit ${PIPESTATUS[0]}
+# rc=0 sure=98.4s zaman=2026-10-29T10:24:38+03:00
+--- stdout ---
+  ✓ V20e gelecekteki saat rc 1 (söz henüz söylenmemiş olamaz)
+  ✓ V20e2 30 saniye sonrası da rc 1 — hoşgörü yok (göz #562 tur 1)
+  ✓ mutant 'gelecek-citi-yok': 30 sn sonrası kabul edilince V20e2 kapısı KIRMIZI (rc 0 döndü)
+── SONUÇ: 426 geçti · 0 kaldı ──
+--- stderr ---
