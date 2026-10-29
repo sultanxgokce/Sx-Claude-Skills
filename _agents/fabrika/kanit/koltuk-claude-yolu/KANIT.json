@@ -1,0 +1,76 @@
+{
+  "is": "koltuk-claude-yolu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T10:38:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bekci-claude-ikilisi",
+      "asama": "once",
+      "dosya": "olcum-bekci-claude-ikilisi-once.txt",
+      "sha256": "2ace8881af956b1b9aa29ce8b77bc02d13d61c35ae68235b1ce643f3c5893aae",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-claude-yolu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:36:28+03:00",
+      "sure_sn": 20.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c811f2bbb925475d83cff904aad435b9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-claude-ikilisi",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-claude-ikilisi-sonra.txt",
+      "sha256": "4107793188bf5206d41b3701cc1e0b6551567bc26a20fd641bbfb3add3113791",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-claude-yolu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:36:28+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4f18e956532a4ec2b758950961ef1e05"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "claude-yolu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-claude-yolu-sinavi-sonra.txt",
+      "sha256": "11b07e60850ff0455f6a19f2f7053c87830f28578c896e673993976eaacca2ce",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/claude-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:36:28+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a0d94c2f18fc42f083c4fb07e7d21797"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sikistirma-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sikistirma-sinavi-sonra.txt",
+      "sha256": "39870c31d4e090e45dcaa623359ef63822040aadbdf2248f98c48774ab6f0554",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/sikistirma-ortami.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:38:58+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "759abcd19bec430d9fdeea5d34fd18b6"
+    }
+  ],
+  "imza": "d45776dc6efe2008fd90d1df1407f5fabcc73d92746b9bd08903f50d5dbd05b3"
+}

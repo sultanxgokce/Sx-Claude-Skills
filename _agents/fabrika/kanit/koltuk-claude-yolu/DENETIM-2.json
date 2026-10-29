@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "koltuk-claude-yolu",
+  "pr": "563",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T10:41:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-claude-yolu",
+  "dal": "koltuk-claude-yolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20813,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8882
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4efd946f372c01b0d1aa989968bdd45e24547bf9",
+  "duzeltme_farki": {
+    "onceki_bas": "9046a22cda31ba67affaab0e3b9fcd4518a2762a",
+    "dosya": 7,
+    "bayt": 14174,
+    "tam_bayt": 28588
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun uygulama kusuru kapanmış: çalışan mutlak Claude yolu bulunamazsa bekçi artık çıplak `claude` göndermeden duruyor ve bu davranış sınanıyor. Talep kutu içinde üretime hazır görünüyor; yalnız gerçek bekçi/tmux açılışının canlı yüzeyde doğrulanması kalmış, bu da kod puanını düşürmez.",
+    "bulgular": [
+      {
+        "ne": "Gerçek bekçi/tmux açılışının hedef kutuda çalışan Claude'u başlattığı hâlâ doğrulanmamış; önceki B2 kapanmamış ve canlı yüzey doğrulaması gerektiriyor.",
+        "kanit": "Önce/sonra ölçümü `/tmp/tmp.*` altındaki sahte nvm ağaçlarında seçilen dizin ile ikili boyutunu, sınavlar da hermetik sahte kök ve tmux kaydı üzerindeki davranışı gösteriyor. İş kartında `canli_gerekir: true` ve gerekçe olarak `bekçisi` yazıyor; gerçek canlı tmux açılış kaydı bulunmuyor.",
+        "konum": "olcum-bekci-claude-ikilisi-once.txt; olcum-bekci-claude-ikilisi-sonra.txt; olcum-claude-yolu-sinavi-sonra.txt; olcum-sikistirma-sinavi-sonra.txt; iş kartı `canli_gerekir`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı bekçi kutusu + tmux oturumu çalıştırma yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 500 baytlık eski stub yerine 2 MiB çalışan ikilinin seçildiğini gösteriyor. Önceki B1, `onar.sh` içindeki rc 1 ile erken dönüş ve K1d'nin “tmux'a yazılmaz” ölçümüyle kapanmış; Y1–Y4b, C1/C2 ve K1c/K1d ilgili seçim ve çağıran davranışlarını kapsıyor. Canlı bekçi/tmux sonucu ise hermetik ölçümlerden çıkarılamaz ve kutu-dışı kalır."
+  }
+}

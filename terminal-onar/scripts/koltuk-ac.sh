@@ -174,7 +174,7 @@ case "$KOMUT" in
         SID="$(alan_bul "$ROL" session_id)"
         CWD="$(cwd_bul "$ROL")"; [ -d "${CWD:-}" ] || CWD="$PROJE"
         # mutlak yol: tmux sunucusunun PATH'i bu sürecinkinden farklı olabilir (sunucu başka ortamda doğmuş olabilir)
-        CL="${TO_CLAUDE:-$(command -v claude 2>/dev/null)}"; [ -x "${CL:-}" ] || { echo "açılamadı: claude bu kutuda bulunamadı" >&2; exit 1; }
+        CL="${TO_CLAUDE:-$(claude_yolu 2>/dev/null)}"; [ -x "${CL:-}" ] || { echo "açılamadı: claude bu kutuda bulunamadı" >&2; exit 1; }
         tmux new-session -d -s "$AD" -c "$CWD" "$(printf '%q' "$CL") --resume $(printf '%q' "$SID")" \
           || { echo "açılamadı: tmux oturumu kurulamadı ($AD)" >&2; exit 1; }
         sleep "$BASLAT_BEKLE"

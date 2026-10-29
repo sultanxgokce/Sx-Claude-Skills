@@ -1,0 +1,21 @@
+$ bash terminal-onar/scripts/sikistirma-ortami.test.sh
+# rc=0 sure=0.5s zaman=2026-10-29T10:38:58+03:00
+--- stdout ---
+── 1) claude_baslat'ın tmux'a yazdığı satır ──
+  ✓ K1 başlatma 'doğdu' ile döndü (rc 0)
+  ✓ K1b yazılan satırda bellek öneğinden SONRA, komuttan ÖNCE 600k eşiği
+  ✓ K2 standart SABİT: dış ortam başka değer verse de satırda 600k (kaçış yok)
+  ✓ K1c geçerli claude varsa satır MUTLAK yolla başlar ('claude' çıplak kelime değil)
+  ✓ K1d çözülemeyince başlatma BAŞARISIZ (rc 1) ve tmux'a komut yazılmaz
+  ✓ K3 ana koltuk (iki dal) + kurtarıcı aynı claude_baslat ile açılır (ikinci başlatma yolu yok)
+── 2) mutant: önek onar.sh'tan kaldırılınca sınav DÜŞER ──
+  ✓ M1 mutant satırda eşik YOK (K1b bunu yakalar; yeşil görünmez)
+  ✓ M1b mutant gerçekten uygulandı (onar.sh farklı)
+── 3) bekçi: sikistirma_denetle sahte /proc ile ──
+  ✓ B1 ortam 600k + hesap ayarı 600000 → güncel
+  ✓ B2 ortamsız+ayarsız · sapmış ortam · 'auto' ayar · '600' · '600000' → beşi eşiksiz, sapma değeriyle (yalnız tam '600k' açık)
+  ✓ B3 koşan claude yok → ölçülemedi (yeşil değil)
+  ✓ B3b … rc 3
+  ✓ B4 bekçi her turda ölçer ve yalnız DEĞİŞİNCE günlüğe yazar (statik)
+SONUÇ: geçen=13 kalan=0
+--- stderr ---
