@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.14.0
+version: 1.15.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -123,7 +123,8 @@ bash /config/.claude/skills/gunluk-plan/scripts/tarama-ekle.sh … --uygula     
 - **Ölçmeden iş yazılmaz (değişmez 1):** `--kaynak` (dosya:satır ya da https adresi) ve `--kanit` ZORUNLU. `dosya:satır` ise dosya GERÇEKTEN var ve satır dosyanın içinde olmalı (çalışma dizinine ya da mutlak yola göre); `--kanit` en az 20 karakter ve ölçülmüş bir SAYI taşımalı (kaç dosya/satır/ms/adet). `https` kaynağı GERÇEKTEN açılmalı (HEAD, olmazsa 1 baytlık GET; 4xx/5xx → rc 2, ağ yoksa rc 3 — açıldığı doğrulanmadan yazılmaz). **Kanıt ölçüm dosyasına bağlanır (SERDAR 26 Eki):** `dosya:satır` kaynağında kanıttaki HER sayı o dosyanın o satırında birebir (tam sayı olarak) geçmeli ve dosya BUGÜN yazılmış olmalı (ölçüm bu turda); biri tutmazsa rc 1 + sebep. Yani `dosya:satır` bu turda üretilen bir ölçüm çıktısını gösterir. **Dürüst sınır:** betik ölçüm dosyasına bağı doğrular, ölçümün DOĞRULUĞUNU doğrulamaz (dosya ve satırın kendisi yazanın elindedir); `https` kaynağında bağ yalnız adresin açılmasıdır. Kaynak ve kanıt kaydın notuna yazılır, gözle denetlenebilir.
 - **Günde en çok 3:** bir kutuda bugün hareketi olan `[tarama] ` kaydı 3'e ulaştıysa dördüncüsü rc 2 ile reddedilir ("yarına"). Tavan SABİTTİR: ortam değişkeniyle ya da argümanla değişmez.
 - **İdempotent:** aynı başlık (büyük-küçük harf ve noktalama farkı yok sayılır) defterde açıksa ya da BUGÜN kapandıysa yazılmaz; eski günde kapanmış başlık yeniden açılabilir.
-- **Kutu tahmin edilmez:** liste tek kutu gösteriyorsa o, birden çok kutu gösteriyorsa (tümünü gören rol) `--kutu` şart (rc 3). Yazım jetonun kutusuna gider; yazımdan sonra kaydın hangi kutuda göründüğü okunur — sayım yapılan kutudan farklıysa ya da görünmüyorsa rc 1 ve açıkça söylenir.
+- **Kutu tahmin edilmez:** liste tek kutu gösteriyorsa o, birden çok kutu gösteriyorsa (tümünü gören rol) `--kutu` şart (rc 3).
+- **Kutu ≠ jeton kutusu → yazmadan ÖNCE ret (1.15.0, görev …NMAGXX8C):** yazım jetonun kutusuna gider; `--kutu` başka bir kutuysa tavan orada sayılıp kayıt buraya düşerdi ve fark yazımdan SONRA görülüyordu (27 Eki ölçümü: kayıt yanlış kutuya yazıldı, rc 1). Artık `scripts/jeton-kutusu.sh` geçidin `/ben` ucundan jetonun kutusunu sorar; fark → rc 2 (hiçbir şey yazılmaz), sorulamadı → rc 3 ("aynı kutu" sayılmaz). Yazım sonrası geri okuma ikinci çit olarak durur. Sınav T13-T13c. Yazım jetonun kutusuna gider; yazımdan sonra kaydın hangi kutuda göründüğü okunur — sayım yapılan kutudan farklıysa ya da görünmüyorsa rc 1 ve açıkça söylenir.
 - **Ölçemezse yazmaz:** görev listesi okunamadı/boşsa ya da ajan kimliği çıkmıyorsa rc 3 — "tavan dolu değil" denmez. Başlık 160 karakteri aşarsa reddedilir (başlık değil nottur; ayrıntı `--kanit`'e).
 - Kuru koşu varsayılandır; `--uygula` yalnız yukarıdaki kapıları geçen çağrıyı yazar.
 Sınavı: `bash scripts/tarama-ekle.test.sh` (T1-T12b + T4g-T4i, hermetik: sahte gorev.sh + sahte bulgu.sh).

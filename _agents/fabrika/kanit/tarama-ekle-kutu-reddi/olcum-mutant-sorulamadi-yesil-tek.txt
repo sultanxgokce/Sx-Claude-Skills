@@ -1,0 +1,51 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ env TARAMA_EKLE=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-tarama/mut-sorulamadi-yesil.sh bash gunluk-plan/scripts/tarama-ekle.test.sh
+# rc=1 sure=1.3s zaman=2026-10-29T11:24:48+03:00
+--- stdout ---
+── KURU koşu
+  ✓ T1 kuru rc=0
+  ✓ T1b kuru 'yazardım' basar, bulgu.sh ÇAĞRILMAZ
+── UYGULA
+  ✓ T2 uygula rc=0 ve tek yaz çağrısı
+  ✓ T2b başlık '[tarama] ' işaretli, etiket özellik, kim=SINAV
+  ✓ T2c not kaynak ve kanıtı taşır
+  ✓ T2d dosya:satır kaynağı kabul
+  ✓ T2e --kim ilk ajan değerini ezer
+── ÖLÇMEDEN İŞ YAZILMAZ
+  ✓ T3 kaynak yok / biçimsiz / http / satırsız → hepsi rc 2, yazılmadı
+  ✓ T4 kanıt 20 karakterden kısa ya da yok → rc 2, yazılmadı
+  ✓ T5 başlık yok / 161 karakter → rc 2; 160 karakter geçer (kuru)
+  ✓ T5b tanınmayan argüman rc 2
+  ✓ T4b kaynak dosyası yok (mesajıyla) / satır dosyanın dışında (51, 0) → hepsi rc 2, yazılmadı
+  ✓ T4d sayı var ama kanıt 20 karakterden kısa → rc 2
+  ✓ T4c kanıtta ölçülmüş sayı yoksa rc 2 (serbest metin ölçüm değil)
+  ✓ T4e https adresi açılmıyorsa (404) rc 2; ağ yoksa rc 3; HEAD reddedilip GET geçerse (405→206) kabul
+  ✓ T4f sonu satır sonu olmayan dosyanın SON satırı geçerli (3), 4. satır değil
+  ✓ T4g kanıttaki sayı (99) kaynak satırında yok → rc 1, sebep söylenir, yazılmadı
+  ✓ T4h kaynak dosyası dünkü (ölçüm bu turda değil) → rc 1, sebep söylenir, yazılmadı
+  ✓ T4i sayı satırda tam sayı olarak geçmeli ('4' ≠ '42' içinde geçen 4) → rc 1
+── KUTU ≠ JETON (NMAGXX8C): yazmadan ÖNCE ret
+  ✓ T13 --kutu nexus, jeton huma → rc 2, bulgu.sh HİÇ çağrılmadı, sebep iki kutuyu söyler
+  ✗ T13b jetonun kutusu sorulamazsa rc 3 (ölçülemedi), yazılmadı — 'aynı kutu' sayılmaz — beklenen=3:0:1 gerçek=2:0:0
+  ✓ T13c kuru koşuda da fark rc 2 (yazardım denmez)
+── KOPYA
+  ✓ T6 açık / bugün kapanan / zaten [tarama] olan aynı başlık (büyük-küçük harf, noktalama farkı dahil) → rc 2, yazılmadı
+  ✓ T6b eski günde kapanmış başlık yeniden yazılabilir
+── GÜNLÜK TAVAN (3)
+  ✓ T7 bugün 2 kayıt var (başka kutu ve dün sayılmaz) → 3. yazılır
+  ✓ T7b bugün 3 kayıt dolu → rc 2, 'günlük tavan 3', yazılmadı
+  ✓ T7c tavan ortam değişkeniyle YÜKSELTİLEMEZ (3 sabit)
+  ✓ T7d kuru koşu da tavanı sayar (dolu günde rc 2)
+── ÖLÇÜLEMEZSE YAZMAZ
+  ✓ T8 liste okunamadı / boş → rc 3, yazılmadı ('yazılacak yok' denmez)
+  ✓ T9 bulgu.sh yok → rc 3; bulgu.sh düşerse → rc 1
+  ✓ T10 ajan kimliği yoksa rc 3 (kim yazdı belli olmadan yazılmaz)
+  ✓ T10b gorev.sh yok → rc 3
+── KUTU ADI ve YAZIM KUTUSU
+  ✓ T11 liste birden çok kutu gösterip --kutu verilmezse TAHMİN YOK: rc 3, yazılmadı
+  ✓ T11b liste tek kutu gösteriyorsa o kutu (mmex) sayılır ve kayıt orada doğrulanır
+  ✓ T12 sayım 'huma'da ama kayıt 'mmex'e düştüyse rc 1 ve açıkça söylenir (tavan çevresinden dolaşılamaz)
+  ✓ T12b yazıldı ama defterde görünmüyorsa rc 1 ('kutu doğrulanamadı')
+
+35 geçti, 1 kaldı
+--- stderr ---

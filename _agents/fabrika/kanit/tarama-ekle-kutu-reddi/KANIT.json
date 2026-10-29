@@ -1,0 +1,90 @@
+{
+  "is": "tarama-ekle-kutu-reddi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T11:24:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "6fa879b678d9e275b33917d665e64ac425d09a35cfab0393272b04183cc1af2b",
+      "komut": [
+        "env",
+        "TARAMA_EKLE=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-tarama/eski-tarama-ekle.sh",
+        "bash",
+        "gunluk-plan/scripts/tarama-ekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T11:24:43+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ff1fb6e014e8437c94cb25c32e40b0c8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "7a28983e6d4a5d2d10ff30fe2813c9be54e8eb7711a34d33b1e9ece871500dd7",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/tarama-ekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:24:45+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a8995661f5614163a2a6895f07517437"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kiyas-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kiyas-yok-tek.txt",
+      "sha256": "d835475d8f9aeda0ce650a200054dbc23d7927b12fbeb5f6856eaf620c914c66",
+      "komut": [
+        "env",
+        "TARAMA_EKLE=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-tarama/mut-kiyas-yok.sh",
+        "bash",
+        "gunluk-plan/scripts/tarama-ekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:24:46+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "a02e9ea15d61432e86a501b979a1e641"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sorulamadi-yesil",
+      "asama": "tek",
+      "dosya": "olcum-mutant-sorulamadi-yesil-tek.txt",
+      "sha256": "b6e7e95407ba41d7b1e1cb6266d30cf6ad3475c3fef9be06a103302d6fbda581",
+      "komut": [
+        "env",
+        "TARAMA_EKLE=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-tarama/mut-sorulamadi-yesil.sh",
+        "bash",
+        "gunluk-plan/scripts/tarama-ekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:24:48+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c3b6ead4456340c294adb7ae547e21b6"
+    }
+  ],
+  "imza": "e19bcaf0b669bfe863d99c31517d4f772a9577478e9971cf175024e8505d1084"
+}
