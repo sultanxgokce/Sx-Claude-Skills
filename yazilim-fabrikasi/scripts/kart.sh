@@ -21,6 +21,9 @@
 #       Her kartta reis kararıyla (sınıflıda sinifli:true; eski Sultan 'daralt' tüketilir); VETOLU kartta rc 1.
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al|canli-borc|basla|dur> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
 #          --beyan <AJAN> [--gerekce "<≥20 karakter>"] (basla|dur dışında zorunlu); dur = VETO
+#          [--soz-zamani <ISO-8601>]: damganın zamanı Sultan sözünün SÖYLENDİĞİ saattir (oturum kaydı damgasından); verilmezse
+#          yazım saati. Yazım saati her kayıtta ayrıca "yazildi" alanındadır. Niçin (görev …F6EWHF, 29 Eki): SERDAR sözü 8 saat geç
+#          yazdı, göz "izinden önce ölçüm" deyip işi tıkadı — ölçümler sözün saatine göre değerlendirilir, yazımın değil.
 #   kart.sh reis-dedi <iş> --karar <devam|daralt|geri-al|birlestir> --reis <AD> --oturum <ref> \
 #          --gerekce "<niçin — en az 20 karakter>"     ← her kartta; VETOLU kartta rc 1
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
@@ -82,14 +85,14 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
 CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # tek argümanlı komut (liste · borclar) "tanınmayan argüman" olmasın
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
-KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""
+KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""; SOZ_ZAMANI=""
 KIME=""; SORU=""; EYLEM=""; SNO=""; KIM=""   # cevap bekle (soru.py)
 OLCUM_YERI=""; SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;; --gorev-bitti) GOREV_BITTI=1; shift ;; --kare) KARE="$2"; shift 2 ;; --surum) SURUM="$2"; shift 2 ;; --olcum) OLCUM="$2"; shift 2 ;; --belge) BELGE="$2"; shift 2 ;;
-  --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
+  --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --soz-zamani) SOZ_ZAMANI="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;;
@@ -686,18 +689,23 @@ SUPPY
     #    satır ekleyebilen bir alan, denetim defteri değildir. Kaynağında reddediyoruz.
     # ⚠ İlk denememde satır-sonu desenini `*"$(printf '\n')"*` ile yazdım: komut ikamesi sondaki
     #   satır sonunu yuttuğu için desen boş dizgeye dönüştü ve HER değeri reddetti. Sınav yakaladı.
-    for v in KARAR OTURUM SOZ BEYAN GEREKCE; do
+    for v in KARAR OTURUM SOZ BEYAN GEREKCE SOZ_ZAMANI; do
       d="${!v}"
       if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then
         _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1
       fi
     done
-    python3 - "$KD/$IS.json" "$KARAR" "$OTURUM" "$SOZ" "$BEYAN" "$GEREKCE" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 1
+    python3 - "$KD/$IS.json" "$KARAR" "$OTURUM" "$SOZ" "$BEYAN" "$GEREKCE" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" "$SOZ_ZAMANI" <<'PY' || exit 1
 import json,sys,datetime
-yol,karar,oturum,soz,beyan,gerekce,hdir=sys.argv[1:]
-sys.path.insert(0,hdir); from izin import siniflimi, KURAL_SURUMU
-k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-kayit={"karar":karar,"oturum":oturum,"soz":soz,"beyan":beyan,"gerekce":gerekce,"zaman":simdi}
+yol,karar,oturum,soz,beyan,gerekce,hdir,soz_zamani=sys.argv[1:]
+sys.path.insert(0,hdir); from izin import siniflimi, KURAL_SURUMU, soz_zamani_coz
+k=json.load(open(yol,encoding="utf-8")); an=datetime.datetime.now().astimezone(); simdi=an.isoformat(timespec="seconds")
+# 🔴 ZAMAN = SÖZÜN SAATİ (görev …F6EWHF): --soz-zamani verildiyse damga o saati taşır, yazım saati "yazildi"de kalır.
+#    Gelecekteki saat kabul edilmez (söz henüz söylenmemiş olamaz); bozuk biçim reddedilir — tahmin yok, kayıt ÜRETİLMEZ.
+zaman, kaynak, hata = soz_zamani_coz(soz_zamani, an)
+if hata:
+    print(f"✗ --soz-zamani {hata} — damga YAZILMADI (A06: sözün saati uydurulmaz, oturum kaydından okunur)", file=sys.stderr); raise SystemExit(1)
+kayit={"karar":karar,"oturum":oturum,"soz":soz,"beyan":beyan,"gerekce":gerekce,"zaman":zaman,"yazildi":simdi,"zaman_kaynagi":kaynak}
 if karar in ("basla","dur") and not siniflimi(k):
     # sınıfsız kartta veto penceresi yok (rc 1)
     print(f"✗ kart SINIFSIZ ({k['is']}): başlama izni / veto penceresi YOK — '{karar}' karta YAZILMADI (yazılsaydı hiçbir kapı okumazdı). "
@@ -708,12 +716,12 @@ ek=""
 if karar in ("basla","dur"):
     # 0.21.0: başlama izni / VETO — son basla/dur kazanır (eski kart alanı burada kazanır)
     bi=k.get("baslama_izni") if isinstance(k.get("baslama_izni"),dict) else {}
-    k["baslama_izni"]={"durum":karar,"istendi":bi.get("istendi") or k.get("zaman"),"zaman":simdi,"oturum":oturum,"soz":soz,"beyan":beyan}
+    k["baslama_izni"]={"durum":karar,"istendi":bi.get("istendi") or k.get("zaman"),"zaman":zaman,"yazildi":simdi,"zaman_kaynagi":kaynak,"oturum":oturum,"soz":soz,"beyan":beyan}
     k.setdefault("kural_surumu",KURAL_SURUMU)
     ek+=(" · ⛔ VETO: reis durur; reis-dedi, daralt ve bitti kapalı — kaldırmak Sultan'ın (--karar basla)" if karar=="dur"
          else " · başlama izni verildi (varsa veto kalktı); iş reis kararlarıyla sürer, dağıtım Sultan eli")
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
-print(f"✓ Sultan karari karta islendi: {karar} · oturum {oturum} · beyan {beyan}{ek}")
+print(f"✓ Sultan karari karta islendi: {karar} · oturum {oturum} · beyan {beyan} · söz saati {zaman[:16]} ({'sözün saati' if kaynak=='soz' else 'yazım saati — --soz-zamani verilmedi'}){ek}")
 PY
     ;;
   reis-dedi)

@@ -1066,4 +1066,27 @@ ek su-6 "merkez 1.91.0 SÜRÜM PAKETİ" h >/dev/null; [ $? -eq 1 ]; g $? "S6 bü
 ek su-7 "yeni sürüm notu yaz" h >/dev/null; g $? "S7 'sürüm paketi' demeyen kart onay istemez"
 
 cd "$T"
+
+echo "════ V20 · --soz-zamani: Sultan damgası sözün saatini taşır (görev …F6EWHF · kart sultan-dedi-soz-zamani) ════"
+cd "$T/depo2"; export KANIT_DEPO="$T/depo2"   # önceki bloklar çalışma dizinini ve KANIT_DEPO'yu başka depoya çevirmiş olabilir
+KU="$T/depo2/_agents/fabrika/kartlar"; bash "$KT" ac is-sz --is "söz saati sınavı için sınıflı iş" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para e --dis-yuzey h --yetki h --oda sinav-oda >/dev/null 2>&1
+O="$(bash "$KT" sultan-dedi is-sz --karar basla --oturum s-sz --soz "tamam başlayın" --beyan MUAVIN --soz-zamani 2026-10-28T20:25:00+03:00 2>&1)"; RC=$?
+python3 -c "import json;k=json.load(open('$KU/is-sz.json'));x=k['sultan_kararlari'][-1];b=k['baslama_izni'];assert x['zaman']=='2026-10-28T20:25:00+03:00' and x['zaman_kaynagi']=='soz' and x['yazildi']!=x['zaman'] and x['yazildi'][:2]=='20' and b['zaman']==x['zaman'] and b['yazildi']==x['yazildi'] and b['zaman_kaynagi']=='soz'" 2>/dev/null && [ "$RC" -eq 0 ] && grep -q "söz saati 2026-10-28T20:25 (sözün saati)" <<<"$O"; g $? "V20a --soz-zamani: zaman = sözün saati, yazildi = şimdi, kaynak soz; baslama_izni aynı; çıktı saati söyler"
+[ "$(bash "$KT" izin-durum is-sz | cut -f1)" = basla ] && bash "$KT" izin-durum is-sz | grep -q "söz saati 2026-10-28T20:25"; g $? "V20b izin künyesi sözün saatini gösterir (göz/kapı/gün sonu aynı künyeyi okur)"
+O="$(bash "$KT" sultan-dedi is-sz --karar basla --oturum s-sz2 --soz "yine başlayın" --beyan MUAVIN 2>&1)"
+python3 -c "import json;k=json.load(open('$KU/is-sz.json'));x=k['sultan_kararlari'][-1];assert x['zaman']==x['yazildi'] and x['zaman_kaynagi']=='yazim'" 2>/dev/null && grep -q "yazım saati" <<<"$O"; g $? "V20c bayraksız: zaman = yazım saati, kaynak yazim (eski davranış korunur, çıktı bunu söyler)"
+O="$(bash "$KT" sultan-dedi is-sz --karar basla --oturum s-szz --soz "saat dilimsiz" --beyan MUAVIN --soz-zamani 2026-10-28T20:25:00 2>&1)"; RC=$?
+python3 -c "import json;k=json.load(open('$KU/is-sz.json'));x=k['sultan_kararlari'][-1];assert x['zaman'].startswith('2026-10-28T20:25:00') and len(x['zaman'])>19 and x['zaman_kaynagi']=='soz'" 2>/dev/null && [ "$RC" -eq 0 ]; g $? "V20c2 saat dilimsiz ISO kabul: kutunun dilimi eklenir, kaynak soz"
+N0=$(python3 -c "import json;print(len(json.load(open('$KU/is-sz.json'))['sultan_kararlari']))")
+O="$(bash "$KT" sultan-dedi is-sz --karar basla --oturum s-sz3 --soz "x" --beyan MUAVIN --soz-zamani "dün akşam" 2>&1)"; [ $? -eq 1 ] && grep -q "bozuk biçim" <<<"$O"; g $? "V20d bozuk biçim rc 1, sebep söylenir"
+GELECEK="$(date -d '+2 hours' +%Y-%m-%dT%H:%M:%S%:z)"
+O="$(bash "$KT" sultan-dedi is-sz --karar basla --oturum s-sz4 --soz "x" --beyan MUAVIN --soz-zamani "$GELECEK" 2>&1)"; [ $? -eq 1 ] && grep -q "gelecekte" <<<"$O"; g $? "V20e gelecekteki saat rc 1 (söz henüz söylenmemiş olamaz)"
+bash "$KT" sultan-dedi is-sz --karar basla --oturum s-sz5 --soz "x" --beyan MUAVIN --soz-zamani "2026-10-28T20:25:00|x" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "V20f --soz-zamani içinde '|' rc 1 (defter ayracı)"
+[ "$(python3 -c "import json;print(len(json.load(open('$KU/is-sz.json'))['sultan_kararlari']))")" = "$N0" ]; g $? "V20g reddedilen üç denemede kayıt ÜRETİLMEDİ (sayı aynı)"
+echo "── V20 · MUTASYON (tam kopya): bayrak yok sayılırsa ya da gelecek çiti kalkarsa sınav KIRMIZI ──"
+szk() { bash "$D16/kart.sh" ac "$1" --is "söz saati mutant sınavı sınıflı iş" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para e --dis-yuzey h --yetki h --oda sinav-oda >/dev/null 2>&1; }
+m16 soz-zamani-yok izin.py 'return z.isoformat(timespec="seconds"), "soz", None' 'return an.isoformat(timespec="seconds"), "yazim", None' && { szk is-mz1; bash "$D16/kart.sh" sultan-dedi is-mz1 --karar basla --oturum m1 --soz "x" --beyan MUAVIN --soz-zamani 2026-10-28T20:25:00+03:00 >/dev/null 2>&1; python3 -c "import json;k=json.load(open('$KU/is-mz1.json'));assert k['sultan_kararlari'][-1]['zaman']=='2026-10-28T20:25:00+03:00'" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "mutant 'soz-zamani-yok': bayrak yok sayılınca V20a kapısı KIRMIZI"; }
+m16 gelecek-citi-yok izin.py 'if z > an + datetime.timedelta(seconds=60):' 'if False:' && { szk is-mz2; bash "$D16/kart.sh" sultan-dedi is-mz2 --karar basla --oturum m2 --soz "x" --beyan MUAVIN --soz-zamani "$GELECEK" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant 'gelecek-citi-yok': gelecek saat kabul edilince V20e kapısı KIRMIZI (rc 0 döndü)"; }
+m16 kunye-saatsiz izin.py 'return "oturum %s · söz \"%s\"%s" % (o, s[:60], (" · söz saati %s" % z) if z else "")' 'return "oturum %s · söz \"%s\"" % (o, s[:60])' && { szk is-mz3; bash "$D16/kart.sh" sultan-dedi is-mz3 --karar basla --oturum m3 --soz "x" --beyan MUAVIN --soz-zamani 2026-10-28T20:25:00+03:00 >/dev/null 2>&1; bash "$D16/kart.sh" izin-durum is-mz3 | grep -q "söz saati"; [ $? -ne 0 ]; g $? "mutant 'kunye-saatsiz': künyeden saat düşünce V20b kapısı KIRMIZI"; }
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

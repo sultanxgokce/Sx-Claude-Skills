@@ -1,0 +1,44 @@
+{
+  "is": "sultan-dedi-soz-zamani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T10:20:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "fceaba85e7dced2cd249d5325dd4adeb645d575ffa6e617073db5248d8c35772",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-sonra.k6m3/yazilim-fabrikasi/scripts && timeout 900 bash kart.test.sh 2>&1 | grep -E '✗|SONUÇ|V20|mutant .(soz|gelecek|kunye)'; exit ${PIPESTATUS[0]}"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:17:17+03:00",
+      "sure_sn": 121.7,
+      "boru_denetimi": "temiz",
+      "olcum_id": "767b6a04015a4a1cb4d873c10b19c6f9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "once",
+      "dosya": "olcum-kart-sinav-once.txt",
+      "sha256": "9b180a1502cf903be2bf244d6f2c57c1306edc60f227c2de6a9fba46bfc0304b",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-once.YZEg/yazilim-fabrikasi/scripts && timeout 900 bash kart.test.sh 2>&1 | grep -E '✗|SONUÇ' | cut -c1-150; exit ${PIPESTATUS[0]}"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T10:20:47+03:00",
+      "sure_sn": 109.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "a298260c7f174d4e84934c2b0ffd23f7"
+    }
+  ],
+  "imza": "7dd664debd058a1d18f6af0de78bdc495afe3facfb949f3db77e10e62f4e5cfd"
+}
