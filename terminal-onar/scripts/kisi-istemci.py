@@ -14,7 +14,7 @@ import base64, fcntl, json, os, select, signal, socket, struct, sys, termios, tt
 YOL = os.environ.get("KOPRU_SOKET", "/run/kisi/koprusu.sock")
 NEDEN = {"kimlik": "Bu hesap bu ekrana giremez.", "koltuk-izinli-degil": "Bu koltuğa erişimin yok.", "koltuk-adi-gecersiz": "Koltuk adı geçersiz.",
          "koltuklar-olculemedi": "Koltuk listesi şu an okunamadı; biraz sonra dene.", "cok-sik": "Çok sık mesaj; birkaç saniye bekle.",
-         "metin-bos-ya-da-uzun": "Mesaj boş ya da 2000 karakterden uzun.", "menu-sorusu-yok": "Koltuk şu an bir seçenek sorusu beklemiyor.",
+         "metin-bos-ya-da-uzun": "Mesaj boş ya da 2000 karakterden uzun.", "menu-sorusu-yok": "Seçilecek soru yok. Yazmak için [m] tuşuna bas.",
          "sik-sunulmadi": "Bu şık sunulmuyor.", "mesaj-yolu-yok": "Mesaj yolu bu kutuda kurulu değil.", "once-izle": "Önce bir koltuk aç."}
 
 
@@ -32,6 +32,7 @@ HAL = {"calisiyor": "çalışıyor", "soru": "soru bekliyor", "bos": "boşta"}
 class Istemci:
     def __init__(self, koltuk):
         self.koltuk, self.durum, self.yaziyor, self.tampon, self.gelen = koltuk, "", None, "", b""
+        self.ret = False   # son durum bir RED ise alt satır genel kısayol şeridi yerine yalnız red + ipucunu gösterir
         self.s = socket.socket(socket.AF_UNIX)
         self.s.connect(YOL)
 
@@ -43,11 +44,12 @@ class Istemci:
         if self.yaziyor is not None:
             metin = "Mesaj: " + self.yaziyor + "▌   (Enter gönder · Esc vazgeç)"
         else:
-            metin = (self.durum + " · " if self.durum else "") + "[m] mesaj gönder · [1-9] şık seç · [q] çık"
+            metin = self.durum if self.ret else (self.durum + " · " if self.durum else "") + "[m] mesaj gönder · [1-9] şık seç · [q] çık"
         sys.stdout.write("\x1b7\x1b[%d;1H\x1b[2K\x1b[7m%s\x1b[0m\x1b8" % (satir, metin[: sutun - 1]))
         sys.stdout.flush()
 
     def tus(self, ch):
+        self.ret = False
         if self.yaziyor is not None:
             if ch in ("\r", "\n"):
                 metin, self.yaziyor = self.yaziyor, None
@@ -76,7 +78,7 @@ class Istemci:
         elif t == "tamam":
             self.durum = "mesaj gönderildi" if m.get("eylem") == "mesaj" else "şık %s seçildi" % m.get("no"); self.alt_satir()
         elif t == "ret":
-            self.durum = NEDEN.get(m.get("neden"), "reddedildi: %s" % m.get("neden")); self.alt_satir()
+            self.durum, self.ret = NEDEN.get(m.get("neden"), "reddedildi: %s" % m.get("neden")), True; self.alt_satir()
         elif t == "bitti":
             return False
         return True

@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kisi-istemci-bos-sohbet-ipucu",
+  "pr": "570",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T17:55:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kirmizi-vaka-sayisi-once.txt (yesil → gecersiz) — göz tur 1: pencere değişikliği ayrı karta taşındı, bu ölçüm I3d içeriyordu · HENDESE;olcum-kirmizi-vaka-sayisi-sonra.txt (yesil → gecersiz) — göz tur 1: pencere değişikliği ayrı karta taşındı, bu ölçüm I3d içeriyordu · HENDESE",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-istemci-bos-sohbet-ipucu",
+  "dal": "kisi-istemci-bos-sohbet-ipucu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20075,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 11262
+  },
+  "dalgic": "uyumsuz",
+  "bas": "feb15cc006741945b45176c617edbc5f40a7f286",
+  "duzeltme_farki": {
+    "onceki_bas": "1f99e927ef184dc2811af25cfdcd4ba5cbf1e1f8",
+    "dosya": 10,
+    "bayt": 16534,
+    "tam_bayt": 20844
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen boş-sohbet reddi ve alt satırdaki “yazmak için m” ipucu uygulanmış; odaklı önce/sonra ölçümünde I3b ve I3c vakaları 2 başarısızlıktan 0 başarısızlığa inmiş. Önceki turdaki kapsam kayması, tmux pencere davranışı ile I3d sınavı ve belgeleri geri çıkarılarak kapanmış; üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Geçersiz ilan edilen iki eski ölçüm kanıt sayılmamış; onların yerine gerçek PTY/tmux istemci akışını kullanan odaklı önce/sonra çifti, I3b ve I3c için önce 2 kırmızı vaka, sonra 0 kırmızı vaka gösteriyor. Görsel kare yok, ancak bu terminal davranışı için tekrarlı ret ve alt satır koşullarını sınayan ölçüm çifti yeterli."
+  }
+}

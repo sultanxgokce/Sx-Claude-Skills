@@ -71,6 +71,10 @@ try:
     os.write(fd, b"zzz yy\r"); oku(fd, 0.6)
     ok("I2 tanımsız tuşlar atıldı (mesaj yolu çalışmadı)", not os.path.exists(T + "/mesaj.gelen"))
     ok("I3 tanımsız tuşlar koltuğa gitmedi", "zzz" not in tmux("capture-pane", "-p", "-t", "=demo-ana:").stdout)
+    os.write(fd, b"1"); son1 = oku(fd, 1.5)
+    ok("I3b soru yokken rakam → red + 'yazmak için m' ipucu; tekrar basınca ipucu yine görünür", "Yazmak için [m]" in son1 and "[q] çık" not in son1.split("Yazmak için [m]")[-1], repr(son1[-200:]))
+    os.write(fd, b"1"); son1 = oku(fd, 1.5)
+    ok("I3c ikinci red de aynı ipucunu basar", "Yazmak için [m]" in son1, repr(son1[-200:]))
     os.write(fd, b"m"); oku(fd, 0.4); os.write(fd, "Selam ajan ş\r".encode()); son = oku(fd, 2.0)
     g = open(T + "/mesaj.gelen").read() if os.path.exists(T + "/mesaj.gelen") else None
     ok("I4 m + yazı + Enter → mesaj köprüden geçti", g is not None and g.strip() == "Selam ajan ş", g)
