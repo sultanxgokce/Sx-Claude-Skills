@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.1
+version: 2.36.3
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -85,6 +85,9 @@ geçirip bağlanır.
 - Kapıyı başlatan bütün sınavlar tuzu geçici yolda tutar (gerçek `$HOME`'a yazmaz).
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
+
+## 🆕 2.36.3 · Kişi terminali: geniş ekran küçük rakip istemciyle daralmaz (29 Eki · görev …MH786T4 · kart kisi-pencere-latest)
+Köprü izlemeyi açmadan önce koltuğun pencere ayarını `window-size latest` yapar (masaüstü bağlanışıyla aynı) — tmux.conf `smallest` iken 80x24 bir istemci daha varsa kişinin geniş ekranı noktalı kalmaz. Sınav: `kisi-istemci.test.py` I3d.
 
 ## 🆕 2.36.1 · Koltuk sorusunun metnine eski konuşma karışmaz (29 Eki · görev …0E6H · kart soru-metni-sinir)
 **Ölçülen hata:** merkez 1.145.0 canlıda Sultan'ın "Senden bekleyen"inde akar/MÜTEVELLİ'nin sorusu şöyle göründü: *"● User answered Claude's

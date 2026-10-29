@@ -71,6 +71,28 @@ try:
     os.write(fd, b"zzz yy\r"); oku(fd, 0.6)
     ok("I2 tanımsız tuşlar atıldı (mesaj yolu çalışmadı)", not os.path.exists(T + "/mesaj.gelen"))
     ok("I3 tanımsız tuşlar koltuğa gitmedi", "zzz" not in tmux("capture-pane", "-p", "-t", "=demo-ana:").stdout)
+    # I3d: kişi ekranı küçük bir başka istemci yüzünden daralmasın (window-size smallest + 60x20 rakip istemci → pencere 105 sütuna uymalı)
+    tmux("set-option", "-g", "window-size", "smallest")
+    rpid, rfd = pty.fork()
+    if rpid == 0:
+        os.environ.update(ENV); os.environ["TERM"] = "xterm"
+        os.execvp("tmux", ["tmux", "attach-session", "-t", "=demo-ana"])
+    fcntl.ioctl(rfd, termios.TIOCSWINSZ, struct.pack("HHHH", 20, 60, 0, 0)); oku(rfd, 0.8)
+    q = tmux("display-message", "-p", "-t", "=demo-ana:", "#{window_width}").stdout.strip()
+    bpid, bfd = pty.fork()
+    if bpid == 0:
+        os.environ.update(ENV); os.environ["TERM"] = "xterm"
+        os.execv(sys.executable, [sys.executable, ISTEMCI, "demo-ana"])
+    fcntl.ioctl(bfd, termios.TIOCSWINSZ, struct.pack("HHHH", 45, 105, 0, 0)); oku(bfd, 2.5)
+    w = tmux("display-message", "-p", "-t", "=demo-ana:", "#{window_width}").stdout.strip()
+    ok("I3d geniş kişi ekranı küçük rakip istemciyle daralmaz (pencere 105 sütun)", w == "105", "rakip tek başına=%s · kişi bağlanınca=%s" % (q, w))
+    for _p, _f in ((bpid, bfd), (rpid, rfd)):
+        os.write(_f, b"q") if _p == bpid else None
+        try:
+            os.kill(_p, 15); os.waitpid(_p, 0)
+        except OSError:
+            pass
+    tmux("set-option", "-g", "window-size", "latest")
     os.write(fd, b"m"); oku(fd, 0.4); os.write(fd, "Selam ajan ş\r".encode()); son = oku(fd, 2.0)
     g = open(T + "/mesaj.gelen").read() if os.path.exists(T + "/mesaj.gelen") else None
     ok("I4 m + yazı + Enter → mesaj köprüden geçti", g is not None and g.strip() == "Selam ajan ş", g)
