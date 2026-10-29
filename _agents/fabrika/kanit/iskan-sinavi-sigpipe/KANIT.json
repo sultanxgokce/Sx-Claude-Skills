@@ -1,0 +1,46 @@
+{
+  "is": "iskan-sinavi-sigpipe",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T04:32:01+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-iskan-sinavi-tek.txt",
+      "sha256": "095848333d0bb0b16d026297ca2cc4f6ed0cc53448e99588df9a3c5880c52a4c",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T04:31:28+03:00",
+      "sure_sn": 36.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "199d15173d3f439e8f8b90f8b88a0592"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-gq-hep-gecer",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-gq-hep-gecer-sonra.txt",
+      "sha256": "6b44fa1f51149f85d8b3e1289303e5e803d94d45c3e6188d08b146b96c150be5",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T04:32:01+03:00",
+      "sure_sn": 33.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "iskan-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c97f8b52b3c34f80a756e7511e917e2a"
+    }
+  ],
+  "imza": "40435edf5c45b505a8ebc4beda59c34ec36a9c97f1bb8b5dccf872fd7fedf60b"
+}
