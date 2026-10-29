@@ -54,11 +54,13 @@ EOF
     sed -n '/^# 4 · kurtarıcı ajan/,/^\[ -n "\${TO_BEKCI_YOK/p' "$1/scripts/onar.sh" | sed '$d'; } > "$1/scripts/adim4.sh"
 }
 say() { local c; c=$(grep -c -- "$1" "$2" 2>/dev/null); echo "${c:-0}"; }   # dosya yoksa 0 (grep -c || echo 0 "0\n0" basar)
+# JRCK8J: çalışan claude çözülemezse onar.sh YAZMAZ (K0 DUR); CI'da gerçek claude yok → sahte nvm kökünde geçerli (≥1 MB) bir claude
+mkdir -p "$T/nvm-var/v1/bin" "$T/nvm-var/v1/lib"; head -c 2097152 /dev/zero > "$T/nvm-var/v1/lib/claude.exe"; chmod +x "$T/nvm-var/v1/lib/claude.exe"; ln -s ../lib/claude.exe "$T/nvm-var/v1/bin/claude"
 M="$T/calisma"; hazirla "$M"
 kapi "H0 onar.sh adım 4 bloğu çıkarıldı (kurtarici_kapali dalı içinde)" "e" "$(grep -q 'if kurtarici_kapali; then' "$M/scripts/adim4.sh" && echo e || echo h)"
 
 kos() { # ortam… betik args → PATH sahte, kutu=sinav, durum dizini $D
-  env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_BEKCI_YOK=1 \
+  env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" TO_NVM_KOK="$T/nvm-var" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_BEKCI_YOK=1 \
       TO_BECERI_KOK="$M" CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" TO_BEKLE_ADIM=0.01 "$@"
 }
 kapi "H1 sahte tmux gerçekten devrede (gerçek tmux'a DOKUNULMAZ)" "sahte" "$(: > "$T/oturum/sahte-kanit"; kos bash -c '. "$TO_BECERI_KOK/scripts/ortak.sh"; tmux_var sahte-kanit && echo sahte || echo GERÇEK' 2>/dev/null; rm -f "$T/oturum/sahte-kanit")"
@@ -133,10 +135,10 @@ s=s[:i]+'if ! claude_oturumu'+s[j+len('elif ! claude_oturumu'):]
 open(p,'w',encoding='utf-8').write(s)
 PY
 sifirla; : > "$D/kurtarici-kapali"
-mhal=$(env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_BEKCI_YOK=1 TO_BECERI_KOK="$MU" \
+mhal=$(env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" TO_NVM_KOK="$T/nvm-var" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_BEKCI_YOK=1 TO_BECERI_KOK="$MU" \
   CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" bash "$MU/scripts/durum.sh" 2>/dev/null | sed -n 's/^kurtarıcı ajan *: //p')
 kapi "X1 MUTANT durum.sh işareti görmez → 'yok' basar (D2 onu yakalar)" "yok" "$mhal"
-env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_BEKCI_YOK=1 TO_BECERI_KOK="$MU" \
+env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" TO_NVM_KOK="$T/nvm-var" HOME="$T" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$D" TO_BEKCI_YOK=1 TO_BECERI_KOK="$MU" \
   CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" TO_BEKLE_ADIM=0.01 bash "$MU/scripts/adim4.sh" >/dev/null 2>&1
 kapi "X2 MUTANT onar adım 4 işarete rağmen kurtarıcıyı AÇAR (O1 onu yakalar)" "1" "$(grep -c 'new-session sinav-kurtarici' "$T/tmux.log")"
 

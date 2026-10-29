@@ -41,12 +41,14 @@ kos() { # $1 = default-shell değeri → onar.sh rc'si + günlük
   #    basıyordu: zaman aşımını başarı sayan bir kapı sahte yeşildir.
   local okunan; okunan=$(tmux -S "$S" show -gv default-shell 2>/dev/null)
   [ "$okunan" = "$1" ] || { echo "FIKSTUR-TUTMADI"; return 0; }
-  env TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" \
+  env TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" TO_NVM_KOK="$T/nvm-var" \
       TMUX_TMPDIR="$T" tmux_soket="$S" TTYD_BEKLE=2 KAPI_BEKLE=2 TO_BEKLE_ADIM=0 \
       bash -c 'tmux() { command tmux -S "'"$S"'" "$@"; }; export -f tmux; timeout 25 bash "'"$KOK"'/scripts/onar.sh" >/dev/null 2>&1'
   echo $?
 }
 mkdir -p "$T/proje" "$T/durum"
+# JRCK8J: çalışan claude çözülemezse onar.sh YAZMAZ (K0 DUR); CI'da gerçek claude yok → sahte nvm kökünde geçerli (≥1 MB) bir claude
+mkdir -p "$T/nvm-var/v1/bin" "$T/nvm-var/v1/lib"; head -c 2097152 /dev/zero > "$T/nvm-var/v1/lib/claude.exe"; chmod +x "$T/nvm-var/v1/lib/claude.exe"; ln -s ../lib/claude.exe "$T/nvm-var/v1/bin/claude"
 
 echo "── sahte kabukta DURMALI"
 kapi "S1 /bin/false ile onarım durur (rc=3)" "3" "$(kos /bin/false)"
