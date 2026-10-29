@@ -1,0 +1,41 @@
+$ bash yazilim-fabrikasi/scripts/golge.test.sh
+# rc=0 sure=3.3s zaman=2026-10-29T01:52:11+03:00
+--- stdout ---
+════ G1 · kayıt ════
+  ✓ G1 sınıfsız iş: satır yazılır, depo adı remote'tan çıkar
+  ✓ G2 satırda iş·PR·baş·depo·görev alanları var
+  ✓ G19 gölge çıktısı işin sahibine 'sahibi sensin, kendin birleştir, önce gh pr view ile durumu oku' der (28 Eki akşamı dersi 6)
+  ✓ G3 aynı (iş,PR,baş) ikinci kez yazılmaz
+  ✓ G4 aynı PR'a yeni baş (yeni commit) YENİ kayıttır
+  ✓ G5 sınıflı iş kayıt dışı
+  ✓ G6 kartsız iş kayıt dışı, rc=0
+  ✓ G7 FABRIKA_GOLGE=0 kapatır
+════ G2 · görev adımı ve zil (sahte araçlar) ════
+  ✓ G8 görev defterine '[birleştirirdim]' adımı yazılır
+  ✓ G9 SERDAR'a zil gider
+  ✓ G10 zil 'gerçekten birleştirilmedi' der (yanlış anlaşılmasın)
+  ✓ G11 ikinci koşuda adım ve zil TEKRARLANMAZ
+  ✓ G12 görevsiz kartta adım yazılmaz ama zil yine gider
+════ G2b · zil sonucu söylenir, yutulmaz (göz 1. tur bulgu 1) ════
+  ✓ G13 zil gerçekten düşerse (rc 7) stderr'e GÖNDERİLEMEDİ yazılır, kayıt kalır, rc=0
+  ✓ G14 meşgul koltukta zil KUYRUĞA girer: 'kuyrukta' denir, sorun sayılmaz
+  ✓ G15 zil gittiyse 'SERDAR'a gitti' denir
+════ G2c · eşzamanlı kapı koşuları tek kayıt yazar (göz 1. tur bulgu 2) ════
+  ✓ G16 altı eşzamanlı koşu (bakma–ekleme arası 0,4 sn gecikme): 1 satır, 1 görev adımı, 1 zil
+  ✓ G17 mutant (flock söküldü): aynı kayıt birden çok yazılır → G16 bu mutantta düşerdi
+  ✓ G18 mutant (zil hatası yine yutuluyor): uyarı kayboluyor → G13 bu mutantta düşerdi
+════ G3 · rapor ════
+  ✓ R1 beş kaydın akıbeti doğru sayılır (birleşti/geri/kapandı/açık/listede yok)
+  ✓ R2 sahte yeşil = geri alınan + birleşmeden kapanan; payda yalnız hükme varanlar (açık ve ölçülemeyen hariç)
+  ✓ R3 sahte yeşiller adıyla listelenir
+  ✓ R4 listede olmayan PR 'ölçülemedi' (birleşmedi sayılmaz)
+  ✓ R5 gh düşerse rc 3 ve 'temiz' denmez (hepsi ölçülemedi)
+  ✓ R6 liste tavana dayanınca (5/5) kayıtlar PR numarasıyla tek tek sorulur: R1 ile AYNI akıbet sayıları (eskiden hepsi ölçülemedi)
+  ✓ R6b tavanda tek PR sorusu da düşerse hepsi ölçülemedi, rc 3 (yeşil denmez)
+  ✓ R7 defter yoksa rc 3 (kayıt yok ≠ sıfır sahte yeşil)
+  ✓ R8 pencere dışı kayıtlar sayılmaz
+  ✓ R6c mutant (tavan yolunda Revert araması söküldü): geri alınan PR kaçar → R6 bu mutantta düşerdi
+  ✓ R9 mutant (geri alma tespiti söküldü): sahte yeşil eksik sayılır → R2 bu mutantta düşerdi
+
+── SONUÇ: 30 geçti · 0 kaldı ──
+--- stderr ---

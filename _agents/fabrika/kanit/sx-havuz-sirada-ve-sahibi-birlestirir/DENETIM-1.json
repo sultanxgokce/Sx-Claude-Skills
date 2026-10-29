@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "sx-havuz-sirada-ve-sahibi-birlestirir",
+  "pr": "552",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:43:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-havuz-sirada-ve-sahibi-birlestirir",
+  "dal": "sx-havuz-sirada-ve-sahibi-birlestirir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44251,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 42415
+  },
+  "dalgic": "uyumsuz",
+  "bas": "08a1895ae449ea1b098af9aa975a53db4f239c85",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Havuzdaki sahipsiz veya koltuğa atanmış işi başlatma adayı yapan akış uygulanmış; sınıfsız işin sahibi tarafından birleştirilmesi ve bayat bildirimde önce PR durumunun okunması da 4-gönder becerisine yazılmış. Havuz değişikliği güçlü ölçülmüş, fakat 4-gönder dersinin davranışı hiçbir sınav veya ölçümle doğrulanmadığı için üretime hazır 5 değil; önce bu güvenceyi çözün.",
+    "bulgular": [
+      {
+        "ne": "4-gönder değişikliği yalnız talimat metni olarak eklenmiş; sınıfsız iş sahibinin gerçekten birleştirmeye ilerlediğini ve bayat bildirimde önce `gh pr view` çalıştırıldığını doğrulayan sınav/ölçüm yok.",
+        "kanit": "Araç imzalı manifestteki beş kaydın tamamı yalnız `bash gunluk-plan/scripts/sirada-bak.test.sh` komutunu çalıştırıyor. Diffte `yazilim-fabrikasi/adimlar/4-gonder.md` değişmiş olmasına rağmen bu davranış için test veya başka ölçüm kaydı bulunmuyor.",
+        "konum": "KANIT MANİFESTİ kayitlar; yazilim-fabrikasi/adimlar/4-gonder.md:64",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. `sirada-bak` için kırmızı önce/yeşil sonra çifti 67/10'dan 77/0'a geçişi gösteriyor; üç mutasyon da dal seçimi, aday sahipliği ve sırada sayımı bozulunca sınavın düştüğünü kanıtlıyor. Buna karşılık bütün ölçümler aynı `sirada-bak.test.sh` sınavına ait; yazılım-fabrikası 4-gönder değişikliği için ölçüm çifti, gerçekçi akış kaydı veya mutasyon kanıtı yok."
+  }
+}

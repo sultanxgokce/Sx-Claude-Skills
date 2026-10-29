@@ -19,6 +19,7 @@ kart is-a duz gorev_X; kart is-b sinifli
 O="$(bash "$GB" is-a --depo "$D" --pr 10 --sha aaa 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "birleştirirdim: 'is-a' (PR #10) · ornek/depo" <<<"$O" && [ "$(wc -l < "$FABRIKA_GOLGE_DEFTER")" -eq 1 ]; g $? "G1 sınıfsız iş: satır yazılır, depo adı remote'tan çıkar" "→ $O"
 python3 -c "import json;r=json.loads(open('$FABRIKA_GOLGE_DEFTER').read().splitlines()[0]);assert r['is']=='is-a' and r['pr']=='10' and r['sha']=='aaa' and r['repo']=='ornek/depo' and r['gorev']=='gorev_X', r"; g $? "G2 satırda iş·PR·baş·depo·görev alanları var"
+grep -q "sahibi sensin" <<<"$O" && grep -q "KENDİN birleştir" <<<"$O" && grep -q "gh pr view 10 --json state,mergedAt" <<<"$O"; g $? "G19 gölge çıktısı işin sahibine 'sahibi sensin, kendin birleştir, önce gh pr view ile durumu oku' der (28 Eki akşamı dersi 6)" "→ $O"
 bash "$GB" is-a --depo "$D" --pr 10 --sha aaa >/dev/null 2>&1; [ "$(wc -l < "$FABRIKA_GOLGE_DEFTER")" -eq 1 ]; g $? "G3 aynı (iş,PR,baş) ikinci kez yazılmaz"
 bash "$GB" is-a --depo "$D" --pr 10 --sha bbb >/dev/null 2>&1; [ "$(wc -l < "$FABRIKA_GOLGE_DEFTER")" -eq 2 ]; g $? "G4 aynı PR'a yeni baş (yeni commit) YENİ kayıttır"
 bash "$GB" is-b --depo "$D" --pr 11 --sha ccc >/dev/null 2>&1; ! grep -q '"is-b"' "$FABRIKA_GOLGE_DEFTER"; g $? "G5 sınıflı iş kayıt dışı"

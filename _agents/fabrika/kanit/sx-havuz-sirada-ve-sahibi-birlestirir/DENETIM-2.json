@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "sx-havuz-sirada-ve-sahibi-birlestirir",
+  "pr": "552",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T01:55:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-havuz-sirada-ve-sahibi-birlestirir",
+  "dal": "sx-havuz-sirada-ve-sahibi-birlestirir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45905,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 20823
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3a54aa62f1dffdb07aaa96963d9e1d369b6b868f",
+  "duzeltme_farki": {
+    "onceki_bas": "08a1895ae449ea1b098af9aa975a53db4f239c85",
+    "dosya": 10,
+    "bayt": 25097,
+    "tam_bayt": 85604
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Havuzdaki kendi işi başlatma adayı sayılıyor; sınıfsız iş sahibine birleştirme sorumluluğu ve bayat bildirimde önce `gh pr view` ile durum okuma talimatı artık çalışan çıktıda da veriliyor. Önceki turdaki B1, kırmızı/yeşil ölçüm çifti ve mesajın iki parçasını ayrı ayrı bozan mutasyonların sınavı düşürmesiyle kapanmış; kanıtlanan kapsamda yalnız rötuş kalmış görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `sirada-bak` ölçümü 67 geçti/10 kaldı durumundan 77/0'a, `golge.test.sh` ise 29/1'den 30/0'a geçmiş; G19 doğrudan sahibin kendisinin birleştirmesi ve önce `gh pr view 10 --json state,mergedAt` çalıştırması yönündeki çıktıyı sınıyor. `mut-gb-satir` ve `mut-gb-oku` kayıtları ilgili üretim mesajı bozulduğunda G19'un düştüğünü, `gercek_olcum=sonra-gb` kaydı gerçek kodun yeşil olduğunu gösteriyor; havuz dalları da üç ayrı mutasyonla korunmuş. Önceki B1 böylece yalnız yazılmış bir talimat olmaktan çıkıp çağrılan gölge çıktısı ve ona duyarlı sınavla ölçülmüş durumda."
+  }
+}

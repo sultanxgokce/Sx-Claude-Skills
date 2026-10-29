@@ -26,7 +26,8 @@ LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 if [ -z "$KUTU" ]; then
   KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" ${KIM:+--kim "$KIM" --cozulmus} --liste /dev/stdin 2>/dev/null)" || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
 fi
-SIRA="$(printf '%s\n' "$LISTE" | python3 -c '
+# Durum kümesi argümandır: Sırada = acik + sira-bende (ekranın tanımı); HAVUZ = havuz (1.14.0, SERDAR 29 Eki "havuz da iştir").
+PY='
 import sys
 import unicodedata
 def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u").replace("ü","u").replace("ö","o").replace("ç","c").replace("ş","s").replace("ğ","g")
@@ -34,26 +35,36 @@ kutu=sys.argv[1]; kim=n(sys.argv[2]); oncel={"cok-acil":0,"acil":1,"esnek":2,"ra
 for i,s in enumerate(sys.stdin):
     p=s.rstrip("\n").split(None,6)
     if len(p)<7 or not p[0].startswith("gorev_"): continue   # id kutu durum aciliyet etiket atanan BAŞLIK
-    if p[1]!=kutu or p[2] not in ("acik","sira-bende"): continue
+    if p[1]!=kutu or p[2] not in sys.argv[3].split(","): continue
     ben="1" if (p[5]=="-" or (kim and n(p[5])==kim)) else "0"   # başlatma adayı: koltuğa atanmış ya da sahipsiz; başkasına atanmış iş ÜSTLENİLMEZ
     r.append((oncel.get(p[3],4),i,p[0],p[3],p[6].split("  (son:")[0],ben))
 for o,i,gid,ac,b,ben in sorted(r): print("%s\t%s\t%s\t%s"%(gid,ac,b,ben))
-' "$KUTU" "$KIM")"
+'
+SIRA="$(printf '%s\n' "$LISTE" | python3 -c "$PY" "$KUTU" "$KIM" "acik,sira-bende")"
+HAVUZ="$(printf '%s\n' "$LISTE" | python3 -c "$PY" "$KUTU" "$KIM" "havuz")"
 N=0; [ -n "$SIRA" ] && N=$(printf '%s\n' "$SIRA" | wc -l)
-echo "KUTU=$KUTU"; echo "SIRADA=$N"; echo "ESIK=$ESIK"
-if [ "$N" -ge "$ESIK" ]; then
+# 1.14.0 (SERDAR 29 Eki, Sultan "ilerleme durdu"): HAVUZ da iştir. Sırada eşiğin altında kalsa bile bu koltuğa atanmış ya da sahipsiz HAVUZ işi varsa
+#   Sultan'a "iş çıkaralım mı" SORULMAZ: iş vardır, sormadan başlanır. Sırada sayısı (ekranın tanımı) DEĞİŞMEZ; havuz ayrı sayılır (HAVUZDA=).
+H=0; [ -n "$HAVUZ" ] && H=$(printf '%s\n' "$HAVUZ" | awk -F'\t' '$4=="1"' | wc -l)
+NB="$N"; HAVUZDAN=0
+echo "KUTU=$KUTU"; echo "SIRADA=$N"; echo "HAVUZDA=$H"; echo "ESIK=$ESIK"
+if [ "$N" -lt "$ESIK" ] && [ "$H" -ge 1 ]; then
+  HAVUZDAN=1; SIRA="$(printf '%s\n%s\n' "$SIRA" "$HAVUZ" | sed '/^$/d')"; NB=$(printf '%s\n' "$SIRA" | wc -l)
+fi
+if [ "$N" -ge "$ESIK" ] || [ "$HAVUZDAN" -eq 1 ]; then
   echo "KARAR=BAS"
+  [ "$HAVUZDAN" -eq 0 ] || echo "NEDEN=Sırada $N iş var (eşik $ESIK) ama havuzda sana düşen $H iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)"
   printf '%s\n' "$SIRA" | head -5 | awk -F'\t' '{printf "ISI=%s · %s · %s\n",$1,$2,$3}'
   ILK="$(printf '%s\n' "$SIRA" | awk -F'\t' '$4=="1" {print $1; exit}')"
   if [ -z "$ILK" ]; then
-    echo "BASLAMADI=yok (sıradaki $N işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)"
-    echo "ONERI=Sultan'a: 'Sırada $N iş var ama hepsi başka koltuklara atanmış; bana atanmış ya da sahipsiz iş yok. Kendimize iş çıkarma seansı yapalım mı?'"
+    echo "BASLAMADI=yok (sıradaki $NB işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)"
+    echo "ONERI=Sultan'a: 'Sırada $NB iş var ama hepsi başka koltuklara atanmış; bana atanmış ya da sahipsiz iş yok. Kendimize iş çıkarma seansı yapalım mı?'"
   elif [ "$BASLA" -eq 1 ]; then
     [ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ustlen için ajan kimliği yok (--kim ver ya da --bak)" >&2; exit 3; }
     if bash "$GOREV" ustlen "$ILK" --kim "$KIM" --tahmin "$TAHMIN" >/dev/null 2>&1; then echo "BASLADI=$ILK (çalışılıyor yapıldı · tahmin ${TAHMIN} dk)"; else echo "BASLAMADI=$ILK (ustlen reddedildi — defter durumunu kendin oku)" >&2; exit 1; fi
-    echo "ONERI=Sultan'a: 'Sırada $N iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez"
+    echo "ONERI=Sultan'a: 'Sırada $NB iş var; en üstteki $ILK ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez"
   else
-    echo "ONERI=Sırada $N iş var; en üstteki $ILK. --bak yalnız baktı, BAŞLANMADI: üstlenmek senin (ajanın) işi, izin beklemez → gorev.sh ustlen $ILK ile başla. Sultan'ın tıkı yalnız 'bugüne al' (öncelik işareti) içindir; başlamanı geciktirmez"
+    echo "ONERI=Sırada $NB iş var; en üstteki $ILK. --bak yalnız baktı, BAŞLANMADI: üstlenmek senin (ajanın) işi, izin beklemez → gorev.sh ustlen $ILK ile başla. Sultan'ın tıkı yalnız 'bugüne al' (öncelik işareti) içindir; başlamanı geciktirmez"
   fi
 else
   echo "KARAR=SOR"

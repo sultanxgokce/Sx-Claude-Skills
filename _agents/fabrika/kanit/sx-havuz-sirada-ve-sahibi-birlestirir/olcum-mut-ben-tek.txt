@@ -1,0 +1,106 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-sb-* ===
+$ bash gunluk-plan/scripts/sirada-bak.test.sh
+# rc=1 sure=3.5s zaman=2026-10-29T01:42:49+03:00
+--- stdout ---
+— kutu-bul
+  ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
+  ✓ K2 başka koltuk kendi kutusunu bulur (MUAVIN→code, İ/I farkı yok sayılır)
+  ✓ K3 atanmış işi olmayan koltuk: rc 3, kutu UYDURULMAZ
+  ✓ K4 iki kutu eşit sayıda: tahmin yok, rc 3
+  ✓ K5 GUNLUK_PLAN_KUTU açık ayarı kazanır
+  ✓ K6 liste okunamazsa rc 3
+— sirada-bak
+  ✓ S1 menzil: Sırada=3 (acik+sira-bende; havuz/çalışılan/biten ve code işleri SAYILMAZ) rc 0
+  ✓ S2 eşik 3 ve 3 iş → KARAR=BAS
+  ✓ S3 acil iş listede ilk sırada
+  ✓ S4 VARSAYILAN koşuda en üstteki iş ustlen edilir (talep: başlasın)
+  ✓ S4b --bak: ustlen ÇAĞRILMAZ ve çıktı 'başladım' DEMEZ (gerçeğe aykırı beyan yok)
+  ✓ S5 öneri bugüne almanın SULTAN'ın olduğunu söyler
+  ✓ S5b varsayılan koşuda BASLADI satırı var
+  ✓ S5c --bak önerisi üstlenmenin ajanın işi olduğunu söyler (izin beklemez)
+  ✓ S5d --bak önerisi üstlen komutunu gösterir
+  ✓ S5e --bak önerisi izin soran 'alayım mı' kalıbını İÇERMEZ
+  ✓ S6 eski --basla bayrağı artık TANINMAZ (rc 2, ustlen yok)
+  ✓ S7 betik bugun_plani'na ASLA yazmaz (ustlen dışında çağrı yok)
+  ✓ S8 eşik 4 ve 3 iş → KARAR=SOR
+  ✓ S9 SOR iki şık verir
+  ✓ S9b SOR: ADIM 0-d tarama ZORUNLU satırı var, Sultan'ı beklemez (HC75A)
+  ✓ S9c ZORUNLU satırı tarama-ekle.sh'ı gösterir ve ölçüt bayraklarını taşır (kaynak + kanıt zorunlu kalır)
+  ✓ S9d günlük tavan söylenir (günde en çok 3, tavan değişmedi)
+  ✓ S9e BAS kararında ZORUNLU satırı YOK (sıra doluyken taranmaz)
+  ✓ S10 SOR iken varsayılanda bile ustlen ÇAĞIRMAZ
+  ✓ S11 Sırada 1 → SOR
+  ✓ S11b Sırada 1 iken 'planlanmış görev yok' DENMEZ (kendi sayımıyla çelişmez)
+  ✓ S11c Sırada 1 iken gerçek sayı ve eşik söylenir
+  ✓ S12 --kutu verilince boş kutu: SIRADA=0 → SOR
+  ✓ S12b Sırada 0 iken 'planlanmış görev yok' denir
+  ✓ S13 liste okunamazsa rc 3 ('Sırada 0' DENMEZ)
+  ✓ S14 ölçülemeyende KARAR satırı basılmaz
+  ✓ S15 bozuk eşik rc 2
+  ✓ S16 eşik 0 rc 2
+  ✓ S17 ustlen reddedilirse rc 1 (sessiz başarı yok)
+  ✓ S18 kim yokken başlatma rc 3
+— başkasının işi üstlenilmez (kutu-düzeyi sayım ≠ koltuk-düzeyi başlatma)
+  ✓ S19 en üstteki iş BAŞKASINA atanmış: onu ÜSTLENMEZ, bana atanmış ilk işi üstlenir
+  ✓ S19b sayım yine kutu-düzeyinde (4 iş) ve karar BAS
+  ✓ S20 3 iş de başkasına atanmış: ustlen ÇAĞRILMAZ, rc 0
+  ✓ S20b 'başkasının işi üstlenilmez' açıkça söylenir
+  ✓ S21 sahipsiz ('-') iş başlatma adayıdır
+— deftere-yaz kutu türetme (menzil hatası)
+  ✓ D1 --kutu verilmeden menzil koltuğu 'kutu=menzil' çıkar (code DEĞİL)
+  ✓ D2 'kutu=code' çıkmaz
+  ✓ D3 atanmışı olmayan koltuk --kutu'suz rc 3
+— koltuk eşleme (kimlik-coz)
+  ✓ Q1 tablodaki koltuk defter adına çevrilir
+  ✓ Q2 İ/I/ı katlı eşleşir (MOBİLYACI)
+  ✓ Q3 tabloda olmayan ad AYNEN döner
+  ✓ Q4 tablo yoksa ad AYNEN döner
+  ✓ Q5 aynı koltuk iki ada giderse rc 3 (tahmin yok)
+  ✓ Q6 bozuk satır atlanır ve söylenir
+  ✓ Q6b sağlam satır yine çalışır
+  ✓ Q7 kutu-bul: koltuk adıyla (MOBILYACI) NECCAR'ın kutusunu bulur
+  ✓ Q7b tablo yokken aynı çağrı ÖLÇEMEZ (rc 3) — kapı çeviriden geliyor
+  ✓ Q8 sirada-bak: ustlen DEFTER adıyla çağrılır (--kim NECCAR)
+  ✓ Q9 deftere-yaz: koltuk adı çevrilir, kutu=mihenk
+  ✓ Q9b deftere-yaz: defter kaydı DEFTER adıyla yazılır (kim=NECCAR)
+  ✓ Q10 zincirli tabloda TEK geçiş: ZA→ZB (ZC'ye varmaz), kutu=kutux
+  ✓ Q10b ustlen ZB adıyla çağrılır (ZC DEĞİL)
+  ✓ Q10c deftere-yaz da tek geçiş: kutu=kutux kim=ZB
+  ✓ Q11 kutu-bul: ASCII koltuk (MUTEVELLI) aksanlı defter adını (MÜTEVELLİ) bulur
+  ✓ Q12 sirada-bak: tablosuz bile MÜTEVELLİ işleri koltuğa atanmış sayılır (BASLAMADI=yok DEĞİL)
+  ✓ Q12b 'bana atanmış ya da sahipsiz iş yok' çıkmaz
+  ✓ Q13 kimlik-coz: ü ö ç ş ğ katlı eşleşir (tablo satırı MUTEVELLİ koltuğu → MÜTEVELLİ)
+
+— havuz da iştir (1.14.0 · SERDAR 29 Eki)
+  ✓ H1 Sırada 3 < eşik 4 ama sahipsiz HAVUZ işi var → KARAR=BAS (Sultan'a 'iş çıkaralım mı' SORULMAZ)
+  ✓ H1b NEDEN satırı 'havuz da iştir' der
+  ✓ H1c HAVUZDA=1 ayrı sayılır, SIRADA=3 değişmez (ekranın tanımı)
+  ✓ H1d SIRADA hâlâ 3
+  ✓ H1e BAS kararında SOR/ZORUNLU yok
+  ✓ H1f ilk aday sıradaki acil iş (sıra önce, havuz sonra)
+  ✓ H2 Sırada 0, koltuğa atanmış havuz işi var → KARAR=BAS
+  ✓ H2b havuz işi üstlenilir
+  ✓ H2c ISI satırında havuz işi listelenir
+  ✗ H3 havuz işi BAŞKASINA atanmışsa sayılmaz → KARAR=SOR — 'KARAR=SOR' yok: KUTU=menzil
+SIRADA=0
+HAVUZDA=1
+ESIK=3
+KARAR=BAS
+NEDEN=Sırada 0 iş var (eşik 3) ama havuzda sana düşen 1 iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)
+ISI=gorev_H2 · esnek · başkasının havuzu
+BASLAMADI=yok (sıradaki 1 işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)
+ONERI=Sultan'a: 'Sırada 1 iş var ama hepsi başka koltuklara atanmış; bana atanmış ya da sahipsiz iş yok. Kendimize iş çıkarma seansı yapalım mı?'
+  ✗ H3b HAVUZDA=0 — 'HAVUZDA=0' yok: KUTU=menzil
+SIRADA=0
+HAVUZDA=1
+ESIK=3
+KARAR=BAS
+NEDEN=Sırada 0 iş var (eşik 3) ama havuzda sana düşen 1 iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)
+ISI=gorev_H2 · esnek · başkasının havuzu
+BASLAMADI=yok (sıradaki 1 işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)
+ONERI=Sultan'a: 'Sırada 1 iş var ama hepsi başka koltuklara atanmış; bana atanmış ya da sahipsiz iş yok. Kendimize iş çıkarma seansı yapalım mı?'
+  ✓ H3c başkasının havuz işi üstlenilmez
+  ✓ H4 --bak havuz işini üstlenmez
+  ✓ H4b --bak havuzdan BAS der ve üstlenme komutunu gösterir
+sonuç: 75 geçti · 2 kaldı
+--- stderr ---
