@@ -58,6 +58,34 @@ kapi('S5b numarasız soru yine serbest (S5 düzeltmesi serbest yolu kapatmadı)'
 const uzun = soruCoz('⏺ x\n' + 'ğüşıöç '.repeat(80) + 'Do you want to proceed?\n❯ 1. ' + 'Evet '.repeat(40) + '\n  2. Hayır\n  3. a\n  4. b\n  5. c\n  6. d\n  7. e\n  8. f');
 kapi('S6 metin ≤300 kod noktası (Türkçe harfle), şık metni ≤80, şık ≤6', uzun && Array.from(uzun.metin).length <= 300 && uzun.siklar.length === 6 && uzun.siklar.every((x) => Array.from(x.metin).length <= 80), uzun && Array.from(uzun.metin).length + '/' + uzun.siklar.length);
 
+console.log('════ Y · yeni ekran işaretleri (2.36.1 · canlı akar/MÜTEVELLİ vakası, merkez 1.145.0 · 29 Eki 14:05) ════');
+// Canlı ölçüm: Sultan'ın 'Senden bekleyen'inde soru metni "● User answered Claude's questions: ⎿ · Ortak giriş parolası … Ran 1 shell command
+//   ❯ /gunluk-plan ☐ Canlı danışman Canlı danışman (S-320) ne zaman ele alınsın?" idi. Claude Code mesaj satırını artık '●' ile çiziyor ('⏺' değil),
+//   kullanıcı istemi '❯ /komut' satırı; ikisi de bölge sınırı sayılmadığı için menünün üstündeki 6 satıra eski konuşma doluyordu.
+const MUTEVELLI = [
+  "● User answered Claude's questions:",
+  '  ⎿  · Ortak giriş parolası konusunda (S-308) ne yapalım? → Önce kaç kişi kurdu sayısını ölç (Önerim)',
+  '  Ran 1 shell command',
+  '❯ /gunluk-plan',
+  '───────────────────────────────────────',
+  ' ☐ Canlı danışman',
+  '',
+  'Canlı danışman (S-320) ne zaman ele alınsın?',
+  '',
+  '❯ 1. Bugün',
+  '  2. Bu hafta',
+  '  3. Type something.',
+  '',
+  'Enter to select · ↑/↓ to navigate · Esc to cancel',
+].join('\n');
+const y = soruCoz(MUTEVELLI);
+kapi('Y1 canlı vaka: metin YALNIZ asıl soru — "Canlı danışman (S-320) ne zaman ele alınsın?"', y && y.tur === 'menu' && y.metin === 'Canlı danışman (S-320) ne zaman ele alınsın?', y && y.metin);
+kapi('Y1b eski konuşma satırları (User answered · ⎿ · Ran 1 shell command · ❯ /gunluk-plan) ve ☐ sekme başlığı metne girmez', y && !/User answered|⎿|Ran 1 shell|gunluk-plan|☐/.test(y.metin), y && y.metin);
+kapi('Y1c şıklar aynen: 1 Bugün · 2 Bu hafta · 3 Type something.', y && y.siklar.map((x) => x.no + ' ' + x.metin).join('|') === '1 Bugün|2 Bu hafta|3 Type something.', y && JSON.stringify(y.siklar));
+const y2 = soruCoz(['⏺ eski araç başlığı', '● Bash(git status)', '  ⎿  temiz', 'Devam edelim mi?', '❯ 1. Evet', '  2. Hayır'].join('\n'));
+kapi("Y2 '●' satırı da sınır: ne '●' başlığı (Bash(git status)) ne üstündeki eski '⏺' satırı metne girer", y2 && !/eski araç|Bash\(git status\)/.test(y2.metin) && /Devam edelim mi\?/.test(y2.metin), y2 && y2.metin);
+kapi("Y3 kutu içindeki '│ ❯ 1. Yes' şık satırı SINIR sayılmaz (izin kutusu S1 aynen)", (soruCoz(IZIN) || {}).siklar && soruCoz(IZIN).siklar.length === 3 && soruCoz(IZIN).metin.includes('Do you want to proceed?'));
+
 console.log('════ Z · sır süzgeci (SERDAR şart 4) ════');
 const JET = 'sk-ant-api03-' + 'A'.repeat(40), GH = 'ghp_' + 'b'.repeat(36), PEM = '-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAA\n-----END OPENSSH PRIVATE KEY-----';
 const z = soruCoz('⏺ Bash(curl)\nBash command\n  curl -H "Authorization: Bearer ' + JET + '" https://u:gizliparola@api.x/v\n  token=abcdef1234567 ' + PEM.replace(/\n/g, ' ') + '\nDo you want to proceed?\n❯ 1. Yes (' + GH + ')\n  2. No');

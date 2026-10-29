@@ -1,0 +1,38 @@
+{
+  "is": "soru-metni-sinir",
+  "cumle": "Koltuk sorusu metnine eski konuşma karışmasın: kapının soru çözümleyicisi bölgeyi yeni ekran işaretlerinden (● mesaj satırı, şık olmayan ❯ istem satırı) de başlatsın, ☐/✔ sekme başlığı metne girmesin; canlı akar/MÜTEVELLİ vakası fikstürle sınanır (eski satır 3 → 0); sınav + mutant (görev 0E6H)",
+  "istedi": "BANI",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T14:07:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canlı",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M63NCXRVPQ3B8G6KXP5W0E6H",
+  "tahmin_dk": 40,
+  "olcut": [],
+  "olcum_yeri": "yerel, terminal-onar/kapi/soru.test.mjs (canlı ekrandan kurulan fikstür)",
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T14:07:29+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
