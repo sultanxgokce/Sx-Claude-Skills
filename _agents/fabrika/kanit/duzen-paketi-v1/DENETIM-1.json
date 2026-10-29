@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "duzen-paketi-v1",
+  "pr": "576",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T00:07:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-paketi-v1",
+  "dal": "duzen-paketi-v1",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 74776,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 14102
+  },
+  "dalgic": "uyumsuz",
+  "bas": "c525cb971664dbb87eb90fe9b8df0b7a3fe8ef01",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Düzen paketi iskeleti, çekirdek aynaları, el-defteri çıkarıcı, not aracı ve salt-okur sürüm denetimiyle doğru kapsamda kurulmuş; gerçek ölçümler ve mutasyon kapıları ana davranışları destekliyor. Önce parite sınavının ölçemediği durumu yeşil başarı saymasını düzeltmek gerekir; ayrıca filoya fiilî iniş bu kanıt bağlamının dışındaki dağıtım yüzeyinde henüz doğrulanmamış.",
+    "bulgular": [
+      {
+        "ne": "Not aracı parite sınavı, Nexus kanoniği bulunmadığında md5 paritesini ölçmeden testi başarıyla bitirebilir; böylece parite iddiası başka kutularda sahte-yeşil olabilir.",
+        "kanit": "Testin `else` kolu yalnız “P4 atlandı… eşitlik ölçülemedi” yazıyor, K sayacını artırmıyor ve son kapı sadece `[ \"$K\" -eq 0 ]`; mevcut yeşil ölçüm ise kanoniğin bulunduğu bu kutudaki md5 eşitliğini gösteriyor.",
+        "konum": "duzen/scripts/append-note-paritesi.test.sh:18",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Paketin bütün kutulara fiilen indiği doğrulanmamış; kanıt yalnız dağıtım planının doğru olduğunu gösteriyor.",
+        "kanit": "`kurulu-duzen-yok` önce ölçümü `/config/.claude/skills/duzen` yolunun bulunmadığını gösteriyor; `lint-kapilari` çıktısı ise “+ duzen → _global: YENİ kurulum” ve “uygulamak için: node sync-skills.mjs --apply” diyor, uygulanmış kurulum ölçümü yok.",
+        "konum": "olcum-kurulu-duzen-yok-once.txt + olcum-lint-kapilari-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "ortak /config/.claude dağıtım yüzeyi ve bütün kutular"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. El-defteri 9/9, sürüm 11/11, append-note 4/4, çekirdek paritesi ve lint kapıları yeşil; ayrıca gerçek ölçüme bağlı mutant sınavı bozuk kodu yakalıyor. Bununla birlikte filoya kurulum için önce/sonra çifti tamamlanmamış: yalnız kurulum öncesi yokluk ve dry-run planı var."
+  }
+}
