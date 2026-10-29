@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "uzlastir-zil-gunlugu",
+  "pr": "561",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T08:12:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastir-zil-gunlugu",
+  "dal": "uzlastir-zil-gunlugu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31708,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 20647
+  },
+  "dalgic": "uyumlu",
+  "bas": "6cc5f83cdcd9186f3a74e5614cefdc6a34ad5d95",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Uzlaştırmadaki her zil denemesi artık kime, geniş aciliyet, tekrar anahtarı ve posta sonucunu tek satırda yazıyor; başarısız posta ile eksik araç yolları da görünür bırakılmış ve sürüm artırılmış. Sultan, önce/sonra sınavı 41/3’ten 44/0’a dönmüş, canlı kayıtta gerçekçi bir zil satırı görülmüş ve 35 mutantın tamamı yakalanmış; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; önce/sonra ölçüm çifti Z1g–Z1i gerilemesini kırmızıdan yeşile taşıyor ve canlı kayıt kime, aciliyet, tekrar anahtarı ile posta rc 1 alanlarını tek gerçekçi satırda gösteriyor. Mutasyon çıktısı UZ1 ve UZ2 dahil 35/0, ancak manifest kaydında rubriğin sözünü ettiği açık `mutasyon: true` alanı bulunmadığından bu kayıt ek destek sayıldı; 44/0 gerçek sınav ve canlı ölçüm sonucu tek başına yeterli."
+  }
+}

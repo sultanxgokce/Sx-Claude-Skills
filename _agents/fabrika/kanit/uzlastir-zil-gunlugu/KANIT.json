@@ -1,0 +1,94 @@
+{
+  "is": "uzlastir-zil-gunlugu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T08:11:53+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "4faf3a7237a39cc2170b5651accd8f1ed725f236dc2586b406d066a71f0e4909",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/once3/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T08:03:24+03:00",
+      "sure_sn": 3.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f036f8e92217491ea2a1038b4acb8655"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "1615889ac646825cfb7c9f211f703467f224ff805346bc041e8c5d91cd76e70a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:03:27+03:00",
+      "sure_sn": 3.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ac730a0312264f3aa438d9e061f94f35"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tek.txt",
+      "sha256": "685e49b46586c6ead7b4e0e2396cc8d4b09105e395b8e3e28613f3bb099ffaa6",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:10:25+03:00",
+      "sure_sn": 417.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "18eff92195d14dd3bdf0cb7bcdf0045f"
+    },
+    {
+      "tur": "canli",
+      "etiket": "zil-gunlugu-canli",
+      "asama": "canli",
+      "dosya": "canli-zil-gunlugu-canli.txt",
+      "sha256": "31dc62ecbc4b93c201aa1581b86ddebb5006aa61187cedc3bbc5dc725f58b204",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-zil-gunlugu.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/canli-zil-gunlugu.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "zil → .* · aciliyet genis · tekrar .* · posta rc",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-29T05:11:02Z   · zil → BERİD · aciliyet genis · tekrar uzlastir-pr-gorev_01M5Y8VFAD0BCWZC6V0NPA2HXB-1392 · posta rc 1",
+        "saat": "2026-10-29T05:11:02Z",
+        "saat_iso": "2026-10-29T05:11:02+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-29T05:11:02Z   · zil → BERİD · aciliyet genis · tekrar uzlastir-pr-gorev_01M5Y8VFAD0BCWZC6V0NPA2HXB-1392 · posta rc 1",
+        "saat": "2026-10-29T05:11:02Z",
+        "saat_iso": "2026-10-29T05:11:02+00:00"
+      },
+      "zaman": "2026-10-29T08:11:53+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "82d68315aa634d7c8f47481ce106b534"
+    }
+  ],
+  "imza": "bc32082799d8c63dc73d9299493ac3344cbd2ce799afdc3f536dfccb853a3e7b"
+}

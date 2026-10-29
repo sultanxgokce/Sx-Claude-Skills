@@ -82,6 +82,10 @@ kart "$T/k1" a BERİD acik gorev_A; kart "$T/k2" b BERİD acik gorev_B
 # Z1: bekliyor'a çekilen görev → sahibine TEK zil, tekrar anahtarı görev+son adım, metinde jeton yok
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "^gonder BERİD" "$T/zil.log" && grep -q "gorev_Y" "$T/zil.log" && grep -q -- "--tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30" "$T/zil.log" && grep -q -- "--aciliyet genis" "$T/zil.log" && ! grep -q -- "--aciliyet orta" "$T/zil.log" && ! grep -q "$GIZLI" "$T/zil.log"; g $? "Z1 çekilen görev için sahibine tek zil (kime=ajan, görev kimliği, --tekrar görev+son adım, aciliyet GENİS — rahat bilgi mektubu), jeton değeri zilde YOK"
+# Z1g (FAEKS1Y): her zil denemesi çıktıya TEK günlük satırı yazar — kime · aciliyet · tekrar · posta rc; metin ve jeton satırda YOK
+grep -q "zil → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · posta rc 0" "$T/cikti" && [ "$(grep -c "zil → " "$T/cikti")" = 1 ] && ! grep -q "$GIZLI" "$T/cikti"; g $? "Z1g zil günlük satırı: kime BERİD · aciliyet genis · tekrar anahtarı · posta rc 0 (tek satır, jeton yok)"
+touch "$T/zilret"; RC=$(kos --uygula); rm -f "$T/zilret"; grep -q "zil → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · posta rc 1" "$T/cikti"; g $? "Z1h posta düşünce günlük satırı 'posta rc 1' der (sessiz değil)"
+RC=$(kos --uygula --zil-komut "$T/yok-boyle-posta"); grep -q "zil → BERİD · aciliyet genis · tekrar uzlastir-cek-gorev_Y-2026-10-26T10:30 · posta ÇALIŞMADI (FileNotFoundError)" "$T/cikti"; g $? "Z1i posta aracı yoksa günlük satırı 'posta ÇALIŞMADI' der"
 # Z1b: 0 → N → N ölçüm zinciri — ilk koşudan ÖNCE zil sayısı 0 (ayrı kapı), ilk koşu 1, ikinci koşu zil log'unu SİLMEDEN koşar, hâlâ 1
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 rm -f "$T/yazim.jsonl" "$T/zil.log"; N0=$(zl); g $([ "$N0" = 0 ]; echo $?) "Z1b-0 ilk koşudan önce zil sayısı 0"
