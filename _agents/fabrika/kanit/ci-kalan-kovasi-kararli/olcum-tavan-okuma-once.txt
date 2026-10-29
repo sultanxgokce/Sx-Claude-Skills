@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-okuma.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kabuk-eski.sh
+# rc=1 sure=0.1s zaman=2026-10-29T07:30:15+03:00
+--- stdout ---
+✗ ./tescil/scripts/sicil.test.sh beyan=480 uygulanan=300 (beyan sessizce düştü)
+✓ ./yazilim-fabrikasi/scripts/agir-sira-sarma.test.sh beyan=300 uygulanan=300
+✗ ./oda-kur/scripts/oda.test.sh beyan=480 uygulanan=300 (beyan sessizce düştü)
+✗ ./tescil/scripts/muhurdar.test.sh beyan=480 uygulanan=300 (beyan sessizce düştü)
+--- stderr ---

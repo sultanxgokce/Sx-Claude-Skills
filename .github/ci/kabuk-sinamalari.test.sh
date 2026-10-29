@@ -51,6 +51,13 @@ yeni_depo d6; printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1\nsleep 5\n' 
 O="$(kos "$T/d6" kalan)"; R=$?
 [ "$R" -ne 0 ] && grep -q "a/iki.test.sh KIRMIZI rc=124" <<<"$O"; g $? "K6 sure=1 isteyen sınama 5 sn uyuyor → rc=124 kırmızı"
 
+echo "── K10 · süre beyanından sonra açıklama gelebilir (WRVA: sicil 480 beyanı sessizce 300'e düşüyordu)"
+yeni_depo d10; printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1   (yerelde 0 sn ölçüldü; CI payı)\nsleep 4\n' > "$T/d10/a/iki.test.sh"
+O="$(kos "$T/d10" kalan)"; R=$?
+[ "$R" -ne 0 ] && grep -q "a/iki.test.sh KIRMIZI rc=124 (süre tavanı 1sn" <<<"$O"; g $? "K10 'sure=1   (açıklama)' beyanı 1 sn olarak okundu (varsayılan 300'e düşmedi): 4 sn uyuyan sınama rc=124"
+printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=abc\nexit 0\n' > "$T/d10/a/bir.test.sh"
+O="$(kos "$T/d10" kalan)"
+grep -q "a/bir.test.sh 'kabuk-testleri:' başlığı var ama sure=N okunamadı" <<<"$O"; g $? "K10b beyan var ama okunamıyor (sure=abc) → UYARI satırı (sessiz varsayılan yok)"
 echo "── K7 · bilinmeyen kova"
 O="$(kos "$T/d1" yok)"; R=$?
 [ "$R" -eq 2 ]; g $? "K7 bilinmeyen kova adı → rc 2"
@@ -84,4 +91,13 @@ open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'',1))
 PYM
 O="$( cd "$T/dm" && bash "$M" diploma 2>&1 )"; R=$?
 [ "$R" -eq 1 ]; g $? "M1 kova kuralından diploma satırı çıkarsa diploma kovası boş → rc 1 (K3 türü kapı bu mutantı yakalar)"
+echo "── MUTASYON · sure_sec eski kalıba dönerse (satır sonu şart) K10 kırmızı olur"
+M2="$T/kabuk-mutant2.sh"
+python3 - "$K" "$M2" <<'PYM'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a=r"\([^0-9].*\)\{0,1\}$"; assert s.count(a)==1, "sure kalıbı"
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a," *$",1))
+PYM
+yeni_depo dm2; printf '#!/usr/bin/env bash\n# kabuk-testleri: sure=1   (açıklama)\nsleep 4\n' > "$T/dm2/a/iki.test.sh"
+O="$( cd "$T/dm2" && bash "$M2" kalan 2>&1 )"; R=$?
+[ "$R" -eq 0 ] && grep -q "a/iki.test.sh (4[0-9]* ms)" <<<"$O"; g $? "M2 eski kalıp: açıklamalı beyan okunmaz, 300 varsayılanıyla 4 sn'lik sınama YEŞİL geçer → K10 bu mutantta KIRMIZI olurdu"
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
