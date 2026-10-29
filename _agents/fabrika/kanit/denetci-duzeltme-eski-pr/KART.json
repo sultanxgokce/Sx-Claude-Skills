@@ -1,0 +1,34 @@
+{
+  "is": "denetci-duzeltme-eski-pr",
+  "cumle": "Bağımsız göz, önceki turun başı bu PR'ın geçmişinde yoksa ya da ana dala çoktan girmişse düzeltme farkı kurmaz, PR'ın kendi farkını gönderir",
+  "istedi": "BANI",
+  "aldi": "BANI",
+  "zaman": "2026-10-29T18:33:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M644N3NJC9Q9BM3060QNQX33",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T18:33:36+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
