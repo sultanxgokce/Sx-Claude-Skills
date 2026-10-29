@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "uzlastir-glob-kok",
+  "pr": "559",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T06:53:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastir-glob-kok",
+  "dal": "uzlastir-glob-kok",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32405,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 23622
+  },
+  "dalgic": "uyumsuz",
+  "bas": "5c766d1c91125fa8efe785850a3bfbb90996a0ac",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tırnaklı glob kart kökü artık kart dosyasının gerçek dizinine çözülüyor; böylece PR listesi doğru depodan okunuyor ve cron günlüğündeki “okunamadı” satırı kesiliyor. Sultan, önce/sonra sınavı, hedefli P8 kapısı, UP9 mutasyonu ve cron komut satırı ölçümü birlikte talebi doğruluyor; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Hedefli sınav önce P8'de 40/1 iken sonra 41/0; UP9 dahil mutasyon ölçümü 33/0; cron komut satırıyla KURU ölçümünde “okunamadı” sayısı eski sürümde 3'ten yeni sürümde 0'a inmiş. Ayrıca canlı etiketli kayıtta aynı komut yüzeyinden 10 uzlaştırma ateşlemesi görülüyor; sarı kayıt yok."
+  }
+}

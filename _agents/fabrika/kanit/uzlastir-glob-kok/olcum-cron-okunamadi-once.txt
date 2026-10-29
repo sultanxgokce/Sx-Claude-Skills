@@ -1,0 +1,5 @@
+$ bash -c n=$(grep -c okunamadı _agents/fabrika/kanit/uzlastir-glob-kok/cron-komutu-kuru-ESKI-0.27.20.log); echo "okunamadi_satiri=$n (eski betik, cron komut satırı, KURU)"; [ "$n" = 0 ]
+# rc=1 sure=0.0s zaman=2026-10-29T06:51:44+03:00
+--- stdout ---
+okunamadi_satiri=3 (eski betik, cron komut satırı, KURU)
+--- stderr ---
