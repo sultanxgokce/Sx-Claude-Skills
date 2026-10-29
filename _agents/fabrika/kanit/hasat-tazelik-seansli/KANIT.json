@@ -1,0 +1,64 @@
+{
+  "is": "hasat-tazelik-seansli",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T00:07:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sinavi",
+      "asama": "once",
+      "dosya": "olcum-sirada-bak-sinavi-once.txt",
+      "sha256": "164b23a05c6174155eb3a3291c5f3edef75a6ba712139e98ac74143f427d7d24",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:03:27+03:00",
+      "sure_sn": 712.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c592395009184a818fc31e302d16a058"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sirada-bak-sinavi-sonra.txt",
+      "sha256": "632055283b9ce959735e06474a57bd12e1fde7c8d94a3edeb287eb1525fbdb73",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:07:18+03:00",
+      "sure_sn": 203.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "01317aa1eb6d4903b9e08b4e4815de23"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "taze-sayimi-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-taze-sayimi-mutant-sonra.txt",
+      "sha256": "96b27c2362670fa649f3ee17a2a3d8c89758cf921e0208ecbdc8c83d1d195108",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutant-taze.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-hasat-tazelik-seansli/gunluk-plan/scripts"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T00:07:23+03:00",
+      "sure_sn": 204.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "06c27f406b0e4a95998728ec2ee97a19"
+    }
+  ],
+  "imza": "59f5b59dc1f548694ee60e63b5fd49b267c30ac5681c05fe562c75606bce9a60"
+}
