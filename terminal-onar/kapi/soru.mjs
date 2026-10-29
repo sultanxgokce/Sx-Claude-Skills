@@ -8,7 +8,7 @@
 //   siklar  menüde [{no, metin}] (en çok 6, her biri en çok 80 karakter, süzülmüş); serbestte []
 //   beri    bu sorunun (tür + metin + şıklar) bu koltukta İLK görüldüğü an — kapının durum dosyasından (aynı soru = aynı an)
 //
-// Bölge: son '⏺' satırından (ajanın son mesajı / araç başlığı) sonrası; soru kutusu oranın altında çizilir. Kutu çizgileri,
+// Bölge: son '⏺'/'●' mesaj satırından ya da '❯ …' istem satırından sonrası (2.36.1); soru kutusu oranın altında çizilir. Kutu çizgileri,
 // altbilgi ("Enter to select · ↑/↓ to navigate · Esc to cancel" — nova-icerik 18 Eki ölçümü) ve ayraçlar metne girmez.
 // Okunamayan soru UYDURULMAZ: metin çıkmazsa sonuç null, alan hiç yazılmaz.
 //
@@ -28,6 +28,11 @@ export const METIN_TAVAN = 300, SIK_TAVAN = 6, SIK_METIN_TAVAN = 80;
 const ALTBILGI = /Enter to select|to navigate|Esc to cancel|Tab to amend|ctrl\+e to explain/i;
 const AYRAC = /^[\s─━═╭╮╰╯┌┐└┘┄┈-]+$/;
 const SIK = /^(?:[❯›>]\s*)?(\d{1,2})\.\s+(\S.*)$/;
+// BÖLGE SINIRI (2.36.1 · canlı akar/MÜTEVELLİ, 29 Eki): Claude Code mesaj satırını '⏺' ya da '●' ile çizer; kullanıcı istemi '❯ <yazı>' satırıdır
+//   (şık satırı '❯ 1.' DEĞİL). Yalnız '⏺' sınır sayılınca menünün üstündeki 6 satıra eski konuşma doluyordu ("User answered…", "Ran 1 shell command",
+//   "❯ /gunluk-plan"). Kutu içindeki '│ ❯ 1. Yes' satırı '│' ile başladığı için sınır DEĞİL.
+const SINIR = /^\s*(?:[⏺●]|❯(?!\s*\d{1,2}\.\s))/;
+const SEKME = /^[←\s]*[☐☒✔✓]\s/;   // soru kutusunun sekme başlığı (" ☐ Canlı danışman") metin değildir
 const SERBEST = /Do you want to|\?\s*(?:\((?:y\/n|Y\/n|y\/N)\)|\[(?:y\/N|Y\/n|y\/n)\])?\s*$/;
 
 const kes = (s, n) => { const a = Array.from(s); return a.length > n ? a.slice(0, n - 1).join('') + '…' : s; };
@@ -41,8 +46,8 @@ const kutusuz = (l) => l.replace(/^\s*[│┃]\s?/, '').replace(/\s*[│┃]\s*$
 /** ekran metni → {tur, metin, siklar} | null (beri yok; o durum dosyasından gelir) */
 export function soruCoz(ekran) {
   const tum = temizSatirlar(ekran);
-  let bas = 0; for (let i = tum.length - 1; i >= 0; i--) if (/^\s*⏺/.test(tum[i])) { bas = i + 1; break; }
-  const bolge = tum.slice(bas).map(kutusuz).filter((l) => l && !AYRAC.test(l) && !ALTBILGI.test(l));
+  let bas = 0; for (let i = tum.length - 1; i >= 0; i--) if (SINIR.test(tum[i])) { bas = i + 1; break; }
+  const bolge = tum.slice(bas).map(kutusuz).filter((l) => l && !AYRAC.test(l) && !ALTBILGI.test(l) && !SEKME.test(l));
   if (!bolge.length) return null;
   // menü: son numaralı şıktan geriye, 1 numaraya kadar (aradaki açıklama satırları şık değildir)
   let son = -1; for (let i = bolge.length - 1; i >= 0; i--) if (SIK.test(bolge[i])) { son = i; break; }

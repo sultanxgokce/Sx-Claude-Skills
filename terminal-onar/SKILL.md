@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.0
+version: 2.36.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -85,6 +85,14 @@ geçirip bağlanır.
 - Kapıyı başlatan bütün sınavlar tuzu geçici yolda tutar (gerçek `$HOME`'a yazmaz).
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
+
+## 🆕 2.36.1 · Koltuk sorusunun metnine eski konuşma karışmaz (29 Eki · görev …0E6H · kart soru-metni-sinir)
+**Ölçülen hata:** merkez 1.145.0 canlıda Sultan'ın "Senden bekleyen"inde akar/MÜTEVELLİ'nin sorusu şöyle göründü: *"● User answered Claude's
+questions: ⎿ · Ortak giriş parolası … Ran 1 shell command ❯ /gunluk-plan ☐ Canlı danışman Canlı danışman (S-320) ne zaman ele alınsın?"* —
+asıl soru yalnız son cümle. Çözümleyici bölgeyi son **'⏺'** satırından başlatıyordu; Claude Code mesaj satırını artık **'●'** ile çiziyor ve
+kullanıcı istemi **'❯ /komut'** satırı da sınır sayılmıyordu, menünün üstündeki 6 satıra eski konuşma doluyordu.
+**Düzeltme (`kapi/soru.mjs`):** bölge sınırı `⏺` · `●` · şık OLMAYAN `❯ …` istem satırı (kutu içindeki `│ ❯ 1. Yes` sınır değildir); soru
+kutusunun sekme başlığı (` ☐ Canlı danışman`) metne girmez. Sınav `kapi/soru.test.mjs` Y1-Y3 (canlı ekrandan kurulan fikstür).
 
 ## 🆕 2.23.0 · Koltuğun sorusu kapıdan okunur — tür · metin · şıklar · ne zamandan beri (23 Eki · K1 · gorev_…V6FJPZ Engel kurgusu · SERDAR 14:42)
 Kapı bir koltuğun "soru" hâlinde olduğunu biliyordu ama **sorunun kendisini** vermiyordu; Sultan hangi soruyu, hangi şıklarla, ne
