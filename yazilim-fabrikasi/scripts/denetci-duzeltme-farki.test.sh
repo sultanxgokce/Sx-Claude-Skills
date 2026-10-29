@@ -142,7 +142,7 @@ icermeyen "D10c 🔴 arada ana hatta başkasının yaptığı değişiklik göze
 iceren "D10d bu PR'ın kendi değişikliği göze gitti" "+yeni-kanit-d10" "$KOK/istem.md"
 dogru "D10e kayıt: duzeltme_farki yok (PR farkı gitti)" "import json;d=json.load(open('$(kayit d10 2)'));assert d['duzeltme_farki'] is None"
 
-echo "════ D11 · önceki PR birleştirme commit'iyle ana hatta girdi (baş atadır): düzeltme turu kurulur ama başkasının işi yine göze gitmez ════"
+echo "════ D11 · önceki PR birleştirme commit'iyle ana hatta girdi (baş atadır ama ana hatta zaten var) → yine PR'ın kendi farkı ════"
 git -C "$KOK/w" checkout -q -b d11 origin/main 2>/dev/null
 printf 'degismeyen-dosya-icerigi\n' > "$KOK/w/eski-d11.txt"; printf 'ilk-satir\n' > "$KOK/w/kod-d11.txt"
 git -C "$KOK/w" add eski-d11.txt kod-d11.txt; git -C "$KOK/w" commit -q -m "ilk d11"; kanitla d11; den d11 "$J4" >/dev/null 2>&1
@@ -152,9 +152,10 @@ git -C "$KOK/baska" commit -q -am "başkası d11"; git -C "$KOK/baska" push -q o
 git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" checkout -q -b d11b origin/main 2>/dev/null
 printf 'yeni-kanit-d11\n' > "$KOK/w/kanit-d11.txt"; git -C "$KOK/w" add kanit-d11.txt; git -C "$KOK/w" commit -q -m "d11 ikinci PR"; : > "$KOK/istem.md"
 kapi "D11a ikinci PR'da tur 2 koştu" 0 den d11 "$J5"
-iceren "D11b önceki baş ata → düzeltme turu normal kuruldu (eski PR dosyaları merge-base'ten boş)" "DÜZELTME TURU" "$KOK/son.out"
+iceren "D11b önceki baş ana hatta girmiş → düzeltme farkı KURULMADI, sebep ekranda" "düzeltme farkı kurulmadı: önceki tur başı" "$KOK/son.out"
 icermeyen "D11c 🔴 başkasının değişikliği göze GİTMEDİ" "baskasinin-d11-satiri" "$KOK/istem.md"
 iceren "D11d bu PR'ın kendi değişikliği göze gitti" "+yeni-kanit-d11" "$KOK/istem.md"
+dogru "D11e kayıt: duzeltme_farki yok (PR farkı gitti)" "import json;d=json.load(open('$(kayit d11 2)'));assert d['duzeltme_farki'] is None"
 
 echo "════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
 if [ -z "${MUTANT_D:-}" ]; then
@@ -184,7 +185,8 @@ MUTY
   mut tavan-yalniz-codex 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then' "D6a"
   mut tavan-ayiklamaya-bagli 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6e"
   mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
-  mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null; then' '  elif false; then' "D10c"
+  mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null \' '  elif false \' "D10c"
+  mut eski-bas-ana-hatta '       || git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' '       || false && git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' "D11b"
   mut tavan-120k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' "D6a"
 fi
 

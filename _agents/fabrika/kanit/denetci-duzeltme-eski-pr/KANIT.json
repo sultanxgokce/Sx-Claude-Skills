@@ -1,7 +1,7 @@
 {
   "is": "denetci-duzeltme-eski-pr",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T18:46:26+03:00",
+  "guncelleme": "2026-10-29T18:55:02+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -150,7 +150,81 @@
       "sure_sn": 185.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "7c0e8127de254d51a4b51e16c3c47bd5"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "duzeltme-farki-v2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-duzeltme-farki-v2-once-35e2d12583ba.txt",
+      "sha256": "a48260f4bc017672a1ba97388551b56528a11fd2004352cca2aeaa71c291ad54",
+      "hedef_dosya": "olcum-duzeltme-farki-v2-once.txt",
+      "hedef_olcum_id": "9be876ed2d93464a804dc9ab554f7ae1",
+      "hedef_sha256": "cb09a5c972cfcae782e3481dde8d6d11ac4ee1c088969b6c27d97d3a27023a4e",
+      "hedef_zaman": "2026-10-29T18:43:21+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "göz tur 1: kartın ikinci koşulu (önceki baş ana hatta girmişse) geri kondu, D11 sınavı değişti; v3 ile yeniden ölçülüyor",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T18:51:46+03:00",
+      "olcum_id": "ecc56d57a35840eab1359fed4b946bb5"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "duzeltme-farki-v2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-duzeltme-farki-v2-sonra-80bc387fe5cb.txt",
+      "sha256": "9344487f457c92a977aad004e7c5d59dd40477fc0092c552c864222f281d0318",
+      "hedef_dosya": "olcum-duzeltme-farki-v2-sonra.txt",
+      "hedef_olcum_id": "7c0e8127de254d51a4b51e16c3c47bd5",
+      "hedef_sha256": "4fc0130d7a66e84c946cf9c6c296fa6d9e1027637e157b36b3f3f5cf0e8fa9f7",
+      "hedef_zaman": "2026-10-29T18:46:26+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: kartın ikinci koşulu (önceki baş ana hatta girmişse) geri kondu, D11 sınavı değişti; v3 ile yeniden ölçülüyor",
+      "kim": "BANI",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T18:51:47+03:00",
+      "olcum_id": "4969befa227f43348d1d770b42f9b67f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme-farki-v3",
+      "asama": "once",
+      "dosya": "olcum-duzeltme-farki-v3-once.txt",
+      "sha256": "1b589ab0b8562bcd24c1fb5cc2328e4c3536b398f0a4365e8685d46a0edbc92d",
+      "komut": [
+        "env",
+        "MUTANT_D=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/denetci-once-tam/denetci.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T18:51:57+03:00",
+      "sure_sn": 10.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "191ecb31236547eba69920cd2c068b9b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme-farki-v3",
+      "asama": "sonra",
+      "dosya": "olcum-duzeltme-farki-v3-sonra.txt",
+      "sha256": "ed0af136a2ac360160b7574ddab5dfa57c286f57fcda95856f86539c731c22d2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T18:55:02+03:00",
+      "sure_sn": 184.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f7209eaff30b47d2ab530698c8e441fa"
     }
   ],
-  "imza": "a239d5aaf58da64a23826828d8a812113fb16993e1693ff3e6926cd47deccfe0"
+  "imza": "51d7be93663fd025cca0deb6e0f4aa2792c3a578f7523a8a7386fc6ec3750f50"
 }
