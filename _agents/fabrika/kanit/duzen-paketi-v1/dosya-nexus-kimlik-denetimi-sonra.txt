@@ -1,0 +1,23 @@
+duzen · kaynak sürüm: 1.0.0 (/config/projects/_wt/Sx-Claude-Skills-duzen-paketi-v1/duzen)
+  kurulu: yok (/config/.claude/skills/duzen) — bu kutuya henüz inmemiş
+  bani: GÜNCEL (manuel-claude-base birebir gömülü)
+  basiret: GÜNCEL (manuel-claude-base birebir gömülü)
+  berid: GÜNCEL (manuel-claude-base birebir gömülü)
+  cirak: GÜNCEL (manuel-claude-base birebir gömülü)
+  dalgic: GÜNCEL (manuel-claude-base birebir gömülü)
+  emanetci: GÜNCEL (manuel-claude-base birebir gömülü)
+  hendese: GÜNCEL (manuel-claude-base birebir gömülü)
+  hezarfen: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil · temel: manuel-claude-base)
+  mabeynci: GÜNCEL (manuel-claude-base birebir gömülü)
+  mirahur: GÜNCEL (manuel-claude-base birebir gömülü)
+  mufettis: GÜNCEL (manuel-claude-base birebir gömülü)
+  muhakkik: GÜNCEL (manuel-claude-base birebir gömülü)
+  mumeyyiz: GÜNCEL (manuel-claude-base birebir gömülü)
+  musavir: GÜNCEL (manuel-claude-base birebir gömülü)
+  nakkas: GÜNCEL (manuel-claude-base birebir gömülü)
+  pazarbasi: GÜNCEL (manuel-claude-base birebir gömülü)
+  serdar: GÜNCEL (mudur-base birebir gömülü)
+  yaver: GÜNCEL (manuel-claude-base birebir gömülü)
+  ekipc işaretli 18 · işaretsiz 18 (depo: /config/projects/Nexus)
+SONUÇ: bayat/el-değmiş var (rc 1) — yazmadı, yalnız raporladı
+rc=1

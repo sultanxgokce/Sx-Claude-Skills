@@ -1,0 +1,25 @@
+{
+  "is": "duzen-paketi-v1",
+  "cumle": "duzen becerisi 1.0.0: filo düzen paketi iskeleti — çekirdek metinler (ekip-os-base aynası), el defteri çıkarıcı, not aracı kopyası (md5 paritesi), sürüm denetimi; bütün kutulara _global kitaplıkla iner",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-29T23:51:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/duzen-paketi-v1 (sınav sayıları, md5 paritesi, mutant)",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}

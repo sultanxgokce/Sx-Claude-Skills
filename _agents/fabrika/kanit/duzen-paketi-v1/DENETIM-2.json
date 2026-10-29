@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "duzen-paketi-v1",
+  "pr": "576",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T00:13:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-paketi-v1",
+  "dal": "duzen-paketi-v1",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28228,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 13151
+  },
+  "dalgic": "uyumsuz",
+  "bas": "ea2e5a82248e59371977b6ea086b48b7c194e3ac",
+  "duzeltme_farki": {
+    "onceki_bas": "c525cb971664dbb87eb90fe9b8df0b7a3fe8ef01",
+    "dosya": 12,
+    "bayt": 21103,
+    "tam_bayt": 81959
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düzen paketi doğru kapsamda hazırlanmış; çekirdek aynaları, el-defteri çıkarıcı, not aracı paritesi, sürüm denetimi ve _global dağıtım planı ölçümlerle destekleniyor. Önceki B1, kanonik yokken de çivili md5 kapısı çalıştırılarak kapanmış; kodda üretimi engelleyen kusur kalmamış, yalnız bütün kutulara fiilî dağıtımın dış yüzeyde doğrulanması gerekiyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmamış: paketin bütün kutulara fiilen indiği hâlâ doğrulanmamış; mevcut kanıt yalnız _global kurulum planını gösteriyor.",
+        "kanit": "`kurulu-duzen-yok` ölçümü `/config/.claude/skills/duzen` yolunun kurulum öncesinde bulunmadığını gösteriyor; `lint-kapilari` ise “+ duzen → _global: YENİ kurulum” ve “uygulamak için: node sync-skills.mjs --apply” diyen bir dry-run çıktısı veriyor. Kurulum sonrası bütün kutuları kapsayan ölçüm yok.",
+        "konum": "olcum-kurulu-duzen-yok-once.txt + olcum-lint-kapilari-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "ortak /config/.claude dağıtım yüzeyi ve bütün kutular"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önceki B1 kapanmış: append-note sınavı kanonik bulunmayan kutuda P4a çivili md5 kapısını ölçüp 4/4 geçiyor; kanoniğin bulunduğu ölçümde P4b canlı eşitlik dâhil 5/5 geçiyor. El-defteri 9/9, sürüm 11/11, çekirdek paritesi ve lint kapıları yeşil; mutasyon kanıtı da E1 kapısının bozuk kodu yakaladığını gösteriyor. Fiilî filo kurulumu için kurulum sonrası ölçüm bulunmadığından B2 kutu-dışı olarak sürüyor ve kod puanını düşürmüyor."
+  }
+}
