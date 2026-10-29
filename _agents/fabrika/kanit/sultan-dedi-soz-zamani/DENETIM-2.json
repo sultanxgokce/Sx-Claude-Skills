@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "sultan-dedi-soz-zamani",
+  "pr": "562",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T10:27:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-dedi-soz-zamani",
+  "dal": "sultan-dedi-soz-zamani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17118,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 11937
+  },
+  "dalgic": "uyumsuz",
+  "bas": "42b7426faf1e5db67226fd83502d7e550f4e8d53",
+  "duzeltme_farki": {
+    "onceki_bas": "a02bfe54e1cadaedc68678d917e5e56523a35e6f",
+    "dosya": 7,
+    "bayt": 16642,
+    "tam_bayt": 29324
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ın söz saati ile yazım saati ayrılmış, söz saati izin künyesine taşınmış; bozuk ve gelecekteki zamanlar reddedilmiş, sınav kapıları ile mutant da buna göre kurulmuş. Önceki turun B1 bulgusu, 60 saniyelik hoşgörünün kaldırılması ve 30 saniye sonrası için eklenen kapıyla kapanmış; araç imzalı ölçüm 426 geçti, 0 kaldı gösterdiğinden üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümü ilgili V20 kapılarının ve mutant kurulumlarının başarısız olduğu 416 geçti · 10 kaldı durumunu, sonra ölçümü 426 geçti · 0 kaldı durumunu gösteriyor; gerçek ölçümde V20e ile yeni V20e2 yeşil, güncellenen gelecek-çiti mutantı da 30 saniyelik geleceğin kabulünü yakalayarak kapıyı kırmızıya düşürüyor. Böylece önceki B1 hem kod satırı hem doğrudan sınav hem de mutasyon kanıtıyla kapanmış."
+  }
+}
