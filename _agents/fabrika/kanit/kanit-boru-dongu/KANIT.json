@@ -1,0 +1,78 @@
+{
+  "is": "kanit-boru-dongu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T06:51:00+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dongu-senaryo",
+      "asama": "once",
+      "dosya": "olcum-dongu-senaryo-once.txt",
+      "sha256": "a0c576fd854af1ee6ab1da3661bbebdc4a8a22447cfc1062c2f7cadf62b8ddee",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-boru-dongu/dongu-senaryo.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kanit-eski.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T06:44:38+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c1e03f130ce842f08fbfcedc4d6b1931"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dongu-senaryo",
+      "asama": "sonra",
+      "dosya": "olcum-dongu-senaryo-sonra.txt",
+      "sha256": "3666859517e3674b8948d79154f4ead9d1f75930fc5ad70d46f552ed91fbf11f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-boru-dongu/dongu-senaryo.sh",
+        "yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:44:38+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6fccc39bcba24601aa79bacccb3212c1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "f99f32607431eae6cc227d8c45267a183d388caea9ed1acafe8115eeb22d0a0e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:45:12+03:00",
+      "sure_sn": 33.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ba74f15309c942a49934903f50ec1b3a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur2",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tur2-tek.txt",
+      "sha256": "607502b1e72e0bd6c5cc694bdaefa3b7c3605b695ea477824d6f3fc3403abc24",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:51:00+03:00",
+      "sure_sn": 33.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f12173be01dc4e8a99c760ee254fe15c"
+    }
+  ],
+  "imza": "02b10d889fe88f39bd8c7b3b117fbe353dc332000037420edf259849fda914ec"
+}

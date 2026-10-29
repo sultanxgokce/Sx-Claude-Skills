@@ -370,6 +370,16 @@ bash "$K" olcum is-boru tsinyal --asama tek -- timeout -s KILL 60 bash -c 'false
 bash "$K" olcum is-boru envu --asama tek -- env -u HOMEX bash -c 'false || true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z4 'env -u VAR bash -c': değer atlandı, ortadaki '|| true' reddedildi (göz tur 5)"
 bash "$K" olcum is-boru tasks --asama tek -- taskset 0x1 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z5 'taskset 0x1 bash -c': onaltılık maske atlandı, reddedildi"
 
+# QY2D (29 Eki): blok içi boru — döngüde `X | tail -1 || exit 1` yeşil kaydediliyordu (X düşse de süzgecin 0'ı geçer, exit 1 hiç tetiklenmez)
+bash "$K" olcum is-boru dongu --asama tek -- bash -c 'for i in 1; do false | tail -1 || exit 1; done' >/dev/null 2>&1; [ $? -eq 1 ] && _yok dongu; g $? "T20z6 döngü içinde '… | tail -1 || exit 1' REDDEDİLDİ, kayıt üretilmedi (QY2D: eskiden yeşil kayıt)"
+bash "$K" olcum is-boru dongu2 --asama tek -- bash -c 'for i in 1; do false | tail -1; done' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z7 döngü gövdesinin son komutu boru (blok sonu 'done' rc'yi tüketir) reddedildi"
+bash "$K" olcum is-boru dongupf --asama tek -- bash -c 'set -o pipefail; for i in 1; do false | tail -1 || exit 1; done' >/dev/null 2>&1; g $? "T20z8 pipefail açıkken döngüdeki boru kabul edildi (rc taşınıyor)"
+_alan dongupf "temiz"; g $? "T20z8b … ve boru_denetimi=temiz"
+bash "$K" olcum is-boru kosul --asama tek -- bash -c 'if false | grep -q x; then echo var; fi; exit 0' >/dev/null 2>&1; _alan kosul "temiz"; g $? "T20z9 'if X | grep -q …' KOŞUL borusu denetlenmez: temiz (boru oradaki testtir)"
+bash "$K" olcum is-boru kosulve --asama tek -- bash -c 'if false | grep -q x && true; then echo var; fi; exit 0' >/dev/null 2>&1; _alan kosulve "temiz"; g $? "T20z9b koşul içinde '&&' ile bağlı boru da KOŞULDUR: temiz (KOŞUL kümesi bunu korur)"
+bash "$K" olcum is-boru dosetkapat --asama tek -- bash -c 'set -o pipefail; for i in 1; do set +o pipefail; false | tail -1 || exit 1; done' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z12 blok başındaki 'do set +o pipefail' de sayılır (göz tur 1): dışarıda açık pipefail döngüde kapatılmış, boru reddedildi"
+bash "$K" olcum is-boru veand --asama tek -- bash -c 'false | grep -q x && echo var; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z10 ortadaki 'X | grep -q … && …' (rc'yi && tüketir, pipefail yok) reddedildi"
+bash "$K" olcum is-boru ortaboru --asama tek -- bash -c 'ls / | head -1; false; exit $?' >/dev/null 2>&1; _alan ortaboru "temiz"; g $? "T20z11 rc'si tüketilmeyen ortadaki boru ('ls | head; false') maske değil: temiz"
 echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
 _mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
 _mut 'durum, neden = boru_denetimi(a.komut)' 'durum, neden = "temiz", None'
@@ -390,6 +400,14 @@ _mut 'while len(toklar) > 1 and toklar[0] in ONEKLER:' 'while False:'
 _mutkos m8 'false; command echo bitti'; [ $? -eq 0 ]; g $? "T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi"
 _mut 'yalin = _yalin(sag)' 'yalin = sag'
 _mutkos m9 'false || /bin/true; ls /'; [ $? -eq 0 ]; g $? "T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi"
+_mut 'if ic and ic[0] not in KOSUL and tuketen:' 'if False:'
+_mutkos m13 'for i in 1; do false | tail -1 || exit 1; done'; [ $? -eq 0 ]; g $? "T21m mutant (blok içi boru kuralı yok — QY2D öncesi hâl) döngüdeki maskeyi kabul ediyor → T20z6 bu mutantta düşerdi"
+_mut 'if ic and ic[0] not in KOSUL and tuketen:' 'if ic and tuketen:'
+_mutkos m14 'if false | grep -q x && true; then echo var; fi; exit 0'; [ $? -eq 1 ]; g $? "T21n mutant (koşul borusu da reddediliyor) 'if X | grep -q && …' koşulunu reddeder → T20z9b bu mutantta düşerdi"
+_mut 'if ic and ic[0] == "set":' 'if bolum and bolum[0] == "set":'
+_mutkos m16 'set -o pipefail; for i in 1; do set +o pipefail; false | tail -1 || exit 1; done'; [ $? -eq 0 ]; g $? "T21p mutant (set yalnız bölüm başında aranıyor — tur 1 hâli) 'do set +o pipefail' kapatmasını kaçırır → T20z12 bu mutantta düşerdi"
+_mut 'tuketen = t if t in ("||", "&&") else (sonraki if sonraki in BLOK_SON else None)' 'tuketen = t if t in ("||", "&&") else None'
+_mutkos m15 'for i in 1; do false | tail -1; done'; [ $? -eq 0 ]; g $? "T21o mutant (blok sonu rc'yi tüketmez sayılıyor) 'do X | tail; done' kabul → T20z7 bu mutantta düşerdi"
 _mut 'if t == "--" or not (t.startswith("-") or t.startswith("+")):' 'if t == "--":'
 KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m11 --asama tek -- bash "$T/betik.sh" -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T21k mutant (seçenek bölgesi betik dosyasında bitmiyor — tur 4 hâli) betik argümanını reddediyor → T20z bu mutantta düşerdi"
 _mut 'k += 2 if komut[k] in degerli else 1' 'k += 1'

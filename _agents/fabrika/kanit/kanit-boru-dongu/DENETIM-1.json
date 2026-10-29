@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kanit-boru-dongu",
+  "pr": "558",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T06:48:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-boru-dongu",
+  "dal": "kanit-boru-dongu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26977,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 28235
+  },
+  "dalgic": "uyumsuz",
+  "bas": "314d2c75080dbe210f38c849e8c50bdab7d41955",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Blok ve döngü içindeki boru maskesini reddeden doğru kapı eklenmiş; önce/sonra ölçümü hedef senaryonun artık yakalandığını gösteriyor. Ancak blok başındaki `set` komutu pipefail durumuna işlenmediği için hem güvenli komut reddedilebiliyor hem de gerçekten maskeli komut kabul edilebiliyor; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Pipefail durum takibi, bölüm `do set ...` veya başka bir blok anahtarıyla başladığında güncellenmiyor. Örneğin dışarıdan pipefail açıkken `for ...; do set +o pipefail; false | tail -1 || exit 1; done` gerçek hayatta maskelidir fakat kod `pipefail=True` sanarak blok-içi denetimi atlar; ters yönde `do set -o pipefail` güvenli boruyu gereksiz reddedebilir.",
+        "kanit": "Durum yalnız `if bolum and bolum[0] == \"set\"` koşuluyla değiştirilirken `BLOK_BAS` temizliği daha sonra ve yalnız boru denetimi için yapılıyor. Eklenen T20z8 yalnız `set -o pipefail; for ...` biçimini ölçüyor; `do set ±o pipefail` biçimini sınayan kapı yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:320-338; yazilim-fabrikasi/scripts/kanit.test.sh:376-378",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Hedef döngü senaryosu için gerçekçi önce/sonra ölçüm çifti mevcut; tam sınav 255/0 yeşil. Mutant satırları genel sınav çıktısında görülüyor ancak manifest kaydı `mutasyon:true` taşımadığından bunları rubriğin özel mutasyon kanıtı olarak saymıyorum; ayrıca ölçümler blok içindeki `set ±o pipefail` boşluğunu kapsamıyor."
+  }
+}

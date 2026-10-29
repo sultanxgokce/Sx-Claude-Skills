@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/kanit-boru-dongu/dongu-senaryo.sh yazilim-fabrikasi/scripts/kanit.py
+# rc=0 sure=0.1s zaman=2026-10-29T06:44:38+03:00
+--- stdout ---
+✓ reddedildi (rc 1): BORU REDDİ: blok içindeki boru (`… | tail`) pipefail'siz ve çıkış kodunu `||` tüketiyor — ölçülen komut düşse de süzgecin 0'ı geçer
+--- stderr ---
