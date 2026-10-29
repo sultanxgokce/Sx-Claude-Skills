@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "ci-kalan-kovasi-kararli",
+  "pr": "560",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T07:48:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ci-kalan-kovasi-kararli",
+  "dal": "ci-kalan-kovasi-kararli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29002,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 15333
+  },
+  "dalgic": "olculemedi",
+  "bas": "03d4349738e353a48a5ad64552841c5189908722",
+  "duzeltme_farki": {
+    "onceki_bas": "31f99195761c028e16400cc5a2ad0a756f210274",
+    "dosya": 10,
+    "bayt": 19801,
+    "tam_bayt": 39799
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Süre beyanı ayrıştırıcısındaki sessiz yanlış okuma kapatılmış; bozuk kuyruk vakaları ve bunları yakalayan mutasyon sınavı yeşil, önceki B1 kapanmış. Kodun ana talebi karşıladığı görülüyor, ancak önceki B3 kapsam kayması sürüyor; ayrıca PR dalındaki ardışık üç gerçek CI koşusu bu kutuda gösterilemediği için ayrı kutu-dışı kayıt gerekiyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B3 kapanmamış: CI kalan kovası işiyle ilgisiz katalog ve beceri sürümü hizalama değişiklikleri PR kapsamında kalıyor; yeni hizalama sınavı tutarlılığı doğrulasa da bu ek değişikliğin iş kartıyla bağını kurmuyor.",
+        "kanit": "`katalog-hiza` önce ölçümünde tescil için `SKILL.md=0.9.0 catalog=0.3.0`, sonra ölçümünde tescil/oda-kur/yazilim-fabrikasi sürümlerinin sırasıyla `0.9.1`, `0.2.1`, `0.27.23` olarak hizalandığı görülüyor. İş kartının talebi süre okuma, ölçülmüş tavanlar ve kalan kovası CI kararlılığıyla sınırlı.",
+        "konum": "olcum-katalog-hiza-once.txt; olcum-katalog-hiza-sonra.txt; önceki tur B3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "PR dalı CI'ında ardışık üç yeşil kalan-kovası koşusu kanıtlanmamış; manifestte iki yerel koşucu sınavı var ve bunlar GitHub CI koşusu değil.",
+        "kanit": "Manifestte `kosucu-sinavi` ve `kosucu-sinavi-tur2` komutları aynı yerel `bash .github/ci/kabuk-sinamalari.test.sh` çağrısıdır; süreleri 11.8 ve 31.7 saniyedir. Üçüncü kayıt ile PR GitHub Actions koşu kimlikleri bulunmuyor.",
+        "konum": "kanıt manifesti:kayitlar; iş kartı: `PR dalı CI'ında 'kalan' kovası ardışık 3 koşu yeşil`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "GitHub Actions PR dalı + koşu kayıtlarına erişim"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra tavan-okuma çifti açıklamalı 480 beyanlarının artık 480 uygulandığını gösteriyor; iki yerel koşucu ölçümü 24/0 ve 26/0 yeşil. Önceki B1, K10c'nin `sure=1 2` ve `sure=1abc` vakalarını sınaması ve M3 mutasyonunun gevşek kalıbı yakalamasıyla kapanmış. Önceki B2, main ölçümü ayrı karta daraltıldığı için bu kart açısından kapanmış; fakat güncel kartta kalan PR CI üçlüsü hâlâ yalnız dış yüzeyde ölçülebilir. Ölçülen ağır sınav süreleri ile seçilen tavanları yan yana veren bir ölçüm çifti sunulmamış."
+  }
+}
