@@ -1,7 +1,7 @@
 {
   "is": "hasat-tazelik-seansli",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T00:07:23+03:00",
+  "guncelleme": "2026-10-30T00:23:02+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,24 +25,24 @@
       "etiket": "sirada-bak-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sirada-bak-sinavi-sonra.txt",
-      "sha256": "632055283b9ce959735e06474a57bd12e1fde7c8d94a3edeb287eb1525fbdb73",
+      "sha256": "ded3f490470c1d50737804a599d84d923dc2f897ec231449a79f5356a605e6d8",
       "komut": [
         "bash",
         "gunluk-plan/scripts/sirada-bak.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T00:07:18+03:00",
-      "sure_sn": 203.8,
+      "zaman": "2026-10-30T00:23:02+03:00",
+      "sure_sn": 286.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "01317aa1eb6d4903b9e08b4e4815de23"
+      "olcum_id": "ed7f163ac95247718c6380c2fa8ef1ca"
     },
     {
       "tur": "olcum",
       "etiket": "taze-sayimi-mutant",
       "asama": "sonra",
       "dosya": "olcum-taze-sayimi-mutant-sonra.txt",
-      "sha256": "96b27c2362670fa649f3ee17a2a3d8c89758cf921e0208ecbdc8c83d1d195108",
+      "sha256": "9fb3510a6919404eaf87e59aba83f8abc9337dc9ff45bf6142773fa8aa93a5eb",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutant-taze.sh",
@@ -50,15 +50,15 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T00:07:23+03:00",
-      "sure_sn": 204.9,
+      "zaman": "2026-10-30T00:22:43+03:00",
+      "sure_sn": 263.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sirada-bak-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "06c27f406b0e4a95998728ec2ee97a19"
+      "olcum_id": "349dd47349dc458ca22ab2f176f82d08"
     }
   ],
-  "imza": "59f5b59dc1f548694ee60e63b5fd49b267c30ac5681c05fe562c75606bce9a60"
+  "imza": "2892830f14f1a27d43aafe1cd6ea352ddf7f26540954ba9b2f9ec83cb878597c"
 }

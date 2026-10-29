@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/sirada-bak.test.sh
-# rc=0 sure=203.8s zaman=2026-10-30T00:07:18+03:00
+# rc=0 sure=286.3s zaman=2026-10-30T00:23:02+03:00
 --- stdout ---
 — kutu-bul
   ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
@@ -114,6 +114,10 @@ $ bash gunluk-plan/scripts/sirada-bak.test.sh
   ✓ T8 bozuk --taze-gun rc 2
   ✓ T8b --taze-gun 0 rc 2
   ✓ T9 bugünün tarihi okunamazsa TAZELIK=ÖLÇÜLEMEDİ (VAR uydurulmaz)
-sonuç: 104 geçti · 0 kaldı
+  ✓ T10 gelecek tarihli havuz kaydı TAZE SAYILMAZ (VAR yok)
+  ✓ T10b gelecek tarihli kayıt okunamayan gibi sayılır: taze 0 · tarihsiz 1 → ÖLÇÜLEMEDİ
+  ✓ T11 pencere sınırı: tam 7 gün TAZE, 8 gün BAYAT (taze 1 · bayat 1 · en eski 8)
+  ✓ T12 tazelik hesabı çıktı vermezse (python3 çöktü) ÖLÇÜLEMEDİ + sayılar '-' (uydurma 0 yok); karar yine verilir
+sonuç: 108 geçti · 0 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-hasat-tazelik-seansli-sirada-bak-sinavi 195 sn bekledi (yuva 2, load1 6.70)
+⏳ agir-sira: kanit-hasat-tazelik-seansli-sirada-bak-sinavi 276 sn bekledi (yuva 1, load1 12.50)

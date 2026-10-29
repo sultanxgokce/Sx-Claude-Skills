@@ -72,6 +72,7 @@ for s in sys.stdin:
     except Exception: t=None
     if t is None: tarihsiz+=1; continue
     yas=(bg-t).days
+    if yas<0: tarihsiz+=1; continue   # gelecek tarihli damga (saat kayması / bozuk veri) güvenilmez: taze SAYILMAZ, okunamayan gibi işlenir (göz tur 1)
     if eneski is None or yas>eneski: eneski=yas
     if yas<=gun: taze+=1
     else: bayat+=1
@@ -82,16 +83,17 @@ else: d="KURU"
 print("%s\t%d\t%d\t%d\t%d\t%s"%(d,top,taze,bayat,tarihsiz,"-" if eneski is None else eneski))
 '
 IFS=$'\t' read -r TZ_D HT HTZ HB HTS HEE < <(printf '%s\n' "$LISTE" | python3 -c "$TZ_PY" "$KUTU" "$BUGUN" "$TAZE_GUN")
-[ -n "${TZ_D:-}" ] || { TZ_D="OLCULEMEDI"; HT=0; HTZ=0; HB=0; HTS=0; HEE="-"; }
+[ -n "${TZ_D:-}" ] || { TZ_D="COKTU"; HT="-"; HTZ="-"; HB="-"; HTS="-"; HEE="-"; }   # python çıktı vermedi: sayılar UYDURULMAZ, "-" basılır
 echo "HAVUZ_TOPLAM=$HT"; echo "HAVUZ_TAZE=$HTZ"; echo "HAVUZ_BAYAT=$HB"; echo "HAVUZ_TARIHSIZ=$HTS"; echo "HAVUZ_EN_ESKI_GUN=$HEE"; echo "TAZE_GUN=$TAZE_GUN"
 case "$TZ_D" in
+  COKTU) echo "TAZELIK=ÖLÇÜLEMEDİ"; echo "TAZELIK_NEDEN=tazelik hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — ne bayat ne taze DENİR; python3 ve liste biçimini kontrol et" ;;
   VAR) echo "TAZELIK=VAR" ;;
   KURU) echo "TAZELIK=KURU · ÖNERİ=Meşveret seansı (yeni bulgu toplanmalı)"
         if [ "$HT" -eq 0 ]; then echo "TAZELIK_NEDEN=havuz boş — hasat edecek kayıt yok; günlük plana 'Meşveret seansı' maddesi koy, taze kayıt ekle (bulgu.sh yaz / tarama-ekle.sh)"
         else echo "TAZELIK_NEDEN=havuzdaki $HT kaydın hiçbiri son $TAZE_GUN günde açılmadı/hareket görmedi (en eskisi $HEE gün) — hepsi bayat; günlük plana 'Meşveret seansı' maddesi koy, taze kayıt ekle"; fi ;;
   *) echo "TAZELIK=ÖLÇÜLEMEDİ"
      if [ "$HTS" -eq 0 ]; then echo "TAZELIK_NEDEN=bugünün tarihi okunamadı (GUNLUK_PLAN_TARIH='$BUGUN') — tazelik hesaplanamaz, bayat da taze de DENMEZ"
-     else echo "TAZELIK_NEDEN=havuzdaki $HTS kaydın tarihi okunamadı, taze kayıt da görünmüyor — bayat DENMEZ, ekranda (son:) damgasını kontrol et"; fi ;;
+     else echo "TAZELIK_NEDEN=havuzdaki $HTS kaydın tarihi okunamadı ya da gelecekte, taze kayıt da görünmüyor — bayat DENMEZ, ekranda (son:) damgasını kontrol et"; fi ;;
 esac
 if [ "$N" -lt "$ESIK" ] && [ "$H" -ge 1 ]; then
   HAVUZDAN=1; SIRA="$(printf '%s\n%s\n' "$SIRA" "$HAVUZ" | sed '/^$/d')"; NB=$(printf '%s\n' "$SIRA" | wc -l)
@@ -120,7 +122,7 @@ else
   else echo "SORU=Bu kutuda sırada yalnız $N iş var (başlamak için en az $ESIK gerek). Kendimize iş çıkarma seansı yapalım mı?"; fi
   # 1.17.0 (Kuzey Yıldızı 1.8): üçüncü şık SEANSLI HASAT — reis havuz kaydını Sultan'a tek tek sunar ("… kodlu kayıttan … içerikli görevi açıyorum, olur mu?"),
   #   üç cevap: kabul · başka sun · düzeltmeyle kabul. Havuz boşsa hasat edilecek bir şey yoktur; şık bunu söyler, Meşveret seansına yönlendirir.
-  if [ "$HT" -eq 0 ]; then SIK3="Havuzdan süzelim: Seanslı Hasat — havuz BOŞ, önce Meşveret seansı (yeni bulgu toplanmalı)"
+  if [ "$HT" = 0 ]; then SIK3="Havuzdan süzelim: Seanslı Hasat — havuz BOŞ, önce Meşveret seansı (yeni bulgu toplanmalı)"
   else SIK3="Havuzdan süzelim: Seanslı Hasat (kayıt kayıt sorarım, 3 cevap: kabul · başka sun · düzeltmeyle kabul)"; fi
   echo "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)|$SIK3"
   # 1.13.0 (HC75A, SERDAR 28 Eki): eşik altında ADIM 0-d ZORUNLU — Sultan'ın cevabı beklenmez; sıra boşken kutu defterine açılış üretir. Tarama-ekle kuru varsayılan kalır, günlük 3 tavanı onun kapısıdır.

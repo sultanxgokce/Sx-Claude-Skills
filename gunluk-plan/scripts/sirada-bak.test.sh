@@ -192,4 +192,15 @@ kapi "T7b BAS dalında TAZELIK satırı KARAR satırından ÖNCE gelir (okuyan �
 bash "$SB" --kutu menzil --taze-gun abc >/dev/null 2>&1; kapi "T8 bozuk --taze-gun rc 2" "2" "$?"
 bash "$SB" --kutu menzil --taze-gun 0 >/dev/null 2>&1; kapi "T8b --taze-gun 0 rc 2" "2" "$?"
 c="$(GUNLUK_PLAN_TARIH="bozuk-tarih" bash "$SB" --kutu menzil --bak 2>&1)"; iceriyor "T9 bugünün tarihi okunamazsa TAZELIK=ÖLÇÜLEMEDİ (VAR uydurulmaz)" "TAZELIK=ÖLÇÜLEMEDİ" "$c"
+# göz tur 1 (Codex): gelecek tarihli damga taze sayılıyordu — saat kayması/bozuk veri VAR üretmemeli
+: > "$T/liste.txt"; satir_son 2026-03-01 G1 menzil havuz esnek ozellik HENDESE "gelecek tarihli (58 gün sonra)" >> "$T/liste.txt"
+c="$(bash "$SB" --kutu menzil 2>&1)"
+icermiyor "T10 gelecek tarihli havuz kaydı TAZE SAYILMAZ (VAR yok)" "TAZELIK=VAR" "$c"
+kapi "T10b gelecek tarihli kayıt okunamayan gibi sayılır: taze 0 · tarihsiz 1 → ÖLÇÜLEMEDİ" "0:1:TAZELIK=ÖLÇÜLEMEDİ" "$(printf '%s\n' "$c" | awk -F= '/^HAVUZ_TAZE=/{a=$2} /^HAVUZ_TARIHSIZ=/{b=$2} /^TAZELIK=/{c=$0} END{print a":"b":"c}')"
+: > "$T/liste.txt"; satir_son 2025-12-26 S7 menzil havuz esnek ozellik HENDESE "tam 7 gün" >> "$T/liste.txt"; satir_son 2025-12-25 S8 menzil havuz esnek ozellik HENDESE "8 gün" >> "$T/liste.txt"
+c="$(bash "$SB" --kutu menzil 2>&1)"
+kapi "T11 pencere sınırı: tam 7 gün TAZE, 8 gün BAYAT (taze 1 · bayat 1 · en eski 8)" "1:1:8" "$(printf '%s\n' "$c" | awk -F= '/^HAVUZ_TAZE=/{a=$2} /^HAVUZ_BAYAT=/{b=$2} /^HAVUZ_EN_ESKI_GUN=/{e=$2} END{print a":"b":"e}')"
+mkdir -p "$T/sahte-bin"; printf '#!/usr/bin/env bash\nexit 1\n' > "$T/sahte-bin/python3"; chmod +x "$T/sahte-bin/python3"   # python3 çöküyor (hiç çıktı yok)
+c="$(PATH="$T/sahte-bin:$PATH" GUNLUK_PLAN_ESLEME="$T/yok.tsv" bash "$SB" --kutu menzil 2>&1)"   # eşleme tablosu kapalı: kimlik-coz'un kendi python3 yolu bu kapının konusu değil
+kapi "T12 tazelik hesabı çıktı vermezse (python3 çöktü) ÖLÇÜLEMEDİ + sayılar '-' (uydurma 0 yok); karar yine verilir" "TAZELIK=ÖLÇÜLEMEDİ:HAVUZ_TAZE=-:1" "$(printf '%s\n' "$c" | grep '^TAZELIK='):$(printf '%s\n' "$c" | grep '^HAVUZ_TAZE='):$(printf '%s\n' "$c" | grep -c '^KARAR=')"
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]
