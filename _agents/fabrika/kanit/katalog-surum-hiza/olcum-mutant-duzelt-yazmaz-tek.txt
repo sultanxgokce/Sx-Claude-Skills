@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/duzelt-yazmaz.mjs bash ahi/schema/katalog-surum-hiza.test.sh
-# rc=1 sure=0.9s zaman=2026-10-29T10:55:18+03:00
+# rc=1 sure=0.8s zaman=2026-10-29T11:02:52+03:00
 --- stdout ---
 ── H1-H3 · hizalı katalog, path biçimleri
   ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
@@ -32,9 +32,13 @@ katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 1
   ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
 katalog↔SKILL.md: girdi 3 · sapma 2 · ölçülemedi 0
   ✎ b: 2.0.0 → 2.3.4
-  ✗ a: girdide "version" anahtarı yok — DOKUNULMADI (elle ekle)
+  ✗ a: girdinin üst düzeyinde dizge "version" anahtarı yok — DOKUNULMADI (elle ekle)
   düzeltildi: 1/2 · dokunulmadı 1 · yeniden ölçüm (tüm katalog): 2 sapma HÂLÂ var
   ✗ H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0   ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
+katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 0
+  ✎ b: 2.0.0 → 2.3.4
+  düzeltildi: 1/1 · yeniden ölçüm (tüm katalog): 1 sapma HÂLÂ var
+  ✗ H11 iç içe nesnenin version'ı önce gelse de ÜST düzey version düzeltildi, iç içe 9.9.9 aynen   ✗ SAPMA b: katalog 2.0.0 ≠ SKILL.md 2.3.4
 katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 0
   ✎ b: 2.0.0 → 2.3.4
   düzeltildi: 1/1 · yeniden ölçüm (tüm katalog): 1 sapma HÂLÂ var
@@ -46,6 +50,7 @@ katalog↔SKILL.md: girdi 3 · sapma 1 · ölçülemedi 0
   ✗ M2 mutant kurulamadı 
   ✓ M3 ölçülemeyen 'sapma yok' sayılınca H4 KIRMIZI (rc 0 döndü)
   ✗ M4 girdi sınırı kalkınca H9 KIRMIZI (a'nın düzeltmesi komşu b'nin version'ına yazıldı) 
+  ✗ M5 derinlik sayımı kalkınca H11 KIRMIZI (iç içe 9.9.9 ezildi) 
 
-SONUÇ: 10 geçti · 8 kaldı
+SONUÇ: 10 geçti · 10 kaldı
 --- stderr ---

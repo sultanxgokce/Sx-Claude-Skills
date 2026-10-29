@@ -66,6 +66,26 @@ export function girdiAraliklari(metin) {
   }
   return ar;
 }
+// Girdi nesnesinin ÜST düzeyindeki "version" değerinin konumu: [değerBaş, değerSon) — iç içe nesnedeki (ör. "kaynak": {"version": …}) version
+// değil (göz tur 2 bulgusu). Dizge-bilinçli, derinlik sayan tarama; bulunmazsa null.
+export function ustVersionKonumu(parca) {
+  let derinlik = 0, i = 0, sonAnahtar = null;
+  const dizgeOku = (j) => { let k = j + 1; while (k < parca.length) { if (parca[k] === '\\') k += 2; else if (parca[k] === '"') return k + 1; else k++; } return -1; };
+  while (i < parca.length) {
+    const c = parca[i];
+    if (c === '"') { const son = dizgeOku(i); if (son < 0) return null;
+      const kalan = parca.slice(son).match(/^\s*:/); const ust = derinlik === 1;   // yalnız girdinin kendi düzeyi
+      if (ust && kalan) { sonAnahtar = JSON.parse(parca.slice(i, son)); i = son + kalan[0].length; continue; }
+      if (ust && sonAnahtar === 'version') return [i, son];   // anahtardan sonraki değer dizgesi
+      sonAnahtar = null; i = son; continue; }
+    if (c === '{' || c === '[') derinlik++; else if (c === '}' || c === ']') derinlik--;
+    else if (c === ',') sonAnahtar = null;
+    else if (derinlik === 1 && sonAnahtar === 'version' && !/\s/.test(c)) return null;   // version değeri dizge değil (sayı/null): dokunulmaz
+    i++;
+  }
+  return null;
+}
+
 function duzelt() {
   // Her sapan girdi KENDİ nesne aralığında bulunur (id JSON.parse ile okunur: boşluk/kaçış yazımından bağımsız) ve yalnız o aralıktaki
   // "version" değeri değişir. JSON yeniden yazılmaz (biçim, sıra, anahtar korunur). version anahtarı yoksa DOKUNULMAZ ve söylenir.
@@ -77,9 +97,9 @@ function duzelt() {
   for (const [id, eski, yeni] of [...sapma].sort((x, y) => (nesne.get(y[0])?.[0] ?? -1) - (nesne.get(x[0])?.[0] ?? -1))) {   // sondan başa: öndeki kaymalar aralıkları bozmasın
     const a = nesne.get(id);
     if (!a) { console.error(`  ✗ ${id}: katalog metninde girdi nesnesi bulunamadı — DOKUNULMADI`); dokunulmadi++; continue; }
-    const parca = metin.slice(a[0], a[1]); const m = /"version"\s*:\s*"[^"]*"/.exec(parca);
-    if (!m) { console.error(`  ✗ ${id}: girdide "version" anahtarı yok — DOKUNULMADI (elle ekle)`); dokunulmadi++; continue; }
-    metin = metin.slice(0, a[0] + m.index) + `"version": "${yeni}"` + metin.slice(a[0] + m.index + m[0].length); yazildi++;
+    const parca = metin.slice(a[0], a[1]); const m = ustVersionKonumu(parca);   // yalnız ÜST düzey version; iç içe nesnedeki değil
+    if (!m) { console.error(`  ✗ ${id}: girdinin üst düzeyinde dizge "version" anahtarı yok — DOKUNULMADI (elle ekle)`); dokunulmadi++; continue; }
+    metin = metin.slice(0, a[0] + m[0]) + `"${yeni}"` + metin.slice(a[0] + m[1]); yazildi++;
     console.log(`  ✎ ${id}: ${eski} → ${yeni}`);
   }
   let yeniKatalog;

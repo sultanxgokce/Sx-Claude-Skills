@@ -1,7 +1,7 @@
 {
   "is": "katalog-surum-hiza",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T10:55:20+03:00",
+  "guncelleme": "2026-10-29T11:02:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "katalog-hiza",
       "asama": "sonra",
       "dosya": "olcum-katalog-hiza-sonra.txt",
-      "sha256": "22236b6f8f1081a70dbbdd140be30bcd29eaad97e8efbfbb54d255713746a349",
+      "sha256": "2fbb115b915f00d0e51a64b5f98a3cce8aaff79cbd605ffcf6841d5b582066d3",
       "komut": [
         "node",
         "ahi/schema/katalog-surum-hiza.mjs",
@@ -34,34 +34,34 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T10:55:15+03:00",
+      "zaman": "2026-10-29T11:02:49+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c50554eb73ea48f18eb78b27f7f2b004"
+      "olcum_id": "c3da918483d34637babef79b7c00eaef"
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "c4e81d3032de3f65cafa0d36b3a71f3985d8c38b9a84e99a7e74dc1b4dd9fc69",
+      "sha256": "f1f1dd224f569993cd6d39e4ba603f994d0c6082ff36e504d59c2d665c0baf4c",
       "komut": [
         "bash",
         "ahi/schema/katalog-surum-hiza.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-29T10:55:16+03:00",
-      "sure_sn": 1.0,
+      "zaman": "2026-10-29T11:02:50+03:00",
+      "sure_sn": 0.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "7ee32d867ba84f50801868980bf11445"
+      "olcum_id": "8d9d4ca60c7f42c695cd97bae9190122"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-kiyas-gevsek",
       "asama": "tek",
       "dosya": "olcum-mutant-kiyas-gevsek-tek.txt",
-      "sha256": "726dfe653729b7485f0c7125e488862f476cdbdb7307b49733894993d35e3a88",
+      "sha256": "d76503d0d7658a059e0918bbc1929d73f8e50a2287e180ec6f04c0ebcb64bace",
       "komut": [
         "env",
         "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/kiyas-gevsek.mjs",
@@ -70,21 +70,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-29T10:55:17+03:00",
-      "sure_sn": 0.7,
+      "zaman": "2026-10-29T11:02:51+03:00",
+      "sure_sn": 0.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "9b5a2d9379994712a90d97b93f3b1fd3"
+      "olcum_id": "41f7fa87cb6f4f6084b263dc80948e3d"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-duzelt-yazmaz",
       "asama": "tek",
       "dosya": "olcum-mutant-duzelt-yazmaz-tek.txt",
-      "sha256": "e8f16f8c0cd835691fbcbd56e5705d74e35f89970fd5d86ad1c476a49d4e85dc",
+      "sha256": "b20107f3e139de76420646a4fc44f9b4191ce1cb0d5f7b00a379e0e174630cf0",
       "komut": [
         "env",
         "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/duzelt-yazmaz.mjs",
@@ -93,21 +93,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-29T10:55:18+03:00",
-      "sure_sn": 0.9,
+      "zaman": "2026-10-29T11:02:52+03:00",
+      "sure_sn": 0.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "8777070f27f342bab3427454e8fb2992"
+      "olcum_id": "809d259f67364350b16872db8d985d3e"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-olculemedi-yesil",
       "asama": "tek",
       "dosya": "olcum-mutant-olculemedi-yesil-tek.txt",
-      "sha256": "89b5c26c1e4f35da1f794659f2cad38b2ec763e025b4e7b8f87edc1998b18d0d",
+      "sha256": "e7f4bac30858c5db84eb7dd77e8fa57fe7a0927da670c431ec18feb9f67ab008",
       "komut": [
         "env",
         "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/olculemedi-yesil.mjs",
@@ -116,21 +116,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-29T10:55:19+03:00",
-      "sure_sn": 0.8,
+      "zaman": "2026-10-29T11:02:53+03:00",
+      "sure_sn": 0.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "2520ee13f49d4320ac44b7200c4e13c3"
+      "olcum_id": "188f074c182649b7bccaedabfb6af2b4"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-sinir-yok",
       "asama": "tek",
       "dosya": "olcum-mutant-sinir-yok-tek.txt",
-      "sha256": "426eeeed7bad2dc881bb04aa56b42da3464a049b32d947528097ed539100574c",
+      "sha256": "3220388d943d1aa67544c4fdcec6eb374f4e728962affedfa30ce9d2a099d230",
       "komut": [
         "env",
         "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/sinir-yok.mjs",
@@ -139,15 +139,38 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-29T10:55:20+03:00",
-      "sure_sn": 0.7,
+      "zaman": "2026-10-29T11:02:54+03:00",
+      "sure_sn": 0.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "3af9b13620e445c2bb84644395dc82a1"
+      "olcum_id": "ab73be32246047db871dac76fed40db5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-derinlik-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-derinlik-yok-tek.txt",
+      "sha256": "ab4a0dc945d284ba9070d85359c64a45cc1a02fab7331ff3246211455a838251",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/derinlik-yok.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T11:02:55+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "8debb2ebcc394d63b7927cc82d10aebb"
     }
   ],
-  "imza": "b18719f03573843e7405f7fcd7b2c281d8431f45a315b8ee6e9809d0e44a78a1"
+  "imza": "453ab8aa2bc8e7cf266d20cc24783e5076dbc6fe4c92da6f3a48e7f8a983d835"
 }

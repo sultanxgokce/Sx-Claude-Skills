@@ -6,8 +6,9 @@
 #   H6 --duzelt: yalnız sapan girdinin version satırı değişir, biçim/sıra/öteki alanlar aynen; yeniden ölçüm rc 0; geri okuma raporu
 #   H7 --duzelt ölçülemeyen girdiye dokunmaz, rc 3 ile söyler       H8 gerçek depo (bu checkout): sapma 0 (CI kapısının koruduğu şey)
 #   H9 --duzelt girdi SINIRINI aşmaz: version anahtarı olmayan sapan girdi DOKUNULMADI der, KOMŞUSUNUN version'ı değişmez (göz tur 1 bulgusu)
+#   H11 --duzelt iç içe nesnedeki version'ı değil ÜST düzey version'ı değiştirir (göz tur 2)
 #   H10 --duzelt id/version yazımına bağlı değil: `"id" :  "b"` boşluklu ve version id'den ÖNCE yazılmış girdi de düzeltilir
-#   M1-M4 MUTASYON: kıyas gevşerse / düzeltme yazmazsa / ölçülemeyen "sapma yok" sayılırsa / girdi sınırı kalkarsa sınav KIRMIZI
+#   M1-M5 MUTASYON: kıyas gevşerse / düzeltme yazmazsa / ölçülemeyen "sapma yok" sayılırsa / girdi sınırı kalkarsa / derinlik sayımı kalkarsa sınav KIRMIZI
 set -u
 # KSH_ARAC=<yol>: sınanan aracı değiştirir (mutant kanıtı için — kanit.sh olcum --mutasyon sinav).
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; ARAC="${KSH_ARAC:-$HERE/katalog-surum-hiza.mjs}"; KOK="$(cd "$HERE/../.." && pwd)"
@@ -71,7 +72,7 @@ s=s.replace('"version": "2.3.4"','"version": "2.0.0"')                          
 open(p,'w').write(s); json.loads(s)
 PY2
 cp "$T/h9/catalog.json" "$T/h9/once.json"; O="$(node "$ARAC" "$T/h9" --duzelt 2>&1)"; RC=$?
-[ "$RC" -eq 1 ] && grep -q 'a: girdide "version" anahtarı yok — DOKUNULMADI' <<<"$O" && grep -q "✎ b: 2.0.0 → 2.3.4" <<<"$O" && [ "$(diff "$T/h9/once.json" "$T/h9/catalog.json" | grep -c '^>')" = 1 ] && grep -q '"version": "0.1.0"' "$T/h9/catalog.json" && ! grep -q '"version": "1.0.0"' "$T/h9/catalog.json"; g $? "H9 version'sız sapan girdi DOKUNULMADI (rc 1), komşu b kendi aralığında düzeltildi, c aynen" "$O"
+[ "$RC" -eq 1 ] && grep -q 'a: girdinin üst düzeyinde dizge "version" anahtarı yok — DOKUNULMADI' <<<"$O" && grep -q "✎ b: 2.0.0 → 2.3.4" <<<"$O" && [ "$(diff "$T/h9/once.json" "$T/h9/catalog.json" | grep -c '^>')" = 1 ] && grep -q '"version": "0.1.0"' "$T/h9/catalog.json" && ! grep -q '"version": "1.0.0"' "$T/h9/catalog.json"; g $? "H9 version'sız sapan girdi DOKUNULMADI (rc 1), komşu b kendi aralığında düzeltildi, c aynen" "$O"
 kur "$T/h10"; python3 - "$T/h10/catalog.json" <<'PY2'
 import sys,json; p=sys.argv[1]; s=open(p).read()
 s=s.replace('      "id": "b",\n      "path": "b/SKILL.md",\n      "version": "2.3.4",\n','      "version": "2.0.0", "path": "b/SKILL.md",\n      "id" :  "b",\n')   # version id'den ÖNCE, id boşluklu
@@ -79,6 +80,13 @@ open(p,'w').write(s); json.loads(s)
 PY2
 O="$(node "$ARAC" "$T/h10" --duzelt 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "✎ b: 2.0.0 → 2.3.4" <<<"$O" && grep -q '"version": "2.3.4", "path": "b/SKILL.md"' "$T/h10/catalog.json" && grep -q '"id" :  "b"' "$T/h10/catalog.json"; g $? "H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0" "$O"
+kur "$T/h11"; python3 - "$T/h11/catalog.json" <<'PY2'
+import sys,json; p=sys.argv[1]; s=open(p).read()
+s=s.replace('      "id": "b",\n      "path": "b/SKILL.md",\n      "version": "2.3.4",\n','      "id": "b",\n      "kaynak": {"version": "9.9.9", "ad": "x"},\n      "path": "b/SKILL.md",\n      "version": "2.0.0",\n')   # iç içe version ÖNCE gelir
+open(p,'w').write(s); json.loads(s)
+PY2
+O="$(node "$ARAC" "$T/h11" --duzelt 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "✎ b: 2.0.0 → 2.3.4" <<<"$O" && grep -q '"kaynak": {"version": "9.9.9", "ad": "x"}' "$T/h11/catalog.json" && grep -q '"version": "2.3.4"' "$T/h11/catalog.json"; g $? "H11 iç içe nesnenin version'ı önce gelse de ÜST düzey version düzeltildi, iç içe 9.9.9 aynen" "$O"
 echo "── H8 · gerçek depo"
 O="$(node "$ARAC" "$KOK" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && grep -q "sapma 0" <<<"$O"; g $? "H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)" "$(tail -2 <<<"$O")"
 echo "── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı"
@@ -96,4 +104,8 @@ m sinir-yok "const parca = metin.slice(a[0], a[1]);" "const parca = metin.slice(
 import sys,json; p=sys.argv[1]; s=open(p).read(); s=s.replace('      "name": "A skill",\n      "version": "1.0.0",\n','      "name": "A skill",\n'); open(p,'w').write(s); json.loads(s)
 PY2
 node "$MU" "$T/m4" --duzelt >/dev/null 2>&1; grep -q '"version": "1.0.0"' "$T/m4/catalog.json"; g $? "M4 girdi sınırı kalkınca H9 KIRMIZI (a'nın düzeltmesi komşu b'nin version'ına yazıldı)"; } || g 1 "M4 mutant kurulamadı"
+m derinlik-yok "const ust = derinlik === 1;" "const ust = true;" && { kur "$T/m5"; python3 - "$T/m5/catalog.json" <<'PY2'
+import sys,json; p=sys.argv[1]; s=open(p).read(); s=s.replace('      "id": "b",\n      "path": "b/SKILL.md",\n      "version": "2.3.4",\n','      "id": "b",\n      "kaynak": {"version": "9.9.9", "ad": "x"},\n      "path": "b/SKILL.md",\n      "version": "2.0.0",\n'); open(p,'w').write(s); json.loads(s)
+PY2
+node "$MU" "$T/m5" --duzelt >/dev/null 2>&1; ! grep -q '"kaynak": {"version": "9.9.9"' "$T/m5/catalog.json"; g $? "M5 derinlik sayımı kalkınca H11 KIRMIZI (iç içe 9.9.9 ezildi)"; } || g 1 "M5 mutant kurulamadı"
 echo ""; echo "SONUÇ: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]

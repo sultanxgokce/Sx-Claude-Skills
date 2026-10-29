@@ -1,5 +1,5 @@
 $ bash ahi/schema/katalog-surum-hiza.test.sh
-# rc=0 sure=1.0s zaman=2026-10-29T10:55:16+03:00
+# rc=0 sure=0.9s zaman=2026-10-29T11:02:50+03:00
 --- stdout ---
 ── H1-H3 · hizalı katalog, path biçimleri
   ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
@@ -20,6 +20,7 @@ $ bash ahi/schema/katalog-surum-hiza.test.sh
 ── H9-H10 · --duzelt girdi sınırı ve yazım bağımsızlığı
   ✓ H9 version'sız sapan girdi DOKUNULMADI (rc 1), komşu b kendi aralığında düzeltildi, c aynen
   ✓ H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0
+  ✓ H11 iç içe nesnenin version'ı önce gelse de ÜST düzey version düzeltildi, iç içe 9.9.9 aynen
 ── H8 · gerçek depo
   ✓ H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)
 ── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı
@@ -27,6 +28,7 @@ $ bash ahi/schema/katalog-surum-hiza.test.sh
   ✓ M2 düzeltme diske yazmayınca H6b KIRMIZI (yeniden ölçüm sapma bulur)
   ✓ M3 ölçülemeyen 'sapma yok' sayılınca H4 KIRMIZI (rc 0 döndü)
   ✓ M4 girdi sınırı kalkınca H9 KIRMIZI (a'nın düzeltmesi komşu b'nin version'ına yazıldı)
+  ✓ M5 derinlik sayımı kalkınca H11 KIRMIZI (iç içe 9.9.9 ezildi)
 
-SONUÇ: 18 geçti · 0 kaldı
+SONUÇ: 20 geçti · 0 kaldı
 --- stderr ---

@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/sinir-yok.mjs bash ahi/schema/katalog-surum-hiza.test.sh
-# rc=1 sure=0.7s zaman=2026-10-29T10:55:20+03:00
+# rc=1 sure=0.8s zaman=2026-10-29T11:02:54+03:00
 --- stdout ---
 ── H1-H3 · hizalı katalog, path biçimleri
   ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
@@ -26,6 +26,7 @@ katalog↔SKILL.md: girdi 3 · sapma 2 · ölçülemedi 0
   ✎ a: (yok) → 1.0.0
   düzeltildi: 2/2 · yeniden ölçüm (tüm katalog): 2 sapma HÂLÂ var
   ✓ H10 boşluklu id, version id'den önce: düzeltildi, yazım korundu, rc 0
+  ✓ H11 iç içe nesnenin version'ı önce gelse de ÜST düzey version düzeltildi, iç içe 9.9.9 aynen
 ── H8 · gerçek depo
   ✓ H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)
 ── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı
@@ -34,6 +35,7 @@ katalog↔SKILL.md: girdi 3 · sapma 2 · ölçülemedi 0
   ✓ M3 ölçülemeyen 'sapma yok' sayılınca H4 KIRMIZI (rc 0 döndü)
 ÇAPA 0
   ✗ M4 mutant kurulamadı 
+  ✓ M5 derinlik sayımı kalkınca H11 KIRMIZI (iç içe 9.9.9 ezildi)
 
-SONUÇ: 16 geçti · 2 kaldı
+SONUÇ: 18 geçti · 2 kaldı
 --- stderr ---
