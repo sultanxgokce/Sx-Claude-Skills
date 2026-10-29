@@ -27,6 +27,8 @@ jobs:
         run: node ahi/schema/validate-repo.mjs . --strict
       - name: "Versiyon · install'lı her skill SKILL.md + semver-frontmatter taşır"
         run: node ahi/schema/version-lint.mjs .
+      - name: "Katalog · catalog.json sürümü = SKILL.md sürümü (sapma → kırmızı; düzeltme: --duzelt)"
+        run: node ahi/schema/katalog-surum-hiza.mjs .
       - name: "Motor · sync-skills.mjs sözdizimi"
         run: node --check sync-skills.mjs
 

@@ -1,0 +1,29 @@
+$ node ahi/schema/katalog-surum-hiza.mjs .
+# rc=1 sure=0.0s zaman=2026-10-29T10:43:53+03:00
+--- stdout ---
+  ✗ SAPMA memex: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA feedback-widget: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA ai-engineering-kit: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA skill-packager: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA inplace-chat: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA yt-transcript: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA whatsapp-baileys: katalog 1.2.1 ≠ SKILL.md 1.2.2
+  ✗ SAPMA sert-teslim: katalog 0.2.1 ≠ SKILL.md 0.2.2
+  ✗ SAPMA kesif: katalog 0.2.0 ≠ SKILL.md 0.2.2
+  ✗ SAPMA layiha-kapisi: katalog 1.1.0 ≠ SKILL.md 0.1.0
+  ✗ SAPMA pcloud-erisim: katalog 1.1.0 ≠ SKILL.md 1.3.0
+  ✗ SAPMA erisim: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA sunucu-kur: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA tescil: katalog 0.3.0 ≠ SKILL.md 0.9.1
+  ✗ SAPMA kayit-damgasi: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA worktree-hijyen: katalog 0.1.0 ≠ SKILL.md 0.2.0
+  ✗ SAPMA iskan: katalog 0.11.0 ≠ SKILL.md 0.11.5
+  ✗ SAPMA federe-os-cekirdek: katalog 0.5.0 ≠ SKILL.md 0.7.0
+  ✗ SAPMA kapi-yolu: katalog 1.1.0 ≠ SKILL.md 1.0.0
+  ✗ SAPMA seans: katalog 1.13.0 ≠ SKILL.md 1.17.0
+  ✗ SAPMA arcelik-mail-erisim: katalog 1.0.0 ≠ SKILL.md 0.1.0
+  ✗ SAPMA elogo-portal-otomasyon: katalog 1.0.0 ≠ SKILL.md 0.1.0
+  ✗ SAPMA baglam-karti: katalog 1.0.0 ≠ SKILL.md 1.0.1
+katalog↔SKILL.md: girdi 82 · sapma 23 · ölçülemedi 0
+--- stderr ---
+✗ 23 sapma — SKILL.md tek gerçek; düzeltmek için: node ahi/schema/katalog-surum-hiza.mjs . --duzelt

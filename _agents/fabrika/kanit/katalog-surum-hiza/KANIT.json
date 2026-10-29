@@ -1,0 +1,130 @@
+{
+  "is": "katalog-surum-hiza",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T10:49:06+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "once",
+      "dosya": "olcum-katalog-hiza-once.txt",
+      "sha256": "93ab9c3f1197ead125ee1aa4e04524c9422a8f787a12421f8a2eaafb99b41b3c",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T10:43:53+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f6ba3f1603084ef394a89e825fe61a0a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "e266ae14c1f0e47b58b6eee9d283b4c7207187ea596fb0e41b6d231edbde248e",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:43:53+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "83178cacc87c438585570d6a8ee95103"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "5f3744d6c5d06c210a21fc0d7a82b75008c31bb1fcf7869baf17264de32995c2",
+      "komut": [
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:49:04+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9fbbd231749647e5adc96aef6eecfb65"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kiyas-gevsek",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kiyas-gevsek-tek.txt",
+      "sha256": "6812adcf7cc5de7f857269aa251be8e8d27c5db2e591887ab05d38e070f31a31",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/kiyas-gevsek.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:49:05+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "39ef273bb3b04b36801609195fe8b979"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-duzelt-yazmaz",
+      "asama": "tek",
+      "dosya": "olcum-mutant-duzelt-yazmaz-tek.txt",
+      "sha256": "12130c4eee3c280df4aaf9f7c04713f59161dc4552818d694d348a5343ecf4b1",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/duzelt-yazmaz.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:49:06+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "4d36b6f8f1e64f79ae573ab20fd21fcc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-olculemedi-yesil",
+      "asama": "tek",
+      "dosya": "olcum-mutant-olculemedi-yesil-tek.txt",
+      "sha256": "b54e2bf51a9c5128262f86ae835110bc220038489092d7dc84d318d4ff207756",
+      "komut": [
+        "env",
+        "KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/olculemedi-yesil.mjs",
+        "bash",
+        "ahi/schema/katalog-surum-hiza.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:49:06+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "bea67d2637c741a2b0c0a5977523d9d5"
+    }
+  ],
+  "imza": "951e8021c4e434622cefc182055389f9af73a9a6dcb9bc6035fcc6480878fea1"
+}

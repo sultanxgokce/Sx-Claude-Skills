@@ -1,0 +1,33 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ env KSH_ARAC=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-jbzet/olculemedi-yesil.mjs bash ahi/schema/katalog-surum-hiza.test.sh
+# rc=1 sure=0.6s zaman=2026-10-29T10:49:06+03:00
+--- stdout ---
+── H1-H3 · hizalı katalog, path biçimleri
+  ✓ H1 hizalı üç girdi → rc 0, 'sapma 0'
+  ✓ H3 path 'b/SKILL.md' ve 'c/' biçimleri ölçüldü (ölçülemedi yok)
+── H2 · sapma
+  ✓ H2 bir sapma → rc 1, girdi adı ve iki sürüm yazılı
+── H4-H5 · ölçülemedi / okunamadı
+  ✗ H4 SKILL.md yok / versiyonsuz → rc 3, iki girdi ÖLÇÜLEMEDİ, 'sapma 0' denmedi   ◻ ÖLÇÜLEMEDİ a: a/SKILL.md versiyonsuz
+  ◻ ÖLÇÜLEMEDİ c: c/SKILL.md yok
+katalog↔SKILL.md: girdi 3 · sapma 0 · ölçülemedi 2
+✓ sapma 0
+  ✓ H5a catalog.json yok → rc 2
+  ✓ H5b bozuk JSON → rc 2
+  ✓ H5c argümansız → rc 2
+── H6 · --duzelt
+  ✓ H6a iki sapma düzeltildi, geri okuma hizalı, rc 0
+  ✓ H6b yeniden ölçüm: sapma 0
+  ✓ H6c yalnız iki version satırı değişti; biçim, sıra ve öteki alanlar aynen (a 1.0.0 dokunulmadı)
+── H7 · --duzelt ölçülemeyene dokunmaz
+  ✓ H7 sapan düzeltildi, ölçülemeyen c aynen kaldı, rc 3 söylendi
+── H8 · gerçek depo
+  ✓ H8 bu checkout: katalog↔SKILL.md sapma 0 (CI kapısının koruduğu şey)
+── MUTASYON (araç kopyası): her mutant bir kapıyı KIRMIZI yapmalı
+  ✓ M1 kıyas gevşeyince H2 KIRMIZI (mutant sapmayı görmez, rc 0 döner)
+  ✓ M2 düzeltme diske yazmayınca H6b KIRMIZI (yeniden ölçüm sapma bulur)
+ÇAPA 0
+  ✗ M3 mutant kurulamadı 
+
+SONUÇ: 13 geçti · 2 kaldı
+--- stderr ---
