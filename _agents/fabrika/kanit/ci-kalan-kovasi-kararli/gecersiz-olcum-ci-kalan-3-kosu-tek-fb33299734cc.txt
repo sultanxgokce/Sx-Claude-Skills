@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-ci-kalan-3-kosu-tek.txt
+hedef_sha256: dbbcef5f90b20ae6d69c60f929f15e905bde24672a460f8b83ab1d31feba4137
+hedef_zaman: 2026-10-29T08:20:16+03:00
+hedef_renk: yesil
+neden: aşım sayısı BOŞ günlükte ölçülmüştü: gh api logs kaçış dizisi yüzünden içerik vermedi, grep -c 0 dedi — pozitif kontrolsüz sahte yeşil; düzeltilip yeniden ölçülüyor
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-29T08:24:12+03:00

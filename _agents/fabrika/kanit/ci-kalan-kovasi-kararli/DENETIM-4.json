@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "ci-kalan-kovasi-kararli",
+  "pr": "560",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T08:25:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 4 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-katalog-hiza-once.txt (kirmizi → gecersiz) — tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET · BÂNİ;olcum-katalog-hiza-sonra.txt (yesil → gecersiz) — tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET · BÂNİ;olcum-ci-kalan-3-kosu-tek.txt (yesil → gecersiz) — aşım sayısı BOŞ günlükte ölçülmüştü: gh api logs kaçış dizisi yüzünden içerik vermedi, grep -c 0 dedi — pozitif kontrolsüz sahte yeşil; düzeltilip yeniden ölçülüyor · BÂNİ;olcum-tavan-sure-kiyas-tek.txt (yesil → gecersiz) — sahte yeşil: günlük ayrıştırması 0 sn okudu (desen tutmadı), betik boş veriyi geçti saydı — EKSİK VERİ ÖNCE SINA dersi; düzeltilip yeniden ölçülüyor · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ci-kalan-kovasi-kararli",
+  "dal": "ci-kalan-kovasi-kararli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36043,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 20735
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3a4ee88b4f3518828754c87514db96ee03ad64fc",
+  "duzeltme_farki": {
+    "onceki_bas": "7bcd171b94260affdd44306d16db1bf3cdabe734",
+    "dosya": 12,
+    "bayt": 21738,
+    "tam_bayt": 71362
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Süre beyanı açıklamayla doğru okunuyor; üç gerçek PR CI koşusu aşım olmadan yeşil ve ağır sınav tavanları ölçülen sürelerle yan yana doğrulanmış. Önceki uygulama bulgusu, sicil tavanının ölçülen 331 saniyeye karşı 480'den 600'e çıkarılması ve son karşılaştırmanın yeşile dönmesiyle kapanmış; üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Geçersiz ilan edilen dört kayıt kanıt sayılmadı; bunların yerine dolu günlük kullanan `ci-kalan-3-kosu-2` üç ayrı başarılı işi (636/458/633 sn, her birinde 0 aşım-yeniden ölçüm), `tavan-sure-kiyas-2` ölçülen 331 sn karşısında 480 tavanın yetersizliğini ve `tavan-sure-kiyas-3` 600 tavanla 1,81 oranında yeşili gösteriyor. Önceki B1 böylece gerçek süre-tavan karşılaştırması ve kırmızı→yeşil ölçüm çiftiyle kapanmış; `tavan-okuma` önce/sonra çifti ile K10 ve mutasyon sınavları da açıklamalı süre ayrıştırmasını destekliyor."
+  }
+}

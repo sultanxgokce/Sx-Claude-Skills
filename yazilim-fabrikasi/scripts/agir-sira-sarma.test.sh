@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# kabuk-testleri: sure=120
+# kabuk-testleri: sure=300   (CI kalan kovası paralel 4: tek başına 92–101 sn, paralelde 120 sn aşıldı → yeniden ölçüm; 29 Eki)
 # agir-sira-sarma.test.sh — denetci.sh ve kanit.sh olcum'un ağır koşularının kod kutusunun ortak sırasına (agir-sira.sh) sarılması
 #   (görev …489VP8 · SERDAR 24 Eki "(a) ONAY"): en çok 15 dk bekle → UYARIYLA koş (fail-open) · sıra yoksa/kapalıysa sarmasız ·
 #   sınav kancası (DENETCI_KOMUT) sırayı hiç görmez · bekleme zaman aşımına SAYILMAZ. HERMETİK: sahte sıra betiği, sahte codex; gerçek

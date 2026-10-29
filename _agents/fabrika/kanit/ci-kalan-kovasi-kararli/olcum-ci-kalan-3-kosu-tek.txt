@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/ci-kalan-3-kosu.sh 40819805097
+# rc=0 sure=9.4s zaman=2026-10-29T08:20:16+03:00
+--- stdout ---
+--- stderr ---
+deneme 1: iş 123269446470 success 636s · paralelde aşım→yeniden ölçüm: 0
+deneme 2: iş 123272684340 success 458s · paralelde aşım→yeniden ölçüm: 0
+deneme 3: iş 123275210532 success 633s · paralelde aşım→yeniden ölçüm: 0

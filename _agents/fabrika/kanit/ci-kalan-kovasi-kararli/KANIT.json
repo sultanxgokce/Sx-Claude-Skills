@@ -1,0 +1,298 @@
+{
+  "is": "ci-kalan-kovasi-kararli",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T08:25:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "tavan-okuma",
+      "asama": "once",
+      "dosya": "olcum-tavan-okuma-once.txt",
+      "sha256": "f2a413517665f3cf81a1873f02cf24b81b0cc0afb5027aa0f5b325675fcd995f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-okuma.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kabuk-eski.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T07:30:15+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "59db2c10d6044977b15ff5008dda0540"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-okuma",
+      "asama": "sonra",
+      "dosya": "olcum-tavan-okuma-sonra.txt",
+      "sha256": "3c6402c26659a28709b74df0d8340bf92900367d1213e69205acdee8502382c4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-okuma.sh",
+        ".github/ci/kabuk-sinamalari.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:30:15+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6cd9f8bce5d941eb881c16486da1f578"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kosucu-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kosucu-sinavi-tek.txt",
+      "sha256": "063bffbbad9daaa72eabaf8bd94aa6186a39c7edb7679121f9b8f965ece39da1",
+      "komut": [
+        "bash",
+        ".github/ci/kabuk-sinamalari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:30:27+03:00",
+      "sure_sn": 11.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "90f87626387043149f306743d9bca909"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "once",
+      "dosya": "olcum-katalog-hiza-once.txt",
+      "sha256": "714fa6bdd284e888158e090c717c9858b18a2cfbe8fd962485ab086ff5662b5e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/hiza-once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T07:41:34+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ff19b35db6a1435dbf2e1a10aee2133f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "6459b56bc1e1f1964cb729134c95ccc23ace0dfe202c33847a0feceb1151705d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:41:34+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bbe82e11f3f84151aab748b6e22cbafa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kosucu-sinavi-tur2",
+      "asama": "tek",
+      "dosya": "olcum-kosucu-sinavi-tur2-tek.txt",
+      "sha256": "dd6c776da13a6b7ac273ab72ca7f123ecb72d86b904797077ad29f60d08fdfe4",
+      "komut": [
+        "bash",
+        ".github/ci/kabuk-sinamalari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:43:36+03:00",
+      "sure_sn": 31.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "92419730a6774203bd3ea3baf30ad836"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-drift-kapsam-disi",
+      "asama": "tek",
+      "dosya": "olcum-katalog-drift-kapsam-disi-tek.txt",
+      "sha256": "bd7416c1841cb12b9e075969d2c2f19d124e196f0a8ab0db8a196712ed19f0a0",
+      "komut": [
+        "bash",
+        "-c",
+        "bash _agents/fabrika/kanit/ci-kalan-kovasi-kararli/katalog-hiza.sh . ; rc=$?; echo \"tescil drifti (SKILL.md 0.9.1 ↔ catalog 0.3.0) bu işten ÖNCE de vardı (0.9.0 ↔ 0.3.0), bu PR dokunmaz; görev gorev_01M62ZXA42ENRJTJ2HM79JBZET\"; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T07:51:39+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7686a9ed61b64403b75c754687a85d14"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "katalog-hiza",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-katalog-hiza-once-ea16d54a3bee.txt",
+      "sha256": "ee9de0607b477e50d6980f985a304ad6b670163847c15f06d74f9466f4c32f72",
+      "hedef_dosya": "olcum-katalog-hiza-once.txt",
+      "hedef_olcum_id": "ff19b35db6a1435dbf2e1a10aee2133f",
+      "hedef_sha256": "714fa6bdd284e888158e090c717c9858b18a2cfbe8fd962485ab086ff5662b5e",
+      "hedef_zaman": "2026-10-29T07:41:34+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T07:51:55+03:00",
+      "olcum_id": "32f8133842a942a499d6aa89debca175"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "katalog-hiza",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-katalog-hiza-sonra-0128c1248600.txt",
+      "sha256": "d435331badfc73c8ef6a010dafde91a38678dcad4d6a878e71c43a8f1ec7e6b0",
+      "hedef_dosya": "olcum-katalog-hiza-sonra.txt",
+      "hedef_olcum_id": "bbe82e11f3f84151aab748b6e22cbafa",
+      "hedef_sha256": "6459b56bc1e1f1964cb729134c95ccc23ace0dfe202c33847a0feceb1151705d",
+      "hedef_zaman": "2026-10-29T07:41:34+03:00",
+      "hedef_renk": "yesil",
+      "neden": "tescil katalog 0.3.0→0.9.1 sıçraması kapsam dışı (göz tur 1 B3 / tur 2): katalog geri alındı, drift ayrı görev …JBZET",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T07:51:55+03:00",
+      "olcum_id": "04a053c6b3f44002bcb0c74e48d98a77"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kalan-3-kosu",
+      "asama": "tek",
+      "dosya": "olcum-ci-kalan-3-kosu-tek.txt",
+      "sha256": "dbbcef5f90b20ae6d69c60f929f15e905bde24672a460f8b83ab1d31feba4137",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/ci-kalan-3-kosu.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:20:16+03:00",
+      "sure_sn": 9.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c8100cfa72a1405bb51898d00a8cdc09"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-sure-kiyas",
+      "asama": "tek",
+      "dosya": "olcum-tavan-sure-kiyas-tek.txt",
+      "sha256": "0b4db62ce82d1eefad58f268df74ec4dcb7afaab461539196dff449b39d976a9",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:23:03+03:00",
+      "sure_sn": 8.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dabf38b410a04561b851691c2b2cb60d"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "tavan-sure-kiyas",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-tavan-sure-kiyas-tek-c025f632e5dd.txt",
+      "sha256": "2f5292b9e11f8a4d479fd0c55eecbc4a373c564edb7e3db401b183f80d97b269",
+      "hedef_dosya": "olcum-tavan-sure-kiyas-tek.txt",
+      "hedef_olcum_id": "dabf38b410a04561b851691c2b2cb60d",
+      "hedef_sha256": "0b4db62ce82d1eefad58f268df74ec4dcb7afaab461539196dff449b39d976a9",
+      "hedef_zaman": "2026-10-29T08:23:03+03:00",
+      "hedef_renk": "yesil",
+      "neden": "sahte yeşil: günlük ayrıştırması 0 sn okudu (desen tutmadı), betik boş veriyi geçti saydı — EKSİK VERİ ÖNCE SINA dersi; düzeltilip yeniden ölçülüyor",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T08:23:29+03:00",
+      "olcum_id": "2e923f41bf9a4a53853853d76622cd5a"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "ci-kalan-3-kosu",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-ci-kalan-3-kosu-tek-fb33299734cc.txt",
+      "sha256": "fc2369e3623acf126e1fbea070a6c9303fb62669bd49ab5a632c41fa60e53cee",
+      "hedef_dosya": "olcum-ci-kalan-3-kosu-tek.txt",
+      "hedef_olcum_id": "c8100cfa72a1405bb51898d00a8cdc09",
+      "hedef_sha256": "dbbcef5f90b20ae6d69c60f929f15e905bde24672a460f8b83ab1d31feba4137",
+      "hedef_zaman": "2026-10-29T08:20:16+03:00",
+      "hedef_renk": "yesil",
+      "neden": "aşım sayısı BOŞ günlükte ölçülmüştü: gh api logs kaçış dizisi yüzünden içerik vermedi, grep -c 0 dedi — pozitif kontrolsüz sahte yeşil; düzeltilip yeniden ölçülüyor",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T08:24:12+03:00",
+      "olcum_id": "0e8dea41f2dd42bbb789e88c4520cce5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kalan-3-kosu-2",
+      "asama": "tek",
+      "dosya": "olcum-ci-kalan-3-kosu-2-tek.txt",
+      "sha256": "5455fbd3423caf0fab628d00efeb766144978d36729c1b6b3a4de59479ae6b16",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/ci-kalan-3-kosu.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:24:21+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d87689c8033c4c8e93dfacdd37c58d82"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-sure-kiyas-2",
+      "asama": "tek",
+      "dosya": "olcum-tavan-sure-kiyas-2-tek.txt",
+      "sha256": "582fabbb84ab0ff2a05c0a6527bdd2743d093421f8b88ca77fa298d32403c1ed",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh",
+        "40819805097"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T08:24:29+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8da9bd0882834126be931190c9c17ccb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-sure-kiyas-3",
+      "asama": "tek",
+      "dosya": "olcum-tavan-sure-kiyas-3-tek.txt",
+      "sha256": "a49e6c231aa56e29154290f5764312f195d3ec08fa9c30a41920a1627f96d53a",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/ci-kalan-kovasi-kararli/tavan-sure-kiyas.sh",
+        "40819805097"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T08:25:19+03:00",
+      "sure_sn": 9.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1b1063e32c6e4d079abb06a832d2a560"
+    }
+  ],
+  "imza": "d5121d41460d0728c44197d1f3218b35436cd0645d9fbec95cddce698633994e"
+}

@@ -1,7 +1,7 @@
 ---
 name: oda-kur
 description: Kutu–oda modeli aracı — bir kutunun (tek depo) içinde amacı ayrı odalar kurar. Oda klasörü iskeleti (master prompt CLAUDE.md, oda.json hedef+reis+ölçü, hafiza/, .claude/skills+agents), kutu ortak ayarından HER odanın .claude/settings.json'unu üretir (izin, ayrı autoMemoryDirectory, yazma kancası), doğrular ve kod yazımını oda klasörüne, ortak veri yazımını çekirdeğin komutuna sınırlayan PreToolUse kancasını sağlar. Tetik "oda kur", "yeni oda", "odalara ayar üret", "oda doğrula", "oda kancası".
-version: 0.2.0
+version: 0.2.1
 ---
 
 # oda-kur — kutu–oda modeli: iskelet, ayar üretimi, yazma kancası

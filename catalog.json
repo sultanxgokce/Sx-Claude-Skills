@@ -1837,7 +1837,7 @@
       "id": "oda-kur",
       "type": "workflow",
       "name": "Kutu–oda modeli — oda iskeleti, ayar üretimi, yazma kancası",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "Bir kutunun (tek depo) içinde amacı ayrı odalar kurar: oda klasörü iskeleti, ortak ayardan her odanın settings.json'unu üretme (ayrı hafıza, izin, kanca), doğrulama ve kod yazımını oda klasörüne / ortak veri yazımını çekirdeğin komutuna sınırlayan PreToolUse kancası.",
       "tags": [
         "oda",
