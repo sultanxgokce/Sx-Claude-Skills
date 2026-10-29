@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "alt-ajan-istem",
+  "pr": "579",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T01:45:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-alt-ajan-istem",
+  "dal": "alt-ajan-istem",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41660,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": "e2fa0b8e2274588941b7298d93b9d3133bf5e690",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Koltuksuz alt personel için kimlik, el defteri, iş ve kuralları tek istemde birleştiren üretici yazılmış; dokuz gerçek kimlikte çalıştığı ve sır süzgecinin mutasyonla sınandığı gösterilmiş. Ana akış sağlam, fakat eksik seçenek değeri komutu sonsuz döngüye sokabildiği için üretime çıkmadan önce girdi ayrıştırması düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Değer bekleyen bir seçenek en sonda verilirse betik hata verip çıkmak yerine aynı argümanda takılabilir; örneğin yalnız `--is` ile çağrıda `shift 2` başarısız olur, `set -e` bulunmadığından döngü sürer ve `$1` değişmez.",
+        "kanit": "Seçenek dalları değeri `${2:-}` ile alıp koşulsuz `shift 2` çalıştırıyor; betikte `set -uo pipefail` var, `set -e` yok. A1-A9 ölçümünde eksik seçenek değeri vakası bulunmuyor.",
+        "konum": "duzen/scripts/alt-ajan-istem.sh:34-39; olcum-sinav-tek.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`--kart` değeri slug olarak doğrulanmadığı için `../` bileşenleriyle beklenen kart dizininin dışındaki bir JSON dosyası okunup içeriği isteme taşınabilir.",
+        "kanit": "`KART` doğrudan `KJ=\"$DEPO/_agents/fabrika/kartlar/$KART.json\"` yoluna ekleniyor; yalnız personel `SLUG` değeri düzenli ifadeyle doğrulanmış. Sınav yalnız geçerli ve bulunamayan kart adlarını kapsıyor.",
+        "konum": "duzen/scripts/alt-ajan-istem.sh:42,133-143; duzen/scripts/alt-ajan-istem.test.sh:85-96",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm 12/12 geçiyor, ayrı mutasyon kaydı sır süzgeci bozulunca A5 kapısının düştüğünü gösteriyor; dokuz gerçek slug taraması da rc=0. CLI işi için kare yerine ölçüm çıktıları uygundur, ancak eksik seçenek değeri ve kart yolu sınırı ölçülmemiştir."
+  }
+}
