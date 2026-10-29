@@ -1,7 +1,7 @@
 {
   "is": "koltuk-claude-yolu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-29T10:36:28+03:00",
+  "guncelleme": "2026-10-29T10:38:58+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -53,7 +53,24 @@
       "sure_sn": 0.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "a0d94c2f18fc42f083c4fb07e7d21797"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sikistirma-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sikistirma-sinavi-sonra.txt",
+      "sha256": "39870c31d4e090e45dcaa623359ef63822040aadbdf2248f98c48774ab6f0554",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/sikistirma-ortami.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T10:38:58+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "759abcd19bec430d9fdeea5d34fd18b6"
     }
   ],
-  "imza": "c0fbae8c8d6e9dabe97e8a9eaff0e57b470f440d7ee84ca1fee86494e1a3ea0c"
+  "imza": "d45776dc6efe2008fd90d1df1407f5fabcc73d92746b9bd08903f50d5dbd05b3"
 }

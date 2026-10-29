@@ -66,8 +66,10 @@ claude_baslat() {
   esac
   cmd=$(tmux display -p -t "$hedef" '#{pane_current_command}' 2>/dev/null)
   case "$cmd" in bash|sh|zsh|dash) ;; *) gunluk "K0 DUR: hedef panede '$cmd' çalışıyor — yazılmadı"; return 1 ;; esac
-  # mutlak yol (JRCK8J): panenin kabuğu bayat PATH taşıyabilir; çözülemezse komut olduğu gibi gider (eski davranış)
-  local cl; cl="$(claude_yolu 2>/dev/null)" && komut="${komut/#claude /$(printf %q "$cl") }"
+  # mutlak yol (JRCK8J): panenin kabuğu bayat PATH taşıyabilir. Çalışan claude çözülemezse YAZILMAZ (çıplak `claude` bayat
+  # PATH'teki kabuk-stub'ı yeniden açardı); bekçi sonraki turda yeniden dener, sebep günlükte.
+  local cl; cl="$(claude_yolu 2>/dev/null)" || { gunluk "K0 DUR: $tm için çalışan claude yolu bulunamadı (PATH + nvm sürümleri) — yazılmadı"; return 1; }
+  komut="${komut/#claude /$(printf %q "$cl") }"
   tmux send-keys -t "$hedef" -l "cd $PROJE && $BELLEK_ENV $SIKISTIRMA_ENV $komut"
   tmux send-keys -t "$hedef" Enter
   local i; for i in $(seq 1 45); do sleep 2; claude_pid "$tm" >/dev/null && return 0; done
