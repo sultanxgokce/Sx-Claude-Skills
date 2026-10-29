@@ -744,6 +744,15 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z
 # Z12: gerçek ölçülemedi zili sebebi taşır (yalnız 'ÖLÇÜLEMEDİ' teşhis değildi)
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZY" DENETCI_ZAMAN_ASIMI=1 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-za --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?
 [ $RC -eq 3 ] && grep -q -- "rc 3 · ZAMAN AŞIMI.* · sebep: .*ZAMAN AŞIMI" "$ZL"; g $? "Z9c rc 3 zili sebep satırını taşır (· sebep: …)"
+# Z9d (görev …KHTY2E, 30 Eki 00:07): sebep BAYTLA (cut -c) kesilince Türkçe harf ortadan bölünüyordu ('göz' → 'g\xc3'); kırık bayt
+#     zil yoluyla ulak postasına girip SERDAR'ın posta kutusunu okunamaz yaptı. Sebep HARF sınırında kesilir: zil her zaman geçerli UTF-8.
+#     Vaka: '--kare dosyası yok: ' 21 bayt, ardından 200 'ğ' (2'şer bayt, 140 harfi aşar) — 140. bayt bir 'ğ'nin İLK baytına düşer (bayt kesimi onu böler).
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" AGENT_NAME=HENDESE FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-z --kare "$(printf 'ğ%.0s' $(seq 200))" --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?
+[ $RC -eq 2 ] && grep -q -- "· sebep: --kare dosyası yok: ğ" "$ZL"; g $? "Z9d1 rc 2 zili Türkçe sebebi taşır (--kare dosyası yok)"
+python3 -I -c 'import sys; open(sys.argv[1],"rb").read().decode("utf-8","strict")' "$ZL" 2>/dev/null; g $? "Z9d2 zil metni geçerli UTF-8 (sebep harf ortasından bölünmedi)"
+python3 -I -c '
+import sys; L=[x for x in open(sys.argv[1],"rb").read().decode("utf-8","replace").splitlines() if "· sebep: " in x]
+assert L and all(len(x.split("· sebep: ",1)[1])==140 and "�" not in x for x in L)' "$ZL" 2>/dev/null; g $? "Z9d3 sebep 140 HARF (bayt değil) ile kesildi, yerine-koyma işareti yok"
 kartac is-zr; bash "$K" olcum is-zr olc --asama tek -- true >/dev/null 2>&1; DZR="$T/_agents/fabrika/kanit/is-zr"
 printf 'pid=%s\npid_kimlik=Thu Jan  1 00:00:00 2026\nbaslangic=2026-01-01T00:00:00\n' "$canli" > "$DZR/DENETIM-1.kosuyor"
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-zr --diff "$T/zd.patch" >"$T/z-out" 2>&1; RC=$?
@@ -856,6 +865,7 @@ mut "sure-dogrulanmaz" 's@ZA=900 ;; esac@: ;; esac@'
 mut "bayat-iz-silinmez" 's@; rm -f "$_iz"$@@'
 mut "canli-iz-ezilir" '/başka denetçi koşuyor/s@; exit 3$@@'
 mut "kilit-red-zil-calar" 's@KILIT_RED=1; exit 3@exit 3@'
+mut "sebep-bayt-kesilir" 's@| python3 -I -c .import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().decode("utf-8", "replace")\[:140\].encode("utf-8")).)"@| cut -c1-140)"@'
 mut "sebep-zile-girmez" 's@^  case "$rc" in 2|3|4) \[ -n "$SON_HATA" \]@  case "$rc" in 9) [ -n "$SON_HATA" ]@'
 mut "asim-ham-yazilmaz" 's@^if \[ "$DRC" -eq 124 \]; then$@if false; then@'
 mut "kosuyor-silinmez" 's@^  \[ -n "$KOSUYOR" \] \&\& rm -f "$KOSUYOR"$@  :@'

@@ -1,0 +1,73 @@
+{
+  "is": "denetci-zil-harf-siniri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T01:57:05+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "zil-sebep",
+      "asama": "once",
+      "dosya": "olcum-zil-sebep-once.txt",
+      "sha256": "244ad8c656e5992dbe26851fe21d5dd547f4048c8c4c90e3d829caeac46a4173",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T01:55:38+03:00",
+      "sure_sn": 774.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "21eb8e239e40442a929d644883e99ade"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "zil-sebep",
+      "asama": "sonra",
+      "dosya": "olcum-zil-sebep-sonra.txt",
+      "sha256": "efcb6a687538ddeaec05903b71b1cb152daaedbeca9f0a637a0a0530614d153f",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:56:31+03:00",
+      "sure_sn": 42.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b8a6dd0c9128483798cadba5b84b769c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-sebep-bayt",
+      "asama": "tek",
+      "dosya": "olcum-mut-sebep-bayt-tek.txt",
+      "sha256": "d1082b1100a7132f55fd5c5a286a176f72b009e6c35b4cf852752e84cb4e3e18",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-denetci-zil-harf-siniri/yazilim-fabrikasi/scripts/.mutant-sebep-bayt-kesilir.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T01:57:05+03:00",
+      "sure_sn": 34.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "zil-sebep",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "e2d657eeafe14366bab6e02382b81582"
+    }
+  ],
+  "imza": "3c47ad4402d6be6019d4104af9778b1329b13e100ff7b28c0321f878d0a09c7a"
+}

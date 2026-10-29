@@ -1,0 +1,25 @@
+{
+  "is": "denetci-zil-harf-siniri",
+  "cumle": "denetci.sh zil metnindeki 'sebep' kesmesi bayt değil harf sınırında yapılır; zil hiçbir zaman geçersiz UTF-8 taşımaz",
+  "istedi": "BERİD",
+  "aldi": "BERİD",
+  "zaman": "2026-10-30T01:39:22+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: zil",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
