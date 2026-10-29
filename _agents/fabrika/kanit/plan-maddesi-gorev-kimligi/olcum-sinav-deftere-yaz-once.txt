@@ -1,0 +1,53 @@
+$ env DEFTERE_YAZ=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-plan/eski-deftere-yaz.sh bash gunluk-plan/scripts/deftere-yaz.test.sh
+# rc=1 sure=6.0s zaman=2026-10-29T11:44:02+03:00
+--- stdout ---
+── KURU: neyi yazacağını basar, deftere yazmaz
+  ✓ D1 kuru rc=0
+  ✓ D2 kuru: ekle çağrılmaz
+  ✓ D3 kuru: 'yazardım' satırları (yeni + eski günde iptal olan = 2)
+  ✓ D4 kuru: açık, onay bekleyen VE bugün kapanan görevle aynı başlık (büyük/küçük harf, sıra numarası farkıyla) atlanır
+  ✓ D4b kutu listeden türedi (huma)
+── UYGULA: yazar, İKİNCİ koşu çift yazmaz
+  ✓ D5 uygula rc=0
+  ✓ D6 iki görev yazıldı
+  ✓ D7 ekle bayrakları: kutu · atanan · özellik · günlük plan kaynağı
+  ✓ D8 ikinci koşu: hiçbir şey yazılmaz (idempotent)
+── ÖLÇÜLEMEYEN durum 'yazılacak bir şey yok' DENMEZ
+  ✓ D9 defter listesi okunamadı → rc=3
+  ✓ D10 çıpa yok → rc=3
+  ✓ D10b liste BOŞ → rc=3 (boş liste 'iş yok' değil, ölçülemedi)
+── ONAY KAPISI (A06/D1): onaysız plan deftere yazılmaz
+  ✓ D16 --onay'sız --uygula REDDEDİLİR (rc=2)
+  ✓ D17b iki harflik kırpık (tarih+imza doğru, yalnız biçim kapısı yakalar) REDDEDİLİR
+  ✓ D17g beyan parçası eksik (tarih+imza doğru) REDDEDİLİR
+  ✓ D17 biçimsiz onay (kırpık/ref eksik) REDDEDİLİR
+  ✓ D18 reddedilen koşuda ekle ÇAĞRILMAZ
+  ✓ D17c ESKİ tarihli onay REDDEDİLİR (bugün değil)
+  ✓ D17d başka planın imzasını taşıyan onay REDDEDİLİR
+  ✓ D17e plan onaydan SONRA değişti → eski onay düşer
+  ✓ D18b reddedilen koşularda ekle çağrılmadı
+  ✓ D17f doğru imza + bugün + biçim → KABUL (rc=0, 1 görev yazıldı)
+  ✓ D19 kuru koşu onaysız ÇALIŞIR (rc=0, 'kuru:' ve plan-imzası basar, ekle çağrılmaz)
+  ✓ D17h 15 kelimeyi aşan alıntı REDDEDİLİR (tarih+imza doğru)
+  ✓ D17i tam 15 kelimelik alıntı KABUL (sınır dahil)
+── Hata ve sınırlar
+  ✓ D11 ekle başarısız → rc=1 (yazıldı denmez)
+  ✓ D12 200 karakter üstü madde REDDEDİLİR (rc=1), ekle çağrılmaz
+  ✓ D13 geçersiz aciliyet rc=2
+  ✓ D14 tanınmayan argüman rc=2
+  ✓ D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer
+── AÇILIŞ ÖZETİ (mihenk/s08): ekle --ozet taşır, hata sebebi ekrana basılır
+  ✓ D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle)
+  ✓ D20 reddedilen yazım YAZILAMADI + sebep satırı basar
+── GÖREV KİMLİKLİ MADDE ve İKİZ (GJRBF1T8): sırada duran işin ikizi açılmaz
+  ✗ D21 kuru: kimlikli iki madde 'bağlardım' (yeni kayıt yok), ikiz iki madde ✗, bir yeni madde yazardım; rc 1 (ikiz var) — beklenen=1:2:2:1 gerçek=0:0:0:5
+  ✗ D21b ikiz uyarısı kimliği ve son-ekini söyler (…JRCK8J, …FVJEYF) — beklenen=1:1 gerçek=0:0
+  ✗ D21c özet satırı bağlanan=2 ikiz=2 yazılan=1 — beklenen=1 gerçek=0
+  ✗ D22 uygula: kimlikli maddeler için gorev.sh adim ÇAĞRILDI (2), ekle yalnız yeni madde için (1), ikizler YAZILMADI — beklenen=2:1:1 gerçek=0:5:0
+  ✗ D22b adım doğru kayda, 'bugünün planında' metniyle (kısa son-ek JRCK8J → tam kimlik) — beklenen=1:1 gerçek=0:0
+  ✓ D22c ekle yalnız 'Bambaşka yepyeni' maddesi için
+  ✗ D23 son-ek iki kayda uyuyor (…1R33ZG) → ✗ çözülemedi; defterde olmayan son-ek ve tam kimlik → ✗; rc 1, tahmin yok — beklenen=1:3:1:2 gerçek=0:0:0:0
+  ✓ D24 örtüşme %60 altı (2/4 kelime) → ikiz DEĞİL, yazardım, rc 0
+  ✗ D25 adim yazılamazsa ✗ ADIM YAZILAMADI + sebep, rc 1 (bağlandı denmez) — beklenen=1:1 gerçek=0:0
+── SONUÇ: 34 geçti · 7 kaldı ──
+--- stderr ---

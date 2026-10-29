@@ -25,6 +25,7 @@ case "$1" in
         # gerçek geçidin açılış kapısı: --ozet yoksa 400 (mihenk/s08, 27 Eki — sahte betik bunu hiç sormuyordu, birim yeşil yol kırık kaldı)
         case "$*" in *" --ozet "?*) ;; *) echo "HTTP 400 ozet_acilista_gerekli" >&2; exit 1 ;; esac
         [ "${EKLE_RC:-0}" -eq 0 ] || exit "$EKLE_RC" ;;
+  adim) printf '%s\n' "$*" >> "$T/adim.log"; [ "${ADIM_RC:-0}" -eq 0 ] || exit "$ADIM_RC" ;;
 esac
 EOF
 chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"
@@ -113,4 +114,34 @@ bash "$ARAC" --uygula --onay "$ONAY" --kutu huma >/dev/null 2>&1
 kapi "D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle)" "1" "$(grep -c -- '--ozet .*→ henüz başlanmadı → .*Ozetli is' "$T/ekle.log")"
 c="$(EKLE_RC=9 bash "$ARAC" --uygula --onay "$ONAY" --kutu huma 2>&1)"
 kapi "D20 reddedilen yazım YAZILAMADI + sebep satırı basar" "1:1" "$(printf '%s' "$c" | grep -c 'YAZILAMADI'):$(printf '%s' "$c" | grep -c 'sebep:')"
+echo "── GÖREV KİMLİKLİ MADDE ve İKİZ (GJRBF1T8): sırada duran işin ikizi açılmaz"
+cat > "$T/liste.txt" <<'EOF'
+gorev_01AAAAAAAAAAAAAAAAAAJRCK8J  huma       acik           esnek     ozellik  SINAV      Terminal arayuzunde ortak klasor gezgini Finder gibi  (son: 2026-01-02T08:00)
+gorev_01BBBBBBBBBBBBBBBBBB1R33ZG  huma       sira-bende     acil      bug      -          Kokpitte posta sekmesi ajan basina gelen kutusu  (son: 2026-01-02T08:00)
+gorev_01CCCCCCCCCCCCCCCCCC1R33ZG  huma       bitti          acil      bug      SINAV      Eski ayni sonekli is  (son: 2026-01-01T08:00)
+gorev_01DDDDDDDDDDDDDDDDDDFVJEYF  huma       acik           esnek     ozellik  SINAV      Nabiz sayaci gorevin ilk calisiliyor anindan sayiyor  (son: 2026-01-02T08:00)
+EOF
+: > "$T/ekle.log"; : > "$T/adim.log"
+bash "$KOK/cipa.sh" yaz --plan "1) görev …JRCK8J tamamlanacak: ortak klasör gezgini biter (sahip: SINAV) | 2) Kokpitte posta sekmesi gorev_01BBBBBBBBBBBBBBBBBB1R33ZG | 3) Terminal arayüzünde ortak klasör gezgini bitirilecek | 4) Nabız sayacı görevin ilk çalışılıyor anından saymalı | 5) Bambaşka yepyeni bir iş fikri" >/dev/null 2>&1
+c="$(bash "$ARAC" --kutu huma 2>&1)"; rc=$?
+kapi "D21 kuru: kimlikli iki madde 'bağlardım' (yeni kayıt yok), ikiz iki madde ✗, bir yeni madde yazardım; rc 1 (ikiz var)" "1:2:2:1" "$rc:$(grep -c 'bağlardım' <<<"$c"):$(grep -c 'İKİZ OLABİLİR' <<<"$c"):$(grep -c 'yazardım' <<<"$c")"
+kapi "D21b ikiz uyarısı kimliği ve son-ekini söyler (…JRCK8J, …FVJEYF)" "1:1" "$(grep -c 'görev …gorev_01AAAAAAAAAAAAAAAAAAJRCK8J' <<<"$c"):$(grep -c 'görev …gorev_01DDDDDDDDDDDDDDDDDDFVJEYF' <<<"$c")"
+kapi "D21c özet satırı bağlanan=2 ikiz=2 yazılan=1" "1" "$(grep -c 'yazılan=1 bağlanan=2 atlanan=0 ikiz=2' <<<"$c")"
+yenile_onay 2>/dev/null; I2="$(bash "$ARAC" --kutu huma 2>/dev/null | sed -n 's/.*plan-imzası=\([0-9a-f]*\).*/\1/p')"; ONAY="2026-01-02 Sultan: plan onaylandi (sohbet · oturum-sinav-1 · \"bugunku plan tamam\" · beyan:SINAV · plan:$I2)"
+c="$(bash "$ARAC" --kutu huma --uygula --onay "$ONAY" 2>&1)"; rc=$?
+kapi "D22 uygula: kimlikli maddeler için gorev.sh adim ÇAĞRILDI (2), ekle yalnız yeni madde için (1), ikizler YAZILMADI" "2:1:1" "$(wc -l < "$T/adim.log" | tr -d ' '):$(wc -l < "$T/ekle.log" | tr -d ' '):$rc"
+kapi "D22b adım doğru kayda, 'bugünün planında' metniyle (kısa son-ek JRCK8J → tam kimlik)" "1:1" "$(grep -c '^adim gorev_01AAAAAAAAAAAAAAAAAAJRCK8J bugünün planında (SINAV, 2026-01-02)' "$T/adim.log"):$(grep -c '^adim gorev_01BBBBBBBBBBBBBBBBBB1R33ZG ' "$T/adim.log")"
+kapi "D22c ekle yalnız 'Bambaşka yepyeni' maddesi için" "1" "$(grep -c 'ekle Bambaşka yepyeni' "$T/ekle.log")"
+: > "$T/ekle.log"; : > "$T/adim.log"
+bash "$KOK/cipa.sh" yaz --plan "1) görev …1R33ZG tamamlanacak: posta sekmesi | 2) görev …YOKYOK tamamlanacak: hayalet | 3) Hayalet tam kimlik gorev_01ZZZZZZZZZZZZZZZZZZZZZZZZ" >/dev/null 2>&1
+c="$(bash "$ARAC" --kutu huma 2>&1)"; rc=$?
+kapi "D23 son-ek iki kayda uyuyor (…1R33ZG) → ✗ çözülemedi; defterde olmayan son-ek ve tam kimlik → ✗; rc 1, tahmin yok" "1:3:1:2" "$rc:$(grep -c 'görev kimliği çözülemedi' <<<"$c"):$(grep -c 'SON-EK BİRDEN ÇOK' <<<"$c"):$(grep -c 'KİMLİK DEFTERDE YOK' <<<"$c")"
+: > "$T/ekle.log"
+bash "$KOK/cipa.sh" yaz --plan "1) Nabız sayacı yeniden ayarlanacak" >/dev/null 2>&1
+c="$(bash "$ARAC" --kutu huma 2>&1)"; rc=$?
+kapi "D24 örtüşme %60 altı (2/4 kelime) → ikiz DEĞİL, yazardım, rc 0" "0:1:0" "$rc:$(grep -c 'yazardım' <<<"$c"):$(grep -c 'İKİZ' <<<"$c")"
+I3="$(bash "$ARAC" --kutu huma 2>/dev/null | sed -n 's/.*plan-imzası=\([0-9a-f]*\).*/\1/p')"; ONAY="2026-01-02 Sultan: plan onaylandi (sohbet · oturum-sinav-1 · \"bugunku plan tamam\" · beyan:SINAV · plan:$I3)"
+bash "$KOK/cipa.sh" yaz --plan "1) görev …FVJEYF tamamlanacak: nabız" >/dev/null 2>&1; I4="$(bash "$ARAC" --kutu huma 2>/dev/null | sed -n 's/.*plan-imzası=\([0-9a-f]*\).*/\1/p')"; ONAY="2026-01-02 Sultan: plan onaylandi (sohbet · oturum-sinav-1 · \"bugunku plan tamam\" · beyan:SINAV · plan:$I4)"
+: > "$T/adim.log"; c="$(ADIM_RC=1 bash "$ARAC" --kutu huma --uygula --onay "$ONAY" 2>&1)"; rc=$?
+kapi "D25 adim yazılamazsa ✗ ADIM YAZILAMADI + sebep, rc 1 (bağlandı denmez)" "1:1" "$rc:$(grep -c 'ADIM YAZILAMADI' <<<"$c")"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

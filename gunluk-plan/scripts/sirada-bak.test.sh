@@ -148,4 +148,9 @@ c="$(bash "$SB" --bak 2>&1)"
 kapi "H4 --bak havuz işini üstlenmez" "yok" "$([ -e "$T/ustlen.log" ] && echo var || echo yok)"
 iceriyor "H4b --bak havuzdan BAS der ve üstlenme komutunu gösterir" "gorev.sh ustlen gorev_H3" "$c"
 
+echo "── MADDE satırı (GJRBF1T8): sıradaki iş doğrudan plan maddesi biçiminde"
+: > "$T/liste.txt"; for i in 1 2 3; do satir "MMMMM$i" menzil acik esnek ozellik MENZILCI "sıra işi $i" >> "$T/liste.txt"; done; satir "ZZZZZ9" menzil acik acil ozellik HENDESE "başkasının işi" >> "$T/liste.txt"
+c="$(GUNLUK_PLAN_AJAN=MENZILCI bash "$SB" --bak --kutu menzil 2>/dev/null)"
+kapi "S30 her ISI satırına bir MADDE satırı eşlik eder (4)" "4" "$(grep -c '^MADDE=' <<<"$c")"
+kapi "S30b biçim: 'görev …<son6> tamamlanacak: <başlık> (sahip: <kim>)' — acil iş önce, başkasının işi 'başkası'" "1:1" "$(grep -c '^MADDE=görev …ZZZZZ9 tamamlanacak: başkasının işi (sahip: başkası)$' <<<"$c"):$(grep -c '^MADDE=görev …MMMMM1 tamamlanacak: sıra işi 1 (sahip: MENZILCI)$' <<<"$c")"
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]
