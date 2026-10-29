@@ -1,0 +1,15 @@
+$ bash duzen/scripts/el-defteri.test.sh
+# rc=0 sure=2.7s zaman=2026-10-30T00:01:01+03:00
+--- stdout ---
+  ✓ E1 defter yoksa rc 3 + 'el defteri yok' (uydurmaz)
+  ✓ E2 bugünkü ÇIPA bulunur (rc 0)
+  ✓ E3 son KONUM bölümünde en yeni KONUM var, eskisi yok
+  ✓ E4 --n 2 son iki satır (not c, not d) gelir; not a gelmez
+  ✓ E5 açık işler: BÂNİ'nin acik+calisiliyor satırları; iptal/bitti ve SERDAR yok
+  ✓ E6 gorev.sh yoksa 'ölçülemedi' yazar, rc 0 (defter yine basılır)
+  ✓ E7 çıktı tavanı ≤45 satır (ölçülen 24)
+── mutasyon
+  ✓ mutant 'defter-yok-yesil' → E1 kırmızı
+  ✓ mutant 'iptal-elenmez' → E5 kırmızı
+== 9 geçti · 0 düştü ==
+--- stderr ---

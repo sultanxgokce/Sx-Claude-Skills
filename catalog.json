@@ -1846,6 +1846,27 @@
         "kanca",
         "ayar-uretimi"
       ]
+    },
+    {
+      "id": "duzen",
+      "type": "workflow",
+      "name": "Düzen — filo düzen paketi (çekirdek metinler · el defteri · not aracı · sürüm denetimi)",
+      "version": "1.0.0",
+      "sync_dagitim": true,
+      "description": "Sultan'ın 'Serdar kutusundaki düzen tüm kutularda aynı olmalı' isteğinin paketi: altı başlık (görev · Bulgu Havuzu · Hasat · oda · haberleşme · çekirdek) için sahip beceriye işaret eder, master prompt çekirdeğini (manuel-claude-base · mudur-base · durma-standardi · cevapsiz-birakma) tek kaynakta taşır, koltuğun el defterini alt ajan istemi için tek metin basar (el-defteri.sh), Nexus append-note.sh'ın birebir kopyasını 19 kutuya indirir (md5 paritesi sınavlı), kutudaki kurulu sürümü ve ekipc işaretli kimliklerin bayatlığını yalnız raporlar (surum.sh). Kopya değil işaretçi; çekirdek metin yalnız burada yaşar.",
+      "installed_in": [
+        "_global"
+      ],
+      "tags": [
+        "duzen",
+        "cekirdek",
+        "el-defteri",
+        "append-note",
+        "surum",
+        "sultan-dili",
+        "global"
+      ],
+      "family": "kutu-ici koordinasyon"
     }
   ]
 }

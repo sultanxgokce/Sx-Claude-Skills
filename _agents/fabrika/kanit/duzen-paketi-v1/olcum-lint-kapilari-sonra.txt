@@ -1,0 +1,24 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/lint-kapilari.sh
+# rc=0 sure=0.8s zaman=2026-10-30T00:02:01+03:00
+--- stdout ---
+✓ repo-parity temiz (catalog 83 ↔ sync-targets 73)
+✓ install-listesi 73 skill: SKILL.md + version tam
+katalog↔SKILL.md: girdi 83 · sapma 0 · ölçülemedi 0
+✓ sapma 0
+✓ sync-skills.mjs sözdizimi
+  kaynak: duzen-paketi-v1@49ba81cc · origin/main'e göre 0 commit geride · 4 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  + duzen → _global: YENİ kurulum (v1.0.0)
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+✓ sözdizimi duzen/scripts/append-note-paritesi.test.sh
+✓ sözdizimi duzen/scripts/append-note.sh
+✓ sözdizimi duzen/scripts/el-defteri.sh
+✓ sözdizimi duzen/scripts/el-defteri.test.sh
+✓ sözdizimi duzen/scripts/surum.sh
+✓ sözdizimi duzen/scripts/surum.test.sh
+--- stderr ---

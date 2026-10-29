@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/cekirdek-parite.sh
+# rc=0 sure=0.2s zaman=2026-10-30T00:02:09+03:00
+--- stdout ---
+✓ manuel-claude-base: başlık soyulunca Nexus kopyasıyla bayt eşit (5e4a8c466a64)
+✓ mudur-base: başlık soyulunca Nexus kopyasıyla bayt eşit (be6f3ff96077)
+✓ durma-standardi: başlık soyulunca Nexus kopyasıyla bayt eşit (37f660a33cf5)
+✓ cevapsiz-birakma: başlık soyulunca Nexus kopyasıyla bayt eşit (d7a70e49cb43)
+--- stderr ---

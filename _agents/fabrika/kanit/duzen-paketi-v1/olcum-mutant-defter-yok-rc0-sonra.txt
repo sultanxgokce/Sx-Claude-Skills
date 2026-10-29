@@ -1,0 +1,14 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-el-defteri-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutant-el.sh
+# rc=1 sure=0.2s zaman=2026-10-30T00:02:33+03:00
+--- stdout ---
+MUTASYON: el-defteri.sh 'el defteri yok' kapısı exit 3 → exit 0
+  ✗ E1 defter yoksa rc 3 + 'el defteri yok' (uydurmaz) → rc=0 el defteri yok: /tmp/tmp.kGhqrXF84P/depo/_agents/yoktur/NOTES.md (koltuk 'YOKTUR' bu kutuda defter tutmuyor — uydurulm
+  ✓ E2 bugünkü ÇIPA bulunur (rc 0)
+  ✓ E3 son KONUM bölümünde en yeni KONUM var, eskisi yok
+  ✓ E4 --n 2 son iki satır (not c, not d) gelir; not a gelmez
+  ✓ E5 açık işler: BÂNİ'nin acik+calisiliyor satırları; iptal/bitti ve SERDAR yok
+  ✓ E6 gorev.sh yoksa 'ölçülemedi' yazar, rc 0 (defter yine basılır)
+  ✓ E7 çıktı tavanı ≤45 satır (ölçülen 24)
+== 6 geçti · 1 düştü ==
+--- stderr ---

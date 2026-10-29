@@ -1,0 +1,17 @@
+$ bash duzen/scripts/surum.test.sh
+# rc=0 sure=8.3s zaman=2026-10-30T00:01:25+03:00
+--- stdout ---
+  ✓ S1 goster → 1.2.3
+  ✓ S2 kurulu sürüm eşit → GÜNCEL rc 0
+  ✓ S3 kurulu v1.0.0 ≠ kaynak v1.2.3 → BAYAT rc 1 (kurulum komutu yazılı)
+  ✓ S4 çekirdek birebir gömülü + hash tutar → bani GÜNCEL, işaretsiz 1 sayılır, rc 0
+  ✓ S5 gömülü metin çekirdekten sapmış → bani BAYAT rc 1 (temel adı yazılı)
+  ✓ S6 hash gövdeyle tutmuyor → EL-DEĞMİŞ rc 1
+  ✓ S7 ne kurulu ne işaretli kimlik → rc 3 ÖLÇÜLEMEDİ
+  ✓ S8 --uygula yok: rc 2 (1.0.0 yalnız raporlar)
+  ✓ S9 hiçbir dosyaya yazmadı (md5 kümesi aynı)
+── mutasyon
+  ✓ mutant 'bayat-guncel-sayilir' → S5 kırmızı
+  ✓ mutant 'hash-bakmaz' → S6 kırmızı
+== 11 geçti · 0 düştü ==
+--- stderr ---
