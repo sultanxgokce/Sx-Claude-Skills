@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "mesveret-seansi",
+  "pr": "575",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T00:14:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-mesveret-seansi",
+  "dal": "mesveret-seansi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22639,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 10169
+  },
+  "dalgic": "uyumsuz",
+  "bas": "bbaae2755b0d373b14b03b8e3a6bf7da87185449",
+  "duzeltme_farki": {
+    "onceki_bas": "a5495deed914e795a264a7fb80ed587b910aedd4",
+    "dosya": 8,
+    "bayt": 16834,
+    "tam_bayt": 32855
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan, Meşveret Seansı’nı tek komutla açabiliyor; A/B/C şablonu her madde için yeniden gösteriliyor, önem kaydı tutarlı biçimde işleniyor ve bulgular kimlik denetimiyle havuza düşüyor. Önceki üç uygulama bulgusu da kod ve yeşil hata-yolu ölçümleriyle kapanmış; yalnız kullanıcı metni ile belgede küçük dil rötuşları kalmış.",
+    "bulgular": [
+      {
+        "ne": "Kullanıcıya gösterilen madde başlığındaki Türkçe ek hatalı: `Madde 2'i` yerine `Madde 2'yi` olmalı.",
+        "kanit": "Yeni `sablon()` işlevi başlığı `Madde $1'i çalışıyoruz` biçiminde üretiyor; gerçek ölçümde M4b kapısı da hatalı `Madde 2'i çalışıyoruz` metnini aynen bekleyerek geçiriyor.",
+        "konum": "mesveret/scripts/mesveret.sh:31; olcum-sinav-sonra.txt M4b",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınav açıklamasında yinelenen `gider` sözcüğü cümleyi bozuyor.",
+        "kanit": "Değişiklikte açıklama `...kimliksiz kayıt reddedilir` satırından sonra yeniden `gider ve seans dosyasına işlenir` diye devam ediyor.",
+        "konum": "mesveret/SKILL.md:98",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçüm 15/15 yeşil: B1, M4c ile görev adımı yazılamadığında rc 4 ve seans öneminin değişmemesi; B2, M4b ile sonraki maddede aynı A/B/C şablonunun açılması; B3, M6b ile kimliksiz havuz çıktısının rc 3 ile reddedilip seansa eklenmemesi üzerinden kapanıyor. Sayaç mutasyonu beklenen tek kapıyı düşürerek sınavın bozuk kodu yakaladığını ayrıca gösteriyor; iş kartındaki CLI davranışları için hermetik ölçüm yeterli, görsel arayüz veya kutu-dışı yüzey gerekmiyor."
+  }
+}
