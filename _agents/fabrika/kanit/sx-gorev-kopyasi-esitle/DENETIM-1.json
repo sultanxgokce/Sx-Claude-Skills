@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sx-gorev-kopyasi-esitle",
+  "pr": "580",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T02:00:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-gorev-kopyasi-esitle",
+  "dal": "sx-gorev-kopyasi-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30059,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "BÂNİ, `gunluk-plan` içindeki görev kopyasını `gorev.sh`, `dugum-bak.py` ve yeni `oda-dagit.py` ile birlikte cloudtop kanoniğine eşitlemiş; sürüm ve Y7 kapısı da buna göre güncellenmiş. Araç imzalı önce/sonra ölçümü Y7 driftinin kırmızıdan yeşile döndüğünü ve üç dosyanın bayt eşitliğini doğruladığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce ölçümünde yalnız Y7 drift kapısı düşüyor, sonra ölçümünde 10/10 geçiyor; Y7 `gorev.sh`, `dugum-bak.py`, `oda-dagit.py` bayt eşitliğini ve `oda-dagit.py` çalıştırılabilirliğini sınadığı için kartın kopyayı kanoniğe eşitleme talebine uygun bir ölçüm çifti sunuyor. Ayrı gerçekçi davranış kareleri yok, ancak bu işin hedefi davranışı yeniden tasarlamak değil kanonik kopyayla bayt eşitliği olduğundan mevcut kanıt yeterli."
+  }
+}
