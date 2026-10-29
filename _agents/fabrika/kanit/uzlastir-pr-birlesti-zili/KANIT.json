@@ -1,0 +1,112 @@
+{
+  "is": "uzlastir-pr-birlesti-zili",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-29T06:03:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "9103df8ac0a67794ec6ae472ee7476cd8545f8607c677d3fcf911a32f41fa5a4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/once/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T05:48:05+03:00",
+      "sure_sn": 3.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "92a81490e50e40418ff7e6726233e962"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "1800fe3f99f622f93d9104c1175ff2e711ea41b1ab54f17d6bd5335dd8eec43f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T05:48:09+03:00",
+      "sure_sn": 4.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "34b19dbb53554323a74e239a3e529e83"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tek.txt",
+      "sha256": "b68c6af6bc213734287fcdc772a32819a5560e10a838b4e62a087490428f2105",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-29T05:55:34+03:00",
+      "sure_sn": 445.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ed26708b5dc2409098cbb2008826d3ce"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-mutasyon-tek-465942a638fc.txt",
+      "sha256": "d449ebf815f88f4ccb2319d9342c59128fa3f20d527d8713abc213ad97aaab74",
+      "hedef_dosya": "olcum-mutasyon-tek.txt",
+      "hedef_olcum_id": "ed26708b5dc2409098cbb2008826d3ce",
+      "hedef_sha256": "b68c6af6bc213734287fcdc772a32819a5560e10a838b4e62a087490428f2105",
+      "hedef_zaman": "2026-10-29T05:55:34+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "iki mutant deseni tutmadı (UM6 benzersizlik, UP4 kaçış) — desenler düzeltildi, yeniden ölçülüyor",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-29T05:56:07+03:00",
+      "olcum_id": "15a15b0285cd4e0a843144d2b3fa7232"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-son",
+      "asama": "tek",
+      "dosya": "olcum-sinav-son-tek.txt",
+      "sha256": "07cbb7bc9208a17e194f81f048de05bc7d5ee0b0f40517f7eafd24d79db0b0ab",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T05:56:28+03:00",
+      "sure_sn": 3.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "32460d0de3b54dd0af19e0417885dc52"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-2",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-2-tek.txt",
+      "sha256": "fb657547dbe326308997f43cc8fada65a08b2c687de55ae39e2e3cb0ffa1acd2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-29T06:03:35+03:00",
+      "sure_sn": 426.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8874a0b9d21c4556a4211a86a634e7df"
+    }
+  ],
+  "imza": "2cba467e7d98a2473d03ebfcb9853d8ac133eddc45b0dff35a6438712680a6f6"
+}
