@@ -1,0 +1,51 @@
+$ bash _agents/fabrika/kanit/denetci-sinav-sure-tavani/bolum-sureleri.sh yazilim-fabrikasi/scripts/denetci.test.sh 1/3
+# rc=0 sure=934.6s zaman=2026-10-29T03:49:26+03:00
+--- stdout ---
+    1 sn  ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
+    1 sn  ════ T2 · kanıt var, 3/H → rc=1, tur 1 ════
+    0 sn  ════ T3 · 5/E → rc=0 GEÇTİ, tur 2 ════
+    9 sn  ════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3
+    0 sn  ════ T4 · 5 ama H → geçmez (doğru şey sütunu puanı ezer) ══�
+    0 sn  ════ T5 · yazan=denetleyen reddedilir (K1) ════
+    4 sn  ════ T6 · tavan: üç düşük tur ilerlemeden → 3. turda tıkandı (
+    3 sn  ════ T7 · ilerleyen iş +1 tur alır; 4 mutlak ════
+    6 sn  ════ T7b · 🚪 SULTAN KAPISI: karar KARTTAN okunur, serbest metinle a�
+   18 sn  ════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; 
+   64 sn  ════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan de
+    1 sn  ════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ══�
+    0 sn  ════ T9 · istem: kart + manifest + diff + rubrik içeriyor ════
+    1 sn  ════ T9b · Türkçe metin + KESME İŞARETİ çıktıyı kırmıyor (23
+    2 sn  ════ T9c · KIRPMA KAYDI: kırpılan tur DENETIM json'da kirpildi.oldu=t
+    1 sn  ════ T9d · GEÇERSİZ ilan (4K938) göze söylenir: kanıt durumu satı
+    2 sn  ════ T9e · 7KKSJK-EK: GEÇERSİZ ilanlı kaydın GÖVDESİ isteme girme
+    0 sn  ════ T10 · bozuk manifest → rc=2 ════
+    7 sn  ════ Y · YEDEK GÖZ (Sultan Y0006): auto kipinde codex yoksa/düşerse 
+    0 sn  ════ Y8 · codex STDIN KAPALI: çağıranın stdin'i hiç kapanmasa da d
+    3 sn  ════ K · KARE ════
+    2 sn  ════ T-ISTEM · kapı istemin TAMAMINI ölçer: fark küçük ama istem 
+    1 sn  ════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölç�
+    1 sn  ✓ O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 s
+    0 sn  ✓ O14 🔴 az satırlı çok baytlı ölçüm kısalır (27503 → 6665 bayt);
+    5 sn  ════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR
+   44 sn  ════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · 
+  662 sn  ════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriy
+    0 sn  (bilgi) 17 mutant · 4 paralel · 662 sn
+    5 sn  ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
+   20 sn  ── KUTU-DIŞI SINIF (ayrı dosya, buradan çağrılır) ──
+    1 sn  ── FARK-KENDİSİ (ayrı dosya, buradan çağrılır) ──
+    0 sn  ════ F1 · yerel kip: --pr/--diff yok → denetçi farkı kendisi alır 
+    0 sn  ════ F2 · ana hat ilerledi (başkası itti), dal geride → DUR rc=3, d
+    1 sn  ════ F3 · ana hat dala birleştirildi → geçer; başkasının dosyas�
+    0 sn  ════ F4 · kayıtsız kod değişikliği → DUR rc=3 (farka girmezdi) �
+    2 sn  ════ F5 · --pr: PR dalının yerel kopyası varsa ve başı PR başınd
+    0 sn  ════ F6 · boş fark → DUR rc=3 ════
+   29 sn  ════ F7 · MUTASYON: her kapı kaldırılınca bir F kapısı düşer (m
+    0 sn  ── SONUÇ (fark-kendisi): 25 geçti · 0 kaldı ──
+   13 sn  ════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle sıfırd
+    6 sn  ════ T-SULTAN · Sultan turu kaydı (kart.sh sultan-turu) göz tur sayı
+   13 sn  ════ T-ONGOZ · DALGIÇ ön-göz gönder akışında kendiliğinden koş
+    0 sn  ════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der,
+    7 sn  ════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.22.0 · gorev_01M5F03K
+    0 sn  ── SONUÇ: 295 geçti · 0 kaldı ──
+TOPLAM 935 sn · rc=0 · SONUÇ: 295 geçti · 0 kaldı
+--- stderr ---
