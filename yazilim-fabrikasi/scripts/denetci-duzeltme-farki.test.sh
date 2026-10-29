@@ -128,6 +128,34 @@ kapi "D9a tur 2 koştu" 0 den d9 "$J5"
 iceren "D9b 🔴 geri alma (silinen satır) göze gitti" "-geri-alinacak-satir" "$KOK/istem.md"
 dogru "D9c kayıt: duzeltme_farki.dosya=1" "import json;d=json.load(open('$(kayit d9 2)'));assert d['duzeltme_farki']['dosya']==1"
 
+echo "════ D10 · aynı kartın İKİNCİ PR'ı, önceki PR squash ile birleşti: eski baştan fark kurulmaz, başkasının işi göze gitmez (gorev …QNQX33 · cloudtop #1167) ════"
+yap d10; kanitla d10; den d10 "$J4" >/dev/null 2>&1
+git -C "$KOK/baska" pull -q origin main 2>/dev/null
+printf 'degismeyen-dosya-icerigi\n' > "$KOK/baska/eski-d10.txt"; printf 'ilk-satir\n' > "$KOK/baska/kod-d10.txt"
+git -C "$KOK/baska" add eski-d10.txt kod-d10.txt; git -C "$KOK/baska" commit -q -m "d10 squash"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+printf 'ilk-satir\nbaskasinin-d10-satiri\n' > "$KOK/baska/kod-d10.txt"; git -C "$KOK/baska" commit -q -am "başkası d10 dosyasını değiştirdi"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" checkout -q -b d10b origin/main 2>/dev/null
+printf 'yeni-kanit-d10\n' > "$KOK/w/kanit-d10.txt"; git -C "$KOK/w" add kanit-d10.txt; git -C "$KOK/w" commit -q -m "d10 ikinci PR"; : > "$KOK/istem.md"
+kapi "D10a ikinci PR'da tur 2 koştu" 0 den d10 "$J5"
+iceren "D10b ekranda sebep: önceki baş bu başın geçmişinde yok" "düzeltme farkı kurulmadı: önceki tur başı" "$KOK/son.out"
+icermeyen "D10c 🔴 arada ana hatta başkasının yaptığı değişiklik göze GİTMEDİ" "baskasinin-d10-satiri" "$KOK/istem.md"
+iceren "D10d bu PR'ın kendi değişikliği göze gitti" "+yeni-kanit-d10" "$KOK/istem.md"
+dogru "D10e kayıt: duzeltme_farki yok (PR farkı gitti)" "import json;d=json.load(open('$(kayit d10 2)'));assert d['duzeltme_farki'] is None"
+
+echo "════ D11 · önceki PR birleştirme commit'iyle ana hatta girdi (baş atadır): düzeltme turu kurulur ama başkasının işi yine göze gitmez ════"
+git -C "$KOK/w" checkout -q -b d11 origin/main 2>/dev/null
+printf 'degismeyen-dosya-icerigi\n' > "$KOK/w/eski-d11.txt"; printf 'ilk-satir\n' > "$KOK/w/kod-d11.txt"
+git -C "$KOK/w" add eski-d11.txt kod-d11.txt; git -C "$KOK/w" commit -q -m "ilk d11"; kanitla d11; den d11 "$J4" >/dev/null 2>&1
+git -C "$KOK/w" checkout -q -b d11-ana origin/main 2>/dev/null; git -C "$KOK/w" merge -q --no-ff --no-edit d11 2>/dev/null; git -C "$KOK/w" push -q origin HEAD:main 2>/dev/null
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'ilk-satir\nbaskasinin-d11-satiri\n' > "$KOK/baska/kod-d11.txt"
+git -C "$KOK/baska" commit -q -am "başkası d11"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" checkout -q -b d11b origin/main 2>/dev/null
+printf 'yeni-kanit-d11\n' > "$KOK/w/kanit-d11.txt"; git -C "$KOK/w" add kanit-d11.txt; git -C "$KOK/w" commit -q -m "d11 ikinci PR"; : > "$KOK/istem.md"
+kapi "D11a ikinci PR'da tur 2 koştu" 0 den d11 "$J5"
+iceren "D11b önceki baş ata → düzeltme turu normal kuruldu (eski PR dosyaları merge-base'ten boş)" "DÜZELTME TURU" "$KOK/son.out"
+icermeyen "D11c 🔴 başkasının değişikliği göze GİTMEDİ" "baskasinin-d11-satiri" "$KOK/istem.md"
+iceren "D11d bu PR'ın kendi değişikliği göze gitti" "+yeni-kanit-d11" "$KOK/istem.md"
+
 echo "════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
 if [ -z "${MUTANT_D:-}" ]; then
   mut() { local ad="$1" eski="$2" yeni="$3" kapi_adi="$4"; local P="$KOK/mutpkg-$ad"; mkdir -p "$P"; cp -p "$HERE"/* "$P/" 2>/dev/null
@@ -156,6 +184,7 @@ MUTY
   mut tavan-yalniz-codex 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then' "D6a"
   mut tavan-ayiklamaya-bagli 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6e"
   mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
+  mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null; then' '  elif false; then' "D10c"
   mut tavan-120k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' "D6a"
 fi
 

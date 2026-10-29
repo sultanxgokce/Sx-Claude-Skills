@@ -1,0 +1,86 @@
+$ env MUTANT_D=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/denetci-once/denetci.sh bash yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
+# rc=1 sure=2.2s zaman=2026-10-29T18:38:33+03:00
+--- stdout ---
+════ D1 · tur 1: tam fark gider, kayıt incelediği başı (bas) yazar ════
+  ✗ D1a tur 1 koştu (4/E → rc 1) (rc=2, beklenen=1)
+  ✗ D1b istemde değişmeyecek dosya var (tam fark) ('degismeyen-dosya-icerigi' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D1c DENETIM-1.bas = incelenen baş
+════ D2 · tur 2 (yeni commit + ana hat dala birleşti): yalnız A..B farkı, PR dosyalarıyla sınırlı; önceki bulgular sayılı ════
+  ✗ D2a tur 2 koştu (5/E → rc 0) (rc=2, beklenen=0)
+  ✗ D2b ekranda DÜZELTME TURU satırı ('DÜZELTME TURU: göze yalnız 45b46971..ab2cc118' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✗ D2c istemde düzeltme notu ('[NOT: DÜZELTME TURU' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D2d istemde yeni satır var ('+duzeltme-satiri' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✓ D2e değişmeyen dosya istemde YOK (yalnız yeni fark)
+  ✓ D2f ana hattan gelen başkasının dosyası farka girmedi
+  ✗ D2g önceki bulgu ayrı satırda sayıldı ('B1. [uygulama] sinir-kontrolu-eksik' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D2i kutu-dışı önceki bulgu da sayıldı, sınıfıyla (göz #436 tur 2) ('B2. [kutu-disi] canli-kurulum-yok' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D2h DENETIM-2: bas=B, duzeltme_farki.onceki_bas=A, dosya=1
+════ D3 · baş değişmedi → fark BOŞ gider, istem bunu söyler (göz #436 tur 1: boş kümede tam farka dönülmez) ════
+  ✗ D3a tur 2 aynı başla koştu (rc=2, beklenen=0)
+  ✗ D3b ekranda: YENİ DEĞİŞİKLİK YOK → fark BOŞ ('YENİ DEĞİŞİKLİK YOK → fark BOŞ gider' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✓ D3c 🔴 tam fark GİTMEDİ
+  ✗ D3d istem farkın BOŞ olduğunu ve niçin söylüyor ('YENİ DEĞİŞİKLİK YOK, bu yüzden aşağıdaki fark BOŞTUR' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D3e önceki bulgu yine sayıldı ('B1. [uygulama] sinir-kontrolu-eksik' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D3f kayıt: duzeltme_farki.dosya=0
+════ D3x · yeni commit var ama yalnız PR DIŞI dosyada (ana hat birleşmesi) → fark BOŞ ════
+  ✗ D3xa tur 2 koştu (rc=2, beklenen=0)
+  ✗ D3xb ekranda YENİ DEĞİŞİKLİK YOK ('YENİ DEĞİŞİKLİK YOK' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✓ D3xc ne tam fark ne başkasının dosyası gitti
+════ D4 · önceki kayıt bas taşımıyor (eski kayıt) → tam fark, sebebi ekranda ════
+  ✗ D4a tur 2 koştu (rc=2, beklenen=0)
+  ✗ D4b sebep: eski kayıt ('eski kayıt' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✗ D4c tam fark gitti ('degismeyen-dosya-icerigi' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+════ D4x · eski kayıt (bas yok) ama kaydı bir commit ekledi → baş atadan türetilir, yalnız yeni fark gider (gorev …DCX24C) ════
+On branch d4x
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	_agents/
+
+nothing added to commit but untracked files present (use "git add" to track)
+  ✗ D4xa tur 2 koştu (rc=2, beklenen=0)
+  ✗ D4xb ekranda türetme söylendi ('incelenen baş 15675b13 olarak türetildi' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✗ D4xc yalnız yeni fark gitti ('+duzeltme-d4x' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✓ D4xd 🔴 değişmeyen dosya (tam fark) GİTMEDİ
+  ✗ D4xe kayıt: duzeltme_farki.onceki_bas=türetilen baş
+════ D5 · --diff kipi: baş ölçülemez → bas boş ════
+  ✗ D5a --diff ile koştu (rc=2, beklenen=0)
+  ✗ D5b DENETIM-1.bas = null
+════ D6 · istem 100 KB'ı aşınca HER denetçide gönderim durur (sahte denetçi, eşik dikişi YOK) ════
+  ✗ D6a ~100 KB üstü istem → rc 1 (İŞİ BÖL) (rc=2, beklenen=1)
+  ✗ D6b sınır 100000 olarak söyleniyor ('> 100000 (istem tavanı' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✓ D6c tur yakılmadı, denetçiye istem gitmedi
+  ✗ D6e 🔴 ayıklama KAPALIYKEN de durur (göz #436 tur 1) (rc=2, beklenen=1)
+  ✗ D6d DENETCI_ISTEM_TAVAN=200000 ile aynı iş denetlenir (rc 0) (rc=2, beklenen=0)
+════ D7 · boşluklu + Türkçe harfli dosya adı: git'in kaçışladığı yol düzeltme farkına girer (göz #436 tur 2) ════
+  ✗ D7a tur 2 koştu (rc=2, beklenen=0)
+  ✗ D7b 🔴 özel adlı dosyanın değişikliği göze gitti ('+ozel-ad-duzeltmesi' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D7c kayıt: duzeltme_farki.dosya=1 (boş fark sanılmadı)
+════ D9 · düzeltme commit'i bir PR dosyasını ana dal hâline TAMAMEN geri alırsa o geri alma göze gider (göz #436 tur 3) ════
+  ✗ D9a tur 2 koştu (rc=2, beklenen=0)
+  ✗ D9b 🔴 geri alma (silinen satır) göze gitti ('-geri-alinacak-satir' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D9c kayıt: duzeltme_farki.dosya=1
+════ D10 · aynı kartın İKİNCİ PR'ı, önceki PR squash ile birleşti: eski baştan fark kurulmaz, başkasının işi göze gitmez (gorev …QNQX33 · cloudtop #1167) ════
+  ✗ D10a ikinci PR'da tur 2 koştu (rc=2, beklenen=0)
+  ✗ D10b ekranda sebep: önceki baş bu başın geçmişinde yok ('düzeltme farkı kurulmadı: önceki tur başı' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✓ D10c 🔴 arada ana hatta başkasının yaptığı değişiklik göze GİTMEDİ
+  ✗ D10d bu PR'ın kendi değişikliği göze gitti ('+yeni-kanit-d10' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+  ✗ D10e kayıt: duzeltme_farki yok (PR farkı gitti)
+════ D11 · önceki PR birleştirme commit'iyle ana hatta girdi (baş atadır ama ana hatta zaten var) → yine PR'ın kendi farkı ════
+  ✗ D11a ikinci PR'da tur 2 koştu (rc=2, beklenen=0)
+  ✗ D11b ekranda sebep söylendi ('düzeltme farkı kurulmadı: önceki tur başı' /tmp/tmp.mMkI43VBcB/son.out içinde yok)
+  ✓ D11c 🔴 başkasının değişikliği göze GİTMEDİ
+  ✗ D11d bu PR'ın kendi değişikliği göze gitti ('+yeni-kanit-d11' /tmp/tmp.mMkI43VBcB/istem.md içinde yok)
+════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════
+
+── SONUÇ (düzeltme-farkı): 8 geçti · 43 kaldı ──
+--- stderr ---
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.mMkI43VBcB/w/_agents/fabrika/kanit/d4/DENETIM-1.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.mMkI43VBcB/w/_agents/fabrika/kanit/d4x/DENETIM-1.json'
+fatal: pathspec '_agents/fabrika/kanit/d4x/DENETIM-1.json' did not match any files

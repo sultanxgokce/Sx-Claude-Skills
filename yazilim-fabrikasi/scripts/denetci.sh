@@ -615,6 +615,13 @@ if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
   if [ -z "$_ob" ]; then _bilgi "· düzeltme farkı hesaplanamadı: önceki tur kaydı incelediği başı yazmamış (eski kayıt) → tam fark gider"
   elif ! git -C "$DEPO" cat-file -e "$_ob^{commit}" 2>/dev/null || ! git -C "$DEPO" cat-file -e "$BAS^{commit}" 2>/dev/null; then
     _bilgi "· düzeltme farkı hesaplanamadı: önceki baş (${_ob:0:8}) ya da bu baş bu depoda bulunamadı → tam fark gider"
+  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null; then
+    # ESKİ PR'IN BAŞI (gorev …QNQX33 · cloudtop #1167, 29 Eki): aynı kartın İKİNCİ PR'ında önceki tur başı ya bu başın geçmişinde yok
+    #   (önceki PR squash ile birleşti, dal silindi; yeni PR ana hattan yeniden dallandı). "Önceki baştan bu yana" farkı
+    #   arada ana hatta başkalarının birleştirdiği işi BU PR'ın değişikliği gibi gösterir (#1167: kanıt-only PR'a 1.145.2/1.145.3 işleri
+    #   "kapsam kayması" diye yazıldı, üç tur). Düzeltme farkı kurulmaz; PR'ın kendi farkı gider. (Önceki PR birleştirme commit'iyle
+  #   girdiyse baş atadır ama eski PR dosyaları merge-base'ten boş çıkar → başkasının işi zaten girmez; sınav D11.)
+    _bilgi "· düzeltme farkı kurulmadı: önceki tur başı (${_ob:0:8}) bu başın geçmişinde yok (önceki PR birleşip dalı silinmiş ya da dal yeniden yazılmış) → PR'ın kendi farkı gider"
   else
     # PR dosyaları fark METNİNDEN değil git'ten, NUL ayraçlı okunur (göz #436 tur 2): `diff --git` başlığında git, boşluklu yolu
     #   TIRNAKSIZ yazar (\S+ deseni kaçırır), ASCII dışı/özel karakterli yolu tırnaklayıp oktal KAÇIŞLAR (ham alınırsa pathspec
