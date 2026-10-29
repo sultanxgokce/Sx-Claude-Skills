@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kanit-boru-dongu",
+  "pr": "558",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T06:53:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-boru-dongu",
+  "dal": "kanit-boru-dongu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30532,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 29338
+  },
+  "dalgic": "uyumsuz",
+  "bas": "15d2f829cff905c090b6c593332aed7055015c4c",
+  "duzeltme_farki": {
+    "onceki_bas": "314d2c75080dbe210f38c849e8c50bdab7d41955",
+    "dosya": 7,
+    "bayt": 39517,
+    "tam_bayt": 72577
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turdaki B1 kapandı: blok anahtarları soyulmadan önceki `set` algılama hatası düzeltilmiş ve `do set +o pipefail` senaryosu doğrudan sınanmış. Hedef döngü borusu önce kabul edilirken sonra reddediliyor, mevcut süit iki turda da tamamen yeşil ve üretimi engelleyen kanıtlı bir kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçekçi hedef senaryo için kırmızı önce/yeşil sonra ölçüm çifti var; yeni B1 regresyon kapısı dahil tam sınav ardışık iki koşuda 255/0 ve 257/0 geçti. Sınav çıktısındaki mutant sonuçları manifestte `mutasyon:true` olarak ayrı kaydedilmediğinden özel mutasyon kanıtı sayılmadı; buna rağmen gerçek ölçümler ve regresyon sınavı talebi yeterince destekliyor."
+  }
+}
