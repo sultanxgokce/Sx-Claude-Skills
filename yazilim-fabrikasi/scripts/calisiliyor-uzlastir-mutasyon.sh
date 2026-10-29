@@ -49,6 +49,8 @@ dene "UP6 gh okunamazsa boş liste sayılır (ölçülemedi ≠ birleşmedi)" $P
 dene "UP7 karttaki pr alanı yok sayılır (dal adına bakar)" $P $U '    if kart.get("pr"):' '    if False:'
 dene "UP8 PR-birleşti zili gidemezse rc 0" $P $U 'print("  ⚠ %s: PR-birleşti zili gidemedi (posta)" % g["id"]); rc = 4' 'print("  ⚠ %s: PR-birleşti zili gidemedi (posta)" % g["id"])'
 dene "UP9 kart kökü glob dizgisi olarak taşınır (depo türetilemez — KALDI hâli)" $P $U '"kok": os.path.dirname(os.path.abspath(f)), "adlar": adlar}' '"kok": kok, "adlar": adlar}'
+dene "UZ1 zil günlük satırı yok (aciliyet ölçülemez — FAEKS1Y öncesi hâl)" $P $U '        print("  · zil → %s · aciliyet %s · tekrar %s · posta rc %d" % (kime, ZIL_ACILIYET, tekrar, c.returncode))' '        pass'
+dene "UZ2 zil günlük satırı aciliyeti yazmıyor" $P $U '"  · zil → %s · aciliyet %s · tekrar %s · posta rc %d" % (kime, ZIL_ACILIYET, tekrar, c.returncode)' '"  · zil → %s · aciliyet %s · tekrar %s · posta rc %d" % (kime, "?", tekrar, c.returncode)'
 dene "UM9 bekliyor'a notsuz çekilir (defter reddeder)" $P $U '{"yerine": {"gorev_durumu": "bekliyor", "not": not_}' '{"yerine": {"gorev_durumu": "bekliyor"}'
 dene "UM10 jeton okunamayınca sessiz geçer" $P $U 'print("  ⚠ uzlaştırma atlandı: defter jetonu okunamadı"); return 4' 'return 0'
 dene "UK1 kart açılışından sonra uzlaştırma çağrılmaz" $K $KT '    uzlastir "$ALDI"

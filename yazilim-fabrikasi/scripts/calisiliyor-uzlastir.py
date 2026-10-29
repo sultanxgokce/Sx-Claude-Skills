@@ -122,14 +122,19 @@ def koltuk_bos_dk(koltuklar, ajan, simdi):
             return max(0, (simdi - k["son"]) // 60), k["son"]
     return None
 
+ZIL_ACILIYET = "genis"   # rahat: bilgi mektubu; postane 0.1.4 rahat mektup ölünce SERDAR'a zil çalmaz (…1SSZVC — 24 ölü uzlaştırma mektubu zil çalıyordu)
+
 def zil(komut, kimden, kime, metin, tekrar):
-    """Sahibine posta. En iyi gayret: başarısızlık söylenir, rc'yi bozmaz (uzlaştırma yazımı zaten oldu)."""
+    """Sahibine posta. En iyi gayret: başarısızlık söylenir, rc'yi bozmaz (uzlaştırma yazımı zaten oldu).
+    Her deneme TEK satır günlük basar (görev …FAEKS1Y, 29 Eki): kime · aciliyet · tekrar anahtarı · posta rc — süpürme cron günlüğü bu satırla
+    'rahat aciliyetle gitti' iddiasını ölçer; eskiden aciliyet hiçbir günlükte yoktu. Mektup metni ve jeton günlüğe YAZILMAZ."""
     try:
-        # aciliyet "genis" (rahat): bu bir bilgi mektubudur; postane 0.1.4 rahat mektup ölünce SERDAR'a zil çalmaz (…1SSZVC — 24 ölü uzlaştırma mektubu zil çalıyordu).
-        c = subprocess.run([komut, "gonder", kime, metin, "--kimden", kimden, "--aciliyet", "genis",
+        c = subprocess.run([komut, "gonder", kime, metin, "--kimden", kimden, "--aciliyet", ZIL_ACILIYET,
                             "--konu", "çalışılıyor uzlaştırması", "--tekrar", tekrar], capture_output=True, text=True, timeout=30)
+        print("  · zil → %s · aciliyet %s · tekrar %s · posta rc %d" % (kime, ZIL_ACILIYET, tekrar, c.returncode))
         return c.returncode == 0
-    except Exception:
+    except Exception as e:
+        print("  · zil → %s · aciliyet %s · tekrar %s · posta ÇALIŞMADI (%s)" % (kime, ZIL_ACILIYET, tekrar, type(e).__name__))
         return False
 
 def ad_sade(g):
