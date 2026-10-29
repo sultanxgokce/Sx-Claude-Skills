@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-pencere-kirmizi-vaka-sonra.txt
+hedef_sha256: 7ed278c01e8958992804edff864b0fc321740eaa2b09d5166fcac23ec866e856
+hedef_zaman: 2026-10-29T17:57:42+03:00
+hedef_renk: yesil
+neden: ölçüm betiği var olmayan dizine bakıyordu, sınav koşmadı (sahte yeşil)
+kim: HENDESE
+karsi: -
+zaman: 2026-10-29T17:58:39+03:00
