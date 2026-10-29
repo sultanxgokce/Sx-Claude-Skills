@@ -1,0 +1,44 @@
+{
+  "is": "kisi-istemci-bos-sohbet-ipucu",
+  "cumle": "Ayşenur boş sohbette 1 basınca anlamsız ret görüyor; ret metnine ve alt satıra 'yazmak için m' ipucu eklenir",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-29T17:34:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M63ZZN9K7P4R7GCD4MH786T4",
+  "tahmin_dk": 40,
+  "sayi_uyarilari": [
+    "1 basınca"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-29T17:34:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-29T17:52:04+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

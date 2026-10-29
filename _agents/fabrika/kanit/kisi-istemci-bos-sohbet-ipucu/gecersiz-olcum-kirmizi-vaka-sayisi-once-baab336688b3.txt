@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kirmizi-vaka-sayisi-once.txt
+hedef_sha256: 9d25439c3aa1f96a44dc8c19c512e01f6aef7ce1a4f32bbc17acc0fa18b3aa13
+hedef_zaman: 2026-10-29T17:45:29+03:00
+hedef_renk: yesil
+neden: göz tur 1: pencere değişikliği ayrı karta taşındı, bu ölçüm I3d içeriyordu
+kim: HENDESE
+karsi: -
+zaman: 2026-10-29T17:53:26+03:00

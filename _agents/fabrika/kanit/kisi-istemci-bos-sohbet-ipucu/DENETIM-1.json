@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kisi-istemci-bos-sohbet-ipucu",
+  "pr": "570",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T17:52:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kisi-istemci-bos-sohbet-ipucu",
+  "dal": "kisi-istemci-bos-sohbet-ipucu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17514,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3757
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1f99e927ef184dc2811af25cfdcd4ba5cbf1e1f8",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen boş-sohbet reddine “Yazmak için [m]” ipucu eklenmiş, alt satır yalnız ret metnini gösterecek biçimde değiştirilmiş ve önce/sonra ölçümünde ilgili vakalar kırmızıdan yeşile dönmüş. Ancak aynı değişiklik paketine iş kartında istenmeyen, tüm tmux pencerelerinin boyutlandırma davranışını değiştiren ayrı bir düzenleme katıldığı için önce kapsam kayması çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "İş kartı yalnız boş sohbetteki ret ve alt satır ipucunu isterken değişiklik, köprü izleme sırasında oturumdaki bütün tmux pencerelerini “window-size latest” yapacak davranışı da üretim koduna ekliyor; bu bağımsız davranış kapsam kaymasıdır.",
+        "kanit": "Diffte koltuk-koprusu.py içine list-windows döngüsü ve her pencere için set-option -w ... window-size latest çağrısı eklenmiş; ölçümde de kartın ipucu vakalarından ayrı I3d geniş ekran vakası önce ✗, sonra ✓ olarak yer alıyor.",
+        "konum": "terminal-onar/scripts/koltuk-koprusu.py:182; olcum-kirmizi-vaka-sayisi-once.txt I3d; olcum-kirmizi-vaka-sayisi-sonra.txt I3d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti gerçek istemci-köprü akışında I3b ve I3c’nin 3 toplam kırmızı vaka içinden başarısızlıktan başarıya geçtiğini gösteriyor; ancak tek toplam ölçüm ipucu talebiyle kapsam dışı I3d pencere davranışını aynı sepette birleştiriyor ve görsel kare/kare dizisi sunmuyor."
+  }
+}
