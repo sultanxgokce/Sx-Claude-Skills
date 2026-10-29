@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mutasyon-tek.txt
+hedef_sha256: b68c6af6bc213734287fcdc772a32819a5560e10a838b4e62a087490428f2105
+hedef_zaman: 2026-10-29T05:55:34+03:00
+hedef_renk: kirmizi
+neden: iki mutant deseni tutmadı (UM6 benzersizlik, UP4 kaçış) — desenler düzeltildi, yeniden ölçülüyor
+kim: BÂNİ
+karsi: -
+zaman: 2026-10-29T05:56:07+03:00

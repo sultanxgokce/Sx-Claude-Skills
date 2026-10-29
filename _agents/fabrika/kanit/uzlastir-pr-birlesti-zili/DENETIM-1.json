@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "uzlastir-pr-birlesti-zili",
+  "pr": "557",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-29T06:06:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-mutasyon-tek.txt (kirmizi → gecersiz) — iki mutant deseni tutmadı (UM6 benzersizlik, UP4 kaçış) — desenler düzeltildi, yeniden ölçülüyor · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastir-pr-birlesti-zili",
+  "dal": "uzlastir-pr-birlesti-zili",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49295,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 24212
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f95f1ab523a7ee3b3657cacdb62f5826e2b05d5a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen PR-birleşti öneri zili, dar dal eşlemesi, KURU kip, ölçülemedi yolu ve görev+PR tekrar anahtarıyla eklenmiş; önce 8 kapı düşerken son ölçüm 40/0, mutasyon ölçümü de 32/0. Üretime hazır; yalnız gerçek postanenin ikinci zili bastırdığı canlı yüzeyde ölçülmemiş ve sınav bunu iki ardışık çağrıyla doğrudan göstermiyor.",
+    "bulgular": [
+      {
+        "ne": "“Aynı görev+PR için ikinci kez çalmaz” davranışı sınavda iki ardışık çalıştırmayla ölçülmüyor; yalnız sabit --tekrar anahtarının postaya verildiği doğrulanıyor.",
+        "kanit": "P1 tek koşuda zil sayısını 1 ve komutta '--tekrar uzlastir-pr-gorev_A-77' metnini arıyor; P1–P7 içinde aynı görev+PR ile ikinci koşu ve zil sayısının 1 kaldığı bir kapı yok. UP2 mutasyonu anahtarın benzersizliğini koruyor fakat gerçek tekrar bastırmasını yine posta aracına bırakıyor.",
+        "konum": "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh:P1; olcum-sinav-son-tek.txt:P1–P7; olcum-mutasyon-2-tek.txt:UP2",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek posta/zil yüzeyinde görev+PR tekrar anahtarının ikinci bildirimi bastırdığı canlı doğrulanmamış.",
+        "kanit": "Z0 açıkça sahte posta aracı kullanıldığını ve gerçek posta.sh çağrısı yapılmadığını söylüyor; iş kartı ise canlı gereğini 'cümlede: zil' olarak işaretliyor.",
+        "konum": "olcum-sinav-son-tek.txt:Z0; iş kartı:canli_gerekir/canli_sebep",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı postane/zil hizmeti + yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; geçersiz ilan edilen ilk mutasyon kaydı değerlendirmeye alınmadı. Geçerli önce/sonra çifti 32/8’den 40/0’a geçti, son gerçek sınav yeşil ve düzeltilmiş mutasyon ölçümü 32 mutantın tamamını yakaladı; sarı kayıt yok. Sahte gerçekçi PR verileri birleşmiş, açık, dar eşleme, karttaki pr, okunamayan gh, KURU kip ve zil hatasını kapsıyor; yalnız canlı zil ve gerçek tekrar bastırması kutu dışında."
+  }
+}

@@ -38,8 +38,11 @@ printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s/zil.log"\n[ -f "%s/zilr
 printf '#!/usr/bin/env bash\n[ -f "%s/koltuk-bozuk" ] && exit 3\ncat "%s/koltuk.txt" 2>/dev/null\nexit 0\n' "$T" "$T" > "$T/koltuk.sh"; chmod +x "$T/koltuk.sh"
 : > "$T/koltuk.txt"
 zl() { [ -f "$T/zil.log" ] && wc -l < "$T/zil.log" || echo 0; }
-kos() { rm -f "$T/yazim.jsonl" "$T/zil.log"; python3 "$U" --ajan "${AJAN:-BERİD}" --defter-uc "${DUC:-$UC}" --jeton-yol "${JY:-$T/jeton}" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --simdi 1000000 "$@" > "$T/cikti" 2>&1; echo $?; }
-kos_suprme() { rm -f "$T/yazim.jsonl" "$T/zil.log"; python3 "$U" --koltuklardan --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --simdi 1000000 "$@" > "$T/cikti" 2>&1; echo $?; }
+# sahte gh (birleşmiş PR listesi): gerçek gh/GitHub'a sorulmaz; prler.json yoksa boş liste, gh-bozuk varsa rc 1
+printf '#!/usr/bin/env bash\n[ -f "%s/gh-bozuk" ] && exit 1\ncat "%s/prler.json" 2>/dev/null || echo "[]"\nexit 0\n' "$T" "$T" > "$T/gh"; chmod +x "$T/gh"
+prler() { printf '%s' "$1" > "$T/prler.json"; }
+kos() { rm -f "$T/yazim.jsonl" "$T/zil.log"; python3 "$U" --ajan "${AJAN:-BERİD}" --defter-uc "${DUC:-$UC}" --jeton-yol "${JY:-$T/jeton}" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --pr-komut "${PRK-$T/gh pr list}" --simdi 1000000 "$@" > "$T/cikti" 2>&1; echo $?; }
+kos_suprme() { rm -f "$T/yazim.jsonl" "$T/zil.log"; python3 "$U" --koltuklardan --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k1" --kart-kok "$T/k2" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --pr-komut "${PRK-$T/gh pr list}" --simdi 1000000 "$@" > "$T/cikti" 2>&1; echo $?; }
 
 echo "════ calisiliyor-uzlastir ════"
 # U1: iki kartlı çalışılıyor → azami içinde, dokunulmaz
@@ -124,6 +127,32 @@ defter "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)" "$(gor gorev_Z BASİ
 RC=$(kos_suprme --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 2 ] && grep -q "/kayit/gorev_Y" "$T/yazim.jsonl" && grep -q "/kayit/gorev_Z" "$T/yazim.jsonl"; g $? "S1 süpürme: koltuktaki iki ajanın kartsız görevleri kimse kart.sh çalıştırmadan bekliyor'a çekilir (ajan olmayan koltuk atlanır)"
 touch "$T/koltuk-bozuk"; RC=$(kos_suprme --uygula); rm -f "$T/koltuk-bozuk"; [ "$RC" = 4 ] && [ "$(yz)" = 0 ] && grep -q "koltuk listesi okunamadı" "$T/cikti"; g $? "S2 süpürme koltuk listesini okuyamazsa: rc 4, hiçbir şey yazılmaz, söylenir"
 python3 "$U" >/dev/null 2>&1; RC=$?; [ "$RC" = 2 ]; g $? "S3 ne --ajan ne --koltuklardan: rc 2"
+# ── TP00WX: açık kartın PR'ı birleşmiş ama görev çalışılıyor → sahibine TEK öneri zili (kendiliğinden çekmez)
+: > "$T/koltuk.txt"; rm -f "$T/k1/c.json"
+kart "$T/k1" a BERİD acik gorev_A; kart "$T/k2" b BERİD acik gorev_B
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_B BERİD calisiliyor 2026-10-26T09:00)"
+prler '[{"number":77,"headRefName":"a","mergedAt":"2026-10-29T01:00:00Z"},{"number":78,"headRefName":"b","mergedAt":null}]'
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 0 ] && [ "$(zl)" = 1 ] && grep -q "^gonder BERİD" "$T/zil.log" && grep -q "PR #77 birleşti" "$T/zil.log" && grep -q "kart.sh bitti a --pr 77" "$T/zil.log" && grep -q -- "--tekrar uzlastir-pr-gorev_A-77" "$T/zil.log" && ! grep -q "gorev_B" "$T/zil.log"; g $? "P1 kart a'nın PR #77 birleşmiş + gorev_A çalışılıyor: sahibine TEK öneri zili (kart.sh bitti tarifi, --tekrar görev+PR), görev ÇEKİLMEZ; açık PR'lı (mergedAt boş) gorev_B'ye zil YOK"
+RC=$(kos); [ "$RC" = 0 ] && [ "$(zl)" = 0 ] && grep -q "KURU: gorev_A" "$T/cikti" && grep -q "PR #77" "$T/cikti"; g $? "P2 KURU (varsayılan): zil çalmaz, yalnız yazar (gorev_A · PR #77)"
+# P3: dal eşlemesi kart.sh supur ile aynı DAR kural — 'ekip/a' ve 'a-12' eşleşir, 'ab' (altdize) ve 'xa' eşleşmez, başka kartın adı olan dal ('b') a'nın değildir
+prler '[{"number":80,"headRefName":"ab","mergedAt":"2026-10-29T01:00:00Z"},{"number":81,"headRefName":"xa","mergedAt":"2026-10-29T01:00:00Z"}]'
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "P3 yalnız 'ab'/'xa' birleşmiş: altdize eşlemesi YOK → zil yok"
+prler '[{"number":82,"headRefName":"ekip/a","mergedAt":"2026-10-29T01:00:00Z"}]'
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "PR #82" "$T/zil.log"; g $? "P3b 'ekip/a' öneki eşleşir (#82)"
+prler '[{"number":83,"headRefName":"a-12","mergedAt":"2026-10-29T01:00:00Z"},{"number":84,"headRefName":"b","mergedAt":"2026-10-29T01:00:00Z"}]'
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 2 ] && grep -q "PR #83" "$T/zil.log" && grep -q "gorev_B.*PR #84" "$T/zil.log" && ! grep -q "gorev_A.*PR #84" "$T/zil.log"; g $? "P3c 'a-12' soneki a'ya (#83), 'b' kendi kartı b'ye (#84) gider; iki görev iki ayrı zil"
+# P4: kartta pr yazılıysa dal adına bakılmaz, o numara aranır
+printf '{"is":"a","aldi":"BERİD","durum":"acik","gorev":"gorev_A","pr":90}' > "$T/k1/a.json"
+prler '[{"number":90,"headRefName":"bambaska-dal","mergedAt":"2026-10-29T01:00:00Z"},{"number":91,"headRefName":"a","mergedAt":"2026-10-29T01:00:00Z"}]'
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "PR #90" "$T/zil.log" && ! grep -q "PR #91" "$T/zil.log"; g $? "P4 kartta pr=90 yazılı: dal adı değil o PR aranır (#90), aynı adlı dal #91 sayılmaz"
+kart "$T/k1" a BERİD acik gorev_A
+# P5: gh okunamazsa ÖLÇÜLEMEDİ — zil yok, 'birleşmedi' denmez, söylenir; rc 0 (öneri katmanı işi düşürmez)
+prler '[{"number":77,"headRefName":"a","mergedAt":"2026-10-29T01:00:00Z"}]'; touch "$T/gh-bozuk"
+RC=$(kos --uygula); rm -f "$T/gh-bozuk"; [ "$RC" = 0 ] && [ "$(zl)" = 0 ] && grep -q "PR listesi okunamadı" "$T/cikti" && grep -q "ÖLÇÜLEMEDİ" "$T/cikti"; g $? "P5 gh okunamadı: zil yok, çıktı 'okunamadı … ÖLÇÜLEMEDİ' der (uydurma 'birleşmedi' yok)"
+RC=$(kos --uygula --pr-komut ""); [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "P6 --pr-komut \"\" : PR-birleşti zili kapalı"
+# P7: zil gidemezse rc 4 ve söylenir
+touch "$T/zilret"; RC=$(kos --uygula); rm -f "$T/zilret"; [ "$RC" = 4 ] && grep -q "PR-birleşti zili gidemedi" "$T/cikti"; g $? "P7 PR-birleşti zili gitmezse: rc 4 ve söylenir"
+rm -f "$T/prler.json"
 # Z0: sınav gerçek postaneye mektup göndermiyor (varsayılan zil aracı ASLA kullanılmadı: hepsi sahte posta)
-[ -f "$T/zil.log" ] || true; g 0 "Z0 sahte posta/koltuk aracı kullanıldı (gerçek posta.sh'e hiçbir çağrı gitmedi)"
+[ -f "$T/zil.log" ] || true; g 0 "Z0 sahte posta/koltuk/gh aracı kullanıldı (gerçek posta.sh'e ve gh'ye hiçbir çağrı gitmedi)"
 echo "── SONUÇ: PASS=$p FAIL=$f ──"; [ "$f" -eq 0 ]
