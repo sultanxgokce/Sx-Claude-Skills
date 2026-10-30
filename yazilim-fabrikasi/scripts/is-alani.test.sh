@@ -320,12 +320,53 @@ CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" kapsam-olc kendi-alan 2
 [ "$RC" -eq 3 ] && grep -q "ölçülemedi" <<<"$CIKTI"; g $? "gh düşünce kapsam-olc rc=3 ÖLÇÜLEMEDİ (yeşil değil, 'kesişim yok' değil)"
 CIKTI="$( cd "$T/depo" && bash "$IS" kapsam-olc boyle-alan-yok 2>&1 )"; RC=$?
 [ "$RC" -eq 3 ] && grep -q "çalışma alanı YOK" <<<"$CIKTI"; g $? "olmayan alan → rc=3 (sahte yeşil yok)"
+# ── DALGIÇ tur 1 bulguları (30 Eki): izlenmeyen yeni dosya · dosya başına ekleme ≠ yeni dosya · hesap çökmesi 'yok' değil · 30 tavanı söylenir
+( cd "$KA" && git checkout -q -- katalog.txt ) >/dev/null 2>&1
+echo "yeni" > "$KA/yepyeni.txt"          # izlenmeyen: git add YOK
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "1 dosyada 1 blok" <<<"$CIKTI" && ! grep -q "henüz hiçbir satır" <<<"$CIKTI"; g $? "izlenmeyen YENİ dosya alanın bloklarına girer ('*' tümü): 'henüz hiçbir satır değiştirmedi' DENMEZ (rc=$RC)"
+KOLY="$T/koly-bin"; mkdir -p "$KOLY"; sed 's/katalog.txt\\n/katalog.txt\\nyepyeni.txt\\n/' "$KOLC/gh" > "$KOLY/gh"; chmod +x "$KOLY/gh"   # PR #11 listesinde yepyeni.txt de var ama dalında yok
+CIKTI="$( cd "$T/depo" && PATH="$KOLY:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "yepyeni.txt) ama satır blokları boş okundu" <<<"$CIKTI" && grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "PR listesi aynı dosyayı sayıyor ama farkında blok yok → 'kesişim yok' DEĞİL rc=3 ölçülemedi (rc=$RC)"
+rm -f "$KA/yepyeni.txt"
+sed -i '1i satir 0 ALAN' "$KA/katalog.txt"   # dosya BAŞINA ekleme: hunk -0,0 → 0-0 (nokta), yeni dosya DEĞİL
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "alan: katalog.txt: 0-0" <<<"$CIKTI" && grep -q "satır kesişimi YOK" <<<"$CIKTI"; g $? "dosya BAŞINA ekleme (0-0) yeni dosya sayılmaz → PR 3-4 ile kesişmez rc=0 (eski kural her blokla kesiştirirdi) (rc=$RC)"
+( cd "$KA" && git checkout -q -- katalog.txt ) >/dev/null 2>&1
+BOZ30="$T/boz30-bin"; mkdir -p "$BOZ30"; cat > "$BOZ30/gh" <<'GH'
+#!/usr/bin/env bash
+case "$1 $2" in
+  "pr list") case " $* " in *headRefName*) python3 -c 'import json;print(json.dumps([{"number":100+i,"headRefName":"d%d"%i} for i in range(30)]))' ;; *) seq 100 129 ;; esac ;;
+  "pr diff") printf 'baska.txt\n' ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$BOZ30/gh"
+sed -i '15s/.*/satir 15 ALAN/' "$KA/katalog.txt"
+CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "tavana (30) ulaştı" <<<"$CIKTI"; g $? "30 açık PR → tavan söylenir (sessiz atlama yok); kesişim yok rc=0 (rc=$RC)"
+CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" ac tavan-ac --kartsiz --dosyalar z.txt 2>&1 )"; grep -q "tavana (30) ulaştı" <<<"$CIKTI"; g $? "ac kapsam kontrolü de 30 tavanını söyler"
+( cd "$T/depo" && bash "$IS" kapat tavan-ac ) >/dev/null 2>&1 || true
+sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
 echo "── T13 · MUTASYON (tam kopya): kesişim koşulu sökülünce aynı satır 'kesişim yok' çıkar → üstteki rc 2 kapısı düşerdi ──"
 MK="$T/pkg-kesisim"; mkdir -p "$MK"; cp "$HERE"/*.sh "$HERE"/*.py "$MK/" 2>/dev/null
 python3 - "$MK/is-alani.sh" <<'PYM' && CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$MK/is-alani.sh" kapsam-olc kendi-alan 2>&1 )"; RC=$?
-import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='if (a,b)==(0,0) or (c,d)==(0,0) or (a<=d and c<=b):'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'if False:'))
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='if x is None or y is None or (x[0]<=y[1] and y[0]<=x[1]):'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'if False:'))
 PYM
 [ "$RC" -eq 0 ] && grep -q "satır kesişimi yok" <<<"$CIKTI"; g $? "mutant (kesişim koşulu False): aynı satır için rc=0 'kesişim yok' → üstteki 🔴 rc 2 kapısı bu mutantta düşerdi (rc=$RC)"
+# mutant 2: hesap çökmesi rc 1 sayılırsa (eski hâl) → 'kesişim yok' sahte yeşil
+M2="$T/pkg-cokme"; mkdir -p "$M2"; cp "$HERE"/*.sh "$HERE"/*.py "$M2/" 2>/dev/null
+python3 - "$M2/is-alani.sh" <<'PYM' && CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$M2/is-alani.sh" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    A,B=oku(sys.argv[1]),oku(sys.argv[2]); var=False'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'    raise RuntimeError("bozuk blok")'))
+PYM
+[ "$RC" -eq 3 ] && grep -q "kesişim hesabı DÜŞTÜ (bozuk blok)" <<<"$CIKTI"; g $? "hesap çökünce rc=3 ÖLÇÜLEMEDİ + sebep basılır ('kesişim yok' değil — DALGIÇ tur 1)"
+# mutant 3: ac aynı-dosya uyarısında eski gibi rc 2 ile çıkarsa (engel geri gelirse) → T7/T13 'alan AÇILDI' kapıları düşer
+M3="$T/pkg-engel"; mkdir -p "$M3"; cp "$HERE"/*.sh "$HERE"/*.py "$M3/" 2>/dev/null
+python3 - "$M3/is-alani.sh" <<'PYM' && ( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$M3/is-alani.sh" ac mutant-engel --kartsiz --dosyalar katalog.txt >/dev/null 2>&1 ); RC=$?
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    kuyari="$(kapsam_kontrol "$dosyalar")"; krc=$?'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,a+'; [ "$krc" -eq 4 ] && exit 2'))
+PYM
+[ "$RC" -ne 0 ] && [ ! -d "$T/alan/depo-mutant-engel" ]; g $? "mutant 3 (aynı dosya yine rc 2 engel): alan AÇILMADI (rc=$RC) → T7/T13 'alan açıldı' kapıları bu mutantta düşerdi"
+( cd "$T/depo" && bash "$IS" kapat mutant-engel ) >/dev/null 2>&1 || true
 ( cd "$KA" && git checkout -q -- katalog.txt ) >/dev/null 2>&1
 ( cd "$T/depo" && bash "$IS" kapat kendi-alan ) >/dev/null 2>&1 || true
 
