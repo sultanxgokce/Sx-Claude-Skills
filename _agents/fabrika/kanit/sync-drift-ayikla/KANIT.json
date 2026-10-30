@@ -1,7 +1,7 @@
 {
   "is": "sync-drift-ayikla",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T18:48:47+03:00",
+  "guncelleme": "2026-10-30T18:53:18+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -345,7 +345,163 @@
       "renk": "ilan",
       "zaman": "2026-10-30T18:48:47+03:00",
       "olcum_id": "0790b44f174542ba89c04abae944252b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-tur2-sonra.txt",
+      "sha256": "831f2c31efa3f804fa6a9c8e11bf23bffec70dd6459b639dadcfda5e2d77ca0e",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:53:07+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "64df8cb2ea274941a8cf0ed6d17771aa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "durum-yaz-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-durum-yaz-sinav-sonra.txt",
+      "sha256": "f557e57b261d479f52e4797c9d60c586419c8f5856a22199ec47bcd5523bcf09",
+      "komut": [
+        "bash",
+        "durum-raporu/scripts/durum-yaz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:53:09+03:00",
+      "sure_sn": 1.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fa3bbb2eb577469682147ffa60e2528f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "wa-oku-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-wa-oku-sinav-sonra.txt",
+      "sha256": "621d4ca1114158c7f6c1e0cde2236705a1156d0385868b1deff77b37b5d46642",
+      "komut": [
+        "bash",
+        "whatsapp-gonder/scripts/wa-oku.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:53:10+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "78c9fb7241b34db4a2aab5118e9c6aca"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-benzetimi-duman",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-benzetimi-duman-sonra.txt",
+      "sha256": "49b379c906cd22c7ec67c39ba1900f2dd65e63ec9b48540f807ea6f27a14dd03",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-duman-kurulum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:53:10+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "945f2ea5975941cab3e1c7df09c4df5c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-durum-yaz-eski-kiyas",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-durum-yaz-eski-kiyas-sonra.txt",
+      "sha256": "e16e8b5ee94478a4e5dba29d80eb9b84fd97425de61c77cebd2e8d0ac71e6593",
+      "komut": [
+        "env",
+        "DURUM_YAZ_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant2/durum-yaz-eski-kiyas.sh",
+        "bash",
+        "durum-raporu/scripts/durum-yaz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:53:11+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "durum-yaz-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "850d04d6a1984b6ab0f8307c92217f57"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-wa-oku-kuru-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-wa-oku-kuru-yok-sonra.txt",
+      "sha256": "66e66430d4996ae3de5bc71effe5bfad3c1f96d9c04de1ddd1e58f97c071f2be",
+      "komut": [
+        "env",
+        "WA_OKU_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant2/wa-oku-kuru-yok.sh",
+        "bash",
+        "whatsapp-gonder/scripts/wa-oku.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:53:12+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "wa-oku-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "99e8eb2c231e4f338ca8758d0aa602fa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-wa-oku-ok-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-wa-oku-ok-yok-sonra.txt",
+      "sha256": "683f1c23264410936414fdc7475e9486f223bb6c50b26f3421570d5652658679",
+      "komut": [
+        "env",
+        "WA_OKU_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant2/wa-oku-ok-yok.sh",
+        "bash",
+        "whatsapp-gonder/scripts/wa-oku.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:53:12+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "wa-oku-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "f6b56082a9fb4353954f47d5918486ab"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kuru-kosu-drift-daralt",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kuru-kosu-drift-daralt-sonra-74ff5ad5d88c.txt",
+      "sha256": "2638cad981ee3c78d102469e196ce9bc88882b3650e404a60c5b74d718f651fb",
+      "hedef_dosya": "olcum-kuru-kosu-drift-daralt-sonra.txt",
+      "hedef_olcum_id": "c0babca8f4044aabb590fbaa82f836ae",
+      "hedef_sha256": "31152ad7f578b293727c320b6eac658a93b57f0d96a33b19e6b840ccc48f940c",
+      "hedef_zaman": "2026-10-30T18:48:41+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "göz tur 1: kaynak bir commit gerideydi ve ağaç kirliydi; origin/main birleştirilip temiz ağaçta yeniden ölçüldü",
+      "kim": "BENNÂ",
+      "karsi": "olcum-kuru-kosu-drift-tur2-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:53:18+03:00",
+      "olcum_id": "864a216202cb4117a2a1dc9fca2191d5"
     }
   ],
-  "imza": "6d1cda40b01600152893482135f2839a44b37b58505e6593af7d25504c68db5a"
+  "imza": "96501d95fafef05a606a79faea5e5986030e0335a4591f78df88a7c8761c3ec3"
 }

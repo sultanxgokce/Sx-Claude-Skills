@@ -1,0 +1,15 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-durum-yaz-sinav-* ===
+$ env DURUM_YAZ_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant2/durum-yaz-eski-kiyas.sh bash durum-raporu/scripts/durum-yaz.test.sh
+# rc=1 sure=1.4s zaman=2026-10-30T18:53:11+03:00
+--- stdout ---
+  ✓ D1 yazım rc 0
+  ✓ D2 --kaynak sultan öneki eklenir
+  ✗ D3 öneksiz --bitti, önekli şimdiki işi temizler (göz bulgusu)
+  ✓ D4 --kaynak yoksa uyarı basılır
+  ✗ D5 önekli --bitti, öneksiz şimdiki işi temizler
+  ✓ D6 biten iş önekiyle kaydedilir
+  ✓ D7 başka iş bitince şimdiki iş KALIR
+  ✓ D8 tanınmayan kaynak uyarır, önek eklemez
+  ✓ D9 geçmiş 30 işle sınırlı
+durum-yaz: geçen=7 kalan=2
+--- stderr ---
