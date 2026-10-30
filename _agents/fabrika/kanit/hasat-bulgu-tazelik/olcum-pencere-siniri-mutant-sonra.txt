@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts hasat.sh hasat.test.sh if yas > gun: if yas >= gun:
-# rc=1 sure=2.5s zaman=2026-10-30T16:35:02+03:00
+# rc=1 sure=2.7s zaman=2026-10-30T16:39:19+03:00
 --- stdout ---
 MUTASYON: hasat.sh · 'if yas > gun:' → 'if yas >= gun:'
 — kullanım
@@ -38,7 +38,8 @@ MUTASYON: hasat.sh · 'if yas > gun:' → 'if yas >= gun:'
   ✓ B4 --birlesme ile --yuzey birlikte rc 2
   ✓ B5 --yuzey: son commit 01-09 git'ten okunur → OLMAZ, BIRLESME=2026-01-09
   ✓ B6 --yuzey eski dosya (01-03) → OLUR
-  ✓ B7 yüzeye hiç commit yok → birleşme yok, OLUR (BIRLESME=-)
+  ✓ B7 yüzey diskte var ama hiç commit görmemiş → birleşme yok, OLUR (BIRLESME=-)
+  ✓ B7b yüzey ne diskte ne git'te → ÖLÇÜLEMEDİ ('birleşme yok' uydurulmaz)
   ✓ B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 ('birleşme yok' UYDURULMAZ)
 — dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)
   ✓ Y1 var: adım yazılır rc 0
@@ -68,6 +69,14 @@ MUTASYON: hasat.sh · 'if yas > gun:' → 'if yas >= gun:'
   ✓ D15 yüzeysiz 'var' (eski biçim) → OLMAZ, NEDEN yüzey ister
   ✓ D16 kayıttaki yüzey ölçülemiyor (git değil) → ÖLÇÜLEMEDİ rc 3
   ✓ D17 --birlesme bayrağı kayıttaki yüzeyi ezer (açık ölçüm kazanır)
+  ✓ Y15 diskte olmayan yüzey 'var' ile yazılmaz rc 2
+  ✓ D18 kayıttaki yüzey hiç var olmamış (commit yok, disk yok) → ÖLÇÜLEMEDİ rc 3, 'birleşme yok' SAYILMAZ
+  ✓ D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ
+  ✓ D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ
+— uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)
+  ✓ F0 fikstür: yerel origin/main bayat (uzaktaki 01-09 birleşmesini henüz görmüyor)
+  ✓ F1 ölçümden önce fetch: uzaktaki 01-09 birleşmesi görülür → OLMAZ
+  ✓ F2 uzak depo tazelenemiyor → ÖLÇÜLEMEDİ rc 3 (bayat kopyadan 'birleşme yok' denmez)
 — ac: kapıdan geçerse havuz kaydı sıraya girer
   ✓ A1 OLUR → gorev.sh durum … acik, gerekçe kaynak kaydı + doğrulama tarihini taşır
   ✓ A1b ACILDI satırı
@@ -77,5 +86,5 @@ MUTASYON: hasat.sh · 'if yas > gun:' → 'if yas >= gun:'
   ✓ A5 ÖLÇÜLEMEDİ → açılmaz rc 3
   ✓ A6 defter açılışı reddederse rc 1
   ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
-sonuç: 67 geçti · 1 kaldı
+sonuç: 75 geçti · 1 kaldı
 --- stderr ---

@@ -39,9 +39,18 @@ tarih_mi() { printf '%s' "$1" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; }
 yuzey_mutlak() { python3 -c 'import os,sys; y,d=sys.argv[1:3]; print(os.path.abspath(y if os.path.isabs(y) or not d else os.path.join(d,y)))' "$1" "${DEPO:-}"; }
 yuzey_kok() { local d="$1"; while [ ! -d "$d" ] && [ "$d" != / ]; do d="$(dirname "$d")"; done; git -C "$d" rev-parse --show-toplevel 2>/dev/null; }
 # birlesme_olc <mutlak yol> → stdout: son commit günü (boş = yüzeye hiç commit yok) · rc 3 ölçülemedi. Dal: HASAT_DAL, yoksa origin/main, yoksa HEAD.
-birlesme_olc() { local kok ref; kok="$(yuzey_kok "$1")" && [ -n "$kok" ] || return 3
-  ref="${HASAT_DAL:-}"; [ -n "$ref" ] || { git -C "$kok" rev-parse --verify -q origin/main >/dev/null && ref=origin/main || ref=HEAD; }
-  git -C "$kok" log -1 --format=%cs "$ref" -- "$1" 2>/dev/null || return 3; }
+#   DALGIÇ tur 2: (a) yerel origin/main bayat olabilir → origin varsa önce fetch; düşerse ÖLÇÜLEMEDİ (bayat kopyadan "birleşme yok" denmez; HASAT_FETCH=0 kapatır).
+#   (b) hiç commit yok VE yol diskte yok = yanlış/uydurma yüzey → ÖLÇÜLEMEDİ ("birleşme yok" sayılmaz). Silinmiş dosyanın silme commit'i vardır, boş dönmez.
+birlesme_olc() { local kok ref gun; kok="$(yuzey_kok "$1")" && [ -n "$kok" ] || return 3
+  ref="${HASAT_DAL:-}"
+  if [ -z "$ref" ] && git -C "$kok" remote get-url origin >/dev/null 2>&1; then
+    if [ "${HASAT_FETCH:-1}" != 0 ]; then timeout 60 git -C "$kok" fetch -q origin main 2>/dev/null || return 3; fi
+    ref=origin/main
+  fi
+  [ -n "$ref" ] || ref=HEAD
+  gun="$(git -C "$kok" log -1 --format=%cs "$ref" -- "$1" 2>/dev/null)" || return 3
+  [ -n "$gun" ] || [ -e "$1" ] || return 3
+  printf '%s\n' "$gun"; }
 
 # ── dogrula: ölçümü kayda yaz ────────────────────────────────────────────────────────────────────────────────────────────
 if [ "$KOMUT" = dogrula ]; then
@@ -53,7 +62,8 @@ if [ "$KOMUT" = dogrula ]; then
   elif [ -n "$KAPANDI" ]; then echo "HATA: --kapandi yalnız --sonuc duzelmis ile" >&2; exit 2; fi
   if [ "$SONUC" = var ] && [ -z "$YUZEY" ]; then echo "HATA: 'var' ölçümü sorunun yaşadığı yüzeyi ister: --yuzey <dosya|dizin> (kod yüzeyi yoksa --yuzey -) — birleşme sonradan bu yüzeyde ölçülür" >&2; exit 2; fi
   if [ -n "$YUZEY" ] && [ "$YUZEY" != "-" ]; then
-    YUZEY="$(yuzey_mutlak "$YUZEY")"; [ -n "$(yuzey_kok "$YUZEY")" ] || { echo "HATA: yüzey bir git deposunda değil ($YUZEY) — birleşmesi ölçülemez; doğru yolu ver ya da --yuzey -" >&2; exit 2; }
+    YUZEY="$(yuzey_mutlak "$YUZEY")"; [ -e "$YUZEY" ] || { echo "HATA: yüzey diskte yok ($YUZEY) — sorunun yaşadığı var olan dosya/dizini ver (yanlış yol sonradan 'birleşme yok' sayılmasın)" >&2; exit 2; }
+    [ -n "$(yuzey_kok "$YUZEY")" ] || { echo "HATA: yüzey bir git deposunda değil ($YUZEY) — birleşmesi ölçülemez; doğru yolu ver ya da --yuzey -" >&2; exit 2; }
   fi
   case "$SONUC" in var) HUKUM="var";; duzelmis) HUKUM="düzelmiş";; *) HUKUM="ölçülemedi";; esac
   METIN="[doğrulama: $HUKUM] sınıf=$SINIF · ölçüm: $OLCUM · tarih=$TARIH"
@@ -93,7 +103,7 @@ import sys,re; y=""
 for s in sys.stdin:
     p=s.rstrip("\n").split("\t")
     if p[0]=="ADIM" and len(p)>=3 and re.match(r"\[doğrulama: (var|düzelmiş|ölçülemedi)\]","\t".join(p[2:])):
-        m=re.search(r"\byüzey=([^ ]+)","\t".join(p[2:])); y=m.group(1) if m else ""
+        m=re.search(r"\byüzey=(.+?)(?: · |$)","\t".join(p[2:])); y=m.group(1) if m else ""
 print(y)')"; YKAYNAK="kayıt"
 fi
 BIRLESME_BEYAN=""
@@ -101,7 +111,7 @@ if [ "$YUZEY" = "-" ]; then BIRLESME_BEYAN="beyan"
 elif [ -n "$YUZEY" ]; then
   [ "$YKAYNAK" = kayıt ] || YUZEY="$(yuzey_mutlak "$YUZEY")"
   BIRLESME="$(birlesme_olc "$YUZEY")" || {
-    echo "KAYIT=$ID"; echo "YUZEY=$YUZEY"; echo "BIRLESME=ÖLÇÜLEMEDİ"; echo "HASAT=ÖLÇÜLEMEDİ"; echo "NEDEN=yüzeyin birleşme tarihi git'ten okunamadı ($YUZEY) — birleşme yok DENMEZ; --birlesme ile tarihi ver ya da depoyu düzelt"; exit 3; }
+    echo "KAYIT=$ID"; echo "YUZEY=$YUZEY"; echo "BIRLESME=ÖLÇÜLEMEDİ"; echo "HASAT=ÖLÇÜLEMEDİ"; echo "NEDEN=yüzeyin birleşme tarihi ölçülemedi ($YUZEY: git okunamadı, uzak depo tazelenemedi ya da yol hiç var olmamış) — birleşme yok DENMEZ; --birlesme ile tarihi ver ya da yüzeyi düzeltip yeniden ölç"; exit 3; }
   # yüzeye hiç commit yoksa boş döner: birleşme yok (ölçüldü, uydurulmadı)
 elif [ -z "$BIRLESME" ]; then BIRLESME_BEYAN="yok"   # son doğrulamada yüzey yok (eski biçim / elle yazılmış): birleşme ölçülemez
 fi

@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts sirada-bak.sh sirada-bak.test.sh if [ "${HASAT_D:-}" != OLUR ]; then if false; then
-# rc=1 sure=6.6s zaman=2026-10-30T16:35:56+03:00
+# rc=1 sure=6.3s zaman=2026-10-30T16:39:51+03:00
 --- stdout ---
 MUTASYON: sirada-bak.sh · 'if [ "${HASAT_D:-}" != OLUR ]; then' → 'if false; then'
 — kutu-bul
@@ -103,7 +103,7 @@ MADDE=görev …rev_H1 tamamlanacak: havuz işim (sahip: MENZILCI)
 HASAT=OLMAZ · gorev_H1
 BASLADI=gorev_H1 (çalışılıyor yapıldı · tahmin 30 dk)
 ONERI=Sultan'a: 'Sırada 1 iş var; en üstteki gorev_H1 ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez
-  ✗ H5c ZORUNLU=HASAT KAPISI satırı doğrulama komutunu kayıt kimliğiyle gösterir — 'ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash /tmp/tmp.OPtfyoOm3A/s/hasat.sh dogrula gorev_H1 --sonuc var|duzelmis|olculemedi --olcum' yok: KUTU=menzil
+  ✗ H5c ZORUNLU=HASAT KAPISI satırı doğrulama komutunu kayıt kimliğiyle gösterir — 'ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash /tmp/tmp.COXOlE5xSB/s/hasat.sh dogrula gorev_H1 --sonuc var|duzelmis|olculemedi --olcum' yok: KUTU=menzil
 SIRADA=0
 HAVUZDA=1
 ESIK=3

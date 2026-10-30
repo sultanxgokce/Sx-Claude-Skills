@@ -80,7 +80,8 @@ echo 2 > "$R/yuzey/a.sh"; git -C "$R" add -A; GIT_AUTHOR_DATE="2026-01-09T10:00:
 c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/a.sh --depo "$R" 2>&1)"; rc=$?
 kapi "B5 --yuzey: son commit 01-09 git'ten okunur → OLMAZ, BIRLESME=2026-01-09" "1:2026-01-09" "$rc:$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
 c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/eski.sh --depo "$R" 2>&1)"; kapi "B6 --yuzey eski dosya (01-03) → OLUR" "OLUR" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
-c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/hic-yok.sh --depo "$R" 2>&1)"; kapi "B7 yüzeye hiç commit yok → birleşme yok, OLUR (BIRLESME=-)" "OLUR:-" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
+echo 3 > "$R/yuzey/kayitsiz.sh"; c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/kayitsiz.sh --depo "$R" 2>&1)"; kapi "B7 yüzey diskte var ama hiç commit görmemiş → birleşme yok, OLUR (BIRLESME=-)" "OLUR:-" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
+c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/hic-yok.sh --depo "$R" 2>&1)"; kapi "B7b yüzey ne diskte ne git'te → ÖLÇÜLEMEDİ ('birleşme yok' uydurulmaz)" "ÖLÇÜLEMEDİ:ÖLÇÜLEMEDİ" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
 c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/a.sh --depo "$T/git-degil" 2>&1)"; rc=$?
 kapi "B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 ('birleşme yok' UYDURULMAZ)" "3:ÖLÇÜLEMEDİ:ÖLÇÜLEMEDİ" "$rc:$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2):$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
 echo "— dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)"
@@ -120,6 +121,25 @@ c="$(bash "$HS" durum gorev_D3 2>&1)"; rc=$?; kapi "D15 yüzeysiz 'var' (eski bi
 kayit D4 havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=$T/git-degil/x.sh"
 c="$(bash "$HS" durum gorev_D4 2>&1)"; rc=$?; kapi "D16 kayıttaki yüzey ölçülemiyor (git değil) → ÖLÇÜLEMEDİ rc 3" "3:ÖLÇÜLEMEDİ" "$rc:$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
 c="$(bash "$HS" durum gorev_D1 --birlesme 2026-01-05 2>&1)"; kapi "D17 --birlesme bayrağı kayıttaki yüzeyi ezer (açık ölçüm kazanır)" "OLUR" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
+temiz; bash "$HS" dogrula gorev_A1 --sonuc var --olcum x --yuzey yuzey/yazim-hatasi.sh --depo "$R" >/dev/null 2>&1; kapi "Y15 diskte olmayan yüzey 'var' ile yazılmaz rc 2" "2:yok" "$?:$([ -e "$T/adim.log" ] && echo var || echo yok)"
+kayit D5 havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=$R/yuzey/hic-olmamis.sh · duruyor"
+c="$(bash "$HS" durum gorev_D5 2>&1)"; rc=$?; kapi "D18 kayıttaki yüzey hiç var olmamış (commit yok, disk yok) → ÖLÇÜLEMEDİ rc 3, 'birleşme yok' SAYILMAZ" "3:ÖLÇÜLEMEDİ" "$rc:$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
+mkdir -p "$R/bos luklu"; echo 1 > "$R/bos luklu/b.sh"; git -C "$R" add -A; GIT_AUTHOR_DATE="2026-01-09T11:00:00+03:00" GIT_COMMITTER_DATE="2026-01-09T11:00:00+03:00" git -C "$R" commit -qm bosluk
+kayit D6 havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=$R/bos luklu/b.sh · duruyor"
+c="$(bash "$HS" durum gorev_D6 2>&1)"; kapi "D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ" "OLMAZ:$R/bos luklu/b.sh" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^YUZEY=' <<<"$c" | cut -d= -f2-)"
+git -C "$R" rm -q yuzey/eski.sh; GIT_AUTHOR_DATE="2026-01-09T12:00:00+03:00" GIT_COMMITTER_DATE="2026-01-09T12:00:00+03:00" git -C "$R" commit -qm sil
+c="$(bash "$HS" durum gorev_D2 2>&1)"; kapi "D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ" "OLMAZ:2026-01-09" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
+echo "— uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)"
+U="$T/uzak.git"; git init -q --bare "$U" 2>/dev/null; git -C "$U" symbolic-ref HEAD refs/heads/main
+Y="$T/yerel"; mkdir -p "$Y"; git -C "$Y" init -q -b main 2>/dev/null; git -C "$Y" config user.email t@t; git -C "$Y" config user.name t; echo 1 > "$Y/k.sh"; git -C "$Y" add -A
+GIT_AUTHOR_DATE="2026-01-02T10:00:00+03:00" GIT_COMMITTER_DATE="2026-01-02T10:00:00+03:00" git -C "$Y" commit -qm ilk; git -C "$Y" remote add origin "$U"; git -C "$Y" push -q origin main 2>/dev/null; git -C "$Y" fetch -q origin 2>/dev/null
+B="$T/baska"; git clone -q "$U" "$B" 2>/dev/null; git -C "$B" config user.email t@t; git -C "$B" config user.name t; echo 2 > "$B/k.sh"; git -C "$B" add -A
+GIT_AUTHOR_DATE="2026-01-09T10:00:00+03:00" GIT_COMMITTER_DATE="2026-01-09T10:00:00+03:00" git -C "$B" commit -qm uzakta-birlesti; git -C "$B" push -q origin HEAD:main 2>/dev/null
+kayit F1 havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=$Y/k.sh"
+kapi "F0 fikstür: yerel origin/main bayat (uzaktaki 01-09 birleşmesini henüz görmüyor)" "2026-01-02" "$(git -C "$Y" log -1 --format=%cs origin/main -- k.sh)"
+c="$(bash "$HS" durum gorev_F1 2>&1)"; kapi "F1 ölçümden önce fetch: uzaktaki 01-09 birleşmesi görülür → OLMAZ" "OLMAZ:2026-01-09" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
+git -C "$Y" remote set-url origin "$T/yok-boyle-uzak.git"
+c="$(bash "$HS" durum gorev_F1 2>&1)"; rc=$?; kapi "F2 uzak depo tazelenemiyor → ÖLÇÜLEMEDİ rc 3 (bayat kopyadan 'birleşme yok' denmez)" "3:ÖLÇÜLEMEDİ" "$rc:$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
 echo "— ac: kapıdan geçerse havuz kaydı sıraya girer"
 temiz; c="$(bash "$HS" ac gorev_A2 "Meşveret 9. madde; Sultan önem 2" 2>&1)"; rc=$?
 kapi "A1 OLUR → gorev.sh durum … acik, gerekçe kaynak kaydı + doğrulama tarihini taşır" "0:durum gorev_A2 acik Meşveret 9. madde; Sultan önem 2 · havuz kaydı gorev_A2'den Hasat ile açıldı · son doğrulama 2026-01-08 var" "$rc:$(cat "$T/durum.log" 2>/dev/null)"
