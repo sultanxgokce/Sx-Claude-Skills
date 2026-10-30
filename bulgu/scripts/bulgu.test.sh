@@ -84,6 +84,17 @@ ok "K1f bilinmeyen etiket rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" ==
 printf 'yanlis-jeton\n' > "$T/jeton2"
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton2" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
 ok "K1g merkez reddederse rc 1 + http kodu/sebep; eski deftere DÜŞMEZ" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=401"* ]] && [[ "$o" != *ARGV* ]]'
+# ── ODA (0.6.3, görev …GZF89Z): Meşveret seansı maddeyi --oda ile geçirir; bulgu tanımadığı için kayıt REDDEDİLİYORDU ──
+odaal(){ python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['govde'].get('oda','YOK'))" "$T/gelen.json"; }
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "Meşveret Seansı mes_x · madde 1" --kim SERDAR --oda agentic-os 2>&1); r=$?
+ok "OD1 --oda merkez gövdesine 'oda' alanı olarak gider (gorev.sh ac --oda ile aynı alan), rc 0" '[ $r -eq 0 ] && [ "$(odaal)" = agentic-os ]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "odasız" --kim X 2>&1); r=$?
+ok "OD2 --oda verilmezse gövdede oda alanı YOK (eski yol aynen)" '[ $r -eq 0 ] && [ "$(odaal)" = YOK ]'
+once=$(md5sum < "$T/gelen.json")
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --oda 2>&1); r=$?
+ok "OD3 --oda değersiz rc 2, deftere HİÇ gidilmez (son gelen gövde değişmedi)" '[ $r -eq 2 ] && [[ "$o" == *"--oda değersiz"* ]] && [ "$(md5sum < "$T/gelen.json")" = "$once" ]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz odalı" --kim X --oda agentic-os 2>&1); r=$?
+ok "OD4 jetonsuz kutuda kayıt eski deftere yazılır, oda YAZILMADI diye SÖYLENİR (sessiz düşme yok)" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz odalı"* ]] && [[ "$o" != *"--oda"*"agentic-os|"* ]] && [[ "$o" == *"oda alanı tanımıyor"* ]] && [[ "$o" == *"YAZILMADI"* ]]'
 # ── DÜĞÜM (0.4.0): --dugum → dugum_acar; çıplak kimlikte kutu defterden; jetonsuz kutuda RED ──
 M="BULGU_KOK=$T/kok DEFTER_JETON_YOL=$T/jeton DEFTER_UC=http://127.0.0.1:$PORT"
 alan(){ python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['govde'].get('dugum_acar','YOK'))" "$T/gelen.json"; }
