@@ -1,0 +1,66 @@
+{
+  "is": "telefon-terminal-zoom-boy",
+  "cumle": "(2) telefon kipinde yarım ekran + telefonda terminale görüntü ekleme düğmesi",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-30T21:21:02+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-30T21:50:40+03:00",
+      "olay": "daralt",
+      "kalan_kart": "telefon-terminal-zoom-boy-kalan",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JQBZN0XWA1A05PW9HJKXAB",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-30T21:21:02+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "BÂNİ alt-ajan BENNÂ 30 Eki 21:5x (BÂNİ mesajı: kapsam daralıyor)",
+      "gerekce": "daraltma: kalan bulgu yeni karta (telefon-terminal-zoom-boy-kalan) — zoom kilidi merkez dumen-yakala-mac kartında (cloudtop #1226)",
+      "zaman": "2026-10-30T21:50:40+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Telefonda terminal: pinch-zoom kilitli olsun ve telefon kipinde terminal yarım çıkmasın (sağ yarı noktalı; pencere telefondan dar kalıyor)",
+      "zaman": "2026-10-30T21:50:40+03:00",
+      "kalan_kart": "telefon-terminal-zoom-boy-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-30T21:50:40+03:00",
+      "kalan_kart": "telefon-terminal-zoom-boy-kalan",
+      "kalan": "zoom kilidi merkez dumen-yakala-mac kartında (cloudtop #1226)",
+      "tur_sifir": 0,
+      "oturum": "BÂNİ alt-ajan BENNÂ 30 Eki 21:5x (BÂNİ mesajı: kapsam daralıyor)"
+    }
+  ]
+}
