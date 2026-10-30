@@ -1,0 +1,65 @@
+{
+  "tur": 1,
+  "is": "duzen-gece-kurulum",
+  "pr": "605",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T02:50:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-kurulum-uyum",
+  "dal": "duzen-gece-kurulum-uyum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34265,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 6683
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d08c8ca0c04224598948fe60fd0dae641dc731eb",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Gece betiği kuru çalışma, dört beceri döngüsü, kimlik yenileme ve reis mektubu akışını kurmuş; ancak “düzen sürümü artınca dört beceri kurulur” talebini düzen sürümünü tetik kabul ederek uygulamıyor. Ayrıca kartta bulunmayan haftalık uyum özelliği kapsama eklenmiş ve sunulan sınav çıktısı diffteki güncel sınavla uyuşmadığı için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Kurulum düzen paketinin sürüm artışına bağlı değil; her becerinin kendi kaynak/kurulu sürümü ayrı karşılaştırılıyor. Yalnız düzen sürümü artıp diğer üç becerinin sürümü değişmezse dört becerinin tamamı kurulmayacak, buna rağmen mektup dört becerinin kurulduğunu söyleyecek.",
+        "kanit": "BECERILER döngüsünde karar `if [ -z \"$ku\" ] || yeni_mi \"$kv\" \"$ku\"` ile her becerinin kendi sürümüne göre veriliyor; mektup metni koşulsuz olarak “dört düzen becerisi kuruldu/yenilendi” diyor. G2 de bütün sahte becerileri aynı anda 1.2.0 yaparak yalnız düzen sürümünün arttığı vakayı sınamıyor.",
+        "konum": "duzen/scripts/duzen-gece.sh:49",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartında istenmeyen haftalık uyum denetimi, Bulgu Havuzu yazımı ve ayrı günlük akışı eklenmiş; bu kapsam kaymasıdır.",
+        "kanit": "Kart yalnız düzen sürümü artınca gece kurulumu ve reislere sürüm mektubu istiyor. Diff ayrıca 63 satırlık `uyum-haftalik.sh`, 71 satırlık sınavı ve SKILL.md içinde Kuzey G30 haftalık uyum özelliğini ekliyor.",
+        "konum": "duzen/scripts/uyum-haftalik.sh:1",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kanıt çıktısı diffte gösterilen güncel gece sınavını ölçmüş olamaz; eklenen G9 dahil normal koşuda 9 gerçek vaka ve 3 mutasyon sonucu toplam 12 geçiş beklenirken kayıt 11 geçiş bildiriyor. Bu nedenle G9 ve güncel sınav sürümü kanıtlanmış sayılmaz.",
+        "kanit": "Sınav kaynak kodunda G1, G2, G3, G4, G5, G9, G6, G7, G8 olmak üzere 9 `ok` çağrısı ve üç mutant `ok` çağrısı var; ölçüm çıktısında G9 satırı yok ve sonuç `== 11 geçti · 0 düştü ==`.",
+        "konum": "olcum-sinav-mutantli-sonra.txt / duzen/scripts/duzen-gece.test.sh:52",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "SKILL.md görünür başlığı sürüm yükseltmesine rağmen eski 1.1.1 sürümünü gösteriyor.",
+        "kanit": "Ön madde ve katalog 1.2.0 yapılmışken başlık `# /duzen — filo düzen paketi (1.1.1 · iskelet + alt ajan istem üreticisi)` olarak kalmış.",
+        "konum": "duzen/SKILL.md:7",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce ölçümü betiğin bulunmadığını gösteriyor, sonra ölçümü ise yeşil hermetik sınav sunuyor. Ancak sonra çıktısı güncel diffteki G9 vakasını içermiyor ve beklenen 12 yerine 11 geçiş bildiriyor; ayrıca kart dışı `uyum-haftalik.sh` için manifestte hiçbir ölçüm kaydı yok. Gerçek kurulum/zamanlayıcı dış yüzeyde bırakılmış olsa da kart canlı kurulumu istemediğinden bu, kod puanını düşüren kutu-dışı eksik sayılmadı."
+  }
+}

@@ -1,7 +1,7 @@
 {
   "is": "duzen-gece-kurulum",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T00:24:46+03:00",
+  "guncelleme": "2026-10-31T02:51:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,18 +26,18 @@
       "etiket": "sinav-mutantli",
       "asama": "sonra",
       "dosya": "olcum-sinav-mutantli-sonra.txt",
-      "sha256": "1c393c4f2e105b5714455942b7f48706540948f6953b23f6f76dfef6c777f94b",
+      "sha256": "8e5e505e291473aaa249f2d970d7632cc10ec3502658adc4b5a30f20ac2fb21a",
       "komut": [
         "bash",
         "duzen/scripts/duzen-gece.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T00:24:46+03:00",
-      "sure_sn": 3.7,
+      "zaman": "2026-10-31T02:51:38+03:00",
+      "sure_sn": 10.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f64a24ea274445568f957a2133cff9a8"
+      "olcum_id": "118e312a4ec94b98920b31fcb710c4c8"
     }
   ],
-  "imza": "57d446b8c728d47ec1fdb857acfacf941354ad2f631813203f9709ac14a2ba65"
+  "imza": "bd227d2514526dbb8b3723fade28aacafeb8d3224f483f2508d952f53e68e20f"
 }

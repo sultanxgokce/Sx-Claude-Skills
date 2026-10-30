@@ -3,7 +3,7 @@
 # G1 varsayılan KURU: hiçbir komut çalışmaz, günlük yazılmaz · G2 --uygula + kurulu eski: dört beceri kurulur (kuruldu satırları onceki/kutu/reis),
 # bayat kimlik yenilenir (yenilendi satırı), reise mektup gider · G3 her şey güncel: hiçbir komut çalışmaz, mektup YOK, rc 0
 # G4 sync reddederse atlandi satırı + rc 1 + "kuruldu" yazılmaz · G5 reis yoksa mektup tahminle yollanmaz (atlandi, rc 1)
-# G6 kaynak sürüm okunamazsa rc 3 ÖLÇÜLEMEDİ · G7 bayat kimliğin temeli bilinmiyorsa yenile ÇAĞRILMAZ (atlandi) · G8 --force hiçbir komuta geçmez · G9 iki kutu reisine ayrı mektup
+# G6 kaynak sürüm okunamazsa rc 3 ÖLÇÜLEMEDİ · G7 bayat kimliğin temeli bilinmiyorsa yenile ÇAĞRILMAZ (atlandi) · G8 --force hiçbir komuta geçmez · G9 iki kutu reisine ayrı mektup · G10 düzen sürümü tetik (dördü de kurulur)
 # mutant: kurulu=kaynak iken kurmaya kalkan kopya G3 kırmızı · reis yokken de mektup yollayan kopya G5 kırmızı · --force geçiren kopya G8 kırmızı
 set -uo pipefail
 export LC_ALL=C.UTF-8
@@ -63,6 +63,10 @@ kurulu 1.1.1
 O="$(kos --uygula --depo "$T/bos" --reis code:SERDAR,mmex:BERİD)"; rc=$?
 ok "G9 iki kutu reisi: her birine AYRI mektup satırı (kutu+reis), rc 0" "$([ $rc -eq 0 ] && [ "$(cagri mektup)" = 2 ] && grep -q 'mektup reis=SERDAR surum=1.2.0 durum=gitti kutu=code' "$T/g.log" && grep -q 'mektup reis=BERİD surum=1.2.0 durum=gitti kutu=mmex' "$T/g.log" && echo 0 || echo 1)" "→ rc=$rc"
 
+kurulu 1.2.0; skill "$T/kur" duzen 1.1.1
+O="$(kos --uygula --depo "$T/bos" --reis SERDAR)"; rc=$?
+ok "G10 yalnız duzen sürümü eski: düzen artınca dördü de kurulur, mektup kurulan adları sayar" "$([ $rc -eq 0 ] && [ "$(cagri sync)" = 4 ] && grep -q 'kurulan beceriler: duzen gunluk-plan mesveret bulgu' "$KAYIT" && echo 0 || echo 1)" "→ rc=$rc"
+
 O="$(bash "$R" --sx "$T/yok-sx" --gunluk "$T/g2.log" 2>&1)"; rc=$?
 ok "G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ" "$([ $rc -eq 3 ] && grep -q 'ÖLÇÜLEMEDİ' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc"
 
@@ -79,7 +83,8 @@ if [ -z "${GECE_BETIK:-}" ]; then
 import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s; s=s.replace(sys.argv[3],sys.argv[4]); assert s!=o; open(sys.argv[2],'w',encoding='utf-8').write(s)
 PY
     local o; o="$(GECE_BETIK="$M" bash "$0" 2>&1)"; ok "mutant '$1' → $4 kırmızı" "$(grep -q "✗ $4 " <<<"$o" && echo 0 || echo 1)" "→ $(grep -E '✗' <<<"$o" | head -2)"; }
-  mut her-zaman-kur 'if [ -z "$ku" ] || yeni_mi "$kv" "$ku"; then' 'if true; then' G3
+  mut her-zaman-kur 'if [ "$ZORLA" -eq 1 ] || [ -z "$ku" ] || yeni_mi "$kv" "$ku"; then' 'if true; then' G3
+  mut duzen-surumu-tetik-degil 'ZORLA=0; { [ -z "$dku" ] || yeni_mi "$dk" "$dku"; } && ZORLA=1' 'ZORLA=0' G10
   mut reissiz-mektup 'if [ -z "$REIS" ]; then yaz' 'if false; then yaz' G5
   mut force-gecir '--skill "$b" --apply' '--skill "$b" --apply --force' G8
 fi

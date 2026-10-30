@@ -44,13 +44,16 @@ KAYNAK_DUZEN="$(surum_oku "$SX/duzen/SKILL.md")"
 RC=0; REISYAZ="${REIS:--}"; REISYAZ="${REISYAZ//,/+}"; REISYAZ="${REISYAZ//[^[:alnum:]_+:ÇĞİÖŞÜçğıöşü-]/}"; [ "$UYGULA" -eq 1 ] || echo "KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)"
 
 # 1) dört beceriyi kur (kaynak > kurulu olanı; --force YOK — elle değişmiş kopya ezilmez, atlanır ve günlüğe yazılır)
-KURULDU=0
+KURULDU=0; KURULANLAR=()
+# tetik: düzen paketinin sürümü artınca dört becerinin TAMAMI kurulur; düzen aynıysa yalnız kendi sürümü artan beceri
+dk="$(surum_oku "$SX/duzen/SKILL.md")"; dku="$(surum_oku "$KURULU_KOK/duzen/SKILL.md")"
+ZORLA=0; { [ -z "$dku" ] || yeni_mi "$dk" "$dku"; } && ZORLA=1
 for b in "${BECERILER[@]}"; do
   kv="$(surum_oku "$SX/$b/SKILL.md")"; ku="$(surum_oku "$KURULU_KOK/$b/SKILL.md")"
   [ -n "$kv" ] || { yaz "atlandi beceri=$b sebep=kaynak-surum-okunamadi kutu=$KUTU"; RC=1; continue; }
-  if [ -z "$ku" ] || yeni_mi "$kv" "$ku"; then
+  if [ "$ZORLA" -eq 1 ] || [ -z "$ku" ] || yeni_mi "$kv" "$ku"; then
     if [ "$UYGULA" -eq 1 ]; then
-      if $SYNC --skill "$b" --apply </dev/null >/dev/null 2>&1; then yaz "kuruldu beceri=$b surum=$kv onceki=${ku:-yok} kutu=$KUTU reis=$REISYAZ"; KURULDU=1
+      if $SYNC --skill "$b" --apply </dev/null >/dev/null 2>&1; then yaz "kuruldu beceri=$b surum=$kv onceki=${ku:-yok} kutu=$KUTU reis=$REISYAZ"; KURULDU=1; KURULANLAR+=("$b")
       else yaz "atlandi beceri=$b sebep=sync-reddetti-rc$? kutu=$KUTU"; RC=1; fi
     else echo "KURU: $b ${ku:-yok} → $kv kurulacaktı"; KURULDU=1; fi
   fi
@@ -76,7 +79,7 @@ if [ "$UYGULA" -eq 1 ] && { [ "$KURULDU" -eq 1 ] || [ "$YENILENDI" -eq 1 ]; }; t
     for oge in "${LISTE[@]}"; do
       case "$oge" in *:*) mk="${oge%%:*}"; mr="${oge#*:}" ;; *) mk="$KUTU"; mr="$oge" ;; esac
       if [ -z "$mr" ] || [ "$mr" = "-" ]; then yaz "mektup reis=- surum=$KAYNAK_DUZEN durum=atlandi kutu=$mk"; RC=1; continue; fi
-      if $MEKTUP "$mr" "düzen v$KAYNAK_DUZEN indi ($mk): dört düzen becerisi kuruldu/yenilendi. 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc yenile' ile tazele." --kimden MİRAHUR --onem normal --konu "düzen v$KAYNAK_DUZEN indi" </dev/null >/dev/null 2>&1
+      if $MEKTUP "$mr" "düzen v$KAYNAK_DUZEN indi ($mk): kurulan beceriler: ${KURULANLAR[*]:-yok}; yenilenen kimlik: $YENILENDI (1=var, 0=yok). 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc yenile' ile tazele." --kimden MİRAHUR --onem normal --konu "düzen v$KAYNAK_DUZEN indi" </dev/null >/dev/null 2>&1
       then yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=gitti kutu=$mk"
       else yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=hata kutu=$mk"; RC=1; fi
     done
