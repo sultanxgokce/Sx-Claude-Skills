@@ -1,6 +1,6 @@
 {
   "is": "postane-postaci-kaynak-tazele",
-  "cumle": "postane-postaci becerisindeki postane.mjs kopyası ve KAYNAK.sha256 cloudtop ana dalıyla (postane 0.1.6) hizalanır",
+  "cumle": "postane-postaci becerisindeki postane.mjs kopyası ve KAYNAK.sha256 cloudtop ana dalıyla (postane 0.1.6) hizalanır; beceri ve katalog sürümü 0.2.0 → 0.2.1 yapılır (kurulu kopya sürüm artmadan güncellenmez)",
   "istedi": "SERDAR",
   "aldi": "HEZARFEN",
   "zaman": "2026-10-30T19:56:15+03:00",
@@ -15,7 +15,11 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "not": "tur 1 göz bulgusu (kapsam kayması): cümleye sürüm 0.2.0→0.2.1 açıkça eklendi — kurulu kopya sürüm artmadan güncellenmez (sync-skills)"
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
