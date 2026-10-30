@@ -15,14 +15,32 @@
   "kanit_nerede": "",
   "oda": "agentic-os",
   "durum": "acik",
-  "gecmis": [],
-  "canli_gerekir": false,
-  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "gecmis": [
+    {
+      "zaman": "2026-10-30T23:02:13+03:00",
+      "olay": "canli-ayarla",
+      "reis": "SERDAR",
+      "canli": "e",
+      "gerekce": "kart cümlesi kurulu kopyaların güncellenmesini istiyor; kurulum yalnız birleşmeden sonra ana daldan yapılır"
+    },
+    {
+      "zaman": "2026-10-30T23:02:13+03:00",
+      "olay": "canli-borc"
+    }
+  ],
+  "canli_gerekir": true,
+  "canli_sebep": "sahip SERDAR ayarladı (--canli e): kart cümlesi kurulu kopyaların güncellenmesini istiyor; kurulum yalnız birleşmeden sonra ana daldan yapılır",
   "kapsam_uyarilari": [
     "30.10 22:56 is-alani: PR #600 aynı dosyaya dokunuyor → catalog.json: 1567-1567 — PR'dan önce kapsam-olc",
     "30.10 22:56 is-alani: PR #506 aynı dosyaya dokunuyor → catalog.json: 1567-1567 — PR'dan önce kapsam-olc"
   ],
   "sayi_uyarilari": [],
   "sayi_bicim_eksikleri": [],
-  "sayi_bicim_uyarisi": false
+  "sayi_bicim_uyarisi": false,
+  "canli_borc": {
+    "zaman": "2026-10-30T23:02:13+03:00",
+    "yazan": "SERDAR",
+    "gerekce": "kurulu kopya ancak birleşmeden sonra ana daldan sync-skills ile kurulur; kuru kurulum dört beceride 0 sapma gösterdi",
+    "odendi": null
+  }
 }

@@ -1,0 +1,13 @@
+$ node sync-skills.mjs --skill gunluk-plan
+# rc=0 sure=0.2s zaman=2026-10-30T23:02:03+03:00
+--- stdout ---
+  kaynak: sultan-dili-satiri@01a65142 · origin/main'e göre 0 commit geride · 0 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  ↑ gunluk-plan → _global: güncelle v1.19.0 → v1.19.1
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---

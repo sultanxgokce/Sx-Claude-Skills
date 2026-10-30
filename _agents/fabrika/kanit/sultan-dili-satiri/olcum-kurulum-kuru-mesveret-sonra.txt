@@ -1,0 +1,13 @@
+$ node sync-skills.mjs --skill mesveret
+# rc=0 sure=0.1s zaman=2026-10-30T23:02:03+03:00
+--- stdout ---
+  kaynak: sultan-dili-satiri@01a65142 · origin/main'e göre 0 commit geride · 3 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  ↑ mesveret → _global: güncelle v0.1.0 → v0.1.1
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---
