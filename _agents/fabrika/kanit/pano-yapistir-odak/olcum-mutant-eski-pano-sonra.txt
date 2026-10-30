@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-y4b-* ===
+$ bash -c cd "$B/terminal-onar" && cmp -s kapi/pano-sinav.mjs /config/projects/_wt/Sx-Claude-Skills-pano-yapistir-odak/terminal-onar/kapi/pano-sinav.mjs && ! grep -q "Odak terminal dışı" kapi/genel/pano.js && echo "MUTASYON: odak bekçisi yok (eski pano.js), sınav yeni" && out=$(timeout 300 node kapi/pano-sinav.mjs </dev/null 2>&1); printf "%s\n" "$out" | grep -E "Y4b|GEÇEN"; grep -qF "✓ Y4b" <<<"$out"
+# rc=1 sure=84.7s zaman=2026-10-30T21:05:24+03:00
+--- stdout ---
+MUTASYON: odak bekçisi yok (eski pano.js), sınav yeni
+  ✗ Y4b terminal DIŞI yazı kutusuna resim yapıştırma köprüye GİTMEZ (yükleme 0 · olay engellenmedi · yol terminale yazılmadı) → {"gecti":false,"engellendi":true} · yükleme 2
+GEÇEN: 30 · KALAN: 5
+  · Y4b terminal DIŞI yazı kutusuna resim yapıştırma köprüye GİTMEZ (yükleme 0 · olay engellenmedi · yol terminale yazılmadı)
+--- stderr ---

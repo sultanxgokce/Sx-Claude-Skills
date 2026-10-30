@@ -1,0 +1,48 @@
+{
+  "is": "pano-yapistir-odak",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T21:05:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-y4b",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-y4b-sonra.txt",
+      "sha256": "c458be85e9e4d4f96a2a84f7928d17cb7ae3537e7394956608b8ccd566d7c2e5",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && out=$(timeout 300 node kapi/pano-sinav.mjs </dev/null 2>&1); printf \"%s\\n\" \"$out\" | grep -E \"Y4b|Y2 |Y3 |GEÇEN\"; grep -qF \"✓ Y4b\" <<<\"$out\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T21:03:52+03:00",
+      "sure_sn": 76.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "51f67a5e1f7c44feb0c26627c12f6495"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-eski-pano",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-eski-pano-sonra.txt",
+      "sha256": "c40682f3688fa9ad1f6ed63265237059225561773552fac537ef998c609101e1",
+      "komut": [
+        "bash",
+        "-c",
+        "cd \"$B/terminal-onar\" && cmp -s kapi/pano-sinav.mjs /config/projects/_wt/Sx-Claude-Skills-pano-yapistir-odak/terminal-onar/kapi/pano-sinav.mjs && ! grep -q \"Odak terminal dışı\" kapi/genel/pano.js && echo \"MUTASYON: odak bekçisi yok (eski pano.js), sınav yeni\" && out=$(timeout 300 node kapi/pano-sinav.mjs </dev/null 2>&1); printf \"%s\\n\" \"$out\" | grep -E \"Y4b|GEÇEN\"; grep -qF \"✓ Y4b\" <<<\"$out\""
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T21:05:24+03:00",
+      "sure_sn": 84.7,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-y4b",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c622906a49a643e4a88b205c3d050fff"
+    }
+  ],
+  "imza": "81e2bc8dc208c6e25431d30f009bf9b4610de1b58dd2510a74bad3ca0a5ceba3"
+}
