@@ -1,0 +1,4 @@
+⚠ PR #586 şu dosyalara zaten dokunuyor: catalog.json yazilim-fabrikasi/SKILL.md
+⚠ PR #506 şu dosyalara zaten dokunuyor: catalog.json
+✗ KAPSAM ÇAKIŞMASI — 2 açık PR aynı dosyaları değiştiriyor. DUR ve sor; alan AÇILMADI.
+exit=2

@@ -1,0 +1,14 @@
+⚠ --kartsiz: kart CEVAPSIZ açıldı, sultan=true damgalı (şüphede sınıf yukarı); gün sonu özetinde görünür
+⚠ PR #586 aynı dosyaya dokunuyor → catalog.json: 1533-1533 · yazilim-fabrikasi/SKILL.md: 4-4 111-111
+⚠ PR #506 aynı dosyaya dokunuyor → catalog.json: 1567-1567
+⚠ KAPSAM UYARISI — 2 açık PR aynı dosyalara dokunuyor (satır blokları yukarıda). Aynı dosya engel DEĞİL: alan AÇILIYOR.
+  Gerçek çakışma satır kesişimidir ve ancak yazdıktan sonra ölçülür → PR'dan ÖNCE: bash /config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi/yazilim-fabrikasi/scripts/is-alani.sh kapsam-olc <iş>  (kesişim >0 → rc 2 DUR)
+✓ çalışma alanı hazır (origin/main üstünde, TAZE) · kart birincil depoda (/config/projects/Sx-Claude-Skills/_agents/fabrika/kartlar/benna-deneme-kapsam.json), kopyalanmadı
+  cd /config/projects/_wt/Sx-Claude-Skills-benna-deneme-kapsam
+  ⚠ worktree PAYLAŞILAN KAYNAĞI izole etmez: port · veritabanı · kilit dosyası ortaktır;
+    port cevap veriyorsa SENİN süreç mi bak; kilit çakışırsa elle birleştirme, yeniden üret.
+  ⚠ aynı-dosya uyarısı karta yazıldı · PR'dan ÖNCE: bash /config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi/yazilim-fabrikasi/scripts/is-alani.sh kapsam-olc benna-deneme-kapsam
+  bitince: bash /config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi/yazilim-fabrikasi/scripts/is-alani.sh kapat benna-deneme-kapsam
+ac exit=0
+✓ kapsam-olc: alan henüz hiçbir satır değiştirmedi (merge-base f5b968db) — kesişim yok
+kapsam-olc(boş) exit=0
