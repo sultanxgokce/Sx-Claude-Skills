@@ -1,32 +1,32 @@
 {
   "is": "postane-postaci-kaynak-tazele",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T19:56:41+03:00",
+  "guncelleme": "2026-10-30T19:59:30+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kaynak-fark",
       "asama": "once",
       "dosya": "olcum-kaynak-fark-once.txt",
-      "sha256": "f09bf5d61adcdb4d3a81796149c647cccf6defd943cfcb4dfa41909e7405d0dc",
+      "sha256": "20d9532401afdf7f7b6b1495b9fdd0dd5d39d06d501c1a85913707cfc901fe60",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh",
-        "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-kaynak-tazele"
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-main-kopya"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T19:56:37+03:00",
+      "zaman": "2026-10-30T19:59:30+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "3a5ea28785df4b3c9264220b4aad6d91"
+      "olcum_id": "6acb2a22d76242e384ef676c104a68e9"
     },
     {
       "tur": "olcum",
       "etiket": "kaynak-fark",
       "asama": "sonra",
       "dosya": "olcum-kaynak-fark-sonra.txt",
-      "sha256": "e45295b7f228283852e54869e736222dcd76759de323b69c4bfaa92213a97d73",
+      "sha256": "1493914d98e25057cee756fb859f9dd03476493a7428614d4acdfdec2bc20d0a",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh",
@@ -34,10 +34,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T19:56:37+03:00",
+      "zaman": "2026-10-30T19:59:30+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "8f5482572ebc48db96b4064dd2c517cf"
+      "olcum_id": "1d06c2a8959f4c32a4c10590e4f77b9f"
     },
     {
       "tur": "olcum",
@@ -57,5 +57,5 @@
       "olcum_id": "45bdd302770f431095704b3a596745ad"
     }
   ],
-  "imza": "9f0778abcd011aa3c19593220aee7af8b9ff467546973a993040c87f638905cc"
+  "imza": "5afb0fa9f395bbe9161a30a13cafa8b74062ff1f25894ea9d5957ddd5d19aa0d"
 }
