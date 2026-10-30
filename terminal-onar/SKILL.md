@@ -86,7 +86,7 @@ geçirip bağlanır.
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
 
-## 🆕 2.36.5 · Telefonda terminal yarım çıkmaz + görüntü ekleme düğmesi + klavye açıkken yazı alanı görünür (30 Eki · görev …HJKXAB · kart telefon-terminal-zoom-boy)
+## 🆕 2.36.5 · Telefonda terminal yarım çıkmaz + telefonda görüntü ekleme düğmesi (30 Eki · görev …HJKXAB · kart telefon-terminal-zoom-boy)
 **Yarım ekran:** telefon (`tel.` kipi, `-f ignore-size`) pencere boyuna girmediği için, pencere son bağlanan dar bir istemcinin boyunda kalınca
 (canlıda `code-ana` 30x50 ölçüldü) telefonun sağı ve altı noktalı çıkıyordu. Artık `koltuk-bagla.sh` telefon kipinde oturuma iki tmux kancası
 (`client-attached[86]`, `client-resized[86]`) kurar; kanca yalnız ignore-size istemcide koşar ve `koltuk-bagla.sh --tel-buyut <istemci>`
@@ -96,8 +96,7 @@ sonradan oturan boyunu kaçırıyordu (3 sütun yine noktalı). Telefon dönünc
 **Görüntü ekle:** telefonda (dokunmatik + dar ekran) terminalin üstünde tek düğme **🖼 Görüntü ekle** (`kapi/genel/pano.js`). `accept="image/*"`,
 `capture` yok: iOS ve Android'in kendi menüsü galeri ile kamerayı aynı dokunuşta sunar. Seçilen dosya yapıştırmayla aynı yoldan geçer
 (küçültme → `/api/resim` → yol terminale). Düğme terminal kabının dışında; kap 52 px aşağı iner, metin örtülmez. Masaüstünde düğme yoktur.
-**Klavye açıkken:** telefonda klavye görünen alanı (visualViewport) küçültünce terminal kabı görünen alana sığdırılır, ttyd yeniden sığdırır; yazı satırı klavyenin altında kalmaz, klavye kapanınca eski boy (pano.js 1.1.0 · sınav G9-G11, klavye başsız tarayıcıda taklitle ölçüldü — gerçek telefonda ölçülmedi).
-Pinch-zoom kilidi bu sürümde YOK — merkezin işi (cloudtop #1226). Sınav: `koltuk-bagla.test.sh` P1-P13 (+P2b) + gerçek tmux R0-R6 · `pano-sinav.mjs` G0-G11.
+Pinch-zoom kilidi bu sürümde YOK — merkezin işi (cloudtop #1226). Sınav: `koltuk-bagla.test.sh` P1-P13 (+P2b) + gerçek tmux R0-R6 · `pano-sinav.mjs` G0-G8.
 ## 🆕 2.36.4 · Yazı kutusuna yapıştırılan resim terminale kaçmaz (30 Eki · görev …QC7Q7E · kart pano-yapistir-odak)
 Görev kartının "Madde ekle" kutusu gibi terminal DIŞI bir yazı alanına (input · textarea · düzenlenebilir alan) Cmd+V ile
 resim yapıştırılınca `genel/pano.js` olayı artık almaz; resim o alanın kendi yapıştırmasına kalır. xterm'in yardımcı

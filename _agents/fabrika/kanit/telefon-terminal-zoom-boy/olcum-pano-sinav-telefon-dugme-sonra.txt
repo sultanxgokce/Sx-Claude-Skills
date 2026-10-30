@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/pano-g.sh /config/projects/_wt/Sx-Claude-Skills-telefon-terminal-zoom-boy/terminal-onar --kare /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/kare/pano-sonra
-# rc=0 sure=105.7s zaman=2026-10-30T22:38:35+03:00
+# rc=0 sure=97.3s zaman=2026-10-30T22:51:35+03:00
 --- stdout ---
 tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules
 ── Y · resim yapıştırma (Cmd+V)
@@ -54,7 +54,7 @@ tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules
   ✓ Y6 ikinci yol da terminale yazıldı
   ✓ Y7 METİN yapıştırma xterm'in kendi yoluyla aynen çalışır (köprü dokunmaz)
   ✓ Y8 son resmin adım süreleri ölçülür (küçültme ms · yükleme ms · bayt) ve bildirim bunları yazar ("küçültme X sn · yükleme Y sn · Z KB")
-   ÖLÇÜ Safari taklidi: kodlama ["image/jpeg"] · süreler {"kucultMs":181,"yukleMs":18,"ilkBayt":3659668,"bayt":230286,"tip":"image/jpeg"}
+   ÖLÇÜ Safari taklidi: kodlama ["image/jpeg"] · süreler {"kucultMs":167,"yukleMs":6,"ilkBayt":3659668,"bayt":230286,"tip":"image/jpeg"}
   ✓ Y9 🔴 Safari (WebP kodlayamaz): resim TEK kez kodlanır, doğrudan JPEG (eski kod: webp→PNG + JPEG = 2 kodlama)
   ✓ Y10 Safari yolunda ekran görüntüsü (3574 KB PNG, 2880 px) JPEG olarak küçülür; yol terminale yazıldı
 ── K · kopyalama (fare seçimi → tmux → OSC 52 → tarayıcı panosu)
@@ -91,17 +91,14 @@ tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules
   ✓ G6 kullanıcıya bildirildi ("resmin yolu terminale yazıldı")
   ✓ G7 görüntü olmayan dosya YÜKLENMEZ, nedeni söylenir
   ✓ G8 aynı düğmeyle ikinci görüntü de gider (girdi her seçimden sonra sıfırlanır)
-  ✓ G9 🔴 klavye açılınca (görünen alan 844→500 px) terminal görünen alana sığar: kap 448 px, ekranın altı ≤ 500, satır sayısı azalır
-  ✓ G10 klavye kapanınca terminal eski boyuna döner (satır sayısı geri gelir)
-  ✓ G11 küçük oynama (44 px, adres çubuğu) klavye sayılmaz: boy değişmez
 ── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI
   ✗ N1 köprüsüz sayfada işaret ve bağ yok 
   ✓ N2 köprüsüz: OSC 52 panoya İNMEZ (ölçüm yokluğu görüyor; K1 tautoloji değil)
   ✓ N3 köprüsüz: resim yapıştırma dinleyiciye ULAŞMAZ (Y2 tautoloji değil)
 ── E · eklenti sınavı ÖLÇÜLMEDİ (EKLENTI_YOL verilmedi) — yeşil sayılmaz
 
-GEÇEN: 46 · KALAN: 2
+GEÇEN: 43 · KALAN: 2
   · Y0 gerçek ttyd+tmux sayfası açıldı, kabuk istemi göründü
   · N1 köprüsüz sayfada işaret ve bağ yok
-ÖZET: pano-sinav rc=1 · G kapıları yeşil=12/12 · bilinen dışı kırmızı=0
+ÖZET: pano-sinav rc=1 · G kapıları yeşil=9/9 · bilinen dışı kırmızı=0
 --- stderr ---

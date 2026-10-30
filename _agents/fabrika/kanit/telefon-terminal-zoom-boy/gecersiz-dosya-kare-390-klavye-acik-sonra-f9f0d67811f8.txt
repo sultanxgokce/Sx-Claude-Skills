@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: dosya-kare-390-klavye-acik-sonra.png
+hedef_sha256: 2b0cbfe881b58edb4c1333cb467846162968b2bf6e53b17d42fb4c1ade6081ce
+hedef_zaman: 2026-10-30T22:45:23+03:00
+hedef_renk: yesil
+neden: klavye uyumu bu karttan çıkarıldı (BÂNİ daralt kararı); kare yeni kartın kanıtıdır
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T22:49:51+03:00

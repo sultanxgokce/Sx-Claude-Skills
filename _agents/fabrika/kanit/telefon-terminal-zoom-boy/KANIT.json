@@ -1,7 +1,7 @@
 {
   "is": "telefon-terminal-zoom-boy",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T22:47:46+03:00",
+  "guncelleme": "2026-10-30T22:51:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -175,7 +175,7 @@
       "etiket": "pano-sinav-telefon-dugme",
       "asama": "sonra",
       "dosya": "olcum-pano-sinav-telefon-dugme-sonra.txt",
-      "sha256": "d31c17191fab26894d6907bdfb435a17885d1a9d628ff785200ca5ef80f36c31",
+      "sha256": "94954393a26010038d1ae1354f4b6dd34a3dd7b8c323840fda68a0503257b0a0",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/pano-g.sh",
@@ -185,10 +185,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T22:38:35+03:00",
-      "sure_sn": 105.7,
+      "zaman": "2026-10-30T22:51:35+03:00",
+      "sure_sn": 97.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "fb30f8e699134fb9858a474f224d89fe"
+      "olcum_id": "eab747645c644387b5c5574b63e909c3"
     },
     {
       "tur": "gecersiz",
@@ -562,7 +562,45 @@
       "renk": "ilan",
       "zaman": "2026-10-30T22:47:11+03:00",
       "olcum_id": "931ef1ef1f284a4c8b7d428390148592"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "mutant-pano-klavye",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-mutant-pano-klavye-sonra-327a0febeea2.txt",
+      "sha256": "b8cf67f5368bbd87b1e195eb998069e7ca9bf91d2317355fc1157188124a6342",
+      "hedef_dosya": "olcum-mutant-pano-klavye-sonra.txt",
+      "hedef_olcum_id": "fa2efab1f29e455db3d1a6574f24e10b",
+      "hedef_sha256": "27d15eed8942aed7e78eede2f2854225d35a353615a0c836fb5cd0c774ce25a4",
+      "hedef_zaman": "2026-10-30T22:40:34+03:00",
+      "hedef_renk": "yesil",
+      "neden": "klavye uyumu bu karttan çıkarıldı (BÂNİ daralt kararı); mutant artık bu işin kodunu ölçmüyor",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T22:49:51+03:00",
+      "olcum_id": "c317ec3c5bda43dbb3083ad2d91115ce"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kare-390-klavye-acik",
+      "asama": "tek",
+      "dosya": "gecersiz-dosya-kare-390-klavye-acik-sonra-f9f0d67811f8.txt",
+      "sha256": "de94fdd8c5f36bcb7b5b1ab4110b1736ad789aa2d6c9d6084ff50337f3eb702b",
+      "hedef_dosya": "dosya-kare-390-klavye-acik-sonra.png",
+      "hedef_olcum_id": "097262c5bbd6407db056e21552f3d29e",
+      "hedef_sha256": "2b0cbfe881b58edb4c1333cb467846162968b2bf6e53b17d42fb4c1ade6081ce",
+      "hedef_zaman": "2026-10-30T22:45:23+03:00",
+      "hedef_renk": "yesil",
+      "neden": "klavye uyumu bu karttan çıkarıldı (BÂNİ daralt kararı); kare yeni kartın kanıtıdır",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T22:49:51+03:00",
+      "olcum_id": "34107055dd5244639d8952f2716012f9"
     }
   ],
-  "imza": "cd58c603cc24e68ca633c5a5486a92b352b46619b8ecde0a33b02d14826c7ce2"
+  "imza": "83cda27daf609bdd212421fc2e65467b0f6e18e693ffa89ed88c9f6393df413a"
 }
