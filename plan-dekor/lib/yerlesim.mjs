@@ -219,8 +219,23 @@ function duvaraDayanma(kutu, duvarlar, noktalar) {
   return sayi;
 }
 
+// Odanın m²'sine düşen OPSİYONEL TAVANI. Eşik program.json'da yaşar (plan-motor doktrini:
+// eşik kodda yaşamaz); burada yalnız bant seçimi yapılır. Bant tanımlı değilse tavan YOKTUR
+// (Infinity) → eski davranış birebir korunur.
+export function opsiyonelButcesi(program, m2) {
+  const b = program?.daire_kisitlari?.opsiyonel_butcesi;
+  if (!b) return Infinity;
+  const bantlar = [...(b.bantlar ?? [])].sort((x, y) => x.azami_m2 - y.azami_m2);
+  for (const bant of bantlar) {
+    if (m2 <= bant.azami_m2) return bant.azami_opsiyonel;
+  }
+  return b.varsayilan_azami_opsiyonel ?? Infinity;
+}
+
 // Bir odayı döşe. Açgözlü + geri-izlemeli: zorunlular önce, sığmazsa ODA BAŞARISIZ (dürüst).
-export function odayiDose(model, oda, { indeks, program }, kuralSeti, { adet = 3 } = {}) {
+// `yasakli`: bu ODADA yasaklanmış mobilya id'leri (daire-ölçeği tekillik tahsisi — bkz plaMobilyala).
+// Yasak YALNIZ opsiyonele işler; zorunluya dokunmaz, yoksa fail-closed davranışı delinirdi.
+export function odayiDose(model, oda, { indeks, program }, kuralSeti, { adet = 3, yasakli } = {}) {
   const baglam = odaBaglami(model, oda);
   const tip = oda.tip ?? 'diger';
   const m2 = alanM2(baglam.odaPoligon);
@@ -235,8 +250,9 @@ export function odayiDose(model, oda, { indeks, program }, kuralSeti, { adet = 3
   }
 
   const zorunluListe = genislet(zorunlu, indeks);
-  const opsiyonelListe = genislet(prog.opsiyonel ?? [], indeks)
-    .sort((a, b) => (b._oncelik ?? 0) - (a._oncelik ?? 0));
+  const butce = opsiyonelButcesi(program, m2);
+  const opsiyonelListe = genislet((prog.opsiyonel ?? []).filter((k) => !yasakli?.has(k.mobilya)), indeks)
+    .sort((a, b) => (b._oncelik ?? 0) - (a._oncelik ?? 0) || String(a.id).localeCompare(String(b.id)));
 
   if (zorunluListe.length === 0 && opsiyonelListe.length === 0) {
     return { oda: oda.id, durum: 'bos-program', adaylar: [{ yerlesimler: [], skor: 0, karar: 'mobilyasız' }] };
@@ -291,10 +307,14 @@ export function odayiDose(model, oda, { indeks, program }, kuralSeti, { adet = 3
     toplamDenenen++;
     if (eksikZorunlu) continue;
 
-    // opsiyoneller — sığdıkça
+    // opsiyoneller — sığdıkça, ama ODA BÜTÇESİ kadar.
+    // `ilk` opsiyonelden geldiyse (zorunlusuz oda: antre/hol) bütçeden düşülmüştür.
+    let harcanan = zorunluListe.length ? 0 : 1;
     for (const mob of kalanOpsiyonel) {
+      if (harcanan >= butce) break;
       const yer = enIyiKonum(mob, baglam, yerlesimler, kuralSeti);
-      if (yer) yerlesimler.push(yer);
+      // Bütçe YERLEŞENİ sayar: sığmayan opsiyonel bütçe harcamaz.
+      if (yer) { yerlesimler.push(yer); harcanan++; }
     }
 
     const { ceza, notlar } = konforCezasi(yerlesimler, baglam, kuralSeti);
@@ -388,10 +408,108 @@ function anaDuvarEtiketi(y, baglam) {
   return adlar[yakinlik.indexOf(Math.min(...yakinlik))];
 }
 
+// Bir odanın (m²'sine göre) YÜRÜRLÜKTEKİ zorunlu listesi — küçük-oda varyantı dahil.
+function yururluktekiZorunlu(prog, m2) {
+  if (prog?.kucuk_oda_m2 && m2 < prog.kucuk_oda_m2 && prog.kucuk_oda_zorunlu) return prog.kucuk_oda_zorunlu;
+  return prog?.zorunlu ?? [];
+}
+
+// 🔴 DAİRE-ÖLÇEĞİ TEKİLLİK TAHSİSİ.
+// Yerleştirici odaları tek tek döşer; hiçbir oda ötekinin ne aldığını bilmez. Sonuç ölçüldü:
+// `yemek-masasi-6` hem mutfak hem oturma_odasi opsiyonelinde tanımlı olduğu için aynı daireye
+// İKİ yemek masası girdi. Geometri temizdi — kusur daire ölçeğindeydi. Bu fonksiyon, tekil
+// ilan edilmiş her mobilyayı SAHİPLERİ arasında sıralar (zorunlu > öncelik > oda-id) ve
+// kazanan dışındaki odaların OPSİYONELİNDEN düşer. Sıralama tamamen deterministiktir.
+function tekilSahipSiralari(hedefOdalar, program, m2ler) {
+  const tekilListe = program?.daire_kisitlari?.daire_tekil ?? [];
+  const siralar = new Map(); // mobilyaId → [{ oda, oncelik, zorunlu }]
+  for (const kalem of tekilListe) {
+    const mid = typeof kalem === 'string' ? kalem : kalem.mobilya;
+    if (!mid) continue;
+    const sahipler = [];
+    for (const o of hedefOdalar) {
+      const prog = program.programlar[o.tip ?? 'diger'];
+      if (!prog) continue;
+      const zorunluMu = yururluktekiZorunlu(prog, m2ler.get(o.id)).some((k) => k.mobilya === mid);
+      const ops = (prog.opsiyonel ?? []).find((k) => k.mobilya === mid);
+      if (!zorunluMu && !ops) continue;
+      sahipler.push({ oda: o.id, zorunlu: zorunluMu, oncelik: zorunluMu ? Infinity : (ops.oncelik ?? 0), m2: m2ler.get(o.id) ?? 0 });
+    }
+    if (sahipler.length <= 1) continue;
+    // `tercih` (VERİDE, opsiyonel): sıralamaya oda ÖLÇÜSÜNÜ katar.
+    // 🔴 Puanlayan-ajan 2026-08-13: sıralama oda m²'sini hiç kullanmıyordu; m2ler haritası
+    // hesaplanıp fonksiyona veriliyordu ama yalnız `yururluktekiZorunlu` için. Sonuç:
+    // 18 m²'lik mutfak masasını 27 m²'lik salona kaptırıp BOŞ kalıyordu ve müşteri bunu
+    // İKİ TESLİMAT üst üste söyledi. Eşik UYDURULMADI ("≥15 m² ise masa hakkı" gibi bir
+    // sayı yok): tercih yalnız SIRALAMA ölçütüdür ve VERİDE beyan edilir.
+    // Beyan yoksa davranış BİREBİR eskisi gibi kalır (sessiz değişiklik yok).
+    const tercih = typeof kalem === 'string' ? null : kalem.tercih;
+    if (tercih === 'en_buyuk_oda') {
+      sahipler.sort((a, b) => Number(b.zorunlu) - Number(a.zorunlu) || b.m2 - a.m2 || String(a.oda).localeCompare(String(b.oda)));
+    } else if (tercih === 'en_kucuk_oda') {
+      sahipler.sort((a, b) => Number(b.zorunlu) - Number(a.zorunlu) || a.m2 - b.m2 || String(a.oda).localeCompare(String(b.oda)));
+    } else {
+      sahipler.sort((a, b) => b.oncelik - a.oncelik || String(a.oda).localeCompare(String(b.oda)));
+    }
+    siralar.set(mid, sahipler);
+  }
+  return siralar;
+}
+
 // Tüm planı döşe
 export function plaMobilyala(model, katalogPaketi, kuralSeti, { adet = 3, odalar: sadeceOdalar } = {}) {
   const hedefOdalar = (model.odalar ?? []).filter((o) => !sadeceOdalar || sadeceOdalar.includes(o.id));
-  const raporlar = hedefOdalar.map((o) => odayiDose(model, o, katalogPaketi, kuralSeti, { adet }));
+  const program = katalogPaketi.program;
+
+  const m2ler = new Map(hedefOdalar.map((o) => [o.id, alanM2(o.dongu.map((nid) => model.noktalar[nid]))]));
+  const siralar = tekilSahipSiralari(hedefOdalar, program, m2ler);
+
+  // Tahsis: her tekil mobilya, sırasının BAŞINDAKİ odaya verilir; ötekilerde yasaklanır.
+  const yasak = new Map(hedefOdalar.map((o) => [o.id, new Set()]));
+  for (const [mid, sahipler] of siralar) {
+    for (const s of sahipler.slice(1)) if (!s.zorunlu) yasak.get(s.oda).add(mid);
+  }
+
+  const dose = (o) => odayiDose(model, o, katalogPaketi, kuralSeti, { adet, yasakli: yasak.get(o.id) });
+  const raporMap = new Map(hedefOdalar.map((o) => [o.id, dose(o)]));
+
+  // DEVİR: kazanan oda tekil mobilyayı GERÇEKTEN yerleştiremediyse (sığmadı), hak sıradaki
+  // odaya geçer — yoksa tekillik kuralı, dairede o mobilyanın HİÇ olmamasına yol açardı.
+  // Döngü sahip sayısıyla sınırlıdır; her adım deterministiktir.
+  for (const [mid, sahipler] of siralar) {
+    for (let i = 0; i < sahipler.length - 1; i++) {
+      const kazanan = sahipler[i];
+      const rapor = raporMap.get(kazanan.oda);
+      const yerlesti = rapor?.durum === 'ok' &&
+        (rapor.adaylar[0]?.yerlesimler ?? []).some((y) => y.mobilya === mid);
+      if (yerlesti) break;
+      if (kazanan.zorunlu) break; // zorunluysa devretmeyiz: oda zaten dürüstçe kırmızıdır
+      const sonraki = sahipler[i + 1];
+      yasak.get(kazanan.oda).add(mid);
+      yasak.get(sonraki.oda).delete(mid);
+      raporMap.set(kazanan.oda, dose(hedefOdalar.find((o) => o.id === kazanan.oda)));
+      raporMap.set(sonraki.oda, dose(hedefOdalar.find((o) => o.id === sonraki.oda)));
+    }
+  }
+
+  // 🔴 SESSİZ DÜŞÜRME YASAK (müşteri bulgusu 2026-08-13, İKİNCİ tekrar): tekillik kuralı bir
+  // odadan mobilyayı düşürdüğünde bunu kimse görmüyordu. Müşteri iki teslim üst üste
+  // "mutfak boş kalmış, masa salona konmuş" dedi; kural doğru çalışıyordu ama KARARINI
+  // söylemiyordu. Düşürme bir karardır — adıyla raporlanır. (Eşik yok; veri zaten elde.)
+  const tekilDusenler = [];
+  for (const [mid, sahipler] of siralar) {
+    const kazanan = sahipler.find((s) => !yasak.get(s.oda)?.has(mid));
+    for (const s of sahipler) {
+      if (!yasak.get(s.oda)?.has(mid)) continue;
+      tekilDusenler.push({
+        oda: s.oda, mobilya: mid, kazanan_oda: kazanan?.oda ?? null,
+        gerekce: 'daire-ölçeği tekillik kuralı (katalog/program.json · daire_tekil)',
+      });
+    }
+  }
+  tekilDusenler.sort((a, b) => String(a.oda).localeCompare(String(b.oda)) || String(a.mobilya).localeCompare(String(b.mobilya)));
+
+  const raporlar = hedefOdalar.map((o) => raporMap.get(o.id));
 
   // Aday N: her odanın N'inci adayı (yoksa en iyisine düşer)
   const planAdaylari = [];
@@ -419,5 +537,5 @@ export function plaMobilyala(model, katalogPaketi, kuralSeti, { adet = 3, odalar
     planAdaylari.push({ _anahtar: anahtar, yerlesimler });
   }
 
-  return { raporlar, planAdaylari };
+  return { raporlar, planAdaylari, tekilDusenler };
 }

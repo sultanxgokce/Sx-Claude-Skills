@@ -1,0 +1,38 @@
+{
+  "ad": "lifting-koprusu",
+  "surum": "1.0",
+  "olusturma": "2026-08-13",
+  "aciklama": "lifting oda-grafını (poligon + mühür) plan-motor MODELİNE çeviren köprünün ayarları. Eşikler bu dosyada YAŞAR, motor kodunda değil (kural-seti ve katman-rolleri deseninin aynısı). Buradaki sayılar KURAL değil ARAMA PENCERESİ ve KUANTİZASYON payıdır; sonuçlar ölçülüp raporlanır.",
+  "gerekce": "Köprü YOKTU: lifting oda grafı üretiyordu ama onu okuyan tek tüketici bile yoktu (grep 0), bu yüzden SKILL.md'nin 2a protokolü kâğıtta kalıyordu. Modeller elle kuruluyordu; açıklıklar hiç girmiyordu ve 'kapı önü boş kalsın' kuralı denetleyecek veri bulamadığı için SESSİZCE geçiyordu. Ölçüldü (2026-08-13, gerçek müşteri dosyası): açıklıklar modele girer girmez o teslimat 13 SERT İHLAL verdi. Kaynak: tellal/_agents/PERGEL/ders-hasadi/{KURU-KOSU-karsilama-ajani-IS-001.md ADAY-9, PUANLAYAN-IS-001.md M1}.",
+
+  "esdogrusal_tolerans_cm": 3.0,
+  "esdogrusal_kaynak": "TÜRETİLMİŞ, uydurma DEĞİL: lifting ızgarayı 2.0 cm hücreyle tarar (lib/lifting.py · HUCRE) ve sınırı hücre sınırlarına yapıştırır. Bir hücreden küçük sapma geometri değil KUANTİZASYON artığıdır; 1.5×hücre pay bırakıldı. Bu tolerans bir mimari kural değildir.",
+
+  "dugum_yapisma_cm": 2.0,
+  "dugum_yapisma_kaynak": "Bir ızgara hücresi. Aynı köşeye denk gelen noktalar tek düğümde birleşsin diye.",
+
+  "azami_alan_sapmasi_yuzde": 1.0,
+  "alan_sapmasi_kaynak": "Sadeleştirme ÖLÇÜYÜ BOZMAMALI. Sadeleştirilmiş halka ile ham halkanın alanı bu paydan fazla ayrışırsa köprü FAIL-CLOSED durur — sessizce yanlış m² üretmektense hiç üretmemek.",
+
+  "duvar_esleme": {
+    "aciklama": "İÇ duvar tespiti: iki AYRI odanın birbirine bakan yüzleri. Aşağıdakiler ARAMA PENCERESİDİR; bulunan kalınlık ÖLÇÜLÜP raporlanır, dosyadan dayatılmaz.",
+    "paralellik_sinus_tavani": 0.08,
+    "paralellik_notu": "≈4.6°. Izgara artığı yüzünden tam paralellik beklenmez.",
+    "asgari_ortusme_cm": 30.0,
+    "ortusme_notu": "İki yüz bu kadar boy üstünde örtüşmüyorsa komşu sayılmaz (köşe teğetleri iç duvar üretmesin).",
+    "kalinlik_araligi_cm": [4.0, 80.0],
+    "kalinlik_notu": "Bu bir DUVAR KALINLIĞI KURALI DEĞİL, arama penceresidir. Pencereye giren en yakın yüz seçilir ve aradaki mesafe kalınlık olarak YAZILIR (ölçüm). Pencere dışıysa yüz DIŞ duvar sayılır."
+  },
+
+  "dis_duvar_varsayilan_kalinlik_cm": 20.0,
+  "dis_duvar_kaynak": "BEYAN: dış duvarın DIŞ yüzü lifting grafında yoktur (graf yalnız oda içlerini taşır), bu yüzden dış kalınlık ÖLÇÜLEMEZ. Varsayılan çizim içindir ve raporda 'ölçülmedi' diye işaretlenir. Ölçülmüş bir sayı gibi sunulması YASAK.",
+
+  "aciklik": {
+    "eslesme_uzaklik_tavani_cm": 12.0,
+    "uzaklik_notu": "Mühür orta noktasının duvar doğrusuna uzaklığı. Izgara artığı + sadeleştirme kaymasını karşılar.",
+    "asgari_genislik_cm": 20.0,
+    "genislik_notu": "Bundan dar bir boşluk kapı/pencere değil, sınır gürültüsüdür.",
+    "asgari_eslesme_orani": 0.5,
+    "oran_notu": "Mühürlerin yarısından azı duvara bağlanabiliyorsa köprü GÜVENİLMEZ → RC 1. Yarım açıklık kümesiyle üretilen plan, açıklıksızdan daha tehlikelidir: eksikliği görünmez kılar."
+  }
+}

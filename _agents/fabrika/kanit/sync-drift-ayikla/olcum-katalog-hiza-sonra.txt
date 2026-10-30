@@ -1,0 +1,6 @@
+$ node ahi/schema/katalog-surum-hiza.mjs .
+# rc=0 sure=0.1s zaman=2026-10-30T18:32:05+03:00
+--- stdout ---
+katalog↔SKILL.md: girdi 85 · sapma 0 · ölçülemedi 0
+✓ sapma 0
+--- stderr ---

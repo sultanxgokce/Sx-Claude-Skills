@@ -7,11 +7,18 @@
 // Bu dosyada 153 polyline'ın 74'ü kapalıdır — sessiz ve ölümcül bir hata sınıfıdır.
 import { readFileSync } from 'fs';
 
-const SINIR_KATMANLARI = ['px_walls', 'px_openings', 'px_columns', 'Zone_Line'];
+// Sınır katmanları VERİDEN gelir — burada sabit liste TUTULMAZ.
+// (Eskiden bu dosyada ve cli.mjs'te İKİ AYRI KOPYA vardı; ikisi de `Zone_Line`i duvar
+//  sayıyordu ve o katman mobilya taşıyordu → odalar %20 küçük ölçülüyordu, sessizce.)
+import { rolleriYukle, katmanlariCoz } from './katman.mjs';
 
-export async function cadCikar(yol, { katmanlar = SINIR_KATMANLARI } = {}) {
+export async function cadCikar(yol, { katmanlar = null, katmanRolleriYolu } = {}) {
   const uzanti = yol.toLowerCase().split('.').pop();
   const ents = uzanti === 'dwg' ? await dwgEntities(yol) : await dxfEntities(yol);
+  if (!katmanlar) {
+    const roller = rolleriYukle(katmanRolleriYolu);
+    katmanlar = katmanlariCoz(ents, roller).sinirKatmanlari;   // beyansız katman → RC 1
+  }
 
   const segmentler = [];
   const etiketler = [];
@@ -61,7 +68,7 @@ async function dwgEntities(yol) {
 async function dxfEntities(yol) {
   const DxfParser = (await import('dxf-parser')).default;
   const d = new DxfParser().parse(readFileSync(yol, 'utf8'));
-  const cikti = [];
+  const cikti = [], atlanan = [];
   for (const e of d.entities ?? []) {
     const katman = e.layer ?? '?';
     if (e.type === 'MTEXT' || e.type === 'TEXT') {
@@ -69,11 +76,24 @@ async function dxfEntities(yol) {
       if (!p) continue;
       cikti.push({ tip: 'metin', katman, ...metniAyikla(e.text ?? ''), x: p.x, y: p.y });
     } else if (e.type === 'LWPOLYLINE' || e.type === 'POLYLINE') {
-      cikti.push({ tip: 'poly', katman, koseler: (e.vertices ?? []).map((v) => [v.x, v.y]), kapali: !!(e.shape || e.closed) });
+      const ks = (e.vertices ?? []).filter((v) => v && Number.isFinite(v.x) && Number.isFinite(v.y)).map((v) => [v.x, v.y]);
+      if (ks.length < 2) { atlanan.push(e.type); continue; }
+      cikti.push({ tip: 'poly', katman, koseler: ks, kapali: !!(e.shape || e.closed) });
     } else if (e.type === 'LINE') {
-      cikti.push({ tip: 'poly', katman, koseler: [[e.startPoint.x, e.startPoint.y], [e.endPoint.x, e.endPoint.y]], kapali: false });
+      // 🔴 dxf-parser sürümüne göre LINE uçları ya `startPoint/endPoint` ya da `vertices`
+      // olarak gelir (ölçüldü 2026-09-24: paketin KENDİ demo DXF'inde LINE'ların startPoint'i
+      // yok, `goster` tüm dosyada rc=3 ile çöküyordu — DWG yolundan girdiğimiz için görünmemiş).
+      // Eksik uçlu varlık artık ÇÖKERTMEZ, atlanır ve sayısı raporlanır.
+      const uc = (e.vertices ?? []).length >= 2
+        ? [[e.vertices[0].x, e.vertices[0].y], [e.vertices[1].x, e.vertices[1].y]]
+        : (e.startPoint && e.endPoint
+          ? [[e.startPoint.x, e.startPoint.y], [e.endPoint.x, e.endPoint.y]]
+          : null);
+      if (!uc) { atlanan.push(e.type); continue; }
+      cikti.push({ tip: 'poly', katman, koseler: uc, kapali: false });
     }
   }
+  if (atlanan.length) console.error(`  ⚠ ${atlanan.length} varlık eksik uçla geldi, atlandı: ${[...new Set(atlanan)].join(', ')}`);
   return cikti;
 }
 

@@ -1,83 +1,225 @@
 {
-  "surum": "0.1.0",
-  "not": "Oda tipi → mobilya programı. 'zorunlu' yerleşemezse oda için aday ÜRETİLMEZ (dürüst RC 1). 'opsiyonel' sığdıkça eklenir, sığmazsa sessizce atlanır. Oda tipleri plan-motor ODA_TIPLERI ile birebir aynıdır.",
-  "programlar": {
-    "yatak_odasi": {
-      "zorunlu": [
-        { "mobilya": "cift-yatak-160", "adet": 1 },
-        { "mobilya": "gardirop-200", "adet": 1 }
-      ],
-      "opsiyonel": [
-        { "mobilya": "komodin", "adet": 2, "oncelik": 10 },
-        { "mobilya": "sifonyer", "adet": 1, "oncelik": 6 },
-        { "mobilya": "calisma-masasi", "adet": 1, "oncelik": 4 },
-        { "mobilya": "berjer", "adet": 1, "oncelik": 2 }
-      ],
-      "kucuk_oda_m2": 11,
-      "kucuk_oda_zorunlu": [
-        { "mobilya": "tek-yatak-90", "adet": 1 },
-        { "mobilya": "gardirop-200", "adet": 1 }
-      ]
+ "surum": "0.2.0",
+ "not": "Oda tipi → mobilya programı. 'zorunlu' yerleşemezse oda için aday ÜRETİLMEZ (dürüst RC 1). 'opsiyonel' sığdıkça eklenir, sığmazsa sessizce atlanır. Oda tipleri plan-motor ODA_TIPLERI ile birebir aynıdır.",
+ "daire_kisitlari": {
+  "not": "DAİRE-ÖLÇEĞİ kısıtları. 'programlar' bölümü her odaya TEK BAŞINA bakar; bir oda ötekinin ne aldığını bilmez. Ölçülen sonuç: aynı dairede İKİ yemek masası (mutfak + salon, ikisi de kendi opsiyonelinden bağımsız karar verdi) ve 7,5 m²'lik misafir odasına 5 parça (berjer + 2 komodin). İkisi de geometrik olarak temizdi — kusur mimariydi. Bu bölüm o boşluğu VERİ katmanında kapatır; eşik koda gömülmez.",
+  "daire_tekil": [
+   {
+    "mobilya": "yemek-masasi-6",
+    "gerekce": "Bir konutta bir yemek masası bulunur. Mutfak ve oturma odası opsiyonellerinde ayrı ayrı tanımlıdır; hangisinde ÖNCELİK yüksekse orada kalır, ötekinden düşer.",
+    "kaynak_durumu": "beyan — konut programı teamülü; sayısal eşik değil, tekillik kuralıdır (ölçüsü yok, sayılabilir)."
+   },
+   {
+    "mobilya": "mutfak-masasi-4",
+    "gerekce": "Mutfak masasi da daire-olceginde TEKILDIR: bir konutta bir mutfak masasi bulunur. Yemek masasindan AYRI bir parca oldugu icin 'dairede iki yemek masasi' kusurunu (2026-08-11) GERI GETIRMEZ — salonda yemek masasi, mutfakta mutfak masasi mimari olarak olagandir.",
+    "kaynak_durumu": "beyan — musteri sinyali 2026-08-13 + ayni sikayetin 2026-08-11 tekrari; tekillik kurali, sayisal esik degil."
+   }
+  ],
+  "opsiyonel_butcesi": {
+   "not": "Oda m²'sine bağlı OPSİYONEL TAVANI. Yalnız 'opsiyonel' kalemleri sayar — 'zorunlu' program ASLA bütçeye takılmaz (fail-closed davranışı korunur: zorunlu sığmıyorsa oda hâlâ dürüstçe kırmızıdır). Tavan yerleşen parçayı sayar, denenen adayı değil: sığmayan opsiyonel bütçe harcamaz.",
+   "bantlar": [
+    {
+     "azami_m2": 9,
+     "azami_opsiyonel": 1,
+     "gerekce": "Asgari-oda bandı. Zorunlu programını (ör. yatak + gardırop) aldıktan sonra bu ölçüdeki bir odada lüks-opsiyonele (berjer, ikinci komodin, şifonyer) yer YOKTUR; geometrik olarak sığması mimari olarak doğru olduğu anlamına gelmez.",
+     "kaynak_durumu": "beyan — 9 m² sayısı Planlı Alanlar İmar Yönetmeliği'nin yatak odası asgarisiyle ÖRTÜŞÜR, ama buradaki kullanım o yönetmelikten TÜRETİLMİŞ değildir: bu bir sert-kural değil, program tercihidir (kural-seti/mobilya-TR.json'daki 'siddet: hata' eşikleriyle aynı sınıfta DEĞİLDİR)."
     },
-    "oturma_odasi": {
-      "zorunlu": [
-        { "mobilya": "kanepe-3lu", "adet": 1 }
-      ],
-      "opsiyonel": [
-        { "mobilya": "tv-unitesi", "adet": 1, "oncelik": 10 },
-        { "mobilya": "sehpa", "adet": 1, "oncelik": 8 },
-        { "mobilya": "berjer", "adet": 2, "oncelik": 6 },
-        { "mobilya": "yemek-masasi-6", "adet": 1, "oncelik": 4 }
-      ]
+    {
+     "azami_m2": 16,
+     "azami_opsiyonel": 3,
+     "gerekce": "Orta bant. Oda zorunlusunun üstüne birkaç tamamlayıcı alır, ama dolu görünecek kadar değil.",
+     "kaynak_durumu": "beyan — dış kaynağa bağlanmadı."
+    }
+   ],
+   "varsayilan_azami_opsiyonel": 6,
+   "varsayilan_kaynak_durumu": "beyan — bant dışı (büyük) odalarda pratikte bağlayıcı değildir; patlamaya karşı üst korkuluktur."
+  },
+  "tercih_notu": "`daire_tekil[].tercih` (opsiyonel): tekil mobilya birden çok odada tanımlıysa sıralamaya oda ÖLÇÜSÜNÜ katar. Değerler: en_buyuk_oda · en_kucuk_oda. BEYAN EDİLMEZSE davranış birebir eskisi gibidir (öncelik > oda-id) — sessiz değişiklik yok. Bu bir EŞİK DEĞİL sıralama ölçütüdür; '≥N m² ise hak doğar' gibi uydurulmuş bir sayı içermez."
+ },
+ "programlar": {
+  "yatak_odasi": {
+   "zorunlu": [
+    {
+     "mobilya": "cift-yatak-160",
+     "adet": 1
     },
-    "mutfak": {
-      "zorunlu": [
-        { "mobilya": "mutfak-tezgah", "adet": 1 }
-      ],
-      "opsiyonel": [
-        { "mobilya": "buzdolabi", "adet": 1, "oncelik": 10 },
-        { "mobilya": "yemek-masasi-6", "adet": 1, "oncelik": 3 }
-      ]
+    {
+     "mobilya": "gardirop-200",
+     "adet": 1
+    }
+   ],
+   "opsiyonel": [
+    {
+     "mobilya": "komodin",
+     "adet": 2,
+     "oncelik": 10
     },
-    "banyo": {
-      "zorunlu": [
-        { "mobilya": "lavabo", "adet": 1 },
-        { "mobilya": "klozet", "adet": 1 }
-      ],
-      "opsiyonel": [
-        { "mobilya": "dus-teknesi", "adet": 1, "oncelik": 10 },
-        { "mobilya": "kuvet", "adet": 1, "oncelik": 5 }
-      ]
+    {
+     "mobilya": "sifonyer",
+     "adet": 1,
+     "oncelik": 6
     },
-    "wc": {
-      "zorunlu": [
-        { "mobilya": "klozet", "adet": 1 },
-        { "mobilya": "lavabo", "adet": 1 }
-      ],
-      "opsiyonel": []
+    {
+     "mobilya": "calisma-masasi",
+     "adet": 1,
+     "oncelik": 4
     },
-    "antre": {
-      "zorunlu": [],
-      "opsiyonel": [
-        { "mobilya": "portmanto", "adet": 1, "oncelik": 10 }
-      ]
+    {
+     "mobilya": "berjer",
+     "adet": 1,
+     "oncelik": 2
+    }
+   ],
+   "kucuk_oda_m2": 11,
+   "kucuk_oda_zorunlu": [
+    {
+     "mobilya": "tek-yatak-90",
+     "adet": 1
     },
-    "hol": {
-      "zorunlu": [],
-      "opsiyonel": [
-        { "mobilya": "portmanto", "adet": 1, "oncelik": 5 }
-      ]
+    {
+     "mobilya": "gardirop-200",
+     "adet": 1
+    }
+   ]
+  },
+  "oturma_odasi": {
+   "zorunlu": [
+    {
+     "mobilya": "kanepe-3lu",
+     "adet": 1
+    }
+   ],
+   "opsiyonel": [
+    {
+     "mobilya": "tv-unitesi",
+     "adet": 1,
+     "oncelik": 10
     },
-    "giyinme": {
-      "zorunlu": [
-        { "mobilya": "gardirop-200", "adet": 1 }
-      ],
-      "opsiyonel": [
-        { "mobilya": "sifonyer", "adet": 1, "oncelik": 8 }
-      ]
+    {
+     "mobilya": "sehpa",
+     "adet": 1,
+     "oncelik": 8
     },
-    "balkon": { "zorunlu": [], "opsiyonel": [] },
-    "kiler": { "zorunlu": [], "opsiyonel": [] },
-    "diger": { "zorunlu": [], "opsiyonel": [] }
+    {
+     "mobilya": "berjer",
+     "adet": 2,
+     "oncelik": 6
+    },
+    {
+     "mobilya": "yemek-masasi-6",
+     "adet": 1,
+     "oncelik": 4
+    }
+   ]
+  },
+  "mutfak": {
+   "zorunlu": [
+    {
+     "mobilya": "mutfak-tezgah",
+     "adet": 1
+    }
+   ],
+   "opsiyonel": [
+    {
+     "mobilya": "buzdolabi",
+     "adet": 1,
+     "oncelik": 10
+    },
+    {
+     "mobilya": "mutfak-masasi-4",
+     "adet": 1,
+     "oncelik": 5
+    },
+    {
+     "mobilya": "yemek-masasi-6",
+     "adet": 1,
+     "oncelik": 3
+    }
+   ]
+  },
+  "banyo": {
+   "zorunlu": [
+    {
+     "mobilya": "lavabo",
+     "adet": 1
+    },
+    {
+     "mobilya": "klozet",
+     "adet": 1
+    }
+   ],
+   "opsiyonel": [
+    {
+     "mobilya": "dus-teknesi",
+     "adet": 1,
+     "oncelik": 10
+    },
+    {
+     "mobilya": "kuvet",
+     "adet": 1,
+     "oncelik": 5
+    }
+   ]
+  },
+  "wc": {
+   "zorunlu": [
+    {
+     "mobilya": "klozet",
+     "adet": 1
+    },
+    {
+     "mobilya": "lavabo",
+     "adet": 1
+    }
+   ],
+   "opsiyonel": []
+  },
+  "antre": {
+   "zorunlu": [],
+   "opsiyonel": [
+    {
+     "mobilya": "portmanto",
+     "adet": 1,
+     "oncelik": 10
+    }
+   ]
+  },
+  "hol": {
+   "zorunlu": [],
+   "opsiyonel": [
+    {
+     "mobilya": "portmanto",
+     "adet": 1,
+     "oncelik": 5
+    }
+   ]
+  },
+  "giyinme": {
+   "zorunlu": [
+    {
+     "mobilya": "gardirop-200",
+     "adet": 1
+    }
+   ],
+   "opsiyonel": [
+    {
+     "mobilya": "sifonyer",
+     "adet": 1,
+     "oncelik": 8
+    }
+   ]
+  },
+  "balkon": {
+   "zorunlu": [],
+   "opsiyonel": []
+  },
+  "kiler": {
+   "zorunlu": [],
+   "opsiyonel": []
+  },
+  "diger": {
+   "zorunlu": [],
+   "opsiyonel": []
   }
+ }
 }

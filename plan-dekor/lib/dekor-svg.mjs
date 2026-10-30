@@ -1,8 +1,9 @@
 // Renkli sunum planı çizici. 1 SVG birimi = 1 cm. Deterministik: aynı girdi → aynı SVG.
 // plan-motor'un svgUret'i sabit paletlidir ve mobilya bilmez; bu yüzden ayrı çizici.
 import { readFileSync } from 'fs';
-import { agirlikMerkezi, alanM2, bbox } from './geo.mjs';
+import { agirlikMerkezi, alanM2, bbox, icNokta, aciklikOlc } from './geo.mjs';
 import { sembolCiz } from './sembol.mjs';
+import { metinGenisligi } from './metin-olcu.mjs';
 
 const f = (n) => +n.toFixed(2);
 const xml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -15,12 +16,8 @@ export function temaYukle(yol) {
   return t;
 }
 
-// DejaVu Sans Bold yaklaşık genişlik katsayısı (harf başına punto oranı) + letter-spacing 1.
-// Tahmindir (±%8) — bu yüzden sığdırma bir UYARI mekanizmasıdır, fail-closed değil.
-// 0.62 ölçüldü ve YETERSİZ çıktı: etiketler BÜYÜK HARF + kalın çiziliyor, bu sınıf DejaVu'da
-// belirgin daha geniştir ("EBEVEYN BANYO" 250 cm odada komşu odaya taşıyordu). 0.76'ya çekildi.
-const KARAKTER_ORANI = 0.76;
-function metinGenisligi(s, punto) { return s.length * punto * KARAKTER_ORANI + s.length; }
+// Genişlik kestirimi TEK KAYNAKTAN gelir (lib/metin-olcu.mjs) — denetim de aynı dosyayı
+// kullanır; iki kopya sessizce ayrışamasın diye.
 
 // Sığdırma sırası: tek satırda küçült → iki satıra böl → taban puntoda bırak.
 function sigdir(metin, genislik, baslangicPunto) {
@@ -81,7 +78,7 @@ export function dekorSvgUret(model, yerlesimler, tema, secenekler = {}) {
   const pxOlcek = 2000 / Math.max(vbW, vbH);
 
   const p = [];
-  p.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${f(vbX)} ${f(vbY)} ${f(vbW)} ${f(vbH)}" width="${Math.round(vbW * pxOlcek)}" height="${Math.round(vbH * pxOlcek)}" font-family="DejaVu Sans, Helvetica, Arial, sans-serif">`);
+  p.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${f(vbX)} ${f(vbY)} ${f(vbW)} ${f(vbH)}" width="${Math.round(vbW * pxOlcek)}" height="${Math.round(vbH * pxOlcek)}" font-family="${(tema && tema.yazi_tipi) || 'DejaVu Sans, Helvetica, Arial, sans-serif'}">`);
 
   // ---- defs: dokular + gölge ----
   p.push('<defs>');
@@ -169,12 +166,27 @@ export function dekorSvgUret(model, yerlesimler, tema, secenekler = {}) {
   }
 
   // ---- oda etiketleri (odaya SIĞDIRILIR — komşu odaya taşan etiket planı okunamaz kılar) ----
+  // Oda başına mobilya kutuları — etiket bunların ÜSTÜNE binmemeli (müşteri bulgusu 2026-08-13:
+  // salonda m² yazısı yemek masasının üstündeydi).
+  const odaMobilyalari = new Map();
+  for (const y of yerlesimler) {
+    if (!y.oda) continue;
+    if (!odaMobilyalari.has(y.oda)) odaMobilyalari.set(y.oda, []);
+    odaMobilyalari.get(y.oda).push(y.kutu);
+  }
+
   for (const o of model.odalar ?? []) {
     const koseler = o.dongu.map((nid) => noktalar[nid]);
-    const [cx, cy] = agirlikMerkezi(koseler);
+    // U/L odada merkez dışarı düşer ("UIT ODA"); mobilyalı odada merkez masanın üstüne düşer.
+    const [cx, cy] = icNokta(koseler, { engeller: odaMobilyalari.get(o.id) ?? [] });
     const m2 = alanM2(koseler);
     const odaKutu = bbox(koseler);
-    const kullanilir = odaKutu.w - 24;
+
+    // Etiketin sığabileceği yarıçap: çapanın kenarlara uzaklığı. Küçük/dar odada bu yarıçap
+    // puntoyu VE satır sayısını kısar — yoksa yazı duvara taşıp yarım kalıyor (DUŞ 1.4 m²).
+    const aciklik = aciklikOlc([cx, cy], koseler);
+    const kullanilir = Math.max(40, Math.min(odaKutu.w - 24, aciklik * 2 - 10));
+    const kullanilirYukseklik = Math.max(14, aciklik * 2 - 10);
 
     const ad = (o.ad ?? o.id).toLocaleUpperCase('tr-TR');
     // Başlangıç puntosu hem alana hem DAR KENARA bağlıdır: geniş ama sığ bir oda büyük punto
@@ -183,12 +195,24 @@ export function dekorSvgUret(model, yerlesimler, tema, secenekler = {}) {
     const tavanPunto = Math.min(m2 >= 8 ? 27 : m2 >= 3 ? 20 : 14, Math.max(11, Math.round(darKenar / 9)));
     const { satirlar, punto } = sigdir(ad, kullanilir, tavanPunto);
 
-    let ty = cy - 4 - (satirlar.length - 1) * punto * 0.55;
-    for (const satir of satirlar) {
-      p.push(`<text x="${f(cx)}" y="${f(ty)}" text-anchor="middle" font-size="${punto}" font-weight="700" fill="${tema.metin.oda}" letter-spacing="1">${xml(satir)}</text>`);
+    // Dikey sığdırma: ad satırları + m² satırı yüksekliğe sığmıyorsa önce m² DÜŞÜRÜLÜR
+    // (oda adı m²'den önce gelir), o da yetmezse ad tek satıra indirilir.
+    const adYuksekligi = satirlar.length * punto * 1.15;
+    const m2Yuksekligi = punto * 0.9;
+    const m2Goster = adYuksekligi + m2Yuksekligi <= kullanilirYukseklik;
+    const gosterilecek = adYuksekligi <= kullanilirYukseklik ? satirlar : [satirlar.join(' ')];
+
+    // `data-etiket-oda`: öz-denetim etiketi ODASIYLA eşleştirebilsin. Eskiden denetim
+    // etiketi ADINA göre regex'le arıyordu; iki satıra bölünen adı bulamayıp SESSİZCE
+    // atlıyordu (`if (!m) continue`). Damga, "hangi metni ölçüyorum" sorusunu kesinleştirir.
+    let ty = cy - 4 - (gosterilecek.length - 1) * punto * 0.55;
+    for (const satir of gosterilecek) {
+      p.push(`<text x="${f(cx)}" y="${f(ty)}" text-anchor="middle" font-size="${punto}" font-weight="700" fill="${tema.metin.oda}" letter-spacing="1" data-etiket-oda="${xml(o.id)}">${xml(satir)}</text>`);
       ty += punto * 1.15;
     }
-    p.push(`<text x="${f(cx)}" y="${f(ty + punto * 0.1)}" text-anchor="middle" font-size="${Math.round(punto * 0.8)}" fill="${tema.metin.alan}">${m2.toFixed(1)} m²</text>`);
+    if (m2Goster) {
+      p.push(`<text x="${f(cx)}" y="${f(ty + punto * 0.1)}" text-anchor="middle" font-size="${Math.round(punto * 0.8)}" fill="${tema.metin.alan}" data-etiket-oda="${xml(o.id)}">${m2.toFixed(1)} m²</text>`);
+    }
   }
 
   // ---- başlık + ölçek beyanı ----
@@ -196,9 +220,17 @@ export function dekorSvgUret(model, yerlesimler, tema, secenekler = {}) {
   const beyan = `birim: cm · 1 birim = 1 cm · ölçü kaynağı: ${model.olcek?.kaynak ?? '?'} · tema: ${tema.id}${secenekler.notu ? ' · ' + secenekler.notu : ''}`;
   p.push(`<text x="${f(vbX + 32)}" y="${f(vbY + 80)}" font-size="16" fill="${tema.metin.alan}">${xml(beyan)}</text>`);
 
-  // ---- kuzey oku ----
-  const kx = vbX + vbW - 80, ky = vbY + 80;
-  p.push(`<g transform="translate(${f(kx)} ${f(ky)})"><circle r="34" fill="none" stroke="${tema.metin.lejant}" stroke-width="2" opacity="0.5"/><path d="M0 -28 L11 12 L0 4 L-11 12 Z" fill="${tema.metin.baslik}"/><text x="0" y="-38" text-anchor="middle" font-size="18" font-weight="700" fill="${tema.metin.lejant}">K</text></g>`);
+  // ---- kuzey oku — YALNIZ model kuzeyi BEYAN ETMİŞSE ----
+  // 🔴 Eskiden KOŞULSUZ basılıyordu, hep yukarı. Model şemasında kuzey alanı yok, girdi
+  // çiziminde de kuzey verisi yoktu → her plan "kuzey yukarıdadır" diye ASILSIZ bir iddia
+  // taşıyordu. Emlak sunum planında yön, alıcının güvendiği bilgidir; bilinmeyen yön
+  // beyan edilmez. (Kuru koşu bulgusu, 2026-08-13 · DERS-ADAYI 7.)
+  // `kuzey_azimut`: kuzeyin saat yönünde derecesi (0 = yukarı). Yoksa ok ÇİZİLMEZ.
+  const azimut = model.kuzey_azimut;
+  if (typeof azimut === 'number' && Number.isFinite(azimut)) {
+    const kx = vbX + vbW - 80, ky = vbY + 80;
+    p.push(`<g transform="translate(${f(kx)} ${f(ky)})"><circle r="34" fill="none" stroke="${tema.metin.lejant}" stroke-width="2" opacity="0.5"/><g transform="rotate(${f(azimut)})"><path d="M0 -28 L11 12 L0 4 L-11 12 Z" fill="${tema.metin.baslik}"/><text x="0" y="-38" text-anchor="middle" font-size="18" font-weight="700" fill="${tema.metin.lejant}">K</text></g></g>`);
+  }
 
   // ---- ölçek çubuğu ----
   const cX = vbX + 32, cY = vbY + vbH - lejantYuksekligi - 34;

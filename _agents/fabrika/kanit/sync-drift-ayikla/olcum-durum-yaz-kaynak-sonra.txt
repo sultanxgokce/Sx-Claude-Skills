@@ -1,0 +1,11 @@
+$ bash durum-raporu/scripts/repo-bul.test.sh
+# rc=0 sure=0.1s zaman=2026-10-30T18:33:01+03:00
+--- stdout ---
+  ✓ R1 proje kökünden çağrılınca kökü bulur
+  ✓ R2 derin alt dizinden yukarı yürüyüp bulur (global kurulumda cwd her yerde olabilir)
+  ✓ R3 açık ayar geçerliyse o kullanılır (cwd başka yerde olsa da)
+  ✓ R4 açık ayar YANLIŞSA sessizce kabul edilmez — cwd'den arama yapılır
+  ✓ R5 hiçbir yerde kayıt yoksa rc=1 (sahte kök uydurulmaz)
+
+geçti=5 · kaldı=0
+--- stderr ---

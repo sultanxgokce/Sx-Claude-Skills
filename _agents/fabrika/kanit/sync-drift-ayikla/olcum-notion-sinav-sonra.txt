@@ -1,0 +1,38 @@
+$ bash notion-erisim/scripts/notion.test.sh
+# rc=0 sure=0.8s zaman=2026-10-30T18:33:01+03:00
+--- stdout ---
+== notion.test.sh ==
+T1 · sözdizimi
+  ✓ T1
+T2 · SALT-OKUR değişmezi: yazma ucu YOK
+  ✓ T2
+T3 · sır-hijyeni: token ARGV'de değil (-H yerine -K - stdin)
+  ✓ T3
+T4 · Notion-Version başlığı GET ve POST dallarının İKİSİNDE de var
+  ✓ T4
+T5 · bilinmeyen komut reddedilir (yazma denemesi dâhil)
+  ✓ T5
+T6 · token YOKken doctor 'doğrulanmadı' der (uydurma-yeşil yok, rc=2)
+  ✓ T6
+T7 · doctor sahte-Notion'da yeşil (Notion-Version doğrulandı)
+  ✓ T7
+T8 · YANLIŞ Notion-Version → dürüst kırmızı (400 validation_error, 'jeton geçersiz' DEĞİL)
+  ✓ T8
+T9 · db-query sayfalama: 2 istek → 3 satır (has_more/next_cursor gerçekten izleniyor)
+  ✓ T9
+T10 · db-query --json: stdout SAF JSONL (özet stderr'e gider)
+  ✓ T10
+T11 · db-list: tekrar eden kayıt TEKİLLEŞİR + imleç döngüsü kesilir
+  ✓ T11
+T12 · db-query olmayan veritabanı → dürüst 404 + paylaşım ipucu
+  ✓ T12
+T13 · file-download: files-OLMAYAN alan reddedilir
+  ✓ T13
+T14 · file-download: imzalı-URL ölü/süresi dolmuş → dürüst hata, sahte-başarı YOK
+  ✓ T14
+  ✓ T14b
+T15 · page-get files/formula alanlarını jq-hatasız basar
+  ✓ T15
+
+SONUÇ: geçen=16 kalan=0
+--- stderr ---

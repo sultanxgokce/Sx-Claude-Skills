@@ -159,6 +159,108 @@ def boya(duvar, en, boy, bas):
     return set(hucreler), kenara_dokundu
 
 
+def etiket_sadelestir(ad):
+    """CAD metnini karşılaştırılabilir hâle getir: biçim kodları (\\C0; \\A1; \\W1.2;), süslü
+    parantez ve \\U+XXXX kaçışları temizlenir; boşluk sadeleşir; büyük/küçük ayrımı kalkar.
+    Niçin: aynı oda adı çizimde '\\C0;ASANS\\U+00D6R BO\\U+015ELU\\U+011EU' yazılıdır; insan
+    'ASANSÖR BOŞLUĞU' beyan eder. Eşleşme insanın yazdığıyla kurulmalı."""
+    import re
+    t = ad or ""
+    t = re.sub(r"\\U\+([0-9A-Fa-f]{4})", lambda m: chr(int(m.group(1), 16)), t)
+    t = re.sub(r"\\[A-Za-z][^;]*;", " ", t)
+    t = t.replace("{", " ").replace("}", " ")
+    t = re.sub(r"\s+", " ", t).strip()
+    return t.casefold().replace("i̇", "i")
+
+
+def oda_tohumlarini_suz(etiketler, beyan, akis):
+    """Yalnız BEYAN edilen etiketler oda tohumu sayılır (ek_muhur/ek_cevre deseni).
+
+    Gerçek çizimde oda adı ile raf adı AYNI katmanlarda durur (ölçüldü 2026-09-18: Siirt'te
+    oda adları 'not'/'duvar', raf adları 'kolon'/'yok-say' rolündeydi) — katman rolü bu sınıfta
+    ayırt edici değildir. Ayrımı insan yapar, motor beyanı uygular ve izini çıktıya yazar.
+    """
+    istenen = [str(x) for x in beyan]
+    anahtar = {}
+    for ad in istenen: anahtar.setdefault(etiket_sadelestir(ad), ad)
+    secilen, elenen, eslesen = [], 0, set()
+    for e in etiketler:
+        k = etiket_sadelestir(e.get("ad"))
+        if k in anahtar:
+            secilen.append(e); eslesen.add(anahtar[k])
+        else:
+            elenen += 1
+    eslesmeyen = [a for a in istenen if a not in eslesen]
+    print(f"  · oda BEYANI: {len(istenen)} ad istendi → {len(secilen)} tohum seçildi, {elenen} etiket elendi", file=akis)
+    for a in eslesmeyen:
+        print(f"    ⚠ beyan edilen '{a}' çizimde BULUNAMADI (yazım farkı olabilir) — sessizce yutulmuyor", file=akis)
+    return secilen, {"kaynak": "oda_etiketleri", "istenen": len(istenen), "tohum": len(secilen),
+                     "elenen_etiket": elenen, "eslesmeyen": eslesmeyen}
+
+
+def duvar_kutusu(segmentler, minX, minY, en, boy):
+    """Sınır segmentlerinin ızgara koordinatındaki kutusu (bina kutusu)."""
+    xs = [p[0] for s in segmentler for p in s]; ys = [p[1] for s in segmentler for p in s]
+    gx0 = max(0, int((min(xs) - minX) / HUCRE)); gx1 = min(en - 1, int((max(xs) - minX) / HUCRE))
+    gy0 = max(0, int((min(ys) - minY) / HUCRE)); gy1 = min(boy - 1, int((max(ys) - minY) / HUCRE))
+    return gx0, gy0, gx1, gy1
+
+
+def _kosular(indisler):
+    """Ardışık indis koşularını (bas, son) olarak grupla."""
+    out = []
+    for i in sorted(indisler):
+        if out and i == out[-1][1] + 1: out[-1][1] = i
+        else: out.append([i, i])
+    return [(a, b) for a, b in out]
+
+
+def cevre_taramasi(hucreler, en, boy, minX, minY, kutu):
+    """Taşkın bölge bina kutusunu NEREDE geçiyor: kenar → [(baş_cm, son_cm, uzunluk_cm)].
+
+    Niçin: 'sınır kapalı değil' tek başına kullanıcıya hedefli soru ürettirmez. Açık yerin
+    hangi kenarda ve hangi aralıkta olduğu söylenirse soru 'şu 140 cm'lik ağzı kapatır mısın'
+    olur. Ölçüm ızgara hücresi üzerindendir; çözünürlük HUCRE (2 cm) kadardır.
+    """
+    gx0, gy0, gx1, gy1 = kutu
+    hatlar = {
+        "BATI":  [((gx0, y), y) for y in range(gy0, gy1 + 1)],
+        "DOGU":  [((gx1, y), y) for y in range(gy0, gy1 + 1)],
+        "GUNEY": [((x, gy0), x) for x in range(gx0, gx1 + 1)],
+        "KUZEY": [((x, gy1), x) for x in range(gx0, gx1 + 1)],
+    }
+    rapor = {}
+    for ad, hat in hatlar.items():
+        acik = [i for (h, i) in hat if h in hucreler]
+        if not acik: continue
+        dikey = ad in ("BATI", "DOGU")
+        taban = minY if dikey else minX
+        araliklar = []
+        for a, b in _kosular(acik):
+            bas = taban + a * HUCRE; son = taban + (b + 1) * HUCRE
+            araliklar.append((round(bas, 1), round(son, 1), round(son - bas, 1)))
+        rapor[ad] = {"araliklar": araliklar, "acik_hucre": len(acik), "kenar_hucre": len(hat)}
+    return rapor
+
+
+def cevre_raporla(rapor, akis):
+    """Çeper taramasını insan diline çevir: her kenar için AÇIK YÜZDE + eksenli aralıklar.
+    Etiket uydurmaz ("çeper yok" diye ikili karar vermez): %92 açık kenar ile 140 cm'lik tek ağız
+    aynı satır biçiminde okunur, yorum insanındır. Çözünürlük ızgara payı kadardır (±2·HUCRE cm)."""
+    acik_kenar = 0
+    for ad in ("BATI", "DOGU", "GUNEY", "KUZEY"):
+        r = rapor.get(ad)
+        if not r: continue
+        acik_kenar += 1
+        oran = 100.0 * r["acik_hucre"] / max(1, r["kenar_hucre"])
+        eksen = "y" if ad in ("BATI", "DOGU") else "x"
+        gosterilen = r["araliklar"][:6]
+        metin = " · ".join(f"{eksen}={a:.0f}…{b:.0f} ({u:.0f} cm)" for a, b, u in gosterilen)
+        fazla = "" if len(r["araliklar"]) <= 6 else f" · +{len(r['araliklar'])-6} aralık daha"
+        print(f"   {ad:6s}: kenarın %{oran:.0f}'i açık · {len(r['araliklar'])} aralık — {metin}{fazla}", file=akis)
+    print(f"   özet: 4 kenarın {acik_kenar}'inde açıklık var (ızgara payı ±{2*HUCRE:.0f} cm)", file=akis)
+
+
 def konturu_izle(hucreler, en, boy):
     """Hücre kümesinin dış sınırını dikdörtgensel poligon olarak çıkar.
     Kenar-yürüyüşü: bölgenin dışına bakan birim kenarları toplayıp zincirler."""
@@ -225,6 +327,54 @@ def main():
     sinir = [(a, b) for a, b in sinir if math.dist(a, b) > 0.1]
     etiketler = girdi["etiketler"]
 
+    # ÇEPER BEYANI: gerçek müşteri çizimlerinde dış çeper çoğu kez kapalı çizili DEĞİLDİR
+    # (ölçüldü 2026-09-16, Bankalar Merkez Siirt: 23 katmanın hiçbiri kapatmıyor). İki meşru
+    # yol var: (a) çizime CEVRE katmanı çizip rolünü 'duvar' beyan etmek — kod gerektirmez,
+    # segmentler sinir'e katmandan gelir; (b) burada 'ek_cevre' ile poligon beyan etmek.
+    # Her ikisi de BEYANDIR, ölçüm değildir: kaynağı çıktıya yazılır ki model bunu gizlemesin.
+    # ODA BEYANI: hangi etiketler oda tohumudur (MEDDAH kararı 2026-09-18)
+    oda_beyani = None
+    ham_oda = girdi.get("oda_etiketleri")
+    if ham_oda:
+        etiketler, oda_beyani = oda_tohumlarini_suz(etiketler, ham_oda, sys.stderr)
+        oda_beyani["gerekce"] = girdi.get("oda_etiketleri_gerekce", "gerekçe yazılmamış")
+        if not etiketler:
+            print("✗ beyan edilen adların HİÇBİRİ çizimde bulunamadı — oda üretilmez", file=sys.stderr)
+            return 1
+
+    # İÇ BÖLME BEYANI (çeperin kardeşi, MEDDAH kararı 2026-09-23): gerçek çizimde bölme duvarları
+    # ya rolü yanlış beyan edilmiş katmanda ya da duvar+mobilya KARIŞIK bir katmandadır (Siirt: `0`
+    # katmanı 712 segmentle hem WC duvarını hem raf ayak izini taşıyor; tek rol her iki yönde yanlış).
+    # Karışık katmanda rol düzeltmesi çare değildir; gereken bölme çizgileri burada BEYAN edilir.
+    bolme_beyani = None
+    ham_bolme = girdi.get("ek_bolme")
+    if ham_bolme:
+        eklenen = []
+        for b in ham_bolme:
+            a_, b_ = tuple(b["a"]), tuple(b["b"])
+            if math.dist(a_, b_) > 0.1: eklenen.append((a_, b_))
+        if not eklenen:
+            print("✗ ek_bolme boş ya da sıfır uzunluklu", file=sys.stderr)
+            return 1
+        sinir = sinir + eklenen
+        bolme_beyani = {"kaynak": "ek_bolme", "segment": len(eklenen),
+                        "gerekce": girdi.get("ek_bolme_gerekce", "gerekçe yazılmamış")}
+        print(f"  · iç bölme BEYANI: {len(eklenen)} segment — {bolme_beyani['gerekce']}", file=sys.stderr)
+
+    cevre_beyani = None
+    ham_cevre = girdi.get("ek_cevre")
+    if ham_cevre:
+        noktalar = [tuple(p) for p in ham_cevre]
+        if len(noktalar) < 3:
+            print("✗ ek_cevre en az 3 köşe ister (kapalı halka)", file=sys.stderr)
+            return 1
+        halka = [(noktalar[i], noktalar[(i + 1) % len(noktalar)]) for i in range(len(noktalar))]
+        eklenen = [(a, b) for a, b in halka if math.dist(a, b) > 0.1]
+        sinir = sinir + eklenen
+        cevre_beyani = {"kaynak": "ek_cevre", "kose": len(noktalar), "segment": len(eklenen),
+                        "gerekce": girdi.get("ek_cevre_gerekce", "gerekçe yazılmamış")}
+        print(f"  · çeper BEYANI: {len(noktalar)} köşe / {len(eklenen)} segment — {cevre_beyani['gerekce']}", file=sys.stderr)
+
     xs = [p[0] for s in sinir for p in s]
     ys = [p[1] for s in sinir for p in s]
     pay = 20
@@ -233,26 +383,48 @@ def main():
     boy = int((max(ys) + pay - minY) / HUCRE) + 2
     print(f"ızgara {en}×{boy} hücre ({HUCRE} cm) · sınır segmenti {len(sinir)}", file=sys.stderr)
 
-    muhurler = kapilari_muhurle(sinir)
+    # OTOMATİK MÜHÜR ANAHTARI (2026-09-23, gerçek market çiziminde ölçüldü): otomatik kural
+    # karışık katmanlı çizimde SAHTE ağız üretiyor (44 mühürün yalnız %14'i duvara bağlandı,
+    # köprü haklı olarak durdu). Kapılar çizimde ölçü yazısıyla belli olduğunda otomatik kural
+    # kapatılır ve ağızlar BEYAN edilir. Varsayılan AÇIK: eski davranış değişmez.
+    otomatik = girdi.get("otomatik_muhur", True)
+    muhurler = kapilari_muhurle(sinir) if otomatik else []
+    if not otomatik:
+        print("  · otomatik mühür KAPALI (beyan: otomatik_muhur=false) — ağızlar yalnız ek_muhur'dan", file=sys.stderr)
     # Otomatik kural her ağzı yakalayamaz (çizimdeki düzensiz boşluklar). v1 YARI-OTOMATİKTİR:
     # kalan ağızlar girdide açıkça beyan edilir; her biri gerekçesiyle kayda geçer.
     elle = girdi.get("ek_muhur", [])
     for m in elle:
-        muhurler.append((tuple(m["a"]), tuple(m["b"])))
+        muhurler.append((tuple(m["a"]), tuple(m["b"]), m.get("genislik")))
         print(f"  · elle mühür: {m['a']} ↔ {m['b']} — {m.get('gerekce', 'gerekçe yazılmamış')}", file=sys.stderr)
     print(f"kapı/pencere ağzı mührü: {len(muhurler) - len(elle)} otomatik + {len(elle)} elle", file=sys.stderr)
-    duvar = rasterle(sinir + muhurler, minX, minY, en, boy)
+    duvar = rasterle([(m[0], m[1]) for m in muhurler], minX, minY, en, boy) if False else rasterle(sinir + [(m[0], m[1]) for m in muhurler], minX, minY, en, boy)
     toplam_bos = en * boy - sum(duvar)
 
     sonuc = []
     imzalar = {}
+    disarida = 0
     for e in etiketler:
         bx = int(round((e["x"] - minX) / HUCRE))
         by = int(round((e["y"] - minY) / HUCRE))
+        if not (0 <= bx < en and 0 <= by < boy):
+            # Çizim kutusunun DIŞINDAKİ etiket (başlık bloğu notu, lejant): oda değildir.
+            # Eskiden IndexError ile çöküyordu (2026-09-16, gerçek market çiziminde ölçüldü).
+            disarida += 1
+            print(f"  ⚠ '{e['ad']}': etiket çizim kutusunun dışında — oda sayılmadı", file=sys.stderr)
+            continue
         hucreler, kenar = boya(duvar, en, boy, (bx, by))
         alan = len(hucreler) * HUCRE * HUCRE / 10000
         if kenar:
             print(f"✗ '{e['ad']}': bölge çizim kenarına sızdı ({alan:.1f} m²) — sınır kapalı değil", file=sys.stderr)
+            kutu = duvar_kutusu(sinir, minX, minY, en, boy)
+            en_cm = (kutu[2] - kutu[0]) * HUCRE; boy_cm = (kutu[3] - kutu[1]) * HUCRE
+            print(f"  çeper taraması (bina kutusu {en_cm:.0f}×{boy_cm:.0f} cm):", file=sys.stderr)
+            tarama = cevre_taramasi(hucreler, en, boy, minX, minY, kutu)
+            if tarama: cevre_raporla(tarama, sys.stderr)
+            else: print("   (taşkın kutu kenarlarına değmiyor — kaçak iç bölgede)", file=sys.stderr)
+            print("  → çeperi kapat: çizime CEVRE katmanı çiz (rol=duvar) ya da girdiye"
+                  " ek_cevre: [[x,y], ...] beyanı koy", file=sys.stderr)
             return 1
         if len(hucreler) > toplam_bos * 0.75:
             print(f"✗ '{e['ad']}': bölge çizimin %75'inden büyük — kaçak var", file=sys.stderr)
@@ -283,14 +455,22 @@ def main():
         {
             "odalar": sonuc,
             # mühürler = kapı/pencere ağızları; model üreticisi bunları açıklığa çevirir
-            "muhurler": [{"a": [round(m[0][0], 1), round(m[0][1], 1)],
-                          "b": [round(m[1][0], 1), round(m[1][1], 1)]} for m in muhurler],
+            # Beyan edilen genişlik (kapı ölçü yazısı) mühürle BİRLİKTE taşınır: köprü onu
+            # duvar parçasının boyundan türetmek zorunda kalmasın (ölçüldü 2026-09-23: 90 cm kapı,
+            # bölme beyanıyla parçalanmış 68 cm'lik duvara düşünce sessizce 66 cm oluyordu).
+            "muhurler": [dict({"a": [round(m[0][0], 1), round(m[0][1], 1)],
+                               "b": [round(m[1][0], 1), round(m[1][1], 1)]},
+                              **({"genislik": m[2]} if len(m) > 2 and m[2] else {})) for m in muhurler],
+            # Çeper beyanla kapatıldıysa model bunu BİLMELİ: ölçü raporunda "dış hat beyandır" der.
+            "cevre_beyani": cevre_beyani,
+            "oda_beyani": oda_beyani,
+            "bolme_beyani": bolme_beyani,
         },
         open(sys.argv[2], "w"),
         ensure_ascii=False,
         indent=1,
     )
-    print(f"✓ {len(sonuc)} oda çıkarıldı", file=sys.stderr)
+    print(f"✓ {len(sonuc)} oda çıkarıldı" + (f" · {disarida} etiket kutu dışında atlandı" if disarida else ""), file=sys.stderr)
     return 0
 
 

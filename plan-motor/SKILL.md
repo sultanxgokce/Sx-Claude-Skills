@@ -1,7 +1,7 @@
 ---
 name: plan-motor
 type: agent
-version: 1.4.0
+version: 1.6.1
 description: >
   2B kat-planı motoru. DWG/DXF çizimini OKUR (katman/birim/envanter), KENDİ geometrisiyle
   referans kalitede ÇİZER (goster), üstünden ÖLÇER (oda alanı/duvar/mesafe), doğal-dil
@@ -44,6 +44,7 @@ kurulumu görür. Yoksa `kur.sh` yeniden kurar (idempotent).
 ```bash
 node cli.mjs goster  --dosya x.dwg|x.dxf --cikti p.svg [--png p.png] [--baslik "…"] [--alt "…"]
                      [--vurgu v.json] [--duzenle d.json] [--kirp x0,y0,x1,y1] [--cikar-json g.json]
+                     [--katman-rolleri k.json]   # v1.5 — sınır katmanları VERİDEN gelir
 node cli.mjs oku     --dosya x.dwg|x.dxf [--rapor r.json]
 node cli.mjs ciz     --model m.json --cikti p.svg [--png p.png] [--dxf p.dxf] [--png-truecolor]
                      [--dwg p.dwg] [--yerlesim y.json]   # v1.4 — AutoCAD DWG yazma
@@ -55,6 +56,51 @@ node cli.mjs uret    --program p.json --kural-seti k.json --cikti-dizin d/ [--ad
 python3 lib/lifting.py girdi.json cikti.json     # ham çizim → semantik oda grafı
 ```
 Çıkış kodları: `0` başarı · `1` doğrulama/fail-closed (çıktı YAZILMAZ) · `2` kullanım · `3` iç hata.
+
+## lifting → MODEL köprüsü (v1.6) — `model` komutu
+
+`lifting.py` bir oda **grafı** üretir (poligon + kapı/pencere ağzı mühürleri); bu bir MODEL
+değildir ve `dogrula` onu reddeder. Köprü aradaki dönüşümü yapar:
+
+```bash
+python3 lib/lifting.py g.json graf.json
+node cli.mjs model --graf graf.json --cikti m.json [--tipler t.json] [--rapor r.json]
+```
+
+| Ne yapar | Nasıl |
+|---|---|
+| Halka sadeleştirme | Izgara kuantizasyon artıklarını (2 cm basamaklar) atar. **Alan sapması denetlenir**: pay aşılırsa model YAZILMAZ — sessizce yanlış m² üretmektense hiç üretmemek |
+| Düğüm ortaklaştırma | Odalar arası çakışan köşeler tek düğüm |
+| **İç/dış duvar türetimi** | Karşı yüzü bulunan yüz `ic` işaretlenir ve **kalınlık ÖLÇÜLÜR**; bulunmayan `dis`. Dış kalınlık **ölçülemez** (dış yüz grafta yok) → beyan edilir ve raporda `ÖLÇÜLMEDİ` diye işaretlenir, ölçülmüş gibi sunulmaz |
+| **Açıklık eşlemesi** | Mühürler duvarlara bağlanır. `tip` **daima `gecis`** — kapı mı pencere mi graftan BİLİNMEZ, uydurulmaz; kanat yayı çizilmez |
+| Kör nokta | `--tipler` verilmezse oda tipleri beyansız kalır ve **raporlanır** (sessiz geçmez) |
+
+**Fail-closed:** alan sapması payı aşarsa · mühürlerin yarısından azı bağlanabiliyorsa RC 1.
+*Yarım açıklık kümesi, açıklıksız modelden tehlikelidir: eksikliği görünmez kılar.*
+Eşikler `lifting-koprusu.json`'da yaşar (arama penceresi ve kuantizasyon payı — mimari kural DEĞİL).
+
+🔴 **Neden var:** köprü YOKTU; iki pakette de lifting çıktısını okuyan tek tüketici bile yoktu,
+bu yüzden 2a protokolü kâğıtta kalıyordu. Modeller elle kuruluyor, `acikliklar` boş kalıyor ve
+"kapı önü boş kalsın" kuralı denetleyecek veri bulamadığı için **sessizce** geçiyordu. Gerçek
+müşteri dosyasında ölçüldü: açıklıklar modele girer girmez o teslimat **13 sert ihlal** verdi.
+Sınav: `tests/graf-koprusu.test.sh` (mutasyon kanıtlı).
+
+## Katman rolleri (v1.5) — sınır VERİDEN gelir
+
+Hangi katmanın **duvar / kolon / açıklık / mobilya / not** olduğu ve hangi rollerin **sınır**
+oluşturduğu `katman-rolleri.json`'da yaşar — motor kodunda sabit liste YOKTUR
+(kural-seti deseninin aynısı). İş-başına geçersiz kılma: `--katman-rolleri k.json`.
+
+🔴 **Neden:** sınır kümesi eskiden kodda sabitti (üstelik iki kopya) ve gerçek bir müşteri
+çiziminde `Zone_Line` katmanını duvar sayıyordu; o katman **mobilya** taşıyor. Mobilya ayak
+izleri odalardan oyuldu → 8 odada 89.76 yerine 71.51 m² (**%20 kayıp**) ve hata **sessizdi**
+(lifting RC 0). Bkz. `DEVIR-CEVAP.md` 2026-08-12.
+
+**Kapı — AÇIK BEYAN (fail-closed):** geometri taşıyan ama rolü beyan edilmemiş katman varsa
+**RC 1**, çizim işlenmez. `"yok-say"` da meşru bir beyandır; beyan **edilmek** zorundadır.
+**Eşik uydurulmadı:** medyan-alan eşiği düşünüldü ve reddedildi — ölçüldü ki gerçek duvar
+katmanının medyanı 0.1 m², yani eşik duvarın kendisini elerdi (K01: ölçmediğin kuralı sert
+ilan edemezsin). Medyan alan yalnız **tanı** olarak raporlanır. Sınav: `tests/katman-rolleri.test.sh`.
 
 ## DWG yazma (`ciz --dwg`, v1.4)
 
@@ -199,6 +245,15 @@ taşıyıcı · çekirdek · otopark) bu skill'in ölçeği DEĞİLDİR — bu p
 kural asgarilerinin altında hedef veriyorsa üretim **hiç başlamaz**: sığmayan programa
 "sığdım" demek, motorun tüm disiplinini çürütür.
 Lifting yarı-otomatiktir: yakalanamayan kapı ağzı girdide `ek_muhur` ile gerekçesiyle beyan edilir.
+**Çeper (dış hat) kapısı (2026-09-16):** gerçek müşteri çizimlerinde dış çeper çoğu kez hiçbir katmanda
+kapalı çizili değildir (ölçüldü: 23 katmanlı market planı, 4 kenarın 4'ü açık). Sızıntıda lifting artık
+**hangi kenarın yüzde kaçının açık olduğunu ve aralıkları (eksenli, cm)** basar — kullanıcıya hedefli soru
+hammaddesi. Kapatma iki yolla, ikisi de BEYANDIR ve çıktıya `cevre_beyani` olarak iz düşer: (a) çizime
+`CEVRE` katmanı çizip rolünü `duvar` beyan etmek (kod gerekmez), (b) girdide `ek_cevre: [[x,y],…]` +
+`ek_cevre_gerekce`. Beyan tek başına kapıyı kandıramaz (yanlış yerdeki çeper yine RC 1). Kutu dışındaki
+etiketler (başlık bloğu notu) oda sayılmaz, uyarıyla atlanır. `oku` birim beyanı ile ölçülen uzam
+çelişince (`$INSUNITS=inç`, geometri cm) `uyarilar` alanında UYARI basar — kapı değil. Sınav:
+`tests/cevre-kapisi.test.sh`, `tests/birim-uyarisi.test.sh`.
 Katman adları girdi çiziminin konvansiyonuna bağlıdır (`lib/cad-render.mjs → BICIM`).
 
 ## Paketleme sözleşmesi uyumu (MEDDAH 7 madde)

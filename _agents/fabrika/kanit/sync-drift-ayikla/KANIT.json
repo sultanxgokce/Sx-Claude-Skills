@@ -1,0 +1,225 @@
+{
+  "is": "sync-drift-ayikla",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T18:33:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift",
+      "asama": "once",
+      "dosya": "olcum-kuru-kosu-drift-once.txt",
+      "sha256": "49e289829d0f5a171e42e2e1590c5c40f95ce3f43998a130c5cb19165a7b48a0",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:21:16+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e630ad15622147ccb718cb5ab1cf9421"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-sonra.txt",
+      "sha256": "6fdae681596c40fe8e9098e58a83cb4620183d4d58816477e8ae3c323cf4ad90",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:31:51+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a034016cf65441a3a4cc85de6f0d74e0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "519cbe2474f4649979b3972f7f78abaf278ca87cb9776525acad6bebe5bae9b0",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:32:05+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8f432d60c0034696a426099ffb9b5cce"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "9d515425a383ef521bb2378160dd78d16d1ac35ff04b94088f503aa97d039533",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:32:05+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "583fb89aa14a40cba35626b6cacf287a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapimda-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapimda-sinav-sonra.txt",
+      "sha256": "89a769e8a95682456aa80f03c82c8f6306c8709a8a6d78a9241c68fe7d121f81",
+      "komut": [
+        "bash",
+        "kapimda/scripts/kapimda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:32:11+03:00",
+      "sure_sn": 5.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "404ffc65bf5e47ea937578bfb560c762"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sinav-sonra.txt",
+      "sha256": "0f5bcd4a763b9cf9a086a337b06fcb55b38fd1954ed4af2327f0fe06fca49f2d",
+      "komut": [
+        "bash",
+        "kapi-sinavi/scripts/kapi-sinavi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:32:59+03:00",
+      "sure_sn": 48.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e31c9f3afff3425ab08e5249072a70c1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olcum-disiplini-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-olcum-disiplini-sinav-sonra.txt",
+      "sha256": "194f75f8615646ffd8ce2c9d544ec11e108317cad78a31a4490783edfd9bce08",
+      "komut": [
+        "bash",
+        "olcum-disiplini/scripts/olcum-disiplini.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:00+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2a82b70ffff94f409f12733363a4bde8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "notion-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-notion-sinav-sonra.txt",
+      "sha256": "ad68f4f64d19089ab2818e3d04683fa923fa7b44286e0a8caab270046c8587b9",
+      "komut": [
+        "bash",
+        "notion-erisim/scripts/notion.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:01+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a7df482e99c74a4a874070e897593e08"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "durum-yaz-kaynak",
+      "asama": "sonra",
+      "dosya": "olcum-durum-yaz-kaynak-sonra.txt",
+      "sha256": "fd46cf07f0eda79093afb4787ed565628ce511b50908dc887353bf23805449ad",
+      "komut": [
+        "bash",
+        "durum-raporu/scripts/repo-bul.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:01+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d96987e0e985446fb2847698daccf8b8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "plan-motor-birim",
+      "asama": "sonra",
+      "dosya": "olcum-plan-motor-birim-sonra.txt",
+      "sha256": "7efdd0b997a959962d2bb0affc75d8e0d912195d43fa2106b5e025ea425b558d",
+      "komut": [
+        "bash",
+        "plan-motor/tests/birim-uyarisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:01+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "12fa5e38858c4840b9ca1aed8723197b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "plan-motor-dxf",
+      "asama": "sonra",
+      "dosya": "olcum-plan-motor-dxf-sonra.txt",
+      "sha256": "29e499c34ac8aee31b6ae52b1bef3e0f1b93ba728b540adbe68f7b88c729a516",
+      "komut": [
+        "bash",
+        "plan-motor/tests/dxf-line-uclari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:01+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8371ab517fe54355b01899de06d0bb4e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-skills-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sync-skills-sinav-sonra.txt",
+      "sha256": "54381e672496d1dc345987cf1727cd7a2837fc5fd9f2d778c72c9bf1651a1072",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:03+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "83cd36aae25c4eff9356173ba69b52bd"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "hukum-tablosu",
+      "asama": "sonra",
+      "dosya": "dosya-hukum-tablosu-sonra.md",
+      "sha256": "94fb84f2abfca6b93aa3006d0ca765d10647ea024cfb6244ad7b54a0a1f765ef",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-hukum-tablosu.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:33:27+03:00",
+      "olcum_id": "5d6439b7a0e249dca101103a9c6c43ca"
+    }
+  ],
+  "imza": "d06da6892d95ada2897c6623489c7aee8c56e685c2abb187573b69cefd555f0c"
+}

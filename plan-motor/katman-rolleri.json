@@ -1,0 +1,53 @@
+{
+  "ad": "katman-rolleri",
+  "surum": "1.0",
+  "olusturma": "2026-08-12",
+  "aciklama": "Katman → ROL eşlemesi ve hangi rollerin SINIR oluşturduğu bu dosyada YAŞAR, motor kodunda değil (kural-seti deseninin aynısı). Bir katmanı sınıra almak bir VERİ kararıdır. Ama 'rolü beyan edilmemiş katman işlenemez' bir KURALDIR ve bu dosyadan kapatılamaz.",
+  "gerekce": "2026-08-12 · gerçek müşteri çiziminde ölçüldü: sınır kümesi kodda sabitti ve 'Zone_Line' katmanını duvar sayıyordu. O katman mobilya/donatı ayak izi taşıyor (boyutlar çizimin kendi notlarıyla birebir: 337x50 ↔ 'Gizli Mutfak Dolabı 50 x 340 cm', 110x90 ↔ 'Gizli Buzdolabı 80 x 110 cm'). Mobilya odadan oyuluyordu → 8 odada toplam 89.76 m² yerine 71.51 m² (%20 kayıp), üstelik SESSİZCE (lifting RC 0). Kaynak: tellal/_agents/PERGEL/ders-hasadi/KURU-KOSU-karsilama-ajani-IS-001.md · DERS-ADAYI 5.",
+  "roller": {
+    "px_walls": "duvar",
+    "px_columns": "kolon",
+    "px_openings": "aciklik",
+    "px_wallhatch": "yok-say",
+    "px_furniture": "mobilya",
+    "Zone_Line": "mobilya",
+    "DimLine": "not",
+    "TEXT": "not",
+    "0": "yok-say",
+    "A-WALL": "duvar",
+    "A-WALL-PATT": "yok-say",
+    "A-GLAZ": "aciklik",
+    "A-DOOR": "aciklik",
+    "A-COLS": "kolon",
+    "A-FURN": "mobilya",
+    "A-ANNO": "not",
+    "A-ANNO-DIMS": "not"
+  },
+  "rol_kumesi": [
+    "duvar",
+    "kolon",
+    "aciklik",
+    "mobilya",
+    "not",
+    "yok-say",
+    "karisik"
+  ],
+  "sinir_rolleri": [
+    "duvar",
+    "kolon",
+    "aciklik"
+  ],
+  "kapi": {
+    "beyan_zorunlu": true,
+    "aciklama": "Geometri taşıyan (poligon/çizgi) ama bu dosyada rolü beyan edilmemiş katman bulunursa RC 1 — çizim işlenmez. 'yok-say' da meşru bir beyandır; beyan EDİLMEK zorundadır. Sessiz varsayım bu kusurun kaynağıydı.",
+    "metin_katmani_muaf": true,
+    "muaf_gerekce": "Yalnız metin taşıyan katman sınır üretemez; etiket toplama ayrı yoldan yürür. Beyan edilmemesi ölçüm hatası doğurmaz."
+  },
+  "tani": {
+    "medyan_alan_bildir": true,
+    "aciklama": "Sınıra alınan her katmanın kapalı poligonlarının medyan alanı RAPOR edilir — İNSAN gözü için. KURAL DEĞİLDİR: bu çizimde WC 2.38 m² ve DUŞ 1.36 m², yani küçük odalar mobilya ölçeğiyle örtüşüyor; ölçülmemiş bir eşiği sert kural ilan etmek yasaktır (K01)."
+  },
+  "karisik_aciklama": "Bir katman hem duvar çizgisi hem tefriş/sembol konturu taşıyorsa `karisik` beyan edilir. Ayrım katman değil VARLIK düzeyinde yapılır (lib/karisik.mjs): kapalı ilmek tefriş, açık çizgi duvar adayı, duvara iki kenarıyla oturan kapalı ilmek SORU (kolon/şaft olabilir). Yalnız `--karisik-ayrim` bayrağıyla işler.",
+  "karisik_bitisiklik_cm": 2.0,
+  "karisik_bitisiklik_kaynak": "TÜRETİLMİŞ: lifting ızgara hücresi (lib/lifting.py · HUCRE=2.0 cm). Bir hücreden küçük sapma geometri değil kuantizasyon artığıdır. Mimari kural DEĞİL."
+}

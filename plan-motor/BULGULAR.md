@@ -155,3 +155,39 @@ LINE=2×kapı+pencere · TEXT=oda · INSUNITS=5(cm) · 5 AIA katmanı. Bu, **mot
 okuyucusunun kendi yazıcısıyla tutarlı** olduğunu kanıtlar; **gerçek AutoCAD'in dosyayı
 açtığını KANITLAMAZ.** O teyit hâlâ açık (`DEVIR.md`) ve Sultan'a kalıyor. "DXF doğrulandı"
 demeyin; "round-trip tutarlı, gerçek CAD teyidi bekliyor" deyin.
+
+### Ö-5 · `--karisik-ayrim` kalınlık sapmasının çaresi DEĞİL (24 Eyl 2026, iki dosyada ölçüldü)
+Karışık katman teşhisi (kapalı ilmek → tefriş, açık çizgi → duvar adayı) **kalınlık sapmasını
+düşürmedi: Siirt 35 → 38, Kozluk 24 → 98.** Sapma oranı Siirt'te %49→%30 düştü ama Kozluk'ta
+%29→%56 yükseldi; iki dosyada tutarlı iyileşme YOK. Sebep ölçüldü: kural GİRDİYİ düzeltiyor,
+gövde kurma MEKANİZMASINI değil — tefriş konturları çıkınca gerçek duvar çizgileri sınıra girip
+ölçülebilir duvar sayısını ikiye katlıyor ve gövde bindirmesi daha çok duvarı etkiliyor.
+**Bu bayrağı "kalınlık düzelir" umuduyla AÇMAYIN.** Yan kazançları gerçek (tefriş konturu sınırdan
+çıkar, kolon koruması SORU sınıfına düşürür, Kozluk'ta açıklık eşleşmesi 6/8→8/8) ama amacı bu değil.
+Kalınlık sapmasının kökü ayrı bir layihada: her yüz için yerel türetilmiş kalınlıkta ayrı gövde kurup
+birleştirme deseni.
+
+### Ö-6 · Müşteri çizimi: beş kusur sınıfı ve üç dosyanın yan yana ölçümü (24 Eyl 2026)
+Üç gerçek market çiziminde ölçüldü. **Beş kusur sınıfı üçünde de var:** (1) birim beyanı yanlış
+(DWG "inç" der, çizim cm) · (2) dış çeper kapalı çizili değil · (3) iç bölmeler sınır-dışı katmanda ·
+(4) raf/tefriş adı oda tohumu sanılıyor, komşu oda etiketleri çakışıyor · (5) kapı genişliği yalnız YAZI.
+
+| dosya | şablon | süre | müdahale | sonuç |
+|---|---|---|---|---|
+| Bankalar Merkez Siirt | A (büro şablonu) | günlere yayıldı | 10 | model + 2 kare · 35 kalınlık sapması |
+| Kozluk Batman | A (aynı şablon: `4RAFLAR` 6↔6, `ALÇIPAN` 62↔62) | 5 dk | 5 | model · 24 sapma |
+| Kısıklı İstanbul | A + B (`AR-*` mimari altlık, başka büro) | 3 dk | 7 | **MODELE GİTMEDİ** (mühür %4-20 bağlandı, fail-closed) |
+| (demo daire, temiz çizim) | — | 2 dk | 2 | model + 2 kare · **0 sapma** |
+
+**Kısıklı niçin bitmedi:** `0` katmanı 467 poligon (370'i kapalı tefriş konturu). Duvar sayılınca oda
+sınırı 2.940-3.544 köşeye çıkıyor ve satış alanı 1.365 m² oluyor (çizimin kendi yazısı 990 m², %38 fazla);
+yok-say sayılınca iç bölmeler kayboluyor. **Bitmemiş hâli de bir veridir:** karışık katman sorunu
+7 müdahaleyle bile aşılamadı.
+
+**Ders:** *rol tablosu devredilmiyor, TARİF devrediyor.* Aynı büronun iki dosyasında 21 katmanın 20'si
+aynı adı taşır ama `0`=duvar biri için çeperi kapatır, öteki için kapatmaz. Üçüncü dosyada `AR-DUVAR`
+adlı katmanda yalnız 12 poligon/158 cm vardır; gerçek taşıyıcı `AR-TASIYICI`'dadır (98/41.558 cm).
+**Katman rolü ADINDAN değil, katman başına ÖLÇEREK beyan edilir** (poligon sayısı · kapalı oranı · toplam boy).
+
+**Sonda uyarısı:** kapı ölçü yazısından açıklık türeten yardımcı sonda `04/02/2025 REV.` tarihini
+"04/025" diye kapı sandı. Bu türetme bir gün kurala girerse **tarih süzgeci şarttır**.

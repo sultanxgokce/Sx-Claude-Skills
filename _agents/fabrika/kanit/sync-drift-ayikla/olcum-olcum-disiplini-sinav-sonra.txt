@@ -1,0 +1,57 @@
+$ bash olcum-disiplini/scripts/olcum-disiplini.test.sh
+# rc=0 sure=1.0s zaman=2026-10-30T18:33:00+03:00
+--- stdout ---
+boru — çıkış kodu boru hattının arkasından okunuyor mu
+  ✓ 🔴 GERÇEK VAKA (MUAVİN): boru sonraki satırda $? ile okunuyor
+  ✓ 🔴 GERÇEK VAKA (MUHASİP): boru ve $? aynı satırda
+  ✓ set -euo pipefail varsa temiz
+  ✓ PIPESTATUS kullanılıyorsa temiz
+  ✓ çıplak komut + $? temiz
+  ✓ || boru sayılmaz
+  ✓ tırnak içindeki | boru sayılmaz
+  ✓ 🔴 grep ile biten boru YANLIŞ POZİTİF ÜRETMEZ (grep bir yargıdır)
+  ✓ wc ile biten boru işaretlenmez
+  ✓ 🔴 'pipefail_yok' KALKAN SAYILMAZ (alt-dizge değil KELİME sınırı)
+  ✓ dizin taranır ve bulgu döner
+  ✓ olmayan yol → kullanım hatası
+  ✓ argümansız → kullanım hatası
+  ✓ tümü temiz dizin → 0
+negatif defteri — aynı negatifi ikinci kez ölçme
+  ✓ 🔴 defter YOKKEN 'ölçülmedi' denmez → ÖLÇÜLEMEDİ (0 DEĞİL)
+  ✓ kanıtsız negatif yazılamaz
+  ✓ iddiasız sorgu → kullanım hatası
+  ✓ yazıldıktan sonra aynı iddia → BULGU (daha önce ölçüldü)
+  ✓ kelimeleri karışık ama aynı iddia → yine yakalanır
+  ✓ ilgisiz iddia → 0 (ölçüm açılabilir)
+  ✓ önceki ölçümün KANITI gösteriliyor
+  ✓ defter append-only (satır eklendi, ezilmedi)
+
+biçim — uzantı İDDİA, baytlar KANIT
+  ✓ gerçek PDF → 0
+  ✓ 🔴 ZIP'i 'pdf' diye iddia → BULGU
+  ✓ uzantıdan türetme (beklenen verilmedi)
+  ✓ PNG → 0
+  ✓ JPG → 0
+  ✓ XML → 0
+  ✓ JSON → 0
+  ✓ docx = zip EŞDEĞER → 0
+  ✓ 🔴 BOŞ dosya → BULGU (0 bayt sessiz geçmez)
+  ✓ olmayan dosya → kullanım hatası
+  ✓ uzantısız + beklenen YOK → ÖLÇÜLEMEDİ
+  ✓ 🔴 tanınmayan bayt → ÖLÇÜLEMEDİ (yeşil DEĞİL, kırmızı da değil)
+  ✓ ZIP bulgusu içeriği listeliyor
+ölçüm kartı — ölçümü KURMADAN önce beş soru
+  ✓ eksik kart → kullanım hatası (ümit kaydedilmez)
+  ✓ tam kart + defterde yok → 0
+  ✓ 🔴 beklenen SAYI içeriyor ama --sayim YOK → kullanım hatası
+  ✓ aynı kart + --sayim → 0
+  ✓ AYIRT EDİCİ: beklenen SAYISIZ ise --sayim istenmez → 0
+  ✓ kart --sayim alanını BASIYOR
+  ✓ 🔴 tam kart AMA daha önce ölçülmüş → BULGU (kart defteri KENDİ sorar)
+  ✓ kart beş alanı da basıyor
+kullanım
+  ✓ bilinmeyen komut → 2
+  ✓ negatif alt-komutu eksik → 2
+
+toplam=45 geçen=45 düşen=0
+--- stderr ---

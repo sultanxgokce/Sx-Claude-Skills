@@ -1,0 +1,25 @@
+$ bash sync-skills.test.sh
+# rc=0 sure=1.3s zaman=2026-10-30T18:33:03+03:00
+--- stdout ---
+── dağıtım duman kapıları ──
+  ✓ G1 kaynak çalıştırılabilirse hedef de çalıştırılabilir
+  ✓ G2 sağlam dağıtımda duman testi sessiz, exit 0
+  ✓ G3 çalıştırılamaz dosya → duman düşer, exit≠0
+  ✓ G4 bozuk sözdizimi → duman düşer, exit≠0
+  ✓ G5 özet satırında duman sayacı görünür
+  ✓ G6 scripts'siz skill duman-düşmez (yanlış alarm yok)
+  ✓ G7 duman testi script'i KOŞMAZ (yan-etki yok)
+  ✓ G8 içerik aynıyken bile bozuk kurulu kopya yakalanır
+  ✓ G9 --apply izni onarır, içeriği DEĞİŞTİRMEZ
+  ✓ G10 dry-run onarmaz (yalnız --apply yazar)
+── kaynak dal ilanı + bayat kaynak koruması (BHJS8W) ──
+  ✓ B1 güncel kaynakta dal@sha ilan edilir, uyarı yok, --apply kurar
+  ✓ B2 origin/main'in gerisindeki kaynaktan --apply REDDEDİLİR (rc 3, hedefe dosya düşmez)
+  ✓ B3 bayat kaynakta kuru-koşu UYARIR (sessiz 'güncel' yok) ama reddetmez
+  ✓ B4 SYNC_BAYAT_KABUL=1 ile bayat kaynak BİLEREK geçilir (uyarı yine basılır)
+  ✓ B5 çözülmemiş çakışması olan kaynaktan --apply REDDEDİLİR
+  ✓ B6 git deposu olmayan kaynakta 'ölçülemedi' ilan edilir, kurulum eskisi gibi çalışır
+  ✓ mutant (RED söküldü): bayat kaynaktan kurulum YAPILIR → B2 bu mutantta düşerdi
+
+17 geçti · 0 kaldı
+--- stderr ---

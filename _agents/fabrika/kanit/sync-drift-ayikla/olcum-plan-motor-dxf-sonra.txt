@@ -1,0 +1,5 @@
+$ bash plan-motor/tests/dxf-line-uclari.test.sh
+# rc=0 sure=0.1s zaman=2026-10-30T18:33:01+03:00
+--- stdout ---
+dxf-line-uclari: gecen=4 kirik=0
+--- stderr ---

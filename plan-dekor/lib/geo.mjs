@@ -124,3 +124,59 @@ export function temizAlanlaBuyut(r, temiz, yon) {
     g: r.g + pay[0] + pay[2], d: r.d + pay[1] + pay[3],
   };
 }
+
+// Etiket/çapa için ODANIN İÇİNDE bir nokta.
+// 🔴 NEDEN: ağırlık merkezi U/L biçimli odada odanın DIŞINA düşer — kuru koşuda SUIT ODA
+// (ebeveyn banyoyu saran U) etiketi banyonun altında kaldı, ekranda "UIT ODA" göründü.
+// Aynı ders taslak katmanında bir kez ödenmişti (bbox merkezi), ürün tarafında TEKRARLADI.
+// Yöntem: merkez içerideyse onu ver; değilse bbox üstünde DETERMİNİSTİK ızgara tara ve
+// kenarlara uzaklığı en büyük iç noktayı seç (erişilmezlik kutbu yaklaşımı).
+// Determinizm: sabit ızgara + sabit tarama sırası → aynı girdi, aynı nokta.
+// `engeller`: kaçınılacak dikdörtgenler [{x,y,g,d}] — mobilya. Müşteri bulgusu 2026-08-13:
+// salonda m² yazısı yemek masasının ÜSTÜNE bindi; etiketin "odanın içinde" olması yetmiyor,
+// MOBİLYADAN da kaçınmalı. Engellerin hepsi kapsıyorsa engelsiz en iyi noktaya düşülür
+// (etiketsiz plan, üstü çizili etiketten kötüdür).
+export function icNokta(poligon, secenekler = {}) {
+  const { bolme = 24, engeller = [] } = typeof secenekler === 'number' ? { bolme: secenekler } : secenekler;
+  const merkez = agirlikMerkezi(poligon);
+  if (!engeller.length && noktaIcinde(merkez, poligon)) return merkez;
+  const k = bbox(poligon);
+  let enIyi = null, enIyiPuan = -1;
+  let yedek = noktaIcinde(merkez, poligon) ? merkez : null, yedekPuan = yedek ? 0 : -1;
+  for (let i = 1; i < bolme; i++) {
+    for (let j = 1; j < bolme; j++) {
+      const p = [k.minX + (k.w * i) / bolme, k.minY + (k.h * j) / bolme];
+      if (!noktaIcinde(p, poligon)) continue;
+      const kenarUzaklik = aciklikOlc(p, poligon);
+      if (kenarUzaklik > yedekPuan) { yedekPuan = kenarUzaklik; yedek = p; }
+      let engelUzaklik = Infinity, kapali = false;
+      for (const e of engeller) {
+        if (p[0] >= e.x && p[0] <= e.x + e.g && p[1] >= e.y && p[1] <= e.y + e.d) { kapali = true; break; }
+        const dx = Math.max(e.x - p[0], 0, p[0] - (e.x + e.g));
+        const dy = Math.max(e.y - p[1], 0, p[1] - (e.y + e.d));
+        engelUzaklik = Math.min(engelUzaklik, Math.hypot(dx, dy));
+      }
+      if (kapali) continue;
+      const puan = Math.min(kenarUzaklik, engelUzaklik);
+      if (puan > enIyiPuan) { enIyiPuan = puan; enIyi = p; }
+    }
+  }
+  return enIyi ?? yedek ?? merkez;
+}
+
+// Bir noktanın poligon KENARLARINA en kısa uzaklığı (cm). Etiketin sığabileceği yarıçap:
+// dar/küçük odada punto ve satır sayısı buna göre kısılır (müşteri bulgusu: DUŞ 1.4 m²
+// etiketi duvara taşıp yarım kaldı).
+export function aciklikOlc(p, poligon) {
+  let enYakin = Infinity;
+  for (let n = 0; n < poligon.length; n++) {
+    const a = poligon[n], b = poligon[(n + 1) % poligon.length];
+    const dx = b[0] - a[0], dy = b[1] - a[1];
+    const uzun2 = dx * dx + dy * dy;
+    let t = uzun2 === 0 ? 0 : ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / uzun2;
+    t = Math.max(0, Math.min(1, t));
+    const d = Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy));
+    if (d < enYakin) enYakin = d;
+  }
+  return enYakin;
+}

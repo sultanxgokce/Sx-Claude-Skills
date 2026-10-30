@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.7.0
+version: 1.8.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa

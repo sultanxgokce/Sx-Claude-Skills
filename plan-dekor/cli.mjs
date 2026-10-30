@@ -33,10 +33,11 @@ function kullanim() {
 
   node cli.mjs mobilya --model m.json --cikti y.json [--adet 3] [--kural-seti k.json] [--oda id,id]
   node cli.mjs ciz     --model m.json [--yerlesim y.json] --cikti p.svg [--png p.png] [--tema T] [--lejant-yok]
+                       [--teslim]   # müşteriye giden çıktı: uyarı sınıfı KAPALI, açıklıksız plan RED
   node cli.mjs revize  --yerlesim y.json --model m.json --degisiklik d.json --cikti yeni.json
   node cli.mjs cipa    --model m.json --cipa c.json [--tolerans 3] [--rapor r.json]
   node cli.mjs denetle --model m.json --yerlesim y.json [--kural-seti k.json] [--rapor r.json]
-  node cli.mjs akis    --model m.json --cikti-dizin d/ [--adet 3] [--tema T]
+  node cli.mjs akis    --model m.json --cikti-dizin d/ [--adet 3] [--tema T] [--teslim]
   node cli.mjs temalar
   node cli.mjs katalog
 
@@ -107,7 +108,7 @@ async function cmdMobilya() {
   const adet = Number(argAl('adet', 3));
   const odaSuzgeci = argAl('oda') ? String(argAl('oda')).split(',').map((s) => s.trim()) : undefined;
 
-  const { raporlar, planAdaylari } = plaMobilyala(model, paket, kuralSeti, { adet, odalar: odaSuzgeci });
+  const { raporlar, planAdaylari, tekilDusenler } = plaMobilyala(model, paket, kuralSeti, { adet, odalar: odaSuzgeci });
 
   const sigmayan = raporlar.filter((r) => r.durum === 'sigmadi');
   const programsiz = raporlar.filter((r) => r.durum === 'program-yok');
@@ -144,11 +145,16 @@ async function cmdMobilya() {
     oda_raporlari: raporlar
       .map((r) => ({ oda: r.oda, durum: r.durum, m2: r.m2, denenen: r.denenen, not: r.not }))
       .sort((a, b) => String(a.oda).localeCompare(String(b.oda))),
+    tekil_dusenler: tekilDusenler,
     adaylar: planAdaylari.map((a, i) => ({ no: i + 1, yerlesimler: a.yerlesimler })),
   };
   writeFileSync(ciktiYol, JSON.stringify(cikti, null, 2));
   console.error(`✓ ${planAdaylari.length} yerleşim adayı → ${ciktiYol}`);
   console.error(`  odalar: ${raporlar.filter((r) => r.durum === 'ok').length} döşendi · ${sigmayan.length} sığmadı · ${programsiz.length} programsız`);
+  // Sessiz düşürme yasak — tekillik kararı ekrana ve teslimat notuna çıkar.
+  for (const d of tekilDusenler) {
+    console.error(`  · tekillik: ${d.oda} ← ${d.mobilya} DÜŞÜRÜLDÜ (kazanan: ${d.kazanan_oda ?? '—'})`);
+  }
   return 0;
 }
 
@@ -174,7 +180,8 @@ async function cmdCiz() {
   const svg = dekorSvgUret(model, yerlesimler, tema, { lejant, notu: argAl('not') || undefined });
 
   // FAIL-CLOSED: öz-denetim geçmeden dosya YAZILMAZ
-  const dd = renderDenetle(svg, { model, yerlesimler, tema, lejant });
+  // --teslim: müşteriye giden çıktı. Uyarı sınıfı kapanır, açıklıksız plan reddedilir.
+  const dd = renderDenetle(svg, { model, yerlesimler, tema, lejant, teslim: bayrak('teslim') });
   for (const u of dd.uyarilar) console.error(`⚠ ${u}`);
   if (!dd.gecti) {
     console.error('✗ render öz-denetimi kırmızı — hiçbir dosya YAZILMADI:');
@@ -370,7 +377,7 @@ async function cmdAkis() {
 
   for (const aday of y.adaylar) {
     const svg = dekorSvgUret(model, aday.yerlesimler, tema, { lejant: true });
-    const dd = renderDenetle(svg, { model, yerlesimler: aday.yerlesimler, tema, lejant: true });
+    const dd = renderDenetle(svg, { model, yerlesimler: aday.yerlesimler, tema, lejant: true, teslim: bayrak('teslim') });
     if (!dd.gecti) {
       console.error(`✗ aday-${aday.no} öz-denetimi kırmızı — YAZILMADI: ${dd.hatalar.join(' · ')}`);
       return 1;

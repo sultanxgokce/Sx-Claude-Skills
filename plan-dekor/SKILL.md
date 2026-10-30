@@ -1,7 +1,7 @@
 ---
 name: plan-dekor
 type: agent
-version: 0.6.0
+version: 0.7.0
 description: >
   2B kat planını RENKLİ, MOBİLYALI sunum planına çevirir. Boş odalara oda tipine göre mobilya
   YERLEŞTİRİR (kural-tabanlı, deterministik — kapı kanadının süpürme alanı boş kalır, mobilya
@@ -32,7 +32,8 @@ renkli zemin dokulu, mobilyası yerleştirilmiş, lejantlı **sunum planı** (SV
 
 **İki iş yapar, ikisi de veriyle sürülür:**
 1. **Mobilya yerleştirme** — `katalog/mobilya.json` (semboller+ölçüler) × `katalog/program.json`
-   (oda tipi → mobilya programı) × `kural-seti/mobilya-TR.json` (kısıtlar).
+   (oda tipi → mobilya programı **+ `daire_kisitlari`**: daire-ölçeği tekillik ve m²'ye bağlı
+   opsiyonel tavanı) × `kural-seti/mobilya-TR.json` (kısıtlar).
 2. **Renklendirme** — `tema/*.json` (oda-tipi renk + doku + gölge + lejant biçimi).
 
 Eşikler ve renkler **motorda değil veride** yaşar; yeni tema/mobilya eklemek kod değiştirmez.

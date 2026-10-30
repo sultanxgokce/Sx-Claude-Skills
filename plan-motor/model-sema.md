@@ -62,6 +62,27 @@ Desen: köşe(nokta) → duvar → oda grafı; açıklıklar duvara `{duvar, ora
 }
 ```
 
+## 🔴 EKSEN SÖZLEŞMESİ — model Y'si AŞAĞI büyür
+
+`noktalar` içindeki **Y ekranla aynı yöne büyür (aşağı)**, CAD'in aksine. Bu sözleşme
+motorun DÖRT yerinde zaten uygulanıyordu ama HİÇBİR YERDE YAZILI DEĞİLDİ:
+
+| Tüketici | Ne yapıyor | Sonuç |
+|---|---|---|
+| `lib/svg.mjs` | model Y'sini SVG'ye doğrudan yazar | SVG Y aşağı → tutarlı |
+| `plan-dekor/lib/dekor-svg.mjs` | aynısı | tutarlı |
+| `lib/dxf.mjs:23` | `Y = (y) => -y` | CAD'e yazarken ÇEVİRİR |
+| `lib/dwg.mjs:159` | `Y = (y) => -y` | CAD'e yazarken ÇEVİRİR |
+
+**CAD'den model üreten her yol Y'yi ÇEVİRMEK ZORUNDADIR** (`lib/graf-koprusu.mjs` bunu yapar).
+Çevirmezse sonuç yalnız "PNG ters" değildir: `ciz --dxf/--dwg` çıktısı da **aynalanır**, yani
+mimara ters bir CAD dosyası teslim edilir. Ölçüldü (2026-08-14): çevirmesiz köprü modelinden
+üretilen DXF'te SALON, WC'nin güneyine düşüyordu; kaynak çizimde kuzeyinde.
+
+> Yazılmamış sözleşme ihlal edilir: bu kusur teşhis edilirken İKİ KEZ yanlış yere atfedildi
+> (önce plan-dekor'a, sonra "ortak çizim sözleşmesi"ne). Kaynağa bakınca görüldü ki çiziciler
+> hep doğruymuş; sözleşmeye uymayan yeni köprüydü. Sınav: `tests/graf-koprusu.test.sh`.
+
 ## Fail-closed kuralları (ihlalde RC≠0, HİÇBİR çıktı yazılmaz)
 - `birim ≠ cm` · `olcek.kaynak` yok → ölçek doğrulanamaz, üretim yok
 - tanımsız nokta/duvar referansı · id tekrarı

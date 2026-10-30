@@ -53,6 +53,9 @@ const KULLANIM = `plan-motor — kat planı motoru (birim: cm, fail-closed)
           [--vurgu v.json] [--duzenle d.json] [--kirp x0,y0,x1,y1] [--cikar-json g.json]
           (çizimi KENDİ geometrisiyle çizer — mevcut planı GÖSTERMEK için; ciz ise modelden üretir)
   oku     --dosya x.dxf|x.dwg [--rapor r.json]
+  model   --graf g.json --cikti m.json [--tipler t.json] [--ayar a.json] [--ad "..."] [--rapor r.json]
+          (lifting oda grafı → MODEL: açıklık eşlemesi + iç/dış duvar türetimi.
+           Açıklık tipi daima 'gecis' — kapı/pencere ayrımı graftan bilinmez, uydurulmaz)
   dogrula --model m.json
   denetle --model m.json --kural-seti k.json [--rapor r.json]
           (mimari kural denetimi — eşikler kural VERİSİNDEN gelir; hata-ihlali = RC 1)
@@ -188,19 +191,50 @@ async function ana() {
       const kirp = kirpArg ? kirpArg.split(',').map(Number) : null;
       const cikarYolu = argAl('cikar-json');
       if (cikarYolu) {
-        // ölçüm hattına (lifting) girdi: düzenleme uygulanmış haliyle sınır + etiket
+        // ölçüm hattına (lifting) girdi: düzenleme uygulanmış haliyle sınır + etiket.
+        // Sınır katmanları VERİDEN gelir (katman-rolleri.json) — kodda sabit liste YOK.
+        // Sebep: sabit liste `Zone_Line`i duvar sayıyordu, o katman mobilya taşıyordu ve
+        // odalar sessizce %20 küçük ölçülüyordu (DEVIR-CEVAP.md 2026-08-12).
+        const { rolleriYukle, katmanlariCoz, taniMedyanAlan } = await import('./lib/katman.mjs');
+        const roller = rolleriYukle(argAl('katman-rolleri') || undefined);
+        const { sinirKatmanlari: sinirKat } = katmanlariCoz(ents, roller);   // beyansız katman → RC 1
+        for (const t of taniMedyanAlan(ents, roller)) {
+          console.log(`  · tanı: sınır katmanı '${t.katman}' — ${t.adet} kapalı poligon, medyan ${t.medyan_m2} m² (bilgi, kural değil)`);
+        }
+        // KARIŞIK katman teşhisi (--karisik-ayrim, varsayılan KAPALI): `karisik` rollü katmanda
+        // ayrım varlık düzeyinde yapılır — kapalı ilmek tefriş (sınıra GİRMEZ), açık çizgi duvar
+        // adayı (girer), duvara iki kenarıyla oturan kapalı ilmek SORU (girer ve raporlanır).
+        // Bayrak kapalıyken `karisik` rollü katman, bugünkü davranışla, sınır dışıdır.
+        const karisikAyrim = bayrak('karisik-ayrim');
+        let karisikTeshisi = null;
+        if (karisikAyrim) {
+          const { karisikTeshis } = await import('./lib/karisik.mjs');
+          karisikTeshisi = karisikTeshis(ents, roller);
+          const o = karisikTeshisi.ozet;
+          console.log(`  · karışık katman teşhisi [${o.karisik_katman.join(', ') || 'katman yok'}]: ` +
+            `duvar adayı ${o.duvar_adayi} · tefriş ${o.tefris} · SORU (kolon olabilir) ${o.soru_kolon_olabilir}`);
+          if (o.soru_kolon_olabilir) console.log(`    ⚠ ${o.soru_kolon_olabilir} kapalı ilmek duvara iki kenarıyla oturuyor — kolon/şaft olabilir, SİLİNMEDİ; kullanıcıya sorulmalı`);
+        }
         const sinir = [];
         for (const e of ents) {
-          if (e.tur !== 'poly' || !['px_walls', 'px_openings', 'px_columns', 'Zone_Line'].includes(e.katman)) continue;
+          if (e.tur !== 'poly') continue;
+          const sinif = karisikTeshisi?.sinifi.get(e);
+          if (sinif === 'tefris') continue;                       // tefriş konturu sınıra alınmaz
+          if (!sinirKat.includes(e.katman) && !sinif) continue;   // karışık teşhisi yoksa eski davranış
           const k = e.koseler, son = e.kapali ? k.length : k.length - 1;
           for (let i = 0; i < son; i++) sinir.push([[k[i].x, k[i].y], [k[(i + 1) % k.length].x, k[(i + 1) % k.length].y]]);
         }
-        const etiketler = ents.filter((e) => e.tur === 'metin').map((e) => {
+        // Katman süzgeci YALNIZ 'mobilya' (MEDDAH kararı 2026-09-18): mobilya katmanındaki metin
+        // oda adı olamaz. 'not'/'yok-say' ELENMEZ — gerçek çizimde oda adları oradaydı (Siirt ölçümü).
+        const etiketler = ents.filter((e) => e.tur === 'metin' && roller.roller[e.katman] !== 'mobilya').map((e) => {
           const t = e.metin.replace(/^\{/, '').replace(/\}$/, '').replace(/\\f[^;]*;/g, '').split(/\\P/);
-          return { ad: (t[0] || '').trim(), m2: null, x: e.x, y: e.y };
+          return { ad: (t[0] || '').trim(), m2: null, x: e.x, y: e.y, katman: e.katman, etiket_rol: roller.roller[e.katman] ?? null };
         });
-        writeFileSync(cikarYolu, JSON.stringify({ sinir, etiketler }));
-        console.log(`✓ ölçüm girdisi: ${cikarYolu} (${sinir.length} segment, ${etiketler.length} etiket)`);
+        writeFileSync(cikarYolu, JSON.stringify({ sinir, etiketler,
+          ...(karisikTeshisi ? { karisik_teshis: { ozet: karisikTeshisi.ozet, kayit: karisikTeshisi.kayit } } : {}) }));
+        const mobilyaElenen = ents.filter((e) => e.tur === 'metin' && roller.roller[e.katman] === 'mobilya').length;
+        console.log(`✓ ölçüm girdisi: ${cikarYolu} (${sinir.length} segment, ${etiketler.length} etiket` +
+          (mobilyaElenen ? `, mobilya katmanından ${mobilyaElenen} metin elendi` : '') + ')');
       }
       const svg = cadSvg(ents, { baslik: argAl('baslik'), altbaslik: argAl('alt'), govdeler, vurgu, kirp });
       await ozDenetle(svg, { entities: ents });           // fail-closed: kusurlu çizim YAZILMAZ
@@ -225,6 +259,51 @@ async function ana() {
       const raporYolu = argAl('rapor');
       if (raporYolu) writeFileSync(raporYolu, JSON.stringify(rapor, null, 2) + '\n');
       return { girdi: dosya, cikti: raporYolu };
+    }
+
+    case 'model': {
+      // LIFTING → MODEL köprüsü. Bu köprü YOKTU: lifting oda grafı üretiyor ama onu okuyan
+      // tüketici yoktu, bu yüzden modeller elle kuruluyor ve `acikliklar` boş kalıyordu.
+      // Boş açıklık kümesi, "kapı önü boş kalsın" kuralını sessizce geçiriyordu.
+      const grafYolu = argAl('graf', true);
+      const ciktiYolu = argAl('cikti', true);
+      const { grafiModeleCevir, ayarYukle } = await import('./lib/graf-koprusu.mjs');
+      const graf = JSON.parse(readFileSync(grafYolu, 'utf8'));
+      const tiplerYolu = argAl('tipler');
+      const tipler = tiplerYolu ? JSON.parse(readFileSync(tiplerYolu, 'utf8')) : {};
+      const ayar = ayarYukle(argAl('ayar') || undefined);
+      // --dis-teshis: karşı yüzü olmayan yüzleri sınıflandır (kılçık düşer · paylaşılan yüz SORU ·
+      // cephe beyan). VARSAYILAN KAPALI — canlı tüketici SEDİR'in davranışı sessizce değişmesin.
+      const disTeshis = bayrak('dis-teshis');
+      const kapiKaydir = bayrak('kapi-kaydir');
+      const { model, rapor } = grafiModeleCevir(graf, { ayar, tipler, ad: argAl('ad'), disTeshis, kapiKaydir });
+      // Köprü kendi ürettiğini SINAR: geçersiz model yazılmaz (kendi çıktısına güvenmez).
+      const { hatalar } = dogrula(model);
+      if (hatalar.length) {
+        for (const h of hatalar.slice(0, 8)) console.error(`✗ ${h}`);
+        throw new MotorHata(`köprü geçersiz model üretti (${hatalar.length} hata) — dosya YAZILMADI`, 1);
+      }
+      writeFileSync(ciktiYolu, JSON.stringify(model, null, 1) + '\n');
+      const raporYolu = argAl('rapor');
+      if (raporYolu) writeFileSync(raporYolu, JSON.stringify(rapor, null, 2) + '\n');
+      console.error(`✓ model: ${ciktiYolu}`);
+      console.error(`  oda ${rapor.oda} · düğüm ${rapor.dugum} · duvar ${rapor.duvar} (iç ${rapor.duvar_ic} · dış ${rapor.duvar_dis})`);
+      if (rapor.olculen_ic_kalinlik_cm) {
+        const k = rapor.olculen_ic_kalinlik_cm;
+        console.error(`  ölçülen iç duvar kalınlığı: ${k.en_az}–${k.en_cok} cm (ortanca ${k.ortanca})`);
+      }
+      console.error(`  dış duvar kalınlığı: ${rapor.dis_duvar_kalinligi.deger} cm — ${rapor.dis_duvar_kalinligi.durum}`);
+      if (rapor.dis_teshis) {
+        const t = rapor.dis_teshis;
+        console.error(`  dış teşhisi (--dis-teshis): iç ölçüldü ${t.ic_olculdu} · cephe ${t.cephe} · SORU ${t.soru_paylasilan_yuz} · düşen kılçık ${t.dusen_kilcik} · açıklık yüzünden korunan ${t.kilcik_ama_aciklik_tasiyor}`);
+        if (t.soru_paylasilan_yuz) console.error(`    ⚠ ${t.soru_paylasilan_yuz} yüz iki odanın PAYLAŞTIĞI tek çizgi: kalınlığı bilinmiyor, beyan kullanıldı — kullanıcıya sorulmalı (iz: model.dis_teshis.kayit)`);
+      }
+      console.error(`  mühür ${rapor.muhur} → açıklık ${rapor.aciklik} (eşleşmeyen ${rapor.aciklik_eslesmeyen}) · ${rapor.aciklik_tipi}`);
+      if (rapor.tipsiz_oda.length) {
+        console.error(`  ⚠ tipi beyan edilmemiş oda (${rapor.tipsiz_oda.length}): ${rapor.tipsiz_oda.join(', ')}`);
+        console.error(`    tip beyansız oda = kural denetiminde KÖR NOKTA. --tipler ile beyan et.`);
+      }
+      return { girdi: grafYolu, cikti: ciktiYolu };
     }
 
     case 'dogrula': {

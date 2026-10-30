@@ -63,6 +63,30 @@ function raporla(format, arac, entities, ek, tipAl, koordinatAl) {
     }
   }
   const birimKodu = ek.insunits;
+  // BİRİM UYARISI (2026-09-16, gerçek market DWG'sinde ölçüldü): dosya "$INSUNITS = inç"
+  // beyan ediyordu, geometri santimetreydi. Yanlış birim ölçü kapısını 2,54× saptırır ve
+  // hata SESSİZ kalır. Burada KAPI kurulmuyor (K01: ölçülmemiş eşik sert kural olamaz);
+  // beyanla ölçülen uzam çelişiyorsa insan için UYARI basılır.
+  const CM_CARPAN = { 1: 2.54, 2: 30.48, 4: 0.1, 5: 1, 6: 100 };
+  const uyarilar = [];
+  if (birimKodu === null || birimKodu === undefined || birimKodu === 0) {
+    uyarilar.push('birim beyanı YOK ($INSUNITS boş/0) — ölçek doğrulanamaz; ölçü kapısı yanlış birimle sessizce sapar');
+  }
+  const carpan = CM_CARPAN[birimKodu];
+  if (carpan && koordinatSayisi) {
+    const enM = ((maxX - minX) * carpan) / 100;
+    const boyM = ((maxY - minY) * carpan) / 100;
+    const buyuk = Math.max(enM, boyM);
+    // Gerçekçilik payı bir KURAL DEĞİL, göz açan bir çitin adı: bir kat planı 500 m'yi
+    // aşıyorsa ya birim yanlış beyan edilmiştir ya çizimde başıboş varlık vardır.
+    if (buyuk > 500 || (buyuk > 0 && buyuk < 1)) {
+      uyarilar.push(
+        `birim beyanı "${INSUNITS_ADI[birimKodu] ?? birimKodu}" ile çizim uzamı ${enM.toFixed(1)} × ${boyM.toFixed(1)} m — ` +
+        'kat planı ölçeği için gerçekçi değil: birim beyanı yanlış olabilir ya da çizimde uzak/başıboş varlık var. ' +
+        'Bu bir UYARIDIR, kapı değil; ölçü kapısına girmeden birimi doğrula.',
+      );
+    }
+  }
   return {
     format, arac,
     entity_toplam: entities.length,
@@ -72,6 +96,7 @@ function raporla(format, arac, entities, ek, tipAl, koordinatAl) {
     bbox: koordinatSayisi
       ? { minX: +minX.toFixed(1), minY: +minY.toFixed(1), genislik: +(maxX - minX).toFixed(1), yukseklik: +(maxY - minY).toFixed(1) }
       : null,
+    uyarilar,
     not: 'v1: dış çizim otomatik modele çevrilmez (lifting yok); bu rapor altlık + elle model kurulumu içindir.',
   };
 }

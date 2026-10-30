@@ -333,3 +333,37 @@ Kapılar: TELLAL **136/0** · plan-dekor **34/0**. Yeni teknik kapıları eski s
 **6/6 kırmızı** veriyor — sahte-yeşil değil.
 
 — MEDDAH (TELLAL)
+
+---
+
+## 2026-08-12 · SÖZLEŞME DUYURUSU — katman rolleri VERİYE taşınıyor (v1.5.0)
+
+**Bulgu (gerçek müşteri dosyasında, kuru koşuda):** sınır katmanı kümesi kodda sabitti —
+`cli.mjs:194` ve `lib/cad-cikar.mjs:10`'da **İKİ AYRI KOPYA** hâlinde:
+`['px_walls','px_openings','px_columns','Zone_Line']`. Ölçüm gösterdi ki `Zone_Line` o çizimde
+**mobilya/donatı ayak izi** taşıyor (17 poligon; `337x50` ↔ "Gizli Mutfak Dolabı 50 x 340 cm",
+`110x90` ↔ "Gizli Buzdolabı 80 x 110 cm", `463x40` ↔ "Gizli Dolap 40 x 355 cm",
+`484x60` ↔ "Gizli Mutfak 60 x 595 cm", salonda L koltuk `351x100`+`100x251`).
+
+Sonuç: **mobilya ayak izleri odalardan oyuluyordu.** SALON 27.27→17.13 m² ·
+CAFE&MUTFAK 18.72→10.67 m² · toplam **89.76→71.51 m² (%20 kayıp)**. Hata **sessizdi** —
+lifting RC 0 dönüyor, sayılar makul görünüyor, hiçbir kapı ötmüyor.
+Kendi yazılı analizimiz doğruyu zaten söylemiş: `REFERANS-CIZIM-ANALIZI.md:28` →
+Zone_Line = *"ölçü/açıklama notları"*. **Kod ile yazılı analiz çelişiyordu.**
+
+**Değişiklik:** katman → ROL eşlemesi ve hangi rollerin sınır oluşturduğu artık
+`katman-rolleri.json`'da yaşar (kural-seti deseninin aynısı: *"eşikler dosyada yaşar,
+motor kodunda değil"*). İki kopya kalktı, tek kaynak `lib/katman.mjs`.
+İş-başına geçersiz kılma: `--katman-rolleri x.json`.
+
+**Kapı — eşik UYDURULMADI.** Medyan-alan eşiği düşünüldü ve **REDDEDİLDİ**: bu dosyada
+WC 2.38 m², DUŞ 1.36 m² — küçük odalar mobilya ölçeğiyle örtüşüyor, ayırt edici değil.
+Ölçmediğimiz eşiği sert kural ilan etmiyoruz (K01). Kapı bunun yerine **AÇIK BEYAN**:
+geometri taşıyan ama rolü beyan edilmemiş katman → **RC 1**, çizim işlenmez.
+"Yok say" da meşru bir beyandır — ama beyan edilmek zorundadır. Sessiz varsayım biter.
+Medyan alan yalnız **tanı olarak raporlanır**, kural değildir.
+
+**Kırılan söz yok:** varsayılan veri dosyası eski davranışı DEĞİL, ölçülmüş doğruyu taşır
+(Zone_Line = mobilya). Bu bilinçli bir davranış değişikliğidir — eski davranış hatalıydı.
+
+— MEDDAH (TELLAL)

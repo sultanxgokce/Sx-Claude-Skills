@@ -54,8 +54,7 @@ async function dwgOku(yol) {
       cikti.push({ tur: 'poly', katman, koseler, kapali: !!e.isClosed });
     } else if (/^Line/.test(t)) {
       cikti.push({ tur: 'poly', katman, kapali: false, koseler: [
-        { x: e.startPoint.x, y: e.startPoint.y, bulge: 0 },
-        { x: e.endPoint.x, y: e.endPoint.y, bulge: 0 },
+        ...ucNoktalari(e),
       ] });
     } else if (/^Arc/.test(t)) {
       cikti.push({ tur: 'yay', katman, cx: e.center.x, cy: e.center.y, r: e.radius, bas: e.startAngle, son: e.endAngle });
@@ -82,8 +81,7 @@ async function dxfOku(yol) {
       });
     } else if (e.type === 'LINE') {
       cikti.push({ tur: 'poly', katman, kapali: false, koseler: [
-        { x: e.startPoint.x, y: e.startPoint.y, bulge: 0 },
-        { x: e.endPoint.x, y: e.endPoint.y, bulge: 0 },
+        ...ucNoktalari(e),
       ] });
     } else if (e.type === 'ARC') {
       cikti.push({ tur: 'yay', katman, cx: e.center.x, cy: e.center.y, r: e.radius, bas: (e.startAngle * Math.PI) / 180, son: (e.endAngle * Math.PI) / 180 });
@@ -104,6 +102,21 @@ async function dxfOku(yol) {
 //     "sil":  [ { "ad": "...", "bolge": [x0,y0,x1,y1], "katman": "px_walls" } ] }
 // Kural: bir nesne ancak TÜM köşeleri bölgenin içindeyse etkilenir — yarısı dışarıda
 // kalan bir duvarı kaydırmak çizimi sessizce kopartır.
+// 🔴 LINE uçları dxf-parser/acad-ts sürümüne göre `startPoint/endPoint` ya da `vertices`
+// olarak gelir. Ölçüldü 2026-09-24: paketin KENDİ demo DXF'inde (demo/ornek-plan.dxf) LINE'ların
+// startPoint'i yok ve `goster` tüm dosyada rc=3 ile çöküyordu. Gerçek müşteri dosyaları DWG
+// yolundan girdiği için bu hiç görünmemişti. Eksik uçlu varlık artık çökertmez, atlanır.
+function ucNoktalari(e) {
+  const v = e.vertices ?? [];
+  if (v.length >= 2 && Number.isFinite(v[0]?.x) && Number.isFinite(v[1]?.x)) {
+    return [{ x: v[0].x, y: v[0].y, bulge: 0 }, { x: v[1].x, y: v[1].y, bulge: 0 }];
+  }
+  if (Number.isFinite(e.startPoint?.x) && Number.isFinite(e.endPoint?.x)) {
+    return [{ x: e.startPoint.x, y: e.startPoint.y, bulge: 0 }, { x: e.endPoint.x, y: e.endPoint.y, bulge: 0 }];
+  }
+  return [];
+}
+
 export function duzenleUygula(entities, duzenleme) {
   const gunluk = [];
   const icinde = (e, b) =>

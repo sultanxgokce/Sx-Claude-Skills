@@ -116,6 +116,11 @@ cmd_set_token(){  # [api|project] — hazır Railway token'ı GİZLİ yapıştı
   echo "Railway token yapıştır (gizli — ekrana/geçmişe düşmez). Üret: railway.com/account/tokens"
   echo "  · api     → Account/Workspace token (Authorization: Bearer) — GraphQL API işleri (bu skill'in ağırlığı)"
   echo "  · project → Project token (Project-Access-Token) — tek proje+ortam (railway.sh set-token project)"
+  if [ ! -t 0 ]; then
+    red "✗ bu kabukta klavye girişi yok (ör. sohbetteki '!' komutu) — gizli giriş okunamaz, hiçbir şey yazılmadı."
+    echo "  Gerçek bir terminal açın (code-server → Terminal ya da ssh) ve orada çalıştırın: bash $0 set-token ${1:-}"
+    exit 2
+  fi
   local tok; read -rsp "Railway ${kind} token: " tok; echo
   [ -n "$tok" ] || die "boş token"
   if [ "$kind" = "api" ]; then

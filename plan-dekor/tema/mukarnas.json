@@ -1,0 +1,94 @@
+{
+ "id": "mukarnas",
+ "ad": "MUKARNAS",
+ "aciklama": "Kâğıt-mürekkep mimari çizim dili: oda ayrımı RENKLE değil TONLA yapılır, tek renk vurgusu kapı süpürme yayındadır. Emlak sunumu değil, mimari çizim geleneği. 🔴 Vurgu rengi KAHVE (#8a5a2b) — Sultan kararı 2026-09-17 14:10: 'mavi olmasın kahve kalsın'.",
+ "yazi_tipi": "Archivo, DejaVu Sans, Helvetica, sans-serif",
+ "zemin": "#fbfaf8",
+ "duvar": {
+  "dis": "#16171a",
+  "ic": "#3a3d42",
+  "poche": "#23252a"
+ },
+ "aciklik": {
+  "kapi": "#8a5a2b",
+  "pencere": "#7d838b",
+  "gecis": "#b9b3a9"
+ },
+ "metin": {
+  "baslik": "#16171a",
+  "oda": "#16171a",
+  "alan": "#7d838b",
+  "lejant": "#7d838b"
+ },
+ "oda_tipleri": {
+  "oturma_odasi": {
+   "dolgu": "#ffffff",
+   "doku": "parke",
+   "doku_renk": "#ddd3c2"
+  },
+  "yatak_odasi": {
+   "dolgu": "#faf7f2",
+   "doku": "parke",
+   "doku_renk": "#ddd3c2"
+  },
+  "giyinme": {
+   "dolgu": "#f5f1e9",
+   "doku": "parke",
+   "doku_renk": "#dad0be"
+  },
+  "antre": {
+   "dolgu": "#efeae0",
+   "doku": "fayans",
+   "doku_renk": "#d6cec0"
+  },
+  "hol": {
+   "dolgu": "#efeae0",
+   "doku": "fayans",
+   "doku_renk": "#d6cec0"
+  },
+  "mutfak": {
+   "dolgu": "#e7e1d4",
+   "doku": "fayans",
+   "doku_renk": "#cec4b2"
+  },
+  "kiler": {
+   "dolgu": "#e7e1d4",
+   "doku": "fayans",
+   "doku_renk": "#cec4b2"
+  },
+  "banyo": {
+   "dolgu": "#ddd6c6",
+   "doku": "fayans",
+   "doku_renk": "#c6bba6"
+  },
+  "wc": {
+   "dolgu": "#ddd6c6",
+   "doku": "fayans",
+   "doku_renk": "#c6bba6"
+  },
+  "balkon": {
+   "dolgu": "#e3ddd1",
+   "doku": "fayans",
+   "doku_renk": "#cdc4b4"
+  },
+  "diger": {
+   "dolgu": "#f2ede4",
+   "doku": "yok",
+   "doku_renk": "#e0d9cc"
+  }
+ },
+ "mobilya": {
+  "dolgu": "#ffffff",
+  "ikincil": "#f3f0ec",
+  "vurgu": "#e4e1dc",
+  "cizgi": "#3a3d42",
+  "kalinlik": 2
+ },
+ "golge": {
+  "acik": false,
+  "renk": "#000000",
+  "opaklik": 0,
+  "kayma_cm": 0,
+  "bulanik_cm": 0
+ }
+}
