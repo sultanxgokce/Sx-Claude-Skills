@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kapsam-satir-kesisimi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T14:43:58+03:00",
+  "guncelleme": "2026-10-30T14:45:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -93,7 +93,19 @@
       "renk": "yesil",
       "zaman": "2026-10-30T14:43:58+03:00",
       "olcum_id": "2c1108f3ae9b403591848906eb3c9d34"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "gercek-kendi-alan-kapsam-olc",
+      "asama": "tek",
+      "dosya": "dosya-gercek-kendi-alan-kapsam-olc-tek.txt",
+      "sha256": "eededd4762b5f155476fc7e14e74cbc3665d2fc582692964084fbe09980f2e65",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kendi-kapsam-olc.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:45:17+03:00",
+      "olcum_id": "2f5fefcd14b94dee9167d67bd877a7a0"
     }
   ],
-  "imza": "ddd03dc1963787cc978a3c9545ed2485b161cb596aa1d36d82e1aaadafec04be"
+  "imza": "3e07e78aa77d76745a984d775def504dcfb9c8b3f1658c51ae786de8e50a8887"
 }
