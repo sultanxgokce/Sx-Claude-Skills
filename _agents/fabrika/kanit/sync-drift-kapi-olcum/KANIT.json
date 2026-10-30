@@ -1,7 +1,7 @@
 {
   "is": "sync-drift-kapi-olcum",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T19:05:57+03:00",
+  "guncelleme": "2026-10-30T19:07:22+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -470,7 +470,43 @@
       "sure_sn": 1.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "834d89a557514f9a81afea6b55b2f8aa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift-tur2-temiz",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-tur2-temiz-sonra.txt",
+      "sha256": "27828ec967f473e677c65ff195411d7624712b76cbc19f2ee226b67fc3ed42b0",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T19:07:18+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "af20c49c549b499f9aa5c4b4cfd98387"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kuru-kosu-drift-tur2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kuru-kosu-drift-tur2-sonra-25f7ba2198a0.txt",
+      "sha256": "6be0a026422f47acb0cdcc677bab1c613cba13b0795298608bb87f8b2f91f6ab",
+      "hedef_dosya": "olcum-kuru-kosu-drift-tur2-sonra.txt",
+      "hedef_olcum_id": "834d89a557514f9a81afea6b55b2f8aa",
+      "hedef_sha256": "15f82c66376a7bc26e68c8fbeb0c1cee3521748c2901d7c4da626cdeb298c2bb",
+      "hedef_zaman": "2026-10-30T19:05:57+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "ölçüm sırasında kanıt dosyaları kayıtsızdı (ağaç kirli göründü); kayıttan sonra temiz ağaçta yeniden ölçüldü",
+      "kim": "BENNÂ",
+      "karsi": "olcum-kuru-kosu-drift-tur2-temiz-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T19:07:22+03:00",
+      "olcum_id": "634d90beaf2847d08c77a44a6f03ca5c"
     }
   ],
-  "imza": "853bec6af9dc4f49e06507987104448ad3e779042eb6bc8957e3efd39ce297fe"
+  "imza": "1c2813ba4169ffb36206171a8b83208988e342c33de24e0c38912c9c5b7410c1"
 }
