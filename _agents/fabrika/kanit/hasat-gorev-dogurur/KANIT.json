@@ -1,7 +1,7 @@
 {
   "is": "hasat-gorev-dogurur",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T02:55:26+03:00",
+  "guncelleme": "2026-10-31T02:56:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -59,22 +59,22 @@
       "etiket": "mutant-bag-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-bag-yok-sonra.txt",
-      "sha256": "f52abf90fc76614036e8ac25165487d1248cb4a42357c687e685b2e396fe54f0",
+      "sha256": "d0437c2234d7b422c272c1229658b1b4307dd1b4065d2409c503730cabb2e1e0",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
         "bag-yok"
       ],
-      "rc": 0,
-      "renk": "kirmizi",
-      "zaman": "2026-10-31T02:54:27+03:00",
-      "sure_sn": 8.4,
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T02:56:19+03:00",
+      "sure_sn": 10.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
-      "dusen_kapi": false,
-      "olcum_id": "f227411f2d7d4143a90bc12d6801b028"
+      "dusen_kapi": true,
+      "olcum_id": "86681471e16f42a7a4c513fef6e0e9ee"
     },
     {
       "tur": "olcum",
@@ -187,5 +187,5 @@
       "olcum_id": "73a1160f4e1343e189e154264a012511"
     }
   ],
-  "imza": "df1ad016fe73a3e122d17a7f9e33a8c2a51ee638669f538ff09039fac12d331b"
+  "imza": "ec9b7fc4bc216f2cedec96b3ccff39f6f2752e69d58a6e5997f6607458fe7b77"
 }
