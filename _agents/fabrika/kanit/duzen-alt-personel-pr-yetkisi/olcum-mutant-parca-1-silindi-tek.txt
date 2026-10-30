@@ -1,0 +1,20 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-tur2-* ===
+$ env AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-mutant2-1.sh bash duzen/scripts/alt-ajan-istem.test.sh
+# rc=1 sure=0.3s zaman=2026-10-30T10:02:38+03:00
+--- stdout ---
+  ✓ A1 kimlik yok → rc 3 + 'kimlik yok' + '/ise-alim', stdout boş
+  ✓ A2 ELLE verbatim alınır, üretilmiş bölge alınmaz (rc 0)
+  ✓ A3 oda+amir registry'den (yorum ve tırnak temizlenmiş), ad ŞAKİRD
+  ✓ A5 sır süzme: parola/token/sifre satırı basılmaz, '[sır satırı süzüldü]' ≥3, sade satır kalır
+  ✓ A6 kart cümlesi JSON'dan okunur + reisin --is cümlesi de var
+  ✓ A8 --dosyalar/--sure basılır; 'reiste kalır' sabit satırı var
+  ✗ A8b Sultan kararı satırı istemde — beş parça: kendi iş alanında · küçük düzeltme PR'ı AÇABİLİR · birleştirme her durumda reiste · canlı · host · sır yok · bütün odalar için aynı (MEREMMETÇİ dahil) 
+  ✓ A9 el-defteri çıktısı istemde (SAHTE-DEFTER-SATIRI), ⚠ uyarı yok
+  ✓ A4 defter yok (rc 3) → istem yine üretilir rc 0, 'defter boş, ilk görev' + ⚠ uyarı satırı
+  ✓ A4b el-defteri başka rc (7) → 'ölçülemedi' der, 'defter boş' DEMEZ, rc 0
+  ✓ A7 ne --is ne --kart → rc 2, stdout boş
+  ✓ A6b kart bulunamazsa ⚠ uyarı + --is ile devam, rc 0
+  ✓ A10 değersiz seçenek (--is sonda) → rc 2 + 'bir değer ister', döngüye girmez (göz tur 1)
+  ✓ A11 --kart ../ yolu reddedilir → rc 2, dizin dışı JSON isteme girmez (göz tur 1)
+== 13 geçti · 1 düştü ==
+--- stderr ---
