@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/gorev-yolu.test.sh
-# rc=0 sure=1.8s zaman=2026-10-30T16:31:17+03:00
+# rc=0 sure=0.3s zaman=2026-10-30T16:35:57+03:00
 --- stdout ---
   ✓ Y1 açık env KESİN (olmayan yol bile aynen basılır)
   ✓ Y2 açık env var olan yolu basar

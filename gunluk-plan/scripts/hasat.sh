@@ -2,13 +2,13 @@
 # hasat.sh — HASAT KAPISI (1.19.0 · Meşveret 30 Eki madde 9, Sultan önem 2 · görev …ZM3PWD): havuzdaki bir bulgu göreve çevrilmeden
 #   ÖNCE "sorun hâlâ var mı" ölçülür. Mevcut tazelik denetimi (sirada-bak 1.17) KAYDIN yaşına bakar; bu kapı SORUNUN yaşadığına bakar.
 #   hasat.sh durum   <gorev_id> [--taze-gun N] [--birlesme YYYY-MM-DD | --yuzey <yol> [--depo <kök>]]   → SALT OKUR: hasat olur mu?
-#   hasat.sh dogrula <gorev_id> --sonuc var|duzelmis|olculemedi --olcum "<komut ya da dosya>" [--sinif olcum|pr|ci|canli|kare]
+#   hasat.sh dogrula <gorev_id> --sonuc var|duzelmis|olculemedi --olcum "<komut ya da dosya>" [--yuzey <dosya|dizin|-> (var'da ZORUNLU)] [--sinif olcum|pr|ci|canli|kare]
 #                    [--soz "<Sultan-dilinde 1-2 cümle>"] [--kapandi "<PR #N | commit | iş adı>"] [--tarih YYYY-MM-DD]
 #                    → kayda MUHAKKİK biçiminde adım: "[doğrulama: var|düzelmiş|ölçülemedi] sınıf=… · ölçüm: … · tarih=… · <söz>"
 #                      düzelmiş → --kapandi ZORUNLU; kayıt "kendiliğinden kapandı — <iş>" notuyla iptal edilir (gorev.sh durum … iptal)
 #   hasat.sh ac      <gorev_id> "<gerekçe ≥5>" [durum seçenekleri]   → kapı OLUR ise gorev.sh durum <id> acik "<gerekçe> · havuz kaydı …'den Hasat ile açıldı · son doğrulama <tarih>"
 # Kapı (durum):  HASAT=OLUR yalnız şu dördü birlikteyse: kayıt havuzda · son doğrulama "var" · doğrulama ≤ taze-gun (vars. 7) gün önce ·
-#   ilgili yüzeyde doğrulamadan SONRA birleşme yok (--birlesme tarihi ya da --yuzey yolunun son commit günü). Doğrulama yok/bayat/düzelmiş/
+#   ilgili yüzeyde doğrulamadan SONRA birleşme yok (--birlesme tarihi · --yuzey yolu · bayraksız: son doğrulama adımındaki yüzey=; son commit günü, git). Doğrulama yok/bayat/düzelmiş/
 #   ölçülemedi → HASAT=OLMAZ (rc 1) ve NEDEN= ne yapılacağını söyler. Tarih okunamıyor / git ölçemedi → HASAT=ÖLÇÜLEMEDİ (rc 3): "olur" UYDURULMAZ.
 # Adım metnine tarih=… yazılır: gorev.sh adim aynı metni ikinci kez eklemez; tarihsiz metin yeniden ölçümde sessizce YUTULUR ve kayıt tazelenmezdi.
 # rc: 0 olur/yazıldı · 1 kapı kapalı ya da defter reddetti · 2 kullanım · 3 ölçülemedi
@@ -34,6 +34,14 @@ case "$TAZE_GUN" in ''|*[!0-9]*) echo "HATA: --taze-gun pozitif tam sayı olmal�
 [ "$TAZE_GUN" -ge 1 ] || { echo "HATA: --taze-gun en az 1" >&2; exit 2; }
 [ -x "$GOREV" ] || [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
 tarih_mi() { printf '%s' "$1" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; }
+# YÜZEY = sorunun yaşadığı dosya/dizin (DALGIÇ ön-göz tur 1: birleşme ölçümü bayrağa bağlıydı, sirada-bak yolunda hiç ölçülmüyordu).
+#   dogrula 'var' yazarken yüzeyi MUTLAK yol olarak adıma koyar (yüzey=<yol>); durum bayraksız çağrıda onu kayıttan okur. '-' = kod yüzeyi yok (açık beyan).
+yuzey_mutlak() { python3 -c 'import os,sys; y,d=sys.argv[1:3]; print(os.path.abspath(y if os.path.isabs(y) or not d else os.path.join(d,y)))' "$1" "${DEPO:-}"; }
+yuzey_kok() { local d="$1"; while [ ! -d "$d" ] && [ "$d" != / ]; do d="$(dirname "$d")"; done; git -C "$d" rev-parse --show-toplevel 2>/dev/null; }
+# birlesme_olc <mutlak yol> → stdout: son commit günü (boş = yüzeye hiç commit yok) · rc 3 ölçülemedi. Dal: HASAT_DAL, yoksa origin/main, yoksa HEAD.
+birlesme_olc() { local kok ref; kok="$(yuzey_kok "$1")" && [ -n "$kok" ] || return 3
+  ref="${HASAT_DAL:-}"; [ -n "$ref" ] || { git -C "$kok" rev-parse --verify -q origin/main >/dev/null && ref=origin/main || ref=HEAD; }
+  git -C "$kok" log -1 --format=%cs "$ref" -- "$1" 2>/dev/null || return 3; }
 
 # ── dogrula: ölçümü kayda yaz ────────────────────────────────────────────────────────────────────────────────────────────
 if [ "$KOMUT" = dogrula ]; then
@@ -43,8 +51,13 @@ if [ "$KOMUT" = dogrula ]; then
   [ -n "$TARIH" ] || TARIH="$BUGUN"; tarih_mi "$TARIH" || { echo "HATA: tarih YYYY-MM-DD olmalı (verilen: '$TARIH')" >&2; exit 2; }
   if [ "$SONUC" = duzelmis ]; then [ -n "$(printf '%s' "$KAPANDI" | tr -d '[:space:]')" ] || { echo "HATA: düzelmiş bulgu hangi işle kapandığını söyler: --kapandi \"PR #N | commit | iş adı\" ZORUNLU" >&2; exit 2; }
   elif [ -n "$KAPANDI" ]; then echo "HATA: --kapandi yalnız --sonuc duzelmis ile" >&2; exit 2; fi
+  if [ "$SONUC" = var ] && [ -z "$YUZEY" ]; then echo "HATA: 'var' ölçümü sorunun yaşadığı yüzeyi ister: --yuzey <dosya|dizin> (kod yüzeyi yoksa --yuzey -) — birleşme sonradan bu yüzeyde ölçülür" >&2; exit 2; fi
+  if [ -n "$YUZEY" ] && [ "$YUZEY" != "-" ]; then
+    YUZEY="$(yuzey_mutlak "$YUZEY")"; [ -n "$(yuzey_kok "$YUZEY")" ] || { echo "HATA: yüzey bir git deposunda değil ($YUZEY) — birleşmesi ölçülemez; doğru yolu ver ya da --yuzey -" >&2; exit 2; }
+  fi
   case "$SONUC" in var) HUKUM="var";; duzelmis) HUKUM="düzelmiş";; *) HUKUM="ölçülemedi";; esac
   METIN="[doğrulama: $HUKUM] sınıf=$SINIF · ölçüm: $OLCUM · tarih=$TARIH"
+  [ -z "$YUZEY" ] || METIN="$METIN · yüzey=$YUZEY"
   [ "$SONUC" != duzelmis ] || METIN="$METIN · kendiliğinden kapandı: $KAPANDI"
   [ -z "$SOZ" ] || METIN="$METIN · $SOZ"
   bash "$GOREV" adim "$ID" "$METIN" || { echo "KIRMIZI: doğrulama adımı yazılamadı (gorev.sh adim rc $?)" >&2; exit 1; }
@@ -72,19 +85,30 @@ for a in k.get("adimlar",[]): print("ADIM\t%s\t%s" % (tm(a.get("ts","")), tm(a.g
 }
 KAYIT="$(kayit_oku "$ID" 2>/dev/null)"; KRC=$?
 [ "$KRC" -eq 0 ] && [ -n "$KAYIT" ] || { echo "ÖLÇÜLEMEDİ: kayıt okunamadı (rc=$KRC) — 'hasat olur' DENMEZ" >&2; exit 3; }
-if [ -n "$YUZEY" ]; then
-  [ -z "$BIRLESME" ] || { echo "HATA: --birlesme ile --yuzey birlikte olmaz" >&2; exit 2; }
-  [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-  BIRLESME="$(git -C "$DEPO" log -1 --format=%cs "${HASAT_DAL:-HEAD}" -- "$YUZEY" 2>/dev/null)"; GRC=$?
-  if [ "$GRC" -ne 0 ]; then
-    echo "KAYIT=$ID"; echo "BIRLESME=ÖLÇÜLEMEDİ"; echo "HASAT=ÖLÇÜLEMEDİ"; echo "NEDEN=yüzeyin birleşme tarihi git'ten okunamadı ($DEPO · $YUZEY) — birleşme yok DENMEZ; --birlesme ile tarihi ver ya da depoyu düzelt"; exit 3
-  fi
+[ -z "$YUZEY" ] || [ -z "$BIRLESME" ] || { echo "HATA: --birlesme ile --yuzey birlikte olmaz" >&2; exit 2; }
+YKAYNAK="bayrak"
+if [ -z "$YUZEY" ] && [ -z "$BIRLESME" ]; then   # bayraksız: yüzey SON doğrulama adımından okunur
+  YUZEY="$(printf '%s\n' "$KAYIT" | python3 -c '
+import sys,re; y=""
+for s in sys.stdin:
+    p=s.rstrip("\n").split("\t")
+    if p[0]=="ADIM" and len(p)>=3 and re.match(r"\[doğrulama: (var|düzelmiş|ölçülemedi)\]","\t".join(p[2:])):
+        m=re.search(r"\byüzey=([^ ]+)","\t".join(p[2:])); y=m.group(1) if m else ""
+print(y)')"; YKAYNAK="kayıt"
+fi
+BIRLESME_BEYAN=""
+if [ "$YUZEY" = "-" ]; then BIRLESME_BEYAN="beyan"
+elif [ -n "$YUZEY" ]; then
+  [ "$YKAYNAK" = kayıt ] || YUZEY="$(yuzey_mutlak "$YUZEY")"
+  BIRLESME="$(birlesme_olc "$YUZEY")" || {
+    echo "KAYIT=$ID"; echo "YUZEY=$YUZEY"; echo "BIRLESME=ÖLÇÜLEMEDİ"; echo "HASAT=ÖLÇÜLEMEDİ"; echo "NEDEN=yüzeyin birleşme tarihi git'ten okunamadı ($YUZEY) — birleşme yok DENMEZ; --birlesme ile tarihi ver ya da depoyu düzelt"; exit 3; }
   # yüzeye hiç commit yoksa boş döner: birleşme yok (ölçüldü, uydurulmadı)
+elif [ -z "$BIRLESME" ]; then BIRLESME_BEYAN="yok"   # son doğrulamada yüzey yok (eski biçim / elle yazılmış): birleşme ölçülemez
 fi
 [ -z "$BIRLESME" ] || tarih_mi "$BIRLESME" || { echo "HATA: --birlesme YYYY-MM-DD olmalı (verilen: '$BIRLESME')" >&2; exit 2; }
 PY="$(cat <<'PYKOD'
 import sys, re, datetime
-gid, bugun, gun, birlesme = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
+gid, bugun, gun, birlesme, beyan = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4], sys.argv[5]
 durum = "?"; son = None   # son doğrulama: (hüküm, tarih-metni)
 for s in sys.stdin:
     p = s.rstrip("\n").split("\t")
@@ -109,16 +133,17 @@ yas = (bg - dt).days
 if yas < 0: cik("var", tarih, yas, "ÖLÇÜLEMEDİ", "son doğrulama gelecek tarihli (%s, bugün %s) — saat kayması ya da bozuk veri; yeniden ölç" % (tarih, bugun))
 if durum != "havuz": cik("var", tarih, yas, "OLMAZ", "kayıt havuzda değil (durum: %s) — hasat yalnız havuz kaydını göreve çevirir" % durum)
 if yas > gun: cik("var", tarih, yas, "OLMAZ", "son doğrulama %d gün önce (pencere %d): bayat — yeniden ölçülmeden hasat edilmez" % (yas, gun))
+if beyan == "yok": cik("var", tarih, yas, "OLMAZ", "son doğrulamada yüzey yok: birleşme ölçülemez — yeniden ölç ve yüzeyi yaz (hasat.sh dogrula … --yuzey <dosya|dizin>, kod yüzeyi yoksa --yuzey -)")
 if birlesme:
     try: bt = datetime.date.fromisoformat(birlesme)
     except Exception: cik("var", tarih, yas, "ÖLÇÜLEMEDİ", "birleşme tarihi bozuk ('%s')" % birlesme)
     if bt >= dt: cik("var", tarih, yas, "OLMAZ", "ilgili yüzeyde doğrulamadan sonra (ya da aynı gün) birleşme var (%s ≥ %s): bulgu düzelmiş olabilir — yeniden ölç" % (birlesme, tarih))
-cik("var", tarih, yas, "OLUR", "son doğrulama %d gün önce 'var'%s — hasat edilebilir" % (yas, (" · yüzeyde sonradan birleşme yok" if birlesme else "")))
+cik("var", tarih, yas, "OLUR", "son doğrulama %d gün önce 'var'%s — hasat edilebilir" % (yas, (" · yüzeyde sonradan birleşme yok" if birlesme else (" · kod yüzeyi yok (beyan)" if beyan == "beyan" else " · yüzeye hiç birleşme yok"))))
 PYKOD
 )"
-IFS=$'\t' read -r DURUM DOG DTARIH YAS HASAT NEDEN < <(printf '%s\n' "$KAYIT" | python3 -c "$PY" "$ID" "$BUGUN" "$TAZE_GUN" "$BIRLESME")
+IFS=$'\t' read -r DURUM DOG DTARIH YAS HASAT NEDEN < <(printf '%s\n' "$KAYIT" | python3 -c "$PY" "$ID" "$BUGUN" "$TAZE_GUN" "$BIRLESME" "$BIRLESME_BEYAN")
 [ -n "${HASAT:-}" ] || { echo "KAYIT=$ID"; echo "HASAT=ÖLÇÜLEMEDİ"; echo "NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ"; exit 3; }
-echo "KAYIT=$ID"; echo "DURUM=$DURUM"; echo "DOGRULAMA=$DOG"; echo "DOGRULAMA_TARIH=$DTARIH"; echo "DOGRULAMA_YAS_GUN=$YAS"; echo "BIRLESME=${BIRLESME:--}"; echo "TAZE_GUN=$TAZE_GUN"
+echo "KAYIT=$ID"; echo "DURUM=$DURUM"; echo "DOGRULAMA=$DOG"; echo "DOGRULAMA_TARIH=$DTARIH"; echo "DOGRULAMA_YAS_GUN=$YAS"; echo "YUZEY=${YUZEY:--}"; echo "BIRLESME=${BIRLESME:--}"; echo "TAZE_GUN=$TAZE_GUN"
 echo "HASAT=$HASAT"; echo "NEDEN=$NEDEN"
 case "$HASAT" in OLUR) ;; OLMAZ) exit 1 ;; *) exit 3 ;; esac
 [ "$KOMUT" = ac ] || exit 0

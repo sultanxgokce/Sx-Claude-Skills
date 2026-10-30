@@ -135,7 +135,7 @@ iceriyor "H1d SIRADA hâlâ 3" "SIRADA=3" "$c"
 icermiyor "H1e BAS kararında SOR/ZORUNLU yok" "ZORUNLU=" "$c"
 kapi "H1f ilk aday sıradaki acil iş (sıra önce, havuz sonra)" "ustlen gorev_M2 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
 # hasat kapısı fikstürü (1.19.0): kayıt dosyası = hasat.sh kayıt okuyucusunun çıktısı (HASAT_KAYIT_OKU); dogrulama <id> <tarih|-> [hüküm]
-dogrulama(){ local id="$1" t="$2" h="${3:-var}"; { printf 'KAYIT\tgorev_%s\thavuz\t-\tbaşlık\n' "$id"; [ "$t" = "-" ] || printf 'ADIM\t%sT09:00:00Z\t[doğrulama: %s] sınıf=olcum · ölçüm: grep -c x y.sh · tarih=%s · sorun duruyor\n' "$t" "$h" "$t"; } > "$T/kayit-gorev_$id.txt"; }
+dogrulama(){ local id="$1" t="$2" h="${3:-var}"; { printf 'KAYIT\tgorev_%s\thavuz\t-\tbaşlık\n' "$id"; [ "$t" = "-" ] || printf 'ADIM\t%sT09:00:00Z\t[doğrulama: %s] sınıf=olcum · ölçüm: grep -c x y.sh · tarih=%s · yüzey=- · sorun duruyor\n' "$t" "$h" "$t"; } > "$T/kayit-gorev_$id.txt"; }
 : > "$T/liste.txt"; satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"; dogrulama H1 2026-01-01
 c="$(bash "$SB" 2>&1)"
 iceriyor "H2 Sırada 0, koltuğa atanmış havuz işi var → KARAR=BAS" "KARAR=BAS" "$c"
@@ -158,6 +158,10 @@ rm -f "$T/ustlen.log" "$T/kayit-gorev_H1.txt"
 c="$(bash "$SB" 2>&1)"; rc=$?; kapi "H7 kayıt okunamıyor (eski gorev.sh / defter) → HASAT=ÖLÇÜLEMEDİ, üstlenilmez, 'olur' UYDURULMAZ" "yok:0:HASAT=ÖLÇÜLEMEDİ · gorev_H1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$rc:$(grep '^HASAT=' <<<"$c")"
 liste_menzil; rm -f "$T/ustlen.log"; c="$(bash "$SB" --esik 4 2>&1)"
 kapi "H8 ilk aday SIRADA işi (havuz değil) ise kapı ÇALIŞMAZ: HASAT satırı yok, M2 üstlenilir" "0:ustlen gorev_M2 --kim MENZILCI --tahmin 30" "$(grep -c '^HASAT=' <<<"$c"):$(cat "$T/ustlen.log" 2>/dev/null)"
+R="$T/hdepo"; mkdir -p "$R"; git -C "$R" init -q 2>/dev/null; git -C "$R" config user.email t@t; git -C "$R" config user.name t; echo 1 > "$R/a.sh"; git -C "$R" add -A; GIT_AUTHOR_DATE="2026-01-02T10:00:00+03:00" GIT_COMMITTER_DATE="2026-01-02T10:00:00+03:00" git -C "$R" commit -qm a
+: > "$T/liste.txt"; satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
+{ printf 'KAYIT\tgorev_H1\thavuz\t-\tbaşlık\n'; printf 'ADIM\t2026-01-01T09:00:00Z\t[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-01 · yüzey=%s/a.sh\n' "$R"; } > "$T/kayit-gorev_H1.txt"
+c="$(bash "$SB" 2>&1)"; kapi "H9 kayıttaki yüzeyde doğrulamadan SONRA birleşme var → sirada-bak de üstlenmez (bayraksız ölçüm)" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c 'hasat kapısı: ilgili yüzeyde doğrulamadan sonra' <<<"$c")"
 echo "— havuz da iştir (devam)"
 : > "$T/liste.txt"; satir H2 menzil havuz esnek ozellik HENDESE "başkasının havuzu" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
 c="$(bash "$SB" --kutu menzil 2>&1)"

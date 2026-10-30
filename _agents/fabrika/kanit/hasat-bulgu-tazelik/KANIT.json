@@ -1,7 +1,7 @@
 {
   "is": "hasat-bulgu-tazelik",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T16:31:17+03:00",
+  "guncelleme": "2026-10-30T16:35:57+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,24 +25,24 @@
       "etiket": "hasat-sinavi",
       "asama": "sonra",
       "dosya": "olcum-hasat-sinavi-sonra.txt",
-      "sha256": "a0077b1b3c0160df2a883ec706f9a702c2d0f02e57cf28ae2b106a480ed1ff26",
+      "sha256": "b3fe2ce4dfff109a346a3e3ad0dc749ea1496c33e8213ef4e3fb54b72d69a831",
       "komut": [
         "bash",
         "gunluk-plan/scripts/hasat.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:26:09+03:00",
-      "sure_sn": 8.7,
+      "zaman": "2026-10-30T16:34:56+03:00",
+      "sure_sn": 2.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f5aee7a020ce4fb0ad374d51325969df"
+      "olcum_id": "80d8633fefc14dd4b11a13c366a926f4"
     },
     {
       "tur": "olcum",
       "etiket": "bayat-esigi-mutant",
       "asama": "sonra",
       "dosya": "olcum-bayat-esigi-mutant-sonra.txt",
-      "sha256": "d9c9e1ba9ebfe73827dd6d1b8de302062bd881a3c6fed1fb6aba109931f16229",
+      "sha256": "9566dd3f7e94b576283c7a67e3b66abf7a5fc9aa60fec6dedf688cf92f2c9707",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
@@ -54,21 +54,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:26:24+03:00",
-      "sure_sn": 14.5,
+      "zaman": "2026-10-30T16:34:59+03:00",
+      "sure_sn": 2.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "hasat-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "4a6ed73ad5e74187b165d1cdea6c189d"
+      "olcum_id": "77c0ff5ea70140f0b7ba9763d41e9d67"
     },
     {
       "tur": "olcum",
       "etiket": "birlesme-ayni-gun-mutant",
       "asama": "sonra",
       "dosya": "olcum-birlesme-ayni-gun-mutant-sonra.txt",
-      "sha256": "51b30ec0a05d8445e8d03ba94b2a465f0cfd654fa60887e57973ba2c01b2889a",
+      "sha256": "635d092ea8fb914bb8b5173575a4a142c727f74d68b5ef8ee457f40ecfa624b9",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
@@ -80,21 +80,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:30:52+03:00",
-      "sure_sn": 267.9,
+      "zaman": "2026-10-30T16:35:04+03:00",
+      "sure_sn": 2.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "hasat-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "e042fa210f024d72bc1d81d39a599475"
+      "olcum_id": "629edad7376b487dad35243e6846d72c"
     },
     {
       "tur": "olcum",
       "etiket": "duzelmis-kapanis-mutant",
       "asama": "sonra",
       "dosya": "olcum-duzelmis-kapanis-mutant-sonra.txt",
-      "sha256": "a4820f8294382b46905e60d67baa9def6a4e2414dbe458af1e483f38b2e20224",
+      "sha256": "74c74a6acc32a479057fd8ef6c357e63ac6db6f00fbd919282de1555ecc214fc",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
@@ -106,38 +106,38 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:30:54+03:00",
+      "zaman": "2026-10-30T16:35:06+03:00",
       "sure_sn": 2.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "hasat-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "9486f593e6fa4a109e4e83f2d8482f36"
+      "olcum_id": "4e21a472b31349208690ab9a666bf4bf"
     },
     {
       "tur": "olcum",
       "etiket": "sirada-bak-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sirada-bak-sinavi-sonra.txt",
-      "sha256": "664f2c9fdb4cce0cd948e6033deafaf848556d402186ee44e01f14f7bc5d57cf",
+      "sha256": "f46141ade6565fde666a95a79a032e9b074f0b7ae92ccbfb2923ce17ab21788b",
       "komut": [
         "bash",
         "gunluk-plan/scripts/sirada-bak.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:31:05+03:00",
-      "sure_sn": 10.3,
+      "zaman": "2026-10-30T16:35:50+03:00",
+      "sure_sn": 7.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "7feed076107a4a69b78e39d069d3a96c"
+      "olcum_id": "391207360715447cbcd01e91cff4b952"
     },
     {
       "tur": "olcum",
       "etiket": "sirada-kapi-mutant",
       "asama": "sonra",
       "dosya": "olcum-sirada-kapi-mutant-sonra.txt",
-      "sha256": "755043b100c5426140365c2a56b6b9695a8a049e928acc28efabcfa57930ba09",
+      "sha256": "d5cc5d7b04dd922cb88841e3ecc46877df8fc4ccb9083dc7caac1e48fc669e3a",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
@@ -149,32 +149,110 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:31:15+03:00",
-      "sure_sn": 10.0,
+      "zaman": "2026-10-30T16:35:56+03:00",
+      "sure_sn": 6.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sirada-bak-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "e6d4bc6be28347fe8c872b17659a8fa8"
+      "olcum_id": "2fb3e67e21de49daabf4260312510838"
     },
     {
       "tur": "olcum",
       "etiket": "gorev-yolu-sinavi",
       "asama": "sonra",
       "dosya": "olcum-gorev-yolu-sinavi-sonra.txt",
-      "sha256": "90c191ae463e239d9610f0cc07042b60a8528c5ca7fac9d9dd0948497d823414",
+      "sha256": "b01dec7490d0ba4e7f388d54fab12e3f274b7f82a3a4d4bb2a00e3465e655e88",
       "komut": [
         "bash",
         "gunluk-plan/scripts/gorev-yolu.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:31:17+03:00",
-      "sure_sn": 1.8,
+      "zaman": "2026-10-30T16:35:57+03:00",
+      "sure_sn": 0.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f013a7f834494332b98c3c36e6f11cde"
+      "olcum_id": "699d3656e8604cc6b28575e3837029d6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pencere-siniri-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-pencere-siniri-mutant-sonra.txt",
+      "sha256": "3b293a0af900e7561acb01c8c1de43db135cdc034eed3e2a0ebefb08e6d5eff8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts",
+        "hasat.sh",
+        "hasat.test.sh",
+        "if yas > gun:",
+        "if yas >= gun:"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T16:35:02+03:00",
+      "sure_sn": 2.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "hasat-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7b842a078edb4f8e8f6eeaac11008c62"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit-yuzeyi-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-yuzeyi-mutant-sonra.txt",
+      "sha256": "635b016775ab89bdd578c5e14ce62899e029b40a1ba62da4a383c49b6b2e5410",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts",
+        "hasat.sh",
+        "hasat.test.sh",
+        "if [ -z \"$YUZEY\" ] && [ -z \"$BIRLESME\" ]; then",
+        "if false; then"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T16:35:10+03:00",
+      "sure_sn": 4.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "hasat-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "ac09442331824a65995581b3e09fa5b7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yuzeysiz-var-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-yuzeysiz-var-mutant-sonra.txt",
+      "sha256": "6f5dfa25416c67e8a2322fd3a758bbc10833f84fc28d77234b6ba40288daf0fc",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts",
+        "hasat.sh",
+        "hasat.test.sh",
+        "if beyan == \"yok\": cik(",
+        "if False: cik("
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T16:35:42+03:00",
+      "sure_sn": 32.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "hasat-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7c2b28117a39404ab4c9ee48279d7e6c"
     }
   ],
-  "imza": "4329037e3f5bf9c58d2ec831dc310f5bed4d0079a0f253b264b6c0473e7abdf9"
+  "imza": "ed08ac15d5deb7aca398493c1a5113c46bcc7fccf6144b7750d4f21684572599"
 }

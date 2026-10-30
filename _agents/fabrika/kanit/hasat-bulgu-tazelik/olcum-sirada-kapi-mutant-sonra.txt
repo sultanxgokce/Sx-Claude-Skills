@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts sirada-bak.sh sirada-bak.test.sh if [ "${HASAT_D:-}" != OLUR ]; then if false; then
-# rc=1 sure=10.0s zaman=2026-10-30T16:31:15+03:00
+# rc=1 sure=6.6s zaman=2026-10-30T16:35:56+03:00
 --- stdout ---
 MUTASYON: sirada-bak.sh · 'if [ "${HASAT_D:-}" != OLUR ]; then' → 'if false; then'
 — kutu-bul
@@ -103,7 +103,7 @@ MADDE=görev …rev_H1 tamamlanacak: havuz işim (sahip: MENZILCI)
 HASAT=OLMAZ · gorev_H1
 BASLADI=gorev_H1 (çalışılıyor yapıldı · tahmin 30 dk)
 ONERI=Sultan'a: 'Sırada 1 iş var; en üstteki gorev_H1 ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez
-  ✗ H5c ZORUNLU=HASAT KAPISI satırı doğrulama komutunu kayıt kimliğiyle gösterir — 'ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash /tmp/tmp.l3NVl4cLLh/s/hasat.sh dogrula gorev_H1 --sonuc var|duzelmis|olculemedi --olcum' yok: KUTU=menzil
+  ✗ H5c ZORUNLU=HASAT KAPISI satırı doğrulama komutunu kayıt kimliğiyle gösterir — 'ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash /tmp/tmp.OPtfyoOm3A/s/hasat.sh dogrula gorev_H1 --sonuc var|duzelmis|olculemedi --olcum' yok: KUTU=menzil
 SIRADA=0
 HAVUZDA=1
 ESIK=3
@@ -127,6 +127,7 @@ ONERI=Sultan'a: 'Sırada 1 iş var; en üstteki gorev_H1 ile başladım. Bugüne
   ✗ H6c son ölçüm 'düzelmiş' → üstlenilmez, neden kapanışı söyler — beklenen=yok:1 gerçek=var:0
   ✗ H7 kayıt okunamıyor (eski gorev.sh / defter) → HASAT=ÖLÇÜLEMEDİ, üstlenilmez, 'olur' UYDURULMAZ — beklenen=yok:0:HASAT=ÖLÇÜLEMEDİ · gorev_H1 gerçek=var:0:HASAT=ÖLÇÜLEMEDİ · gorev_H1
   ✓ H8 ilk aday SIRADA işi (havuz değil) ise kapı ÇALIŞMAZ: HASAT satırı yok, M2 üstlenilir
+  ✗ H9 kayıttaki yüzeyde doğrulamadan SONRA birleşme var → sirada-bak de üstlenmez (bayraksız ölçüm) — beklenen=yok:1 gerçek=var:0
 — havuz da iştir (devam)
   ✓ H3 havuz işi BAŞKASINA atanmışsa sayılmaz → KARAR=SOR
   ✓ H3b HAVUZDA=0
@@ -175,5 +176,5 @@ ONERI=Sultan'a: 'Sırada 1 iş var; en üstteki gorev_H1 ile başladım. Bugüne
   ✓ X3 aynı tmux oturumu iki üyede: belirsiz → türetilmez, rc 3, ustlen yok
   ✓ X4 ortam boş ve tmux yok: ÖLÇÜLEMEDİ rc 3, KARAR satırı basılmaz (kutu düzeyinde 'başkasının işi' sevki YOK), hata satırı yolu söyler
   ✓ X5 AGENT_NAME tmux türetmesinden ÖNCE gelir (MUAVIN → kutu code)
-sonuç: 120 geçti · 6 kaldı
+sonuç: 120 geçti · 7 kaldı
 --- stderr ---

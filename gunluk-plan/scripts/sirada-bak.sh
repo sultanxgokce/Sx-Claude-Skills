@@ -144,7 +144,7 @@ if [ "$N" -ge "$ESIK" ] || [ "$HAVUZDAN" -eq 1 ]; then
     echo "HASAT=${HASAT_D:-ÖLÇÜLEMEDİ} · $ILK"
     if [ "${HASAT_D:-}" != OLUR ]; then
       echo "BASLAMADI=$ILK (hasat kapısı: ${HASAT_N:-kapı ölçemedi, rc $HKRC} — havuz kaydı ölçülmeden göreve çevrilmez)"
-      echo "ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash $KOK/hasat.sh dogrula $ILK --sonuc var|duzelmis|olculemedi --olcum \"<komut ya da dosya>\" [--kapandi \"PR #N\"] ; 'var' ise bash $KOK/hasat.sh ac $ILK \"<gerekçe>\" (ya da sirada-bak'ı yeniden koş)"
+      echo "ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash $KOK/hasat.sh dogrula $ILK --sonuc var|duzelmis|olculemedi --olcum \"<komut ya da dosya>\" --yuzey <sorunun dosyası|dizini|-> [--kapandi \"PR #N\"] ; 'var' ise bash $KOK/hasat.sh ac $ILK \"<gerekçe>\" (ya da sirada-bak'ı yeniden koş)"
       exit 0
     fi
   fi
@@ -168,7 +168,7 @@ else
   else SIK3="Havuzdan süzelim: Seanslı Hasat (kayıt kayıt sorarım, 3 cevap: kabul · başka sun · düzeltmeyle kabul)"; fi
   echo "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)|$SIK3"
   # 1.19.0 HASAT KAPISI (Meşveret madde 9): Seanslı Hasat'ta her kayıt göreve çevrilmeden önce "hâlâ var mı" ölçülür — ezbere iş açılmaz.
-  [ "$HT" = 0 ] || echo "HASAT_KAPI=her havuz kaydı göreve çevrilmeden ÖNCE ölçülür: bash $KOK/hasat.sh durum <gorev_id> → OLUR değilse bash $KOK/hasat.sh dogrula <gorev_id> --sonuc var|duzelmis|olculemedi --olcum \"<komut>\" (düzelmiş → --kapandi \"PR #N\" ile kendiliğinden kapanır); $TAZE_GUN günden eski ya da yüzeyde birleşme görmüş doğrulama yeniden ölçülür; açılış: bash $KOK/hasat.sh ac <gorev_id> \"<gerekçe>\""
+  [ "$HT" = 0 ] || echo "HASAT_KAPI=her havuz kaydı göreve çevrilmeden ÖNCE ölçülür: bash $KOK/hasat.sh durum <gorev_id> → OLUR değilse bash $KOK/hasat.sh dogrula <gorev_id> --sonuc var|duzelmis|olculemedi --olcum \"<komut>\" --yuzey <dosya|dizin|-> (düzelmiş → --kapandi \"PR #N\" ile kendiliğinden kapanır); $TAZE_GUN günden eski ya da yüzeyde birleşme görmüş doğrulama yeniden ölçülür; açılış: bash $KOK/hasat.sh ac <gorev_id> \"<gerekçe>\""
   # 1.13.0 (HC75A, SERDAR 28 Eki): eşik altında ADIM 0-d ZORUNLU — Sultan'ın cevabı beklenmez; sıra boşken kutu defterine açılış üretir. Tarama-ekle kuru varsayılan kalır, günlük 3 tavanı onun kapısıdır.
   echo "ZORUNLU=ADIM 0-d tarama: Sultan'ın cevabını BEKLEMEDEN bir ölçülmüş iş ekle (günde en çok 3): bash $KOK/tarama-ekle.sh --baslik \"<tek cümle>\" --kaynak <dosya:satır|https://…> --kanit \"<bu turda ölçtüğün>\" --uygula"
 fi
