@@ -1,7 +1,7 @@
 {
   "is": "sultan-dili-satiri",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T23:02:03+03:00",
+  "guncelleme": "2026-10-30T23:22:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -132,7 +132,42 @@
       "sure_sn": 0.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "fd6667d7daf4401d89d617493a27314d"
+    },
+    {
+      "tur": "canli",
+      "etiket": "kurulu-g9",
+      "asama": "canli",
+      "dosya": "canli-kurulu-g9.txt",
+      "sha256": "25c226da78bdfb1c5cbdbbad2a7b0d282066670ea11f1d282e3f1df71d554b68",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/projects/_wt/Sx-Claude-Skills-sultan-dili-satiri/_agents/fabrika/kanit/sultan-dili-satiri/canli-kurulum.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/projects/_wt/Sx-Claude-Skills-sultan-dili-satiri/_agents/fabrika/kanit/sultan-dili-satiri/canli-kurulum.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "G9 \\[G2\\.1\\] GEÇTİ",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-30T23:22:02+03:00 G9 [G2.1] GEÇTİ — açık 192 · özetsiz 0 · 80 harften uzun 0 · özet kapısı sert · Sultan dili satırı eksik: yok",
+        "saat": "2026-10-30T23:22:02+03:00",
+        "saat_iso": "2026-10-30T23:22:02+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-30T23:22:02+03:00 G9 [G2.1] GEÇTİ — açık 192 · özetsiz 0 · 80 harften uzun 0 · özet kapısı sert · Sultan dili satırı eksik: yok",
+        "saat": "2026-10-30T23:22:02+03:00",
+        "saat_iso": "2026-10-30T23:22:02+03:00"
+      },
+      "zaman": "2026-10-30T23:22:19+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "36faf50d7a574137adee28bce373658f"
     }
   ],
-  "imza": "bcbb2a50fbba2ad74e24f52a37f315161ec0f9da0765b1f8e1404551505e54d0"
+  "imza": "70ec910b28832f97193d26a4f2c1e89226a85f074f47689bf8dc25ac79318efa"
 }

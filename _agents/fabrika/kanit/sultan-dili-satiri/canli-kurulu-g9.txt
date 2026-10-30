@@ -1,0 +1,9 @@
+$ tail -n 2000 -- /config/projects/_wt/Sx-Claude-Skills-sultan-dili-satiri/_agents/fabrika/kanit/sultan-dili-satiri/canli-kurulum.log
+# kaynak=dosya:/config/projects/_wt/Sx-Claude-Skills-sultan-dili-satiri/_agents/fabrika/kanit/sultan-dili-satiri/canli-kurulum.log tur=dosya desen=G9 \[G2\.1\] GEÇTİ en_az=1 son=2000 atesleme=1 rc=0 sure=0.0s zaman=2026-10-30T23:22:19+03:00
+--- stdout ---
+2026-10-30T23:22:02+03:00 kurulu gunluk-plan 1.19.1
+2026-10-30T23:22:02+03:00 kurulu bulgu 0.6.4
+2026-10-30T23:22:02+03:00 kurulu mesveret 0.1.1
+2026-10-30T23:22:02+03:00 kurulu yazilim-fabrikasi 0.27.35
+2026-10-30T23:22:02+03:00 G9 [G2.1] GEÇTİ — açık 192 · özetsiz 0 · 80 harften uzun 0 · özet kapısı sert · Sultan dili satırı eksik: yok
+--- stderr ---
