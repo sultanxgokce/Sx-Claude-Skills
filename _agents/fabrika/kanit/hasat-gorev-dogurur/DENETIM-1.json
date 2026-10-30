@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "hasat-gorev-dogurur",
+  "pr": "606",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T02:52:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-gorev-dogurur",
+  "dal": "hasat-gorev-dogurur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57230,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 20774
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d5d0af436bd06460a95fee36ccaf6fd90f1232f9",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Hasat artık havuz kaydını yerinde bırakıp kip bilgili yeni görev doğuruyor ve bağı yazıyor; gerçek ölçüm 99/99, beş mutasyon da ilgili kapıları doğruluyor. Ancak görev oluşturma, açılış adımı ve bağ üç ayrı yazma olduğundan son iki yazmanın hatasında sistem eksik ya da bağsız bir görev bırakıyor; üretimden önce bu bütünlük sorunu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Görev doğurma atomik değil: yeni görev açıldıktan sonra açılış adımı veya havuz bağı yazılamazsa işlem rc 1 dönüyor fakat oluşturulmuş görevi geri almıyor; böylece talepteki kipli açılış adımı ya da bağ olmadan kalıcı görev oluşabiliyor.",
+        "kanit": "Üretim kodunda önce `gorev.sh ekle`, ardından ayrı ayrı `gorev.sh adim` ve `gorev.sh dogan` çağrılıyor. A6 sınavı adım reddini yalnız rc 1 ile, E4 sınavı bağ reddini yalnız rc 1 ile kabul ediyor; E4 mesajı ayrıca görevin açılmış kaldığını ve bağın elle yazılmasını söylüyor.",
+        "konum": "gunluk-plan/scripts/hasat.sh, `ac: havuz kaydı YERİNDE kalır` bloğu; gunluk-plan/scripts/hasat.test.sh E4 ve A6",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kullanım belgesinde eski, artık geçersiz kipsiz Otomatik Hasat çağrısı bırakılmış; kullanıcı bu örneği izlerse yeni zorunlu `--kip` kapısından rc 2 alır.",
+        "kanit": "SKILL.md Seanslı Hasat paragrafı hâlâ `hasat.sh ac <id> \"<gerekçe>\"` örneğini veriyor; aynı değişiklikte sonraki bölüm ve A1g sınavı `--kip` olmadığında rc 2 beklendiğini açıkça gösteriyor.",
+        "konum": "gunluk-plan/SKILL.md, `SEANSLI HASAT — üçüncü şık` paragrafı; gunluk-plan/scripts/hasat.test.sh A1g",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `sinav` kaydında rc 0 ile 99 geçti, 0 kaldı; önce/sonra çifti 76/23'ten 99/0'a ilerlemeyi gösteriyor. Beş mutasyon kaydı rc 1 ve düşen kapı ile bozuk kodun yakalandığını doğruluyor; bunlardaki ✗ satırları bulgu sayılmadı. Kanıt güçlü, fakat atomiklik beklentisini sınayan bir ölçüm yok; mevcut E4/A6 testleri kısmi yazmayı yalnız hata dönüşü olarak kabul ediyor."
+  }
+}
