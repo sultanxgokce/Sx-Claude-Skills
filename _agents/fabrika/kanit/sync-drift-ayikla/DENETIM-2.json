@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "sync-drift-ayikla",
+  "pr": "594",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T18:54:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 7 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kuru-kosu-drift-sonra.txt (kirmizi → gecersiz) — daraltmadan önceki ölçüm; kapi-sinavi ve olcum-disiplini bu PR'dan çıktı, yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-daralt-sonra.txt;olcum-kapimda-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;olcum-kapi-sinavi-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;olcum-olcum-disiplini-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;olcum-sultan-alarmi-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;dosya-hukum-tablosu-sonra.md (yesil → gecersiz) — duman sayısı yanlış yazıldı (1 dedi, ölçüm 2); düzeltilmiş tablo hukum-tablosu-v2 · BENNÂ · karşı kanıt: dosya-hukum-tablosu-v2-sonra.md;olcum-kuru-kosu-drift-daralt-sonra.txt (kirmizi → gecersiz) — göz tur 1: kaynak bir commit gerideydi ve ağaç kirliydi; origin/main birleştirilip temiz ağaçta yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-tur2-sonra.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sync-drift-ayikla",
+  "dal": "sync-drift-ayikla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 59216,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 30432
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1ebd48bbc191767f9e4c8d3445d65ae9425a824c",
+  "duzeltme_farki": {
+    "onceki_bas": "7e74ff136e93174f0018348102e1c13d4e3a4f98",
+    "dosya": 15,
+    "bayt": 39253,
+    "tam_bayt": 155881
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Altı becerideki değerli düzenlemeler kaynağa ve yeni sürümlere taşınmış; kalan driftler ayıklama hükmüne bırakılmış. Önceki dört uygulama bulgusu temiz kaynak ölçümü, kurulum benzetimi, doğrudan sınavlar ve mutasyon kanıtlarıyla kapanmış; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; geçersiz ilan edilen yedi kayıt değerlendirmeye alınmadı. İstenen kuru-koşu ölçüm çifti temiz kaynakta driftin 22'den 4'e düştüğünü gösteriyor; B1 temiz ağaç ve origin/main'e göre 0 gerilikle, B2 kurulum benzetiminde kipin 644'ten 775'e dönmesi ve sync rc=0 ile, B3 wa-oku sınavındaki 13/13 sonuç ve iki başarılı mutasyon yakalamasıyla, B4 durum-yaz sınavındaki 9/9 sonuç ve mutasyon yakalamasıyla kapanmış. Katalog-sürüm hizası 0 sapma, ilgili gerçek ölçümler yeşil; mutasyon kayıtlarındaki başarısız satırlar beklenen bozuk-kod yakalamalarıdır."
+  }
+}
