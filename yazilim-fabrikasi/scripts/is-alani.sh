@@ -306,7 +306,9 @@ kapsam_olc() {
   git -C "$yol" fetch -q origin "$ANA" 2>/dev/null </dev/null || _bilgi "◻ origin/$ANA tazelenemedi — eldeki origin/$ANA ile ölçülüyor"
   mb="$(git -C "$yol" merge-base "origin/$ANA" HEAD 2>/dev/null)" || { _hata "merge-base bulunamadı (origin/$ANA ↔ HEAD) — ölçülemedi"; return 3; }
   local T; T="$(mktemp -d)"
-  git -C "$yol" diff -U0 "$mb" 2>/dev/null | _hunklar > "$T/alan" || { _hata "alanın farkı okunamadı — ölçülemedi"; rm -r -f "$T"; return 3; }
+  # DALGIÇ tur 2: `git diff | _hunklar || …` boruda yalnız _hunklar'ın rc'si görünür (pipefail yok) → fark önce değişkene alınır, git düşerse rc 3
+  local fark; fark="$(git -C "$yol" diff -U0 "$mb" 2>/dev/null)" || { _hata "alanın farkı okunamadı (git diff $mb düştü) — ölçülemedi"; rm -r -f "$T"; return 3; }
+  printf '%s\n' "$fark" | _hunklar > "$T/alan"
   # DALGIÇ tur 1: izlenmeyen (henüz `git add` edilmemiş) yeni dosya `git diff`te görünmez → yalnız yeni dosya yazan alan 'hiçbir satır değiştirmedi' çıkardı. Onlar '*' (tümü) olarak eklenir.
   git -C "$yol" ls-files --others --exclude-standard 2>/dev/null | sed 's/$/\t*/' >> "$T/alan"
   if [ ! -s "$T/alan" ]; then _bilgi "✓ kapsam-olc: alan henüz hiçbir satır değiştirmedi (merge-base ${mb:0:8}) — kesişim yok"; rm -r -f "$T"; return 0; fi
@@ -321,7 +323,8 @@ kapsam_olc() {
   [ "$(printf '%s\n' "$satirlar" | grep -c .)" -ge 30 ] && _bilgi "⚠ açık PR sayısı tavana (30) ulaştı — daha eski açık PR'lara bakılmadı"
   while read -r n pdal; do
     [ -n "$n" ] || continue
-    if [ -n "$dal" ] && [ "${pdal##*/}" = "${dal##*/}" ]; then _bilgi "· PR #$n kendi PR'ın ($pdal) — sayılmaz"; continue; fi
+    # kendi PR'ı = dal adı BİREBİR aynı (DALGIÇ tur 2: yalnız son parça karşılaştırılırsa fabrika/x ile fix/x karışır, gerçek kesişim kaçar)
+    if [ -n "$dal" ] && [ "$pdal" = "$dal" ]; then _bilgi "· PR #$n kendi PR'ın ($pdal) — sayılmaz"; continue; fi
     bakilan=$((bakilan+1))
     pr_dosyalar="$(cd "$DEPO" && gh pr diff "$n" --name-only 2>/dev/null </dev/null)" || { _bilgi "◻ PR #$n dosya listesi okunamadı — bu PR ölçülemedi"; olcemedi=$((olcemedi+1)); continue; }
     ort="$(printf '%s\n' "$benim_dosyalar" | grep -Fx -f <(printf '%s\n' "$pr_dosyalar") || true)"

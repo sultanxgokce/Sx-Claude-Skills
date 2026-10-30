@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kapsam-satir-kesisimi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T14:56:36+03:00",
+  "guncelleme": "2026-10-30T15:01:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -143,7 +143,45 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "0d8e425c714e4f828fd108fb1c85e644"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-isalani-tur3-sonra.txt",
+      "sha256": "a052c832bfab093c27776711b9222be0a4b63e9de02fa0bbd6fe2b9f4867801e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:01:29+03:00",
+      "sure_sn": 33.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0d807e27b4d04c0b99f59298e8be13f6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sinir-kucuktur",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-sinir-kucuktur-sonra.txt",
+      "sha256": "bb651eba472b79e1047b9b62cafb1ed6be1261159582127e8d1210d1b8019a74",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:01:43+03:00",
+      "sure_sn": 13.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-isalani-tur3",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "a8c3164102004f7bbf6349098c539411"
     }
   ],
-  "imza": "73c748f18f73d04814af885a0504db32227d8d819b37c40c241297097bb2e4ea"
+  "imza": "07f27d856f544a5244b395938d9b7916243ba02257f45587893ee237564f7043"
 }

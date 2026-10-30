@@ -314,6 +314,17 @@ sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
 CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
 [ "$RC" -eq 2 ] && grep -q "PR #11 (pr-satir) SATIR KESİŞİMİ" <<<"$CIKTI" && grep -q "katalog.txt: alan 3-3 ∩ PR 3-4" <<<"$CIKTI" && grep -q "SATIR KESİŞİMİ — 1 açık PR" <<<"$CIKTI"
 g $? "🔴 aynı SATIR (alan 3 · PR 3-4) → rc=2 DUR, kesişen blok çifti adıyla basılır (rc=$RC)"
+# sınır kapıları (DALGIÇ tur 2): PR bloğu 3-4 → alan 4 (son satır) KESİŞİR; alan 2 ve alan 5 (hemen dışı) KESİŞMEZ — `<=`yi `<` yapan mutant burada yakalanır
+for sinir in "4 2" "2 0" "5 0"; do set -- $sinir
+  ( cd "$KA" && git checkout -q -- katalog.txt ); sed -i "${1}s/.*/satir $1 ALAN/" "$KA/katalog.txt"
+  ( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan >/dev/null 2>&1 ); RC=$?
+  [ "$RC" -eq "$2" ]; g $? "sınır: alan $1 · PR 3-4 → rc=$2 beklendi, rc=$RC"
+done
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
+# kendi PR muafiyeti BİREBİR dal adı ister: 'fabrika/kendi-alan' adlı PR kendi PR'ı DEĞİLDİR (DALGIÇ tur 2)
+KOLZ="$T/kolz-bin"; mkdir -p "$KOLZ"; sed 's/"headRefName":"kendi-alan"/"headRefName":"fabrika\/kendi-alan"/' "$KOLC/gh" > "$KOLZ/gh"; chmod +x "$KOLZ/gh"
+CIKTI="$( cd "$T/depo" && PATH="$KOLZ:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+! grep -q "kendi PR'ın" <<<"$CIKTI" && grep -q "PR #12 (fabrika/kendi-alan) SATIR KESİŞİMİ" <<<"$CIKTI"; g $? "önekli benzer dal (fabrika/kendi-alan) kendi PR'ı sayılmaz, kesişimi ölçülür (rc=$RC)"
 CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc 2>&1 )"; RC=$?
 [ "$RC" -eq 3 ] && grep -q "birincil ağaçtasın" <<<"$CIKTI"; g $? "birincil ağaçta argümansız kapsam-olc → rc=3 ölçülemedi (hangi alan? söylenir)"
 CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
