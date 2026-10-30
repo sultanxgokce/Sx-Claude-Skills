@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "hasat-bulgu-tazelik",
+  "pr": "592",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T16:51:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-hayalet-yuzey-mutant-sonra.txt (yesil → gecersiz) — döngüdeki | ayracı çapayı böldü; üretilen mutant hedeflenen değişiklik değildi (59 kapı düştü) — doğru çapayla yeniden ölçüldü · BENNÂ;olcum-tarih-son-parca-mutant-sonra.txt (yesil → gecersiz) — mutant sözdizimi hatasıyla çöktü (SyntaxError); düşen kapılar hatadan, sahte yakalama — temiz mutantla yeniden ölçüldü · BENNÂ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik",
+  "dal": "hasat-bulgu-tazelik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 89733,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 16845
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4c2f209f9989d37b3994488a2f29a2b5425defb0",
+  "duzeltme_farki": {
+    "onceki_bas": "4ee3ce1e4fd9c6523ad3e5afeb790053ed1a51db",
+    "dosya": 8,
+    "bayt": 24718,
+    "tam_bayt": 225814
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hasat kapısı hat üstündeki `hasat.sh` ve `sirada-bak` akışlarında son ölçüm, tazelik, yüzey birleşmesi ve kendiliğinden kapanma kurallarıyla uygulanmış; merkezi geçit zorunluluğu reis kararıyla ayrı işe daraltılmış. Önceki turdaki değersiz bayrak döngüsü düzeltilip gerçek ve mutasyon ölçümleriyle yakalandığı, önceki merkezi geçit bulgusu da artık bu kartın kapsamı dışında olduğu için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önceki B1, kartın açık daraltması ve “geçitte zorunluluk ayrı iş” hükmüyle bu kart bakımından kapanmış; `hasat.sh ac` ile `sirada-bak` hat kapıları gerçek ölçümlerde yeşil ve `sirada-kapi-mutant` kapının kaldırılmasını yakalıyor. Önceki B2, `hasat.sh` seçenek döngüsündeki ön değer denetimiyle kapanmış; gerçek `hasat-sinavi` 78/78, `degersiz-bayrak-mutant` ise denetim kaldırıldığında rc 124 vakalarını yakalıyor. `sirada-bak-sinavi` 127/127 ve `gorev-yolu-sinavi` 10/10 yeşil; geçerli mutasyonlar tazelik sınırı, aynı gün birleşme, kapanış, uzak depo tazeleme, hayalet/boşluklu yüzey ve kayıt ayrıştırma kapılarını düşürüyor. İlan edilmiş iki geçersiz mutasyon kaydı kanıta katılmamış ve temiz tekrarları mevcut."
+  }
+}

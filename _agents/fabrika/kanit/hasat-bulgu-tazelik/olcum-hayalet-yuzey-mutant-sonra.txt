@@ -1,0 +1,103 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts hasat.sh hasat.test.sh [ -n "$gun" ]  | [ -e "$1" ] || return 3|true
+# rc=1 sure=1.0s zaman=2026-10-30T16:41:49+03:00
+--- stdout ---
+MUTASYON: hasat.sh · '[ -n "$gun" ] ' → '| [ -e "$1" ] || return 3|true'
+— kullanım
+  ✓ U1 komutsuz rc 2
+  ✓ U2 gorev_ öneksiz kimlik rc 2
+  ✓ U3 --taze-gun 0 rc 2
+  ✓ U4 ac gerekçesi 5 harften kısa rc 2
+— durum: kapı (fikstür günü 2026-01-10, pencere 7)
+  ✗ D1 doğrulama yok → HASAT=OLMAZ rc 1 — beklenen=1:HASAT=OLMAZ gerçek=2:
+  ✗ D1b NEDEN doğrulama komutunu gösterir — 'hasat.sh dogrula gorev_A1' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✗ D1c DOGRULAMA=yok — 'DOGRULAMA=yok' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✗ D2 2 gün önce 'var' → HASAT=OLUR rc 0 — beklenen=0:HASAT=OLUR gerçek=2:
+  ✗ D2b tarih adım metnindeki tarih= alanından, yaş 2 — beklenen=2026-01-08:2 gerçek=:
+  ✗ D3 8 gün önce (pencere 7) → bayat, OLMAZ rc 1 — beklenen=1:HASAT=OLMAZ gerçek=2:
+  ✗ D3b NEDEN 'bayat' ve yeniden ölçüm ister — 'bayat — yeniden ölçülmeden hasat edilmez' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✗ D3c --taze-gun 10 ile aynı kayıt OLUR — beklenen=HASAT=OLUR gerçek=
+  ✗ D3d pencere sınırı: TAM 7 gün önce doğrulama hâlâ taze → OLUR (8 gün D3'te OLMAZ) — beklenen=OLUR:7 gerçek=:
+  ✗ D4 SON ölçüm 'düzelmiş' (öncekinde var olsa da) → OLMAZ, DOGRULAMA=duzelmis — beklenen=1:duzelmis gerçek=2:
+  ✗ D4b NEDEN kapanışı gösterir — 'kapanır' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✗ D5 son ölçüm 'ölçülemedi' → OLMAZ rc 1 (olur UYDURULMAZ) — beklenen=1:OLMAZ gerçek=2:
+  ✗ D6 kayıt havuzda değil (acik) → OLMAZ, NEDEN durumu söyler — beklenen=1:1 gerçek=2:0
+  ✗ D7 tarih= yok ve zaman damgası yok → ÖLÇÜLEMEDİ rc 3 (taze DENMEZ) — beklenen=3:ÖLÇÜLEMEDİ gerçek=2:
+  ✗ D8 tarih= yoksa zaman damgasından okunur → OLUR, yaş 1 — beklenen=OLUR:1 gerçek=:
+  ✗ D9 gelecek tarihli doğrulama → ÖLÇÜLEMEDİ rc 3 — beklenen=3:ÖLÇÜLEMEDİ gerçek=2:
+  ✗ D10 bugünün tarihi bozuk → ÖLÇÜLEMEDİ rc 3 — beklenen=3 gerçek=2
+  ✗ D11 kayıt okunamazsa rc 3, 'olur' denmez — beklenen=3 gerçek=2
+  ✗ D11b olmayan kayıt rc 3 — beklenen=3 gerçek=2
+  ✗ D12 MUHAKKİK'in görev hükmü (geçti/kaldı) bulgu doğrulaması SAYILMAZ → DOGRULAMA=yok — beklenen=yok gerçek=
+— birleşme: --birlesme tarihi ve --yuzey (git)
+  ✗ B1 doğrulamadan (01-08) SONRA birleşme (01-09) → OLMAZ rc 1 — beklenen=1:OLMAZ gerçek=2:
+  ✗ B1b NEDEN yüzeyde birleşmeyi söyler — 'ilgili yüzeyde doğrulamadan sonra' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✗ B1c aynı gün birleşme de yeniden ölçüm ister (≥) — beklenen=OLMAZ gerçek=
+  ✗ B2 doğrulamadan ÖNCE birleşme → OLUR, BIRLESME basılır — beklenen=OLUR:2026-01-05 gerçek=:
+  ✓ B3 bozuk --birlesme rc 2
+  ✓ B4 --birlesme ile --yuzey birlikte rc 2
+  ✗ B5 --yuzey: son commit 01-09 git'ten okunur → OLMAZ, BIRLESME=2026-01-09 — beklenen=1:2026-01-09 gerçek=2:
+  ✗ B6 --yuzey eski dosya (01-03) → OLUR — beklenen=OLUR gerçek=
+  ✗ B7 yüzey diskte var ama hiç commit görmemiş → birleşme yok, OLUR (BIRLESME=-) — beklenen=OLUR:- gerçek=:
+  ✗ B7b yüzey ne diskte ne git'te → ÖLÇÜLEMEDİ ('birleşme yok' uydurulmaz) — beklenen=ÖLÇÜLEMEDİ:ÖLÇÜLEMEDİ gerçek=:
+  ✗ B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 ('birleşme yok' UYDURULMAZ) — beklenen=3:ÖLÇÜLEMEDİ:ÖLÇÜLEMEDİ gerçek=2::
+— dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)
+  ✗ Y1 var: adım yazılır rc 0 — beklenen=0 gerçek=2
+  ✗ Y1b adım metni: [doğrulama: var] sınıf=olcum · ölçüm: … · tarih=<bugün> · <söz> — beklenen=adim gorev_A1 [doğrulama: var] sınıf=olcum · tarih=2026-01-10 · yüzey=- · ölçüm: grep -c TODO x.sh → 3 · Sorun duruyor, üç yerde. gerçek=
+  ✓ Y1c var: durum YAZILMAZ (kayıt havuzda kalır)
+  ✗ Y1d çıktı DOGRULAMA=var ve tarih — 'DOGRULAMA_TARIH=2026-01-10' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✓ Y2 --olcum yoksa rc 2, adım yazılmaz (ölçümsüz doğrulama yok)
+  ✓ Y3 bozuk --sonuc rc 2
+  ✓ Y3b bozuk --sinif rc 2
+  ✓ Y4 düzelmiş ama --kapandi yok → rc 2, hiçbir şey yazılmaz
+  ✗ Y5 düzelmiş + --kapandi: rc 0, adım 'kendiliğinden kapandı: PR #12' taşır — beklenen=0:1 gerçek=2:
+  ✗ Y5b kayıt iptal ile kapanır, gerekçe 'kendiliğinden kapandı — PR #12: <söz>' — beklenen=durum gorev_A1 iptal kendiliğinden kapandı — PR #12: Aynı satır başka işle düzeldi. gerçek=
+  ✗ Y5c çıktı KAPANDI=PR #12 — 'KAPANDI=PR #12' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✓ Y6 --kapandi yalnız düzelmişle: var ile rc 2
+  ✗ Y7 ölçülemedi: adım '[doğrulama: ölçülemedi]' yazılır, kapanış yok — beklenen=0:1:yok gerçek=2::yok
+  ✗ Y8 defter adımı reddederse rc 1 (sessiz başarı yok) — beklenen=1 gerçek=2
+  ✗ Y9 kapanış reddedilirse rc 1 — beklenen=1 gerçek=2
+  ✗ Y10 --tarih verilirse metne o yazılır — beklenen=1 gerçek=
+  ✓ Y10b bozuk --tarih rc 2
+  ✓ Y11 'var' yüzeysiz yazılmaz rc 2 (birleşme sonradan ölçülemezdi)
+  ✗ Y12 --yuzey + --depo: adıma MUTLAK yol yazılır — beklenen=1 gerçek=
+  ✓ Y13 yüzey git deposunda değil → rc 2, adım yazılmaz
+  ✗ Y14 kapanış reddedilince (rc 1) aynı komut yeniden koşulur ve kayıt kapanır (rc 0, iki iptal denemesi kütükte) — beklenen=1:0:2 gerçek=2:2:
+— bayraksız durum: yüzey SON doğrulama adımından okunur (DALGIÇ ön-göz tur 1: sirada-bak yolu birleşmeyi hiç ölçmüyordu)
+  ✗ D13 kayıttaki yüzeyde doğrulamadan sonra birleşme (01-09) → bayraksız da OLMAZ rc 1 — beklenen=1:2026-01-09:/tmp/tmp.clFHFynqiC/depo/yuzey/a.sh gerçek=2::
+  ✗ D14 kayıttaki yüzey eski (01-03) → OLUR — beklenen=OLUR gerçek=
+  ✗ D15 yüzeysiz 'var' (eski biçim) → OLMAZ, NEDEN yüzey ister — beklenen=1:1 gerçek=2:0
+  ✗ D16 kayıttaki yüzey ölçülemiyor (git değil) → ÖLÇÜLEMEDİ rc 3 — beklenen=3:ÖLÇÜLEMEDİ gerçek=2:
+  ✗ D17 --birlesme bayrağı kayıttaki yüzeyi ezer (açık ölçüm kazanır) — beklenen=OLUR gerçek=
+  ✓ Y15 diskte olmayan yüzey 'var' ile yazılmaz rc 2
+  ✗ D18 kayıttaki yüzey hiç var olmamış (commit yok, disk yok) → ÖLÇÜLEMEDİ rc 3, 'birleşme yok' SAYILMAZ — beklenen=3:ÖLÇÜLEMEDİ gerçek=2:
+  ✗ D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ — beklenen=OLMAZ:/tmp/tmp.clFHFynqiC/depo/bos luklu/b.sh gerçek=:
+  ✗ D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ — beklenen=OLMAZ:2026-01-09 gerçek=:
+  ✗ D21 ölçüm/söz metnindeki 'tarih=' ve 'yüzey=' yazıcının alanlarını EZMEZ (tarih 2026-01-10 · yüzey - · OLUR) — beklenen=2026-01-10:-:OLUR gerçek=::
+— uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)
+  ✓ F0 fikstür: yerel origin/main bayat (uzaktaki 01-09 birleşmesini henüz görmüyor)
+  ✗ F1 ölçümden önce fetch: uzaktaki 01-09 birleşmesi görülür → OLMAZ — beklenen=OLMAZ:2026-01-09 gerçek=:
+  ✗ F2 uzak depo tazelenemiyor → ÖLÇÜLEMEDİ rc 3 (bayat kopyadan 'birleşme yok' denmez) — beklenen=3:ÖLÇÜLEMEDİ gerçek=2:
+— ac: kapıdan geçerse havuz kaydı sıraya girer
+  ✗ A1 OLUR → gorev.sh durum … acik, gerekçe kaynak kaydı + doğrulama tarihini taşır — beklenen=0:durum gorev_A2 acik Meşveret 9. madde; Sultan önem 2 · havuz kaydı gorev_A2'den Hasat ile açıldı · son doğrulama 2026-01-08 var gerçek=2:
+  ✗ A1b ACILDI satırı — 'ACILDI=gorev_A2' yok: /tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: syntax error near unexpected token `|'
+/tmp/tmp.Sia9YhXK50/s/hasat.sh: line 52: `  | [ -e "$1" ] || return 3|true|| [ -e "$1" ] || return 3'
+  ✗ A2 doğrulamasız kayıt AÇILMAZ rc 1, durum yazılmaz — beklenen=1:yok gerçek=2:yok
+  ✗ A3 bayat doğrulama AÇILMAZ rc 1 — beklenen=1:yok gerçek=2:yok
+  ✗ A4 doğrulamadan sonra birleşme AÇILMAZ rc 1 — beklenen=1:yok gerçek=2:yok
+  ✗ A5 ÖLÇÜLEMEDİ → açılmaz rc 3 — beklenen=3:yok gerçek=2:yok
+  ✗ A6 defter açılışı reddederse rc 1 — beklenen=1 gerçek=2
+  ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
+sonuç: 18 geçti · 59 kaldı
+--- stderr ---
+grep: /tmp/tmp.clFHFynqiC/adim.log: No such file or directory
+grep: /tmp/tmp.clFHFynqiC/adim.log: No such file or directory
+grep: /tmp/tmp.clFHFynqiC/durum.log: No such file or directory
+cut: /tmp/tmp.clFHFynqiC/adim.log: No such file or directory

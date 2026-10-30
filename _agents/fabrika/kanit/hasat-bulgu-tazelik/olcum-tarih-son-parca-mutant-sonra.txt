@@ -1,0 +1,127 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts hasat.sh hasat.test.sh re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)), "") re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")
+# rc=1 sure=2.5s zaman=2026-10-30T16:41:52+03:00
+--- stdout ---
+MUTASYON: hasat.sh · 're.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)), "")' → 're.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")'
+— kullanım
+  ✓ U1 komutsuz rc 2
+  ✓ U2 gorev_ öneksiz kimlik rc 2
+  ✓ U3 --taze-gun 0 rc 2
+  ✓ U4 ac gerekçesi 5 harften kısa rc 2
+— durum: kapı (fikstür günü 2026-01-10, pencere 7)
+  ✗ D1 doğrulama yok → HASAT=OLMAZ rc 1 — beklenen=1:HASAT=OLMAZ gerçek=3:HASAT=ÖLÇÜLEMEDİ
+  ✗ D1b NEDEN doğrulama komutunu gösterir — 'hasat.sh dogrula gorev_A1' yok:   File "<string>", line 11
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+                                                                                              ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '('
+KAYIT=gorev_A1
+HASAT=ÖLÇÜLEMEDİ
+NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ
+  ✗ D1c DOGRULAMA=yok — 'DOGRULAMA=yok' yok:   File "<string>", line 11
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+                                                                                              ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '('
+KAYIT=gorev_A1
+HASAT=ÖLÇÜLEMEDİ
+NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ
+  ✗ D2 2 gün önce 'var' → HASAT=OLUR rc 0 — beklenen=0:HASAT=OLUR gerçek=3:HASAT=ÖLÇÜLEMEDİ
+  ✗ D2b tarih adım metnindeki tarih= alanından, yaş 2 — beklenen=2026-01-08:2 gerçek=:
+  ✗ D3 8 gün önce (pencere 7) → bayat, OLMAZ rc 1 — beklenen=1:HASAT=OLMAZ gerçek=3:HASAT=ÖLÇÜLEMEDİ
+  ✗ D3b NEDEN 'bayat' ve yeniden ölçüm ister — 'bayat — yeniden ölçülmeden hasat edilmez' yok:   File "<string>", line 11
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+                                                                                              ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '('
+KAYIT=gorev_A3
+HASAT=ÖLÇÜLEMEDİ
+NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ
+  ✗ D3c --taze-gun 10 ile aynı kayıt OLUR — beklenen=HASAT=OLUR gerçek=HASAT=ÖLÇÜLEMEDİ
+  ✗ D3d pencere sınırı: TAM 7 gün önce doğrulama hâlâ taze → OLUR (8 gün D3'te OLMAZ) — beklenen=OLUR:7 gerçek=ÖLÇÜLEMEDİ:
+  ✗ D4 SON ölçüm 'düzelmiş' (öncekinde var olsa da) → OLMAZ, DOGRULAMA=duzelmis — beklenen=1:duzelmis gerçek=3:
+  ✗ D4b NEDEN kapanışı gösterir — 'kapanır' yok:   File "<string>", line 11
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+                                                                                              ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '('
+KAYIT=gorev_A4
+HASAT=ÖLÇÜLEMEDİ
+NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ
+  ✗ D5 son ölçüm 'ölçülemedi' → OLMAZ rc 1 (olur UYDURULMAZ) — beklenen=1:OLMAZ gerçek=3:ÖLÇÜLEMEDİ
+  ✗ D6 kayıt havuzda değil (acik) → OLMAZ, NEDEN durumu söyler — beklenen=1:1 gerçek=3:0
+  ✓ D7 tarih= yok ve zaman damgası yok → ÖLÇÜLEMEDİ rc 3 (taze DENMEZ)
+  ✗ D8 tarih= yoksa zaman damgasından okunur → OLUR, yaş 1 — beklenen=OLUR:1 gerçek=ÖLÇÜLEMEDİ:
+  ✓ D9 gelecek tarihli doğrulama → ÖLÇÜLEMEDİ rc 3
+  ✓ D10 bugünün tarihi bozuk → ÖLÇÜLEMEDİ rc 3
+  ✓ D11 kayıt okunamazsa rc 3, 'olur' denmez
+  ✓ D11b olmayan kayıt rc 3
+  ✗ D12 MUHAKKİK'in görev hükmü (geçti/kaldı) bulgu doğrulaması SAYILMAZ → DOGRULAMA=yok — beklenen=yok gerçek=
+— birleşme: --birlesme tarihi ve --yuzey (git)
+  ✗ B1 doğrulamadan (01-08) SONRA birleşme (01-09) → OLMAZ rc 1 — beklenen=1:OLMAZ gerçek=3:ÖLÇÜLEMEDİ
+  ✗ B1b NEDEN yüzeyde birleşmeyi söyler — 'ilgili yüzeyde doğrulamadan sonra' yok:   File "<string>", line 11
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+                                                                                              ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '('
+KAYIT=gorev_A2
+HASAT=ÖLÇÜLEMEDİ
+NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ
+  ✗ B1c aynı gün birleşme de yeniden ölçüm ister (≥) — beklenen=OLMAZ gerçek=ÖLÇÜLEMEDİ
+  ✗ B2 doğrulamadan ÖNCE birleşme → OLUR, BIRLESME basılır — beklenen=OLUR:2026-01-05 gerçek=ÖLÇÜLEMEDİ:
+  ✓ B3 bozuk --birlesme rc 2
+  ✓ B4 --birlesme ile --yuzey birlikte rc 2
+  ✗ B5 --yuzey: son commit 01-09 git'ten okunur → OLMAZ, BIRLESME=2026-01-09 — beklenen=1:2026-01-09 gerçek=3:
+  ✗ B6 --yuzey eski dosya (01-03) → OLUR — beklenen=OLUR gerçek=ÖLÇÜLEMEDİ
+  ✗ B7 yüzey diskte var ama hiç commit görmemiş → birleşme yok, OLUR (BIRLESME=-) — beklenen=OLUR:- gerçek=ÖLÇÜLEMEDİ:
+  ✓ B7b yüzey ne diskte ne git'te → ÖLÇÜLEMEDİ ('birleşme yok' uydurulmaz)
+  ✓ B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 ('birleşme yok' UYDURULMAZ)
+— dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)
+  ✓ Y1 var: adım yazılır rc 0
+  ✓ Y1b adım metni: [doğrulama: var] sınıf=olcum · ölçüm: … · tarih=<bugün> · <söz>
+  ✓ Y1c var: durum YAZILMAZ (kayıt havuzda kalır)
+  ✓ Y1d çıktı DOGRULAMA=var ve tarih
+  ✓ Y2 --olcum yoksa rc 2, adım yazılmaz (ölçümsüz doğrulama yok)
+  ✓ Y3 bozuk --sonuc rc 2
+  ✓ Y3b bozuk --sinif rc 2
+  ✓ Y4 düzelmiş ama --kapandi yok → rc 2, hiçbir şey yazılmaz
+  ✓ Y5 düzelmiş + --kapandi: rc 0, adım 'kendiliğinden kapandı: PR #12' taşır
+  ✓ Y5b kayıt iptal ile kapanır, gerekçe 'kendiliğinden kapandı — PR #12: <söz>'
+  ✓ Y5c çıktı KAPANDI=PR #12
+  ✓ Y6 --kapandi yalnız düzelmişle: var ile rc 2
+  ✓ Y7 ölçülemedi: adım '[doğrulama: ölçülemedi]' yazılır, kapanış yok
+  ✓ Y8 defter adımı reddederse rc 1 (sessiz başarı yok)
+  ✓ Y9 kapanış reddedilirse rc 1
+  ✓ Y10 --tarih verilirse metne o yazılır
+  ✓ Y10b bozuk --tarih rc 2
+  ✓ Y11 'var' yüzeysiz yazılmaz rc 2 (birleşme sonradan ölçülemezdi)
+  ✓ Y12 --yuzey + --depo: adıma MUTLAK yol yazılır
+  ✓ Y13 yüzey git deposunda değil → rc 2, adım yazılmaz
+  ✓ Y14 kapanış reddedilince (rc 1) aynı komut yeniden koşulur ve kayıt kapanır (rc 0, iki iptal denemesi kütükte)
+— bayraksız durum: yüzey SON doğrulama adımından okunur (DALGIÇ ön-göz tur 1: sirada-bak yolu birleşmeyi hiç ölçmüyordu)
+  ✗ D13 kayıttaki yüzeyde doğrulamadan sonra birleşme (01-09) → bayraksız da OLMAZ rc 1 — beklenen=1:2026-01-09:/tmp/tmp.UtPavIYPHz/depo/yuzey/a.sh gerçek=3::
+  ✗ D14 kayıttaki yüzey eski (01-03) → OLUR — beklenen=OLUR gerçek=ÖLÇÜLEMEDİ
+  ✗ D15 yüzeysiz 'var' (eski biçim) → OLMAZ, NEDEN yüzey ister — beklenen=1:1 gerçek=3:0
+  ✓ D16 kayıttaki yüzey ölçülemiyor (git değil) → ÖLÇÜLEMEDİ rc 3
+  ✗ D17 --birlesme bayrağı kayıttaki yüzeyi ezer (açık ölçüm kazanır) — beklenen=OLUR gerçek=ÖLÇÜLEMEDİ
+  ✓ Y15 diskte olmayan yüzey 'var' ile yazılmaz rc 2
+  ✓ D18 kayıttaki yüzey hiç var olmamış (commit yok, disk yok) → ÖLÇÜLEMEDİ rc 3, 'birleşme yok' SAYILMAZ
+  ✗ D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ — beklenen=OLMAZ:/tmp/tmp.UtPavIYPHz/depo/bos luklu/b.sh gerçek=ÖLÇÜLEMEDİ:
+  ✗ D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ — beklenen=OLMAZ:2026-01-09 gerçek=ÖLÇÜLEMEDİ:
+  ✗ D21 ölçüm/söz metnindeki 'tarih=' ve 'yüzey=' yazıcının alanlarını EZMEZ (tarih 2026-01-10 · yüzey - · OLUR) — beklenen=2026-01-10:-:OLUR gerçek=::ÖLÇÜLEMEDİ
+— uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)
+  ✓ F0 fikstür: yerel origin/main bayat (uzaktaki 01-09 birleşmesini henüz görmüyor)
+  ✗ F1 ölçümden önce fetch: uzaktaki 01-09 birleşmesi görülür → OLMAZ — beklenen=OLMAZ:2026-01-09 gerçek=ÖLÇÜLEMEDİ:
+  ✓ F2 uzak depo tazelenemiyor → ÖLÇÜLEMEDİ rc 3 (bayat kopyadan 'birleşme yok' denmez)
+— ac: kapıdan geçerse havuz kaydı sıraya girer
+  ✗ A1 OLUR → gorev.sh durum … acik, gerekçe kaynak kaydı + doğrulama tarihini taşır — beklenen=0:durum gorev_A2 acik Meşveret 9. madde; Sultan önem 2 · havuz kaydı gorev_A2'den Hasat ile açıldı · son doğrulama 2026-01-08 var gerçek=3:
+  ✗ A1b ACILDI satırı — 'ACILDI=gorev_A2' yok:   File "<string>", line 11
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] or [""])[0] if False else [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1:] and [x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)][-1], "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+                                                                                              ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '('
+KAYIT=gorev_A2
+HASAT=ÖLÇÜLEMEDİ
+NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ
+  ✗ A2 doğrulamasız kayıt AÇILMAZ rc 1, durum yazılmaz — beklenen=1:yok gerçek=3:yok
+  ✗ A3 bayat doğrulama AÇILMAZ rc 1 — beklenen=1:yok gerçek=3:yok
+  ✗ A4 doğrulamadan sonra birleşme AÇILMAZ rc 1 — beklenen=1:yok gerçek=3:yok
+  ✓ A5 ÖLÇÜLEMEDİ → açılmaz rc 3
+  ✗ A6 defter açılışı reddederse rc 1 — beklenen=1 gerçek=3
+  ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
+sonuç: 41 geçti · 36 kaldı
+--- stderr ---

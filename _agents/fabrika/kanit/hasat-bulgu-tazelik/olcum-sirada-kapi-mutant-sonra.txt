@@ -1,0 +1,180 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts sirada-bak.sh sirada-bak.test.sh if [ "${HASAT_D:-}" != OLUR ]; then if false; then
+# rc=1 sure=6.3s zaman=2026-10-30T16:42:04+03:00
+--- stdout ---
+MUTASYON: sirada-bak.sh · 'if [ "${HASAT_D:-}" != OLUR ]; then' → 'if false; then'
+— kutu-bul
+  ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
+  ✓ K2 başka koltuk kendi kutusunu bulur (MUAVIN→code, İ/I farkı yok sayılır)
+  ✓ K3 atanmış işi olmayan koltuk: rc 3, kutu UYDURULMAZ
+  ✓ K4 iki kutu eşit sayıda: tahmin yok, rc 3
+  ✓ K5 GUNLUK_PLAN_KUTU açık ayarı kazanır
+  ✓ K6 liste okunamazsa rc 3
+— sirada-bak
+  ✓ S1 menzil: Sırada=3 (acik+sira-bende; havuz/çalışılan/biten ve code işleri SAYILMAZ) rc 0
+  ✓ S2 eşik 3 ve 3 iş → KARAR=BAS
+  ✓ S3 acil iş listede ilk sırada
+  ✓ S4 VARSAYILAN koşuda en üstteki iş ustlen edilir (talep: başlasın)
+  ✓ S4b --bak: ustlen ÇAĞRILMAZ ve çıktı 'başladım' DEMEZ (gerçeğe aykırı beyan yok)
+  ✓ S5 öneri bugüne almanın SULTAN'ın olduğunu söyler
+  ✓ S5b varsayılan koşuda BASLADI satırı var
+  ✓ S5c --bak önerisi üstlenmenin ajanın işi olduğunu söyler (izin beklemez)
+  ✓ S5d --bak önerisi üstlen komutunu gösterir
+  ✓ S5e --bak önerisi izin soran 'alayım mı' kalıbını İÇERMEZ
+  ✓ S6 eski --basla bayrağı artık TANINMAZ (rc 2, ustlen yok)
+  ✓ S7 betik bugun_plani'na ASLA yazmaz (ustlen dışında çağrı yok)
+  ✓ S8 eşik 4 ve 3 iş → KARAR=SOR
+  ✓ S9 SOR iki şık verir
+  ✓ S9b SOR: ADIM 0-d tarama ZORUNLU satırı var, Sultan'ı beklemez (HC75A)
+  ✓ S9c ZORUNLU satırı tarama-ekle.sh'ı gösterir ve ölçüt bayraklarını taşır (kaynak + kanıt zorunlu kalır)
+  ✓ S9d günlük tavan söylenir (günde en çok 3, tavan değişmedi)
+  ✓ S9e BAS kararında ZORUNLU satırı YOK (sıra doluyken taranmaz)
+  ✓ S10 SOR iken varsayılanda bile ustlen ÇAĞIRMAZ
+  ✓ S11 Sırada 1 → SOR
+  ✓ S11b Sırada 1 iken 'planlanmış görev yok' DENMEZ (kendi sayımıyla çelişmez)
+  ✓ S11c Sırada 1 iken gerçek sayı ve eşik söylenir
+  ✓ S12 --kutu verilince boş kutu: SIRADA=0 → SOR
+  ✓ S12b Sırada 0 iken 'planlanmış görev yok' denir
+  ✓ S13 liste okunamazsa rc 3 ('Sırada 0' DENMEZ)
+  ✓ S14 ölçülemeyende KARAR satırı basılmaz
+  ✓ S15 bozuk eşik rc 2
+  ✓ S16 eşik 0 rc 2
+  ✓ S17 ustlen reddedilirse rc 1 (sessiz başarı yok)
+  ✓ S18 kim yokken başlatma rc 3
+— başkasının işi üstlenilmez (kutu-düzeyi sayım ≠ koltuk-düzeyi başlatma)
+  ✓ S19 en üstteki iş BAŞKASINA atanmış: onu ÜSTLENMEZ, bana atanmış ilk işi üstlenir
+  ✓ S19b sayım yine kutu-düzeyinde (4 iş) ve karar BAS
+  ✓ S20 3 iş de başkasına atanmış: ustlen ÇAĞRILMAZ, rc 0
+  ✓ S20b 'başkasının işi üstlenilmez' açıkça söylenir
+  ✓ S21 sahipsiz ('-') iş başlatma adayıdır
+— deftere-yaz kutu türetme (menzil hatası)
+  ✓ D1 --kutu verilmeden menzil koltuğu 'kutu=menzil' çıkar (code DEĞİL)
+  ✓ D2 'kutu=code' çıkmaz
+  ✓ D3 atanmışı olmayan koltuk --kutu'suz rc 3
+— koltuk eşleme (kimlik-coz)
+  ✓ Q1 tablodaki koltuk defter adına çevrilir
+  ✓ Q2 İ/I/ı katlı eşleşir (MOBİLYACI)
+  ✓ Q3 tabloda olmayan ad AYNEN döner
+  ✓ Q4 tablo yoksa ad AYNEN döner
+  ✓ Q5 aynı koltuk iki ada giderse rc 3 (tahmin yok)
+  ✓ Q6 bozuk satır atlanır ve söylenir
+  ✓ Q6b sağlam satır yine çalışır
+  ✓ Q7 kutu-bul: koltuk adıyla (MOBILYACI) NECCAR'ın kutusunu bulur
+  ✓ Q7b tablo yokken aynı çağrı ÖLÇEMEZ (rc 3) — kapı çeviriden geliyor
+  ✓ Q8 sirada-bak: ustlen DEFTER adıyla çağrılır (--kim NECCAR)
+  ✓ Q9 deftere-yaz: koltuk adı çevrilir, kutu=mihenk
+  ✓ Q9b deftere-yaz: defter kaydı DEFTER adıyla yazılır (kim=NECCAR)
+  ✓ Q10 zincirli tabloda TEK geçiş: ZA→ZB (ZC'ye varmaz), kutu=kutux
+  ✓ Q10b ustlen ZB adıyla çağrılır (ZC DEĞİL)
+  ✓ Q10c deftere-yaz da tek geçiş: kutu=kutux kim=ZB
+  ✓ Q11 kutu-bul: ASCII koltuk (MUTEVELLI) aksanlı defter adını (MÜTEVELLİ) bulur
+  ✓ Q12 sirada-bak: tablosuz bile MÜTEVELLİ işleri koltuğa atanmış sayılır (BASLAMADI=yok DEĞİL)
+  ✓ Q12b 'bana atanmış ya da sahipsiz iş yok' çıkmaz
+  ✓ Q13 kimlik-coz: ü ö ç ş ğ katlı eşleşir (tablo satırı MUTEVELLİ koltuğu → MÜTEVELLİ)
+
+— havuz da iştir (1.14.0 · SERDAR 29 Eki)
+  ✓ H1 Sırada 3 < eşik 4 ama sahipsiz HAVUZ işi var → KARAR=BAS (Sultan'a 'iş çıkaralım mı' SORULMAZ)
+  ✓ H1b NEDEN satırı 'havuz da iştir' der
+  ✓ H1c HAVUZDA=1 ayrı sayılır, SIRADA=3 değişmez (ekranın tanımı)
+  ✓ H1d SIRADA hâlâ 3
+  ✓ H1e BAS kararında SOR/ZORUNLU yok
+  ✓ H1f ilk aday sıradaki acil iş (sıra önce, havuz sonra)
+  ✓ H2 Sırada 0, koltuğa atanmış havuz işi var → KARAR=BAS
+  ✓ H2b havuz işi (1 gün önce 'var' doğrulamalı) üstlenilir
+  ✓ H2c ISI satırında havuz işi listelenir
+  ✓ H2d hasat kapısı ölçüldü ve OLUR dedi (HASAT=OLUR satırı)
+— hasat kapısı (1.19.0 · Meşveret 30 Eki madde 9): havuz kaydı ölçülmeden göreve çevrilmez
+  ✗ H5 havuz kaydında doğrulama YOK → ustlen ÇAĞRILMAZ, rc 0, HASAT=OLMAZ — beklenen=yok:0:HASAT=OLMAZ · gorev_H1 gerçek=var:0:HASAT=OLMAZ · gorev_H1
+  ✗ H5b BASLAMADI 'hasat kapısı' der ve nedeni taşır — 'BASLAMADI=gorev_H1 (hasat kapısı: doğrulama yok' yok: KUTU=menzil
+SIRADA=0
+HAVUZDA=1
+ESIK=3
+HAVUZ_TOPLAM=1
+HAVUZ_TAZE=1
+HAVUZ_BAYAT=0
+HAVUZ_TARIHSIZ=0
+HAVUZ_EN_ESKI_GUN=1
+TAZE_GUN=7
+TAZELIK=VAR
+KARAR=BAS
+NEDEN=Sırada 0 iş var (eşik 3) ama havuzda sana düşen 1 iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)
+ISI=gorev_H1 · esnek · havuz işim
+MADDE=görev …rev_H1 tamamlanacak: havuz işim (sahip: MENZILCI)
+HASAT=OLMAZ · gorev_H1
+BASLADI=gorev_H1 (çalışılıyor yapıldı · tahmin 30 dk)
+ONERI=Sultan'a: 'Sırada 1 iş var; en üstteki gorev_H1 ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez
+  ✗ H5c ZORUNLU=HASAT KAPISI satırı doğrulama komutunu kayıt kimliğiyle gösterir — 'ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash /tmp/tmp.AeP6lGOaa6/s/hasat.sh dogrula gorev_H1 --sonuc var|duzelmis|olculemedi --olcum' yok: KUTU=menzil
+SIRADA=0
+HAVUZDA=1
+ESIK=3
+HAVUZ_TOPLAM=1
+HAVUZ_TAZE=1
+HAVUZ_BAYAT=0
+HAVUZ_TARIHSIZ=0
+HAVUZ_EN_ESKI_GUN=1
+TAZE_GUN=7
+TAZELIK=VAR
+KARAR=BAS
+NEDEN=Sırada 0 iş var (eşik 3) ama havuzda sana düşen 1 iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)
+ISI=gorev_H1 · esnek · havuz işim
+MADDE=görev …rev_H1 tamamlanacak: havuz işim (sahip: MENZILCI)
+HASAT=OLMAZ · gorev_H1
+BASLADI=gorev_H1 (çalışılıyor yapıldı · tahmin 30 dk)
+ONERI=Sultan'a: 'Sırada 1 iş var; en üstteki gorev_H1 ile başladım. Bugüne almak ister misin?' — üstlenmek ajanın işiydi (yapıldı); bugüne alma tıkı Sultan'ın (ekranda), işi geciktirmez
+  ✓ H5d KARAR yine BAS (havuz da iştir; kapı yalnız üstlenmeyi tutar)
+  ✗ H6 doğrulama 13 gün önce (pencere 7) → bayat, üstlenilmez — beklenen=yok:1 gerçek=var:0
+  ✓ H6b --taze-gun 20 pencereyi kapıya da taşır → üstlenilir
+  ✗ H6c son ölçüm 'düzelmiş' → üstlenilmez, neden kapanışı söyler — beklenen=yok:1 gerçek=var:0
+  ✗ H7 kayıt okunamıyor (eski gorev.sh / defter) → HASAT=ÖLÇÜLEMEDİ, üstlenilmez, 'olur' UYDURULMAZ — beklenen=yok:0:HASAT=ÖLÇÜLEMEDİ · gorev_H1 gerçek=var:0:HASAT=ÖLÇÜLEMEDİ · gorev_H1
+  ✓ H8 ilk aday SIRADA işi (havuz değil) ise kapı ÇALIŞMAZ: HASAT satırı yok, M2 üstlenilir
+  ✗ H9 kayıttaki yüzeyde doğrulamadan SONRA birleşme var → sirada-bak de üstlenmez (bayraksız ölçüm) — beklenen=yok:1 gerçek=var:0
+— havuz da iştir (devam)
+  ✓ H3 havuz işi BAŞKASINA atanmışsa sayılmaz → KARAR=SOR
+  ✓ H3b HAVUZDA=0
+  ✓ H3c başkasının havuz işi üstlenilmez
+  ✓ H4 --bak havuz işini üstlenmez
+  ✓ H4b --bak havuzdan BAS der ve üstlenme komutunu gösterir
+── MADDE satırı (GJRBF1T8): sıradaki iş doğrudan plan maddesi biçiminde
+  ✓ S30 her ISI satırına bir MADDE satırı eşlik eder (4)
+  ✓ S30b biçim: 'görev …<son6> tamamlanacak: <başlık> (sahip: <kim>)' — acil iş önce, başkasının işi 'başkası'
+── havuz tazeliği + Seanslı Hasat şıkkı (1.17.0 · Kuzey Yıldızı 1.5/1.8 · Sultan 29 Eki 'her şey bayatsa kontrol mekanizması olmalı')
+  ✓ T1 taze havuz kaydı (1 gün) → TAZELIK=VAR
+  ✓ T1b sayım: toplam 1 · taze 1 · bayat 0 · tarihsiz 0 · en eski 1 gün · pencere 7
+  ✓ T1c başkasının havuzu: KARAR=SOR (HAVUZDA=0 koltuk düzeyi) ama tazelik KUTU düzeyinde sayıldı
+  ✓ T2 SOR üçüncü şık: Seanslı Hasat, üç cevabıyla
+  ✓ T2b taze varken Meşveret önerisi YOK
+  ✓ T2c SOR + havuz dolu: HASAT_KAPI satırı doğrulama (hasat.sh durum/dogrula/ac) yolunu ve pencereyi söyler
+  ✓ T2d HASAT_KAPI düzelmiş bulgunun kendiliğinden kapanmasını ve 7 gün penceresini söyler
+  ✓ T3 hepsi bayat (13 ve 32 gün, pencere 7) → KURU + Meşveret önerisi tek satırda
+  ✓ T3b sayım: toplam 2 · taze 0 · bayat 2 · en eski 32
+  ✓ T3c NEDEN 'hepsi bayat' der ve günlük plana Meşveret maddesi ister
+  ✓ T3d tazelik KARAR'ı değiştirmez: sahipsiz havuz işi var → yine BAS (havuz da iştir)
+  ✓ T3e --taze-gun 40: aynı kayıtlar taze → VAR (pencere argümanı işler)
+  ✓ T3f TAZE_GUN=40 basılır
+  ✓ T4 havuz boş → KURU
+  ✓ T4b NEDEN 'havuz boş' der
+  ✓ T4c havuz boşken üçüncü şık hasat yerine Meşveret'e yönlendirir
+  ✓ T4d ilk iki şık değişmedi
+  ✓ T4e havuz boşken HASAT_KAPI satırı YOK (ölçülecek kayıt yok)
+  ✓ T5 tarih okunamıyor, taze yok → TAZELIK=ÖLÇÜLEMEDİ (rc 0, karar yine verilir)
+  ✓ T5b HAVUZ_TARIHSIZ=1
+  ✓ T5c ölçülemeyende 'bayat' hükmü YOK
+  ✓ T5d tarihsiz kayıt yanında taze kayıt varsa VAR (tarihsiz, VAR'ı engellemez)
+  ✓ T6 başka kutunun havuzu SAYILMAZ: menzil HAVUZ_TOPLAM=0
+  ✓ T7 BAS dalında da TAZELIK basılır (M4 havuz kaydı 1 gün → VAR)
+  ✓ T7b BAS dalında TAZELIK satırı KARAR satırından ÖNCE gelir (okuyan önce havuzu görür)
+  ✓ T8 bozuk --taze-gun rc 2
+  ✓ T8b --taze-gun 0 rc 2
+  ✓ T9 bugünün tarihi okunamazsa TAZELIK=ÖLÇÜLEMEDİ (VAR uydurulmaz)
+  ✓ T10 gelecek tarihli havuz kaydı TAZE SAYILMAZ (VAR yok)
+  ✓ T10b gelecek tarihli kayıt okunamayan gibi sayılır: taze 0 · tarihsiz 1 → ÖLÇÜLEMEDİ
+  ✓ T11 pencere sınırı: tam 7 gün TAZE, 8 gün BAYAT (taze 1 · bayat 1 · en eski 8)
+  ✓ T12 tazelik hesabı çıktı vermezse (python3 çöktü) ÖLÇÜLEMEDİ + sayılar '-' (uydurma 0 yok); karar yine verilir
+── kimlik türetme (1.18.0 · MUAVİN Madde 4 · NOVA: KIM boşken kendi işi başkasının sayılıyordu)
+  ✓ X1 AILE_KIMDEN kimlik kaynağıdır: kutu menzil, kendi işi üstlenilir, rc 0
+  ✓ X2 ortam boş, tmux oturumu MENZILCI:0 ↔ aile-registry → kimlik MENZILCI, kendi işi üstlenilir; 'bana atanmış ya da sahipsiz iş yok' DENMEZ
+  ✓ X3 aynı tmux oturumu iki üyede: belirsiz → türetilmez, rc 3, ustlen yok
+  ✓ X4 ortam boş ve tmux yok: ÖLÇÜLEMEDİ rc 3, KARAR satırı basılmaz (kutu düzeyinde 'başkasının işi' sevki YOK), hata satırı yolu söyler
+  ✓ X5 AGENT_NAME tmux türetmesinden ÖNCE gelir (MUAVIN → kutu code)
+sonuç: 120 geçti · 7 kaldı
+--- stderr ---

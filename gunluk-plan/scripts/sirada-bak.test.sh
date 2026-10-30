@@ -23,6 +23,7 @@ case "$1" in
 esac
 EOS
 chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"
+printf '#!/usr/bin/env bash\ncat "%s/kayit-$1.txt" 2>/dev/null || exit 3\n' "$T" > "$T/oku.sh"; export HASAT_KAYIT_OKU="$T/oku.sh"   # hasat kapısı kayıt okuyucusu (1.19.0)
 # satır biçimi: id kutu durum aciliyet etiket atanan BAŞLIK  (son: …)
 satir(){ printf 'gorev_%s  %-10s %-14s %-9s %-8s %-10s %s  (son: 2026-01-01)\n' "$@"; }
 liste_menzil(){ : > "$T/liste.txt"
@@ -133,17 +134,41 @@ iceriyor "H1c HAVUZDA=1 ayrı sayılır, SIRADA=3 değişmez (ekranın tanımı)
 iceriyor "H1d SIRADA hâlâ 3" "SIRADA=3" "$c"
 icermiyor "H1e BAS kararında SOR/ZORUNLU yok" "ZORUNLU=" "$c"
 kapi "H1f ilk aday sıradaki acil iş (sıra önce, havuz sonra)" "ustlen gorev_M2 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
-: > "$T/liste.txt"; satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
+# hasat kapısı fikstürü (1.19.0): kayıt dosyası = hasat.sh kayıt okuyucusunun çıktısı (HASAT_KAYIT_OKU); dogrulama <id> <tarih|-> [hüküm]
+dogrulama(){ local id="$1" t="$2" h="${3:-var}"; { printf 'KAYIT\tgorev_%s\thavuz\t-\tbaşlık\n' "$id"; [ "$t" = "-" ] || printf 'ADIM\t%sT09:00:00Z\t[doğrulama: %s] sınıf=olcum · ölçüm: grep -c x y.sh · tarih=%s · yüzey=- · sorun duruyor\n' "$t" "$h" "$t"; } > "$T/kayit-gorev_$id.txt"; }
+: > "$T/liste.txt"; satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"; dogrulama H1 2026-01-01
 c="$(bash "$SB" 2>&1)"
 iceriyor "H2 Sırada 0, koltuğa atanmış havuz işi var → KARAR=BAS" "KARAR=BAS" "$c"
-kapi "H2b havuz işi üstlenilir" "ustlen gorev_H1 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
+kapi "H2b havuz işi (1 gün önce 'var' doğrulamalı) üstlenilir" "ustlen gorev_H1 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
 iceriyor "H2c ISI satırında havuz işi listelenir" "ISI=gorev_H1" "$c"
+iceriyor "H2d hasat kapısı ölçüldü ve OLUR dedi (HASAT=OLUR satırı)" "HASAT=OLUR · gorev_H1" "$c"
+echo "— hasat kapısı (1.19.0 · Meşveret 30 Eki madde 9): havuz kaydı ölçülmeden göreve çevrilmez"
+rm -f "$T/ustlen.log"; dogrulama H1 -
+c="$(bash "$SB" 2>&1)"; rc=$?
+kapi "H5 havuz kaydında doğrulama YOK → ustlen ÇAĞRILMAZ, rc 0, HASAT=OLMAZ" "yok:0:HASAT=OLMAZ · gorev_H1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$rc:$(grep '^HASAT=' <<<"$c")"
+iceriyor "H5b BASLAMADI 'hasat kapısı' der ve nedeni taşır" "BASLAMADI=gorev_H1 (hasat kapısı: doğrulama yok" "$c"
+iceriyor "H5c ZORUNLU=HASAT KAPISI satırı doğrulama komutunu kayıt kimliğiyle gösterir" "ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash $KOK/hasat.sh dogrula gorev_H1 --sonuc var|duzelmis|olculemedi --olcum" "$c"
+iceriyor "H5d KARAR yine BAS (havuz da iştir; kapı yalnız üstlenmeyi tutar)" "KARAR=BAS" "$c"
+rm -f "$T/ustlen.log"; dogrulama H1 2025-12-20
+c="$(bash "$SB" 2>&1)"; kapi "H6 doğrulama 13 gün önce (pencere 7) → bayat, üstlenilmez" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c 'hasat kapısı: son doğrulama 13 gün önce (pencere 7): bayat' <<<"$c")"
+rm -f "$T/ustlen.log"; c="$(bash "$SB" --taze-gun 20 2>&1)"; kapi "H6b --taze-gun 20 pencereyi kapıya da taşır → üstlenilir" "ustlen gorev_H1 --kim MENZILCI --tahmin 30" "$(cat "$T/ustlen.log" 2>/dev/null)"
+rm -f "$T/ustlen.log"; dogrulama H1 2026-01-01 "düzelmiş"
+c="$(bash "$SB" 2>&1)"; kapi "H6c son ölçüm 'düzelmiş' → üstlenilmez, neden kapanışı söyler" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c "hasat kapısı: son ölçüm 'düzelmiş'" <<<"$c")"
+rm -f "$T/ustlen.log" "$T/kayit-gorev_H1.txt"
+c="$(bash "$SB" 2>&1)"; rc=$?; kapi "H7 kayıt okunamıyor (eski gorev.sh / defter) → HASAT=ÖLÇÜLEMEDİ, üstlenilmez, 'olur' UYDURULMAZ" "yok:0:HASAT=ÖLÇÜLEMEDİ · gorev_H1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$rc:$(grep '^HASAT=' <<<"$c")"
+liste_menzil; rm -f "$T/ustlen.log"; c="$(bash "$SB" --esik 4 2>&1)"
+kapi "H8 ilk aday SIRADA işi (havuz değil) ise kapı ÇALIŞMAZ: HASAT satırı yok, M2 üstlenilir" "0:ustlen gorev_M2 --kim MENZILCI --tahmin 30" "$(grep -c '^HASAT=' <<<"$c"):$(cat "$T/ustlen.log" 2>/dev/null)"
+R="$T/hdepo"; mkdir -p "$R"; git -C "$R" init -q 2>/dev/null; git -C "$R" config user.email t@t; git -C "$R" config user.name t; echo 1 > "$R/a.sh"; git -C "$R" add -A; GIT_AUTHOR_DATE="2026-01-02T10:00:00+03:00" GIT_COMMITTER_DATE="2026-01-02T10:00:00+03:00" git -C "$R" commit -qm a
+: > "$T/liste.txt"; satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
+{ printf 'KAYIT\tgorev_H1\thavuz\t-\tbaşlık\n'; printf 'ADIM\t2026-01-01T09:00:00Z\t[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-01 · yüzey=%s/a.sh\n' "$R"; } > "$T/kayit-gorev_H1.txt"
+c="$(bash "$SB" 2>&1)"; kapi "H9 kayıttaki yüzeyde doğrulamadan SONRA birleşme var → sirada-bak de üstlenmez (bayraksız ölçüm)" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c 'hasat kapısı: ilgili yüzeyde doğrulamadan sonra' <<<"$c")"
+echo "— havuz da iştir (devam)"
 : > "$T/liste.txt"; satir H2 menzil havuz esnek ozellik HENDESE "başkasının havuzu" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
 c="$(bash "$SB" --kutu menzil 2>&1)"
 iceriyor "H3 havuz işi BAŞKASINA atanmışsa sayılmaz → KARAR=SOR" "KARAR=SOR" "$c"
 iceriyor "H3b HAVUZDA=0" "HAVUZDA=0" "$c"
 kapi "H3c başkasının havuz işi üstlenilmez" "yok" "$([ -e "$T/ustlen.log" ] && echo var || echo yok)"
-: > "$T/liste.txt"; satir H3 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
+: > "$T/liste.txt"; satir H3 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"; dogrulama H3 2026-01-01
 c="$(bash "$SB" --bak 2>&1)"
 kapi "H4 --bak havuz işini üstlenmez" "yok" "$([ -e "$T/ustlen.log" ] && echo var || echo yok)"
 iceriyor "H4b --bak havuzdan BAS der ve üstlenme komutunu gösterir" "gorev.sh ustlen gorev_H3" "$c"
@@ -163,6 +188,8 @@ kapi "T1b sayım: toplam 1 · taze 1 · bayat 0 · tarihsiz 0 · en eski 1 gün 
 iceriyor "T1c başkasının havuzu: KARAR=SOR (HAVUZDA=0 koltuk düzeyi) ama tazelik KUTU düzeyinde sayıldı" "KARAR=SOR" "$c"
 iceriyor "T2 SOR üçüncü şık: Seanslı Hasat, üç cevabıyla" "|Havuzdan süzelim: Seanslı Hasat (kayıt kayıt sorarım, 3 cevap: kabul · başka sun · düzeltmeyle kabul)" "$c"
 icermiyor "T2b taze varken Meşveret önerisi YOK" "ÖNERİ=Meşveret" "$c"
+iceriyor "T2c SOR + havuz dolu: HASAT_KAPI satırı doğrulama (hasat.sh durum/dogrula/ac) yolunu ve pencereyi söyler" "HASAT_KAPI=her havuz kaydı göreve çevrilmeden ÖNCE ölçülür: bash $KOK/hasat.sh durum <gorev_id>" "$c"
+iceriyor "T2d HASAT_KAPI düzelmiş bulgunun kendiliğinden kapanmasını ve 7 gün penceresini söyler" "kendiliğinden kapanır); 7 günden eski" "$c"
 : > "$T/liste.txt"; satir_son 2025-12-01 B1 menzil havuz esnek ozellik - "32 günlük" >> "$T/liste.txt"; satir_son 2025-12-20 B2 menzil havuz esnek ozellik HENDESE "13 günlük" >> "$T/liste.txt"
 c="$(bash "$SB" --kutu menzil --bak 2>&1)"
 iceriyor "T3 hepsi bayat (13 ve 32 gün, pencere 7) → KURU + Meşveret önerisi tek satırda" "TAZELIK=KURU · ÖNERİ=Meşveret seansı (yeni bulgu toplanmalı)" "$c"
@@ -177,6 +204,7 @@ iceriyor "T4 havuz boş → KURU" "TAZELIK=KURU · ÖNERİ=Meşveret seansı" "$
 iceriyor "T4b NEDEN 'havuz boş' der" "TAZELIK_NEDEN=havuz boş" "$c"
 iceriyor "T4c havuz boşken üçüncü şık hasat yerine Meşveret'e yönlendirir" "Seanslı Hasat — havuz BOŞ, önce Meşveret seansı" "$c"
 iceriyor "T4d ilk iki şık değişmedi" "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)|" "$c"
+icermiyor "T4e havuz boşken HASAT_KAPI satırı YOK (ölçülecek kayıt yok)" "HASAT_KAPI=" "$c"
 : > "$T/liste.txt"; satir_son "" U1 menzil havuz esnek ozellik HENDESE "damgasız kayıt" >> "$T/liste.txt"
 c="$(bash "$SB" --kutu menzil 2>&1)"; rc=$?
 kapi "T5 tarih okunamıyor, taze yok → TAZELIK=ÖLÇÜLEMEDİ (rc 0, karar yine verilir)" "0:TAZELIK=ÖLÇÜLEMEDİ" "$rc:$(printf '%s\n' "$c" | grep '^TAZELIK=')"
