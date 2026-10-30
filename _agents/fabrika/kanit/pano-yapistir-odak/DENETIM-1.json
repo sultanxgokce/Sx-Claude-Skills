@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "pano-yapistir-odak",
+  "pr": "599",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T21:06:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-pano-yapistir-odak",
+  "dal": "pano-yapistir-odak",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14752,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Genel yapıştırma yakalayıcısı, odak terminal dışındaki input, textarea veya düzenlenebilir alandayken erken çıkıyor; xterm içindeki yardımcı textarea ise kapsamda kalıyor. Hedefli gerçek ölçüm ve eski kod mutasyonu davranış ayrımını doğruladığı için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçümde Y4b, terminal dışı yazı alanında yükleme yapılmadığını, olayın engellenmediğini ve yolun terminale yazılmadığını doğruluyor; Y2/Y3 terminal içi resim akışının sürdüğünü gösteriyor. Mutasyon ölçümü eski pano.js ile Y4b kapısının düştüğünü kanıtlıyor. Önce/sonra görsel karesi yok, ancak davranış iddiası gerçek ölçüm ile mutasyon çifti üzerinden yeterince desteklenmiş."
+  }
+}
