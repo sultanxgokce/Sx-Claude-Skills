@@ -342,7 +342,26 @@
     document.body.appendChild(serit); document.body.appendChild(etiket);
     kap.style.marginTop = RESIM_SERIT + 'px'; kap.style.height = 'calc(100% - ' + RESIM_SERIT + 'px)';
     try { window.dispatchEvent(new Event('resize')); } catch (e) { /* eski tarayıcı */ }
-    window.__kapiResim = { surum: '1.0.0', dugme: true, serit: RESIM_SERIT };
+    var klavye = klavyeUyumKur(kap);
+    window.__kapiResim = { surum: '1.1.0', dugme: true, serit: RESIM_SERIT, klavye: klavye };
+    return true;
+  }
+  // ── KLAVYE AÇIKKEN YAZI ALANI GÖRÜNÜR (1.1.0 · BÂNİ 30 Eki, Kuzey Yıldızı G2.9): telefonda klavye açılınca tarayıcı yalnız GÖRÜNEN alanı
+  //    (visualViewport) küçültür; sayfa ve terminal tam boyda kalır → terminalin alt satırları (Claude'un yazı kutusu) klavyenin ALTINDA kalır.
+  //    Çare: görünen alan sayfadan belirgin kısaysa (klavye) terminal kabı görünen alana sığdırılır, ttyd yeniden sığdırır (satır azalır);
+  //    tmux imleci izler, yazı satırı görünür kalır. Klavye kapanınca eski boy. Telefon ignore-size ile bağlı: pencere küçülmez, masaüstü etkilenmez.
+  function klavyeUyumKur(kap) {
+    var vv = window.visualViewport; if (!vv || typeof vv.addEventListener !== 'function') return false;
+    var son = '';
+    function uygula() {
+      var acik = vv.height < window.innerHeight - 80;                    // 80 px'ten az fark: adres çubuğu oynaması, klavye değil
+      var boy = acik ? Math.max(120, Math.round(vv.height - RESIM_SERIT)) + 'px' : 'calc(100% - ' + RESIM_SERIT + 'px)';
+      if (boy === son) return; son = boy;
+      kap.style.height = boy;
+      if (acik && vv.offsetTop) { try { window.scrollTo(window.scrollX, 0); } catch (e) { /* yok */ } }   // iOS sayfayı kaydırmışsa şerit+terminal başa döner
+      try { window.dispatchEvent(new Event('resize')); } catch (e) { /* eski tarayıcı */ }
+    }
+    vv.addEventListener('resize', uygula); vv.addEventListener('scroll', uygula);
     return true;
   }
   (function bekleDugme(n) { if (resimDugmesiKur() || !telefonMu()) return; if (n > 0) setTimeout(function () { bekleDugme(n - 1); }, 100); })(100);
