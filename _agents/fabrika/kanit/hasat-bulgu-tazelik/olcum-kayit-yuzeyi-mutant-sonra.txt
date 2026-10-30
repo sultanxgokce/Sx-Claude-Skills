@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts hasat.sh hasat.test.sh if [ -z "$YUZEY" ] && [ -z "$BIRLESME" ]; then if false; then
-# rc=1 sure=2.1s zaman=2026-10-30T16:39:27+03:00
+# rc=1 sure=2.1s zaman=2026-10-30T16:41:43+03:00
 --- stdout ---
 MUTASYON: hasat.sh · 'if [ -z "$YUZEY" ] && [ -z "$BIRLESME" ]; then' → 'if false; then'
 — kullanım
@@ -64,15 +64,16 @@ MUTASYON: hasat.sh · 'if [ -z "$YUZEY" ] && [ -z "$BIRLESME" ]; then' → 'if f
   ✓ Y13 yüzey git deposunda değil → rc 2, adım yazılmaz
   ✓ Y14 kapanış reddedilince (rc 1) aynı komut yeniden koşulur ve kayıt kapanır (rc 0, iki iptal denemesi kütükte)
 — bayraksız durum: yüzey SON doğrulama adımından okunur (DALGIÇ ön-göz tur 1: sirada-bak yolu birleşmeyi hiç ölçmüyordu)
-  ✗ D13 kayıttaki yüzeyde doğrulamadan sonra birleşme (01-09) → bayraksız da OLMAZ rc 1 — beklenen=1:2026-01-09:/tmp/tmp.u0iftZRxYY/depo/yuzey/a.sh gerçek=1:-:-
+  ✗ D13 kayıttaki yüzeyde doğrulamadan sonra birleşme (01-09) → bayraksız da OLMAZ rc 1 — beklenen=1:2026-01-09:/tmp/tmp.2PVx97mznP/depo/yuzey/a.sh gerçek=1:-:-
   ✗ D14 kayıttaki yüzey eski (01-03) → OLUR — beklenen=OLUR gerçek=OLMAZ
   ✓ D15 yüzeysiz 'var' (eski biçim) → OLMAZ, NEDEN yüzey ister
   ✗ D16 kayıttaki yüzey ölçülemiyor (git değil) → ÖLÇÜLEMEDİ rc 3 — beklenen=3:ÖLÇÜLEMEDİ gerçek=1:OLMAZ
   ✓ D17 --birlesme bayrağı kayıttaki yüzeyi ezer (açık ölçüm kazanır)
   ✓ Y15 diskte olmayan yüzey 'var' ile yazılmaz rc 2
   ✗ D18 kayıttaki yüzey hiç var olmamış (commit yok, disk yok) → ÖLÇÜLEMEDİ rc 3, 'birleşme yok' SAYILMAZ — beklenen=3:ÖLÇÜLEMEDİ gerçek=1:OLMAZ
-  ✗ D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ — beklenen=OLMAZ:/tmp/tmp.u0iftZRxYY/depo/bos luklu/b.sh gerçek=OLMAZ:-
+  ✗ D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ — beklenen=OLMAZ:/tmp/tmp.2PVx97mznP/depo/bos luklu/b.sh gerçek=OLMAZ:-
   ✗ D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ — beklenen=OLMAZ:2026-01-09 gerçek=OLMAZ:-
+  ✗ D21 ölçüm/söz metnindeki 'tarih=' ve 'yüzey=' yazıcının alanlarını EZMEZ (tarih 2026-01-10 · yüzey - · OLUR) — beklenen=2026-01-10:-:OLUR gerçek=2026-01-10:-:OLMAZ
 — uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)
   ✓ F0 fikstür: yerel origin/main bayat (uzaktaki 01-09 birleşmesini henüz görmüyor)
   ✗ F1 ölçümden önce fetch: uzaktaki 01-09 birleşmesi görülür → OLMAZ — beklenen=OLMAZ:2026-01-09 gerçek=OLMAZ:-
@@ -95,5 +96,5 @@ NEDEN=son doğrulamada yüzey yok: birleşme ölçülemez — yeniden ölç ve y
   ✓ A5 ÖLÇÜLEMEDİ → açılmaz rc 3
   ✓ A6 defter açılışı reddederse rc 1
   ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
-sonuç: 62 geçti · 14 kaldı
+sonuç: 62 geçti · 15 kaldı
 --- stderr ---

@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-tarih-son-parca-mutant-sonra.txt
+hedef_sha256: 461d24eb22c620a2dc6eca67a11513dc5d984bf89ddafb57402bb4341c10e2bf
+hedef_zaman: 2026-10-30T16:41:52+03:00
+hedef_renk: yesil
+neden: mutant sözdizimi hatasıyla çöktü (SyntaxError); düşen kapılar hatadan, sahte yakalama — temiz mutantla yeniden ölçüldü
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T16:42:18+03:00

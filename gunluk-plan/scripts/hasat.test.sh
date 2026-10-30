@@ -87,7 +87,7 @@ kapi "B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 
 echo "— dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)"
 temiz; c="$(bash "$HS" dogrula gorev_A1 --sonuc var --olcum "grep -c TODO x.sh → 3" --yuzey - --soz "Sorun duruyor, üç yerde." 2>&1)"; rc=$?
 kapi "Y1 var: adım yazılır rc 0" "0" "$rc"
-kapi "Y1b adım metni: [doğrulama: var] sınıf=olcum · ölçüm: … · tarih=<bugün> · <söz>" "adim gorev_A1 [doğrulama: var] sınıf=olcum · ölçüm: grep -c TODO x.sh → 3 · tarih=2026-01-10 · yüzey=- · Sorun duruyor, üç yerde." "$(cat "$T/adim.log" 2>/dev/null)"
+kapi "Y1b adım metni: [doğrulama: var] sınıf=olcum · ölçüm: … · tarih=<bugün> · <söz>" "adim gorev_A1 [doğrulama: var] sınıf=olcum · tarih=2026-01-10 · yüzey=- · ölçüm: grep -c TODO x.sh → 3 · Sorun duruyor, üç yerde." "$(cat "$T/adim.log" 2>/dev/null)"
 kapi "Y1c var: durum YAZILMAZ (kayıt havuzda kalır)" "yok" "$([ -e "$T/durum.log" ] && echo var || echo yok)"
 iceriyor "Y1d çıktı DOGRULAMA=var ve tarih" "DOGRULAMA_TARIH=2026-01-10" "$c"
 temiz; bash "$HS" dogrula gorev_A1 --sonuc var >/dev/null 2>&1; kapi "Y2 --olcum yoksa rc 2, adım yazılmaz (ölçümsüz doğrulama yok)" "2:yok" "$?:$([ -e "$T/adim.log" ] && echo var || echo yok)"
@@ -95,7 +95,7 @@ bash "$HS" dogrula gorev_A1 --sonuc belki --olcum x >/dev/null 2>&1; kapi "Y3 bo
 bash "$HS" dogrula gorev_A1 --sonuc var --olcum x --sinif tahmin >/dev/null 2>&1; kapi "Y3b bozuk --sinif rc 2" "2" "$?"
 temiz; bash "$HS" dogrula gorev_A1 --sonuc duzelmis --olcum "gh pr view 12" >/dev/null 2>&1; kapi "Y4 düzelmiş ama --kapandi yok → rc 2, hiçbir şey yazılmaz" "2:yok" "$?:$([ -e "$T/adim.log" ] || [ -e "$T/durum.log" ] && echo var || echo yok)"
 temiz; c="$(bash "$HS" dogrula gorev_A1 --sonuc duzelmis --olcum "gh pr view 12 --json state" --sinif pr --kapandi "PR #12" --soz "Aynı satır başka işle düzeldi." 2>&1)"; rc=$?
-kapi "Y5 düzelmiş + --kapandi: rc 0, adım 'kendiliğinden kapandı: PR #12' taşır" "0:1" "$rc:$(grep -c 'adim gorev_A1 \[doğrulama: düzelmiş\] sınıf=pr · ölçüm: gh pr view 12 --json state · tarih=2026-01-10 · kendiliğinden kapandı: PR #12 · Aynı satır' "$T/adim.log" 2>/dev/null)"
+kapi "Y5 düzelmiş + --kapandi: rc 0, adım 'kendiliğinden kapandı: PR #12' taşır" "0:1" "$rc:$(grep -c 'adim gorev_A1 \[doğrulama: düzelmiş\] sınıf=pr · tarih=2026-01-10 · ölçüm: gh pr view 12 --json state · kendiliğinden kapandı: PR #12 · Aynı satır' "$T/adim.log" 2>/dev/null)"
 kapi "Y5b kayıt iptal ile kapanır, gerekçe 'kendiliğinden kapandı — PR #12: <söz>'" "durum gorev_A1 iptal kendiliğinden kapandı — PR #12: Aynı satır başka işle düzeldi." "$(cat "$T/durum.log" 2>/dev/null)"
 iceriyor "Y5c çıktı KAPANDI=PR #12" "KAPANDI=PR #12" "$c"
 temiz; bash "$HS" dogrula gorev_A1 --sonuc var --olcum x --kapandi "PR #1" >/dev/null 2>&1; kapi "Y6 --kapandi yalnız düzelmişle: var ile rc 2" "2" "$?"
@@ -129,6 +129,9 @@ kayit D6 havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm
 c="$(bash "$HS" durum gorev_D6 2>&1)"; kapi "D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ" "OLMAZ:$R/bos luklu/b.sh" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^YUZEY=' <<<"$c" | cut -d= -f2-)"
 git -C "$R" rm -q yuzey/eski.sh; GIT_AUTHOR_DATE="2026-01-09T12:00:00+03:00" GIT_COMMITTER_DATE="2026-01-09T12:00:00+03:00" git -C "$R" commit -qm sil
 c="$(bash "$HS" durum gorev_D2 2>&1)"; kapi "D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ" "OLMAZ:2026-01-09" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
+temiz; bash "$HS" dogrula gorev_A1 --sonuc var --olcum "grep tarih=2020-01-01 · tarih=2020-01-02 x.sh" --yuzey - --soz "yüzey=/sahte · tarih=2020-01-03" >/dev/null 2>&1
+{ printf 'KAYIT\tgorev_D7\thavuz\t-\tb\n'; printf 'ADIM\t2026-01-09T09:00:00Z\t%s\n' "$(cut -d' ' -f3- "$T/adim.log")"; } > "$T/kayit-gorev_D7.txt"
+c="$(bash "$HS" durum gorev_D7 2>&1)"; kapi "D21 ölçüm/söz metnindeki 'tarih=' ve 'yüzey=' yazıcının alanlarını EZMEZ (tarih 2026-01-10 · yüzey - · OLUR)" "2026-01-10:-:OLUR" "$(grep '^DOGRULAMA_TARIH=' <<<"$c" | cut -d= -f2):$(grep '^YUZEY=' <<<"$c" | cut -d= -f2):$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
 echo "— uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)"
 U="$T/uzak.git"; git init -q --bare "$U" 2>/dev/null; git -C "$U" symbolic-ref HEAD refs/heads/main
 Y="$T/yerel"; mkdir -p "$Y"; git -C "$Y" init -q -b main 2>/dev/null; git -C "$Y" config user.email t@t; git -C "$Y" config user.name t; echo 1 > "$Y/k.sh"; git -C "$Y" add -A

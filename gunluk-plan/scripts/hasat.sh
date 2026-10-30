@@ -66,8 +66,11 @@ if [ "$KOMUT" = dogrula ]; then
     [ -n "$(yuzey_kok "$YUZEY")" ] || { echo "HATA: yüzey bir git deposunda değil ($YUZEY) — birleşmesi ölçülemez; doğru yolu ver ya da --yuzey -" >&2; exit 2; }
   fi
   case "$SONUC" in var) HUKUM="var";; duzelmis) HUKUM="düzelmiş";; *) HUKUM="ölçülemedi";; esac
-  METIN="[doğrulama: $HUKUM] sınıf=$SINIF · ölçüm: $OLCUM · tarih=$TARIH"
+  # Alan sırası (DALGIÇ tur 3): tarih= ve yüzey= kullanıcı yazısı olan ölçüm/sözden ÖNCE; okuyucu ' · ' parçalarında TAM eşleşen ilk parçayı alır
+  #   → '--olcum "grep tarih=2020-01-01 …"' son doğrulama tarihini bozamaz.
+  METIN="[doğrulama: $HUKUM] sınıf=$SINIF · tarih=$TARIH"
   [ -z "$YUZEY" ] || METIN="$METIN · yüzey=$YUZEY"
+  METIN="$METIN · ölçüm: $OLCUM"
   [ "$SONUC" != duzelmis ] || METIN="$METIN · kendiliğinden kapandı: $KAPANDI"
   [ -z "$SOZ" ] || METIN="$METIN · $SOZ"
   bash "$GOREV" adim "$ID" "$METIN" || { echo "KIRMIZI: doğrulama adımı yazılamadı (gorev.sh adim rc $?)" >&2; exit 1; }
@@ -103,7 +106,7 @@ import sys,re; y=""
 for s in sys.stdin:
     p=s.rstrip("\n").split("\t")
     if p[0]=="ADIM" and len(p)>=3 and re.match(r"\[doğrulama: (var|düzelmiş|ölçülemedi)\]","\t".join(p[2:])):
-        m=re.search(r"\byüzey=(.+?)(?: · |$)","\t".join(p[2:])); y=m.group(1) if m else ""
+        y=next((x[len("yüzey="):] for x in "\t".join(p[2:]).split(" · ") if x.startswith("yüzey=")), "")
 print(y)')"; YKAYNAK="kayıt"
 fi
 BIRLESME_BEYAN=""
@@ -127,8 +130,8 @@ for s in sys.stdin:
     ts, metin = p[1], "\t".join(p[2:])
     m = re.match(r"\[doğrulama: (var|düzelmiş|ölçülemedi)\]", metin)
     if not m: continue
-    t = re.search(r"\btarih=(\d{4}-\d{2}-\d{2})", metin)
-    son = (m.group(1), t.group(1) if t else (ts[:10] if re.match(r"\d{4}-\d{2}-\d{2}", ts) else ""))
+    t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)), "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
+    son = (m.group(1), t or (ts[:10] if re.match(r"\d{4}-\d{2}-\d{2}", ts) else ""))
 def cik(dog, tarih, yas, hasat, neden): print("\t".join([durum, dog, tarih or "-", str(yas) if yas is not None else "-", hasat, neden])); sys.exit(0)
 if son is None: cik("yok", "", None, "OLMAZ", "doğrulama yok: bulgu ölçülmeden hasat edilmez → bash hasat.sh dogrula %s --sonuc var|duzelmis|olculemedi --olcum \"<komut>\"" % gid)
 dog, tarih = son

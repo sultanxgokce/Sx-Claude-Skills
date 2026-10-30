@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts hasat.sh hasat.test.sh if beyan == "yok": cik( if False: cik(
-# rc=1 sure=2.5s zaman=2026-10-30T16:39:30+03:00
+# rc=1 sure=2.6s zaman=2026-10-30T16:41:45+03:00
 --- stdout ---
 MUTASYON: hasat.sh · 'if beyan == "yok": cik(' → 'if False: cik('
 — kullanım
@@ -73,6 +73,7 @@ MUTASYON: hasat.sh · 'if beyan == "yok": cik(' → 'if False: cik('
   ✓ D18 kayıttaki yüzey hiç var olmamış (commit yok, disk yok) → ÖLÇÜLEMEDİ rc 3, 'birleşme yok' SAYILMAZ
   ✓ D19 boşluklu yüzey yolu kesilmeden okunur → birleşme 01-09 görülür, OLMAZ
   ✓ D20 yüzey dosyası doğrulamadan sonra silindi → silme commit'i birleşmedir, OLMAZ
+  ✓ D21 ölçüm/söz metnindeki 'tarih=' ve 'yüzey=' yazıcının alanlarını EZMEZ (tarih 2026-01-10 · yüzey - · OLUR)
 — uzak depo: bayat origin/main'den hüküm verilmez (DALGIÇ tur 2)
   ✓ F0 fikstür: yerel origin/main bayat (uzaktaki 01-09 birleşmesini henüz görmüyor)
   ✓ F1 ölçümden önce fetch: uzaktaki 01-09 birleşmesi görülür → OLMAZ
@@ -86,5 +87,5 @@ MUTASYON: hasat.sh · 'if beyan == "yok": cik(' → 'if False: cik('
   ✓ A5 ÖLÇÜLEMEDİ → açılmaz rc 3
   ✓ A6 defter açılışı reddederse rc 1
   ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
-sonuç: 75 geçti · 1 kaldı
+sonuç: 76 geçti · 1 kaldı
 --- stderr ---

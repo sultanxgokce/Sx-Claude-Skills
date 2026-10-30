@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/sirada-bak.test.sh
-# rc=0 sure=6.2s zaman=2026-10-30T16:39:45+03:00
+# rc=0 sure=6.1s zaman=2026-10-30T16:41:58+03:00
 --- stdout ---
 — kutu-bul
   ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
