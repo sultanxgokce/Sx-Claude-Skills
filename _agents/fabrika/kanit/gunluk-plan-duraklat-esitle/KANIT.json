@@ -1,0 +1,25 @@
+{
+  "is": "gunluk-plan-duraklat-esitle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T23:57:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin-main",
+      "asama": "sonra",
+      "dosya": "olcum-y7-origin-main-sonra.txt",
+      "sha256": "4a3a68bb43acc3518db6b165ccdd9bcac206ad86118db1c5fcaee7fba6508fd9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7-origin.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T23:57:13+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e6888d5ae31746b7af516f3fdd3d52ce"
+    }
+  ],
+  "imza": "3ad6ae831e09b66768f2a897c18995c2a1024686b9b573d990774060e5fd1b2a"
+}
