@@ -1,5 +1,0 @@
-$ test -f /config/projects/Sx-Claude-Skills/duzen/scripts/uyum-haftalik.sh
-# rc=1 sure=50.1s zaman=2026-10-31T00:24:40+03:00
---- stdout ---
---- stderr ---
-⏳ agir-sira: kanit-duzen-uyum-haftalik-betik-var 50 sn bekledi (yuva 1, load1 17.78)

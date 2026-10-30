@@ -100,11 +100,10 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
-- **1.2.0** (31 Eki 2026, MİRAHUR · Kuzey G25 G29 G30): `duzen-gece.sh` (düzen sürümü artınca dört düzen becerisini gece kurar, bu depoda BAYAT ekipc
-  kimliklerini yeniler, reise "düzen vX indi" mektubu yollar; VARSAYILAN KURU, `--force` yok, reis bilinmiyorsa mektup tahminle gitmez) +
-  `uyum-haftalik.sh` (surum.sh denetle'yi koşar, sapmayı Bulgu Havuzu'na yazar, günlüğe `sapma=N` düşer; hiç kimlik işaretli değilse
-  "güncel" DEMEZ, SARI der rc 4). İkisinin sınavı + mutantı. Günlük biçimi `duzen-gece.sh` başlığında. Zamanlayıcı satırı ayrı PR (cloudtop
-  `crontab-abc`) ve Sultan-eli uygulanır; "sync-skills cron'da değil" kararı (aşağıda b) bu PR'la DEĞİŞMEZ, gece betiği yalnız --uygula ile yazar.
+- **1.2.0** (31 Eki 2026, MİRAHUR · Kuzey G25 G29): `duzen-gece.sh` (düzen sürümü artınca dört düzen becerisini gece kurar, bu depoda BAYAT ekipc
+  kimliklerini yeniler, her kutu reisine "düzen vX indi" mektubu yollar; VARSAYILAN KURU, `--force` yok, reis bilinmiyorsa mektup tahminle gitmez).
+  Sınavı + mutantı var; günlük biçimi `duzen-gece.sh` başlığında. Zamanlayıcı satırı ayrı PR (cloudtop `crontab-abc`); "sync-skills cron'da değil"
+  kararı (aşağıda b) bu PR'la DEĞİŞMEZ, gece betiği yalnız --uygula ile yazar. Haftalık uyum denetimi (G30) ayrı kart/PR.
 
 - **1.1.1** (30 Eki 2026, BÂNİ): yetki bloğuna Sultan kararı satırı (SERDAR 09:24): alt personel kendi iş alanında küçük düzeltme PR'ı AÇABİLİR; birleştirme her durumda reiste; canlı · host · sır yok; kural bütün odalar için aynı (MEREMMETÇİ dahil). Sınav A8b.
 - **1.1.0** (30 Eki 2026, SERDAR gece inşası): `alt-ajan-istem.sh` + sınavı. 9 koltuksuz alt personel (Nexus #1414) için istem
