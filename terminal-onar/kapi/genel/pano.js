@@ -320,9 +320,12 @@
     var etiket = document.createElement('label'); etiket.id = 'kapi-resim-ekle'; etiket.setAttribute('role', 'button');
     etiket.setAttribute('aria-label', 'Terminale görüntü ekle (galeri ya da kamera)');
     etiket.style.cssText = 'position:fixed;top:4px;left:8px;z-index:2147483646;display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;' +
-      'box-sizing:border-box;padding:0 16px;border-radius:999px;cursor:pointer;background:#c9914f;border:1px solid #e0b070;color:#1e1a14;' +
-      'font:600 14px/1 system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none';
-    etiket.textContent = '🖼 Görüntü ekle';
+      // görsel dil = merkezin "Dar görünüm" hapı (aynı ekranda iki ayrı dil olmasın): koyu zemin · ince kenar · açık metin · emoji YOK.
+      //   Birincil eylem yazmaktır, bu düğme değil — dolu vurgu rengi terminalin en parlak öğesi olurdu. Değişkenler merkezde tanımlı; kapının kendi sayfasında yedek değer.
+      'box-sizing:border-box;padding:0 16px;border-radius:999px;cursor:pointer;background:var(--zemin,#120e0a);border:1px solid var(--kenar,#3a2f24);' +
+      'color:var(--metin,#f4ede2);opacity:.94;font:14px/1 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;' +
+      '-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none';
+    etiket.textContent = 'Görüntü ekle';
     var girdi = document.createElement('input'); girdi.type = 'file'; girdi.accept = 'image/*'; girdi.id = 'kapi-resim-girdi';
     girdi.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none';
     girdi.addEventListener('change', function () {

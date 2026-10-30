@@ -1,7 +1,7 @@
 {
   "is": "telefon-terminal-zoom-boy",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T22:51:35+03:00",
+  "guncelleme": "2026-10-30T22:58:04+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -600,7 +600,37 @@
       "renk": "ilan",
       "zaman": "2026-10-30T22:49:51+03:00",
       "olcum_id": "34107055dd5244639d8952f2716012f9"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "dugme-dil-390",
+      "asama": "sonra",
+      "dosya": "dosya-dugme-dil-390-sonra.png",
+      "sha256": "fbc3fa56bb6e9dfbc03f3126c1e7d5eb153697114d90ffa7cce08b9507dfc089",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/tel-dugme-v2-telefon-dugme.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:56:25+03:00",
+      "olcum_id": "1f0222dc3cef4f62be73f85362e3db2a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-dugme-dil",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-dugme-dil-sonra.txt",
+      "sha256": "4a03d044463a9558cf54552c0f6f54745d3e6b9268f3e7ef800e6103c34a1921",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && out=$(timeout 400 node kapi/pano-sinav.mjs </dev/null 2>&1); printf \"%s\\n\" \"$out\" | grep -E \"G[0-9]|GEÇEN\"; grep -q \"✓ G2\" <<<\"$out\" && ! grep -q \"✗ G\" <<<\"$out\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:58:04+03:00",
+      "sure_sn": 98.8,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ee0d69cf1f2c48ec94f6d09ded5e5a90"
     }
   ],
-  "imza": "83cda27daf609bdd212421fc2e65467b0f6e18e693ffa89ed88c9f6393df413a"
+  "imza": "cd8a4c21a8ecc108d945483f38b9deeeedde2f22d53addd3d60e24843011f02c"
 }
