@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.1.0
+version: 1.1.1
 ---
 
-# /duzen — filo düzen paketi (1.1.0 · iskelet + alt ajan istem üreticisi)
+# /duzen — filo düzen paketi (1.1.1 · iskelet + alt ajan istem üreticisi)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -75,7 +75,7 @@ tarafına dokunmaz; o geçiş ayrı iş).
 |---|---|---|
 | `el-defteri.sh [--ajan AD] [--n 25]` | Koltuğun el defterini tek metin basar: bugünkü ÇIPA · son KONUM · son N not · açık işler (gorev.sh). Alt ajan istemine eklenir. Defter yoksa **"el defteri yok" rc 3** (uydurmaz); gorev.sh yoksa "ölçülemedi" yazar | `el-defteri.test.sh` E1-E7 + 2 mutant |
 | `append-note.sh` | Nexus `scripts/append-note.sh`'ın **birebir** kopyası: Read'siz güvenli ekleme, ajan defterinde ÇIPA başlığı + saat damgasını ARAÇ yazar. 19 kutu aynı not aracını alır | `append-note-paritesi.test.sh` P1-P4 (P4 = Nexus kopyasıyla md5 eşitliği) |
-| `alt-ajan-istem.sh <slug> --is "…" [--kart İŞ] [--dosyalar a,b] [--sure DK] [--depo KÖK]` | **Koltuksuz alt personel** (BENNÂ · MÜZEHHİP · ŞAKİRD · ÇAPAR · TATAR · MESSÂH · MEREMMETÇİ · MÜCERRİB · MÜTEFENNİN) için reisin Agent aracına yapıştıracağı **tek istem metnini** basar (yalnız stdout, dosyaya yazmaz). Altı blok: kimlik (`AGENT.md` `## ELLE` verbatim; ekipc üretilmiş ORTAK-TEMEL alınmaz) · reis/oda/yetki (aile-registry `oda:`+`amir:`; "birleştirme · canlı · host · sır reiste" sabit) · el defteri (`el-defteri.sh`; defter yoksa "defter boş, ilk görev" + ⚠, istem yine çıkar) · iş (`--is`; `--kart` varsa kartın `cumle`si önde) · dosyalar+süre · sabit kurallar (hat · Sultan-dili · kanıt · ölçmeden hüküm yok · scratchpad öneki · rerun yok). Slug'ın AGENT.md'si yoksa **rc 3 "kimlik yok: önce /ise-alim"**. `token|sifre|şifre|parola` geçen satır basılmaz → `[sır satırı süzüldü]` | `alt-ajan-istem.test.sh` A1-A9 + mutant `sir` (gömülü ve `--mutant sir`) |
+| `alt-ajan-istem.sh <slug> --is "…" [--kart İŞ] [--dosyalar a,b] [--sure DK] [--depo KÖK]` | **Koltuksuz alt personel** (BENNÂ · MÜZEHHİP · ŞAKİRD · ÇAPAR · TATAR · MESSÂH · MEREMMETÇİ · MÜCERRİB · MÜTEFENNİN) için reisin Agent aracına yapıştıracağı **tek istem metnini** basar (yalnız stdout, dosyaya yazmaz). Altı blok: kimlik (`AGENT.md` `## ELLE` verbatim; ekipc üretilmiş ORTAK-TEMEL alınmaz) · reis/oda/yetki (aile-registry `oda:`+`amir:`; "birleştirme · canlı · host · sır reiste" sabit; 1.1.1: Sultan kararı satırı — alt personel kendi iş alanında küçük düzeltme PR'ı açabilir, birleştirme her durumda reiste, bütün odalar) · el defteri (`el-defteri.sh`; defter yoksa "defter boş, ilk görev" + ⚠, istem yine çıkar) · iş (`--is`; `--kart` varsa kartın `cumle`si önde) · dosyalar+süre · sabit kurallar (hat · Sultan-dili · kanıt · ölçmeden hüküm yok · scratchpad öneki · rerun yok). Slug'ın AGENT.md'si yoksa **rc 3 "kimlik yok: önce /ise-alim"**. `token|sifre|şifre|parola` geçen satır basılmaz → `[sır satırı süzüldü]` | `alt-ajan-istem.test.sh` A1-A9 + mutant `sir` (gömülü ve `--mutant sir`) |
 | `surum.sh goster` · `surum.sh denetle [--depo KÖK] [--kurulu DİZİN]` | Paket sürümü · kutudaki kurulu sürüm kaynakla aynı mı · `ekipc` işaretli AGENT.md'lerde hash tutuyor mu (EL-DEĞMİŞ) ve gömülü çekirdek birebir mi (BAYAT). **Yalnız raporlar, yazmaz** (`--kuru` varsayılan ve tek kip) | `surum.test.sh` S1-S9 + 2 mutant |
 
 İlk ölçüm (29 Eki, Nexus): ekipc işaretli 18 kimlik → 17 GÜNCEL, 1 BAYAT (HEZARFEN); işaretsiz 18 kimlik
@@ -100,6 +100,7 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.1.1** (30 Eki 2026, BÂNİ): yetki bloğuna Sultan kararı satırı (SERDAR 09:24): alt personel kendi iş alanında küçük düzeltme PR'ı AÇABİLİR; birleştirme her durumda reiste; canlı · host · sır yok; kural bütün odalar için aynı (MEREMMETÇİ dahil). Sınav A8b.
 - **1.1.0** (30 Eki 2026, SERDAR gece inşası): `alt-ajan-istem.sh` + sınavı. 9 koltuksuz alt personel (Nexus #1414) için istem
   üretici. Yalnız stdout; el defterini yazmaz. Sultan kararı bekleyenler değişmedi.
 - **1.0.0** (29 Eki 2026): iskelet — çekirdek metinler · el-defteri.sh · append-note.sh paritesi · surum.sh.

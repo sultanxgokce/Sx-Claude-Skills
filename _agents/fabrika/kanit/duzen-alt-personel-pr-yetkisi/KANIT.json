@@ -1,0 +1,67 @@
+{
+  "is": "duzen-alt-personel-pr-yetkisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T09:53:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "fa9c6ccdad5a78db70919a085db9e997cf5d1735fc70aaf6ccc0406ed45adc1f",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-eski-alt-ajan-istem.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T09:53:06+03:00",
+      "sure_sn": 105.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b18321eccea24409b366d5c2b0d1e447"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "76e933aca27fa44c6f7114d2dfb6fabae837af014395f9fa48f1465eb334d06c",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T09:53:08+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a0d0e15b72cb4b26aeb1e8fd0fc579b1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-satir-silindi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-satir-silindi-tek.txt",
+      "sha256": "85ab897feb69b5d23ba1dd326530ee42da819bb90aa9a9bd41a67a3d4a613426",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-mutant-alt-ajan-istem.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T09:53:40+03:00",
+      "sure_sn": 32.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "fa0239951c6e4394afcea24c27de9252"
+    }
+  ],
+  "imza": "3db05189e486116a26033da8d6e1d929831dc5737c00f4192fbc18fae22aadb0"
+}

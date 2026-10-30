@@ -4,7 +4,7 @@
 # A3 oda+amir aile-registry'den doğru (kanallar _agents/<slug>/ eşlemesi; yorum/alıntı temizlenir) · A4 defter yok (sahte el-defteri rc 3)
 # → rc 0, "defter boş, ilk görev" + ⚠ uyarı · A4b başka rc → "ölçülemedi", "defter boş" demez · A5 sır süzme: parola/token/sifre satırı
 # basılmaz, "[sır satırı süzüldü]" yazılır · A6 kart cümlesi kart JSON'dan (cumle alanı) · A6b kart yoksa ⚠ + --is ile devam
-# A7 ne --is ne --kart → rc 2 · A10 değersiz seçenek rc 2 (döngü yok) · A11 --kart ../ reddi · A8 --sure/--dosyalar basılır, sabit "reiste kalır" satırı var · A9 el-defteri rc 0 çıktısı istemde
+# A7 ne --is ne --kart → rc 2 · A10 değersiz seçenek rc 2 (döngü yok) · A11 --kart ../ reddi · A8 --sure/--dosyalar basılır, sabit "reiste kalır" satırı var · A8b Sultan kararı satırı (küçük düzeltme PR'ı açabilir, birleştirme reiste) · A9 el-defteri rc 0 çıktısı istemde
 # Mutant (gömülü + `--mutant sir`): sır süzgeci kapatılmış GEÇİCİ kopyada A5 kırmızı. `--mutant sir` bütün süiti mutanta karşı koşar
 # ve onun rc'sini döner (beklenen KIRMIZI) — kanit.sh olcum --mutasyon <gerçek etiket> bununla kaydedilir.
 set -uo pipefail
@@ -82,6 +82,7 @@ ok "A3 oda+amir registry'den (yorum ve tırnak temizlenmiş), ad ŞAKİRD" "$(gr
 ok "A5 sır süzme: parola/token/sifre satırı basılmaz, '[sır satırı süzüldü]' ≥3, sade satır kalır" "$(! grep -q 'hunter2' <<<"$O" && ! grep -qi 'workflow-token' <<<"$O" && ! grep -q '12345' <<<"$O" && [ "$(grep -c '\[sır satırı süzüldü\]' <<<"$O")" -ge 3 ] && grep -q 'sade satır kalır' <<<"$O" && echo 0 || echo 1)" "→ süzülen: $(grep -c 'sır satırı süzüldü' <<<"$O")"
 ok "A6 kart cümlesi JSON'dan okunur + reisin --is cümlesi de var" "$(grep -q 'Kart (deneme-is): KART-CUMLESI: sınavı yaz' <<<"$O" && grep -q 'Reisin cümlesi: REIS-CUMLESI' <<<"$O" && echo 0 || echo 1)"
 ok "A8 --dosyalar/--sure basılır; 'reiste kalır' sabit satırı var" "$(grep -q 'a.sh,b.sh (yalnız bunlar' <<<"$O" && grep -q 'Süre tavanı: 45 dk' <<<"$O" && grep -q 'sır DEĞERİ reiste kalır' <<<"$O" && echo 0 || echo 1)"
+ok "A8b Sultan kararı satırı (alt personel küçük düzeltme PR'ı açabilir · birleştirme reiste · bütün odalar) istemde" "$(grep -q "küçük düzeltme PR'ı AÇABİLİR; birleştirme her durumda reiste" <<<"$O" && grep -q 'bütün odalar için aynı' <<<"$O" && echo 0 || echo 1)"
 ok "A9 el-defteri çıktısı istemde (SAHTE-DEFTER-SATIRI), ⚠ uyarı yok" "$(grep -q 'SAHTE-DEFTER-SATIRI' <<<"$O" && ! grep -q '^⚠' <<<"$O" && echo 0 || echo 1)" "→ $(grep '^⚠' <<<"$O" | head -2)"
 
 O4="$(SAHTE_DEFTER=yok kos sakird --is "ilk iş" 2>"$T/e4")"; rc=$?
