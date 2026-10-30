@@ -1,0 +1,8 @@
+── kapsam-olc · alan fabrika-kapsam-satir-kesisimi · 11 dosyada 28 blok (merge-base f5b968db)
+✗ PR #586 (kart-bitti-gorevsiz-uyari) SATIR KESİŞİMİ (merge-base (git diff -U0 origin/main...origin/kart-bitti-gorevsiz-uyari)):
+    · catalog.json: alan 1533-1533 ∩ PR 1533-1533
+    · yazilim-fabrikasi/SKILL.md: alan 4-4 ∩ PR 4-4
+    · yazilim-fabrikasi/SKILL.md: alan 111-111 ∩ PR 111-111
+· PR #506 (oda-kapi-koltuk) aynı dosya, satır kesişimi YOK (merge-base (git diff -U0 origin/main...origin/oda-kapi-koltuk)) — PR: catalog.json: 1567-1567 · alan: catalog.json: 1533-1533
+✗ SATIR KESİŞİMİ — 1 açık PR aynı satırları değiştiriyor. DUR: önce o PR birleşsin ve alan onun üstüne alınsın, ya da reise sor.
+kendi-kapsam-olc exit=2

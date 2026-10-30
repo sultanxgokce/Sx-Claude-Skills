@@ -1116,6 +1116,27 @@ blok DAR | grep -q "settings_file: /config/projects/t/eski.json" \
 blok YENI | grep -q "settings_file: /config/projects/t/izin.json" && blok YENI | grep -q "permission_mode: default" \
   && ok "registry-üretimi: yeni üyeye bayraktaki izin dosyası yazıldı (kip default)" \
   || bad "registry-üretimi: yeni üyenin izin dosyası yazılmadı"
+
+# 35f. (0.11.6 · MUAVİN Madde 4, 30 Eki) mevcut kayıtta OLMAYAN üyenin izin kipi: ekip-registry'deki permission_mode →
+#      ISKAN_EY_PMODE_VARSAYILAN → default; yalnız 'default'a düşüşte görünür [sarı] uyarı (3 kapı). Eskiden sessizce 'default' (ENİS/SIHHAT rezerve koltuğu).
+EK_REG="$(printf 'uyeler:\n  - id: REZ\n    tmux: "REZ:0"\n    permission_mode: bypassPermissions\n  - id: YOK\n    tmux: "YOK:0"\n')"
+EK_HATA="$(mktemp)"
+out="$(EY_PROJE=t EY_CNAME=c EY_HOSTNAME=h EY_PORT=1 EY_HOST_CFG=/x EY_HEDEF_ICI=/config/projects/t \
+  EY_REG_MEVCUT="$RG_ESKI" EY_EKIP_REG="$EK_REG" \
+  _ey_iskan_registry_icerik < <(printf 'KOD\tuye\taaaaaaaa-0000-0000-0000-000000000001\nREZ\tuye\taaaaaaaa-0000-0000-0000-000000000004\nYOK\tuye\taaaaaaaa-0000-0000-0000-000000000005\n') 2>"$EK_HATA")"
+blok REZ | grep -q "permission_mode: bypassPermissions" && ! grep -q "izin kipi: 'REZ'" "$EK_HATA" \
+  && ok "registry-üretimi 35f: mevcut kayıtta olmayan REZ'in kipi ekip-registry'den okundu (bypassPermissions) ve ona uyarı YOK" \
+  || bad "registry-üretimi 35f: REZ'in ekip-registry kipi okunmadı ya da gereksiz uyarı: $(blok REZ | grep permission_mode) | $(cat "$EK_HATA")"
+blok YOK | grep -q "permission_mode: default" && grep -q "\[sarı\] izin kipi: 'YOK'" "$EK_HATA" \
+  && ok "registry-üretimi 35f: hiçbir kaynakta olmayan YOK 'default' aldı ve stderr'e görünür [sarı] uyarı düştü" \
+  || bad "registry-üretimi 35f: YOK için default/uyarı yok: $(blok YOK | grep permission_mode) | $(cat "$EK_HATA")"
+out="$(EY_PROJE=t EY_CNAME=c EY_HOSTNAME=h EY_PORT=1 EY_HOST_CFG=/x EY_HEDEF_ICI=/config/projects/t \
+  EY_REG_MEVCUT="$RG_ESKI" EY_EKIP_REG="" ISKAN_EY_PMODE_VARSAYILAN=acceptEdits \
+  _ey_iskan_registry_icerik < <(printf 'YOK\tuye\taaaaaaaa-0000-0000-0000-000000000005\n') 2>"$EK_HATA")"
+blok YOK | grep -q "permission_mode: acceptEdits" && ! grep -q "izin kipi:" "$EK_HATA" \
+  && ok "registry-üretimi 35f: ISKAN_EY_PMODE_VARSAYILAN varsayılanı değiştirir (acceptEdits); bilinçli kip 'default' düşüşü değildir → uyarı YOK (göz tur 1)" \
+  || bad "registry-üretimi 35f: ISKAN_EY_PMODE_VARSAYILAN işlemedi ya da gereksiz uyarı: $(blok YOK | grep permission_mode) | $(cat "$EK_HATA")"
+rm -f "$EK_HATA"; unset EK_REG EK_HATA
 unset RG_ESKI
 
 # 36. uye-ekle --apply yeni-üye ama host-erişilemez → rc=1, mutasyonsuz erken-kırmızı

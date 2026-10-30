@@ -1,0 +1,80 @@
+{
+  "is": "mesveret-oda-bulgu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T13:11:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "e22e050e017233b7d56481d30d78f4823846a8662bcd938d6b5909aca2738b80",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T13:11:04+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c0afc652bd2447129779d79556652a35"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "3f9a9ffe277ce8bf28f31ba39589eb90e93fc7ed0922bc23a93f859c78d5de94",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T13:11:06+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "40ad8d0179ce46f88b61616a3a849dde"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mesveret-sinav",
+      "asama": "tek",
+      "dosya": "olcum-mesveret-sinav-tek.txt",
+      "sha256": "9fabe252687ada8c1719430b7bacd422d37a0fe3a426efdcb756dd58e1d393e5",
+      "komut": [
+        "bash",
+        "mesveret/scripts/mesveret.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T13:11:06+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1a8094dc40434cecb673e01be82194db"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-oda-dusuruldu",
+      "asama": "tek",
+      "dosya": "olcum-mutant-oda-dusuruldu-tek.txt",
+      "sha256": "edd14ab3fed37f85222c47d507cc533fc0ada4256c283f3e46d8ea73058ad6cf",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T13:11:27+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "759a56f76ec249e7b2b51f21e2eadfb0"
+    }
+  ],
+  "imza": "56d063cd0588dd33d6636afef827acae68921064a0aa5ab54aef6f7b205769f4"
+}

@@ -902,7 +902,7 @@
       "id": "iskan",
       "type": "agent",
       "name": "İSKÂN — container + ekip yaşam-döngüsü master-skill (Usta · bileşik)",
-      "version": "0.11.5",
+      "version": "0.11.6",
       "description": "Container + ekip yaşam-döngüsü master-skill: bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme) için host-provizyon (UC1 yeni-proje), oturum-kurtarma (UC2 seans-getir, deterministik session-id), üye-ekleme (UC3) akışlarını ekip-kur/ise-alim/sunucu-kur/cloudflare-erisim'i BESTELEYEREK tek-komuta indirger. Kendi owner-domain'i: container-provizyon host-adaptörü + tmux-oturum açma/casing/session-id rezervasyonu + CF-hostname orkestrasyonu + evergreen-manifest oto-yazımı; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). D6: `kur <proje>` zincirleyicisi — UC1 tam-yaşamdöngüsünü duraklı durum-makinesi olarak besteler (DURAK-1 cloudtop-PR merge; GO-marker'lar bypass edilmez, exit-4 aynen iletilir; --dry-run/--devam/--durum).",
       "prerequisites": {
         "system": [
@@ -1423,7 +1423,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.17.1",
+      "version": "1.18.0",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1530,7 +1530,7 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.27.30",
+      "version": "0.27.33",
       "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2: sergi-beceri.py → sergi.mmepanel.com canlı (22 Eyl). F3: kart.sh (sınıf soruları araçta; kartsız iş alanı açılmaz) + gun-sonu.sh (özet defterden). Kapılar: ana-dal Edit/Write kilidi + birleştirme kapısı (kanıtsız/puansız iş birleşemez).",
       "prerequisites": {
         "system": [
@@ -1679,7 +1679,7 @@
       "id": "bulgu",
       "type": "workflow",
       "name": "Bulgu — filonun tek bulgu komutu (kutunun Bulgu Defteri'ne yaz/listele/hâl)",
-      "version": "0.6.2",
+      "version": "0.6.3",
       "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06). 0.3.0: jeton varsa merkezî Görev Defteri'ne görev yazar. 0.4.0: --dugum ile başka kutunun bekleyen görevine düğüm bağı. 0.4.1: bağ reddinde defterin neden + yapılacak satırı basılır. 0.5.0: kayıt varsayılan 'havuz' durumunda açılır (Sırada'ya düşmez, haftalık süzmede görev olur); --gorev doğrudan iş; --dugum --gorev ister; defter havuzu tanımıyorsa söyler.",
       "tags": [
         "bulgu",
@@ -1882,6 +1882,14 @@
         "seans",
         "kuzey-yildizi"
       ]
+    },
+    {
+      "id": "postane-postaci",
+      "type": "tool",
+      "name": "postane-postaci — POSTANE postacısını bir kutuya kuran paket",
+      "version": "0.2.0",
+      "description": "Postacı dosyaları (cloudtop infra/postane birebir kopya) + kutu kurulum betiği: kuru varsayılan, yalnız izinli kutuda ve DAR jetonla cron + bayrak yazar. Etkinleştirme Sultan-eli.",
+      "path": "postane-postaci"
     }
   ]
 }

@@ -1,0 +1,36 @@
+{
+  "tur": 2,
+  "is": "madde4-iskan-izin-kipi-kaynak",
+  "pr": "588",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T14:15:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-madde4-iskan-izin-kipi-kaynak",
+  "dal": "madde4-iskan-izin-kipi-kaynak",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29196,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İzin kipi zinciri istenen sırayla uygulanmış, yalnız gerçek `default` düşüşlerinde uyarı verilmiş, üç yeni kapı geçmiş ve registry okumasını kapatan mutant yakalanmış. Önceki turun B1 bulgusu 282→285 ile N+3 olarak, B2 bulgusu da `pmode != default` koşulu ve `acceptEdits` için uyarı beklemeyen sınavla kapanmış; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıtların sha'ları tutuyor. Gerçek ölçüm çifti 282 geçti/0 kaldı → 285 geçti/0 kaldı göstererek tam N+3 artışı kanıtlıyor; sonra ölçümü rc=0/yeşil. Mutasyon kaydı ayrı ve doğru işaretli: registry okuması kapatılınca 284 geçti/1 kaldı ve rc=1 ile ilgili kapı düşüyor; bu beklenen mutant başarısızlığıdır. Sürüm ölçümü SKILL.md ve catalog.json için 0.11.6 eşitliğini doğruluyor. Uygulama stderr'indeki `[sarı]` uyarılar manifest anlamında sarı/rc=3 kayıt değildir."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "tur": 2,
+  "is": "fabrika-kapsam-satir-kesisimi",
+  "pr": "589",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T15:15:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi",
+  "dal": "fabrika-kapsam-satir-kesisimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 86421,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, aynı dosyayı engel yerine görünür uyarı yapan açılış akışı ile satır bloklarını kesiştirip gerçek çakışmada rc 2 veren kapsam-olc talep edilen işi yapıyor. Önceki turun B1 ve B2 bulguları bu turda kapandı; son gerçek ölçüm 94/0 ve üç ayrı mutasyon kapısı nedeniyle yalnız rötuş düzeyi dahi kanıtlanmış bir kusur kalmadı.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti rc 1, 62/18'den rc 0, 80/0'a geçişi gösteriyor; sonraki gerçek ölçümler 87/0, 91/0 ve son olarak 94/0. Önceki B1, 30 PR tavanında olcemedi artırılıp rc 3 verilmesi ve tur4'teki ilgili kapıyla; B2 ise hunk gövdesinde yalnız gerçek +/- satırların sayılması, bağlam satırı 6 için rc 0 ve gerçek satır 4 için rc 2 kontrolleriyle kapanmış. Kesişim koşulu, sınır karşılaştırması ve bağlamı değişiklik sayma hataları ayrı mutasyon kayıtlarında rc 1 ile yakalanmış; bu kayıtlardaki ✗ satırları beklenen mutasyon sonucudur, gerçek kodun durumu gercek_olcum etiketli yeşil kayıtlardan okunmuştur."
+  }
+}

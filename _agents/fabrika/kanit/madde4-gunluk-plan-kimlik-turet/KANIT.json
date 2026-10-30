@@ -1,0 +1,81 @@
+{
+  "is": "madde4-gunluk-plan-kimlik-turet",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T14:12:14+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sinavi",
+      "asama": "once",
+      "dosya": "olcum-sirada-bak-sinavi-once.txt",
+      "sha256": "c18b77fb3822cfb2f75234a772ec4b17ddb2f8e2484acde4e57daaff17c2d467",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T13:56:17+03:00",
+      "sure_sn": 159.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "54356b44c27d4473ba4546d38c3b6a96"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sirada-bak-sinavi-sonra.txt",
+      "sha256": "597a979b99ef8833662fe4b0bd8090d15bfadd3386978b7aaca2e8865893578b",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:12:07+03:00",
+      "sure_sn": 10.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4474abfeb5d3458b91ccd41fdf7302c9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-tmux-dali-kapali",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-tmux-dali-kapali-sonra.txt",
+      "sha256": "126d9e9f2f70e2b90c5ade4855f0218661ee31599c071c4ac2f6a7c69f5276b4",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:12:14+03:00",
+      "sure_sn": 6.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "a2d7e4e2b1274132b1d113de0ad464ae"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-esitligi",
+      "asama": "sonra",
+      "dosya": "olcum-surum-esitligi-sonra.txt",
+      "sha256": "f2c028237115c30aed52de282d016ad1743ca97e7fd2296616d834c4da0df93c",
+      "komut": [
+        "bash",
+        "-c",
+        "a=$(sed -n \"s/^version: //p\" gunluk-plan/SKILL.md); b=$(python3 -c \"import json;print([x for x in json.load(open(\\\"catalog.json\\\"))[\\\"skills\\\"] if x[\\\"id\\\"]==\\\"gunluk-plan\\\"][0][\\\"version\\\"])\" 2>/dev/null || python3 -c \"import json,re;c=open(\\\"catalog.json\\\").read();i=c.index(\\\"\\\\\\\"id\\\\\\\": \\\\\\\"gunluk-plan\\\\\\\"\\\");print(re.search(r\\\"\\\\\\\"version\\\\\\\": \\\\\\\"([^\\\\\\\"]+)\\\\\\\"\\\",c[i:]).group(1))\"); echo \"SKILL=$a catalog=$b\"; [ \"$a\" = \"1.18.0\" ] && [ \"$a\" = \"$b\" ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:08:49+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "eb3b07212a0b48d9b0bc3bac7d1c1b9c"
+    }
+  ],
+  "imza": "388a78c99056527cb43e8831370756995bca7e85566e0edd1e2ffff5c1508429"
+}

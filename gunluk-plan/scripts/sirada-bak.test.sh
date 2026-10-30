@@ -203,4 +203,21 @@ kapi "T11 pencere sınırı: tam 7 gün TAZE, 8 gün BAYAT (taze 1 · bayat 1 ·
 mkdir -p "$T/sahte-bin"; printf '#!/usr/bin/env bash\nexit 1\n' > "$T/sahte-bin/python3"; chmod +x "$T/sahte-bin/python3"   # python3 çöküyor (hiç çıktı yok)
 c="$(PATH="$T/sahte-bin:$PATH" GUNLUK_PLAN_ESLEME="$T/yok.tsv" bash "$SB" --kutu menzil 2>&1)"   # eşleme tablosu kapalı: kimlik-coz'un kendi python3 yolu bu kapının konusu değil
 kapi "T12 tazelik hesabı çıktı vermezse (python3 çöktü) ÖLÇÜLEMEDİ + sayılar '-' (uydurma 0 yok); karar yine verilir" "TAZELIK=ÖLÇÜLEMEDİ:HAVUZ_TAZE=-:1" "$(printf '%s\n' "$c" | grep '^TAZELIK='):$(printf '%s\n' "$c" | grep '^HAVUZ_TAZE='):$(printf '%s\n' "$c" | grep -c '^KARAR=')"
+echo "── kimlik türetme (1.18.0 · MUAVİN Madde 4 · NOVA: KIM boşken kendi işi başkasının sayılıyordu)"
+mkdir -p "$T/sahte-tmux"; printf '#!/usr/bin/env bash\ncase "$1" in display-message) printf "%%s\\n" "${SAHTE_TMUX_OTURUM:-MENZILCI}:0" ;; *) exit 1 ;; esac\n' > "$T/sahte-tmux/tmux"; chmod +x "$T/sahte-tmux/tmux"
+printf 'uyeler:\n  - id: MENZILCI\n    tmux: "MENZILCI:0"\n  - id: HENDESE\n    tmux: "HENDESE:0"\n' > "$T/aile.yaml"
+KIMSIZ=(env -u GUNLUK_PLAN_AJAN -u AGENT_NAME -u AILE_KIMDEN -u TMUX -u TMUX_PANE)
+liste_menzil; rm -f "$T/ustlen.log"
+c="$("${KIMSIZ[@]}" AILE_KIMDEN=MENZILCI bash "$SB" 2>&1)"; rc=$?
+kapi "X1 AILE_KIMDEN kimlik kaynağıdır: kutu menzil, kendi işi üstlenilir, rc 0" "0:ustlen gorev_M2 --kim MENZILCI --tahmin 30" "$rc:$(cat "$T/ustlen.log" 2>/dev/null)"
+rm -f "$T/ustlen.log"
+c="$("${KIMSIZ[@]}" TMUX=sahte PATH="$T/sahte-tmux:$PATH" GUNLUK_PLAN_REGISTRY="$T/aile.yaml" bash "$SB" 2>&1)"; rc=$?
+kapi "X2 ortam boş, tmux oturumu MENZILCI:0 ↔ aile-registry → kimlik MENZILCI, kendi işi üstlenilir; 'bana atanmış ya da sahipsiz iş yok' DENMEZ" "0:ustlen gorev_M2 --kim MENZILCI --tahmin 30:0" "$rc:$(cat "$T/ustlen.log" 2>/dev/null):$(grep -c 'bana atanmış ya da sahipsiz iş yok' <<<"$c")"
+printf 'uyeler:\n  - id: MENZILCI\n    tmux: "MENZILCI:0"\n  - id: IKIZ\n    tmux: "MENZILCI:0"\n' > "$T/aile-ikiz.yaml"; rm -f "$T/ustlen.log"
+c="$("${KIMSIZ[@]}" TMUX=sahte PATH="$T/sahte-tmux:$PATH" GUNLUK_PLAN_REGISTRY="$T/aile-ikiz.yaml" bash "$SB" 2>&1)"; rc=$?
+kapi "X3 aynı tmux oturumu iki üyede: belirsiz → türetilmez, rc 3, ustlen yok" "3:yok" "$rc:$([ -e "$T/ustlen.log" ] && echo var || echo yok)"
+c="$("${KIMSIZ[@]}" bash "$SB" 2>&1)"; rc=$?
+kapi "X4 ortam boş ve tmux yok: ÖLÇÜLEMEDİ rc 3, KARAR satırı basılmaz (kutu düzeyinde 'başkasının işi' sevki YOK), hata satırı yolu söyler" "3:0:0:1" "$rc:$(grep -c '^KARAR=' <<<"$c"):$(grep -c 'BASLAMADI=yok' <<<"$c"):$(grep -c 'ajan kimliği yok' <<<"$c")"
+c="$("${KIMSIZ[@]}" AGENT_NAME=MUAVIN TMUX=sahte PATH="$T/sahte-tmux:$PATH" GUNLUK_PLAN_REGISTRY="$T/aile.yaml" bash "$SB" --bak 2>&1)"
+iceriyor "X5 AGENT_NAME tmux türetmesinden ÖNCE gelir (MUAVIN → kutu code)" "KUTU=code" "$c"
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]

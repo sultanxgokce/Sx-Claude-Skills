@@ -1,0 +1,36 @@
+{
+  "tur": 2,
+  "is": "madde4-gunluk-plan-kimlik-turet",
+  "pr": "587",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T14:13:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-madde4-gunluk-plan-kimlik-turet",
+  "dal": "madde4-gunluk-plan-kimlik-turet",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27227,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kimlik sırası, tekil tmux eşleşmesi, belirsizlikte ÖLÇÜLEMEDİ rc 3, mutant kapısı ve 1.18.0 sürüm eşitliği ölçülmüş; önceki turdaki B1 de 108→113 ile kapanmış. Talep artık N+5 ve 0 kalan kabulünü birebir karşılıyor, üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm önce 108 geçti · 0 kaldı, sonra 113 geçti · 0 kaldı göstererek tam N+5 artışı kanıtlıyor; tmux dalını kapatan mutasyon X2 kapısını beklendiği gibi düşürüyor ve gercek_olcum kaydı başarılı koşuya bağlı. Sürüm ölçümü de SKILL.md ile catalog.json değerlerini 1.18.0 olarak eşit doğruluyor."
+  }
+}

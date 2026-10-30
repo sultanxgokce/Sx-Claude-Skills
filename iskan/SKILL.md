@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.11.5
+version: 0.11.6
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -40,6 +40,8 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   yeni dosya eklemeye izin verir — kalıp-reddi bir engeldir, kilit değil). **Kayıt koruması (0.10.0):**
   mevcut kayıt YALNIZ aynı kiracıdan okunur (`proje:` tam-eşleşme; host tek-dosyası yabancı kiracınınsa
   reddedilir) ve yeniden-üretimde üyelerin `permission_mode` + `settings_file` alanları KORUNUR.
+  **0.11.6 (Madde 4, 30 Eki 2026):** mevcut kayıtta OLMAYAN üyenin izin kipi sessizce `default` olmaz — sıra mevcut kayıt →
+  ekip-registry üyesindeki `permission_mode` → `ISKAN_EY_PMODE_VARSAYILAN` → `default`, düşen üye için görünür `[sarı]` uyarı (sınav 35f).
   Çakışma-koruması ('uye-zaten-var') · Nexus-hedefte canlı-invoke YOK ('ise-alim' yönlendirmesi, İ1) ·
   izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir roster'ı
   `ISKAN_EY_ROSTER` (açık-override) ya da container-içi `_agents/handoff/ekip-registry.yaml`'dan okur;
