@@ -109,6 +109,7 @@ CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac cakisan-is --kartsiz
 [ "$RC" -eq 2 ]; g $? "çakışmada rc=2"
 grep -q "PR #7" <<<"$CIKTI"; g $? "hangi PR'la çakıştığı yazılı"
 [ ! -d "$T/alan/depo-cakisan-is" ]; g $? "alan AÇILMADI"
+grep -q "PR #7 tek yüzey (merge-base ölçülemedi" <<<"$CIKTI"; g $? "iki yüzey (30 Eki): sahte gh 'pr view' vermiyor → git yolu düştü, TEK YÜZEY uyarısı basıldı (sessiz düşme yok), hüküm GitHub listesinden"
 CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac temiz-is --kartsiz --dosyalar z.txt 2>&1 )"; RC=$?
 [ "$RC" -eq 0 ]; g $? "çakışma yokken rc=0"
 grep -q "çakışması yok" <<<"$CIKTI"; g $? "kaç PR'a bakıldığı yazılı"
@@ -213,6 +214,67 @@ MD="$T/pkg-kk"; mkdir -p "$MD"; cp "$HERE"/*.sh "$HERE"/*.py "$MD/" 2>/dev/null
 python3 - "$MD/is-alani.sh" <<'PYM' && kart kbm acik && alan_ac kbm && echo "kbm 5" >> "$T/pr-harita" && ( cd "$T/depo" && PATH="$GHK:$PATH" bash "$MD/is-alani.sh" kapat kbm >/dev/null 2>&1 ); [ "$(kdur kbm 2>/dev/null)" = "acik  " ]; g $? "mutant (kart_kapanisi çağrılmıyor): birleşmiş PR'lı kart AÇIK kaldı → üstteki kapı bu mutantta düşerdi"
 import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    kart_kapanisi "$is" "$yol"'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'    :'))
 PYM
+
+echo "════ T12 · KAPSAM BAYAT LİSTE (MÜZEHHİP dersi 30 Eki 02:02): PR dalı main'i merge etmişse GitHub'ın dosya listesi main'den gelenleri de sayar; ════"
+echo "          kapı yalnız o listeye bakarsa dokunulmayan dosya için SAHTE çakışma verir. Beklenen: merge-base farkı (origin/main...dal) ile ikinci yüzey ════"
+# Fikstür (gerçek kayıttan: cloudtop PR #1185 gh=275 dosya · merge-base=21 · fazla 265): depo'da pr-dali açılır, kendi dosyası pr-kendi.txt;
+# sonra main dosya.txt'yi değiştirir, pr-dali main'i MERGE eder. Sahte gh = GitHub'ın şişkin listesi (dosya.txt + pr-kendi.txt);
+# gerçek fark `git diff --name-only origin/main...origin/pr-dali` = yalnız pr-kendi.txt.
+# (T0 kancası paylaşılan ağaçta özellik dalına commit'i engeller — fikstür T3'teki acil kaçışla kurulur; `git add -A` YOK: T11'in kartlar/ artığı dala karışmasın)
+( cd "$T/depo" && export PAYLASILAN_COMMIT=1 && git checkout -q -b pr-dali && echo kendi > pr-kendi.txt && git add pr-kendi.txt && git -c user.email=t@t -c user.name=T commit -qm "feat: pr kendi dosyası" &&
+  git push -q -u origin pr-dali && git checkout -q main && echo main-ilerledi >> dosya.txt && git add dosya.txt && git -c user.email=t@t -c user.name=T commit -qm "chore: main ilerledi" &&
+  git push -q origin main && git checkout -q pr-dali && git -c user.email=t@t -c user.name=T merge -q --no-edit main && git push -q origin pr-dali && git checkout -q main ) >/dev/null 2>&1
+g $? "fikstür: pr-dali main'i merge etti, origin'de ikisi de var"
+MB="$( cd "$T/depo" && git diff --name-only origin/main...origin/pr-dali )"
+[ "$MB" = "pr-kendi.txt" ]; g $? "fikstür doğru: merge-base farkı YALNIZ pr-kendi.txt (dosya.txt main'den geldi) — fark: $(printf '%s' "$MB" | tr '\n' ' ')"
+BAYAT="$T/bayat-bin"; mkdir -p "$BAYAT"; : > "$T/bayat-log"
+cat > "$BAYAT/gh" <<GH
+#!/usr/bin/env bash
+# sahte gh = GitHub'ın BAYAT/ŞİŞKİN görünümü: PR #9 (pr-dali) listesinde main'den gelen dosya.txt de var
+echo "\$*" >> "$T/bayat-log"
+case "\$1 \$2" in
+  "pr list") echo 9 ;;
+  "pr diff") printf 'dosya.txt\npr-kendi.txt\n' ;;
+  "pr view") case " \$* " in *" --jq "*) echo pr-dali ;; *) echo '{"number":9,"headRefName":"pr-dali","baseRefName":"main"}' ;; esac ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$BAYAT/gh"
+# K1 — kırmızı beklenen (bug): dosya.txt yalnız şişkin listede; PR'ın gerçek farkında YOK → çakışma OLMAMALI, alan açılmalı
+CIKTI="$( cd "$T/depo" && PATH="$BAYAT:$PATH" bash "$IS" ac bayat-sahte-cakisma --kartsiz --dosyalar dosya.txt 2>&1 )"; RC=$?
+grep -q "PR #9\|9 PR\|1 PR" <<<"$CIKTI" && grep -q "pr diff 9" "$T/bayat-log"; g $? "pozitif kontrol: sahte gh kullanıldı, PR #9'a bakıldı (ölçüm gerçek, ÖLÇÜLEMEDİ değil)"
+[ "$RC" -eq 0 ] && [ -d "$T/alan/depo-bayat-sahte-cakisma" ]; g $? "🔴 main'den gelen dosya.txt için SAHTE çakışma YOK: rc=0, alan açıldı (rc=$RC · $(printf '%s' "$CIKTI" | grep -o 'KAPSAM ÇAKIŞMASI\|çakışması yok' | head -1))"
+( cd "$T/depo" && bash "$IS" kapat bayat-sahte-cakisma ) >/dev/null 2>&1 || true
+# K1b — DALGIÇ ön-göz 30 Eki: git yolunun ÜÇ düşüş kapısı da tek-yüzey uyarısıyla GitHub listesine düşmeli (sessiz değil).
+#   (i) pr view dal verir ama dal origin'de YOK → fetch düşer; (ii) pr view bozuk JSON → dal adı okunamaz; (iii) dal = ana → merge-base farkı BOŞ (çakışma yok, ölçüldü).
+mk_gh() { # <dizin> <pr view çıktısı>
+  mkdir -p "$1"; cat > "$1/gh" <<GH
+#!/usr/bin/env bash
+case "\$1 \$2" in
+  "pr list") echo 9 ;;
+  "pr diff") printf 'dosya.txt\npr-kendi.txt\n' ;;
+  "pr view") printf '%s\n' '$2' ;;
+  *) exit 1 ;;
+esac
+GH
+  chmod +x "$1/gh"
+}
+mk_gh "$T/fetch-duser-bin" '{"number":9,"headRefName":"origin-de-olmayan-dal","baseRefName":"main"}'
+CIKTI="$( cd "$T/depo" && PATH="$T/fetch-duser-bin:$PATH" bash "$IS" ac fetch-duser --kartsiz --dosyalar dosya.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "PR #9 tek yüzey (merge-base ölçülemedi: git fetch origin origin-de-olmayan-dal düştü)" <<<"$CIKTI" && [ ! -d "$T/alan/depo-fetch-duser" ]
+g $? "(i) dal origin'de yok → fetch düştü → TEK YÜZEY uyarısı (sebep: fetch) + GitHub listesinden hüküm rc=2, alan açılmadı (rc=$RC)"
+mk_gh "$T/json-bozuk-bin" 'bozuk{'
+CIKTI="$( cd "$T/depo" && PATH="$T/json-bozuk-bin:$PATH" bash "$IS" ac json-bozuk --kartsiz --dosyalar dosya.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "PR #9 tek yüzey (merge-base ölçülemedi: dal adı okunamadı" <<<"$CIKTI" && [ ! -d "$T/alan/depo-json-bozuk" ]
+g $? "(ii) pr view bozuk JSON → 'dal adı okunamadı' TEK YÜZEY uyarısı + GitHub listesinden hüküm rc=2 (rc=$RC)"
+mk_gh "$T/bos-fark-bin" '{"number":9,"headRefName":"main","baseRefName":"main"}'
+CIKTI="$( cd "$T/depo" && PATH="$T/bos-fark-bin:$PATH" bash "$IS" ac bos-fark --kartsiz --dosyalar dosya.txt,pr-kendi.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && ! grep -q "tek yüzey" <<<"$CIKTI" && grep -q "çakışması yok (1 PR bakıldı)" <<<"$CIKTI" && [ -d "$T/alan/depo-bos-fark" ]
+g $? "(iii) merge-base farkı BOŞ (dal=ana, ölçüldü) → GitHub listesi ne derse desin çakışma YOK, tek-yüzey uyarısı YOK, alan açıldı (rc=$RC)"
+( cd "$T/depo" && bash "$IS" kapat bos-fark ) >/dev/null 2>&1 || true
+# K2 — pozitif kontrol (yeşil kalmalı): PR'ın KENDİ dosyası (pr-kendi.txt, merge-base farkında da var) → gerçek çakışma rc=2, alan AÇILMAZ
+CIKTI="$( cd "$T/depo" && PATH="$BAYAT:$PATH" bash "$IS" ac gercek-cakisma --kartsiz --dosyalar pr-kendi.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "PR #9" <<<"$CIKTI" && [ ! -d "$T/alan/depo-gercek-cakisma" ]; g $? "pozitif kontrol: PR'ın kendi dosyası pr-kendi.txt → GERÇEK çakışma rc=2, PR #9 adıyla, alan AÇILMADI (rc=$RC)"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""

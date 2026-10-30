@@ -8,6 +8,7 @@
 #
 # Fabrika sürümü (cloudtop scripts/is-alani.sh temel; iki ek):
 #   · KAPSAM KONTROLÜ: `--dosyalar a,b,c` verilirse açık PR'ların dosyalarıyla çakışma aranır → çakışma rc=2, AÇMAZ.
+#     İKİ YÜZEY: GitHub dosya listesi ∩ merge-base farkı (main'i merge etmiş PR'ın artıkları sayılmaz); git yolu düşerse tek yüzey + uyarı.
 #   · KALICI DİZİN: /config/projects/_wt (/tmp konteyner yeniden başlayınca silinir; kayıtsız iş kaybolur).
 #
 # Kullanım:
@@ -50,17 +51,43 @@ birincil_mi() {
   [ "$d" = "$c" ]
 }
 
+# 🔴 İKİ YÜZEY (30 Eki 2026 · kart is-alani-kapsam-iki-yuzey · ŞAKİRD T12): GitHub'ın `pr diff --name-only` listesi PR dalı
+#    main'i MERGE etmişse main'den gelen dosyaları da sayar (cloudtop #1185: gh 275 dosya · merge-base farkı 21 · yalnız GitHub'da 265)
+#    → dokunulmayan dosya için SAHTE çakışma, rc 2, alan açılmıyordu. İkinci yüzey: dal adı `gh pr view --json headRefName,baseRefName`,
+#    `git fetch origin <dal>` sonrası `git diff --name-only origin/<ana>...origin/<dal>` (merge-base farkı = PR'ın GERÇEKTEN değiştirdiği).
+#    Çakışma = (GitHub listesi ∩ merge-base farkı) ∩ --dosyalar. Git yolu düşerse (pr view · fetch · diff) GitHub listesine düşülür ve
+#    "◻ tek yüzey (merge-base ölçülemedi)" uyarısı basılır — sessiz düşme yok; tek yüzeyle verilen çakışma hükmü uyarısıyla gider.
+# _pr_merge_base_farki <N> → rc 0: stdout = PR'ın merge-base farkındaki dosyalar · rc 1: stdout = ölçülememe SEBEBİ
+#   (çağıran $(…) içinde koşturur; alt kabukta değişken kaybolur, sebep bu yüzden stdout'tan döner — DALGIÇ/ilk koşu: sebep "?" çıktı)
+_pr_merge_base_farki() {
+  local n="$1" json dal ana
+  json="$(cd "$DEPO" && gh pr view "$n" --json headRefName,baseRefName 2>/dev/null </dev/null)" || { printf "%s" "gh pr view düştü"; return 1; }
+  dal="$(printf '%s' "$json" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("headRefName",""))' 2>/dev/null)" || dal=""
+  ana="$(printf '%s' "$json" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("baseRefName",""))' 2>/dev/null)" || ana=""
+  [ -n "$dal" ] || { printf "%s" "dal adı okunamadı (gh pr view yanıtı)"; return 1; }
+  [ -n "$ana" ] || ana="$ANA"
+  git -C "$DEPO" fetch -q origin "$dal" "$ana" 2>/dev/null </dev/null || { printf "%s" "git fetch origin $dal düştü"; return 1; }
+  git -C "$DEPO" diff --name-only "origin/$ana...origin/$dal" 2>/dev/null || { printf "%s" "git diff origin/$ana...origin/$dal düştü"; return 1; }
+}
+
 # kapsam_kontrol <dosyalar,virgüllü> → 0 temiz · 2 çakışma · 3 ölçülemedi (gh yok/yetkisiz)
 kapsam_kontrol() {
-  local dosyalar="$1" prs n cakisan=0
+  local dosyalar="$1" prs n cakisan=0 tek_yuzey=0
   command -v gh >/dev/null 2>&1 || { _bilgi "◻ kapsam kontrolü YAPILAMADI — gh yok (açık PR'lara bakılmadı)"; return 3; }
   prs="$(cd "$DEPO" && gh pr list --state open --limit 30 --json number --jq '.[].number' 2>/dev/null)" \
     || { _bilgi "◻ kapsam kontrolü YAPILAMADI — gh pr list düştü (yetki/ağ)"; return 3; }
   [ -n "$prs" ] || { _bilgi "✓ kapsam: açık PR yok"; return 0; }
   for n in $prs; do
-    local pr_dosyalar ort
+    local pr_dosyalar gercek aday ort
     pr_dosyalar="$(cd "$DEPO" && gh pr diff "$n" --name-only 2>/dev/null)" || continue
-    ort="$(printf '%s\n' "$dosyalar" | tr ',' '\n' | grep -Fx -f <(printf '%s\n' "$pr_dosyalar") || true)"
+    # 2. yüzey: merge-base farkı; ölçüldüyse aday = iki listenin KESİŞİMİ, ölçülemediyse GitHub listesi + uyarı
+    if gercek="$(_pr_merge_base_farki "$n")"; then
+      aday="$(printf '%s\n' "$pr_dosyalar" | grep -Fx -f <(printf '%s\n' "$gercek") || true)"
+    else
+      aday="$pr_dosyalar"; tek_yuzey=$((tek_yuzey+1))
+      _bilgi "◻ PR #$n tek yüzey (merge-base ölçülemedi: ${gercek:-?}) — GitHub dosya listesi olduğu gibi kullanıldı; main'den gelen artıklar sayılmış olabilir"
+    fi
+    ort="$(printf '%s\n' "$dosyalar" | tr ',' '\n' | grep -Fx -f <(printf '%s\n' "$aday") || true)"
     if [ -n "$ort" ]; then
       cakisan=$((cakisan+1))
       _bilgi "⚠ PR #$n şu dosyalara zaten dokunuyor: $(printf '%s' "$ort" | tr '\n' ' ')"
@@ -70,7 +97,7 @@ kapsam_kontrol() {
     _hata "KAPSAM ÇAKIŞMASI — $cakisan açık PR aynı dosyaları değiştiriyor. DUR ve sor; alan AÇILMADI."
     return 2
   fi
-  _bilgi "✓ kapsam: açık PR'larla dosya çakışması yok ($(printf '%s' "$prs" | wc -w) PR bakıldı)"
+  _bilgi "✓ kapsam: açık PR'larla dosya çakışması yok ($(printf '%s' "$prs" | wc -w) PR bakıldı$( [ "$tek_yuzey" -gt 0 ] && printf ', %s tek yüzey' "$tek_yuzey" ))"
   return 0
 }
 

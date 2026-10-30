@@ -1,0 +1,43 @@
+{
+  "is": "is-alani-kapsam-bayat-sinav",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T02:42:14+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-t12-bayat-liste",
+      "asama": "once",
+      "dosya": "olcum-sinav-t12-bayat-liste-once.txt",
+      "sha256": "899a8c3cb2e17ff0789a5cae255189ba495168cca81bc3f20a11af1667c0e143",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T02:42:00+03:00",
+      "sure_sn": 5.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f7106124cc6842239813ebdabe69fba5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-github-pr1185-siskin-liste",
+      "asama": "once",
+      "dosya": "olcum-gercek-github-pr1185-siskin-liste-once.txt",
+      "sha256": "169de09f45892c3769b10fbbad46da5c64e14425a9005256b445096574c48196",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; cd /config/projects/cloudtop || exit 3; gh_l=$(gh pr diff 1185 --name-only | sort) || exit 3; mb_l=$(git diff --name-only origin/main...origin/gece-supurme-birlesik | sort) || exit 3; gh_n=$(wc -l <<<\"$gh_l\"); mb_n=$(wc -l <<<\"$mb_l\"); fazla=$(comm -23 <(echo \"$gh_l\") <(echo \"$mb_l\") | wc -l); echo \"cloudtop PR #1185 (gece-supurme-birlesik, açık): gh pr diff --name-only = $gh_n dosya · merge-base farkı origin/main...dal = $mb_n dosya · yalnız GitHub listesinde (main artığı) = $fazla dosya\"; echo \"örnek 5 artık:\"; comm -23 <(echo \"$gh_l\") <(echo \"$mb_l\") | head -5; test \"$fazla\" -gt 0; rc=$?; exit $rc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T02:42:14+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "d06ab9b32a0b485ba2d9cf8223f52c20"
+    }
+  ],
+  "imza": "2a33ec78b218eba911c5474498db2a944ff8a1e8db4aa2aef93758a909ebc8f3"
+}

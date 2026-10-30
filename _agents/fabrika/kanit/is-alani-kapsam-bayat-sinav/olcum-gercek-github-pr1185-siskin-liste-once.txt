@@ -1,0 +1,11 @@
+$ bash -c set -o pipefail; cd /config/projects/cloudtop || exit 3; gh_l=$(gh pr diff 1185 --name-only | sort) || exit 3; mb_l=$(git diff --name-only origin/main...origin/gece-supurme-birlesik | sort) || exit 3; gh_n=$(wc -l <<<"$gh_l"); mb_n=$(wc -l <<<"$mb_l"); fazla=$(comm -23 <(echo "$gh_l") <(echo "$mb_l") | wc -l); echo "cloudtop PR #1185 (gece-supurme-birlesik, açık): gh pr diff --name-only = $gh_n dosya · merge-base farkı origin/main...dal = $mb_n dosya · yalnız GitHub listesinde (main artığı) = $fazla dosya"; echo "örnek 5 artık:"; comm -23 <(echo "$gh_l") <(echo "$mb_l") | head -5; test "$fazla" -gt 0; rc=$?; exit $rc
+# rc=0 sure=1.5s zaman=2026-10-30T02:42:14+03:00
+--- stdout ---
+cloudtop PR #1185 (gece-supurme-birlesik, açık): gh pr diff --name-only = 275 dosya · merge-base farkı origin/main...dal = 21 dosya · yalnız GitHub listesinde (main artığı) = 265 dosya
+örnek 5 artık:
+ARCHITECTURE.md
+_agents/fabrika/kanit/dogrulat-kanit-yolu-kapat/DENETIM-1.json
+_agents/fabrika/kanit/dogrulat-kanit-yolu-kapat/DENETIM-2.json
+_agents/fabrika/kanit/dogrulat-kanit-yolu-kapat/DENETIM-3.json
+_agents/fabrika/kanit/dogrulat-kanit-yolu-kapat/KANIT.json
+--- stderr ---

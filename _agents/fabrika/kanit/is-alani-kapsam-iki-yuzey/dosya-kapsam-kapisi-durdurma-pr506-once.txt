@@ -1,0 +1,5 @@
+# kapsam kapısı durdurdu (BENNÂ #580 emsali) · 2026-10-30T02:46:08+03:00
+is-alani.sh ac --dosyalar … → rc=2: PR #506 catalog.json'a dokunuyor.
+Gerçek mi? merge-base farkı origin/main...origin/oda-kapi-koltuk catalog.json içeriyor → GERÇEK (şişkin liste değil).
+Metinsel çakışma: #506 hunk @@ -1567 (terminal-onar girdisi) · bu iş @@ ~1533 (yazilim-fabrikasi girdisi) → ayrık, çakışmaz.
+Karar: git worktree add -b ile aç, kanıta yaz, PR Sınır'ına yaz.
