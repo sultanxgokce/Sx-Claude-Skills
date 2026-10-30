@@ -1,0 +1,21 @@
+$ bash postane-postaci/scripts/postaci-kutu.test.sh
+# rc=0 sure=3.9s zaman=2026-10-30T19:56:41+03:00
+--- stdout ---
+PASS  S0 sözdizimi
+PASS  S1 KURU: rc 0, crontab ve bayrak YAZILMADI
+PASS  S1b jeton değeri çıktıda geçmez
+PASS  S2 --uygula (dar jeton, code): kurulur, bayrak yazılır, satır crontab ve kalıcı kopyada TEK
+PASS  S2c cron satırına node MUTLAK yolla yazılır (cron PATH dar)
+PASS  S2b ikinci --uygula idempotent: satır yine TEK
+PASS  S3 GENİŞ jeton (SERDAR kuyruğu 200, pilot olmayan kutu): rc 1, kurulum YOK, bayrak YOK
+PASS  S3b pilot kutu (code) jetonu bilerek geniş: dar yetki şartı uygulanmaz, kurulur
+PASS  S3c kalıcı kopya yazılamazsa: rc 1, önceki crontab GERİ YÜKLENİR (kısmi kurulum yok), bayrak YOK
+PASS  S3d geri alma da başarısız olursa: rc 1, 'GERİ ALMA BAŞARISIZ' basılır, başarı mesajı BASILMAZ, bayrak SİLİNİR (cron no-op)
+PASS  S4 ölçülemeyen yetki (500): rc 1, kurulum YOK (ölçülemeyen yeşil sayılmaz)
+PASS  S5 listede olmayan kutu (sohbet): rc 1, kurulum YOK
+PASS  S6 listedeki ikinci kutu (menzil, dar jeton): kurulur
+PASS  S7 --kapat: bayrak silinir
+PASS  S8 jeton dosyası yok: rc 1
+PASS  S9 bilinmeyen bayrak: rc 2
+── SONUÇ: PASS=16 FAIL=0 ──
+--- stderr ---

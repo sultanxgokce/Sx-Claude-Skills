@@ -1,0 +1,61 @@
+{
+  "is": "postane-postaci-kaynak-tazele",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T19:56:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kaynak-fark",
+      "asama": "once",
+      "dosya": "olcum-kaynak-fark-once.txt",
+      "sha256": "f09bf5d61adcdb4d3a81796149c647cccf6defd943cfcb4dfa41909e7405d0dc",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-kaynak-tazele"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:37+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3a5ea28785df4b3c9264220b4aad6d91"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kaynak-fark",
+      "asama": "sonra",
+      "dosya": "olcum-kaynak-fark-sonra.txt",
+      "sha256": "e45295b7f228283852e54869e736222dcd76759de323b69c4bfaa92213a97d73",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-kaynak-tazele"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:37+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8f5482572ebc48db96b4064dd2c517cf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "beceri-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-beceri-sinavi-sonra.txt",
+      "sha256": "821d44746dded60d586394c14113a75d5bb733c2701a5552bb902d1ddc9fc45a",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:41+03:00",
+      "sure_sn": 3.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "45bdd302770f431095704b3a596745ad"
+    }
+  ],
+  "imza": "9f0778abcd011aa3c19593220aee7af8b9ff467546973a993040c87f638905cc"
+}

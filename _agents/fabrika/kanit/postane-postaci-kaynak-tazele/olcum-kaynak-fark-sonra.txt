@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh /config/projects/_wt/Sx-Claude-Skills-postane-postaci-kaynak-tazele
+# rc=0 sure=0.1s zaman=2026-10-30T19:56:37+03:00
+--- stdout ---
+kaynaktan farklı dosya: 0
+--- stderr ---
