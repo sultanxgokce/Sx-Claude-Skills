@@ -21,11 +21,15 @@ case "$1" in
                    while IFS= read -r n; do case "$n" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) k=claude; p=100 ;; *) k=bash; p=200 ;; esac
                      printf '%s\t1\t1\t%%%s\t%s\t%s\n' "$n" "$n" "$p" "$k"; done < "$SAHTE/oturumlar"
                  else t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac; fi ;;
-  display-message) echo 1760000000 ;;
+  display-message) if [ "$3" = -c ]; then [ -f "$SAHTE/istemci-bilgi" ] || exit 1; cat "$SAHTE/istemci-bilgi"; else echo 1760000000; fi ;;
+  set-hook)      echo "$*" >> "$SAHTE/iz-kanca" ;;
+  has-session)   grep -qxF -- "${3#=}" "$SAHTE/oturumlar" ;;
   capture-pane)  case "$4" in =*) echo "can't find pane: $4" >&2; exit 1 ;; esac   # gerçek tmux gibi: bölme hedefinde '=ad' geçersiz
                  case "$4" in %*) t="${4#%}" ;; *) t="${4%:}" ;; esac; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
-  list-windows)  echo "@1" ;;
-  set-option)    echo "$*" >> "$SAHTE/iz-set" ;;
+  list-windows)  case "$*" in *window_width*) if [ -f "$SAHTE/pencereler" ]; then cat "$SAHTE/pencereler"; else echo "@1 200 50"; fi ;; *) echo "@1" ;; esac ;;
+  list-clients)  [ -n "${SAHTE_ISTEMCI_BOZUK:-}" ] && exit 1; cat "$SAHTE/istemciler" 2>/dev/null; exit 0 ;;
+  show-options)  cat "$SAHTE/yerel-ws" 2>/dev/null; exit 0 ;;
+  set-option|resize-window) echo "$*" >> "$SAHTE/iz-set" ;;
   new-session|attach-session) echo "$*" >> "$SAHTE/iz"; exit 0 ;;
   *) exit 1 ;;
 esac
@@ -117,6 +121,107 @@ kos maiset-ana /p tel.maiset-ana
 printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"
 : > "$S/iz-set"; kos maiset-ana /p BASIRET
 [ "$(iz)" = "attach-session -t =BASIRET" ] && [ -s "$S/iz-set" ] && ok "T10 öneksiz adres bugünkü gibi: bayraksız bağlanır, window-size latest yazılır" || bad T10 "iz=$(iz) set=$(cat "$S/iz-set")"
+
+echo "P · telefon boyu (2.36.5 · telefon-terminal-zoom-boy): pencere telefondan darsa telefon boyuna BÜYÜR; masaüstü hiç küçülmez"
+: > "$S/iz-kanca"; kos maiset-ana /p tel.BASIRET
+grep -q "^set-hook -t =BASIRET: client-attached\[86\] if-shell -F '#{m:\*ignore-size\*,#{client_flags}}' { run-shell -b \"bash $B --tel-buyut '#{client_name}'\" }$" "$S/iz-kanca" \
+  && grep -q '^set-hook -t =BASIRET: client-resized\[86\] ' "$S/iz-kanca" && [ "$(iz)" = "attach-session -f ignore-size -t =BASIRET" ] \
+  && ok "P1 'tel.<koltuk>' oturuma iki kanca kurar (bağlanış + boy değişimi), yalnız ignore-size istemcide koşar; bağlanma yine ignore-size" || bad P1 "kanca=$(cat "$S/iz-kanca") iz=$(iz)"
+: > "$S/iz-kanca"; kos maiset-ana /p tel.
+grep -q '^set-hook -t =maiset-ana: client-resized\[86\] ' "$S/iz-kanca" && ok "P2 'tel.' (ana oturum) yolunda da kanca kurulur" || bad P2 "kanca=$(cat "$S/iz-kanca")"
+: > "$S/iz-kanca"; kos maiset-ana /p BASIRET
+[ ! -s "$S/iz-kanca" ] && ok "P3 öneksiz (masaüstü) adreste kanca YOK — yalnız telefon kipi" || bad P3 "kanca=$(cat "$S/iz-kanca")"
+printf '%s\n' BASIRET CARSI > "$S/oturumlar"; : > "$S/iz-kanca"; kos maiset-ana /p tel.
+[ "$(sed -n 1p "$S/iz")" = "new-session -d -s maiset-ana -c /p" ] && [ "$(sed -n 2p "$S/iz")" = "new-session -A -f ignore-size -s maiset-ana -c /p" ] \
+  && grep -q '^set-hook -t =maiset-ana: client-resized\[86\] ' "$S/iz-kanca" \
+  && ok "P2b 🔴 ana oturum YOKKEN 'tel.': önce ayrık açılır, SONRA kanca kurulur, sonra bağlanılır (yeni oturum kancasız kalmaz)" || bad P2b "iz=$(tr '\n' '|' < "$S/iz") kanca=$(cat "$S/iz-kanca")"
+printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"
+pb() { : > "$S/iz-set"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --tel-buyut "${1:-/dev/pts/7}" > "$S/cikti" 2>&1; echo $? > "$S/rc"; }
+psifirla() { rm -f "$S/pencereler" "$S/istemciler" "$S/yerel-ws"; printf '50\t50\toff\tattached,focused,ignore-size,UTF-8\tBASIRET\n' > "$S/istemci-bilgi"; }
+setler() { tr '\n' '|' < "$S/iz-set"; }
+psifirla; echo "@1 30 50" > "$S/pencereler"; pb
+grep -qx 'resize-window -t @1 -x 50 -y 50' "$S/iz-set" && grep -qx 'set-option -w -u -t @1 window-size' "$S/iz-set" \
+  && ok "P4 🔴 pencere 30 sütun, telefon 50 → pencere 50'ye büyür, yerel ayar silinir (manual'de kalmaz)" || bad P4 "set=$(setler)"
+psifirla; echo "@1 200 50" > "$S/pencereler"; pb
+[ ! -s "$S/iz-set" ] && ok "P5 pencere telefondan genişse dokunulmaz (masaüstü boyu korunur)" || bad P5 "set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; echo "attached,focused,UTF-8" > "$S/istemciler"; pb
+[ ! -s "$S/iz-set" ] && ok "P6 🔴 oturumda boyu sayılan (masaüstü) istemci varsa dokunulmaz — boy onundur" || bad P6 "set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; echo "attached,focused,ignore-size,UTF-8" > "$S/istemciler"; pb
+grep -qx 'resize-window -t @1 -x 50 -y 50' "$S/iz-set" && ok "P7 yalnız telefon(lar) bağlıysa büyütülür (P6 tautoloji değil)" || bad P7 "set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; echo latest > "$S/yerel-ws"; pb
+grep -qx 'set-option -w -t @1 window-size latest' "$S/iz-set" && ! grep -q -- ' -u ' "$S/iz-set" && ok "P8 pencerenin yerel window-size ayarı varsa AYNEN geri yazılır" || bad P8 "set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; printf '50\t50\toff\tattached,focused,UTF-8\tBASIRET\n' > "$S/istemci-bilgi"; pb
+[ ! -s "$S/iz-set" ] && ok "P9 🔴 kanca masaüstü (ignore-size'sız) istemciden gelirse hiçbir şey yapılmaz" || bad P9 "set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; rm -f "$S/istemci-bilgi"; pb
+[ ! -s "$S/iz-set" ] && [ "$(rc)" = 0 ] && ok "P10 istemci ölçülemezse (gitti) dokunulmaz, sessiz çıkar" || bad P10 "rc=$(rc) set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; SAHTE_ISTEMCI_BOZUK=1 pb
+[ ! -s "$S/iz-set" ] && ok "P11 oturumun istemci listesi ölçülemezse dokunulmaz (bilinmeyeni 'kimse yok' saymaz)" || bad P11 "set=$(setler)"
+psifirla; printf '%s\n' "@1 60 20" "@2 40 60" > "$S/pencereler"; printf '50\t31\ton\tattached,ignore-size\tBASIRET\n' > "$S/istemci-bilgi"; pb
+grep -qx 'resize-window -t @1 -x 60 -y 30' "$S/iz-set" && grep -qx 'resize-window -t @2 -x 50 -y 60' "$S/iz-set" \
+  && ok "P12 her boyut ayrı büyür, hiçbiri küçülmez; durum çubuğu satırı düşülür (31 satır − 1 = 30)" || bad P12 "set=$(setler)"
+psifirla; echo "@1 30 50" > "$S/pencereler"; pb "/dev/pts/1;rm"
+[ ! -s "$S/iz-set" ] && ok "P13 kancadan gelen istemci adı süzülür (dar karakter kümesi)" || bad P13 "set=$(setler)"
+psifirla; rm -f "$S/istemci-bilgi"
+
+echo "R · telefon boyu GERÇEK tmux 3.4 ile (ayrı TMUX_TMPDIR; kutunun oturumlarına dokunmaz)"
+if command -v tmux >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then
+  RT="$(mktemp -d)"
+  rt()  { TMUX_TMPDIR="$RT" tmux "$@"; }
+  rbek() { for _ in $(seq 1 50); do [ "$(rt list-clients 2>/dev/null | wc -l)" -ge "$1" ] && return 0; sleep 0.1; done; return 1; }
+  # istemci = gerçek pty (python): <sütun> <satır> [<sonra sütun> <sonra satır> <saniye>] — telefon dönünce pty boyu değişir (SIGWINCH).
+  #   pty'nin girdisi açık kalır: kapanırsa koltuktaki kabuk EOF alır, 'logout' olur, oturum düşer (script ile ölçüldü).
+  cat > "$RT/telpty.py" <<'PYPTY'
+import os, pty, sys, time, fcntl, termios, struct, select
+a = sys.argv[1:]; k = a.index('--'); v = [float(x) for x in a[:k]]; cmd = a[k+1:]
+pid, fd = pty.fork()
+if pid == 0: os.execvp(cmd[0], cmd)
+boy = lambda c, r: (fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack('HHHH', int(r), int(c), 0, 0)), os.kill(pid, 28))
+boy(v[0], v[1]); t0 = time.time(); d = len(v) < 5
+while time.time() - t0 < 25:
+    if not d and time.time() - t0 > v[4]: boy(v[2], v[3]); d = True
+    if select.select([fd], [], [], 0.2)[0]:
+        try: os.read(fd, 65536)
+        except OSError: break
+PYPTY
+  # TERM şart: CI'da TERM yok → 'tmux attach' terminali tanımaz, istemci hiç bağlanmaz (ölçüldü: env -u TERM ile R0-R6 kırmızı)
+  rist() { ( TERM=xterm-256color TMUX_TMPDIR="$RT" python3 -I "$RT/telpty.py" "$@" </dev/null >>"$RT/pty.log" 2>&1 & ); }
+  rilk() { rt kill-server 2>/dev/null; sleep 0.2
+    rt -f /dev/null new-session -d -s KALFA -x 30 -y 50; rt new-session -d -s BASKA -x 200 -y 50
+    rt set -g window-size latest; rt set -g aggressive-resize on; rt set -g status off
+    rist 200 50 -- tmux attach -t =BASKA; rbek 1; }   # başka oturumda masaüstü: ignore-size telefonun YOK SAYILMASI için şart (tmux kuralı)
+  rgen() { rt list-windows -t =KALFA -F '#{window_width}x#{window_height}'; }
+  rbekle() { for _ in $(seq 1 40); do [ "$(rgen)" = "$1" ] && return 0; sleep 0.1; done; return 1; }   # kanca arka planda koşar
+  unset TMUX TMUX_PANE
+  rilk; rist 50 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.6; R0="$(rgen)"; R0F="$(rt list-clients -t =KALFA -F '#{client_width} #{client_flags}')"
+  [ "$R0" = 30x50 ] && [[ "$R0F" == "50 "*ignore-size* ]] && ok "R0 ÖNCE (yalnız ignore-size, kancasız): telefon 50 sütunla BAĞLI ama pencere 30 sütunda kalır — sağı noktalı hatası gerçek tmux'ta üretildi" || bad R0 "→ $R0 telefon=[$R0F]"
+  rilk; rist 50 30 70 30 1.5 -- bash "$B" anaoturum / tel.KALFA; rbek 2; rbekle 50x50; R1="$(rgen)"
+  R1F="$(rt list-clients -t =KALFA -F '#{client_flags}')"; R1Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"
+  [ "$R1" = 50x50 ] && [[ "$R1F" == *ignore-size* ]] && ok "R1 🔴 koltuk-bagla tel.: pencere 50x50 (telefon tam sığar, yükseklik küçülmedi), telefon ignore-size kaldı" || bad R1 "→ $R1 bayrak=$R1F günlük=$(tail -c 300 "$RT/pty.log" | tr -cd "[:print:]")"
+  [ -z "$R1Y" ] && ok "R2 pencere 'manual'de kalmadı: yerel window-size silindi (global 'latest' geçerli)" || bad R2 "yerel=$R1Y"
+  rt new-session -d -s POZ -x 30 -y 20; rt resize-window -t POZ: -x 40; RPZ="$(rt show-options -wv -t POZ: window-size 2>/dev/null)"; rt kill-session -t POZ
+  [ "$RPZ" = manual ] && ok "R2a pozitif kontrol: show-options -wv yerel ayarı GÖRÜYOR (resize-window sonrası 'manual')" || bad R2a "→ [$RPZ]"
+  rbekle 70x50; R5="$(rgen)"
+  [ "$R5" = 70x50 ] && ok "R5 🔴 telefon döndü (pty 50→70 sütun): kanca pencereyi 70'e büyüttü — bağlanış anı dışında da çalışıyor" || bad R5 "→ $R5"
+  # R6 (bağımsız göz #600 tur 1): ana oturum HİÇ yokken 'tel.' — yeni oturum da kancalı olmalı; telefon dönünce büyür
+  # yeni oturum tmux'un son etkin istemcisinin boyunda doğar (burada 200x50); dar kalmış pencereyi taklit etmek için bağlandıktan sonra
+  # pencere elle 30x20'ye çekilir, yerel ayar silinir; telefon 3 sn sonra döner (60→100) → yalnız KANCA pencereyi büyütebilir
+  rist 60 30 100 30 3 -- bash "$B" YENIANA / tel.; rbek 3; sleep 1
+  rt resize-window -t YENIANA: -x 30 -y 20; rt set-option -w -u -t YENIANA: window-size
+  R6I="$(rt list-windows -t =YENIANA -F '#{window_width}x#{window_height}' 2>/dev/null)"
+  R6K="$(rt show-hooks -t YENIANA: 2>/dev/null | grep -c 'client-resized\[86\]')"
+  for _ in $(seq 1 50); do [ "$(rt list-windows -t =YENIANA -F '#{window_width}' 2>/dev/null)" = 100 ] && break; sleep 0.1; done
+  R6="$(rt list-windows -t =YENIANA -F '#{window_width}x#{window_height}' 2>/dev/null)"
+  [ "$R6K" = 1 ] && [ "${R6%x*}" = 100 ] && ok "R6 🔴 ana oturum yokken 'tel.': oturum doğar, kancası kurulur; pencere 30'a daralmışken telefon dönünce (60→100) kanca 100'e büyütür" || bad R6 "kanca=$R6K ilk=$R6I → $R6"
+  rt kill-session -t =YENIANA 2>/dev/null
+  # istemci SAYISI değil o istemcinin kendisi beklenir: R6'nın telefonu kill-session sonrası geç düşerse sayı yanıltır (yük altında R3/R4 sahte kırmızı ölçüldü)
+  rist 120 40 -- tmux attach -t =KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 120 && break; sleep 0.1; done; rbekle 120x40; R3="$(rgen)"
+  [ "$R3" = 120x40 ] && ok "R3 sonra masaüstü bağlanınca boy yine masaüstünün (120) — telefon onu sınırlamaz" || bad R3 "→ $R3"
+  rist 90 30 -- bash "$B" anaoturum / tel.KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 90 && break; sleep 0.1; done; sleep 1; R4="$(rgen)"
+  [ "$R4" = 120x40 ] && ok "R4 🔴 masaüstü bağlıyken ikinci telefon gelince pencere 120 kalır (masaüstü daralmaz)" || bad R4 "→ $R4"
+  rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
+else
+  echo "  … R ÖLÇÜLEMEDİ: tmux ya da python3 yok (yeşil değil, sayılmadı)"
+fi
 
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
 # ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──

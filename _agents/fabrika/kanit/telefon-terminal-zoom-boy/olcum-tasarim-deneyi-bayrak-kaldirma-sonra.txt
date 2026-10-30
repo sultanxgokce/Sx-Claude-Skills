@@ -1,0 +1,8 @@
+$ timeout 40 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/deney2.sh
+# rc=0 sure=62.6s zaman=2026-10-30T21:57:39+03:00
+--- stdout ---
+E3 resize + unset: 50x50 yerel-ws=[x] 
+E4a bayrak kalktı: 50x29 yerel-ws=[x]
+E4b masaüstü A'ya: 120x39 yerel-ws=[x]
+E4c telefon tuşa bastı: 50x29 yerel-ws=[x]  (masaüstü 120 iken)
+--- stderr ---

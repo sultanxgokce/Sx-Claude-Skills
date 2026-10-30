@@ -1,0 +1,77 @@
+{
+  "tur": 3,
+  "is": "telefon-terminal-zoom-boy",
+  "pr": "600",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T22:49:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-telefon-terminal-zoom-boy",
+  "dal": "telefon-terminal-zoom-boy",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 66081,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 27218
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0278df6e449d6a0186f11e090d45429e42c6a651",
+  "duzeltme_farki": {
+    "onceki_bas": "50b652387d1902309d2dd29fca09d8382a2a693c",
+    "dosya": 12,
+    "bayt": 38745,
+    "tam_bayt": 139616
+  },
+  "kareler": {
+    "adet": 4,
+    "gorsel_verildi": true,
+    "liste": [
+      {
+        "ad": "once-390-pencere-15x30.png",
+        "sha256": "3188d4ce7b8dbd3bb4278ab03d8812275763b3b264e637bf8e27bdeafbf8329c"
+      },
+      {
+        "ad": "sonra-390-pencere-15x30.png",
+        "sha256": "290acd0b72b7d7eebb2b45f2ec9c047eb84d5ae467d73742e5826649a4057ddc"
+      },
+      {
+        "ad": "pano-sonra-telefon-dugme.png",
+        "sha256": "ffb44df532c2832250145edd675668f005df514e48f105ef33def6232d2dff28"
+      },
+      {
+        "ad": "pano-sonra-telefon-klavye.png",
+        "sha256": "2b0cbfe881b58edb4c1333cb467846162968b2bf6e53b17d42fb4c1ade6081ce"
+      }
+    ]
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, karttaki yarım ekran ve telefondan görüntü ekleme işleri önceki turdaki 5/5 durumunu koruyor; yeni fark ayrıca klavye açılınca terminali görünen alana sığdırıyor. Ancak bu klavye davranışı kartın açık talebinin dışına taşan üretim değişikliği olduğundan önce kapsam kaymasını çözmek gerekir; gerçek telefon doğrulaması da ayrıca kutu dışında kalıyor.",
+    "bulgular": [
+      {
+        "ne": "Klavye açıldığında terminal yüksekliğini değiştiren yeni üretim davranışı iş kartında istenmiyor; bu kapsam kaymasıdır.",
+        "kanit": "İş kartının güncel cümlesi yalnız “telefon kipinde yarım ekran + telefonda terminale görüntü ekleme düğmesi” isterken fark, pano.js 1.1.0 içinde visualViewport dinleyicileri ve dinamik kap yüksekliği ekliyor; SKILL.md başlığı da “klavye açıkken yazı alanı görünür” diye genişletilmiş.",
+        "konum": "terminal-onar/kapi/genel/pano.js: klavyeUyumKur eklemesi; terminal-onar/SKILL.md: 2.36.5 açıklaması",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yeni klavye uyumunun gerçek iOS/Android davranışı bu konteynerde doğrulanmamış; başsız Chromium'daki sahte visualViewport yalnız vekil ölçümdür.",
+        "kanit": "pano-sinav.mjs yorumunda visualViewport'un sahte EventTarget ile değiştirildiği yazıyor; SKILL.md açıkça “klavye başsız tarayıcıda taklitle ölçüldü — gerçek telefonda ölçülmedi” diyor. G9-G11 ve klavye karesi bu taklidi kanıtlar, fiziksel cihazı değil.",
+        "konum": "terminal-onar/kapi/pano-sinav.mjs:G9-G11 düzeneği; terminal-onar/SKILL.md:2.36.5; kare-390-klavye-acik-sonra",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "fiziksel iOS ve Android telefonlar"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt bulunmuyor. Kartın asıl iki talebi güçlü kanıtlıdır: 15x30 ve 30x50 önce/sonra ölçümleri ile kareler noktalı yarım ekranın kalktığını, pano G0-G8 ölçümü ve telefon düğmesi karesi görüntü ekleme akışını gösteriyor; gerçek ölçümler yeşil, mutasyonlardaki rc=1 ve çarpılar beklenen bozuk-kod yakalamalarıdır. Önceki turda bulgu yoktu ve bu fark o kabulü bozan bir gerileme göstermiyor. Yeni G9-G11 ölçümü yeşil olsa da sahte visualViewport kullanıyor; gerçek telefon iddiasını ölçmediği için fiziksel cihaz kanıtının yerine geçmez."
+  }
+}

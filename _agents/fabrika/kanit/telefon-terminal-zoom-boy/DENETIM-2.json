@@ -1,0 +1,62 @@
+{
+  "tur": 2,
+  "is": "telefon-terminal-zoom-boy",
+  "pr": "600",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T22:28:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-telefon-terminal-zoom-boy",
+  "dal": "telefon-terminal-zoom-boy",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 59568,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 26528
+  },
+  "dalgic": "uyumsuz",
+  "bas": "50b652387d1902309d2dd29fca09d8382a2a693c",
+  "duzeltme_farki": {
+    "onceki_bas": "f66d220623361f8028b55ff819fe3840f58f3f55",
+    "dosya": 9,
+    "bayt": 33749,
+    "tam_bayt": 126619
+  },
+  "kareler": {
+    "adet": 4,
+    "gorsel_verildi": true,
+    "liste": [
+      {
+        "ad": "once-390-pencere-15x30.png",
+        "sha256": "3188d4ce7b8dbd3bb4278ab03d8812275763b3b264e637bf8e27bdeafbf8329c"
+      },
+      {
+        "ad": "sonra-390-pencere-15x30.png",
+        "sha256": "290acd0b72b7d7eebb2b45f2ec9c047eb84d5ae467d73742e5826649a4057ddc"
+      },
+      {
+        "ad": "pano-sonra-telefon-dugme.png",
+        "sha256": "ffb44df532c2832250145edd675668f005df514e48f105ef33def6232d2dff28"
+      },
+      {
+        "ad": "pano-sonra-telefon-yuklendi.png",
+        "sha256": "60490cd9e48b7fa4b806c3ffeb9d82e142575834327978a80fe54a755378478d"
+      }
+    ]
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Telefon terminalinin yarım ekran kalması giderilmiş, telefona çalışan görüntü ekleme akışı konmuş ve önceki turdaki yeni ana oturum kancası açığı kapatılmış. Gerçek tmux R6 ölçümü, tam sınavlar, mutasyon kontrolleri ve görsel önce/sonra kanıtları üretime engel bir kusur bırakmıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önceki B1, ana oturum yoksa önce ayrık oluşturma, ardından kancayı kurma ve son olarak bağlanma sırasıyla kapatılmış; P2b sahte tmux sırasını, gerçek tmux R6 ise daraltılmış yeni oturumun telefon dönüşünde 30 sütundan 100 sütuna büyüdüğünü ölçüyor ve ilgili mutasyon bu korumanın gerçekten sınandığını gösteriyor. Yarım ekran talebi 390 px önce/sonra kareleri ile 15x30 ve 30x50 ölçüm çiftlerinde noktalı alanın kaybolmasıyla; görüntü ekleme talebi telefon düğmesi/yükleme kareleri, G0-G8 akış sınavı ve pano mutasyonlarıyla desteklenmiş. Mutasyon kayıtlarındaki rc=1 ve çarpılar beklenen bozuk-kod yakalamalarıdır; gerçek ölçümler yeşildir."
+  }
+}

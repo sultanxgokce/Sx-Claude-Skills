@@ -1,0 +1,7 @@
+$ timeout 90 node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/kare.mjs /config/projects/_wt/Sx-Claude-Skills-telefon-terminal-zoom-boy/terminal-onar/scripts/koltuk-bagla.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/kare/sonra-390-pencere-30x50.png 30 50
+# rc=0 sure=6.1s zaman=2026-10-30T21:58:02+03:00
+--- stdout ---
+############################## / pencere=30 sutun / bash-5.2$
+telefon xterm=30x59 · pencere=30x59 · istemci=30x59 attached,focused,ignore-size,UTF-8
+SONUÇ: pencere telefonu tam kaplıyor (noktalı alan yok)
+--- stderr ---

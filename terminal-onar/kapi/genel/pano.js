@@ -297,4 +297,53 @@
     if (ipucu) return; ipucu = true;
     bildir('Kopyalamak için: fareyle seçtiğin an panoya iner (Cmd+C gerekmez).\nTarayıcı seçimi istersen Shift basılı tutup sürükle, sonra Cmd+C.', '#ede5d7', 8000);
   }, true);
+
+  // ── TELEFONDA GÖRÜNTÜ EKLE (2.36.5 · Sultan 30 Eki 21:16, görev …HJKXAB): telefonda pano resmi terminale yapıştırılamıyor —
+  //    galeriden seçme ya da kamerayla çekme yolu YOK. Telefonda (dokunmatik + dar ekran; merkezin TEL_BAS ölçütüyle AYNI sorgu) terminalin
+  //    ÜSTÜNE tek düğme: seçilen dosya yapıştırmayla AYNI yoldan geçer (resimIsle: küçültme → /api/resim → yol terminale). Masaüstünde
+  //    düğme HİÇ yaratılmaz.
+  //    TEK düğme, capture YOK (seçim gerekçesi): accept="image/*" iOS Safari'de ve Android Chrome'da işletim sisteminin kendi menüsünü açar
+  //    (Fotoğraf Arşivi · Fotoğraf Çek · Dosya Seç) — galeri ile kamera aynı dokunuşta. capture="environment" galeriyi KAPATIR (doğrudan kamera);
+  //    ikinci düğme ise terminalin üstünden bir dokunma hedefi daha yer. Bu davranış platform belgesidir, bu kutuda ölçülemedi (gerçek telefon yok).
+  //    Terminal metnini ÖRTMEZ: düğme terminal kabının DIŞINDA; kap 52 px aşağı itilir, yüksekliği o kadar kısalır, ttyd yeniden sığdırır.
+  //    Dokunma hedefi ≥ 44 px (Apple İK). Merkezin sağ üstteki "dar" düğmesiyle çakışmasın diye SOLDA.
+  var RESIM_SERIT = 52;
+  //    "Dar": sayfa genişliği YA DA cihaz ekranı ≤ 720 px — merkez (TEL_BAS) görünüm etiketini koyar, sayfa 390 px olur; doğrudan kutu adresinde
+  //    etiket yoktur, sayfa 980 px çizilir ama cihaz ekranı yine dardır (screen.width).
+  function telefonMu() {
+    try { return !!(window.matchMedia && matchMedia('(pointer:coarse)').matches && (matchMedia('(max-width:720px)').matches || (screen && screen.width <= 720))); }
+    catch (e) { return false; }
+  }
+  function resimDugmesiKur() {
+    if (!telefonMu() || !document.body || document.getElementById('kapi-resim-ekle')) return false;
+    var kap = document.getElementById('terminal-container'); if (!kap) return false;
+    var etiket = document.createElement('label'); etiket.id = 'kapi-resim-ekle'; etiket.setAttribute('role', 'button');
+    etiket.setAttribute('aria-label', 'Terminale görüntü ekle (galeri ya da kamera)');
+    etiket.style.cssText = 'position:fixed;top:4px;left:8px;z-index:2147483646;display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;' +
+      // görsel dil = merkezin "Dar görünüm" hapı (aynı ekranda iki ayrı dil olmasın): koyu zemin · ince kenar · açık metin · emoji YOK.
+      //   Birincil eylem yazmaktır, bu düğme değil — dolu vurgu rengi terminalin en parlak öğesi olurdu. Değişkenler merkezde tanımlı; kapının kendi sayfasında yedek değer.
+      'box-sizing:border-box;padding:0 16px;border-radius:999px;cursor:pointer;background:var(--zemin,#120e0a);border:1px solid var(--kenar,#3a2f24);' +
+      'color:var(--metin,#f4ede2);opacity:.94;font:14px/1 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;' +
+      '-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none';
+    etiket.textContent = 'Görüntü ekle';
+    var girdi = document.createElement('input'); girdi.type = 'file'; girdi.accept = 'image/*'; girdi.id = 'kapi-resim-girdi';
+    girdi.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none';
+    girdi.addEventListener('change', function () {
+      var f = girdi.files && girdi.files[0]; girdi.value = '';
+      if (!f) return;
+      if (!f.type || f.type.indexOf('image/') !== 0) { bildir('✗ bu bir görüntü değil (' + (f.type || 'tür yok') + ')', '#ff7b72', 6000); return; }
+      resimIsle(f);
+    });
+    etiket.appendChild(girdi);
+    // şerit zemini: terminalin kendi zemin rengi (ttyd teması) — düğmenin arkası beyaz bir boşluk olmasın; merkezin sağ üst düğmesi (z 5) önde kalır
+    var zemin = '#15120e'; try { var tz = window.term && window.term.options && window.term.options.theme; if (tz && tz.background) zemin = tz.background; } catch (e) { /* varsayılan */ }
+    var serit = document.createElement('div'); serit.id = 'kapi-resim-serit';
+    serit.style.cssText = 'position:fixed;top:0;left:0;right:0;height:' + RESIM_SERIT + 'px;z-index:1;background:' + zemin + ';pointer-events:none';
+    document.body.appendChild(serit); document.body.appendChild(etiket);
+    kap.style.marginTop = RESIM_SERIT + 'px'; kap.style.height = 'calc(100% - ' + RESIM_SERIT + 'px)';
+    try { window.dispatchEvent(new Event('resize')); } catch (e) { /* eski tarayıcı */ }
+    window.__kapiResim = { surum: '1.0.0', dugme: true, serit: RESIM_SERIT };
+    return true;
+  }
+  (function bekleDugme(n) { if (resimDugmesiKur() || !telefonMu()) return; if (n > 0) setTimeout(function () { bekleDugme(n - 1); }, 100); })(100);
 })();

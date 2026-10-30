@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-pano-sinav-telefon-dugme-once.txt
+hedef_sha256: 1820c762a6d1f313df63822d78a8f63d0cd6ae353575bdfb0c89eee513818535
+hedef_zaman: 2026-10-30T22:02:15+03:00
+hedef_renk: kirmizi
+neden: ikinci koşu da G3 kapısında çöktü (boş düğme alanı), kırmızı sayılamaz; G3 korundu, yeniden ölçüldü
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T22:04:02+03:00

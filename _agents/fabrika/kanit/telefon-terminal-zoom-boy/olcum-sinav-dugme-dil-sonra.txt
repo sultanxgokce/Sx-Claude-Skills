@@ -1,0 +1,15 @@
+$ bash -c cd terminal-onar && out=$(timeout 400 node kapi/pano-sinav.mjs </dev/null 2>&1); printf "%s\n" "$out" | grep -E "G[0-9]|GEÇEN"; grep -q "✓ G2" <<<"$out" && ! grep -q "✗ G" <<<"$out"
+# rc=0 sure=98.8s zaman=2026-10-30T22:58:04+03:00
+--- stdout ---
+  ✓ G0 masaüstünde (fare, 1100 px) görüntü düğmesi YOK, dosya girdisi yok
+  ✓ G1 telefonda (390 px, dokunmatik) düğme kuruldu: TEK dosya girdisi, accept=image/*, capture YOK (galeri+kamera işletim sisteminin menüsünde)
+  ✓ G2a sayfa telefon genişliğinde çizildi (390 px; ölçümler gerçek dokunma boyutu)
+  ✓ G2 dokunma hedefi ≥ 44×44 px ve gerçekten en üstte (tıklanan nokta düğmenin kendisi)
+  ✓ G3 düğme terminal metnini ÖRTMEZ: .xterm-screen ile kesişim yok, terminal düğmenin altından başlar
+  ✓ G4 🔴 seçilen görüntü /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · yapıştırmayla aynı yol)
+  ✓ G5 🔴 dönen yol TERMİNALE yazıldı
+  ✓ G6 kullanıcıya bildirildi ("resmin yolu terminale yazıldı")
+  ✓ G7 görüntü olmayan dosya YÜKLENMEZ, nedeni söylenir
+  ✓ G8 aynı düğmeyle ikinci görüntü de gider (girdi her seçimden sonra sıfırlanır)
+GEÇEN: 43 · KALAN: 2
+--- stderr ---

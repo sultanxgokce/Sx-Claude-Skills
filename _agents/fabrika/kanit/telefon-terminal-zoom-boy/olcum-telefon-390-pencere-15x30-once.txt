@@ -1,0 +1,7 @@
+$ timeout 90 node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/kare.mjs /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/eski/scripts/koltuk-bagla.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/kare/once-390-pencere-15x30.png 15 30
+# rc=1 sure=5.8s zaman=2026-10-30T21:57:55+03:00
+--- stdout ---
+pencere=15 sutu / n / bash-5.2$
+telefon xterm=30x59 · pencere=15x30 · istemci=30x59 attached,focused,ignore-size,UTF-8
+SONUÇ: pencere telefondan KÜÇÜK (15x30 < 30x59) → telefonda noktalı alan var
+--- stderr ---

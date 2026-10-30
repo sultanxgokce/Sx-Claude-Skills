@@ -1,0 +1,36 @@
+{
+  "tur": 5,
+  "is": "telefon-terminal-zoom-boy",
+  "pr": "600",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T22:58:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-mutant-pano-klavye-sonra.txt (yesil → gecersiz) — klavye uyumu bu karttan çıkarıldı (BÂNİ daralt kararı); mutant artık bu işin kodunu ölçmüyor · BENNÂ;dosya-kare-390-klavye-acik-sonra.png (yesil → gecersiz) — klavye uyumu bu karttan çıkarıldı (BÂNİ daralt kararı); kare yeni kartın kanıtıdır · BENNÂ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-telefon-terminal-zoom-boy",
+  "dal": "telefon-terminal-zoom-boy",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 97301,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, telefon terminalinin yarım kalmasını önleyen yalnız-büyütme kancaları ile telefona özel görüntü ekleme akışı kartın iki talebini de karşılıyor; son rötuşta düğmenin görsel dili sadeleştirilmiş ve buna yönelik hedefli sınav eklenmiştir. Gerçek ölçümler, önce/sonra çiftleri ve mutasyon kapıları üretime engel kusur göstermediğinden puan 5'tir.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, geçersiz ilan edilen klavye kayıtları değerlendirmeye katılmadı. Yarım ekran için iki ayrı önce/sonra ölçüm çifti, pencerenin 15x30 veya 30x50’den telefonun 30x59 boyuna büyüdüğünü gösteriyor; gerçek koltuk sınavı 129/129 geçiyor ve ilgili mutasyonlar bozuk kodu yakalıyor. Görüntü düğmesinde G0-G8 kapıları 9/9 yeşil; yüklemenin /api/resim’e ulaşması, yolun terminale yazılması, tekrar seçim, geçersiz dosya reddi, masaüstünde görünmeme ve 44 px dokunma hedefi ölçülmüş. Düğme dili için son hedefli ölçüm rc=0 ve G kapılarında çarpı bulunmadığını doğruluyor; kayıtlı düğme ve yükleme-sonrası kareleri akışı destekliyor. Önceki turda bulgu bulunmadığından kapanması gereken eski bulgu yoktur."
+  }
+}

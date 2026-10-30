@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mutant-pano-klavye-sonra.txt
+hedef_sha256: 27d15eed8942aed7e78eede2f2854225d35a353615a0c836fb5cd0c774ce25a4
+hedef_zaman: 2026-10-30T22:40:34+03:00
+hedef_renk: yesil
+neden: klavye uyumu bu karttan çıkarıldı (BÂNİ daralt kararı); mutant artık bu işin kodunu ölçmüyor
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T22:49:51+03:00

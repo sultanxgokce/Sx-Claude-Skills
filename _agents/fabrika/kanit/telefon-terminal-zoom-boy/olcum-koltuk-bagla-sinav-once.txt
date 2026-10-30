@@ -1,0 +1,22 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh kb-once
+# rc=1 sure=46.8s zaman=2026-10-30T22:27:13+03:00
+--- stdout ---
+MUTASYON: kb-once · beklenen kırmızı kapılar: P1 P2 P4 R1 R5
+  ✗ P1 — kanca= iz=attach-session -f ignore-size -t =BASIRET
+  ✗ P2 — kanca=
+  ✗ P2b — iz=new-session -A -f ignore-size -s maiset-ana -c /p| kanca=
+  ✗ P4 — set=
+  ✗ P7 — set=
+  ✗ P8 — set=
+  ✗ P12 — set=
+  ✗ R1 — → 30x50 bayrak=attached,focused,ignore-size,UTF-8 günlük=
+  ✗ R5 — → 30x50
+  ✗ R6 — kanca=0 ilk=30x20 → 30x20
+toplam=129 geçen=119 düşen=10
+kırmızı: P1
+kırmızı: P2
+kırmızı: P4
+kırmızı: R1
+kırmızı: R5
+SONUÇ: beklenen kapılardan 5 tanesi KIRMIZI (rc=1)
+--- stderr ---
