@@ -1,0 +1,253 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-kapi-tur2b-* ===
+$ bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
+# rc=1 sure=221.4s zaman=2026-10-30T15:41:09+03:00
+--- stdout ---
+════ T1 · hiçbir şey yok → engeller ════
+  ✓ kart+kanıt+denetim yokken rc=1
+════ T2 · kart+kanıt var ama DENETİM yok → engeller ════
+  ✓ bağımsız göz koşmamışken rc=1
+  ✓ sebebi yazılı
+  ✓ kancasız depoda gerçek yol yazılı (kart.sh sultan-dedi / reis-dedi)
+  ✓ 🔴 kancası olmayan depoda kaçış satırı BASILMAZ, değişkenin işe yaramadığı söylenir (izole kutuyu yanlış yönlendirme)
+  ✓ kaçış satırı bozulmadan basılıyor (kancalı depoda)
+  ✓ kancalı depoda 'işe yaramaz' uyarısı YOK
+  ✓ yönlendirme hatası yok
+════ T3 · puan 4 → engeller · 5 ama H → engeller ════
+  ✓ 4/5 → rc=1
+  ✓ 5 ama 'doğru şey' H → rc=1
+════ T4 · 5+E → GEÇER ════
+  ✓ rc=0
+  ✓ GEÇTİ yazıyor
+  ✓ son turu okudu (1 ve 2 değil)
+════ T5 · yazan = denetçi → engeller (K1) ════
+  ✓ aynı model → rc=1
+  ✓ K1 gerekçesi yazılı
+════ T5b · yedek göz + farklı model → bağımsız SAYILIR (Sultan Y0006) ════
+  ✓ farklı model → yedek göz bağımsız, rc=0
+  ✓ sebebi yazılı
+════ T5c · SAHTE yedek kaydı (yedek_model = yazan_model) → HÂLÂ ENGELLER (fail-closed) ════
+  ✓ yedek_model = yazan_model → sahte-yedek, rc=1 (fail-closed)
+  ✓ K1 gerekçesi yazılı
+════ T5d · yedek alanı dolu ama model bilgisi YOK → HÂLÂ ENGELLER (fail-closed) ════
+  ✓ model alanları boş → ölçülemez, rc=1 (fail-closed)
+════ T5e · 🔧 yedek gerekçesi '|' İÇERİYOR → alan kaymıyor (bağımsız göz #339) ════
+  ✓ '|' içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)
+  ✓ K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)
+  ✓ '|' içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır
+════ T5g · 🔧 yedek gerekçesi YENİ SATIR İÇERİYOR → alan kaymıyor (bağımsız göz #339 tur 2) ════
+  ✓ yeni satır içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)
+  ✓ K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)
+  ✓ yeni satır içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır
+════ T5h · 🔧 karar denetçi METNİNİN BİÇİMİNE bağlı değil (bağımsız göz #339 tur 3, CİDDİ) ════
+  ✓ denetci metni yazanı İÇERMİYOR ama yedek AYNI modelle → hâlâ reddeder
+  ✓ K1 gerekçesi yazılı
+════ T6 · kanıt manifesti elle boyanırsa → engeller ════
+  ✓ önce temiz: rc=0
+  ✓ boyanmış manifest → rc=1
+  ✓ sebebi yazılı
+════ T7 · kart yoksa engeller (0. adım atlanamaz) ════
+  ✓ kartsız → rc=1
+  ✓ sebebi yazılı
+════ T8 · sınıf işi GEÇER ama Sultan uyarısı basar (A06) ════
+  ✓ 5+E ile geçer
+  ✓ Sultan kararı olduğunu söylüyor, onay üretmiyor
+════ T9 · MUTASYON: kapıyı bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant (red kaldırıldı) izin veriyor → T1 bu mutantta düşerdi
+  ✓ mutant sağlam işe de izin veriyor (ölçer sahte-kırmızı üretmiyor)
+════ T10 · kanıt aracı yoksa YEŞİL DEMİYOR (rc=3) ════
+  ✓ kanit.py yokken rc=3 (ölçülemedi, yeşil değil)
+  ✓ sebebi yazılı
+  ✓ gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)
+════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez; kayıt KARTA BAĞLI olmalı ════
+  ✓ T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1
+  ✓ T11b sebebi ve yolu yazılı
+  ✓ T11c canlı SARI → rc=1 (sarı yeşil değildir)
+  ✓ T11d sarı sebebi yazılı
+  ✓ T11e2 yeşil ama ateşleme kart açılışından ÖNCE → işe bağlanamaz, rc=1
+  ✓ T11e3 sebebi yazılı: kayıt işe bağlanamadı (kart açılışından önce)
+  ✓ T11e canlı YEŞİL ve kart açılışından sonra → rc=0
+  ✓ T11f kapı ilk ateşlemeyi saatiyle ve okuyan komutla basıyor (göz görsün)
+  ✓ T11o son ateşleme ölçümden 2 saat sonra (geleceğe tarihli) → bağlanmaz, rc=1
+  ✓ T11o2 sebebi yazılı
+  ✓ T11o3 araçla yeniden ölçülünce (gerçek saat) yine geçer
+  ✓ T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)
+  ✓ T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1
+  ✓ T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1
+  ✓ T11j kapı canlı şartının nereden geldiğini söylüyor
+  ✓ T11k eski kart + bağlı yeşil canlı → geçer
+  ✓ T11p kart okunamıyor (canli-gerekir düşer) → rc=3 ÖLÇÜLEMEDİ, yeşil değil
+  ✓ T11p2 sebebi yazılı
+  ✓ T11p3 mutant 7 üretildi (fail-closed çitler: canli-gerekir rc + kart zamanı kaldırıldı)
+  ✓ T11p4 mutant 7: bozuk kartta ölçülemedi DEMİYOR → T11p bu mutantta düşerdi
+  ✓ T11q önce sağlam: bağlı yeşil canlı ile geçer
+  ✓ T11q2 kart 'zaman' çözülemez → rc=3 ÖLÇÜLEMEDİ (rc=1 değil)
+  ✓ T11q3 sebebi yazılı
+  ✓ T11q4 mutant 8 üretildi (zaman-okunamadı kapısı kaldırıldı)
+  ✓ T11q5 mutant 8: ölçülemediğini söylemiyor → T11q2 bu mutantta düşerdi
+  ✓ T11r dilimsiz kart zamanı: çökmez, yerel dilimde bağlanır → geçer
+  ✓ T11r2 mutant 9 üretildi (dilim düzeltmesi kaldırıldı)
+  ✓ T11r3 mutant 9: TypeError → python düşer → kapı ÖLÇÜLEMEDİ rc=3 der (rc=1 'canlı yok' DEĞİL)
+  ✓ T11r4 düşme sebebi yazılı
+  ✓ T11r5 mutant 10 (rc denetimi de kaldırıldı): çöküş 'canlı yok' rc=1'e dönüşüyor → T11r3 bu mutantta düşerdi
+════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════
+  ✓ T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)
+  ✓ T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi
+  ✓ T12c gerçek kapı aynı işte hâlâ rc=1
+  ✓ T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)
+  ✓ T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi
+  ✓ T12f gerçek kapı sarıyı hâlâ tutuyor
+  ✓ T12g mutant 5 üretildi (işe bağlama kaldırıldı)
+  ✓ T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi
+  ✓ T12i gerçek kapı eski kaydı bağlamıyor, rc=1
+  ✓ T12j mutant 6 üretildi (gelecek payı 100 yıl)
+  ✓ T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi
+  ✓ T12l gerçek kapı geleceğe tarihli kaydı reddediyor
+════ T13 · GEÇERSİZ ilan (4K938): geçersiz canlı yeşil sayılmaz, sarı gibi engeldir; ilan kapıyı gevşetmez ════
+  ✓ T13a önce: canlı kartı bağlı yeşil canlıyla geçer
+  ✓ T13a2 önce: canlısız kart (yeşil canlı kaydıyla) geçer
+  ✓ T13b geçersiz ilan edilen yeşil canlı SAYILMAZ → rc=1
+  ✓ T13c sebebi ve yolu yazılı (yeniden ölç)
+  ✓ T13d canlısız kartta da geçersiz canlı ENGEL (sarı gibi) → rc=1
+  ✓ T13e kontrol kopyası (mutasyonsuz) gerçek kapıyla aynı: rc=1
+  ✓ T13f mutant 9 üretildi (geçersiz canlı engel listesinden çıktı)
+  ✓ T13g mutant 9: geçersiz canlı canlısız kartı GEÇİRİYOR → T13d bu mutantta düşerdi
+  ✓ T13h mutant 10 üretildi (kapı etkin renk yerine ham rengi okuyor)
+  ✓ T13i mutant 10: geçersiz yeşil canlıyı SAYIYOR → T13b bu mutantta düşerdi
+  ✓ T13j yeniden ölçülünce ilan uygulanmaz (eski ölçüme aitti) → geçer
+  ✓ T13j2 kontrol kopyası geçen durumu da geçiriyor (kopyada içe aktarım düşmüyor)
+  ✓ T13k ölçüm ilanı kapı çıktısında görünür (sessiz kalmaz; hükmü göz verir)
+════ T13 · DARALTMA kaydı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz (PCP7J) ════
+  ✓ daraltma yokken 3. tur 5/E → geçer (gerileme yok)
+  ✓ kart daraltıldı (tur sıfırı 3)
+  ✓ daraltma sonrası tur yokken son 5/E (tur 3 = sıfırdan önce) GEÇMEZ
+  ✓ sebep yazılı: son denetim daraltmadan önce
+  ✓ daraltma SONRASI 5/E tur → geçer
+  ✓ kapı daraltma kaydını ve reis kararını BASTI (eskiden hiç okumuyordu)
+════ T13b · MUTASYON: daraltma kontrolü kaldırılınca eski 5/E geçer (kapı gerçek) ════
+  ✓ T13b mutant üretildi (daraltma çiti kaldırıldı)
+  ✓ mutant: daraltma çiti kalkınca eski 5/E GEÇİYOR → T13 bu mutantta düşerdi
+  ✓ gerçek kapı aynı durumda hâlâ reddediyor
+════ T13s · SULTAN TURU kaydı: Sultan 'değiştir' dedikten sonra denetlenmemiş 5/E birleştirmez (beğeni döngüsü, 2BXA6J) ════
+  ✓ Sultan turu kaydı yokken 3. tur 5/E → geçer (gerileme yok)
+  ✓ Sultan turundan sonra göz turu yokken eski 5/E GEÇMEZ (rc 1, sebep yazılı)
+  ✓ Sultan turundan SONRA 5/E tur → geçer, kayıt kapı çıktısında görünür
+════ T13t · MUTASYON: Sultan turu çiti kalkarsa eski 5/E geçer (kapı gerçek) ════
+  ✓ T13t mutant üretildi (Sultan turu çiti kaldırıldı)
+  ✓ mutant: Sultan turu çiti kalkınca eski 5/E GEÇİYOR → T13s bu mutantta düşerdi
+  ✓ gerçek kapı aynı durumda hâlâ reddediyor
+════ T14 · KANIT TEK KURALLA: iş alanı · PR başı · birincil aynı sırayla; birincilden --pr ile çağrı iş alanındaki kanıtı bulur (retro W42 ders M3) ════
+  ✓ 🔴 BİRİNCİLDEN çağrı iş alanındaki kanıtı buldu → GEÇTİ (15 Eki'de 'kanıt YOK' deyip kaçışa itmişti)
+  ✓ iş alanının içinden çağrı aynı kanıtı buldu (aynı kural, aynı sonuç)
+  ✓ iş alanı kapalıyken kanıt PR #7 başından okundu → GEÇTİ
+  ✓ PR başı okuması birincil ağaca DOKUNMADI (kanıt geçici yere çıkarıldı)
+  ✓ --pr verilmezse PR başına bakılmaz; aranan yerler sayılır, kapı kapalı (rc=1)
+  ✓ 🔴 birincildeki BAYAT 5/E kopyası kapıyı açmaz — dalı iş adıyla aynı olan iş alanı esas (3/E → rc=1)
+  ✓ önekli dal (hendese/is-onek) iş adıyla eşleşir
+════ T14b · KAÇIŞ DEFTERİ FİKSTÜRÜ: W42'nin 9 kapısız birleştirmesi — yalnız 'kanıt başka yerde' sınıfı kapıdan geçer, gerisi KAPALI kalır ════
+  ✓ fikstür: 9 satır, 9 sınıf
+  ✓ 🔴 9 kaçışın yalnız 'kanıt başka yerde' olanı (15 Eki 10:42) artık kapıdan geçer; 8'i (tavan · kanıtsız) KAPALI kalır — kapı gevşemedi (geçen: kanit-yeri)
+════ T14pr · İTİLMEMİŞ KAYIT (…898AX): kanıt/DENETİM yerelde var, PR başında YOK → kapı --pr kipinde REDDEDER (#907/#908 iki kez DENETIM-1.json'suz birleşti) ════
+  ✓ 🔴 DENETİM yerelde commit'lenmemiş, PR başında yok → rc=1 ve eksik dosya ADIYLA söylenir (eski kapı rc=0 verirdi)
+  ✓ 🔴 DENETİM yerelde commit'li ama İTİLMEMİŞ → rc=1: 'itilmemiş commit var' + yerel baş ≠ PR başı + dosya adı
+  ✓ mutant üretildi (PR başı bloğu kapatıldı; çapa bulundu — çapa kayarsa sınav sessiz yeşil vermez)
+  ✓ 🔴 mutant (PR başı denetimi kapalı) itilmemiş DENETİM'e rc=0 verir — gerçek kapı rc=1 verdi: sınav bu bloğu ölçüyor (#907/#908 davranışı)
+  ✓ itildikten sonra aynı çağrı GEÇER (rc=0) ve PR başıyla aynılığı söyler (kapı sağlam işi reddetmiyor)
+  ✓ --pr verilmezse (iş adıyla çağrı) PR başı denetimi YOK: eski davranış aynen (geriye uyum)
+  ✓ PR başı çekilemezse ÖLÇÜLEMEDİ (rc=3) — 'temiz' denmez
+  ✓ kanıt itilmiş ama KOD commit'i itilmemiş → rc=1 (göz başka bir hâli görmüş olurdu); dosya satırı yok, yalnız baş uyuşmazlığı
+════ T14 · CANLI BORÇ (5WYQMW): dağıtım birleşmeden SONRA ise kapı kayıtlı borçla geçer; kart BİTMEZ; ödenmezse kırmızı ════
+  ✓ T14a borçsuz canlı-gerekli kart canlı kayıt YOKKEN rc=1 (borç yokken kapı AYNEN kapalı)
+  ✓ T14b borcu kartın sahibi OLMAYAN yazamaz (aldi M ≠ X) ve kayıt YAZILMAZ
+  ✓ T14c 20 karakterden kısa gerekçe reddedilir ve kayıt YAZILMAZ
+  ✓ T14d sınıfsız kartta sahibi (M) geçerli gerekçeyle borç yazar
+  ✓ T14e ikinci borç yazılmaz
+  ✓ T14f 5+E + kayıtlı geçerli borç → kapı GEÇER (rc=0)
+  ✓ T14g kapı borcu YÜKSEK SESLE basar (sessiz geçmez)
+  ✓ T14h kart.sh bitti → durum 'canli-borclu' (bitti DEĞİL), bitiş yok
+  ✓ T14i çıktı borçlu olduğunu ve ödeme yolunu söyler
+  ✓ T14j taze borç: kart.sh borclar rc=0 (süresinde)
+  ✓ T14k borçlu kartta --gorev-bitti reddedilir (görev canlı kayıt ödenmeden bitmez)
+  ✓ T14l 24 saati aşan borç → borclar rc=1 + SÜRE AŞILDI (bekçi/nabız bunu okur)
+  ✓ T14m borçtan sonra bağlı yeşil canlı kayıt → durum 'odendi'
+  ✓ T14n ödenen borçta kart.sh bitti → 'bitti' ve ödeme anı kartta
+  ✓ T14o ödenen borç artık listede yok (rc=0)
+  ✓ T14p elle bozulmuş borç (yazan ≠ sahip) → kapı rc=1 ve sebep yazılı
+  ✓ T14q geçersiz borçla kart.sh bitti reddedilir ve kart AÇIK kalır
+  ✓ T14r sarı canlı, borç YOK → rc=1 (T11c ile aynı)
+  ✓ T14s sarı canlı + geçerli borç → rc=0
+  ✓ T14t SINIFLI kartta Sultan kararı olmadan borç YAZILAMAZ (A06)
+  ✓ T14u sebep ve yol (sultan-dedi --karar canli-borc) söylenir
+  ✓ T14v sultan-dedi canli-borc işlendikten SONRA sınıflı kartta borç yazılır
+  ✓ T14w sınıflı kart + Sultan kararlı borç → kapı geçer
+  ✓ T14zb sınıflı kartta Sultan kararının zamanı BOZUK → karar sayılmaz, borç yazılmaz (fail-closed)
+  ✓ T14zc kararın zamanı EKSİK → karar sayılmaz
+  ✓ T14zd karar borçtan SONRAYA tarihli → sayılmaz (sıra: önce Sultan, sonra borç)
+  ✓ T14zf 30 boşluk gerekçe sayılmaz, borç yazılmaz (göz tur 2)
+  ✓ T14zg baş/son boşlukla 20'ye tamamlanan gerekçe sayılmaz
+  ✓ T14x mutant üretildi (geçerli borç artık geçirmiyor)
+  ✓ T14y mutant: borç geçirmiyor → T14f/T14s bu mutantta düşerdi
+  ✓ T14z mutant 2: geçersiz borç da geçiriyor → T14p bu mutantta düşerdi
+  ✓ T14ze mutant 4: eski fail-open (bozuk zaman = borç anı) geri gelince bozuk kararlı borç yazılıyor → T14zb bu mutantta düşerdi
+  ✓ T14za mutant 3: sınıflı Sultan-kararı denetimi kalkınca ajan borç yazabiliyor → T14t bu mutantta düşerdi
+════ T15 · canlı-yazılan dosya UYARISI (rc değişmez) ════
+  ✓ T15a canlı dosyaya dokunan PR yine GEÇER (rc=0, yalnız uyarı)
+  ✓ T15b uyarı iki canlı dosyayı adıyla sayıyor
+  ✓ T15c sıradan dosya uyarıya girmiyor
+  ✓ T15d yalnız sıradan dosya → uyarı YOK, rc=0
+  ✓ T15e değişen liste okunamazsa 'ölçülemedi' denir, 'temiz' denmez (rc yine 0)
+  ✓ T15f mutant üretildi (eşleşme artık işaretlenmiyor)
+  ✓ T15g mutant: uyarı kayboluyor → T15b bu mutantta düşerdi
+════ T16 · kapı GEÇTİ → sınıfsız işte 'birleştirirdim' kaydı (TCBXPP) ════
+  ✓ T16a sınıfsız iş GEÇTİ → rc=0, 'birleştirirdim' basılır, deftere 1 satır
+  ✓ T16b aynı iş+baş ikinci koşuda ikinci satır YAZMAZ
+  ✓ T16c SINIFLI iş (geri alınamaz=e) kapıyı GEÇER ama kayıt YOK (karar insanın)
+  ✓ T16d kapı GEÇMEZSE (puan 4) kayıt YOK
+  ✓ T16e FABRIKA_GOLGE=0 kapatır, kapı yine rc=0
+  ✓ T16f defter yazılamazsa kapı BOZULMAZ (rc=0), sorun söylenir
+  ✓ T16g mutant (kapı VE betikteki sınıf koşulu söküldü): sınıflı iş kayıt bırakır → T16c bu mutantta düşerdi
+════ T17 · İŞ ADI PR'IN KANIT DİZİNİNDEN: dal ≠ iş (gorev …THYFXG0 · #884/#817/#960 sınıfı) — GEÇTİ ve KALDI yüzü ════
+  ✓ 🔴 T17a GEÇTİ yüzü: dal 'kanit-dali' ≠ iş 'is-asil' → iş PR'ın kanıt dizininden türedi, kart+kanıt+puan bulundu (rc=0)
+  ✓ 🔴 T17b KALDI yüzü: dal ≠ iş ama puan 3/E → kapı DOĞRU işi ölçüp KAPALI kalır (rc=1, 'kart YOK' değil)
+  ✓ T17c KALDI yüzü: iki kanıt dizini, pr=33 kaydı/gövde yok → DUR rc=2 'hangi kart?' + adaylar + çare (eskiden rc 3)
+  ✗ T17d PR iki dizine dokunuyor, biri dal adı → yine DUR rc=2 (DALGIÇ tur 3: dal adı tahmindir, #1185 bu tahminle yanlış kartı okudu) (rc=0)
+  ✓ T17d2 aynı PR gövdesinde 'Kart: a' (büyük harf) → kimlik çözülür, rc=0 (DALGIÇ tur 3)
+  ✓ T17e dosya listesi okunamadı → dal adı YEDEK olarak kullanılır (rc=0, türetme notu yok)
+  ✓ T17f PR hiçbir kanıt dizinine dokunmuyor → dal adı (eski davranış korunur)
+  ✓ T17g önekli dal (hendese/is-ck) = kanıt dizini → not düşmez, aynı iş (rc=0)
+  ✓ T17h iş adı elle verilmişse türetme DEVREYE GİRMEZ (açık ad kazanır)
+════ T19 · KART KİMLİĞİ PR'IN KENDİSİNDEN (görev …CE1RT · cloudtop #1185 emsali): gövde 'kart:' · kanıt kaydı pr=N · bayat taban süzülür · çelişki DUR ════
+  ✓ 🔴 T19a gövdedeki 'kart: is-govde' satırı kart kimliğidir → doğru kart, 5/E, rc=0 (rc=0)
+  ✓ T19a2 gövde olmayan kartı ilan ederse kapı onu arar ve 'kart YOK' der (gövde kazanır, sessiz düzeltme yok) rc=1
+  ✓ 🔴 T19b iki dizin, dal hiçbiri değil, is-p1'in DENETIM kaydı pr=42 → is-p1 seçildi, rc=0 (eski kapı rc 3 'hiçbiri dal adı değil' derdi) (rc=0)
+  ✓ T19c gövde ile kanıt kaydı ÇELİŞİYOR → DUR rc=2, ikisi de basılır (rc=2)
+  ✓ fikstür: main 1 commit ilerledi (yabancı kanıt dizini eski-1, 2/H); PR #51 başı eski main'den
+  ✓ 🔴 T19d bayat taban: yabancı eski-1 merge-base süzgeciyle düştü, doğru kart is-dogru (5/E) okundu, taban uyarısı basıldı, rc=0 (#1185'te eski kart 2/H okunup 2× engellenmişti) (rc=0)
+  ✓ T19e GitHub dosya listesi okunamazsa merge-base farkı (ikinci yüzey) aday kaynağıdır → yine is-dogru, rc=0
+  ✓ T19f iki dizinin kaydı da pr=43 → DUR rc=2, ikisi listelenir (rc=2)
+  ✓ T19g origin/<ana> çekilemezse taban uyarısı 'ÖLÇÜLEMEDİ … SÜZÜLMEDİ' basılır (sessiz atlama yok); tek dizin is-dogru ile kapı rc=0 (rc=0)
+── T19 · MUTASYON (tam kopya, kardeşlerle): süzgeç · gövde · pr-eşleşme sökülünce ilgili kapı düşer ──
+  ✓ mutant süzgeç üretildi (merge-base süzgeci kalktı)
+  ✓ mutant süzgeç: yabancı eski-1 sayıldı → 'hangi kart?' rc=2 → T19d bu mutantta düşerdi (rc=2)
+  ✓ mutant gövde üretildi ('kart:' satırı okunmuyor)
+  ✓ mutant gövde: çelişki görülmez, is-p1 ile GEÇER → T19c bu mutantta düşerdi (rc=0)
+  ✓ mutant eşleşme üretildi (pr=N eşleşmesi sayılmıyor)
+  ✓ mutant eşleşme: is-p1 seçilemez, 'hangi kart?' rc=2 → T19b bu mutantta düşerdi (rc=2)
+════ T18 · BAYAT SARI (#817, RH8A3): sonraki bağlı yeşil sarıyı yerine geçirir; sarı iken geçersiz ilan edilen sarı sayılmaz; yeşili geçersiz ve sonradan sarı ENGEL kalır ════
+  ✓ T18a önce: yalnız sarı canlı var → rc=1 (kapı hâlâ kilitli)
+  ✓ T18b sonradan bağlı YEŞİL geldi (farklı etiket) → bayat sarı düşer, rc=0
+  ✓ T18c yeşil ÖNCE, sarı SONRA → sarı yerine geçilmedi, rc=1
+  ✓ T18d önce: canlısız kartta sarı canlı kaydı da engel → rc=1
+  ✓ T18e sarı kayıt GEÇERSİZ ilan edildi → sayımdan düşer, rc=0
+  ✓ T18f YEŞİL kayıt geçersiz ilan edildi → hâlâ ENGEL (ilan kapıyı gevşetmez), rc=1
+  ✓ T18g mutant 11 üretildi (yerine geçme kalktı)
+  ✓ T18h mutant 11: bayat sarı kilitliyor → T18b bu mutantta düşerdi
+  ✓ T18i mutant 12 üretildi (sarı-geçersiz düşürme kalktı)
+  ✓ T18j mutant 12: geçersiz sarı kilitliyor → T18e bu mutantta düşerdi
+  ✓ T18k mutant 13 üretildi (yerine geçme zaman sırası kalktı)
+  ✓ T18l mutant 13: sonraki sarı da yeşille aklanıyor → T18c bu mutantta düşerdi
+  ✓ T18m mutant 14 üretildi (geçersiz yeşil de düşüyor)
+  ✓ T18n mutant 14: geçersiz yeşil kapıyı GEÇİRİYOR → T18f bu mutantta düşerdi
+
+── SONUÇ: 211 geçti · 1 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-fabrika-kapi-kart-kimligi-prden-mutant-dal-adi-tahmini-b 5 sn bekledi (yuva 1, load1 17.68)
