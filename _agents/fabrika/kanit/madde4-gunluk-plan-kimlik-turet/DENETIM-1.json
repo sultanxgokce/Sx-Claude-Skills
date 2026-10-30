@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "madde4-gunluk-plan-kimlik-turet",
+  "pr": "587",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T14:10:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-madde4-gunluk-plan-kimlik-turet",
+  "dal": "madde4-gunluk-plan-kimlik-turet",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24712,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kimlik türetme, belirsizlikte rc 3 davranışı, tmux mutant kapısı ve sürüm eşitliği yeşil ölçümlerle doğrulanmış. Ancak iş kartının açıkça istediği önce=N, sonra=N+5 sonucu sağlanmamış; ölçüm 108’den 115’e çıkarak yedi yeni kapı gösterdiği için önce bu kabul ölçütü düzeltilmeli ya da kartla uzlaştırılmalı.",
+    "bulgular": [
+      {
+        "ne": "İstenen sınav artışı N+5 değil N+7; teslim iş kartındaki sayısal kabul ölçütünü karşılamıyor.",
+        "kanit": "Önce ölçümü “sonuç: 108 geçti · 0 kaldı”, sonra ölçümü “sonuç: 115 geçti · 0 kaldı” diyor; fark 7. Diffte X1-X5 yanında ayrı kapılar olan X2b ve X4b de eklenmiş.",
+        "konum": "olcum-sirada-bak-sinavi-once.txt ve olcum-sirada-bak-sinavi-sonra.txt; gunluk-plan/scripts/sirada-bak.test.sh:+206",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm 108/0’dan 115/0’a geçmiş, tmux dalını kapatan mutasyon beklendiği gibi X2 kapısını düşürmüş ve gerçek ölçüme bağlanmış, sürüm eşitliği de 1.18.0 olarak ölçülmüş. İşlevsel davranış için güçlü hermetik ölçüm var; fakat kanıt aynı zamanda karttaki N+5 iddiasını çürütüyor."
+  }
+}

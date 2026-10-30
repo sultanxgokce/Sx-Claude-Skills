@@ -1,0 +1,29 @@
+{
+  "is": "madde4-gunluk-plan-kimlik-turet",
+  "cumle": "sirada-bak.sh koltuk kimliğini ortamda yokken türetir: --kim → GUNLUK_PLAN_AJAN → AGENT_NAME → AILE_KIMDEN → tmux oturumu ↔ aile-registry 'tmux:' alanı (tek eşleşme); türetilemezse 'ÖLÇÜLEMEDİ' rc 3, kendi işi 'başkasının' sayılmaz. sirada-bak.test.sh önce=N geçti sonra=N+5 geçti 0 kaldı; mutant (tmux dalı kapatılır) sınavda yakalanır; SKILL.md 1.17.1→1.18.0 ve catalog.json aynı sürüm.",
+  "istedi": "MUAVİN",
+  "aldi": "BENNÂ",
+  "zaman": "2026-10-30T13:50:46+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "0 kaldı"
+  ],
+  "sayi_bicim_eksikleri": [
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}
