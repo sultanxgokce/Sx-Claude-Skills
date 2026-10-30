@@ -37,10 +37,17 @@ if not onek and any(k in o for k in ('bitti','simdi')) or (not onek and kuy):
     print('UYARI: --kaynak verilmedi; is satiri oneksiz yaziliyor (sultan-dili.md §3/§5 uyari verir)', file=sys.stderr)
 def cumle(m):
     return m if (not onek or any(m.startswith(x) for x in KAYNAK.values())) else onek+m
+def ozu(m):   # kaynak önekini soyar: "biten iş = şimdiki iş" kıyası önekten bağımsızdır
+    m = m or ''
+    for x in KAYNAK.values():
+        if m.startswith(x): return m[len(x):]
+    return m
 if 'bitti' in o:
     o['bitti']=cumle(o['bitti'])
     d['bitirdi']=[{'is':o['bitti'],'zaman':now,'kayit':o.get('kayit'),'kaynak':o.get('kaynak'),'link':(f"mmepanel://{kutu}/kayit/{o['kayit']}" if o.get('kayit') else None)}]+d.get('bitirdi',[])[:29]   # geçmiş: son 30 iş (ayrıntı sayfası)
-    if d.get('simdi') and d['simdi'].get('is')==o['bitti']: d['simdi']=None
+    # Göz tur 1 (Sx #594): --simdi ve --bitti ayrı çağrılarda farklı (ya da eksik) --kaynak alırsa öneki farklı olur;
+    # birebir kıyas biten işi 'şimdi' satırında asılı bırakıyordu. Kıyas önek soyulmuş metinle yapılır.
+    if d.get('simdi') and ozu(d['simdi'].get('is'))==ozu(o['bitti']): d['simdi']=None
 if 'simdi' in o: d['simdi']={'is':cumle(o['simdi']),'baslangic':now,'link':o.get('link'),'kaynak':o.get('kaynak')}
 if temizle: d['kuyruk']=[]
 for k in kuy:
