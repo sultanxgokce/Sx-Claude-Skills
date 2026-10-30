@@ -7,8 +7,10 @@
 # Çözüm dikkat değil YAPI: iş kendi worktree'sinde yapılır. Orada dal senin, kimse çekemez.
 #
 # Fabrika sürümü (cloudtop scripts/is-alani.sh temel; iki ek):
-#   · KAPSAM KONTROLÜ: `--dosyalar a,b,c` verilirse açık PR'ların dosyalarıyla çakışma aranır → çakışma rc=2, AÇMAZ.
+#   · KAPSAM KONTROLÜ: `--dosyalar a,b,c` verilirse açık PR'ların dosyalarıyla çakışma aranır.
 #     İKİ YÜZEY: GitHub dosya listesi ∩ merge-base farkı (main'i merge etmiş PR'ın artıkları sayılmaz); git yolu düşerse tek yüzey + uyarı.
+#     ÜÇÜNCÜ YÜZEY (30 Eki · görev …7PRJ07): aynı DOSYA engel değil UYARIDIR — alan açılır, PR'ın o dosyadaki satır blokları basılır ve
+#     karta yazılır; gerçek çakışma SATIR kesişimidir ve ancak alan yazdıktan sonra ölçülebilir → `kapsam-olc` (kesişim >0 → rc 2 DUR).
 #   · KALICI DİZİN: /config/projects/_wt (/tmp konteyner yeniden başlayınca silinir; kayıtsız iş kaybolur).
 #
 # Kullanım:
@@ -16,6 +18,7 @@
 #   is-alani.sh kontrol                     → güvenli(0) / riskli(1) / ölçülemedi(2)
 #   is-alani.sh liste                       → açık çalışma alanları
 #   is-alani.sh kapat <iş>                  → worktree'yi kaldırır; kayıtsız iş varsa SİLMEZ (rc=1)
+#   is-alani.sh kapsam-olc [<iş>]           → alanın yazdığı satır blokları ∩ açık PR'ların blokları: kesişim yok(0) / VAR → DUR(2) / ölçülemedi(3)
 #   is-alani.sh kanca-kur                   → pre-commit korumasını BU klonda kurar (idempotent)
 # Ortam: IS_ALANI_DEPO (depo kökü) · IS_ALANI_KOK (alan dizini) · IS_ALANI_ANA (ana dal, vars. main)
 set -u
@@ -70,7 +73,76 @@ _pr_merge_base_farki() {
   git -C "$DEPO" diff --name-only "origin/$ana...origin/$dal" 2>/dev/null || { printf "%s" "git diff origin/$ana...origin/$dal düştü"; return 1; }
 }
 
-# kapsam_kontrol <dosyalar,virgüllü> → 0 temiz · 2 çakışma · 3 ölçülemedi (gh yok/yetkisiz)
+# 🔴 ÜÇÜNCÜ YÜZEY — SATIR BLOKLARI (30 Eki 2026 · görev …7PRJ07 · kart fabrika-kapsam-satir-kesisimi · BENNÂ): dosya ADI çakışması
+#    engel sayılıyordu; Sx'te her beceri sürümü catalog.json'a dokunduğundan açık bir PR varken HİÇBİR alan açılamıyordu (bir günde 3× ölçüldü:
+#    #506 @1564 · #586 @1530 · iskan @905 · gunluk-plan @1426 — satır kesişimi 0, rc 2). Alan henüz yazmadığı için satır kesişimi `ac`
+#    anında ölçülEMEZ: aynı dosya → UYARI (dosya + PR + PR'ın satır blokları basılır, karta yazılır), alan AÇILIR. Gerçek kesişim yazdıktan
+#    sonra `kapsam-olc` ile ölçülür: alanın blokları (merge-base'e göre -U0) ∩ açık PR'ların blokları; kesişim >0 → rc 2 DUR. Sessiz gevşeme yok.
+#    Dürüst sınır: bloklar TABAN (eski taraf) satır numarasıdır; PR dalı main'i merge etmişse merge-base kayar ve numaralar birkaç satır şaşabilir.
+# _hunklar [dosya…] ← stdin: birleşik fark · stdout: "<dosya>\t<a>-<b>" (taban tarafı aralığı; ekleme a-a; yeni dosya 0-0 = tüm dosya); dosya verilirse süzer
+_hunklar() {
+  python3 -c '
+import re,sys
+suz=set(sys.argv[1:]); f=None
+for l in sys.stdin.read().splitlines():
+    if l.startswith("diff --git "):
+        m=re.match(r"diff --git a/(.*?) b/(.*)$",l); f=m.group(2) if m else None; continue
+    if l.startswith("+++ "):
+        p=l[4:].strip()
+        if p!="/dev/null": f=p[2:] if p.startswith("b/") else p
+        continue
+    m=re.match(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@",l)
+    if m and f and (not suz or f in suz):
+        a=int(m.group(1)); b=int(m.group(2)) if m.group(2) is not None else 1
+        print(f"{f}\t{a}-{a+b-1 if b>0 else a}")
+' "$@"
+}
+# _pr_hunklar <N> <dosya…> → stdout: ilk satır "#kaynak\t<nasıl ölçüldü>", sonra "<dosya>\t<a>-<b>"; rc 1: PR farkı hiç okunamadı
+_pr_hunklar() {
+  local n="$1" json dal ana; shift
+  json="$(cd "$DEPO" && gh pr view "$n" --json headRefName,baseRefName 2>/dev/null </dev/null)" || json=""
+  dal="$(printf '%s' "$json" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("headRefName",""))' 2>/dev/null)" || dal=""
+  ana="$(printf '%s' "$json" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("baseRefName",""))' 2>/dev/null)" || ana=""
+  [ -n "$ana" ] || ana="$ANA"
+  if [ -n "$dal" ] && git -C "$DEPO" fetch -q origin "$dal" "$ana" 2>/dev/null </dev/null; then
+    printf '#kaynak\tmerge-base (git diff -U0 origin/%s...origin/%s)\n' "$ana" "$dal"
+    git -C "$DEPO" diff -U0 "origin/$ana...origin/$dal" -- "$@" 2>/dev/null | _hunklar "$@"; return 0
+  fi
+  local ham; ham="$(cd "$DEPO" && gh pr diff "$n" 2>/dev/null </dev/null)" || return 1
+  printf '#kaynak\tgh pr diff (±3 satır bağlam dahil — aralıklar gerçekten geniş olabilir)\n'
+  printf '%s\n' "$ham" | _hunklar "$@"
+}
+# _blok_metni ← stdin: _pr_hunklar çıktısı · stdout: "dosya: a-b c-d · dosya2: …" tek satır (0-0 → "yeni dosya (tümü)")
+_blok_metni() {
+  python3 -c '
+import sys
+d={}
+for l in sys.stdin.read().splitlines():
+    if l.startswith("#") or "\t" not in l: continue
+    f,r=l.split("\t",1); d.setdefault(f,[]).append("yeni dosya (tümü)" if r=="0-0" else r)
+print(" · ".join(f"{f}: {chr(32).join(v)}" for f,v in d.items()) or "(satır blokları okunamadı: PR farkı çözülemedi)")
+'
+}
+# _kesisim <alan-bloklar-dosyası> <pr-bloklar-dosyası> → stdout: "dosya\talan a-b\tPR c-d" (kesişen çiftler) · rc 0 kesişim VAR · 1 yok
+_kesisim() {
+  python3 - "$1" "$2" <<'PYK'
+import sys
+def oku(p):
+    d={}
+    for l in open(p,encoding="utf-8").read().splitlines():
+        if l.startswith("#") or "\t" not in l: continue
+        f,r=l.split("\t",1); a,b=r.split("-"); d.setdefault(f,[]).append((int(a),int(b)))
+    return d
+A,B=oku(sys.argv[1]),oku(sys.argv[2]); var=False
+for f in A:
+    for a,b in A[f]:
+        for c,d in B.get(f,[]):
+            if (a,b)==(0,0) or (c,d)==(0,0) or (a<=d and c<=b):
+                print(f"{f}\talan {a}-{b}\tPR {c}-{d}"); var=True
+sys.exit(0 if var else 1)
+PYK
+}
+# kapsam_kontrol <dosyalar,virgüllü> → 0 temiz · 4 aynı dosya UYARISI (alan açılır; "⚠ PR #" satırları stdout'ta) · 3 ölçülemedi (gh yok/yetkisiz)
 kapsam_kontrol() {
   local dosyalar="$1" prs n cakisan=0 tek_yuzey=0
   command -v gh >/dev/null 2>&1 || { _bilgi "◻ kapsam kontrolü YAPILAMADI — gh yok (açık PR'lara bakılmadı)"; return 3; }
@@ -90,12 +162,14 @@ kapsam_kontrol() {
     ort="$(printf '%s\n' "$dosyalar" | tr ',' '\n' | grep -Fx -f <(printf '%s\n' "$aday") || true)"
     if [ -n "$ort" ]; then
       cakisan=$((cakisan+1))
-      _bilgi "⚠ PR #$n şu dosyalara zaten dokunuyor: $(printf '%s' "$ort" | tr '\n' ' ')"
+      # shellcheck disable=SC2046
+      _bilgi "⚠ PR #$n aynı dosyaya dokunuyor → $(_pr_hunklar "$n" $(printf '%s' "$ort" | tr '\n' ' ') | _blok_metni)"
     fi
   done
   if [ "$cakisan" -gt 0 ]; then
-    _hata "KAPSAM ÇAKIŞMASI — $cakisan açık PR aynı dosyaları değiştiriyor. DUR ve sor; alan AÇILMADI."
-    return 2
+    _bilgi "⚠ KAPSAM UYARISI — $cakisan açık PR aynı dosyalara dokunuyor (satır blokları yukarıda). Aynı dosya engel DEĞİL: alan AÇILIYOR."
+    _bilgi "  Gerçek çakışma satır kesişimidir ve ancak yazdıktan sonra ölçülür → PR'dan ÖNCE: bash $HERE/is-alani.sh kapsam-olc <iş>  (kesişim >0 → rc 2 DUR)"
+    return 4
   fi
   _bilgi "✓ kapsam: açık PR'larla dosya çakışması yok ($(printf '%s' "$prs" | wc -w) PR bakıldı$( [ "$tek_yuzey" -gt 0 ] && printf ', %s tek yüzey' "$tek_yuzey" ))"
   return 0
@@ -169,9 +243,10 @@ PY
   if git -C "$DEPO" show-ref --verify --quiet "refs/heads/$is"; then
     _hata "'$is' dalı zaten var — başka ad seç ya da önce kapat (asla zorla üstüne yazma)"; exit 1
   fi
+  local krc=0 kuyari=""
   if [ -n "$dosyalar" ]; then
-    kapsam_kontrol "$dosyalar"; local krc=$?
-    [ "$krc" -eq 2 ] && exit 2
+    kuyari="$(kapsam_kontrol "$dosyalar")"; krc=$?
+    printf '%s\n' "$kuyari"
   else
     _bilgi "· kapsam: dosya listesi verilmedi (--dosyalar a,b,c) — dosya çakışmasına bakılmadı; yalnız ad/cümle benzerliği aranıyor:"
     benzer_pr_uyar "$is" "$kart"
@@ -188,7 +263,73 @@ PY
   _bilgi "  cd $yol"
   _bilgi "  ⚠ worktree PAYLAŞILAN KAYNAĞI izole etmez: port · veritabanı · kilit dosyası ortaktır;"
   _bilgi "    port cevap veriyorsa SENİN süreç mi bak; kilit çakışırsa elle birleştirme, yeniden üret."
+  # aynı-dosya uyarısı KARTA yazılır (kapsam_uyarilari — kart.sh goster basar, bağımsız göz görür): uyarı ekranda kalıp unutulmasın (sessiz gevşeme yok)
+  if [ "$krc" -eq 4 ]; then
+    python3 - "$kart" "$kuyari" <<'PYK' 2>/dev/null || _bilgi "  ◻ kapsam uyarısı karta YAZILAMADI (kart okunamadı) — yalnız ekranda"
+import json,sys,datetime
+yol,metin=sys.argv[1:3]
+k=json.load(open(yol,encoding="utf-8")); u=k.setdefault("kapsam_uyarilari",[])
+z=datetime.datetime.now().astimezone().strftime("%d.%m %H:%M")
+for l in metin.splitlines():
+    if l.startswith("⚠ PR #"): u.append(f"{z} is-alani: {l[2:]} — PR'dan önce kapsam-olc")
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+PYK
+    _bilgi "  ⚠ aynı-dosya uyarısı karta yazıldı · PR'dan ÖNCE: bash $HERE/is-alani.sh kapsam-olc $is"
+  fi
   _bilgi "  bitince: bash $HERE/is-alani.sh kapat $is"
+}
+
+# kapsam_olc [<iş>] → alanın SATIR blokları ∩ açık PR'ların blokları. İş verilmezse içinde bulunulan alan (birincil ağaçta çağrılamaz).
+#   Alanın farkı: çalışma ağacı vs merge-base(origin/ANA, HEAD) -U0 → commit'lenmemiş satırlar da sayılır, main'in ilerlemesi sayılmaz.
+#   Kendi PR'ı (dal adı = alan dalı) sayılmaz. rc 0 kesişim yok · 2 kesişim VAR (DUR) · 3 ölçülemedi (gh yok/düştü · alan yok).
+kapsam_olc() {
+  local is="${1:-}" yol dal mb kes
+  if [ -n "$is" ]; then yol="$KOK/$DEPO_AD-$is"
+  else
+    birincil_mi && { _hata "birincil ağaçtasın — kapsam-olc alanın içinden ya da iş adıyla çağrılır: is-alani.sh kapsam-olc <iş>"; return 3; }
+    yol="$(git rev-parse --show-toplevel 2>/dev/null)"
+  fi
+  [ -d "$yol" ] || { _hata "çalışma alanı YOK: $yol — ölçülemedi"; return 3; }
+  dal="$(git -C "$yol" symbolic-ref --short -q HEAD 2>/dev/null || echo "")"
+  git -C "$yol" fetch -q origin "$ANA" 2>/dev/null </dev/null || _bilgi "◻ origin/$ANA tazelenemedi — eldeki origin/$ANA ile ölçülüyor"
+  mb="$(git -C "$yol" merge-base "origin/$ANA" HEAD 2>/dev/null)" || { _hata "merge-base bulunamadı (origin/$ANA ↔ HEAD) — ölçülemedi"; return 3; }
+  local T; T="$(mktemp -d)"
+  git -C "$yol" diff -U0 "$mb" 2>/dev/null | _hunklar > "$T/alan"
+  if [ ! -s "$T/alan" ]; then _bilgi "✓ kapsam-olc: alan henüz hiçbir satır değiştirmedi (merge-base ${mb:0:8}) — kesişim yok"; rm -r -f "$T"; return 0; fi
+  local benim_dosyalar; benim_dosyalar="$(cut -f1 "$T/alan" | sort -u)"
+  command -v gh >/dev/null 2>&1 || { _hata "gh yok — açık PR'ların blokları ölçülemedi"; rm -r -f "$T"; return 3; }
+  local prs satirlar kesisen=0 bakilan=0 ayni_dosya=0 n pdal pr_dosyalar ort kaynak
+  prs="$(cd "$DEPO" && gh pr list --state open --limit 30 --json number,headRefName 2>/dev/null </dev/null)" \
+    || { _hata "gh pr list düştü (yetki/ağ) — ölçülemedi"; rm -r -f "$T"; return 3; }
+  satirlar="$(printf '%s' "$prs" | python3 -c 'import json,sys;[print(p.get("number",""),p.get("headRefName","")) for p in json.load(sys.stdin)]' 2>/dev/null)" \
+    || { _hata "gh pr list yanıtı çözülemedi — ölçülemedi"; rm -r -f "$T"; return 3; }
+  _bilgi "── kapsam-olc · alan ${dal:-?} · $(printf '%s\n' "$benim_dosyalar" | grep -c .) dosyada $(grep -c . "$T/alan") blok (merge-base ${mb:0:8})"
+  while read -r n pdal; do
+    [ -n "$n" ] || continue
+    if [ -n "$dal" ] && [ "${pdal##*/}" = "${dal##*/}" ]; then _bilgi "· PR #$n kendi PR'ın ($pdal) — sayılmaz"; continue; fi
+    bakilan=$((bakilan+1))
+    pr_dosyalar="$(cd "$DEPO" && gh pr diff "$n" --name-only 2>/dev/null </dev/null)" || { _bilgi "◻ PR #$n dosya listesi okunamadı — bu PR ölçülemedi"; continue; }
+    ort="$(printf '%s\n' "$benim_dosyalar" | grep -Fx -f <(printf '%s\n' "$pr_dosyalar") || true)"
+    [ -n "$ort" ] || continue
+    ayni_dosya=$((ayni_dosya+1))
+    # shellcheck disable=SC2046
+    _pr_hunklar "$n" $(printf '%s' "$ort" | tr '\n' ' ') > "$T/pr-$n" || { _bilgi "◻ PR #$n aynı dosya ($(printf '%s' "$ort" | tr '\n' ' ')) ama farkı okunamadı — kesişim ölçülemedi"; continue; }
+    kaynak="$(sed -n 's/^#kaynak\t//p' "$T/pr-$n")"
+    if kes="$(_kesisim "$T/alan" "$T/pr-$n")"; then
+      kesisen=$((kesisen+1))
+      _bilgi "✗ PR #$n ($pdal) SATIR KESİŞİMİ ($kaynak):"
+      printf '%s\n' "$kes" | while IFS=$'\t' read -r f a b; do _bilgi "    · $f: $a ∩ $b"; done
+    else
+      _bilgi "· PR #$n ($pdal) aynı dosya, satır kesişimi YOK ($kaynak) — PR: $(_blok_metni < "$T/pr-$n") · alan: $(grep -F -f <(printf '%s\n' "$ort" | sed 's/$/\t/') "$T/alan" | _blok_metni)"
+    fi
+  done <<<"$satirlar"
+  rm -r -f "$T"
+  if [ "$kesisen" -gt 0 ]; then
+    _hata "SATIR KESİŞİMİ — $kesisen açık PR aynı satırları değiştiriyor. DUR: önce o PR birleşsin ve alan onun üstüne alınsın, ya da reise sor."
+    return 2
+  fi
+  _bilgi "✓ kapsam-olc: satır kesişimi yok ($bakilan açık PR bakıldı, $ayni_dosya aynı dosyaya dokunuyor)"
+  return 0
 }
 
 kontrol() {
@@ -296,5 +437,6 @@ case "${1:-kontrol}" in
   kontrol)   kontrol ;;
   liste)     liste ;;
   kapat)     shift; kapat "$@" ;;
-  *)         sed -n '1,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' ;;
+  kapsam-olc) shift; kapsam_olc "$@" ;;
+  *)         sed -n '1,22p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' ;;
 esac

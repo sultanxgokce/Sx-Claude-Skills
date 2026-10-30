@@ -1,0 +1,12 @@
++      "version": "0.27.99",
+── kapsam-olc · alan benna-deneme-kapsam · 1 dosyada 1 blok (merge-base f5b968db)
+✗ PR #586 (kart-bitti-gorevsiz-uyari) SATIR KESİŞİMİ (merge-base (git diff -U0 origin/main...origin/kart-bitti-gorevsiz-uyari)):
+    · catalog.json: alan 1533-1533 ∩ PR 1533-1533
+· PR #506 (oda-kapi-koltuk) aynı dosya, satır kesişimi YOK (merge-base (git diff -U0 origin/main...origin/oda-kapi-koltuk)) — PR: catalog.json: 1567-1567 · alan: catalog.json: 1533-1533
+✗ SATIR KESİŞİMİ — 1 açık PR aynı satırları değiştiriyor. DUR: önce o PR birleşsin ve alan onun üstüne alınsın, ya da reise sor.
+kapsam-olc(aynı satır) exit=2
+── kapsam-olc · alan benna-deneme-kapsam · 1 dosyada 1 blok (merge-base f5b968db)
+· PR #586 (kart-bitti-gorevsiz-uyari) aynı dosya, satır kesişimi YOK (merge-base (git diff -U0 origin/main...origin/kart-bitti-gorevsiz-uyari)) — PR: catalog.json: 1533-1533 · alan: catalog.json: 1600-1600
+· PR #506 (oda-kapi-koltuk) aynı dosya, satır kesişimi YOK (merge-base (git diff -U0 origin/main...origin/oda-kapi-koltuk)) — PR: catalog.json: 1567-1567 · alan: catalog.json: 1600-1600
+✓ kapsam-olc: satır kesişimi yok (2 açık PR bakıldı, 2 aynı dosyaya dokunuyor)
+kapsam-olc(farklı satır) exit=0
