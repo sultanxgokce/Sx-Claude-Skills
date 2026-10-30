@@ -1,0 +1,17 @@
+$ bash duzen/scripts/duzen-gece.test.sh
+# rc=0 sure=3.7s zaman=2026-10-31T00:24:46+03:00
+--- stdout ---
+  ✓ G1 varsayılan KURU: komut çalışmaz, günlük yazılmaz
+  ✓ G2 --uygula: dört beceri kurulur, bayat kimlik yenilenir, reise mektup gider
+  ✓ G3 her şey güncel: komut yok, mektup yok, rc 0
+  ✓ G4 sync reddeder: atlandi + rc 1, 'kuruldu' yazılmaz
+  ✓ G5 reis yok: mektup tahminle yollanmaz (atlandi), rc 1
+  ✓ G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ
+  ✓ G7 temeli bilinmeyen bayat kimlik: yenile çağrılmaz (atlandi), rc 1
+  ✓ G8 hiçbir komuta --force geçmez
+── mutasyon
+  ✓ mutant 'her-zaman-kur' → G3 kırmızı
+  ✓ mutant 'reissiz-mektup' → G5 kırmızı
+  ✓ mutant 'force-gecir' → G8 kırmızı
+== 11 geçti · 0 düştü ==
+--- stderr ---

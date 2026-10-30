@@ -1,7 +1,7 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.1.1
+version: 1.2.0
 ---
 
 # /duzen — filo düzen paketi (1.1.1 · iskelet + alt ajan istem üreticisi)
@@ -99,6 +99,12 @@ satırın işaretçisi gerekiyorsa reis sözle verir.
 Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`yi okur, yoksa `is`e düşer.
 
 ## Sürüm notları
+
+- **1.2.0** (31 Eki 2026, MİRAHUR · Kuzey G25 G29 G30): `duzen-gece.sh` (düzen sürümü artınca dört düzen becerisini gece kurar, bu depoda BAYAT ekipc
+  kimliklerini yeniler, reise "düzen vX indi" mektubu yollar; VARSAYILAN KURU, `--force` yok, reis bilinmiyorsa mektup tahminle gitmez) +
+  `uyum-haftalik.sh` (surum.sh denetle'yi koşar, sapmayı Bulgu Havuzu'na yazar, günlüğe `sapma=N` düşer; hiç kimlik işaretli değilse
+  "güncel" DEMEZ, SARI der rc 4). İkisinin sınavı + mutantı. Günlük biçimi `duzen-gece.sh` başlığında. Zamanlayıcı satırı ayrı PR (cloudtop
+  `crontab-abc`) ve Sultan-eli uygulanır; "sync-skills cron'da değil" kararı (aşağıda b) bu PR'la DEĞİŞMEZ, gece betiği yalnız --uygula ile yazar.
 
 - **1.1.1** (30 Eki 2026, BÂNİ): yetki bloğuna Sultan kararı satırı (SERDAR 09:24): alt personel kendi iş alanında küçük düzeltme PR'ı AÇABİLİR; birleştirme her durumda reiste; canlı · host · sır yok; kural bütün odalar için aynı (MEREMMETÇİ dahil). Sınav A8b.
 - **1.1.0** (30 Eki 2026, SERDAR gece inşası): `alt-ajan-istem.sh` + sınavı. 9 koltuksuz alt personel (Nexus #1414) için istem
