@@ -1,0 +1,10 @@
+$ bash kapi-sinavi/scripts/kapi-sinavi.sh ithal
+# rc=0 sure=12.3s zaman=2026-10-30T18:51:28+03:00
+--- stdout ---
+✓ elogo-paket-butunlugu: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ elogo-onay-beyani: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ havuz-kayit-semasi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ yargi-hukum-esigi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ yogunluk-ekran-denetimi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ yogunluk-profil-tutarliligi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+--- stderr ---

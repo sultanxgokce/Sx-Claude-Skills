@@ -1,0 +1,148 @@
+{
+  "is": "sync-drift-kapi-olcum",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T18:51:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift",
+      "asama": "once",
+      "dosya": "olcum-kuru-kosu-drift-once.txt",
+      "sha256": "993eb0444fba53ad1f78ba017cd4d9e68b6d5314362f5441cea2bf9ffa97e9c4",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:49:45+03:00",
+      "sure_sn": 27.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "244194729a5e4ed1851dd567b968047d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-sonra.txt",
+      "sha256": "3de4ceb85cc17dbdef00949b14eb74ada4ba47158cf52dad8874ee0aff92a3a2",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:50:14+03:00",
+      "sure_sn": 13.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a200fa6666d94d8e82cc117be8925560"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sinav-sonra.txt",
+      "sha256": "ab83ba9de228872f192035340ce3d5bb1661eb8bedf87b1daaf581c83bb58e98",
+      "komut": [
+        "bash",
+        "kapi-sinavi/scripts/kapi-sinavi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:51:11+03:00",
+      "sure_sn": 57.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2314f042692f4d9582df7310603a6c4c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olcum-disiplini-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-olcum-disiplini-sinav-sonra.txt",
+      "sha256": "a1a9b1ca35dbf025f904c8f973b945101db835db6beb108c08e4ebf3efe60b9e",
+      "komut": [
+        "bash",
+        "olcum-disiplini/scripts/olcum-disiplini.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:51:13+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "03d778b6cbfd4784a33bac82cf9d261b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kapi-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-ci-kapi-kayit-sonra.txt",
+      "sha256": "5655d6fbcf6221d29b4a9cb52022331dad59129450a016c6e62375271c75f0d7",
+      "komut": [
+        "bash",
+        "kapi-sinavi/scripts/kapi-sinavi.sh",
+        "kayit"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:51:13+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d6dfb750aceb48a895f02167ab2b5fa2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kapi-bagli-mi",
+      "asama": "sonra",
+      "dosya": "olcum-ci-kapi-bagli-mi-sonra.txt",
+      "sha256": "cb9bc161f4e975b183a8b9e438d362539ddbf9f8f0fbb9b9eeb9af405381f417",
+      "komut": [
+        "bash",
+        "kapi-sinavi/scripts/kapi-sinavi.sh",
+        "bagli-mi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:51:16+03:00",
+      "sure_sn": 2.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6831887b14ea482f97b437ffc5b71d96"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-kapi-ithal",
+      "asama": "sonra",
+      "dosya": "olcum-ci-kapi-ithal-sonra.txt",
+      "sha256": "26a43116a9fde5a32f24640541989c69365628f0d49465e76cdbfa13da287e6c",
+      "komut": [
+        "bash",
+        "kapi-sinavi/scripts/kapi-sinavi.sh",
+        "ithal"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:51:28+03:00",
+      "sure_sn": 12.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "95e44643f07e4309b073fbbe281179e1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "3b868d115f067f2dfb95c17a5e23ec8c50b77b9b20fef2376874294e901203f8",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:51:28+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "43c6c3a6a30c49e69d453f5b06645750"
+    }
+  ],
+  "imza": "6a632607a0ffb37ff34747c2b59ffbe8513bad8a60884b97348795e578922d04"
+}

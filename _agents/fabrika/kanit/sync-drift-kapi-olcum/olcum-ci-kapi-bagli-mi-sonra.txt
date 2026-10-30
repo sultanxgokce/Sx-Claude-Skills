@@ -1,0 +1,10 @@
+$ bash kapi-sinavi/scripts/kapi-sinavi.sh bagli-mi
+# rc=0 sure=2.2s zaman=2026-10-30T18:51:16+03:00
+--- stdout ---
+✓ elogo-paket-butunlugu: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ elogo-onay-beyani: bağlı (2 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ havuz-kayit-semasi: bağlı (16 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ yargi-hukum-esigi: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ yogunluk-ekran-denetimi: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ yogunluk-profil-tutarliligi: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+--- stderr ---
