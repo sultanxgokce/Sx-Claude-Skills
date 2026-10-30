@@ -1,0 +1,25 @@
+{
+  "is": "postane-postaci-kaynak-tazele",
+  "cumle": "postane-postaci becerisindeki postane.mjs kopyası ve KAYNAK.sha256 cloudtop ana dalıyla (postane 0.1.6) hizalanır",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-30T19:56:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
