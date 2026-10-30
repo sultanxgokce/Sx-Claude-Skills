@@ -40,6 +40,19 @@ const JUNK_DIRS = new Set(['__pycache__', 'node_modules', '.pytest_cache', '.ruf
 const isJunk = (n) =>
   n === '.DS_Store' || n.startsWith('._') || JUNK_DIRS.has(n) || n.endsWith('.pyc');
 
+// ── ÇALIŞMA VERİSİ — TEK LİSTE (görev …ZM36SHM · 30 Eki 2026) ──────────────────────────────────────────────
+// Bazı beceriler çalışırken KENDİ klasörüne veri yazar; bu veri kaynakta yoktur ve olmamalıdır:
+//   · `.olcum/`          olcum-disiplini'nin negatif defteri (OLCUM_DEFTERI vars. ./.olcum, beceri klasöründen koşulunca oraya düşer)
+//   · `metrikler.jsonl`  plan-motor / plan-dekor ölçüm defteri (vars. CWD; demo/ altında da birikir)
+// NİÇİN: iki ayrı arıza üretiyordu. (1) İçerik izine giriyordu → kurulu kopya kodda kaynakla birebir aynıyken her gün
+//   "İÇERİK-DRIFT" — günlük denetim yanlış kırmızı (30 Eki: olcum-disiplini'nin TEK farkı negatifler.jsonl idi).
+//   (2) copyDir hedefi önce tümden siliyordu → kurulum çalışma verisini SESSİZCE yok ediyordu (aynı gün reis yedekten geri koydu).
+// Kural: veri izden DIŞTIR, kurulumda YERİNDE KALIR, kaynaktan asla üstüne yazılmaz. Gerçek kod farkı yine farktır.
+// Yeni veri adı eklemek = bu iki kümeye satır + sync-skills.test.sh V kapıları. Ad tabanlıdır (her derinlikte eşleşir).
+const VERI_DIZINLERI = new Set(['.olcum']);
+const VERI_DOSYALARI = new Set(['metrikler.jsonl']);
+const isVeri = (n, dizinMi) => (dizinMi ? VERI_DIZINLERI.has(n) : VERI_DOSYALARI.has(n));
+
 /** SKILL.md frontmatter'ından `version:` çek. */
 function readVersion(skillMdPath) {
   if (!existsSync(skillMdPath)) return null;
@@ -69,7 +82,9 @@ function dirHash(dir) {
     for (const name of readdirSync(d).sort()) {
       if (isJunk(name)) continue;
       const p = join(d, name), rel = prefix ? `${prefix}/${name}` : name;
-      if (statSync(p).isDirectory()) walk(p, rel);
+      const dz = statSync(p).isDirectory();
+      if (isVeri(name, dz)) continue;   // çalışma verisi içerik izine girmez (bkz VERI_* yorumu)
+      if (dz) walk(p, rel);
       else { h.update(rel); h.update('\0'); h.update(readFileSync(p)); h.update('\0'); }
     }
   };
@@ -77,14 +92,29 @@ function dirHash(dir) {
   return h.digest('hex').slice(0, 12);
 }
 
-/** klasörü özyinelemeli kopyala (junk hariç). Hedefteki eski içerik önce silinir (temiz kopya). */
+/** Hedefi temizler ama ÇALIŞMA VERİSİNİ yerinde bırakır; veriyi barındıran dizin de kalır. Dönüş: dizin boş kaldı mı. */
+function veriHaricTemizle(dir) {
+  let kalan = 0;
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    let st; try { st = statSync(p); } catch { rmSync(p, { force: true }); continue; }   // kırık bağ vb.
+    const dz = st.isDirectory();
+    if (isVeri(name, dz)) { kalan++; continue; }
+    if (dz) { if (veriHaricTemizle(p)) rmSync(p, { recursive: true, force: true }); else kalan++; }
+    else rmSync(p, { force: true });
+  }
+  return kalan === 0;
+}
+
+/** klasörü özyinelemeli kopyala (junk ve çalışma verisi hariç). Hedefteki eski içerik silinir, ÇALIŞMA VERİSİ KORUNUR. */
 function copyDir(src, dst) {
-  if (existsSync(dst)) rmSync(dst, { recursive: true, force: true });
+  if (existsSync(dst)) veriHaricTemizle(dst);
   mkdirSync(dst, { recursive: true });
   for (const name of readdirSync(src)) {
     if (isJunk(name)) continue;
     const s = join(src, name), d = join(dst, name);
     const st = statSync(s);
+    if (isVeri(name, st.isDirectory())) continue;   // kaynaktaki veri adı kurulu verinin üstüne ASLA yazılmaz
     if (st.isDirectory()) copyDir(s, d);
     else {
       copyFileSync(s, d);
