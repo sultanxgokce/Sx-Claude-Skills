@@ -1,7 +1,7 @@
 ---
 name: donus
 type: agent
-version: 1.0.1
+version: 1.0.2
 description: >
   Tek dönüş sözleşmesi: işi bitiren, tıkanan ya da soru soran ajan TEK komutla döner, işi AÇAN anında uyanır.
   "dönüş yap · görevi bitirdim · G0034 bitti · tıkandım · işi açana haber ver" tetiğinde. Kutuda (izole oda) dönüşü
@@ -58,8 +58,11 @@ Elle yazacaksan (beceri yoksa): dosya ADINDA numara bitişik dursun (`PEYK-G0034
   mektupları rol kuralıyla MUAVİN'de kalır.
 - **Tek satır.** Ayrıntı ve ek gövdeye girmez; kanıt bir YOLdur. Sır/numara yazılmaz.
 - Çıkış: `0` yazıldı (+merkezde zil çaldı) · `2` kullanım · `3` açan bulunamadı (yazıldı; `--kime`) · `4` zil çalamadı (yazıldı).
+- **Kip yazılabilirlikle seçilir (1.0.2 · nazir, 30 Eki).** Nexus dosyalarının görünmesi merkez demek değildir: izole kutuda Nexus
+  SALT OKUR kopyadır. Merkez kipi yalnız Nexus giden kutusu yazılabilirse; değilse kutu kipi, ve kutu kipinde yazılabilir İLK
+  giden kutusu seçilir (salt okur aday atlanır). Hiçbiri yazılamıyorsa rc 2 ve açık hata — elle yedek yol gerekmez.
 
 ## Sınav
 
-`bash scripts/donus.test.sh` — 21 kapı (kutu adı merkez deseniyle çapraz denetlenir; açan çözümü; zil düşmesi; biçim kapıları).
+`bash scripts/donus.test.sh` — 23 kapı (K6 salt okur Nexus → kutu kipi · K7 yazılabilir aday seçimi dahil) (kutu adı merkez deseniyle çapraz denetlenir; açan çözümü; zil düşmesi; biçim kapıları).
 Merkez tarafı Nexus'ta: `scripts/donus-hizli.test.sh` · `scripts/oda-cevap-zili.test.sh` (G1-G11).

@@ -1,0 +1,40 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash -c cp /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/donus-mutant-kip.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.sh; bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.test.sh
+# rc=1 sure=0.2s zaman=2026-10-30T11:08:21+03:00
+--- stdout ---
+── K · kutu
+  ✗ K1 kutuda giden kutusuna yazıldı, rc 0 → beklenen [0|1] olan [127|0]
+  ✗ K2 dosya ADINDA numara, gönderen önde → beklenen [1] olan [0]
+  ✗ K3 merkezin hızlı yolu bu adı tanır (çapraz desen) → beklenen [1] olan [0]
+  ✗ K4 ilk 5 satır: 'G0034 · bitti · …' · '→ AÇAN' başlığı · HEDEF · GOREV · DURUM → beklenen [1|1|1|1|1] olan [0|0|0|0|0]
+  ✓ K5 kutuda zil ÇAĞRILMAZ (ssh yok; merkez yoklar)
+  ✗ K6 Nexus dosyaları var ama giden kutusu salt okur → kip KUTU, dönüş kutunun giden kutusuna yazılır, Nexus'a yazılmaz, rc 0 → beklenen [0|1|0|kutu] olan [127|0|0|]
+  ✗ K7 cwd projede değil, ilk aday salt okur → yazılabilir ikinci projenin giden kutusu seçilir, rc 0 → beklenen [0|0|1] olan [127|0|0]
+── M · merkez
+  ✗ M1 G#### → açan defterden (SERDAR), mesajda numara+durum, rc 0 → beklenen [0|SERDAR|1] olan [127||0]
+  ✗ M2 durum defteri: G0034 tikandi durtuldu → beklenen [G0034 tikandi durtuldu] olan []
+  ✗ M3 merkez dönüşü Nexus giden kutusunda (kalıcı işaret) → beklenen [1] olan [0]
+  ✗ M4 G-AJAN-#### → açan görev mektubundan (SERDAR) → beklenen [0|SERDAR] olan [127|]
+  ✗ M5 ASCII açan (MUAVIN) → kayıt kimliği MUAVİN → beklenen [MUAVİN] olan []
+  ✗ M6 zil düşerse rc 4, dönüş YAZILI, durum zil=ulasmadi → beklenen [4|ulasmadi] olan [127|]
+  ✗ M7 açan bulunamazsa rc 3, kimse çalınmaz, dönüş yine yazılır → beklenen [3|yok|1] olan [127|yok|0]
+  ✗ M8 --kime açanı verir → beklenen [SERDAR] olan []
+── B · biçim kapıları (dosya yazılmaz)
+  ✗ B 'G34' 'bitti' 'x' → rc 2 → beklenen [2] olan [127]
+  ✗ B 'G0034' 'tamam' 'x' → rc 2 → beklenen [2] olan [127]
+  ✗ B 'G-bani-0006' 'bitti' 'x' → rc 2 → beklenen [2] olan [127]
+  ✗ B 'G0034' 'bitti' '' → rc 2 → beklenen [2] olan [127]
+  ✗ B5 çok satırlı özet → rc 2 → beklenen [2] olan [127]
+  ✗ B6 300 karakter üstü → rc 2 → beklenen [2] olan [127]
+  ✓ B7 hiçbir ret dosya yazmadı
+  ✓ B8 kuru koşum: yazmaz, çalmaz
+
+GEÇEN: 3 · KALAN: 20
+--- stderr ---
+head: error reading '/tmp/tmp.QU3HaaHTq8/kutu/proj/0-teslimat/giden/': Is a directory
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.QU3HaaHTq8/filo/gorev-durum.jsonl'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.QU3HaaHTq8/filo/gorev-durum.jsonl'
