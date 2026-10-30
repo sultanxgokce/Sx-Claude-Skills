@@ -1,0 +1,81 @@
+{
+  "is": "madde4-iskan-izin-kipi-kaynak",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T14:10:08+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinavi",
+      "asama": "once",
+      "dosya": "olcum-iskan-sinavi-once.txt",
+      "sha256": "93f7f772179c837d944b3478d1d601d008455c7fdbdbff789c3b9952eeaac078",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T13:56:45+03:00",
+      "sure_sn": 67.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1a3cb343600b4a8bb22d8496022fb190"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-iskan-sinavi-sonra.txt",
+      "sha256": "ee5598c93460a4d764810f8a0212aad83833e5725dadabe09e15d32fdb80793f",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:08:40+03:00",
+      "sure_sn": 90.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "86c0a730724148a0aab2d8b50109d89a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ekip-registry-okumasi-kapali",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-ekip-registry-okumasi-kapali-sonra.txt",
+      "sha256": "bd11e645455953152b80db33910800290c03aa2ba5ae7fb711056dd2ee35bbab",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-iskan-mutant/iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:09:19+03:00",
+      "sure_sn": 38.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "iskan-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "67100ccd1e214b7c90fd5c88d6da1a12"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-esitligi",
+      "asama": "sonra",
+      "dosya": "olcum-surum-esitligi-sonra.txt",
+      "sha256": "c0f2dad146c7ef8b3bc2b19a01621256860f11659342d652fb70012dce1e28c4",
+      "komut": [
+        "bash",
+        "-c",
+        "a=$(sed -n \"s/^version: //p\" iskan/SKILL.md); b=$(python3 -c \"import re;c=open(\\\"catalog.json\\\").read();i=c.index(\\\"\\\\\\\"id\\\\\\\": \\\\\\\"iskan\\\\\\\"\\\");print(re.search(r\\\"\\\\\\\"version\\\\\\\": \\\\\\\"([^\\\\\\\"]+)\\\\\\\"\\\",c[i:]).group(1))\"); echo \"SKILL=$a catalog=$b\"; [ \"$a\" = \"0.11.6\" ] && [ \"$a\" = \"$b\" ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:10:08+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "05af4882a492491d86609f73853a5f93"
+    }
+  ],
+  "imza": "bb9f25b9e48460460c5e6dbe8c8d336549948d4f70d4011879cb3b3bcb9e7492"
+}

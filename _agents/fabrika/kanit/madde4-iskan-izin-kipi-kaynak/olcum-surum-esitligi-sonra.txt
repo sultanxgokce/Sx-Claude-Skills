@@ -1,0 +1,5 @@
+$ bash -c a=$(sed -n "s/^version: //p" iskan/SKILL.md); b=$(python3 -c "import re;c=open(\"catalog.json\").read();i=c.index(\"\\\"id\\\": \\\"iskan\\\"\");print(re.search(r\"\\\"version\\\": \\\"([^\\\"]+)\\\"\",c[i:]).group(1))"); echo "SKILL=$a catalog=$b"; [ "$a" = "0.11.6" ] && [ "$a" = "$b" ]
+# rc=0 sure=0.1s zaman=2026-10-30T14:10:08+03:00
+--- stdout ---
+SKILL=0.11.6 catalog=0.11.6
+--- stderr ---
