@@ -36,6 +36,11 @@
       "zaman": "2026-10-30T21:21:02+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-30T22:23:06+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
