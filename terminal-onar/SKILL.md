@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.3
+version: 2.36.4
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -85,6 +85,13 @@ geçirip bağlanır.
 - Kapıyı başlatan bütün sınavlar tuzu geçici yolda tutar (gerçek `$HOME`'a yazmaz).
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
+
+## 🆕 2.36.4 · Yazı kutusuna yapıştırılan resim terminale kaçmaz (30 Eki · görev …QC7Q7E · kart pano-yapistir-odak)
+Görev kartının "Madde ekle" kutusu gibi terminal DIŞI bir yazı alanına (input · textarea · düzenlenebilir alan) Cmd+V ile
+resim yapıştırılınca `genel/pano.js` olayı artık almaz; resim o alanın kendi yapıştırmasına kalır. xterm'in yardımcı
+textarea'sı `.xterm` içinde olduğundan terminale resim yapıştırma aynen sürer. Sınav `pano-sinav.mjs` Y4b (mutant: eski
+pano.js'te Y4b kırmızı, resim yüklenip yol terminale yazılıyor). Canlıya iniş: kurulumdan sonra kapı SIGHUP ile yeni
+pano.js'i okur (bağlantı düşmez).
 
 ## 🆕 2.36.3 · Kişi terminali: geniş ekran küçük rakip istemciyle daralmaz (29 Eki · görev …MH786T4 · kart kisi-pencere-latest)
 Köprü izlemeyi açmadan önce koltuğun pencere ayarını `window-size latest` yapar (masaüstü bağlanışıyla aynı) — tmux.conf `smallest` iken 80x24 bir istemci daha varsa kişinin geniş ekranı noktalı kalmaz. Sınav: `kisi-istemci.test.py` I3d.

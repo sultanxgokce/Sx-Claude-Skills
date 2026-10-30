@@ -120,6 +120,10 @@
   // Cmd/Ctrl+V → tarayıcı `paste` olayı xterm'in textarea'sına düşer; belgede YAKALAMA fazında önce biz görürüz.
   // Resim varsa olayı burada bitiririz (xterm'e ve varsa tarayıcı eklentisine gitmez); metinse HİÇ dokunmayız.
   document.addEventListener('paste', function (e) {
+    // Odak terminal dışı bir yazı alanındaysa (ör. görev kartının "Madde ekle" kutusu) yapıştırma o alanındır;
+    // xterm'in kendi yardımcı textarea'sı .xterm içinde olduğu için yakalanmaya devam eder.
+    var t = e.target;
+    if (t && t.closest && !t.closest('.xterm') && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
     var items = (e.clipboardData && e.clipboardData.items) || [];
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
