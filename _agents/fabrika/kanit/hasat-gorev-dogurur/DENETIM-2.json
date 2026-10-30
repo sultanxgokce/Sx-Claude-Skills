@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "hasat-gorev-dogurur",
+  "pr": "606",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T02:57:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-gorev-dogurur",
+  "dal": "hasat-gorev-dogurur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38777,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 23846
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d2159805a21db4726ef183289c71512edb6f67e3",
+  "duzeltme_farki": {
+    "onceki_bas": "d5d0af436bd06460a95fee36ccaf6fd90f1232f9",
+    "dosya": 14,
+    "bayt": 37165,
+    "tam_bayt": 68422
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Hasat havuz kaydını yerinde bırakıp kipli yeni görev doğuruyor; önceki turdaki B1 adım/bağ hatalarında geri alma eklenerek, B2 ise zorunlu `--kip otomatik` belgelendirilerek kapanmış. Ancak görev oluşturulduğu hâlde kimliği çıktıdan okunamazsa E3 yolu geri alma yapmadan çıkıyor ve erişilebilir fakat bağsız bir görev bırakabiliyor; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Doğan görevin kimliği okunamazsa oluşturulmuş görev geri alınmıyor: `gorev.sh ekle` başarılı olduktan sonra kimlik ayrıştırma hatası doğrudan `exit 1` ile bitiyor, dolayısıyla havuz bağı ve açılış adımı olmayan bir görev kalabiliyor.",
+        "kanit": "Üretim kodunda `CIKTI=... gorev.sh ekle` başarılı olduktan sonra `YENI=... grep` çalışıyor; hemen ardından `[ -n \"$YENI\" ] || ... exit 1` var ve `geri_al` işlevi ancak bu denetimden sonra tanımlanıp adım/bağ hatalarında çağrılıyor. E3 sınavı da `EKLE_CIKTI=\"kayıt alındı ama kimlik yok\"` ile bu yolu çalıştırıyor, rc 1 ve yalnız bağın yazılmamasını bekliyor; oluşturulan kaydın geri alınmasını sınamıyor.",
+        "konum": "gunluk-plan/scripts/hasat.sh: `CIKTI`/`YENI` kimlik ayrıştırma bloğu; gunluk-plan/scripts/hasat.test.sh E3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 76 geçti/23 kaldıdan 101 geçti/0 kaldıya ilerliyor, gerçek `sinav` ölçümü rc 0; altı mutasyon kaydı rc 1 ve düşen kapıyla ilgili sınavların bozuk kodu yakaladığını gösteriyor. B1'in adım ve bağ hata yolları E4/A6 ile, B2'nin belge düzeltmesi farkla kanıtlanmış; ancak E3'te oluşturulmuş görevin yaşam döngüsü ölçülmediği için kimlik okunamayan başarı durumundaki yetim görev riski açık kalıyor."
+  }
+}
