@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.6.2
+version: 0.6.3
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -36,6 +36,11 @@ sayısına girmez, Sırada cümlesinin sonunda "N bulgu havuzda, süzülmeyi bek
 - Jetonsuz kutuda (eski kutu defteri) havuz yoktur; komut bunu uyarıyla söyler, kayıt eski biçimde düşer.
 - Defter 1.18.0 öncesiyse `havuz` 400 ile reddedilir ve komut bunu basar (rc 1); sessizce `acik`a düşmez.
 - `kaynak_sinif: ajan` artık gövdede açıkça yazılır (ekranda "X açtı" künyesi defterin türetmesine bağlı kalmasın).
+
+## 0.6.3 — `yaz --oda <oda>` (BÂNİ 30 Ekim, görev …GZF89Z)
+Meşveret seansı maddeyi `bulgu.sh yaz … --oda <oda>` ile geçiriyordu; `yaz` bu bayrağı tanımadığından (`bilinmeyen: --oda`, rc 2)
+hiçbir madde kaydedilemiyordu. Artık `--oda` alınır ve merkezî deftere `oda` alanı olarak gider (`gorev.sh ac --oda` ile aynı alan).
+Jetonsuz kutuda eski defter oda alanı tanımaz: kayıt yazılır, odanın YAZILMADIĞI söylenir (sessiz düşme yok). Sınav OD1–OD4.
 
 ## Komut (her kutuda AYNI)
 ```bash
