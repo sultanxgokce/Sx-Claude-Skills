@@ -5,6 +5,7 @@
 #   KARAR=SOR  → Sırada < eşik: Sultan'a TEK soru, üç şık (1 Sultan'la sohbet · 2 reis kendi başına: ADIM 0-d tarama-ekle · 3 Seanslı Hasat: havuz kayıt kayıt sorulur, 1.17.0)
 #                + ZORUNLU=ADIM 0-d satırı (cevap beklenmez, 1.13.0)
 #   TAZELIK=   → her koşuda havuz tazeliği (1.17.0): VAR · KURU (Meşveret seansı önerilir) · ÖLÇÜLEMEDİ; pencere --taze-gun N (varsayılan 7)
+#   HASAT=    → ilk aday HAVUZ kaydıysa hasat kapısı (1.19.0, hasat.sh durum): OLUR değilse üstlenilmez, BASLAMADI + ZORUNLU=HASAT KAPISI basılır
 #   rc: 0 karar verildi · 2 kullanım · 3 ölçülemedi (defter okunamadı / kutu çıkmadı) — "Sırada 0" DENMEZ, ölçülemeyen SORU değil ÖLÇÜLEMEDİ'dir
 # Sırada = ekranın tanımı: aynı kutuda gorev_durumu acik ya da sira-bende (havuz/tasarlaniyor/bekliyor/calisiliyor/onay-bekliyor/bitti/iptal SAYILMAZ).
 # 🔴 "Bugüne al" Sultan'ındır: bugun_plani alanını geçit YALNIZ Sultan ekranına yazdırır (A06) — bu betik onu YAZMAZ, yalnız ÖNERİR.
@@ -133,6 +134,20 @@ if [ "$N" -ge "$ESIK" ] || [ "$HAVUZDAN" -eq 1 ]; then
   #   Biçim: görev …<son 6> tamamlanacak: <başlık> (sahip: <atanan | sen>)  — kimlik son-ek olarak taşınır, deftere-yaz tam kimliğe çözer.
   printf '%s\n' "$SIRA" | head -5 | awk -F'\t' -v kim="${KIM:-sen}" '{printf "MADDE=görev …%s tamamlanacak: %s (sahip: %s)\n", substr($1,length($1)-5), $3, ($4=="1" ? kim : "başkası")}'
   ILK="$(printf '%s\n' "$SIRA" | awk -F'\t' '$4=="1" {print $1; exit}')"
+  # 1.19.0 (Meşveret 30 Eki madde 9 · görev …ZM3PWD): HASAT KAPISI. İlk aday HAVUZ kaydıysa (havuz da iştir yolu) kayıt göreve çevrilmeden
+  #   önce "sorun hâlâ var mı" ölçülmüş olmalı: hasat.sh durum → OLUR değilse ÜSTLENİLMEZ; doğrulama komutu basılır. Tazelik (1.17) kaydın
+  #   yaşına bakar, bu kapı sorunun yaşadığına. Kapı ölçemezse (eski gorev.sh, kayıt okunamadı) da başlanmaz: "olur" uydurulmaz.
+  HASAT_ILK=0; [ -z "$ILK" ] || [ -z "$HAVUZ" ] || HASAT_ILK=$(printf '%s\n' "$HAVUZ" | awk -F'\t' -v i="$ILK" '$1==i' | wc -l)
+  if [ "$HASAT_ILK" -ge 1 ]; then
+    HK="$(bash "$KOK/hasat.sh" durum "$ILK" --taze-gun "$TAZE_GUN" 2>&1)"; HKRC=$?
+    HASAT_D="$(printf '%s\n' "$HK" | sed -n 's/^HASAT=//p' | head -1)"; HASAT_N="$(printf '%s\n' "$HK" | sed -n 's/^NEDEN=//p' | head -1)"
+    echo "HASAT=${HASAT_D:-ÖLÇÜLEMEDİ} · $ILK"
+    if [ "${HASAT_D:-}" != OLUR ]; then
+      echo "BASLAMADI=$ILK (hasat kapısı: ${HASAT_N:-kapı ölçemedi, rc $HKRC} — havuz kaydı ölçülmeden göreve çevrilmez)"
+      echo "ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash $KOK/hasat.sh dogrula $ILK --sonuc var|duzelmis|olculemedi --olcum \"<komut ya da dosya>\" [--kapandi \"PR #N\"] ; 'var' ise bash $KOK/hasat.sh ac $ILK \"<gerekçe>\" (ya da sirada-bak'ı yeniden koş)"
+      exit 0
+    fi
+  fi
   if [ -z "$ILK" ]; then
     echo "BASLAMADI=yok (sıradaki $NB işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)"
     echo "ONERI=Sultan'a: 'Sırada $NB iş var ama hepsi başka koltuklara atanmış; bana atanmış ya da sahipsiz iş yok. Kendimize iş çıkarma seansı yapalım mı?'"
@@ -152,6 +167,8 @@ else
   if [ "$HT" = 0 ]; then SIK3="Havuzdan süzelim: Seanslı Hasat — havuz BOŞ, önce Meşveret seansı (yeni bulgu toplanmalı)"
   else SIK3="Havuzdan süzelim: Seanslı Hasat (kayıt kayıt sorarım, 3 cevap: kabul · başka sun · düzeltmeyle kabul)"; fi
   echo "SIKLAR=Sultan'la sohbet ederek|Reis kendi başına tarasın (önerim)|$SIK3"
+  # 1.19.0 HASAT KAPISI (Meşveret madde 9): Seanslı Hasat'ta her kayıt göreve çevrilmeden önce "hâlâ var mı" ölçülür — ezbere iş açılmaz.
+  [ "$HT" = 0 ] || echo "HASAT_KAPI=her havuz kaydı göreve çevrilmeden ÖNCE ölçülür: bash $KOK/hasat.sh durum <gorev_id> → OLUR değilse bash $KOK/hasat.sh dogrula <gorev_id> --sonuc var|duzelmis|olculemedi --olcum \"<komut>\" (düzelmiş → --kapandi \"PR #N\" ile kendiliğinden kapanır); $TAZE_GUN günden eski ya da yüzeyde birleşme görmüş doğrulama yeniden ölçülür; açılış: bash $KOK/hasat.sh ac <gorev_id> \"<gerekçe>\""
   # 1.13.0 (HC75A, SERDAR 28 Eki): eşik altında ADIM 0-d ZORUNLU — Sultan'ın cevabı beklenmez; sıra boşken kutu defterine açılış üretir. Tarama-ekle kuru varsayılan kalır, günlük 3 tavanı onun kapısıdır.
   echo "ZORUNLU=ADIM 0-d tarama: Sultan'ın cevabını BEKLEMEDEN bir ölçülmüş iş ekle (günde en çok 3): bash $KOK/tarama-ekle.sh --baslik \"<tek cümle>\" --kaynak <dosya:satır|https://…> --kanit \"<bu turda ölçtüğün>\" --uygula"
 fi

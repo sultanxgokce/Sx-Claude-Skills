@@ -1,0 +1,71 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh /config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts hasat.sh hasat.test.sh if bt >= dt: if bt > dt:
+# rc=1 sure=267.9s zaman=2026-10-30T16:30:52+03:00
+--- stdout ---
+MUTASYON: hasat.sh · 'if bt >= dt:' → 'if bt > dt:'
+— kullanım
+  ✓ U1 komutsuz rc 2
+  ✓ U2 gorev_ öneksiz kimlik rc 2
+  ✓ U3 --taze-gun 0 rc 2
+  ✓ U4 ac gerekçesi 5 harften kısa rc 2
+— durum: kapı (fikstür günü 2026-01-10, pencere 7)
+  ✓ D1 doğrulama yok → HASAT=OLMAZ rc 1
+  ✓ D1b NEDEN doğrulama komutunu gösterir
+  ✓ D1c DOGRULAMA=yok
+  ✓ D2 2 gün önce 'var' → HASAT=OLUR rc 0
+  ✓ D2b tarih adım metnindeki tarih= alanından, yaş 2
+  ✓ D3 8 gün önce (pencere 7) → bayat, OLMAZ rc 1
+  ✓ D3b NEDEN 'bayat' ve yeniden ölçüm ister
+  ✓ D3c --taze-gun 10 ile aynı kayıt OLUR
+  ✓ D4 SON ölçüm 'düzelmiş' (öncekinde var olsa da) → OLMAZ, DOGRULAMA=duzelmis
+  ✓ D4b NEDEN kapanışı gösterir
+  ✓ D5 son ölçüm 'ölçülemedi' → OLMAZ rc 1 (olur UYDURULMAZ)
+  ✓ D6 kayıt havuzda değil (acik) → OLMAZ, NEDEN durumu söyler
+  ✓ D7 tarih= yok ve zaman damgası yok → ÖLÇÜLEMEDİ rc 3 (taze DENMEZ)
+  ✓ D8 tarih= yoksa zaman damgasından okunur → OLUR, yaş 1
+  ✓ D9 gelecek tarihli doğrulama → ÖLÇÜLEMEDİ rc 3
+  ✓ D10 bugünün tarihi bozuk → ÖLÇÜLEMEDİ rc 3
+  ✓ D11 kayıt okunamazsa rc 3, 'olur' denmez
+  ✓ D11b olmayan kayıt rc 3
+  ✓ D12 MUHAKKİK'in görev hükmü (geçti/kaldı) bulgu doğrulaması SAYILMAZ → DOGRULAMA=yok
+— birleşme: --birlesme tarihi ve --yuzey (git)
+  ✓ B1 doğrulamadan (01-08) SONRA birleşme (01-09) → OLMAZ rc 1
+  ✓ B1b NEDEN yüzeyde birleşmeyi söyler
+  ✗ B1c aynı gün birleşme de yeniden ölçüm ister (≥) — beklenen=OLMAZ gerçek=OLUR
+  ✓ B2 doğrulamadan ÖNCE birleşme → OLUR, BIRLESME basılır
+  ✓ B3 bozuk --birlesme rc 2
+  ✓ B4 --birlesme ile --yuzey birlikte rc 2
+  ✓ B5 --yuzey: son commit 01-09 git'ten okunur → OLMAZ, BIRLESME=2026-01-09
+  ✓ B6 --yuzey eski dosya (01-03) → OLUR
+  ✓ B7 yüzeye hiç commit yok → birleşme yok, OLUR (BIRLESME=-)
+  ✓ B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 ('birleşme yok' UYDURULMAZ)
+— dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)
+  ✓ Y1 var: adım yazılır rc 0
+  ✓ Y1b adım metni: [doğrulama: var] sınıf=olcum · ölçüm: … · tarih=<bugün> · <söz>
+  ✓ Y1c var: durum YAZILMAZ (kayıt havuzda kalır)
+  ✓ Y1d çıktı DOGRULAMA=var ve tarih
+  ✓ Y2 --olcum yoksa rc 2, adım yazılmaz (ölçümsüz doğrulama yok)
+  ✓ Y3 bozuk --sonuc rc 2
+  ✓ Y3b bozuk --sinif rc 2
+  ✓ Y4 düzelmiş ama --kapandi yok → rc 2, hiçbir şey yazılmaz
+  ✓ Y5 düzelmiş + --kapandi: rc 0, adım 'kendiliğinden kapandı: PR #12' taşır
+  ✓ Y5b kayıt iptal ile kapanır, gerekçe 'kendiliğinden kapandı — PR #12: <söz>'
+  ✓ Y5c çıktı KAPANDI=PR #12
+  ✓ Y6 --kapandi yalnız düzelmişle: var ile rc 2
+  ✓ Y7 ölçülemedi: adım '[doğrulama: ölçülemedi]' yazılır, kapanış yok
+  ✓ Y8 defter adımı reddederse rc 1 (sessiz başarı yok)
+  ✓ Y9 kapanış reddedilirse rc 1
+  ✓ Y10 --tarih verilirse metne o yazılır
+  ✓ Y10b bozuk --tarih rc 2
+— ac: kapıdan geçerse havuz kaydı sıraya girer
+  ✓ A1 OLUR → gorev.sh durum … acik, gerekçe kaynak kaydı + doğrulama tarihini taşır
+  ✓ A1b ACILDI satırı
+  ✓ A2 doğrulamasız kayıt AÇILMAZ rc 1, durum yazılmaz
+  ✓ A3 bayat doğrulama AÇILMAZ rc 1
+  ✓ A4 doğrulamadan sonra birleşme AÇILMAZ rc 1
+  ✓ A5 ÖLÇÜLEMEDİ → açılmaz rc 3
+  ✓ A6 defter açılışı reddederse rc 1
+  ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
+sonuç: 57 geçti · 1 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-hasat-bulgu-tazelik-birlesme-ayni-gun-mutant 266 sn bekledi (yuva 1, load1 17.61)
