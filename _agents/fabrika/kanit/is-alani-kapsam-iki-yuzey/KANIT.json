@@ -1,0 +1,76 @@
+{
+  "is": "is-alani-kapsam-iki-yuzey",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T03:00:02+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-is-alani",
+      "asama": "once",
+      "dosya": "olcum-sinav-is-alani-once.txt",
+      "sha256": "3376fc18756801859230efc6d4595b8fcc0f6c150c504cc89a266e8894081dee",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T02:52:17+03:00",
+      "sure_sn": 343.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "faf92b2f17cd42fba8bdc63ec9ab62bc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-is-alani",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-is-alani-sonra.txt",
+      "sha256": "faa40b9ddc7b1a45fdc6ff677fa0bcabea2fc3cd18dbc03ffaad194adaad05cf",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T02:59:54+03:00",
+      "sure_sn": 23.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "54bed3e274e74ee0a7b7fe93437fea32"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kesisim-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kesisim-yok-sonra.txt",
+      "sha256": "96d72ac648a35c410f2a68de40feb1af32749b3dec73d00619474be1bb4dfab8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant-kesisim-yok.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-is-alani-kapsam-iki-yuzey/yazilim-fabrikasi"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T03:00:02+03:00",
+      "sure_sn": 7.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-is-alani",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "e5a865cf62a94f88b0487eaad379d74f"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kapsam-kapisi-durdurma-pr506",
+      "asama": "once",
+      "dosya": "dosya-kapsam-kapisi-durdurma-pr506-once.txt",
+      "sha256": "4dc3c8032f69f0056ac9b45b3d5a7b3418c6eca3462aa573dbe969e0c82f4286",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-is-alani-kapsam-iki-yuzey/_agents/fabrika/kanit/is-alani-kapsam-iki-yuzey/kapsam-kapisi-durdurma-pr506.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T02:54:47+03:00",
+      "olcum_id": "2225f9a14770468a9ad46974940946c5"
+    }
+  ],
+  "imza": "5cd995629eeefd49fa6828a8ba852c9e92af38abe1cab3d24e820c642147a6af"
+}
