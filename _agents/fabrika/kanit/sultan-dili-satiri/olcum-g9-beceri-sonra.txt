@@ -1,0 +1,5 @@
+$ bash /config/projects/_wt/Nexus-kuzey-olc/scripts/kuzey-olc.sh G9
+# rc=0 sure=1.1s zaman=2026-10-30T22:59:08+03:00
+--- stdout ---
+G9 [G2.1] GEÇTİ — açık 193 · özetsiz 0 · 80 harften uzun 0 · özet kapısı sert · Sultan dili satırı eksik: yok
+--- stderr ---

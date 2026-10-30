@@ -1,0 +1,62 @@
+{
+  "is": "sultan-dili-satiri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T22:59:17+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "g9-beceri",
+      "asama": "once",
+      "dosya": "olcum-g9-beceri-once.txt",
+      "sha256": "ce3a29292bf1d2fbd255dd6dee603b5391be09c3efb8de86a55f259c563001e8",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Nexus-kuzey-olc/scripts/kuzey-olc.sh",
+        "G9"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T22:59:07+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fea1ac5d26c04f76aecbe199f872585c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "g9-beceri",
+      "asama": "sonra",
+      "dosya": "olcum-g9-beceri-sonra.txt",
+      "sha256": "0cd5c6b4a781ac25c2b3d12381a0e01466c9a26ca1ba351701fe512f375b1cca",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Nexus-kuzey-olc/scripts/kuzey-olc.sh",
+        "G9"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:59:08+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "54c88e9fe65145188f671e120c951adb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "73ba6ff9e017e07dc83cbcb0e7f451153ce4de401a3f5ed9a44e92e7e520ffb5",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:59:17+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "88199134714a491daec76842d0b0c67b"
+    }
+  ],
+  "imza": "ce5d0b3f335be4c7367e5fc5272b0a86375076954dda399ad3a9a5de8770ff28"
+}

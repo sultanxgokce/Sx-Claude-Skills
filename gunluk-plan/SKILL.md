@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.19.0
+version: 1.19.1
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -19,7 +19,9 @@ bırakmaktır** — plan yalnız oraya giden yoldur.
    olur. Hafızadan/özetten madde üretmek yasak — hafıza bayatlar ([[project_bayat_kayit]]).
 2. **Yeni havuz/defter KURULMAZ.** Kaynaklar aşağıda sabittir; sekizincisini icat etme.
 3. **A06:** Sultan'ın onayı üretilmez. Plan sunulur, seçimi o yapar.
-4. **Sultan-dili.** Dosya yolu · komut · kod-terimi plan gövdesinde geçmez; kanıt satırında geçebilir.
+4. **Sultan dili zorunlu.** Dosya yolu · komut · kod-terimi plan gövdesinde geçmez; kanıt satırında geçebilir.
+   Deftere yazılan her maddenin (ADIM 0-b · 0-d) özeti tek cümle ve 80 harften kısadır, adı 5-10 kelimedir; yol, komut ve kod
+   terimi ne adda ne özette geçer. Defterin özet kapısı sert kiptedir, kuralı bozan açılışı reddeder (Kuzey Yıldızı G2.1–G2.2, 1.19.1).
 5. **Kapasite dürüstlüğü.** Bir güne 3-5 maddeden fazlası yazılmaz. Uzun liste plan değil, kaçıştır.
 6. **Kuyruğunda iş varken durma.** Onaylanan maddeyi bitir, sonra sonrakine geç.
 7. **🔴 ÇIPA ÖNCE, COMPACT SONRA.** Bu komut günün en uzun işidir; bağlamı en çok yiyen
@@ -113,6 +115,7 @@ Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sa
 > **1.10.1 (27 Eki, görev 0HC75A):** üç betik (`deftere-yaz` · `haftalik` · `tarama-ekle`) görev betiğini tek yerden bulur (`scripts/gorev-yolu.sh`): açık env → cloudtop kanoniği → BU BECERİNİN kendi kopyası (`scripts/gorev.sh` + `dugum-bak.py`) → PATH → `/config/.local/bin`. cloudtop deposunu görmeyen 9 kutuda plan maddeleri deftere yazılamıyordu. Paketlenmiş kopyanın cloudtop kanoniğinden sapmasını `gorev-yolu.test.sh` Y7 yakalar (kanonik her değiştiğinde buraya yeniden kopyalanır).
 > **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
 > **1.18.0 (30 Eki, MUAVİN Madde 4 · NOVA):** `sirada-bak.sh` koltuk kimliğini ortamda yokken türetir — `--kim` → `GUNLUK_PLAN_AJAN` → `AGENT_NAME` → `AILE_KIMDEN` → tmux oturumu ↔ aile-registry `tmux:` alanı (tek eşleşme; yol `GUNLUK_PLAN_REGISTRY`). Eskiden kimlik boşken betik yine koşuyor, koltuğa atanmış işleri 'başkasının' sayıp Sultan'a 'iş çıkaralım mı' diye sevk ediyordu (NOVA 30 Eki). Türetilemezse ÖLÇÜLEMEDİ rc 3, kimlik uydurulmaz. Sınav X1-X5.
+> **1.19.1 (30 Eki, SERDAR · Kuzey Yıldızı G2.1–G2.2):** değişmez 4 "Sultan dili zorunlu" oldu: deftere yazılan madde özeti tek cümle ve 80 harften kısa, adı 5-10 kelime. Betik değişmedi.
 
 > **1.17.1 (30 Eki, görev …Y5DY7):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (cloudtop #1184 sonrası) yeniden eşitlendi — oda süzgeci (`liste --oda/--odasiz/--kutu`), `oda`, `oda-dagit` (+`scripts/oda-dagit.py`, Y7 kapısı onu da bayt-eşit ister), `bulgu --puan/--gerekce/--gorsel`, `puan`, `gorsel`, `dogan`. Cloudtop'u görmeyen kutular bu komutları ancak bu sürümle görür.
 
