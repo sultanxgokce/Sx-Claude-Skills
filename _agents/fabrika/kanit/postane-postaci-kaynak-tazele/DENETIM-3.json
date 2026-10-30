@@ -1,0 +1,56 @@
+{
+  "tur": 3,
+  "is": "postane-postaci-kaynak-tazele",
+  "pr": "597",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T20:06:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-kaynak-tazele",
+  "dal": "postane-postaci-kaynak-tazele",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13355,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10206
+  },
+  "dalgic": "olculemedi",
+  "bas": "51e049062a25bf22ed1d0ef4d001b814d7939e84",
+  "duzeltme_farki": {
+    "onceki_bas": "ca5f869ea304b9c08c693438bb2b764c21ecdd8b",
+    "dosya": 6,
+    "bayt": 10206,
+    "tam_bayt": 19383
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "postane.mjs kopyası cloudtop origin/main başı 640bee1, postane 0.1.6 ve #1216 kaynak commitine bağlanarak eşitlenmiş; kaynak farkı 1’den 0’a düşmüş ve beceri sınavı 16/16 geçmiştir. Önceki iki bulgu da kapanmıştır; üretime engel uygulama sorunu kalmamıştır.",
+    "bulgular": [
+      {
+        "ne": "B1 kapandı: kaynak eşitliği ölçümü artık hedef kaynağı cloudtop ana dalı ve postane 0.1.6 olarak görünür biçimde doğruluyor.",
+        "kanit": "Önce ve sonra çıktılarının ikisi de “cloudtop origin/main: 640bee17005a69ca54592a98fc755d6aab528941”, “cloudtop postane sürümü (package.json): 0.1.6” ve #1216 kaynak commitini gösteriyor; “kaynaktan farklı dosya” değeri 1’den 0’a iniyor.",
+        "konum": "olcum-kaynak-fark-once.txt; olcum-kaynak-fark-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 kapalı kalmıştır: 0.2.0 → 0.2.1 beceri ve katalog sürüm artışı güncel talebin açık parçasıdır, kapsam kayması değildir.",
+        "kanit": "İş kartı cümlesi iki sürüm artışını ve kurulu kopyanın güncellenmesi gerekçesini açıkça içeriyor; önceki tur kaydı da bu bulgunun kapandığını belgeliyor ve bu turda üretim kodu değişmemiştir.",
+        "konum": "İŞ KARTI.cumle; İŞ KARTI.gecmis[0]; ÖNCEKİ TUR B2; DEĞİŞİKLİK notu",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı kayıt yoktur. Kaynak için gerçekçi kimlik bilgileri taşıyan yeşil önce/sonra ölçüm çifti, farkın 1’den 0’a indiğini gösteriyor; ayrıca rc=0 ve PASS=16 FAIL=0 beceri sınavı vardır. Sürüm artışları bu tur farkında yeniden gösterilmemiş olsa da önceki tam-PR incelemesinde görülmüş, bu turda üretim kodunun değişmediği açıkça belirtilmiştir."
+  }
+}
