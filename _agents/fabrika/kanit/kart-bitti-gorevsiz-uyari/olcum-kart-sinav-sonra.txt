@@ -1,5 +1,6 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kartgb.sh yeni
-# rc=0 sure=123.6s zaman=2026-10-30T15:05:21+03:00
+# rc=0 sure=173.1s zaman=2026-10-30T15:27:45+03:00
 --- stdout ---
-430 geçti, 0 kaldı
+431 geçti, 0 kaldı
 --- stderr ---
+⏳ agir-sira: kanit-kart-bitti-gorevsiz-uyari-kart-sinav 30 sn bekledi (yuva 1, load1 17.31)

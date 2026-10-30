@@ -1104,5 +1104,9 @@ PY
 O="$(bash "$KT" bitti gbu-2 --pr 6 2>&1)"; ! grep -qF "görev bağı yok" <<<"$O"; g $? "GB3 görevli kart bitti → uyarı YOK (altın)"
 bash "$KT" ac gbu-3 --is "görevsiz tıkanma" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 O="$(bash "$KT" tikandi gbu-3 --yol devam --neden "beklemede" 2>&1)"; ! grep -qF "göreve bağlı değil, defterde PR kapanışı" <<<"$O"; g $? "GB4 tikandi'da bu uyarı çıkmaz (yalnız bitti)"
+bash "$KT" ac gbu-5 --is "gorev null kapanış" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 -c "import json,sys;p=sys.argv[1];k=json.load(open(p));k['gorev']=None;json.dump(k,open(p,'w'),ensure_ascii=False)" "$KU/gbu-5.json"
+O="$(bash "$KT" bitti gbu-5 --pr 8 2>&1)"; RC=$?
+[ $RC -eq 0 ] && grep -qF "$GBM" <<<"$O"; g $? "GB5 kartta gorev JSON null → görevsiz sayılır, uyarı VAR (None dizgesi görev sanılmaz), rc 0"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

@@ -578,7 +578,7 @@ PY
       export GOREV_BITTI KARE SURUM OLCUM BELGE
     fi
     GRC=0
-    if [ -n "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev',''))")" ]; then gorev_yaz "$KD/$IS.json" "$CMD" || GRC=4
+    if [ -n "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev') or '')")" ]; then gorev_yaz "$KD/$IS.json" "$CMD" || GRC=4
     elif [ "$CMD" = bitti ]; then echo "  · görev bağı yok — bu iş göreve bağlı değil, defterde PR kapanışı görünmez (bağlamak: kart.sh ac … --gorev)"   # 0.27.30: açılışta ve göz adımında söyleniyordu, kapanışta sessizdi; yalnız söyler, rc ve kapanış DEĞİŞMEZ
     fi
     uzlastir "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('aldi',''))")"
