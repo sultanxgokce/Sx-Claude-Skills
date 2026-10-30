@@ -126,18 +126,18 @@ gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 
   # iyimser kilidi, 409 surum_catismasi) ve çatışmada BİR kez yeniden okunup gövde yeniden kurulur (göz tur 1 bulgusu, 774ZHG).
   for deneme in 1 2; do
   case "$olay" in ac|gecti|tikandi) oku="$(gorev_durum_oku "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")")"; MEVCUT="${oku%% *}"; MSURUM="${oku#* }"; [ "$MEVCUT" = "-" ] && MEVCUT=""; [[ "$MSURUM" =~ ^[0-9]+$ ]] || MSURUM="" ;; esac
-  govde="$(MEVCUT_DURUM="$MEVCUT" MEVCUT_SURUM="$MSURUM" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+  govde="$(MEVCUT_DURUM="$MEVCUT" MEVCUT_SURUM="$MSURUM" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KART_IZIN_NOT="${KART_IZIN_NOT:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 md=os.environ.get("MEVCUT_DURUM","")
 KORU=md in ("onay-bekliyor","bitti")
 if KORU and olay in ("ac","gecti","tikandi"):
     # ONAY KORUMASI: durum yazılmaz, yalnız adım (Sultan'ın kuyruğundaki iş yerinde kalır)
-    neler={"ac":"kart %s açıldı (tahmin %s dk)" % (is_,k.get("tahmin_dk")),"gecti":"kart %s açıkken başka işe geçti: %s" % (is_,os.environ.get("GECTI_KART","?")),
+    neler={"ac":"kart %s açıldı (tahmin %s dk)%s" % (is_,k.get("tahmin_dk"),os.environ.get("KART_IZIN_NOT","")),"gecti":"kart %s açıkken başka işe geçti: %s" % (is_,os.environ.get("GECTI_KART","?")),
            "tikandi":"kart %s tıkandı: %s" % (is_,((k.get("tikanma") or {}).get("neden","") or "tıkandı")[:300])}
     print(json.dumps({"adimlar":["[▶ dilim] %s · %s — görev '%s', durumu KORUNUR (onay kuyruğundan düşmez)" % (kim,neler[olay],md)]},ensure_ascii=False)); sys.exit(0)
 if olay=="ac":
-    y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk · sınıf: %s" % (kim,is_,k.get("tahmin_dk"),",".join(k.get("siniflar") or []) or "yok")   # 0.25.2: merkezin otomatik doğrulama devri sınıfsız işi buradan okur (sınıf bilinmiyorsa Doğrulat)
+    y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk · sınıf: %s" % (kim,is_,k.get("tahmin_dk"),",".join(k.get("siniflar") or []) or "yok")+os.environ.get("KART_IZIN_NOT","")   # 0.25.2: merkezin otomatik doğrulama devri sınıfsız işi buradan okur (sınıf bilinmiyorsa Doğrulat)
 elif olay=="bitti":
     # DİLİM ≠ GÖREV (KF22R · Sultan D1 21 Eki): kart = dilim; PR birleşmesi görevi BİTİRMEZ. Varsayılan: göreve yalnız dilim adımı,
     #   durum 'çalışılıyor' kalır. Görev de bitecekse --gorev-bitti + kanıt sınıfı (ekran: --kare + --surum · ölçüm: --olcum · belge: --belge);
@@ -403,9 +403,18 @@ case "$CMD" in
     #    Varsayılan oda UYDURULMAZ: oda-tetik.sh'ta "merkez/Sultan" diye bir oda yok; tahmin edilen oda sessiz kayıp olurdu.
     #    Sınıfsız kart DEĞİŞMEDİ (--oda isteğe bağlı, tetik best-effort).
     SINIFLI=0; case "${GA}${PARA}${DIS}${YETKI}" in *e*|*\?*) SINIFLI=1 ;; esac
+    # 🔴 DEFTER YOLU (0.27.34 · görev …QFS1RR, nova MUAVİN ölçümü 30 Eki): yalıtılmış kutu Nexus'u görmez → tetik betiği YOK ve sınıflı kart hiç
+    #    açılamıyordu (iş kayıtsız kalıyordu). Kutuda tetik yoksa izin Sultan'a BAĞLI GÖREV üzerinden gider: görev Sultan'ın ekranındadır,
+    #    açılış adımı sınıfı ve veto cümlesini taşır. Görev yazılamazsa kart AÇILMAZ (fail-closed, tetik düşmesiyle aynı kural).
+    #    Tetik betiği VARSA davranış değişmedi (--oda zorunlu, tetik). Dürüst sınır: defter yolu zil çalmaz; Sultan görevi ekranında görür.
+    DEFTER_YOLU=0
     if [ "$SINIFLI" = 1 ]; then
-      [ -n "$ODA" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — sınıflı işin başlama izni Sultan'a gitmeli, --oda verilmedi (kart AÇILMADI)"; exit 1; }
-      [ -x "$TETIK" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — tetik betiği yok: $TETIK (FABRIKA_TETIK; kart AÇILMADI)"; exit 1; }
+      if [ -x "$TETIK" ]; then
+        [ -n "$ODA" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — sınıflı işin başlama izni Sultan'a gitmeli, --oda verilmedi (kart AÇILMADI)"; exit 1; }
+      else
+        [ -n "$GOREV" ] || { _hata "Sultan'a ulaşılamadı: tetik betiği yok: $TETIK (FABRIKA_TETIK) — bu kutuda başlama izni bağlı görev üzerinden gider: --gorev gorev_<kimlik> --tahmin <dk> ver (kart AÇILMADI)"; exit 1; }
+        DEFTER_YOLU=1
+      fi
     fi
     if [ -n "$GOREV" ]; then
       [[ "$GOREV" =~ ^gorev_[A-Za-z0-9]{10,40}$ ]] || { _hata "--gorev gorev_<kimlik> biçiminde olmalı ('$GOREV' değil)"; exit 1; }
@@ -481,13 +490,20 @@ if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor
 PY
     # Sultan'a giden satır Sultan-dilindedir: Sultan komut yazmaz (göz 23 Eki tur 2). Ajan tarafı: kart.sh sultan-dedi <iş> --karar dur
     IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
-    TRC=0; tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT" || TRC=1
+    TRC=0; GRC=0; GYAZILDI=0
+    if [ "$DEFTER_YOLU" = 1 ]; then   # izin bağlı göreve yazılır; yazılamazsa izin GİTMEMİŞTİR → kart yayımlanmaz
+      KART_IZIN_NOT=" · başlama izni Sultan'da: iş yürür, durdurmak için 'dur' demen yeter (bu kutuda tetik yok, izin bu görevden okunur)" gorev_yaz "$KART_TMP" ac || TRC=1
+      if [ "$TRC" -ne 0 ]; then _hata "Sultan'a ulaşılamadı: bağlı görev $GOREV deftere yazılamadı, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)"; rm -f -- "$KART_TMP"; exit 1; fi
+      GYAZILDI=1
+    else
+      tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT" || TRC=1
+    fi
     if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ]; then   # izin isteği GİTMEDİ → kart hiç yayımlanmaz (yalnız kendi geçici dosyamız silinir)
       rm -f -- "$KART_TMP"; _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — '$ODA' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)"; exit 1
     fi
     ln -- "$KART_TMP" "$KD/$IS.json" 2>/dev/null || { rm -f -- "$KART_TMP"; _hata "kart zaten var: $IS (açılış sırasında başkası açtı; onun kartına dokunulmadı)"; exit 1; }
     rm -f -- "$KART_TMP"
-    GRC=0; [ -n "$GOREV" ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
+    [ -n "$GOREV" ] && [ "$GYAZILDI" = 0 ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
     # 0.24.0: aynı ajanın BAŞKA açık, görev bağlı kartı varsa o görev 'bekliyor' + 'başka işe geçti: <bu kart>' (bırakma anı araçta)
     if [ -n "$GOREV" ]; then
       for ONC in $(python3 - "$KD" "$IS" "$ALDI" "$GOREV" <<'PY'
