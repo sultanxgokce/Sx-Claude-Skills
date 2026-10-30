@@ -1,0 +1,25 @@
+{
+  "is": "is-alani-kapsam-iki-yuzey",
+  "cumle": "is-alani.sh kapsam kapısı iki yüzeyli olur: açık PR'ın GitHub dosya listesi ile merge-base farkının kesişimi çakışma sayılır, git yolu düşerse tek-yüzey uyarısıyla GitHub listesine düşer; ŞAKİRD'in T12 sınavı yeşile döner, eski kapılar yeşil kalır",
+  "istedi": "BÂNİ",
+  "aldi": "BENNÂ",
+  "zaman": "2026-10-30T02:45:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/is-alani-kapsam-iki-yuzey (Sx deposu)",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}

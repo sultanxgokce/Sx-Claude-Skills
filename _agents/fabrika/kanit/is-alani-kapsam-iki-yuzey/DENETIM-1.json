@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "is-alani-kapsam-iki-yuzey",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T03:04:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-is-alani-kapsam-iki-yuzey",
+  "dal": "is-alani-kapsam-iki-yuzey",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31784,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapsam kapısı, GitHub dosya listesi ile merge-base farkının kesişimini kullanacak biçimde iki yüzeyli yapılmış; git yolu ölçülemezse açık uyarıyla GitHub listesine dönüyor. T12’nin 62/1’den 67/0’a geçmesi, eski kapıların yeşil kalması, gerçek PR ölçümü ve kesişimi kaldıran mutantın iki kapıyı düşürmesi nedeniyle iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA’ları tutuyor; sarı kayıt yok. Aynı sınav için kırmızı önce/yeşil sonra ölçüm çifti var, 67/0 sonucu T12 ile eski kapıları birlikte kapsıyor; ayrıca gerçek gh + merge-base senaryosu gerçek çakışmayı doğruluyor ve mutasyon kaydı kesişim kaldırıldığında sınavın 65/2 ile bozuk kodu yakaladığını gösteriyor."
+  }
+}
