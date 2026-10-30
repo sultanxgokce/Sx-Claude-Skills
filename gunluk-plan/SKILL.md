@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.17.1
+version: 1.18.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -112,6 +112,8 @@ Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sa
 
 > **1.10.1 (27 Eki, görev 0HC75A):** üç betik (`deftere-yaz` · `haftalik` · `tarama-ekle`) görev betiğini tek yerden bulur (`scripts/gorev-yolu.sh`): açık env → cloudtop kanoniği → BU BECERİNİN kendi kopyası (`scripts/gorev.sh` + `dugum-bak.py`) → PATH → `/config/.local/bin`. cloudtop deposunu görmeyen 9 kutuda plan maddeleri deftere yazılamıyordu. Paketlenmiş kopyanın cloudtop kanoniğinden sapmasını `gorev-yolu.test.sh` Y7 yakalar (kanonik her değiştiğinde buraya yeniden kopyalanır).
 > **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
+> **1.18.0 (30 Eki, MUAVİN Madde 4 · NOVA):** `sirada-bak.sh` koltuk kimliğini ortamda yokken türetir — `--kim` → `GUNLUK_PLAN_AJAN` → `AGENT_NAME` → `AILE_KIMDEN` → tmux oturumu ↔ aile-registry `tmux:` alanı (tek eşleşme; yol `GUNLUK_PLAN_REGISTRY`). Eskiden kimlik boşken betik yine koşuyor, koltuğa atanmış işleri 'başkasının' sayıp Sultan'a 'iş çıkaralım mı' diye sevk ediyordu (NOVA 30 Eki). Türetilemezse ÖLÇÜLEMEDİ rc 3, kimlik uydurulmaz. Sınav X1-X5.
+
 > **1.17.1 (30 Eki, görev …Y5DY7):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (cloudtop #1184 sonrası) yeniden eşitlendi — oda süzgeci (`liste --oda/--odasiz/--kutu`), `oda`, `oda-dagit` (+`scripts/oda-dagit.py`, Y7 kapısı onu da bayt-eşit ister), `bulgu --puan/--gerekce/--gorsel`, `puan`, `gorsel`, `dogan`. Cloudtop'u görmeyen kutular bu komutları ancak bu sürümle görür.
 
 ## ADIM 0-d — TARAMA: kod tabanı + web + endüstriden ölçülmüş İŞ ekle (1.10.0 · görev 0HC75A (b): "havuza, günde ≤3")
@@ -154,7 +156,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh --taze-gun 14   # 
 - **Ölçemezse karar vermez:** defter okunamadı ya da kutu çıkmadıysa rc 3 — "Sırada 0" DENMEZ, soru da sorulmaz.
 - **Kutu tahmin edilmez (`kutu-bul.sh`):** görev listesi kutuya özel DEĞİLDİR (herkes tüm kutuları görür); "listedeki en sık kutu" hep en kalabalık kutuyu (code) verirdi — menzil'de maddeler yanlış deftere gidecekti. Kutu = o koltuğa ATANMIŞ işlerin kutusu; atanmışı yoksa ya da iki kutu eşitse rc 3 ve `--kutu` istenir (`GUNLUK_PLAN_KUTU` ile de verilir). `deftere-yaz.sh` de aynı yolu kullanır.
 - **`deftere-yaz.sh` düzeltmesi (mihenk/s08):** `gorev.sh ekle` artık `--ozet` (Sultan-dili açılış özeti) taşır — geçit özetsiz açılışı 400 `ozet_acilista_gerekli` ile reddediyordu ve üç madde sessizce yazılamıyordu; reddedilen yazımın SEBEBİ artık ekrana basılır. Sınavın sahte `gorev.sh`'ı gerçek kapıyı taklit etmediği için bu hata yeşil sınavın arkasında kalmıştı.
-Sınavı: `bash scripts/sirada-bak.test.sh` (K1-K6 · S1-S21 · D1-D3 · Q1-Q13 · H1-H4 · T1-T12 tazelik + Seanslı Hasat şıkkı, hermetik). Mutant sınav dosyasında değil kanıttadır: `kanit.py olcum --mutasyon` ile `taze+=1 → taze+=0` bozulunca 7 kapı kırmızı (`_agents/fabrika/kanit/hasat-tazelik-seansli`). + `deftere-yaz.test.sh` (D19-D20).
+Sınavı: `bash scripts/sirada-bak.test.sh` (K1-K6 · S1-S21 · D1-D3 · Q1-Q13 · H1-H4 · T1-T12 · X1-X5 kimlik türetme tazelik + Seanslı Hasat şıkkı, hermetik). Mutant sınav dosyasında değil kanıttadır: `kanit.py olcum --mutasyon` ile `taze+=1 → taze+=0` bozulunca 7 kapı kırmızı (`_agents/fabrika/kanit/hasat-tazelik-seansli`). + `deftere-yaz.test.sh` (D19-D20).
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 

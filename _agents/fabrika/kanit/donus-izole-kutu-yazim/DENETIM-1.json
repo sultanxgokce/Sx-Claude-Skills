@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "donus-izole-kutu-yazim",
+  "pr": "584",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T11:32:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-donus-izole-kutu-yazim",
+  "dal": "donus-izole-kutu-yazim",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28054,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kip seçimi Nexus giden kutusunun yazılabilirliğine bağlanmış, kutu kipinde salt okunur adaylar atlanarak ilk yazılabilir giden kutusu seçilmiş ve sürüm 1.0.2 yapılmış. İki ayrı önce/sonra ölçümünde hedef vakalar K6 ve K7 kırmızıdan yeşile dönüyor; ayrıca mutasyon ölçümü kip denetimi çıkarıldığında K6 kapısının düştüğünü gösteriyor, bu yüzden üretime engel kanıtlı bir kusur yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. sinav2 ölçüm çifti özellikle hedefi ayırıyor: önce K6 ve K7 başarısızken sonra 23/23 geçiyor. Mutasyon kaydı beklenen rc=1 ile yazılabilirlik denetimi kaldırıldığında K6'nın düştüğünü doğruluyor; gerçek kod durumu gercek_olcum=sinav2 kaydında rc=0. İlk ölçüm çifti de 3/23'ten 23/23'e geçiş sağlıyor, ancak eski kopyanın genel eksikleri nedeniyle hedefe özgüllüğü sinav2 kadar güçlü değil."
+  }
+}

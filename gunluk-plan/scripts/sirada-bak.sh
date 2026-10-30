@@ -12,6 +12,31 @@ set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 GOREV="$(bash "$KOK/gorev-yolu.sh" 2>/dev/null)" || GOREV="${GUNLUK_PLAN_GOREV_SH:-/gorev.sh-yok}"
 KUTU=""; KIM=""; ESIK="${GUNLUK_PLAN_SIRA_ESIK:-3}"; BASLA=1; TAHMIN="${GUNLUK_PLAN_TAHMIN_DK:-30}"; TAZE_GUN="${GUNLUK_PLAN_TAZE_GUN:-7}"
+# 1.18.0 (MUAVİN Madde 4, 30 Eki · NOVA): kimlik ortamda yokken TÜRETİLİR (ulak.sh #1416 deseni, bu betiğin kendi yoluna uydurulmuş):
+#   --kim → GUNLUK_PLAN_AJAN → AGENT_NAME → AILE_KIMDEN → $TMUX içindeyse tmux oturumu ('#S:#I' tam, yoksa '#S') ↔ aile-registry 'tmux:' alanı
+#   (TEK eşleşme; yol GUNLUK_PLAN_REGISTRY, vars. <depo kökü>/_agents/handoff/aile-registry.yaml). Eskiden KIM boşken betik yine koşuyor,
+#   koltuğa atanmış işleri "başkasının" sayıp Sultan'a "iş çıkaralım mı" diye sevk ediyordu. Türetilemezse ÖLÇÜLEMEDİ rc 3; kimlik UYDURULMAZ.
+kimlik_tmux() {
+  [ -n "${TMUX:-}" ] && command -v tmux >/dev/null 2>&1 || return 0
+  local hedef=() tam ses reg
+  [ -n "${TMUX_PANE:-}" ] && hedef=(-t "$TMUX_PANE")
+  tam="$(tmux display-message -p "${hedef[@]}" '#S:#I' 2>/dev/null || true)"; ses="${tam%%:*}"
+  reg="${GUNLUK_PLAN_REGISTRY:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)/_agents/handoff/aile-registry.yaml}"
+  [ -n "$ses" ] && [ -r "$reg" ] || return 0
+  python3 - "$reg" "$tam" "$ses" <<'PYKOD' 2>/dev/null || true
+import re, sys
+reg, tam, ses = sys.argv[1:4]; uye, cift = None, []
+for s in open(reg, encoding="utf-8", errors="replace"):
+    m = re.match(r'^\s*-\s*id:\s*["\']?([^"\'#\s]+)', s)
+    if m: uye = m.group(1); continue
+    m = re.match(r'^\s*tmux:\s*["\']?([^"\'#\s]+)', s)
+    if m and uye: cift.append((uye, m.group(1)))
+tamlar = sorted({u for u, t in cift if t == tam})
+sesler = sorted({u for u, t in cift if t.split(":")[0] == ses})
+secim = tamlar if tamlar else sesler
+if len(secim) == 1: print(secim[0])   # birden çok eşleşme = belirsiz → türetilmez
+PYKOD
+}
 while [ $# -gt 0 ]; do
   case "$1" in
     --kutu) KUTU="${2:-}"; shift 2 ;; --kim) KIM="${2:-}"; shift 2 ;; --esik) ESIK="${2:-}"; shift 2 ;; --bak) BASLA=0; shift ;; --taze-gun) TAZE_GUN="${2:-}"; shift 2 ;;
@@ -23,7 +48,9 @@ case "$ESIK" in ''|*[!0-9]*) echo "HATA: --esik pozitif tam sayı olmalı (veril
 case "$TAZE_GUN" in ''|*[!0-9]*) echo "HATA: --taze-gun pozitif tam sayı olmalı (verilen: '$TAZE_GUN')" >&2; exit 2 ;; esac
 [ "$TAZE_GUN" -ge 1 ] || { echo "HATA: --taze-gun en az 1" >&2; exit 2; }
 [ -x "$GOREV" ] || [ -f "$GOREV" ] || { echo "ÖLÇÜLEMEDİ: gorev.sh yok ($GOREV)" >&2; exit 3; }
-[ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-}}"
+[ -n "$KIM" ] || KIM="${GUNLUK_PLAN_AJAN:-${AGENT_NAME:-${AILE_KIMDEN:-}}}"
+[ -n "$KIM" ] || KIM="$(kimlik_tmux)"
+[ -n "$KIM" ] || { echo "ÖLÇÜLEMEDİ: ajan kimliği yok — GUNLUK_PLAN_AJAN/AGENT_NAME/AILE_KIMDEN ayarla ya da --kim ver (tmux oturumu aile-registry 'tmux:' alanıyla TEK eşleşmedi); kimlik uydurulmaz, iş 'başkasının' sayılmaz" >&2; exit 3; }
 [ -z "$KIM" ] || KIM="$(bash "$KOK/kimlik-coz.sh" "$KIM")" || { echo "ÖLÇÜLEMEDİ: koltuk adı defter adına çevrilemedi (koltuk-esleme.tsv)" >&2; exit 3; }   # koltuk adı → defter adı (tablo)
 LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 [ "$LRC" -eq 0 ] && [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı (rc=$LRC) — 'Sırada 0' DENMEZ" >&2; exit 3; }

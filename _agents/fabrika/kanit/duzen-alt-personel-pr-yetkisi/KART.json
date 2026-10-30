@@ -1,0 +1,42 @@
+{
+  "is": "duzen-alt-personel-pr-yetkisi",
+  "cumle": "Alt ajan istem üreticisindeki yetki satırı Sultan kararıyla yeniden yazılır: alt personel kendi iş alanında küçük düzeltme PR'ı açabilir, birleştirme her durumda reiste, canlı/host/sır yok, kural bütün odalar için aynı (MEREMMETÇİ dahil); sınav çapası eklenir, duzen 1.1.1",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-30T09:26:39+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-30T09:27:53+03:00",
+      "olay": "canli-ayarla",
+      "reis": "BÂNİ",
+      "canli": "h",
+      "gerekce": "Kart cümlesindeki canlı/host kelimeleri alt personel yetki KURALININ metnidir (canlı ve host yetkisi reiste); iş bir istem üreticisindeki metin ve sınav değişikliğidir, cron/servis/sunucu ateşlemesi yoktur"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "sahip BÂNİ ayarladı (--canli h): Kart cümlesindeki canlı/host kelimeleri alt personel yetki KURALININ metnidir (canlı ve host yetkisi reiste); iş bir istem üreticisindeki metin ve sınav değişikliğidir, cron/servis/sunucu ateşlemesi yoktur",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "ulak_1793342791-77fb64f2",
+      "gerekce": "SERDAR 09:46 kararı: alan açılsın; #506 ile catalog.json satır kesişimi 0 ölçüldü, katalog her beceri sürümünün ortak dosyası; kapsam kapısı bulgusu havuzda (gorev …7PRJ07)",
+      "zaman": "2026-10-30T09:49:46+03:00"
+    }
+  ]
+}

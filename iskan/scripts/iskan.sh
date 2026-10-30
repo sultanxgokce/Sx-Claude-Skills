@@ -1443,7 +1443,15 @@ EOF
   while IFS=$'\t' read -r rol gorev uuid; do
     [ -n "$rol" ] || continue
     pmode="$(_ey_registry_alan "${EY_REG_MEVCUT:-}" "$rol" permission_mode)"
-    [ -n "$pmode" ] || pmode="default"
+    # 0.11.6 (MUAVİN Madde 4, 30 Eki 2026 · ENİS/SIHHAT): mevcut kayıtta OLMAYAN üye (rezerve/yeni ya da #575 gibi düşmüş kayıt)
+    #   eskiden SESSİZCE 'default' alıyordu. Sıra artık: mevcut kayıt → ekip-registry üyesinin permission_mode alanı (EY_EKIP_REG)
+    #   → ISKAN_EY_PMODE_VARSAYILAN → default; 'default'a düşen her üye için stderr'e görünür [sarı] satır (sessiz sıfırlama yok; bilinçli VARSAYILAN uyarı almaz).
+    if [ -z "$pmode" ] && [ -n "${EY_EKIP_REG:-}" ]; then pmode="$(_ey_registry_alan "$EY_EKIP_REG" "$rol" permission_mode)"; fi
+    if [ -z "$pmode" ]; then
+      pmode="${ISKAN_EY_PMODE_VARSAYILAN:-default}"
+      # uyarı YALNIZ 'default'a düşüşte (göz tur 1): ISKAN_EY_PMODE_VARSAYILAN ile bilinçli seçilen kip sessiz-sıfırlama değildir
+      [ "$pmode" != "default" ] || echo "[sarı] izin kipi: '$rol' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle ya da ISKAN_EY_PMODE_VARSAYILAN ver" >&2
+    fi
     sfile="$(_ey_registry_alan "${EY_REG_MEVCUT:-}" "$rol" settings_file)"
     if [ "$rol" = "${EY_YENI_UYE:-}" ] && [ -n "${EY_YENI_SETTINGS:-}" ]; then sfile="$EY_YENI_SETTINGS"; fi
     cat <<EOF
@@ -1946,6 +1954,7 @@ cmd_ekip_yerlestir() {
   # son-doğanın kaydıdır; yabancı kiracı kaydı 'mevcut' sayılırsa uuid'ler yeniden üretilir).
   # reg_host AYRI tutulur: _ey_registry_dagit host kopyasının md5-karşılaştırmasını onunla yapar.
   _ey_reg_mevcut_oku "$proje" "$ssh_ok"
+  EY_EKIP_REG="$ekip_reg"   # izin kipinin ikinci kaynağı: ekip-registry üyesindeki permission_mode (0.11.6)
   reg_mevcut="$EY_REG_MEVCUT"
 
   # ── ROSTER-KAYNAĞI (FAZ-7 roster-köprüsü): ISKAN_EY_ROSTER (açık-override) → container-içi
@@ -2358,6 +2367,7 @@ cmd_uye_ekle() {
   # rezerv-uuid + izin kipi YALNIZ bu kiracının kaydından (bkz _ey_reg_mevcut_oku — ölçülmüş vaka:
   # host dosyası TELLAL'ındı; AKAR'a üye eklemek AKAR koltuklarının uuid'lerini yeniden üretirdi).
   _ey_reg_mevcut_oku "$proje" "$ssh_ok"
+  EY_EKIP_REG="$ekip_reg"   # izin kipinin ikinci kaynağı: ekip-registry üyesindeki permission_mode (0.11.6)
   reg_mevcut="$EY_REG_MEVCUT"
 
   # roster (mevcut): ekip-registry (birincil) → iskan-registry uyeler (fallback, görev bilinmez → uye)

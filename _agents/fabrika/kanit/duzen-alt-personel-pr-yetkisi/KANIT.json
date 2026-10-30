@@ -1,0 +1,153 @@
+{
+  "is": "duzen-alt-personel-pr-yetkisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T10:02:39+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "fa9c6ccdad5a78db70919a085db9e997cf5d1735fc70aaf6ccc0406ed45adc1f",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-eski-alt-ajan-istem.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T09:53:06+03:00",
+      "sure_sn": 105.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b18321eccea24409b366d5c2b0d1e447"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "76e933aca27fa44c6f7114d2dfb6fabae837af014395f9fa48f1465eb334d06c",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T09:53:08+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a0d0e15b72cb4b26aeb1e8fd0fc579b1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-satir-silindi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-satir-silindi-tek.txt",
+      "sha256": "85ab897feb69b5d23ba1dd326530ee42da819bb90aa9a9bd41a67a3d4a613426",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-mutant-alt-ajan-istem.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T09:53:40+03:00",
+      "sure_sn": 32.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "fa0239951c6e4394afcea24c27de9252"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-tur2-sonra.txt",
+      "sha256": "2d4472ad7714b11166e504e3f29c1831e0af8454e276dbb2ae364c8e71fcfeb5",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T10:02:38+03:00",
+      "sure_sn": 156.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "100db942e739403da5430e74bb91fcac"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-parca-1-silindi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-parca-1-silindi-tek.txt",
+      "sha256": "a588ea6fc9bd4198112e6d248ab5c5cfbb33c5b66d2afe604cdbf991feafdeee",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-mutant2-1.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T10:02:38+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c079d67820b54a778dedcc7817733167"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-parca-2-silindi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-parca-2-silindi-tek.txt",
+      "sha256": "1c93c04ebb57614a1064d0e31b9ced9484203ffebf6d1e0ab330474a23957fa7",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-mutant2-2.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T10:02:39+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "09faee708470442fbebcf641d9773266"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-parca-3-silindi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-parca-3-silindi-tek.txt",
+      "sha256": "9cc34bd1c337c6fe856057f2c4d7d8e723748d49d9a2e281d1f4e74cef86b101",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/duzen-mutant2-3.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T10:02:39+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "3e06c353b0e54f1fa8d3e01b20d9615f"
+    }
+  ],
+  "imza": "76d5e0d0c8c12b90a5b2673d860ba5b26d812c5b34803c7182e9eda62161e253"
+}

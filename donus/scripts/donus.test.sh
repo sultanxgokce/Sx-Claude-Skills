@@ -28,6 +28,17 @@ h="$(head -5 "$T/kutu/proj/0-teslimat/giden/$f")"
 kapi "K4 ilk 5 satır: 'G0034 · bitti · …' · '→ AÇAN' başlığı · HEDEF · GOREV · DURUM" "1|1|1|1|1" \
   "$(sed -n 1p <<<"$h" | grep -c '^G0034 · bitti · ölçüler')|$(sed -n 2p <<<"$h" | grep -c '→ ')|$(grep -c '^HEDEF: merkez' <<<"$h")|$(grep -c '^GOREV: G0034' <<<"$h")|$(grep -c '^DURUM: bitti' <<<"$h")"
 kapi "K5 kutuda zil ÇAĞRILMAZ (ssh yok; merkez yoklar)" "yok" "$([ -s "$T/zil" ] && echo var || echo yok)"
+# 1.0.2 (nazir, 30 Eki): izole kutuda Nexus SALT OKUR kopyadır → kip kendiliğinden kutu olmalı; salt okur Nexus'a yazılmaz
+RO="$T/nexus-ro"; mkdir -p "$RO/scripts" "$RO/0-teslimat/giden"; : > "$RO/scripts/aile-notify.sh"; : > "$RO/scripts/filo.py"; chmod a-w "$RO/0-teslimat/giden" "$RO/0-teslimat"
+out="$( cd "$T/kutu/proj" && DONUS_KIP= DONUS_NEXUS="$RO" bash "$S" G0034 bitti "salt okur sınavı" --ben PEYK 2>&1 )"; rc=$?
+kapi "K6 Nexus dosyaları var ama giden kutusu salt okur → kip KUTU, dönüş kutunun giden kutusuna yazılır, Nexus'a yazılmaz, rc 0" "0|1|0|kutu" \
+  "$rc|$(grep -l 'salt okur sınavı' "$T/kutu/proj/0-teslimat/giden/"*.md 2>/dev/null | wc -l)|$(ls "$RO/0-teslimat/giden/" | wc -l)|$( cd "$T/kutu/proj" && DONUS_KIP= DONUS_NEXUS="$RO" bash "$S" G0034 bitti "kuru" --ben PEYK --kuru 2>&1 | grep -o 'kip: [a-z]*' | head -1 | sed 's/kip: //')"
+chmod u+w "$RO/0-teslimat/giden" "$RO/0-teslimat"
+# cwd projede değil + aday listesinde ilk proje salt okur → yazılabilir ikinci proje seçilir
+PK="$T/projeler"; mkdir -p "$PK/a-ro/0-teslimat/giden" "$PK/b-rw/0-teslimat/giden"; chmod a-w "$PK/a-ro/0-teslimat/giden" "$PK/a-ro/0-teslimat"
+out="$( cd "$T" && DONUS_KIP=kutu DONUS_PROJE_KOK="$PK" bash "$S" G0034 bitti "aday sınavı" --ben PEYK 2>&1 )"; rc=$?
+kapi "K7 cwd projede değil, ilk aday salt okur → yazılabilir ikinci projenin giden kutusu seçilir, rc 0" "0|0|1" "$rc|$(ls "$PK/a-ro/0-teslimat/giden/" | wc -l)|$(ls "$PK/b-rw/0-teslimat/giden/" | wc -l)"
+chmod u+w "$PK/a-ro/0-teslimat/giden" "$PK/a-ro/0-teslimat"
 echo "── M · merkez"
 out="$(M G0034 tikandi "numara yok, MAİŞET'ten bekleniyor" --ben BANI)"; rc=$?
 kapi "M1 G#### → açan defterden (SERDAR), mesajda numara+durum, rc 0" "0|SERDAR|1" "$rc|$(cut -d'|' -f1 "$T/zil")|$(grep -c 'G0034 · tikandi' "$T/zil")"

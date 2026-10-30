@@ -1,0 +1,43 @@
+{
+  "is": "mesveret-oda-bulgu",
+  "cumle": "Meşveret seansı madde kaydederken oda bayrağını bulgu aracına geçiriyor, bulgu aracı bu bayrağı tanımayıp kaydı reddediyor; bulgu aracı oda bayrağını alıp deftere geçirir (yazıcı destekliyorsa) ya da tanımıyorsa meşveret geçirmez; iki sınav vakası ile",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-30T13:04:11+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M663W5FRW37P4SN53KGZF89Z",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-30T13:04:11+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "ulak_1793354541-4dcae0f2",
+      "gerekce": "catalog.json ortak dosya, satır ayrık değişiklik çakışma sayılmaz (SERDAR 09:46 #583 emsali); alan dosya listesiz açılır",
+      "zaman": "2026-10-30T13:04:15+03:00"
+    }
+  ]
+}

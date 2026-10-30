@@ -902,7 +902,7 @@
       "id": "iskan",
       "type": "agent",
       "name": "İSKÂN — container + ekip yaşam-döngüsü master-skill (Usta · bileşik)",
-      "version": "0.11.5",
+      "version": "0.11.6",
       "description": "Container + ekip yaşam-döngüsü master-skill: bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme) için host-provizyon (UC1 yeni-proje), oturum-kurtarma (UC2 seans-getir, deterministik session-id), üye-ekleme (UC3) akışlarını ekip-kur/ise-alim/sunucu-kur/cloudflare-erisim'i BESTELEYEREK tek-komuta indirger. Kendi owner-domain'i: container-provizyon host-adaptörü + tmux-oturum açma/casing/session-id rezervasyonu + CF-hostname orkestrasyonu + evergreen-manifest oto-yazımı; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). D6: `kur <proje>` zincirleyicisi — UC1 tam-yaşamdöngüsünü duraklı durum-makinesi olarak besteler (DURAK-1 cloudtop-PR merge; GO-marker'lar bypass edilmez, exit-4 aynen iletilir; --dry-run/--devam/--durum).",
       "prerequisites": {
         "system": [
@@ -1423,7 +1423,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.17.1",
+      "version": "1.18.0",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1679,7 +1679,7 @@
       "id": "bulgu",
       "type": "workflow",
       "name": "Bulgu — filonun tek bulgu komutu (kutunun Bulgu Defteri'ne yaz/listele/hâl)",
-      "version": "0.6.2",
+      "version": "0.6.3",
       "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06). 0.3.0: jeton varsa merkezî Görev Defteri'ne görev yazar. 0.4.0: --dugum ile başka kutunun bekleyen görevine düğüm bağı. 0.4.1: bağ reddinde defterin neden + yapılacak satırı basılır. 0.5.0: kayıt varsayılan 'havuz' durumunda açılır (Sırada'ya düşmez, haftalık süzmede görev olur); --gorev doğrudan iş; --dugum --gorev ister; defter havuzu tanımıyorsa söyler.",
       "tags": [
         "bulgu",
@@ -1692,7 +1692,7 @@
     {
       "id": "donus",
       "name": "donus — işi açana tek komutla dönüş",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "type": "agent",
       "sync_dagitim": true,
       "description": "Tek dönüş sözleşmesi: işi bitiren/tıkanan/soran ajan donus.sh <G####|G-AJAN-####> bitti|tikandi|soru '<tek satır>' ile döner, işi AÇAN anında uyanır. Kutuda dönüşü adında numara taşıyan bir dosya olarak giden kutusuna bırakır (merkez ≤60 sn içinde alır); merkezde açanı görev defterinden/mektubundan bulup ortak göndericiyle çalar ve durumu /filo gorevler'e işler.",
@@ -1851,7 +1851,7 @@
       "id": "duzen",
       "type": "workflow",
       "name": "Düzen — filo düzen paketi (çekirdek metinler · el defteri · not aracı · sürüm denetimi)",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "sync_dagitim": true,
       "description": "Sultan'ın 'Serdar kutusundaki düzen tüm kutularda aynı olmalı' isteğinin paketi: altı başlık (görev · Bulgu Havuzu · Hasat · oda · haberleşme · çekirdek) için sahip beceriye işaret eder, master prompt çekirdeğini (manuel-claude-base · mudur-base · durma-standardi · cevapsiz-birakma) tek kaynakta taşır, koltuğun el defterini alt ajan istemi için tek metin basar (el-defteri.sh), koltuksuz alt personel için kimlik+oda/yetki+el defteri+iş+sabit kuralları tek istemde üretir (alt-ajan-istem.sh, 1.1.0), Nexus append-note.sh'ın birebir kopyasını 19 kutuya indirir (md5 paritesi sınavlı), kutudaki kurulu sürümü ve ekipc işaretli kimliklerin bayatlığını yalnız raporlar (surum.sh). Kopya değil işaretçi; çekirdek metin yalnız burada yaşar.",
       "installed_in": [
