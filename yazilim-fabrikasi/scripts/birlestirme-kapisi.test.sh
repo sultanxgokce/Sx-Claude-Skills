@@ -625,9 +625,9 @@ echo "════ T17 · İŞ ADI PR'IN KANIT DİZİNİNDEN: dal ≠ iş (gorev
 GS="$R/golge"; mkdir -p "$GS"
 cat > "$GS/gh" <<'GHS'
 #!/bin/sh
-# sahte gh: pr view → FAKE_DAL · pr diff --name-only → FAKE_DOSYALAR (boşlukla ayrık) ya da FAKE_DOSYA_YOK varsa hata
+# sahte gh: pr view → FAKE_DAL (gövde istenirse FAKE_GOVDE) · pr diff --name-only → FAKE_DOSYALAR (boşlukla ayrık) ya da FAKE_DOSYA_YOK varsa hata
 case "$1 $2" in
-  "pr view") echo "$FAKE_DAL" ;;
+  "pr view") case " $* " in *" body "*|*",body"*|*"body,"*|*".body"*) printf '%s\n' "${FAKE_GOVDE:-}" ;; *) echo "$FAKE_DAL" ;; esac ;;
   "pr diff") [ -n "${FAKE_DOSYA_YOK:-}" ] && exit 1; printf '%s\n' $FAKE_DOSYALAR ;;
   *) exit 2 ;;
 esac
@@ -648,11 +648,15 @@ git -C "$P" worktree remove --force "$A3" >/dev/null 2>&1
 CIKTI="$(ghk env FAKE_DAL=kanit-dali2 FAKE_DOSYALAR="$KD/is-zayif/KANIT.json $KD/is-zayif/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 32")"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "iş: is-zayif" <<<"$CIKTI" && ! grep -q "kart YOK" <<<"$CIKTI"; g $? "🔴 T17b KALDI yüzü: dal ≠ iş ama puan 3/E → kapı DOĞRU işi ölçüp KAPALI kalır (rc=1, 'kart YOK' değil)"
 
-CIKTI="$(ghk env FAKE_DAL=baska-dal FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 31")"; RC=$?
-[ "$RC" -eq 3 ] && grep -q "birden çok kanıt dizinine dokunuyor ve hiçbiri dal adı" <<<"$CIKTI" && grep -q "a b" <<<"$CIKTI"; g $? "T17c KALDI yüzü: PR iki kanıt dizinine dokunuyor, hiçbiri dal adı değil → ÖLÇÜLEMEDİ (rc=3, adaylar basılır)"
+# (30 Eki …CE1RT) adaylar artık PR başının merge-base farkıyla süzülür → fikstür gerçek: pull/33 başında a ve b kanıt dizinleri (kayıtları pr=7, 33 değil)
+kartP a; kartP b; A7="$(alan iki-dizin)"; kanitla "$A7" a 5 E; kanitla "$A7" b 5 E
+( cd "$A7" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/33/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A7" >/dev/null 2>&1
+CIKTI="$(ghk env FAKE_DAL=baska-dal FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 33")"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "hangi kart? 2 kanıt dizinine dokunuyor, hiçbiri dal adı ('baska-dal') değil" <<<"$CIKTI" && grep -q "a b" <<<"$CIKTI" && grep -q "PR gövdesine 'kart: <ad>' yaz" <<<"$CIKTI"; g $? "T17c KALDI yüzü: iki kanıt dizini, hiçbiri dal adı/pr=33/gövde değil → DUR rc=2 'hangi kart?' + adaylar + çare (eskiden rc 3)"
 
-CIKTI="$(ghk env FAKE_DAL=is-ck FAKE_DOSYALAR="$KD/is-ck/KANIT.json $KD/diger/x.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
-[ "$RC" -eq 0 ] && grep -q "dal adıyla eşleşen seçildi: 'is-ck'" <<<"$CIKTI"; g $? "T17d PR iki dizine dokunuyor ama biri dal adı → dal adı seçilir (rc=0)"
+CIKTI="$(ghk env FAKE_DAL=a FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 33")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "dal adıyla eşleşen seçildi: 'a'" <<<"$CIKTI"; g $? "T17d PR iki dizine dokunuyor ama biri dal adı → dal adı seçilir (rc=0)"
 
 CIKTI="$(ghk env FAKE_DAL=is-ck FAKE_DOSYA_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17e dosya listesi okunamadı → dal adı YEDEK olarak kullanılır (rc=0, türetme notu yok)"
@@ -665,6 +669,53 @@ CIKTI="$(ghk env FAKE_DAL=hendese/is-ck FAKE_DOSYALAR="$KD/is-ck/KANIT.json" bas
 
 CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' is-ck --pr 7")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17h iş adı elle verilmişse türetme DEVREYE GİRMEZ (açık ad kazanır)"
+
+echo "════ T19 · KART KİMLİĞİ PR'IN KENDİSİNDEN (görev …CE1RT · cloudtop #1185 emsali): gövde 'kart:' · kanıt kaydı pr=N · bayat taban süzülür · çelişki DUR ════"
+# (a) gövde 'kart: <ad>': dal 'govde-dali', kanıt dizini is-govde; PR kendini ilan eder
+kartP is-govde; A4="$(alan govde-dali)"; kanitla "$A4" is-govde 5 E
+( cd "$A4" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/41/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A4" >/dev/null 2>&1
+CIKTI="$(ghk env FAKE_DAL=govde-dali FAKE_GOVDE=$'açıklama satırı\nkart: is-govde\n\nkanıt: …' FAKE_DOSYALAR="$KD/is-govde/KANIT.json $KD/is-govde/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 41")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş adı PR gövdesinden: 'kart: is-govde' (PR dalı 'govde-dali')" <<<"$CIKTI" && grep -q "iş: is-govde" <<<"$CIKTI"; g $? "🔴 T19a gövdedeki 'kart: is-govde' satırı kart kimliğidir → doğru kart, 5/E, rc=0 (rc=$RC)"
+CIKTI="$(ghk env FAKE_DAL=govde-dali FAKE_GOVDE='kart: olmayan-kart' FAKE_DOSYALAR="$KD/is-govde/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 41")"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "kart YOK: .*olmayan-kart" <<<"$CIKTI"; g $? "T19a2 gövde olmayan kartı ilan ederse kapı onu arar ve 'kart YOK' der (gövde kazanır, sessiz düzeltme yok) rc=1"
+# (b) PR numarası eşleşmesi: iki kanıt dizini (is-p1 kaydı pr=42 · is-p2 kaydı pr=7), dal 'ikili-dal' hiçbiriyle eşleşmez
+kartP is-p1; kartP is-p2; A5="$(alan ikili-dal)"; kanitla "$A5" is-p1 5 E; kanitla "$A5" is-p2 5 E
+python3 -c "import json,sys;p=sys.argv[1];d=json.load(open(p));d['pr']='42';json.dump(d,open(p,'w'))" "$A5/_agents/fabrika/kanit/is-p1/DENETIM-1.json"
+( cd "$A5" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/42/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A5" >/dev/null 2>&1
+CIKTI="$(ghk env FAKE_DAL=ikili-dal FAKE_DOSYALAR="$KD/is-p1/KANIT.json $KD/is-p1/DENETIM-1.json $KD/is-p2/KANIT.json $KD/is-p2/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 42")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş adı PR numarası eşleşmesinden: 'is-p1' (kanıt kaydında pr=42; PR dalı 'ikili-dal')" <<<"$CIKTI"; g $? "🔴 T19b iki dizin, dal hiçbiri değil, is-p1'in DENETIM kaydı pr=42 → is-p1 seçildi, rc=0 (eski kapı rc 3 'hiçbiri dal adı değil' derdi) (rc=$RC)"
+# (c) çelişki: gövde is-p2 der, kayıt is-p1 der → DUR
+CIKTI="$(ghk env FAKE_DAL=ikili-dal FAKE_GOVDE='kart: is-p2' FAKE_DOSYALAR="$KD/is-p1/KANIT.json $KD/is-p1/DENETIM-1.json $KD/is-p2/KANIT.json $KD/is-p2/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 42")"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "hangi kart? gövde 'kart: is-p2' diyor, kanıt kaydı pr=42 ile başka karta bağlı: is-p1" <<<"$CIKTI"; g $? "T19c gövde ile kanıt kaydı ÇELİŞİYOR → DUR rc=2, ikisi de basılır (rc=$RC)"
+# (d) #1185 emsali: PR başı eski main'den; sonra main ilerleyip YABANCI kanıt dizini (eski-1, 2/H) getirdi; GitHub listesi ikisini de sayar
+kartP is-dogru; A6="$(alan kanit-dali-51)"; kanitla "$A6" is-dogru 5 E
+( cd "$A6" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/51/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A6" >/dev/null 2>&1
+kartP eski-1; kanitla "$P" eski-1 2 H
+( cd "$P" && git add -A _agents/fabrika/kanit/eski-1 && git commit -qm "docs: eski kanıt (main ilerledi)" && git push -q origin HEAD:main ) >/dev/null 2>&1
+g $? "fikstür: main 1 commit ilerledi (yabancı kanıt dizini eski-1, 2/H); PR #51 başı eski main'den"
+CIKTI="$(ghk env FAKE_DAL=kanit-dali-51 FAKE_DOSYALAR="$KD/eski-1/KANIT.json $KD/eski-1/DENETIM-1.json $KD/is-dogru/KANIT.json $KD/is-dogru/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 51")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "PR #51 tabanı origin/main'in 1 commit gerisinde" <<<"$CIKTI" && grep -q "iş adı PR'ın tek kanıt dizininden türetildi: 'is-dogru'" <<<"$CIKTI"; g $? "🔴 T19d bayat taban: yabancı eski-1 merge-base süzgeciyle düştü, doğru kart is-dogru (5/E) okundu, taban uyarısı basıldı, rc=0 (#1185'te eski kart 2/H okunup 2× engellenmişti) (rc=$RC)"
+CIKTI="$(ghk env FAKE_DAL=kanit-dali-51 FAKE_DOSYA_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 51")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş: is-dogru" <<<"$CIKTI"; g $? "T19e GitHub dosya listesi okunamazsa merge-base farkı (ikinci yüzey) aday kaynağıdır → yine is-dogru, rc=0"
+echo "── T19 · MUTASYON (tam kopya, kardeşlerle): süzgeç · gövde · pr-eşleşme sökülünce ilgili kapı düşer ──"
+PKG19="$R/pkg19"; mkdir -p "$PKG19"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$HERE/izin.py" "$PKG19/"
+mut19() { # mut19 <ad> <eski> <yeni> → $PKG19/<ad>.sh
+  python3 - "$G" "$PKG19/$1.sh" "$2" "$3" <<'PYM'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a=sys.argv[3]; assert s.count(a)==1, ("çapa", s.count(a)); open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,sys.argv[4]))
+PYM
+}
+mut19 m-suzgec '    [ -z "$GERCEK" ] || PRDOSYA="$(printf '"'"'%s\n'"'"' "$PRDOSYA" | grep -Fx -f <(printf '"'"'%s\n'"'"' "$GERCEK") || true)"' '    :'; g $? "mutant süzgeç üretildi (merge-base süzgeci kalktı)"
+CIKTI="$(ghk env FAKE_DAL=kanit-dali-51 FAKE_DOSYALAR="$KD/eski-1/KANIT.json $KD/eski-1/DENETIM-1.json $KD/is-dogru/KANIT.json $KD/is-dogru/DENETIM-1.json" bash -c "$(declare -f kapi); G='$PKG19/m-suzgec.sh'; kapi '$P' --pr 51")"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "hangi kart? 2 kanıt dizinine" <<<"$CIKTI"; g $? "mutant süzgeç: yabancı eski-1 sayıldı → 'hangi kart?' rc=2 → T19d bu mutantta düşerdi (rc=$RC)"
+mut19 m-govde '  if [ -n "$GOVDE_KART" ]; then' '  if false; then'; g $? "mutant gövde üretildi ('kart:' satırı okunmuyor)"
+CIKTI="$(ghk env FAKE_DAL=ikili-dal FAKE_GOVDE='kart: is-p2' FAKE_DOSYALAR="$KD/is-p1/KANIT.json $KD/is-p1/DENETIM-1.json $KD/is-p2/KANIT.json $KD/is-p2/DENETIM-1.json" bash -c "$(declare -f kapi); G='$PKG19/m-govde.sh'; kapi '$P' --pr 42")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş: is-p1" <<<"$CIKTI"; g $? "mutant gövde: çelişki görülmez, is-p1 ile GEÇER → T19c bu mutantta düşerdi (rc=$RC)"
+mut19 m-eslesme '  NESLESEN="$(printf '"'"'%s'"'"' "$ESLESEN" | grep -c . || true)"' '  NESLESEN=0'; g $? "mutant eşleşme üretildi (pr=N eşleşmesi sayılmıyor)"
+CIKTI="$(ghk env FAKE_DAL=ikili-dal FAKE_DOSYALAR="$KD/is-p1/KANIT.json $KD/is-p1/DENETIM-1.json $KD/is-p2/KANIT.json $KD/is-p2/DENETIM-1.json" bash -c "$(declare -f kapi); G='$PKG19/m-eslesme.sh'; kapi '$P' --pr 42")"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "hangi kart? 2 kanıt dizinine" <<<"$CIKTI"; g $? "mutant eşleşme: is-p1 seçilemez, 'hangi kart?' rc=2 → T19b bu mutantta düşerdi (rc=$RC)"
 
 echo "════ T18 · BAYAT SARI (#817, RH8A3): sonraki bağlı yeşil sarıyı yerine geçirir; sarı iken geçersiz ilan edilen sarı sayılmaz; yeşili geçersiz ve sonradan sarı ENGEL kalır ════"
 printf 'henüz log yok\n' > "$LGK/yok2.log"

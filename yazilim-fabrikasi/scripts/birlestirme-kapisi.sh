@@ -18,8 +18,9 @@
 #
 # Kullanım:
 #   birlestirme-kapisi.sh <iş> [--depo KÖK] [--sessiz]
-#   birlestirme-kapisi.sh --pr <N> [--depo KÖK]     (iş adını PR'ın değiştirdiği TEK kanıt dizininden çözer; dal adı yedek)
-# rc: 0 GEÇTİ · 1 eksik (kanıt yok/puan yetersiz/kart yok) · 2 kullanım · 3 ÖLÇÜLEMEDİ (yeşil değil)
+#   birlestirme-kapisi.sh --pr <N> [--depo KÖK]     (iş adını PR'IN KENDİSİNDEN çözer — sıra: gövdedeki 'kart: <ad>' satırı · kanıt kaydında
+#                                                    pr=N olan dizin · PR'ın tek kanıt dizini · dal adı; aday birden çoksa rc 2 "hangi kart?")
+# rc: 0 GEÇTİ · 1 eksik (kanıt yok/puan yetersiz/kart yok) · 2 kullanım / hangi kart? · 3 ÖLÇÜLEMEDİ (yeşil değil)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 IS=""; PR=""; DEPO="${KANIT_DEPO:-}"; SESSIZ=0
@@ -47,21 +48,61 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
   IS="${IS##*/}"   # muavin/<iş> gibi önekleri at
   # 🔴 İŞ ADI DAL ADINDAN DEĞİL, PR'IN DEĞİŞTİRDİĞİ KANIT DİZİNİNDEN gelir (gorev …THYFXG0): kanıt PR'ı ayrı dalla açılınca
   #    (dal 'merkez-dogrulat-kanit' ≠ iş 'merkez-dogrulat-kendiliginden') dal adı yanlış işi gösterir, kapı "kart/kanıt/denetim YOK" der ve
-  #    birleştirme kancası kapı iş adıyla GEÇMİŞ PR'ı keserdi (#884, #817, #960). Kural: PR'ın değiştirdiği dosyalardan
-  #    _agents/fabrika/kanit/<X>/ altındaki farklı X'ler toplanır —
-  #      tek X → iş adı X (dal adı yedek, ayrışıyorsa söylenir) · birden çok X → dal adıyla eşleşen varsa o, yoksa ÖLÇÜLEMEDİ (rc=3, adaylar basılır)
-  #      sıfır X ya da dosya listesi okunamadı → dal adı (eski davranış; kapı yine de kanıt yoksa kapalı kalır).
-  DAL_ADI="$IS"; IS_NOT=""
+  #    birleştirme kancası kapı iş adıyla GEÇMİŞ PR'ı keserdi (#884, #817, #960).
+  # 🔴 KART KİMLİĞİ PR'IN KENDİSİNDEN (30 Eki 2026 · görev …CE1RT · kart fabrika-kapi-kart-kimligi-prden · BENNÂ): cloudtop #1185'te PR tabanı
+  #    bayattı, GitHub dosya listesi main'den gelen 4 YABANCI kanıt dizinini saydı; kapı dal adıyla eşleşeni seçip ESKİ kartı (2/H) okudu, doğru
+  #    kartı (5/E) görmedi, 2× engelledi. Şimdi aday listesi merge-base farkıyla süzülür (origin/main...PR başı — yabancı dizin düşer; taban
+  #    gerideyse söylenir) ve kart kimliği PR'ın kendisinden alınır, öncelik sırası:
+  #      1) PR gövdesinde 'kart: <ad>' satırı (PR kendini ilan eder; kanıt kaydı başka karta bağlıysa ÇELİŞKİ → rc 2)
+  #      2) PR'ın dokunduğu kanıt dizinlerinden, PR başındaki DENETIM-*.json / KART.json kaydında pr=N olan (tek → o; birden çok → rc 2)
+  #      3) tek kanıt dizini → o (dal adı ayrışıyorsa söylenir)
+  #      4) birden çok dizin → dal adıyla eşleşen; yoksa DUR rc 2 "hangi kart?" (adaylar basılır; eskiden rc 3)
+  #      5) sıfır dizin ya da liste okunamadı → dal adı (kapı yine de kanıt yoksa kapalı kalır).
+  DAL_ADI="$IS"; IS_NOT=""; PR_UYARI=""; ANA_DAL="${KANIT_ANA:-main}"
+  GOVDE_KART="$(cd "$DEPO" && gh pr view "$PR" --json body --jq .body 2>/dev/null | sed -n 's/^[[:space:]]*kart:[[:space:]]*\([^[:space:]]\{1,\}\).*/\1/p' | head -1)"
+  PRBAS_C=""; GERCEK=""
+  if git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
+    PRBAS_C="$(git -C "$DEPO" rev-parse FETCH_HEAD 2>/dev/null)"
+    if [ -n "$PRBAS_C" ] && git -C "$DEPO" fetch -q origin "$ANA_DAL" 2>/dev/null; then
+      GERCEK="$(git -C "$DEPO" diff --name-only "origin/$ANA_DAL...$PRBAS_C" 2>/dev/null)" || GERCEK=""
+      geri="$(git -C "$DEPO" rev-list --count "$PRBAS_C..origin/$ANA_DAL" 2>/dev/null || echo "")"
+      [ -n "$geri" ] && [ "$geri" -gt 0 ] && PR_UYARI="PR #$PR tabanı origin/$ANA_DAL'in $geri commit gerisinde — GitHub dosya listesi main'den gelen (yabancı) kanıt dizinlerini sayabilir; adaylar merge-base farkıyla süzüldü"
+    fi
+  fi
+  PRDOSYA=""
   if PRDOSYA="$(cd "$DEPO" && gh pr diff "$PR" --name-only 2>/dev/null)" && [ -n "$PRDOSYA" ]; then
+    [ -z "$GERCEK" ] || PRDOSYA="$(printf '%s\n' "$PRDOSYA" | grep -Fx -f <(printf '%s\n' "$GERCEK") || true)"
+  else
+    PRDOSYA="$GERCEK"   # GitHub listesi okunamadı → merge-base farkı (ikinci yüzey); o da yoksa dal adı
+  fi
+  ADAY=""; NADAY=0; ESLESEN=""
+  if [ -n "$PRDOSYA" ]; then
     ADAY="$(printf '%s\n' "$PRDOSYA" | awk -F/ '$1=="_agents" && $2=="fabrika" && $3=="kanit" && NF>=5 {print $4}' | sort -u)"
     NADAY="$(printf '%s' "$ADAY" | grep -c . || true)"
-    if [ "$NADAY" -eq 1 ]; then
-      IS="$ADAY"
-      [ "$IS" = "$DAL_ADI" ] || IS_NOT="iş adı PR'ın tek kanıt dizininden türetildi: '$IS' (PR dalı '$DAL_ADI' ayrışıyor)"
-    elif [ "$NADAY" -gt 1 ]; then
-      if printf '%s\n' "$ADAY" | grep -qxF -- "$DAL_ADI"; then IS="$DAL_ADI"; IS_NOT="PR birden çok kanıt dizinine dokunuyor; dal adıyla eşleşen seçildi: '$IS'"
-      else _h "PR #$PR birden çok kanıt dizinine dokunuyor ve hiçbiri dal adı ('$DAL_ADI') değil: $(printf '%s' "$ADAY" | tr '\n' ' ')— iş adını elle ver — ÖLÇÜLEMEDİ"; exit 3
-      fi
+    if [ -n "$PRBAS_C" ] && [ "$NADAY" -gt 0 ]; then
+      ESLESEN="$(for x in $ADAY; do
+        for f in $(git -C "$DEPO" ls-tree --name-only "$PRBAS_C" "_agents/fabrika/kanit/$x/" 2>/dev/null | grep -E '/(DENETIM-[0-9]+|KART)\.json$'); do
+          git -C "$DEPO" show "$PRBAS_C:$f" 2>/dev/null | python3 -c 'import json,sys;d=json.load(sys.stdin);print(str(d.get("pr","")).lstrip("#"))' 2>/dev/null | grep -qx -- "$PR" && { echo "$x"; break; }
+        done
+      done | sort -u)"
+    fi
+  fi
+  NESLESEN="$(printf '%s' "$ESLESEN" | grep -c . || true)"
+  if [ -n "$GOVDE_KART" ]; then
+    if [ "$NESLESEN" -gt 0 ] && ! printf '%s\n' "$ESLESEN" | grep -qxF -- "$GOVDE_KART"; then
+      _h "PR #$PR hangi kart? gövde 'kart: $GOVDE_KART' diyor, kanıt kaydı pr=$PR ile başka karta bağlı: $(printf '%s' "$ESLESEN" | tr '\n' ' ')— çelişki; iş adını elle ver"; exit 2
+    fi
+    IS="$GOVDE_KART"; IS_NOT="iş adı PR gövdesinden: 'kart: $IS'$( [ "$IS" = "$DAL_ADI" ] || printf " (PR dalı '%s')" "$DAL_ADI")"
+  elif [ "$NESLESEN" -eq 1 ]; then
+    IS="$ESLESEN"; IS_NOT="iş adı PR numarası eşleşmesinden: '$IS' (kanıt kaydında pr=$PR$( [ "$IS" = "$DAL_ADI" ] || printf "; PR dalı '%s'" "$DAL_ADI"))"
+  elif [ "$NESLESEN" -gt 1 ]; then
+    _h "PR #$PR hangi kart? birden çok kanıt dizininin kaydı pr=$PR diyor: $(printf '%s' "$ESLESEN" | tr '\n' ' ')— iş adını elle ver"; exit 2
+  elif [ "$NADAY" -eq 1 ]; then
+    IS="$ADAY"
+    [ "$IS" = "$DAL_ADI" ] || IS_NOT="iş adı PR'ın tek kanıt dizininden türetildi: '$IS' (PR dalı '$DAL_ADI' ayrışıyor)"
+  elif [ "$NADAY" -gt 1 ]; then
+    if printf '%s\n' "$ADAY" | grep -qxF -- "$DAL_ADI"; then IS="$DAL_ADI"; IS_NOT="PR birden çok kanıt dizinine dokunuyor; dal adıyla eşleşen seçildi: '$IS'"
+    else _h "PR #$PR hangi kart? $NADAY kanıt dizinine dokunuyor, hiçbiri dal adı ('$DAL_ADI') değil, hiçbirinin kaydı pr=$PR demiyor, gövdede 'kart: <ad>' yok: $(printf '%s' "$ADAY" | tr '\n' ' ')— PR gövdesine 'kart: <ad>' yaz ya da iş adını elle ver"; exit 2
     fi
   fi
 fi
@@ -102,6 +143,7 @@ DZ=""; DZ_YER=""; DZ_AGAC=""; kanit_bul || true
 eksik=0; olcemedi=0
 _y "── BİRLEŞTİRME KAPISI · iş: $IS"
 [ -n "${IS_NOT:-}" ] && _y "  · $IS_NOT"
+[ -n "${PR_UYARI:-}" ] && _y "  ⚠ $PR_UYARI"
 _y "  · kanıt yeri: $DZ_YER"
 
 # 🔴 PR BAŞI DOĞRULAMASI (…898AX · SERDAR 26 Eki 2026): kanıt YEREL ağaçtan okunduysa kapı, orada duran ama PR'a İTİLMEMİŞ bir denetim

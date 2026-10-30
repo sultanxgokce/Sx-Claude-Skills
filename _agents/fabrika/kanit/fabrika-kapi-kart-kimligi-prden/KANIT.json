@@ -1,0 +1,63 @@
+{
+  "is": "fabrika-kapi-kart-kimligi-prden",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T15:12:57+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kapi",
+      "asama": "once",
+      "dosya": "olcum-sinav-kapi-once.txt",
+      "sha256": "db7e03e47e29bda9b59015dc1f84248a2715de0dbe3dd0f7f47ed4608e1fe43d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T15:05:29+03:00",
+      "sure_sn": 255.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "74454e0142544737a632ef2ea1988582"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kapi-sonra.txt",
+      "sha256": "31acb43f69ad327dd5686b53485e0b7b710e1ea4336df989feb4e5de054b2795",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:09:18+03:00",
+      "sure_sn": 228.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7db2d1f48a1349ceaa4b62736f13a737"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-suzgec-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-suzgec-yok-sonra.txt",
+      "sha256": "ee5dc9bc57a6ec681a5f47c017cc3b7c513c36f9e7c1eafbf0a389b367d48deb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:12:57+03:00",
+      "sure_sn": 219.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kapi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "e4d96cee356b45f087d11208510db1c7"
+    }
+  ],
+  "imza": "4dac589d8f8f4abf244ddac2a6f5787233a424da58aac3320b4238efbcf681d9"
+}
