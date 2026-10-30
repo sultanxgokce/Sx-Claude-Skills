@@ -1,7 +1,7 @@
 {
   "is": "sync-drift-kapi-olcum",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T18:54:30+03:00",
+  "guncelleme": "2026-10-30T18:57:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -178,7 +178,96 @@
       "renk": "ilan",
       "zaman": "2026-10-30T18:54:30+03:00",
       "olcum_id": "491e4944a4fb470fbbe6af996d45716d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift-guncel",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-guncel-sonra.txt",
+      "sha256": "9af98d2155f92e641bd78b72e147a014b337eda6f8b8d4411d358c68dec61644",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:57:03+03:00",
+      "sure_sn": 137.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "222db63df704437897bc4590a0f83268"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kuru-kosu-drift-temiz",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kuru-kosu-drift-temiz-sonra-046f23f94eef.txt",
+      "sha256": "197dd7865e86b6a053388c25915811ab24d36f9455d27ca85ed6284ef6e67ad7",
+      "hedef_dosya": "olcum-kuru-kosu-drift-temiz-sonra.txt",
+      "hedef_olcum_id": "65c97360ceea482cb1302fc77308b3ad",
+      "hedef_sha256": "496addf56cabdc4c94cb188c1430213e647f6f326281e6ea06fb67792146152c",
+      "hedef_zaman": "2026-10-30T18:54:29+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "kaynak origin/main'in bir commit gerisindeydi; birleştirilip yeniden ölçüldü",
+      "kim": "BENNÂ",
+      "karsi": "olcum-kuru-kosu-drift-guncel-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:57:03+03:00",
+      "olcum_id": "1413b833108240e495318e602c69119f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-benzetimi-duman",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-benzetimi-duman-sonra.txt",
+      "sha256": "b17f53ee34738e68a50b5a75ed00434681a16556be4d3fff120e31d21b5f80f7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-duman-kurulum-kapi.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:57:21+03:00",
+      "sure_sn": 10.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3c164010a5fd4d1fbf3384e4b95423eb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-benzetimi-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-benzetimi-kapi-sonra.txt",
+      "sha256": "7eced92274c7d0b38d491f63eee9a131e02fb72d222afacc29f5ee7b40d8c847",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-duman-kurulum-kapi.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:57:30+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c7d489d425ff4dbe8c482e1a7957866a"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kurulum-benzetimi-duman",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kurulum-benzetimi-duman-sonra-833c4dc203e0.txt",
+      "sha256": "00569367a49092b18432eea20ecaae5c6d20af0cb89015885937b6f73d2c494d",
+      "hedef_dosya": "olcum-kurulum-benzetimi-duman-sonra.txt",
+      "hedef_olcum_id": "3c164010a5fd4d1fbf3384e4b95423eb",
+      "hedef_sha256": "b17f53ee34738e68a50b5a75ed00434681a16556be4d3fff120e31d21b5f80f7",
+      "hedef_zaman": "2026-10-30T18:57:21+03:00",
+      "hedef_renk": "yesil",
+      "neden": "çıktı etiketi yanlış dosya adını yazıyordu (mimetype); ölçülen kapi-sinavi.sh idi, etiket düzeltilip yeniden ölçüldü",
+      "kim": "BENNÂ",
+      "karsi": "olcum-kurulum-benzetimi-kapi-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:57:31+03:00",
+      "olcum_id": "73434412aa9844dda0499a6ff5f6a2b7"
     }
   ],
-  "imza": "8a9cd16b7176f2de05ea1c563a9552a9a1e42432cd1eb6738823f85a0b3d8d7f"
+  "imza": "0f2a3476dce464ad843f7b3ffe5c308d6307b3896747c52d7e9e5ebaae4d5520"
 }

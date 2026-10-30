@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kurulum-benzetimi-duman-sonra.txt
+hedef_sha256: b17f53ee34738e68a50b5a75ed00434681a16556be4d3fff120e31d21b5f80f7
+hedef_zaman: 2026-10-30T18:57:21+03:00
+hedef_renk: yesil
+neden: çıktı etiketi yanlış dosya adını yazıyordu (mimetype); ölçülen kapi-sinavi.sh idi, etiket düzeltilip yeniden ölçüldü
+kim: BENNÂ
+karsi: olcum-kurulum-benzetimi-kapi-sonra.txt
+zaman: 2026-10-30T18:57:31+03:00
