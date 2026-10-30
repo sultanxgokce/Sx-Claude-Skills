@@ -1,0 +1,9 @@
+$ bash -c cd terminal-onar && out=$(timeout 300 node kapi/pano-sinav.mjs </dev/null 2>&1); printf "%s\n" "$out" | grep -E "Y4b|Y2 |Y3 |GEÇEN"; grep -qF "✓ Y4b" <<<"$out"
+# rc=0 sure=76.2s zaman=2026-10-30T21:03:52+03:00
+--- stdout ---
+  ✓ Y2 resim /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · x-requested-with: dashboard)
+  ✓ Y3 dönen yol TERMİNALE yazıldı (kabuk satırında görünür)
+  ✓ Y4b terminal DIŞI yazı kutusuna resim yapıştırma köprüye GİTMEZ (yükleme 0 · olay engellenmedi · yol terminale yazılmadı)
+  ✓ N3 köprüsüz: resim yapıştırma dinleyiciye ULAŞMAZ (Y2 tautoloji değil)
+GEÇEN: 33 · KALAN: 2
+--- stderr ---

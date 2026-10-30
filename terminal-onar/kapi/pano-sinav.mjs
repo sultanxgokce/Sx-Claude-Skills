@@ -127,6 +127,18 @@ try {
   const bd = await bildirim(pg);
   kapi('Y4 kullanıcıya bildirildi: "resmin yolu terminale yazıldı — Enter ile gönder"', /terminale yazıldı/.test(bd), `→ ${bd}`);
   if (KARE) await pg.screenshot({ path: `${KARE}-yapistir.png` });
+  // 🔴 QC7Q7E (30 Eki): görev kartının "Madde ekle" kutusu gibi terminal DIŞI bir yazı alanına Cmd+V → resim o alanın; köprü almaz
+  const odakDis = await pg.evaluate(({ b64 }) => {
+    const ta = document.createElement('textarea'); ta.className = 'grv-md-metin'; document.body.appendChild(ta); ta.focus();
+    const dt = new DataTransfer(); const bin = atob(b64); const u = new Uint8Array(bin.length); for (let j = 0; j < bin.length; j++) u[j] = bin.charCodeAt(j);
+    dt.items.add(new File([u], 'resim', { type: 'image/png' }));
+    const ev = new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true });
+    const r = ta.dispatchEvent(ev); ta.remove(); return { gecti: r, engellendi: ev.defaultPrevented };
+  }, { b64: PNG1 });
+  await bekle(1500);
+  kapi('Y4b terminal DIŞI yazı kutusuna resim yapıştırma köprüye GİTMEZ (yükleme 0 · olay engellenmedi · yol terminale yazılmadı)',
+       yuklemeler.length === once + 1 && odakDis.gecti && !odakDis.engellendi, `→ ${JSON.stringify(odakDis)} · yükleme ${yuklemeler.length - once}`);
+  await pg.focus('.xterm-helper-textarea');
   // büyük resim → 2000px webp
   const buyuk = await pg.evaluate(async () => { const cv = new OffscreenCanvas(2600, 1600); const c = cv.getContext('2d');
     for (let k = 0; k < 4000; k++) { c.fillStyle = `hsl(${Math.random() * 360},70%,${30 + Math.random() * 50}%)`; c.fillRect(Math.random() * 2600, Math.random() * 1600, 40, 40); }
