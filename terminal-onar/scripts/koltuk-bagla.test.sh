@@ -23,6 +23,7 @@ case "$1" in
                  else t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac; fi ;;
   display-message) if [ "$3" = -c ]; then [ -f "$SAHTE/istemci-bilgi" ] || exit 1; cat "$SAHTE/istemci-bilgi"; else echo 1760000000; fi ;;
   set-hook)      echo "$*" >> "$SAHTE/iz-kanca" ;;
+  has-session)   grep -qxF -- "${3#=}" "$SAHTE/oturumlar" ;;
   capture-pane)  case "$4" in =*) echo "can't find pane: $4" >&2; exit 1 ;; esac   # gerçek tmux gibi: bölme hedefinde '=ad' geçersiz
                  case "$4" in %*) t="${4#%}" ;; *) t="${4%:}" ;; esac; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
   list-windows)  case "$*" in *window_width*) if [ -f "$SAHTE/pencereler" ]; then cat "$SAHTE/pencereler"; else echo "@1 200 50"; fi ;; *) echo "@1" ;; esac ;;
@@ -130,6 +131,11 @@ grep -q "^set-hook -t =BASIRET: client-attached\[86\] if-shell -F '#{m:\*ignore-
 grep -q '^set-hook -t =maiset-ana: client-resized\[86\] ' "$S/iz-kanca" && ok "P2 'tel.' (ana oturum) yolunda da kanca kurulur" || bad P2 "kanca=$(cat "$S/iz-kanca")"
 : > "$S/iz-kanca"; kos maiset-ana /p BASIRET
 [ ! -s "$S/iz-kanca" ] && ok "P3 öneksiz (masaüstü) adreste kanca YOK — yalnız telefon kipi" || bad P3 "kanca=$(cat "$S/iz-kanca")"
+printf '%s\n' BASIRET CARSI > "$S/oturumlar"; : > "$S/iz-kanca"; kos maiset-ana /p tel.
+[ "$(sed -n 1p "$S/iz")" = "new-session -d -s maiset-ana -c /p" ] && [ "$(sed -n 2p "$S/iz")" = "new-session -A -f ignore-size -s maiset-ana -c /p" ] \
+  && grep -q '^set-hook -t =maiset-ana: client-resized\[86\] ' "$S/iz-kanca" \
+  && ok "P2b 🔴 ana oturum YOKKEN 'tel.': önce ayrık açılır, SONRA kanca kurulur, sonra bağlanılır (yeni oturum kancasız kalmaz)" || bad P2b "iz=$(tr '\n' '|' < "$S/iz") kanca=$(cat "$S/iz-kanca")"
+printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"
 pb() { : > "$S/iz-set"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --tel-buyut "${1:-/dev/pts/7}" > "$S/cikti" 2>&1; echo $? > "$S/rc"; }
 psifirla() { rm -f "$S/pencereler" "$S/istemciler" "$S/yerel-ws"; printf '50\t50\toff\tattached,focused,ignore-size,UTF-8\tBASIRET\n' > "$S/istemci-bilgi"; }
 setler() { tr '\n' '|' < "$S/iz-set"; }
@@ -195,6 +201,17 @@ PYPTY
   [ "$RPZ" = manual ] && ok "R2a pozitif kontrol: show-options -wv yerel ayarı GÖRÜYOR (resize-window sonrası 'manual')" || bad R2a "→ [$RPZ]"
   rbekle 70x50; R5="$(rgen)"
   [ "$R5" = 70x50 ] && ok "R5 🔴 telefon döndü (pty 50→70 sütun): kanca pencereyi 70'e büyüttü — bağlanış anı dışında da çalışıyor" || bad R5 "→ $R5"
+  # R6 (bağımsız göz #600 tur 1): ana oturum HİÇ yokken 'tel.' — yeni oturum da kancalı olmalı; telefon dönünce büyür
+  # yeni oturum tmux'un son etkin istemcisinin boyunda doğar (burada 200x50); dar kalmış pencereyi taklit etmek için bağlandıktan sonra
+  # pencere elle 30x20'ye çekilir, yerel ayar silinir; telefon 3 sn sonra döner (60→100) → yalnız KANCA pencereyi büyütebilir
+  rist 60 30 100 30 3 -- bash "$B" YENIANA / tel.; rbek 3; sleep 1
+  rt resize-window -t YENIANA: -x 30 -y 20; rt set-option -w -u -t YENIANA: window-size
+  R6I="$(rt list-windows -t =YENIANA -F '#{window_width}x#{window_height}' 2>/dev/null)"
+  R6K="$(rt show-hooks -t YENIANA: 2>/dev/null | grep -c 'client-resized\[86\]')"
+  for _ in $(seq 1 50); do [ "$(rt list-windows -t =YENIANA -F '#{window_width}' 2>/dev/null)" = 100 ] && break; sleep 0.1; done
+  R6="$(rt list-windows -t =YENIANA -F '#{window_width}x#{window_height}' 2>/dev/null)"
+  [ "$R6K" = 1 ] && [ "${R6%x*}" = 100 ] && ok "R6 🔴 ana oturum yokken 'tel.': oturum doğar, kancası kurulur; pencere 30'a daralmışken telefon dönünce (60→100) kanca 100'e büyütür" || bad R6 "kanca=$R6K ilk=$R6I → $R6"
+  rt kill-session -t =YENIANA 2>/dev/null
   rist 120 40 -- tmux attach -t =KALFA; rbek 3; rbekle 120x40; R3="$(rgen)"
   [ "$R3" = 120x40 ] && ok "R3 sonra masaüstü bağlanınca boy yine masaüstünün (120) — telefon onu sınırlamaz" || bad R3 "→ $R3"
   rist 90 30 -- bash "$B" anaoturum / tel.KALFA; rbek 4; sleep 1; R4="$(rgen)"

@@ -96,7 +96,7 @@ sonradan oturan boyunu kaçırıyordu (3 sütun yine noktalı). Telefon dönünc
 **Görüntü ekle:** telefonda (dokunmatik + dar ekran) terminalin üstünde tek düğme **🖼 Görüntü ekle** (`kapi/genel/pano.js`). `accept="image/*"`,
 `capture` yok: iOS ve Android'in kendi menüsü galeri ile kamerayı aynı dokunuşta sunar. Seçilen dosya yapıştırmayla aynı yoldan geçer
 (küçültme → `/api/resim` → yol terminale). Düğme terminal kabının dışında; kap 52 px aşağı iner, metin örtülmez. Masaüstünde düğme yoktur.
-Pinch-zoom kilidi bu sürümde YOK — merkezin işi (cloudtop #1226). Sınav: `koltuk-bagla.test.sh` P1-P13 + gerçek tmux R0-R5 · `pano-sinav.mjs` G0-G8.
+Pinch-zoom kilidi bu sürümde YOK — merkezin işi (cloudtop #1226). Sınav: `koltuk-bagla.test.sh` P1-P13 (+P2b) + gerçek tmux R0-R6 · `pano-sinav.mjs` G0-G8.
 ## 🆕 2.36.4 · Yazı kutusuna yapıştırılan resim terminale kaçmaz (30 Eki · görev …QC7Q7E · kart pano-yapistir-odak)
 Görev kartının "Madde ekle" kutusu gibi terminal DIŞI bir yazı alanına (input · textarea · düzenlenebilir alan) Cmd+V ile
 resim yapıştırılınca `genel/pano.js` olayı artık almaz; resim o alanın kendi yapıştırmasına kalır. xterm'in yardımcı

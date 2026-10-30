@@ -1,14 +1,14 @@
 {
   "is": "telefon-terminal-zoom-boy",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T22:20:04+03:00",
+  "guncelleme": "2026-10-30T22:28:21+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "koltuk-bagla-sinav",
       "asama": "once",
       "dosya": "olcum-koltuk-bagla-sinav-once.txt",
-      "sha256": "3fc8fec2fb760224029b7c9ff74dce145a88ce25c7ba1fbc93aa0c23191c8cb5",
+      "sha256": "e1651ef8692bc8277fcca960b3826b7b422869b3db088a1b054ce01853e8b3fe",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh",
@@ -16,27 +16,27 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-30T21:56:06+03:00",
-      "sure_sn": 33.1,
+      "zaman": "2026-10-30T22:27:13+03:00",
+      "sure_sn": 46.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c81f3d3cecb24543bede0dea9bd72dc9"
+      "olcum_id": "098230bdcd624dc79b402831a2600bad"
     },
     {
       "tur": "olcum",
       "etiket": "koltuk-bagla-sinav",
       "asama": "sonra",
       "dosya": "olcum-koltuk-bagla-sinav-sonra.txt",
-      "sha256": "76ee093c1ef4f37c56df29cd456e71301ae38f15ab6b0785af199cd72676daf5",
+      "sha256": "277581af8fce7cce0930d2bd7886dc3e9932663357b8884f40d183603ab95f77",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T22:08:27+03:00",
-      "sure_sn": 28.6,
+      "zaman": "2026-10-30T22:27:46+03:00",
+      "sure_sn": 32.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1fc88f47e9754d20857937de556bf312"
+      "olcum_id": "b9f3723bbf5a499fa119206f04764803"
     },
     {
       "tur": "olcum",
@@ -484,7 +484,29 @@
       "renk": "yesil",
       "zaman": "2026-10-30T22:20:04+03:00",
       "olcum_id": "9e4f438994a44e2a8c431d21bd027dc6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kb-yeni-ana",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kb-yeni-ana-sonra.txt",
+      "sha256": "889290732d308c8a6b5dcc2bf10c525023a8c288f6fb652b11d763e85c2ba90d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh",
+        "kb-yeni-ana"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:28:21+03:00",
+      "sure_sn": 34.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "koltuk-bagla-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "afcc272633e247a0b6fb4a3c3284e99f"
     }
   ],
-  "imza": "8713e4b1cf341b8366684021375031d91869f3d160cf5ce5170a2c8208c347fd"
+  "imza": "f95db84ed27e324c0f686e19bf4714563eaf76afd32909a0aa756a4fe928b15c"
 }

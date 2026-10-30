@@ -352,7 +352,12 @@ if [ -z "$ISTEK" ]; then
   # 🔴 Yalnız ARGÜMANSIZ yol oturum YARATIR. Ana oturumun adı adresle açıkça verilirse o da
   #    öteki koltuklar gibi beyaz listeden geçer (bağımsız göz, tur 1: açık ad listeyi deliyordu).
   # telefon kipinde de aynı yol (ana yoksa açar) — yalnız istemci bayrağı eklenir
-  [ "$TEL" = 1 ] && tel_kanca "$ANA"   # ana oturum yoksa kanca kurulamaz; yeni oturum zaten telefonun boyunda doğar
+  # telefon kipinde ana oturum YOKSA önce ayrık açılır, sonra kanca kurulur (bağımsız göz #600 tur 1): yoksa set-hook düşer, yeni oturum
+  #   kancasız kalır ve ttyd'nin sonradan oturan boyu ya da telefonun dönmesi pencereyi büyütemezdi. Ayrık açılış + -A bağlanış = "yoksa aç" ile aynı.
+  if [ "$TEL" = 1 ]; then
+    tmux has-session -t "=$ANA" 2>/dev/null || tmux new-session -d -s "$ANA" -c "$PROJE"
+    tel_kanca "$ANA"
+  fi
   exec tmux new-session -A "${IGN[@]}" -s "$ANA" -c "$PROJE"
 fi
 # ── AD DIŞI KİMLİK (2.24.0 · P4GT2W): adres 'k'+16 onaltılık taşıyorsa ve bu ADDA bir koltuk yoksa kimlik çözülür:
