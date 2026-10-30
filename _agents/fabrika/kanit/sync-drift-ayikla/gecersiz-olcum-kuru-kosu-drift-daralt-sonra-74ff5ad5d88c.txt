@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kuru-kosu-drift-daralt-sonra.txt
+hedef_sha256: 31152ad7f578b293727c320b6eac658a93b57f0d96a33b19e6b840ccc48f940c
+hedef_zaman: 2026-10-30T18:48:41+03:00
+hedef_renk: kirmizi
+neden: göz tur 1: kaynak bir commit gerideydi ve ağaç kirliydi; origin/main birleştirilip temiz ağaçta yeniden ölçüldü
+kim: BENNÂ
+karsi: olcum-kuru-kosu-drift-tur2-sonra.txt
+zaman: 2026-10-30T18:53:18+03:00

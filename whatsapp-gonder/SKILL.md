@@ -1,7 +1,7 @@
 ---
 name: whatsapp-gonder
 type: agent
-version: 1.1.0
+version: 1.2.0
 description: >
   Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında
   yapılandırma yoktur: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara
@@ -53,6 +53,27 @@ belge yerine satır-içi fotoğraf olarak düşer. Bayrak verilmezse davranış 
   adı `.png` olan dosya karşıya **PDF olarak düşüyor ve açılmıyordu** (2026-08-15, 13+ kutu).
   Uzantı tahmin edilemezse alan hiç konmaz — geçit onu "bilinmeyen" sayar, pdf'e DÜŞMEZ.
 
+## 🔴 `alici_bu_kutuya_kapali` (403) — ölçüldü 2026-09-09
+
+Geçit, **kutu → alıcı** iznini kendi tutar. Bir kutudan Sultan'a gönderim çalışırken
+başka bir alıcıya `403 {"hata":"alici_bu_kutuya_kapali","kutu":"<kutu>"}` dönebilir.
+
+**Bu bir istemci arızası DEĞİLDİR** ve kutuda çözülemez: ayar `cloudtop-wa` içindedir,
+izole kutu oraya erişemez. Doğru yol merkeze (s01) **tetikli** talep bırakmaktır
+(`federe-os-cekirdek`), kutuda ayar aramak değil.
+
+**Teşhis sırası — hangi katman reddediyor:**
+| gözlem | katman |
+|---|---|
+| `--durum` → 🔴 ulaşılamıyor | ağ / geçit ayakta değil |
+| `--durum` → 🟡 oturum kapalı | WhatsApp oturumu (QR gerekir → `whatsapp-baileys`) |
+| `--durum` → 🟢 ama gönderim 403 | **izin listesi** — merkez açar |
+| 🟢 ve başka alıcıya gidiyor | alıcı adı sözlükte yok |
+
+> ⚠️ **Çıkış kodunu boru hattından okuma.** `bash $S … | tail -3; echo $?` **tail'in**
+> kodunu basar; reddedilen bir gönderim ekranda `0` görünür. Ölçüldü 2026-09-09, aynı
+> gün ikinci kez. Doğrusu: `out=$(bash $S …); rc=$?; echo "$out"`.
+
 ## Ne zaman KULLANMA
 
 - Toplu/otomatik bildirim akıtmak için — Baileys gayrıresmîdir, düşük hacim ilkesi geçerlidir.
@@ -75,3 +96,34 @@ basılmaz; bu dosyada da yalnız KONUMU yazılır. Kayıt defteri: `Nexus/_agent
 **Çırak.** Tek betik, tek sorumluluk, taşınabilir (yalnız `curl` + `python3` ister).
 Kalfa'ya terfi için: gönderim kaydı/telemetri + kuyruk-yedeği (geçit kapalıyken dosyaya yaz,
 sonra akıt) + `ahi promote whatsapp-gonder`.
+
+## İ1 sınırı — etiket sır DEĞİLDİR (ölçülmüş, 2026-09-09)
+
+Geçitte bir alıcıya gönderim kapalıysa açılması için merkeze **adı** yazmak gerekir.
+MUHASİP bunu yapmadı: *"alıcı adını buraya koymuyorum"* dedi ve **açılması gereken kapıyı,
+açacak kişiden gizledi.** Talep bir tur boşa gitti.
+
+🔴 **Ayrım:** sır olan **numaradır**. Sözlükteki ad yalnız bir etikettir (`Arçelik-Yönetim`,
+`TamamlayiciSatis` cinsinden) ve zaten merkezde açık durur. İ1 *içerik ve sır* der, *etiket*
+demez. Kanalda yazılır:
+
+| Yazılır | Yazılmaz |
+|---|---|
+| etiket (`Resul`) | telefon numarası |
+| hangi kutunun kime kapalı olduğu | mesajın gövdesi |
+| ret kodu | kişisel veri, adres |
+
+**Numarayı Sultan verir, kanaldan değil.** Sen yalnız etiketi bildirirsin.
+
+### Ret kaydının kör noktası
+Geçidin ret kaydı **kimin** reddedildiğini yazmıyor:
+`{"m":"gonderim-RED","kutu":"mmex","hata":"alici_bu_kutuya_kapali"}` — alıcı alanı yok.
+Yani merkez hangi adı eklemesi gerektiğini göremez, sen de hangi adın kapalı olduğunu.
+Teşhisi **kıyaslayarak** kurarsın (birine gidiyor, ötekine gitmiyor → fark alıcıda) —
+bu bir çıkarımdır, okuma değil; raporunda öyle yaz.
+
+### İzin modeli — grup YOK, liste var (merkez ölçtü)
+Her kutu bir **alıcı adları listesi** taşır; rol/grup kavramı yok. Yeni ad eklemek
+merkezde **elle** yapılır, kod yazmaz. "Topluca açma"nın tek yolu tam yetkidir ve o
+bilerek kapalıdır. Bir ad eklemek yeni yetenek değil, satır eklemektir — **iki addan
+fazlasını ölçülmüş gerekçe olmadan isteme.**

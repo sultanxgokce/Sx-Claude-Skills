@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kuru-kosu-drift-sonra.txt
+hedef_sha256: d609675486c8ce38a569ef92686918e55e9873c5ca4d39832bbb545b32fd79b7
+hedef_zaman: 2026-10-30T18:40:23+03:00
+hedef_renk: kirmizi
+neden: daraltmadan önceki ölçüm; kapi-sinavi ve olcum-disiplini bu PR'dan çıktı, yeniden ölçüldü
+kim: BENNÂ
+karsi: olcum-kuru-kosu-drift-daralt-sonra.txt
+zaman: 2026-10-30T18:48:47+03:00

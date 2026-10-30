@@ -1,0 +1,25 @@
+$ bash whatsapp-gonder/scripts/mimetype.test.sh
+# rc=0 sure=0.9s zaman=2026-10-30T18:41:27+03:00
+--- stdout ---
+── D: dosya gönderiminde tür bildirimi
+  ✓ D1 png → mimetype=image/png
+  ✓ D2 varsayılan tür 'dosya' DEĞİŞMEDİ (geriye uyum)
+  ✓ D3 dosya adı korunuyor
+  ✓ D4 içerik hâlâ gövdede taşınıyor
+  ✓ D5 pdf → application/pdf
+  ✓ D6 jpg → image/jpeg
+── B: tahmin edilemeyen uzantı ASLA pdf demez
+  ✓ B1 bilinmeyen uzantı pdf DEMİYOR
+  ✓ B2 alan ya yok ya da octet-stream
+── G: --gorsel bayrağı
+  ✓ G1 --gorsel → tur=gorsel
+  ✓ G2 --gorsel türü de bildiriyor
+  ✓ G3 --gorsel dosya adını taşıyor
+  ✓ G4 --gorsel dosyasız kullanım REDDEDİLİR (rc=2)
+── E: eski çağrı biçimleri kırılmadı
+  ✓ E1 düz metin aynen çalışıyor
+  ✓ E2 --kime + --not aynen çalışıyor
+  ✓ E3 çift konumsal argüman hâlâ reddediliyor
+
+SONUÇ: 15 geçti · 0 kaldı
+--- stderr ---

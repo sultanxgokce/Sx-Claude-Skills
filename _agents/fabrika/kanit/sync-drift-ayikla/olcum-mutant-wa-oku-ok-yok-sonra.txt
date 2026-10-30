@@ -1,0 +1,19 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-wa-oku-sinav-* ===
+$ env WA_OKU_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant2/wa-oku-ok-yok.sh bash whatsapp-gonder/scripts/wa-oku.test.sh
+# rc=1 sure=0.3s zaman=2026-10-30T18:53:12+03:00
+--- stdout ---
+  ✓ W1 200 + iki mesaj → rc 0
+  ✓ W2 mesajlar gönderen/yön/grup ile basılır
+  ✓ W3 imleç son_sira'ya ilerler
+  ✓ W4 imleç dosyası 600 izinli
+  ✓ W5 imleç yokken istek sonra=0
+  ✓ W6 kayıtlı imleç ve --sayi isteğe girer
+  ✓ W7 --bastan imleci yok sayar
+  ✓ W8 --kuru imleci İLERLETMEZ
+  ✓ W9 geçit reddi → rc 4
+  ✓ W10 geçide ulaşılamıyor → rc 3
+  ✗ W11 ok:false gövde → rc 4, imleç değişmez
+  ✓ W12 --sayi sayı değilse rc 2
+  ✓ W13 jeton (sır) çıktıya düşmez
+wa-oku: geçen=12 kalan=1
+--- stderr ---

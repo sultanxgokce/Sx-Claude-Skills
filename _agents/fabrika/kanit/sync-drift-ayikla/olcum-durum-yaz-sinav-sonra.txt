@@ -1,0 +1,14 @@
+$ bash durum-raporu/scripts/durum-yaz.test.sh
+# rc=0 sure=1.6s zaman=2026-10-30T18:53:09+03:00
+--- stdout ---
+  ✓ D1 yazım rc 0
+  ✓ D2 --kaynak sultan öneki eklenir
+  ✓ D3 öneksiz --bitti, önekli şimdiki işi temizler (göz bulgusu)
+  ✓ D4 --kaynak yoksa uyarı basılır
+  ✓ D5 önekli --bitti, öneksiz şimdiki işi temizler
+  ✓ D6 biten iş önekiyle kaydedilir
+  ✓ D7 başka iş bitince şimdiki iş KALIR
+  ✓ D8 tanınmayan kaynak uyarır, önek eklemez
+  ✓ D9 geçmiş 30 işle sınırlı
+durum-yaz: geçen=9 kalan=0
+--- stderr ---

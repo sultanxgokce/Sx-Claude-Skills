@@ -1,0 +1,18 @@
+$ bash whatsapp-gonder/scripts/wa-oku.test.sh
+# rc=0 sure=0.7s zaman=2026-10-30T18:53:10+03:00
+--- stdout ---
+  ✓ W1 200 + iki mesaj → rc 0
+  ✓ W2 mesajlar gönderen/yön/grup ile basılır
+  ✓ W3 imleç son_sira'ya ilerler
+  ✓ W4 imleç dosyası 600 izinli
+  ✓ W5 imleç yokken istek sonra=0
+  ✓ W6 kayıtlı imleç ve --sayi isteğe girer
+  ✓ W7 --bastan imleci yok sayar
+  ✓ W8 --kuru imleci İLERLETMEZ
+  ✓ W9 geçit reddi → rc 4
+  ✓ W10 geçide ulaşılamıyor → rc 3
+  ✓ W11 ok:false gövde → rc 4, imleç değişmez
+  ✓ W12 --sayi sayı değilse rc 2
+  ✓ W13 jeton (sır) çıktıya düşmez
+wa-oku: geçen=13 kalan=0
+--- stderr ---

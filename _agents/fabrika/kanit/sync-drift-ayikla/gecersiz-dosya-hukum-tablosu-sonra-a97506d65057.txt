@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: dosya-hukum-tablosu-sonra.md
+hedef_sha256: 340e9e780b15de3630956f5e706f8a55fd35691e61ef322cb9b0689d96f2bc11
+hedef_zaman: 2026-10-30T18:41:30+03:00
+hedef_renk: yesil
+neden: duman sayısı yanlış yazıldı (1 dedi, ölçüm 2); düzeltilmiş tablo hukum-tablosu-v2
+kim: BENNÂ
+karsi: dosya-hukum-tablosu-v2-sonra.md
+zaman: 2026-10-30T18:41:47+03:00

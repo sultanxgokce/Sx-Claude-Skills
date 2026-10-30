@@ -1,0 +1,65 @@
+{
+  "tur": 1,
+  "is": "sync-drift-ayikla",
+  "pr": "594",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T18:50:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 6 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kuru-kosu-drift-sonra.txt (kirmizi → gecersiz) — daraltmadan önceki ölçüm; kapi-sinavi ve olcum-disiplini bu PR'dan çıktı, yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-daralt-sonra.txt;olcum-kapimda-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;olcum-kapi-sinavi-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;olcum-olcum-disiplini-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;olcum-sultan-alarmi-sinav-sonra.txt (yesil → gecersiz) — kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar · BENNÂ;dosya-hukum-tablosu-sonra.md (yesil → gecersiz) — duman sayısı yanlış yazıldı (1 dedi, ölçüm 2); düzeltilmiş tablo hukum-tablosu-v2 · BENNÂ · karşı kanıt: dosya-hukum-tablosu-v2-sonra.md",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sync-drift-ayikla",
+  "dal": "sync-drift-ayikla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65520,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 22,
+    "bayt": 87417
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7e74ff136e93174f0018348102e1c13d4e3a4f98",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Altı hedef becerinin kaynak düzenlemeleri ve sürüm artışları yapılmış; daraltılan kapi-sinavi ile olcum-disiplini değişiklikte bırakılmamış. Önce bayat ve kirli kaynak üzerinden alınan son drift ölçümünü güncel temiz kaynakta tekrarlayın, whatsapp-gonder duman hatasını giderin ve yeni wa-oku akışını doğrudan sınayın.",
+    "bulgular": [
+      {
+        "ne": "Son kabul ölçümü güvenilir bir kaynak durumunda alınmamış; ölçümün kendisi kurulum içeriği ve öksüz hedef hükümlerinin güvenilmez olduğunu açıkça söylüyor.",
+        "kanit": "Son kuru koşu `origin/main'e göre 1 commit geride · 7 kirli dosya` ve `KAYNAK BAYAT ... kurulum içeriği GÜVENİLMEZ` uyarılarını veriyor; buna karşılık önce ölçümü temiz ve güncel kaynakta alınmış.",
+        "konum": "olcum-kuru-kosu-drift-daralt-sonra.txt, kaynak durum satırları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Son kuru koşu whatsapp-gonder hedefini kullanılamaz bırakacak çalıştırma izni sorununu bildiriyor; bu haliyle eşitleme sonucu yeşil değil.",
+        "kanit": "Çıktıda `mimetype.test.sh: ÇALIŞTIRILAMAZ (izin yok)`, `1 duman-düştü` ve `1 skill KULLANILAMAZ hâlde kuruldu — dağıtım YEŞİL DEĞİL` yazıyor.",
+        "konum": "olcum-kuru-kosu-drift-daralt-sonra.txt, whatsapp-gonder bölümü ve özet",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "whatsapp-gonder içine eklenen 102 satırlık yeni wa-oku istemcisinin davranışı doğrudan sınanmamış; mevcut yeşil sınav yalnız gönderim mimetype ve --gorsel davranışını kapsıyor.",
+        "kanit": "Diff `whatsapp-gonder/scripts/wa-oku.sh` dosyasını yeni ekliyor; `olcum-whatsapp-mimetype-sonra.txt` içindeki 15 sınavın tamamı mimetype, görsel bayrağı ve eski gönderim çağrılarını ölçüyor, gelen-okuma/imleç/hata akışı için sınav bulunmuyor.",
+        "konum": "whatsapp-gonder/scripts/wa-oku.sh:1; olcum-whatsapp-mimetype-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "durum-yaz tamamlanan işi, etkin işi yalnız dönüştürülmüş metin birebir aynıysa temizliyor; `simdi` ve `bitti` farklı ya da eksik --kaynak kullanırsa tamamlanmış iş etkin kalabilir.",
+        "kanit": "`bitti` önce `cumle()` ile önekleniyor, ardından `d['simdi'].get('is')==o['bitti']` karşılaştırılıyor; `simdi` de kendi çağrısındaki --kaynak ile ayrı önekleniyor ve --kaynak zorunlu değil, yalnız uyarı veriliyor.",
+        "konum": "durum-raporu/scripts/durum-yaz.sh:31-43",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; geçersiz ilan edilen altı kayıt değerlendirmeye alınmadı. İstenen önce/sonra kuru-koşu çifti mevcut ve drift 22'den 16'ya düşüyor, katalog-sürüm hizası da sıfır sapma gösteriyor; ancak geçerli son ölçüm kırmızı, bayat/kirli kaynak uyarılı ve bir duman hatalıdır. Bazı beceri sınavları yeşil olsa da kapimda ile sultan-alarmi kayıtları geçersiz ilan edilmiştir; yeni wa-oku için doğrudan ölçüm yoktur."
+  }
+}

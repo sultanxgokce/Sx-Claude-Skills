@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-sultan-alarmi-sinav-sonra.txt
+hedef_sha256: f8b8594006fa1c9dc739fd4a356bad3ee32c4bc8aadd1f1bf3ddb356e25bbfba
+hedef_zaman: 2026-10-30T18:41:28+03:00
+hedef_renk: yesil
+neden: kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T18:43:08+03:00
