@@ -215,10 +215,7 @@ BASLIK="${BASLIK_ARG:-$K_BASLIK}"; OZET="${OZET_ARG:-$K_OZET}"; KUTU="${KUTU_ARG
 [ -n "$KUTU" ] || { echo "HATA: doğan görevin kutusu okunamadı (--kutu ver)" >&2; exit 2; }
 EKLE=(ekle "$BASLIK" --kutu "$KUTU" --ozet "$OZET" --kaynak-kim "${AGENT_NAME:-REİS}" --kaynak-nereden "Hasat ($KIP_AD)")
 [ -z "$ATANAN" ] || EKLE+=(--atanan "$ATANAN")
-CIKTI="$(bash "$GOREV" "${EKLE[@]}" 2>&1)" || { echo "KIRMIZI: doğan görev açılamadı (gorev.sh ekle rc $?): ${CIKTI:0:300}" >&2; exit 1; }
-YENI="$(printf '%s\n' "$CIKTI" | grep -oE 'gorev_[0-9A-Z]+' | head -1)"
-[ -n "$YENI" ] || { echo "KIRMIZI: doğan görevin kimliği okunamadı (gorev.sh ekle çıktısı: ${CIKTI:0:200}) — havuz kaydına bağ YAZILMADI" >&2; exit 1; }
-# ATOMİKLİK (göz tur 1): ekle → adım → bağ üç ayrı yazım. Adım ya da bağ yazılamazsa doğan görev GERİ ALINIR (iptal); geri alınamazsa söylenir (sessiz yetim yok).
+# ATOMİKLİK (göz tur 1-2): ekle → adım → bağ üç ayrı yazım. Herhangi biri yarım kalırsa doğan görev GERİ ALINIR (iptal); alınamazsa söylenir (sessiz yetim yok).
 geri_al() { # $1 = neden
   if bash "$GOREV" durum "$YENI" iptal "Hasat açılışı yarım kaldı ($1); havuz kaydı $ID yerinde, yeniden denenebilir" >/dev/null 2>&1; then
     echo "KIRMIZI: $1 — doğan görev $YENI GERİ ALINDI (iptal); havuz kaydı $ID yerinde, komutu yeniden koşabilirsin" >&2
@@ -226,6 +223,16 @@ geri_al() { # $1 = neden
     echo "KIRMIZI: $1 — doğan görev $YENI geri ALINAMADI (gorev.sh durum iptal reddedildi): elle iptal et ya da tamamla (gorev.sh dogan $ID $YENI) — yetim kalmasın" >&2
   fi
   exit 1; }
+# Kimlik çıktıdan okunamazsa geri alma için görev listeden bulunur — YALNIZ ekle'den ÖNCE listede olmayıp SONRA çıkan TEK satır varsa (kanıt: iki okuma arası beliren tek kayıt); başka her durumda dokunulmaz.
+baslik_idleri() { bash "$GOREV" liste --kutu "$KUTU" 2>/dev/null | awk -v b="$BASLIK" 'index($0, b) && $1 ~ /^gorev_/ {print $1}' | sort -u; }
+IDLER_ONCE="$(baslik_idleri)"
+CIKTI="$(bash "$GOREV" "${EKLE[@]}" 2>&1)" || { echo "KIRMIZI: doğan görev açılamadı (gorev.sh ekle rc $?): ${CIKTI:0:300}" >&2; exit 1; }
+YENI="$(printf '%s\n' "$CIKTI" | grep -oE 'gorev_[0-9A-Z]+' | head -1)"
+if [ -z "$YENI" ]; then
+  YENI_ADAY="$(comm -13 <(printf '%s\n' "$IDLER_ONCE") <(baslik_idleri) | grep -v '^$')"
+  if [ -n "$YENI_ADAY" ] && [ "$(printf '%s\n' "$YENI_ADAY" | wc -l)" -eq 1 ]; then YENI="$YENI_ADAY"; geri_al "doğan görevin kimliği çıktıdan okunamadı (listeden bulundu)"; fi
+  echo "KIRMIZI: doğan görev açılmış olabilir ama kimliği okunamadı ve geri alınamadı (gorev.sh ekle çıktısı: ${CIKTI:0:160}) — kutu $KUTU'da \"$BASLIK\" başlıklı yeni kaydı ara ve elle iptal et; havuz kaydına bağ YAZILMADI" >&2; exit 1
+fi
 bash "$GOREV" adim "$YENI" "havuz kaydı $ID'den $KIP_AD Hasat ile açıldı · $GEREKCE · son doğrulama $DTARIH var" >/dev/null || geri_al "açılış adımı yazılamadı"
 bash "$GOREV" dogan "$ID" "$YENI" >/dev/null || geri_al "havuz kaydına doğan görev bağı yazılamadı"
 echo "HAVUZ_KAYDI=$ID (yerinde, durum havuz)"; echo "DOGAN=$YENI"; echo "KIP=$KIP_AD Hasat"

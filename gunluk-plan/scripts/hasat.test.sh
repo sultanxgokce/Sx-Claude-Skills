@@ -16,7 +16,11 @@ T="$(dirname "${BASH_SOURCE[0]}")"
 case "$1" in
   adim)    printf '%s\n' "$*" >> "$T/adim.log"; [ "${ADIM_RC:-0}" -eq 0 ] || exit "$ADIM_RC" ;;
   durum)   printf '%s\n' "$*" >> "$T/durum.log"; [ "${DURUM_RC:-0}" -eq 0 ] || exit "$DURUM_RC" ;;
-  ekle)    printf '%s\n' "$*" >> "$T/ekle.log"; [ "${EKLE_RC:-0}" -eq 0 ] || exit "$EKLE_RC"; echo "${EKLE_CIKTI:-📌 gorev_NEW1 · menzil · tür? · aciliyet? — doğan görev}" ;;
+  ekle)    printf '%s\n' "$*" >> "$T/ekle.log"; [ "${EKLE_RC:-0}" -eq 0 ] || exit "$EKLE_RC"
+           printf 'gorev_NEW1  menzil  acik  -  -  -  %s  (son: 2026-01-10T10:00)\n' "$2" >> "$T/liste.txt"
+           [ -z "${EKLE_IKI:-}" ] || printf 'gorev_NEW2  menzil  acik  -  -  -  %s  (son: 2026-01-10T10:00)\n' "$2" >> "$T/liste.txt"
+           echo "${EKLE_CIKTI:-📌 gorev_NEW1 · menzil · tür? · aciliyet? — doğan görev}" ;;
+  liste)   [ "${LISTE_RC:-0}" -eq 0 ] || exit "$LISTE_RC"; cat "$T/liste.txt" 2>/dev/null ;;
   dogan)   printf '%s\n' "$*" >> "$T/dogan.log"; [ "${DOGAN_RC:-0}" -eq 0 ] || exit "$DOGAN_RC" ;;
   *) printf '%s\n' "$*" >> "$T/baska.log"; exit 2 ;;
 esac
@@ -25,7 +29,7 @@ chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"
 printf '#!/usr/bin/env bash\n[ "${ADIMLAR_RC:-0}" -eq 0 ] || exit "$ADIMLAR_RC"\ncat "%s/kayit-$1.txt" 2>/dev/null || exit 3\n' "$T" > "$T/oku.sh"; export HASAT_KAYIT_OKU="$T/oku.sh"   # kayıt okuyucu (gorev.sh paket kopyasına fiil EKLENMEDİ)
 # fikstür: kayit <id> <durum> [adım metni ...] — her adım "ts|metin"
 kayit(){ local id="$1" d="$2"; shift 2; { printf 'KAYIT\tgorev_%s\t%s\t-\tbaşlık %s\t%s\t%s\n' "$id" "$d" "$id" "${K_KUTU-menzil}" "${K_OZET-Havuz kaydı örneği için beş kelimelik ad: açıklama}"; for a in "$@"; do printf 'ADIM\t%s\t%s\n' "${a%%|*}" "${a#*|}"; done; } > "$T/kayit-gorev_$id.txt"; }
-temiz(){ rm -f "$T/adim.log" "$T/durum.log" "$T/baska.log" "$T/ekle.log" "$T/dogan.log"; }
+temiz(){ rm -f "$T/adim.log" "$T/durum.log" "$T/baska.log" "$T/ekle.log" "$T/dogan.log" "$T/liste.txt"; }
 echo "— kullanım"
 bash "$HS" >/dev/null 2>&1; kapi "U1 komutsuz rc 2" "2" "$?"
 bash "$HS" durum yanlis >/dev/null 2>&1; kapi "U2 gorev_ öneksiz kimlik rc 2" "2" "$?"
@@ -170,7 +174,12 @@ echo "— ac: doğan görev hata yolları ve mevcut kapı"
 K_OZET="" kayit AO havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=-"
 temiz; bash "$HS" ac gorev_AO "özetsiz kayıt" --kip otomatik >/dev/null 2>&1; kapi "E1 özet yok (kayıtta da, bayrakta da) → rc 2, görev doğmaz (özet uydurulmaz)" "2:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
 temiz; EKLE_RC=1 bash "$HS" ac gorev_A2 "defter ekle reddediyor" --kip otomatik >/dev/null 2>&1; kapi "E2 defter doğan görevi reddederse rc 1, adım ve bağ YAZILMAZ" "1:yok:yok" "$?:$([ -e "$T/adim.log" ] && echo var || echo yok):$([ -e "$T/dogan.log" ] && echo var || echo yok)"
-temiz; EKLE_CIKTI="kayıt alındı ama kimlik yok" bash "$HS" ac gorev_A2 "kimliksiz" --kip otomatik >/dev/null 2>&1; kapi "E3 doğan görev kimliği okunamazsa rc 1, bağ YAZILMAZ" "1:yok" "$?:$([ -e "$T/dogan.log" ] && echo var || echo yok)"
+temiz; EKLE_CIKTI="kayıt alındı ama kimlik yok" bash "$HS" ac gorev_A2 "kimliksiz" --kip otomatik >/dev/null 2>"$T/e3"; rc=$?
+kapi "E3 kimlik çıktıdan okunamasa da liste farkından TEK yeni kayıt bulunur ve GERİ ALINIR; bağ yazılmaz" "1:yok:durum gorev_NEW1 iptal" "$rc:$([ -e "$T/dogan.log" ] && echo var || echo yok):$(cut -c1-22 "$T/durum.log" 2>/dev/null)"
+temiz; EKLE_CIKTI="kimlik yok" EKLE_IKI=1 bash "$HS" ac gorev_A2 "belirsiz" --kip otomatik >/dev/null 2>"$T/e3b"; rc=$?
+kapi "E3b liste farkında İKİ aday (belirsiz) → HİÇBİR kayda dokunulmaz, başlık söylenir, rc 1" "1:yok:1" "$rc:$([ -e "$T/durum.log" ] && echo var || echo yok):$(grep -c 'başlık' "$T/e3b")"
+temiz; EKLE_CIKTI="kimlik yok" LISTE_RC=1 bash "$HS" ac gorev_A2 "liste okunamıyor" --kip otomatik >/dev/null 2>"$T/e3c"; rc=$?
+kapi "E3c liste okunamıyorsa dokunulmaz, elle aranacağı söylenir, rc 1" "1:yok:1" "$rc:$([ -e "$T/durum.log" ] && echo var || echo yok):$(grep -c 'elle iptal et' "$T/e3c")"
 temiz; DOGAN_RC=1 bash "$HS" ac gorev_A2 "bağ yazılamıyor" --kip otomatik >/dev/null 2>"$T/e4"; rc=$?
 kapi "E4 bağ yazılamazsa rc 1 ve doğan görev GERİ ALINIR (gorev.sh durum <yeni> iptal) — yetim kalmaz" "1:durum gorev_NEW1 iptal" "$rc:$(cut -c1-22 "$T/durum.log" 2>/dev/null)"
 iceriyor "E4b çıktı geri alındığını söyler, havuz kaydının yerinde olduğunu bildirir" "GERİ ALINDI (iptal); havuz kaydı gorev_A2 yerinde" "$(cat "$T/e4")"
