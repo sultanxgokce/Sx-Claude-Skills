@@ -1,7 +1,7 @@
 ---
 name: mesveret
 type: agent
-version: 0.1.0
+version: 0.1.1
 description: >
   Meşveret Seansı — Sultan tek komutla reisle bulgu toplama seansı açar. Seans madde madde, sabit ve emojili bir
   şablonla ilerler (A sen anlat · B ben önereyim · C etkileşimli gidelim); her madde kaydedilince Sultan'a önemi
@@ -36,6 +36,8 @@ Bu beceri o birikimin **Sultan'ın ağzından** gelen kolunu açar.
    (`mesveret.sh durum` kaldığı yeri söyler).
 5. **Ölçemezse yazmaz.** Bulgu Defteri bu kutuda kurulu değilse (`bulgu.sh` rc 3) madde kaydedilmez, Sultan'a
    söylenir; "yazdım" denmez.
+6. **Sultan dili zorunlu.** Madde başlığı Sultan'ın anlayacağı tek cümledir (5-10 kelime); dosya yolu, komut ve kod terimi
+   başlıkta ve notta geçmez. Kayıt Hasat'ta göreve dönerken 80 harften kısa tek cümlelik özet alır (Kuzey Yıldızı G2.1–G2.2).
 
 ## Akış (reis böyle yürütür)
 
@@ -100,6 +102,7 @@ gider ve seans dosyasına işlenir · önem sözsüz REDDEDİLİR (A06) · önem
 defter kurulu değilse rc 3 ve dosyaya yazılmaz · 1 mutant (madde sayacı bozulunca özet kırmızı).
 
 ## Sürüm notları
+- **0.1.1 (30 Eki 2026, SERDAR — Kuzey Yıldızı G2.1–G2.2):** değişmez 6 "Sultan dili zorunlu" eklendi (madde başlığı ve notu). Betik değişmedi.
 - **0.1.0 (30 Eki 2026, SERDAR — Kuzey Yıldızı gece inşası):** ilk sürüm. Şablon · kayıt · önem (D1) · özet · hermetik sınav.
   Göz tur 1 düzeltmeleri: havuza işlenmeyen önem seansa da işlenmez (rc 4) · her madde sonrası A/B/C şablonu yeniden açılır · kayıt kimliği okunamazsa madde yazılmaz (rc 3).
   Sınır: Nişan Paneli henüz yok (C şıkkı görüntü yolunu elle alır); `sultan_onem` alanı defterde henüz yok (adım olarak işlenir).

@@ -1,0 +1,138 @@
+{
+  "is": "sultan-dili-satiri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T23:02:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "g9-beceri",
+      "asama": "once",
+      "dosya": "olcum-g9-beceri-once.txt",
+      "sha256": "ce3a29292bf1d2fbd255dd6dee603b5391be09c3efb8de86a55f259c563001e8",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Nexus-kuzey-olc/scripts/kuzey-olc.sh",
+        "G9"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T22:59:07+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fea1ac5d26c04f76aecbe199f872585c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "g9-beceri",
+      "asama": "sonra",
+      "dosya": "olcum-g9-beceri-sonra.txt",
+      "sha256": "0cd5c6b4a781ac25c2b3d12381a0e01466c9a26ca1ba351701fe512f375b1cca",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Nexus-kuzey-olc/scripts/kuzey-olc.sh",
+        "G9"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:59:08+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "54c88e9fe65145188f671e120c951adb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "73ba6ff9e017e07dc83cbcb0e7f451153ce4de401a3f5ed9a44e92e7e520ffb5",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:59:17+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "88199134714a491daec76842d0b0c67b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-kuru-gunluk-plan",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-kuru-gunluk-plan-sonra.txt",
+      "sha256": "246f286271bdf8ce1389d01d58e09a5b8e0d81f71eae4527ab9ecef761d5fdec",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "gunluk-plan"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T23:02:03+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b2924fe4e66b4495b2b96027acc8a421"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-kuru-bulgu",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-kuru-bulgu-sonra.txt",
+      "sha256": "6a43f2910b5361f0354546ce1073d315e6f94c6094f2e7eb46d342d91957dc43",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "bulgu"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T23:02:03+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "52f6cdab84294e938fa24bd1f5057b16"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-kuru-mesveret",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-kuru-mesveret-sonra.txt",
+      "sha256": "5e7266070fd750c6a800739e197a604b4beea5942c054d2deb5be0fbeabaff14",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "mesveret"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T23:02:03+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b4db8d452787415294f86a6ca7b21ba2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-kuru-yazilim-fabrikasi",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-kuru-yazilim-fabrikasi-sonra.txt",
+      "sha256": "06c7e9ce0821d0388fb692f7ec9a0f45948306f529144a910a01bf80bc13c3c4",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T23:02:03+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fd6667d7daf4401d89d617493a27314d"
+    }
+  ],
+  "imza": "bcbb2a50fbba2ad74e24f52a37f315161ec0f9da0765b1f8e1404551505e54d0"
+}

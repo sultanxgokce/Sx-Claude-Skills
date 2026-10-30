@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.6.3
+version: 0.6.4
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -37,6 +37,9 @@ sayısına girmez, Sırada cümlesinin sonunda "N bulgu havuzda, süzülmeyi bek
 - Defter 1.18.0 öncesiyse `havuz` 400 ile reddedilir ve komut bunu basar (rc 1); sessizce `acik`a düşmez.
 - `kaynak_sinif: ajan` artık gövdede açıkça yazılır (ekranda "X açtı" künyesi defterin türetmesine bağlı kalmasın).
 
+## 0.6.4 — Sultan dili zorunlu (SERDAR 30 Ekim, Kuzey Yıldızı G2.1–G2.2)
+Başlık kuralı "Sultan dili zorunlu" satırıyla yazılı hâle geldi (Komut bölümü). Betik değişmedi.
+
 ## 0.6.3 — `yaz --oda <oda>` (BÂNİ 30 Ekim, görev …GZF89Z)
 Meşveret seansı maddeyi `bulgu.sh yaz … --oda <oda>` ile geçiriyordu; `yaz` bu bayrağı tanımadığından (`bilinmeyen: --oda`, rc 2)
 hiçbir madde kaydedilemiyordu. Artık `--oda` alınır ve merkezî deftere `oda` alanı olarak gider (`gorev.sh ac --oda` ile aynı alan).
@@ -51,7 +54,8 @@ bash /config/.claude/skills/bulgu/scripts/bulgu.sh sema             # bu kutunun
 ```
 - Numara (S-N) defterin çekirdeği verir; elle `id/no/sayi` yazma.
 - `--kim` zorunlu: kaydı kimin açtığı (`acan`) sonradan sorulur.
-- Başlık Sultan-dilinde tek cümle; kanıt `--not` içinde.
+- **Sultan dili zorunlu:** başlık tek cümle, 5-10 kelime; dosya yolu, komut ve kod terimi başlıkta geçmez, kanıt `--not` içinde
+  durur. Havuz kaydı Hasat'ta göreve dönerken 80 harften kısa tek cümlelik Sultan özeti alır (Kuzey Yıldızı G2.1–G2.2, 0.6.4).
 - Tik/onay alanına ajan YAZMAZ (A06) — hâl geçişi `bulgu.sh hal` (0.2.0; `onaylandi` reddedilir), onay yalnız insan.
 - Beceri Sx deposunda yaşar (0.2.0'da adopte edildi; öncesinde ortak dizinde öksüzdü — kayıtsız beceri rebuild'de kaybolur).
 

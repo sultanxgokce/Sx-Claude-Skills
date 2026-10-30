@@ -1423,7 +1423,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.19.0",
+      "version": "1.19.1",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1530,7 +1530,7 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.27.34",
+      "version": "0.27.35",
       "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2: sergi-beceri.py → sergi.mmepanel.com canlı (22 Eyl). F3: kart.sh (sınıf soruları araçta; kartsız iş alanı açılmaz) + gun-sonu.sh (özet defterden). Kapılar: ana-dal Edit/Write kilidi + birleştirme kapısı (kanıtsız/puansız iş birleşemez).",
       "prerequisites": {
         "system": [
@@ -1679,7 +1679,7 @@
       "id": "bulgu",
       "type": "workflow",
       "name": "Bulgu — filonun tek bulgu komutu (kutunun Bulgu Defteri'ne yaz/listele/hâl)",
-      "version": "0.6.3",
+      "version": "0.6.4",
       "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06). 0.3.0: jeton varsa merkezî Görev Defteri'ne görev yazar. 0.4.0: --dugum ile başka kutunun bekleyen görevine düğüm bağı. 0.4.1: bağ reddinde defterin neden + yapılacak satırı basılır. 0.5.0: kayıt varsayılan 'havuz' durumunda açılır (Sırada'ya düşmez, haftalık süzmede görev olur); --gorev doğrudan iş; --dugum --gorev ister; defter havuzu tanımıyorsa söyler.",
       "tags": [
         "bulgu",
@@ -1872,7 +1872,7 @@
       "id": "mesveret",
       "type": "agent",
       "name": "mesveret — Meşveret Seansı: Sultan'la madde madde bulgu toplama",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Sultan tek komutla reisle bulgu toplama seansı açar; sabit emojili şablon (A sen anlat · B ben önereyim · C etkileşimli), her maddede Sultan önemi (1-3) sorulur ve D1 olarak işlenir; kayıt Bulgu Havuzu'na (merkezî görev defteri, havuz) düşer; Hasat tazelik denetimi KURU dediğinde önerilir. Kuzey Yıldızı 1.2.",
       "tags": [
         "sultan",

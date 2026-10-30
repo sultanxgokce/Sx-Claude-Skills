@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "sultan-dili-satiri",
+  "pr": "601",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T23:03:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-dili-satiri",
+  "dal": "sultan-dili-satiri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16270,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 11276
+  },
+  "dalgic": "olculemedi",
+  "bas": "48003fc6cae98d1bf65ffffe2e2e45d2918f480a",
+  "duzeltme_farki": {
+    "onceki_bas": "c81943667799cffa8667328e1ff66d971be8ca7e",
+    "dosya": 7,
+    "bayt": 11276,
+    "tam_bayt": 32154
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dört kaynak el defterindeki Sultan dili kuralı G9 ölçümünde 4 eksikten 0 eksiğe inmiş, katalog hizası korunmuş ve dört kurulum kuru denetimi beklenen sürüm geçişlerini sapmasız planlamış. Önceki B1 kod kusuru olarak kapanmıştır; kurulu kopyalara gerçek uygulama birleşme sonrası ana dalda yapılacağından kalan borç kutu-dışıdır ve kod puanını düşürmez.",
+    "bulgular": [
+      {
+        "ne": "Önceki turdaki B1 yeniden sınıflandırıldı: kurulu dört kopya henüz güncellenmemiştir; kuru denetimler her biri için bir güncellemenin yalnız planlandığını ve ayrıca --apply gerektiğini gösterir. İş kartı bu işlemi birleşme sonrası ana dala bağlayıp canlı borç olarak kaydettiğinden eksik, bu konteynerde düzeltilecek bir kod kusuru değil kutu-dışı teslim adımıdır.",
+        "kanit": "Dört kurulum çıktısının her birinde “CHECK (dry-run)”, “1 planlandı” ve “uygulamak için: node sync-skills.mjs --apply” bulunuyor; sürüm geçişleri gunluk-plan 1.19.0→1.19.1, bulgu 0.6.3→0.6.4, mesveret 0.1.0→0.1.1 ve yazilim-fabrikasi 0.27.34→0.27.35. İş kartındaki canli_borc gerekçesi kurulumun ancak birleşmeden sonra ana daldan yapılacağını, odendi=null alanı da borcun sürdüğünü gösteriyor.",
+        "konum": "olcum-kurulum-kuru-gunluk-plan-sonra.txt; olcum-kurulum-kuru-bulgu-sonra.txt; olcum-kurulum-kuru-mesveret-sonra.txt; olcum-kurulum-kuru-yazilim-fabrikasi-sonra.txt; iş kartı canli_borc",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "birleşmiş ana dal + gerçek kurulum yüzeyi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. G9 için kırmızıdan yeşile dönen gerçek önce/sonra ölçüm çifti dört kaynak beceride eksik kuralın 4→0 indiğini, katalog ölçümü sapmanın 0 olduğunu gösteriyor. Dört kuru kurulum kaydı gerçek kurulumun yapıldığını kanıtlamıyor; yalnız uygulanacak değişiklikleri ölçüyor ve böylece birleşme sonrası kutu-dışı kurulum borcunu açıkça görünür kılıyor."
+  }
+}
