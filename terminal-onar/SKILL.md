@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.5
+version: 2.36.6
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -85,6 +85,13 @@ geçirip bağlanır.
 - Kapıyı başlatan bütün sınavlar tuzu geçici yolda tutar (gerçek `$HOME`'a yazmaz).
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
+
+## 🆕 2.36.6 · Telefonda klavye açıkken yazı alanı görünür kalır (31 Eki · görev G17 …WXTCS · kart telefon-klavye-gorunur)
+Telefonda klavye açılınca tarayıcı yalnız GÖRÜNEN alanı (visualViewport) küçültür; sayfa ve terminal tam boyda kalır, Claude'un yazı kutusu
+klavyenin altında kalırdı. Artık `kapi/genel/pano.js` (görüntü düğmesi 1.1.0) görünen alan sayfadan 80 px'ten fazla kısalınca terminal kabını
+görünen alana sığdırır, ttyd yeniden sığdırır (satır azalır, tmux imleci izler); klavye kapanınca eski boy. 80 px altı oynama (adres çubuğu)
+klavye sayılmaz. Telefon `ignore-size` ile bağlı olduğu için masaüstü pencere boyu etkilenmez. Sınav `pano-sinav.mjs` G9-G11: başsız
+tarayıcıda gerçek klavye yok, görünen alan taklit edilir — bu bir VEKİL ölçümdür; gerçek iOS/Android klavyesi Sultan denemesinde (SARI).
 
 ## 🆕 2.36.5 · Telefonda terminal yarım çıkmaz + telefonda görüntü ekleme düğmesi (30 Eki · görev …HJKXAB · kart telefon-terminal-zoom-boy)
 **Yarım ekran:** telefon (`tel.` kipi, `-f ignore-size`) pencere boyuna girmediği için, pencere son bağlanan dar bir istemcinin boyunda kalınca

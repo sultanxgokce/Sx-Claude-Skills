@@ -1,0 +1,82 @@
+{
+  "is": "telefon-klavye-gorunur",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T00:33:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-sonra.txt",
+      "sha256": "cf72fabffae15dae15019ba4d14cb9f3852658a3831a56671ae230b65349f0f6",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T00:24:35+03:00",
+      "sure_sn": 139.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f5812ceb60ea40618659dfd240b5b58a"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "pano-sinav-main-taban",
+      "asama": "once",
+      "dosya": "dosya-pano-sinav-main-taban-once.txt",
+      "sha256": "cbacd2ce7913db0f70e5833a9729136143be9369424e14f9f501bfc7b6ce7971",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/pano-main.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:26:37+03:00",
+      "olcum_id": "c8b8179ce40c4661a96704e53dbcf6fb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-klavye-dinleyici",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-klavye-dinleyici-sonra.txt",
+      "sha256": "4e81c058277b356b924406087f2fa4b4632ecac4c2fd906b020138a2a4076957",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/mut-klavye/terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:28:27+03:00",
+      "sure_sn": 103.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "pano-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "aa15732e1abc4f59a09186c6751a67f4"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "telefon-klavye-kapali",
+      "asama": "once",
+      "dosya": "dosya-telefon-klavye-kapali-once.png",
+      "sha256": "fbc3fa56bb6e9dfbc03f3126c1e7d5eb153697114d90ffa7cce08b9507dfc089",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/klavye-kare/k-telefon-dugme.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:33:30+03:00",
+      "olcum_id": "0bd8968f9bf840459d7c31ea80bfe09d"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "telefon-klavye-acik",
+      "asama": "sonra",
+      "dosya": "dosya-telefon-klavye-acik-sonra.png",
+      "sha256": "7657462d9ec7da2af43da4ed1780b64d437711109e87c650ac267c047c47aae8",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/klavye-kare/k-telefon-klavye.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:33:30+03:00",
+      "olcum_id": "6b25d941244e4c5ba24fba581e58ab65"
+    }
+  ],
+  "imza": "0be6144d592b30102c86c6d84b6e170cafb4c0099e5e437bb8d66abd5f61c976"
+}
