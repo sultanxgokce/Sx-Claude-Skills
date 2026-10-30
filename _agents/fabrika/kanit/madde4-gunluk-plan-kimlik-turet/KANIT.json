@@ -1,7 +1,7 @@
 {
   "is": "madde4-gunluk-plan-kimlik-turet",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T14:08:49+03:00",
+  "guncelleme": "2026-10-30T14:12:14+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,38 +25,38 @@
       "etiket": "sirada-bak-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sirada-bak-sinavi-sonra.txt",
-      "sha256": "05f70c4d62b79683665d5b072d24b71bd44f39ef543f81c0eda76e36934d0103",
+      "sha256": "597a979b99ef8833662fe4b0bd8090d15bfadd3386978b7aaca2e8865893578b",
       "komut": [
         "bash",
         "gunluk-plan/scripts/sirada-bak.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T14:03:22+03:00",
-      "sure_sn": 6.3,
+      "zaman": "2026-10-30T14:12:07+03:00",
+      "sure_sn": 10.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "36d0a7443bcc42768df1b517565d157d"
+      "olcum_id": "4474abfeb5d3458b91ccd41fdf7302c9"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-tmux-dali-kapali",
       "asama": "sonra",
       "dosya": "olcum-mutant-tmux-dali-kapali-sonra.txt",
-      "sha256": "739312b4bca82099bce63d5b3564042dfd091187ec25fd7961622229456c03f2",
+      "sha256": "126d9e9f2f70e2b90c5ade4855f0218661ee31599c071c4ac2f6a7c69f5276b4",
       "komut": [
         "bash",
         "gunluk-plan/scripts/sirada-bak.test.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T14:04:25+03:00",
-      "sure_sn": 12.0,
+      "zaman": "2026-10-30T14:12:14+03:00",
+      "sure_sn": 6.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sirada-bak-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "b971640bc66c48f285d8abb49d190b4e"
+      "olcum_id": "a2d7e4e2b1274132b1d113de0ad464ae"
     },
     {
       "tur": "olcum",
@@ -77,5 +77,5 @@
       "olcum_id": "eb3b07212a0b48d9b0bc3bac7d1c1b9c"
     }
   ],
-  "imza": "30d4143e6a56cfa56f8c046cecece4296c393c0ebbcb995e17326b00e8b58293"
+  "imza": "388a78c99056527cb43e8831370756995bca7e85566e0edd1e2ffff5c1508429"
 }

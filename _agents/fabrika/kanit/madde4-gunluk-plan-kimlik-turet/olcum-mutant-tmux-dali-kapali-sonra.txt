@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sinavi-* ===
 $ bash gunluk-plan/scripts/sirada-bak.test.sh
-# rc=1 sure=12.0s zaman=2026-10-30T14:04:25+03:00
+# rc=1 sure=6.8s zaman=2026-10-30T14:12:14+03:00
 --- stdout ---
 — kutu-bul
   ✓ K1 menzil koltuğu kutuyu 'menzil' bulur (en sık sütun 'code' olsa da)
@@ -121,12 +121,9 @@ $ bash gunluk-plan/scripts/sirada-bak.test.sh
   ✓ T12 tazelik hesabı çıktı vermezse (python3 çöktü) ÖLÇÜLEMEDİ + sayılar '-' (uydurma 0 yok); karar yine verilir
 ── kimlik türetme (1.18.0 · MUAVİN Madde 4 · NOVA: KIM boşken kendi işi başkasının sayılıyordu)
   ✓ X1 AILE_KIMDEN kimlik kaynağıdır: kutu menzil, kendi işi üstlenilir, rc 0
-  ✗ X2 ortam boş, tmux oturumu MENZILCI:0 ↔ aile-registry → kimlik MENZILCI, kendi işi üstlenilir (başkasının sayılmaz) — beklenen=0:ustlen gorev_M2 --kim MENZILCI --tahmin 30 gerçek=3:
-  ✓ X2b 'bana atanmış ya da sahipsiz iş yok' DENMEZ
+  ✗ X2 ortam boş, tmux oturumu MENZILCI:0 ↔ aile-registry → kimlik MENZILCI, kendi işi üstlenilir; 'bana atanmış ya da sahipsiz iş yok' DENMEZ — beklenen=0:ustlen gorev_M2 --kim MENZILCI --tahmin 30:0 gerçek=3::0
   ✓ X3 aynı tmux oturumu iki üyede: belirsiz → türetilmez, rc 3, ustlen yok
-  ✓ X4 ortam boş ve tmux yok: ÖLÇÜLEMEDİ rc 3, KARAR satırı basılmaz (kutu düzeyinde 'başkasının işi' sevki YOK)
-  ✓ X4b hata satırı kimliğin nasıl verileceğini söyler
+  ✓ X4 ortam boş ve tmux yok: ÖLÇÜLEMEDİ rc 3, KARAR satırı basılmaz (kutu düzeyinde 'başkasının işi' sevki YOK), hata satırı yolu söyler
   ✓ X5 AGENT_NAME tmux türetmesinden ÖNCE gelir (MUAVIN → kutu code)
-sonuç: 114 geçti · 1 kaldı
+sonuç: 112 geçti · 1 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-madde4-gunluk-plan-kimlik-turet-mutant-tmux-dali-kapali 5 sn bekledi (yuva 2, load1 8.48)
