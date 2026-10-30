@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "postane-postaci-kaynak-tazele",
+  "pr": "597",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T20:01:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-kaynak-tazele",
+  "dal": "postane-postaci-kaynak-tazele",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13416,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8771
+  },
+  "dalgic": "olculemedi",
+  "bas": "ca5f869ea304b9c08c693438bb2b764c21ecdd8b",
+  "duzeltme_farki": {
+    "onceki_bas": "8468571fa85e2edb689ab7b514ccbeb92fe9d837",
+    "dosya": 5,
+    "bayt": 8771,
+    "tam_bayt": 14690
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "postane.mjs ile KAYNAK.sha256 eşitlenmiş, sürüm artışı karta eklenmiş ve beceri sınavı 16/16 geçmiştir. Ancak kaynak ölçümü hâlâ karşı tarafın cloudtop ana dalındaki postane 0.1.6 olduğunu göstermediği için asıl hedef kanıtlanmış değildir; önce bu ölçüm düzeltilmelidir.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmadı: kaynak eşitliği ölçümü doğru hedefin cloudtop ana dalındaki postane 0.1.6 olduğunu hâlâ doğrulamıyor.",
+        "kanit": "Önce/sonra çıktıları “kaynaktan farklı dosya: 1” ve “kaynaktan farklı dosya: 0” değerlerini, ayrıca #1216 commitini gösteriyor; fakat çıktıda cloudtop depo kimliği, ana dalın çözümlenen başı veya postane 0.1.6 sürümü yok. Çağrılan geçici pt-ol.sh betiğinin içeriği de kanıtta yer almıyor.",
+        "konum": "olcum-kaynak-fark-once.txt; olcum-kaynak-fark-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 kapandı: beceri ve katalog sürümünün 0.2.0 → 0.2.1 artırılması artık kapsam kayması değildir.",
+        "kanit": "Güncel iş kartı cümlesi sürüm artışını açıkça talep ediyor ve gerekçesini “kurulu kopya sürüm artmadan güncellenmez” diye belirtiyor; önceki bulgunun dayandığı talep sınırı böylece değişmiş.",
+        "konum": "İŞ KARTI.cumle; İŞ KARTI.gecmis[0]",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Kaynak farkı için önce/sonra ölçüm çifti ile rc=0, 16/16 geçen beceri sınavı mevcut; ancak ölçüm hedef kaynağın cloudtop ana dalı ve postane 0.1.6 olduğunu görünür biçimde bağlamadığından talebin kaynak kimliği kanıtsız kalıyor."
+  }
+}

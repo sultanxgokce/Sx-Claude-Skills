@@ -29,6 +29,8 @@ export const KIRA_GORULDU_MS = 600_000;    // görüldü, "işlendi" gelmezse me
 export const MAX_DENEME = 3;
 export const ICERIK_AZAMI = 20_000;
 export const KAPALI = Object.freeze(['islendi', 'reddedildi', 'olu', 'arsiv']);
+// Ölü ya da arşive düşmüş mektubu alıcı geç okursa kapatabilir (…J411F): gördüm durum değiştirmez (diriltme yok), işlendi/reddet kapatır.
+export const GEC_KAPANIR = Object.freeze(['olu', 'arsiv']);
 export const OLU_ARSIV_MS = 86_400_000;   // ölü mektup 24 saat kimse kapatmazsa kendiliğinden arşive düşer (…1SSZVC: liste hiç erimiyordu)
 const ACIK = Object.freeze(['gonderildi', 'teslim', 'goruldu']);
 
@@ -157,6 +159,10 @@ export function postaneAc(dosya, { adlar = adlariKur() } = {}) {
     return islem(() => {
       const m = mesajBul(id);
       if (!m) return hata('mesaj_yok', `${id} yok`, 404);
+      if (GEC_KAPANIR.includes(m.durum)) {
+        if (!bir(`SELECT 1 FROM olay WHERE mesaj_id=? AND tur='gec_goruldu'`, id)) olay(id, now, 'gec_goruldu', kim, `${m.durum} iken alıcı gördü`);
+        return { ok: true, tekrar: false, gec: true, mesaj: goster(m, now) };
+      }
       if (KAPALI.includes(m.durum)) return hata('durum_kapali', `mesaj zaten ${m.durum}`, 409);
       if (m.durum === 'goruldu') return { ok: true, tekrar: true, mesaj: goster(m, now) };
       if (m.durum !== 'teslim') return hata('durum_sirasi', `mesaj '${m.durum}' durumunda: önce posta al ile teslim alınmalı (kira dolduysa yeniden alınır)`, 409);
@@ -216,6 +222,13 @@ export function postaneAc(dosya, { adlar = adlariKur() } = {}) {
       const m = mesajBul(id);
       if (!m) return hata('mesaj_yok', `${id} yok`, 404);
       if (m.durum === sonuc) return { ok: true, tekrar: true, mesaj: goster(m, now) };
+      if (GEC_KAPANIR.includes(m.durum)) {
+        // Geç kapanış: gördüm zinciri aranmaz (mektup zaten kapalı listedeydi); merkezin kapatma gerekçesi işlendi'de korunur.
+        calis(`UPDATE mesaj SET durum=?, islendi_ts=?, goruldu_ts=COALESCE(goruldu_ts, ?), gerekce=?, kira_bitis=NULL WHERE id=?`,
+          sonuc, now, now, ret ? reddet.trim() : m.gerekce, id);
+        olay(id, now, sonuc, kim, `${m.durum === 'olu' ? 'ölü' : 'arşivdeki ölü'} mektup geç kapandı${ret ? ' · ' + reddet.trim() : ''}`.slice(0, 200));
+        return { ok: true, tekrar: false, gec: true, mesaj: goster(mesajBul(id), now) };
+      }
       if (KAPALI.includes(m.durum)) return hata('durum_kapali', `mesaj zaten ${m.durum}`, 409);
       // Zincir atlanmaz: işlendi de reddedildi de YALNIZ görüldü durumundan gelir (teslim → görüldü → karar).
       if (m.durum !== 'goruldu') {

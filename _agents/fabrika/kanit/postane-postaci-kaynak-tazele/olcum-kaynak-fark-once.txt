@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-main-kopya
+# rc=0 sure=0.1s zaman=2026-10-30T20:04:42+03:00
+--- stdout ---
+cloudtop origin/main: 640bee17005a69ca54592a98fc755d6aab528941
+cloudtop postane sürümü (package.json): 0.1.6
+postane.mjs son commit: 3c2679a9 fix: ölü ya da arşivdeki mektubu alıcı geç okuyunca kapatabilsin (#1216)
+kaynaktan farklı dosya: 1
+--- stderr ---
