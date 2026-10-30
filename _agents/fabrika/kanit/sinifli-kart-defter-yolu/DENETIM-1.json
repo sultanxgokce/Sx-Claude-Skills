@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sinifli-kart-defter-yolu",
+  "pr": "593",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T18:40:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sinifli-kart-defter-yolu",
+  "dal": "sinifli-kart-defter-yolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25459,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Yalıtılmış kutuda tetik yokken sınıflı kartın iznini bağlı göreve yazan yol eklenmiş; görev yazımı başarısızsa geçici kart silinip açılış kapatılıyor, sınıfsız ve tetikli yollar korunuyor. Araç imzalı önce/sonra ölçümü 432/439 geçen ve 7/0 kalan sonucunu gösterdiği, hedef vakalar ile iki mutasyon sınavı da eklendiği için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı kart sınavında önce rc=1 ve 432 geçti/7 kaldı, sonra rc=0 ve 439 geçti/0 kaldı ölçüm çifti mevcut. Sonraki ölçümün görünen T14a kaynak sınavları tetiksiz sınıflı kartın tek görev yazımıyla açılması, görev yazılamayınca kartın ve geçici dosyanın oluşmaması, jetonsuz ve görevsiz çağrıların kapanması, sınıfsız yolun korunması ve iki hata mutantının yakalanmasını hedefliyor; çıktı kırpılmış olsa da nihai sonuç satırı sıfır kalan sınav bildiriyor."
+  }
+}
