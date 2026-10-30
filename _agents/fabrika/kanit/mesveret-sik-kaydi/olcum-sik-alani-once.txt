@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ms-once.sh
+# rc=0 sure=0.2s zaman=2026-10-31T00:19:12+03:00
+--- stdout ---
+hedef: Sx origin/main 2d3fb71e1742a40a7a018ad7bff41c0e1cb6d0f4
+şıklı madde alanı: None
+--- stderr ---

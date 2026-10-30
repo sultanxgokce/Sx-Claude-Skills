@@ -1,7 +1,7 @@
 ---
 name: mesveret
 type: agent
-version: 0.1.1
+version: 0.2.0
 description: >
   Meşveret Seansı — Sultan tek komutla reisle bulgu toplama seansı açar. Seans madde madde, sabit ve emojili bir
   şablonla ilerler (A sen anlat · B ben önereyim · C etkileşimli gidelim); her madde kaydedilince Sultan'a önemi
@@ -59,9 +59,10 @@ A) Sen anlat · B) Ben önereyim · C) Etkileşimli gidelim
 
 ### 2 · Kaydet
 ```bash
-bash …/mesveret.sh madde <seans> "<başlık Sultan dilinde>" --kim <REİS> --etiket bug|ozellik \
+bash …/mesveret.sh madde <seans> "<başlık Sultan dilinde>" --kim <REİS> --etiket bug|ozellik --sik A|B|C \
      --not "<2-3 cümle>" [--gorsel <yol>] [--oda <oda>]
 ```
+`--sik` Sultan'ın o maddede seçtiği şıktır (A, B ya da C); şıksız madde yazılmaz (rc 2). Şık seans dosyasında (`sik` alanı) ve havuz notunda (`şık: B`) durur.
 Kayıt Bulgu Havuzu'na düşer; çıktı görev kimliğidir. Sonra reis **önemi sorar** (tek soru, üç şık):
 ```
 Bu maddenin önemi? 1 (düşük) · 2 (orta) · 3 (yüksek)
@@ -88,7 +89,7 @@ Seans dosyası kalır (`~/.cache/mesveret/<seans>.json`); `mesveret.sh liste` ge
 ## Komutlar
 ```
 mesveret.sh basla [--oda <oda>] [--konu "…"]           → seans kimliği
-mesveret.sh madde <seans> "<başlık>" --kim <AD> --etiket bug|ozellik [--not "…"] [--gorsel <yol>] [--oda <oda>]
+mesveret.sh madde <seans> "<başlık>" --kim <AD> --etiket bug|ozellik --sik A|B|C [--not "…"] [--gorsel <yol>] [--oda <oda>]
 mesveret.sh onem  <seans> <madde-no> --onem 1|2|3 --soz "…" --oturum <ref>
 mesveret.sh durum <seans>                               → kaçıncı madde, hangileri önemsiz kaldı
 mesveret.sh bitir <seans>                               → özet
@@ -102,6 +103,7 @@ gider ve seans dosyasına işlenir · önem sözsüz REDDEDİLİR (A06) · önem
 defter kurulu değilse rc 3 ve dosyaya yazılmaz · 1 mutant (madde sayacı bozulunca özet kırmızı).
 
 ## Sürüm notları
+- **0.2.0 (31 Eki 2026, HEZARFEN — Kuzey Yıldızı G2):** `madde` komutu `--sik A|B|C` ister; seçilen şık seans dosyasına (`sik`), havuz notuna ve `durum`/`bitir` çıktısına işlenir. Şıksız ya da A/B/C dışı madde yazılmaz. Sınav M8–M8e + şık mutantı.
 - **0.1.1 (30 Eki 2026, SERDAR — Kuzey Yıldızı G2.1–G2.2):** değişmez 6 "Sultan dili zorunlu" eklendi (madde başlığı ve notu). Betik değişmedi.
 - **0.1.0 (30 Eki 2026, SERDAR — Kuzey Yıldızı gece inşası):** ilk sürüm. Şablon · kayıt · önem (D1) · özet · hermetik sınav.
   Göz tur 1 düzeltmeleri: havuza işlenmeyen önem seansa da işlenmez (rc 4) · her madde sonrası A/B/C şablonu yeniden açılır · kayıt kimliği okunamazsa madde yazılmaz (rc 3).
