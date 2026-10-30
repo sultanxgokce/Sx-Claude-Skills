@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "sultan-dili-satiri",
+  "pr": "601",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T23:00:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-dili-satiri",
+  "dal": "sultan-dili-satiri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25742,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 3977
+  },
+  "dalgic": "uyumsuz",
+  "bas": "c81943667799cffa8667328e1ff66d971be8ca7e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Dört kaynak el defterine Sultan dili kuralı eklenmiş, sürümler katalogla hizalanmış ve G9 ölçümü 4 eksikten 0 eksiğe dönmüş. Ancak iş kartının açıkça istediği kurulu kopyaların güncellendiğine dair ne üretim farkında değişiklik ne de kurulum/denetim ölçümü var; önce bu teslim parçası tamamlanmalı.",
+    "bulgular": [
+      {
+        "ne": "Kurulu beceri kopyalarını güncelleme talebi karşılanmamış veya en azından kanıtlanmamış; değişiklik yalnız kaynak SKILL.md dosyaları ile catalog.json'u kapsıyor.",
+        "kanit": "Eksiksiz olduğu belirtilen üretim farkında yalnız bulgu/SKILL.md, gunluk-plan/SKILL.md, mesveret/SKILL.md, yazilim-fabrikasi/SKILL.md ve catalog.json değişiyor. G9 önce/sonra ölçümü kaynaklardaki eksik kuralı 4→0 ölçüyor; katalog-hiza ölçümü de yalnız katalog↔SKILL.md sapmasını ölçüyor. Kurulu kopya yollarını güncelleyen fark veya kurulum sonrası denetim kaydı bulunmuyor.",
+        "konum": "üretim diffi; olcum-g9-beceri-sonra.txt; olcum-katalog-hiza-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. G9 için gerçek bir önce/sonra ölçüm çifti var ve dört kaynak beceride kural eksikliğinin 4→0 indiğini destekliyor; katalog hizası da yeşil ölçülmüş. Buna karşılık kurulu kopyaların güncellendiğini sınayan bir kayıt yok, dolayısıyla iş kartının bu yarısı kanıtsız."
+  }
+}

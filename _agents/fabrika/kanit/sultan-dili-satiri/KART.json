@@ -1,0 +1,28 @@
+{
+  "is": "sultan-dili-satiri",
+  "cumle": "Görev yazan dört becerinin (günlük plan, bulgu, meşveret, yazılım fabrikası) el defterine Sultan dili zorunlu kuralı yazılır ve kurulu kopyalar güncellenir; Kuzey G9'da kuralı eksik beceri 4 → 0 (kaynak: kuzey-olc.sh G9, 30 Eki)",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-30T22:56:06+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "30.10 22:56 is-alani: PR #600 aynı dosyaya dokunuyor → catalog.json: 1567-1567 — PR'dan önce kapsam-olc",
+    "30.10 22:56 is-alani: PR #506 aynı dosyaya dokunuyor → catalog.json: 1567-1567 — PR'dan önce kapsam-olc"
+  ],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
