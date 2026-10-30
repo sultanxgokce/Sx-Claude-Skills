@@ -10,7 +10,7 @@ description: >
 # postane-postaci — postacıyı bir kutuya taşıyan paket
 
 **Ne:** `scripts/postaci.mjs` (+ `postane.mjs` · `ajan-adlari.mjs` · `ulid.mjs`) cloudtop `infra/postane` dosyalarının BİREBİR kopyasıdır (`scripts/KAYNAK.sha256`). Değişiklik kaynakta (cloudtop) yapılır, buraya taşınır; kopya elle düzenlenmez.
-**Kurulum betiği:** `bash scripts/postaci-kutu.sh` (KURU) · `--uygula` · `--kapat`. Sınav: `bash scripts/postaci-kutu.test.sh` (15 kapı).
+**Kurulum betiği:** `bash scripts/postaci-kutu.sh` (KURU) · `--uygula` · `--kapat`. Sınav: `bash scripts/postaci-kutu.test.sh` (16 kapı).
 
 ## Sınırlar (kodda)
 1. **İzinli kutu listesi sabit** (17 ekip kutusu); listede olmayan kutuda `--uygula` reddedilir.

@@ -75,7 +75,12 @@ fi
 MEVCUT="$($CRONTAB -l 2>/dev/null || true)"
 YENI="$(printf '%s\n' "$MEVCUT" | awk -v i="$SATIR_ISARET" '$0==i{atla=2} atla>0{atla--; next} {print}')"
 YENI="$(printf '%s\n%s\n%s\n' "$YENI" "$SATIR_ISARET" "$SATIR" | sed '/./,$!d')"
-geri_al() { printf '%s\n' "$MEVCUT" | $CRONTAB - 2>/dev/null; echo "  ↩ önceki crontab geri yüklendi (kısmi kurulum bırakılmadı)"; }
+geri_al() {   # bayrak ÖNCE silinir (cron satırı no-op olur); sonra eski crontab geri yüklenir ve GERİ OKUNARAK doğrulanır
+  rm -f "$BAYRAK"
+  local beklenen; beklenen="$(printf '%s\n' "$MEVCUT" | grep -cF "$JS")"
+  if printf '%s\n' "$MEVCUT" | $CRONTAB - 2>/dev/null && [ "$($CRONTAB -l 2>/dev/null | grep -cF "$JS")" -eq "$beklenen" ]; then echo "  ↩ önceki crontab geri yüklendi ve doğrulandı (kısmi kurulum bırakılmadı)"
+  else echo "  ✗ GERİ ALMA BAŞARISIZ — cron satırı crontab'ta kalmış olabilir; bayrak silindi (satır no-op); elle: crontab -e ($JS satırını sil)"; fi
+}
 printf '%s\n' "$YENI" | $CRONTAB - || { echo "✗ crontab yüklenemedi — bayrak YAZILMADI"; exit 1; }
 if [ "$($CRONTAB -l 2>/dev/null | grep -cF "$JS")" -ne 1 ]; then geri_al; echo "✗ crontab geri okumada satır bir kez bulunamadı — bayrak YAZILMADI"; exit 1; fi
 mkdir -p "$(dirname "$KALICI")" && printf '%s\n' "$YENI" > "$KALICI" || { geri_al; echo "✗ kalıcı kopya yazılamadı ($KALICI) — bayrak YAZILMADI"; exit 1; }

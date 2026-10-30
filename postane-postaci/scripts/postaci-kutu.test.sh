@@ -8,7 +8,7 @@ pass=0; fail=0; ok() { if eval "$2"; then pass=$((pass+1)); echo "PASS  $1"; els
 GIZLI="GIZLI-JETON-DEGERI-XYZ-0123"; echo "$GIZLI" > "$T/jeton"; mkdir -p "$T/oturum"
 cat > "$T/crontab" <<'C'
 #!/usr/bin/env bash
-if [ "${1:-}" = "-l" ]; then cat "$CT_DEPO" 2>/dev/null; else cat > "$CT_DEPO"; fi
+if [ "${1:-}" = "-l" ]; then cat "$CT_DEPO" 2>/dev/null; else if [ -n "${CT_YAZ_ENGEL:-}" ] && grep -q "postaci.mjs" "$CT_DEPO" 2>/dev/null; then exit 1; fi; cat > "$CT_DEPO"; fi
 C
 chmod +x "$T/crontab"
 cat > "$T/sunucu.mjs" <<'S'
@@ -40,6 +40,9 @@ ok "S3b pilot kutu (code) jetonu bilerek geniş: dar yetki şartı uygulanmaz, k
 rm -f "$T/bayrak" "$T/kalici"; printf 'ESKI-SATIR\n' > "$T/ct-depo"; : > "$T/dosya-engel"
 POSTANE_URL="http://127.0.0.1:$PORT" POSTACI_JETON="$T/jeton" OTURUM_DIZIN="$T/oturum" BAYRAK="$T/bayrak" CRONTAB_KOMUT="$T/crontab" KALICI_CRON="$T/dosya-engel/alt/kalici" FLOCK_DOSYA="$T/kilit" bash "$K" --uygula > "$T/cikti" 2>&1; rc=$?
 ok "S3c kalıcı kopya yazılamazsa: rc 1, önceki crontab GERİ YÜKLENİR (kısmi kurulum yok), bayrak YOK" '[ "$rc" = 1 ] && [ ! -e "$T/bayrak" ] && ! grep -q "postaci.mjs" "$T/ct-depo" && grep -q "ESKI-SATIR" "$T/ct-depo"'
+rm -f "$T/bayrak"; printf 'ESKI-SATIR\n' > "$T/ct-depo"; : > "$T/bayrak"
+CT_YAZ_ENGEL=1 POSTANE_URL="http://127.0.0.1:$PORT" POSTACI_JETON="$T/jeton" OTURUM_DIZIN="$T/oturum" BAYRAK="$T/bayrak" CRONTAB_KOMUT="$T/crontab" KALICI_CRON="$T/dosya-engel/alt/kalici" FLOCK_DOSYA="$T/kilit" bash "$K" --uygula > "$T/cikti" 2>&1; rc=$?
+ok "S3d geri alma da başarısız olursa: rc 1, 'GERİ ALMA BAŞARISIZ' basılır, başarı mesajı BASILMAZ, bayrak SİLİNİR (cron no-op)" '[ "$rc" = 1 ] && grep -q "GERİ ALMA BAŞARISIZ" "$T/cikti" && ! grep -q "doğrulandı" "$T/cikti" && [ ! -e "$T/bayrak" ]'
 touch "$T/port.olcumsuz"; rc=$(kos --uygula); rm -f "$T/port.olcumsuz"
 ok "S4 ölçülemeyen yetki (500): rc 1, kurulum YOK (ölçülemeyen yeşil sayılmaz)" '[ "$rc" = 1 ] && [ ! -e "$T/ct-depo" ] && [ ! -e "$T/bayrak" ] && grep -q "ÖLÇÜLEMEDİ" "$T/cikti"'
 touch "$T/port.sohbet"; rc=$(kos --uygula); rm -f "$T/port.sohbet"

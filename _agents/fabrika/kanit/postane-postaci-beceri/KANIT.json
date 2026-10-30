@@ -1,7 +1,7 @@
 {
   "is": "postane-postaci-beceri",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T15:14:24+03:00",
+  "guncelleme": "2026-10-30T15:23:25+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -59,18 +59,18 @@
       "etiket": "node-yolu-ve-pilot-sinavi",
       "asama": "sonra",
       "dosya": "olcum-node-yolu-ve-pilot-sinavi-sonra.txt",
-      "sha256": "e19b34d95adc8098a6f6c3f8fa16b63128c6b1975560e6a7eb98ceb8f0954004",
+      "sha256": "02d5c73bbac3965875187e5a7f70b8c81be83d9b7970c5a9d598ec866f4e0b64",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T15:14:24+03:00",
-      "sure_sn": 5.9,
+      "zaman": "2026-10-30T15:23:25+03:00",
+      "sure_sn": 398.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e921b9284a674c80a481e98bc708ee5e"
+      "olcum_id": "9b6fa71686344b1aa0f79a2ddede803f"
     }
   ],
-  "imza": "381f656af2ae78f7ebf64ec548807a9ac7f91bf929c6e3aaaf1c4c8a5ea809f5"
+  "imza": "ad5065c098b118c78c4d3d1ff9cb8f9f0e920ba9351257d92e57530fa0393752"
 }
