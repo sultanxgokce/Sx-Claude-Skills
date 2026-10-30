@@ -1,10 +1,11 @@
-=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti). Gerçek kod ölçümü: olcum-sinav-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh bag-yok
-# rc=1 sure=7.5s zaman=2026-10-31T02:49:27+03:00
+# rc=0 sure=8.4s zaman=2026-10-31T02:54:27+03:00
 --- stdout ---
 MUTASYON: bag-yok
-  ✗ A1d bağ havuz kaydının doğan görevler alanına yazıldı (gorev.sh dogan havuz yeni) — beklenen=dogan gorev_A2 gorev_NEW1 gerçek=
-  ✗ E4 bağ yazılamazsa rc 1 (doğan görev açıldı, elle gorev.sh dogan söylenir) — beklenen=1 gerçek=0
-sonuç: 97 geçti · 2 kaldı
-sınav rc=1 (≠0 = mutant YAKALANDI)
+sonuç: 101 geçti · 0 kaldı
+sınav rc=0 (≠0 = mutant YAKALANDI)
 --- stderr ---
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+AssertionError: ('bag-yok', 0)

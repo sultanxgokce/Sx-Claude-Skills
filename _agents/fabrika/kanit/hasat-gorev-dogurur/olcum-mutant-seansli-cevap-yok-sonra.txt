@@ -1,10 +1,10 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh seansli-cevap-yok
-# rc=1 sure=10.3s zaman=2026-10-31T02:49:38+03:00
+# rc=1 sure=14.9s zaman=2026-10-31T02:54:42+03:00
 --- stdout ---
 MUTASYON: seansli-cevap-yok
   ✗ S1 Seanslı + Sultan cevabı kayıtta YOK → rc 1, görev doğmaz — beklenen=1:yok gerçek=0:var
   ✗ S3 SON cevap 'başka sun' (öncesinde kabul olsa da) → rc 1, görev doğmaz — beklenen=1:yok gerçek=0:var
-sonuç: 97 geçti · 2 kaldı
+sonuç: 99 geçti · 2 kaldı
 sınav rc=1 (≠0 = mutant YAKALANDI)
 --- stderr ---
