@@ -19,7 +19,7 @@
 # Kullanım:
 #   birlestirme-kapisi.sh <iş> [--depo KÖK] [--sessiz]
 #   birlestirme-kapisi.sh --pr <N> [--depo KÖK]     (iş adını PR'IN KENDİSİNDEN çözer — sıra: gövdedeki 'kart: <ad>' satırı · kanıt kaydında
-#                                                    pr=N olan dizin · PR'ın tek kanıt dizini · dal adı; aday birden çoksa rc 2 "hangi kart?")
+#                                                    pr=N olan dizin · PR'ın tek kanıt dizini · (dizin yoksa) dal adı; aday birden çoksa rc 2 "hangi kart?")
 # rc: 0 GEÇTİ · 1 eksik (kanıt yok/puan yetersiz/kart yok) · 2 kullanım / hangi kart? · 3 ÖLÇÜLEMEDİ (yeşil değil)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -56,18 +56,25 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
   #      1) PR gövdesinde 'kart: <ad>' satırı (PR kendini ilan eder; kanıt kaydı başka karta bağlıysa ÇELİŞKİ → rc 2)
   #      2) PR'ın dokunduğu kanıt dizinlerinden, PR başındaki DENETIM-*.json / KART.json kaydında pr=N olan (tek → o; birden çok → rc 2)
   #      3) tek kanıt dizini → o (dal adı ayrışıyorsa söylenir)
-  #      4) birden çok dizin → dal adıyla eşleşen; yoksa DUR rc 2 "hangi kart?" (adaylar basılır; eskiden rc 3)
-  #      5) sıfır dizin ya da liste okunamadı → dal adı (kapı yine de kanıt yoksa kapalı kalır).
+  #      4) birden çok dizin → DUR rc 2 "hangi kart?" (adaylar basılır; DALGIÇ tur 3: dal adıyla eşleşeni seçmek de bir TAHMİNDİ — #1185 tam
+  #         bu tahminle yanlış kartı okudu; eskiden rc 3 / dal adı). Çare PR gövdesine 'kart: <ad>' yazmak ya da iş adını elle vermek.
+  #      5) sıfır dizin ya da liste okunamadı → dal adı (is-alani dalı iş adıyla açar; kapı yine de kanıt yoksa kapalı kalır).
   DAL_ADI="$IS"; IS_NOT=""; PR_UYARI=""; ANA_DAL="${KANIT_ANA:-main}"
-  GOVDE_KART="$(cd "$DEPO" && gh pr view "$PR" --json body --jq .body 2>/dev/null | sed -n 's/^[[:space:]]*kart:[[:space:]]*\([^[:space:]]\{1,\}\).*/\1/p' | head -1)"
+  GOVDE_KART="$(cd "$DEPO" && gh pr view "$PR" --json body --jq .body 2>/dev/null | sed -n 's/^[[:space:]]*[kK][aA][rR][tT]:[[:space:]]*\([^[:space:]]\{1,\}\).*/\1/p' | head -1)"
   PRBAS_C=""; GERCEK=""
   if git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
     PRBAS_C="$(git -C "$DEPO" rev-parse FETCH_HEAD 2>/dev/null)"
     if [ -n "$PRBAS_C" ] && git -C "$DEPO" fetch -q origin "$ANA_DAL" 2>/dev/null; then
       GERCEK="$(git -C "$DEPO" diff --name-only "origin/$ANA_DAL...$PRBAS_C" 2>/dev/null)" || GERCEK=""
       geri="$(git -C "$DEPO" rev-list --count "$PRBAS_C..origin/$ANA_DAL" 2>/dev/null || echo "")"
-      [ -n "$geri" ] && [ "$geri" -gt 0 ] && PR_UYARI="PR #$PR tabanı origin/$ANA_DAL'in $geri commit gerisinde — GitHub dosya listesi main'den gelen (yabancı) kanıt dizinlerini sayabilir; adaylar merge-base farkıyla süzüldü"
+      if [ -z "$geri" ]; then PR_UYARI="PR #$PR tabanının origin/$ANA_DAL'e göre konumu ÖLÇÜLEMEDİ (rev-list düştü) — adaylar süzülmedi"
+      elif [ "$geri" -gt 0 ]; then PR_UYARI="PR #$PR tabanı origin/$ANA_DAL'in $geri commit gerisinde — GitHub dosya listesi main'den gelen (yabancı) kanıt dizinlerini sayabilir; adaylar merge-base farkıyla süzüldü"
+      fi
+    else
+      PR_UYARI="PR #$PR tabanı ÖLÇÜLEMEDİ (origin/$ANA_DAL çekilemedi) — aday listesi merge-base ile SÜZÜLMEDİ, GitHub listesi olduğu gibi kullanıldı"   # DALGIÇ tur 3: sessiz atlama yok
     fi
+  else
+    PR_UYARI="PR #$PR başı çekilemedi (origin pull/$PR/head) — taban konumu ve pr=N eşleşmesi ÖLÇÜLEMEDİ, adaylar süzülmedi"
   fi
   PRDOSYA=""
   if PRDOSYA="$(cd "$DEPO" && gh pr diff "$PR" --name-only 2>/dev/null)" && [ -n "$PRDOSYA" ]; then
@@ -101,9 +108,7 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
     IS="$ADAY"
     [ "$IS" = "$DAL_ADI" ] || IS_NOT="iş adı PR'ın tek kanıt dizininden türetildi: '$IS' (PR dalı '$DAL_ADI' ayrışıyor)"
   elif [ "$NADAY" -gt 1 ]; then
-    if printf '%s\n' "$ADAY" | grep -qxF -- "$DAL_ADI"; then IS="$DAL_ADI"; IS_NOT="PR birden çok kanıt dizinine dokunuyor; dal adıyla eşleşen seçildi: '$IS'"
-    else _h "PR #$PR hangi kart? $NADAY kanıt dizinine dokunuyor, hiçbiri dal adı ('$DAL_ADI') değil, hiçbirinin kaydı pr=$PR demiyor, gövdede 'kart: <ad>' yok: $(printf '%s' "$ADAY" | tr '\n' ' ')— PR gövdesine 'kart: <ad>' yaz ya da iş adını elle ver"; exit 2
-    fi
+    _h "PR #$PR hangi kart? $NADAY kanıt dizinine dokunuyor, hiçbirinin kaydı pr=$PR demiyor, gövdede 'kart: <ad>' yok: $(printf '%s' "$ADAY" | tr '\n' ' ')— dal adı ('$DAL_ADI') ile tahmin edilmez; PR gövdesine 'kart: <ad>' yaz ya da iş adını elle ver"; exit 2
   fi
 fi
 [ -n "$IS" ] || { _h "iş adı gerekiyor (ya da --pr N)"; exit 2; }

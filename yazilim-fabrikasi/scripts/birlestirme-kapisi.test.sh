@@ -653,10 +653,12 @@ kartP a; kartP b; A7="$(alan iki-dizin)"; kanitla "$A7" a 5 E; kanitla "$A7" b 5
 ( cd "$A7" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/33/head" ) >/dev/null 2>&1
 git -C "$P" worktree remove --force "$A7" >/dev/null 2>&1
 CIKTI="$(ghk env FAKE_DAL=baska-dal FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 33")"; RC=$?
-[ "$RC" -eq 2 ] && grep -q "hangi kart? 2 kanıt dizinine dokunuyor, hiçbiri dal adı ('baska-dal') değil" <<<"$CIKTI" && grep -q "a b" <<<"$CIKTI" && grep -q "PR gövdesine 'kart: <ad>' yaz" <<<"$CIKTI"; g $? "T17c KALDI yüzü: iki kanıt dizini, hiçbiri dal adı/pr=33/gövde değil → DUR rc=2 'hangi kart?' + adaylar + çare (eskiden rc 3)"
+[ "$RC" -eq 2 ] && grep -q "hangi kart? 2 kanıt dizinine dokunuyor, hiçbirinin kaydı pr=33 demiyor" <<<"$CIKTI" && grep -q "a b" <<<"$CIKTI" && grep -q "dal adı ('baska-dal') ile tahmin edilmez; PR gövdesine 'kart: <ad>' yaz" <<<"$CIKTI"; g $? "T17c KALDI yüzü: iki kanıt dizini, pr=33 kaydı/gövde yok → DUR rc=2 'hangi kart?' + adaylar + çare (eskiden rc 3)"
 
 CIKTI="$(ghk env FAKE_DAL=a FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 33")"; RC=$?
-[ "$RC" -eq 0 ] && grep -q "dal adıyla eşleşen seçildi: 'a'" <<<"$CIKTI"; g $? "T17d PR iki dizine dokunuyor ama biri dal adı → dal adı seçilir (rc=0)"
+[ "$RC" -eq 2 ] && grep -q "dal adı ('a') ile tahmin edilmez" <<<"$CIKTI"; g $? "T17d PR iki dizine dokunuyor, biri dal adı → yine DUR rc=2 (DALGIÇ tur 3: dal adı tahmindir, #1185 bu tahminle yanlış kartı okudu) (rc=$RC)"
+CIKTI="$(ghk env FAKE_DAL=a FAKE_GOVDE='Kart: a' FAKE_DOSYALAR="$KD/a/KANIT.json $KD/b/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 33")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "iş adı PR gövdesinden: 'kart: a'" <<<"$CIKTI"; g $? "T17d2 aynı PR gövdesinde 'Kart: a' (büyük harf) → kimlik çözülür, rc=0 (DALGIÇ tur 3)"
 
 CIKTI="$(ghk env FAKE_DAL=is-ck FAKE_DOSYA_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 7")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "iş: is-ck" <<<"$CIKTI" && ! grep -q "türetildi" <<<"$CIKTI"; g $? "T17e dosya listesi okunamadı → dal adı YEDEK olarak kullanılır (rc=0, türetme notu yok)"
@@ -700,6 +702,16 @@ CIKTI="$(ghk env FAKE_DAL=kanit-dali-51 FAKE_DOSYALAR="$KD/eski-1/KANIT.json $KD
 [ "$RC" -eq 0 ] && grep -q "PR #51 tabanı origin/main'in 1 commit gerisinde" <<<"$CIKTI" && grep -q "iş adı PR'ın tek kanıt dizininden türetildi: 'is-dogru'" <<<"$CIKTI"; g $? "🔴 T19d bayat taban: yabancı eski-1 merge-base süzgeciyle düştü, doğru kart is-dogru (5/E) okundu, taban uyarısı basıldı, rc=0 (#1185'te eski kart 2/H okunup 2× engellenmişti) (rc=$RC)"
 CIKTI="$(ghk env FAKE_DAL=kanit-dali-51 FAKE_DOSYA_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 51")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "iş: is-dogru" <<<"$CIKTI"; g $? "T19e GitHub dosya listesi okunamazsa merge-base farkı (ikinci yüzey) aday kaynağıdır → yine is-dogru, rc=0"
+# (f) iki dizinin kaydı da pr=43 → birden çok eşleşme → DUR
+kartP is-q1; kartP is-q2; A8="$(alan cift-eslesme)"; kanitla "$A8" is-q1 5 E; kanitla "$A8" is-q2 5 E
+for q in is-q1 is-q2; do python3 -c "import json,sys;p=sys.argv[1];d=json.load(open(p));d['pr']='43';json.dump(d,open(p,'w'))" "$A8/_agents/fabrika/kanit/$q/DENETIM-1.json"; done
+( cd "$A8" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/43/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A8" >/dev/null 2>&1
+CIKTI="$(ghk env FAKE_DAL=cift-eslesme FAKE_DOSYALAR="$KD/is-q1/KANIT.json $KD/is-q1/DENETIM-1.json $KD/is-q2/KANIT.json $KD/is-q2/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 43")"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "hangi kart? birden çok kanıt dizininin kaydı pr=43 diyor: is-q1 is-q2" <<<"$CIKTI"; g $? "T19f iki dizinin kaydı da pr=43 → DUR rc=2, ikisi listelenir (rc=$RC)"
+# (g) taban konumu ölçülemezse SESSİZ kalmaz (DALGIÇ tur 3): ana dal adı yanlış verildi → fetch düşer → uyarı + adaylar süzülmedi
+CIKTI="$(ghk env KANIT_ANA=boyle-dal-yok FAKE_DAL=kanit-dali-51 FAKE_DOSYALAR="$KD/is-dogru/KANIT.json $KD/is-dogru/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 51")"; RC=$?
+grep -q "PR #51 tabanı ÖLÇÜLEMEDİ (origin/boyle-dal-yok çekilemedi) — aday listesi merge-base ile SÜZÜLMEDİ" <<<"$CIKTI" && [ "$RC" -eq 0 ]; g $? "T19g origin/<ana> çekilemezse taban uyarısı 'ÖLÇÜLEMEDİ … SÜZÜLMEDİ' basılır (sessiz atlama yok); tek dizin is-dogru ile kapı rc=0 (rc=$RC)"
 echo "── T19 · MUTASYON (tam kopya, kardeşlerle): süzgeç · gövde · pr-eşleşme sökülünce ilgili kapı düşer ──"
 PKG19="$R/pkg19"; mkdir -p "$PKG19"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$HERE/izin.py" "$PKG19/"
 mut19() { # mut19 <ad> <eski> <yeni> → $PKG19/<ad>.sh

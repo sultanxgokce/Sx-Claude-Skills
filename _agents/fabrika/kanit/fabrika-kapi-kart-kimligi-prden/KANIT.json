@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kapi-kart-kimligi-prden",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T15:12:57+03:00",
+  "guncelleme": "2026-10-30T15:41:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -57,7 +57,83 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "e4d96cee356b45f087d11208510db1c7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kapi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kapi-tur2-sonra.txt",
+      "sha256": "f8a52c872891568f1a34e0f5e4e615c50f709b225cb6299b078ab7c7bb5361dd",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T15:28:17+03:00",
+      "sure_sn": 270.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "02864b5095074aeca19bf85a95cb60ed"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-dal-adi-tahmini",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-dal-adi-tahmini-sonra.txt",
+      "sha256": "dee8145f39723b930bfdc196cb766844b0f59308010633e8df14e3847f091c83",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:33:22+03:00",
+      "sure_sn": 304.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kapi-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "29360936220041f096648578e610ad2a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kapi-tur2b",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kapi-tur2b-sonra.txt",
+      "sha256": "5bf0ff0dd9060fb07ce6bd8c5f4edeaddc91414cb0a40053dfe60230669e641f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:37:28+03:00",
+      "sure_sn": 208.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "364b53e6106940e998e9754bd57375e1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-dal-adi-tahmini-b",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-dal-adi-tahmini-b-sonra.txt",
+      "sha256": "72782a6bf4e3d504c97e95617ab50699ad993c65136cf207dd98f57e23373944",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:41:09+03:00",
+      "sure_sn": 221.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kapi-tur2b",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "4791c253d5c541f6b34595c05a75e33d"
     }
   ],
-  "imza": "4dac589d8f8f4abf244ddac2a6f5787233a424da58aac3320b4238efbcf681d9"
+  "imza": "0a366df35712bc3526194798915376b40470dbf2eaa9d1b4398440a4d376896d"
 }
