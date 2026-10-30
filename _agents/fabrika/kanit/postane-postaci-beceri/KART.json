@@ -1,0 +1,37 @@
+{
+  "is": "postane-postaci-beceri",
+  "cumle": "POSTANE D2: postacı dosyaları ve kurulum betiği Sx becerisi olarak tüm kutulara dağıtılabilir olur (16 kutuda dosya yok); etkinleştirme Sultan-eli kalır",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-30T10:07:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-30T10:07:04+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "sayi_uyarilari": [
+    "16 kutuda"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}
