@@ -1,7 +1,7 @@
 {
   "is": "sync-veri-koru",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T19:56:15+03:00",
+  "guncelleme": "2026-10-30T19:56:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -187,7 +187,24 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "879bbb2648b8433b85231127202cd2c3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kuru-kosu",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kuru-kosu-sonra.txt",
+      "sha256": "4be762b5ab767df8f3d1f22d14d45e7808ebe30ac18570eeb8a027a17fa3bd95",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T19:56:17+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2f0a4de1cfc44bc2872c44e9e3c4eafa"
     }
   ],
-  "imza": "db8db1ee8a4f700ae15f627f6134f065375ea83dc2e9ac047feb8480c100fd77"
+  "imza": "102f9b4abbb0e15dd92f81044ccb19ab488b8ef30ceb0045d5f453d47605fb5b"
 }
