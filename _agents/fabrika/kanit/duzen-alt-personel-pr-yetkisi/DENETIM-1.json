@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "duzen-alt-personel-pr-yetkisi",
+  "pr": "583",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T09:59:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-alt-personel-pr-yetkisi",
+  "dal": "duzen-alt-personel-pr-yetkisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17859,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Yetki satırı Sultan kararına uygun biçimde yeniden yazılmış, bütün odalar ile MEREMMETÇİ açıkça kapsanmış ve düzen sürümü 1.1.1'e çıkarılmış. Gerçek ölçüm önce kırmızıdan sonra yeşile dönüyor ve mutasyon satırın silinmesini yakalıyor; ancak sınav çapası talebin bazı kritik parçalarını doğrudan sınamadığı için önce bu uygulama boşluğu kapatılmalı.",
+    "bulgular": [
+      {
+        "ne": "A8b sınav çapası, yetki kuralındaki “kendi iş alanında” sınırını, MEREMMETÇİ kapsamını ve “canlı · host · sır yok” hükümlerini doğrudan doğrulamıyor; bu parçalar kaybolsa test yine geçebilir.",
+        "kanit": "Eklenen A8b yalnız “küçük düzeltme PR'ı AÇABİLİR; birleştirme her durumda reiste” ve “bütün odalar için aynı” parçalarını grep ediyor. Üretim satırında bulunan “kendi iş alanında”, “MEREMMETÇİ dahil” ve “canlı · host · sır yok” ifadeleri A8b koşulunda yer almıyor.",
+        "konum": "duzen/scripts/alt-ajan-istem.test.sh:85",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Gerçek ölçüm çifti önce rc=1/kırmızı ve sonra rc=0/yeşil olarak A8b davranış değişimini gösteriyor; mutasyon kaydı da satır silinince kapının düştüğünü doğruluyor. Sarı kayıt yok. Kanıt, eklenen satırın mevcut hâlini güçlü biçimde destekliyor; fakat sınavın yukarıdaki semantik parçaları koruduğunu göstermiyor."
+  }
+}

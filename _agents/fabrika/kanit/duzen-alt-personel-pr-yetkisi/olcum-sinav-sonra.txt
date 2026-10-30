@@ -1,0 +1,21 @@
+$ bash duzen/scripts/alt-ajan-istem.test.sh
+# rc=0 sure=1.2s zaman=2026-10-30T09:53:08+03:00
+--- stdout ---
+  ✓ A1 kimlik yok → rc 3 + 'kimlik yok' + '/ise-alim', stdout boş
+  ✓ A2 ELLE verbatim alınır, üretilmiş bölge alınmaz (rc 0)
+  ✓ A3 oda+amir registry'den (yorum ve tırnak temizlenmiş), ad ŞAKİRD
+  ✓ A5 sır süzme: parola/token/sifre satırı basılmaz, '[sır satırı süzüldü]' ≥3, sade satır kalır
+  ✓ A6 kart cümlesi JSON'dan okunur + reisin --is cümlesi de var
+  ✓ A8 --dosyalar/--sure basılır; 'reiste kalır' sabit satırı var
+  ✓ A8b Sultan kararı satırı (alt personel küçük düzeltme PR'ı açabilir · birleştirme reiste · bütün odalar) istemde
+  ✓ A9 el-defteri çıktısı istemde (SAHTE-DEFTER-SATIRI), ⚠ uyarı yok
+  ✓ A4 defter yok (rc 3) → istem yine üretilir rc 0, 'defter boş, ilk görev' + ⚠ uyarı satırı
+  ✓ A4b el-defteri başka rc (7) → 'ölçülemedi' der, 'defter boş' DEMEZ, rc 0
+  ✓ A7 ne --is ne --kart → rc 2, stdout boş
+  ✓ A6b kart bulunamazsa ⚠ uyarı + --is ile devam, rc 0
+  ✓ A10 değersiz seçenek (--is sonda) → rc 2 + 'bir değer ister', döngüye girmez (göz tur 1)
+  ✓ A11 --kart ../ yolu reddedilir → rc 2, dizin dışı JSON isteme girmez (göz tur 1)
+── mutasyon (gömülü): süzgeç kapatılınca A5 düşmeli
+  ✓ mutant 'sir' → A5 kırmızı (MUTASYON: sır süzgeci kapatıldı)
+== 15 geçti · 0 düştü ==
+--- stderr ---
