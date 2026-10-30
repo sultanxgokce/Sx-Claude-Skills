@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "postane-postaci-beceri",
+  "pr": "590",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T15:15:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-beceri",
+  "dal": "postane-postaci-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19189,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6893
+  },
+  "dalgic": "uyumsuz",
+  "bas": "ae0c9c594530fb6f7ff7a7a6c00a1d471920f051",
+  "duzeltme_farki": {
+    "onceki_bas": "e8944ac0042495a4a11ac42ccc87348bd343d3e9",
+    "dosya": 7,
+    "bayt": 12737,
+    "tam_bayt": 77110
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Postacı becerisi dağıtılabilir hâle getirilmiş; önceki belge–uygulama çelişkisi giderilmiş ve kalıcı kopya hatasında crontab geri alma yolu ile sınavı eklenmiş. Ancak geri alma komutunun başarısı denetlenmeden “geri yüklendi” denmesi, hata yolunda hâlâ etkin cron bırakabileceği için önce bu uygulama açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "B1 yalnız kısmen kapandı: kalıcı kopya yazılamadığında eski crontab geri yüklenmeye çalışılıyor, fakat geri yükleme başarısızlığı bastırılıyor ve buna rağmen başarı mesajı basılıyor; böylece komut hata koduyla dönerken yeni cron etkin kalabilir.",
+        "kanit": "`geri_al()` içindeki `printf ... | $CRONTAB - 2>/dev/null; echo \"↩ önceki crontab geri yüklendi\"` dizisi crontab komutunun dönüş kodunu sınamıyor. Eklenen S3c sınavı yalnız geri alma işleminin başarılı olduğu yolu doğruluyor; manifestteki son ölçüm PASS=15 FAIL=0 olsa da geri alma komutunun başarısız olduğu dal ölçülmüyor.",
+        "konum": "postane-postaci/scripts/postaci-kutu.sh:78; postane-postaci/scripts/postaci-kutu.test.sh:42-44",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İki önce/sonra ölçüm çifti var: beceri betiği sayısı 0→7 ve pilot sınavı PASS=12 FAIL=2→PASS=15 FAIL=0. B2, SKILL.md açıklaması ve sınır maddesine `code` pilot istisnasının açıkça eklenmesiyle kapanmış; B1 için başarılı geri alma sınavı eklenmiş olsa da geri alma başarısızlığı kanıtlanmamış. Gerçek 16 kutudaki etkinleştirme kart gereği Sultan-eli olduğundan eksik sayılmıyor."
+  }
+}

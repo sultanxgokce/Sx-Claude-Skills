@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "postane-postaci-beceri",
+  "pr": "590",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T15:29:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postane-postaci-beceri",
+  "dal": "postane-postaci-beceri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17855,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5417
+  },
+  "dalgic": "uyumsuz",
+  "bas": "42338f6ff8ecca5629ac66f4d65eaf970e93a8de",
+  "duzeltme_farki": {
+    "onceki_bas": "ae0c9c594530fb6f7ff7a7a6c00a1d471920f051",
+    "dosya": 6,
+    "bayt": 10394,
+    "tam_bayt": 81418
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Postacı dosyaları ile kurulum betiği Sx becerisi olarak paketlenmiş; önceki turdaki geri alma açığı, bayrağı önce silen, crontab geri yüklemesini denetleyen ve başarısızlık dalını sınayan değişiklikle kapanmış. Araç imzalı ölçümler 0→7 betik ve PASS=12 FAIL=2→PASS=16 FAIL=0 gösterdiğinden yalnız Sultan-eli etkinleştirme dışarıda kalıyor ve kod üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. İki önce/sonra ölçüm çifti bulunuyor: beceri betiği sayısı 0→7, node yolu ve pilot sınavı PASS=12 FAIL=2→PASS=16 FAIL=0. Önceki B1 kapanmış: postaci-kutu.sh:78 çevresinde geri alma sonucu ve geri okuma denetleniyor; postaci-kutu.test.sh:42-47 çevresindeki yeni S3d kapısı geri alma başarısızlığında hata mesajını, başarı mesajının yokluğunu ve bayrağın silinmesini ölçüyor. Gerçek 16 kutuda etkinleştirme kanıtlanmamış olsa da iş kartı bunu açıkça Sultan-eli bıraktığından kod kusuru veya yanlış hedef sayılmıyor."
+  }
+}
