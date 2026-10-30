@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kart-bitti-gorevsiz-uyari",
+  "pr": "586",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T15:31:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-bitti-gorevsiz-uyari",
+  "dal": "kart-bitti-gorevsiz-uyari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 12525,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 7703
+  },
+  "dalgic": "uyumsuz",
+  "bas": "efb09c6a638c50f04928d76f3710ae9bcf3b4798",
+  "duzeltme_farki": {
+    "onceki_bas": "5d88c85263b63a64301819816c6eacc580e7ba49",
+    "dosya": 7,
+    "bayt": 9992,
+    "tam_bayt": 17999
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Görev kimliği olmayan `bitti` kapanışı görünür uyarı veriyor; JSON `null` değeri de artık doğru biçimde görevsiz sayılıyor ve bu vaka sınava eklenmiş. Önceki turdaki tek uygulama bulgusu kapanmış, yeni üretim farkında yalnız rötuş düzeyinde dahi somut bir kusur görünmüyor; iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 429 geçti/2 kaldıdan 431 geçti/0 kaldıya ilerliyor ve iki kayıt da rc 0; yeni GB5 sınavı `gorev: null` için uyarıyı ve kapanış rc'sini ölçüyor. Ölçüm özetleri tek tek sınav adlarını göstermese de diffteki sınav iddiaları ve başarılı toplam sonuç önceki B1 bulgusunun kapandığını destekliyor; görevin bitirilmediğine ilişkin doğrudan çıktı ise bu kırpılmış ölçümde ayrıca görünmüyor."
+  }
+}
