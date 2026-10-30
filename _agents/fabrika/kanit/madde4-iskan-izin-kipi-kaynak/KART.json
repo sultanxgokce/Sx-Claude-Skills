@@ -1,0 +1,29 @@
+{
+  "is": "madde4-iskan-izin-kipi-kaynak",
+  "cumle": "iskan.sh kayıt üreticisi mevcut kayıtta bulunmayan üyenin izin kipini sessizce 'default' yapıyordu; artık sırayla mevcut kayıt → ekip-registry üyesinin permission_mode alanı → ISKAN_EY_PMODE_VARSAYILAN → default okur ve 'default'a düşen her üye için görünür uyarı basar. iskan.test.sh önce=N geçti sonra=N+3 geçti 0 kaldı; mutant (ekip-registry okuması kapatılır) sınavda yakalanır; SKILL.md 0.11.5→0.11.6 ve catalog.json aynı sürüm.",
+  "istedi": "MUAVİN",
+  "aldi": "BENNÂ",
+  "zaman": "2026-10-30T13:50:42+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "0 kaldı"
+  ],
+  "sayi_bicim_eksikleri": [
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}
