@@ -1,0 +1,44 @@
+{
+  "is": "fabrika-kapsam-satir-kesisimi",
+  "cumle": "is-alani.sh kapsam kapısı aynı dosyaya dokunan açık PR'ı artık engel değil uyarı sayar (dosya + PR + satır blokları basılır, alan açılır); yeni kapsam-olc alt komutu alanın yazdığı satır bloklarını açık PR'ların blokları ile kesiştirir, kesişim varsa rc 2 durur; sınav + mutant kanıtı",
+  "istedi": "SERDAR",
+  "aldi": "BENNÂ",
+  "zaman": "2026-10-30T14:33:34+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M65QXVWTDJRZSFC3SQ7PRJ07",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [
+    "2 durur"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-30T14:33:35+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-30T14:46:43+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
