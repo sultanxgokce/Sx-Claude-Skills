@@ -1,7 +1,7 @@
 ---
 name: notion-erisim
 type: agent
-version: 1.0.0
+version: 1.0.1
 install_target:
   skills: .claude/skills/
 stacks: ["*"]

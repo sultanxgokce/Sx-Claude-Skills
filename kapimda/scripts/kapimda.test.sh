@@ -265,6 +265,25 @@ _ok "$O" bitti "Kapanan Kart" --gerekce "halloldu" >/dev/null 2>&1
 grep -q '^oda: mihenk$' "$O" && ok "O13 kart kapanınca kaynak izi SİLİNMEZ" || kotu "O13 kapanışta iz kayboldu"
 _ok "$O" lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "O14 yeni alan linti kırmızıya düşürmez" || kotu "O14 lint yanlış kırmızı"
 
+# ── A06-B · damgasız Sultan-onay iddiası (2026-09-18, ölçülmüş vaka) ──────────
+# Vaka: "Bolge Filmi Onayi" kartı `kapanış: Sultan 12:50 ... onayladı` ile kapatıldı;
+# Sultan 13:25'te "onay vermedim" dedi. Satır dosyaya ELLE yazılmıştı → yazma kapısını
+# hiç görmedi. Bu testler denetim tarafının o satırı yakaladığını kilitler.
+source <(sed -n '/^_sultan_onay_iddiasi()/,/^}/p' "$SUT")
+
+_a06b() { # $1=beklenen(RED|temiz) $2=metin $3=etiket
+  local c; if _sultan_onay_iddiasi "$2"; then c=RED; else c=temiz; fi
+  [ "$c" = "$1" ] && ok "$3" || kotu "$3 (beklenen=$1 çıkan=$c)"
+}
+_a06b RED   "kapanış: Sultan 12:50 (nöbet): bölge filmini onayladı" "A06B-1 gerçek vaka satırı YAKALANIR"
+_a06b RED   "Sultan onay verdi, yayına çıkıyoruz"                   "A06B-2 'onay verdi' yakalanır"
+_a06b RED   "Sultan izin verdi — anahtarı dağıttım"                 "A06B-3 'izin verdi' yakalanır"
+_a06b RED   "Sultan bu işe olur dedi"                               "A06B-4 'olur dedi' yakalanır"
+_a06b temiz "Sultan onayı şart, bekliyoruz"                         "A06B-5 ihtiyaç kipi iddia SAYILMAZ"
+_a06b temiz "hiçbir ajan senin adına onay yazamaz"                  "A06B-6 kuralın kendisi iddia SAYILMAZ"
+_a06b temiz "Sultan onay vermezse film beklemede kalır"             "A06B-7 olumsuz kip iddia SAYILMAZ"
+_a06b temiz 'Sultan onayladı (sohbet · 4f6442d1 · "olur, yayınla" · beyan:SERDAR)' "A06B-8 D1 damgalı iddia GEÇER"
+
 # ══ L39 · SULTAN-TALİMAT FORMATI — 9 karar (2026-08-11 gece) ═══════════════════
 # Kaynak: _agents/spec/sultan-talimat-formati-DESIGN.md §9. Damga `🛠️ ŞİMDİ SEN` ve
 # `adım i/N` zaten kuruluydu (kararlar #1/#2 kısmen); burada MEKANİZMAYA bağlanan üç

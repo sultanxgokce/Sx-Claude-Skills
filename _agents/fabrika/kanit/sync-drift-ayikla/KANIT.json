@@ -1,0 +1,239 @@
+{
+  "is": "sync-drift-ayikla",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T18:41:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift",
+      "asama": "once",
+      "dosya": "olcum-kuru-kosu-drift-once.txt",
+      "sha256": "1ae3befffcdc3b6412f819b6e4c99017d4d831b6fa5a3fa25ff540cbfa8bebc4",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:39:40+03:00",
+      "sure_sn": 263.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "96c2ba3d7b9e49e28c88ac1599631008"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-sonra.txt",
+      "sha256": "d609675486c8ce38a569ef92686918e55e9873c5ca4d39832bbb545b32fd79b7",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:40:23+03:00",
+      "sure_sn": 6.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "67e5411e9a82433387e35a74b1fd0315"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "katalog-hiza",
+      "asama": "sonra",
+      "dosya": "olcum-katalog-hiza-sonra.txt",
+      "sha256": "0a0f9bf89b74628ac5d0ef820001877cc674e2903cea4f3fdec628000acbb871",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:40:23+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e752821629e949548c3b1b32e5f06f95"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "ecb5c7ae308d783aa941c2d5360ee5e4d6b898be0ddffde35c9a324eebdc29ba",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:40:23+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "40386577a36546ef9f830c77e70c977f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapimda-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapimda-sinav-sonra.txt",
+      "sha256": "fb1b26905b29979e05fec481936a16f9146fcf6addba29d4e70058597e1aaed4",
+      "komut": [
+        "bash",
+        "kapimda/scripts/kapimda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:40:28+03:00",
+      "sure_sn": 5.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "99b06a22aebc4b418b3b2cc89f8e8956"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sinav-sonra.txt",
+      "sha256": "8b48e938f594a7dd06175829ae227bdf35090715969394de3e9b5b04e55f451b",
+      "komut": [
+        "bash",
+        "kapi-sinavi/scripts/kapi-sinavi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:18+03:00",
+      "sure_sn": 49.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "02cfc4b5fd21441288a0963e3aaf5270"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olcum-disiplini-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-olcum-disiplini-sinav-sonra.txt",
+      "sha256": "de0d7acd78c9c0eac9c3a1cb984423297ab6c8dfd1182db5d4d355802a34f571",
+      "komut": [
+        "bash",
+        "olcum-disiplini/scripts/olcum-disiplini.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:24+03:00",
+      "sure_sn": 6.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "94f1f4aa994d43ad8ab99f4cfa6f57a6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "notion-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-notion-sinav-sonra.txt",
+      "sha256": "83033f69957335bb38787f2ab23cbf4127d56eddfc5b2bc95e8cf19ecb8f760b",
+      "komut": [
+        "bash",
+        "notion-erisim/scripts/notion.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:26+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1af95191ef6f406f9484348273a8fa24"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "whatsapp-mimetype",
+      "asama": "sonra",
+      "dosya": "olcum-whatsapp-mimetype-sonra.txt",
+      "sha256": "9209c466cc27696869ce923f5c96fab925be2aa7017bf47622a3e9d8a44ec55b",
+      "komut": [
+        "bash",
+        "whatsapp-gonder/scripts/mimetype.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:27+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "81961f9204e84a31b200bf2da2884773"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sultan-alarmi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sultan-alarmi-sinav-sonra.txt",
+      "sha256": "f8b8594006fa1c9dc739fd4a356bad3ee32c4bc8aadd1f1bf3ddb356e25bbfba",
+      "komut": [
+        "bash",
+        "sultan-alarmi/scripts/alarm.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:28+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "eafbc47572e84f14885e32d05e35bf29"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-skills-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sync-skills-sinav-sonra.txt",
+      "sha256": "30bf8050f93a9509c06cd411bce06d47009e2b03e24a1c709e0a9886da00137c",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:30+03:00",
+      "sure_sn": 1.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c91598b980bb461d8045ca7545c5a59f"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "hukum-tablosu",
+      "asama": "sonra",
+      "dosya": "dosya-hukum-tablosu-sonra.md",
+      "sha256": "340e9e780b15de3630956f5e706f8a55fd35691e61ef322cb9b0689d96f2bc11",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-hukum-tablosu.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:30+03:00",
+      "olcum_id": "d45ba77cfb4446828e030c02db92735d"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "hukum-tablosu-v2",
+      "asama": "sonra",
+      "dosya": "dosya-hukum-tablosu-v2-sonra.md",
+      "sha256": "91664cd16182447f461d8aa0a11a06a11f8d812ca3765d49b2535160ed03a67f",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-hukum-tablosu.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:41:44+03:00",
+      "olcum_id": "3ba1590ac7c64da0a628ffdfd69bea3e"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "hukum-tablosu",
+      "asama": "tek",
+      "dosya": "gecersiz-dosya-hukum-tablosu-sonra-a97506d65057.txt",
+      "sha256": "86e27a4089ab96ec0e77fffa8feec187954650de91a48e8fa3c678c168808118",
+      "hedef_dosya": "dosya-hukum-tablosu-sonra.md",
+      "hedef_olcum_id": "d45ba77cfb4446828e030c02db92735d",
+      "hedef_sha256": "340e9e780b15de3630956f5e706f8a55fd35691e61ef322cb9b0689d96f2bc11",
+      "hedef_zaman": "2026-10-30T18:41:30+03:00",
+      "hedef_renk": "yesil",
+      "neden": "duman sayısı yanlış yazıldı (1 dedi, ölçüm 2); düzeltilmiş tablo hukum-tablosu-v2",
+      "kim": "BENNÂ",
+      "karsi": "dosya-hukum-tablosu-v2-sonra.md",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:41:47+03:00",
+      "olcum_id": "7aac0f7e37b94d36835ab3502442ca03"
+    }
+  ],
+  "imza": "74b9425aa143c2fbc39169e32d2c5e529d36ba0a14b8cde0bc77591c10bc9e04"
+}

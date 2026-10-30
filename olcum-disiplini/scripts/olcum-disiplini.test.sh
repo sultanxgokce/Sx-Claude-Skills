@@ -124,10 +124,50 @@ N1=$(wc -l < "$OLCUM_DEFTERI"); bash "$ARAC" negatif yaz --iddia "başka bir şe
 N2=$(wc -l < "$OLCUM_DEFTERI")
 if [[ "$N2" -eq $((N1+1)) ]]; then _ok "defter append-only (satır eklendi, ezilmedi)"; else _no "defter append-only" "$N1 → $N2"; fi
 
+# ── 2b · biçim doğrulama (sihirli baytlar) ───────────────────────────────────
+printf '\nbiçim — uzantı İDDİA, baytlar KANIT\n'
+BD="$(mktemp -d)"
+printf '%%PDF-1.7\n%%%%EOF\n'            > "$BD/gercek.pdf"
+printf 'PK\003\004sahte-zip-govdesi'     > "$BD/zipmis.pdf"     # BUGÜNKÜ GERÇEK VAKA
+printf '\211PNG\r\n\032\n'            > "$BD/resim.png"
+printf '\377\330\377\340bilgi'         > "$BD/foto.jpg"
+printf '<?xml version="1.0"?><a/>'         > "$BD/belge.xml"
+printf '{"a":1}'                           > "$BD/veri.json"
+printf 'PK\003\004ofis'                  > "$BD/rapor.docx"     # docx = zip, EŞDEĞER
+printf '\007\007\007\007tanimsiz'      > "$BD/gizem.bin"
+: > "$BD/bos.pdf"
+_bekle "gerçek PDF → 0"                        0 "$(_rc bash "$ARAC" bicim "$BD/gercek.pdf" pdf)"
+_bekle "🔴 ZIP'i 'pdf' diye iddia → BULGU"      1 "$(_rc bash "$ARAC" bicim "$BD/zipmis.pdf" pdf)"
+_bekle "uzantıdan türetme (beklenen verilmedi)" 1 "$(_rc bash "$ARAC" bicim "$BD/zipmis.pdf")"
+_bekle "PNG → 0"                               0 "$(_rc bash "$ARAC" bicim "$BD/resim.png")"
+_bekle "JPG → 0"                               0 "$(_rc bash "$ARAC" bicim "$BD/foto.jpg")"
+_bekle "XML → 0"                               0 "$(_rc bash "$ARAC" bicim "$BD/belge.xml")"
+_bekle "JSON → 0"                              0 "$(_rc bash "$ARAC" bicim "$BD/veri.json")"
+_bekle "docx = zip EŞDEĞER → 0"                0 "$(_rc bash "$ARAC" bicim "$BD/rapor.docx")"
+_bekle "🔴 BOŞ dosya → BULGU (0 bayt sessiz geçmez)" 1 "$(_rc bash "$ARAC" bicim "$BD/bos.pdf" pdf)"
+_bekle "olmayan dosya → kullanım hatası"       2 "$(_rc bash "$ARAC" bicim "$BD/yok.pdf" pdf)"
+printf '%%PDF-1.7\n' > "$BD/uzantisiz"     # uzantı YOK — türetilecek bilgi de yok
+_bekle "uzantısız + beklenen YOK → ÖLÇÜLEMEDİ" 3 "$(_rc bash "$ARAC" bicim "$BD/uzantisiz")"
+_bekle "🔴 tanınmayan bayt → ÖLÇÜLEMEDİ (yeşil DEĞİL, kırmızı da değil)" 3 "$(_rc bash "$ARAC" bicim "$BD/gizem.bin" bin)"
+printf '%%PDF-1.7\n' > "$BD/ic.pdf"
+(cd "$BD" && python3 -c "import zipfile;z=zipfile.ZipFile('paket.pdf','w');z.write('ic.pdf');z.close()" 2>/dev/null)
+RZ="$(bash "$ARAC" bicim "$BD/paket.pdf" pdf 2>&1)"
+if grep -q 'ic.pdf' <<<"$RZ"; then _ok "ZIP bulgusu içeriği listeliyor"; else _no "ZIP bulgusu içeriği listeliyor" "liste yok"; fi
+find "$BD" -type f -delete 2>/dev/null; rmdir "$BD" 2>/dev/null
+
 # ── 3 · ölçüm kartı ──────────────────────────────────────────────────────────
 printf 'ölçüm kartı — ölçümü KURMADAN önce beş soru\n'
 _bekle "eksik kart → kullanım hatası (ümit kaydedilmez)" 2 "$(_rc bash "$ARAC" kart --hipotez "a" --degisken "b")"
-_bekle "tam kart + defterde yok → 0" 0 "$(_rc bash "$ARAC" kart --hipotez "kontör servisten sorgulanabiliyor mu" --degisken "operasyon adı" --beklenen "69 operasyonda eşleşme" --gecersiz "WSDL bayatsa" --ortam "demo")"
+_bekle "tam kart + defterde yok → 0" 0 "$(_rc bash "$ARAC" kart --hipotez "kontör servisten sorgulanabiliyor mu" --degisken "operasyon adı" --beklenen "69 operasyonda eşleşme" --gecersiz "WSDL bayatsa" --ortam "demo" --sayim "69'un üçünü elle açtım, aranan operasyon adı")"
+
+# 🔴 ALTINCI SORU — SAYI ÜRETEN ÖLÇÜMDE `--sayim` ZORUNLU (ölçülmüş vaka 2026-08-30:
+#    "39 tevkifatlı fatura" dendi, OTUZ DOKUZU DA yanlış-pozitifti). Beş soru bunu
+#    yakalamıyordu; altıncı soru sayıyı ÜRETEN eşleşmenin açılmasını ister.
+_bekle "🔴 beklenen SAYI içeriyor ama --sayim YOK → kullanım hatası" 2 "$(_rc bash "$ARAC" kart --hipotez "gelen faturalarda tevkifat var" --degisken "tarama deseni" --beklenen "39 fatura bulunur" --gecersiz "desen başka alanda eşleşirse" --ortam "canlı e-Logo")"
+_bekle "aynı kart + --sayim → 0" 0 "$(_rc bash "$ARAC" kart --hipotez "gelen faturalarda tevkifat var" --degisken "tarama deseni" --beklenen "39 fatura bulunur" --gecersiz "desen başka alanda eşleşirse" --ortam "canlı e-Logo" --sayim "ikisini açtım: kelime bir ETİKET alanında, aranan yapı değil")"
+_bekle "AYIRT EDİCİ: beklenen SAYISIZ ise --sayim istenmez → 0" 0 "$(_rc bash "$ARAC" kart --hipotez "ortam kilidi okunuyor mu" --degisken "kilit dosyası" --beklenen "canlı gönderim kabul edilir" --gecersiz "yol boş çözülürse" --ortam "yerel")"
+R6="$(bash "$ARAC" kart --hipotez "x" --degisken "y" --beklenen "7 kayıt" --gecersiz "z" --ortam "w" --sayim "birini açtım" 2>&1)"
+if grep -q 'sayım' <<<"$R6"; then _ok "kart --sayim alanını BASIYOR"; else _no "kart --sayim alanını BASIYOR" "alan basılmadı"; fi
 _bekle "🔴 tam kart AMA daha önce ölçülmüş → BULGU (kart defteri KENDİ sorar)" 1 "$(_rc bash "$ARAC" kart --hipotez "portalde XML yükleme ekranı var mı" --degisken "ekran" --beklenen "yükleme alanı" --gecersiz "menü kırpılmışsa" --ortam "canlı")"
 
 R="$(bash "$ARAC" kart --hipotez "kontör servisten sorgulanabiliyor mu" --degisken "op" --beklenen "e" --gecersiz "g" --ortam "demo" 2>&1)"

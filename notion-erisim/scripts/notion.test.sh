@@ -38,12 +38,12 @@ n="$(grep -c 'Notion-Version: \${NOTION_VERSION}' "$S")"
 
 echo "T5 · bilinmeyen komut reddedilir (yazma denemesi dâhil)"
 out="$(bash "$S" page-create 2>&1)"; rc=$?
-{ [ "$rc" -ne 0 ] && printf '%s' "$out" | grep -q 'SALT-OKUR'; } && gec T5 || kal T5 "rc=$rc çıktı='$out'"
+{ [ "$rc" -ne 0 ] && grep -q 'SALT-OKUR' <<<"$out"; } && gec T5 || kal T5 "rc=$rc çıktı='$out'"
 
 echo "T6 · token YOKken doctor 'doğrulanmadı' der (uydurma-yeşil yok, rc=2)"
 : > "$TMP/bos.env"
 out="$(CORTEX_ACCESS_ENV="$TMP/bos.env" VAULT_CEK_BIN="$TMP/yok.sh" NOTION_TOKEN= bash "$S" doctor 2>&1)"; rc=$?
-{ [ "$rc" -eq 2 ] && printf '%s' "$out" | grep -q 'DOĞRULANMADI'; } && gec T6 || kal T6 "rc=$rc çıktı='$out'"
+{ [ "$rc" -eq 2 ] && grep -q 'DOĞRULANMADI' <<<"$out"; } && gec T6 || kal T6 "rc=$rc çıktı='$out'"
 
 # ── sahte-Notion'u başlat ────────────────────────────────────────────────────
 python3 "$DIR/notion-stub.py" > "$TMP/port" 2>/dev/null &
@@ -55,15 +55,15 @@ cagir(){ CORTEX_ACCESS_ENV="$TMP/env" VAULT_CEK_BIN="$TMP/yok.sh" NOTION_API_HOS
 
 echo "T7 · doctor sahte-Notion'da yeşil (Notion-Version doğrulandı)"
 out="$(cagir doctor 2>&1)"; rc=$?
-{ [ "$rc" -eq 0 ] && printf '%s' "$out" | grep -q 'kimlik geçerli'; } && gec T7 || kal T7 "rc=$rc çıktı='$out'"
+{ [ "$rc" -eq 0 ] && grep -q 'kimlik geçerli' <<<"$out"; } && gec T7 || kal T7 "rc=$rc çıktı='$out'"
 
 echo "T8 · YANLIŞ Notion-Version → dürüst kırmızı (400 validation_error, 'jeton geçersiz' DEĞİL)"
 out="$(NOTION_API_VERSION=1999-01-01 cagir doctor 2>&1)"; rc=$?
-{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep -q 'validation_error'; } && gec T8 || kal T8 "rc=$rc çıktı='$out'"
+{ [ "$rc" -eq 1 ] && grep -q 'validation_error' <<<"$out"; } && gec T8 || kal T8 "rc=$rc çıktı='$out'"
 
 echo "T9 · db-query sayfalama: 2 istek → 3 satır (has_more/next_cursor gerçekten izleniyor)"
 out="$(cagir db-query db-1 2>&1)"
-printf '%s' "$out" | grep -q '3 satır · 2 istek' && gec T9 || kal T9 "çıktı='$out'"
+grep -q '3 satır · 2 istek' <<<"$out" && gec T9 || kal T9 "çıktı='$out'"
 
 echo "T10 · db-query --json: stdout SAF JSONL (özet stderr'e gider)"
 n="$(cagir db-query db-1 --json 2>/dev/null | jq -s 'length' 2>/dev/null)"
@@ -71,25 +71,25 @@ n="$(cagir db-query db-1 --json 2>/dev/null | jq -s 'length' 2>/dev/null)"
 
 echo "T11 · db-list: tekrar eden kayıt TEKİLLEŞİR + imleç döngüsü kesilir"
 out="$(cagir db-list 2>&1)"
-{ printf '%s' "$out" | grep -q '2 veritabanı (tekil)' && printf '%s' "$out" | grep -q 'LİSTE KESİLDİ'; } \
+{ grep -q '2 veritabanı (tekil)' <<<"$out" && grep -q 'LİSTE KESİLDİ' <<<"$out"; } \
   && gec T11 || kal T11 "çıktı='$out'"
 
 echo "T12 · db-query olmayan veritabanı → dürüst 404 + paylaşım ipucu"
 out="$(cagir db-query yok-db 2>&1)"; rc=$?
-{ [ "$rc" -ne 0 ] && printf '%s' "$out" | grep -q 'object_not_found'; } && gec T12 || kal T12 "rc=$rc çıktı='$out'"
+{ [ "$rc" -ne 0 ] && grep -q 'object_not_found' <<<"$out"; } && gec T12 || kal T12 "rc=$rc çıktı='$out'"
 
 echo "T13 · file-download: files-OLMAYAN alan reddedilir"
 out="$(cagir file-download sayfa-1 Marka "$TMP/indir" 2>&1)"; rc=$?
-{ [ "$rc" -ne 0 ] && printf '%s' "$out" | grep -q 'files tipinde değil'; } && gec T13 || kal T13 "rc=$rc çıktı='$out'"
+{ [ "$rc" -ne 0 ] && grep -q 'files tipinde değil' <<<"$out"; } && gec T13 || kal T13 "rc=$rc çıktı='$out'"
 
 echo "T14 · file-download: imzalı-URL ölü/süresi dolmuş → dürüst hata, sahte-başarı YOK"
 out="$(cagir file-download sayfa-1 Ruhsat "$TMP/indir" 2>&1)"; rc=$?
-{ [ "$rc" -ne 0 ] && printf '%s' "$out" | grep -q 'süresi'; } && gec T14 || kal T14 "rc=$rc çıktı='$out'"
+{ [ "$rc" -ne 0 ] && grep -q 'süresi' <<<"$out"; } && gec T14 || kal T14 "rc=$rc çıktı='$out'"
 [ -e "$TMP/indir/0.png" ] && kal T14b "başarısız indirmede yarım dosya bırakıldı" || gec T14b
 
 echo "T15 · page-get files/formula alanlarını jq-hatasız basar"
 out="$(cagir page-get sayfa-1 2>&1)"; rc=$?
-{ [ "$rc" -eq 0 ] && ! printf '%s' "$out" | grep -q 'jq: error' && printf '%s' "$out" | grep -q 'Ruhsat \[files\]'; } \
+{ [ "$rc" -eq 0 ] && ! grep -q 'jq: error' <<<"$out" && grep -q 'Ruhsat \[files\]' <<<"$out"; } \
   && gec T15 || kal T15 "rc=$rc çıktı='$out'"
 
 echo

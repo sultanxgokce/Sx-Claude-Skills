@@ -151,6 +151,28 @@ _sir_var() {
 _cevap_alani_var() { # $1=dosya-yolu → 0 bulundu(RED) · 1 temiz
   grep -qEi '^[[:space:]]*(cevap|yanit|yanıt|sultan_cevap|sultan_response|onay-cevabi|answer)[[:space:]]*:' "$1" 2>/dev/null
 }
+# ── A06-B · SULTAN-ONAY İDDİASI (2026-09-18, ölçülmüş vaka) ──────────────────
+# VAKA: "Bolge Filmi Onayi" kartı `kapanış: Sultan 12:50 (nöbet): bölge filmini onayladı`
+#   satırıyla kapatıldı. Sultan 13:25'te "onay vermedim, filmi beklet" dedi. Dosya 16 kutuda
+#   ORTAK → uydurma onay tüm filoda "Sultan onayladı" olarak durdu.
+# NİÇİN ESKİ KAPI TUTMADI: A06 yalnız ALAN ADI arıyordu (`cevap:` `answer:` …). Serbest
+#   metnin içindeki "Sultan onayladı" iddiası alan adı taşımadığı için tertemiz geçiyordu.
+# KURAL (D1 kanonu): Sultan'ın onayını İDDİA eden her satır damgasını taşımak zorundadır:
+#   (sohbet · <oturum-ref> · "<Sultan'ın verbatim kırpığı>" · beyan:<AJAN>)
+#   Damgasız iddia = uydurma ile ayırt edilemez → RED.
+# KAPSAM DIŞI (bilerek): "Sultan onayı şart", "Sultan'a sor", "onay bekliyor" gibi
+#   GELECEK/İHTİYAÇ kipleri iddia değildir; yalnız OLMUŞ-BİTMİŞ kip yakalanır.
+_sultan_onay_iddiasi() { # $1=metin → 0 damgasız-iddia(RED) · 1 temiz
+  local m="$1"
+  printf '%s' "$m" | grep -qEi \
+    'sultan[^.]{0,40}(onaylad[ıi]|onay verdi|izin verdi|kabul etti|karar verdi|olur dedi|onay geldi)' \
+    || return 1
+  # İddia var → D1 damgası aynı metinde mi? (sohbet · ref · "kırpık" · beyan:AJAN)
+  printf '%s' "$m" | grep -qE 'sohbet[[:space:]]*·[^·]+·[[:space:]]*"[^"]+"[[:space:]]*·[[:space:]]*beyan:[A-ZÇĞİÖŞÜ]+' \
+    && return 1
+  return 0
+}
+
 # Tek-eylem: "Ne yapman gerekiyor" iki ayrı iş taşıyorsa adım-kartına bölünmeli (L39).
 _cok_eylem() {
   printf '%s' "$1" | grep -qE '(;|,[[:space:]]*(sonra|ard[ıi]ndan)|[[:space:]]sonra[[:space:]].*[[:space:]]ve[[:space:]])'
@@ -521,6 +543,19 @@ _lint_dosya() {
     _hata "A06 kapısı: kapimda.md içinde ajan-yazımı bir 'cevap' alanı bulundu — Sultan'ın cevabı ASLA ajan tarafından üretilmez"
     bulgu=1
   fi
+  # A06-B — serbest metindeki damgasız Sultan-onay iddiası (2026-09-18)
+  # Yazma kapısı (bitti --gerekce) yalnız KOMUT yolunu korur; dosyaya ELLE yazılan satır
+  # o kapıyı hiç görmez. Ölçülmüş vaka bu yoldan girdi → denetim dosyayı satır satır tarar.
+  local _sat _no=0
+  while IFS= read -r _sat; do
+    _no=$((_no+1))
+    if _sultan_onay_iddiasi "$_sat"; then
+      _hata "A06-B kapısı: satır $_no damgasız Sultan-onay iddiası taşıyor — D1 damgası şart: (sohbet · <ref> · \"<verbatim kırpık>\" · beyan:<AJAN>)"
+      printf '   → %s\n' "$(printf '%s' "$_sat" | cut -c1-110)" >&2
+      bulgu=1
+    fi
+  done < "$DOSYA"
+
   # N-dürüstlüğü + A06'yı tüm adım planlarına da uygula
   if [ -d "$ADIM_DIZIN" ]; then
     local f

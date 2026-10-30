@@ -3,7 +3,7 @@
 Gerçek Notion'a BAĞLANMAZ (CI'da Notion yok → canlı çağrı sahte-yeşil üretirdi).
 Doğrular: Authorization başlığı · Notion-Version başlığı (yoksa gerçek Notion gibi 400) ·
 sayfalama (has_more/next_cursor/start_cursor) · files-tipi alan."""
-import json, sys
+import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 ROWS = [{"id": f"row-{i}", "object": "page",

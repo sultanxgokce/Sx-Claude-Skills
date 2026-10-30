@@ -1,6 +1,6 @@
 ---
 name: durum-raporu
-version: 0.2.1
+version: 0.3.0
 description: Sultan "durum raporu / son durum / neler yapılıyor" deyince bu kutunun personelini STANDART biçimde raporlar — kişi başına bitirdi · geçti · önündeki işler · bekliyor · canlı bağlantı; veri tüm kutularda aynı şemadan (SEMA.md).
 allowed-tools: Bash, Read
 ---
