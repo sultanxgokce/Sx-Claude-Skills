@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "sync-drift-kapi-olcum",
+  "pr": "596",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T18:59:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 3 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kuru-kosu-drift-sonra.txt (kirmizi → gecersiz) — ağaç kayıt öncesi kirliyken alındı; kayıttan sonra temiz ağaçta yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-temiz-sonra.txt;olcum-kuru-kosu-drift-temiz-sonra.txt (kirmizi → gecersiz) — kaynak origin/main'in bir commit gerisindeydi; birleştirilip yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-guncel-sonra.txt;olcum-kurulum-benzetimi-duman-sonra.txt (yesil → gecersiz) — çıktı etiketi yanlış dosya adını yazıyordu (mimetype); ölçülen kapi-sinavi.sh idi, etiket düzeltilip yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kurulum-benzetimi-kapi-sonra.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sync-drift-kapi-olcum",
+  "dal": "sync-drift-kapi-olcum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 74441,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 16,
+    "bayt": 62869
+  },
+  "dalgic": "uyumsuz",
+  "bas": "df73fc1c904edc3e597a25eb3faa210dedabd113",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kurulu kopyadaki iki beceriye ait düzenlemeler kaynağa taşınmış, sürümler artırılmış ve ana sınavlar yeşil koşmuş; talep edilen iş yapılmış görünüyor. Ancak `kayitsiz` içindeki geçersiz özel desen hatası temiz sonuç gibi yutulabildiği için üretim öncesi bu uygulama kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Geçersiz `.kapi_desen` düzenli ifadesi Python sürecini kod 1 ile düşürür; kabuk yalnız kod 9'u denetlediğinden hata boş sonuç kabul edilip `kayitsiz` temiz dönebilir.",
+        "kanit": "Python parçası `kalip = re.compile(...)` hatasını yakalamıyor; hemen ardından kabuk yalnız `if [[ $? -eq 9 ]]` dalını ele alıyor ve sonunda bulgu yoksa `_iyi ...` ile RC=0 döndürüyor. Böylece bozuk kullanıcı deseni fail-open davranıyor.",
+        "konum": "kapi-sinavi/scripts/kapi-sinavi.sh:_kayitsiz, `re.compile` çağrısı ve komut ikamesinden sonraki `$? -eq 9` kontrolü",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Belgelerdeki dört mutasyonla korunduğu iddiası sunulan kanıt manifestinde bağımsız mutasyon ölçümüyle desteklenmemiş.",
+        "kanit": "SKILL.md farkı “dört mutasyonun dördü de kırmızı yakar” diyor; manifestteki kayıtların hiçbirinde `mutasyon: true` alanı yok ve verilen 53 testlik çıktı yalnız normal `gercek_olcum` niteliğinde sınav koşumunu gösteriyor.",
+        "konum": "kapi-sinavi/SKILL.md `kayitsiz mutasyon-kanıtı`; kanıt manifesti kayıtlarının tamamı",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; üç geçersiz kayıt doğru biçimde dışlanmış. Geçerli kayıtlar iki becerinin sınavlarını, katalog-sürüm hizasını ve kapi-sinavi için kurulum benzetimini yeşil gösteriyor; ayrıca güncel kuru koşu önceki 22 drift uyarısını 8'e indirmiş. Bununla birlikte son genel kuru koşu hâlâ RC=1 ve başka becerilere ait 8 drift ile 1 duman düşüşü içeriyor; bunlar bu kartın hedefleri için doğrudan kusur kanıtı değil. `olcum-disiplini` için ayrı kurulum benzetimi ve belgelenen mutasyon iddiaları için `mutasyon: true` kaydı bulunmuyor."
+  }
+}
