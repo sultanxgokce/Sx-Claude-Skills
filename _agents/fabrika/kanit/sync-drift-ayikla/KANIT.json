@@ -1,7 +1,7 @@
 {
   "is": "sync-drift-ayikla",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T18:43:08+03:00",
+  "guncelleme": "2026-10-30T18:48:47+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -309,7 +309,43 @@
       "renk": "ilan",
       "zaman": "2026-10-30T18:43:08+03:00",
       "olcum_id": "7a60166f88a04ade98ec086239916c6f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kosu-drift-daralt",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kosu-drift-daralt-sonra.txt",
+      "sha256": "31152ad7f578b293727c320b6eac658a93b57f0d96a33b19e6b840ccc48f940c",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:48:41+03:00",
+      "sure_sn": 21.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c0babca8f4044aabb590fbaa82f836ae"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kuru-kosu-drift",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kuru-kosu-drift-sonra-2b55a2eea84c.txt",
+      "sha256": "5ba5bef73aecec2c4dad6b5c09f9fa49d35903eb9ef6d39725f0ac6bb2e96d9f",
+      "hedef_dosya": "olcum-kuru-kosu-drift-sonra.txt",
+      "hedef_olcum_id": "67e5411e9a82433387e35a74b1fd0315",
+      "hedef_sha256": "d609675486c8ce38a569ef92686918e55e9873c5ca4d39832bbb545b32fd79b7",
+      "hedef_zaman": "2026-10-30T18:40:23+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "daraltmadan önceki ölçüm; kapi-sinavi ve olcum-disiplini bu PR'dan çıktı, yeniden ölçüldü",
+      "kim": "BENNÂ",
+      "karsi": "olcum-kuru-kosu-drift-daralt-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:48:47+03:00",
+      "olcum_id": "0790b44f174542ba89c04abae944252b"
     }
   ],
-  "imza": "2ae35160d86b745062c99fbaab18af6f0242296329b029159d1e17b31f8ce4e3"
+  "imza": "6d1cda40b01600152893482135f2839a44b37b58505e6593af7d25504c68db5a"
 }

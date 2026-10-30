@@ -28,7 +28,6 @@
 #
 # Kullanım:
 #   kapi-sinavi.sh kayit                 defteri doğrula (dosyalar var mı, alanlar tam mı)
-#   kapi-sinavi.sh kayitsiz [--dizin <yol>]  sicile YAZILMAMIŞ kapı-adlı fonksiyon var mı
 #   kapi-sinavi.sh kos      [ad]         kapının sınavını koş; yeşilse damgayı kaydet
 #   kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (üretim yolundan)
 #   kapi-sinavi.sh bayat-mi [ad]         kapı son yeşil koşumdan sonra değişti mi
@@ -244,24 +243,6 @@ _bagli_mi(){
     local ic; ic=0
     printf '%s\n' "$yerler" | grep -qx -e "$dosya" && ic=1
 
-    local girisler; girisler="$(_dizi "$ad" girisler)"
-    # 🔴 BEYAN EDİLEN GİRİŞ DOSYASI BU AĞAÇTA YOKSA HÜKÜM "ÖLÇÜLEMEDİ"DİR, "ÖLÜ KOD" DEĞİL
-    #    (düzeltildi 2026-09-09 · MMEx kolu). Ölçülmüş vaka: `numara_ver` beceri deposunda
-    #    tanımlı, tek çağıranı BAŞKA depoda (MMEx `mmex_fatura.py`). Araç giriş dosyasını
-    #    bulamayınca "ÇAĞIRAN YOK" diyordu — yani depolar arası bir kapıyı ÖLÜ İLAN ediyordu.
-    #    Bu yalnız gürültü değil, YANLIŞ SEBEPTİR: insanı var olmayan bir kusuru onarmaya
-    #    gönderir (bkz. aynı hattaki s0262 dersi: doğru durup yanlış sebep söyleyen kapı).
-    local eksik_giris=0 var_giris=0 g0
-    while IFS= read -r g0; do
-      [[ -n "$g0" ]] || continue
-      if [[ -e "$KOK/$g0" ]]; then var_giris=1; else eksik_giris=1; fi
-    done <<< "$girisler"
-    if [[ $var_giris -eq 0 && $eksik_giris -eq 1 ]]; then
-      _olcemedim_k "$ad/bagli-mi" "$ad: beyan edilen giriş dosyalarının HİÇBİRİ bu ağaçta yok → bağlılık ÖLÇÜLEMEZ"
-      _hata  "     beyan: $(printf '%s' "$girisler" | tr '\n' ' ')"
-      _hata  "     → çağıran başka bir depoda olabilir; oradan ölçülmeli. 'Ölü kod' HÜKMÜ VERİLMEDİ."
-      [[ $bulgu -eq 1 ]] || bulgu=3; continue
-    fi
     if [[ "$sayi" -eq 0 ]]; then
       _bulgu_k "$ad/bagli-mi" "$ad: ÇAĞIRAN YOK — '$cagri' yalnız kendi dosyasında/sınavında geçiyor"
       _hata  "     → 'yazılmış ama bağlanmamış' vakası. Bu kapı için kapı sayısı SIFIRDIR."
@@ -269,6 +250,7 @@ _bagli_mi(){
       bulgu=1; continue
     fi
 
+    local girisler; girisler="$(_dizi "$ad" girisler)"
     if [[ -z "$girisler" ]]; then
       _olcemedim_k "$ad/bagli-mi" "$ad: 'girisler' beyan edilmemiş — yalnız çağrı VARLIĞI ölçüldü ($sayi yer)"
       [[ $bulgu -eq 1 ]] || bulgu=3; continue
@@ -455,52 +437,9 @@ PY
         uygulandi=0
         while IFS= read -r g; do
           [[ -n "$g" && -f "$tmp/$g" ]] || continue
-          # 🔴 YALNIZ ÇAĞRI KALDIRILIR, TANIM DURUR (düzeltildi 2026-09-09 · MMEx kolu).
-          #    Eski hâl `sed s/\bad\b/ad__KALDIRILDI/g` idi: TANIMI da yeniden adlandırıyordu.
-          #    Kapı kendi dosyasından çağrılıyorsa (çok yaygın: dosya == giriş) def ve çağrı
-          #    BİRLİKTE değişiyor, davranış AYNI kalıyor → mutasyon BOŞA DÜŞÜYOR.
-          #    Ölçülen iki yüzü de vardı:
-          #      · yanlış KIRMIZI — sınav sağlamken "bu kapıyı ölçmüyor" (alias · ortam-kilidi)
-          #      · yanlış YEŞİL   — sınav adı `from … import ad` ile alıyorsa import patlıyor,
-          #                         araç "yakalandı" diyor; oysa yakalanan ÇAĞRI değil AD DEĞİŞİMİ.
-          #    Doğrusu: yalnız ast.Call düğümlerindeki ad değişir. Tanım ve import el değmez.
-          if PYTHONDONTWRITEBYTECODE=1 python3 - "$tmp/$g" "$cagri" <<'PY'; then uygulandi=1; fi
-import ast, sys
-yol, ad = sys.argv[1], sys.argv[2]
-try:
-    ham = open(yol, "rb").read()
-    agac = ast.parse(ham.decode("utf-8"))
-except Exception:
-    sys.exit(1)
-yerler = []
-for d in ast.walk(agac):
-    if not isinstance(d, ast.Call):
-        continue
-    f = d.func
-    if isinstance(f, ast.Name) and f.id == ad:
-        hedef = f
-    elif isinstance(f, ast.Attribute) and f.attr == ad:
-        hedef = f
-    else:
-        continue
-    if hedef.end_lineno is None:
-        continue
-    yerler.append((hedef.lineno, hedef.col_offset, hedef.end_lineno, hedef.end_col_offset))
-if not yerler:
-    sys.exit(1)
-satirlar = ham.split(b"\n")
-# col_offset UTF-8 BAYT uzaklığıdır — bayt üzerinde çalışıyoruz (Türkçe karakterli
-# dosyalarda karakter indeksi kullanmak yanlış yere yazardı).
-for ls, cs, le, ce in sorted(yerler, reverse=True):
-    if ls != le:
-        continue
-    st = satirlar[ls - 1]
-    parca = st[cs:ce]
-    if not parca.endswith(ad.encode()):
-        continue
-    satirlar[ls - 1] = st[:ce] + b"__KALDIRILDI" + st[ce:]
-open(yol, "wb").write(b"\n".join(satirlar))
-PY
+          if grep -q -e "$cagri" "$tmp/$g"; then
+            sed -i "s/\\b${cagri}\\b/${cagri}__KALDIRILDI/g" "$tmp/$g" && uygulandi=1
+          fi
         done <<< "$hedefler"
         ;;
     esac
@@ -558,122 +497,6 @@ _taban_karsilastir(){ # <taban-dosyasi> <anahtar-dosyasi>
   return "$rc"
 }
 
-# ── kayitsiz ─────────────────────────────────────────────────────────────────
-# 🔴 NİÇİN VAR (ölçülmüş, 2026-09-09 · MMEx fatura hattı):
-#    Fatura hattında dokuz kapı-fonksiyonu vardı, sicilde SEKİZ kayıt. Eksik ikisi
-#    tam da Sultan'ın KENDİ düzeltmelerinden doğan kapılardı (belge-türü: malzeme
-#    iade satış kalemiyle kesilemez · çift-kesim: aynı fatura iki kez kesilemez).
-#    İkisi de sınavlıydı, ikisi de çalışıyordu — ama sicilde olmadıkları için
-#    HİÇ mutasyon denetiminden geçmemişlerdi. Kök neden bir unutkanlık değil,
-#    bir SAHİPSİZLİK: "yeni kapıyı sicile yaz" adımının çağıranı yoktu.
-#    Bu komut o çağırandır.
-#
-# Kesinlik > kapsam (bu aracın `boru` dersi): yalnız sicilde ZATEN adı geçen
-# dosyalar taranır. Mantık: bir dosyada kapı olduğunu biliyorsak, o dosyadaki
-# ikinci bir kapı-adlı fonksiyonun kayıtsızlığı GÜÇLÜ sinyaldir. Depoyu geniş
-# taramak isteyen `--dizin` ile açıkça ister (opt-in, gürültü çağıranın kararı).
-#
-# ⚠️ DÜRÜST SINIR: bu bir AD-SÖZLEŞMESİ taramasıdır, anlam çözümlemesi değil.
-#    Sözleşmeye uymayan bir kapı (ör. `dayanak_coz`) BULUNAMAZ. "0 bulgu" =
-#    "adı kapıya benzeyen kayıtsız fonksiyon yok" demektir; "kapı eksiği yok"
-#    DEMEK DEĞİLDİR. Bu yüzden komut asla "tüm kapılar kayıtlı" diye yazmaz.
-#
-# Muafiyet: defterdeki `.muaf[]` — {ad, dosya, gerekce}. GEREKÇE ZORUNLUDUR;
-#    gerekçesiz muafiyet RC=2 ile REDDEDİLİR (sessiz muafiyet, kapatılmış kapıdır).
-_KAPI_DESEN_VARSAYILAN='.*kapisi|.*_dogrula|dogrula|.*_kapisi'
-
-_kayitsiz(){
-  _defter_var
-  local ekdizin=()
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --dizin) [[ -n "${2:-}" ]] || { _hata "HATA: --dizin bir yol ister"; exit "$RC_KULLANIM"; }
-               ekdizin+=("$2"); shift 2 ;;
-      "") shift ;;
-      *) _hata "bilinmeyen bayrak: $1"; exit "$RC_KULLANIM" ;;
-    esac
-  done
-
-  # Gerekçesiz muafiyet = fail-closed
-  local kotu
-  kotu="$(jq -r '(.muaf // [])[] | select((.gerekce // "") | gsub("^\\s+|\\s+$";"") == "") | (.ad // "?")' "$DEFTER")"
-  if [[ -n "$kotu" ]]; then
-    _hata "HATA: gerekçesiz muafiyet var (sessiz muafiyet = kapatılmış kapı):"
-    while IFS= read -r a; do [[ -n "$a" ]] && _hata "  · $a"; done <<< "$kotu"
-    exit "$RC_KULLANIM"
-  fi
-
-  local desen; desen="$(jq -r '.kapi_desen // ""' "$DEFTER")"
-  [[ -n "$desen" ]] || desen="$_KAPI_DESEN_VARSAYILAN"
-
-  # Taranacak dosyalar: sicildeki dosyalar (tekil) + açıkça istenen dizinler
-  local -a dosyalar=()
-  while IFS= read -r d; do
-    [[ -n "$d" ]] || continue
-    [[ -f "$KOK/$d" ]] && dosyalar+=("$d")
-  done < <(jq -r '[.kapilar[].dosya] | unique[]' "$DEFTER")
-  local dz
-  for dz in "${ekdizin[@]:-}"; do
-    [[ -n "$dz" ]] || continue
-    [[ -d "$KOK/$dz" ]] || { _hata "HATA: dizin yok: $KOK/$dz"; exit "$RC_KULLANIM"; }
-    while IFS= read -r d; do dosyalar+=("${d#$KOK/}"); done \
-      < <(find "$KOK/$dz" -name '*.py' -not -name '*.test.py' -not -path '*/__pycache__/*' | sort)
-  done
-
-  if [[ ${#dosyalar[@]} -eq 0 ]]; then
-    _olcemedim "kayitsiz: taranacak .py dosyası yok"
-    return "$RC_OLCULEMEDI"
-  fi
-
-  # Kayıtlı çağrı adları + muaf adlar
-  local kayitli muaflar
-  kayitli="$(jq -r '[.kapilar[].cagri] | unique[]' "$DEFTER")"
-  muaflar="$(jq -r '(.muaf // [])[] | .ad' "$DEFTER")"
-
-  local bulgu=0 tarandi=0 py_yok=0 d
-  for d in "${dosyalar[@]}"; do
-    [[ "$d" == *.py ]] || continue
-    [[ -f "$KOK/$d" ]] || continue
-    tarandi=$((tarandi+1))
-    local adlar
-    # AST ile: ANMAK≠TANIMLAMAK. Yorum/dizge içindeki ad fonksiyon sayılmaz.
-    adlar="$(PYTHONDONTWRITEBYTECODE=1 python3 - "$KOK/$d" "$desen" <<'PY' 2>/dev/null
-import ast, re, sys
-try:
-    src = open(sys.argv[1], encoding="utf-8").read()
-    agac = ast.parse(src)
-except Exception:
-    sys.exit(9)
-kalip = re.compile("^(" + sys.argv[2] + ")$")
-for d in ast.walk(agac):
-    if isinstance(d, (ast.FunctionDef, ast.AsyncFunctionDef)):
-        ad = d.name
-        if kalip.match(ad.lstrip("_")) or kalip.match(ad):
-            print(f"{ad}\t{d.lineno}")
-PY
-)"
-    if [[ $? -eq 9 ]]; then
-      _olcemedim_k "kayitsiz/$d" "kayitsiz: $d ayrıştırılamadı (sözdizimi?)"
-      py_yok=1
-      continue
-    fi
-    while IFS=$'\t' read -r ad satir; do
-      [[ -n "$ad" ]] || continue
-      grep -qxF "$ad" <<< "$kayitli" && continue
-      grep -qxF "$ad" <<< "$muaflar" && continue
-      _bulgu_k "kayitsiz/$ad" "KAYITSIZ KAPI: $ad  ($d:$satir) — sicilde yok, hiç mutasyon denetimi görmedi"
-      _hata "     → .kapi/kapilar.json'a ekle, ya da .muaf[] içine GEREKÇESİYLE yaz"
-      bulgu=1
-    done <<< "$adlar"
-  done
-
-  if [[ $bulgu -eq 1 ]]; then return "$RC_BULGU"; fi
-  [[ $py_yok -eq 1 ]] && return "$RC_OLCULEMEDI"
-  # 🔴 Bilinçli olarak "tüm kapılar kayıtlı" DEMEZ — bu bir ad taramasıdır.
-  _iyi "kayitsiz: $tarandi dosyada ad-sözleşmesine uyan kayıtsız fonksiyon yok (ad taraması; kapı eksiği kanıtı DEĞİL)"
-  return "$RC_TEMIZ"
-}
-
 _denetle(){
   local mut=0 taban=""
   while [[ $# -gt 0 ]]; do
@@ -692,7 +515,7 @@ _denetle(){
   #    yazar ve bayatlık kapısı KENDİ ÖLÇTÜĞÜ ŞEYİ tazeler — hiçbir zaman ateşlemez.
   #    (Bu aracın sınavı yakaladı: "kırmızı yok ama ölçülemeyen var" vakası 0 dönüyordu.)
   #    Doğru soru: "BEN GELDİĞİMDE bu kapının son yeşil koşumu güncel miydi?"
-  for adim in _kayit _kayitsiz _bayat_mi _ithal _bagli_mi _kos; do
+  for adim in _kayit _bayat_mi _ithal _bagli_mi _kos; do
     printf '\n── %s ──\n' "${adim#_}"
     $adim; rc=$?
     [[ $rc -eq 1 ]] && kirmizi=1
@@ -731,7 +554,6 @@ _denetle(){
 
 case "${1:-}" in
   kayit)    shift; _kayit "${1:-}" ;;
-  kayitsiz) shift; _kayitsiz "$@" ;;
   kos)      shift; _kos "${1:-}" ;;
   bagli-mi) shift; _bagli_mi "${1:-}" ;;
   bayat-mi) shift; _bayat_mi "${1:-}" ;;

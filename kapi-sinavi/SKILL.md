@@ -1,7 +1,7 @@
 ---
 name: kapi-sinavi
 type: agent
-version: 1.3.0
+version: 1.2.1
 description: >
   Bir KAPININ gerçekten kapı olduğunu kanıtlar. Kapının doğru karar verdiğini değil —
   DEVREDE olduğunu, SINAVININ onu fiilen ölçtüğünü ve son yeşil koşumdan sonra
@@ -76,7 +76,6 @@ Bu beceri o üç soruyu makineye sordurur.
 ## Komutlar
 
 ```
-kapi-sinavi.sh kayitsiz              sicile YAZILMAMIŞ kapı var mı (yeni)
 kapi-sinavi.sh kayit                 defteri doğrula (dosyalar var mı, alanlar tam mı, ad tekil mi)
 kapi-sinavi.sh kos      [ad]         sınavı ÇIPLAK koş; yeşilse kapının sha'sını damgala
 kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (AST tabanlı)
@@ -102,84 +101,6 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 
 Ön koşul: mutasyonsuz hâl yeşil olmalı. **Kırmızıdan kırmızıya geçiş hiçbir şey kanıtlamaz**
 → sınav zaten kırmızıysa `mutasyon` RC=3 döner (ölçüm reddedilir, sahte yeşil üretilmez).
-
-## 🔴 AYIRT EDİCİLİK — "hangi kapıyı ölçtün?" (ölçüldü 2026-08-29)
-
-Üç mutasyon *kapının* devrede olduğunu sınar. Ama bir sınav **komşu kapıyı** ölçüyor
-olabilir ve bunu kimse fark etmez.
-
-**Ölçülmüş vaka:** bir sınav "kimlik yoksa RET" kapısını ölçtüğünü sanıyordu. Kapı
-silindiğinde sınav **YEŞİL kaldı** — çünkü kimlik silinince değişken boşalıyor ve
-*yön kapısı* aynı `rc`'yi üretiyordu. Yani sınav, ölçtüğünü sandığı kapıyı değil
-yanındakini ölçüyordu ve iki kapıdan biri kalkabilirdi.
-
-> **Aynı çıkış kodunu iki kapı üretebiliyorsa, sınav hangisini ölçtüğünü bilmiyordur.**
-
-**Ayırt edicilik reçetesi:** girdiyi öyle seç ki **komşu kapı GEÇSİN**, yalnız ölçtüğün
-kapı reddetsin. Yukarıdaki vakada çözüm, karşılaştırılan iki alanı da boşaltmaktı:
-kimlik kapısı varsa RET, yoksa iki boş değer eşitlenip belge geçiyordu.
-
-**Nasıl bulunur:** `mutasyon` çıktısında hangi sınav kalemlerinin kırmızıya döndüğüne
-bak. İki FARKLI kapının mutasyonu **aynı kalem kümesini** kırmızı yakıyorsa, o kalemler
-ikisini ayırt etmiyordur. Aynı şey tersi için de geçerli: bir kapıyı mutasyona uğrattın
-ve **hiçbir** kalem düşmediyse, o kapının sınavı yoktur.
-
-## 🔴 SIRA DA BİR SÖZLEŞMEDİR
-
-Kapılar bir dizide koşar ve sıra anlamlıdır: yapı kapısı tutar kapısından **önce**
-koşmalıdır — yapısı yanlış bir belgede tutarın doğruluğu sorulmaz bile. Sırayı
-mutasyonla sına: kapıyı bir sonraki kapının **arkasına kaydır**; sınav kırmızı
-yanmıyorsa sıra sözleşmesi kilitli değildir. (Ölçüldü 2026-09-03: sıra kaydırma
-mutasyonu 6 kapı kırmızı yaktı — sözleşme gerçekten kilitliymiş.)
-
-## `kayitsiz` — sicile hiç yazılmamış kapı
-
-```
-kapi-sinavi.sh kayitsiz [--dizin <yol>]
-```
-
-**Niçin var (ölçülmüş, 2026-09-09 · MMEx fatura hattı):** hatta dokuz kapı-fonksiyonu
-vardı, sicilde **sekiz** kayıt. Eksik olan ikisi tam da en pahalı ikisiydi:
-
-| Kapı | Ne yapar | Sicilde |
-|---|---|---|
-| `belge_turu_kapisi` | malzeme iade, satış kalemleriyle kesilemez | ❌ yoktu |
-| `_paketi_dogrula` | yarım paket ağa çıkmaz | ❌ yoktu |
-
-İkisi de yazılmıştı, ikisi de üretim yolundan **çağrılıyordu**, ikisinin de sınavı
-vardı. Ama sicilde olmadıkları için **hiç mutasyon denetimi görmemişlerdi.** Sicile
-yazılır yazılmaz ölçüldü: `_paketi_dogrula` için **üç mutasyonun ÜÇÜ DE sessizce
-geçti** — kapı vardı, kanıtı yoktu. (Aynı gün sınavı yazıldı, üçü de kırmızıya döndü.)
-
-🔴 **Kök neden bir unutkanlık değil, bir SAHİPSİZLİKTİ.** "Yeni kapıyı sicile yaz"
-adımının çağıranı yoktu. Bu komut o çağırandır ve `denetle` zincirinde `kayit`'ın
-hemen ardından koşar.
-
-### Kesinlik > kapsam
-Yalnız **sicilde adı zaten geçen dosyalar** taranır. Mantık: bir dosyada kapı olduğunu
-biliyorsak, oradaki ikinci bir kapı-adlı fonksiyonun kayıtsızlığı güçlü sinyaldir.
-Geniş tarama `--dizin` ile **açıkça** istenir — gürültü çağıranın kararıdır. (Bu aracın
-`boru` dersi: gürültülü kapı, kapatılan kapıdır.)
-
-### ⚠️ Dürüst sınır — bu bir AD taramasıdır
-Ad sözleşmesine uymayan bir kapı (ör. `dayanak_coz`) **bulunamaz**. Bu yüzden komut
-asla *"tüm kapılar kayıtlı"* demez; temiz çıktısı şudur:
-
-> *"ad-sözleşmesine uyan kayıtsız fonksiyon yok (ad taraması; kapı eksiği kanıtı DEĞİL)"*
-
-Sınav bu cümleyi **kilitler** — araç kapsam iddiasında bulunursa kırmızı yakar.
-
-### Alt-çizgili fonksiyonlar ELENMEZ
-İlk tasarım `_` ile başlayanları özel-yardımcı sayıp atlayacaktı. Ölçüm bunu çürüttü:
-`_paketi_dogrula` gerçek bir kapıydı. Eleme, **gerçek bir kapıyı kaçıracaktı**; mutasyon
-sınavı bu kararı kilitler.
-
-### Muafiyet gerekçe ister
-Kapı olmayan bir eşleşmeyi susturmak için defterde `.muaf[]`:
-```json
-"muaf": [{"ad": "toplam_dogrula", "dosya": "x.py", "gerekce": "saf hesap, ret yolu yok"}]
-```
-**Gerekçesiz muafiyet RC=2 ile reddedilir** — sessiz muafiyet, kapatılmış kapıdır.
 
 ## Sınırlar — dürüstçe
 
@@ -271,33 +192,6 @@ koştuğu için kullanıcının deposuna `__pycache__` bırakıyordu — **ölç
 kirletmemeli.** Her iki yüz de tek yerde kapandı: bütün sınav koşumları
 `PYTHONDONTWRITEBYTECODE=1` ile geçer (`_sinav_kos`), ve sınav bunu kilitler.
 
-### ⚠️ Aracın kendi iki kusuru — kayda geçiyor (2026-09-09 · MMEx kolu)
-
-Bu bölüm silinmiyor: **ölçen aracın kendisi de ölçülmelidir.**
-
-**1 · `yer-kaydirma` mutasyonu boşa düşüyordu.** Mutasyon `sed` ile çağrı adını
-değiştiriyordu — ama aynı `sed` **tanımı da** değiştiriyordu. Kapı kendi dosyasından
-çağrılıyorsa (çok yaygın; bu skill'in kendi kanonu bunu "meşru" ilan eder) `def` ve
-çağrı birlikte yeniden adlandırılır ve **davranış hiç değişmez.** İki yüzü de ölçüldü:
-
-| Yüz | Ne olur | Ölçülen vaka |
-|---|---|---|
-| yanlış **KIRMIZI** | sağlam sınava "bu kapıyı ölçmüyor" der | `alias-kapisi` · `servis-ortam-kilidi` |
-| yanlış **YEŞİL** | sınav adı `import` ediyorsa import patlar, araç "yakalandı" sanır — yakalanan **çağrı değil ad değişimi** | `cift-kesim-kapisi` (PARA kapısı) |
-
-İkincisi ağırdır: düzeltilince çift-kesim kapısının **bağ sınavının hiç olmadığı**
-ortaya çıktı. Mutasyon artık AST tabanlıdır — yalnız `ast.Call` düğümlerindeki ad
-değişir; tanım ve `import` satırlarına dokunulmaz.
-
-**2 · `bagli-mi` doğru durup yanlış sebep söylüyordu.** Beyan edilen giriş dosyası
-ağaçta yoksa "ÇAĞIRAN YOK = ölü kod" hükmü veriyordu. Ölçülen gerçek: `numara_ver`
-beceri deposunda tanımlı, tek çağıranı **başka depoda**. Bu yalnız gürültü değil,
-**yanlış sebeptir** — insanı var olmayan bir kusuru onarmaya gönderir. Artık ayırt
-edilir: giriş dosyası yoksa hüküm **ÖLÇÜLEMEDİ (RC=3)**, ölü kod değil.
-
-> Bu ikisi, bu becerinin kuruluş dersinin aynısıdır: *kapının varlığı, etkinliğinin
-> kanıtı sayılamaz.* Aracın kendisi de bir kapıdır.
-
 ## Çağıran kim (bu becerinin kendi kapısı)
 
 Bu beceri gönüllülüğe bırakılmaz — kurulduğu derste tam olarak o hata ölçüldü.
@@ -306,17 +200,12 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **53 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **41 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·
 mutasyonun gerçek ağaca dokunmadığının **sha ile** kanıtı · zaten-kırmızı sınav (→3) ·
-`denetle` RC birleştirme kuralı · bilinmeyen komut · olmayan kapı adı · **kayıtsız kapı** ·
-**kapsam iddiası etmeme** · **alt-çizgili kapının elenmemesi** · **gerekçesiz muafiyetin reddi**.
-
-**`kayitsiz` mutasyon-kanıtı (2026-09-09):** dört mutasyonun dördü de kırmızı yakar —
-kapıyı no-op yapmak (7 vaka düşer) · `denetle` zincirinden çıkarmak · gerekçesiz-muafiyet
-kontrolünü silmek · alt-çizgili adları elemek. Yani koruma gerçek, süs değil.
+`denetle` RC birleştirme kuralı · bilinmeyen komut · olmayan kapı adı.
 
 **Gerçek-veri regresyonu (ithal):** canlı `elogo-erisim`'in **12 python modülü** tarandı →
 **12/12 temiz, RC=0, yanlış-pozitif yok.**

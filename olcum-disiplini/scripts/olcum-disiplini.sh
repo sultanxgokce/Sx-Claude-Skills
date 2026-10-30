@@ -27,14 +27,8 @@
 #   olcum-disiplini.sh boru <yol...>        boru-hattı arkasından çıkış kodu okuma avı
 #   olcum-disiplini.sh negatif sor   --iddia "..."
 #   olcum-disiplini.sh negatif yaz   --iddia "..." --kanit "..."
-#   olcum-disiplini.sh bicim <dosya> [beklenen-tur]
-#     Dosyanın GERÇEKTEN o tür olduğunu SİHİRLİ BAYTLARINDAN doğrular.
-#     Uzantı bir iddiadır, baytlar kanıttır. rc: 0 uyuşuyor · 1 UYUŞMUYOR · 3 tanınmıyor
-#
 #   olcum-disiplini.sh kart --hipotez "..." --degisken "..." --beklenen "..." \
-#                           --gecersiz "..." --ortam "..." [--sayim "..."]
-#     --sayim: beklenen bir SAYI içeriyorsa ZORUNLU. "o sayıyı üreten eşleşmelerden
-#              birini açıp gerçekten aradığın şey olduğunu doğruladın mı?"
+#                           --gecersiz "..." --ortam "..."
 #
 # Çıkış: 0 temiz · 1 BULGU · 2 kullanım/ortam · 3 ÖLÇÜLEMEDİ
 set -uo pipefail
@@ -221,93 +215,11 @@ sys.exit(1)
 PY
 }
 
-# ── bicim ────────────────────────────────────────────────────────────────────
-# Bir dosyanın GERÇEKTEN iddia edilen türde olduğunu SİHİRLİ BAYTLARINDAN doğrular.
-#
-# 🔴 NİÇİN (ölçülmüş, 2026-09-09): bir servisten "PDF" istendi; yanıtın alan adı
-#    `dataType=PDF` idi, dosya adı `.zip`, baytlar ise `PK\x03\x04` — yani ZIP.
-#    İçinde tek bir gerçek PDF vardı. Açmadan diske "fatura.pdf" diye yazmak BOZUK
-#    bir dosya üretirdi ve bunu KİMSE dosyayı açana kadar fark etmezdi: teslim
-#    edilmiş, arşivlenmiş, "gönderdim" denmiş bir bozukluk.
-#
-#    > Uzantı bir İDDİADIR. Baytlar KANITTIR. İkisi çelişince baytlar kazanır.
-_bicim(){
-  local yol="${1:-}" beklenen="${2:-}"
-  [[ -n "$yol" ]] || { _hata "kullanım: bicim <dosya> [beklenen-tür]"; return "$RC_KULLANIM"; }
-  [[ -f "$yol" ]] || { _hata "dosya yok ya da düz dosya değil: $yol"; return "$RC_KULLANIM"; }
-  [[ -s "$yol" ]] || { _bulgu "dosya BOŞ (0 bayt): $yol"; return "$RC_BULGU"; }
-  # beklenen verilmezse uzantıdan türet — uzantı yoksa ÖLÇÜLEMEDİ
-  if [[ -z "$beklenen" ]]; then
-    # 🔴 UZANTI DOSYA ADINDAN OKUNUR, YOLDAN DEĞİL (sınav yakaladı 2026-09-09):
-    #    ilk sürüm `case "$yol" in *.*)` yapıyordu; `/tmp/tmp.AbCd/uzantisiz` gibi
-    #    DİZİN adında nokta olan bir yolda uzantı VAR sanıp "uzantisiz" adının
-    #    tamamını uzantı olarak alıyordu. Ölçüm aracının kendi ölçümü yanlıştı.
-    local dosya="${yol##*/}"
-    case "$dosya" in
-      ?*.*) beklenen="${dosya##*.}" ;;
-      *) _hata "uzantı yok ve beklenen tür verilmedi → ÖLÇÜLEMEDİ"; return "$RC_OLCULEMEDI" ;;
-    esac
-  fi
-  beklenen="$(printf '%s' "$beklenen" | tr 'A-Z' 'a-z')"
-  local bas; bas="$(head -c 8 "$yol" | od -An -tx1 | tr -d ' \n')"
-  local gercek="bilinmiyor"
-  case "$bas" in
-    25504446*)   gercek="pdf" ;;                 # %PDF
-    504b0304*|504b0506*|504b0708*) gercek="zip" ;;
-    89504e47*)   gercek="png" ;;
-    ffd8ff*)     gercek="jpg" ;;
-    1f8b*)       gercek="gz"  ;;
-    3c3f786d6c*) gercek="xml" ;;                 # <?xml
-    efbbbf3c3f*) gercek="xml" ;;                 # BOM + <?xml
-    *)
-      # metin tabanlılar: ilk görünür karakterden karar ver
-      local ilk; ilk="$(tr -d '[:space:]' < "$yol" | head -c 1)"
-      case "$ilk" in
-        '<') gercek="xml/html" ;;
-        '{'|'[') gercek="json" ;;
-      esac ;;
-  esac
-  # eşdeğerlik: zip tabanlı ofis biçimleri, xml/html ailesi
-  local uyar=""
-  case "$beklenen:$gercek" in
-    docx:zip|xlsx:zip|pptx:zip|odt:zip|jar:zip) gercek="$beklenen" ;;
-    html:xml/html|xml:xml/html|htm:xml/html)    gercek="$beklenen" ;;
-    json:json|xml:xml) ;;
-  esac
-  if [[ "$gercek" == "$beklenen" ]]; then
-    printf '✓ %s · baytlar %s ile uyuşuyor\n' "$yol" "$beklenen"
-    return "$RC_TEMIZ"
-  fi
-  if [[ "$gercek" == "bilinmiyor" ]]; then
-    _hata "⏸ ÖLÇÜLEMEDİ · $yol — baytlar tanınmıyor (baş: ${bas:0:16})"
-    _hata "   'yanlış tür' DEMEK DEĞİLDİR; bu araç o biçimi bilmiyor."
-    return "$RC_OLCULEMEDI"
-  fi
-  _bulgu "$yol · '$beklenen' bekleniyordu, baytlar '$gercek' diyor"
-  if [[ "$gercek" == "zip" ]]; then
-    _hata "   → ZIP içinde asıl dosya olabilir. İçerik:"
-    if command -v python3 >/dev/null 2>&1; then
-      python3 - "$yol" <<'PZ' 2>/dev/null || _hata "     (zip açılamadı)"
-import sys, zipfile
-try:
-    z = zipfile.ZipFile(sys.argv[1])
-    for n in z.namelist()[:5]:
-        print(f"     · {n} ({z.getinfo(n).file_size} bayt)")
-except Exception as e:
-    print(f"     (okunamadı: {type(e).__name__})")
-PZ
-    fi
-  fi
-  _hata "   🔴 Uzantı bir İDDİADIR, baytlar KANITTIR. Diske bu adla yazmak bozuk"
-  _hata "      dosya üretir ve kimse AÇANA KADAR fark etmez."
-  return "$RC_BULGU"
-}
-
 # ── kart ─────────────────────────────────────────────────────────────────────
 # Ölçüm kartı: ölçümü KURMADAN önce cevaplanması gereken beş soru. Kazıdaki altı
 # geçersiz ölçümün altısı da bu beş sorudan birine takılırdı.
 _kart(){
-  local hipotez="" degisken="" beklenen="" gecersiz="" ortam="" sayim=""
+  local hipotez="" degisken="" beklenen="" gecersiz="" ortam=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --hipotez)  hipotez="${2:-}"; shift 2 ;;
@@ -315,7 +227,6 @@ _kart(){
       --beklenen) beklenen="${2:-}"; shift 2 ;;
       --gecersiz) gecersiz="${2:-}"; shift 2 ;;
       --ortam)    ortam="${2:-}"; shift 2 ;;
-      --sayim)    sayim="${2:-}"; shift 2 ;;
       *) _hata "bilinmeyen bayrak: $1"; exit "$RC_KULLANIM" ;;
     esac
   done
@@ -325,17 +236,6 @@ _kart(){
   [[ -n "$beklenen" ]] || eksik+=("--beklenen (fark ne olmalı — sayı ya da gözlem)")
   [[ -n "$gecersiz" ]] || eksik+=("--gecersiz (bu ölçümü GEÇERSİZ kılacak şey ne)")
   [[ -n "$ortam"    ]] || eksik+=("--ortam (bu iddiayı hangi ortam KANITLAYABİLİR)")
-  # 🔴 ALTINCI SORU — YALNIZ SAYI ÜRETEN ÖLÇÜMLERDE (ölçülmüş vaka 2026-08-30):
-  #    bir tarama "39 tevkifatlı fatura buldum" dedi; kontrol edilince OTUZ DOKUZU DA
-  #    yanlış-pozitifti — aranan kelime bambaşka bir alanda, etiket olarak geçiyordu.
-  #    O sayıya güvenip biçim kopyalansaydı, UYDURMA bir yapı "ölçüldü" diye kanona
-  #    girecekti. Beş soru bunu YAKALAMIYORDU: hipotez doğru, değişken tek, ortam doğru,
-  #    geçersizlik tanımı bile vardı — eksik olan "SAYIYI ÜRETEN ŞEYİ AÇTIN MI" idi.
-  #    Zorunluluk KOŞULLUDUR: yalnız `--beklenen` bir sayı içeriyorsa istenir.
-  if [[ -z "$sayim" && "$beklenen" =~ [0-9] ]]; then
-    eksik+=("--sayim (beklenen bir SAYI içeriyor → o sayıyı üreten eşleşmelerden en az"
-            "         BİRİNİ açıp, gerçekten aradığın şey olduğunu doğruladın mı? nasıl?)")
-  fi
   if [[ ${#eksik[@]} -gt 0 ]]; then
     _bulgu "ölçüm kartı eksik — ölçüm KURULMADAN önce doldurulur:"
     printf '   · %s\n' "${eksik[@]}"
@@ -348,7 +248,6 @@ _kart(){
   printf '  beklenen : %s\n' "$beklenen"
   printf '  geçersiz : %s\n' "$gecersiz"
   printf '  ortam    : %s\n' "$ortam"
-  [[ -n "$sayim" ]] && printf '  sayım    : %s\n' "$sayim"
   printf '\n── defter kontrolü ──\n'
   # Kartın ÇAĞIRANI burada: negatif defteri gönüllü sorulmaz, kart onu KENDİLİĞİNDEN sorar.
   _negatif_sor --iddia "$hipotez"; local nrc=$?
@@ -361,7 +260,6 @@ _kart(){
 
 case "${1:-}" in
   boru)    shift; _boru "$@" ;;
-  bicim)   shift; _bicim "$@" ;;
   negatif) shift
     case "${1:-}" in
       yaz) shift; _negatif_yaz "$@" ;;
