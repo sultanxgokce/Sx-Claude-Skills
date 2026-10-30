@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kapimda-sinav-sonra.txt
+hedef_sha256: fb1b26905b29979e05fec481936a16f9146fcf6addba29d4e70058597e1aaed4
+hedef_zaman: 2026-10-30T18:40:28+03:00
+hedef_renk: yesil
+neden: kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T18:43:07+03:00

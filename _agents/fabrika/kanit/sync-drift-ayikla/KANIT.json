@@ -1,7 +1,7 @@
 {
   "is": "sync-drift-ayikla",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T18:41:47+03:00",
+  "guncelleme": "2026-10-30T18:43:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -233,7 +233,83 @@
       "renk": "ilan",
       "zaman": "2026-10-30T18:41:47+03:00",
       "olcum_id": "7aac0f7e37b94d36835ab3502442ca03"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kapimda-sinav",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kapimda-sinav-sonra-6011cb0761ce.txt",
+      "sha256": "65a5bb72ce9fee920cf582a57c4d0307c18ae254e4b505ba69ee49ea2cc82273",
+      "hedef_dosya": "olcum-kapimda-sinav-sonra.txt",
+      "hedef_olcum_id": "99b06a22aebc4b418b3b2cc89f8e8956",
+      "hedef_sha256": "fb1b26905b29979e05fec481936a16f9146fcf6addba29d4e70058597e1aaed4",
+      "hedef_zaman": "2026-10-30T18:40:28+03:00",
+      "hedef_renk": "yesil",
+      "neden": "kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:43:07+03:00",
+      "olcum_id": "0f2c1fdb051f4b27b8073e6825e34169"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kapi-sinavi-sinav",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kapi-sinavi-sinav-sonra-0a38db1a7802.txt",
+      "sha256": "40b2ff8944efb7dec961749ea08d44e95b1593da97f98a295ba0d3348128602e",
+      "hedef_dosya": "olcum-kapi-sinavi-sinav-sonra.txt",
+      "hedef_olcum_id": "02cfc4b5fd21441288a0963e3aaf5270",
+      "hedef_sha256": "8b48e938f594a7dd06175829ae227bdf35090715969394de3e9b5b04e55f451b",
+      "hedef_zaman": "2026-10-30T18:41:18+03:00",
+      "hedef_renk": "yesil",
+      "neden": "kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:43:07+03:00",
+      "olcum_id": "85d814c696954959be0f12016b2a3a9f"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "olcum-disiplini-sinav",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-olcum-disiplini-sinav-sonra-54007aa4d87a.txt",
+      "sha256": "4681b9d666db681bd77c77a875abcaa079f35440e84ac2db1019a0da6b2f4bcd",
+      "hedef_dosya": "olcum-olcum-disiplini-sinav-sonra.txt",
+      "hedef_olcum_id": "94f1f4aa994d43ad8ab99f4cfa6f57a6",
+      "hedef_sha256": "de0d7acd78c9c0eac9c3a1cb984423297ab6c8dfd1182db5d4d355802a34f571",
+      "hedef_zaman": "2026-10-30T18:41:24+03:00",
+      "hedef_renk": "yesil",
+      "neden": "kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:43:08+03:00",
+      "olcum_id": "5d09820421724344b23f4a3004559676"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "sultan-alarmi-sinav",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-sultan-alarmi-sinav-sonra-6a966e67a647.txt",
+      "sha256": "75c9a164a2de873010e77b300e9a648570ddd7c076ab7637ebd9fbe779b27d40",
+      "hedef_dosya": "olcum-sultan-alarmi-sinav-sonra.txt",
+      "hedef_olcum_id": "eafbc47572e84f14885e32d05e35bf29",
+      "hedef_sha256": "f8b8594006fa1c9dc739fd4a356bad3ee32c4bc8aadd1f1bf3ddb356e25bbfba",
+      "hedef_zaman": "2026-10-30T18:41:28+03:00",
+      "hedef_renk": "yesil",
+      "neden": "kartın ölçüm yeri yalnız kuru koşu drift sayısı; bu sınav çıktısı göz istemini 100 KB tavanın üstüne itti (111 KB) — aynı sınav CI kabuk kovasında koşar",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T18:43:08+03:00",
+      "olcum_id": "7a60166f88a04ade98ec086239916c6f"
     }
   ],
-  "imza": "74b9425aa143c2fbc39169e32d2c5e529d36ba0a14b8cde0bc77591c10bc9e04"
+  "imza": "2ae35160d86b745062c99fbaab18af6f0242296329b029159d1e17b31f8ce4e3"
 }
