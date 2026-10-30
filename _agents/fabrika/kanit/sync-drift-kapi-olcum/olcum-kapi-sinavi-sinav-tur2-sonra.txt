@@ -1,0 +1,70 @@
+$ bash kapi-sinavi/scripts/kapi-sinavi.test.sh
+# rc=0 sure=49.5s zaman=2026-10-30T19:01:39+03:00
+--- stdout ---
+kayit — defter tutarlılığı
+  ✓ temiz defter → 0
+  ✓ sınavsız kapı → BULGU (sınavı olmayan kapı, kapı değildir)
+  ✓ çift ad → BULGU
+  ✓ var olmayan kapı dosyası → BULGU
+  ✓ bozuk JSON → kullanım hatası (sessiz geçmez)
+  ✓ defter yok → kullanım hatası
+kos — sınavı çıplak koş, damgala
+  ✓ yeşil sınav → 0
+  ✓ yeşil koşum damgası diske yazıldı
+  ✓ kos gerçek ağaca bayt-kodu bırakmadı (__pycache__ yok)
+  ✓ kırmızı sınav → BULGU
+bagli-mi — kapı fiilen çağrılıyor mu
+  ✓ kapı giriş noktasından çağrılıyor → 0
+  ✓ 🔴 ÇAĞIRAN YOK → BULGU ('yazılmış ama bağlanmamış')
+  ✓ kapı yalnız KENDİ modülünden çağrılıyor + o modül giriş → 0 (sahte kırmızı YOK)
+  ✓ 🔴 yalnız YORUMDA anılıyor → ÇAĞIRAN YOK (anmak ≠ çağırmak)
+  ✓ çağrılıyor ama beyan edilen giriş noktasından değil → BULGU
+  ✓ giriş noktası beyan edilmemiş → ÖLÇÜLEMEDİ (0 DEĞİL)
+ithal — modül güvenle içe aktarılabiliyor mu
+  ✓ temiz modül içe aktarılır → 0
+  ✓ 🔴 GERÇEK VAKA: modül düzeyinde stdin → İÇE AKTARIRKEN DONDU
+  ✓ içe aktarılamayan modül → BULGU
+  ✓ 🔴 REGRESYON: tireli dosya adı → temiz içe aktarılır (yanlış kırmızı YOK)
+  ✓ tireli dosya adı → bağlılık da ölçülebilir
+  ✓ python olmayan kapı → ÖLÇÜLEMEDİ (0 DEĞİL)
+bayat-mi — kapı son yeşilden sonra değişti mi
+  ✓ hiç yeşil koşum yok → ÖLÇÜLEMEDİ (0 DEĞİL)
+  ✓ koşumdan hemen sonra → taze
+  ✓ kapı değişti, yeniden koşulmadı → BAYAT
+mutasyon — sil · no-op · yer-kaydırma
+  ✓ gerçek sınav üç mutasyonu da yakalar → 0
+  ✓ 🔴 DEĞİŞMEZ 2 — mutasyon GERÇEK AĞACA dokunmadı (sha aynı)
+  ✓ sınav bütünleşmeyi ölçmüyor → BULGU (yer-kaydırma yakalanmaz)
+  ✓ sınav zaten kırmızı → ÖLÇÜLEMEDİ (kırmızıdan kırmızıya geçiş kanıt değil)
+  ✓ giriş yok → yer-kaydırma ölçülemez → ÖLÇÜLEMEDİ
+denetle — tek RC, ölçülemeyen asla yeşile yuvarlanmaz
+  ✓ her şey temiz → 0
+  ✓ kırmızı yok ama ölçülemeyen var → 3
+  ✓ ölçülemeyen durumda 'YEŞİL DEĞİLDİR' açıkça basılıyor
+  ✓ bulgu varken → 1 (3'e düşmez)
+cırcır — bilinen kalem geçer, yeni kalem kırmızı, bayat taban kırmızı
+  ✓ bilinen kalem tabanda → 0 (bilinen kusur yolu tıkamaz)
+  ✓ bilinen kalemler ADIYLA ekrana basılıyor (gizlenmiyor)
+  ✓ 🔴 tabanda olmayan kalem → gerileme, KIRMIZI
+  ✓ 🔴 artık düşmeyen kalem tabanda duruyorsa → TABAN BAYAT, KIRMIZI
+  ✓ bayat taban gerekçesiyle basılıyor (taban yalnız küçülür)
+  ✓ temiz proje + boş taban → 0
+  ✓ olmayan taban dosyası → kullanım hatası
+kullanım
+  ✓ bilinmeyen komut → 2
+  ✓ defterde olmayan kapı adı → 2
+kayitsiz — sicile yazılmamış kapı
+  ✓ kayıtsız kapı yokken → 0
+  ✓ ad taraması KAPSAM İDDİASI etmiyor (dürüst sınır basılıyor)
+  ✓ sicile yazılmamış ikinci kapı → BULGU
+  ✓ bulgu kapının ADINI ve yerini basıyor
+  ✓ denetle, kayıtsız kapıyı ZİNCİRDE yakalıyor
+  ✓ alt-çizgili kapı ELENMİYOR (gerçek vaka: _paketi_dogrula)
+  ✓ gerekçeli muafiyet → 0
+  ✓ gerekçesiz muafiyet → REDDEDİLİR (sessiz muafiyet yok)
+  ✓ olmayan --dizin → 2
+  ✓ --dizin yolsuz → 2
+  ✓ bozuk .kapi_desen → 2 (temiz DEĞİL)
+
+toplam=54 geçen=54 düşen=0
+--- stderr ---
