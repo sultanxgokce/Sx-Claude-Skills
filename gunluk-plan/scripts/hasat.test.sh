@@ -171,12 +171,17 @@ K_OZET="" kayit AO havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum �
 temiz; bash "$HS" ac gorev_AO "özetsiz kayıt" --kip otomatik >/dev/null 2>&1; kapi "E1 özet yok (kayıtta da, bayrakta da) → rc 2, görev doğmaz (özet uydurulmaz)" "2:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
 temiz; EKLE_RC=1 bash "$HS" ac gorev_A2 "defter ekle reddediyor" --kip otomatik >/dev/null 2>&1; kapi "E2 defter doğan görevi reddederse rc 1, adım ve bağ YAZILMAZ" "1:yok:yok" "$?:$([ -e "$T/adim.log" ] && echo var || echo yok):$([ -e "$T/dogan.log" ] && echo var || echo yok)"
 temiz; EKLE_CIKTI="kayıt alındı ama kimlik yok" bash "$HS" ac gorev_A2 "kimliksiz" --kip otomatik >/dev/null 2>&1; kapi "E3 doğan görev kimliği okunamazsa rc 1, bağ YAZILMAZ" "1:yok" "$?:$([ -e "$T/dogan.log" ] && echo var || echo yok)"
-temiz; DOGAN_RC=1 bash "$HS" ac gorev_A2 "bağ yazılamıyor" --kip otomatik >/dev/null 2>&1; kapi "E4 bağ yazılamazsa rc 1 (doğan görev açıldı, elle gorev.sh dogan söylenir)" "1" "$?"
+temiz; DOGAN_RC=1 bash "$HS" ac gorev_A2 "bağ yazılamıyor" --kip otomatik >/dev/null 2>"$T/e4"; rc=$?
+kapi "E4 bağ yazılamazsa rc 1 ve doğan görev GERİ ALINIR (gorev.sh durum <yeni> iptal) — yetim kalmaz" "1:durum gorev_NEW1 iptal" "$rc:$(cut -c1-22 "$T/durum.log" 2>/dev/null)"
+iceriyor "E4b çıktı geri alındığını söyler, havuz kaydının yerinde olduğunu bildirir" "GERİ ALINDI (iptal); havuz kaydı gorev_A2 yerinde" "$(cat "$T/e4")"
+temiz; DOGAN_RC=1 DURUM_RC=1 bash "$HS" ac gorev_A2 "bağ ve geri alma kırık" --kip otomatik >/dev/null 2>"$T/e4c"; rc=$?
+kapi "E4c geri alma da reddedilirse rc 1 ve yetim ELLE tamamlanmak üzere söylenir (sessiz yetim yok)" "1:1" "$rc:$(grep -c 'geri ALINAMADI' "$T/e4c")"
 temiz; bash "$HS" ac gorev_A1 "doğrulamasız kayıt" --kip otomatik >/dev/null 2>&1; kapi "A2 doğrulamasız kayıt AÇILMAZ rc 1, görev doğmaz" "1:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
 temiz; bash "$HS" ac gorev_A3 "bayat kayıt" --kip otomatik >/dev/null 2>&1; kapi "A3 bayat doğrulama AÇILMAZ rc 1" "1:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
 temiz; bash "$HS" ac gorev_A2 "yüzeyde birleşme" --kip otomatik --birlesme 2026-01-09 >/dev/null 2>&1; kapi "A4 doğrulamadan sonra birleşme AÇILMAZ rc 1" "1:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
 temiz; bash "$HS" ac gorev_A7 "ölçülemeyen" --kip otomatik >/dev/null 2>&1; kapi "A5 ÖLÇÜLEMEDİ → açılmaz rc 3" "3:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
-temiz; ADIM_RC=1 bash "$HS" ac gorev_A2 "adım reddediyor" --kip otomatik >/dev/null 2>&1; kapi "A6 açılış adımı yazılamazsa rc 1, bağ yazılmaz" "1" "$?"
+temiz; ADIM_RC=1 bash "$HS" ac gorev_A2 "adım reddediyor" --kip otomatik >/dev/null 2>&1; rc=$?
+kapi "A6 açılış adımı yazılamazsa rc 1, bağ yazılmaz, doğan görev geri alınır" "1:yok:durum gorev_NEW1 iptal" "$rc:$([ -e "$T/dogan.log" ] && echo var || echo yok):$(cut -c1-22 "$T/durum.log" 2>/dev/null)"
 kapi "A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı" "yok" "$([ -e "$T/baska.log" ] && echo var || echo yok)"
 echo "— cevap: Seanslı Hasat'ın üç cevabı havuz kaydına adım olur (Sultan'ın sözü aktarılır, üretilmez)"
 temiz; bash "$HS" cevap gorev_A2 kabul --oturum s_1 --soz "olur aç" >/dev/null 2>&1; rc=$?
