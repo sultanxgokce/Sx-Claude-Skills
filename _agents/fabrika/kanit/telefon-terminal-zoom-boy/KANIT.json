@@ -1,7 +1,7 @@
 {
   "is": "telefon-terminal-zoom-boy",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T22:28:21+03:00",
+  "guncelleme": "2026-10-30T22:45:23+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,17 +26,20 @@
       "etiket": "koltuk-bagla-sinav",
       "asama": "sonra",
       "dosya": "olcum-koltuk-bagla-sinav-sonra.txt",
-      "sha256": "277581af8fce7cce0930d2bd7886dc3e9932663357b8884f40d183603ab95f77",
+      "sha256": "a44b5ef61f898d9fceba90c46204f0dfdecd653835d648775f668e943e4d6466",
       "komut": [
+        "env",
+        "-u",
+        "TERM",
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
-      "rc": 0,
-      "renk": "yesil",
-      "zaman": "2026-10-30T22:27:46+03:00",
-      "sure_sn": 32.7,
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T22:45:23+03:00",
+      "sure_sn": 49.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b9f3723bbf5a499fa119206f04764803"
+      "olcum_id": "535776e4d5d249f4ad4c97ec81550ccb"
     },
     {
       "tur": "olcum",
@@ -172,7 +175,7 @@
       "etiket": "pano-sinav-telefon-dugme",
       "asama": "sonra",
       "dosya": "olcum-pano-sinav-telefon-dugme-sonra.txt",
-      "sha256": "0433883bfff9e86aafdb2b61d8a40d4d23e29f90e38e6a67bbc74176d49a39ff",
+      "sha256": "d31c17191fab26894d6907bdfb435a17885d1a9d628ff785200ca5ef80f36c31",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/pano-g.sh",
@@ -182,10 +185,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T22:10:08+03:00",
-      "sure_sn": 101.1,
+      "zaman": "2026-10-30T22:38:35+03:00",
+      "sure_sn": 105.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "0a86a7b868424ede958459f67d730890"
+      "olcum_id": "fb30f8e699134fb9858a474f224d89fe"
     },
     {
       "tur": "gecersiz",
@@ -506,7 +509,41 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "afcc272633e247a0b6fb4a3c3284e99f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-pano-klavye",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-pano-klavye-sonra.txt",
+      "sha256": "27d15eed8942aed7e78eede2f2854225d35a353615a0c836fb5cd0c774ce25a4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh",
+        "pano-klavye"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:40:34+03:00",
+      "sure_sn": 108.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "pano-sinav-telefon-dugme",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "fa2efab1f29e455db3d1a6574f24e10b"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-390-klavye-acik",
+      "asama": "sonra",
+      "dosya": "dosya-kare-390-klavye-acik-sonra.png",
+      "sha256": "2b0cbfe881b58edb4c1333cb467846162968b2bf6e53b17d42fb4c1ade6081ce",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/kare/pano-sonra-telefon-klavye.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:45:23+03:00",
+      "olcum_id": "097262c5bbd6407db056e21552f3d29e"
     }
   ],
-  "imza": "f95db84ed27e324c0f686e19bf4714563eaf76afd32909a0aa756a4fe928b15c"
+  "imza": "7ca5b0e849ccbc9a9b8d10d521b942aa633c8abb3324e79c77d7c42587a6f1de"
 }

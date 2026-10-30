@@ -183,7 +183,8 @@ while time.time() - t0 < 25:
         try: os.read(fd, 65536)
         except OSError: break
 PYPTY
-  rist() { ( TMUX_TMPDIR="$RT" python3 -I "$RT/telpty.py" "$@" </dev/null >>"$RT/pty.log" 2>&1 & ); }
+  # TERM şart: CI'da TERM yok → 'tmux attach' terminali tanımaz, istemci hiç bağlanmaz (ölçüldü: env -u TERM ile R0-R6 kırmızı)
+  rist() { ( TERM=xterm-256color TMUX_TMPDIR="$RT" python3 -I "$RT/telpty.py" "$@" </dev/null >>"$RT/pty.log" 2>&1 & ); }
   rilk() { rt kill-server 2>/dev/null; sleep 0.2
     rt -f /dev/null new-session -d -s KALFA -x 30 -y 50; rt new-session -d -s BASKA -x 200 -y 50
     rt set -g window-size latest; rt set -g aggressive-resize on; rt set -g status off

@@ -356,6 +356,10 @@ try {
     // Sultan'ın telefon yolu merkezdir: merkez sayfaya görünüm etiketini (TEL_BAS: width=device-width) koyar → burada da aynısı belge başında.
     const telCtx = await b.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2, permissions: ['clipboard-read', 'clipboard-write'] });
     await telCtx.addInitScript(() => { document.addEventListener('DOMContentLoaded', () => { if (!document.querySelector('meta[name=viewport]')) { const m = document.createElement('meta'); m.name = 'viewport'; m.content = 'width=device-width,initial-scale=1'; document.head.appendChild(m); } }); });
+    // Klavye taklidi (G9-G11): başsız Chromium'da gerçek klavye yok → visualViewport sayfa betiklerinden ÖNCE sahte bir olay hedefiyle
+    //   değiştirilir; yükseklik sınavca değiştirilip 'resize' atılır. Bu bir VEKİL ölçümdür: gerçek iOS/Android klavyesi ölçülmedi (SARI).
+    await telCtx.addInitScript(() => { const f = new EventTarget(); f.height = window.innerHeight; f.width = window.innerWidth; f.offsetTop = 0; f.offsetLeft = 0; f.scale = 1;
+      try { Object.defineProperty(window, 'visualViewport', { configurable: true, get: () => f }); window.__sahteVV = f; } catch (e) { /* tanımlanamadı */ } });
     await telCtx.addCookies([{ name: 'kapi', value: await giris(P1), domain: '127.0.0.1', path: '/sinav' }]);
     const pt = await telCtx.newPage();
     await pt.goto(`http://127.0.0.1:${P1}/sinav/tty/`, { waitUntil: 'load' }); await pt.waitForSelector('.xterm-helper-textarea', { timeout: 15000 });
@@ -398,6 +402,18 @@ try {
     await dosyaSec(pt, { name: 'ikinci.png', mimeType: 'image/png', buffer: Buffer.from(PNG1, 'base64') });
     await bekle(1500);
     kapi('G8 aynı düğmeyle ikinci görüntü de gider (girdi her seçimden sonra sıfırlanır)', yuklemeler.length === onceG3 + 1, `→ ${yuklemeler.length - onceG3} yükleme`);
+    // ── klavye açıkken yazı alanı görünür (pano.js 1.1.0)
+    const kb = (h) => pt.evaluate(async (h) => { const f = window.__sahteVV; if (!f) return null; f.height = h; f.dispatchEvent(new Event('resize'));
+      await new Promise((r) => setTimeout(r, 700)); const k = document.getElementById('terminal-container'), sc = document.querySelector('.xterm-screen');
+      const kr = k.getBoundingClientRect(), sr = sc.getBoundingClientRect(); return { kap: Math.round(kr.height), ekranAlt: Math.round(sr.bottom), satir: window.term.rows, klavye: window.__kapiResim && window.__kapiResim.klavye }; }, h);
+    const kb0 = await kb(844), kb1 = await kb(500);
+    kapi('G9 🔴 klavye açılınca (görünen alan 844→500 px) terminal görünen alana sığar: kap 448 px, ekranın altı ≤ 500, satır sayısı azalır',
+      !!kb1 && kb1.klavye === true && kb1.kap === 448 && kb1.ekranAlt <= 500 && kb1.satir < kb0.satir, `→ önce ${JSON.stringify(kb0)} · klavye ${JSON.stringify(kb1)}`);
+    if (KARE) await pt.screenshot({ path: `${KARE}-telefon-klavye.png` });
+    const kb2 = await kb(844);
+    kapi('G10 klavye kapanınca terminal eski boyuna döner (satır sayısı geri gelir)', !!kb2 && kb2.satir === kb0.satir && kb2.kap === kb0.kap, `→ ${JSON.stringify(kb2)}`);
+    const kb3 = await kb(800);
+    kapi('G11 küçük oynama (44 px, adres çubuğu) klavye sayılmaz: boy değişmez', !!kb3 && kb3.satir === kb0.satir, `→ ${JSON.stringify(kb3)}`);
     await pt.context().close();
   }
   ({ pg, hazir } = await sayfa(P1));   // aşağıdaki bölümler masaüstü sayfasıyla sürer
