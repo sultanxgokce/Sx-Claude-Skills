@@ -3,7 +3,7 @@
 # G1 varsayılan KURU: hiçbir komut çalışmaz, günlük yazılmaz · G2 --uygula + kurulu eski: dört beceri kurulur (kuruldu satırları onceki/kutu/reis),
 # bayat kimlik yenilenir (yenilendi satırı), reise mektup gider · G3 her şey güncel: hiçbir komut çalışmaz, mektup YOK, rc 0
 # G4 sync reddederse atlandi satırı + rc 1 + "kuruldu" yazılmaz · G5 reis yoksa mektup tahminle yollanmaz (atlandi, rc 1)
-# G6 kaynak sürüm okunamazsa rc 3 ÖLÇÜLEMEDİ · G7 bayat kimliğin temeli bilinmiyorsa yenile ÇAĞRILMAZ (atlandi) · G8 --force hiçbir komuta geçmez
+# G6 kaynak sürüm okunamazsa rc 3 ÖLÇÜLEMEDİ · G7 bayat kimliğin temeli bilinmiyorsa yenile ÇAĞRILMAZ (atlandi) · G8 --force hiçbir komuta geçmez · G9 iki kutu reisine ayrı mektup
 # mutant: kurulu=kaynak iken kurmaya kalkan kopya G3 kırmızı · reis yokken de mektup yollayan kopya G5 kırmızı · --force geçiren kopya G8 kırmızı
 set -uo pipefail
 export LC_ALL=C.UTF-8
@@ -58,6 +58,10 @@ ok "G4 sync reddeder: atlandi + rc 1, 'kuruldu' yazılmaz" "$([ $rc -eq 1 ] && g
 kurulu 1.1.1
 O="$(kos --uygula --depo "$T/bos")"; rc=$?
 ok "G5 reis yok: mektup tahminle yollanmaz (atlandi), rc 1" "$([ $rc -eq 1 ] && [ "$(cagri mektup)" = 0 ] && grep -q 'mektup reis=- .*durum=atlandi' "$T/g.log" && echo 0 || echo 1)" "→ rc=$rc"
+
+kurulu 1.1.1
+O="$(kos --uygula --depo "$T/bos" --reis code:SERDAR,mmex:BERİD)"; rc=$?
+ok "G9 iki kutu reisi: her birine AYRI mektup satırı (kutu+reis), rc 0" "$([ $rc -eq 0 ] && [ "$(cagri mektup)" = 2 ] && grep -q 'mektup reis=SERDAR surum=1.2.0 durum=gitti kutu=code' "$T/g.log" && grep -q 'mektup reis=BERİD surum=1.2.0 durum=gitti kutu=mmex' "$T/g.log" && echo 0 || echo 1)" "→ rc=$rc"
 
 O="$(bash "$R" --sx "$T/yok-sx" --gunluk "$T/g2.log" 2>&1)"; rc=$?
 ok "G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ" "$([ $rc -eq 3 ] && grep -q 'ÖLÇÜLEMEDİ' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc"

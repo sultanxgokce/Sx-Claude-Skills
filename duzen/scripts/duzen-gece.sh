@@ -6,7 +6,8 @@
 # Kullanım: duzen-gece.sh [--uygula] [--depo KÖK] [--kutu AD] [--reis AD] [--sx KÖK] [--gunluk DOSYA]
 #   --sx      Sx-Claude-Skills kökü (varsayılan /config/projects/Sx-Claude-Skills; kaynak sürüm onun duzen/SKILL.md'sinden okunur)
 #   --kutu    günlüğe/mektuba yazılan kutu adı (varsayılan: duzen sürüm kaydındaki hostname kısası)
-#   --reis    mektubun gideceği reis (boşsa mektup ATLANIR ve günlüğe yazılır — kimseye tahminle yazılmaz)
+#   --reis    mektubun gideceği reis(ler): virgülle ayrılmış 'kutu:reis' (ya da yalnız reis = bu kutu). /config/.claude her kutuda AYNI dizin olduğu için
+#             betik tek yerde koşar ve HER kutu reisine ayrı mektup gider. Boşsa/bilinmiyorsa mektup ATLANIR ve günlüğe yazılır — tahminle yazılmaz
 # Dikişler (sınav): DUZEN_SYNC_CMD · DUZEN_YENILE_CMD · DUZEN_MEKTUP_CMD · DUZEN_KURULU_KOK (kurulu beceriler kökü)
 # duzen_gunlugu satırları (key=value, tek satır):
 #   <ISO> kuruldu beceri=<ad> surum=<yeni> onceki=<eski|yok> kutu=<kutu> reis=<reis|->
@@ -25,7 +26,7 @@ while [ $# -gt 0 ]; do
     --uygula) UYGULA=1; shift ;; --kuru) UYGULA=0; shift ;;
     --depo) DEPO="${2:-}"; shift 2 ;; --kutu) KUTU="${2:-}"; shift 2 ;; --reis) REIS="${2:-}"; shift 2 ;;
     --sx) SX="${2:-}"; shift 2 ;; --gunluk) GUNLUK="${2:-}"; shift 2 ;;
-    -h|--help) sed -n '2,19p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,21p' "$0"; exit 0 ;;
     *) echo "duzen-gece: bilinmeyen seçenek: $1" >&2; exit 2 ;;
   esac
 done
@@ -40,7 +41,7 @@ yaz() { local s; s="$(date -Iseconds) $*"; echo "$s"; [ "$UYGULA" -eq 1 ] || ret
 
 KAYNAK_DUZEN="$(surum_oku "$SX/duzen/SKILL.md")"
 [ -n "$KAYNAK_DUZEN" ] || { echo "duzen-gece: ÖLÇÜLEMEDİ — kaynak sürüm okunamadı ($SX/duzen/SKILL.md)" >&2; exit 3; }
-RC=0; REISYAZ="${REIS:--}"; [ "$UYGULA" -eq 1 ] || echo "KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)"
+RC=0; REISYAZ="${REIS:--}"; REISYAZ="${REISYAZ//,/+}"; REISYAZ="${REISYAZ//[^[:alnum:]_+:ÇĞİÖŞÜçğıöşü-]/}"; [ "$UYGULA" -eq 1 ] || echo "KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)"
 
 # 1) dört beceriyi kur (kaynak > kurulu olanı; --force YOK — elle değişmiş kopya ezilmez, atlanır ve günlüğe yazılır)
 KURULDU=0
@@ -70,8 +71,15 @@ done < <(bash "$SURUM" denetle --depo "$DEPO" --kurulu "$KURULU_KOK/duzen" 2>/de
 # 3) reise düzen konulu sürüm mektubu (yalnız bir şey kurulduysa/yenilendiyse; reis bilinmiyorsa tahmin edilmez)
 if [ "$UYGULA" -eq 1 ] && { [ "$KURULDU" -eq 1 ] || [ "$YENILENDI" -eq 1 ]; }; then
   if [ -z "$REIS" ]; then yaz "mektup reis=- surum=$KAYNAK_DUZEN durum=atlandi kutu=$KUTU"; RC=1
-  elif $MEKTUP "$REIS" "düzen v$KAYNAK_DUZEN indi ($KUTU): dört düzen becerisi kuruldu/yenilendi. 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc yenile' ile tazele." --kimden MİRAHUR --onem normal --konu "düzen v$KAYNAK_DUZEN indi" </dev/null >/dev/null 2>&1
-  then yaz "mektup reis=$REIS surum=$KAYNAK_DUZEN durum=gitti kutu=$KUTU"
-  else yaz "mektup reis=$REIS surum=$KAYNAK_DUZEN durum=hata kutu=$KUTU"; RC=1; fi
+  else
+    IFS=',' read -r -a LISTE <<<"$REIS"
+    for oge in "${LISTE[@]}"; do
+      case "$oge" in *:*) mk="${oge%%:*}"; mr="${oge#*:}" ;; *) mk="$KUTU"; mr="$oge" ;; esac
+      if [ -z "$mr" ] || [ "$mr" = "-" ]; then yaz "mektup reis=- surum=$KAYNAK_DUZEN durum=atlandi kutu=$mk"; RC=1; continue; fi
+      if $MEKTUP "$mr" "düzen v$KAYNAK_DUZEN indi ($mk): dört düzen becerisi kuruldu/yenilendi. 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc yenile' ile tazele." --kimden MİRAHUR --onem normal --konu "düzen v$KAYNAK_DUZEN indi" </dev/null >/dev/null 2>&1
+      then yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=gitti kutu=$mk"
+      else yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=hata kutu=$mk"; RC=1; fi
+    done
+  fi
 fi
 exit "$RC"
