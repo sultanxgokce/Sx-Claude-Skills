@@ -1,0 +1,18 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh pano-once
+# rc=1 sure=117.6s zaman=2026-10-30T22:06:00+03:00
+--- stdout ---
+MUTASYON: pano-once · beklenen kırmızı kapılar: G1
+  ✗ Y0 gerçek ttyd+tmux sayfası açıldı, kabuk istemi göründü → bash-5.2$ 
+  ✗ G1 telefonda (390 px, dokunmatik) düğme kuruldu: TEK dosya girdisi, accept=image/*, capture YOK (galeri+kamera işletim sisteminin menüsünde) → {"kur":false,"dosya":0,"accept":null,"captur
+  ✗ G2 dokunma hedefi ≥ 44×44 px ve gerçekten en üstte (tıklanan nokta düğmenin kendisi) → null üstte=false
+  ✗ G3 düğme terminal metnini ÖRTMEZ: .xterm-screen ile kesişim yok, terminal düğmenin altından başlar → düğme null ekran {"x":5,"y":5,"w":350,"h":825,"alt":830,"sag":355}
+  ✗ G4 🔴 seçilen görüntü /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · yapıştırmayla aynı yol) → 0 yükleme
+  ✗ G5 🔴 dönen yol TERMİNALE yazıldı → $(printf YAVAS-PANO-SATIRI | |  base64)\a" | bash-5.2$
+  ✗ G6 kullanıcıya bildirildi ("resmin yolu terminale yazıldı") → 
+  ✗ G7 görüntü olmayan dosya YÜKLENMEZ, nedeni söylenir → 0 yükleme · 
+  ✗ G8 aynı düğmeyle ikinci görüntü de gider (girdi her seçimden sonra sıfırlanır) → 0 yükleme
+  ✗ N1 köprüsüz sayfada işaret ve bağ yok 
+GEÇEN: 34 · KALAN: 10
+kırmızı: G1
+SONUÇ: beklenen kapılardan 1 tanesi KIRMIZI (rc=1)
+--- stderr ---

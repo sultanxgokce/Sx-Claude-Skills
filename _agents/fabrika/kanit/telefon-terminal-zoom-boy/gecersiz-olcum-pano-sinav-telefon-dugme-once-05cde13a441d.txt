@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-pano-sinav-telefon-dugme-once.txt
+hedef_sha256: 171fd9f8dc961b6f44d01312456399265615519f87de3d95d0270841794ec926
+hedef_zaman: 2026-10-30T21:59:19+03:00
+hedef_renk: kirmizi
+neden: sınav düğmesiz eski kodda G kapısında çöktü (rc 2), kırmızı sayılamaz; sınav çökmeyecek biçimde düzeltildi, yeniden ölçüldü
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T22:01:09+03:00

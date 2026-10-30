@@ -1,0 +1,13 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-koltuk-bagla-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh kb-kanca
+# rc=1 sure=37.6s zaman=2026-10-30T22:10:46+03:00
+--- stdout ---
+MUTASYON: kb-kanca · beklenen kırmızı kapılar: P1 R1
+  ✗ P1 — kanca= iz=attach-session -f ignore-size -t =BASIRET
+  ✗ R1 — → 30x50 bayrak=attached,focused,ignore-size,UTF-8 günlük=
+  ✗ R5 — → 30x50
+toplam=127 geçen=124 düşen=3
+kırmızı: P1
+kırmızı: R1
+SONUÇ: beklenen kapılardan 2 tanesi KIRMIZI (rc=1)
+--- stderr ---

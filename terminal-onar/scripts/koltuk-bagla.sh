@@ -5,6 +5,7 @@
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
 #                                                          TELEFON KİPİ (2.25.0): ?arg=tel. (ana oturum) · ?arg=tel.<koltuk|kimlik> →
 #                                                          tmux'a '-f ignore-size' ile bağlanır: telefon pencere boyunu ETKİLEMEZ, masaüstü daralmaz
+#   koltuk-bagla.sh --tel-buyut <istemci>                  (2.36.5) telefon kancasının çağrısı: ignore-size istemcinin boyuna pencereyi YALNIZ BÜYÜTÜR
 #   koltuk-bagla.sh --gizli                                listede OLMAYAN oturumlar, gerekçesiyle: ad · neden (G-BANI-0007:
 #                                                          sessiz düşürme yok — gizlenen her oturum adıyla ve nedeniyle sayılır)
 #   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
@@ -227,6 +228,51 @@ bos_kabuk_mu() {  # $1 = oturum → 0 ise BOŞ KABUK: Claude yok ve her bölme y
   [ $n -gt 0 ]
 }
 
+# ── TELEFON BOYU (2.36.5 · telefon-terminal-zoom-boy): ignore-size'ın ters yüzü. Telefon pencere boyuna HİÇ girmediği için pencere
+#    telefondan DARSA (son bağlanan dar bir masaüstünün boyunda kalmış: canlıda code-ana 30x50 ölçüldü) telefonun sağı/altı noktalı çıkar.
+#    Kural: telefon masaüstünü daraltmaz AMA pencere telefondan darsa (ya da kısaysa) pencere telefon boyuna BÜYÜTÜLÜR. Yalnız büyütür,
+#    hiçbir boyutu küçültmez; oturumda boyu sayılan (ignore-size'sız) bir istemci varsa DOKUNMAZ — boy onundur.
+#    Ölçülerek seçildi (gerçek tmux 3.4 + gerçek ttyd + Chromium 390 px):
+#    · bayrağı kaldırmak (refresh-client -f '!ignore-size') REDDEDİLDİ: telefon tuşa bastığı an 'latest' olur, 120 sütunluk masaüstünü 50'ye indirir.
+#    · bağlanırken tek seferlik büyütme (stty size) YETMEDİ: ttyd süreci ilk boyla doğar (30x55), xterm sonra 31x59'a oturur → 3 sütun yine noktalı.
+#    · SEÇİLEN: oturuma iki kanca (client-attached + client-resized, dizin 86). tmux ölçtüğü İSTEMCİ boyuyla çağırır; telefon dönünce de çalışır.
+#      Kanca yalnız ignore-size istemcide koşar (if-shell -F süzgeci): masaüstü istemcisi hiç süreç doğurmaz. Kanca oturum kapsamlıdır, başka
+#      oturuma ve sunucu geneline yazmaz; telefon gidince kalır ama telefonsuz hiçbir şey yapmaz.
+#    resize-window pencereyi 'manual'e çeker → hemen ardından pencerenin YEREL ayarı eski hâline döner (yoksa silinir): boy kalır, sonra bağlanan
+#    masaüstü 'latest' kuralıyla boyu yine alır.
+TEL_KANCA_NO=86
+tel_kanca() {  # $1 = oturum adı → telefon boyu kancalarını kurar (yol tmux komutuna güvenle yazılamıyorsa kurmaz)
+  local yol="$KB_DIZIN/koltuk-bagla.sh" k
+  case "$yol" in *[!A-Za-z0-9_./-]*) return 0 ;; esac
+  k="if-shell -F '#{m:*ignore-size*,#{client_flags}}' { run-shell -b \"bash $yol --tel-buyut '#{client_name}'\" }"
+  tmux set-hook -t "=$1:" "client-attached[$TEL_KANCA_NO]" "$k" 2>/dev/null
+  tmux set-hook -t "=$1:" "client-resized[$TEL_KANCA_NO]" "$k" 2>/dev/null
+  return 0
+}
+tel_buyut() {  # $1 = istemci adı (kancadan) → istemci ignore-size ise ve oturumda boyu sayılan istemci yoksa pencereleri istemci boyuna büyütür
+  local bilgi tc ts st bay ses ist w ww wh nx ny yerel
+  [[ "$1" =~ ^[A-Za-z0-9_./-]{1,64}$ ]] || return 0
+  bilgi="$(tmux display-message -p -c "$1" '#{client_width}	#{client_height}	#{status}	#{client_flags}	#{session_name}' 2>/dev/null)" || return 0
+  IFS=$'\t' read -r tc ts st bay ses <<< "$bilgi"
+  [[ "$bay" == *ignore-size* ]] || return 0
+  [[ "$tc" =~ ^[0-9]+$ && "$ts" =~ ^[0-9]+$ ]] && [ "$tc" -gt 0 ] && [ -n "$ses" ] || return 0
+  case "$st" in off) ;; on) ts=$((ts-1)) ;; [2-5]) ts=$((ts-st)) ;; esac   # durum çubuğu satırları pencereye girmez
+  [ "$ts" -gt 0 ] || return 0
+  ist="$(tmux list-clients -t "=$ses" -F '#{client_flags}' 2>/dev/null)" || return 0   # ölçülemedi → dokunma
+  printf '%s\n' "$ist" | grep -v 'ignore-size' | grep -q '^.' && return 0
+  tmux list-windows -t "=$ses" -F '#{window_id} #{window_width} #{window_height}' 2>/dev/null | while read -r w ww wh; do
+    [[ "$ww" =~ ^[0-9]+$ && "$wh" =~ ^[0-9]+$ ]] || continue
+    nx=$ww; [ "$tc" -gt "$ww" ] && nx=$tc
+    ny=$wh; [ "$ts" -gt "$wh" ] && ny=$ts
+    [ "$nx" = "$ww" ] && [ "$ny" = "$wh" ] && continue
+    yerel="$(tmux show-options -wqv -t "$w" window-size 2>/dev/null)"
+    tmux resize-window -t "$w" -x "$nx" -y "$ny" 2>/dev/null || continue
+    if [ -n "$yerel" ]; then tmux set-option -w -t "$w" window-size "$yerel" 2>/dev/null; else tmux set-option -w -u -t "$w" window-size 2>/dev/null; fi
+  done
+  return 0
+}
+if [ "${1:-}" = "--tel-buyut" ]; then tel_buyut "${2:-}"; exit 0; fi
+
 if [ "${1:-}" = "--bos" ]; then
   if ! TUM="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then
     case "$TUM" in *"no server running"*|*"No such file or directory"*) exit 0 ;; esac
@@ -306,6 +352,7 @@ if [ -z "$ISTEK" ]; then
   # 🔴 Yalnız ARGÜMANSIZ yol oturum YARATIR. Ana oturumun adı adresle açıkça verilirse o da
   #    öteki koltuklar gibi beyaz listeden geçer (bağımsız göz, tur 1: açık ad listeyi deliyordu).
   # telefon kipinde de aynı yol (ana yoksa açar) — yalnız istemci bayrağı eklenir
+  [ "$TEL" = 1 ] && tel_kanca "$ANA"   # ana oturum yoksa kanca kurulamaz; yeni oturum zaten telefonun boyunda doğar
   exec tmux new-session -A "${IGN[@]}" -s "$ANA" -c "$PROJE"
 fi
 # ── AD DIŞI KİMLİK (2.24.0 · P4GT2W): adres 'k'+16 onaltılık taşıyorsa ve bu ADDA bir koltuk yoksa kimlik çözülür:
@@ -337,4 +384,5 @@ if [ "$TEL" = 0 ]; then
     tmux set-option -w -t "$w" window-size latest 2>/dev/null || true
   done
 fi
+[ "$TEL" = 1 ] && tel_kanca "$ISTEK"
 exec tmux attach-session "${IGN[@]}" -t "=$ISTEK"

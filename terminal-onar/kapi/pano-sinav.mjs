@@ -91,8 +91,8 @@ let b; try { b = await chromium.launch(); } catch (e) { console.log('ÖLÇÜLEME
 const ekran = (pg) => pg.evaluate(() => { const t = window.term; if (!t) return ''; const bf = t.buffer.active; const s = []; for (let i = 0; i < bf.length; i++) s.push((bf.getLine(i) && bf.getLine(i).translateToString(true)) || ''); return s.join('\n'); });
 const ekranda = (pg, metin, ms = 8000) => pg.waitForFunction((m) => { const t = window.term; if (!t) return false; const bf = t.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).includes(m)) return true; } return false; }, metin, { timeout: ms }).then(() => true, () => false);
 const bildirim = (pg) => pg.$eval('#kapi-pano-bildirim', (e) => (e.style.display !== 'none' ? e.textContent : '')).catch(() => '');
-async function sayfa(port) {
-  const ctx = await b.newContext({ viewport: { width: 1100, height: 640 }, permissions: ['clipboard-read', 'clipboard-write'] });
+async function sayfa(port, ctxAyar = {}) {
+  const ctx = await b.newContext({ viewport: { width: 1100, height: 640 }, permissions: ['clipboard-read', 'clipboard-write'], ...ctxAyar });
   await ctx.addCookies([{ name: 'kapi', value: await giris(port), domain: '127.0.0.1', path: '/sinav' }]);
   const pg = await ctx.newPage();
   await pg.goto(`http://127.0.0.1:${port}/sinav/tty/`, { waitUntil: 'load' });
@@ -345,6 +345,62 @@ try {
   await pg.evaluate(() => { navigator.clipboard.writeText = window.__pano.wt; navigator.clipboard.write = window.__pano.w; window.__kapiPano._indiOmru(5000); });
   pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
   kapi('S7b söz yazımı sürerken gelen ret onun sonucunu bekler: söz inince düğme YOK, kırmızı YOK, pano doğru', !dg7b && !/reddedildi/.test(bd7b) && pano === 'YAVAS-PANO-SATIRI', `→ düğme=${dg7b} bildirim="${bd7b}" pano="${pano}"`);
+
+  // ── G · TELEFONDA GÖRÜNTÜ EKLE (2.36.5 · görev …HJKXAB): telefonda (dokunmatik + dar) terminalin üstünde tek düğme; seçilen dosya
+  //    yapıştırmayla AYNI yoldan (resimIsle) geçer. Masaüstünde düğme YOK. Yukarıdaki masaüstü sayfası (1100 px, dokunmasız) ölçülür.
+  console.log('── G · telefonda görüntü ekle düğmesi');
+  const masaDugme = await pg.evaluate(() => ({ el: !!document.getElementById('kapi-resim-ekle'), girdi: document.querySelectorAll('input[type=file]').length, isaret: !!window.__kapiResim }));
+  kapi('G0 masaüstünde (fare, 1100 px) görüntü düğmesi YOK, dosya girdisi yok', !masaDugme.el && masaDugme.girdi === 0 && !masaDugme.isaret, `→ ${JSON.stringify(masaDugme)}`);
+  await pg.context().close();
+  {
+    // Sultan'ın telefon yolu merkezdir: merkez sayfaya görünüm etiketini (TEL_BAS: width=device-width) koyar → burada da aynısı belge başında.
+    const telCtx = await b.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2, permissions: ['clipboard-read', 'clipboard-write'] });
+    await telCtx.addInitScript(() => { document.addEventListener('DOMContentLoaded', () => { if (!document.querySelector('meta[name=viewport]')) { const m = document.createElement('meta'); m.name = 'viewport'; m.content = 'width=device-width,initial-scale=1'; document.head.appendChild(m); } }); });
+    await telCtx.addCookies([{ name: 'kapi', value: await giris(P1), domain: '127.0.0.1', path: '/sinav' }]);
+    const pt = await telCtx.newPage();
+    await pt.goto(`http://127.0.0.1:${P1}/sinav/tty/`, { waitUntil: 'load' }); await pt.waitForSelector('.xterm-helper-textarea', { timeout: 15000 });
+    const genislik = await pt.evaluate(() => window.innerWidth);
+    const kur = await pt.waitForFunction(() => window.__kapiResim && window.__kapiResim.dugme === true, null, { timeout: 8000 }).then(() => true, () => false);
+    await bekle(600);   // ttyd yeniden sığdırsın (resize olayı)
+    const geo = await pt.evaluate(() => {
+      const d = document.getElementById('kapi-resim-ekle'), g = document.getElementById('kapi-resim-girdi'), sc = document.querySelector('.xterm-screen');
+      const r = (e) => { if (!e) return null; const x = e.getBoundingClientRect(); return { x: x.left, y: x.top, w: x.width, h: x.height, alt: x.bottom, sag: x.right }; };
+      const dr = r(d), sr = r(sc);
+      const kesisir = !!(dr && sr && dr.x < sr.sag && sr.x < dr.sag && dr.y < sr.alt && sr.y < dr.alt);
+      const en = dr ? document.elementFromPoint(dr.x + dr.w / 2, dr.y + dr.h / 2) : null;   // düğme yoksa kapılar KIRMIZI olur, sınav çökmez
+      return { dr, sr, kesisir, ustte: !!(en && (en === d || d.contains(en))), dosya: document.querySelectorAll('input[type=file]').length,
+        accept: g && g.accept, capture: g && g.hasAttribute('capture'), yazi: d && d.textContent.trim(), satir: window.term && window.term.rows };
+    });
+    kapi('G1 telefonda (390 px, dokunmatik) düğme kuruldu: TEK dosya girdisi, accept=image/*, capture YOK (galeri+kamera işletim sisteminin menüsünde)',
+      kur && geo.dosya === 1 && geo.accept === 'image/*' && geo.capture === false && /Görüntü ekle/.test(geo.yazi || ''), `→ ${JSON.stringify({ kur, dosya: geo.dosya, accept: geo.accept, capture: geo.capture, yazi: geo.yazi })}`);
+    kapi('G2a sayfa telefon genişliğinde çizildi (390 px; ölçümler gerçek dokunma boyutu)', genislik === 390, `→ ${genislik}`);
+    kapi('G2 dokunma hedefi ≥ 44×44 px ve gerçekten en üstte (tıklanan nokta düğmenin kendisi)', !!geo.dr && geo.dr.w >= 44 && geo.dr.h >= 44 && geo.ustte, `→ ${JSON.stringify(geo.dr)} üstte=${geo.ustte}`);
+    kapi('G3 düğme terminal metnini ÖRTMEZ: .xterm-screen ile kesişim yok, terminal düğmenin altından başlar', !geo.kesisir && !!geo.sr && !!geo.dr && geo.sr.y >= geo.dr.alt, `→ düğme ${JSON.stringify(geo.dr)} ekran ${JSON.stringify(geo.sr)}`);
+    if (KARE) await pt.screenshot({ path: `${KARE}-telefon-dugme.png` });
+    // girdi yoksa (düğmesiz eski kod) seçim yapılamaz: 2 sn'de vazgeçilir, kapılar kırmızı olur — sınav çökmez
+    const dosyaSec = (sayfa, dosya) => sayfa.setInputFiles('#kapi-resim-girdi', dosya, { timeout: 2000 }).catch((e) => console.log('  … dosya seçilemedi: ' + String(e.message).split('\n')[0]));
+    const onceG = yuklemeler.length;
+    await dosyaSec(pt, { name: 'kamera.png', mimeType: 'image/png', buffer: Buffer.from(PNG1, 'base64') });
+    await pt.waitForFunction(() => /yazıldı|✗/.test((document.getElementById('kapi-pano-bildirim') || {}).textContent || ''), null, { timeout: 10000 }).catch(() => {});
+    const bdG = await bildirim(pt);   // bildirim 6 sn sonra kapanır: yol beklenmeden ÖNCE okunur
+    const yG = yuklemeler[onceG];
+    kapi('G4 🔴 seçilen görüntü /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · yapıştırmayla aynı yol)', yuklemeler.length === onceG + 1 && !!yG && yG.govde.equals(Buffer.from(PNG1, 'base64')) && yG.xrw === 'dashboard', `→ ${yuklemeler.length - onceG} yükleme`);
+    // 390 px'te terminal ~30 sütun: istem + yol satıra SIĞMAZ, xterm satırı kaydırır → satırlar birleştirilerek aranır
+    let yazildi = false; for (let k = 0; k < 40 && yG && !yazildi; k++) { yazildi = (await ekran(pt)).replace(/\n/g, '').includes(yG.yol); if (!yazildi) await bekle(200); }
+    kapi('G5 🔴 dönen yol TERMİNALE yazıldı', yazildi, `→ ${(await ekran(pt)).trim().split('\n').slice(-3).join(' | ')}`);
+    kapi('G6 kullanıcıya bildirildi ("resmin yolu terminale yazıldı")', /terminale yazıldı/.test(bdG), `→ ${bdG}`);
+    if (KARE) await pt.screenshot({ path: `${KARE}-telefon-yuklendi.png` });
+    const onceG2 = yuklemeler.length;
+    await dosyaSec(pt, { name: 'not.txt', mimeType: 'text/plain', buffer: Buffer.from('merhaba') });
+    await bekle(1200); const bdG2 = await bildirim(pt);
+    kapi('G7 görüntü olmayan dosya YÜKLENMEZ, nedeni söylenir', yuklemeler.length === onceG2 && /görüntü değil/.test(bdG2), `→ ${yuklemeler.length - onceG2} yükleme · ${bdG2}`);
+    const onceG3 = yuklemeler.length;
+    await dosyaSec(pt, { name: 'ikinci.png', mimeType: 'image/png', buffer: Buffer.from(PNG1, 'base64') });
+    await bekle(1500);
+    kapi('G8 aynı düğmeyle ikinci görüntü de gider (girdi her seçimden sonra sıfırlanır)', yuklemeler.length === onceG3 + 1, `→ ${yuklemeler.length - onceG3} yükleme`);
+    await pt.context().close();
+  }
+  ({ pg, hazir } = await sayfa(P1));   // aşağıdaki bölümler masaüstü sayfasıyla sürer
 
   console.log('── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI');
   await pg.context().close();   // köprülü sayfa AYNI tmux oturumuna bağlı kalırsa OSC 52'yi o alır ve panoyu doldurur → kontrol kirlenir

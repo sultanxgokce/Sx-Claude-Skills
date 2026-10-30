@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.4
+version: 2.36.5
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -86,6 +86,17 @@ geçirip bağlanır.
 - Dürüst sınır: kutunun KENDİ telefon ekranı (`genel/uygulama.js`) koltuğu hâlâ adla açar; terminalin içindeki tmux durum
   satırı oturum adını gösterir. Bu sürüm yalnız dışarı verilen adresi değiştirir.
 
+## 🆕 2.36.5 · Telefonda terminal yarım çıkmaz + telefonda görüntü ekleme düğmesi (30 Eki · görev …HJKXAB · kart telefon-terminal-zoom-boy)
+**Yarım ekran:** telefon (`tel.` kipi, `-f ignore-size`) pencere boyuna girmediği için, pencere son bağlanan dar bir istemcinin boyunda kalınca
+(canlıda `code-ana` 30x50 ölçüldü) telefonun sağı ve altı noktalı çıkıyordu. Artık `koltuk-bagla.sh` telefon kipinde oturuma iki tmux kancası
+(`client-attached[86]`, `client-resized[86]`) kurar; kanca yalnız ignore-size istemcide koşar ve `koltuk-bagla.sh --tel-buyut <istemci>`
+pencereyi **yalnız büyütür** (telefon boyuna; hiçbir boyut küçülmez). Oturumda boyu sayılan bir masaüstü varsa dokunmaz; sonra gelen masaüstü
+`latest` kuralıyla boyu yine alır. Ölçülerek seçildi: bayrağı kaldırmak masaüstünü 120→50 daraltıyordu; bağlanırken tek sefer büyütmek ttyd'nin
+sonradan oturan boyunu kaçırıyordu (3 sütun yine noktalı). Telefon dönünce de çalışır (sınav R5).
+**Görüntü ekle:** telefonda (dokunmatik + dar ekran) terminalin üstünde tek düğme **🖼 Görüntü ekle** (`kapi/genel/pano.js`). `accept="image/*"`,
+`capture` yok: iOS ve Android'in kendi menüsü galeri ile kamerayı aynı dokunuşta sunar. Seçilen dosya yapıştırmayla aynı yoldan geçer
+(küçültme → `/api/resim` → yol terminale). Düğme terminal kabının dışında; kap 52 px aşağı iner, metin örtülmez. Masaüstünde düğme yoktur.
+Pinch-zoom kilidi bu sürümde YOK — merkezin işi (cloudtop #1226). Sınav: `koltuk-bagla.test.sh` P1-P13 + gerçek tmux R0-R5 · `pano-sinav.mjs` G0-G8.
 ## 🆕 2.36.4 · Yazı kutusuna yapıştırılan resim terminale kaçmaz (30 Eki · görev …QC7Q7E · kart pano-yapistir-odak)
 Görev kartının "Madde ekle" kutusu gibi terminal DIŞI bir yazı alanına (input · textarea · düzenlenebilir alan) Cmd+V ile
 resim yapıştırılınca `genel/pano.js` olayı artık almaz; resim o alanın kendi yapıştırmasına kalır. xterm'in yardımcı

@@ -1,0 +1,16 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-pano-sinav-telefon-dugme-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-tel/mut.sh pano-yol
+# rc=1 sure=106.8s zaman=2026-10-30T22:14:37+03:00
+--- stdout ---
+MUTASYON: pano-yol · beklenen kırmızı kapılar: G4 G5
+  ✗ Y0 gerçek ttyd+tmux sayfası açıldı, kabuk istemi göründü → bash-5.2$ 
+  ✗ G4 🔴 seçilen görüntü /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · yapıştırmayla aynı yol) → 0 yükleme
+  ✗ G5 🔴 dönen yol TERMİNALE yazıldı → $(printf YAVAS-PANO-SATIRI | |  base64)\a" | bash-5.2$
+  ✗ G6 kullanıcıya bildirildi ("resmin yolu terminale yazıldı") → 
+  ✗ G8 aynı düğmeyle ikinci görüntü de gider (girdi her seçimden sonra sıfırlanır) → 0 yükleme
+  ✗ N1 köprüsüz sayfada işaret ve bağ yok 
+GEÇEN: 39 · KALAN: 6
+kırmızı: G4
+kırmızı: G5
+SONUÇ: beklenen kapılardan 2 tanesi KIRMIZI (rc=1)
+--- stderr ---
