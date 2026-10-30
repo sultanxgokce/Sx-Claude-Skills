@@ -1,0 +1,59 @@
+{
+  "is": "mesveret-sik-kaydi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T00:19:14+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sik-alani",
+      "asama": "once",
+      "dosya": "olcum-sik-alani-once.txt",
+      "sha256": "eedd83310af0693aabf9e0c066f33a42758c1e5a7b5654e6023488827d310bfc",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ms-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:19:12+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "40e6edde2b264d5e9cc465bde913e8bb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sik-alani",
+      "asama": "sonra",
+      "dosya": "olcum-sik-alani-sonra.txt",
+      "sha256": "e1634f6b17a7265198abda604503b314b8b4c34d7367ba47a71497d1755c294e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ms-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:19:12+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "01c152945093494e9270e1667eea09e9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "8d46b24147fc2dc2741b1f0cbaa6b4cb541b70db6f6eaec3429d3b5d767c554b",
+      "komut": [
+        "bash",
+        "mesveret/scripts/mesveret.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T00:19:14+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fdf7fa7f29554171a499a3d49939ad95"
+    }
+  ],
+  "imza": "0984d7b7b504021086d25be763622d2d42f96e127558f3a514f78b62e03b8221"
+}

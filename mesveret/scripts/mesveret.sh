@@ -20,7 +20,7 @@ kullanim() {
   cat <<'K' >&2
 kullanım:
   mesveret.sh basla [--oda <oda>] [--konu "…"]
-  mesveret.sh madde <seans> "<başlık>" --kim <AD> --etiket bug|ozellik [--not "…"] [--gorsel <yol>] [--oda <oda>]
+  mesveret.sh madde <seans> "<başlık>" --kim <AD> --etiket bug|ozellik --sik A|B|C [--not "…"] [--gorsel <yol>] [--oda <oda>]
   mesveret.sh onem  <seans> <madde-no> --onem 1|2|3 --soz "<Sultan sözü>" --oturum <ref> [--beyan <AD>]
   mesveret.sh durum <seans> · bitir <seans> · liste
 K
@@ -53,10 +53,11 @@ PY
     ;;
   madde)
     [ $# -ge 2 ] || kullanim; seans="$1"; baslik="$2"; shift 2
-    kim=""; etiket=""; notu=""; gorsel=""; oda=""
+    kim=""; etiket=""; sik=""; notu=""; gorsel=""; oda=""
     while [ $# -gt 0 ]; do case "$1" in
       --kim) [ $# -ge 2 ] || kullanim; kim="$2"; shift 2;;
       --etiket) [ $# -ge 2 ] || kullanim; etiket="$2"; shift 2;;
+      --sik) [ $# -ge 2 ] || kullanim; sik="$2"; shift 2;;
       --not) [ $# -ge 2 ] || kullanim; notu="$2"; shift 2;;
       --gorsel) [ $# -ge 2 ] || kullanim; gorsel="$2"; shift 2;;
       --oda) [ $# -ge 2 ] || kullanim; oda="$2"; shift 2;;
@@ -64,6 +65,8 @@ PY
     seans_var "$seans"
     [ -n "$kim" ] || { echo "--kim zorunlu" >&2; exit 2; }
     case "$etiket" in bug|ozellik) ;; *) echo "--etiket bug ya da ozellik" >&2; exit 2;; esac
+    # G2: Sultan'ın o maddede seçtiği şık (A sen anlat · B ben önereyim · C etkileşimli) kayıtsız madde yazılmaz
+    case "$sik" in A|B|C) ;; *) echo "--sik A, B ya da C (Sultan'ın seçtiği şık) zorunlu; madde yazılmadı" >&2; exit 2;; esac
     [ ${#baslik} -ge 5 ] || { echo "başlık çok kısa" >&2; exit 2; }
     [ -x "$BULGU" ] || { echo "⛔ bulgu.sh yok ($BULGU) — madde kaydedilmedi" >&2; exit 3; }
     no=$(py "$(seans_yolu "$seans")" <<'PY'
@@ -74,7 +77,7 @@ PY
 import json,sys; print(json.load(open(sys.argv[1])).get("oda",""))
 PY
 )
-    tam_not="Meşveret Seansı $seans · madde $no · önem: sorulmadı"
+    tam_not="Meşveret Seansı $seans · madde $no · şık: $sik · önem: sorulmadı"
     [ -n "$notu" ] && tam_not="$notu — $tam_not"
     [ -n "$gorsel" ] && tam_not="$tam_not · görsel: $gorsel"
     args=(yaz "$baslik" --kim "$kim" --etiket "$etiket" --not "$tam_not")
@@ -83,10 +86,10 @@ PY
     if [ $rc -ne 0 ]; then echo "⛔ Bulgu Havuzu'na yazılamadı (rc=$rc): $cikti" >&2; exit 3; fi
     gid=$(printf '%s\n' "$cikti" | grep -oE 'gorev_[0-9A-Z]+' | head -1)
     [ -n "$gid" ] || { echo "⛔ Bulgu Havuzu kayıt kimliği okunamadı (bulgu.sh çıktısı: ${cikti:0:120}) — madde seansa YAZILMADI" >&2; exit 3; }
-    py "$(seans_yolu "$seans")" "$no" "$baslik" "$gid" "$etiket" "$gorsel" "$(now)" <<'PY'
+    py "$(seans_yolu "$seans")" "$no" "$baslik" "$gid" "$etiket" "$gorsel" "$(now)" "$sik" <<'PY'
 import json,sys
-p,no,baslik,gid,etiket,gorsel,t=sys.argv[1:8]
-d=json.load(open(p)); d["maddeler"].append({"no":int(no),"baslik":baslik,"gorev":gid,"etiket":etiket,"gorsel":gorsel,"zaman":t,"onem":None})
+p,no,baslik,gid,etiket,gorsel,t,sik=sys.argv[1:9]
+d=json.load(open(p)); d["maddeler"].append({"no":int(no),"baslik":baslik,"gorev":gid,"etiket":etiket,"gorsel":gorsel,"sik":sik,"zaman":t,"onem":None})
 json.dump(d,open(p,"w"),ensure_ascii=False,indent=1)
 PY
     echo "madde $no kaydedildi → ${gid:-?} (havuz)"
@@ -136,7 +139,7 @@ PY
 import json,sys
 d=json.load(open(sys.argv[1])); m=d["maddeler"]; eksik=[x["no"] for x in m if x["onem"] is None]
 print(f"seans={d['seans']} durum={d['durum']} oda={d.get('oda','') or '-'} madde={len(m)} onem_eksik={len(eksik)} sıradaki={len(m)+1}")
-for x in m: print(f"  {x['no']}. {x['baslik']} → {x['gorev'] or '?'} · önem {x['onem'] if x['onem'] is not None else 'sorulmadı'}")
+for x in m: print(f"  {x['no']}. {x['baslik']} → {x['gorev'] or '?'} · şık {x.get('sik') or '?'} · önem {x['onem'] if x['onem'] is not None else 'sorulmadı'}")
 PY
     ;;
   bitir)
@@ -146,7 +149,7 @@ import json,sys
 p,t=sys.argv[1:3]; d=json.load(open(p)); d["durum"]="bitti"; d["kapanis"]=t
 json.dump(d,open(p,"w"),ensure_ascii=False,indent=1)
 m=d["maddeler"]; eksik=[x["no"] for x in m if x["onem"] is None]
-print(f"Meşveret Seansı bitti: {len(m)} madde kaydedildi · görevler: {' '.join((x['gorev'] or '?')[-6:] for x in m) or '-'} · önemi sorulmayan: {len(eksik)}")
+print(f"Meşveret Seansı bitti: {len(m)} madde kaydedildi · görevler: {' '.join((x['gorev'] or '?')[-6:] for x in m) or '-'} · önemi sorulmayan: {len(eksik)} · şıklar: {' '.join(x.get('sik') or '?' for x in m) or '-'}")
 PY
     ;;
   liste)
