@@ -213,9 +213,10 @@ PYPTY
   R6="$(rt list-windows -t =YENIANA -F '#{window_width}x#{window_height}' 2>/dev/null)"
   [ "$R6K" = 1 ] && [ "${R6%x*}" = 100 ] && ok "R6 🔴 ana oturum yokken 'tel.': oturum doğar, kancası kurulur; pencere 30'a daralmışken telefon dönünce (60→100) kanca 100'e büyütür" || bad R6 "kanca=$R6K ilk=$R6I → $R6"
   rt kill-session -t =YENIANA 2>/dev/null
-  rist 120 40 -- tmux attach -t =KALFA; rbek 3; rbekle 120x40; R3="$(rgen)"
+  # istemci SAYISI değil o istemcinin kendisi beklenir: R6'nın telefonu kill-session sonrası geç düşerse sayı yanıltır (yük altında R3/R4 sahte kırmızı ölçüldü)
+  rist 120 40 -- tmux attach -t =KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 120 && break; sleep 0.1; done; rbekle 120x40; R3="$(rgen)"
   [ "$R3" = 120x40 ] && ok "R3 sonra masaüstü bağlanınca boy yine masaüstünün (120) — telefon onu sınırlamaz" || bad R3 "→ $R3"
-  rist 90 30 -- bash "$B" anaoturum / tel.KALFA; rbek 4; sleep 1; R4="$(rgen)"
+  rist 90 30 -- bash "$B" anaoturum / tel.KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 90 && break; sleep 0.1; done; sleep 1; R4="$(rgen)"
   [ "$R4" = 120x40 ] && ok "R4 🔴 masaüstü bağlıyken ikinci telefon gelince pencere 120 kalır (masaüstü daralmaz)" || bad R4 "→ $R4"
   rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
 else

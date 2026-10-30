@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-koltuk-bagla-sinav-sonra.txt
+hedef_sha256: a44b5ef61f898d9fceba90c46204f0dfdecd653835d648775f668e943e4d6466
+hedef_zaman: 2026-10-30T22:45:23+03:00
+hedef_renk: kirmizi
+neden: R3/R4 sınavın kendi bekleme yarışıydı (istemci sayısı yanıltıyordu); bekleme düzeltildi, yeniden ölçüldü
+kim: BENNÂ
+karsi: -
+zaman: 2026-10-30T22:47:11+03:00

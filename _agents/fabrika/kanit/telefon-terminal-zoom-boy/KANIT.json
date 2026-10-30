@@ -1,7 +1,7 @@
 {
   "is": "telefon-terminal-zoom-boy",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T22:45:23+03:00",
+  "guncelleme": "2026-10-30T22:47:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "koltuk-bagla-sinav",
       "asama": "sonra",
       "dosya": "olcum-koltuk-bagla-sinav-sonra.txt",
-      "sha256": "a44b5ef61f898d9fceba90c46204f0dfdecd653835d648775f668e943e4d6466",
+      "sha256": "b13660873ded3a49e933d5db84d44af942f84d7320dbeb1c1a3970f1593fdab5",
       "komut": [
         "env",
         "-u",
@@ -34,12 +34,12 @@
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-30T22:45:23+03:00",
-      "sure_sn": 49.8,
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T22:47:46+03:00",
+      "sure_sn": 35.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "535776e4d5d249f4ad4c97ec81550ccb"
+      "olcum_id": "925a12f0bee24073b3a2fffe852aafcc"
     },
     {
       "tur": "olcum",
@@ -543,7 +543,26 @@
       "renk": "yesil",
       "zaman": "2026-10-30T22:45:23+03:00",
       "olcum_id": "097262c5bbd6407db056e21552f3d29e"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "koltuk-bagla-sinav",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-koltuk-bagla-sinav-sonra-cfd009be9c7d.txt",
+      "sha256": "710b0374418b92f1eb040434a3171b60c733730ae6e7c077ed82f12854d42b8d",
+      "hedef_dosya": "olcum-koltuk-bagla-sinav-sonra.txt",
+      "hedef_olcum_id": "535776e4d5d249f4ad4c97ec81550ccb",
+      "hedef_sha256": "a44b5ef61f898d9fceba90c46204f0dfdecd653835d648775f668e943e4d6466",
+      "hedef_zaman": "2026-10-30T22:45:23+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "R3/R4 sınavın kendi bekleme yarışıydı (istemci sayısı yanıltıyordu); bekleme düzeltildi, yeniden ölçüldü",
+      "kim": "BENNÂ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-30T22:47:11+03:00",
+      "olcum_id": "931ef1ef1f284a4c8b7d428390148592"
     }
   ],
-  "imza": "7ca5b0e849ccbc9a9b8d10d521b942aa633c8abb3324e79c77d7c42587a6f1de"
+  "imza": "cd58c603cc24e68ca633c5a5486a92b352b46619b8ecde0a33b02d14826c7ce2"
 }
