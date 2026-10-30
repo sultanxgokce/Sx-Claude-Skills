@@ -1,7 +1,7 @@
 ---
 name: postane-postaci
 type: tool
-version: 0.1.0
+version: 0.2.0
 description: >
   POSTANE postacısının (dakikada bir kutu içi tur: posta defterindeki mesajı alıcı ajanın CANLI Claude oturumuna yerel soketle iletir) bir kutuya kurulması için dosyalar ve kutu betiği.
   Kuru koşu varsayılan; --uygula yalnız izinli 17 ekip kutusundan birinde VE kutu jetonu dar iken (başka kutunun/merkezin ajan kuyruğunu okuyamıyorsa) cron + açma bayrağı yazar.
@@ -10,7 +10,7 @@ description: >
 # postane-postaci — postacıyı bir kutuya taşıyan paket
 
 **Ne:** `scripts/postaci.mjs` (+ `postane.mjs` · `ajan-adlari.mjs` · `ulid.mjs`) cloudtop `infra/postane` dosyalarının BİREBİR kopyasıdır (`scripts/KAYNAK.sha256`). Değişiklik kaynakta (cloudtop) yapılır, buraya taşınır; kopya elle düzenlenmez.
-**Kurulum betiği:** `bash scripts/postaci-kutu.sh` (KURU) · `--uygula` · `--kapat`. Sınav: `bash scripts/postaci-kutu.test.sh` (12 kapı, mutantlı).
+**Kurulum betiği:** `bash scripts/postaci-kutu.sh` (KURU) · `--uygula` · `--kapat`. Sınav: `bash scripts/postaci-kutu.test.sh` (14 kapı, mutantlı).
 
 ## Sınırlar (kodda)
 1. **İzinli kutu listesi sabit** (17 ekip kutusu); listede olmayan kutuda `--uygula` reddedilir.

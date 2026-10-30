@@ -31,9 +31,12 @@ rc=$(kos); ok "S1 KURU: rc 0, crontab ve bayrak YAZILMADI" '[ "$rc" = 0 ] && [ !
 ok "S1b jeton değeri çıktıda geçmez" '! grep -q "$GIZLI" "$T/cikti"'
 rc=$(kos --uygula); ok "S2 --uygula (dar jeton, code): kurulur, bayrak yazılır, satır crontab ve kalıcı kopyada TEK" '[ "$rc" = 0 ] && [ -e "$T/bayrak" ] && [ "$(grep -c "postaci.mjs" "$T/ct-depo")" = 1 ] && [ "$(grep -c "postaci.mjs" "$T/kalici")" = 1 ]'
 POSTANE_URL="http://127.0.0.1:$PORT" POSTACI_JETON="$T/jeton" OTURUM_DIZIN="$T/oturum" BAYRAK="$T/bayrak" CRONTAB_KOMUT="$T/crontab" KALICI_CRON="$T/kalici" FLOCK_DOSYA="$T/kilit" bash "$K" --uygula >/dev/null 2>&1
+ok "S2c cron satırına node MUTLAK yolla yazılır (cron PATH dar)" 'grep -qE " /[^ ]*node --disable-warning" "$T/ct-depo"'
 ok "S2b ikinci --uygula idempotent: satır yine TEK" '[ "$(grep -c "postaci.mjs" "$T/ct-depo")" = 1 ]'
-touch "$T/port.genis"; rc=$(kos --uygula); rm -f "$T/port.genis"
-ok "S3 GENİŞ jeton (SERDAR kuyruğu 200): rc 1, kurulum YOK, bayrak YOK" '[ "$rc" = 1 ] && [ ! -e "$T/ct-depo" ] && [ ! -e "$T/bayrak" ] && grep -q "jeton GENİŞ" "$T/cikti"'
+touch "$T/port.genis" "$T/port.menzil"; rc=$(kos --uygula); rm -f "$T/port.genis" "$T/port.menzil"
+ok "S3 GENİŞ jeton (SERDAR kuyruğu 200, pilot olmayan kutu): rc 1, kurulum YOK, bayrak YOK" '[ "$rc" = 1 ] && [ ! -e "$T/ct-depo" ] && [ ! -e "$T/bayrak" ] && grep -q "jeton GENİŞ" "$T/cikti"'
+rm -f "$T/ct-depo" "$T/bayrak"; touch "$T/port.genis"; rc=$(kos --uygula); rm -f "$T/port.genis"
+ok "S3b pilot kutu (code) jetonu bilerek geniş: dar yetki şartı uygulanmaz, kurulur" '[ "$rc" = 0 ] && [ -e "$T/bayrak" ] && grep -q "pilot kutu" "$T/cikti"'
 touch "$T/port.olcumsuz"; rc=$(kos --uygula); rm -f "$T/port.olcumsuz"
 ok "S4 ölçülemeyen yetki (500): rc 1, kurulum YOK (ölçülemeyen yeşil sayılmaz)" '[ "$rc" = 1 ] && [ ! -e "$T/ct-depo" ] && [ ! -e "$T/bayrak" ] && grep -q "ÖLÇÜLEMEDİ" "$T/cikti"'
 touch "$T/port.sohbet"; rc=$(kos --uygula); rm -f "$T/port.sohbet"

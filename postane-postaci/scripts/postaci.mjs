@@ -10,6 +10,7 @@
  *  · Postacı KENDİ içerik üretmez: ilettiği metin yalnız postaneden `al` ile gelen mesajdır (başlık satırı mesajın alanlarından kurulur).
  *  · Her teslim denemesi postane olayı olur: 'iletildi' ya da 'iletilemedi' (+neden). İletilemezse mesaj 'teslim' durumunda kalır, kirası
  *    dolunca yeniden görünür, 3. denemeden sonra ölü mektup — sessiz düşme yok.
+ *  · Meşgul koltuk (busy/waiting): daha önce iletilmiş mektup yeniden iletilmez (ertelendi) — kira dolması deneme yakmaz; koltuk boşalınca sürer.
  *  · Oturum eşlemesi KAYITTAN (tmux oturum adı → ajan listesi); eşleşmeyen / ölü süreç / soketi olmayan oturuma teslim YOK.
  *  · Sürüm kapısı: peerProtocol 1 dışındaki kayıt atlanır (protokol sürüme bağlı, 2.1.310'da ölçüldü).
  */
@@ -18,13 +19,23 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { adlariKur, MAX_DENEME } from './postane.mjs';
+/** Çalışan koltuk durumları (oturum kaydındaki `status`): bu durumda daha önce iletilmiş mektup yeniden basılmaz (görev …CQ33DNM). */
+export const MESGUL = ['busy', 'waiting'];
 
 const PROTOKOL = 1;
 
 export const yasiyor = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
 
-/** Kayıt dizininden ajan → oturum haritası. Anahtar OKUNMAZ (ayrı, teslim anında). */
-export function oturumlariOku(dizin, adlar, { canli = yasiyor } = {}) {
+/** Bu kutunun pid alanı, oturum kaydındaki `pidDomain` biçiminde (`linux::pid:[N]`). Okunamazsa null. */
+export function kutuAlani() { try { return `linux::${fs.readlinkSync('/proc/self/ns/pid')}`; } catch { return null; } }
+
+/**
+ * Kayıt dizininden ajan → oturum haritası. Anahtar OKUNMAZ (ayrı, teslim anında).
+ * Kayıt dizini 17 kutuda ORTAKTIR: başka kutunun oturumu burada görünür, pid'i bu kutuda tesadüfen canlı olabilir ve soketi bu kutuda yoktur
+ * (teslim denemesi 3'te ölü mektup yapar). Bu yüzden `pidDomain` bu kutunun alanıyla AYNI değilse oturum atlanır. FAIL-CLOSED:
+ * kaydın `pidDomain`ı yoksa / metin değilse, ya da bu kutunun alanı okunamazsa (null) oturum ATLANIR (ölçüldü: canlı kayıtların 19'u da alanı taşıyor).
+ */
+export function oturumlariOku(dizin, adlar, { canli = yasiyor, alan = kutuAlani() } = {}) {
   const harita = new Map();
   let dosyalar = [];
   try { dosyalar = fs.readdirSync(dizin).filter((f) => /^\d+\.json$/.test(f)); } catch { return harita; }
@@ -33,6 +44,7 @@ export function oturumlariOku(dizin, adlar, { canli = yasiyor } = {}) {
     try { k = JSON.parse(fs.readFileSync(path.join(dizin, f), 'utf8')); } catch { continue; }
     if (!k || typeof k !== 'object' || !Number.isInteger(k.pid) || k.peerProtocol !== PROTOKOL) continue;
     if (typeof k.messagingSocketPath !== 'string' || !k.messagingSocketPath || typeof k.tmux !== 'string') continue;
+    if (typeof k.pidDomain !== 'string' || !alan || k.pidDomain !== alan) continue;   // başka kutunun oturumu / alansız kayıt / bu kutunun alanı okunamadı → atla (fail-closed)
     const ajan = adlar.coz(k.tmux.split(':')[0]);
     if (!ajan || !canli(k.pid)) continue;
     const eski = harita.get(ajan);
@@ -116,7 +128,7 @@ export async function postaciKuru({ taban, jetonDosya, oturumDizin, adlar = adla
  * Dönüş: iletim sayıları; olayHata = olay yazılamadı; belirsiz = önceki turdan sonuçsuz niyet (yeniden iletilmez).
  */
 export async function postaciTur({ taban, jetonDosya, oturumDizin, adlar = adlariKur(), ilet = iletSoket, canli = yasiyor, log = () => {} }) {
-  const sayac = { iletildi: 0, iletilemedi: 0, oturumsuz: 0, olayHata: 0, belirsiz: 0 };
+  const sayac = { iletildi: 0, iletilemedi: 0, oturumsuz: 0, olayHata: 0, belirsiz: 0, ertelendi: 0 };
   const oturumlar = oturumlariOku(oturumDizin, adlar, { canli });
   for (const [ajan, o] of oturumlar) {
     const o1 = await cagir(taban, jetonDosya, 'GET', `/ozet/${encodeURIComponent(ajan)}`);
@@ -141,6 +153,12 @@ export async function postaciTur({ taban, jetonDosya, oturumDizin, adlar = adlar
         sayac.belirsiz++; if (!yazildi) sayac.olayHata++;
         log(`${m.id} → ${ajan}: önceki iletim sonucu belirsiz (${n}/${MAX_DENEME})${yazildi ? '' : ' · OLAY YAZILAMADI'}`);
         if (n >= MAX_DENEME || !yazildi) continue;
+      }
+      // 1b) Meşgul koltuk (görev …CQ33DNM): mesaj bu oturuma zaten iletilmiş ve kirası koltuk çalışırken dolmuşsa yeniden basılmaz —
+      //     ilk kopya oturumun kuyruğunda bekliyor; yeniden iletim deneme yakar ve 3'te ölü mektup yapar (MUAVİN: 11/11 ölü mektup böyle öldü).
+      //     Mesaj gonderildi'de kalır, deneme artmaz; koltuk boşalınca (idle) normal yeniden iletim sürer.
+      if (MESGUL.includes(o.durum) && olaylar.some((x) => x.tur === 'iletildi')) {
+        sayac.ertelendi++; log(`${m.id} → ${ajan} (pid ${o.pid}, ${o.durum}): ertelendi — daha önce iletildi, koltuk boşalınca yeniden`); continue;
       }
       // 2) Niyet olayı sokete yazmadan ÖNCE: yazılamazsa teslim hiç denenmez (izsiz teslim olmaz).
       if (!(await iletimYaz(taban, jetonDosya, { id: m.id, kim: 'postaci', sonuc: 'basladi', ayrinti: `pid ${o.pid}` }))) {
@@ -169,7 +187,7 @@ export async function postaciSurekli({ taban, jetonDosya, oturumDizin, adlar = a
   bekle = bekleCagir, tur = postaciTur, uyu = (ms) => new Promise((r) => setTimeout(r, ms)), saat = () => Date.now(), dur = () => false, canli = yasiyor, log = () => {} }) {
   const sayac = { tur: 0, uyanma: 0, zamanAsimi: 0, hata: 0, oturumsuz: 0 };
   let sonTur = -Infinity; let bekleme = ilkBeklemeMs; let sonAjanlar = null;
-  const turAt = async () => { sonTur = saat(); sayac.tur++; try { await tur({ taban, jetonDosya, oturumDizin, adlar, canli, log }); } catch (e) { log('tur hatası: ' + (e.code || e.message)); } };
+  const turAt = async () => { sonTur = saat(); sayac.tur++; try { return await tur({ taban, jetonDosya, oturumDizin, adlar, canli, log }); } catch (e) { log('tur hatası: ' + (e.code || e.message)); return null; } };
   await turAt();                                                                            // yeniden başlama: kaldığı yerden — bekleyen ne varsa hemen
   while (!dur()) {
     const ajanlar = [...oturumlariOku(oturumDizin, adlar, { canli }).keys()];
@@ -183,13 +201,39 @@ export async function postaciSurekli({ taban, jetonDosya, oturumDizin, adlar = a
     try { r = await bekle({ taban, jetonDosya, ajanlar, sn: bekleSn }); bekleme = ilkBeklemeMs; }
     catch (e) { sayac.hata++; log(`merkeze bağlanılamadı (${e.code || e.message}) — ${bekleme} ms sonra yeniden`); await uyu(bekleme); bekleme = Math.min(bekleme * 2, enCokBeklemeMs); if (saat() - sonTur >= yedekMs) await turAt(); continue; }
     if (dur()) break;
-    if (r.bekleyen && Object.keys(r.bekleyen).length) { sayac.uyanma++; await turAt(); await uyu(200); }   // 200 ms: hep-başarısız mesajda sıkı döngü olmasın
+    if (r.bekleyen && Object.keys(r.bekleyen).length) {
+      sayac.uyanma++; const s = await turAt();
+      // 200 ms: hep-başarısız mesajda sıkı döngü olmasın. Tur yalnız ertelediyse (meşgul koltuk) bekleyen sayısı düşmez ve /bekle hemen döner → bekleSn bekle.
+      await uyu(s && s.ertelendi > 0 && !(s.iletildi || s.iletilemedi || s.belirsiz) ? bekleSn * 1000 : 200);
+    }
     else { sayac.zamanAsimi++; if (saat() - sonTur >= yedekMs) await turAt(); }
   }
   return sayac;
 }
 
 /** Uzun bekleme çağrısı: HTTP hatası / geçersiz cevap = atılan hata (üstel geri çekilmeye girer). */
+/** Ad çözümleyicisini yalnız `izinli` ajanlara daraltır (jetonun okuyabileceği ad dışındaki oturum eşleşmez → 403 turu boşa gitmez). */
+export function adlariKisitla(adlar, izinli) {
+  const set = new Set(izinli.map((x) => adlar.coz(x)).filter(Boolean));
+  return { liste: adlar.liste.filter((a) => set.has(adlar.coz(a))), coz: (ad) => { const a = adlar.coz(ad); return a && set.has(a) ? a : null; } };
+}
+
+/**
+ * Jetonun KENDİ iznine göre ad listesi: /ben ajan listesi verdiyse (kutu jetonu) ona daraltılır; okur jetonu ya da ajansız kutu jetonu BOŞ listeye
+ * daralır (fail-closed). Merkez jetonu ya da /ben ulaşılamazsa verilen liste AYNEN kalır (neden `log`a yazılır). Dönüş: { adlar, kaynak: 'jeton'|'varsayilan', neden? }.
+ */
+export async function adlariJetondanTuret({ taban, jetonDosya, adlar = adlariKur(), cagri = cagir, log = () => {} }) {
+  let k;
+  try { k = await cagri(taban, jetonDosya, 'GET', '/ben'); } catch (e) { log('ajan listesi izinden alınamadı: ' + (e.code || e.message)); return { adlar, kaynak: 'varsayilan', neden: 'ben_ulasilamadi' }; }
+  if (k.kod !== 200 || !k.j || k.j.ok !== true) { log('ajan listesi izinden alınamadı: HTTP ' + k.kod); return { adlar, kaynak: 'varsayilan', neden: 'ben_hata' }; }
+  if (k.j.merkez) return { adlar, kaynak: 'varsayilan', neden: 'merkez' };
+  // İzin alanı yoksa (F2-2 öncesi geçit /ben yalnız {ok,kutu} döner — ölçüldü 30 Eki) izin BİLİNMİYOR: liste aynen kalır, sessiz daralma yok
+  if (!('ajanlar' in k.j) && k.j.okur === undefined) { log('ajan listesi izinden alınamadı: /ben izin alanı taşımıyor (eski geçit)'); return { adlar, kaynak: 'varsayilan', neden: 'ben_alansiz' }; }
+  // FAIL-CLOSED: okur jetonu teslim edemez (/iletim 403), ajansız kutu jetonu hiçbir ajan adına işlem yapamaz (geçit kuralı) → liste BOŞ, varsayılana açılmaz
+  if (k.j.okur === true || !Array.isArray(k.j.ajanlar) || !k.j.ajanlar.length) { const neden = k.j.okur ? 'okur' : 'liste_bos'; log(`ajan listesi izinden: ${neden} — hiçbir oturuma teslim yok`); return { adlar: adlariKisitla(adlar, []), kaynak: 'jeton', neden }; }
+  return { adlar: adlariKisitla(adlar, k.j.ajanlar), kaynak: 'jeton' };
+}
+
 export async function bekleCagir({ taban, jetonDosya, ajanlar, sn }) {
   const k = await cagir(taban, jetonDosya, 'GET', `/bekle?ajanlar=${encodeURIComponent(ajanlar.join(','))}&sn=${sn}`);
   if (k.kod !== 200 || !k.j || k.j.ok !== true) throw Object.assign(new Error(`bekle HTTP ${k.kod}`), { code: `HTTP_${k.kod}` });
@@ -201,7 +245,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const jetonDosya = process.env.POSTACI_JETON || '/config/defter-jeton';
   const oturumDizin = process.env.OTURUM_DIZIN || '/config/.claude/sessions';
   const ek = (process.env.POSTANE_EK_ADLAR || '').split(',').map((s) => s.trim()).filter(Boolean);
-  const adlar = adlariKur(ek);
+  const gunluk = (m) => console.log(new Date().toISOString(), m);
+  const turet = process.env.POSTANE_AJANLAR_IZINDEN !== '0' ? await adlariJetondanTuret({ taban, jetonDosya, adlar: adlariKur(ek), log: gunluk }) : { adlar: adlariKur(ek), kaynak: 'varsayilan', neden: 'kapali' };
+  const adlar = turet.adlar;
+  if (!process.argv.includes('--kuru')) gunluk(`ajan listesi: ${turet.kaynak}${turet.neden ? ' (' + turet.neden + ')' : ''} · ${adlar.liste.length} ad`);
   const dongu = async () => { try { await postaciTur({ taban, jetonDosya, oturumDizin, adlar, log: (m) => console.log(new Date().toISOString(), m) }); } catch (e) { console.log(new Date().toISOString(), 'tur hatası:', e.code || e.message); } };
   if (process.argv.includes('--kuru')) {
     postaciKuru({ taban, jetonDosya, oturumDizin, adlar }).then((r) => {

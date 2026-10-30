@@ -17,11 +17,21 @@ JETON="${POSTACI_JETON:-/config/defter-jeton}"
 OTURUM_DIZIN="${OTURUM_DIZIN:-/config/.claude/sessions}"
 POSTANE_URL="${POSTANE_URL:-http://cloudtop-postane:8797}"
 export POSTACI_JETON="$JETON" OTURUM_DIZIN POSTANE_URL
-NODE="${NODE:-node}"
+# node yolu GÖMÜLMEZ, ölçülür: ortamdaki node (>= 22.13) → yoksa nvm'deki en yeni sürüm. Cron satırına mutlak yol yazılır (cron PATH'i dardır).
+nodeBul() {
+  local a c
+  for c in "$(command -v node 2>/dev/null)" $(ls -d "${NVM_DIZIN:-/config/.nvm/versions/node}"/v*/bin/node 2>/dev/null | sort -V -r); do
+    [ -n "$c" ] && [ -x "$c" ] && "$c" -e 'const [a,b]=process.versions.node.split(".").map(Number); process.exit(a>22||(a===22&&b>=13)?0:1)' 2>/dev/null && { echo "$c"; return 0; }
+  done
+  return 1
+}
+NODE="${NODE:-$(nodeBul || echo node)}"
+NODE_MUTLAK="$(command -v "$NODE" 2>/dev/null || echo "$NODE")"
 CRONTAB="${CRONTAB_KOMUT:-crontab}"
 KALICI="${KALICI_CRON:-/config/crontabs/abc}"
 LOCK="${FLOCK_DOSYA:-/config/.filo/postaci.lock}"
 IZINLI_KUTULAR="akar code enis huma huzur maiset medigate menzil mihenk mmex nazir nova revak sedir tellal tez vekatip"   # sabit; kutu eklemek = bu satırı değiştiren ayrı, sınıflı PR
+PILOT_KUTU="code"   # tek istisna: pilot kutunun jetonu merkez yetkilidir (izin dosyasında merkez:true)
 OLCUM_AJANI="SERDAR"   # merkez ajanı: hiçbir ekip kutusunun kuyruğu değil; dar jeton bunu OKUYAMAZ
 SATIR_ISARET="# POSTANE postacısı (Sx postane-postaci)"
 MOD=kuru
@@ -47,7 +57,7 @@ if [ -n "$KUTU_ADI" ] && [[ " $IZINLI_KUTULAR " == *" $KUTU_ADI "* ]]; then echo
 DAR="$(JETON_DOSYA="$JETON" OLC="$OLCUM_AJANI" "$NODE" -e 'const fs=require("fs");fetch(process.env.POSTANE_URL+"/kutu/"+encodeURIComponent(process.env.OLC)+"?durum=gonderildi",{headers:{"x-defter-jeton":fs.readFileSync(process.env.JETON_DOSYA,"utf8").trim()}}).then(r=>console.log(r.status)).catch(()=>console.log("yok"))' 2>/dev/null)"
 case "$DAR" in
   403) echo "  ✓ dar yetki ($OLCUM_AJANI kuyruğu 403)" ;;
-  200) echo "  ✗ jeton GENİŞ ($OLCUM_AJANI kuyruğu 200) — izin dosyasında bu kutunun jetonuna ajanlar:[kendi ajanları] verilmeli"; hata=1 ;;
+  200) if [ "$KUTU_ADI" = "$PILOT_KUTU" ]; then echo "  ✓ pilot kutu ($PILOT_KUTU): jeton bilerek merkez yetkili — dar yetki şartı bu kutuya uygulanmaz"; else echo "  ✗ jeton GENİŞ ($OLCUM_AJANI kuyruğu 200) — izin dosyasında bu kutunun jetonuna ajanlar:[kendi ajanları] verilmeli"; hata=1; fi ;;
   *)   echo "  ✗ dar yetki ÖLÇÜLEMEDİ ($OLCUM_AJANI kuyruğu: ${DAR:-boş}) — ölçülemeyen yeşil sayılmaz"; hata=1 ;;
 esac
 adim "oturum kayıt dizini okunur ($OTURUM_DIZIN)" test -r "$OTURUM_DIZIN"
@@ -56,7 +66,7 @@ if [ "$KURU_RC" -eq 0 ]; then echo "  ✓ kuru tur (eşleşme + bekleyen, hiçbi
 printf '%s\n' "$KURU_CIKTI" | sed 's/^/      /'
 
 if [ "$hata" -ne 0 ]; then echo "✗ ön kontrol KIRMIZI — kurulum yapılmadı"; exit 1; fi
-SATIR="* * * * * sleep 12 && [ -f $BAYRAK ] && mkdir -p /config/.filo && flock -n $LOCK $NODE --disable-warning=ExperimentalWarning $JS >> /config/.filo/postaci-cron.log 2>&1 || true"
+SATIR="* * * * * sleep 12 && [ -f $BAYRAK ] && mkdir -p /config/.filo && flock -n $LOCK $NODE_MUTLAK --disable-warning=ExperimentalWarning $JS >> /config/.filo/postaci-cron.log 2>&1 || true"
 if [ "$MOD" = kuru ]; then
   echo "KURU: ön kontroller yeşil. --uygula şunu yapar: crontab'a tek satır ekler (idempotent; $SATIR_ISARET) + kalıcı kopyayı ($KALICI) günceller + bayrak yazar ($BAYRAK). Şu an HİÇBİR ŞEY değişmedi."
   exit 0
