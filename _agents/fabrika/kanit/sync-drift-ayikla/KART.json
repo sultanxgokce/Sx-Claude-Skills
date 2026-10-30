@@ -1,6 +1,6 @@
 {
   "is": "sync-drift-ayikla",
-  "cumle": "Beceri eşitleme kuru koşusundaki bilinen içerik farkları tek tek ayıklanır: doğru olan kaynağa taşınıp sürümü artırılır, çöp kurulu kopya reise ezdirilmek üzere listelenir",
+  "cumle": "Kurulu kopyada kalan değerli düzenlemeler whatsapp-gonder, railway-erisim, notion-erisim, kapimda, sultan-alarmi ve durum-raporu becerilerinde kaynağa taşınıp sürümü artırılır; eski ya da çöp kurulu kopyalar reise ezdirilmek üzere listelenir",
   "istedi": "SERDAR",
   "aldi": "BENNÂ",
   "zaman": "2026-10-30T18:17:15+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-30T18:47:52+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sync-drift-kapi-olcum",
+      "tur_sifir": 0
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [
@@ -25,5 +32,37 @@
   "olcum_yeri": "node sync-skills.mjs kuru koşu: İÇERİK-DRIFT satır sayısı önce ve sonra",
   "sayi_uyarilari": [],
   "sayi_bicim_eksikleri": [],
-  "sayi_bicim_uyarisi": false
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BENNÂ",
+      "oturum": "ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c",
+      "gerekce": "BÂNİ kararı 30 Eki 18:5x: göz istemi 107,8 KB > 100 KB; #594 ikiye bölünür",
+      "zaman": "2026-10-30T18:47:43+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BENNÂ",
+      "oturum": "ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sync-drift-kapi-olcum) — kapi-sinavi ve olcum-disiplini becerilerinin kurulu kopyadaki değerli düzenlemeleri kaynağa taşınıp sürümü artırılır (ayrı PR, ayrı göz)",
+      "zaman": "2026-10-30T18:47:52+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Beceri eşitleme kuru koşusundaki bilinen içerik farkları tek tek ayıklanır: doğru olan kaynağa taşınıp sürümü artırılır, çöp kurulu kopya reise ezdirilmek üzere listelenir",
+      "zaman": "2026-10-30T18:47:52+03:00",
+      "kalan_kart": "sync-drift-kapi-olcum"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-30T18:47:52+03:00",
+      "kalan_kart": "sync-drift-kapi-olcum",
+      "kalan": "kapi-sinavi ve olcum-disiplini becerilerinin kurulu kopyadaki değerli düzenlemeleri kaynağa taşınıp sürümü artırılır (ayrı PR, ayrı göz)",
+      "tur_sifir": 0,
+      "oturum": "ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c"
+    }
+  ]
 }
