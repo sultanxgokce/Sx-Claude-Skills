@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "hasat-bulgu-tazelik",
+  "pr": "592",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T16:43:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-hayalet-yuzey-mutant-sonra.txt (yesil → gecersiz) — döngüdeki | ayracı çapayı böldü; üretilen mutant hedeflenen değişiklik değildi (59 kapı düştü) — doğru çapayla yeniden ölçüldü · BENNÂ;olcum-tarih-son-parca-mutant-sonra.txt (yesil → gecersiz) — mutant sözdizimi hatasıyla çöktü (SyntaxError); düşen kapılar hatadan, sahte yakalama — temiz mutantla yeniden ölçüldü · BENNÂ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik",
+  "dal": "hasat-bulgu-tazelik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 95321,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "olculemedi",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Hasat kapısı; son doğrulama, 7 günlük sınır, yüzey birleşmesi, ölçülemedi sonucu ve düzelmiş bulgunun notla kapanması için güçlü sınavlarla eklenmiş. Ancak görev kartındaki “zorunlu” güvence tam sağlanmıyor: doğrudan `gorev.sh durum <id> acik` yolu kapıyı bütünüyle aşabiliyor; ayrıca eksik seçenek değeri betiği sonsuz döngüye sokabilir, önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Kapı merkezi geçişte zorunlu değil; havuz kaydı doğrudan `gorev.sh durum <id> acik` ile doğrulamasız açılabiliyor. Bu nedenle kartın “bulgu yeniden ölçülmeden hasat edilmez” talebi yalnız yeni sarmalayıcıları kullanan akışlarda geçerli.",
+        "kanit": "Eklenen SKILL metni açıkça “`gorev.sh durum <id> acik` ile doğrudan açılış hâlâ kapısızdır” diyor. Sınav A1-A7 yalnız `hasat.sh ac` yolunu, `sirada-bak` sınavları da istemci kapısını ölçüyor; doğrudan geçişin reddedildiğini gösteren ölçüm yok.",
+        "konum": "gunluk-plan/SKILL.md: eklenen HASAT KAPISI bölümündeki “Sınır” paragrafı; olcum-hasat-sinavi-sonra.txt A1-A7",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Değer bekleyen bir seçenek değersiz verilirse başarısız `shift 2` sonrası argüman listesi değişmediğinden seçenek ayrıştırma döngüsü sonsuza kadar sürebilir.",
+        "kanit": "`set -uo pipefail` kullanılıyor, `set -e` yok; seçenek dalları örneğin `--taze-gun) TAZE_GUN=\"${2:-}\"; shift 2 ;;` biçiminde. Tek kalan argümanda `shift 2` başarısız olur fakat döngüyü sonlandıran bir denetim bulunmaz. Ölçümlerde U3 yalnız `--taze-gun 0`, U4 ise kısa gerekçe durumunu kapsıyor; eksik seçenek değeri vakası yok.",
+        "konum": "gunluk-plan/scripts/hasat.sh: seçenek ayrıştıran `while [ $# -gt 0 ]` bloğu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçümler `hasat-sinavi` için 77/77, `sirada-bak-sinavi` için 127/127 ve `gorev-yolu-sinavi` için 10/10 yeşil; mutasyon kayıtları önemli kapıların sınavlarca yakalandığını gösteriyor. İki geçersiz mutasyon kaydı doğru biçimde dışlanmış ve temiz tekrarları mevcut. Buna karşın kanıt, merkezi `gorev.sh` geçişini değil yalnız sarmalayıcı akışları ölçüyor; eksik seçenek değeri vakasını da kapsamıyor."
+  }
+}
