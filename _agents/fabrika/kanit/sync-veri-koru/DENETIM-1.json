@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sync-veri-koru",
+  "pr": "598",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T19:57:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sync-veri-koru",
+  "dal": "sync-veri-koru",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 43141,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 39702
+  },
+  "dalgic": "olculemedi",
+  "bas": "e7a7f7304af67ad8768bd839450832446b0d9b1a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Beceri çalışma verisi içerik izinden çıkarılmış, kurulum ve zorlamalı kurulum sırasında korunmuş; gerçek kod farkı ise görünür kalmış. Odak sınavının kırmızıdan 22/22 yeşile dönmesi ve beş ayrı mutasyonun ilgili kapıları düşürmesi üretime hazır hükmünü destekliyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Odak ölçüm çifti önce 18 geçti/4 kaldı ve sonra 22 geçti/0 kaldı sonucunu gösteriyor; V1-V5 talebin iz, koruma, gerçek kod farkı, temizlik ve kaynak verisinin hedefi ezmemesi boyutlarını doğrudan ölçüyor. Beş mutasyon kaydı da bozuk davranışların sınav tarafından yakalandığını gösteriyor. Gerçek kuru koşunun önce ve sonra rc=1 olması, çıktılardaki iş kartından bağımsız planlı güncellemeler nedeniyle bu değişiklik için başarı ölçüsü değil; odak sınavındaki yeşil gerçek ölçümü geçersiz kılmıyor."
+  }
+}

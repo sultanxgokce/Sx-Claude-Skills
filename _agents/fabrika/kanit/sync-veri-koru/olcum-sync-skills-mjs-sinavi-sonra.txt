@@ -1,0 +1,20 @@
+$ node sync-skills.test.mjs
+# rc=0 sure=0.3s zaman=2026-10-30T19:56:04+03:00
+--- stdout ---
+
+  sync-skills — bekçi sesi testleri
+
+  ✓ G1 içerik aynıysa drift YOK
+  ✓ G1 temiz koşuda RC=0
+  ✓ G2 eşit-sürüm-farklı-içerik YAKALANIR
+  ✓ G2 drift varken RC=1 (sesi çıkar)
+  ✓ G3 --apply force-suz üzerine YAZMAZ
+  ✓ G3 --apply drift varken yine RC=1
+  ✓ G4 --force üzerine yazar
+  ✓ G4 --force sonrası RC=0
+  ✓ G5 __pycache__ drift sayılmaz
+  ✓ G5 yanlış-pozitif yok → RC=0
+
+  özet: 10 geçti · 0 kaldı
+
+--- stderr ---

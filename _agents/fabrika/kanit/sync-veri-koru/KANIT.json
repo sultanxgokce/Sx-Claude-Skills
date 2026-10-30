@@ -1,0 +1,210 @@
+{
+  "is": "sync-veri-koru",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T19:56:17+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kuru-kosu",
+      "asama": "once",
+      "dosya": "olcum-gercek-kuru-kosu-once.txt",
+      "sha256": "f86a1b82d252409e821b7ff58314df4239fc43643e4faf37598020a829abb778",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-eski-kuru.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T19:56:00+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "84874476b7874df08387a97d4c4837d1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "veri-sinavi",
+      "asama": "once",
+      "dosya": "olcum-veri-sinavi-once.txt",
+      "sha256": "a672ab11ac80a88c2bc29d5d59ee4d616ad9cca370dfddba5e6f8fef3d73ca0d",
+      "komut": [
+        "env",
+        "SYNC_SKILLS_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant4/eski-sync-skills.mjs",
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T19:56:02+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3ba55c3ddf4e4f0a9dc403a493a85847"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "veri-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-veri-sinavi-sonra.txt",
+      "sha256": "699f469c64ad4a76ab4417ce531377c3281b45cc5661a0c48d8a8d30c6d91fa6",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:04+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "01eede53625744e8b3c1fba4c16ad16b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-skills-mjs-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sync-skills-mjs-sinavi-sonra.txt",
+      "sha256": "0939f5255a57502b510a3ffa775a598eff90533e807a1d909d5f79a5f969dedf",
+      "komut": [
+        "node",
+        "sync-skills.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:04+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bbb8e8b1a2b9418d8871cf90e48c4b22"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-iz-veriyi-sayar",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-iz-veriyi-sayar-sonra.txt",
+      "sha256": "3f380a784799499cb8f8328d9ffe984ba61060108127937b2247b4947394086b",
+      "komut": [
+        "env",
+        "SYNC_SKILLS_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant4/iz-veriyi-sayar.mjs",
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:06+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "veri-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "62d9584ad63b471f96af79807afec56e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kurulum-hepsini-siler",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kurulum-hepsini-siler-sonra.txt",
+      "sha256": "74cccd6fec407535836a328b6338dcd32681aa80b8fe1dd7670324c31fbff2ee",
+      "komut": [
+        "env",
+        "SYNC_SKILLS_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant4/kurulum-hepsini-siler.mjs",
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:08+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "veri-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c4ce79129fe24139af7ceda6a2995f64"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-her-sey-veri",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-her-sey-veri-sonra.txt",
+      "sha256": "fc605a342814695d7758b6d4ff8970293fa90d65ff81cdfd1b42ef02cea26f79",
+      "komut": [
+        "env",
+        "SYNC_SKILLS_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant4/her-sey-veri.mjs",
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:12+03:00",
+      "sure_sn": 3.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "veri-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7422fec218364395b807c57a9c50d8c6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kaynak-veriyi-ezer",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kaynak-veriyi-ezer-sonra.txt",
+      "sha256": "5963f34e0afd83c7424979ebbcd4a3a64a0360b401ef20964bc8b258c7d740c9",
+      "komut": [
+        "env",
+        "SYNC_SKILLS_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant4/kaynak-veriyi-ezer.mjs",
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:13+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "veri-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "cbe1b199d8d643159250ad567918806e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-temizlik-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-temizlik-yok-sonra.txt",
+      "sha256": "3b82e063de9def460cc6796c19d78456e05a9888326f117a802ece29865ddc08",
+      "komut": [
+        "env",
+        "SYNC_SKILLS_SUT=/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant4/temizlik-yok.mjs",
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T19:56:15+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "veri-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "879bbb2648b8433b85231127202cd2c3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kuru-kosu",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kuru-kosu-sonra.txt",
+      "sha256": "4be762b5ab767df8f3d1f22d14d45e7808ebe30ac18570eeb8a027a17fa3bd95",
+      "komut": [
+        "node",
+        "sync-skills.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T19:56:17+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2f0a4de1cfc44bc2872c44e9e3c4eafa"
+    }
+  ],
+  "imza": "102f9b4abbb0e15dd92f81044ccb19ab488b8ef30ceb0045d5f453d47605fb5b"
+}

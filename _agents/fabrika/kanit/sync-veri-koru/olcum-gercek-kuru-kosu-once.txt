@@ -1,0 +1,119 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-eski-kuru.sh
+# rc=1 sure=1.7s zaman=2026-10-30T19:56:00+03:00
+--- stdout ---
+  kaynak: git deposu olarak ölçülemedi (dal/sha bilinmiyor)
+
+  sync-skills — CHECK (dry-run)
+
+  = whatsapp-baileys → _global: güncel (v1.2.2)
+  = whatsapp-gonder → _global: güncel (v1.2.0)
+  = cloudflare-erisim → _global: güncel (v1.6.0)
+  ↑ cloudflare-erisim → nexus: güncelle v1.5.0 → v1.6.0
+  ↑ cloudflare-erisim → cortex: güncelle v1.5.0 → v1.6.0
+  = railway-erisim → _global: güncel (v1.1.1)
+  = railway-erisim → nexus: güncel (v1.1.1)
+  = railway-erisim → cortex: güncel (v1.1.1)
+  = erisim-skill-fabrikasi → _global: güncel (v1.1.0)
+  = erisim-skill-fabrikasi → nexus: güncel (v1.1.0)
+  = erisim-skill-fabrikasi → cortex: güncel (v1.1.0)
+  = ekip-kur → _global: güncel (v1.8.0)
+  = pr-onay → _global: güncel (v1.1.0)
+  = sert-teslim → _global: güncel (v0.2.2)
+  = sert-teslim → mmex: güncel (v0.2.2)
+  = kesif → _global: güncel (v0.2.2)
+  = kesif → mmex: güncel (v0.2.2)
+  = sert-dongu → _global: güncel (v0.2.0)
+  = pcloud-erisim → _global: güncel (v1.3.0)
+  = pcloud-erisim → nexus: güncel (v1.3.0)
+  = pcloud-erisim → cortex: güncel (v1.3.0)
+  = notion-erisim → _global: güncel (v1.0.1)
+  = notion-erisim → nexus: güncel (v1.0.1)
+  = notion-erisim → cortex: güncel (v1.0.1)
+  = elogo-erisim → _global: güncel (v1.8.0)
+  = elogo-erisim → nexus: güncel (v1.8.0)
+  = elogo-erisim → cortex: güncel (v1.8.0)
+  = erisim → _global: güncel (v1.0.0)
+  = erisim → nexus: güncel (v1.0.0)
+  = erisim → cortex: güncel (v1.0.0)
+  = vault-cek → _global: güncel (v1.4.1)
+  = vault-cek → nexus: güncel (v1.4.1)
+  = vault-cek → cortex: güncel (v1.4.1)
+  = seyir-defteri → _global: güncel (v1.2.0)
+  = seyir-defteri → nexus: güncel (v1.2.0)
+  = seyir-defteri → mmex: güncel (v1.2.0)
+  ↑ seyir-defteri → vekatip: güncelle v1.0.0 → v1.2.0
+  = ahi → _global: güncel (v0.4.0)
+  = sultanca → _global: güncel (v0.1.0)
+  + sultan-ogren → _global: YENİ kurulum (v0.1.0)
+  = sunucu-kur → _global: güncel (v1.0.0)
+  ↑ tescil → _global: güncelle v0.9.0 → v0.9.1
+  = kayit-damgasi → _global: güncel (v1.0.0)
+  = worktree-hijyen → _global: güncel (v0.2.0)
+  = resume-banner → _global: güncel (v0.1.0)
+  = iskan → _global: güncel (v0.11.6)
+  = iskan → cloudtop: güncel (v0.11.6)
+  = federe-os-cekirdek → _global: güncel (v0.7.0)
+  = kapimda → _global: güncel (v1.8.0)
+  = layiha → _global: güncel (v1.16.0)
+  = kasif-tara → _global: güncel (v1.4.2)
+  = mucit-suz → _global: güncel (v1.9.0)
+  = layiha-fabrikasi → _global: güncel (v1.5.0)
+  = kapi-yolu → _global: güncel (v1.0.0)
+  = ekip → _global: güncel (v1.1.0)
+  + kesif-hatti → _global: YENİ kurulum (v1.1.1)
+  = seans → _global: güncel (v1.17.0)
+  = layiha-kapisi → _global: güncel (v0.1.0)
+  = ui-tasarim-akisi → _global: güncel (v0.7.1)
+  = sultan-eli → _global: güncel (v0.1.0)
+  = sultan-alarmi → _global: güncel (v0.1.3)
+  = maas-kapisi → _global: güncel (v0.1.0)
+  ⚠ plan-dekor → _global: İÇERİK-DRIFT — sürüm aynı (v0.6.0) ama içerik farklı
+     → kaynak 46e198fb3e19 ≠ kurulu 742580f9716a. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ plan-motor → _global: HEDEF DAHA YENİ (hedef v1.6.0 > kaynak v1.4.0) — DRIFT!
+     → kurulu kopya elle düzenlenmiş olabilir. Önce kaynağa geri taşı, ya da --force ile ez.
+  = kapi-sinavi → _global: güncel (v1.3.0)
+  ⚠ olcum-disiplini → _global: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak 5170b8ba323e ≠ kurulu 6ce78834b3eb. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = gunluk-plan → _global: güncel (v1.19.0)
+  = gun-ortasi → _global: güncel (v1.3.0)
+  = gorsel-yon → _global: güncel (v0.4.0)
+  = zeyl → _global: güncel (v1.0.1)
+  = zeyl → nexus: güncel (v1.0.1)
+  = zeyl → mmex: güncel (v1.0.1)
+  = zeyl → vekatip: güncel (v1.0.1)
+  = durum-raporu → _global: güncel (v0.3.0)
+  = ekip-iletisim-uzmani → _global: güncel (v0.1.0)
+  = frontend-boost → _global: güncel (v0.5.1)
+  = arayuz-zanaati → _global: güncel (v0.1.0)
+  = sunum-hazirlama → _global: güncel (v0.1.0)
+  = brosur-hazirlama → _global: güncel (v0.1.0)
+  = tasarim-citasi → _global: güncel (v0.1.0)
+  + baglam-nobeti → _global: YENİ kurulum (v0.2.0)
+  = sergi → _global: güncel (v0.1.0)
+  = yazilim-fabrikasi → _global: güncel (v0.27.34)
+  = terminal-onar → _global: güncel (v2.36.3)
+  = canli-sayfa → _global: güncel (v1.2.0)
+  = tarif-kaydi → _global: güncel (v0.1.0)
+  = soluklan → _global: güncel (v1.0.0)
+  = kosu-kaydi → _global: güncel (v0.5.2)
+  = bileyi → _global: güncel (v0.5.0)
+  = bulgu → _global: güncel (v0.6.3)
+  = donus → _global: güncel (v1.0.2)
+  = retro → _global: güncel (v1.4.0)
+  = hafta-kapanis → _global: güncel (v1.1.0)
+  + baglam-karti → _global: YENİ kurulum (v1.0.1)
+  = higgsfield-abonelik → _global: güncel (v1.0.0)
+  = dumen-surucu → _global: güncel (v0.5.0)
+  ↑ oda-kur → _global: güncelle v0.2.0 → v0.2.1
+  = duzen → _global: güncel (v1.1.1)
+  = mesveret → _global: güncel (v0.1.0)
+  = postane-postaci → _global: güncel (v0.2.0)
+
+  özet: 9 planlandı · 88 güncel · 3 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---

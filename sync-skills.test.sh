@@ -3,7 +3,7 @@
 # Gerçek /config/.claude'a DOKUNMAZ: her kapı kendi sahte kaynak+hedef ağacıyla koşar.
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SUT="$HERE/sync-skills.mjs"
+SUT="${SYNC_SKILLS_SUT:-$HERE/sync-skills.mjs}"   # SYNC_SKILLS_SUT: mutant koşusu için
 gecen=0; kalan=0
 kapi(){ if [ "$2" = 0 ]; then printf '  ✓ %s\n' "$1"; gecen=$((gecen+1)); else printf '  ✗ %s\n' "$1"; kalan=$((kalan+1)); fi; }
 
@@ -12,7 +12,7 @@ T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 # Sahte repo: sync-skills.mjs + kendi sync-targets.json + tek skill
 _kur() { # $1=kaynak-script-kipi (755/644) $2=sozdizimi(ok/bozuk)
   R="$T/repo$RANDOM"; mkdir -p "$R/deneme-skill/scripts" "$R/hedef"
-  cp "$SUT" "$R/"
+  cp "$SUT" "$R/sync-skills.mjs"
   printf -- '---\nname: deneme-skill\nversion: 1.0.0\n---\ngövde\n' > "$R/deneme-skill/SKILL.md"
   if [ "$2" = ok ]; then printf '#!/usr/bin/env bash\necho merhaba\n' > "$R/deneme-skill/scripts/calis.sh"
   else printf '#!/usr/bin/env bash\nif [ 1 = 1 ]; then\necho eksik-fi\n' > "$R/deneme-skill/scripts/calis.sh"; fi
@@ -98,7 +98,7 @@ echo "── kaynak dal ilanı + bayat kaynak koruması (BHJS8W) ──"
 # Git'li sahte kaynak: uzak (bare) + çalışma kopyası; ikinci klon uzağı ilerletir, kopya fetch eder → origin/main'in gerisinde.
 _git_kur() {  # → $R (git'li kaynak), $UZ (bare uzak)
   UZ="$T/uzak$RANDOM"; git init -q --bare -b main "$UZ" 2>/dev/null
-  R="$T/gkaynak$RANDOM"; mkdir -p "$R"; cp "$SUT" "$R/"
+  R="$T/gkaynak$RANDOM"; mkdir -p "$R"; cp "$SUT" "$R/sync-skills.mjs"
   mkdir -p "$R/deneme-skill/scripts" "$R/hedef"
   printf -- '---\nname: deneme-skill\nversion: 1.0.0\n---\ngövde\n' > "$R/deneme-skill/SKILL.md"
   printf '#!/usr/bin/env bash\necho merhaba\n' > "$R/deneme-skill/scripts/calis.sh"; chmod 755 "$R/deneme-skill/scripts/calis.sh"
@@ -157,6 +157,49 @@ _git_kur; _uzagi_ilerlet; cp "$MUT" "$R/sync-skills.mjs"
 [ -e "$R/hedef/deneme-skill/SKILL.md" ]
 kapi "mutant (RED söküldü): bayat kaynaktan kurulum YAPILIR → B2 bu mutantta düşerdi" $?
 
+
+echo "── çalışma verisi kapıları (görev …ZM36SHM) ──"
+# Kurulu kopyaya ÇALIŞMA VERİSİ konur: kök metrikler.jsonl, alt dizinde metrikler.jsonl, .olcum/ defteri.
+_veri_koy() { # $1=beceri hedef dizini
+  mkdir -p "$1/.olcum" "$1/demo"
+  printf '{"n":1}\n' > "$1/metrikler.jsonl"; printf '{"d":1}\n' > "$1/demo/metrikler.jsonl"
+  printf '{"iddia":"x"}\n' > "$1/.olcum/negatifler.jsonl"
+}
+_veri_ayni() { # $1=beceri hedef dizini → üç veri dosyası içerikleriyle yerinde mi
+  [ "$(cat "$1/metrikler.jsonl" 2>/dev/null)" = '{"n":1}' ] && [ "$(cat "$1/demo/metrikler.jsonl" 2>/dev/null)" = '{"d":1}' ] \
+    && [ "$(cat "$1/.olcum/negatifler.jsonl" 2>/dev/null)" = '{"iddia":"x"}' ]
+}
+
+# V1 · (a) yalnız veri farkı → İÇERİK-DRIFT YOK, kuru koşu güncel, rc 0
+R="$(_kur 755 ok)"; (cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+_veri_koy "$R/hedef/deneme-skill"
+out="$(cd "$R" && node sync-skills.mjs 2>&1)"; rc=$?
+[ "$rc" = 0 ] && ! printf '%s' "$out" | grep -q 'İÇERİK-DRIFT' && printf '%s' "$out" | grep -q 'deneme-skill → _t: güncel'
+kapi "V1 kurulu kopyada yalnız çalışma verisi var → fark YOK (güncel, rc 0)" $?
+
+# V2 · (b) kurulumda veri SİLİNMEZ: sürüm artar, --apply → kod güncellenir, üç veri dosyası içeriğiyle yerinde
+sed -i 's/^version: 1.0.0/version: 1.1.0/' "$R/deneme-skill/SKILL.md"; printf '#!/usr/bin/env bash\necho yeni\n' > "$R/deneme-skill/scripts/calis.sh"
+(cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+_veri_ayni "$R/hedef/deneme-skill" && grep -q 'echo yeni' "$R/hedef/deneme-skill/scripts/calis.sh"
+kapi "V2 --apply kodu günceller, çalışma verisi (kök · alt dizin · .olcum) yerinde kalır" $?
+
+# V3 · (c) gerçek kod farkı (veriyle birlikte) hâlâ İÇERİK-DRIFT, rc 1
+printf '#!/usr/bin/env bash\necho elle-duzenlendi\n' > "$R/hedef/deneme-skill/scripts/calis.sh"
+out="$(cd "$R" && node sync-skills.mjs 2>&1)"; rc=$?
+[ "$rc" = 1 ] && printf '%s' "$out" | grep -q 'deneme-skill → _t: İÇERİK-DRIFT'
+kapi "V3 kurulu kopyada gerçek kod farkı → İÇERİK-DRIFT, rc 1 (veri onu gizlemez)" $?
+
+# V4 · --force ezmesi de veriyi korur; kaynaktan kalkmış eski kod dosyası ise silinir (temizlik sürer)
+printf 'eski\n' > "$R/hedef/deneme-skill/scripts/kaldirilmis.sh"
+(cd "$R" && node sync-skills.mjs --apply --force >/dev/null 2>&1)
+_veri_ayni "$R/hedef/deneme-skill" && [ ! -e "$R/hedef/deneme-skill/scripts/kaldirilmis.sh" ] && grep -q 'echo yeni' "$R/hedef/deneme-skill/scripts/calis.sh"
+kapi "V4 --force veriyi korur, kaynakta olmayan kod dosyasını siler, kodu kaynaktan yazar" $?
+
+# V5 · kaynakta aynı adla veri dosyası olsa bile kurulu veri ÜSTÜNE yazılmaz
+printf '{"kaynak":1}\n' > "$R/deneme-skill/metrikler.jsonl"; sed -i 's/^version: 1.1.0/version: 1.2.0/' "$R/deneme-skill/SKILL.md"
+(cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+_veri_ayni "$R/hedef/deneme-skill"
+kapi "V5 kaynaktaki veri adı kurulu verinin üstüne yazılmaz" $?
 
 
 printf '\n%s geçti · %s kaldı\n' "$gecen" "$kalan"
