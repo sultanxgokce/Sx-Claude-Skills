@@ -1,0 +1,34 @@
+{
+  "is": "donus-izole-kutu-yazim",
+  "cumle": "Dönüş aracı izole kutuda merkez kipine düşüp salt okunur Nexus kopyasına yazmaya çalışıyor; kip seçimi yazılabilirlik şartına bağlanır (Nexus giden kutusu yazılamıyorsa kutu kipi), kutu kipinde yazılabilir ilk giden kutusu seçilir, sınav vakaları eklenir, donus 1.0.2",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-30T11:05:22+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "ulak_1793342791-77fb64f2",
+      "gerekce": "catalog.json her beceri sürümünde ortak dosya; SERDAR 09:46 kararı (#583 emsali): satır ayrık katalog değişikliği çakışma sayılmaz, alan dosya listesi olmadan açılır",
+      "zaman": "2026-10-30T11:05:24+03:00"
+    }
+  ]
+}

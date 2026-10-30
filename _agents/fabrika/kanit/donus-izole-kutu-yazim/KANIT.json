@@ -1,0 +1,120 @@
+{
+  "is": "donus-izole-kutu-yazim",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T11:29:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "af2e32a06d57a79b6b32671e5ec0883904e08b1d4baf4bcf36899f6b3f4c8078",
+      "komut": [
+        "bash",
+        "-c",
+        "cp /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/donus-eski.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.sh; cp /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/donus-test-kopya.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.test.sh; bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T11:08:20+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "d53410169f054ab1b60644dd95809d7c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "de0bc76b66d2edcefb4b3453645e5d6323c89cec6899dc8743bc34e6cdc21e65",
+      "komut": [
+        "bash",
+        "donus/scripts/donus.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T11:08:20+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c69e8709c9c447658a5ec7d667d2845b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kip-yazilabilirlik-sokuldu",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kip-yazilabilirlik-sokuldu-tek.txt",
+      "sha256": "b1849ab1787fabd2ba8b694777b757a306660593ec54f5b43c84b40231def027",
+      "komut": [
+        "bash",
+        "-c",
+        "cp /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/donus-mutant-kip.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.sh; bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/olc-donus.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T11:08:21+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d62e35d6e47e4f11922ed9d9008d2265"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav2",
+      "asama": "once",
+      "dosya": "olcum-sinav2-once.txt",
+      "sha256": "aff9e19c1493d301aee1c43c41fd04cc70dd13b6b4282c98956adc5d8efa6221",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/donus-olc-once/donus.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T11:29:23+03:00",
+      "sure_sn": 66.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e501929b4f0746ce85b0e941d1c2b88a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav2-sonra.txt",
+      "sha256": "5f22fa0cd198162bb8c852c3437d020d79cc72c50a1a0b91834ade15146e7145",
+      "komut": [
+        "bash",
+        "donus/scripts/donus.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T11:29:24+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f78ece5ceeb84358a802809fb04dac74"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant2-kip-yazilabilirlik-sokuldu",
+      "asama": "tek",
+      "dosya": "olcum-mutant2-kip-yazilabilirlik-sokuldu-tek.txt",
+      "sha256": "3769feb50fdfcf7f91300dd34668f7fb8f00816dc54d68553d1cbe1d2837aa56",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/donus-olc-mutant/donus.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T11:29:25+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "2c9f9271a3154d839e53071ec1efddcd"
+    }
+  ],
+  "imza": "c0716a8d2b0f11cff902e4c373901fe5d0f64d3d8174d5b5764659143d860be1"
+}

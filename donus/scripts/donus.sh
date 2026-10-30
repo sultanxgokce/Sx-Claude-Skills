@@ -34,7 +34,9 @@ BEN_DOSYA="$(printf '%s' "$BEN" | sed 's/ç/c/g;s/Ç/C/g;s/ğ/g/g;s/Ğ/G/g;s/ı/
 [ -n "$BEN_DOSYA" ] || BEN_DOSYA=KUTU
 KIP="${DONUS_KIP:-}"
 if [ -z "$KIP" ]; then
-  if [ -f "$NEXUS/scripts/aile-notify.sh" ] && [ -f "$NEXUS/scripts/filo.py" ]; then KIP=merkez; else KIP=kutu; fi
+  # 1.0.2 (nazir, 30 Eki): izole kutuda Nexus SALT OKUR kopya olarak görünür; dosya varlığı merkez demek değildir — giden kutusu
+  # YAZILABİLİR olmalı (dizin yoksa üst dizin yazılabilir olmalı). Değilse kutu kipi: dönüş kutunun kendi giden kutusuna gider.
+  if [ -f "$NEXUS/scripts/aile-notify.sh" ] && [ -f "$NEXUS/scripts/filo.py" ] && { [ -w "$NEXUS/0-teslimat/giden" ] || { [ ! -e "$NEXUS/0-teslimat/giden" ] && [ -w "$NEXUS/0-teslimat" ]; }; }; then KIP=merkez; else KIP=kutu; fi
 fi
 # ── açan ──────────────────────────────────────────────────────────────────────────────────────────────────────
 acan_bul() {
@@ -56,9 +58,13 @@ print(k, end="")' "$FILO_DIZ/gorev.jsonl" "$NO"
 if [ "$KIP" = merkez ]; then KOK="$NEXUS"
 else
   KOK="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null || true)"
-  if [ -z "$KOK" ] || [ ! -d "$KOK/0-teslimat" ]; then
-    ilk="$(ls -d /config/projects/*/0-teslimat 2>/dev/null | head -1)"; KOK="${ilk%/0-teslimat}"   # cwd bir projede değilse ilk proje
-    [ -d "$KOK/0-teslimat" ] || { echo "HATA: giden kutusu bulunamadı (proje kökünde 0-teslimat/ yok)" >&2; exit 2; }
+  if [ -z "$KOK" ] || [ ! -d "$KOK/0-teslimat" ] || ! { [ -w "$KOK/0-teslimat/giden" ] || { [ ! -e "$KOK/0-teslimat/giden" ] && [ -w "$KOK/0-teslimat" ]; }; }; then
+    # cwd bir projede değilse ya da projenin giden kutusu yazılamıyorsa: YAZILABİLİR ilk giden kutusu (1.0.2: salt okur Nexus kopyası ilk sırada çıkıyordu)
+    KOK=""; for aday in ${DONUS_PROJE_KOK:-/config/projects}/*/0-teslimat; do
+      [ -d "$aday" ] || continue
+      if [ -w "$aday/giden" ] || { [ ! -e "$aday/giden" ] && [ -w "$aday" ]; }; then KOK="${aday%/0-teslimat}"; break; fi
+    done
+    [ -n "$KOK" ] || { echo "HATA: yazılabilir giden kutusu bulunamadı (hiçbir projede yazılabilir 0-teslimat/giden yok)" >&2; exit 2; }
   fi
 fi
 GIDEN="$KOK/0-teslimat/giden"
