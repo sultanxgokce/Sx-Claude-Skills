@@ -306,17 +306,17 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **53 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **54 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·
 mutasyonun gerçek ağaca dokunmadığının **sha ile** kanıtı · zaten-kırmızı sınav (→3) ·
 `denetle` RC birleştirme kuralı · bilinmeyen komut · olmayan kapı adı · **kayıtsız kapı** ·
-**kapsam iddiası etmeme** · **alt-çizgili kapının elenmemesi** · **gerekçesiz muafiyetin reddi**.
+**kapsam iddiası etmeme** · **alt-çizgili kapının elenmemesi** · **gerekçesiz muafiyetin reddi** · **bozuk `.kapi_desen` temiz sayılmaz (RC=2)**.
 
-**`kayitsiz` mutasyon-kanıtı (2026-09-09):** dört mutasyonun dördü de kırmızı yakar —
+**`kayitsiz` mutasyon-kanıtı (2026-09-09):** beş mutasyonun beşi de kırmızı yakar —
 kapıyı no-op yapmak (7 vaka düşer) · `denetle` zincirinden çıkarmak · gerekçesiz-muafiyet
-kontrolünü silmek · alt-çizgili adları elemek. Yani koruma gerçek, süs değil.
+kontrolünü silmek · alt-çizgili adları elemek · bozuk deseni yutmak (göz tur 1, Sx #596: eskiden python rc 1 ile düşüyor, komut TEMİZ dönüyordu). Yani koruma gerçek, süs değil.
 
 **Gerçek-veri regresyonu (ithal):** canlı `elogo-erisim`'in **12 python modülü** tarandı →
 **12/12 temiz, RC=0, yanlış-pozitif yok.**

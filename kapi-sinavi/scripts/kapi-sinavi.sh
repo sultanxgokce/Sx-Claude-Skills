@@ -605,6 +605,12 @@ _kayitsiz(){
 
   local desen; desen="$(jq -r '.kapi_desen // ""' "$DEFTER")"
   [[ -n "$desen" ]] || desen="$_KAPI_DESEN_VARSAYILAN"
+  # 🔴 Bozuk desen FAIL-CLOSED (göz tur 1, Sx #596): eskiden re.compile hatası python'u rc 1 ile düşürüyor, kabuk yalnız
+  #    rc 9'u tanıdığı için boş çıktı "kayıtsız kapı yok" sayılıyor ve komut TEMİZ dönüyordu. Desen önce doğrulanır.
+  if ! PYTHONDONTWRITEBYTECODE=1 python3 -c 'import re,sys; re.compile("^(" + sys.argv[1] + ")$")' "$desen" 2>/dev/null; then
+    _hata "HATA: .kapi_desen geçerli bir düzenli ifade değil: $desen"
+    exit "$RC_KULLANIM"
+  fi
 
   # Taranacak dosyalar: sicildeki dosyalar (tekil) + açıkça istenen dizinler
   local -a dosyalar=()
@@ -652,8 +658,11 @@ for d in ast.walk(agac):
             print(f"{ad}\t{d.lineno}")
 PY
 )"
-    if [[ $? -eq 9 ]]; then
-      _olcemedim_k "kayitsiz/$d" "kayitsiz: $d ayrıştırılamadı (sözdizimi?)"
+    local prc=$?
+    # rc 9 = dosya ayrıştırılamadı; başka her sıfırdan farklı kod da tarayıcı ÇÖKÜŞÜDÜR — boş çıktı temiz sayılmaz.
+    if [[ $prc -ne 0 ]]; then
+      if [[ $prc -eq 9 ]]; then _olcemedim_k "kayitsiz/$d" "kayitsiz: $d ayrıştırılamadı (sözdizimi?)"
+      else _olcemedim_k "kayitsiz/$d" "kayitsiz: $d taranamadı (tarayıcı rc=$prc)"; fi
       py_yok=1
       continue
     fi

@@ -7,7 +7,7 @@
 #    vakalar KIRMIZIYA döner. Kapının sınavını yazarken kendi dersimizi uyguluyoruz.
 set -uo pipefail
 
-ARAC="$(cd "$(dirname "$0")" && pwd)/kapi-sinavi.sh"
+ARAC="${KAPI_SINAVI_SUT:-$(cd "$(dirname "$0")" && pwd)/kapi-sinavi.sh}"   # KAPI_SINAVI_SUT: mutant koşusu için
 GECEN=0; DUSEN=0
 
 _ok(){ printf '  ✓ %s\n' "$1"; GECEN=$((GECEN+1)); }
@@ -497,6 +497,15 @@ _sil "$P"
 P="$(_fikstur tam)"
 _bekle "olmayan --dizin → 2" 2 "$(_kos "$P" kayitsiz --dizin yokboyle)"
 _bekle "--dizin yolsuz → 2" 2 "$(_kos "$P" kayitsiz --dizin)"
+_sil "$P"
+
+# bozuk .kapi_desen → FAIL-CLOSED (göz tur 1, Sx #596: eskiden python rc 1 ile düşüyor, komut TEMİZ dönüyordu)
+P="$(_fikstur tam)"
+python3 - "$P/.kapi/kapilar.json" <<'PY2'
+import json,sys
+p=sys.argv[1]; d=json.load(open(p)); d["kapi_desen"]="(bozuk"; json.dump(d,open(p,"w"))
+PY2
+_bekle "bozuk .kapi_desen → 2 (temiz DEĞİL)" 2 "$(_kos "$P" kayitsiz)"
 _sil "$P"
 
 printf '\ntoplam=%d geçen=%d düşen=%d\n' "$((GECEN+DUSEN))" "$GECEN" "$DUSEN"
