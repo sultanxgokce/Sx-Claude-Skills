@@ -341,7 +341,7 @@ O="$(FABRIKA_TETIK="$T/tetik-hedefli.sh" bash "$KT" ac is-u10 --is "hedef satır
 [ "$RC" -eq 0 ] && [ -f "$KU/is-u10.json" ] && grep -q "tetik: sinav-oda" <<<"$O"; g $? "U10 🔴 tetik mektubu ilk satırda 'HEDEF: <oda>' taşır → HEDEF kuralını uygulayan tetik kabul eder, sınıflı kart AÇILIR"
 echo "── T17 · MUTASYON (tam kopya): yol kapalıyken rc 0 dönerse sınav KIRMIZI ──"
 m16 oda-citi-yok kart.sh "[ -n \"\$ODA\" ] || { _hata \"Sultan'a ulaşılamadı" "true || { _hata \"Sultan'a ulaşılamadı" && { bash "$D16/kart.sh" ac is-mu1 --is "odasız sınıflı mutant cümlesi" $SNF >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$KU/is-mu1.json" ]; g $? "mutant 'oda çiti kalkınca': odasız sınıflı kart rc 0 ile açılıyor → U1 bu mutantta KIRMIZI"; }
-m16 betik-citi-yok kart.sh "[ -x \"\$TETIK\" ] || { _hata \"Sultan'a ulaşılamadı" "true || { _hata \"Sultan'a ulaşılamadı" && { O="$(FABRIKA_TETIK="$T/yok-boyle-tetik.sh" bash "$D16/kart.sh" ac is-mu2 --is "tetiksiz sınıflı mutant cümlesi" $SNF --oda sinav-oda 2>&1)"; ! grep -q "tetik betiği yok" <<<"$O"; g $? "mutant 'betik çiti kalkınca': sebep 'tetik betiği yok' söylenmiyor → U2 bu mutantta KIRMIZI"; }
+m16 betik-citi-yok kart.sh "[ -n \"\$GOREV\" ] || { _hata \"Sultan'a ulaşılamadı: tetik betiği yok" "true || { _hata \"Sultan'a ulaşılamadı: tetik betiği yok" && { O="$(FABRIKA_TETIK="$T/yok-boyle-tetik.sh" bash "$D16/kart.sh" ac is-mu2 --is "tetiksiz sınıflı mutant cümlesi" $SNF --oda sinav-oda 2>&1)"; ! grep -q "tetik betiği yok" <<<"$O"; g $? "mutant 'betik çiti kalkınca': sebep 'tetik betiği yok' söylenmiyor → U2 bu mutantta KIRMIZI"; }
 m16 geri-alma-yok kart.sh 'if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ]; then' 'if false; then' && { TETIK_SAHTE_RC=4 bash "$D16/kart.sh" ac is-mu3 --is "tetiği düşen sınıflı mutant cümlesi" $SNF --oda sinav-oda >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$KU/is-mu3.json" ]; g $? "mutant 'geri alma kalkınca': tetik düştüğü hâlde rc 0 + kart duruyor → U3 bu mutantta KIRMIZI"; }
 m16 eski-tetik-sessiz kart.sh 'else echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"; r=1; fi' 'else echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"; r=0; fi' && { TETIK_SAHTE_RC=4 bash "$D16/kart.sh" ac is-mu4 --is "tetiği düşen ikinci sınıflı mutant" $SNF --oda sinav-oda >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$KU/is-mu4.json" ]; g $? "mutant 'tetik() düşüşü yutunca' (eski davranış): rc 0 + kart duruyor → U3 bu mutantta KIRMIZI"; }
 m16 komut-geri kart.sh "durdurmak için 'dur' demen yeter)\"" "durdurmak için kart.sh sultan-dedi \$IS --karar dur)\"" && { bash "$D16/kart.sh" ac is-mu5 --is "komutlu satır mutant cümlesi" $SNF --oda sinav-oda >/dev/null 2>&1; grep -P '^sinav-oda\t.*komutlu satır mutant cümlesi' "$TETIK_KAYIT" | grep -q "kart.sh"; g $? "mutant 'komut satıra geri konunca': Sultan'a giden satırda 'kart.sh' var → U4b bu mutantta KIRMIZI"; }
@@ -527,6 +527,32 @@ N0=$(yz); O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" ac gb-4 --is "jetonsuz
 N0=$(yz); O="$(bash "$KT" ac gb-5 --is "bağsız iş" --istedi SERDAR --aldi BANI $SINIF 2>&1)"; RC=$?
 [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ] && grep -q "görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ" <<<"$O"; g $? "G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)"
 O="$(bash "$KT" bitti gb-5 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ]; g $? "G7b bağsız kartın bitti'si de deftere gitmez"
+echo "════ T14a · 0.27.34 (…QFS1RR): tetiksiz (yalıtılmış) kutuda sınıflı kart — başlama izni bağlı görev üzerinden ════"
+SNP="--istedi Sultan --aldi DYSINAV --geri-alinamaz h --para e --dis-yuzey h --yetki h"; YOKT="$T/yok-boyle-tetik.sh"
+N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" bash "$KT" ac dy-1 --is "tetiksiz kutuda sınıflı iş" $SNP --gorev gorev_KARTTEST00000011 --tahmin 40 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$KK/dy-1.json" "$N0" <<'PY2'; g $? "D1 tetik yok + --gorev → kart AÇILIR, göreve TEK açılış yazımı: çalışılıyor + adımda 'sınıf: para' ve 'başlama izni Sultan'da … dur'"
+import json,sys
+L=[json.loads(l) for l in open(sys.argv[1])][int(sys.argv[3]):]; k=json.load(open(sys.argv[2]))
+assert len(L)==1 and L[0]["yol"]=="/kayit/gorev_KARTTEST00000011", L
+b=L[0]["govde"]; ad=b["adimlar"][0]
+assert b["yerine"]["gorev_durumu"]=="calisiliyor" and "sınıf: para" in ad and "başlama izni Sultan'da" in ad and "'dur'" in ad, ad
+assert k["gorev_yazimlari"][-1]["olay"]=="ac" and k["gorev_yazimlari"][-1]["sonuc"]=="yazıldı" and k["sultan"] is True
+PY2
+[ $RC -eq 0 ] && grep -q "→ çalışılıyor (defter)" <<<"$O" && ! grep -q "tetik atılmadı" <<<"$O"; g $? "D1b rc 0, ekranda '→ çalışılıyor (defter)', tetik denemesi YOK"
+N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" bash "$KT" ac dy-2 --is "defteri reddedilen sınıflı iş" $SNP --gorev gorev_KARTRED000000001 --tahmin 40 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ ! -f "$KK/dy-2.json" ] && ! ls "$KK"/dy-2.json.acilis-* >/dev/null 2>&1 && grep -q "başlama izni GİTMEDİ (kart GERİ ALINDI" <<<"$O"; g $? "D2 🔴 tetik yok + görev yazılamadı (409) → rc 1, kart YOK, geçici dosya YOK, 'izni GİTMEDİ'"
+N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" ac dy-3 --is "jetonsuz tetiksiz sınıflı iş" $SNP --gorev gorev_KARTTEST00000013 --tahmin 40 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ ! -f "$KK/dy-3.json" ] && [ "$(yz)" -eq "$N0" ]; g $? "D3 🔴 tetik yok + defter jetonu yok → rc 1, kart YOK (sessiz açılış yok)"
+N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" bash "$KT" ac dy-4 --is "görevsiz tetiksiz sınıflı iş" $SNP 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ ! -f "$KK/dy-4.json" ] && [ "$(yz)" -eq "$N0" ] && grep -q "bağlı görev üzerinden gider: --gorev" <<<"$O"; g $? "D4 tetik yok + --gorev yok → rc 1, kart YOK, yol söylenir (--gorev ver)"
+N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" bash "$KT" ac dy-5 --is "tetiksiz sınıfsız bağlı iş" --istedi SERDAR --aldi DYSINAV2 $SINIF --gorev gorev_KARTTEST00000015 --tahmin 20 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "D5 sınıfsız kart tetiksiz kutuda ESKİ yolda: tek yazım, adımda izin cümlesi YOK"
+import json,sys
+L=[json.loads(l) for l in open(sys.argv[1])][int(sys.argv[2]):]
+assert len(L)==1 and "başlama izni" not in L[0]["govde"]["adimlar"][0], L
+PY2
+m16 dy-izin-yutulur kart.sh 'gorev_yaz "$KART_TMP" ac || TRC=1' 'gorev_yaz "$KART_TMP" ac || true' && { O="$(FABRIKA_TETIK="$YOKT" bash "$D16/kart.sh" ac dy-m1 --is "mutant izin yutar" --istedi Sultan --aldi DYSINAV4 --geri-alinamaz h --para e --dis-yuzey h --yetki h --gorev gorev_KARTRED000000001 --tahmin 40 2>&1)"; [ -f "$KK/dy-m1.json" ]; g $? "mutant 'görev yazılamasa da kart açılır': kart AÇILIYOR → D2 bu mutantta KIRMIZI"; }
+m16 dy-cift-yazim kart.sh '[ "$GYAZILDI" = 0 ] && { gorev_yaz' 'true && { gorev_yaz' && { N0=$(yz); FABRIKA_TETIK="$YOKT" bash "$D16/kart.sh" ac dy-m2 --is "mutant çift yazım" --istedi Sultan --aldi DYSINAV3 --geri-alinamaz h --para e --dis-yuzey h --yetki h --gorev gorev_KARTTEST00000016 --tahmin 40 >/dev/null 2>&1; [ "$(python3 -c "import json;print(sum(1 for l in open('$T/yazim.jsonl') if json.loads(l)['yol'].endswith('KARTTEST00000016')))")" -eq 2 ]; g $? "mutant 'açılış göreve iki kez yazılır': iki yazım → D1 (tek yazım) bu mutantta KIRMIZI"; }
 echo "════ T14b · 0.24.0 (Y7J3Q): yeni işe geçince önceki görev 'bekliyor'; göz turu göreve tek adım, durum değişmez ════"
 bash "$KT" bitti gb-3 >/dev/null 2>&1   # gb-3'ün görevi (KARTRED) ret döner; kart bitmiş olur → açık sayılmaz
 N0=$(yz); O="$(bash "$KT" ac gb-6 --is "yeni iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000006 --tahmin 30 2>&1)"; RC=$?

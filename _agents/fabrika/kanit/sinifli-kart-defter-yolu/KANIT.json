@@ -1,0 +1,42 @@
+{
+  "is": "sinifli-kart-defter-yolu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T18:37:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "once",
+      "dosya": "olcum-kart-sinav-once.txt",
+      "sha256": "20f6192e7f7f3b3befc7f3a2d25e0d0aa945b220cb9ecfd47df92b0ff65fba32",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kart-once-kopya/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T18:32:47+03:00",
+      "sure_sn": 145.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b8d2edd301ae4dc897dd610318c16c9d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "ce782b8e144394978461eded8111804ce4a41373ce1a2be4c11762d67fb3e332",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T18:37:03+03:00",
+      "sure_sn": 256.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ac3696312b814924810598802881548a"
+    }
+  ],
+  "imza": "2ffe7be0a2ab204555dfc3b50b589cd1a7df851900daafe8a1467cfc881e074b"
+}
