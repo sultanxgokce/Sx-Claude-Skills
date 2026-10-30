@@ -1,7 +1,7 @@
 {
   "is": "madde4-iskan-izin-kipi-kaynak",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T14:10:08+03:00",
+  "guncelleme": "2026-10-30T14:14:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,38 +25,38 @@
       "etiket": "iskan-sinavi",
       "asama": "sonra",
       "dosya": "olcum-iskan-sinavi-sonra.txt",
-      "sha256": "ee5598c93460a4d764810f8a0212aad83833e5725dadabe09e15d32fdb80793f",
+      "sha256": "d512d16cc1f0f35a256e1dad9addf5c210f96fca8a69e4d96de49dbc07ba6657",
       "komut": [
         "bash",
         "iskan/scripts/iskan.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T14:08:40+03:00",
-      "sure_sn": 90.8,
+      "zaman": "2026-10-30T14:13:43+03:00",
+      "sure_sn": 26.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "86c0a730724148a0aab2d8b50109d89a"
+      "olcum_id": "9a5de1eda6e741d0969a3bff262a75d2"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-ekip-registry-okumasi-kapali",
       "asama": "sonra",
       "dosya": "olcum-mutant-ekip-registry-okumasi-kapali-sonra.txt",
-      "sha256": "bd11e645455953152b80db33910800290c03aa2ba5ae7fb711056dd2ee35bbab",
+      "sha256": "91716b99a203e087a6da566fe980802ea570fd5f33c0ae6dc833792a8e06859b",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-iskan-mutant/iskan/scripts/iskan.test.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-30T14:09:19+03:00",
-      "sure_sn": 38.7,
+      "zaman": "2026-10-30T14:14:09+03:00",
+      "sure_sn": 26.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "iskan-sinavi",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "67100ccd1e214b7c90fd5c88d6da1a12"
+      "olcum_id": "7eea898b97af4aadbc183a96627a9f65"
     },
     {
       "tur": "olcum",
@@ -77,5 +77,5 @@
       "olcum_id": "05af4882a492491d86609f73853a5f93"
     }
   ],
-  "imza": "bb9f25b9e48460460c5e6dbe8c8d336549948d4f70d4011879cb3b3bcb9e7492"
+  "imza": "2ff61bd981b43485d3b118e761756cd9369dd04d7921e64a6dba2786ec954d43"
 }

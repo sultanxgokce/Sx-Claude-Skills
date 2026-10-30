@@ -1445,11 +1445,12 @@ EOF
     pmode="$(_ey_registry_alan "${EY_REG_MEVCUT:-}" "$rol" permission_mode)"
     # 0.11.6 (MUAVİN Madde 4, 30 Eki 2026 · ENİS/SIHHAT): mevcut kayıtta OLMAYAN üye (rezerve/yeni ya da #575 gibi düşmüş kayıt)
     #   eskiden SESSİZCE 'default' alıyordu. Sıra artık: mevcut kayıt → ekip-registry üyesinin permission_mode alanı (EY_EKIP_REG)
-    #   → ISKAN_EY_PMODE_VARSAYILAN → default; 'default'a düşen her üye için stderr'e görünür [sarı] satır (sessiz sıfırlama yok).
+    #   → ISKAN_EY_PMODE_VARSAYILAN → default; 'default'a düşen her üye için stderr'e görünür [sarı] satır (sessiz sıfırlama yok; bilinçli VARSAYILAN uyarı almaz).
     if [ -z "$pmode" ] && [ -n "${EY_EKIP_REG:-}" ]; then pmode="$(_ey_registry_alan "$EY_EKIP_REG" "$rol" permission_mode)"; fi
     if [ -z "$pmode" ]; then
       pmode="${ISKAN_EY_PMODE_VARSAYILAN:-default}"
-      echo "[sarı] izin kipi: '$rol' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → '$pmode' (varsayılan) yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle" >&2
+      # uyarı YALNIZ 'default'a düşüşte (göz tur 1): ISKAN_EY_PMODE_VARSAYILAN ile bilinçli seçilen kip sessiz-sıfırlama değildir
+      [ "$pmode" != "default" ] || echo "[sarı] izin kipi: '$rol' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle ya da ISKAN_EY_PMODE_VARSAYILAN ver" >&2
     fi
     sfile="$(_ey_registry_alan "${EY_REG_MEVCUT:-}" "$rol" settings_file)"
     if [ "$rol" = "${EY_YENI_UYE:-}" ] && [ -n "${EY_YENI_SETTINGS:-}" ]; then sfile="$EY_YENI_SETTINGS"; fi

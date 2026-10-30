@@ -1,5 +1,5 @@
 $ bash iskan/scripts/iskan.test.sh
-# rc=0 sure=90.8s zaman=2026-10-30T14:08:40+03:00
+# rc=0 sure=26.5s zaman=2026-10-30T14:13:43+03:00
 --- stdout ---
 == iskan.test.sh ==
   ok - compose-clean: kesişim=0
@@ -126,10 +126,9 @@ $ bash iskan/scripts/iskan.test.sh
   ok - registry-üretimi: alanı olmayan üyeye settings_file eklenmedi (bayt-aynı)
   ok - registry-üretimi: DAR'ın izin dosyası korundu
   ok - registry-üretimi: yeni üyeye bayraktaki izin dosyası yazıldı (kip default)
-  ok - registry-üretimi 35f: mevcut kayıtta olmayan REZ'in kipi ekip-registry'den okundu (bypassPermissions)
+  ok - registry-üretimi 35f: mevcut kayıtta olmayan REZ'in kipi ekip-registry'den okundu (bypassPermissions) ve ona uyarı YOK
   ok - registry-üretimi 35f: hiçbir kaynakta olmayan YOK 'default' aldı ve stderr'e görünür [sarı] uyarı düştü
-  ok - registry-üretimi 35f: kipi bulunan REZ için uyarı YOK (uyarı yalnız düşen üyeye)
-  ok - registry-üretimi 35f: ISKAN_EY_PMODE_VARSAYILAN varsayılanı değiştirir (acceptEdits) ve varsayılana düşüş yine uyarılır (DALGIÇ tur 1)
+  ok - registry-üretimi 35f: ISKAN_EY_PMODE_VARSAYILAN varsayılanı değiştirir (acceptEdits); bilinçli kip 'default' düşüşü değildir → uyarı YOK (göz tur 1)
   ok - uye-ekle --apply: host-erişilemezken rc=1 + repo-dosya değişmedi (mutasyonsuz erken-kırmızı)
   ok - _ey_ekip_roster_oku: 3-üye roster doğru çözüldü (yonetici-etiketi dahil)
   ok - _ue_kahya_adaptor: KÂHYA-şema → K2 üye-bloğu dönüşümü tam (5 anahtar)
@@ -288,9 +287,8 @@ $ bash iskan/scripts/iskan.test.sh
   ok - İZ-YORUM-5 stdin ('-') yolu: host compose ssh-cat ile aynı kural (ADIM-5b)
   ok - İZ-YORUM-6 olmayan dosya → 0 (sayım patlamaz; eski grep -ci || true davranışı korunur)
   ok - İZ-YORUM-7 tırnak İÇİNDEKİ '#' yorum değil (göz tur 1+2): çift/tek tırnak, boşluksuz 'a#b', kaçışlı \" sonrası hâlâ tırnak içi → 4; tırnak dışı/kapanmış tırnak sonrası ' #' yorum
-== 286 geçti / 0 kaldı ==
+== 285 geçti / 0 kaldı ==
 --- stderr ---
-⏳ agir-sira: kanit-madde4-iskan-izin-kipi-kaynak-iskan-sinavi 61 sn bekledi (yuva 1, load1 16.83)
-[sarı] izin kipi: 'denekAlfa' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' (varsayılan) yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle
-[sarı] izin kipi: 'denekBeta' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' (varsayılan) yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle
-[sarı] izin kipi: 'YENI' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' (varsayılan) yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle
+[sarı] izin kipi: 'denekAlfa' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle ya da ISKAN_EY_PMODE_VARSAYILAN ver
+[sarı] izin kipi: 'denekBeta' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle ya da ISKAN_EY_PMODE_VARSAYILAN ver
+[sarı] izin kipi: 'YENI' ne mevcut kayıtta ne ekip-registry'de permission_mode taşıyor → 'default' yazıldı; bilinçli kip için ekip-registry üyesine 'permission_mode: <kip>' ekle ya da ISKAN_EY_PMODE_VARSAYILAN ver
