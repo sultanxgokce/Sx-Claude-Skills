@@ -1,14 +1,14 @@
 {
   "is": "postane-postaci-kaynak-tazele",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T19:59:30+03:00",
+  "guncelleme": "2026-10-30T20:04:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kaynak-fark",
       "asama": "once",
       "dosya": "olcum-kaynak-fark-once.txt",
-      "sha256": "20d9532401afdf7f7b6b1495b9fdd0dd5d39d06d501c1a85913707cfc901fe60",
+      "sha256": "0d02a9b14f8b04897d92c5426262ba71989927f8975d5a4aad302371169aeb98",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh",
@@ -16,17 +16,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T19:59:30+03:00",
+      "zaman": "2026-10-30T20:04:42+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "6acb2a22d76242e384ef676c104a68e9"
+      "olcum_id": "8e2aafd384bd49efb6553a3de3c7bab5"
     },
     {
       "tur": "olcum",
       "etiket": "kaynak-fark",
       "asama": "sonra",
       "dosya": "olcum-kaynak-fark-sonra.txt",
-      "sha256": "1493914d98e25057cee756fb859f9dd03476493a7428614d4acdfdec2bc20d0a",
+      "sha256": "145aa16c7ff07c0c3c9b68f8ac0f4eab94356f2f2673101274832afabd3d5c4e",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pt-ol.sh",
@@ -34,10 +34,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T19:59:30+03:00",
+      "zaman": "2026-10-30T20:04:42+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1d06c2a8959f4c32a4c10590e4f77b9f"
+      "olcum_id": "6a6fcf31a8ad42b695d0757942f81224"
     },
     {
       "tur": "olcum",
@@ -57,5 +57,5 @@
       "olcum_id": "45bdd302770f431095704b3a596745ad"
     }
   ],
-  "imza": "5afb0fa9f395bbe9161a30a13cafa8b74062ff1f25894ea9d5957ddd5d19aa0d"
+  "imza": "c16418dc0893c83852d849736214bf05f5fde8b38d132b389471beaa1c546724"
 }
