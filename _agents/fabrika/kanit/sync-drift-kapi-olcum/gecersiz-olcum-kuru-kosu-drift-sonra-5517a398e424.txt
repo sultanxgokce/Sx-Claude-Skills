@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kuru-kosu-drift-sonra.txt
+hedef_sha256: 3de4ceb85cc17dbdef00949b14eb74ada4ba47158cf52dad8874ee0aff92a3a2
+hedef_zaman: 2026-10-30T18:50:14+03:00
+hedef_renk: kirmizi
+neden: ağaç kayıt öncesi kirliyken alındı; kayıttan sonra temiz ağaçta yeniden ölçüldü
+kim: BENNÂ
+karsi: olcum-kuru-kosu-drift-temiz-sonra.txt
+zaman: 2026-10-30T18:54:30+03:00

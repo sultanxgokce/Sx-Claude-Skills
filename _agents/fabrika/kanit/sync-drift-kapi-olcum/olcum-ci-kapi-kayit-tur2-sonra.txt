@@ -1,0 +1,5 @@
+$ bash kapi-sinavi/scripts/kapi-sinavi.sh kayit
+# rc=0 sure=0.1s zaman=2026-10-30T19:05:42+03:00
+--- stdout ---
+✓ defter tutarlı (6 kapı)
+--- stderr ---

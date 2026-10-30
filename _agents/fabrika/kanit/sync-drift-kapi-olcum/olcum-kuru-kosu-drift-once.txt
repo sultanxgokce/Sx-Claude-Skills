@@ -1,0 +1,177 @@
+$ node sync-skills.mjs
+# rc=1 sure=27.2s zaman=2026-10-30T18:49:45+03:00
+--- stdout ---
+  kaynak: sync-drift-kapi-olcum@27670282 · origin/main'e göre 0 commit geride · 0 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  = whatsapp-baileys → _global: güncel (v1.2.2)
+  ⚠ whatsapp-gonder → _global: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak fcb920da0a15 ≠ kurulu 28d1a55595ab. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = cloudflare-erisim → _global: güncel (v1.6.0)
+  ↑ cloudflare-erisim → nexus: güncelle v1.5.0 → v1.6.0
+  ↑ cloudflare-erisim → cortex: güncelle v1.5.0 → v1.6.0
+  ⚠ railway-erisim → _global: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak c70815344e00 ≠ kurulu 67937b3f29d6. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = railway-erisim → nexus: güncel (v1.1.0)
+  = railway-erisim → cortex: güncel (v1.1.0)
+  ⚠ erisim-skill-fabrikasi → _global: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak 33a1d5741d42 ≠ kurulu 1147f394ae8f. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ erisim-skill-fabrikasi → nexus: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak 33a1d5741d42 ≠ kurulu 1147f394ae8f. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ erisim-skill-fabrikasi → cortex: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak 33a1d5741d42 ≠ kurulu 1147f394ae8f. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = ekip-kur → _global: güncel (v1.8.0)
+  = pr-onay → _global: güncel (v1.1.0)
+  = sert-teslim → _global: güncel (v0.2.2)
+  = sert-teslim → mmex: güncel (v0.2.2)
+  = kesif → _global: güncel (v0.2.2)
+  = kesif → mmex: güncel (v0.2.2)
+  = sert-dongu → _global: güncel (v0.2.0)
+  = pcloud-erisim → _global: güncel (v1.3.0)
+  = pcloud-erisim → nexus: güncel (v1.3.0)
+  = pcloud-erisim → cortex: güncel (v1.3.0)
+  = notion-erisim → _global: güncel (v1.0.0)
+  ⚠ notion-erisim → nexus: İÇERİK-DRIFT — sürüm aynı (v1.0.0) ama içerik farklı
+     → kaynak 30242205dc97 ≠ kurulu f5957ddea077. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = notion-erisim → cortex: güncel (v1.0.0)
+  = elogo-erisim → _global: güncel (v1.8.0)
+  = elogo-erisim → nexus: güncel (v1.8.0)
+  = elogo-erisim → cortex: güncel (v1.8.0)
+  = erisim → _global: güncel (v1.0.0)
+  = erisim → nexus: güncel (v1.0.0)
+  = erisim → cortex: güncel (v1.0.0)
+  = vault-cek → _global: güncel (v1.4.1)
+  = vault-cek → nexus: güncel (v1.4.1)
+  = vault-cek → cortex: güncel (v1.4.1)
+  = seyir-defteri → _global: güncel (v1.2.0)
+  = seyir-defteri → nexus: güncel (v1.2.0)
+  = seyir-defteri → mmex: güncel (v1.2.0)
+  ↑ seyir-defteri → vekatip: güncelle v1.0.0 → v1.2.0
+  ⚠ ahi → _global: İÇERİK-DRIFT — sürüm aynı (v0.4.0) ama içerik farklı
+     → kaynak 2b25d38f1d02 ≠ kurulu 06bc0675f7f5. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = sultanca → _global: güncel (v0.1.0)
+  + sultan-ogren → _global: YENİ kurulum (v0.1.0)
+  = sunucu-kur → _global: güncel (v1.0.0)
+  ↑ tescil → _global: güncelle v0.9.0 → v0.9.1
+  = kayit-damgasi → _global: güncel (v1.0.0)
+  = worktree-hijyen → _global: güncel (v0.2.0)
+  = resume-banner → _global: güncel (v0.1.0)
+  = iskan → _global: güncel (v0.11.6)
+  = iskan → cloudtop: güncel (v0.11.6)
+  = federe-os-cekirdek → _global: güncel (v0.7.0)
+  ⚠ kapimda → _global: İÇERİK-DRIFT — sürüm aynı (v1.7.0) ama içerik farklı
+     → kaynak 0553c6dbdbc9 ≠ kurulu 9f5840adf918. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = layiha → _global: güncel (v1.16.0)
+  = kasif-tara → _global: güncel (v1.4.2)
+  = mucit-suz → _global: güncel (v1.9.0)
+  ⚠ layiha-fabrikasi → _global: İÇERİK-DRIFT — sürüm aynı (v1.5.0) ama içerik farklı
+     → kaynak f7285ea56560 ≠ kurulu 931e7f74ae2c. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = kapi-yolu → _global: güncel (v1.0.0)
+  = ekip → _global: güncel (v1.1.0)
+  + kesif-hatti → _global: YENİ kurulum (v1.1.1)
+  = seans → _global: güncel (v1.17.0)
+  ⚠ layiha-kapisi → _global: İÇERİK-DRIFT — sürüm aynı (v0.1.0) ama içerik farklı
+     → kaynak a121332dc00c ≠ kurulu afd5618ce93f. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = ui-tasarim-akisi → _global: güncel (v0.7.1)
+  = sultan-eli → _global: güncel (v0.1.0)
+  ⚠ sultan-alarmi → _global: İÇERİK-DRIFT — sürüm aynı (v0.1.2) ama içerik farklı
+     → kaynak e7840ae3a132 ≠ kurulu c245b2b97860. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = maas-kapisi → _global: güncel (v0.1.0)
+  ⚠ plan-dekor → _global: İÇERİK-DRIFT — sürüm aynı (v0.6.0) ama içerik farklı
+     → kaynak 46e198fb3e19 ≠ kurulu 742580f9716a. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ plan-motor → _global: HEDEF DAHA YENİ (hedef v1.6.0 > kaynak v1.4.0) — DRIFT!
+     → kurulu kopya elle düzenlenmiş olabilir. Önce kaynağa geri taşı, ya da --force ile ez.
+  ⚠ kapi-sinavi → _global: İÇERİK-DRIFT — sürüm aynı (v1.2.1) ama içerik farklı
+     → kaynak 1a326abd3dd2 ≠ kurulu d19a41104747. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ olcum-disiplini → _global: İÇERİK-DRIFT — sürüm aynı (v1.0.0) ama içerik farklı
+     → kaynak 3d3ea14750c1 ≠ kurulu ca54c4a49dee. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = gunluk-plan → _global: güncel (v1.19.0)
+  = gun-ortasi → _global: güncel (v1.3.0)
+  = gorsel-yon → _global: güncel (v0.4.0)
+  ⚠ zeyl → _global: İÇERİK-DRIFT — sürüm aynı (v1.0.1) ama içerik farklı
+     → kaynak 6ed8667e4c39 ≠ kurulu 8007deae698b. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ zeyl → nexus: İÇERİK-DRIFT — sürüm aynı (v1.0.1) ama içerik farklı
+     → kaynak 6ed8667e4c39 ≠ kurulu 8007deae698b. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ zeyl → mmex: İÇERİK-DRIFT — sürüm aynı (v1.0.1) ama içerik farklı
+     → kaynak 6ed8667e4c39 ≠ kurulu 8007deae698b. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ zeyl → vekatip: İÇERİK-DRIFT — sürüm aynı (v1.0.1) ama içerik farklı
+     → kaynak 6ed8667e4c39 ≠ kurulu 8007deae698b. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  ⚠ durum-raporu → _global: İÇERİK-DRIFT — sürüm aynı (v0.2.1) ama içerik farklı
+     → kaynak 0822db1cc493 ≠ kurulu 55dad056849f. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = ekip-iletisim-uzmani → _global: güncel (v0.1.0)
+  = frontend-boost → _global: güncel (v0.5.1)
+  = arayuz-zanaati → _global: güncel (v0.1.0)
+  = sunum-hazirlama → _global: güncel (v0.1.0)
+  = brosur-hazirlama → _global: güncel (v0.1.0)
+  = tasarim-citasi → _global: güncel (v0.1.0)
+  + baglam-nobeti → _global: YENİ kurulum (v0.2.0)
+  = sergi → _global: güncel (v0.1.0)
+  = yazilim-fabrikasi → _global: güncel (v0.27.34)
+  ⚠ terminal-onar → _global: İÇERİK-DRIFT — sürüm aynı (v2.36.3) ama içerik farklı
+     → kaynak 343ff44eeddb ≠ kurulu d0121786a399. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  = canli-sayfa → _global: güncel (v1.2.0)
+  = tarif-kaydi → _global: güncel (v0.1.0)
+  = soluklan → _global: güncel (v1.0.0)
+  = kosu-kaydi → _global: güncel (v0.5.2)
+  = bileyi → _global: güncel (v0.5.0)
+  = bulgu → _global: güncel (v0.6.3)
+  = donus → _global: güncel (v1.0.2)
+  = retro → _global: güncel (v1.4.0)
+  ⚠ hafta-kapanis → _global: İÇERİK-DRIFT — sürüm aynı (v1.1.0) ama içerik farklı
+     → kaynak 9abf64843f8b ≠ kurulu ec1fccbc09d4. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+  + baglam-karti → _global: YENİ kurulum (v1.0.1)
+  = higgsfield-abonelik → _global: güncel (v1.0.0)
+  = dumen-surucu → _global: güncel (v0.5.0)
+  ↑ oda-kur → _global: güncelle v0.2.0 → v0.2.1
+  = duzen → _global: güncel (v1.1.1)
+  = mesveret → _global: güncel (v0.1.0)
+  = postane-postaci → _global: güncel (v0.2.0)
+
+  özet: 9 planlandı · 69 güncel · 22 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---
+⏳ agir-sira: kanit-sync-drift-kapi-olcum-kuru-kosu-drift 25 sn bekledi (yuva 1, load1 17.98)

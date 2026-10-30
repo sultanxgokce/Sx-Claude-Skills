@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-duman-kurulum-kapi.sh
+# rc=0 sure=0.2s zaman=2026-10-30T18:57:30+03:00
+--- stdout ---
+ÖNCE (kurulu kopyanın kopyası): kapi-sinavi.sh kipi 644
+  kaynak: git deposu olarak ölçülemedi (dal/sha bilinmiyor)
+
+  sync-skills — APPLY
+
+  ↑ kapi-sinavi → gecici: güncelle v1.2.1 → v1.3.0
+
+  özet: 1 uygulandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+
+SONRA: kapi-sinavi.sh kipi 775 · sync rc=0
+--- stderr ---
