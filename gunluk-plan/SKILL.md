@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.19.1
+version: 1.19.2
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -116,6 +116,7 @@ Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sa
 > **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
 > **1.18.0 (30 Eki, MUAVİN Madde 4 · NOVA):** `sirada-bak.sh` koltuk kimliğini ortamda yokken türetir — `--kim` → `GUNLUK_PLAN_AJAN` → `AGENT_NAME` → `AILE_KIMDEN` → tmux oturumu ↔ aile-registry `tmux:` alanı (tek eşleşme; yol `GUNLUK_PLAN_REGISTRY`). Eskiden kimlik boşken betik yine koşuyor, koltuğa atanmış işleri 'başkasının' sayıp Sultan'a 'iş çıkaralım mı' diye sevk ediyordu (NOVA 30 Eki). Türetilemezse ÖLÇÜLEMEDİ rc 3, kimlik uydurulmaz. Sınav X1-X5.
 > **1.19.1 (30 Eki, SERDAR · Kuzey Yıldızı G2.1–G2.2):** değişmez 4 "Sultan dili zorunlu" oldu: deftere yazılan madde özeti tek cümle ve 80 harften kısa, adı 5-10 kelime. Betik değişmedi.
+> **1.19.2 (30 Eki, BÂNİ · Kuzey Yıldızı G2.6/G14):** paketli `scripts/gorev.sh` cloudtop kanoniğiyle (#1232) yeniden eşitlendi: `gorev.sh ustlen <yeni> --kim <AD> --tahmin <dk> --duraklat <eski>` — yeni işi öne alıp elindekini bırakırken eskiye "öne alınan iş yüzünden" sebebi düşer, kart "Durakladı · …" gösterir. Ajan iki işi paralel yürütebildiği için otomatik değil, açık bayrak.
 
 > **1.17.1 (30 Eki, görev …Y5DY7):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (cloudtop #1184 sonrası) yeniden eşitlendi — oda süzgeci (`liste --oda/--odasiz/--kutu`), `oda`, `oda-dagit` (+`scripts/oda-dagit.py`, Y7 kapısı onu da bayt-eşit ister), `bulgu --puan/--gerekce/--gorsel`, `puan`, `gorsel`, `dogan`. Cloudtop'u görmeyen kutular bu komutları ancak bu sürümle görür.
 

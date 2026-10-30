@@ -46,6 +46,7 @@
 #   gorev.sh ata <gorev_id> <AJAN> "<gerekçe ≥5>"       → atanan tashih + adım
 #   gorev.sh aciliyet <gorev_id> <aciliyet> "<gerekçe>" → aciliyet tashih + adım (kim değiştirdi kayıtta)
 #   gorev.sh ustlen <gorev_id> --kim <AJAN> --tahmin <dk>  → atanan + tahmin_dk + durum calisiliyor + adım (tahmin ZORUNLU)
+#     [--duraklat <eski_gorev_id>] → yeni işi öne alıp eskisini bırakıyorsan: eskiye "[bekliyor] öne alınan iş yüzünden: <yeni>" adımı düşer, kart "Durakladı · …" gösterir (G2.6/G14)
 #   gorev.sh bitti <gorev_id> --kim <AJAN> (--kare <yol> --surum <sürüm> [--ekran "…"] | --olcum "…" | --belge <yol>) [--pr N] → kanıt sınıfı + durum onay-bekliyor (✓ bitti yalnız insan, A06); PR tek başına yetmez (KF22R)
 #   gorev.sh bulgu "<başlık>" --kim <AJAN> [--not "<kanıt>"] [--etiket bug|ozellik]  → K1: bulgu = etiketli görev (bulgu.sh yaz ile aynı imza)
 #   BEĞENİ DÖNGÜSÜ (--etiket begeni-dongusu · Sultan "tamam" diyene dek tur tur giden iş, çoğu ekran/tasarım · tasarım: Nexus _agents/spec/begeni-dongusu-DESIGN.md):
@@ -217,11 +218,23 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN
     _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"aciliyet: %s · adım yazıldı" % j["kayit"]["canli"].get("aciliyet")' ;;
   ustlen)
     ID="${2:-}"; shift 2 2>/dev/null || { echo "kullanım: gorev.sh ustlen <gorev_id> --kim <AJAN> --tahmin <dk>" >&2; exit 2; }
-    KIM=""; TAH=""
-    while [ $# -gt 0 ]; do case "$1" in --kim) KIM="${2:-}"; shift 2;; --tahmin) TAH="${2:-}"; shift 2;; *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
-    [ -n "$ID" ] && [ -n "$KIM" ] && [ -n "$TAH" ] || { echo "kullanım: gorev.sh ustlen <gorev_id> --kim <AJAN> --tahmin <dk> — tahmin ZORUNLU (Sultan: başladıysa tahmini bitiş)" >&2; exit 2; }
-    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"atanan":sys.argv[1],"tahmin_dk":sys.argv[2],"gorev_durumu":"calisiliyor"},"gerekce":"%s üstlendi, tahmin %s dk" % (sys.argv[1],sys.argv[2]),"adimlar":["[üstlendi] %s · tahmin %s dk" % (sys.argv[1],sys.argv[2])]},ensure_ascii=False))' "$KIM" "$TAH")"
-    _cagir PATCH "/kayit/$ID" "$G" | _sonuc 200 '"▶ çalışılıyor · %s · ~%s dk" % (j["kayit"]["canli"].get("atanan"), j["kayit"]["canli"].get("tahmin_dk"))' ;;
+    KIM=""; TAH=""; DUR=""
+    while [ $# -gt 0 ]; do case "$1" in --kim) KIM="${2:-}"; shift 2;; --tahmin) TAH="${2:-}"; shift 2;; --duraklat) DUR="${2:-}"; [ -n "$DUR" ] || { echo "--duraklat bir görev kimliği ister" >&2; exit 2; }; shift 2;; *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
+    [ -n "$ID" ] && [ -n "$KIM" ] && [ -n "$TAH" ] || { echo "kullanım: gorev.sh ustlen <gorev_id> --kim <AJAN> --tahmin <dk> [--duraklat <eski_gorev_id>] — tahmin ZORUNLU (Sultan: başladıysa tahmini bitiş)" >&2; exit 2; }
+    # --duraklat (G2.6/G14): öne alınan iş yüzünden bırakılan işin sebebi kayda ve karta düşer. Önce iki kayıt okunur; eski iş çalışılıyor
+    #   değilse ya da aynı işse hiçbir şey yazılmaz (rc 2). Sıra: önce yeni iş üstlenilir, sonra eskiye adım — yarıda kalırsa söylenir (rc 1).
+    YB=""
+    if [ -n "$DUR" ]; then
+      [ "$DUR" != "$ID" ] || { echo "--duraklat: öne alınan iş ile duraklatılan iş aynı ($ID)" >&2; exit 2; }
+      YB="$(_cagir GET "/kayit/$ID" | _sonuc 200 'j["kayit"]["adlar"][0]["deger"]')" || { echo "--duraklat: öne alınan iş okunamadı — $YB" >&2; exit 1; }
+      ED="$(_cagir GET "/kayit/$DUR" | _sonuc 200 'j["kayit"]["canli"].get("gorev_durumu") or "-"')" || { echo "--duraklat: duraklatılacak iş okunamadı — $ED" >&2; exit 1; }
+      [ "$ED" = "calisiliyor" ] || { echo "--duraklat: $DUR çalışılıyor değil ($ED) — duraklatılacak bir şey yok, hiçbir şey yazılmadı" >&2; exit 2; }
+    fi
+    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"atanan":sys.argv[1],"tahmin_dk":sys.argv[2],"gorev_durumu":"calisiliyor"},"gerekce":"%s üstlendi, tahmin %s dk" % (sys.argv[1],sys.argv[2]),"adimlar":["[üstlendi] %s · tahmin %s dk" % (sys.argv[1],sys.argv[2])] + (["[öne alındı] %s duraklatıldı" % sys.argv[3]] if sys.argv[3] else [])},ensure_ascii=False))' "$KIM" "$TAH" "$DUR")"
+    _cagir PATCH "/kayit/$ID" "$G" | _sonuc 200 '"▶ çalışılıyor · %s · ~%s dk" % (j["kayit"]["canli"].get("atanan"), j["kayit"]["canli"].get("tahmin_dk"))' || exit 1
+    [ -n "$DUR" ] || exit 0
+    G="$(python3 -c 'import sys,json; b=sys.argv[1] if len(sys.argv[1])<=60 else sys.argv[1][:59]+"…"; print(json.dumps({"adimlar":["[bekliyor] öne alınan iş yüzünden: %s" % b]},ensure_ascii=False))' "$YB")"
+    _cagir PATCH "/kayit/$DUR" "$G" | _sonuc 200 '"⏸ %s duraklıyor · sebep: öne alınan iş yüzünden (adım yazıldı)" % j["kayit"]["id"]' || { echo "yeni iş üstlenildi AMA $DUR üzerine sebep yazılamadı — elle: gorev.sh adim $DUR \"[bekliyor] öne alınan iş yüzünden: …\"" >&2; exit 1; } ;;
   bitti)
     # DİLİM ≠ GÖREV (KF22R · Sultan D1 21 Eki): bitti = özellik Sultan'ın ekranında. PR birleşmesi dilimdir; kanıt bir SINIF taşır:
     #   ekran işi: --kare <yol> --surum <canlı sürüm> [--ekran "<ekran adı>"] · ölçüm işi: --olcum "önce=N sonra=M (+ dosya yolu)" · belge işi: --belge <yol>
