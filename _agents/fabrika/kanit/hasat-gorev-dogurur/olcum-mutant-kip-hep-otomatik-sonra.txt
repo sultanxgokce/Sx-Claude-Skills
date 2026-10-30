@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh kip-hep-otomatik
+# rc=1 sure=8.3s zaman=2026-10-31T02:50:04+03:00
+--- stdout ---
+MUTASYON: kip-hep-otomatik
+  ✗ S2 Seanslı + son cevap 'kabul' → rc 0, açılış adımı 'Seanslı Hasat ile açıldı' — beklenen=0:1 gerçek=0:0
+  ✗ S4 --baslik/--ozet/--kutu/--atanan doğan göreve aynen gider — 'ekle Düzeltilmiş görev başlığı --kutu akar --ozet Düzeltilmiş ad beş kelime burada: açıklama --kaynak-kim REİS --kaynak-nereden Hasat (Seanslı) --atanan ASIL' yok: ekle Düzeltilmiş görev başlığı --kutu akar --ozet Düzeltilmiş ad beş kelime burada: açıklama --kaynak-kim REİS --kaynak-nereden Hasat (Otomatik) --atanan ASIL
+sonuç: 97 geçti · 2 kaldı
+sınav rc=1 (≠0 = mutant YAKALANDI)
+--- stderr ---
