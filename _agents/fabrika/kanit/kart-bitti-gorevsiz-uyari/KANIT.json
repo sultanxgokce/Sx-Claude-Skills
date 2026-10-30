@@ -1,0 +1,44 @@
+{
+  "is": "kart-bitti-gorevsiz-uyari",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T15:27:45+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "once",
+      "dosya": "olcum-kart-sinav-once.txt",
+      "sha256": "e4f0950ba656f53265eaf9d52669704e45af43dc52123dd25296ee92a6f15928",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kartgb.sh",
+        "eski"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:24:52+03:00",
+      "sure_sn": 569.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "834fbae6bc60480b83405b5f4f9c4167"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "6f9397125877b3bc2080862a620d21629585dbb14cfd4f77f39b419294bf0c88",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/olc-kartgb.sh",
+        "yeni"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:27:45+03:00",
+      "sure_sn": 173.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5f3e41c5b5be428a9f01fe2f7b143fa2"
+    }
+  ],
+  "imza": "36e99b47787591a74f75989a440275660cb764d9e8ea48772725ffe779ca27cc"
+}

@@ -1091,4 +1091,22 @@ m16 soz-zamani-yok izin.py 'return z.isoformat(timespec="seconds"), "soz", None'
 m16 gelecek-citi-yok izin.py 'if z > an:' 'if False:' && { szk is-mz2; bash "$D16/kart.sh" sultan-dedi is-mz2 --karar basla --oturum m2 --soz "x" --beyan MUAVIN --soz-zamani "$YAKIN" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant 'gelecek-citi-yok': 30 sn sonrası kabul edilince V20e2 kapısı KIRMIZI (rc 0 döndü)"; }
 m16 kunye-saatsiz izin.py 'return "oturum %s · söz \"%s\"%s" % (o, s[:60], (" · söz saati %s" % z) if z else "")' 'return "oturum %s · söz \"%s\"" % (o, s[:60])' && { szk is-mz3; bash "$D16/kart.sh" sultan-dedi is-mz3 --karar basla --oturum m3 --soz "x" --beyan MUAVIN --soz-zamani 2026-10-28T20:25:00+03:00 >/dev/null 2>&1; bash "$D16/kart.sh" izin-durum is-mz3 | grep -q "söz saati"; [ $? -ne 0 ]; g $? "mutant 'kunye-saatsiz': künyeden saat düşünce V20b kapısı KIRMIZI"; }
 
+echo "════ T-GB · bitti görevsiz kartta SÖYLER (kapanışta sessizdi; ac ve göz adımı söylüyordu), görevli kartta söylemez, rc ve kapanış değişmez ════"
+GBM="görev bağı yok — bu iş göreve bağlı değil, defterde PR kapanışı görünmez"
+bash "$KT" ac gbu-1 --is "görevsiz kapanış" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+O="$(bash "$KT" bitti gbu-1 --pr 5 2>&1)"; RC=$?
+[ $RC -eq 0 ] && grep -qF "$GBM" <<<"$O" && grep -qF "(bağlamak: kart.sh ac … --gorev)" <<<"$O"; g $? "GB1 görevsiz kart bitti → görünür uyarı VAR ve rc 0 (bloklamaz)"
+python3 -c "import json;assert json.load(open('$KU/gbu-1.json'))['durum']=='bitti'"; g $? "GB2 görevsiz kart yine de kapandı (durum=bitti)"
+bash "$KT" ac gbu-2 --is "görevli kapanış" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 - "$KU/gbu-2.json" <<'PY'
+import json,sys; k=json.load(open(sys.argv[1])); k["gorev"]="gorev_GBUYARI0000000001"; json.dump(k,open(sys.argv[1],"w"),ensure_ascii=False)
+PY
+O="$(bash "$KT" bitti gbu-2 --pr 6 2>&1)"; ! grep -qF "görev bağı yok" <<<"$O"; g $? "GB3 görevli kart bitti → uyarı YOK (altın)"
+bash "$KT" ac gbu-3 --is "görevsiz tıkanma" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+O="$(bash "$KT" tikandi gbu-3 --yol devam --neden "beklemede" 2>&1)"; ! grep -qF "göreve bağlı değil, defterde PR kapanışı" <<<"$O"; g $? "GB4 tikandi'da bu uyarı çıkmaz (yalnız bitti)"
+bash "$KT" ac gbu-5 --is "gorev null kapanış" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 -c "import json,sys;p=sys.argv[1];k=json.load(open(p));k['gorev']=None;json.dump(k,open(p,'w'),ensure_ascii=False)" "$KU/gbu-5.json"
+O="$(bash "$KT" bitti gbu-5 --pr 8 2>&1)"; RC=$?
+[ $RC -eq 0 ] && grep -qF "$GBM" <<<"$O"; g $? "GB5 kartta gorev JSON null → görevsiz sayılır, uyarı VAR (None dizgesi görev sanılmaz), rc 0"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

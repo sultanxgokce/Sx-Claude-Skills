@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kart-bitti-gorevsiz-uyari",
+  "pr": "586",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T15:09:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-bitti-gorevsiz-uyari",
+  "dal": "kart-bitti-gorevsiz-uyari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17779,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 2993
+  },
+  "dalgic": "uyumlu",
+  "bas": "5d88c85263b63a64301819816c6eacc580e7ba49",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Görevsiz kartın `bitti` kapanışına görünür ve bloklamayan uyarı eklenmiş; görevli kart ile diğer kapanış türleri ayrılmış, kapanma durumu ve rc sınanmış. Ancak `gorev: null` kimlik yokluğu sayılmayıp `None` metni nedeniyle görev varmış gibi işleneceğinden önce bu kenar durum çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "`gorev` alanı JSON `null` olduğunda görevsiz uyarı basılmaz ve `gorev_yaz` yanlışlıkla çağrılır.",
+        "kanit": "Koşuldaki `python3 -c \"...print(...get('gorev',''))\"` ifadesi null değerini `None` olarak basar; `[ -n \"None\" ]` doğru olur. Eklenen T-GB sınavları yalnız boş/atanmış görev durumlarını kapsıyor, null durumu yok.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:580; yazilim-fabrikasi/scripts/kart.test.sh:1095",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 429 geçti/1 kaldıdan 430 geçti/0 kaldıya ilerlemeyi gösteriyor ve rc 0. Sınav görünür uyarıyı, görevli kartta sessizliği, rc 0'ı, durum=bitti kapanışını ve yalnız `bitti` kapsamını ölçüyor; fakat `gorev: null` vakasını ve görevin bitirilmediğini doğrudan ölçen ayrı bir iddiayı kapsamıyor."
+  }
+}
