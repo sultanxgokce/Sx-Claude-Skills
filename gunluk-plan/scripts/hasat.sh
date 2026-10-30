@@ -23,6 +23,8 @@ ID="${1:-}"; case "$ID" in gorev_*) shift ;; *) echo "HATA: gorev_id 'gorev_' il
 GEREKCE=""; if [ "$KOMUT" = ac ]; then GEREKCE="${1:-}"; [ -n "$(printf '%s' "$GEREKCE" | tr -d '[:space:]')" ] && [ ${#GEREKCE} -ge 5 ] || { echo "HATA: ac için gerekçe (≥5 harf) ister" >&2; exit 2; }; shift; fi
 TAZE_GUN="${GUNLUK_PLAN_TAZE_GUN:-7}"; BIRLESME=""; YUZEY=""; DEPO="${HASAT_DEPO:-}"; SONUC=""; OLCUM=""; SINIF="olcum"; SOZ=""; KAPANDI=""; TARIH=""
 while [ $# -gt 0 ]; do
+  # göz tur 1: değersiz bayrakta 'shift 2' düşer, argüman listesi değişmez → sonsuz döngü. Değer ister bayrağı önce sına.
+  case "$1" in --taze-gun|--birlesme|--yuzey|--depo|--sonuc|--olcum|--sinif|--soz|--kapandi|--tarih) [ $# -ge 2 ] || { echo "HATA: $1 değer ister" >&2; exit 2; } ;; esac
   case "$1" in
     --taze-gun) TAZE_GUN="${2:-}"; shift 2 ;; --birlesme) BIRLESME="${2:-}"; shift 2 ;; --yuzey) YUZEY="${2:-}"; shift 2 ;; --depo) DEPO="${2:-}"; shift 2 ;;
     --sonuc) SONUC="${2:-}"; shift 2 ;; --olcum) OLCUM="${2:-}"; shift 2 ;; --sinif) SINIF="${2:-}"; shift 2 ;; --soz) SOZ="${2:-}"; shift 2 ;;

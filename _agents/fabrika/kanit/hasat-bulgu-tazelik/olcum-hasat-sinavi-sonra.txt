@@ -1,11 +1,12 @@
 $ bash gunluk-plan/scripts/hasat.test.sh
-# rc=0 sure=2.5s zaman=2026-10-30T16:41:28+03:00
+# rc=0 sure=2.8s zaman=2026-10-30T16:44:30+03:00
 --- stdout ---
 — kullanım
   ✓ U1 komutsuz rc 2
   ✓ U2 gorev_ öneksiz kimlik rc 2
   ✓ U3 --taze-gun 0 rc 2
   ✓ U4 ac gerekçesi 5 harften kısa rc 2
+  ✓ U5 değer isteyen her bayrak (10) değersiz verilince rc 2, döngüye girmez (göz tur 1)
 — durum: kapı (fikstür günü 2026-01-10, pencere 7)
   ✓ D1 doğrulama yok → HASAT=OLMAZ rc 1
   ✓ D1b NEDEN doğrulama komutunu gösterir
@@ -85,5 +86,5 @@ $ bash gunluk-plan/scripts/hasat.test.sh
   ✓ A5 ÖLÇÜLEMEDİ → açılmaz rc 3
   ✓ A6 defter açılışı reddederse rc 1
   ✓ A7 hiçbir yol bilinmeyen gorev.sh fiili çağırmadı
-sonuç: 77 geçti · 0 kaldı
+sonuç: 78 geçti · 0 kaldı
 --- stderr ---

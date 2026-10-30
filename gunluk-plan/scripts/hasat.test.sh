@@ -29,6 +29,8 @@ bash "$HS" >/dev/null 2>&1; kapi "U1 komutsuz rc 2" "2" "$?"
 bash "$HS" durum yanlis >/dev/null 2>&1; kapi "U2 gorev_ öneksiz kimlik rc 2" "2" "$?"
 bash "$HS" durum gorev_A1 --taze-gun 0 >/dev/null 2>&1; kapi "U3 --taze-gun 0 rc 2" "2" "$?"
 bash "$HS" ac gorev_A1 "kısa" >/dev/null 2>&1; kapi "U4 ac gerekçesi 5 harften kısa rc 2" "2" "$?"
+for b in --taze-gun --birlesme --yuzey --depo --sonuc --olcum --sinif --soz --kapandi --tarih; do timeout 10 bash "$HS" durum gorev_A1 "$b" >/dev/null 2>&1; r=$?; [ "$r" = 2 ] || { kalan=$((kalan+1)); echo "  ✗ U5 $b değersiz: rc $r (124 = sonsuz döngü)"; continue; }; done
+kapi "U5 değer isteyen her bayrak (10) değersiz verilince rc 2, döngüye girmez (göz tur 1)" "2" "$(timeout 10 bash "$HS" dogrula gorev_A1 --sonuc var --olcum >/dev/null 2>&1; echo $?)"
 echo "— durum: kapı (fikstür günü 2026-01-10, pencere 7)"
 kayit A1 havuz "2026-01-01T10:00:00Z|[kanıt] ilk gözlem"
 c="$(bash "$HS" durum gorev_A1 2>&1)"; rc=$?

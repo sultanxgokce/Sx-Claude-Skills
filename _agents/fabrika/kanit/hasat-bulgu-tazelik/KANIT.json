@@ -1,7 +1,7 @@
 {
   "is": "hasat-bulgu-tazelik",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T16:42:37+03:00",
+  "guncelleme": "2026-10-30T16:46:25+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,17 +25,17 @@
       "etiket": "hasat-sinavi",
       "asama": "sonra",
       "dosya": "olcum-hasat-sinavi-sonra.txt",
-      "sha256": "c136bdffe0985ebaff3508dd2b6e55e09a508fd806f5b9d72745548d990b855c",
+      "sha256": "2b9a22d31412cb2a85bf9c278c0e65b2900f55f3f156761db76aa18d6b4efde2",
       "komut": [
         "bash",
         "gunluk-plan/scripts/hasat.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-30T16:41:28+03:00",
-      "sure_sn": 2.5,
+      "zaman": "2026-10-30T16:44:30+03:00",
+      "sure_sn": 2.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1b0daffc98474f379c703b21afe4377f"
+      "olcum_id": "f36eeca623ce47df9bf35d14f4528e33"
     },
     {
       "tur": "olcum",
@@ -446,7 +446,33 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "579ca73b4607407ca131d3a05591b140"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "degersiz-bayrak-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-degersiz-bayrak-mutant-sonra.txt",
+      "sha256": "b3e8c8d5f8e7878dd69b2b6d2a07662436d789a869ce4b961d6fe0be806877f8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-hasat-bulgu-tazelik/gunluk-plan/scripts",
+        "hasat.sh",
+        "hasat.test.sh",
+        "[ $# -ge 2 ] || { echo \"HATA: $1 değer ister\" >&2; exit 2; } ;;",
+        ":;;"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T16:46:25+03:00",
+      "sure_sn": 115.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "hasat-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0714ab4ecf62434095edab60a195ae09"
     }
   ],
-  "imza": "d22b6af7c3f3961022e4032380cccdc22ef6bd895775859c28fb404fe9b739ea"
+  "imza": "c190d6ae60251efa3f75a46ceaee0276b722f265b043aa458b57d3ffcfbfea5d"
 }
