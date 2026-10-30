@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kapsam-satir-kesisimi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T15:01:43+03:00",
+  "guncelleme": "2026-10-30T15:13:47+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -181,7 +181,45 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "a8c3164102004f7bbf6349098c539411"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-isalani-tur4-sonra.txt",
+      "sha256": "0aacc50706e80310d4d77e1ccd9e8845cbe4ce156ea7765ccaf58aae959cd4b6",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:13:35+03:00",
+      "sure_sn": 84.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6c9c2e3538b34ed1824c9af0680824b1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-baglam-sayilir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-baglam-sayilir-sonra.txt",
+      "sha256": "f5a1bda54dfa91069a40cfeff0be3ec417d8ad9d81449029be4847791376e27a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:13:47+03:00",
+      "sure_sn": 11.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-isalani-tur4",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "8c9fcf98e7a14e4f8b6078a68376f7e2"
     }
   ],
-  "imza": "07f27d856f544a5244b395938d9b7916243ba02257f45587893ee237564f7043"
+  "imza": "7a7657971a53c9506f2b36eb78ad1acdb4f60b745cafa82e808c316aa94d9593"
 }

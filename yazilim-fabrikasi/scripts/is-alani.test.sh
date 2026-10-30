@@ -355,8 +355,28 @@ GH
 chmod +x "$BOZ30/gh"
 sed -i '15s/.*/satir 15 ALAN/' "$KA/katalog.txt"
 CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
-[ "$RC" -eq 0 ] && grep -q "tavana (30) ulaştı" <<<"$CIKTI"; g $? "30 açık PR → tavan söylenir (sessiz atlama yok); kesişim yok rc=0 (rc=$RC)"
-CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" ac tavan-ac --kartsiz --dosyalar z.txt 2>&1 )"; grep -q "tavana (30) ulaştı" <<<"$CIKTI"; g $? "ac kapsam kontrolü de 30 tavanını söyler"
+[ "$RC" -eq 3 ] && grep -q "tavana (30) ulaştı" <<<"$CIKTI" && grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "30 açık PR → tavan söylenir ve 'kesişim yok' DENMEZ: rc=3 ölçülemedi (göz tur 1) (rc=$RC)"
+CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" ac tavan-ac --kartsiz --dosyalar z.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "tavana (30) ulaştı" <<<"$CIKTI" && grep -q "EKSİK — 30 PR tavanı" <<<"$CIKTI" && ! grep -q "çakışması yok" <<<"$CIKTI"; g $? "ac: 30 tavanında 'çakışma yok' denmez, EKSİK/ölçülemedi denir, alan yine açılır (rc=$RC)"
+# yedek yol: pr view yok → gh pr diff (±3 BAĞLAMLI) — bağlam satırı kesişim sayılmaz (göz tur 1 bulgu 2)
+BAGLAM="$T/baglam-bin"; mkdir -p "$BAGLAM"; ( cd "$T/depo" && git diff -U3 origin/main origin/pr-satir ) > "$T/pr-satir-U3.diff"
+grep -q "^@@ -1,7 +1,7 @@" "$T/pr-satir-U3.diff"; g $? "fikstür: bağlamlı fark başlığı 1-7 (gerçek değişiklik 3-4)"
+cat > "$BAGLAM/gh" <<GH
+#!/usr/bin/env bash
+case "\$1 \$2" in
+  "pr list") case " \$* " in *headRefName*) echo '[{"number":11,"headRefName":"pr-satir"}]' ;; *) echo 11 ;; esac ;;
+  "pr diff") case " \$* " in *--name-only*) printf 'katalog.txt\\n' ;; *) cat "$T/pr-satir-U3.diff" ;; esac ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$BAGLAM/gh"
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '6s/.*/satir 6 ALAN/' "$KA/katalog.txt"
+CIKTI="$( cd "$T/depo" && PATH="$BAGLAM:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "gh pr diff (bağlam satırları ayıklandı" <<<"$CIKTI" && grep -q "PR: katalog.txt: 3-4" <<<"$CIKTI"; g $? "🔴 yedek yol (gh pr diff ±3 bağlam): PR bloğu 3-4 olarak okundu, bağlamdaki alan satırı 6 KESİŞMEZ rc=0 (eski: başlık 1-7 sayılır, sahte rc 2) (rc=$RC)"
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '4s/.*/satir 4 ALAN/' "$KA/katalog.txt"
+( cd "$T/depo" && PATH="$BAGLAM:$PATH" bash "$IS" kapsam-olc kendi-alan >/dev/null 2>&1 ); RC=$?
+[ "$RC" -eq 2 ]; g $? "yedek yol pozitif kontrol: alan 4 gerçek kesişim rc=2 (rc=$RC)"
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '15s/.*/satir 15 ALAN/' "$KA/katalog.txt"
 ( cd "$T/depo" && bash "$IS" kapat tavan-ac ) >/dev/null 2>&1 || true
 sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
 echo "── T13 · MUTASYON (tam kopya): kesişim koşulu sökülünce aynı satır 'kesişim yok' çıkar → üstteki rc 2 kapısı düşerdi ──"
