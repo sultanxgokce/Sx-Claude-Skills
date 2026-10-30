@@ -1,0 +1,225 @@
+{
+  "is": "fabrika-kapsam-satir-kesisimi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-30T15:13:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani",
+      "asama": "once",
+      "dosya": "olcum-sinav-isalani-once.txt",
+      "sha256": "bedbb755ed985177a315a78e1b90926e9750612dbc60158880e4f5de87263a22",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-30T14:43:04+03:00",
+      "sure_sn": 7.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "10dc4f1c65bb403b85413af8310890dd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-isalani-sonra.txt",
+      "sha256": "a3f8996126d8cc62a4dbfd7bb685efe8090535a1a46860bfd8912a5e6cdb6db7",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:43:14+03:00",
+      "sure_sn": 9.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "286a2834722d4036b38c956d21d5a241"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kesisim-false",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kesisim-false-sonra.txt",
+      "sha256": "63121aac933f50cc718edaad1ef96b9ef505fdab19ca148398c4dc52d7b39c75",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:43:23+03:00",
+      "sure_sn": 9.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-isalani",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "f671c17eea1548a99dc77a41cf934ba1"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "gercek-once-gercek-ac",
+      "asama": "tek",
+      "dosya": "dosya-gercek-once-gercek-ac-tek.txt",
+      "sha256": "6c39dd2891b95b643db706766f5cb909f0f49f7efbdcf2248b079b02633ef4c8",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi/_agents/fabrika/kanit/fabrika-kapsam-satir-kesisimi/gercek-once-gercek-ac.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:43:58+03:00",
+      "olcum_id": "2646e1ad735a498ab393de82190393cd"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "gercek-sonra-gercek-ac",
+      "asama": "tek",
+      "dosya": "dosya-gercek-sonra-gercek-ac-tek.txt",
+      "sha256": "cada7342ab60b375a410c96eaf9bcf6595d640fc35c759ac9a04f34163e3813e",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi/_agents/fabrika/kanit/fabrika-kapsam-satir-kesisimi/gercek-sonra-gercek-ac.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:43:58+03:00",
+      "olcum_id": "563d08ae884242f9831bf571a98aea59"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "gercek-sonra-gercek-kapsam-olc",
+      "asama": "tek",
+      "dosya": "dosya-gercek-sonra-gercek-kapsam-olc-tek.txt",
+      "sha256": "dcdf6626315d365caae0df6f4514712b973c15452cc2b68d8f27a61f73e6e09d",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi/_agents/fabrika/kanit/fabrika-kapsam-satir-kesisimi/gercek-sonra-gercek-kapsam-olc.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:43:58+03:00",
+      "olcum_id": "2c1108f3ae9b403591848906eb3c9d34"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "gercek-kendi-alan-kapsam-olc",
+      "asama": "tek",
+      "dosya": "dosya-gercek-kendi-alan-kapsam-olc-tek.txt",
+      "sha256": "eededd4762b5f155476fc7e14e74cbc3665d2fc582692964084fbe09980f2e65",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kendi-kapsam-olc.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:45:17+03:00",
+      "olcum_id": "2f5fefcd14b94dee9167d67bd877a7a0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-isalani-tur2-sonra.txt",
+      "sha256": "1203eb9e944206f5f0f7baa0ba74246f5611672acc2d60b2af4afb10e7f78100",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:56:15+03:00",
+      "sure_sn": 15.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "50fe5f31f6e74da88139f1db2c0f3c83"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kesisim-false-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kesisim-false-tur2-sonra.txt",
+      "sha256": "899d1c95b0efbdbd2d8b24629141a825d7295963d015ce79e2c1c64ca2e91bb7",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T14:56:36+03:00",
+      "sure_sn": 20.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-isalani-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0d8e425c714e4f828fd108fb1c85e644"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-isalani-tur3-sonra.txt",
+      "sha256": "a052c832bfab093c27776711b9222be0a4b63e9de02fa0bbd6fe2b9f4867801e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:01:29+03:00",
+      "sure_sn": 33.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0d807e27b4d04c0b99f59298e8be13f6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sinir-kucuktur",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-sinir-kucuktur-sonra.txt",
+      "sha256": "bb651eba472b79e1047b9b62cafb1ed6be1261159582127e8d1210d1b8019a74",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:01:43+03:00",
+      "sure_sn": 13.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-isalani-tur3",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "a8c3164102004f7bbf6349098c539411"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-isalani-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-isalani-tur4-sonra.txt",
+      "sha256": "0aacc50706e80310d4d77e1ccd9e8845cbe4ce156ea7765ccaf58aae959cd4b6",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:13:35+03:00",
+      "sure_sn": 84.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6c9c2e3538b34ed1824c9af0680824b1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-baglam-sayilir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-baglam-sayilir-sonra.txt",
+      "sha256": "f5a1bda54dfa91069a40cfeff0be3ec417d8ad9d81449029be4847791376e27a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-30T15:13:47+03:00",
+      "sure_sn": 11.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-isalani-tur4",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "8c9fcf98e7a14e4f8b6078a68376f7e2"
+    }
+  ],
+  "imza": "7a7657971a53c9506f2b36eb78ad1acdb4f60b745cafa82e808c316aa94d9593"
+}

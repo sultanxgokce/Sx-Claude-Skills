@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "fabrika-kapsam-satir-kesisimi",
+  "pr": "589",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T15:10:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-kapsam-satir-kesisimi",
+  "dal": "fabrika-kapsam-satir-kesisimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 70381,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, aynı dosya engelini uyarıya çeviren kapı ve yeni kapsam-olc akışı talep edilen işi yapıyor; gerçek ölçüm 91/0, iki mutasyon da bozukluğu yakalıyor. Ancak açık PR listesinin ilk 30 ile sınırlanması eksik ölçümü rc 0 diye sunabiliyor, yedek gh fark yolu da bağlam satırlarını değişmiş blok sayarak yanlış rc 2 üretebiliyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "kapsam-olc yalnız ilk 30 açık PR'ı inceliyor; 30 sınırına gelince daha eski PR'ların denetlenmediğini söylemesine rağmen, incelenenlerde kesişim yoksa rc 0 ve “satır kesişimi yok” sonucu veriyor. Talep tüm açık PR bloklarıyla kesişim ister; eksik tarama başarı değil, en azından rc 3 ölçülemedi olmalıdır.",
+        "kanit": "Değişiklikte `gh pr list --state open --limit 30` kullanılıyor; hemen ardından tavan uyarısı basılıyor, fakat son karar `olcemedi` artmadığı için rc 0 olabiliyor. T13 ölçümü bunu açıkça `30 açık PR → tavan söylenir ... kesişim yok rc=0` diye yeşil kabul ediyor.",
+        "konum": "yazilim-fabrikasi/scripts/is-alani.sh:kapsam_olc içindeki `--limit 30` ve son rc kararı; olcum-sinav-isalani-tur3-sonra.txt T13",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "PR dalını merge-base ile okuyamayan yedek yol, `gh pr diff` çıktısındaki bağlamlı hunk aralığının tamamını değişmiş satır bloğu sayıyor. Böylece yalnız bağlamda kalan bir alan satırı kesişmiş görünerek kapsam-olc'u yanlış rc 2 ile durdurabilir.",
+        "kanit": "`_pr_hunklar` yedek yolu `gh pr diff` çıktısını doğrudan `_hunklar`a veriyor; `_hunklar` yalnız `@@ -baş,uzunluk` başlığını okuyup bütün eski aralığı bloklaştırıyor. Kodun kendi kaynak etiketi de `gh pr diff (±3 satır bağlam dahil — aralıklar gerçekten geniş olabilir)` diyerek bu genişlemeyi doğruluyor; ölçümlerde yedek yolun gerçek değişen satırları bağlamdan ayırdığına dair kapı yok.",
+        "konum": "yazilim-fabrikasi/scripts/is-alani.sh:_pr_hunklar ve _hunklar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 62/18 ve ardından 80/0, son gerçek ölçüm ise 91/0 gösteriyor. `gercek_olcum` etiketli yeşil kayıtlar gerçek kodu doğruluyor; iki mutasyon kaydındaki rc 1 ve ✗ satırları beklenen sonuç ve sınavın kesişim koşulu ile sınır hatasını yakaladığını kanıtlıyor. Kanıt geniş, fakat sınav 30-PR eksik taramasını bilerek rc 0 kabul ediyor ve bağlamlı yedek farkın yanlış pozitifliğini sınamıyor."
+  }
+}

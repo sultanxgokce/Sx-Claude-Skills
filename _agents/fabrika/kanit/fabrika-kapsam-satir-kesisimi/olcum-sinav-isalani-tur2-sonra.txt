@@ -1,0 +1,111 @@
+$ bash yazilim-fabrikasi/scripts/is-alani.test.sh
+# rc=0 sure=15.5s zaman=2026-10-30T14:56:15+03:00
+--- stdout ---
+════ T0 · kanca-kur: şablondan kopyalar, hooksPath ayarlar, idempotent ════
+  ✓ kanca kuruldu
+  ✓ pre-commit dosyası var ve çalıştırılabilir
+  ✓ core.hooksPath=.githooks
+  ✓ ikinci kurulum: dokunmadı (idempotent)
+════ T1 · paylaşılan ağaç · main → SERBEST ════
+  ✓ main'e commit atılabildi
+  ✓ commit gerçekten düştü
+════ T2 · paylaşılan ağaç · özellik dalı → BLOKE ════
+  ✓ commit ENGELLENDİ (rc=1)
+  ✓ ne yapılacağı komutla yazılı
+  ✓ commit gerçekten düşmedi
+════ T3 · acil kaçış ════
+  ✓ PAYLASILAN_COMMIT=1 ile geçilebiliyor
+════ T4 · ac: kendi alanı, origin/main'den, <depo>-<iş> adıyla ════
+  ✓ alan açıldı
+  ✓ kart iş alanına KOPYALANMADI (tek kaynak birincil; 15 Eki — kopya bayatlıyor ve PR'la birincil pull'unu tıkıyordu)
+  ✓ açılış mesajı kartın birincilde kaldığını söylüyor
+  ✓ origin/main üstünde açtığını söylüyor
+  ✓ paylaşılan-kaynak uyarısı basıldı
+  ✓ kapsam bakılmadığını SÖYLÜYOR (sessiz atlama yok)
+  ✓ worktree dizini <depo>-<iş> adıyla var
+  ✓ İZOLE alanda özellik dalına commit SERBEST
+  ✓ commit düştü
+  ✓ aynı adla ikinci açılış REDDEDİLDİ
+════ T5 · kontrol üç durum ════
+  ✓ izole alanda: güvenli (IS_ALANI_DEPO dışarıdan verilmişken bile)
+  ✓ paylaşılan+main: güvenli
+  ✓ paylaşılan+özellik dalı: rc=1
+  ✓ riskli olduğunu söylüyor
+════ T6 · kapat: kirli alanı silmez ════
+  ✓ kayıtsız değişiklik varken KAPATMADI
+  ✓ alan yerinde (iş kaybı yok)
+  ✓ 🔴 kartlar/ altında İZLENEN+DEĞİŞMİŞ dosya varken KAPATMADI (iş sayıldı)
+  ✓ izlenen kart dosyası SİLİNMEDİ, değişiklik yerinde (iş kaybı yok)
+  ✓ indekse EKLENMİŞ (A) kart dosyası da iş: kapatmadı, silmedi
+  ✓ temizken kapatıldı — kartlar/ altındaki kayıtsız kopya 'kayıtsız iş' SAYILMADI (kart birincilde)
+════ T7 · kapsam kontrolü (sahte gh): aynı dosya → UYARI + açar (30 Eki · görev …7PRJ07; eskiden rc=2 AÇMAZDI); temiz → açar ════
+  ✓ 🔴 aynı dosya ENGEL DEĞİL: rc=0 (eskiden rc=2 — Sx'te catalog.json yüzünden açık PR varken hiç alan açılamıyordu) (rc=0)
+  ✓ hangi PR'ın aynı dosyaya dokunduğu yazılı
+  ✓ alan AÇILDI
+  ✓ uyarı sessiz değil: KAPSAM UYARISI + PR'dan önce koşulacak komut (kapsam-olc <iş>) yazılı
+  ✓ sahte gh fark vermiyor → satır blokları 'okunamadı' denir (uydurulmaz)
+  ✓ uyarı KARTA yazıldı (kapsam_uyarilari: PR #7 + kapsam-olc) — bağımsız göz görür
+  ✓ iki yüzey (30 Eki): sahte gh 'pr view' vermiyor → git yolu düştü, TEK YÜZEY uyarısı basıldı (sessiz düşme yok), hüküm GitHub listesinden
+  ✓ çakışma yokken rc=0
+  ✓ kaç PR'a bakıldığı yazılı
+════ T7b · dosya listesi YOKKEN benzer açık PR uyarısı (görev …Z2G: aynı iş iki kez inşa edildi) ════
+  ✓ benzer PR varken de alan AÇILIR (yalnız uyarı, yanlış alarm işi durdurmaz)
+  ✓ benzer PR #2 adıyla uyarıldı
+  ✓ alakasız PR #3 uyarıya girmedi
+  ✓ uyarı ne yapılacağını söylüyor
+  ✓ benzemeyen işte uyarı YOK, kaç PR'a bakıldığı yazılı
+  ✓ gh düşünce alan yine açılır
+  ✓ gh düşünce 'YAPILAMADI' denir (sessiz atlama yok)
+  ✓ gh bozuk JSON dönerse alan yine açılır
+  ✓ bozuk JSON sessiz geçilmez, 'YAPILAMADI' denir
+  ✓ 50 açık PR tavanına ulaşılınca söylenir
+  ✓ --dosyalar verilince benzer-iş sezgisi koşmaz (kesin kontrol var)
+════ T8 · gh DÜŞÜNCE (yetkisiz/ağsız): ölçülemedi der, yine açar (sessiz atlama yok) ════
+  ✓ kapsam kontrolü yapılamadığını söyledi
+  ✓ alan yine açıldı
+════ T9 · worktree İÇİNDEN çağrı: birincil depo bulunur, yol çift ad almaz (13 Eki) ════
+  ✓ worktree içinden 'ac': alan <depo>-<iş> (çift ad değil)
+  ✓ worktree içinden 'kapat': doğru alanı buldu ve kaldırdı
+════ T10 · olmayan alanı kapatmak YEŞİL değil (rc 2, sahte başarı yok) ════
+  ✓ olmayan alan → rc 2 + 'YOK' (eskiden rc 0 'zaten yok')
+════ T11 · KART KAPANIŞI (CBBQEE): PR birleşmişse kapat kartı alanın İÇİNDEN 'bitti' yapar; değilse açık bırakır ve söyler ════
+  ✓ 🔴 PR birleşmiş + kart açık → kart 'bitti' (pr 42) · kanıt alanın İÇİNDEN görüldü · alan kapandı (bitti 42 True)
+  ✓ kapanış ne yaptığını söylüyor
+  ✓ PR birleşmemiş (geri al/terk) → kart AÇIK kalır + söylenir, alan kapanır
+  ✓ gh düşünce ölçülemedi denir, kart açık kalır, kapanış durmaz (sessiz 'bitti' yok)
+  ✓ zaten kapanmış kart: gh'ye HİÇ sorulmaz, kart değişmez
+  ✓ 🔴 kart.sh bitti düşerse alan SİLİNMEZ (silinseydi kart bir daha alanın içinden kapatılamazdı)
+── T11 · MUTASYON (tam kopya): kapanış çağrısı kalkınca kart açık kalır → üstteki 🔴 kapı düşerdi ──
+  ✓ mutant (kart_kapanisi çağrılmıyor): birleşmiş PR'lı kart AÇIK kaldı → üstteki kapı bu mutantta düşerdi
+════ T12 · KAPSAM BAYAT LİSTE (MÜZEHHİP dersi 30 Eki 02:02): PR dalı main'i merge etmişse GitHub'ın dosya listesi main'den gelenleri de sayar; ════
+          kapı yalnız o listeye bakarsa dokunulmayan dosya için SAHTE çakışma verir. Beklenen: merge-base farkı (origin/main...dal) ile ikinci yüzey ════
+  ✓ fikstür: pr-dali main'i merge etti, origin'de ikisi de var
+  ✓ fikstür doğru: merge-base farkı YALNIZ pr-kendi.txt (dosya.txt main'den geldi) — fark: pr-kendi.txt
+  ✓ pozitif kontrol: sahte gh kullanıldı, PR #9'a bakıldı (ölçüm gerçek, ÖLÇÜLEMEDİ değil)
+  ✓ 🔴 main'den gelen dosya.txt için SAHTE çakışma YOK: rc=0, alan açıldı (rc=0 · çakışması yok)
+  ✓ (i) dal origin'de yok → fetch düştü → TEK YÜZEY uyarısı (sebep: fetch) + GitHub listesinden aynı-dosya UYARISI, alan açıldı rc=0 (rc=0)
+  ✓ (ii) pr view bozuk JSON → 'dal adı okunamadı' TEK YÜZEY uyarısı + GitHub listesinden aynı-dosya UYARISI, alan açıldı rc=0 (rc=0)
+  ✓ (iii) merge-base farkı BOŞ (dal=ana, ölçüldü) → GitHub listesi ne derse desin çakışma YOK, tek-yüzey uyarısı YOK, alan açıldı (rc=0)
+  ✓ pozitif kontrol: PR'ın kendi dosyası pr-kendi.txt → UYARI 'PR #9 … pr-kendi.txt: yeni dosya (tümü)' (merge-base'den okundu), alan açıldı rc=0 (rc=0)
+════ T13 · kapsam-olc (görev …7PRJ07): SATIR kesişimi — aynı dosya farklı satır → geçer; aynı satır → rc 2 DUR; kendi PR'ı sayılmaz; ölçülemedi rc 3 ════
+  ✓ fikstür: katalog.txt 20 satır main'de, pr-satir dalı 3-4. satırları değiştirdi, origin'de
+  ✓ ac: aynı dosya → PR #11'in satır bloğu (3-4) merge-base'den okunup basıldı, alan açıldı (rc=0)
+  ✓ kapsam-olc: alan yazmamışken 'henüz hiçbir satır değiştirmedi' rc=0 (rc=0)
+  ✓ 🔴 aynı dosya FARKLI satır (PR 3-4 · alan 15, commit'lenmemiş) → kesişim YOK, rc=0; alanın İÇİNDEN argümansız çağrı; bloklar iki taraflı basılır (rc=0)
+  ✓ alanın kendi PR'ı (#12, dal adı aynı) sayılmadı ve söylendi
+  ✓ 🔴 aynı SATIR (alan 3 · PR 3-4) → rc=2 DUR, kesişen blok çifti adıyla basılır (rc=2)
+  ✓ birincil ağaçta argümansız kapsam-olc → rc=3 ölçülemedi (hangi alan? söylenir)
+  ✓ gh düşünce kapsam-olc rc=3 ÖLÇÜLEMEDİ (yeşil değil, 'kesişim yok' değil)
+  ✓ olmayan alan → rc=3 (sahte yeşil yok)
+  ✓ izlenmeyen YENİ dosya alanın bloklarına girer ('*' tümü): 'henüz hiçbir satır değiştirmedi' DENMEZ (rc=0)
+  ✓ PR listesi aynı dosyayı sayıyor ama farkında blok yok → 'kesişim yok' DEĞİL rc=3 ölçülemedi (rc=3)
+  ✓ dosya BAŞINA ekleme (0-0) yeni dosya sayılmaz → PR 3-4 ile kesişmez rc=0 (eski kural her blokla kesiştirirdi) (rc=0)
+  ✓ 30 açık PR → tavan söylenir (sessiz atlama yok); kesişim yok rc=0 (rc=0)
+  ✓ ac kapsam kontrolü de 30 tavanını söyler
+── T13 · MUTASYON (tam kopya): kesişim koşulu sökülünce aynı satır 'kesişim yok' çıkar → üstteki rc 2 kapısı düşerdi ──
+  ✓ mutant (kesişim koşulu False): aynı satır için rc=0 'kesişim yok' → üstteki 🔴 rc 2 kapısı bu mutantta düşerdi (rc=0)
+  ✓ hesap çökünce rc=3 ÖLÇÜLEMEDİ + sebep basılır ('kesişim yok' değil — DALGIÇ tur 1)
+  ✓ mutant 3 (aynı dosya yine rc 2 engel): alan AÇILMADI (rc=2) → T7/T13 'alan açıldı' kapıları bu mutantta düşerdi
+
+── SONUÇ: 87 geçti · 0 kaldı ──
+--- stderr ---

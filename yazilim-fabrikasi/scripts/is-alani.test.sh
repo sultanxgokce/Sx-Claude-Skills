@@ -93,7 +93,7 @@ mkdir -p "$T/alan/depo-yeni-is/_agents/fabrika/kartlar"; echo '{"is":"yeni-is"}'
 ( cd "$T/depo" && bash "$IS" kapat yeni-is ) >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && [ ! -d "$T/alan/depo-yeni-is" ]; g $? "temizken kapatıldı — kartlar/ altındaki kayıtsız kopya 'kayıtsız iş' SAYILMADI (kart birincilde)"
 
-echo "════ T7 · kapsam kontrolü (sahte gh): çakışma → rc=2, açmaz; temiz → açar ════"
+echo "════ T7 · kapsam kontrolü (sahte gh): aynı dosya → UYARI + açar (30 Eki · görev …7PRJ07; eskiden rc=2 AÇMAZDI); temiz → açar ════"
 SAHTE="$T/sahte-bin"; mkdir -p "$SAHTE"
 cat > "$SAHTE/gh" <<'GH'
 #!/usr/bin/env bash
@@ -106,10 +106,14 @@ esac
 GH
 chmod +x "$SAHTE/gh"
 CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac cakisan-is --kartsiz --dosyalar dosya.txt,z.txt 2>&1 )"; RC=$?
-[ "$RC" -eq 2 ]; g $? "çakışmada rc=2"
-grep -q "PR #7" <<<"$CIKTI"; g $? "hangi PR'la çakıştığı yazılı"
-[ ! -d "$T/alan/depo-cakisan-is" ]; g $? "alan AÇILMADI"
+[ "$RC" -eq 0 ]; g $? "🔴 aynı dosya ENGEL DEĞİL: rc=0 (eskiden rc=2 — Sx'te catalog.json yüzünden açık PR varken hiç alan açılamıyordu) (rc=$RC)"
+grep -q "⚠ PR #7 aynı dosyaya dokunuyor" <<<"$CIKTI"; g $? "hangi PR'ın aynı dosyaya dokunduğu yazılı"
+[ -d "$T/alan/depo-cakisan-is" ]; g $? "alan AÇILDI"
+grep -q "KAPSAM UYARISI" <<<"$CIKTI" && grep -q "kapsam-olc cakisan-is" <<<"$CIKTI"; g $? "uyarı sessiz değil: KAPSAM UYARISI + PR'dan önce koşulacak komut (kapsam-olc <iş>) yazılı"
+grep -q "satır blokları okunamadı" <<<"$CIKTI"; g $? "sahte gh fark vermiyor → satır blokları 'okunamadı' denir (uydurulmaz)"
+python3 -c 'import json,sys;k=json.load(open(sys.argv[1]));u=k.get("kapsam_uyarilari",[]);sys.exit(0 if any("PR #7" in x and "kapsam-olc" in x for x in u) else 1)' "$T/depo/_agents/fabrika/kartlar/cakisan-is.json"; g $? "uyarı KARTA yazıldı (kapsam_uyarilari: PR #7 + kapsam-olc) — bağımsız göz görür"
 grep -q "PR #7 tek yüzey (merge-base ölçülemedi" <<<"$CIKTI"; g $? "iki yüzey (30 Eki): sahte gh 'pr view' vermiyor → git yolu düştü, TEK YÜZEY uyarısı basıldı (sessiz düşme yok), hüküm GitHub listesinden"
+( cd "$T/depo" && bash "$IS" kapat cakisan-is ) >/dev/null 2>&1
 CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac temiz-is --kartsiz --dosyalar z.txt 2>&1 )"; RC=$?
 [ "$RC" -eq 0 ]; g $? "çakışma yokken rc=0"
 grep -q "çakışması yok" <<<"$CIKTI"; g $? "kaç PR'a bakıldığı yazılı"
@@ -261,20 +265,141 @@ GH
 }
 mk_gh "$T/fetch-duser-bin" '{"number":9,"headRefName":"origin-de-olmayan-dal","baseRefName":"main"}'
 CIKTI="$( cd "$T/depo" && PATH="$T/fetch-duser-bin:$PATH" bash "$IS" ac fetch-duser --kartsiz --dosyalar dosya.txt 2>&1 )"; RC=$?
-[ "$RC" -eq 2 ] && grep -q "PR #9 tek yüzey (merge-base ölçülemedi: git fetch origin origin-de-olmayan-dal düştü)" <<<"$CIKTI" && [ ! -d "$T/alan/depo-fetch-duser" ]
-g $? "(i) dal origin'de yok → fetch düştü → TEK YÜZEY uyarısı (sebep: fetch) + GitHub listesinden hüküm rc=2, alan açılmadı (rc=$RC)"
+[ "$RC" -eq 0 ] && grep -q "PR #9 tek yüzey (merge-base ölçülemedi: git fetch origin origin-de-olmayan-dal düştü)" <<<"$CIKTI" && grep -q "⚠ PR #9 aynı dosyaya dokunuyor" <<<"$CIKTI" && [ -d "$T/alan/depo-fetch-duser" ]
+g $? "(i) dal origin'de yok → fetch düştü → TEK YÜZEY uyarısı (sebep: fetch) + GitHub listesinden aynı-dosya UYARISI, alan açıldı rc=0 (rc=$RC)"
+( cd "$T/depo" && bash "$IS" kapat fetch-duser ) >/dev/null 2>&1 || true
 mk_gh "$T/json-bozuk-bin" 'bozuk{'
 CIKTI="$( cd "$T/depo" && PATH="$T/json-bozuk-bin:$PATH" bash "$IS" ac json-bozuk --kartsiz --dosyalar dosya.txt 2>&1 )"; RC=$?
-[ "$RC" -eq 2 ] && grep -q "PR #9 tek yüzey (merge-base ölçülemedi: dal adı okunamadı" <<<"$CIKTI" && [ ! -d "$T/alan/depo-json-bozuk" ]
-g $? "(ii) pr view bozuk JSON → 'dal adı okunamadı' TEK YÜZEY uyarısı + GitHub listesinden hüküm rc=2 (rc=$RC)"
+[ "$RC" -eq 0 ] && grep -q "PR #9 tek yüzey (merge-base ölçülemedi: dal adı okunamadı" <<<"$CIKTI" && grep -q "⚠ PR #9 aynı dosyaya dokunuyor" <<<"$CIKTI" && [ -d "$T/alan/depo-json-bozuk" ]
+g $? "(ii) pr view bozuk JSON → 'dal adı okunamadı' TEK YÜZEY uyarısı + GitHub listesinden aynı-dosya UYARISI, alan açıldı rc=0 (rc=$RC)"
+( cd "$T/depo" && bash "$IS" kapat json-bozuk ) >/dev/null 2>&1 || true
 mk_gh "$T/bos-fark-bin" '{"number":9,"headRefName":"main","baseRefName":"main"}'
 CIKTI="$( cd "$T/depo" && PATH="$T/bos-fark-bin:$PATH" bash "$IS" ac bos-fark --kartsiz --dosyalar dosya.txt,pr-kendi.txt 2>&1 )"; RC=$?
 [ "$RC" -eq 0 ] && ! grep -q "tek yüzey" <<<"$CIKTI" && grep -q "çakışması yok (1 PR bakıldı)" <<<"$CIKTI" && [ -d "$T/alan/depo-bos-fark" ]
 g $? "(iii) merge-base farkı BOŞ (dal=ana, ölçüldü) → GitHub listesi ne derse desin çakışma YOK, tek-yüzey uyarısı YOK, alan açıldı (rc=$RC)"
 ( cd "$T/depo" && bash "$IS" kapat bos-fark ) >/dev/null 2>&1 || true
-# K2 — pozitif kontrol (yeşil kalmalı): PR'ın KENDİ dosyası (pr-kendi.txt, merge-base farkında da var) → gerçek çakışma rc=2, alan AÇILMAZ
+# K2 — pozitif kontrol: PR'ın KENDİ dosyası (pr-kendi.txt, merge-base farkında da var) → aynı-dosya UYARISI (PR #9 + satır bloğu), alan açılır (30 Eki: engel değil)
 CIKTI="$( cd "$T/depo" && PATH="$BAYAT:$PATH" bash "$IS" ac gercek-cakisma --kartsiz --dosyalar pr-kendi.txt 2>&1 )"; RC=$?
-[ "$RC" -eq 2 ] && grep -q "PR #9" <<<"$CIKTI" && [ ! -d "$T/alan/depo-gercek-cakisma" ]; g $? "pozitif kontrol: PR'ın kendi dosyası pr-kendi.txt → GERÇEK çakışma rc=2, PR #9 adıyla, alan AÇILMADI (rc=$RC)"
+[ "$RC" -eq 0 ] && grep -q "⚠ PR #9 aynı dosyaya dokunuyor → pr-kendi.txt: yeni dosya (tümü)" <<<"$CIKTI" && [ -d "$T/alan/depo-gercek-cakisma" ]; g $? "pozitif kontrol: PR'ın kendi dosyası pr-kendi.txt → UYARI 'PR #9 … pr-kendi.txt: yeni dosya (tümü)' (merge-base'den okundu), alan açıldı rc=0 (rc=$RC)"
+( cd "$T/depo" && bash "$IS" kapat gercek-cakisma ) >/dev/null 2>&1 || true
+
+echo "════ T13 · kapsam-olc (görev …7PRJ07): SATIR kesişimi — aynı dosya farklı satır → geçer; aynı satır → rc 2 DUR; kendi PR'ı sayılmaz; ölçülemedi rc 3 ════"
+# Fikstür: main'de 20 satırlık katalog.txt; origin'de pr-satir dalı 3-4. satırları değiştiriyor (Sx catalog.json emsali: her PR aynı dosyada ayrı blok)
+( cd "$T/depo" && export PAYLASILAN_COMMIT=1 && git checkout -q main && seq -f 'satir %g' 1 20 > katalog.txt && git add katalog.txt && git -c user.email=t@t -c user.name=T commit -qm "feat: katalog" && git push -q origin main &&
+  git checkout -q -b pr-satir && sed -i '3s/.*/satir 3 PR/;4s/.*/satir 4 PR/' katalog.txt && git add katalog.txt && git -c user.email=t@t -c user.name=T commit -qm "feat: pr satir 3-4" && git push -q -u origin pr-satir && git checkout -q main ) >/dev/null 2>&1
+g $? "fikstür: katalog.txt 20 satır main'de, pr-satir dalı 3-4. satırları değiştirdi, origin'de"
+KOLC="$T/kolc-bin"; mkdir -p "$KOLC"
+cat > "$KOLC/gh" <<'GH'
+#!/usr/bin/env bash
+# sahte gh: #11 pr-satir (katalog.txt) · #12 kendi-alan (alanın KENDİ PR'ı — sayılmamalı)
+case "$1 $2" in
+  "pr list") case " $* " in *headRefName*) echo '[{"number":11,"headRefName":"pr-satir"},{"number":12,"headRefName":"kendi-alan"}]' ;; *) echo 11 ;; esac ;;
+  "pr diff") printf 'katalog.txt\n' ;;
+  "pr view") echo '{"number":11,"headRefName":"pr-satir","baseRefName":"main"}' ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$KOLC/gh"
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" ac kendi-alan --kartsiz --dosyalar katalog.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "⚠ PR #11 aynı dosyaya dokunuyor → katalog.txt: 3-4" <<<"$CIKTI" && [ -d "$T/alan/depo-kendi-alan" ]; g $? "ac: aynı dosya → PR #11'in satır bloğu (3-4) merge-base'den okunup basıldı, alan açıldı (rc=$RC)"
+KA="$T/alan/depo-kendi-alan"
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "henüz hiçbir satır değiştirmedi" <<<"$CIKTI"; g $? "kapsam-olc: alan yazmamışken 'henüz hiçbir satır değiştirmedi' rc=0 (rc=$RC)"
+sed -i '15s/.*/satir 15 ALAN/' "$KA/katalog.txt"
+CIKTI="$( cd "$KA" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "PR #11 (pr-satir) aynı dosya, satır kesişimi YOK" <<<"$CIKTI" && grep -q "PR: katalog.txt: 3-4 · alan: katalog.txt: 15-15" <<<"$CIKTI" && grep -q "satır kesişimi yok (1 açık PR bakıldı, 1 aynı dosyaya dokunuyor)" <<<"$CIKTI"
+g $? "🔴 aynı dosya FARKLI satır (PR 3-4 · alan 15, commit'lenmemiş) → kesişim YOK, rc=0; alanın İÇİNDEN argümansız çağrı; bloklar iki taraflı basılır (rc=$RC)"
+grep -q "PR #12 kendi PR'ın (kendi-alan) — sayılmaz" <<<"$CIKTI"; g $? "alanın kendi PR'ı (#12, dal adı aynı) sayılmadı ve söylendi"
+sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "PR #11 (pr-satir) SATIR KESİŞİMİ" <<<"$CIKTI" && grep -q "katalog.txt: alan 3-3 ∩ PR 3-4" <<<"$CIKTI" && grep -q "SATIR KESİŞİMİ — 1 açık PR" <<<"$CIKTI"
+g $? "🔴 aynı SATIR (alan 3 · PR 3-4) → rc=2 DUR, kesişen blok çifti adıyla basılır (rc=$RC)"
+# sınır kapıları (DALGIÇ tur 2): PR bloğu 3-4 → alan 4 (son satır) KESİŞİR; alan 2 ve alan 5 (hemen dışı) KESİŞMEZ — `<=`yi `<` yapan mutant burada yakalanır
+for sinir in "4 2" "2 0" "5 0"; do set -- $sinir
+  ( cd "$KA" && git checkout -q -- katalog.txt ); sed -i "${1}s/.*/satir $1 ALAN/" "$KA/katalog.txt"
+  ( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan >/dev/null 2>&1 ); RC=$?
+  [ "$RC" -eq "$2" ]; g $? "sınır: alan $1 · PR 3-4 → rc=$2 beklendi, rc=$RC"
+done
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
+# kendi PR muafiyeti BİREBİR dal adı ister: 'fabrika/kendi-alan' adlı PR kendi PR'ı DEĞİLDİR (DALGIÇ tur 2)
+KOLZ="$T/kolz-bin"; mkdir -p "$KOLZ"; sed 's/"headRefName":"kendi-alan"/"headRefName":"fabrika\/kendi-alan"/' "$KOLC/gh" > "$KOLZ/gh"; chmod +x "$KOLZ/gh"
+CIKTI="$( cd "$T/depo" && PATH="$KOLZ:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+! grep -q "kendi PR'ın" <<<"$CIKTI" && grep -q "PR #12 (fabrika/kendi-alan) SATIR KESİŞİMİ" <<<"$CIKTI"; g $? "önekli benzer dal (fabrika/kendi-alan) kendi PR'ı sayılmaz, kesişimi ölçülür (rc=$RC)"
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc 2>&1 )"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "birincil ağaçtasın" <<<"$CIKTI"; g $? "birincil ağaçta argümansız kapsam-olc → rc=3 ölçülemedi (hangi alan? söylenir)"
+CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "ölçülemedi" <<<"$CIKTI"; g $? "gh düşünce kapsam-olc rc=3 ÖLÇÜLEMEDİ (yeşil değil, 'kesişim yok' değil)"
+CIKTI="$( cd "$T/depo" && bash "$IS" kapsam-olc boyle-alan-yok 2>&1 )"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "çalışma alanı YOK" <<<"$CIKTI"; g $? "olmayan alan → rc=3 (sahte yeşil yok)"
+# ── DALGIÇ tur 1 bulguları (30 Eki): izlenmeyen yeni dosya · dosya başına ekleme ≠ yeni dosya · hesap çökmesi 'yok' değil · 30 tavanı söylenir
+( cd "$KA" && git checkout -q -- katalog.txt ) >/dev/null 2>&1
+echo "yeni" > "$KA/yepyeni.txt"          # izlenmeyen: git add YOK
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "1 dosyada 1 blok" <<<"$CIKTI" && ! grep -q "henüz hiçbir satır" <<<"$CIKTI"; g $? "izlenmeyen YENİ dosya alanın bloklarına girer ('*' tümü): 'henüz hiçbir satır değiştirmedi' DENMEZ (rc=$RC)"
+KOLY="$T/koly-bin"; mkdir -p "$KOLY"; sed 's/katalog.txt\\n/katalog.txt\\nyepyeni.txt\\n/' "$KOLC/gh" > "$KOLY/gh"; chmod +x "$KOLY/gh"   # PR #11 listesinde yepyeni.txt de var ama dalında yok
+CIKTI="$( cd "$T/depo" && PATH="$KOLY:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "yepyeni.txt) ama satır blokları boş okundu" <<<"$CIKTI" && grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "PR listesi aynı dosyayı sayıyor ama farkında blok yok → 'kesişim yok' DEĞİL rc=3 ölçülemedi (rc=$RC)"
+rm -f "$KA/yepyeni.txt"
+sed -i '1i satir 0 ALAN' "$KA/katalog.txt"   # dosya BAŞINA ekleme: hunk -0,0 → 0-0 (nokta), yeni dosya DEĞİL
+CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "alan: katalog.txt: 0-0" <<<"$CIKTI" && grep -q "satır kesişimi YOK" <<<"$CIKTI"; g $? "dosya BAŞINA ekleme (0-0) yeni dosya sayılmaz → PR 3-4 ile kesişmez rc=0 (eski kural her blokla kesiştirirdi) (rc=$RC)"
+( cd "$KA" && git checkout -q -- katalog.txt ) >/dev/null 2>&1
+BOZ30="$T/boz30-bin"; mkdir -p "$BOZ30"; cat > "$BOZ30/gh" <<'GH'
+#!/usr/bin/env bash
+case "$1 $2" in
+  "pr list") case " $* " in *headRefName*) python3 -c 'import json;print(json.dumps([{"number":100+i,"headRefName":"d%d"%i} for i in range(30)]))' ;; *) seq 100 129 ;; esac ;;
+  "pr diff") printf 'baska.txt\n' ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$BOZ30/gh"
+sed -i '15s/.*/satir 15 ALAN/' "$KA/katalog.txt"
+CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "tavana (30) ulaştı" <<<"$CIKTI" && grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "30 açık PR → tavan söylenir ve 'kesişim yok' DENMEZ: rc=3 ölçülemedi (göz tur 1) (rc=$RC)"
+CIKTI="$( cd "$T/depo" && PATH="$BOZ30:$PATH" bash "$IS" ac tavan-ac --kartsiz --dosyalar z.txt 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "tavana (30) ulaştı" <<<"$CIKTI" && grep -q "EKSİK — 30 PR tavanı" <<<"$CIKTI" && ! grep -q "çakışması yok" <<<"$CIKTI"; g $? "ac: 30 tavanında 'çakışma yok' denmez, EKSİK/ölçülemedi denir, alan yine açılır (rc=$RC)"
+# yedek yol: pr view yok → gh pr diff (±3 BAĞLAMLI) — bağlam satırı kesişim sayılmaz (göz tur 1 bulgu 2)
+BAGLAM="$T/baglam-bin"; mkdir -p "$BAGLAM"; ( cd "$T/depo" && git diff -U3 origin/main origin/pr-satir ) > "$T/pr-satir-U3.diff"
+grep -q "^@@ -1,7 +1,7 @@" "$T/pr-satir-U3.diff"; g $? "fikstür: bağlamlı fark başlığı 1-7 (gerçek değişiklik 3-4)"
+cat > "$BAGLAM/gh" <<GH
+#!/usr/bin/env bash
+case "\$1 \$2" in
+  "pr list") case " \$* " in *headRefName*) echo '[{"number":11,"headRefName":"pr-satir"}]' ;; *) echo 11 ;; esac ;;
+  "pr diff") case " \$* " in *--name-only*) printf 'katalog.txt\\n' ;; *) cat "$T/pr-satir-U3.diff" ;; esac ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$BAGLAM/gh"
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '6s/.*/satir 6 ALAN/' "$KA/katalog.txt"
+CIKTI="$( cd "$T/depo" && PATH="$BAGLAM:$PATH" bash "$IS" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "gh pr diff (bağlam satırları ayıklandı" <<<"$CIKTI" && grep -q "PR: katalog.txt: 3-4" <<<"$CIKTI"; g $? "🔴 yedek yol (gh pr diff ±3 bağlam): PR bloğu 3-4 olarak okundu, bağlamdaki alan satırı 6 KESİŞMEZ rc=0 (eski: başlık 1-7 sayılır, sahte rc 2) (rc=$RC)"
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '4s/.*/satir 4 ALAN/' "$KA/katalog.txt"
+( cd "$T/depo" && PATH="$BAGLAM:$PATH" bash "$IS" kapsam-olc kendi-alan >/dev/null 2>&1 ); RC=$?
+[ "$RC" -eq 2 ]; g $? "yedek yol pozitif kontrol: alan 4 gerçek kesişim rc=2 (rc=$RC)"
+( cd "$KA" && git checkout -q -- katalog.txt ); sed -i '15s/.*/satir 15 ALAN/' "$KA/katalog.txt"
+( cd "$T/depo" && bash "$IS" kapat tavan-ac ) >/dev/null 2>&1 || true
+sed -i '3s/.*/satir 3 ALAN/' "$KA/katalog.txt"
+echo "── T13 · MUTASYON (tam kopya): kesişim koşulu sökülünce aynı satır 'kesişim yok' çıkar → üstteki rc 2 kapısı düşerdi ──"
+MK="$T/pkg-kesisim"; mkdir -p "$MK"; cp "$HERE"/*.sh "$HERE"/*.py "$MK/" 2>/dev/null
+python3 - "$MK/is-alani.sh" <<'PYM' && CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$MK/is-alani.sh" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='if x is None or y is None or (x[0]<=y[1] and y[0]<=x[1]):'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'if False:'))
+PYM
+[ "$RC" -eq 0 ] && grep -q "satır kesişimi yok" <<<"$CIKTI"; g $? "mutant (kesişim koşulu False): aynı satır için rc=0 'kesişim yok' → üstteki 🔴 rc 2 kapısı bu mutantta düşerdi (rc=$RC)"
+# mutant 2: hesap çökmesi rc 1 sayılırsa (eski hâl) → 'kesişim yok' sahte yeşil
+M2="$T/pkg-cokme"; mkdir -p "$M2"; cp "$HERE"/*.sh "$HERE"/*.py "$M2/" 2>/dev/null
+python3 - "$M2/is-alani.sh" <<'PYM' && CIKTI="$( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$M2/is-alani.sh" kapsam-olc kendi-alan 2>&1 )"; RC=$?
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    A,B=oku(sys.argv[1]),oku(sys.argv[2]); var=False'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'    raise RuntimeError("bozuk blok")'))
+PYM
+[ "$RC" -eq 3 ] && grep -q "kesişim hesabı DÜŞTÜ (bozuk blok)" <<<"$CIKTI"; g $? "hesap çökünce rc=3 ÖLÇÜLEMEDİ + sebep basılır ('kesişim yok' değil — DALGIÇ tur 1)"
+# mutant 3: ac aynı-dosya uyarısında eski gibi rc 2 ile çıkarsa (engel geri gelirse) → T7/T13 'alan AÇILDI' kapıları düşer
+M3="$T/pkg-engel"; mkdir -p "$M3"; cp "$HERE"/*.sh "$HERE"/*.py "$M3/" 2>/dev/null
+python3 - "$M3/is-alani.sh" <<'PYM' && ( cd "$T/depo" && PATH="$KOLC:$PATH" bash "$M3/is-alani.sh" ac mutant-engel --kartsiz --dosyalar katalog.txt >/dev/null 2>&1 ); RC=$?
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    kuyari="$(kapsam_kontrol "$dosyalar")"; krc=$?'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,a+'; [ "$krc" -eq 4 ] && exit 2'))
+PYM
+[ "$RC" -ne 0 ] && [ ! -d "$T/alan/depo-mutant-engel" ]; g $? "mutant 3 (aynı dosya yine rc 2 engel): alan AÇILMADI (rc=$RC) → T7/T13 'alan açıldı' kapıları bu mutantta düşerdi"
+( cd "$T/depo" && bash "$IS" kapat mutant-engel ) >/dev/null 2>&1 || true
+( cd "$KA" && git checkout -q -- katalog.txt ) >/dev/null 2>&1
+( cd "$T/depo" && bash "$IS" kapat kendi-alan ) >/dev/null 2>&1 || true
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""
