@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "sync-drift-kapi-olcum",
+  "pr": "596",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-30T19:08:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 4 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kuru-kosu-drift-sonra.txt (kirmizi → gecersiz) — ağaç kayıt öncesi kirliyken alındı; kayıttan sonra temiz ağaçta yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-temiz-sonra.txt;olcum-kuru-kosu-drift-temiz-sonra.txt (kirmizi → gecersiz) — kaynak origin/main'in bir commit gerisindeydi; birleştirilip yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-guncel-sonra.txt;olcum-kurulum-benzetimi-duman-sonra.txt (yesil → gecersiz) — çıktı etiketi yanlış dosya adını yazıyordu (mimetype); ölçülen kapi-sinavi.sh idi, etiket düzeltilip yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kurulum-benzetimi-kapi-sonra.txt;olcum-kuru-kosu-drift-tur2-sonra.txt (kirmizi → gecersiz) — ölçüm sırasında kanıt dosyaları kayıtsızdı (ağaç kirli göründü); kayıttan sonra temiz ağaçta yeniden ölçüldü · BENNÂ · karşı kanıt: olcum-kuru-kosu-drift-tur2-temiz-sonra.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sync-drift-kapi-olcum",
+  "dal": "sync-drift-kapi-olcum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 66345,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 15,
+    "bayt": 62034
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2880211be3aab118672cf01bb5e5f75736be5022",
+  "duzeltme_farki": {
+    "onceki_bas": "df73fc1c904edc3e597a25eb3faa210dedabd113",
+    "dosya": 18,
+    "bayt": 66841,
+    "tam_bayt": 171689
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kurulu kopyadaki kapi-sinavi ve olcum-disiplini düzenlemeleri kaynağa taşınmış, sürüm-katalog hizası sağlanmış ve önceki turun iki bulgusu da sınavlarla kapatılmış. Geçerli gerçek ölçümler yeşil, beş mutasyonun tamamı bozuk kodu yakalıyor ve üretimi durduracak açık kusur kalmıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; ilan edilmiş dört geçersiz kayıt değerlendirme dışı bırakılmış. Önceki B1, bozuk `.kapi_desen` için ön doğrulama ve tüm sıfır-dışı tarayıcı kodlarının fail-closed ele alınmasıyla kapanmış; 54/54 gerçek ölçüm ve ilgili mutasyon bunu doğruluyor. Önceki B2 de beş ayrı `mutasyon: true` kaydının her birinde rc=1, `dusen_kapi: true` ve geçerli `gercek_olcum` bağıyla kapanmış. İki becerinin sınavları, kapının kayıt/bağlılık/ithal kontrolleri, katalog-sürüm hizası ve kapi-sinavi kurulum benzetimi yeşil. Güncel genel kuru koşunun RC=1 olması, 8 başka drift ve 1 başka duman düşüşünden kaynaklanıyor; sunulan çıktı hedef iki beceride kalan drift göstermediğinden bu kart için bulgu sayılmıyor."
+  }
+}
