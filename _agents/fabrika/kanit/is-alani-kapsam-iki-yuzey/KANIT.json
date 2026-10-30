@@ -1,7 +1,7 @@
 {
   "is": "is-alani-kapsam-iki-yuzey",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-30T03:00:02+03:00",
+  "guncelleme": "2026-10-30T03:03:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -70,7 +70,25 @@
       "renk": "yesil",
       "zaman": "2026-10-30T02:54:47+03:00",
       "olcum_id": "2225f9a14770468a9ad46974940946c5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-gh-pr506-iki-yuzey",
+      "asama": "tek",
+      "dosya": "olcum-gercek-gh-pr506-iki-yuzey-tek.txt",
+      "sha256": "78a254ad458ee2bc993660e3fc460fa8f1b3f228d63b19a70ceb2837c1973876",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-gercek-gh.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-alan"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-30T03:03:38+03:00",
+      "sure_sn": 3.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5ef95b950cc2446aa9d9e9b306261f6e"
     }
   ],
-  "imza": "5cd995629eeefd49fa6828a8ba852c9e92af38abe1cab3d24e820c642147a6af"
+  "imza": "7a08558e4618b520b6b24a794689e779a9257f18f7bf5aedbb7193e2412cd453"
 }

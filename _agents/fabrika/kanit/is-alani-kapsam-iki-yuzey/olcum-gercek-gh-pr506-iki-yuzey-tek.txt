@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-gercek-gh.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/alt-ajan-istem-benna-alan
+# rc=0 sure=3.0s zaman=2026-10-30T03:03:38+03:00
+--- stdout ---
+⚠ --kartsiz: kart CEVAPSIZ açıldı, sultan=true damgalı (şüphede sınıf yukarı); gün sonu özetinde görünür
+⚠ PR #506 şu dosyalara zaten dokunuyor: catalog.json
+✗ KAPSAM ÇAKIŞMASI — 1 açık PR aynı dosyaları değiştiriyor. DUR ve sor; alan AÇILMADI.
+is-alani rc=2
+✓ iki yüzey uyuştu: gerçek gh + merge-base farkı, #506 catalog.json gerçek çakışma, tek-yüzey uyarısı yok
+--- stderr ---
