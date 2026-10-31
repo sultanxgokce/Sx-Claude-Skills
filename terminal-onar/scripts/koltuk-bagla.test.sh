@@ -258,6 +258,13 @@ PYPTY
   done
   [ "$S3O" -le 2 ] || { S3K=1; S3B="ölçülemeyen tur $S3O/5 (en az 3 ölçülmeli)"; }
   [ "$S3K" = 0 ] && ok "S3 kilitsiz kol (flock yok taklidi): 8 eşzamanlı × 5 tur, pencere 80'e büyür ve yerel ayar hep silinir" || bad S3 "→ $S3B"
+  # S4 kilitsiz kolda kullanıcının BİLEREK koyduğu 'manual' korunur (bağımsız göz #611 tur 3): pencere büyütülmez, ayar silinmez
+  rilk; rist 80 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.4
+  SC="$(rt list-clients -t =KALFA -F '#{client_name} #{client_flags}' | grep ignore-size | head -1 | cut -d' ' -f1)"
+  rt set-option -w -t KALFA: window-size manual 2>/dev/null; S4A="$(rgen)"
+  KB_KILIT_YOK=1 TERM=xterm-256color TMUX_TMPDIR="$RT" bash "$B" --tel-buyut "$SC" </dev/null >/dev/null 2>&1; sleep 1
+  S4Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"; S4G="$(rgen)"
+  [ "$S4Y" = manual ] && [ -n "$S4G" ] && [ "$S4G" = "$S4A" ] && ok "S4 kilitsiz kol: kullanıcının koyduğu 'manual' korunur (ayar silinmez, pencere büyütülmez: $S4G)" || bad S4 "→ yerel=[$S4Y] önce=$S4A sonra=$S4G"
   rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
 else
   echo "  … R ÖLÇÜLEMEDİ: tmux ya da python3 yok (yeşil değil, sayılmadı)"

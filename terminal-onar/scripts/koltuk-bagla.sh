@@ -276,10 +276,11 @@ tel_buyut() {  # $1 = istemci adı (kancadan) → istemci ignore-size ise ve otu
     ny=$wh; [ "$ts" -gt "$wh" ] && ny=$ts
     [ "$nx" = "$ww" ] && [ "$ny" = "$wh" ] && continue
     yerel="$(tmux show-options -wqv -t "$w" window-size 2>/dev/null)"
+    # KİLİTSİZ kolda 'manual' ya kullanıcının bilerek koyduğudur ya da eşzamanlı kancanın resize-window'undan kalandır; ikisi ayırt edilemez →
+    # pencereye dokunma (ne büyüt, ne sil, ne geri yaz): ayar korunur, yarış 'manual' bırakamaz.
+    [ "$KILITLI" = 0 ] && [ "$yerel" = manual ] && continue
     tmux resize-window -t "$w" -x "$nx" -y "$ny" 2>/dev/null || continue
-    # KİLİTSİZ kolda (flock yok / kilit dosyası açılamadı) eşzamanlı kanca 'manual'i eski değer sanabilir: resize-window'un kendi bıraktığı 'manual' geri yazılmaz, silinir
-    # (kilitliyken 'manual' yalnız kullanıcının bilerek koyduğu olabilir → korunur).
-    if [ -n "$yerel" ] && { [ "$KILITLI" = 1 ] || [ "$yerel" != manual ]; }; then tmux set-option -w -t "$w" window-size "$yerel" 2>/dev/null; else tmux set-option -w -u -t "$w" window-size 2>/dev/null; fi
+    if [ -n "$yerel" ]; then tmux set-option -w -t "$w" window-size "$yerel" 2>/dev/null; else tmux set-option -w -u -t "$w" window-size 2>/dev/null; fi
   done
   return 0
 }
