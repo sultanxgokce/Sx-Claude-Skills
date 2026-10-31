@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh /config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle
+# rc=0 sure=0.1s zaman=2026-10-31T15:31:36+03:00
+--- stdout ---
+KAYNAK.sha256 tutuyor
+cloudtop ana dalından farklı dosya: 0
+--- stderr ---

@@ -1,0 +1,44 @@
+{
+  "is": "postaci-kopya-esitle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T15:31:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "farkli-dosya",
+      "asama": "once",
+      "dosya": "olcum-farkli-dosya-once.txt",
+      "sha256": "cb6e592fb6a4984cea9092ab5c83f91eaf50f4eb93674964228eefe7dd3e178f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T15:31:25+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e97991f0e0484bc8ab3bf385e65548c2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "farkli-dosya",
+      "asama": "sonra",
+      "dosya": "olcum-farkli-dosya-sonra.txt",
+      "sha256": "e839277f0db2434aa76e4f4c5c456a1b2d013bc99ebd35f36d2169f453682298",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T15:31:36+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "03fab5695756406ab0090b22e43d32af"
+    }
+  ],
+  "imza": "5396d5bdbc0278651732f0e4c75ce363f787d4736e3237f593701c309f78c0f6"
+}

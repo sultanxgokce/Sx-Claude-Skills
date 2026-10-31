@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { adlariKur, MAX_DENEME } from './postane.mjs';
+import { katla } from './ajan-adlari.mjs';
 /** Çalışan koltuk durumları (oturum kaydındaki `status`): bu durumda daha önce iletilmiş mektup yeniden basılmaz (görev …CQ33DNM). */
 export const MESGUL = ['busy', 'waiting'];
 
@@ -219,19 +220,47 @@ export function adlariKisitla(adlar, izinli) {
 }
 
 /**
+ * Kutu ad tablosuyla (kutu-adlari.json, federe-birimler.yaml'dan türetilir) ad listesini genişletir: tablo[kutu] varsa üyeler ek ad olur ve
+ * `<kutu>-ana` tmux adı kutu reisine (uyeler[0], listedeki yazımla) çözülür. YALNIZ kendi kutu: başka kutunun `-ana` adı çözülmez.
+ * Kutu yoksa / tabloda yoksa / üye listesi boşsa ad listesi AYNEN döner (aynı nesne). Dönüşte `kutuEk` = { kutu, ek, reis } (günlük için).
+ */
+export function kutuAdlariniEkle(adlar, kutu, tablo) {
+  const kayit = typeof kutu === 'string' && kutu && tablo && typeof tablo === 'object' && Object.hasOwn(tablo, kutu) ? tablo[kutu] : null;
+  if (!kayit || !Array.isArray(kayit.uyeler) || !kayit.uyeler.length) return adlar;
+  const liste = [...adlar.liste]; const ek = new Map();
+  for (const u of kayit.uyeler) {
+    if (typeof u !== 'string' || adlar.coz(u)) continue;
+    const k = katla(u); if (k && !ek.has(k)) { ek.set(k, u); liste.push(u); }
+  }
+  const cozTemel = (ad) => adlar.coz(ad) ?? ek.get(katla(ad)) ?? null;
+  const reis = cozTemel(kayit.reis ?? kayit.uyeler[0]);
+  const ana = katla(`${kutu}-ana`);
+  return { liste, coz: (ad) => (reis && katla(ad) === ana ? reis : cozTemel(ad)), kutuEk: { kutu, ek: ek.size, reis } };
+}
+
+/** Kutu ad tablosunu okur; okunamazsa null (çağıran eski davranışla sürer). */
+export function kutuTablosuOku(yol) {
+  try { const t = JSON.parse(fs.readFileSync(yol, 'utf8')); return t && typeof t === 'object' && !Array.isArray(t) ? t : null; } catch { return null; }
+}
+
+/**
  * Jetonun KENDİ iznine göre ad listesi: /ben ajan listesi verdiyse (kutu jetonu) ona daraltılır; okur jetonu ya da ajansız kutu jetonu BOŞ listeye
  * daralır (fail-closed). Merkez jetonu ya da /ben ulaşılamazsa verilen liste AYNEN kalır (neden `log`a yazılır). Dönüş: { adlar, kaynak: 'jeton'|'varsayilan', neden? }.
  */
-export async function adlariJetondanTuret({ taban, jetonDosya, adlar = adlariKur(), cagri = cagir, log = () => {} }) {
+export async function adlariJetondanTuret({ taban, jetonDosya, adlar = adlariKur(), tablo = null, cagri = cagir, log = () => {} }) {
   let k;
   try { k = await cagri(taban, jetonDosya, 'GET', '/ben'); } catch (e) { log('ajan listesi izinden alınamadı: ' + (e.code || e.message)); return { adlar, kaynak: 'varsayilan', neden: 'ben_ulasilamadi' }; }
   if (k.kod !== 200 || !k.j || k.j.ok !== true) { log('ajan listesi izinden alınamadı: HTTP ' + k.kod); return { adlar, kaynak: 'varsayilan', neden: 'ben_hata' }; }
-  if (k.j.merkez) return { adlar, kaynak: 'varsayilan', neden: 'merkez' };
+  if (k.j.merkez) return { adlar, kaynak: 'varsayilan', neden: 'merkez' };   // merkez: kutu tablosu UYGULANMAZ (davranış aynen)
+  const kutu = typeof k.j.kutu === 'string' && k.j.kutu ? k.j.kutu : undefined;
+  // Kutu üyeleri + `<kutu>-ana` → reis, izin daraltmasından ÖNCE eklenir: izin dışı ad yine eşleşmez (daraltma eklenenleri de süzer)
+  const genis = kutuAdlariniEkle(adlar, kutu, tablo);
+  const kutuEk = genis.kutuEk;
   // İzin alanı yoksa (F2-2 öncesi geçit /ben yalnız {ok,kutu} döner — ölçüldü 30 Eki) izin BİLİNMİYOR: liste aynen kalır, sessiz daralma yok
-  if (!('ajanlar' in k.j) && k.j.okur === undefined) { log('ajan listesi izinden alınamadı: /ben izin alanı taşımıyor (eski geçit)'); return { adlar, kaynak: 'varsayilan', neden: 'ben_alansiz' }; }
+  if (!('ajanlar' in k.j) && k.j.okur === undefined) { log('ajan listesi izinden alınamadı: /ben izin alanı taşımıyor (eski geçit)'); return { adlar: genis, kaynak: 'varsayilan', neden: 'ben_alansiz', kutu, kutuEk }; }
   // FAIL-CLOSED: okur jetonu teslim edemez (/iletim 403), ajansız kutu jetonu hiçbir ajan adına işlem yapamaz (geçit kuralı) → liste BOŞ, varsayılana açılmaz
-  if (k.j.okur === true || !Array.isArray(k.j.ajanlar) || !k.j.ajanlar.length) { const neden = k.j.okur ? 'okur' : 'liste_bos'; log(`ajan listesi izinden: ${neden} — hiçbir oturuma teslim yok`); return { adlar: adlariKisitla(adlar, []), kaynak: 'jeton', neden }; }
-  return { adlar: adlariKisitla(adlar, k.j.ajanlar), kaynak: 'jeton' };
+  if (k.j.okur === true || !Array.isArray(k.j.ajanlar) || !k.j.ajanlar.length) { const neden = k.j.okur ? 'okur' : 'liste_bos'; log(`ajan listesi izinden: ${neden} — hiçbir oturuma teslim yok`); return { adlar: adlariKisitla(genis, []), kaynak: 'jeton', neden, kutu, kutuEk }; }
+  return { adlar: adlariKisitla(genis, k.j.ajanlar), kaynak: 'jeton', kutu, kutuEk };
 }
 
 export async function bekleCagir({ taban, jetonDosya, ajanlar, sn }) {
@@ -246,9 +275,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const oturumDizin = process.env.OTURUM_DIZIN || '/config/.claude/sessions';
   const ek = (process.env.POSTANE_EK_ADLAR || '').split(',').map((s) => s.trim()).filter(Boolean);
   const gunluk = (m) => console.log(new Date().toISOString(), m);
-  const turet = process.env.POSTANE_AJANLAR_IZINDEN !== '0' ? await adlariJetondanTuret({ taban, jetonDosya, adlar: adlariKur(ek), log: gunluk }) : { adlar: adlariKur(ek), kaynak: 'varsayilan', neden: 'kapali' };
+  // Kutu ad tablosu (kutu-adlari.json): okunamazsa günlüğe tek satır ve eski davranış (çökme yok)
+  const tablo = kutuTablosuOku(new URL('./kutu-adlari.json', import.meta.url));
+  if (!tablo) gunluk('kutu ad tablosu okunamadı (kutu-adlari.json) — yalnız varsayılan ad listesi');
+  const turet = process.env.POSTANE_AJANLAR_IZINDEN !== '0' ? await adlariJetondanTuret({ taban, jetonDosya, adlar: adlariKur(ek), tablo, log: gunluk }) : { adlar: adlariKur(ek), kaynak: 'varsayilan', neden: 'kapali' };
   const adlar = turet.adlar;
-  if (!process.argv.includes('--kuru')) gunluk(`ajan listesi: ${turet.kaynak}${turet.neden ? ' (' + turet.neden + ')' : ''} · ${adlar.liste.length} ad`);
+  const kutuNotu = turet.kutuEk ? ` · kutu ${turet.kutuEk.kutu} (+${turet.kutuEk.ek} üye, ${turet.kutuEk.kutu}-ana→${turet.kutuEk.reis ?? '?'})` : '';
+  if (!process.argv.includes('--kuru')) gunluk(`ajan listesi: ${turet.kaynak}${turet.neden ? ' (' + turet.neden + ')' : ''} · ${adlar.liste.length} ad${kutuNotu}`);
   const dongu = async () => { try { await postaciTur({ taban, jetonDosya, oturumDizin, adlar, log: (m) => console.log(new Date().toISOString(), m) }); } catch (e) { console.log(new Date().toISOString(), 'tur hatası:', e.code || e.message); } };
   if (process.argv.includes('--kuru')) {
     postaciKuru({ taban, jetonDosya, oturumDizin, adlar }).then((r) => {

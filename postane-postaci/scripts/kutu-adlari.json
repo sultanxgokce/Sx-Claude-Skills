@@ -1,0 +1,117 @@
+{
+  "mmex": {
+    "reis": "SINAN",
+    "uyeler": [
+      "SINAN",
+      "CABIR",
+      "SADIK"
+    ]
+  },
+  "vekatip": {
+    "reis": "REISULKUTTAB",
+    "uyeler": [
+      "REISULKUTTAB",
+      "MUSEVVID",
+      "MUBEYYIZ",
+      "RUZNAMCECI"
+    ]
+  },
+  "medigate": {
+    "reis": "HEKIMBASI",
+    "uyeler": [
+      "HEKIMBASI",
+      "CERRAH",
+      "MUSAVVIR",
+      "MUNSI"
+    ]
+  },
+  "huma": {
+    "reis": "DEFTERDAR",
+    "uyeler": [
+      "DEFTERDAR",
+      "SARRAF",
+      "MUVAKKIT",
+      "MIZAN",
+      "KARAKULAK",
+      "HAZNEDAR"
+    ]
+  },
+  "mihenk": {
+    "reis": "NISANCI",
+    "uyeler": [
+      "NISANCI",
+      "MUNECCIM"
+    ]
+  },
+  "tellal": {
+    "reis": "MEDDAH",
+    "uyeler": [
+      "MEDDAH",
+      "SEYYAH",
+      "HAYALI",
+      "KAYYIM"
+    ]
+  },
+  "akar": {
+    "reis": "MUTEVELLI",
+    "uyeler": [
+      "MUTEVELLI",
+      "MUHTESIP"
+    ]
+  },
+  "tez": {
+    "reis": "tez-yon",
+    "uyeler": [
+      "tez-yon",
+      "tez-motor1",
+      "tez-mim",
+      "tez-muharrir"
+    ]
+  },
+  "huzur": {
+    "reis": "huzur-yon",
+    "uyeler": [
+      "huzur-yon",
+      "huzur-motor1",
+      "huzur-mim"
+    ]
+  },
+  "nova": {
+    "reis": "KALFA",
+    "uyeler": [
+      "KALFA",
+      "MUZEYYIN"
+    ]
+  },
+  "maiset": {
+    "reis": "BASIRET",
+    "uyeler": [
+      "BASIRET",
+      "CARSI",
+      "KESSAF",
+      "PEYK",
+      "DULGER"
+    ]
+  },
+  "enis": {
+    "reis": "ENIS",
+    "uyeler": [
+      "ENIS",
+      "MURSIT"
+    ]
+  },
+  "menzil": {
+    "reis": "MENZILCI",
+    "uyeler": [
+      "MENZILCI"
+    ]
+  },
+  "munavebe": {
+    "reis": "munavebe-yon",
+    "uyeler": [
+      "munavebe-yon",
+      "munavebe-motor1",
+      "munavebe-mim"
+    ]
+  }
+}
