@@ -192,10 +192,15 @@ PYPTY
   rgen() { rt list-windows -t =KALFA -F '#{window_width}x#{window_height}'; }
   rbekle() { for _ in $(seq 1 40); do [ "$(rgen)" = "$1" ] && return 0; sleep 0.1; done; return 1; }   # kanca arka planda koşar
   unset TMUX TMUX_PANE
+  echo "  ⓘ ÖLÇÜM tmux=$(tmux -V) yuk=$(cut -d' ' -f1 /proc/loadavg) cekirdek=$(nproc)"
   rilk; rist 50 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.6; R0="$(rgen)"; R0F="$(rt list-clients -t =KALFA -F '#{client_width} #{client_flags}')"
   [ "$R0" = 30x50 ] && [[ "$R0F" == "50 "*ignore-size* ]] && ok "R0 ÖNCE (yalnız ignore-size, kancasız): telefon 50 sütunla BAĞLI ama pencere 30 sütunda kalır — sağı noktalı hatası gerçek tmux'ta üretildi" || bad R0 "→ $R0 telefon=[$R0F]"
   rilk; rist 50 30 70 30 1.5 -- bash "$B" anaoturum / tel.KALFA; rbek 2; rbekle 50x50; R1="$(rgen)"
   R1F="$(rt list-clients -t =KALFA -F '#{client_flags}')"; R1Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"
+  # kanca run-shell -b ile ARKA PLANDA koşar: pencere 50x50 olduktan sonra yerel ayarı silmesi biraz sürebilir. Anlık okuma yarış üretir (CI'da R2 'manual');
+  # en çok 5 sn beklenir ve bekleme süresi basılır — beklemeden sonra hâlâ 'manual' ise gerçek hata.
+  R2B=0; while [ -n "$R1Y" ] && [ "$R2B" -lt 50 ]; do sleep 0.1; R2B=$((R2B+1)); R1Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"; done
+  echo "  ⓘ ÖLÇÜM R2 yerel ayarın silinmesi için ${R2B}x0.1 sn beklendi (0 = anında silinmişti)"
   [ "$R1" = 50x50 ] && [[ "$R1F" == *ignore-size* ]] && ok "R1 🔴 koltuk-bagla tel.: pencere 50x50 (telefon tam sığar, yükseklik küçülmedi), telefon ignore-size kaldı" || bad R1 "→ $R1 bayrak=$R1F günlük=$(tail -c 300 "$RT/pty.log" | tr -cd "[:print:]")"
   [ -z "$R1Y" ] && ok "R2 pencere 'manual'de kalmadı: yerel window-size silindi (global 'latest' geçerli)" || bad R2 "yerel=$R1Y"
   rt new-session -d -s POZ -x 30 -y 20; rt resize-window -t POZ: -x 40; RPZ="$(rt show-options -wv -t POZ: window-size 2>/dev/null)"; rt kill-session -t POZ
@@ -215,8 +220,10 @@ PYPTY
   rt kill-session -t =YENIANA 2>/dev/null
   # istemci SAYISI değil o istemcinin kendisi beklenir: R6'nın telefonu kill-session sonrası geç düşerse sayı yanıltır (yük altında R3/R4 sahte kırmızı ölçüldü)
   rist 120 40 -- tmux attach -t =KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 120 && break; sleep 0.1; done; rbekle 120x40; R3="$(rgen)"
+  [ "$R3" != 120x40 ] && echo "  ⓘ ÖLÇÜM R3 durumu: pencere=$R3 yerel-ayar=[$(rt show-options -wv -t KALFA: window-size 2>/dev/null)] istemciler=[$(rt list-clients -t =KALFA -F '#{client_width}x#{client_height}:#{client_flags}' | tr '\n' ' ')]"
   [ "$R3" = 120x40 ] && ok "R3 sonra masaüstü bağlanınca boy yine masaüstünün (120) — telefon onu sınırlamaz" || bad R3 "→ $R3"
   rist 90 30 -- bash "$B" anaoturum / tel.KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 90 && break; sleep 0.1; done; sleep 1; R4="$(rgen)"
+  [ "$R4" != 120x40 ] && echo "  ⓘ ÖLÇÜM R4 durumu: pencere=$R4 yerel-ayar=[$(rt show-options -wv -t KALFA: window-size 2>/dev/null)] istemciler=[$(rt list-clients -t =KALFA -F '#{client_width}x#{client_height}:#{client_flags}' | tr '\n' ' ')]"
   [ "$R4" = 120x40 ] && ok "R4 🔴 masaüstü bağlıyken ikinci telefon gelince pencere 120 kalır (masaüstü daralmaz)" || bad R4 "→ $R4"
   rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
 else
