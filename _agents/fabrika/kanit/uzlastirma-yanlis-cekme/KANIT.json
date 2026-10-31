@@ -1,0 +1,228 @@
+{
+  "is": "uzlastirma-yanlis-cekme",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T20:33:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "7bbb4dfefc46972674eae9c1b959f90f4a1c255964a8f508c07b4091019f13f9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u0/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T20:23:14+03:00",
+      "sure_sn": 9.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b77c9370fd88428f976ceb6be533abf0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "ba8d01b203bc44a8d6f25cf5402e2419b4a9be42598a772d40240102bb236e5f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:24+03:00",
+      "sure_sn": 9.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2d60f85bf20242b48a950efcd7228424"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-borc-sayilmaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-borc-sayilmaz-sonra.txt",
+      "sha256": "82992c8e6b1f1153d723142b26716b20ae4367149230dc8772fb67a18f02314a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u1/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:29+03:00",
+      "sure_sn": 5.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "fd0bd87f8e14470e82cfe557b65c5dca"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-borc-azami",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-borc-azami-sonra.txt",
+      "sha256": "ab24dd496664e0502793836c6f577556ceabdd14529d12b182412df4cb4b14c9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u2/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:34+03:00",
+      "sure_sn": 5.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "1c2618d4962c41a4acf2da5547364b87"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-gelecek-taze",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-gelecek-taze-sonra.txt",
+      "sha256": "a2f14edd78cb2c5f943bec6007ee1d699ad3052d55b38dc17f1f117d35c01788",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u3/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:40+03:00",
+      "sure_sn": 5.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "3e05e3375b6045988f4f3263d320dd2d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-bekleme-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-bekleme-yok-sonra.txt",
+      "sha256": "845c770139a47a432cca302c721dae2352a07473206e3b6ccb1281903c492035",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u4/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:45+03:00",
+      "sure_sn": 5.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0dc310e2e84b437a9c92cde8e68dc56e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-neden-eski",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-neden-eski-sonra.txt",
+      "sha256": "00276b7cf7e57caca14984e76fe45ff9e2ac27b11d2879d3d09030a483512807",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u5/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:50+03:00",
+      "sure_sn": 5.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "62d7adbf75e645e5a8cad68ae24922b4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-borc-zil",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-borc-zil-sonra.txt",
+      "sha256": "c5cf5c6c7def5e164d214a08d0602ba1d71eb172c436c8e5b098d0ebe95416e6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u6/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:23:56+03:00",
+      "sure_sn": 5.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "1f4034a18c474af7b0999fb422da9bee"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-acik-kazanir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-acik-kazanir-sonra.txt",
+      "sha256": "501e057b9173d953316e17cd0233b314cf70a7fe6a1d8c32cac75d40c870567b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/u7/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:24:01+03:00",
+      "sure_sn": 5.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7d690ba2c3ce483ea9d79a955c2d09e9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-gercek-defter",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-gercek-defter-sonra.txt",
+      "sha256": "8b2186bfe7c39cb565fcd7af5b289ce3c752ce727ed6d692be15595d30684ba5",
+      "komut": [
+        "python3",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.py",
+        "--koltuklardan",
+        "--kart-kok",
+        "/config/projects/*/_agents/fabrika/kartlar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:24:13+03:00",
+      "sure_sn": 11.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f6b4b913e2e94889b50fdb279147e01b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-plani",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-plani-sonra.txt",
+      "sha256": "a3aa0eeaa607c5f70d7de53e6dfeb7a8ffd900432e74601872c48dd1f1890937",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:33:55+03:00",
+      "sure_sn": 140.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ccfdc19b9bba4a3c810c2f9507727658"
+    }
+  ],
+  "imza": "ff0e43a2e680fddec05257735eb9b7d07e86b514411611cc359f76e56a34fc37"
+}

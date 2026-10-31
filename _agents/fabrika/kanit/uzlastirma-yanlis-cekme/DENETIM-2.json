@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "uzlastirma-yanlis-cekme",
+  "pr": "622",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T20:30:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastirma-yanlis-cekme",
+  "dal": "uzlastirma-yanlis-cekme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57647,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 40998
+  },
+  "dalgic": "uyumsuz",
+  "bas": "442dc688a56c23e10cb03d5fc64fa694b94e96d9",
+  "duzeltme_farki": {
+    "onceki_bas": "0136c469cc5be11212115db402bf1b034703593f",
+    "dosya": 15,
+    "bayt": 44180,
+    "tam_bayt": 86596
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı borçlu kartın korunması, kartsız görev için 60 dakikalık bekleme ve birleşmiş PR kapanış açıklaması doğru hedeflenmiş; B1 dosya sırasından bağımsız açık-kart üstünlüğü ve iki yönlü U4l ölçümüyle kapanmış. B2 için gerçek defter üzerinde kuru koşu eklenmiş olsa da komut hâlâ depo yolundaki betiği çalıştırıyor; kurulu betiğin çağrıldığı kanıtlanmadan üretime hazır diyemem.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 tam kapanmamış: gerçek defterle kuru koşu artık mevcut, fakat iş kartının özellikle istediği kurulu betikle koşu gösterilmemiş; yazılmış depo sürümü ile kurulmuş sürümün aynı olduğu doğrulanmıyor.",
+        "kanit": "`kuru-gercek-defter` kaydı rc=0 ve gerçek kart köküyle çalışıyor, ancak komutu `python3 yazilim-fabrikasi/scripts/calisiliyor-uzlastir.py ...`; kurulu bir komut veya kurulum hedefi çağrılmıyor. Dolayısıyla önceki bulgunun gerçek veri kısmı kapanmış, kurulum kısmı açık kalmış.",
+        "konum": "kanıt manifesti: kuru-gercek-defter; olcum-kuru-gercek-defter-sonra.txt komut satırı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek sınav çifti kırmızı 48/57’den yeşil 57/57’ye dönüyor; yedi mutasyon kaydı ilgili bozulmaları yakalıyor. B1 ayrıca açık+borçlu kartın iki dosya sırasını deneyen U4l ile ölçülmüş ve kapanmış. Gerçek defter kuru koşusu rc=0 olsa da kurulu betik yerine depo yolundaki Python dosyasını çağırdığı için B2 yalnız kısmen kapanmış."
+  }
+}
