@@ -1,0 +1,42 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-pr-duzeyi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pd-mutant2.sh
+# rc=1 sure=46.0s zaman=2026-11-01T00:58:03+03:00
+--- stdout ---
+════ O1 · bas = birleşen uç → GEÇER ════
+  ✓ rc=0 (bas = uç)
+  ✓ ✓ satırı basıldı
+════ O2 · göz sonrası yalnız DENETİM kaydı commit'lendi → GEÇER ════
+  ✓ rc=0 (arada yalnız kanıt dizini)
+  ✓ açıklaması basıldı
+════ O3 · puandan SONRA kod değişti → ENGELLER ════
+  ✓ rc=1
+  ✓ değişen dosya adıyla söylendi
+════ O4 · bas başka bir dalın commit'i (uçun atası değil) → ENGELLER ════
+  ✓ rc=1
+  ✓ sebep yazıldı
+════ O5 · bas yok (eski kayıt) → GEÇER ama söylenir ════
+  ✓ rc=0 (geriye uyum)
+  ✓ karşılaştırılamadığı söylendi
+════ O6 · ana hatta zaten olan dosya dala girmiş (master birleştirme) → engellemez ════
+  ✓ rc=0 (baska.txt ana hatta aynı)
+════ O13-O14 · PUANDAN SONRA ANA DAL BİRLEŞTİ (SERDAR 1 Kas, Sx #629): aynı dosyada iki ayrı iş → PR farkı aynıysa GEÇER, PR kodu değiştiyse ENGELLER ════
+  ✓ O13 · puandan sonra ana dal aynı dosyaya girdi, PR farkı aynı → rc=0 (kanıt: 1 satır)
+  ✓ O14 · aynı kurulum + PR'a puandan sonra kod girdi → rc=1, uygulama.sh adıyla
+════ O15 · AYNI +/- satırları puandan sonra BAŞKA DOSYAYA taşındı (göz #634 tur 1) → dosya adı karşılaştırılır, ENGELLER ════
+  ✗ O15 · aynı +/- satırı başka dosyaya taşındı → rc=1 (eski ölçü bunu geçirirdi)
+════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değil geçti de değil ════
+  ✓ rc=3
+  ✓ sebep yazıldı
+════ O8 · kirli ağaçta ölçülmüş KANIT kaydı → engellemez ama söylenir ════
+  ✓ rc=0 (uyarı, engel değil)
+  ✓ kirli kayıt adıyla söylendi
+════ O9 · git diff düşerse kapı geçti SAYMAZ (fail-closed, rc=3) ════
+  ✓ rc=3 (fark alınamadı)
+  ✓ yeşil ✓ basılmadı
+════ O10-O11 · PR KİPİ (prbas): çıplak origin + birincil klon + iş alanı; PR başı refs/pull/<N>/head ════
+  ✓ O10 · PR başı = bas + yalnız kanıt kaydı → rc=0 (prbas yolu koştu)
+  ✓ O11 · PR başına puandan sonra kod girdi → rc=1, dosya adıyla
+════ O12 · KANIT kaydı uçun soyundan OLMAYAN commit'te ölçülmüş → engellemez, söylenir ════
+  ✓ yabancı commit'te ölçülmüş kayıt adıyla uyarıldı, engellenmedi
+── SONUÇ: 22 geçti · 1 kaldı ──
+--- stderr ---

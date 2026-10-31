@@ -1,7 +1,7 @@
 {
   "is": "kapi-pr-duzeyi-fark",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T00:53:36+03:00",
+  "guncelleme": "2026-11-01T00:59:03+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -91,7 +91,7 @@
       "etiket": "kapi-tam",
       "asama": "sonra",
       "dosya": "olcum-kapi-tam-sonra.txt",
-      "sha256": "dce040d929d6b86c601d0eda3e948e026d15544ddad276ebfcae1c7da1346d64",
+      "sha256": "9b0bad20a4b46d291a535f9da9648fe6667ea2b9c9fe52eb5fe74ae0786d9a80",
       "komut": [
         "bash",
         "-c",
@@ -99,13 +99,36 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T00:53:36+03:00",
-      "sure_sn": 37.5,
+      "zaman": "2026-11-01T00:59:03+03:00",
+      "sure_sn": 59.8,
       "boru_denetimi": "temiz",
-      "olcum_id": "3d2453e968004de2bff74750c7295036",
-      "olculen_commit": "ed2078f81fec8136e623cd59f2880273376c9aa8",
+      "olcum_id": "58805d486c7a46dbb5136a3f3c2f8371",
+      "olculen_commit": "aac6d149e1eb3067f22383c87ef054267123fcdd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-baslik",
+      "asama": "sonra",
+      "dosya": "olcum-mut-baslik-sonra.txt",
+      "sha256": "cb1d34252ead084c8829258bb616a24d8e06b2ed17ae14f2fa751df5b5850739",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pd-mutant2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T00:58:03+03:00",
+      "sure_sn": 46.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "pr-duzeyi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "245928017a3242c991791affe3c91071",
+      "olculen_commit": "aac6d149e1eb3067f22383c87ef054267123fcdd",
       "olculen_kirli": true
     }
   ],
-  "imza": "feba97a05ef470c84c78b851643b448d8ad3d123aba8c6d8fda86b64cef4c2a0"
+  "imza": "bc9b423bc34e12f43ce3317f99f35864bf566ad346586c939032346057aa4665"
 }

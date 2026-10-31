@@ -73,6 +73,13 @@ ana_birlesim
 ( cd "$T" && echo yeni-kod >> uygulama.sh && git add -A && git commit -q -m "fix: puandan sonra kod" ) >/dev/null 2>&1
 C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C" && grep -q "uygulama.sh" <<<"$C"; g $? "O14 · aynı kurulum + PR'a puandan sonra kod girdi → rc=1, uygulama.sh adıyla"
 
+echo "════ O15 · AYNI +/- satırları puandan sonra BAŞKA DOSYAYA taşındı (göz #634 tur 1) → dosya adı karşılaştırılır, ENGELLER ════"
+kur
+( cd "$T" && printf 'a\nb\nc\n' > liste.txt && printf 'a\nb\nc\n' > ikinci.txt && git add -A && git commit -q -m "chore: iki liste" && git checkout -q -b is-dal && printf 'A\nb\nc\n' > liste.txt && git add -A && git commit -q -m "feat: pr degisikligi" ) >/dev/null 2>&1
+B="$(bas_al)"; den "$B"
+( cd "$T" && git checkout -q main && printf 'x\n' > yan.txt && git add -A && git commit -q -m "chore: baskasinin isi" && git checkout -q is-dal && git merge -q --no-edit main && printf 'a\nb\nc\n' > liste.txt && printf 'A\nb\nc\n' > ikinci.txt && git add -A && git commit -q -m "fix: ayni degisiklik baska dosyada" ) >/dev/null 2>&1
+C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C"; g $? "O15 · aynı +/- satırı başka dosyaya taşındı → rc=1 (eski ölçü bunu geçirirdi)"
+
 echo "════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değil geçti de değil ════"
 kur; den "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"; C="$(kapi)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "rc=3"; grep -q "bu depoda yok" <<<"$C"; g $? "sebep yazıldı"
