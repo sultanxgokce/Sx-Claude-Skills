@@ -39,6 +39,20 @@
       "zaman": "2026-11-01T01:00:00+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-01T01:05:32+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HEZARFEN",
+      "oturum": "ulak_1793484351-00ccf14a",
+      "gerekce": "SERDAR kararı (ulak_1793484351-00ccf14a, 1 Kas 01:05): DEVAM, tur 4 mutlak son; metin farkı yerine git merge-tree ağaç kanıtı, çakışma ya da fark engel",
+      "zaman": "2026-11-01T01:06:15+03:00"
     }
   ]
 }
