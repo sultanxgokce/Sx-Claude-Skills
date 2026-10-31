@@ -385,14 +385,18 @@ PYK
       fi
       oc_degisen="$oc_degisen $f"
     done <<< "$oc_fark"
-    #   PR DÜZEYİNDE KARŞILAŞTIRMA (SERDAR 1 Kas, Sx #629): puandan sonra ANA DAL dalı birleşince başka işin dosyası (catalog.json gibi)
-    #   iki uç arasında "değişen kod" görünüyordu. Ölçü artık PR'ın ana dala göre KENDİ farkıdır (üç nokta, -U1; dosya adı başlıkları + bağlam ve +/- satırları; @@ satır numaraları ANA DAL kaymasından etkilendiği için karşılaştırılmaz, yer değiştirme bağlam satırlarından anlaşılır):
-    #   puanlı başın farkı ile uçun farkı aynıysa PR'ın kodu değişmemiştir, arada yalnız ana dal girmiştir.
+    #   AĞAÇ KANITI (SERDAR 1 Kas, Sx #629 · tur 4 kararı): puandan sonra ANA DAL dalı birleşince başka işin dosyası (catalog.json gibi) iki uç
+    #   arasında "değişen kod" görünüyordu. Fark METNİNİ karşılaştırmak (satır, bağlam, konum) göz önünde art arda delindi (taşınmış satır, tekrarlı
+    #   blok). Yöntem değişti: git merge-tree ile puanlı baş (bas) ile uçun aldığı ana dal commit'i (uç ile ana dalın ortak atası) BİRLEŞTİRİLİR;
+    #   çıkan ağaç uç ağacıyla (kanıt dizini hariç) aynıysa uç = puanlı baş + ana dal, yani PR'ın kodu değişmemiştir. Birleştirme çatışırsa,
+    #   ağaç alınamazsa ya da bir fark kalırsa engel sürer: güvenli yön bu (elle değiştirilmiş birleşim de burada yakalanır).
     if [ -n "$oc_degisen" ] && [ "${oc_atla:-0}" -eq 0 ] && [ -n "$oc_ana" ]; then
-      oc_pf() { git -C "$oc_agac" diff -U1 --no-renames "$oc_ana...$1" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null | grep -E '^([ +-]|diff --git )' | grep -vE '^(\+\+\+|---) '; return "${PIPESTATUS[0]}"; }
-      oc_pb="$(oc_pf "$oc_bas")"; oc_r1=$?; oc_pu="$(oc_pf "$oc_uc")"; oc_r2=$?
-      if [ "$oc_r1" -eq 0 ] && [ "$oc_r2" -eq 0 ] && [ "$oc_pb" = "$oc_pu" ]; then
-        _y "  ✓ puan ${oc_bas:0:8} için verilmiş; birleşen uç ${oc_uc:0:8}: PR'ın ana dala göre farkı aynı (arada yalnız ana dal birleşmiş:${oc_degisen:0:160})"; oc_degisen=""; oc_ana_kapali=1
+      oc_x="$(git -C "$oc_agac" merge-base "$oc_ana" "$oc_uc" 2>/dev/null)"
+      if [ -n "$oc_x" ] && oc_mt="$(git -C "$oc_agac" merge-tree --write-tree "$oc_bas" "$oc_x" 2>/dev/null)" && [ -n "$oc_mt" ]; then
+        oc_mt="${oc_mt%%$'\n'*}"
+        if oc_fk="$(git -C "$oc_agac" diff --name-only "$oc_mt" "$oc_uc" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null)" && [ -z "$oc_fk" ]; then
+          _y "  ✓ puan ${oc_bas:0:8} için verilmiş; birleşen uç ${oc_uc:0:8}: uç ağacı = puanlı baş + ana dal ${oc_x:0:8} (git merge-tree; arada yalnız ana dal birleşmiş:${oc_degisen:0:160})"; oc_degisen=""; oc_ana_kapali=1
+        fi
       fi
     fi
     if [ "${oc_atla:-0}" -eq 1 ]; then :

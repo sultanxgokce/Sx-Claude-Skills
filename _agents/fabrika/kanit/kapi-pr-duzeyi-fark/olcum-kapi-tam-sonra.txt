@@ -1,5 +1,5 @@
 $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark/yazilim-fabrikasi/scripts && bash birlestirme-kapisi-olculen-commit.test.sh
-# rc=0 sure=44.5s zaman=2026-11-01T01:03:39+03:00
+# rc=0 sure=64.6s zaman=2026-11-01T01:16:18+03:00
 --- stdout ---
 ════ O1 · bas = birleşen uç → GEÇER ════
   ✓ rc=0 (bas = uç)
@@ -18,13 +18,19 @@ $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark/yazilim-f
   ✓ karşılaştırılamadığı söylendi
 ════ O6 · ana hatta zaten olan dosya dala girmiş (master birleştirme) → engellemez ════
   ✓ rc=0 (baska.txt ana hatta aynı)
-════ O13-O14 · PUANDAN SONRA ANA DAL BİRLEŞTİ (SERDAR 1 Kas, Sx #629): aynı dosyada iki ayrı iş → PR farkı aynıysa GEÇER, PR kodu değiştiyse ENGELLER ════
-  ✓ O13 · puandan sonra ana dal aynı dosyaya girdi, PR farkı aynı → rc=0 (kanıt: 1 satır)
+════ O13-O14 · PUANDAN SONRA ANA DAL BİRLEŞTİ (SERDAR 1 Kas, Sx #629): aynı dosyada iki ayrı iş → uç = puanlı baş + ana dal ise GEÇER, PR kodu değiştiyse ENGELLER ════
+  ✓ O13 · puandan sonra ana dal aynı dosyaya girdi, PR farkı aynı → rc=0 (kanıt: 0 satır)
   ✓ O14 · aynı kurulum + PR'a puandan sonra kod girdi → rc=1, uygulama.sh adıyla
 ════ O15 · AYNI +/- satırları puandan sonra BAŞKA DOSYAYA taşındı (göz #634 tur 1) → dosya adı karşılaştırılır, ENGELLER ════
   ✓ O15 · aynı +/- satırı başka dosyaya taşındı → rc=1 (eski ölçü bunu geçirirdi)
 ════ O16 · AYNI dosyada AYNI +/- satırları puandan sonra BAŞKA KONUMA taşındı (göz #634 tur 2) → bağlam satırları karşılaştırılır, ENGELLER ════
   ✓ O16 · aynı +/- satırı aynı dosyada başka konuma taşındı → rc=1 (-U0 ölçüsü bunu geçirirdi)
+════ O17 · AYNI komşulu TEKRARLI bloklar arasında taşıma (göz #634 tur 3) → ağaç kanıtı, ENGELLER ════
+  ✓ O17 · aynı komşulu iki blok arasında taşıma → rc=1 (metin farkı bunu ayıramazdı)
+════ O18 · ELLE DEĞİŞTİRİLMİŞ BİRLEŞİM: birleştirme commit'inin içine gizlenmiş kod → ENGELLER ════
+  ✓ O18 · birleşimin içine gizlenen kod → rc=1, dosya adıyla
+════ O19 · ÇATIŞAN birleşim (aynı satıra iki iş): ağaç kanıtı kurulamaz → ENGELLER (güvenli yön) ════
+  ✓ O19 · aynı satırda iki iş, üçüncü içerikle elle çözülmüş birleşim → rc=1, liste.txt adıyla
 ════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değil geçti de değil ════
   ✓ rc=3
   ✓ sebep yazıldı
@@ -39,5 +45,5 @@ $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark/yazilim-f
   ✓ O11 · PR başına puandan sonra kod girdi → rc=1, dosya adıyla
 ════ O12 · KANIT kaydı uçun soyundan OLMAYAN commit'te ölçülmüş → engellemez, söylenir ════
   ✓ yabancı commit'te ölçülmüş kayıt adıyla uyarıldı, engellenmedi
-── SONUÇ: 24 geçti · 0 kaldı ──
+── SONUÇ: 27 geçti · 0 kaldı ──
 --- stderr ---
