@@ -29,6 +29,7 @@ fi
 
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null; find "$HERE" -maxdepth 1 -name ".mutant-ajan-$$-*" -delete 2>/dev/null' EXIT
 G=0; K=0
+export DUZEN_CAGRI_KAYDI="$T/cagri.jsonl"   # gerçek /config/.filo kaydına sınav yazmaz
 ok() { if [ "$2" -eq 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1 ${3:-}"; fi; }
 
 SIMDI=1793264400   # 2026-10-29
@@ -101,11 +102,30 @@ printf '{"cumle":"DIZIN-DISI-KART"}\n' > "$T/disari.json"
 kos sakird --is "x" --kart "../../../../$(basename "$T")/disari" >"$T/o11" 2>"$T/e11"; rc=$?
 ok "A11 --kart ../ yolu reddedilir → rc 2, dizin dışı JSON isteme girmez (göz tur 1)" "$([ $rc -eq 2 ] && ! grep -q 'DIZIN-DISI-KART' "$T/o11" && grep -q 'kart iş adı' "$T/e11" && echo 0 || echo 1)" "→ rc=$rc"
 
+# ── C: çağrı kaydı (Kuzey G22, duzen 1.4.0) ──
+: > "$T/cagri.jsonl"; SAHTE_DEFTER=var kos sakird --is "GIZLI-IS-CUMLESI" --kart deneme-is >"$T/oc1" 2>&1; rc=$?
+SATIRC="$(cat "$T/cagri.jsonl")"
+KIM="$(sed -nE '1s/.*kimlik: (ai-[^ ]+).*/\1/p' "$T/oc1")"
+cok="$(python3 -I -c 'import json,sys; d=json.loads(sys.argv[1]); print(int(d["slug"]=="sakird" and d["ad"]=="ŞAKİRD" and d["oda"]=="agentic-os" and d["amir"]=="BÂNİ" and d["kart"]=="deneme-is" and d["el_defteri_bayt"]>0 and d["istem_bayt"]>0 and d["istem_kimligi"]==sys.argv[2] and "zaman" in d))' "$SATIRC" "$KIM" 2>/dev/null)"
+ok "C1 tek satır JSON yazılır; alanlar dolu, el defteri bayt>0, kimlik istem başlığıyla AYNI" "$([ $rc -eq 0 ] && [ "$(wc -l < "$T/cagri.jsonl")" -eq 1 ] && [ -n "$KIM" ] && [ "$cok" = 1 ] && echo 0 || echo 1)" "→ rc=$rc kim=$KIM"
+ok "C1b kayıtta içerik/sır/iş cümlesi YOK" "$(! grep -qE 'GIZLI-IS-CUMLESI|hunter2|SAHTE-DEFTER-SATIRI|KART-CUMLESI' "$T/cagri.jsonl" && echo 0 || echo 1)"
+: > "$T/cagri.jsonl"; SAHTE_DEFTER=yok kos sakird --is "x" >"$T/oc2" 2>&1; rc=$?
+ok "C2 boş defter el_defteri_bayt=0 yazar (istem yine basılır)" "$([ $rc -eq 0 ] && grep -q '"el_defteri_bayt": 0' "$T/cagri.jsonl" && grep -q 'ALT AJAN İSTEMİ' "$T/oc2" && echo 0 || echo 1)" "→ rc=$rc"
+: > "$T/dosya"; DUZEN_CAGRI_KAYDI="$T/dosya/kayit.jsonl" kos sakird --is "x" >"$T/oc3" 2>&1; rc=$?
+ok "C3 yazılamayan kayıt: istem yine basılır (rc 0), başlığın altında ⚠ çağrı kaydı YAZILAMADI" "$([ $rc -eq 0 ] && sed -n 2p "$T/oc3" | grep -q '^⚠ çağrı kaydı YAZILAMADI' && grep -q '## 1 · KİMLİK' "$T/oc3" && echo 0 || echo 1)" "→ rc=$rc"
+
 if [ -z "${AJAN_BETIK:-}" ]; then
   echo "── mutasyon (gömülü): süzgeç kapatılınca A5 düşmeli"
   M="$HERE/.mutant-ajan-$$-sir"
   if mutant_yaz "$M" "$MUT_SIR_ESKI" "$MUT_SIR_YENI"; then
     o="$(AJAN_BETIK="$M" bash "$0" 2>&1)"; ok "mutant 'sir' → A5 kırmızı (MUTASYON: sır süzgeci kapatıldı)" "$(grep -q '✗ A5 ' <<<"$o" && echo 0 || echo 1)" "→ $(grep -E '✗' <<<"$o" | head -2)"
   else ok "mutant 'sir': desen tutmadı (betik değişti, mutant yeniden yazılmalı)" 1; fi
+  M2="$HERE/.mutant-ajan-$$-kayit"
+  if python3 -I -c '
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); e=sys.argv[3]
+assert s.count(e)==1, s.count(e)
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(e,"true"))' "$R" "$M2" "printf '%s\\n' \"\$SATIR\" >> \"\$KAYIT\"" 2>/dev/null; then
+    o="$(AJAN_BETIK="$M2" bash "$0" 2>&1)"; ok "mutant 'kayit-yazmaz' → C1 kırmızı (MUTASYON: kayıt satırı yazılmıyor)" "$(grep -q '✗ C1 ' <<<"$o" && echo 0 || echo 1)"
+  else ok "mutant 'kayit-yazmaz': desen tutmadı (betik değişti)" 1; fi
 fi
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]

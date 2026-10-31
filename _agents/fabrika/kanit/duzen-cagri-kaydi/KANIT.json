@@ -1,0 +1,44 @@
+{
+  "is": "duzen-cagri-kaydi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T03:37:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-mutantli",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-mutantli-sonra.txt",
+      "sha256": "8ff8f115d68b4ee21131aefcecca39a724c308f04fb6d53ed7a65c0d6cd929b1",
+      "komut": [
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T03:37:43+03:00",
+      "sure_sn": 12.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bc613fc989e14e0e817720c54d12b412"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cagri-kaydi-yok",
+      "asama": "once",
+      "dosya": "olcum-cagri-kaydi-yok-once.txt",
+      "sha256": "4ff03bbc7f0297345719e97a071ec69322c0eb9451ceb9d60cf282322a124fdd",
+      "komut": [
+        "env",
+        "AJAN_BETIK=/config/projects/_wt/Sx-Claude-Skills-duzen-cagri-kaydi/duzen/scripts/.eski-alt-ajan-istem.sh",
+        "bash",
+        "duzen/scripts/alt-ajan-istem.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T03:37:49+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4804ef9c94cd471487f35a178ba7108d"
+    }
+  ],
+  "imza": "0e4022288e4da25076efcfa6be565a292d9a43976f6d2a09b135d7bf4ce167e1"
+}
