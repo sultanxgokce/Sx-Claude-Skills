@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "koltuk-bagla-ci-olcum",
+  "pr": "611",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T05:17:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-bagla-ci-olcum",
+  "dal": "koltuk-bagla-ci-olcum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25907,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 54069
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a171b007a0027eb9295c7215b26deed052e5c3a3",
+  "duzeltme_farki": {
+    "onceki_bas": "322ee2e37506651ac123f5681dcc75f78e86353b",
+    "dosya": 7,
+    "bayt": 57366,
+    "tam_bayt": 116735
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kilit zaman aşımı yolu artık güvenli biçimde duruyor ve S2 ile iki ayrı mutasyon ölçümü bu kapının gerçekten çalıştığını gösteriyor. Ancak kilit dosyası açılamadığında veya `flock` bulunmadığında yarış hâlâ bilerek kilitsiz yürütülüyor; main kovası ile Sx PR sonuçlarıysa bu kutunun dışındaki CI yüzeyinde doğrulanmayı bekliyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 yalnız kısmen kapandı: kilit alınamazsa gövde artık duruyor, fakat kilit dosyası açılamazsa veya `flock` yoksa gövde kilitsiz çalışıp aynı yarışı yeniden mümkün kılıyor; önce bu dayanıklılık açığını çözün.",
+        "kanit": "Yeni koşul yalnız `command -v flock` ve `exec 9>...` başarılıysa `flock -w ... || return 0` çalıştırıyor; bu iki önkoşuldan biri başarısız olduğunda akış doğrudan `tmux list-windows` gövdesine geçiyor. S2 ve `mutant-kilit-alinamazsa-surer` ölçümü yalnız açılmış kilidin zaman aşımı yolunu sınıyor, kilit dosyasının açılamaması veya `flock` yokluğu yolunu sınamıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:266-269; terminal-onar/scripts/koltuk-bagla.test.sh:239-246",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önceki B2 yerel kanıtla kapanmadı: main kovasının ve Sx PR'larının yeşile döndüğü burada görülemiyor; bu, kod kusuru değil dış CI doğrulamasıdır.",
+        "kanit": "Sağlam manifestteki üç kaydın komutu da yalnız `bash terminal-onar/scripts/koltuk-bagla.test.sh`; CI koşusu, main kovası veya Sx PR durumunu gösteren kayıt yok.",
+        "konum": "kanıt manifesti: sinav-kilitli, mutant-kilitsiz ve mutant-kilit-alinamazsa-surer kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "main kovası ve Sx PR'larının CI sonuç yüzeyi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 131/131, iki mutasyon ölçümü rc=1 ile sırasıyla S1 ve S2 kapılarında düşerek kilitsiz kodun ve kilit zaman aşımında devam etmenin yakalandığını gösteriyor. Buna karşılık kilit dosyasının açılamaması veya `flock` yokluğu ölçülmemiş; ayrıca main/Sx CI durumu için dış yüzey kanıtı bulunmuyor."
+  }
+}

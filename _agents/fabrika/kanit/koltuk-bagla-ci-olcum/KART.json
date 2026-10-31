@@ -1,0 +1,64 @@
+{
+  "is": "koltuk-bagla-ci-olcum",
+  "cumle": "koltuk-bagla sınavının R2-R4 yarışını oturum kilidiyle onarır; kilit dosyası açılamaz ya da flock yoksa gövde durur; kilitsiz kol kullanıcının bilerek koyduğu manual ayarını korur",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-31T04:51:31+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-31T05:31:55+03:00",
+      "olay": "daralt",
+      "kalan_kart": "koltuk-bagla-ci-olcum-kalan",
+      "tur_sifir": 3
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "tur 3 tek uygulama bulgusu: kilitsiz kolda kullanıcının bilerek koyduğu manual silinir; çözüm küçük (manual görülen pencere atlanır) ve bulgu sayısı yönü ilerliyor",
+      "zaman": "2026-10-31T05:27:19+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "MİRAHUR",
+      "oturum": "ulak_1793413719-3a226024",
+      "gerekce": "daraltma: kalan bulgu yeni karta (koltuk-bagla-ci-olcum-kalan) — B2 main kovası ve Sx PR yeşili: kutu dışı yüzey, birleşmeden sonra canlı borç olarak ölçülür (main kovasının ilk koşusu + 608/610 yeniden koşusu)",
+      "zaman": "2026-10-31T05:31:55+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "koltuk-bagla sınavının R2 R3 R4 adımlarının CI'da neden düştüğünü ölçer ve onarır; main kovası ve Sx PR'ları yeşile dönsün",
+      "zaman": "2026-10-31T05:31:55+03:00",
+      "kalan_kart": "koltuk-bagla-ci-olcum-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-31T05:31:55+03:00",
+      "kalan_kart": "koltuk-bagla-ci-olcum-kalan",
+      "kalan": "B2 main kovası ve Sx PR yeşili: kutu dışı yüzey, birleşmeden sonra canlı borç olarak ölçülür (main kovasının ilk koşusu + 608/610 yeniden koşusu)",
+      "tur_sifir": 3,
+      "oturum": "ulak_1793413719-3a226024"
+    }
+  ]
+}
