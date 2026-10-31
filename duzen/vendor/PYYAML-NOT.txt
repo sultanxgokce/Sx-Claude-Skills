@@ -1,0 +1,3 @@
+PyYAML 6.0.3 (saf Python, değiştirilmemiş)
+yaml-saf.zip sha256: 6649c2b05b9086f4d2b78d9cc5d998afb384d245ed4c0d021cac681b6793366e
+İçerik: 17 .py dosyası; derlenmiş uzantı yok. Neden zip: düz kaynak 236 KB idi, bağımsız göz istemi tavanını (100 KB) aşıyordu.

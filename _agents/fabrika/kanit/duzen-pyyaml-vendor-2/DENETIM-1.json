@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "duzen-pyyaml-vendor-2",
+  "pr": "636",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T02:20:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-pyyaml-vendor-2",
+  "dal": "duzen-pyyaml-vendor-2",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21223,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4080
+  },
+  "dalgic": "uyumsuz",
+  "bas": "944fa2ae5d1441a42142dcfece3d89bed3baa945",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Paket, saf Python PyYAML vendor’ını ekleyip ekipc’yi sistem PyYAML’sız koşulda çalıştırmış; sürüm, katalog ve P8 paritesi de talebe uygun güncellenmiş. Gerçek ölçümde 26 kapının tamamı geçmiş ve mutasyon ölçümü vendor kaldırıldığında kapıların düştüğünü göstermiş; üretimi engelleyen kanıtlı bir kusur yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm temiz commit üzerinde rc=0 ile 26 geçti, 0 düştü sonucunu veriyor. Mutasyon kaydı doğru biçimde ayrı tutulmuş ve vendor bozulunca 5 ilgili kapının düştüğünü kanıtlıyor. P6b kutuda Nexus katalogu/manifesti bulunmadığı için atlanmış olsa da P6a canlı kanonik md5 eşitliğini ölçmüş; bu sarı kayıt değildir. PyYAML’sız çalışma, kuru koşuda dokunmama, sistem PyYAML çıktısıyla bayt paritesi, vendor yokken dürüst exit 2 ve saf-Python paket yapısı ölçülmüş. Bununla birlikte “tek commit” koşulu temiz bir commit ölçüldüğünü gösteren manifestten görülse de commit geçmişi karşılaştırması sunulmadığından doğrudan kanıtlanmış değildir; bu, mevcut kod kusuru bulgusu oluşturmaya yetmez."
+  }
+}
