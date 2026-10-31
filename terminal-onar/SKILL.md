@@ -5,11 +5,12 @@ version: 2.36.8
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
-## 🆕 2.36.8 · Koltuğun odası kapıdan okunur — çalışma klasöründen (27 Eki · görev …1ASZ · kutu–oda modeli 2 · SERDAR kararı A)
-- `/api/koltuklar` her koltuğa `oda` ekler: koltuğun çalışma dizininden yukarı çıkılır, ilk `oda.json` odayı verir (`oda-kur` düzeni). Yanıt kutunun odalarını da taşır: `odalar: [{ad, hedef, reis}]`.
-- Ekip kaydındaki `oda:` alanı yalnız **tutarlılık denetimi**: klasörle ayrışırsa (ya da koltuk oda klasöründe açılmamışsa) koltukta `oda_uyari` döner; oda yine klasörden gelir, kayıt oda uydurmaz. Bozuk `oda.json` sessizce odasız sayılmaz, uyarıda söylenir.
+## 🆕 2.36.8 · Koltuğun odası kapıdan okunur: oda.json → kayıt → oda dışı (31 Eki · görev …1ASZ · kutu–oda modeli 2 · SERDAR kararı A, #506 yerine)
+- `/api/koltuklar` her koltuğa `oda` ve `oda_kaynak` (`klasor` · `kayit`) ekler. Sıra: koltuğun çalışma dizininden yukarı çıkılır, ilk `oda.json` kazanır; yoksa ekip kaydındaki `oda:`; ikisi de yoksa oda dışı (alanlar yazılmaz). Yanıt kutunun odalarını taşır: `odalar: [{ad, hedef, reis}]`, kayıttan gelen odada hedef ve reis boş.
+- SERDAR 31 Eki: "Kayıt yalnız denetler kararımı bu cümleyle değiştiriyorum." Niçin: filoda `oda.json` 3 dizinde, kod kutusunda koltuklar proje kökünde; yalnız klasörle oda listesi boş dönerdi.
+- Ad eşlemesi: kayıttaki `tmux` alanı; yoksa katlanmış kimlik (ŞAKİRD ⟷ sakird). Ayrışmada klasör geçerli, `oda_uyari` döner. Bozuk `oda.json` kayda düşer ve uyarıda söylenir; kayıtta da yoksa odasız + uyarı.
 - `koltuk-bagla.sh --liste` 9. sütun: etkin bölmenin çalışma dizini. Dizin API yanıtına **yazılmaz**.
-- Sınav: `kapi/sunucu.test.mjs` OD1–OD7 · `scripts/koltuk-bagla.test.sh` OD1–OD3. Merkezde oda başlıklı görünüm ayrı kartta (cloudtop).
+- Sınav: `kapi/sunucu.test.mjs` OD1–OD9 · `scripts/koltuk-bagla.test.sh` OD1–OD3. Merkezde görünüm ayrı kartta (cloudtop).
 
 ## 🆕 2.36.7 · Telefon boyu kancası artık sıralı koşar: eşzamanlı iki kanca pencereyi 'manual'de bırakmaz (31 Eki)
 `koltuk-bagla.sh --tel-buyut` (client-attached + client-resized kancaları) aynı anda koşunca ikincisi, birincinin `resize-window`'undan sonra ama yerel

@@ -625,27 +625,30 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   p11.kill();
 }
 
-// ── OD · koltuğun ODASI (2.33.0 · kutu–oda modeli 2 · SERDAR kararı A): oda çalışma dizininden (oda.json), ekip kaydı yalnız tutarlılık ──
+// ── OD · koltuğun ODASI (2.36.8 · SERDAR kararı A, 31 Eki): sıra oda.json → kayıttaki oda → oda dışı; koltukta oda_kaynak ──
 {
   const PO = join(T, 'oda-proje'); const od = (y, m) => { mkdirSync(join(PO, y), { recursive: true }); if (m !== undefined) writeFileSync(join(PO, y, 'oda.json'), m); };
   od('agentic-os', JSON.stringify({ ad: 'agentic-os', reis: 'SERDAR', hedef: 'Agentic OS çekirdeği', olcu: 'kapanan iş', ek_yazma: [] }));
   od('agentic-os/alt/derin'); od('freelance', JSON.stringify({ ad: 'freelance', reis: 'BASIRET', hedef: 'Freelance işleri', olcu: 'teklif' }));
   od('bozuk', '{ad: bozuk'); mkdirSync(join(PO, '_agents/handoff'), { recursive: true });
-  writeFileSync(join(PO, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    oda: agentic-os   # eşleşir\n  - id: KALFA\n    tmux: "kalfa:0"\n    oda: agentic-os\n  - id: MIMAR\n    tmux: "mimar:0"\n    oda: freelance\n  - id: CIRAK\n    tmux: "cirak:0"\n');
+  writeFileSync(join(PO, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    oda: agentic-os   # eşleşir\n  - id: KALFA\n    tmux: "kalfa:0"\n    oda: agentic-os\n  - id: MIMAR\n    tmux: "mimar:0"\n    oda: freelance\n  - id: CIRAK\n    tmux: "cirak:0"\n  - id: CIRAK2\n    tmux: "cirak2:0"\n    oda: freelance\n  - id: ŞAKİRD\n    oda: hezarfen\n  - id: MÜZEHHİP\n    tmux: "muzehhip:0"\n    oda: hezarfen\n  - id: KOTU\n    tmux: "kotu:0"\n    oda: Kötü_Ad\n');
   const sat = (ad, dizin) => `${ad}\\t5\\t1\\tajan\\tbos\\t\\t\\t\\t${dizin}\\n`;
   const K9 = join(T, 'koltuk-sahte9.sh');
-  writeFileSync(K9, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nprintf "' + sat('sinavkutu-ana', PO) + sat('BASIRET', join(PO, 'agentic-os/alt/derin')) + sat('kalfa', join(PO, 'freelance')) + sat('mimar', PO) + sat('cirak', join(PO, 'bozuk')) + 'eski\\t5\\t1\\tajan\\tbos\\t\\t\\t\\n' + '"\n');
+  writeFileSync(K9, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nprintf "' + sat('sinavkutu-ana', PO) + sat('cirak2', join(PO, 'bozuk')) + sat('sakird', PO) + sat('muzehhip', PO) + sat('kotu', PO) + sat('BASIRET', join(PO, 'agentic-os/alt/derin')) + sat('kalfa', join(PO, 'freelance')) + sat('mimar', PO) + sat('cirak', join(PO, 'bozuk')) + 'eski\\t5\\t1\\tajan\\tbos\\t\\t\\t\\n' + '"\n');
   const PD = 18780; const pd = await kapiAc('/sedir', PD, { TO_PROJE: PO, KAPI_KOLTUK_BETIK: K9 });
   const ok = await iste(PD, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
   const cd = 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
   const r = await iste(PD, '/sedir/api/koltuklar', { cerez: cd }); const metin = await r.text(); let j = {}; try { j = JSON.parse(metin); } catch {}
   const K = (ad) => (j.koltuklar || []).find((x) => x.ad === ad) || {};
-  kapi('OD1 koltuk oda klasörünün ALTINDA açılmış: oda yukarıdaki oda.json\'dan (agentic-os), kayıtla aynı → uyarı YOK', K('BASIRET').oda === 'agentic-os' && !K('BASIRET').oda_uyari, `→ ${JSON.stringify(K('BASIRET'))}`);
-  kapi('OD2 kayıt agentic-os, klasör freelance → oda KLASÖRDEN (freelance) + iki adı söyleyen uyarı', K('kalfa').oda === 'freelance' && /'agentic-os'/.test(K('kalfa').oda_uyari || '') && /'freelance'/.test(K('kalfa').oda_uyari || ''), `→ ${JSON.stringify(K('kalfa'))}`);
-  kapi('OD3 kayıtta oda var, koltuk oda klasöründe değil → oda UYDURULMAZ, uyarı "açılmamış"', !('oda' in K('mimar')) && /açılmamış/.test(K('mimar').oda_uyari || ''), `→ ${JSON.stringify(K('mimar'))}`);
-  kapi('OD4 bozuk oda.json → odasız gösterilir ve SÖYLENİR (sessiz odasız değil)', !('oda' in K('cirak')) && /okunamadı/.test(K('cirak').oda_uyari || ''), `→ ${JSON.stringify(K('cirak'))}`);
-  kapi('OD5 kayıtsız + odasız koltuk ve dizin sütunu olmayan eski satır: oda da uyarı da yok', !('oda' in K('sinavkutu-ana')) && !K('sinavkutu-ana').oda_uyari && K('eski').ad === 'eski' && !('oda' in K('eski')), `→ ${JSON.stringify([K('sinavkutu-ana'), K('eski')])}`);
-  kapi('OD6 yanıt kutunun odalarını taşır (ad · hedef · reis, sıralı); çalışma dizini yanıta SIZMAZ', JSON.stringify(j.odalar) === JSON.stringify([{ ad: 'agentic-os', hedef: 'Agentic OS çekirdeği', reis: 'SERDAR' }, { ad: 'freelance', hedef: 'Freelance işleri', reis: 'BASIRET' }]) && !metin.includes(PO) && !/"dizin"/.test(metin), `→ ${JSON.stringify(j.odalar)} sızıntı=${metin.includes(PO)}`);
+  kapi('OD1 koltuk oda klasörünün ALTINDA açılmış: oda yukarıdaki oda.json\'dan (agentic-os), kaynak klasor, kayıtla aynı → uyarı YOK', K('BASIRET').oda === 'agentic-os' && K('BASIRET').oda_kaynak === 'klasor' && !K('BASIRET').oda_uyari, `→ ${JSON.stringify(K('BASIRET'))}`);
+  kapi('OD2 kayıt agentic-os, klasör freelance → oda KLASÖRDEN (freelance) + kaynak klasor + iki adı söyleyen uyarı', K('kalfa').oda === 'freelance' && K('kalfa').oda_kaynak === 'klasor' && /'agentic-os'/.test(K('kalfa').oda_uyari || '') && /'freelance'/.test(K('kalfa').oda_uyari || ''), `→ ${JSON.stringify(K('kalfa'))}`);
+  kapi('OD3 kayıtta oda var, koltuk oda klasöründe değil → oda KAYITTAN, kaynak kayit, uyarı YOK (kararın 2. basamağı olağan durum)', K('mimar').oda === 'freelance' && K('mimar').oda_kaynak === 'kayit' && !K('mimar').oda_uyari, `→ ${JSON.stringify(K('mimar'))}`);
+  kapi('OD4 bozuk oda.json, kayıtta oda yok → odasız gösterilir ve SÖYLENİR (sessiz odasız değil)', !('oda' in K('cirak')) && !('oda_kaynak' in K('cirak')) && /okunamadı/.test(K('cirak').oda_uyari || ''), `→ ${JSON.stringify(K('cirak'))}`);
+  kapi('OD4b bozuk oda.json, kayıtta oda var → kayıttan gösterilir, kaynak kayit, uyarı hem bozukluğu hem kayıt odasını söyler', K('cirak2').oda === 'freelance' && K('cirak2').oda_kaynak === 'kayit' && /okunamadı/.test(K('cirak2').oda_uyari || '') && /'freelance'/.test(K('cirak2').oda_uyari || ''), `→ ${JSON.stringify(K('cirak2'))}`);
+  kapi('OD5 kayıtsız + odasız koltuk ve dizin sütunu olmayan eski satır: oda dışı (oda · kaynak · uyarı yok)', !('oda' in K('sinavkutu-ana')) && !('oda_kaynak' in K('sinavkutu-ana')) && !K('sinavkutu-ana').oda_uyari && K('eski').ad === 'eski' && !('oda' in K('eski')), `→ ${JSON.stringify([K('sinavkutu-ana'), K('eski')])}`);
+  kapi('OD6 odalar kayıt odalarını da taşır, klasör bilgisi kayıt satırını ezer (cirak2 kayıttan önce geldi), sıralı; çalışma dizini yanıta SIZMAZ', JSON.stringify(j.odalar) === JSON.stringify([{ ad: 'agentic-os', hedef: 'Agentic OS çekirdeği', reis: 'SERDAR' }, { ad: 'freelance', hedef: 'Freelance işleri', reis: 'BASIRET' }, { ad: 'hezarfen', hedef: '', reis: '' }]) && !metin.includes(PO) && !/"dizin"/.test(metin), `→ ${JSON.stringify(j.odalar)} sızıntı=${metin.includes(PO)}`);
+  kapi('OD8 ad eşlemesi: tmux alanıyla muzehhip ⟷ MÜZEHHİP; tmux alanı yokken ŞAKİRD ⟷ sakird', K('muzehhip').oda === 'hezarfen' && K('muzehhip').oda_kaynak === 'kayit' && K('sakird').oda === 'hezarfen' && K('sakird').oda_kaynak === 'kayit', `→ ${JSON.stringify([K('muzehhip'), K('sakird')])}`);
+  kapi('OD9 kayıtta geçersiz oda adı oda sayılmaz: oda dışı', !('oda' in K('kotu')) && !('oda_kaynak' in K('kotu')), `→ ${JSON.stringify(K('kotu'))}`);
   const { odaBul } = await import(pathToFileURL(join(KOK, 'oda.mjs')).href);
   kapi('OD7 göreli ya da boş dizin → oda aranmaz (null)', odaBul('agentic-os') === null && odaBul('') === null && odaBul(undefined) === null);
   pd.kill();
