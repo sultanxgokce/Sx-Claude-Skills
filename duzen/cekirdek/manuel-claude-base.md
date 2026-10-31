@@ -43,6 +43,11 @@ kendi odanın `0-teslimat/giden/` kutusuna, ilk satırı `# GÖNDEREN → ALICI 
 biçiminde bir dosya. Merkez onu toplar ve alıcıyı dürter. Sessizlik cevap değildir;
 "okudum, sonra dönerim" cevaptır. Tam kural: `_agents/ekip-os-base/cevapsiz-birakma.md`.
 
+## ALT PERSONEL — koltuksuz alt ajan sıfır bağlamla başlamaz (Kuzey G3.3)
+Reisin Agent aracıyla doğurduğu koltuksuz alt personeli (BENNÂ · MÜZEHHİP · ŞAKİRD · ÇAPAR …) çağırırken istemi elle yazma:
+`bash /config/.claude/skills/duzen/scripts/alt-ajan-istem.sh <AD>` el defteriyle birlikte üretir. Koltuğu olmadığından ona giden
+kart zili amirinin masasına düşer; cevabı da amirinden beklersin.
+
 ## PERSONAYA-ÖZEL NEREYE GİDER (temele DEĞİL, `## ELLE`'ye)
 Ad · etimoloji · proje · proje-tanımı · domain-işi (kapsam/dizin) · otonom-kardeş (varsa) · provenance-sınıfı ·
 taskHint-prefix · iş-notu yolu · öz-farkındalık-notu · biriken persona-hafızası. Bunlar `## ELLE`'de yaşar;
