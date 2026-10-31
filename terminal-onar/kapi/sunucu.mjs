@@ -25,7 +25,7 @@ import { bugunOku } from './bugun.mjs';
 import { kadroYazKilitAltinda, KadroHata, davaEkle, kisiyeBagla, baglaGeriAl, DOSYA_NO, kisaAdGecerli } from './kadro-yaz.mjs';
 import { etiketOku, etiketYaz, EtiketHata } from './kadro-etiket.mjs';
 import { dosyaKilit } from './kilit.mjs';
-import { onbellekKur } from './koltuk-onbellek.mjs';   // /api/koltuklar kısa süreli önbellek (ölçüm notu dosyada)
+import { onbellekKur, koltukDegistirir } from './koltuk-onbellek.mjs';   // /api/koltuklar kısa süreli önbellek (ölçüm notu dosyada)
 import { koltukKimlik } from './koltuk-kimlik.mjs';   // ad dışı kimlik (2.24.0 · P4GT2W): adres adı değil kimliği taşır
 import { oturumKimlikleri, oturumDizinleri } from './kimlik.mjs';   // kişi↔oturum eşleşmesinin kimlik ayağı (salt-okur)
 import { davaDondur, davaEk, davaGeriEk } from './dava.mjs';   // Dava Rafı: dondurmanın tek yolu (kapı Aç'ı + günlük bekçi turu)
@@ -310,10 +310,9 @@ function gecmisOku(adet) {
 }
 
 const koltukOnbellek = onbellekKur(async () => { const r = await calistir('bash', [KOLTUK_BETIK, '--liste']); return { ok: r.kod === 0, out: r.out }; },
-  { taze: +(process.env.KAPI_KOLTUK_TAZE_MS ?? 4000), bayat: +(process.env.KAPI_KOLTUK_BAYAT_MS ?? 60000) });
+  { taze: +(process.env.KAPI_KOLTUK_TAZE_MS ?? 4000), bayat: +(process.env.KAPI_KOLTUK_BAYAT_MS ?? 150000) });
 const sunucu = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
-  if (req.method !== 'GET' && req.method !== 'HEAD') res.once('finish', () => koltukOnbellek.dusur());   // koltuk açma, dondurma: cevap gidince liste eskidir
   // Taban SIYRILIR: aşağıdaki bütün yollar taban-bağımsız kalsın (tek yerde çevrilir;
   // her uçta ayrı ayrı ele alınsaydı biri unutulur ve o uç sessizce 404 olurdu).
   let y = url.pathname;
@@ -322,6 +321,7 @@ const sunucu = http.createServer(async (req, res) => {
     if (y.startsWith(TABAN + '/')) y = y.slice(TABAN.length);
     else { res.writeHead(404); return res.end('yok'); }   // taban dışı istek bu kapıya ait değil
   }
+  if (req.method === 'POST') res.once('finish', () => { if (koltukDegistirir(y, res.statusCode)) koltukOnbellek.dusur(); });   // koltuk açma, dondurma: cevap gidince liste eskidir
   res.setHeader('x-content-type-options', 'nosniff');
   res.setHeader('referrer-policy', 'no-referrer');
   // 🔴 ÇERÇEVE İZNİ (canlı sayfa kuralı 1.1.0 · SEDİR'in ölçümü ve isteği, 2026-10-01).

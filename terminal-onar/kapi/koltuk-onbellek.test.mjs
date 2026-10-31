@@ -1,6 +1,6 @@
 // koltuk-onbellek sınavı — sahte saat + sayaçlı üretici. Çıktı: "N geçti · M kaldı".
 import assert from 'node:assert/strict';
-import { onbellekKur } from './koltuk-onbellek.mjs';
+import { onbellekKur, koltukDegistirir } from './koltuk-onbellek.mjs';
 let gecti = 0; const kalan = [];
 const t = async (ad, fn) => { try { await fn(); gecti++; } catch (e) { kalan.push(`${ad}: ${e.message.split('\n')[0]}`); } };
 const kur = (o = {}) => { let saat = 1000, n = 0, sonuc = () => ({ ok: true, n }), bekle = null;
@@ -18,4 +18,11 @@ await t('O6 bayat hatayı süresiz gizlemez: yenileme hep düşerse pencere dolu
 await t('O7 dusur eldekini atar, sonraki istek yeniden üretir', async () => { const o = kur(); await o.c.al(); o.c.dusur(); await o.c.al(); assert.equal(o.sayi(), 2); });
 await t('O8 dusur sırasında yoldaki eski koşu önbelleğe yazılmaz', async () => {
   const o = kur(); let bitir; o.tut(new Promise((r) => { bitir = r; })); const y = o.c.al(); await tur(); o.c.dusur(); o.tut(null); bitir(); await y; await tur(); await o.c.al(); assert.equal(o.sayi(), 2); });
+await t('O9 yalnız koltuk değiştiren başarılı uç düşürür: giriş ve başarısız açma düşürmez, 504 düşürür', () => {
+  assert.equal(koltukDegistirir('/api/koltuk/BASIRET/ac', 200), true); assert.equal(koltukDegistirir('/api/koltuk/BASIRET/ac', 202), true); assert.equal(koltukDegistirir('/api/koltuk/BASIRET/ac', 504), true);
+  assert.equal(koltukDegistirir('/api/koltuk/BASIRET/ac', 502), false); assert.equal(koltukDegistirir('/api/kadro/hal', 200), true); assert.equal(koltukDegistirir('/api/onar', 200), true);
+  assert.equal(koltukDegistirir('/giris', 200), false); assert.equal(koltukDegistirir('/api/gonder', 200), false);
+});
+await t('O10 varsayılan bayat pencere merkez bekçisinin dakikalık çağrısından uzun: 60 sn sonraki istek betiği beklemez', async () => {
+  let saat = 0, n = 0; const c = onbellekKur(async () => ({ ok: true, n: ++n }), { saat: () => saat }); await c.al(); saat = 61_000; assert.equal((await c.al()).deger.n, 1); });
 console.log(`${gecti} geçti · ${kalan.length} kaldı`); kalan.forEach((k) => console.log('  ✗ ' + k)); process.exit(kalan.length ? 1 : 0);

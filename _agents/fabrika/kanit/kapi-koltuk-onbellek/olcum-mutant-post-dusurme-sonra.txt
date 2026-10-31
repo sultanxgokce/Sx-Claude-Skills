@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sunucu-* ===
-$ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m5/terminal-onar/kapi/sunucu.test.mjs
-# rc=1 sure=9.0s zaman=2026-10-31T18:52:20+03:00
+$ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/m5/terminal-onar/kapi/sunucu.test.mjs
+# rc=1 sure=7.6s zaman=2026-10-31T19:03:45+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -50,7 +50,9 @@ $ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1d
   ✓ Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler
   ✓ Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)
   ✓ Y10d iki eşzamanlı ve bir sonraki istek TEK betik koşusuna iner · cevap yas_ms taşır
-  ✗ Y10e yazma isteği (POST) önbelleği düşürür: sonraki okuma betiği yeniden koşar → 1
+  ✓ Y10e ilgisiz yazma isteği (giriş) önbelleği DÜŞÜRMEZ
+  ✓ Y10e2 başarısız koltuk açma önbelleği DÜŞÜRMEZ
+  ✗ Y10e3 başarılı koltuk açma önbelleği düşürür: sonraki okuma betiği yeniden koşar → {"kBasarili":200,"sonraAc":1}
   ✗ Y10f betik düşünce önbellekteki eski liste hatayı gizlemez: 500 → 200
   ✓ Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)
   ✓ Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar
@@ -64,7 +66,7 @@ $ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1d
 
 ── M · MAHREMİYET (iki kutu aynı kaynağı paylaşıyor) ──
   ✓ M1 geçerli oturumla BAŞKA kutunun yoluna gidilemez (404)
-  ✓ M2 ... kendi yolu çalışıyor (M1 "her şey 404" değil)
+  ✗ M2 ... kendi yolu çalışıyor (M1 "her şey 404" değil) → 500
 
 ── W · WEBSOCKET (tam terminal bağlantısı) ──
   ✓ W1 tabanlı WS yolu ttyd'ye ULAŞIR
@@ -134,12 +136,12 @@ $ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1d
   ✓ KD7 kayıt var ama okunamıyor → 500 + hangi dosya
   ✓ KT0 girişsiz /api/kadro/tarif ve /api/kadro/uzmanlik 401
 --- stderr ---
-file:///tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m5/terminal-onar/kapi/sunucu.test.mjs:637
+file:///tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/m5/terminal-onar/kapi/sunucu.test.mjs:642
   kapi('KT1 GET /api/kadro/tarif 200: kutu + gerçek tarif (1 uzmanlık · 36 terim), olc yok, yol yok', r.status === 200 && j.kutu === 'sinavkutu' && j.tarif.uzmanliklar.length === 1 && j.terim.terimler.length === 36 && !j.olc.tarif && !j.olc.terim && !JSON.stringify(j).includes(VERI), `→ ${r.status} ${JSON.stringify(j.olc)}`);
                                                                                                                                                             ^
 
 TypeError: Cannot read properties of null (reading 'uzmanliklar')
-    at file:///tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m5/terminal-onar/kapi/sunucu.test.mjs:637:157
+    at file:///tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/m5/terminal-onar/kapi/sunucu.test.mjs:642:157
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
 
 Node.js v22.23.0

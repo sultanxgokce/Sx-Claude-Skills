@@ -16,7 +16,7 @@ import { koltukKimlik as _kk, KOLTUK_KIMLIK_DESEN as _KD } from './koltuk-kimlik
 // beklenen ekran adresi: ad DEĞİL kimlik (aynı tuz) · ADI TAŞIMADIĞI ayrıca ölçülür (adr)
 const ekr = (ad) => '/sedir/tty/?arg=' + _kk(ad);
 const adr = (o, ad) => !!o && o.ekran === ekr(ad) && _KD.test(o.kimlik || '') && o.kimlik === _kk(ad) && !o.ekran.includes(encodeURIComponent(ad)) && !o.ekran.includes(ad);
-import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -237,20 +237,25 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   // Y10d (kart kapi-koltuk-onbellek): liste betiği yük altında 1,4-3,1 sn; önbellek betiği koşturmaz, yazma isteği eldekini atar, başarısız koşu saklanmaz
   const SAYAC = join(T, 'koltuk-sayac'); const KOLTUK_SAYAN = join(T, 'koltuk-sayan.sh');
   writeFileSync(KOLTUK_SAYAN, `#!/usr/bin/env bash\necho x >> ${JSON.stringify(SAYAC)}\n[ -f ${JSON.stringify(SAYAC + '.dur')} ] && exit 1\nprintf "sinavkutu-ana\\t1760000000\\t0\\n"\n`);
-  const PK = 18889, koc = await kapiAc('/sedir', PK, { KAPI_KOLTUK_BETIK: KOLTUK_SAYAN, KAPI_KOLTUK_TAZE_MS: '60000', KAPI_KOLTUK_BAYAT_MS: '120000' });
-  const giris10 = async () => 'kapi=' + (((await iste(PK, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } })).headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const AC_SAHTE = join(T, 'koltuk-ac-sayan.sh'); writeFileSync(AC_SAHTE, `#!/usr/bin/env bash\n[ -f ${JSON.stringify(SAYAC + '.acma-dus')} ] && { echo olmadi; exit 1; }\necho acildi\n`);
+  const PK = 18889, koc = await kapiAc('/sedir', PK, { KAPI_KOLTUK_BETIK: KOLTUK_SAYAN, KAPI_KOLTUK_AC_BETIK: AC_SAHTE, KAPI_KOLTUK_TAZE_MS: '60000', KAPI_KOLTUK_BAYAT_MS: '120000' });
   const say = () => { try { return readFileSync(SAYAC, 'utf8').trim().split('\n').length; } catch { return 0; } };
+  const giris10 = async () => 'kapi=' + (((await iste(PK, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } })).headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const oku10 = async () => { const r = await iste(PK, '/sedir/api/koltuklar', { cerez: ck }); await r.text(); return r.status; };
+  const ac10 = async () => { const r = await iste(PK, '/sedir/api/koltuk/BASIRET/ac', { cerez: ck, metot: 'POST', govde: {} }); await r.text(); await new Promise((c) => setTimeout(c, 100)); return r.status; };
   const ck = await giris10(); const once = say();
   const [ka, kb2] = await Promise.all([iste(PK, '/sedir/api/koltuklar', { cerez: ck }), iste(PK, '/sedir/api/koltuklar', { cerez: ck })]);
   const ja = await ka.json(); await kb2.text(); const ikiEs = say() - once;
-  await (await iste(PK, '/sedir/api/koltuklar', { cerez: ck })).text(); const ucuncu = say() - once;
+  await oku10(); const ucuncu = say() - once;
   kapi('Y10d iki eşzamanlı ve bir sonraki istek TEK betik koşusuna iner · cevap yas_ms taşır', ka.status === 200 && ikiEs === 1 && ucuncu === 1 && typeof ja.yas_ms === 'number', `→ ${JSON.stringify({ ikiEs, ucuncu, yas: ja.yas_ms })}`);
-  await giris10(); await new Promise((r) => setTimeout(r, 100));
-  await (await iste(PK, '/sedir/api/koltuklar', { cerez: ck })).text(); const sonraPost = say() - once;
-  kapi('Y10e yazma isteği (POST) önbelleği düşürür: sonraki okuma betiği yeniden koşar', sonraPost === 2, `→ ${sonraPost}`);
-  writeFileSync(SAYAC + '.dur', ''); await giris10(); await new Promise((r) => setTimeout(r, 100));
-  const rd = await iste(PK, '/sedir/api/koltuklar', { cerez: ck }); await rd.text();
-  kapi('Y10f betik düşünce önbellekteki eski liste hatayı gizlemez: 500', rd.status === 500, `→ ${rd.status}`);
+  await giris10(); await new Promise((c) => setTimeout(c, 100)); await oku10(); const sonraGiris = say() - once;
+  kapi('Y10e ilgisiz yazma isteği (giriş) önbelleği DÜŞÜRMEZ', sonraGiris === 1, `→ ${sonraGiris}`);
+  writeFileSync(SAYAC + '.acma-dus', ''); const kBasarisiz = await ac10(); await oku10(); const sonraRed = say() - once;
+  kapi('Y10e2 başarısız koltuk açma önbelleği DÜŞÜRMEZ', kBasarisiz === 502 && sonraRed === 1, `→ ${JSON.stringify({ kBasarisiz, sonraRed })}`);
+  rmSync(SAYAC + '.acma-dus'); const kBasarili = await ac10(); await oku10(); const sonraAc = say() - once;
+  kapi('Y10e3 başarılı koltuk açma önbelleği düşürür: sonraki okuma betiği yeniden koşar', kBasarili === 200 && sonraAc === 2, `→ ${JSON.stringify({ kBasarili, sonraAc })}`);
+  writeFileSync(SAYAC + '.dur', ''); await ac10(); const rd = await oku10();
+  kapi('Y10f betik düşünce önbellekteki eski liste hatayı gizlemez: 500', rd === 500, `→ ${rd}`);
   koc.kill();
   k5.kill();
   // Kullanıcı yüzü (bağımsız göz, tur 1): seçici sayfada ve betikte var, listeyi aynı uçtan çeker, tam terminali ?arg= ile açar.

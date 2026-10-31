@@ -1,5 +1,5 @@
-$ node sunucu.test.mjs
-# rc=0 sure=8.3s zaman=2026-10-31T18:52:11+03:00
+$ node terminal-onar/kapi/sunucu.test.mjs
+# rc=0 sure=7.8s zaman=2026-10-31T19:03:37+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -49,7 +49,9 @@ $ node sunucu.test.mjs
   ✓ Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler
   ✓ Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)
   ✓ Y10d iki eşzamanlı ve bir sonraki istek TEK betik koşusuna iner · cevap yas_ms taşır
-  ✓ Y10e yazma isteği (POST) önbelleği düşürür: sonraki okuma betiği yeniden koşar
+  ✓ Y10e ilgisiz yazma isteği (giriş) önbelleği DÜŞÜRMEZ
+  ✓ Y10e2 başarısız koltuk açma önbelleği DÜŞÜRMEZ
+  ✓ Y10e3 başarılı koltuk açma önbelleği düşürür: sonraki okuma betiği yeniden koşar
   ✓ Y10f betik düşünce önbellekteki eski liste hatayı gizlemez: 500
   ✓ Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)
   ✓ Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar
@@ -147,5 +149,5 @@ $ node sunucu.test.mjs
   ✓ OD7 göreli ya da boş dizin → oda aranmaz (null)
 
 ────────────────────────────────────────────────────────
-GECEN: 132  ·  KALAN: 0
+GECEN: 134  ·  KALAN: 0
 --- stderr ---

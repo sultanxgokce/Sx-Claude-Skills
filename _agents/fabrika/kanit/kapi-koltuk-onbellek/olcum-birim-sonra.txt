@@ -1,6 +1,5 @@
-$ node koltuk-onbellek.test.mjs
-# rc=0 sure=155.6s zaman=2026-10-31T18:48:26+03:00
+$ node terminal-onar/kapi/koltuk-onbellek.test.mjs
+# rc=0 sure=0.1s zaman=2026-10-31T19:03:29+03:00
 --- stdout ---
-8 geçti · 0 kaldı
+10 geçti · 0 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-kapi-koltuk-onbellek-birim 156 sn bekledi (yuva 1, load1 17.95)
