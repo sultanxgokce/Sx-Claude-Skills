@@ -1,44 +1,82 @@
 {
   "is": "postaci-kopya-esitle",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T15:31:36+03:00",
+  "guncelleme": "2026-10-31T15:35:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "farkli-dosya",
       "asama": "once",
       "dosya": "olcum-farkli-dosya-once.txt",
-      "sha256": "cb6e592fb6a4984cea9092ab5c83f91eaf50f4eb93674964228eefe7dd3e178f",
+      "sha256": "f7cd263db9f639deef939c191e9f2b9ffd4092b5d30e56ab56400e995e463b20",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh",
-        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle"
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-ana/postane-postaci"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T15:31:25+03:00",
+      "zaman": "2026-10-31T15:35:46+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e97991f0e0484bc8ab3bf385e65548c2"
+      "olcum_id": "bbac01487aee4ff084a261063386cff2"
     },
     {
       "tur": "olcum",
       "etiket": "farkli-dosya",
       "asama": "sonra",
       "dosya": "olcum-farkli-dosya-sonra.txt",
-      "sha256": "e839277f0db2434aa76e4f4c5c456a1b2d013bc99ebd35f36d2169f453682298",
+      "sha256": "b724f70aff127d8fe1696b4ab0f7d57373bafca697830da36d900c675940e93f",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh",
-        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle"
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle/postane-postaci"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T15:31:36+03:00",
+      "zaman": "2026-10-31T15:35:46+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "03fab5695756406ab0090b22e43d32af"
+      "olcum_id": "5fcba171785b4ad5a7cb5624bb986a21"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "farkli-dosya",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-farkli-dosya-once-23f1dc8e2a98.txt",
+      "sha256": "d24d64b6035bb6fa9c8f1af177e744a69c68b377ea9efad0665065d69a840f8c",
+      "hedef_dosya": "olcum-farkli-dosya-once.txt",
+      "hedef_olcum_id": "e97991f0e0484bc8ab3bf385e65548c2",
+      "hedef_sha256": "cb6e592fb6a4984cea9092ab5c83f91eaf50f4eb93674964228eefe7dd3e178f",
+      "hedef_zaman": "2026-10-31T15:31:25+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: eksik dosya hatası sayılmadan yeşil dönüyordu ve KAYNAK.sha256 kendi içinde sınanıyordu (önce 2, kart 3); betik eksik dosyayı sayar, KAYNAK'ı olması gereken listeyle kıyaslar, kaynak okunamazsa rc 3",
+      "kim": "BERİD",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T15:35:46+03:00",
+      "olcum_id": "6ca650334c7c4f6d9f49addf121f4b18"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "farkli-dosya",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-farkli-dosya-sonra-f52efbb2418d.txt",
+      "sha256": "f056efd9fd00d60f19e7e3e8b8d583b473042e3cfdad6f8f5f2b0bfeeb30aad8",
+      "hedef_dosya": "olcum-farkli-dosya-sonra.txt",
+      "hedef_olcum_id": "03fab5695756406ab0090b22e43d32af",
+      "hedef_sha256": "e839277f0db2434aa76e4f4c5c456a1b2d013bc99ebd35f36d2169f453682298",
+      "hedef_zaman": "2026-10-31T15:31:36+03:00",
+      "hedef_renk": "yesil",
+      "neden": "göz tur 1: eksik dosya hatası sayılmadan yeşil dönüyordu ve KAYNAK.sha256 kendi içinde sınanıyordu (önce 2, kart 3); betik eksik dosyayı sayar, KAYNAK'ı olması gereken listeyle kıyaslar, kaynak okunamazsa rc 3",
+      "kim": "BERİD",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T15:35:46+03:00",
+      "olcum_id": "b96e18f2762f498bb47281defdddb558"
     }
   ],
-  "imza": "5396d5bdbc0278651732f0e4c75ce363f787d4736e3237f593701c309f78c0f6"
+  "imza": "ad4f742821ed57cef98da293e1cc93aca0886856d8a99957b560015314816cdd"
 }

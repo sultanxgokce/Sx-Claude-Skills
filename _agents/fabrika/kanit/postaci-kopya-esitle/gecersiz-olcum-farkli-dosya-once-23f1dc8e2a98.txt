@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-farkli-dosya-once.txt
+hedef_sha256: cb6e592fb6a4984cea9092ab5c83f91eaf50f4eb93674964228eefe7dd3e178f
+hedef_zaman: 2026-10-31T15:31:25+03:00
+hedef_renk: yesil
+neden: göz tur 1: eksik dosya hatası sayılmadan yeşil dönüyordu ve KAYNAK.sha256 kendi içinde sınanıyordu (önce 2, kart 3); betik eksik dosyayı sayar, KAYNAK'ı olması gereken listeyle kıyaslar, kaynak okunamazsa rc 3
+kim: BERİD
+karsi: -
+zaman: 2026-10-31T15:35:46+03:00

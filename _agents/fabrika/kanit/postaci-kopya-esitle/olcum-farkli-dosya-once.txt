@@ -1,9 +1,8 @@
-$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh /config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle
-# rc=0 sure=0.1s zaman=2026-10-31T15:31:25+03:00
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-ana/postane-postaci
+# rc=0 sure=0.1s zaman=2026-10-31T15:35:46+03:00
 --- stdout ---
 farklı: postaci.mjs
-farklı: kutu-adlari.json
-KAYNAK.sha256 tutuyor
-cloudtop ana dalından farklı dosya: 2
+eksik: kutu-adlari.json
+farklı: KAYNAK.sha256 (cloudtop dosyalarından üretilmesi gereken liste değil)
+cloudtop ana dalından farklı ya da eksik dosya: 3
 --- stderr ---
-/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh: line 3: /config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle/postane-postaci/scripts/kutu-adlari.json: No such file or directory
