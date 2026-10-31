@@ -1,0 +1,13 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kapi-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/oc-mutant.sh 2
+# rc=1 sure=0.3s zaman=2026-10-31T23:56:28+03:00
+--- stdout ---
+════ K1 · temiz ağaç: olculen_commit = HEAD, olculen_kirli = False ════
+  ✗ olculen_commit HEAD ile aynı
+  ✓ olculen_kirli=False
+════ K2 · izlenen dosyada commit'siz değişiklik: olculen_kirli = True ════
+  ✓ olculen_kirli=True
+════ K3 · imza bozulmadı (dogrula rc=0) ════
+  ✓ dogrula rc=0
+── SONUÇ: 3 geçti · 1 kaldı ──
+--- stderr ---

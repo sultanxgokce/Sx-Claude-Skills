@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/oc-once.sh
+# rc=0 sure=365.3s zaman=2026-10-31T23:55:14+03:00
+--- stdout ---
+kalan=18
+--- stderr ---
+⏳ agir-sira: kanit-olculen-commit-yamasi-sx-kapi-sinavi 330 sn bekledi (yuva 2, load1 4.31)
