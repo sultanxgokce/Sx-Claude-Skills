@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.3.0
+version: 1.4.0
 ---
 
-# /duzen — filo düzen paketi (1.3.0 · iskelet + alt ajan istem üreticisi)
+# /duzen — filo düzen paketi (1.4.0 · iskelet + alt ajan istem üreticisi)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -100,6 +100,10 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.4.0** (31 Eki 2026, MİRAHUR · Kuzey G22 G3.3): `alt-ajan-istem.sh` her istem üretiminde `/config/.filo/alt-ajan-istem.jsonl`'e TEK satır yazar
+  (zaman · slug · ad · oda · amir · kart · el_defteri_bayt · istem_bayt · istem_kimligi) ve aynı kimliği istem başlığına basar. İçerik/sır yazılmaz; kayıt
+  yazılamazsa istem yine basılır, başlıkta ⚠ çıkar. Ölçüm: son 20 çağrının hepsinde el_defteri_bayt > 0. Sınav C1-C3 + mutant. Kayıt dosyasını ortam
+  değişkeni `DUZEN_CAGRI_KAYDI` değiştirir (sınav için).
 - **1.3.0** (31 Eki 2026, MİRAHUR · Kuzey G30): `uyum-haftalik.sh` — `surum.sh denetle`'yi koşar, sapmayı Bulgu Havuzu'na yazar (bug), günlüğe
   `uyum depo=… isaretli=N sapma=N durum=…` düşer; hiç kimlik işaretli değilse "güncel" DEMEZ, SARI der (rc 4, havuza ozellik). `--gunluk` bayrağı
   ölçüm fikstürünün gerçek günlüğe yazmaması içindir. Sınav + mutant var. Zamanlayıcı satırı ayrı cloudtop PR'ı.

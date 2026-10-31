@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # alt-ajan-istem.sh — KOLTUKSUZ alt personel (BENNÂ · MÜZEHHİP · ŞAKİRD · ÇAPAR · TATAR · MESSÂH · MEREMMETÇİ · MÜCERRİB · MÜTEFENNİN …)
-# için reisin Agent aracına yapıştıracağı TEK istem metnini üretir (yalnız stdout; hiçbir dosyaya yazmaz).
+# için reisin Agent aracına yapıştıracağı TEK istem metnini üretir (stdout). Tek yan etki: çağrı kaydı (aşağıda, G22).
 #
 # Niçin: koltuksuz personel reisin oturumundan alt ajan olarak doğar ve SIFIR bağlamla başlar (Kuzey Yıldızı 3.3). Bu boşluğu
 # el defteri telafi eder; ama kimlik + oda/yetki + defter + iş + kuralları her seferinde elle toplamak hem yavaş hem tutarsızdı
@@ -14,7 +14,11 @@
 #     --dosyalar  dokunulabilecek dosyalar (virgülle); verilmezse "sınırlanmadı" yazılır
 #     --sure      süre tavanı dakika; verilmezse 120 varsayılır (yazılır)
 #     --depo      kutu depo kökü (varsayılan: git toplevel, yoksa cwd)
-# Ortam (sınav/elle): DUZEN_EL_DEFTERI_SH = el-defteri.sh yolu (varsayılan yan dosya) · DUZEN_SIMDI = epoch (tarih sabitlenir)
+# Çağrı kaydı (Kuzey G22, duzen 1.4.0): her istemde /config/.filo/alt-ajan-istem.jsonl'e TEK satır JSON: zaman, slug, ad, oda, amir, kart,
+#   el_defteri_bayt (el defteri bloğunun bayt sayısı; defter boş/yok/ölçülemedi ise 0), istem_bayt (istem metni, ⚠ yazım-uyarısı satırı hariç),
+#   istem_kimligi (aynı kimlik istem başlığına da basılır). İÇERİK, iş cümlesi ve sır YAZILMAZ. Kayıt yazılamazsa istem YİNE basılır, başlıkta ⚠ çıkar.
+#   Ölçüm: son 20 çağrının hepsinde el_defteri_bayt > 0 olmalı.
+# Ortam (sınav/elle): DUZEN_CAGRI_KAYDI = kayıt dosyası (varsayılan /config/.filo/alt-ajan-istem.jsonl) · DUZEN_EL_DEFTERI_SH = el-defteri.sh yolu (varsayılan yan dosya) · DUZEN_SIMDI = epoch (tarih sabitlenir)
 # Bloklar: 1 KİMLİK (AGENT.md `## ELLE` verbatim — ekipc üretilmiş ORTAK-TEMEL bölgesi alınmaz, çok uzun ve zaten tek kaynakta)
 #          2 REİS·ODA·YETKİ (aile-registry oda:+amir:, sabit "birleştirme/canlı/host/sır reiste") · 3 EL DEFTERİ (el-defteri.sh çıktısı;
 #          rc 3 = "defter boş, ilk görev" uyarısı, istem yine üretilir) · 4 İŞ · 5 DOSYALAR·SÜRE · 6 SABİT KURALLAR.
@@ -49,6 +53,7 @@ AGENT="$DEPO/_agents/$SLUG/AGENT.md"
 [ -f "$AGENT" ] || { echo "kimlik yok: $AGENT bulunamadı — önce /ise-alim (KÂHYA) ile kimlik üretilir; istem ÜRETİLMEDİ" >&2; exit 3; }
 
 UYARI=()
+EL_BAYT=0
 AN="${DUZEN_SIMDI:-$(date +%s)}"; GUN="$(date -d "@$AN" +%F)"
 
 # ── sır süzgeci: token|sifre|şifre|parola geçen satır basılmaz (büyük/küçük harf duyarsız) ──
@@ -110,7 +115,7 @@ ELD="${DUZEN_EL_DEFTERI_SH:-$HERE/el-defteri.sh}"
 if [ -f "$ELD" ]; then
   DEFTER_ERR="$(mktemp)"; DEFTER="$(DUZEN_SIMDI="$AN" bash "$ELD" --ajan "$AD" --depo "$DEPO" 2>"$DEFTER_ERR")"; drc=$?
   case $drc in
-    0) DEFTER="$(sir_suz <<<"$DEFTER")" ;;
+    0) DEFTER="$(sir_suz <<<"$DEFTER")"; EL_BAYT="$(printf '%s' "$DEFTER" | wc -c | tr -d ' ')" ;;
     3) DEFTER="(defter boş, ilk görev — $(head -c200 "$DEFTER_ERR" | tr -d '\n'))"; UYARI+=("el defteri yok (el-defteri.sh rc 3): bu personelin ilk görevi; iş bitince NOTES.md'ye ilk satırı append-note.sh ile yazsın") ;;
     *) DEFTER="(el defteri ölçülemedi: el-defteri.sh rc $drc — $(head -c200 "$DEFTER_ERR" | tr -d '\n'))"; UYARI+=("el-defteri.sh rc $drc ile düştü; defter bloğu boş — ÖLÇÜLEMEDİ, 'defter yok' sayılmaz") ;;
   esac
@@ -138,7 +143,9 @@ fi
 if [ -n "$DOSYALAR" ]; then DOSYA_SATIR="$DOSYALAR (yalnız bunlar; başka dosya gerekirse DUR, reise yaz)"; else DOSYA_SATIR="sınırlanmadı — iş alanını \`is-alani.sh ac <iş> --dosyalar …\` ile açarken dokunacağın dosyaları KENDİN yaz; ürün UI (P07) ve canlı-yazılan dosyalar (aile-registry · NOTES · *.jsonl · Notlarim/) dışarıda"; fi
 
 # ───────────────────────────── çıktı ─────────────────────────────
-echo "# ALT AJAN İSTEMİ · $AD ($SLUG) · $GUN · üretici: duzen/scripts/alt-ajan-istem.sh · kutu: $DEPO"
+KIMLIK_ID="ai-$(date -d "@$AN" +%Y%m%dT%H%M%S)-$(printf '%s-%s-%s' "$SLUG" "$AN" "$$" | sha256sum | cut -c1-8)"
+uret() {
+echo "# ALT AJAN İSTEMİ · $AD ($SLUG) · $GUN · kimlik: $KIMLIK_ID · üretici: duzen/scripts/alt-ajan-istem.sh · kutu: $DEPO"
 for u in "${UYARI[@]+"${UYARI[@]}"}"; do echo "⚠ $u"; done
 cat <<T
 
@@ -177,4 +184,18 @@ ${KART_CUMLE:+- Kart ($KART): $KART_CUMLE
 7. **CI:** hiçbir run'ı yeniden koşturma — rerun reisindir. CI'ı \`gh pr checks N --watch\` ile arka planda izle.
 8. **Bitince:** \`_agents/$SLUG/NOTES.md\`'ye append-note.sh ile TEK satır (ne yapıldı · PR · kanıt) ve reise tek satır: "$AD: <iş> PR #N · göz <puan> · kapı rc<k>".
 T
+}
+ISTEM="$(uret)"
+ISTEM_BAYT="$(printf '%s\n' "$ISTEM" | wc -c | tr -d ' ')"
+
+# ── çağrı kaydı: tek satır, içeriksiz; yazılamazsa istem yine basılır, başlığa ⚠ eklenir ──
+KAYIT="${DUZEN_CAGRI_KAYDI:-/config/.filo/alt-ajan-istem.jsonl}"
+SATIR="$(python3 -I -c 'import json,sys,datetime
+a=sys.argv
+print(json.dumps({"zaman":datetime.datetime.fromtimestamp(int(a[1])).astimezone().isoformat(timespec="seconds"),"slug":a[2],"ad":a[3],"oda":a[4],"amir":a[5],"kart":a[6],
+ "el_defteri_bayt":int(a[7]),"istem_bayt":int(a[8]),"istem_kimligi":a[9]},ensure_ascii=False))' "$AN" "$SLUG" "$AD" "$ODA" "$AMIR" "$KART" "$EL_BAYT" "$ISTEM_BAYT" "$KIMLIK_ID" 2>/dev/null)"
+if [ -z "$SATIR" ] || ! { mkdir -p "$(dirname "$KAYIT")" 2>/dev/null && printf '%s\n' "$SATIR" >> "$KAYIT"; } 2>/dev/null; then
+  ISTEM="$(awk -v u="⚠ çağrı kaydı YAZILAMADI ($KAYIT) — istem yine üretildi; çağrı sayımı eksik kalır" 'NR==1{print; print u; next} {print}' <<<"$ISTEM")"
+fi
+printf '%s\n' "$ISTEM"
 exit 0
