@@ -10,6 +10,7 @@ KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 DIZIN="${SULTAN_ALARMI_DIZIN:-${HOME:-/tmp}/.cache/sultan-alarmi}"
 NTFY="${SULTAN_ALARMI_NTFY:-http://cloudtop-ntfy/alarm}"
 CURL="${SULTAN_ALARMI_CURL:-curl}"
+WA="${SULTAN_ALARMI_WA:-/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh}"   # asıl kanal (Sultan 31 Eki: ntfy kullanmıyor); ntfy yalnız ikincil
 GOREV_SH="${SULTAN_ALARMI_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
 KAPIMDA_SH="${SULTAN_ALARMI_KAPIMDA_SH:-/config/.claude/skills/kapimda/scripts/kapimda.sh}"
 SIMDI="${SULTAN_ALARMI_SIMDI:-$(date +%s)}"
@@ -65,9 +66,12 @@ gonder)
   if [ -z "${NO_COLOR:-}" ]; then printf '\033[1;31m%s\033[0m\n' "$M"; else printf '%s\n' "$M"; fi
   if [ "$TEL" -eq 0 ]; then kutuk "$SAY" yok terminal; exit 0; fi
   if [ "${SULTAN_EKRANDA:-0}" = 1 ]; then echo "(telefon atlandı: Sultan ekranda)"; kutuk "$SAY" atlandi ekranda; exit 0; fi
-  if [ "$KURU" -eq 1 ]; then echo "(kuru: telefona gidecekti → $NTFY · öncelik $ONCELIK)"; kutuk "$SAY" kuru -; exit 0; fi
+  if [ "$KURU" -eq 1 ]; then echo "(kuru: telefona gidecekti → WhatsApp + $NTFY · öncelik $ONCELIK)"; kutuk "$SAY" kuru -; exit 0; fi
   KOD="$("$CURL" -s -m 8 -o /dev/null -w '%{http_code}' -H "Priority: $ONCELIK" -H "Title: SULTAN ALARMI" -d "$M" "$NTFY" 2>/dev/null)"; KOD="${KOD:-000}"
-  case "$KOD" in 2*) kutuk "$SAY" gitti "http=$KOD" ;; *) kutuk "$SAY" hata "http=$KOD"; echo "UYARI: telefon bildirimi gitmedi (http=$KOD); terminal satırı basıldı" >&2; exit 0 ;; esac ;;
+  # 'gitti' yalnız WhatsApp ulaşınca: ntfy'nin http 200'ü Sultan'a ulaştı demek DEĞİL (31 Eki ölçümü: 22 'gitti' alarmın hiçbiri görülmedi).
+  bash "$WA" "$M" >/dev/null 2>&1; WA_RC=$?
+  if [ "$WA_RC" -eq 0 ]; then echo "whatsapp: gitti"; kutuk "$SAY" gitti "wa=0 http=$KOD"
+  else kutuk "$SAY" hata "wa=$WA_RC http=$KOD"; echo "UYARI: telefon bildirimi gitmedi (WhatsApp rc=$WA_RC, ntfy http=$KOD); terminal satırı basıldı" >&2; exit 0; fi ;;
 tara)
   OK=0; KAY=""
   if K="$("$KAPIMDA_SH" liste 2>/dev/null)"; then OK=1

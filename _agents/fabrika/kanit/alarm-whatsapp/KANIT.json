@@ -1,0 +1,61 @@
+{
+  "is": "alarm-whatsapp",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T15:10:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "wa-kanal",
+      "asama": "once",
+      "dosya": "olcum-wa-kanal-once.txt",
+      "sha256": "82f53db6ca48e233851e5ce6a5b000ed2c874a4d36d5388a8e97771b601fb2e2",
+      "komut": [
+        "bash",
+        "-c",
+        "git show origin/main:sultan-alarmi/scripts/alarm.sh > /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/alarm-eski.sh; echo \"wa satırı: $(grep -c \"wa-gonder\" /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/alarm-eski.sh) · ntfy satırı: $(grep -c cloudtop-ntfy /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/alarm-eski.sh)\"; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T15:10:45+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "c7829d131ca14a88b970da669daba464"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "wa-kanal",
+      "asama": "sonra",
+      "dosya": "olcum-wa-kanal-sonra.txt",
+      "sha256": "07fad0d0eda1e982a97f083f80e2587d6f53b0ef4a614d03c9eadf78b43c77c1",
+      "komut": [
+        "bash",
+        "sultan-alarmi/scripts/alarm.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T15:10:48+03:00",
+      "sure_sn": 2.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "de56b99dbd3e4c7582361eec9c465207"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "wa-kanal-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-wa-kanal-mutant-sonra.txt",
+      "sha256": "38eb1377fe145e1d22753d4b8483ee9bfe95a2ca7224668086853803ab988ff6",
+      "komut": [
+        "bash",
+        "-c",
+        "M=$(mktemp -d); mkdir -p $M/s; cp sultan-alarmi/scripts/alarm.sh sultan-alarmi/scripts/alarm.test.sh $M/s/; sed -i \"s/bash \\\"\\$WA\\\" \\\"\\$M\\\" >\\/dev\\/null 2>&1; WA_RC=\\$?/WA_RC=0/\" $M/s/alarm.sh; o=$(ALARM_SH=$M/s/alarm.sh bash $M/s/alarm.test.sh); echo \"$o\" | grep -E \"✗|sonuç:\" | cut -c1-90; d=$(echo \"$o\" | grep -c \"✗\"); echo \"kırmızı=$d\"; [ \"$d\" -ge 2 ] && [ \"$d\" -le 6 ]; exit $?"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T15:10:49+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "802e15abbf0d476dac50fb89e7af00f6"
+    }
+  ],
+  "imza": "49a63ebaafcdcc18a587e8a3037b58c60d5c5207f54f1ef74a1a8e7835d46d64"
+}

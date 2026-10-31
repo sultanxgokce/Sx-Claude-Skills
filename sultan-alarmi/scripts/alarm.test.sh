@@ -25,8 +25,12 @@ printf 'gorev_B  code  onay-bekliyor  acil  -  MİRAHUR  Taze onay işi  (son: 2
 printf 'gorev_C  code  acik  esnek  -  MUAVİN  Onay beklemeyen  (son: 2020-01-01)\n'
 printf 'gorev_D  code  onay-bekliyor  acil  -  HEZARFEN  Tarihsiz onay işi\n'
 EOC
-chmod +x "$T/curl" "$T/kapimda" "$T/gorev.sh"
-export SULTAN_ALARMI_CURL="$T/curl" SULTAN_ALARMI_KAPIMDA_SH="$T/kapimda" SULTAN_ALARMI_GOREV_SH="$T/gorev.sh"
+cat > "$T/wa" <<'EOC'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >> "$(dirname "$0")/wa.log"; exit "${WA_RC:-0}"
+EOC
+chmod +x "$T/curl" "$T/kapimda" "$T/gorev.sh" "$T/wa"
+export SULTAN_ALARMI_WA="$T/wa" SULTAN_ALARMI_CURL="$T/curl" SULTAN_ALARMI_KAPIMDA_SH="$T/kapimda" SULTAN_ALARMI_GOREV_SH="$T/gorev.sh"
 G(){ bash "$AL" gonder --is "Revak disk silme" --kim "SERDAR bekliyor" --ne "revak terminalinde ! ile tek satır" "$@"; }
 echo "— biçim"
 o="$(bash "$AL" bicim --is "A" --kim "B" --ne "C")"; ok "B1 sabit biçim" "🚨🔴 SULTAN ALARMI — A · B · C" "$o"
@@ -51,8 +55,15 @@ rm -r -- "$T/d"; G --telefon >/dev/null; ok "G5 --telefon: ntfy'ye gider (öncel
 ok "G5b kütükte gitti kaydı" "1" "$(grep -c '"telefon": "gitti"' "$T/d/kutuk.jsonl")"
 rm -r -- "$T/d"; : > "$T/curl.log"; SULTAN_EKRANDA=1 G --telefon >/dev/null; ok "G6 Sultan ekrandaysa telefon atlanır" "0" "$(grep -c . "$T/curl.log")"
 ok "G6b kütükte atlandı kaydı" "1" "$(grep -c '"telefon": "atlandi"' "$T/d/kutuk.jsonl")"
-rm -r -- "$T/d"; o="$(CURL_KOD=500 G --telefon 2>&1)"; var "G7 bildirim gitmediyse UYARI (sessiz başarı yok)" "telefon bildirimi gitmedi" "$o"
+rm -r -- "$T/d"; : > "$T/wa.log"; o="$(WA_RC=4 G --telefon 2>&1)"; var "G7 WhatsApp gitmediyse UYARI (sessiz başarı yok)" "telefon bildirimi gitmedi" "$o"
+yok "G7a ntfy 200 olsa da WhatsApp'sız 'gitti' denmez" "whatsapp: gitti" "$o"
 ok "G7b kütükte hata kaydı" "1" "$(grep -c '"telefon": "hata"' "$T/d/kutuk.jsonl")"
+rm -r -- "$T/d"; o="$(CURL_KOD=500 G --telefon 2>&1)"; var "G7c ntfy düşse de WhatsApp ulaştıysa gitti" "whatsapp: gitti" "$o"
+ok "G7d kütükte gitti kaydı (ntfy 500)" "1" "$(grep -c '"telefon": "gitti"' "$T/d/kutuk.jsonl")"
+rm -r -- "$T/d"; : > "$T/wa.log"; G --telefon >/dev/null; ok "G8a --telefon: WhatsApp'a tek mesaj, alarm metniyle" "1:1" "$(grep -c . "$T/wa.log"):$(grep -c 'SULTAN ALARMI — Revak disk silme' "$T/wa.log")"
+rm -r -- "$T/d"; : > "$T/wa.log"; G >/dev/null; ok "G8b --telefon yokken WhatsApp'a gitmez" "0" "$(grep -c . "$T/wa.log")"
+rm -r -- "$T/d"; : > "$T/wa.log"; G --telefon --kuru >/dev/null; ok "G8c --kuru WhatsApp'a gitmez" "0" "$(grep -c . "$T/wa.log")"
+rm -r -- "$T/d"; : > "$T/wa.log"; SULTAN_EKRANDA=1 G --telefon >/dev/null; ok "G8d Sultan ekrandaysa WhatsApp'a gitmez" "0" "$(grep -c . "$T/wa.log")"
 echo "— yükseltme"
 rm -r -- "$T/d"; for i in 1 2 3; do SULTAN_ALARMI_SIMDI=$((1800000000 + i*7200)) G >/dev/null; done
 o="$(SULTAN_ALARMI_SIMDI=$((1800000000 + 4*7200)) G --telefon)"; var "Y1 4. tekrarda YÜKSELTİLDİ" "TEKRAR 4 — YÜKSELTİLDİ" "$o"
