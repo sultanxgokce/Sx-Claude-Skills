@@ -1,9 +1,9 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-gercek.sh
-# rc=0 sure=186.7s zaman=2026-10-31T22:28:02+03:00
+# rc=0 sure=921.3s zaman=2026-10-31T22:45:10+03:00
 --- stdout ---
   ✓ P8h exit 2'de dosyaya DOKUNULMADI
   ✓ P6a Nexus kanoniği (canlı) ile md5 EŞİT
   · P6b atlandı: Nexus katalogu/manifesti bu kutuda yok
-== 23 geçti · 0 düştü ==
+== 24 geçti · 0 düştü ==
 --- stderr ---
-⏳ agir-sira: kanit-duzen-pyyaml-vendor-vendor-parite 186 sn bekledi (yuva 1, load1 17.49)
+⏳ agir-sira: kanit-duzen-pyyaml-vendor-vendor-parite 917 sn bekledi (yuva 1, load1 15.89)

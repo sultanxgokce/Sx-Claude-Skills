@@ -61,7 +61,8 @@ ok "P7c SKILL sürümü 1.6.0 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple
 # P8 (Kuzey Hat E): izole kutuların çoğunda sistem python3'ünde PyYAML YOK. `python3 -S` site-packages'ı kapatır → PyYAML YALNIZ paketle gelen vendor/yaml'dan gelebilir.
 SHIM="$T/yamlsiz-bin"; mkdir -p "$SHIM"; printf '#!/bin/sh\nexec %s -S "$@"\n' "$(command -v python3)" > "$SHIM/python3"; chmod +x "$SHIM/python3"
 ok "P8a önkoşul: yamlsız python3 gerçekten PyYAML göremiyor" "$(PATH="$SHIM:$PATH" python3 -c 'import yaml' >/dev/null 2>&1; [ $? -eq 1 ] && echo 0 || echo 1)"
-ok "P8b paketle gelen vendor/yaml var (__init__.py) ve derlenmiş .so YOK (saf Python)" "$([ -f "$PAKET/vendor/yaml/__init__.py" ] && [ "$(find "$PAKET/vendor" -name '*.so' | wc -l)" -eq 0 ] && echo 0 || echo 1)"
+ok "P8b paketle gelen vendor/yaml var (__init__.py) ve derlenmiş .so YOK (saf Python)" "$([ -f "$PAKET/vendor/yaml/__init__.py" ] && [ -f "$PAKET/vendor/yaml-saf.zip" ] && [ "$(find "$PAKET/vendor" -name '*.so' | wc -l)" -eq 0 ] && echo 0 || echo 1)"
+ok "P8b2 zip içinde derlenmiş uzantı YOK ve 17 .py var (saf Python)" "$(python3 -c "import zipfile,sys;n=zipfile.ZipFile(sys.argv[1]).namelist();sys.exit(0 if len(n)==17 and all(x.endswith('.py') for x in n) else 1)" "$PAKET/vendor/yaml-saf.zip" && echo 0 || echo 1)"
 ok "P8c vendor lisansı paketle gelir (LICENSE-PyYAML)" "$([ -f "$PAKET/vendor/LICENSE-PyYAML" ] && echo 0 || echo 1)"
 printf 'insan notu\n' > "$T/p8.md"
 PATH="$SHIM:$PATH" bash "$EK" benimse --dosya "$T/p8.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
