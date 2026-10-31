@@ -1,0 +1,7 @@
+$ node /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-gercek.mjs
+# rc=0 sure=1.7s zaman=2026-10-31T18:05:23+03:00
+--- stdout ---
+oda dışı: code-ana
+oda dışı: code-kabuk
+kaynak {"kayit":11,"oda-disi":2} odalar {"agentic-os":7,"pazar":1,"mesajlasma":1,"hendese":1,"hezarfen":1}
+--- stderr ---

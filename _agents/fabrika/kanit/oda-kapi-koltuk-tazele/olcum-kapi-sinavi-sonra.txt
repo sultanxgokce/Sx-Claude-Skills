@@ -1,5 +1,5 @@
-$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/kapi-olc.sh /config/projects/_wt/Sx-Claude-Skills-oda-kapi-koltuk-tazele
-# rc=0 sure=7.4s zaman=2026-10-31T17:16:43+03:00
+$ node terminal-onar/kapi/sunucu.test.mjs
+# rc=0 sure=9.3s zaman=2026-10-31T18:01:51+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -132,14 +132,17 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f96575
   ✓ KT1 GET /api/kadro/tarif 200: kutu + gerçek tarif (1 uzmanlık · 36 terim), olc yok, yol yok
   ✓ KT2 yazma yolu yok: POST → 405 (iki uçta da)
   ✓ KT3 kayıt yok → 200 + personel null + olc "kaynak yok" (boş liste DEĞİL)
-  ✓ OD1 koltuk oda klasörünün ALTINDA açılmış: oda yukarıdaki oda.json'dan (agentic-os), kayıtla aynı → uyarı YOK
-  ✓ OD2 kayıt agentic-os, klasör freelance → oda KLASÖRDEN (freelance) + iki adı söyleyen uyarı
-  ✓ OD3 kayıtta oda var, koltuk oda klasöründe değil → oda UYDURULMAZ, uyarı "açılmamış"
-  ✓ OD4 bozuk oda.json → odasız gösterilir ve SÖYLENİR (sessiz odasız değil)
-  ✓ OD5 kayıtsız + odasız koltuk ve dizin sütunu olmayan eski satır: oda da uyarı da yok
-  ✓ OD6 yanıt kutunun odalarını taşır (ad · hedef · reis, sıralı); çalışma dizini yanıta SIZMAZ
+  ✓ OD1 koltuk oda klasörünün ALTINDA açılmış: oda yukarıdaki oda.json'dan (agentic-os), kaynak klasor, kayıtla aynı → uyarı YOK
+  ✓ OD2 kayıt agentic-os, klasör freelance → oda KLASÖRDEN (freelance) + kaynak klasor + iki adı söyleyen uyarı
+  ✓ OD3 kayıtta oda var, koltuk oda klasöründe değil → oda KAYITTAN, kaynak kayit, uyarı YOK (kararın 2. basamağı olağan durum)
+  ✓ OD4 bozuk oda.json, kayıtta oda yok → odasız gösterilir ve SÖYLENİR (sessiz odasız değil)
+  ✓ OD4b bozuk oda.json, kayıtta oda var → kayıttan gösterilir, kaynak kayit, uyarı hem bozukluğu hem kayıt odasını söyler
+  ✓ OD5 kayıtsız + odasız koltuk ve dizin sütunu olmayan eski satır: oda dışı (oda · kaynak · uyarı yok)
+  ✓ OD6 odalar kayıt odalarını da taşır, klasör bilgisi kayıt satırını ezer (cirak2 kayıttan önce geldi), sıralı; çalışma dizini yanıta SIZMAZ
+  ✓ OD8 ad eşlemesi: tmux alanıyla muzehhip ⟷ MÜZEHHİP; tmux alanı yokken ŞAKİRD ⟷ sakird
+  ✓ OD9 kayıtta geçersiz oda adı oda sayılmaz: oda dışı
   ✓ OD7 göreli ya da boş dizin → oda aranmaz (null)
 
 ────────────────────────────────────────────────────────
-GECEN: 126  ·  KALAN: 0
+GECEN: 129  ·  KALAN: 0
 --- stderr ---
