@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "postaci-kopya-esitle",
+  "pr": "615",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T15:35:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle",
+  "dal": "postaci-kopya-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19020,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3472
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0b94c58da8f972487846924391f1238e3871a2d4",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, postacı kopyası ve kutu ad tablosu eklenmiş, kaynak sağlama toplamı ile sürüm kayıtları da güncellenmiş; son ölçüm cloudtop ana dalından farklı dosya sayısını 0 gösteriyor. Ancak ölçümün önce ayağı karttaki 3 yerine 2 sayıyor ve eksik dosya hatasına rağmen yeşil/rc=0 dönüyor; bu yüzden üretime hazır demeden önce ölçüm betiğinin hata yakalaması ve başlangıç sayısının açıklanması gerekir.",
+    "bulgular": [
+      {
+        "ne": "Ölçüm betiği, eksik kutu-adlari.json hatasını başarısızlık saymadan yeşil sonuç üretiyor; bu durum karşılaştırma kanıtının güvenilirliğini zayıflatıyor.",
+        "kanit": "Önce ölçümünün stderr bölümünde “kutu-adlari.json: No such file or directory” bulunmasına rağmen manifest kaydı rc=0 ve renk=yesil.",
+        "konum": "olcum-farkli-dosya-once.txt / manifest:farkli-dosya:once",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kartta belirtilen 3→0 başlangıç değeri kanıtlanmamış; araçlı önce ölçümü 2→0 gösteriyor.",
+        "kanit": "İş kartı “farklı dosya 3 → 0” derken önce çıktısı “cloudtop ana dalından farklı dosya: 2”, sonra çıktısı 0 yazıyor.",
+        "konum": "iş kartı cumle; olcum-farkli-dosya-once.txt; olcum-farkli-dosya-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok, aynı etiketli önce/sonra ölçüm çifti mevcut. Son ölçüm farklı dosya sayısını 0 ve KAYNAK.sha256 durumunu tutarlı gösteriyor; fakat önce ölçümündeki stderr hatasının rc=0 ile maskelenmesi ve karttaki 3 sayısının ölçümde 2 çıkması kanıt kalitesini düşürüyor."
+  }
+}

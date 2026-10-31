@@ -1,0 +1,29 @@
+{
+  "is": "postaci-kopya-esitle",
+  "cumle": "Sx postane-postaci kopyası cloudtop ana dalıyla eşitlenir: postacı (#1257 #1258) ve kutu ad tablosu (#1265); farklı dosya 3 → 0",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-31T15:31:07+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Sx-Claude-Skills + cloudtop anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac postaci-kopya-esitle-sx … · kart.sh ac postaci-kopya-esitle-cloudtop …"
+  ],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}
