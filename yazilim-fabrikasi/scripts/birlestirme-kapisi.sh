@@ -323,6 +323,75 @@ PY
 )"
   eval "$okuma"
   _y "  · denetim tur $tur · $puan/5 · doğru şey: $dogru · bulgu: $nb · yazan: $yazan → denetçi: $denetci"
+  # ── PUAN HANGİ COMMIT'E VERİLDİ? (kart kanit-kaydi-olculen-commit · 31 Eki 2026)
+  #    DENETIM kaydı `bas`ı (göze giden commit) taşır ama kapı onu hiç okumuyordu: göz 5/E verdikten sonra koda dokunan commit
+  #    kapıyı yine geçerdi. Artık birleşen uç (PR başı, yoksa kanıtın okunduğu ağacın HEAD'i) ile `bas` karşılaştırılır:
+  #      · aynı commit → ✓ · `bas` uçun atası değil → eksik (puan başka dalda verilmiş)
+  #      · ata ama arada kanıt dizini DIŞINDA, ana hatta da OLMAYAN dosya değişmiş → eksik (puandan sonra kod değişti)
+  #      · yalnız kanıt kaydı (DENETIM/KANIT/KART) eklenmişse ✓ (göz kaydı kendisi bir commit ister; bu kaçınılmaz)
+  #    `bas` yoksa (eski kayıt ya da --diff kipi) karşılaştırılamaz: GEÇERSİZ SAYILMAZ, ama söylenir — eski birleşmeleri geriye dönük
+  #    kırmak bu kartın işi değil. Uç çözülemezse ÖLÇÜLEMEDİ (rc=3).
+  oc_bas="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('bas') or '')" "$SON" 2>/dev/null)"
+  #    KANIT kayıtları da okunur (kanit.py 0.6.0 olculen_commit/olculen_kirli yazar): kirli ağaçta ya da uçun soyundan OLMAYAN commit'te ölçülmüş kayıt
+  #    ENGELLEMEZ (eski kayıtlar bunu taşımıyor, ölçüm yeniden koşulmadan düzeltilemez) ama adıyla SÖYLENİR.
+  oc_kanit="$(python3 - "$DZ/KANIT.json" <<'PYK'
+import json,sys
+try: m=json.load(open(sys.argv[1],encoding="utf-8"))
+except FileNotFoundError: raise SystemExit
+except Exception: print("bozuk - -"); raise SystemExit
+for r in m.get("kayitlar",[]):
+    c=r.get("olculen_commit")
+    if c: print(("kirli" if r.get("olculen_kirli") else "temiz"), c, r.get("etiket","?")+"/"+str(r.get("asama","?")))
+PYK
+)"
+  oc_agac="${DZ_AGAC:-$DEPO}"; oc_uc=""; oc_atla=0; oc_kirli_ad=""; oc_yabanci=""
+  if [ -n "$PR" ]; then
+    oc_uc="${prbas:-}"
+    [ -n "$oc_uc" ] || { git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null && oc_uc="$(git -C "$DEPO" rev-parse -q --verify FETCH_HEAD 2>/dev/null)"; }
+  else
+    oc_uc="$(git -C "$oc_agac" rev-parse -q --verify HEAD 2>/dev/null)"
+  fi
+  if [ -n "$oc_kanit" ] && [ -n "$oc_uc" ]; then
+    oc_kirli_say=0
+    while read -r durum c ad; do
+      [ -n "$c" ] || continue
+      [ "$durum" = bozuk ] && { _y "  ⚠ KANIT.json okunamadı — kayıtların ölçülen commit'i kontrol EDİLEMEDİ"; continue; }
+      [ "$durum" = kirli ] && { oc_kirli_say=$((oc_kirli_say+1)); oc_kirli_ad="${oc_kirli_ad:-} $ad"; }
+      git -C "$oc_agac" merge-base --is-ancestor "$c" "$oc_uc" 2>/dev/null || oc_yabanci="$oc_yabanci $ad"
+    done <<< "$oc_kanit"
+    [ "$oc_kirli_say" -gt 0 ] && _y "  ⚠ $oc_kirli_say kanıt kaydı commit'lenmemiş değişiklikli ağaçta ölçülmüş (HEAD'in kendisi değil):${oc_kirli_ad:0:200}"
+    [ -n "$oc_yabanci" ] && _y "  ⚠ kanıt kaydı birleşen uçun soyundan olmayan commit'te ölçülmüş:${oc_yabanci:0:200}"
+  fi
+  if [ -z "$oc_bas" ]; then
+    _y "  ⚠ puan kaydı hangi commit'te verildiğini taşımıyor (eski kayıt ya da --diff kipi) — birleşen uçla KARŞILAŞTIRILAMADI"
+  elif [ -z "$oc_uc" ]; then
+    _h "birleşen uç çözülemedi — puanın verildiği commit (${oc_bas:0:8}) ile karşılaştırılamadı (ÖLÇÜLEMEDİ)"; olcemedi=$((olcemedi+1))
+  elif [ "$oc_bas" = "$oc_uc" ]; then
+    _y "  ✓ puan birleşen uca verilmiş: ${oc_uc:0:8}"
+  elif ! git -C "$oc_agac" cat-file -e "$oc_bas^{commit}" 2>/dev/null; then
+    _h "puanın verildiği commit (${oc_bas:0:8}) bu depoda yok — birleşen uçla (${oc_uc:0:8}) karşılaştırılamadı (ÖLÇÜLEMEDİ; PR kipinde önce git fetch origin pull/N/head)"; olcemedi=$((olcemedi+1))
+  elif ! git -C "$oc_agac" merge-base --is-ancestor "$oc_bas" "$oc_uc" 2>/dev/null; then
+    _h "puan başka bir commit'e verilmiş: denetim ${oc_bas:0:8} için, birleşen uç ${oc_uc:0:8} onun soyundan değil — yeniden göze gönder"; eksik=$((eksik+1))
+  else
+    oc_ana=""; for r in origin/HEAD origin/main origin/master main master; do git -C "$oc_agac" rev-parse -q --verify "$r" >/dev/null 2>&1 && { oc_ana="$r"; break; }; done
+    oc_degisen=""; oc_fark="$(git -C "$oc_agac" diff --name-only "$oc_bas" "$oc_uc" 2>/dev/null)"; oc_frc=$?
+    [ "$oc_frc" -eq 0 ] || { _h "puan ile birleşen uç arasındaki fark alınamadı (git diff rc=$oc_frc) — ÖLÇÜLEMEDİ, geçti sayılmaz"; olcemedi=$((olcemedi+1)); oc_fark=""; oc_atla=1; }
+    while IFS= read -r f; do
+      [ -n "$f" ] || continue
+      case "$f" in _agents/fabrika/kanit/"$IS"/*) continue ;; esac
+      if [ -n "$oc_ana" ]; then
+        ub="$(git -C "$oc_agac" rev-parse -q --verify "$oc_uc:$f" 2>/dev/null)"; ab="$(git -C "$oc_agac" rev-parse -q --verify "$oc_ana:$f" 2>/dev/null)"
+        [ -n "$ub" ] && [ "$ub" = "$ab" ] && continue   # bu dosya ana hatta zaten aynı: dala başkasının işi girmiş, bu işin kodu değil
+      fi
+      oc_degisen="$oc_degisen $f"
+    done <<< "$oc_fark"
+    if [ "${oc_atla:-0}" -eq 1 ]; then :
+    elif [ -n "$oc_degisen" ]; then
+      _h "puan verildikten sonra kod değişmiş: denetim ${oc_bas:0:8}, birleşen uç ${oc_uc:0:8}; arada kanıt dizini dışında değişen:${oc_degisen:0:300} — yeniden göze gönder"; eksik=$((eksik+1))
+    else
+      _y "  ✓ puan ${oc_bas:0:8} için verilmiş; birleşen uç ${oc_uc:0:8}: aradaki fark yalnız kanıt kaydı"
+    fi
+  fi
   # ── DARALTMA KAYDI (PCP7J, 18 Eki 2026): kapı eskiden kartın reis/Sultan kararlarını hiç okumuyor, koşulsuz son
   #    DENETIM 5/E istiyordu. Kart daraltıldıysa (kart.sh daralt → daraltmalar[-1].tur_sifir) son denetim daraltmadan
   #    SONRA koşmuş olmalı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz. Kart okunamazsa ÖLÇÜLEMEDİ (rc=3), geçti değil.
