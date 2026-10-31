@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.5.0
+version: 0.6.0
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -26,6 +26,16 @@ const d = await Dumen.baglan({ cdpUrl: 'http://127.0.0.1:9222', merkez: process.
 try { await d.fill('#ad', 'Ayşe'); } catch (e) { if (e instanceof KapiHata) { /* dur; mod ajana dönünce kaldığın yerden sür */ } }
 ```
 `playwright-core` bulunamazsa `DUMEN_PLAYWRIGHT=<playwright-core dizini>`.
+
+## Salt-okur: sayfayı oku, kare al (0.6.0 · SİNAN/VADE 31 Eki · görev …W3ZKKH)
+```js
+const yazi = await d.metin();            // görünür sayfa yazısı (en çok 20.000 harf); d.metin('#borc-tablosu') yalnız o alan
+await d.kare('/tmp/gib.png');            // ekran karesi dosyaya; { tamSayfa: true } bütün sayfa
+```
+- Aynı **"Dümen kimde"** kapısından geçer: Dümen Sultan'daysa okuma da YOKTUR (`KapiHata.neden = sultanda`), kare dosyası yazılmaz.
+- Okuma **eylem değildir**: eylem penceresi açmaz, sayfaya dokunmaz. Okunan metin ya da kare hiçbir kütüğe, merkeze, terminale yazılmaz; yalnız çağırana döner.
+- Parola/SMS/kart alanını hedefleyen `metin(sel)` durma noktasına takılır (yazmadaki kapı). `innerText` giriş alanlarının değerini içermez.
+- Ne işe yarar: Sultan Dümen'de bir siteye kendisi girer (ör. GİB, resimli güvenlik kodu), Dümen'i ajana verir; ajan yalnız okur, tıklama yalnız gezinmedir.
 
 ## Masaüstü (0.2.0 · görev …F9Y2Y) — terminal dahil tüm masaüstü
 `scripts/masa.mjs` → `new Masa({ merkez })` ajana `ekranAl / tik / yaz / tus / kaydir / durum` verir; hepsi masaüstü bekçisine (`masa-kopru.py`, `172.30.0.2:9224`) gider. Sözleşme: cloudtop `infra/dumen/SOZLESME.md` §5.

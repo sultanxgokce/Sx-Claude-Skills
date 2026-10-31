@@ -168,6 +168,29 @@ const eY = await hata(() => dZ.goto(MERKEZ + '/yavas', { timeout: 6000 }));
 ok('D29 mod ajan iken soket düşerse: açık hata "baglanti-koptu" (sessiz yutulmaz)', eY instanceof KapiHata && eY.neden === 'baglanti-koptu', String(eY));
 await dZ.kapat(); ch3.kill();
 
+// ── SALT-OKUR yöntemler (metin · kare) — SİNAN/VADE 31 Eki
+mod = 'ajan'; await d.goto(MERKEZ + '/sayfa');
+await ham.fill('#t', 'gizli-deger-731');
+const uyariOnce = uyariGelen.length, durakOnce = duraklar.length; satirlar.length = 0;
+const m1 = await d.metin();
+ok('O1 metin(): görünür sayfa yazısı döner', typeof m1 === 'string' && m1.includes('Tamam') && m1.includes('Öde'), JSON.stringify(m1).slice(0, 120));
+ok('O2 metin(): giriş alanının DEĞERİ metne girmez', !m1.includes('gizli-deger-731'));
+ok('O3 okuma sayfayı değiştirmez, terminale/merkeze metin yazmaz, uyarı üretmez', (await deger('#t')) === 'gizli-deger-731' && !satirlar.some((x) => x.includes('Tamam')) && uyariGelen.length === uyariOnce, JSON.stringify(satirlar));
+const eOP = await hata(() => d.metin('#pw'));
+ok('O4 parola alanını hedefleyen okuma durma noktasına takılır', eOP instanceof KapiHata && eOP.neden === 'durak' && duraklar.length === durakOnce + 1 && duraklar.at(-1).neden === 'sifre', String(eOP));
+const kareYol = join(mkdtempSync(join(tmpdir(), 'dumen-kare-')), 'k.png');
+await d.kare(kareYol);
+const kb = (await import('fs')).readFileSync(kareYol);
+ok('O5 kare(yol): PNG dosyası yazılır', kb.length > 100 && kb.subarray(1, 4).toString() === 'PNG', String(kb.length));
+mod = 'sultan';
+const eOM = await hata(() => d.metin());
+const kareYol2 = kareYol.replace('k.png', 'k2.png');
+const eOK = await hata(() => d.kare(kareYol2));
+ok('O6 Dümen Sultanda iken okuma da YOK (metin + kare "sultanda", dosya yazılmaz)', eOM instanceof KapiHata && eOM.neden === 'sultanda' && eOK instanceof KapiHata && eOK.neden === 'sultanda' && !(await import('fs')).existsSync(kareYol2), String(eOM) + ' / ' + String(eOK));
+mod = 'ajan';
+const eOY = await hata(() => d.kare());
+ok('O7 kare() yolsuz reddedilir', eOY instanceof KapiHata && eOY.neden === 'kare-yolu-yok', String(eOY));
+
 console.log(`SONUÇ: geçti=${G} kaldı=${K}`);
 await ham.context().browser().close().catch(() => {}); await d.kapat(); await dM.kapat(); ch.kill(); srv.close();
 process.exit(K === 0 ? 0 : 1);

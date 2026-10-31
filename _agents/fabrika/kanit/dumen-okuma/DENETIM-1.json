@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "dumen-okuma",
+  "pr": "613",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T12:32:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-okuma",
+  "dal": "dumen-okuma",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20103,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 9358
+  },
+  "dalgic": "uyumsuz",
+  "bas": "38b19ed1aa8171cfd6ab94c942b176c2a1347ce9",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dümen sürücüsüne kapıdan geçen, eylem penceresi açmayan metin ve ekran karesi okumaları eklenmiş; hassas hedef, Sultan modu ve kayıt sızıntısı davranışları da sınanmış. Üretim kodunda talebi engelleyen kanıtlı bir kusur görünmediği için puan 5.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçümü yöntem sayısını 0→2 gösteriyor, gerçek sınav 49/49 geçiyor ve 21/21 mutant yakalanıyor; metin, kapı, hassas hedef, sızıntı ve PNG üretimi gerçekçi sahte sayfayla sınanmış. Görsel bir önce/sonra kare sunulmamış ve PNG içeriği yalnız biçim/boyut düzeyinde doğrulanmış olsa da üretim farkı ile işlevsel ve mutasyon ölçümleri birlikte yeterli kanıt oluşturuyor."
+  }
+}

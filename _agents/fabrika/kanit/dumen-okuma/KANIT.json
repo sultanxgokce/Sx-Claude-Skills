@@ -1,0 +1,61 @@
+{
+  "is": "dumen-okuma",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T12:31:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dumen-sinavi-mutantli",
+      "asama": "sonra",
+      "dosya": "olcum-dumen-sinavi-mutantli-sonra.txt",
+      "sha256": "43f129de21af45d0b5e78af5e4992768140c71dcc196dccea0249ecce558b67a",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T12:30:31+03:00",
+      "sure_sn": 184.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ad808ba810394ab38da18187f2e3082a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "okuma-yontemi",
+      "asama": "once",
+      "dosya": "olcum-okuma-yontemi-once.txt",
+      "sha256": "f8206a5c4fd247c9e65cd86ea2d8f032c9a2b563b55d8114676f0700907f8c4e",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(git show origin/main:dumen-surucu/scripts/dumen.mjs | grep -cE 'async (metin|kare)\\('); echo 'origin/main okuma yöntemi='$n; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T12:31:22+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ec45b72323974b9a93bb64fdbb310512"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "okuma-yontemi",
+      "asama": "sonra",
+      "dosya": "olcum-okuma-yontemi-sonra.txt",
+      "sha256": "5a36f6407141dfa6bb344db7618b8a2f553d5faf74aba86ce15598335597e933",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -cE 'async (metin|kare)\\(' dumen-surucu/scripts/dumen.mjs); echo 'dal okuma yöntemi='$n; [ \"$n\" = 2 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T12:31:22+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ae9ba51bf13847208e23e1b04231e63a"
+    }
+  ],
+  "imza": "d0c5a949bf49ce4ba886d80e4451e0fb98eb8dfb1f466af9910460cf1654e95a"
+}
