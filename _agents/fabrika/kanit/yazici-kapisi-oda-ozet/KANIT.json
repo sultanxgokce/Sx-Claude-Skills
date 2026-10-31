@@ -1,0 +1,140 @@
+{
+  "is": "yazici-kapisi-oda-ozet",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-10-31T22:46:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinavi-once.txt",
+      "sha256": "8927d55fee2fd482201dda110650feb482d1453ca87ad04f0f44851fbe0e3576",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:45:01+03:00",
+      "sure_sn": 594.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "550c201814ba4e74976b3ac8eab26940"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "74e88a1820ad6d3c8de963de34155ed255552ff6357aa85c0c273b890a804e71",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:45:06+03:00",
+      "sure_sn": 4.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b9d0192696b54a7fab003a9a049c036b",
+      "olculen_commit": "72b5e28758ab29bbc990bdfb978dbfc020dcb6a9",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-1",
+      "asama": "sonra",
+      "dosya": "olcum-mut-1-sonra.txt",
+      "sha256": "87d5fb22146f7ea6c77a0d8f39c09d0a3b63dd72f6dea7d2fc39d4acafc613db",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-mutant.sh",
+        "1"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:46:20+03:00",
+      "sure_sn": 53.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "9a27fba44a364f199dcea64d502c06b7",
+      "olculen_commit": "72b5e28758ab29bbc990bdfb978dbfc020dcb6a9",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-2",
+      "asama": "sonra",
+      "dosya": "olcum-mut-2-sonra.txt",
+      "sha256": "271429e80aa5fec47d4db2e01f6d36b6e7cfebb75951afc5d411c3f9d5ea6350",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-mutant.sh",
+        "2"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:46:21+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "5680fea877764940afcd53dee117b4b3",
+      "olculen_commit": "72b5e28758ab29bbc990bdfb978dbfc020dcb6a9",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-3",
+      "asama": "sonra",
+      "dosya": "olcum-mut-3-sonra.txt",
+      "sha256": "82e42f27bcd15be38d4b6cd1ef7623d1e073816fbd89728043365cef38fd2790",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-mutant.sh",
+        "3"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:46:23+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "9c01003332434fcfa5383b1e187f3cba",
+      "olculen_commit": "72b5e28758ab29bbc990bdfb978dbfc020dcb6a9",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-4",
+      "asama": "sonra",
+      "dosya": "olcum-mut-4-sonra.txt",
+      "sha256": "fa848547e2457ceda18459f0898beab3f3407773bca8387d0d930507b55a3f23",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-mutant.sh",
+        "4"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:46:26+03:00",
+      "sure_sn": 3.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "697a9bf4f3d5429289332bcda7dfb3e2",
+      "olculen_commit": "72b5e28758ab29bbc990bdfb978dbfc020dcb6a9",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "7633a9e973520df9ca69fa560c9ee8f2a73eee620b602170441baff5b13d0003"
+}

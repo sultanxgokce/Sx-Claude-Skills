@@ -131,6 +131,17 @@ for s in open(sys.argv[2],encoding="utf-8"):
     m=re.match(r"^\s+oda:\s*([a-z][a-z0-9-]{1,30})\s*(#.*)?$",s)
     if m and bu==ara: print(m.group(1),end=""); break' "$koltuk" "$kayit" 2>/dev/null || true
 }
+# _oda_yaz <açık değer> → odanın adı; bulunamazsa agentic-os (SÖYLENİR). 1.20.2 (görev …9ABX5, SERDAR 31 Eki): ac/ekle/bulgu ile doğan kayıt ODASIZ olmaz
+#   (Kuzey G3.4 odasız 0; bir günde 3 kez mühür düştü). _oda_coz ayrı kalır: sipariş --isteyen-oda orada boş kalabilir.
+_oda_yaz() {
+  local o; o="$(_oda_coz "${1:-}")"
+  if [ -z "$o" ]; then o=agentic-os; echo "not: oda verilmedi ve koltuğun odası bulunamadı → varsayılan oda agentic-os yazıldı (başka odaysa --oda ver)" >&2; fi
+  printf '%s' "$o"
+}
+# _ozet_kapi <özet> → 80 harf ve üstü reddedilir (Kuzey G2.1: ≥80 sayılır). Boş özeti burada karıştırmayız (defter 400 ozet_acilista_gerekli der).
+_ozet_kapi() {
+  [ "$(printf '%s' "${1:-}" | python3 -c 'import sys; print(len(sys.stdin.read().strip()))')" -lt 80 ] || { echo "--ozet 80 harften KISA olmalı (Kuzey G2.1: ≥80 sayılır, mühür düşer); kısalt — kayıt YAZILMADI" >&2; return 1; }
+}
 _eylem_ekle() {  # <json> <--bayrak> <değer> → json'a alan ekler (değersiz bayrak rc 2)
   [ -n "${3:-}" ] || { echo "$2 değer ister" >&2; return 2; }
   python3 -c 'import sys,json; d=json.loads(sys.argv[1]); d[{"--kimi":"bekleyen_kimi"}.get(sys.argv[2], sys.argv[2].lstrip("-").replace("-","_"))]=sys.argv[3]; print(json.dumps(d,ensure_ascii=False))' "$1" "$2" "$3"
@@ -160,6 +171,7 @@ case "${1:-}" in
     DUGUM="$(_dugum_coz "$DUGUM")" || exit 1
     [ -n "$B" ] || { echo "kullanım: gorev.sh ac \"<başlık>\" [--kapi …] [--sahip …] [--ust …] [--durum …] [--not …] [--kaynak sultan|ajan]
 başlıkta sayı varsa tek ölçüt: <ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)" >&2; exit 2; }
+    _ozet_kapi "$OZET" || exit 2
     G="$(python3 -c 'import sys,json; d={"tur":"gorev","adlar":[sys.argv[1]],"kapi":sys.argv[2],"sahip":sys.argv[3],"gorev_durumu":sys.argv[5]}
 if sys.argv[4]: d["ust_gorev_id"]=sys.argv[4]
 if sys.argv[6].strip(): d["not"]=sys.argv[6].strip()
@@ -171,7 +183,7 @@ if sys.argv[11].strip(): d["ozet_sultan"]=sys.argv[11].strip()
 if sys.argv[12]: d["oda"]=sys.argv[12]
 if sys.argv[13]: d["isteyen_oda"]=sys.argv[13]
 if sys.argv[14]: d["teslim"]=sys.argv[14]
-print(json.dumps(d,ensure_ascii=False))' "$B" "$KAPI" "$SAHIP" "$UST" "$DURUM" "$NOTU" "$DUGUM" "$KUTU" "$EY" "$KAYNAK" "$OZET" "$(_oda_coz "$ODA")" "$ISTEYEN" "$TESLIM")"
+print(json.dumps(d,ensure_ascii=False))' "$B" "$KAPI" "$SAHIP" "$UST" "$DURUM" "$NOTU" "$DUGUM" "$KUTU" "$EY" "$KAYNAK" "$OZET" "$(_oda_yaz "$ODA")" "$ISTEYEN" "$TESLIM")"
     _cagir POST /kayit "$G" | _sonuc 201 '"açıldı: %s · %s" % (j["kayit"]["id"], bas(j["kayit"])) + (("\n  ⛓ bekleyen %s: %s" % (j["dugum_bekleyen"]["id"], "bekliyor notu yazıldı" if j["dugum_bekleyen"]["yazildi"] else "NOT YAZILMADI — " + j["dugum_bekleyen"].get("sebep","?"))) if j.get("dugum_bekleyen") else "")'; rc=$?; [ $rc -ne 0 ] || [ -n "$OZET" ] || echo "ⓘ Sultan-dili özet yok — ekle: gorev.sh ozet <id> \"sebep → ne yapıldı → ne olacak\"" >&2; exit $rc ;;
   ekle)
     shift; B="${1:-}"; shift || true; KUTU=""; ETIKET=""; ACIL=""; ATANAN=""; KKIM=""; KNERE=""; ESKI=""; SAHIP=""; KSINIF=""; KRAPOR=""; DUGUM=""; OZET=""; ODA=""
@@ -193,16 +205,18 @@ başlıkta sayı varsa tek ölçüt: <ne sayılıyor> <şimdi> → <hedef> (kayn
       KSINIF="$(_sinif_sor "$KKIM" "$KNERE")"
       [ -n "$KSINIF" ] || echo "not: kaynak sınıfı sunucudan alınamadı (eski defter ya da ipucu yok) — sınıfsız gönderildi; defter 1.27.0 kendi türetir, ipucu yoksa boş kalır" >&2
     fi
+    _ozet_kapi "$OZET" || exit 2
     G="$(python3 -c 'import sys,json
 b,kutu,et,ac,at,kk,kn,es,sa,ks,kr,dg,oz,od=sys.argv[1:15]
 d={"tur":"gorev","adlar":[b],"kutu":kutu,"sahip":sa or kutu,"gorev_durumu":"acik"}
 for k,v in (("etiket",et),("aciliyet",ac),("atanan",at),("kaynak_kim",kk),("kaynak_nereden",kn),("eski_no",es),("kaynak_sinif",ks),("kaynak_rapor",kr),("dugum_acar",dg),("ozet_sultan",oz.strip()),("oda",od)):
     if v: d[k]=v
-print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN" "$KKIM" "$KNERE" "$ESKI" "$SAHIP" "$KSINIF" "$KRAPOR" "$DUGUM" "$OZET" "$(_oda_coz "$ODA")")"
+print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN" "$KKIM" "$KNERE" "$ESKI" "$SAHIP" "$KSINIF" "$KRAPOR" "$DUGUM" "$OZET" "$(_oda_yaz "$ODA")")"
     _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s · %s — %s · kaynak: %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu",""), j["kayit"]["canli"].get("etiket","tür?"), j["kayit"]["canli"].get("aciliyet","aciliyet?"), bas(j["kayit"]), j["kayit"]["canli"].get("kaynak_sinif") or "sınıfsız")'; rc=$?; [ $rc -ne 0 ] || [ -n "$OZET" ] || echo "ⓘ Sultan-dili özet yok — ekle: gorev.sh ozet <id> \"sebep → ne yapıldı → ne olacak\"" >&2; exit $rc ;;
   ozet)
     [ $# -ge 3 ] && [ -n "${3// /}" ] || { echo "kullanım: gorev.sh ozet <gorev_id> \"<Sultan-dili tek cümle: sebep → ne yapıldı → ne olacak>\"" >&2; exit 2; }
     # tashih (tekil alan, eski özet damgasıyla kayıtta kalır); adimlar YOK → adım yazmaz, durumu değiştirmez (SERDAR tasarımı 22 Eki)
+    _ozet_kapi "$3" || exit 2
     G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"ozet_sultan":sys.argv[1].strip()},"gerekce":"Sultan-dili özet yazıldı"},ensure_ascii=False))' "$3")"
     _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"özet yazıldı · adım yazılmadı · durum: %s" % j["kayit"]["canli"].get("gorev_durumu","acik")' ;;
   yildiz-oner)
@@ -353,7 +367,7 @@ if od: d["oda"]=od
 if pu: d["reis_puan"]=pu; d["reis_puan_gerekce"]=ge
 if go: d["gorsel"]=go
 if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
-print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF" "$(_oda_coz "$ODA")" "$PUAN" "$GEREKCE" "$GORSEL")"
+print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF" "$(_oda_yaz "$ODA")" "$PUAN" "$GEREKCE" "$GORSEL")"
     _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s — %s (açan: %s)" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu") or j["kayit"].get("ekleyen_kutu"), j["kayit"]["canli"].get("etiket"), bas(j["kayit"]), j["kayit"]["canli"].get("kaynak_kim"))' ;;
   puan)
     # 1.50.0: reisin puanı (1-10) + tek cümle gerekçe — TASHİH (eski puan damgasıyla kalır); yalnız reis jetonu/insan (defter 403 reis_alani)

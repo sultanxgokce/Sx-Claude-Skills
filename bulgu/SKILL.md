@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.6.4
+version: 0.6.5
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -44,6 +44,9 @@ Başlık kuralı "Sultan dili zorunlu" satırıyla yazılı hâle geldi (Komut b
 Meşveret seansı maddeyi `bulgu.sh yaz … --oda <oda>` ile geçiriyordu; `yaz` bu bayrağı tanımadığından (`bilinmeyen: --oda`, rc 2)
 hiçbir madde kaydedilemiyordu. Artık `--oda` alınır ve merkezî deftere `oda` alanı olarak gider (`gorev.sh ac --oda` ile aynı alan).
 Jetonsuz kutuda eski defter oda alanı tanımaz: kayıt yazılır, odanın YAZILMADIĞI söylenir (sessiz düşme yok). Sınav OD1–OD4.
+
+## 0.6.5 — odasız ve uzun özetli kayıt doğmaz (SERDAR 31 Eki, görev …9ABX5)
+`bulgu.sh yaz` oda sırası: açık `--oda` > `GOREV_ODA` > yazanın ekip kaydındaki odası > varsayılan `agentic-os` (stderr'de söylenir). `--ozet` 80 harf ve üstüyse rc 2, deftere gidilmez. Haftalık uyum denetimi gibi koltuksuz yazıcılar artık odasız bulgu üretmez.
 
 ## Komut (her kutuda AYNI)
 ```bash

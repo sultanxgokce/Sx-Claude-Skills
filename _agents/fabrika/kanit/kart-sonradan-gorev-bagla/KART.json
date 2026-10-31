@@ -1,0 +1,44 @@
+{
+  "is": "kart-sonradan-gorev-bagla",
+  "cumle": "Açık karta sonradan görev bağlanır: kart.sh gorev-bagla kartı göreve bağlar, görev çalışılıyor olur, başkasının ya da biten kartın bağı değişmez",
+  "istedi": "BÂNİ",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-31T21:18:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "Sx PR, kart.test.sh, sınav ve mutant",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M69FHVNBW9QCKTQ33RWK1692",
+  "tahmin_dk": 45,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T21:18:51+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T22:22:23+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T22:46:40+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

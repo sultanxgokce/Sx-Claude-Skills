@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kart-sonradan-gorev-bagla",
+  "pr": "628",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T22:46:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sonradan-gorev-bagla",
+  "dal": "kart-sonradan-gorev-bagla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65035,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 92640
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0407b05653822f51dd8294274fb29a18ab69bf70",
+  "duzeltme_farki": {
+    "onceki_bas": "de73fa315091c7f8ad76531ee9a1a00532e5f4c5",
+    "dosya": 9,
+    "bayt": 103138,
+    "tam_bayt": 400516
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "B1 dizin kilidi ve GBA10 ile, B2 ise seçici geri alma ve GBA7b ile önceki biçimleri bakımından kapanmış; açık karta görev bağlama, çalışılıyor durumu ve koruma kuralları talebe uygundur. Ancak seçici geri alma kendi eklediği kayıtları kimlikle ayırmadığı için eşzamanlı veya tarihsel kayıtları silebilir; üretimden önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Geri alma, yalnız bu çağrının eklediği geçmiş ve görev-yazımı kayıtlarını kaldırmak yerine içerik/konum varsayımıyla kayıt silmektedir; aynı göreve ait eski geçmiş kayıtlarının tamamı silinebilir ve eşzamanlı eklenen son `ac` kaydı yanlışlıkla çıkarılabilir.",
+        "kanit": "Hata kolunda `gecmis` listesi, `olay == \"gorev-bagla\"` ve aynı `gorev` olan bütün öğeler süzülerek yeniden yazılıyor; eklenen kayda özgü kimlik kullanılmıyor. `gorev_yazimlari` için de `y[-1].olay == \"ac\"` ise kaydın bu çağrıya aitliği sınanmadan `pop()` yapılıyor. GBA7b eşzamanlı değişiklik olarak yalnız `eszamanli=\"evet\"` alanını eklediğinden bu iki kayıt yarışını ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:gorev-bagla geri alma Python kolu; yazilim-fabrikasi/scripts/kart.test.sh:GBA7b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Gerçek ölçüm çifti önce rc=1 ve 454/458, sonra rc=0 ve 460/460 gösteriyor; GBA10 ile eşzamanlı bağlama ve GBA7b ile alan ezmeme eklenmiş. Yedi yeşil mutasyon kaydı ilgili bozuklukları yakalıyor; özellikle kilitsiz ve tam geri yazma mutantları önceki B1/B2 kusurlarının kapandığını destekliyor. Buna karşılık seçici geri almanın kayıt aidiyeti için ayrı ölçüm veya mutant bulunmuyor."
+  }
+}

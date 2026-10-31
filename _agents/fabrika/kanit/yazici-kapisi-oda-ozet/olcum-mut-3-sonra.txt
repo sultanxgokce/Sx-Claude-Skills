@@ -1,0 +1,15 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kapi-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-mutant.sh 3
+# rc=1 sure=1.4s zaman=2026-10-31T22:46:23+03:00
+--- stdout ---
+  ✓ E1 ekle: oda verilmedi, koltuk da yok → agentic-os yazılır ve söylenir
+  ✓ E2 ekle: koltuğun ekip kaydındaki odası kullanılır
+  ✓ E3 ekle: açık --oda her şeyden önce
+  ✗ E4 ekle: 80 harflik özet rc 2, deftere HİÇ gidilmez
+  ✓ A1 ac: oda verilmedi → agentic-os
+  ✗ A2 ac: 80 harflik özet rc 2
+  ✓ B1 bulgu: oda verilmedi → agentic-os
+  ✗ Z1 ozet tashih: 80 harf rc 2, deftere gidilmez
+  ✓ Z2 ozet tashih: 79 harf geçer
+yazici-kapisi.test: 6 geçti · 3 kaldı
+--- stderr ---
