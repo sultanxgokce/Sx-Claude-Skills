@@ -1,7 +1,7 @@
 {
   "is": "kart-gorev-atanan-koru",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T21:00:57+03:00",
+  "guncelleme": "2026-10-31T21:21:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -201,7 +201,24 @@
       "sure_sn": 155.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "45b346bbe12a48a194f32ea0c53d991d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kurulu-kopya",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kurulu-kopya-sonra.txt",
+      "sha256": "a914ad2aac4259598969326b7c61629c6d100141d9e1cc6765e8dc91f1acc95b",
+      "komut": [
+        "bash",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T21:21:06+03:00",
+      "sure_sn": 258.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cd7aee13945d468d8329af38c0540e89"
     }
   ],
-  "imza": "9a5379c2fc417a1fa807078f78122891ddf31623abe89366809e9e149ad6039c"
+  "imza": "ce2c6bc4aac912a2bcc7c05d41da4e0e2460b5e8c77f2ad596d9fd51bb9e94ec"
 }
