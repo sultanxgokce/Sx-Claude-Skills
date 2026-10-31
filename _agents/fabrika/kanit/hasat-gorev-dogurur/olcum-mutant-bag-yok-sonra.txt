@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh bag-yok
+# rc=1 sure=11.2s zaman=2026-10-31T03:00:12+03:00
+--- stdout ---
+MUTASYON: bag-yok
+  ✗ A1d bağ havuz kaydının doğan görevler alanına yazıldı (gorev.sh dogan havuz yeni) — beklenen=dogan gorev_A2 gorev_NEW1 gerçek=
+  ✗ E4 bağ yazılamazsa rc 1 ve doğan görev GERİ ALINIR (gorev.sh durum <yeni> iptal) — yetim kalmaz — beklenen=1:durum gorev_NEW1 iptal gerçek=0:
+  ✗ E4b çıktı geri alındığını söyler, havuz kaydının yerinde olduğunu bildirir — 'GERİ ALINDI (iptal); havuz kaydı gorev_A2 yerinde' yok: 
+  ✗ E4c geri alma da reddedilirse rc 1 ve yetim ELLE tamamlanmak üzere söylenir (sessiz yetim yok) — beklenen=1:1 gerçek=0:0
+sonuç: 99 geçti · 4 kaldı
+sınav rc=1 (≠0 = mutant YAKALANDI)
+--- stderr ---

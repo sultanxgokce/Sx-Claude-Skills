@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hd-sonra.sh
+# rc=0 sure=44.7s zaman=2026-10-31T02:59:57+03:00
+--- stdout ---
+hedef: Sx iş alanı dalı 89e5c42fd753d7b5d20e9918b69b27916f848f6d (yeni hasat.sh, yeni sınav)
+sonuç: 103 geçti · 0 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-hasat-gorev-dogurur-sinav-sonucu 40 sn bekledi (yuva 1, load1 9.50)

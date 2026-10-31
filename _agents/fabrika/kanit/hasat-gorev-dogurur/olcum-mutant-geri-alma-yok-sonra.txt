@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh geri-alma-yok
+# rc=1 sure=11.9s zaman=2026-10-31T03:01:33+03:00
+--- stdout ---
+MUTASYON: geri-alma-yok
+  ✗ E3 kimlik çıktıdan okunamasa da liste farkından TEK yeni kayıt bulunur ve GERİ ALINIR; bağ yazılmaz — beklenen=1:yok:durum gorev_NEW1 iptal gerçek=1:yok:
+  ✗ E4 bağ yazılamazsa rc 1 ve doğan görev GERİ ALINIR (gorev.sh durum <yeni> iptal) — yetim kalmaz — beklenen=1:durum gorev_NEW1 iptal gerçek=1:
+  ✗ E4c geri alma da reddedilirse rc 1 ve yetim ELLE tamamlanmak üzere söylenir (sessiz yetim yok) — beklenen=1:1 gerçek=1:0
+  ✗ A6 açılış adımı yazılamazsa rc 1, bağ yazılmaz, doğan görev geri alınır — beklenen=1:yok:durum gorev_NEW1 iptal gerçek=1:yok:
+sonuç: 99 geçti · 4 kaldı
+sınav rc=1 (≠0 = mutant YAKALANDI)
+--- stderr ---
