@@ -467,7 +467,9 @@ class H(http.server.BaseHTTPRequestHandler):
             if "yaris" in d: d=d["yaris"]; json.dump(d,open(kf,"w"))   # yarış: görev GET ile PATCH arasında değişti (Sultan onaya aldı)
             if "surum" in b and b["surum"]!=d["kayit"].get("surum"):
                 self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi"}).encode()); return
-        if self.path.endswith("gorev_KARTRED000000001"):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
+        if self.path.endswith("gorev_KARTRED000000003"):   # yarış: ret anında kartı başka bir komut değiştirmiş olsun (geri alma bunu ezmemeli)
+            y=open(os.path.join(T,"yaris-kart")).read().strip(); k=json.load(open(y)); k["eszamanli"]="evet"; k.setdefault("gecmis",[]).append({"olay":"gorev-bagla","gorev":"gorev_KARTRED000000003","eski":"evet"}); k.setdefault("gorev_yazimlari",[]).append({"olay":"ac","sonuc":"baska komut"}); json.dump(k,open(y,"w"),ensure_ascii=False,indent=2)
+        if self.path.endswith(("gorev_KARTRED000000001","gorev_KARTRED000000002","gorev_KARTRED000000003")):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
             self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi","yerine":"görev bu arada değişti, yeniden dene"},ensure_ascii=False).encode()); return
         self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"kayit":{"id":self.path.rsplit("/",1)[1]}}).encode())
 with socketserver.TCPServer(("127.0.0.1",0),H) as s:
@@ -529,6 +531,27 @@ N0=$(yz); O="$(bash "$KT" ac gb-5 --is "bağsız iş" --istedi SERDAR --aldi BAN
 O="$(bash "$KT" bitti gb-5 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ]; g $? "G7b bağsız kartın bitti'si de deftere gitmez"
 echo "════ T14a · 0.27.34 (…QFS1RR): tetiksiz (yalıtılmış) kutuda sınıflı kart — başlama izni bağlı görev üzerinden ════"
 SNP="--istedi Sultan --aldi DYSINAV --geri-alinamaz h --para e --dis-yuzey h --yetki h"; YOKT="$T/yok-boyle-tetik.sh"
+# GB: açık karta sonradan görev bağı (kart.sh gorev-bagla · bulgu …K1692)
+bash "$KT" ac gba-1 --is "bağsız açılan iş" --istedi SERDAR --aldi GBASINAV $SINIF >/dev/null 2>&1
+N0=$(yz); O="$(bash "$KT" gorev-bagla gba-1 --reis GBASINAV --gorev gorev_KARTTEST00000021 --tahmin 30 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(yz)" -gt "$N0" ] && python3 -c "import json;k=json.load(open('$KK/gba-1.json'));assert k['gorev']=='gorev_KARTTEST00000021' and k['tahmin_dk']==30 and k['gorev_yazimlari'][-1]['olay']=='ac' and any(x.get('olay')=='gorev-bagla' for x in k['gecmis'])"; g $? "GBA1 bağsız açık kart sonradan göreve bağlanır, deftere çalışılıyor yazılır"
+bash "$KT" gorev-bagla gba-1 --reis GBASINAV --gorev gorev_KARTTEST00000022 --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && python3 -c "import json;assert json.load(open('$KK/gba-1.json'))['gorev']=='gorev_KARTTEST00000021'"; g $? "GBA2 zaten bağlı kartın bağı değişmez (rc 1)"
+bash "$KT" ac gba-2 --is "ikinci bağsız iş" --istedi SERDAR --aldi GBASINAV $SINIF >/dev/null 2>&1
+bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTTEST00000021 --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && python3 -c "import json;assert not json.load(open('$KK/gba-2.json')).get('gorev')"; g $? "GBA3 başka açık karta bağlı görev reddedilir"
+bash "$KT" gorev-bagla gba-2 --reis SERDAR --gorev gorev_KARTTEST00000023 --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && python3 -c "import json;assert not json.load(open('$KK/gba-2.json')).get('gorev')"; g $? "GBA4 kartın sahibi olmayan bağlayamaz"
+bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTTEST00000023 --tahmin yok >/dev/null 2>&1; [ $? -eq 1 ]; g $? "GBA5 tahmin sayı değilse rc 1"
+bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev bozuk --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "GBA6 görev kimliği biçimsizse rc 1"
+K0="$(cat "$KK/gba-2.json")"; bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTRED000000002 --tahmin 30 >/dev/null 2>&1; [ $? -eq 4 ] && [ "$(cat "$KK/gba-2.json")" = "$K0" ]; g $? "GBA7 defter reddederse bağ geri alınır, kart bayt bayt eski hâlinde (rc 4)"
+printf '%s\n' "$KK/gba-2.json" > "$T/yaris-kart"; bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTRED000000003 --tahmin 30 >/dev/null 2>&1; [ $? -eq 4 ] && python3 -c "import json;k=json.load(open('$KK/gba-2.json'));assert k.get('eszamanli')=='evet' and not k.get('gorev') and [x.get('eski') for x in k['gecmis'] if x.get('olay')=='gorev-bagla']==['evet'] and [x['sonuc'] for x in k['gorev_yazimlari'] if x.get('olay')=='ac' and 'yazılamadı' not in x['sonuc']]==['baska komut'] and not any('yazılamadı' in x['sonuc'] and x.get('kimlik') for x in k['gorev_yazimlari'])"; g $? "GBA7b geri alma arada işlenen alanı ve yabancı kayıtları ezmez, yalnız bu çağrının kayıtlarını söker"
+for i in 1 2 3 4 5 6 7 8; do bash "$KT" ac gbr-$i --is "yarış işi $i" --istedi SERDAR --aldi GBASINAV $SINIF >/dev/null 2>&1; done
+for i in 1 2 3 4 5 6 7 8; do bash "$KT" gorev-bagla gbr-$i --reis GBASINAV --gorev gorev_KARTTEST00000026 --tahmin 30 >/dev/null 2>&1 & done; wait $(jobs -p | grep -v "^$DSRV$")
+[ "$(grep -l '"gorev": "gorev_KARTTEST00000026"' "$KK"/gbr-*.json | wc -l)" -eq 1 ]; g $? "GBA10 sekiz eşzamanlı bağlamada görev yalnız bir karta yazılır"
+python3 - "$KK/gba-2.json" <<'PY'
+import json,sys
+k=json.load(open(sys.argv[1])); k["durum"]="bitti"; json.dump(k,open(sys.argv[1],"w"),ensure_ascii=False)
+PY
+bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTTEST00000024 --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && python3 -c "import json;assert not json.load(open('$KK/gba-2.json')).get('gorev')"; g $? "GBA8 biten karta görev bağlanmaz"
+bash "$KT" gorev-bagla gba-yok --reis GBASINAV --gorev gorev_KARTTEST00000025 --tahmin 30 >/dev/null 2>&1; [ $? -eq 3 ]; g $? "GBA9 kart yoksa rc 3"
 N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" bash "$KT" ac dy-1 --is "tetiksiz kutuda sınıflı iş" $SNP --gorev gorev_KARTTEST00000011 --tahmin 40 2>&1)"; RC=$?
 python3 - "$T/yazim.jsonl" "$KK/dy-1.json" "$N0" <<'PY2'; g $? "D1 tetik yok + --gorev → kart AÇILIR, göreve TEK açılış yazımı: çalışılıyor + adımda 'sınıf: para' ve 'başlama izni Sultan'da … dur'"
 import json,sys
