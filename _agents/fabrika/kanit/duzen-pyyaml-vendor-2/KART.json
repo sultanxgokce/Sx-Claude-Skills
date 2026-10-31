@@ -1,0 +1,25 @@
+{
+  "is": "duzen-pyyaml-vendor-2",
+  "cumle": "duzen paketi saf Python PyYAML vendor taşır (ekipc PyYAML'sız kutuda çalışır), parite P8 ve SKILL 1.6.1; yalnız vendor kodu, sınavlar ve catalog.json'daki duzen satırı, tek commit",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-01T02:16:44+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
