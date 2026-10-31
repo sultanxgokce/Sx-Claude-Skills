@@ -1,5 +1,5 @@
 $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark/yazilim-fabrikasi/scripts && bash birlestirme-kapisi-olculen-commit.test.sh
-# rc=0 sure=59.8s zaman=2026-11-01T00:59:03+03:00
+# rc=0 sure=44.5s zaman=2026-11-01T01:03:39+03:00
 --- stdout ---
 ════ O1 · bas = birleşen uç → GEÇER ════
   ✓ rc=0 (bas = uç)
@@ -23,6 +23,8 @@ $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark/yazilim-f
   ✓ O14 · aynı kurulum + PR'a puandan sonra kod girdi → rc=1, uygulama.sh adıyla
 ════ O15 · AYNI +/- satırları puandan sonra BAŞKA DOSYAYA taşındı (göz #634 tur 1) → dosya adı karşılaştırılır, ENGELLER ════
   ✓ O15 · aynı +/- satırı başka dosyaya taşındı → rc=1 (eski ölçü bunu geçirirdi)
+════ O16 · AYNI dosyada AYNI +/- satırları puandan sonra BAŞKA KONUMA taşındı (göz #634 tur 2) → bağlam satırları karşılaştırılır, ENGELLER ════
+  ✓ O16 · aynı +/- satırı aynı dosyada başka konuma taşındı → rc=1 (-U0 ölçüsü bunu geçirirdi)
 ════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değil geçti de değil ════
   ✓ rc=3
   ✓ sebep yazıldı
@@ -37,6 +39,5 @@ $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark/yazilim-f
   ✓ O11 · PR başına puandan sonra kod girdi → rc=1, dosya adıyla
 ════ O12 · KANIT kaydı uçun soyundan OLMAYAN commit'te ölçülmüş → engellemez, söylenir ════
   ✓ yabancı commit'te ölçülmüş kayıt adıyla uyarıldı, engellenmedi
-── SONUÇ: 23 geçti · 0 kaldı ──
+── SONUÇ: 24 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-kapi-pr-duzeyi-fark-kapi-tam 15 sn bekledi (yuva 2, load1 16.75)

@@ -80,6 +80,13 @@ B="$(bas_al)"; den "$B"
 ( cd "$T" && git checkout -q main && printf 'x\n' > yan.txt && git add -A && git commit -q -m "chore: baskasinin isi" && git checkout -q is-dal && git merge -q --no-edit main && printf 'a\nb\nc\n' > liste.txt && printf 'A\nb\nc\n' > ikinci.txt && git add -A && git commit -q -m "fix: ayni degisiklik baska dosyada" ) >/dev/null 2>&1
 C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C"; g $? "O15 · aynı +/- satırı başka dosyaya taşındı → rc=1 (eski ölçü bunu geçirirdi)"
 
+echo "════ O16 · AYNI dosyada AYNI +/- satırları puandan sonra BAŞKA KONUMA taşındı (göz #634 tur 2) → bağlam satırları karşılaştırılır, ENGELLER ════"
+kur
+( cd "$T" && printf 'p\na\nq\nr\na\ns\n' > liste.txt && git add -A && git commit -q -m "chore: liste" && git checkout -q -b is-dal && printf 'p\nA\nq\nr\na\ns\n' > liste.txt && git add -A && git commit -q -m "feat: pr degisikligi" ) >/dev/null 2>&1
+B="$(bas_al)"; den "$B"
+( cd "$T" && git checkout -q main && printf 'x\n' > yan.txt && git add -A && git commit -q -m "chore: baskasinin isi" && git checkout -q is-dal && git merge -q --no-edit main && printf 'p\na\nq\nr\nA\ns\n' > liste.txt && git add -A && git commit -q -m "fix: ayni degisiklik baska konumda" ) >/dev/null 2>&1
+C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C"; g $? "O16 · aynı +/- satırı aynı dosyada başka konuma taşındı → rc=1 (-U0 ölçüsü bunu geçirirdi)"
+
 echo "════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değil geçti de değil ════"
 kur; den "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"; C="$(kapi)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "rc=3"; grep -q "bu depoda yok" <<<"$C"; g $? "sebep yazıldı"

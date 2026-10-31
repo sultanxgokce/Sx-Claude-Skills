@@ -386,10 +386,10 @@ PYK
       oc_degisen="$oc_degisen $f"
     done <<< "$oc_fark"
     #   PR DÜZEYİNDE KARŞILAŞTIRMA (SERDAR 1 Kas, Sx #629): puandan sonra ANA DAL dalı birleşince başka işin dosyası (catalog.json gibi)
-    #   iki uç arasında "değişen kod" görünüyordu. Ölçü artık PR'ın ana dala göre KENDİ farkıdır (üç nokta, -U0; dosya adı başlıkları + +/- satırları; satır numaraları ANA DAL kaymasından etkilendiği için karşılaştırılmaz — aynı dosyada yer değiştirme bu ölçüyle ayırt edilemez):
+    #   iki uç arasında "değişen kod" görünüyordu. Ölçü artık PR'ın ana dala göre KENDİ farkıdır (üç nokta, -U1; dosya adı başlıkları + bağlam ve +/- satırları; @@ satır numaraları ANA DAL kaymasından etkilendiği için karşılaştırılmaz, yer değiştirme bağlam satırlarından anlaşılır):
     #   puanlı başın farkı ile uçun farkı aynıysa PR'ın kodu değişmemiştir, arada yalnız ana dal girmiştir.
     if [ -n "$oc_degisen" ] && [ "${oc_atla:-0}" -eq 0 ] && [ -n "$oc_ana" ]; then
-      oc_pf() { git -C "$oc_agac" diff -U0 --no-renames "$oc_ana...$1" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null | grep -E '^([+-]|diff --git )' | grep -vE '^(\+\+\+|---) '; return "${PIPESTATUS[0]}"; }
+      oc_pf() { git -C "$oc_agac" diff -U1 --no-renames "$oc_ana...$1" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null | grep -E '^([ +-]|diff --git )' | grep -vE '^(\+\+\+|---) '; return "${PIPESTATUS[0]}"; }
       oc_pb="$(oc_pf "$oc_bas")"; oc_r1=$?; oc_pu="$(oc_pf "$oc_uc")"; oc_r2=$?
       if [ "$oc_r1" -eq 0 ] && [ "$oc_r2" -eq 0 ] && [ "$oc_pb" = "$oc_pu" ]; then
         _y "  ✓ puan ${oc_bas:0:8} için verilmiş; birleşen uç ${oc_uc:0:8}: PR'ın ana dala göre farkı aynı (arada yalnız ana dal birleşmiş:${oc_degisen:0:160})"; oc_degisen=""; oc_ana_kapali=1
