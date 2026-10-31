@@ -1,0 +1,7 @@
+$ node /config/projects/_wt/Sx-Claude-Skills-kapi-koltuk-onbellek/terminal-onar/kapi/koltuk-gecikme.olcum.mjs /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/taban/terminal-onar/kapi
+# rc=1 sure=250.4s zaman=2026-10-31T19:10:48+03:00
+--- stdout ---
+bekçi isteği 1517 ms (kod 200) · 61 sn sonra Sultan isteği 1509 ms (kod 200) · eşik 500 ms
+  ✗ ikinci istek betiği bekledi
+--- stderr ---
+⏳ agir-sira: kanit-kapi-koltuk-onbellek-gecikme 186 sn bekledi (yuva 1, load1 17.50)

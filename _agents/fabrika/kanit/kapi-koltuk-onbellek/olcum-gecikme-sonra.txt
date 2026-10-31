@@ -1,0 +1,7 @@
+$ node terminal-onar/kapi/koltuk-gecikme.olcum.mjs
+# rc=0 sure=133.0s zaman=2026-10-31T19:13:01+03:00
+--- stdout ---
+bekçi isteği 1514 ms (kod 200) · 61 sn sonra Sultan isteği 7 ms (kod 200) · eşik 500 ms
+  ✓ ikinci istek betiği beklemedi
+--- stderr ---
+⏳ agir-sira: kanit-kapi-koltuk-onbellek-gecikme 70 sn bekledi (yuva 1, load1 17.10)

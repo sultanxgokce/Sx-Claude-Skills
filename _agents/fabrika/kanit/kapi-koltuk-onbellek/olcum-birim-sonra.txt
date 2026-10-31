@@ -1,0 +1,5 @@
+$ node terminal-onar/kapi/koltuk-onbellek.test.mjs
+# rc=0 sure=0.1s zaman=2026-10-31T19:03:29+03:00
+--- stdout ---
+10 geçti · 0 kaldı
+--- stderr ---

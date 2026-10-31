@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-gecikme-* ===
+$ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/m7/terminal-onar/kapi/koltuk-gecikme.olcum.mjs
+# rc=1 sure=64.3s zaman=2026-10-31T19:06:37+03:00
+--- stdout ---
+bekçi isteği 1511 ms (kod 200) · 61 sn sonra Sultan isteği 1511 ms (kod 200) · eşik 500 ms
+  ✗ ikinci istek betiği bekledi
+--- stderr ---
