@@ -1,0 +1,34 @@
+{
+  "is": "alarm-whatsapp",
+  "cumle": "Sultan alarmının telefon kanalı WhatsApp olsun; gitti kaydı yalnız WhatsApp ulaşınca yazılsın",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-31T15:09:12+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M68W2HXAAPRW5AJXAJY684SF",
+  "tahmin_dk": 40,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T15:09:12+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

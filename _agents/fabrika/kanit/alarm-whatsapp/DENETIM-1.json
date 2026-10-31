@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "alarm-whatsapp",
+  "pr": "614",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T15:11:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-alarm-whatsapp",
+  "dal": "alarm-whatsapp",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19830,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7926
+  },
+  "dalgic": "uyumlu",
+  "bas": "2f92c350007469fd8b4df317ef2c7afeb211e21f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Alarmın başarı kaydı WhatsApp geçidinin dönüşüne bağlanmış ve gerçek ölçümde 53 sınavın tamamı geçmiştir. Ancak telefon kanalı WhatsApp'a çevrilmek yerine ntfy gönderimi korunup WhatsApp'tan önce çalıştırılmış; bu, tekil kanal talebini karşılamıyor ve WhatsApp alarmını ntfy gecikmesine bağlıyor.",
+    "bulgular": [
+      {
+        "ne": "Telefon kanalı yalnız WhatsApp yapılmamış; her --telefon çağrısında ntfy'ye de bildirim gönderiliyor.",
+        "kanit": "Üretim farkında önce CURL ile $NTFY adresine gönderim yapılıyor, ardından bash \"$WA\" \"$M\" çağrılıyor; SKILL.md ve catalog açıklamaları da ntfy'yi 'ikincil' olarak koruduğunu açıkça söylüyor. İş kartı ise telefon kanalının WhatsApp olmasını istiyor.",
+        "konum": "sultan-alarmi/scripts/alarm.sh:69-72; sultan-alarmi/SKILL.md:33; catalog.json:1258",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "WhatsApp gönderimi, artık başarı ölçütü olmayan ntfy isteğinin tamamlanmasını bekliyor; ntfy yavaşsa alarm WhatsApp'a sekiz saniyeye kadar geç ulaşabilir.",
+        "kanit": "$CURL çağrısında '-m 8' bulunuyor ve bu çağrı bash \"$WA\" satırından önce eşzamanlı yürütülüyor. Sonraki testler ntfy 500 durumunu kapsıyor fakat ntfy zaman aşımında WhatsApp'a gecikmesiz geçişi ölçmüyor.",
+        "konum": "sultan-alarmi/scripts/alarm.sh:69-72; sultan-alarmi/scripts/alarm.test.sh:G7c-G7d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm yeşil olarak 53 geçti, 0 kaldı sonucunu veriyor. Önce kaydı yalnız satır sayımı yapıyor, sonra kaydı davranış sınavı çalıştırıyor; mutasyon kaydı sınavın bozuk kodu yakaladığını gösterse de mutasyonun ilgisiz D1 sınavını da düşürmesi mutasyonun temiz yalıtılmadığını gösteriyor. WhatsApp geçidinin gerçek dış yüzeyde teslimatı ölçülmemiş, fakat iş kartı canlı doğrulama istemediğinden bu durum kod puanını düşürmedi."
+  }
+}
