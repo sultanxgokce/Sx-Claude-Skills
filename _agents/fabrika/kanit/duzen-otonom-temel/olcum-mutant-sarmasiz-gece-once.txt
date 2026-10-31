@@ -1,0 +1,20 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-gece-* ===
+$ env GECE_BETIK=/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/duzen-gece-sarmasiz.sh bash duzen/scripts/duzen-gece.test.sh
+# rc=1 sure=21.0s zaman=2026-10-31T07:59:55+03:00
+--- stdout ---
+  ✓ G1 varsayılan KURU: komut çalışmaz, günlük yazılmaz
+  ✗ G2 --uygula: dört beceri kurulur, bayat kimlik yenilenir, reise mektup gider → rc=0
+  ✓ G3 her şey güncel: komut yok, mektup yok, rc 0
+  ✓ G4 sync reddeder: atlandi + rc 1, 'kuruldu' yazılmaz
+  ✓ G5 reis yok: mektup tahminle yollanmaz (atlandi), rc 1
+  ✓ G9 iki kutu reisi: her birine AYRI mektup satırı (kutu+reis), rc 0
+  ✓ G10 yalnız duzen sürümü eski: düzen artınca dördü de kurulur, mektup kurulan adları sayar
+  ✓ G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ
+  ✗ G7 temeli bilinmeyen bayat kimlik: yenile çağrılmaz (atlandi), rc 1 → rc=0
+  ✗ G11 bayat otonom kimlik: yenile --baz otonom-ajan ile çağrılır, günlükte temel=otonom-ajan → rc=0
+  ✗ G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: kurulum + yenileme + mektup satırları tamam → rc=2 /tmp/tmp.iIqPGNkkKZ/paket12/scripts/duzen-gece.sh: line 61: syntax error near unexpected token `('
+/tmp/tmp.iIqPGNkkKZ/paket12/scripts/duzen-gece.sh: line 61: `ŞÜçğıöşü-]/}"; [ "$UYGULA" -eq 1 ] || echo "KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)"'
+  ✓ G8 hiçbir komuta --force geçmez
+== 8 geçti · 4 düştü ==
+--- stderr ---
+⏳ agir-sira: kanit-duzen-otonom-temel-mutant-sarmasiz-gece 20 sn bekledi (yuva 1, load1 17.66)

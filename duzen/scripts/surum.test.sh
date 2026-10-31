@@ -16,6 +16,7 @@ P="$T/paket"; mkdir -p "$P/scripts" "$P/cekirdek"; cp "$R" "$P/scripts/surum.sh"
 printf -- '---\nname: duzen\nversion: 1.2.3\n---\n' > "$P/SKILL.md"
 printf '<!-- kaynak: Sx duzen/cekirdek · Nexus kopyası bu dosyayı okur -->\n# ORTAK-TEMEL manuel\nsatır bir\nsatır iki\n' > "$P/cekirdek/manuel-claude-base.md"
 printf '<!-- kaynak: Sx duzen/cekirdek · Nexus kopyası bu dosyayı okur -->\n# ORTAK-TEMEL müdür\nmüdür satırı\n' > "$P/cekirdek/mudur-base.md"
+printf '<!-- kaynak: Sx duzen/cekirdek · Nexus kopyası bu dosyayı okur -->\n# ORTAK-TEMEL otonom\notonom satırı\n' > "$P/cekirdek/otonom-ajan-base.md"
 S="bash $P/scripts/surum.sh"
 
 kimlik() {  # kimlik <dizin> <gövde-metni> [hash|bozuk]
@@ -27,10 +28,12 @@ kimlik() {  # kimlik <dizin> <gövde-metni> [hash|bozuk]
 D1="$T/depo1"; kimlik "$D1/_agents/bani" "$(printf '# ORTAK-TEMEL manuel\nsatır bir\nsatır iki\n\n## KİŞİ\nBÂNİ')"
 mkdir -p "$D1/_agents/isaretsiz"; printf '# serbest kimlik\n' > "$D1/_agents/isaretsiz/AGENT.md"
 D2="$T/depo2"; kimlik "$D2/_agents/bani" "$(printf '# ORTAK-TEMEL manuel (kaynak: _agents/ekip-os-base/manuel-claude-base.md)\nsatır bir\nESKİ satır\n')"
+D4="$T/depo4"; kimlik "$D4/_agents/ares" "$(printf '# ORTAK-TEMEL otonom\notonom satırı\n\n## KİŞİ\nARES')"
+D5="$T/depo5"; kimlik "$D5/_agents/ares" "$(printf '# ORTAK-TEMEL otonom (kaynak: _agents/ekip-os-base/otonom-ajan-base.md)\nESKİ otonom satırı\n')"
 D3="$T/depo3"; kimlik "$D3/_agents/bani" "$(printf '# ORTAK-TEMEL manuel\nsatır bir\nsatır iki\n')" bozuk
 K1="$T/kurulu-esit/duzen"; mkdir -p "$K1"; printf -- '---\nname: duzen\nversion: 1.2.3\n---\n' > "$K1/SKILL.md"
 K2="$T/kurulu-eski/duzen"; mkdir -p "$K2"; printf -- '---\nname: duzen\nversion: 1.0.0\n---\n' > "$K2/SKILL.md"
-ONCE="$(find "$T/depo1" "$T/depo2" "$T/depo3" "$P" -type f -exec md5sum {} + | sort)"
+ONCE="$(find "$T/depo1" "$T/depo2" "$T/depo3" "$T/depo4" "$T/depo5" "$P" -type f -exec md5sum {} + | sort)"
 
 O="$($S goster)"; ok "S1 goster → 1.2.3" "$([ "$O" = 1.2.3 ] && echo 0 || echo 1)" "→ $O"
 O="$($S denetle --depo "$T/bos" --kurulu "$K1")"; rc=$?; ok "S2 kurulu sürüm eşit → GÜNCEL rc 0" "$([ $rc -eq 0 ] && grep -q 'GÜNCEL' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc"
@@ -40,7 +43,9 @@ O="$($S denetle --depo "$D2" --kurulu /yok)"; rc=$?; ok "S5 gömülü metin çek
 O="$($S denetle --depo "$D3" --kurulu /yok)"; rc=$?; ok "S6 hash gövdeyle tutmuyor → EL-DEĞMİŞ rc 1" "$([ $rc -eq 1 ] && grep -q 'bani: EL-DEĞMİŞ' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc"
 O="$($S denetle --depo "$T/bos" --kurulu /yok 2>&1)"; rc=$?; ok "S7 ne kurulu ne işaretli kimlik → rc 3 ÖLÇÜLEMEDİ" "$([ $rc -eq 3 ] && grep -q 'ÖLÇÜLEMEDİ' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc"
 $S denetle --depo "$D1" --uygula >/dev/null 2>&1; rc=$?; ok "S8 --uygula yok: rc 2 (1.0.0 yalnız raporlar)" "$([ $rc -eq 2 ] && echo 0 || echo 1)" "→ rc=$rc"
-SONRA="$(find "$T/depo1" "$T/depo2" "$T/depo3" "$P" -type f -exec md5sum {} + | sort)"
+O="$($S denetle --depo "$D4" --kurulu /yok)"; rc=$?; ok "S10 otonom çekirdek birebir gömülü → ares GÜNCEL rc 0 (otonom-ajan-base adı yazılı)" "$([ $rc -eq 0 ] && grep -q 'ares: GÜNCEL (otonom-ajan-base' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc $O"
+O="$($S denetle --depo "$D5" --kurulu /yok)"; rc=$?; ok "S11 otonom gömülü metin sapmış → ares BAYAT rc 1 (temel: otonom-ajan-base yazılı)" "$([ $rc -eq 1 ] && grep -q 'ares: BAYAT' <<<"$O" && grep -q 'temel: otonom-ajan-base' <<<"$O" && echo 0 || echo 1)" "→ rc=$rc $O"
+SONRA="$(find "$T/depo1" "$T/depo2" "$T/depo3" "$T/depo4" "$T/depo5" "$P" -type f -exec md5sum {} + | sort)"
 ok "S9 hiçbir dosyaya yazmadı (md5 kümesi aynı)" "$([ "$ONCE" = "$SONRA" ] && echo 0 || echo 1)"
 
 if [ -z "${SURUM_BETIK:-}" ]; then
@@ -51,5 +56,6 @@ PY
     local o; o="$(SURUM_BETIK="$M" bash "$0" 2>&1)"; ok "mutant '$1' → $4 kırmızı" "$(grep -q "✗ $4 " <<<"$o" && echo 0 || echo 1)" "→ $(grep -E '✗' <<<"$o" | head -2)"; }
   mut bayat-guncel-sayilir 'temeller[a] and temeller[a] in g' 'temeller[a]' S5
   mut hash-bakmaz '.hexdigest()!=stored' '.hexdigest()!=stored and False' S6
+  mut otonom-temeli-tanimaz '("manuel-claude-base","mudur-base","otonom-ajan-base")' '("manuel-claude-base","mudur-base")' S10
 fi
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]

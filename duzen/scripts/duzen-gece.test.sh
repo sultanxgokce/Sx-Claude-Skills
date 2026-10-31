@@ -3,8 +3,8 @@
 # G1 varsayılan KURU: hiçbir komut çalışmaz, günlük yazılmaz · G2 --uygula + kurulu eski: dört beceri kurulur (kuruldu satırları onceki/kutu/reis),
 # bayat kimlik yenilenir (yenilendi satırı), reise mektup gider · G3 her şey güncel: hiçbir komut çalışmaz, mektup YOK, rc 0
 # G4 sync reddederse atlandi satırı + rc 1 + "kuruldu" yazılmaz · G5 reis yoksa mektup tahminle yollanmaz (atlandi, rc 1)
-# G6 kaynak sürüm okunamazsa rc 3 ÖLÇÜLEMEDİ · G7 bayat kimliğin temeli bilinmiyorsa yenile ÇAĞRILMAZ (atlandi) · G8 --force hiçbir komuta geçmez · G9 iki kutu reisine ayrı mektup · G10 düzen sürümü tetik (dördü de kurulur)
-# mutant: kurulu=kaynak iken kurmaya kalkan kopya G3 kırmızı · reis yokken de mektup yollayan kopya G5 kırmızı · --force geçiren kopya G8 kırmızı
+# G6 kaynak sürüm okunamazsa rc 3 ÖLÇÜLEMEDİ · G7 bayat kimliğin temeli bilinmiyorsa yenile ÇAĞRILMAZ (atlandi) · G8 --force hiçbir komuta geçmez · G9 iki kutu reisine ayrı mektup · G10 düzen sürümü tetik (dördü de kurulur) · G11 bayat otonom kimlik --baz otonom-ajan ile yenilenir · G12 kurulum betiği yerinde değişse de çalışan kopya kayık okumaz
+# mutant: kurulu=kaynak iken kurmaya kalkan kopya G3 kırmızı · reis yokken de mektup yollayan kopya G5 kırmızı · --force geçiren kopya G8 kırmızı · otonom temelini tanımayan kopya G11 kırmızı
 set -uo pipefail
 export LC_ALL=C.UTF-8
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="${GECE_BETIK:-$HERE/duzen-gece.sh}"
@@ -74,6 +74,25 @@ kimlik "$T/tembel" bani "$(printf '# ORTAK-TEMEL manuel\nsatır bir\nESKİ\n')"
 kurulu 1.2.0; O="$(kos --uygula --depo "$T/tembel" --reis SERDAR)"; rc=$?
 ok "G7 temeli bilinmeyen bayat kimlik: yenile çağrılmaz (atlandi), rc 1" "$([ $rc -eq 1 ] && [ "$(cagri yenile)" = 0 ] && grep -q 'atlandi beceri=kimlik:bani sebep=temel-bilinmiyor' "$T/g.log" && echo 0 || echo 1)" "→ rc=$rc"
 
+kimlik "$T/otonom" ares "$(printf '# ORTAK-TEMEL otonom (kaynak: _agents/ekip-os-base/otonom-ajan-base.md)\nESKİ otonom\n')"
+kurulu 1.2.0; O="$(kos --uygula --depo "$T/otonom" --reis SERDAR)"; rc=$?
+ok "G11 bayat otonom kimlik: yenile --baz otonom-ajan ile çağrılır, günlükte temel=otonom-ajan" "$([ $rc -eq 0 ] && [ "$(cagri yenile)" = 1 ] && grep -q -- '--baz otonom-ajan' "$KAYIT" && grep -q 'yenilendi kimlik=ares temel=otonom-ajan' "$T/g.log" && echo 0 || echo 1)" "→ rc=$rc"
+
+# G12 kurulum betiği YERİNDE değiştirir (sync-skills copyFileSync gibi): çalışan kopya kayık okumaz, 2. ve 3. adım yine koşar
+P12="$T/paket12"; mkdir -p "$P12"; cp -r "$HERE/../scripts" "$HERE/../cekirdek" "$P12/" 2>/dev/null; cp "$HERE/../SKILL.md" "$P12/" 2>/dev/null; cp "$R" "$P12/scripts/duzen-gece.sh"
+cat > "$T/sync12" <<'S'
+#!/usr/bin/env bash
+printf 'sync %s\n' "$*" >> "$KAYIT"
+python3 -I - "$P12_BETIK" <<'PY'
+import sys; p=sys.argv[1]; b=open(p,'rb').read(); i=b.index(b'\n')+1
+open(p,'r+b').write(b[:i]+b'# '+b'x'*300+b'\n'+b[i:])
+PY
+exit 0
+S
+kurulu 1.1.1; : > "$KAYIT"; rm -f "$T/g12.log"
+O="$(P12_BETIK="$P12/scripts/duzen-gece.sh" DUZEN_SYNC_CMD="bash $T/sync12" bash "$P12/scripts/duzen-gece.sh" --sx "$T/sx" --gunluk "$T/g12.log" --kutu code --uygula --depo "$T/bayat" --reis SERDAR 2>&1)"; rc=$?
+ok "G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: kurulum + yenileme + mektup satırları tamam" "$([ $rc -eq 0 ] && grep -q ' kuruldu ' "$T/g12.log" && grep -q 'yenilendi kimlik=bani' "$T/g12.log" && grep -q 'mektup reis=SERDAR' "$T/g12.log" && [ "$(wc -c < "$P12/scripts/duzen-gece.sh")" -gt "$(wc -c < "$R")" ] && echo 0 || echo 1)" "→ rc=$rc $(tail -2 <<<"$O")"
+
 kurulu 1.1.1; O="$(kos --uygula --depo "$T/bayat" --reis SERDAR)"
 ok "G8 hiçbir komuta --force geçmez" "$(! grep -q -- '--force' "$KAYIT" && echo 0 || echo 1)"
 
@@ -86,6 +105,7 @@ PY
   mut her-zaman-kur 'if [ "$ZORLA" -eq 1 ] || [ -z "$ku" ] || yeni_mi "$kv" "$ku"; then' 'if true; then' G3
   mut duzen-surumu-tetik-degil 'ZORLA=0; { [ -z "$dku" ] || yeni_mi "$dk" "$dku"; } && ZORLA=1' 'ZORLA=0' G10
   mut reissiz-mektup 'if [ -z "$REIS" ]; then yaz' 'if false; then yaz' G5
+  mut otonom-temel-bilinmez 'otonom-ajan) arg=(--baz otonom-ajan); t=otonom-ajan ;; ' '' G11
   mut force-gecir '--skill "$b" --apply' '--skill "$b" --apply --force' G8
 fi
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]

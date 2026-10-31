@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "duzen-otonom-temel",
+  "pr": "612",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T08:03:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-otonom-temel",
+  "dal": "duzen-otonom-temel",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37714,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 11581
+  },
+  "dalgic": "uyumsuz",
+  "bas": "63fba1c02dd465b6180c19cf66f6ec9c89f9434d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Uyum denetimi otonom-ajan temelini tanıyor, gece yenilemesi doğru bazla çalışıyor ve benimsenmiş yedi kimliğin BAYAT’tan GÜNCEL’e geçtiği ölçülmüş. Üretim davranışı güçlü sınav ve mutasyon kanıtlarıyla hazır; yalnız belge başlığındaki eski sürüm ifadesi küçük bir rötuş istiyor.",
+    "bulgular": [
+      {
+        "ne": "SKILL.md ana başlığı paket 1.5.0’a yükseltilmesine rağmen hâlâ 1.4.0 diyor.",
+        "kanit": "Ön bilgi ve catalog sürümü 1.5.0’a çıkarılmışken başlık satırı `# /duzen — filo düzen paketi (1.4.0 · iskelet + alt ajan istem üreticisi)` olarak değişmeden kalmış.",
+        "konum": "duzen/SKILL.md:6",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Yedi gerçek kimlikte kırmızı rc=1 öncesi ile yeşil rc=0 sonrası ölçüm çifti mevcut; sürüm sınavı 14/14, gece sınavı 17/17 geçiyor ve hedef davranışları S10-S11 ile G11-G12 doğrudan sınıyor. Mutasyon kayıtları bozuk kodun ilgili kapıları düşürdüğünü gösteriyor; mutant kaydındaki beklenen ✗ satırları gerçek kod bulgusu değildir. G6/S7 içindeki rc=3 senaryoları sınavın bilinçli ölçülemedi durumunu sınamasıdır ve teslim iddiasını desteklemek için kullanılmamıştır."
+  }
+}

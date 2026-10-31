@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.4.0
+version: 1.5.0
 ---
 
-# /duzen — filo düzen paketi (1.4.0 · iskelet + alt ajan istem üreticisi)
+# /duzen — filo düzen paketi (1.5.0 · iskelet + alt ajan istem üreticisi + otonom temel)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -62,6 +62,7 @@ bölgeye gömer (`<!-- ekipc:uretilen:basla surum= hash= -->` … `bitti`, altı
 |---|---|
 | `cekirdek/manuel-claude-base.md` | Sultan-eşli interaktif Claude personasının ORTAK-TEMEL'i (18 Nexus kimliğinde gömülü) |
 | `cekirdek/mudur-base.md` | Kutu reisi (MÜDÜR) temeli (SERDAR'da gömülü) |
+| `cekirdek/otonom-ajan-base.md` | Otonom ajan (ARES · FORGE · GÖZCÜ · HAFIZ · İRFAN · NEDİM · PUSULA) ortak temeli |
 | `cekirdek/durma-standardi.md` | Filo-ortak DUR kuralı: Ş2 fiili ∨ 6 eskalasyon sinyali ∨ kutu-🔴 |
 | `cekirdek/cevapsiz-birakma.md` | Gelen mesaj/zil cevapsız bırakılmaz kuralı |
 
@@ -100,6 +101,10 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.5.0** (31 Eki 2026, MİRAHUR · Kuzey G3.6): `surum.sh denetle` ve `duzen-gece.sh` `otonom-ajan` ortak temelini de tanır. `cekirdek/otonom-ajan-base.md` eklendi; gömülü temeli
+  birebir olan otonom kimlik GÜNCEL sayılır, sapmışsa BAYAT (temel adıyla) ve gece işi onu `ekipc yenile --baz otonom-ajan` ile yeniler (günlükte `temel=otonom-ajan`).
+  Öncesinde bu temel tanınmadığı için benimsenen otonom kimlikler her hafta sahte "bayat" bulgusu üretir, gece işi de "temel-bilinmiyor" diye atlardı. Ayrıca `duzen-gece.sh` gövdesi tek fonksiyona sarıldı: `sync-skills` bu dosyayı yerinde yeniden yazdığı için sarılmamış betik gece kurulumundan sonra kayık okur
+  (sınamada gerçek `syntax error`). Sınav: surum 14/14 (S10 S11 + mutant), gece 17/17 (G11 G12 + mutant).
 - **1.4.0** (31 Eki 2026, MİRAHUR · Kuzey G22 G3.3): `alt-ajan-istem.sh` her istem üretiminde `/config/.filo/alt-ajan-istem.jsonl`'e TEK satır yazar
   (zaman · slug · ad · oda · amir · kart · el_defteri_bayt · istem_bayt · istem_kimligi) ve aynı kimliği istem başlığına basar. İçerik/sır yazılmaz; kayıt
   yazılamazsa istem yine basılır, başlıkta ⚠ çıkar. Ölçüm: son 20 çağrının hepsinde el_defteri_bayt > 0. Sınav C1-C3 + mutant. Kayıt dosyasını ortam

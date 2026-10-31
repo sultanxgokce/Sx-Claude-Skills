@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/otonom-denetle.sh /config/.claude/skills/duzen/scripts/surum.sh
+# rc=1 sure=527.7s zaman=2026-10-31T07:55:54+03:00
+--- stdout ---
+  ares: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  forge: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  gozcu: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  hafiz: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  irfan: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  nedim: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  pusula: BAYAT (gövdedeki ORTAK-TEMEL çekirdekle birebir değil)
+  ekipc işaretli 45 · işaretsiz 0 (depo: /config/projects/_wt/Nexus-ekipc-otonom-yedi-benimse)
+SONUÇ: bayat/el-değmiş var (rc 1) — yazmadı, yalnız raporladı
+--- stderr ---
+⏳ agir-sira: kanit-duzen-otonom-temel-yedi-kimlik 528 sn bekledi (yuva 2, load1 17.87)

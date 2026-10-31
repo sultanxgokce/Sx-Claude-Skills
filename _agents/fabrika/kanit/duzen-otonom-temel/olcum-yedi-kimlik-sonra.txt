@@ -1,0 +1,13 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/otonom-denetle.sh /config/projects/_wt/Sx-Claude-Skills-duzen-otonom-temel/duzen/scripts/surum.sh
+# rc=0 sure=0.1s zaman=2026-10-31T07:55:54+03:00
+--- stdout ---
+  ares: GÜNCEL (otonom-ajan-base birebir gömülü)
+  forge: GÜNCEL (otonom-ajan-base birebir gömülü)
+  gozcu: GÜNCEL (otonom-ajan-base birebir gömülü)
+  hafiz: GÜNCEL (otonom-ajan-base birebir gömülü)
+  irfan: GÜNCEL (otonom-ajan-base birebir gömülü)
+  nedim: GÜNCEL (otonom-ajan-base birebir gömülü)
+  pusula: GÜNCEL (otonom-ajan-base birebir gömülü)
+  ekipc işaretli 45 · işaretsiz 0 (depo: /config/projects/_wt/Nexus-ekipc-otonom-yedi-benimse)
+SONUÇ: güncel
+--- stderr ---
