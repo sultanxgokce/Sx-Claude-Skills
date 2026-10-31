@@ -1,5 +1,5 @@
 $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=591.8s zaman=2026-10-31T22:37:28+03:00
+# rc=0 sure=284.6s zaman=2026-10-31T22:55:47+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -268,7 +268,7 @@ $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ GBA5 tahmin sayı değilse rc 1
   ✓ GBA6 görev kimliği biçimsizse rc 1
   ✓ GBA7 defter reddederse bağ geri alınır, kart bayt bayt eski hâlinde (rc 4)
-  ✓ GBA7b geri alma arada karta işlenen değişikliği ezmez, yalnız bağı söker
+  ✓ GBA7b geri alma arada işlenen alanı ve yabancı kayıtları ezmez, yalnız bu çağrının kayıtlarını söker
   ✓ GBA10 sekiz eşzamanlı bağlamada görev yalnız bir karta yazılır
   ✓ GBA8 biten karta görev bağlanmaz
   ✓ GBA9 kart yoksa rc 3
@@ -507,4 +507,4 @@ $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
 
 ── SONUÇ: 460 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-kart-sonradan-gorev-bagla-sinav 386 sn bekledi (yuva 1, load1 17.49)
+⏳ agir-sira: kanit-kart-sonradan-gorev-bagla-sinav 105 sn bekledi (yuva 2, load1 17.97)

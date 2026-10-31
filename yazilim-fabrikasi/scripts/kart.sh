@@ -209,10 +209,12 @@ else:
   fi
   [ "$deneme" = 1 ] && [ -n "$MSURUM" ] && [[ "$sonuc" == "yazılamadı: http 409 · surum_catismasi"* ]] || break
   done
-  MEVCUT_DURUM="$MEVCUT" MEVCUT_HEDEF="$MHEDEF" MEVCUT_ATANAN="$MATANAN" MEVCUT_BASKASI="$MBASKASI" GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
-import json,sys,datetime
+  MEVCUT_DURUM="$MEVCUT" MEVCUT_HEDEF="$MHEDEF" MEVCUT_ATANAN="$MATANAN" MEVCUT_BASKASI="$MBASKASI" GOREV_BITTI="${GOREV_BITTI:-}" YAZIM_KIMLIK="${YAZIM_KIMLIK:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
+import json,sys,datetime,os as _os
 p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
-k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
+_y={"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc}
+if _os.environ.get("YAZIM_KIMLIK"): _y["kimlik"]=_os.environ["YAZIM_KIMLIK"]   # gorev-bagla geri alması yalnız bu kaydı söksün
+k.setdefault("gorev_yazimlari",[]).append(_y)
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
 d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor","goz":"göz adımı (durum değişmez)","gecti":"bekliyor (başka işe geçti)","daralt":"ölçüt adımı (görev durumu değişmez)"}[olay]
@@ -1003,10 +1005,10 @@ PY
     [ -n "$REIS" ] || { _hata "--reis <AD> gerekiyor: görev bağını yalnız kartın sahibi (aldı alanı) ekler"; exit 1; }
     # Bakma + yazma + defter + geri alma TEK kilit altında: iki eşzamanlı bağlama aynı görevi iki karta yazamaz (göz tur 1, #628). Kilit dizinin kendisinde: depoya dosya bırakmaz.
     exec 9<"$KD"; flock -w 30 9 || { _hata "kart kilidi 30 sn alınamadı: başka bağlama sürüyor, yeniden dene"; exit 4; }
-    KART_YEDEK="$(cat "$KD/$IS.json")"
-    python3 - "$KD/$IS.json" "$GOREV" "$TAHMIN" "$REIS" "$KD" <<'PY' || exit 1
+    KART_YEDEK="$(cat "$KD/$IS.json")"; YAZIM_KIMLIK="bag-$$-$(date +%s%N)"
+    python3 - "$KD/$IS.json" "$GOREV" "$TAHMIN" "$REIS" "$KD" "$YAZIM_KIMLIK" <<'PY' || exit 1
 import glob,json,os,sys,datetime
-yol,gorev,tahmin,reis,kd=sys.argv[1:]
+yol,gorev,tahmin,reis,kd,bag=sys.argv[1:]
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 if k.get("durum")!="acik":
     print(f"✗ kart açık değil (durum: {k.get('durum')}) — biten kartın görev bağı sonradan değiştirilmez", file=sys.stderr); raise SystemExit(1)
@@ -1021,21 +1023,21 @@ for f in glob.glob(os.path.join(kd,"*.json")):
     if o.get("gorev")==gorev and o.get("durum") in ("acik","canli-borclu"):
         print(f"✗ {gorev} başka açık karta bağlı: {o.get('is')} (sahibi {o.get('aldi')})", file=sys.stderr); raise SystemExit(1)
 k["gorev"]=gorev; k["tahmin_dk"]=int(tahmin)
-k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"gorev-bagla","reis":reis,"gorev":gorev})
+k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"gorev-bagla","reis":reis,"gorev":gorev,"kimlik":bag})
 g=f"{yol}.{os.getpid()}.gecici"; json.dump(k,open(g,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(g,yol)
 PY
     if ! gorev_yaz "$KD/$IS.json" ac; then
       # Geri alma yalnız bu bağın alanlarını söker; eski metni geri yazmaz, arada karta işlenen başka değişiklik (öteki kart.sh komutları kilit almaz) ezilmesin.
-      KART_YEDEK="$KART_YEDEK" python3 - "$KD/$IS.json" "$GOREV" <<'PY' || { _hata "görev deftere yazılamadı, bağ da GERİ ALINAMADI: kartı elle düzelt"; exit 4; }
+      KART_YEDEK="$KART_YEDEK" python3 - "$KD/$IS.json" "$GOREV" "$YAZIM_KIMLIK" <<'PY' || { _hata "görev deftere yazılamadı, bağ da GERİ ALINAMADI: kartı elle düzelt"; exit 4; }
 import json,os,sys
-yol,gorev=sys.argv[1:]; eski=json.loads(os.environ["KART_YEDEK"]); k=json.load(open(yol,encoding="utf-8"))
+yol,gorev,bag=sys.argv[1:]; eski=json.loads(os.environ["KART_YEDEK"]); k=json.load(open(yol,encoding="utf-8"))
 if k.get("gorev")!=gorev: raise SystemExit(1)
 for a in ("gorev","tahmin_dk"):
     if a in eski: k[a]=eski[a]
     else: k.pop(a,None)
-k["gecmis"]=[x for x in k.get("gecmis",[]) if not (x.get("olay")=="gorev-bagla" and x.get("gorev")==gorev)]
-y=k.get("gorev_yazimlari") or []
-if y and y[-1].get("olay")=="ac": y.pop()
+k["gecmis"]=[x for x in k.get("gecmis",[]) if x.get("kimlik")!=bag]
+y=[x for x in (k.get("gorev_yazimlari") or []) if x.get("kimlik")!=bag]
+if "gorev_yazimlari" in k: k["gorev_yazimlari"]=y
 for a,v in (("gecmis",k.get("gecmis")),("gorev_yazimlari",y)):
     if a not in eski and not v: k.pop(a,None)
 g=f"{yol}.{os.getpid()}.gecici"; json.dump(k,open(g,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(g,yol)
