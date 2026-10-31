@@ -81,6 +81,10 @@ _cagir() {  # <metot> <yol> [json]
 _sonuc() {  # stdin: gövde+kod · $1: beklenen kod · $2: python ifadesi (j → çıktı)
   python3 -c '
 import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
+def bas(x):   # BAŞLIK-OKUYUCU: defterin baslik alanı (kural tek yerde: kayit.mjs baslik) — boş dizgi de geçerli cevaptır; alan yoksa (defter <=1.53) geçiş: ham son ad, çökmez
+    if isinstance(x,dict) and isinstance(x.get("baslik"),str): return x["baslik"]
+    a=(x.get("adlar") if isinstance(x,dict) else None) or [None]; v=a[-1]; v=v.get("deger") if isinstance(v,dict) else v
+    return v if isinstance(v,str) else ""
 try: j=json.loads(g or "{}")
 except Exception: j={"hata":"yanit_bozuk"}
 if kod!=sys.argv[1]:
@@ -102,6 +106,10 @@ _dugum_coz() {
   case "${1:-}" in ''|*:*) printf '%s' "${1:-}"; return 0;; esac
   _cagir GET "/kayit/$1" | python3 -c '
 import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
+def bas(x):   # BAŞLIK-OKUYUCU: defterin baslik alanı (kural tek yerde: kayit.mjs baslik) — boş dizgi de geçerli cevaptır; alan yoksa (defter <=1.53) geçiş: ham son ad, çökmez
+    if isinstance(x,dict) and isinstance(x.get("baslik"),str): return x["baslik"]
+    a=(x.get("adlar") if isinstance(x,dict) else None) or [None]; v=a[-1]; v=v.get("deger") if isinstance(v,dict) else v
+    return v if isinstance(v,str) else ""
 if kod!="200": print("KIRMIZI: düğümün bekleyen görevi %s görünmüyor (http %s) — <kutu>:%s biçimiyle ver" % (sys.argv[1], kod, sys.argv[1]), file=sys.stderr); sys.exit(1)
 k=json.loads(g)["kayit"]; print("%s:%s" % (k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["id"]), end="")' "$1"
 }
@@ -164,7 +172,7 @@ if sys.argv[12]: d["oda"]=sys.argv[12]
 if sys.argv[13]: d["isteyen_oda"]=sys.argv[13]
 if sys.argv[14]: d["teslim"]=sys.argv[14]
 print(json.dumps(d,ensure_ascii=False))' "$B" "$KAPI" "$SAHIP" "$UST" "$DURUM" "$NOTU" "$DUGUM" "$KUTU" "$EY" "$KAYNAK" "$OZET" "$(_oda_coz "$ODA")" "$ISTEYEN" "$TESLIM")"
-    _cagir POST /kayit "$G" | _sonuc 201 '"açıldı: %s · %s" % (j["kayit"]["id"], j["kayit"]["adlar"][0]["deger"]) + (("\n  ⛓ bekleyen %s: %s" % (j["dugum_bekleyen"]["id"], "bekliyor notu yazıldı" if j["dugum_bekleyen"]["yazildi"] else "NOT YAZILMADI — " + j["dugum_bekleyen"].get("sebep","?"))) if j.get("dugum_bekleyen") else "")'; rc=$?; [ $rc -ne 0 ] || [ -n "$OZET" ] || echo "ⓘ Sultan-dili özet yok — ekle: gorev.sh ozet <id> \"sebep → ne yapıldı → ne olacak\"" >&2; exit $rc ;;
+    _cagir POST /kayit "$G" | _sonuc 201 '"açıldı: %s · %s" % (j["kayit"]["id"], bas(j["kayit"])) + (("\n  ⛓ bekleyen %s: %s" % (j["dugum_bekleyen"]["id"], "bekliyor notu yazıldı" if j["dugum_bekleyen"]["yazildi"] else "NOT YAZILMADI — " + j["dugum_bekleyen"].get("sebep","?"))) if j.get("dugum_bekleyen") else "")'; rc=$?; [ $rc -ne 0 ] || [ -n "$OZET" ] || echo "ⓘ Sultan-dili özet yok — ekle: gorev.sh ozet <id> \"sebep → ne yapıldı → ne olacak\"" >&2; exit $rc ;;
   ekle)
     shift; B="${1:-}"; shift || true; KUTU=""; ETIKET=""; ACIL=""; ATANAN=""; KKIM=""; KNERE=""; ESKI=""; SAHIP=""; KSINIF=""; KRAPOR=""; DUGUM=""; OZET=""; ODA=""
     while [ $# -gt 0 ]; do case "$1" in
@@ -191,7 +199,7 @@ d={"tur":"gorev","adlar":[b],"kutu":kutu,"sahip":sa or kutu,"gorev_durumu":"acik
 for k,v in (("etiket",et),("aciliyet",ac),("atanan",at),("kaynak_kim",kk),("kaynak_nereden",kn),("eski_no",es),("kaynak_sinif",ks),("kaynak_rapor",kr),("dugum_acar",dg),("ozet_sultan",oz.strip()),("oda",od)):
     if v: d[k]=v
 print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN" "$KKIM" "$KNERE" "$ESKI" "$SAHIP" "$KSINIF" "$KRAPOR" "$DUGUM" "$OZET" "$(_oda_coz "$ODA")")"
-    _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s · %s — %s · kaynak: %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu",""), j["kayit"]["canli"].get("etiket","tür?"), j["kayit"]["canli"].get("aciliyet","aciliyet?"), j["kayit"]["adlar"][0]["deger"], j["kayit"]["canli"].get("kaynak_sinif") or "sınıfsız")'; rc=$?; [ $rc -ne 0 ] || [ -n "$OZET" ] || echo "ⓘ Sultan-dili özet yok — ekle: gorev.sh ozet <id> \"sebep → ne yapıldı → ne olacak\"" >&2; exit $rc ;;
+    _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s · %s — %s · kaynak: %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu",""), j["kayit"]["canli"].get("etiket","tür?"), j["kayit"]["canli"].get("aciliyet","aciliyet?"), bas(j["kayit"]), j["kayit"]["canli"].get("kaynak_sinif") or "sınıfsız")'; rc=$?; [ $rc -ne 0 ] || [ -n "$OZET" ] || echo "ⓘ Sultan-dili özet yok — ekle: gorev.sh ozet <id> \"sebep → ne yapıldı → ne olacak\"" >&2; exit $rc ;;
   ozet)
     [ $# -ge 3 ] && [ -n "${3// /}" ] || { echo "kullanım: gorev.sh ozet <gorev_id> \"<Sultan-dili tek cümle: sebep → ne yapıldı → ne olacak>\"" >&2; exit 2; }
     # tashih (tekil alan, eski özet damgasıyla kayıtta kalır); adimlar YOK → adım yazmaz, durumu değiştirmez (SERDAR tasarımı 22 Eki)
@@ -226,7 +234,7 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN
     YB=""
     if [ -n "$DUR" ]; then
       [ "$DUR" != "$ID" ] || { echo "--duraklat: öne alınan iş ile duraklatılan iş aynı ($ID)" >&2; exit 2; }
-      YB="$(_cagir GET "/kayit/$ID" | _sonuc 200 'j["kayit"]["adlar"][0]["deger"]')" || { echo "--duraklat: öne alınan iş okunamadı — $YB" >&2; exit 1; }
+      YB="$(_cagir GET "/kayit/$ID" | _sonuc 200 'bas(j["kayit"])')" || { echo "--duraklat: öne alınan iş okunamadı — $YB" >&2; exit 1; }
       ED="$(_cagir GET "/kayit/$DUR" | _sonuc 200 'j["kayit"]["canli"].get("gorev_durumu") or "-"')" || { echo "--duraklat: duraklatılacak iş okunamadı — $ED" >&2; exit 1; }
       [ "$ED" = "calisiliyor" ] || { echo "--duraklat: $DUR çalışılıyor değil ($ED) — duraklatılacak bir şey yok, hiçbir şey yazılmadı" >&2; exit 2; }
     fi
@@ -346,7 +354,7 @@ if pu: d["reis_puan"]=pu; d["reis_puan_gerekce"]=ge
 if go: d["gorsel"]=go
 if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
 print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF" "$(_oda_coz "$ODA")" "$PUAN" "$GEREKCE" "$GORSEL")"
-    _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s — %s (açan: %s)" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu") or j["kayit"].get("ekleyen_kutu"), j["kayit"]["canli"].get("etiket"), j["kayit"]["adlar"][0]["deger"], j["kayit"]["canli"].get("kaynak_kim"))' ;;
+    _cagir POST /kayit "$G" | _sonuc 201 '"📌 %s · %s · %s — %s (açan: %s)" % (j["kayit"]["id"], j["kayit"]["canli"].get("kutu") or j["kayit"].get("ekleyen_kutu"), j["kayit"]["canli"].get("etiket"), bas(j["kayit"]), j["kayit"]["canli"].get("kaynak_kim"))' ;;
   puan)
     # 1.50.0: reisin puanı (1-10) + tek cümle gerekçe — TASHİH (eski puan damgasıyla kalır); yalnız reis jetonu/insan (defter 403 reis_alani)
     [ $# -ge 4 ] && [ -n "${4:-}" ] || { echo "kullanım: gorev.sh puan <gorev_id> <1-10> \"<gerekçe ≥5>\"" >&2; exit 2; }
@@ -408,7 +416,7 @@ open(sys.argv[2],"w",encoding="utf-8").write(t[0])' "$DG.ham" "$DG"; r=$?; rm -f
     [ -n "$LODA" ] && [ "$LODASIZ" = 1 ] && { echo "--oda ile --odasiz birlikte olmaz" >&2; exit 2; }
     # süzgeç istemcide (tek defter, oda süzgeci — Kuzey Yıldızı 3.6). Sütun sırası değişmez (kutu-bul/sirada-bak/deftere-yaz/haftalik/tarama-ekle split(None,6) ile okur); oda satır sonuna eklenir. Boş sonuç 'görev yok'
     export GL_ODA="$LODA" GL_KUTU="$LKUTU" GL_ODASIZ="$LODASIZ"   # boru: önek ataması yalnız ilk komuta geçer, süzgeç _sonuc'ta koşar → export
-    _cagir GET /gorevler | _sonuc 200 '"\n".join("%s  %-10s %-14s %-9s %-8s %-10s %s  (son: %s)%s" % (g["id"], g["canli"].get("kutu") or g.get("ekleyen_kutu",""), g["canli"].get("gorev_durumu",""), g["canli"].get("aciliyet","-"), g["canli"].get("etiket","-"), g["canli"].get("atanan","-"), g["adlar"][-1]["deger"], g.get("son_adim","")[:16], ("  oda: %s" % g["canli"]["oda"]) if isinstance(g["canli"].get("oda"),str) and g["canli"]["oda"] else "") for g in j["gorevler"] if (not __import__("os").environ.get("GL_KUTU") or (g["canli"].get("kutu") or g.get("ekleyen_kutu",""))==__import__("os").environ["GL_KUTU"]) and (not __import__("os").environ.get("GL_ODA") or g["canli"].get("oda")==__import__("os").environ["GL_ODA"]) and (__import__("os").environ.get("GL_ODASIZ")!="1" or not g["canli"].get("oda"))) or "görev yok"' ;;
+    _cagir GET /gorevler | _sonuc 200 '"\n".join("%s  %-10s %-14s %-9s %-8s %-10s %s  (son: %s)%s" % (g["id"], g["canli"].get("kutu") or g.get("ekleyen_kutu",""), g["canli"].get("gorev_durumu",""), g["canli"].get("aciliyet","-"), g["canli"].get("etiket","-"), g["canli"].get("atanan","-"), bas(g), g.get("son_adim","")[:16], ("  oda: %s" % g["canli"]["oda"]) if isinstance(g["canli"].get("oda"),str) and g["canli"]["oda"] else "") for g in j["gorevler"] if (not __import__("os").environ.get("GL_KUTU") or (g["canli"].get("kutu") or g.get("ekleyen_kutu",""))==__import__("os").environ["GL_KUTU"]) and (not __import__("os").environ.get("GL_ODA") or g["canli"].get("oda")==__import__("os").environ["GL_ODA"]) and (__import__("os").environ.get("GL_ODASIZ")!="1" or not g["canli"].get("oda"))) or "görev yok"' ;;
   oda)
     [ $# -ge 3 ] && [ -n "${3:-}" ] || { echo "kullanım: gorev.sh oda <gorev_id> <oda>" >&2; exit 2; }
     printf '%s' "$3" | grep -Eq '^[a-z][a-z0-9-]{1,30}$' || { echo "oda adı küçük harf/rakam/tire (2-31), ör. agentic-os" >&2; exit 2; }
@@ -454,9 +462,9 @@ d={"tur":"rapor","adlar":[b],"kod":kod,"rapor_turu":tur}
 for k,v in (("rapor_donemi",don),("ozet",oz),("dosya",dos),("rutin_id",rut)):
     if v: d[k]=v
 print(json.dumps(d,ensure_ascii=False))' "$B" "$KOD" "$TUR" "$DON" "$OZ" "$DOS" "$RUT")"
-    _cagir POST /kayit "$G" | _sonuc 201 '"🗂 %s · %s — %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("kod"), j["kayit"]["adlar"][0]["deger"])' ;;
+    _cagir POST /kayit "$G" | _sonuc 201 '"🗂 %s · %s — %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("kod"), bas(j["kayit"]))' ;;
   raporlar)
-    _cagir GET /raporlar | _sonuc 200 '"\n".join("%s  %-18s %-8s %-9s %3d görev  %s" % (r["id"], r["canli"].get("kod",""), r["canli"].get("rapor_turu",""), r["canli"].get("rapor_donemi","-"), len(r.get("bagli_gorevler",[])), r["adlar"][0]["deger"]) for r in j["raporlar"]) or "rapor yok"' ;;
+    _cagir GET /raporlar | _sonuc 200 '"\n".join("%s  %-18s %-8s %-9s %3d görev  %s" % (r["id"], r["canli"].get("kod",""), r["canli"].get("rapor_turu",""), r["canli"].get("rapor_donemi","-"), len(r.get("bagli_gorevler",[])), bas(r)) for r in j["raporlar"]) or "rapor yok"' ;;
   rutin)
     shift; B="${1:-}"; shift || true; SIK=""; ZAM=""; ATA=""; KOM=""; RTUR=""
     while [ $# -gt 0 ]; do case "$1" in --siklik) SIK="${2:-}"; shift 2;; --zaman) ZAM="${2:-}"; shift 2;; --atanan) ATA="${2:-}"; shift 2;; --komut) KOM="${2:-}"; shift 2;; --rapor-turu) RTUR="${2:-}"; shift 2;; *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
@@ -467,7 +475,7 @@ d={"tur":"rutin","adlar":[b],"siklik":sik,"rutin_durumu":"aktif"}
 for k,v in (("zaman",zam),("atanan",ata),("komut",kom),("rapor_turu",rt)):
     if v: d[k]=v
 print(json.dumps(d,ensure_ascii=False))' "$B" "$SIK" "$ZAM" "$ATA" "$KOM" "$RTUR")"
-    _cagir POST /kayit "$G" | _sonuc 201 '"🔁 %s · %s — %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("siklik"), j["kayit"]["adlar"][0]["deger"])' ;;
+    _cagir POST /kayit "$G" | _sonuc 201 '"🔁 %s · %s — %s" % (j["kayit"]["id"], j["kayit"]["canli"].get("siklik"), bas(j["kayit"]))' ;;
   kosu)
     ID="${2:-}"; NE="${3:-}"; shift 3 2>/dev/null || { echo "kullanım: gorev.sh kosu <rutin_id> \"<ne oldu>\" [--sonraki …]" >&2; exit 2; }
     SON=""; while [ $# -gt 0 ]; do case "$1" in --sonraki) SON="${2:-}"; shift 2;; *) echo "bilinmeyen: $1" >&2; exit 2;; esac; done
@@ -479,10 +487,10 @@ if son: y["sonraki"]=son
 print(json.dumps({"yerine":y,"gerekce":"rutin koştu: "+ne,"adimlar":["[koşu] "+ne]},ensure_ascii=False))' "$NE" "$SON")"
     _cagir PATCH "/kayit/$ID" "$G" | _sonuc 200 '"🔁 koşu yazıldı · son %s · sonraki %s" % (j["kayit"]["canli"].get("son_kosu"), j["kayit"]["canli"].get("sonraki","-"))' ;;
   rutinler)
-    _cagir GET /rutinler | _sonuc 200 '"\n".join("%s  %-9s %-12s %-16s son:%-16s sonraki:%-16s %s" % (r["id"], r["canli"].get("siklik",""), r["canli"].get("rutin_durumu",""), r["canli"].get("zaman","-"), r["canli"].get("son_kosu","-"), r["canli"].get("sonraki","-"), r["adlar"][0]["deger"]) for r in j["rutinler"]) or "rutin yok"' ;;
+    _cagir GET /rutinler | _sonuc 200 '"\n".join("%s  %-9s %-12s %-16s son:%-16s sonraki:%-16s %s" % (r["id"], r["canli"].get("siklik",""), r["canli"].get("rutin_durumu",""), r["canli"].get("zaman","-"), r["canli"].get("son_kosu","-"), r["canli"].get("sonraki","-"), bas(r)) for r in j["rutinler"]) or "rutin yok"' ;;
   tohum)
     [ -r "${2:-}" ] || { echo "kullanım: gorev.sh tohum <dosya.tsv>" >&2; exit 2; }
-    MEVCUT="$(_cagir GET /gorevler | _sonuc 200 '"\n".join(g["adlar"][0]["deger"] for g in j["gorevler"])')" || exit 1
+    MEVCUT="$(_cagir GET /gorevler | _sonuc 200 '"\n".join(bas(g) for g in j["gorevler"])')" || exit 1
     eklendi=0; atlandi=0; dusen=0
     # 🔴 sekme IFS'de "boşluk" sayılır: art arda iki sekme (boş not sütunu) YUTULUR, eylem nota kayardı → satır \x1f ile bölünür (boş sütun korunur)
     while IFS= read -r satir; do IFS=$'\x1f' read -r baslik kapi sahip durum notu eylem <<<"$(printf '%s' "$satir" | tr '\t' '\037')"

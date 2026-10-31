@@ -1423,7 +1423,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.20.0",
+      "version": "1.20.1",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1564,7 +1564,7 @@
     {
       "id": "terminal-onar",
       "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
-      "version": "2.36.6",
+      "version": "2.36.7",
       "type": "capability",
       "sync_dagitim": true,
       "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",

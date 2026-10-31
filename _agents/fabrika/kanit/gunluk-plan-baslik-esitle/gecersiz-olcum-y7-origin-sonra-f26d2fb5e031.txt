@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-y7-origin-sonra.txt
+hedef_sha256: 7b351e622f84791ddf3277f2175b0690948028b0a682fbe2812a86a268ea21b1
+hedef_zaman: 2026-10-31T04:15:38+03:00
+hedef_renk: yesil
+neden: Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2
+kim: BANI
+karsi: olcum-y7-origin2-sonra.txt
+zaman: 2026-10-31T04:23:08+03:00

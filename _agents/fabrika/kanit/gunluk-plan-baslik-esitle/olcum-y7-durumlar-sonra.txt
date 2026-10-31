@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-y7-durumlar.sh
+# rc=0 sure=5.5s zaman=2026-10-31T04:29:51+03:00
+--- stdout ---
+A (depo yok): rc=0 · == 9 geçti · 0 düştü · Y7 ÖLÇÜLMEDİ (kanonik bu kutuda yok) ==
+B (origin yok): rc=1 · == 9 geçti · 1 düştü ==
+--- stderr ---
+⏳ agir-sira: kanit-gunluk-plan-baslik-esitle-y7-durumlar 5 sn bekledi (yuva 2, load1 7.09)

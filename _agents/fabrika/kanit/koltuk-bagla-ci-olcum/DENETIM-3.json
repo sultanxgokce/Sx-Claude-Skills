@@ -1,0 +1,56 @@
+{
+  "tur": 3,
+  "is": "koltuk-bagla-ci-olcum",
+  "pr": "611",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T05:26:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-bagla-ci-olcum",
+  "dal": "koltuk-bagla-ci-olcum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34342,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 54815
+  },
+  "dalgic": "uyumsuz",
+  "bas": "6dd48c6401a1564e976143201cefabcb4d4173e9",
+  "duzeltme_farki": {
+    "onceki_bas": "a171b007a0027eb9295c7215b26deed052e5c3a3",
+    "dosya": 7,
+    "bayt": 60994,
+    "tam_bayt": 158007
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1’deki kilitsiz yarış S3 ve ona bağlı mutasyon kapısıyla kapatılmış; gerçek ölçüm 132/132 geçiyor ve üç mutasyon da hedeflenen bozuklukları yakalıyor. Ancak kilitsiz yolda önceden kullanıcı tarafından bilerek konmuş `manual` ayarı da ayrım yapılmadan silinebiliyor; önce bu davranış kaybını çözün, main kovası ile Sx PR yeşilliğini de dış CI yüzeyinde doğrulayın.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1’in yarış kısmı kapandı, fakat çözüm kilitsiz kolda kullanıcının önceden bilerek koyduğu `window-size=manual` ayarını da silebilir; S3 bu koruma davranışını sınamıyor.",
+        "kanit": "Üretim kodundaki koşul, `KILITLI=0` iken `yerel=manual` değerini kaynağına bakmadan `set-option -u` koluna gönderiyor. S3 yalnız eşzamanlı çağrılar sonunda pencerenin 80 olması ve yerel ayarın boş kalmasını kabul ediyor; kilitsiz çağrıdan önce bilerek verilmiş `manual` ayarının korunmasına dair vaka yok.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:265-280; terminal-onar/scripts/koltuk-bagla.test.sh:249-261",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önceki B2 kapanmadı: main kovasının ve Sx PR’larının yeşile döndüğü verilen kanıtta görülemiyor; bu kod puanını düşürmeyen dış CI doğrulamasıdır.",
+        "kanit": "Sağlam manifestteki dört kaydın komutu da yalnız `bash terminal-onar/scripts/koltuk-bagla.test.sh`; main kovası veya Sx PR durumunu gösteren bir CI kaydı bulunmuyor.",
+        "konum": "kanıt manifesti: sinav-kilitli, mutant-kilitsiz, mutant-kilit-alinamazsa-surer ve mutant-kilitsiz-kol-manual-geri-yazar kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "main kovası ve Sx PR’larının CI sonuç yüzeyi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 132/132 geçiyor; üç mutasyon ölçümü rc=1 ile sırasıyla S1, S2 ve S3 kapılarında düşerek kilitsiz yarışı, kilit alınamayınca sürmeyi ve kilitsiz kolda `manual` geri yazmayı sınavın yakaladığını gösteriyor. Buna karşılık bilerek konmuş `manual` ayarının kilitsiz yolda korunması ölçülmemiş ve main/Sx CI sonucu dış yüzey kanıtı olarak sunulmamış."
+  }
+}

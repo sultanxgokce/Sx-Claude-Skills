@@ -260,12 +260,25 @@ tel_buyut() {  # $1 = istemci adı (kancadan) → istemci ignore-size ise ve otu
   [ "$ts" -gt 0 ] || return 0
   ist="$(tmux list-clients -t "=$ses" -F '#{client_flags}' 2>/dev/null)" || return 0   # ölçülemedi → dokunma
   printf '%s\n' "$ist" | grep -v 'ignore-size' | grep -q '^.' && return 0
+  # İKİ KANCA (client-attached + client-resized) AYNI ANDA koşabilir: ikincisi, birincinin resize-window'undan SONRA ama yerel ayarı silmesinden ÖNCE
+  # 'yerel'i okursa 'manual'i eski değer sanıp geri yazar → pencere sonsuza dek 'manual' kalır, sonra bağlanan masaüstü boyu alamaz
+  # (CI'da R2/R3/R4; ölçüm: yerel-ayar=[manual], pencere 70x50, 120x40 istemci bağlı). Çözüm: oturum başına kilit — gövde sıralı koşar.
+  # Kilit dosyası AÇILAMAZSA (salt-okur TMPDIR) ya da flock YOKSA kilitsiz sürer (özellik çalışsın); kilit AÇILDI ama süre içinde ALINAMADIYSA başka bir kanca
+  # aynı işi yapıyor demektir → dokunma (kilitsiz sürmek yarışı geri getirirdi). Süre: KB_KILIT_SN (varsayılan 10).
+  KILITLI=0
+  if [ -z "${KB_KILIT_YOK:-}" ] && command -v flock >/dev/null 2>&1 && exec 9>"${TMPDIR:-/tmp}/koltuk-bagla-tel-buyut.$(id -u).${ses//[^A-Za-z0-9_.-]/_}.lock" 2>/dev/null; then
+    flock -w "${KB_KILIT_SN:-10}" 9 || return 0
+    KILITLI=1
+  fi
   tmux list-windows -t "=$ses" -F '#{window_id} #{window_width} #{window_height}' 2>/dev/null | while read -r w ww wh; do
     [[ "$ww" =~ ^[0-9]+$ && "$wh" =~ ^[0-9]+$ ]] || continue
     nx=$ww; [ "$tc" -gt "$ww" ] && nx=$tc
     ny=$wh; [ "$ts" -gt "$wh" ] && ny=$ts
     [ "$nx" = "$ww" ] && [ "$ny" = "$wh" ] && continue
     yerel="$(tmux show-options -wqv -t "$w" window-size 2>/dev/null)"
+    # KİLİTSİZ kolda 'manual' ya kullanıcının bilerek koyduğudur ya da eşzamanlı kancanın resize-window'undan kalandır; ikisi ayırt edilemez →
+    # pencereye dokunma (ne büyüt, ne sil, ne geri yaz): ayar korunur, yarış 'manual' bırakamaz.
+    [ "$KILITLI" = 0 ] && [ "$yerel" = manual ] && continue
     tmux resize-window -t "$w" -x "$nx" -y "$ny" 2>/dev/null || continue
     if [ -n "$yerel" ]; then tmux set-option -w -t "$w" window-size "$yerel" 2>/dev/null; else tmux set-option -w -u -t "$w" window-size 2>/dev/null; fi
   done

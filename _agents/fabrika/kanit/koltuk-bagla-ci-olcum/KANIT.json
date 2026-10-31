@@ -1,0 +1,109 @@
+{
+  "is": "koltuk-bagla-ci-olcum",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T05:31:45+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kilitli",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kilitli-sonra.txt",
+      "sha256": "c1c23a7df854065e4e86b4e8d1a2ab5b6d715ec11322d4ae2483ba8d71100124",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T05:30:29+03:00",
+      "sure_sn": 84.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "45f5e1c1357946b3aea5926bff44fe2d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kilitsiz",
+      "asama": "once",
+      "dosya": "olcum-mutant-kilitsiz-once.txt",
+      "sha256": "939616b61a3f111cee4cb0673ca2c11c7f19fa49f4b7e20e041cce203ded37a0",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T05:08:20+03:00",
+      "sure_sn": 34.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kilitli",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "358f09090c1d4894986423c2a29f07d2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kilit-alinamazsa-surer",
+      "asama": "once",
+      "dosya": "olcum-mutant-kilit-alinamazsa-surer-once.txt",
+      "sha256": "81794f8597e7001cf556e2ff366e088da34b7eebedde7c1713f11863610bbeed",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T05:14:49+03:00",
+      "sure_sn": 146.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kilitli",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7cf6bb745a6a405fa35a26a0c83cf6f9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kilitsiz-kol-manual-geri-yazar",
+      "asama": "once",
+      "dosya": "olcum-mutant-kilitsiz-kol-manual-geri-yazar-once.txt",
+      "sha256": "d0c83fdd331933375e1b5d2f59007e37feff59aa337c7f1b56d7c956883fb457",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T05:26:00+03:00",
+      "sure_sn": 62.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kilitli",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "14ab83d34a3e457198d4e3427562a9a4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kilitsiz-kol-manual-siler",
+      "asama": "once",
+      "dosya": "olcum-mutant-kilitsiz-kol-manual-siler-once.txt",
+      "sha256": "f9ff8be49db8af980eaa80e634dc262b7233a51cf54caaf9c5f42a987bf66957",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T05:31:45+03:00",
+      "sure_sn": 75.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kilitli",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "07c31b8e6a664f0b8af8d4d075ff90c0"
+    }
+  ],
+  "imza": "6947e5d181ff840e7dd8576a34d40b39ac7492a2a08e593a50c199119a864570"
+}

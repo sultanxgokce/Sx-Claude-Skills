@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-y7-sapma-once.txt
+hedef_sha256: a86007d40e87eeb0accfb72737d490af581eb165aba1c1212832ee688a775438
+hedef_zaman: 2026-10-31T04:14:09+03:00
+hedef_renk: yesil
+neden: Y7 kanoniği cloudtop ANA checkout'undan okur; checkout #1251'de (bayat) — sapmayı değil checkout yaşını ölçtü; yerine origin/main ile doğrudan eşitlik
+kim: BANI
+karsi: olcum-kanonik-esitlik-once.txt
+zaman: 2026-10-31T04:14:33+03:00
