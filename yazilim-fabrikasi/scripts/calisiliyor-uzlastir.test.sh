@@ -57,10 +57,36 @@ RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q '"/kayit/gorev_C
 # U3: kartı olmayan çalışılıyor (X666)
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_Y BERİD calisiliyor 2026-10-26T10:30)"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_Y" "$T/yazim.jsonl" && grep -q "açık kartı yok" "$T/yazim.jsonl"; g $? "U3 açık kartı olmayan çalışılıyor görev (gorev_Y) bekliyor'a çekilir, kartlı olan (gorev_A) kalır"
-# U4: kart bitmiş/canlı borçlu → kartı yok sayılır
+# U4: canlı borçlu kart yaşıyor (kart.sh "görev çalışılıyor kalır"); biten kart açık sayılmaz
 kart "$T/k1" a BERİD canli-borclu gorev_A
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
-RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_A" "$T/yazim.jsonl"; g $? "U4 kartı canlı-borçlu/bitti olan görev açık kart sayılmaz (kapanan iş çalışılıyor görünmez)"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 0 ]; g $? "U4 canlı borçlu kartın görevi çekilmez (iş dağıtım bekliyor, kart yaşıyor)"
+kart "$T/k1" a BERİD canli-borclu gorev_A; kart "$T/k1" c2 BERİD acik gorev_C; kart "$T/k2" b BERİD acik gorev_B
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T11:00)" "$(gor gorev_B BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_C BERİD calisiliyor 2026-10-26T09:00)"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 0 ]; g $? "U4b canlı borçlu görev azami sayısına girmez (iki açık + bir borçlu: çekim yok)"
+rm -f "$T/k1/c2.json"; kart "$T/k2" b BERID acik gorev_B
+printf '{"is":"a","aldi":"BERİD","durum":"canli-borclu","gorev":"gorev_A","pr":"77"}' > "$T/k1/a.json"; prler '[{"number":77,"headRefName":"a","mergedAt":"2026-10-26T09:00:00Z"}]'
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
+RC=$(kos --uygula); prler '[]'; [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "U4k canlı borçlu görev için 'PR birleşti ama çalışılıyor' zili çalmaz"
+kart "$T/k1" a BERİD bitti gorev_A
+defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_A" "$T/yazim.jsonl" && grep -q "açık kartı yok" "$T/yazim.jsonl"; g $? "U4c biten kart (PR'sız) açık sayılmaz: çekilir, not eskisi gibi"
+printf '{"is":"a","aldi":"BERİD","durum":"bitti","gorev":"gorev_A","pr":"77","bitis":"2026-10-26T12:00"}' > "$T/k1/a.json"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "PR #77 ile kapandı" "$T/yazim.jsonl" && grep -q "gorev.sh bitti gorev_A --pr 77" "$T/zil.log" && ! grep -q "açık kartı yok" "$T/yazim.jsonl"; g $? "U4d PR ile biten kartın görevi: not gerçek nedeni, zil kapanış yolunu söyler"
+TAZE=$(python3 -c "import datetime as d;print((d.datetime.now(d.timezone.utc)-d.timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%S.000Z'))")
+ESKI=$(python3 -c "import datetime as d;print((d.datetime.now(d.timezone.utc)-d.timedelta(minutes=61)).strftime('%Y-%m-%dT%H:%M:%S.000Z'))")
+rm -f "$T/k1/a.json"
+defter "$(gor gorev_Y BERİD calisiliyor "$TAZE")"
+RC=$(kos --uygula --kart-bekle-dk 60 --simdi "$(date +%s)"); [ "$RC" = 0 ] && [ "$(yz)" = 0 ]; g $? "U4e kartsız görev son hareketten 10 dk sonra çekilmez (Sultan onayı ile kart açılışı arası)"
+RC=$(kos --uygula --kart-bekle-dk 0 --simdi "$(date +%s)"); [ "$RC" = 0 ] && [ "$(yz)" = 1 ]; g $? "U4f --kart-bekle-dk 0 bekleme kapalı: taze görev de çekilir"
+defter "$(gor gorev_Y BERİD calisiliyor "$ESKI")"
+RC=$(kos --uygula --kart-bekle-dk 60 --simdi "$(date +%s)"); [ "$RC" = 0 ] && [ "$(yz)" = 1 ]; g $? "U4g 61 dk hareketsiz kartsız görev çekilir (X666 kuralı sürer)"
+defter "$(gor gorev_Y BERİD calisiliyor bozuk-zaman)"
+RC=$(kos --uygula --kart-bekle-dk 60 --simdi "$(date +%s)"); [ "$RC" = 0 ] && [ "$(yz)" = 1 ]; g $? "U4h son hareket okunamıyorsa taze sayılmaz: çekilir"
+GELECEK=$(python3 -c "import datetime as d;print((d.datetime.now(d.timezone.utc)+d.timedelta(minutes=30)).strftime('%Y-%m-%dT%H:%M:%S.000Z'))")
+defter "$(gor gorev_Y BERİD calisiliyor "$GELECEK")"
+RC=$(kos --uygula --kart-bekle-dk 60 --simdi "$(date +%s)"); [ "$RC" = 0 ] && [ "$(yz)" = 1 ]; g $? "U4j gelecek tarihli hareket taze sayılmaz: çekilir"
+RC=$(kos --kart-bekle-dk -1); [ "$RC" = 2 ]; g $? "U4i --kart-bekle-dk negatif: rc 2"
 kart "$T/k1" a BERİD acik gorev_A
 # U5: başkasının görevi, bekliyor/açık görev dokunulmaz
 defter "$(gor gorev_Z BASİRET calisiliyor 2026-10-26T10:00)" "$(gor gorev_W BERİD bekliyor 2026-10-26T10:00)" "$(gor gorev_V BERİD acik 2026-10-26T10:00)"
