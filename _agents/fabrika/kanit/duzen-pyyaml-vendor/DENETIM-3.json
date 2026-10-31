@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "duzen-pyyaml-vendor",
+  "pr": "629",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:22:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-pyyaml-vendor",
+  "dal": "duzen-pyyaml-vendor",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14505,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9105
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2842741d45f4661b5a19494c6822c1f1359ae76d",
+  "duzeltme_farki": {
+    "onceki_bas": "aeff6c577f8aee9b939d562d000a5cf9c75e6cb2",
+    "dosya": 6,
+    "bayt": 10842,
+    "tam_bayt": 25211
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: P8e doğrulaması artık `yenile` komutunun `rc` değeri ezilmeden hemen sonra yapılıyor; mutasyon ölçümü de bu kapının bozuk vendor durumunu yakaladığını gösteriyor. İş kartındaki PyYAML’sız izole kutu ve dry-run hedefi sınanmış olsa da önceki B2 sürüyor: gerçek ölçüm sunulan başa bağlanmadığı ve kirli çalışma ağacında alındığı için üretim öncesi kanıt izlenebilirliği düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmamış: gerçek ölçüm, incelenen düzeltme başını tanımlamıyor ve kirli çalışma ağacında alınmış; bu nedenle geçen sonucun sunulan PR bütünüyle birebir bağı kanıtlanamıyor.",
+        "kanit": "Değişiklik notunda sunulan baş `2842741d45f4` iken manifestte hem `vendor-parite` hem `vendor-mutant` için `olculen_commit: aa07c50df0a3084da5834b5b741b464adc850780` ve `olculen_kirli: true` yazıyor.",
+        "konum": "KANIT MANİFESTİ:vendor-parite,vendor-mutant; DEĞİŞİKLİK notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 26 geçti/0 düştü, mutasyon kaydı beklenen rc=1 ve düşen kapıyla sınavın bozuk vendor durumuna duyarlı olduğunu gösteriyor. Önceki B1, P8e’nin `yenile` sonrasına taşınmasıyla kapanmış; ancak ölçülen commitin sunulan baştan farklı ve çalışma ağacının kirli olması nedeniyle kanıt bu baş için tam izlenebilir değil."
+  }
+}
