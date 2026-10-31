@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "golge-birlesmis-pr-sus",
+  "pr": "618",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T17:44:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-golge-birlesmis-pr-sus",
+  "dal": "golge-birlesmis-pr-sus",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22685,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 9587
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0582d06124131de0ff5a59724b3e43ee81ef648e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Birleşmiş PR için gölge kaydı, görev adımı ve zil kesilmiş; gerçek ölçüm 35/35 geçiyor, mutant da durum süzgeci sökülünce kapının düştüğünü gösteriyor. Ancak değişiklik talebi aşarak birleşmeden kapanmış PR’leri de susturuyor ve canlı GitHub/zil yüzeyindeki “0 bayat zil” sonucu bu kutuda ölçülmemiş; önce kapsam taşmasını çöz.",
+    "bulgular": [
+      {
+        "ne": "Talep yalnız zaten birleşmiş PR’i sustururken uygulama CLOSED durumundaki, birleşmemiş olabilecek PR’i de kayıt ve zil dışına çıkarıyor; bu kapsam kayması gölge kaydını gereğinden fazla susturabilir.",
+        "kanit": "Üretim koşulu `MERGED|CLOSED)` ile iki durumu da erken `exit 0` yapıyor; G21 ayrıca CLOSED için kayıt ve zil olmadığını doğruluyor. İş kartı ise özellikle “zaten birleşmiş PR” ve “0 bayat zil” diyor.",
+        "konum": "yazilim-fabrikasi/scripts/golge-birlestirme.sh:43; olcum-golge-sinavi-sonra.txt:G21",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek canlı GitHub durumu ve gerçek zil hattında 0 bayat zil sonucu doğrulanmamış.",
+        "kanit": "Kart `canli_gerekir: true` ve gerekçe olarak “zil” diyor; sunulan G20-G24 ölçümleri `gh-sahte.sh` ile `FABRIKA_AILE_NOTIFY=$T/zil-sahte.sh` kullanan sahte araçlara dayanıyor.",
+        "konum": "iş kartı:canli_gerekir/canli_sebep; yazilim-fabrikasi/scripts/golge.test.sh:132-143",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı GitHub + gerçek zil hattı ve gerekli yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 35/35 geçiyor, mutasyon kaydı rc=1 ve düşen kapıyla bozuk süzgecin yakalandığını kanıtlıyor. Buna karşılık yalnız “sonra” ölçümü var ve iş kartının istediği canlı 0 bayat zil sonucu sahte gh/zil araçlarıyla sınanmış; canlı ölçüm çifti bulunmuyor."
+  }
+}
