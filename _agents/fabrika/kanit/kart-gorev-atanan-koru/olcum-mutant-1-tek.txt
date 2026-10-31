@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-yeni-kod-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mutant-tek.sh 1
+# rc=1 sure=261.4s zaman=2026-10-31T20:42:09+03:00
+--- stdout ---
+  ✗ GA5 🔴 hedef türü: ac durum yazmaz, atanan kendisi olsa bile
+  ✗ GA6 🔴 hedef türü: gecti 'bekliyor' yazmaz (onay akışından düşmez)
+  ✗ GA7 🔴 hedef türü: tikandi 'bekliyor' yazmaz
+yakalandı hedef=GA5  test_rc=1
+--- stderr ---
+⏳ agir-sira: kanit-kart-gorev-atanan-koru-mutant-1 106 sn bekledi (yuva 1, load1 17.24)

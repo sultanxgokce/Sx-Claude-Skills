@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.37
+version: 0.27.38
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -109,6 +109,7 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - **Gün sonu çıktısı ISO saat damgalı "çalıştı" satırıyla biter (0.27.14, 28 Eki · kart gun-sonu-saat-damgasi · SERDAR borç turu):** `kanit.sh canli` saat damgasız satırı ateşleme saymaz; akşam cron günlüğünde satır başı saat yoktu, gun-sonu-aksam-cron canlı borcu ödenemiyordu. Son satır: `→ gün sonu çalıştı · <ISO saat> · gün <gün>`. Sınav G13 + mutant.
 - **Gün sonu özeti bitişi boş (null) kartta çökmez (0.27.12, 28 Eki · kart gun-sonu-bitis-bos · SERDAR borç turu):** `kart.sh canli-borc` kartta `bitis: null` yazar; `gun-sonu.sh` bunu dilimleyip Python hatasıyla düşüyor, akşam cron özeti 27 ve 28 Eki üretilmedi. Boş bitiş boş metin sayılır. Sınav G12 (zaman eski gün olmalı; bugünse `or` kısa devre yapar) + mutant.
 - **Düzeltme turu eski kayıtta tam fark göndermez (0.27.13, 28 Eki · görev DCX24C):** önceki DENETIM kaydında `bas` yoksa (0.18.1 öncesi) baş, kaydı depoya ekleyen commit'in atasından ve kayıt zamanından önceki son commit'ten ESKİ olanıyla türetilir; ekranda "türetildi" yazar, fark gereğinden büyük olabilir ama değişiklik eksik kalmaz. Kayıt commit'lenmemişse tam fark gider (sebebi yazılı). Tavan gevşetilmedi. Sınav: `denetci-duzeltme-farki.test.sh` D4x.
+- **Kart aracı atananı ve hedef görevi ezmez (0.27.38, 31 Eki · görev …E4ZYG4 · kart kart-gorev-atanan-koru):** `kart.sh` bağlı görevde açılış, başka işe geçiş ve tıkanmada yazmadan önce atananı ve hedef türünü okur. Atanan başkasıysa ya da görev hedef türüyse yalnız adım düşer, durum ve atama aynen kalır. Başkasının görevini almak açık fiildir: `gorev.sh ustlen`.
 - **Uzlaştırma yürüyen işi çekmez (0.27.37, 31 Eki · görev …Z568BB, …VR933AS):** canlı borçlu kartın görevi çalışılıyor kalır, azamiye girmez, yersiz zil çalmaz (kart.sh zaten böyle diyordu, uzlaştırma tersini yapıyordu). Kartsız görev son hareketinden 60 dk geçmeden çekilmez (`--kart-bekle-dk`): Sultan onayı ile kart açılışı arası korunur, süre dolunca X666 kuralı aynen işler. PR ile biten kartın görevi çekilirken not gerçek nedeni ve `gorev.sh bitti` yolunu yazar.
 - **Gölge zili birleşmiş PR'e susar (0.27.36, 31 Eki · görev …0J2M5C · kart golge-birlesmis-pr-sus):** `golge-birlestirme.sh` kayıttan, görev adımından ve SERDAR zilinden önce PR durumunu `gh pr view` ile okur; MERGED ise hiçbirini yazmaz (CLOSED/birleşmemiş kapsam dışı) (kapı birleşmiş işe yeniden koşunca "birleştirirdim" yalanı çıkıyordu). Durum okunamazsa eski davranış sürer ve not düşer. Sınav: `golge.test.sh` G20-G24.
 - **Sultan dili zorunlu (0.27.35, 30 Eki · Kuzey Yıldızı G2.1–G2.2 · kart sultan-dili-satiri):** Sultan'a görünen her metin — gün sonu özeti, görev ekranına düşen görev adı ve özeti — Sultan dilindedir: görev özeti tek cümle ve 80 harften kısa, adı 5-10 kelime; dosya yolu, komut ve kod terimi yalnız kanıt satırında ve kart cümlesinin kaynak parantezinde durur (adım 2 kuralının yazılı hâli). Defterin özet kapısı sert kiptedir, kuralı bozan açılışı reddeder. Betik değişmedi.

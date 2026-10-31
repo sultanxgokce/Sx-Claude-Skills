@@ -29,4 +29,9 @@ dene "KG7 bitti/tıkandı'da yazılamayınca rc 0 (sessiz)" '{ gorev_yaz "$KD/$I
 dene "KG8 yazım sonucu karta işlenmez" 'k.setdefault("gorev_yazimlari",[]).append(' 'list().append('
 dene "KG9 jetonsuz kutuda da deftere gidilir" 'if [ ! -r "$DEFTER_JY" ]; then sonuc=' 'if false; then sonuc='
 dene "KG10 bağsız kartta 'görünüme düşmez' uyarısı yok" 'if not gorev: print("  · görev bağı yok' 'if False: print("  · görev bağı yok'
+dene "KG11 hedef türü korunmaz (E4ZYG4)" 'HEDEF=os.environ.get("MEVCUT_HEDEF")=="evet"; ATANAN' 'HEDEF=False; ATANAN'
+dene "KG12 hedef türü hiç okunmaz (E4ZYG4)" 'tek("hedef_turu")' '"-"'
+dene "KG13 başkasının ataması korunmaz (E4ZYG4)" 'BASKASI=os.environ.get("MEVCUT_BASKASI")=="1"' 'BASKASI=False'
+dene "KG14 ad karşılaştırması harf farkına takılır (E4ZYG4)" 'if m.norm(atn)!=m.norm(json.load(open(p))["aldi"]): print(1)' 'if atn!=json.load(open(p))["aldi"]: print(1)'
+dene "KG15 boşluklu atanan kırpılır (E4ZYG4)" '[ "${MATANAN:-}" = "-" ] && MATANAN="";' 'MATANAN="${MATANAN%% *}"; [ "${MATANAN:-}" = "-" ] && MATANAN="";'
 echo "─────────────"; echo "MUTASYON: gecti=$gecti dusen=$dusen"; [ $dusen -eq 0 ]

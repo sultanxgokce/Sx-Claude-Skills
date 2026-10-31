@@ -112,30 +112,49 @@ DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-ht
 #    iken açılış (ac), başka işe geçiş (gecti) ve tıkanma (tikandi) görevin DURUMUNU yazmaz — yalnız adım düşer. Zincir şuydu: onay bekleyen göreve
 #    kart bağlandı → ac 'çalışılıyor' yazdı → kart bitti (dilim, durum yazılmaz) → uzlaştırma açık kartı olmayan 'çalışılıyor'u 'bekliyor'a çekti.
 #    Ajan 'onay-bekliyor'u ancak açık --gorev-bitti ile yazar; 'bitti' yalnız insanın (A06). Durum okunamazsa eski davranış (yazım zaten düşerdi).
-gorev_durum_oku() {  # gorev_durum_oku <gorev_id> → stdout: "<gorev_durumu> <surum>" ya da boş (okunamadı)
+# 🔴 ATANAN + HEDEF KORUMASI (görev …E4ZYG4 · SERDAR ölçümü 31 Eki): yazmadan önce atanan ve hedef türü de okunur. Hedef türü görev ac/gecti/tikandi'de
+#    durum yazmaz (hedef-kapisi tasarlaniyor→bekliyor geçişini engellemiyor, onay akışından düşerdi). Atanan başkasıysa atama ve durum ezilmez;
+#    görevi almak açık fiildir: gorev.sh ustlen. Adlar calisiliyor-uzlastir.py norm() ile karşılaştırılır (Bânî = BANI). Okunamazsa eski davranış.
+gorev_durum_oku() {  # gorev_durum_oku <gorev_id> → stdout: "<gorev_durumu> <surum> <hedef_turu> <atanan>" ("-" = boş; atanan boşluk taşıyabilir, son alan) ya da boş (okunamadı)
   [ -r "$DEFTER_JY" ] || return 0
   local cfg; cfg="$(mktemp)"; printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$DEFTER_JY")" > "$cfg"
   curl -sS -m 10 --config "$cfg" "$DEFTER_U/kayit/$1" 2>/dev/null | python3 -c 'import sys,json
-try: k=json.load(sys.stdin).get("kayit") or {}; print(((k.get("canli") or {}).get("gorev_durumu") or "-") + " " + str(k.get("surum") or ""))
+def tek(a):
+    v=c.get(a); v=(v[0] if v else "") if isinstance(v,list) else v
+    return str(v or "-")
+try: k=json.load(sys.stdin).get("kayit") or {}; c=k.get("canli") or {}; print(tek("gorev_durumu") + " " + (str(k.get("surum") or "") or "-") + " " + tek("hedef_turu") + " " + tek("atanan"))
 except Exception: pass' 2>/dev/null
   rm -f -- "$cfg"
 }
+atanan_baskasi() {  # atanan_baskasi <kart.json> <atanan> → "1" başkası · değilse boş. Tek ad kuralı: calisiliyor-uzlastir.py norm()
+  [ -n "$2" ] || return 0
+  python3 - "$1" "$2" "$(dirname "${BASH_SOURCE[0]}")/calisiliyor-uzlastir.py" <<'PY'
+import importlib.util,json,sys
+p,atn,yol=sys.argv[1:]
+ozel=importlib.util.spec_from_file_location("uzlastir",yol); m=importlib.util.module_from_spec(ozel); ozel.loader.exec_module(m)
+if m.norm(atn)!=m.norm(json.load(open(p))["aldi"]): print(1)
+PY
+}
 gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
-  local kj="$1" olay="$2" govde cfg cevap rc sonuc MEVCUT="" MSURUM="" oku deneme
+  local kj="$1" olay="$2" govde cfg cevap rc sonuc MEVCUT="" MSURUM="" MHEDEF="" MATANAN="" MBASKASI="" oku deneme
   # Okuma ile yazma arasında görev değişirse (Sultan o an onaya aldıysa) eski okumayla durum EZİLMESİN: okunan sürüm yazıma eklenir (defterin
   # iyimser kilidi, 409 surum_catismasi) ve çatışmada BİR kez yeniden okunup gövde yeniden kurulur (göz tur 1 bulgusu, 774ZHG).
   for deneme in 1 2; do
-  case "$olay" in ac|gecti|tikandi) oku="$(gorev_durum_oku "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")")"; MEVCUT="${oku%% *}"; MSURUM="${oku#* }"; [ "$MEVCUT" = "-" ] && MEVCUT=""; [[ "$MSURUM" =~ ^[0-9]+$ ]] || MSURUM="" ;; esac
-  govde="$(MEVCUT_DURUM="$MEVCUT" MEVCUT_SURUM="$MSURUM" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KART_IZIN_NOT="${KART_IZIN_NOT:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+  case "$olay" in ac|gecti|tikandi) oku="$(gorev_durum_oku "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")")"; read -r MEVCUT MSURUM MHEDEF MATANAN <<<"$oku"; [ "$MEVCUT" = "-" ] && MEVCUT=""; [ "${MATANAN:-}" = "-" ] && MATANAN=""; MBASKASI="$(atanan_baskasi "$kj" "$MATANAN")"; [[ "$MSURUM" =~ ^[0-9]+$ ]] || MSURUM="" ;; esac
+  govde="$(MEVCUT_DURUM="$MEVCUT" MEVCUT_SURUM="$MSURUM" MEVCUT_HEDEF="$MHEDEF" MEVCUT_ATANAN="$MATANAN" MEVCUT_BASKASI="$MBASKASI" DARALT_NOT="${DARALT_NOT:-}" GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KART_IZIN_NOT="${KART_IZIN_NOT:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 md=os.environ.get("MEVCUT_DURUM","")
 KORU=md in ("onay-bekliyor","bitti")
-if KORU and olay in ("ac","gecti","tikandi"):
+HEDEF=os.environ.get("MEVCUT_HEDEF")=="evet"; ATANAN=os.environ.get("MEVCUT_ATANAN","")
+BASKASI=os.environ.get("MEVCUT_BASKASI")=="1"
+if (KORU or HEDEF or BASKASI) and olay in ("ac","gecti","tikandi"):
     # ONAY KORUMASI: durum yazılmaz, yalnız adım (Sultan'ın kuyruğundaki iş yerinde kalır)
+    # ATANAN + HEDEF KORUMASI: aynı yol; sebep adımda ayrı yazılır
     neler={"ac":"kart %s açıldı (tahmin %s dk)%s" % (is_,k.get("tahmin_dk"),os.environ.get("KART_IZIN_NOT","")),"gecti":"kart %s açıkken başka işe geçti: %s" % (is_,os.environ.get("GECTI_KART","?")),
            "tikandi":"kart %s tıkandı: %s" % (is_,((k.get("tikanma") or {}).get("neden","") or "tıkandı")[:300])}
-    print(json.dumps({"adimlar":["[▶ dilim] %s · %s — görev '%s', durumu KORUNUR (onay kuyruğundan düşmez)" % (kim,neler[olay],md)]},ensure_ascii=False)); sys.exit(0)
+    sebep=("görev '%s', durumu KORUNUR (onay kuyruğundan düşmez)" % md if KORU else "hedef türü görev, durumu KORUNUR (onay akışından düşmez)" if HEDEF else "atanan %s, atama ve durum KORUNUR (almak için gorev.sh ustlen)" % ATANAN)
+    print(json.dumps({"adimlar":["[▶ dilim] %s · %s — %s" % (kim,neler[olay],sebep)]},ensure_ascii=False)); sys.exit(0)
 if olay=="ac":
     y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk · sınıf: %s" % (kim,is_,k.get("tahmin_dk"),",".join(k.get("siniflar") or []) or "yok")+os.environ.get("KART_IZIN_NOT","")   # 0.25.2: merkezin otomatik doğrulama devri sınıfsız işi buradan okur (sınıf bilinmiyorsa Doğrulat)
 elif olay=="bitti":
@@ -189,7 +208,7 @@ else:
   fi
   [ "$deneme" = 1 ] && [ -n "$MSURUM" ] && [[ "$sonuc" == "yazılamadı: http 409 · surum_catismasi"* ]] || break
   done
-  MEVCUT_DURUM="$MEVCUT" GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
+  MEVCUT_DURUM="$MEVCUT" MEVCUT_HEDEF="$MHEDEF" MEVCUT_ATANAN="$MATANAN" MEVCUT_BASKASI="$MBASKASI" GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
 import json,sys,datetime
 p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
 k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
@@ -197,7 +216,10 @@ json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
 d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor","goz":"göz adımı (durum değişmez)","gecti":"bekliyor (başka işe geçti)","daralt":"ölçüt adımı (görev durumu değişmez)"}[olay]
 md=os.environ.get("MEVCUT_DURUM","")
-if md in ("onay-bekliyor","bitti") and olay in ("ac","gecti","tikandi"): d="yalnız adım — görev '%s', durumu korundu" % md
+if olay in ("ac","gecti","tikandi"):
+    if md in ("onay-bekliyor","bitti"): d="yalnız adım — görev '%s', durumu korundu" % md
+    elif os.environ.get("MEVCUT_HEDEF")=="evet": d="yalnız adım — hedef türü görev, durumu korundu"
+    elif os.environ.get("MEVCUT_BASKASI")=="1": d="yalnız adım — görev %s'ın, atama ve durum korundu; almak için önce: gorev.sh ustlen %s --kim %s --tahmin <dk>" % (os.environ.get("MEVCUT_ATANAN",""),k["gorev"],k["aldi"])
 print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
 PY
   [ "$sonuc" = "yazıldı" ]

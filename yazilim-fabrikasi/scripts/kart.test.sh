@@ -670,6 +670,48 @@ m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000013")]
 assert len(m)==1 and m[0]["govde"]["yerine"]["gorev_durumu"]=="calisiliyor", l
 PY2
 rm -f "$T/gorevler-kart.json"; unset KART_UZLASTIR_KOKLER UZLASTIR_ZIL_KOMUT UZLASTIR_KOLTUK_KOMUT
+echo "════ T14d · ATANAN + HEDEF KORUMASI (…E4ZYG4): başkasının görevi ve hedef türü görev kart olaylarıyla ezilmez, yalnız adım düşer ════"
+yerinesiz() {  # yerinesiz <görev> <N0> <beklenen metin>: o göreve giden yazımların hiçbiri 'yerine' taşımaz, en az biri metni içerir
+python3 - "$T/yazim.jsonl" "$2" "$1" "$3" <<'PY2'
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith(sys.argv[3])]
+assert m and all("yerine" not in x["govde"] for x in m), m
+assert any(sys.argv[4] in a for x in m for a in x["govde"].get("adimlar",[])), m
+PY2
+}
+yerineli() {  # yerineli <görev> <N0> <alan> <değer>: o göreve giden yazım alanı değeri yazar
+python3 - "$T/yazim.jsonl" "$2" "$1" "$3" "$4" <<'PY2'
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+m=[x for x in l if x["yol"].endswith(sys.argv[3]) and "yerine" in x["govde"]]
+assert len(m)==1 and m[0]["govde"]["yerine"].get(sys.argv[4])==sys.argv[5], l
+PY2
+}
+kayit() { printf '%s' "$2" > "$T/kayit-gorev_KARTTEST000000$1.json"; }
+kayit A1 '{"kayit":{"surum":5,"canli":{"gorev_durumu":"acik","atanan":"SERDAR"}}}'
+N0=$(yz); O="$(KART_UZLASTIR=0 bash "$KT" ac gb-a1 --is "başkasının görevine dilim" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST000000A1 --tahmin 20 2>&1)"; RC=$?
+yerinesiz gorev_KARTTEST000000A1 "$N0" "atanan SERDAR, atama ve durum KORUNUR"; g $? "GA1 🔴 atanan başkası: ac atananı ve durumu yazmaz, adım bunu söyler"
+[ $RC -eq 0 ] && grep -q "yalnız adım — görev SERDAR'ın, atama ve durum korundu" <<<"$O" && grep -q "gorev.sh ustlen" <<<"$O"; g $? "GA1b rc 0, ekranda korunduğu ve üstlenme yolu yazar"
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" tikandi gb-a1 --yol daralt --neden "başkasının görevinde tıkandı" >/dev/null 2>&1
+yerinesiz gorev_KARTTEST000000A1 "$N0" "tıkandı: başkasının görevinde tıkandı"; g $? "GA2 atanan başkası: tikandi 'bekliyor' yazmaz, neden adıma düşer"
+kayit A3 '{"kayit":{"surum":5,"canli":{"gorev_durumu":"acik","atanan":"Bânî"}}}'
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-a3 --is "kendi görevim yazımı farklı" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST000000A3 --tahmin 20 >/dev/null 2>&1
+yerineli gorev_KARTTEST000000A3 "$N0" gorev_durumu calisiliyor; g $? "GA3 atanan kendisi (Bânî = BANI, harf farkı başkası sayılmaz): durum yazılır"
+kayit A4 '{"kayit":{"surum":5,"canli":{"gorev_durumu":"acik"}}}'
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-a4 --is "atanansız görev" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST000000A4 --tahmin 20 >/dev/null 2>&1
+yerineli gorev_KARTTEST000000A4 "$N0" atanan BANI; g $? "GA4 atanan boş: kartı alan atanır (eski davranış)"
+kayit A5 '{"kayit":{"surum":7,"canli":{"gorev_durumu":"tasarlaniyor","hedef_turu":"evet","atanan":"BANI"}}}'
+N0=$(yz); O="$(KART_UZLASTIR=0 bash "$KT" ac gb-a5 --is "hedef göreve dilim" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST000000A5 --tahmin 20 2>&1)"; RC=$?
+yerinesiz gorev_KARTTEST000000A5 "$N0" "hedef türü görev, durumu KORUNUR"; g $? "GA5 🔴 hedef türü: ac durum yazmaz, atanan kendisi olsa bile"
+[ $RC -eq 0 ] && grep -q "yalnız adım — hedef türü görev, durumu korundu" <<<"$O"; g $? "GA5b rc 0, ekranda hedef korundu yazar"
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-a6 --is "başka iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST000000A4 --tahmin 20 >/dev/null 2>&1
+yerinesiz gorev_KARTTEST000000A5 "$N0" "başka işe geçti: gb-a6"; g $? "GA6 🔴 hedef türü: gecti 'bekliyor' yazmaz (onay akışından düşmez)"
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" tikandi gb-a5 --yol daralt --neden "hedefte tıkandı" >/dev/null 2>&1
+yerinesiz gorev_KARTTEST000000A5 "$N0" "tıkandı: hedefte tıkandı"; g $? "GA7 🔴 hedef türü: tikandi 'bekliyor' yazmaz"
+kayit A8 '{"kayit":{"surum":5,"canli":{"gorev_durumu":"acik","atanan":"KIRK BIR"}}}'
+N0=$(yz); KART_UZLASTIR=0 bash "$KT" ac gb-a8 --is "boşluklu atanan" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST000000A8 --tahmin 20 >/dev/null 2>&1
+yerinesiz gorev_KARTTEST000000A8 "$N0" "atanan KIRK BIR, atama ve durum KORUNUR"; g $? "GA8 boşluklu atanan adı kırpılmaz"
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"

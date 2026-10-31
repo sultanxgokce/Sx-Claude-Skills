@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kart-gorev-atanan-koru",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T21:02:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-gorev-atanan-koru",
+  "dal": "kart-gorev-atanan-koru",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 50492,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 138087
+  },
+  "dalgic": "uyumsuz",
+  "bas": "cbfafc2d9b049a8aa45a3aebd545fc3f4a386839",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kart aracı, bağlı görev başkasına ait olduğunda veya hedef türündeyken atama ile durumu koruyor; yalnız adım düşüp sebebini ve gerektiğinde üstlenme yolunu söylüyor. Eski kodda kalan sekiz sınavın yeni kodda geçmesi, beş ayrı bozma denemesinin sınavca yakalanması ve gerçek defter okumasında görevin değişmeden kalması üretime hazır düzeyde kanıt sağlıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Aynı sınav eski kodda 441 geçti/8 kaldı iken yeni ve birleşik ölçümlerde 449 geçti/0 kaldı; GA1-GA8 başkasının atamasını, hedef türünü, ad normalleştirmesini, boş atananı, açılışı, başka işe geçişi, tıkanmayı ve görünür açıklamayı kapsıyor. Beş ayrı yeşil mutasyon kaydı ilgili bozuklukları yakalıyor; gerçek defter okuması da E4ZYG4 görevinin durum=calisiliyor, atanan=BENNÂ olarak korunduğunu gösteriyor. Toplu mutant-hedef-kapi kaydındaki renk=kirmizi ve dusen_kapi=false alanları kendi SONUÇ kaçan=0 çıktısıyla tutarsız olsa da, aynı davranışlar ayrı yeşil mutasyon kayıtları ve gerçek ölçümle bağımsız olarak doğrulanmış."
+  }
+}
