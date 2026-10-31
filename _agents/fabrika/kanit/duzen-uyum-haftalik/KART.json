@@ -1,0 +1,48 @@
+{
+  "is": "duzen-uyum-haftalik",
+  "cumle": "haftalık uyum denetimi (uyum-haftalik.sh) sapmayı havuza yazar; hiç kimlik işaretli değilse sarı der (Kuzey G30)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-31T00:19:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "?"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [
+    "ÇOK GÜNLÜK KAPSAM (haftalik, haftalık): bir PR'da teslim edilmez — gün başına kart öner: duzen-uyum-haftalik-g1 · duzen-uyum-haftalik-g2 … (her biri günün teslim birimi)"
+  ],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-31T00:19:48+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M67AR84VA0GTG6D9SFW1DDQM",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T00:19:54+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T00:20:02+03:00",
+      "olay": "gecti",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

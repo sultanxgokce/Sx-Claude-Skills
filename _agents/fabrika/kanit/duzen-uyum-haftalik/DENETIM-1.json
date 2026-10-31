@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "duzen-uyum-haftalik",
+  "pr": "607",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T03:20:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-kurulum-uyum",
+  "dal": "duzen-uyum-haftalik-pr",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20769,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3444
+  },
+  "dalgic": "uyumsuz",
+  "bas": "45c8dcbfc9cc535649caf9936a447d0881da3d66",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen haftalık uyum betiği sapmayı havuza yazıyor, işaretli kimlik bulunmadığında SARI/rc 4 veriyor ve temel hata yollarını sınıyor. Üretim kodunda teslimi engelleyen kusur görünmüyor; yalnız mutasyon kanıtının manifest sınıflandırması rötuş istiyor.",
+    "bulgular": [
+      {
+        "ne": "Mutasyon sınavı çalıştırılmış olsa da manifest kaydı `mutasyon: true` taşımıyor; bu nedenle üç mutantın yakalandığı kısmı rubriğe göre resmî mutasyon kanıtı sayılamaz.",
+        "kanit": "Manifestte `sinav-mutantli` kaydı normal `olcum` olarak yer alıyor ve `mutasyon: true` alanı yok; çıktıda ise `── mutasyon` altında üç mutant sonucu bulunuyor.",
+        "konum": "kanıt manifesti: sinav-mutantli / olcum-sinav-mutantli-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonraki ölçüm gerçekçi hermetik vakalarla U1-U8'i yeşil gösteriyor ve gerçek `surum.sh` entegrasyonunu da U8'de sınıyor. Ancak önce/sonra kayıtları aynı ölçüm çifti değil ve mutant bölümü `mutasyon: true` ile işaretlenmediğinden mutasyon iddiasının kanıt biçimi eksik; üretim davranışının asıl ölçümü yine U1-U8 çıktısıyla yeterli."
+  }
+}
