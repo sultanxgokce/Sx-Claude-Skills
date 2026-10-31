@@ -68,6 +68,23 @@
       "tez-muharrir"
     ]
   },
+  "nazir": {
+    "reis": "nazir-yon",
+    "uyeler": [
+      "nazir-yon",
+      "nazir-motor1",
+      "nazir-mim",
+      "nazir-rasatci",
+      "nazir-seyyah",
+      "nazir-hafizadar",
+      "nazir-mizanci",
+      "nazir-seritdar",
+      "nazir-mudekkik",
+      "nazir-kilavuz",
+      "nazir-tercuman",
+      "nazir-musahhih"
+    ]
+  },
   "huzur": {
     "reis": "huzur-yon",
     "uyeler": [
@@ -83,10 +100,24 @@
       "MUZEYYIN"
     ]
   },
-  "maiset": {
-    "reis": "BASIRET",
+  "revak": {
+    "reis": "REVAK-MİMAR",
     "uyeler": [
-      "BASIRET",
+      "REVAK-MİMAR",
+      "KALEMKÂR",
+      "HATTAT",
+      "MİHMANDAR",
+      "REVAK-MÜHÜRDAR",
+      "REVAK-BAĞLAMA",
+      "REVAK-KEŞİF",
+      "REVAK-ŞANTİYE",
+      "REVAK-KURTARICI"
+    ]
+  },
+  "maiset": {
+    "reis": "FERASET",
+    "uyeler": [
+      "FERASET",
       "CARSI",
       "KESSAF",
       "PEYK",

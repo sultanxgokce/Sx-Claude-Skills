@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh /config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle-4/postane-postaci
+# rc=0 sure=0.1s zaman=2026-11-01T01:43:49+03:00
+--- stdout ---
+farklı: kutu-adlari.json
+farklı: KAYNAK.sha256 (cloudtop dosyalarından üretilmesi gereken liste değil)
+cloudtop ana dalından farklı ya da eksik dosya: 2
+--- stderr ---
