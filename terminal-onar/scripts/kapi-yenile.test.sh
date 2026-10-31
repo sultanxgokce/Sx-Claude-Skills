@@ -31,6 +31,10 @@ esac
 EOF
 printf '#!/usr/bin/env bash\nprintf "%%s  -\\n" "$(cat %s/disk-sha)"\n' "$T" > "$T/bin/sha256sum"
 chmod +x "$T/bin/"* "$T/calisma/scripts/onar.sh"
+# sahte ps TESTİN BAŞINDA kurulur (H2): '-o etimes=' sorgusu $T/etimes'ten gelir, dosya yoksa BOŞ döner → kapı yaşı ölçülemez, eski akış.
+# Kurulmazsa A-D bölümleri gerçek ps'i çağırır; taze çekilmiş CI makinesinde 1234 numaralı GERÇEK bir süreç olabilir ve dosya zamanı o sürecin
+# başlangıcından yeni göründüğü için sınav 'kapı ESKİ' koluna girer (main'de 13 kaldı). Yerelde 1234 yok, sınav tesadüfen yeşildi.
+printf '#!/usr/bin/env bash\ncase "$*" in *etimes*) cat "%s/etimes" 2>/dev/null ;; *) /usr/bin/ps "$@" ;; esac\n' "$T" > "$T/bin/ps"; chmod +x "$T/bin/ps"
 printf 'abcdef123456' > "$T/disk-sha"
 kos() { env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T" TO_DURUM_DIZ="$D" TO_BECERI_KOK="$T/calisma" \
   CORTEX_ACCESS_ENV="$T/yok.env" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" bash "$T/calisma/scripts/kapi-yenile.sh" "$@" 2>&1; }
@@ -39,6 +43,7 @@ onar_sayisi() { c=$(grep -c "web-yenile" "$D/onar.log" 2>/dev/null); echo "${c:-
 
 echo "── sahteler devrede mi (ortak.sh PATH tuzağı)"
 kapi "H1 sahte curl/pgrep ortak.sh'tan sonra da öndedir" "sahte" "$(kos --kuru >/dev/null; env -i PATH="$T/bin:/usr/bin:/bin" TO_SAHTE_BIN="$T/bin" TO_KUTU=sinav TO_DURUM_DIZ="$D" TO_BECERI_KOK="$T/calisma" bash -c '. "$TO_BECERI_KOK/scripts/ortak.sh"; [ "$(command -v pgrep)" = "$TO_SAHTE_BIN/pgrep" ] && echo sahte || echo GERÇEK')"
+kapi "H2 sahte ps A-D'den ÖNCE kurulu: etimes dosyası yokken gerçek (var olan) bir pid için de BOŞ döner — CI'da 1234 gerçek süreç olabilir" "bos" "$(rm -f "$T/etimes"; v=$(env -i PATH="$T/bin:/usr/bin:/bin" ps -o etimes= -p 1 | tr -d ' '); [ -z "$v" ] && echo bos || echo "gercek:$v")"
 
 echo "── A · zaten güncel"
 sifirla; echo 1234 > "$T/canli"; echo 1234 > "$D/kapi.pid"; cp "$T/disk-sha" "$T/sunulan"
@@ -94,7 +99,7 @@ kapi "X1 MUTANT eski kapıya SIGHUP gönderir ve onu öldürür (C2 bunu yakalar
 
 echo "── E · kapı diskteki koddan ESKİ çalışıyor (2.34.0 · WHRJ): SIGHUP yetmez, tam yeniden başlatma"
 # sahte ps: '-o etimes= -p <pid>' → $T/etimes (süreç yaşı sn); kapi-eski-mi.sh gerçek find/date ile sunucu.mjs'in yaşını kıyaslar
-printf '#!/usr/bin/env bash\ncase "$*" in *etimes*) cat "%s/etimes" 2>/dev/null ;; *) /usr/bin/ps "$@" ;; esac\n' "$T" > "$T/bin/ps"; chmod +x "$T/bin/ps"
+# (sahte ps en başta kuruldu — H2)
 eski_kur() { sifirla; echo 1234 > "$T/canli"; echo 1234 > "$D/kapi.pid"; cp "$T/disk-sha" "$T/sunulan"; echo 7200 > "$T/etimes"; touch "$T/calisma/kapi/sunucu.mjs"; }   # süreç 2 sa önce, kod ŞİMDİ
 eski_kur; c=$(kos); rc=$?
 kapi "E1 pano sha aynı olsa da kod süreçten yeni → 'ESKİ' der, SIGHUP YOK, onar --web-yenile bir kez" "e" "$(grep -q 'diskteki koddan ESKİ' <<<"$c" && [ ! -f "$T/hup" ] && [ "$(onar_sayisi)" = 1 ] && echo e || echo "h:$c")"
