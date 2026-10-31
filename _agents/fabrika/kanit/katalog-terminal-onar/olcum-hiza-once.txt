@@ -1,0 +1,8 @@
+$ node ahi/schema/katalog-surum-hiza.mjs .
+# rc=1 sure=15.1s zaman=2026-10-31T23:43:27+03:00
+--- stdout ---
+  ✗ SAPMA terminal-onar: katalog 2.36.9 ≠ SKILL.md 2.37.0
+katalog↔SKILL.md: girdi 85 · sapma 1 · ölçülemedi 0
+--- stderr ---
+⏳ agir-sira: kanit-katalog-terminal-onar-hiza 15 sn bekledi (yuva 2, load1 14.28)
+✗ 1 sapma — SKILL.md tek gerçek; düzeltmek için: node ahi/schema/katalog-surum-hiza.mjs . --duzelt
