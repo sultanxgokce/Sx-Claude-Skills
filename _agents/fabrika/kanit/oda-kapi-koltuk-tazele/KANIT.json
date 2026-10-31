@@ -1,0 +1,43 @@
+{
+  "is": "oda-kapi-koltuk-tazele",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T17:16:43+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "3a9cbe4d8fab4d7324dec6084d320c20f0b0f5a0537482bbd031c058d7207633",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/kapi-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-oda-kapi-koltuk-tazele"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T17:16:43+03:00",
+      "sure_sn": 7.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b479c594c0e14447874c68d6793cec87"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "betik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-betik-sinavi-sonra.txt",
+      "sha256": "43bf9c77b86cd996fcfda090476ac7a0b2ecaeb64bbf77df33ab85d41abc2141",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T17:15:52+03:00",
+      "sure_sn": 77.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "21e6b4e187b045d2a1b3be9502420b21"
+    }
+  ],
+  "imza": "2f15b7bd88b42b393fab8cf4e970304450d604e68834235c89fe4c2c974193e6"
+}
