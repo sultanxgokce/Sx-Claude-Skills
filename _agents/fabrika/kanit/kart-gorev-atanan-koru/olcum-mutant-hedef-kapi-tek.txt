@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti). Gerçek kod ölçümü: olcum-sinav-yeni-kod-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mutant-hedef.sh
+# rc=0 sure=926.9s zaman=2026-10-31T20:37:21+03:00
+--- stdout ---
+yakalandı hedef korunmaz · hedef GA5  · rc 1 · kırmızı 3
+yakalandı hedef okunmaz · hedef GA6  · rc 1 · kırmızı 4
+yakalandı başkası korunmaz · hedef GA1  · rc 1 · kırmızı 3
+yakalandı harf farkı · hedef GA3  · rc 1 · kırmızı 1
+yakalandı boşluklu ad · hedef GA8  · rc 1 · kırmızı 1
+SONUÇ kaçan=0
+--- stderr ---
+⏳ agir-sira: kanit-kart-gorev-atanan-koru-mutant-hedef-kapi 45 sn bekledi (yuva 2, load1 17.81)

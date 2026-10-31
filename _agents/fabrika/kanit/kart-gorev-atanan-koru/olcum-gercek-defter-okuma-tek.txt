@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gercek-oku.sh
+# rc=0 sure=100.3s zaman=2026-10-31T20:57:53+03:00
+--- stdout ---
+NYEFRZ durum=calisiliyor surum=161 hedef=evet atanan=SERDAR
+E4ZYG4 durum=calisiliyor surum=4 hedef=- atanan=BENNÂ
+06XGWS durum=bitti surum=15 hedef=- atanan=HEZARFEN
+--- stderr ---
+⏳ agir-sira: kanit-kart-gorev-atanan-koru-gercek-defter-okuma 100 sn bekledi (yuva 2, load1 16.69)
