@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "postaci-izinli-munavebe",
+  "pr": "616",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T16:26:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-izinli-munavebe",
+  "dal": "postaci-izinli-munavebe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14116,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3671
+  },
+  "dalgic": "uyumsuz",
+  "bas": "5fee6f2bd397a5c2379d6c18305f8e4566ce72a2",
+  "duzeltme_farki": {
+    "onceki_bas": "1c35a489415ddcf68b1f10d5681371927ddd512d",
+    "dosya": 3,
+    "bayt": 4601,
+    "tam_bayt": 17599
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Münâvebe izinli kutu listesine eklenmiş, doğrudan kurulum sınavı geçmiş ve önceki belgedeki 16/17 kapı uyuşmazlığı 17 olarak düzeltilmiş. Ancak önceki turun B1 bulgusu kapanmamış: yetki sınıfındaki işe başlama izni hâlâ beklerken değişiklik ve ölçümler yapılmış; önce bu süreç sorununu çözün.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: Yetki sınıfındaki iş, başlama izni verilmeden uygulanmış.",
+        "kanit": "İş kartında siniflar=[\"yetki\"] ve baslama_izni.durum=\"bekliyor\"; buna rağmen manifestte 16:18:55–16:20:22 arasında üretim değişikliğini doğrulayan ölçümler bulunuyor.",
+        "konum": "İŞ KARTI: siniflar, baslama_izni; KANIT MANİFESTİ: kayitlar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İzinli liste ölçüm çifti 17/False → 18/True değişimini, kutu sınavı da S6b ile münâvebenin dar jetonla kurulduğunu ve toplam 17/17 kapının geçtiğini gösteriyor; depo kapıları da yeşil. Önceki B2 kapanmış: SKILL.md artık 17 kapı diyor ve PASS=17 ölçümüyle uyumlu. B1 ise iş kartındaki bekleyen başlama izni nedeniyle açık."
+  }
+}
