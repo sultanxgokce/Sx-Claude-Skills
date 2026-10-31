@@ -1,0 +1,51 @@
+{
+  "is": "duzen-gece-kurulum",
+  "cumle": "düzen sürümü artınca dört düzen becerisi gece kurulur, reislere sürüm mektubu gider (Kuzey G25 G29)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-31T00:19:57+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "?"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-31T00:19:57+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M67AR7Z9D39XPZV6MJQKB9F2",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T00:20:02+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T02:50:32+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T02:52:40+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

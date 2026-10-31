@@ -1,0 +1,43 @@
+{
+  "is": "duzen-gece-kurulum",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T02:51:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "betik-var",
+      "asama": "once",
+      "dosya": "olcum-betik-var-once.txt",
+      "sha256": "c3e8424db101a0a35d9c1e2659490681217d2e6a46c52ffdd07f1d478a9af78c",
+      "komut": [
+        "test",
+        "-f",
+        "/config/projects/Sx-Claude-Skills/duzen/scripts/duzen-gece.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T00:24:42+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1a431a79efd84775a00057ed8a26cc75"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-mutantli",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-mutantli-sonra.txt",
+      "sha256": "8e5e505e291473aaa249f2d970d7632cc10ec3502658adc4b5a30f20ac2fb21a",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T02:51:38+03:00",
+      "sure_sn": 10.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "118e312a4ec94b98920b31fcb710c4c8"
+    }
+  ],
+  "imza": "bd227d2514526dbb8b3723fade28aacafeb8d3224f483f2508d952f53e68e20f"
+}
