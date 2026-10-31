@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "postaci-izinli-munavebe",
+  "pr": "616",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T16:22:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-izinli-munavebe",
+  "dal": "postaci-izinli-munavebe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16847,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 6662
+  },
+  "dalgic": "uyumlu",
+  "bas": "1c35a489415ddcf68b1f10d5681371927ddd512d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Münâvebe izinli kutu listesine eklenmiş, sürüm ve sınav güncellenmiş; önce/sonra ölçümü ile 17 sınav kapısı değişikliğin çalıştığını gösteriyor. Ancak işe başlama izni hâlâ beklerken değişiklik yapılmış ve belge sınav sayısını 16 diye bırakmış; önce bunları düzeltin.",
+    "bulgular": [
+      {
+        "ne": "Yetki sınıfındaki iş, başlama izni verilmeden uygulanmış.",
+        "kanit": "İş kartında siniflar=[\"yetki\"] ve baslama_izni.durum=\"bekliyor\"; buna rağmen üretim kodu farkı ve 16:18:55–16:20:22 tarihli ölçümler mevcut.",
+        "konum": "İŞ KARTI: baslama_izni; KANIT MANİFESTİ: kayitlar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınav sayısı belgesi güncel değil: çıktı 17 kapı gösterirken SKILL.md hâlâ 16 kapı diyor.",
+        "kanit": "olcum-kutu-sinavi-sonra.txt sonunda “PASS=17 FAIL=0”; değişiklikte SKILL.md satırı “Sınav: ... (16 kapı)” olarak kalmış.",
+        "konum": "postane-postaci/SKILL.md:13; olcum-kutu-sinavi-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İzinli liste için gerçekçi bir önce/sonra ölçüm çifti 17/False → 18/True sonucunu veriyor, ayrıca münâvebenin dar jetonla kurulabildiğini doğrudan sınayan yeşil kayıt ve depo kapıları ölçümü var."
+  }
+}
