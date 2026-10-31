@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.20.1
+version: 1.20.2
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -116,6 +116,8 @@ Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sa
 > **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
 > **1.18.0 (30 Eki, MUAVİN Madde 4 · NOVA):** `sirada-bak.sh` koltuk kimliğini ortamda yokken türetir — `--kim` → `GUNLUK_PLAN_AJAN` → `AGENT_NAME` → `AILE_KIMDEN` → tmux oturumu ↔ aile-registry `tmux:` alanı (tek eşleşme; yol `GUNLUK_PLAN_REGISTRY`). Eskiden kimlik boşken betik yine koşuyor, koltuğa atanmış işleri 'başkasının' sayıp Sultan'a 'iş çıkaralım mı' diye sevk ediyordu (NOVA 30 Eki). Türetilemezse ÖLÇÜLEMEDİ rc 3, kimlik uydurulmaz. Sınav X1-X5.
 > **1.19.1 (30 Eki, SERDAR · Kuzey Yıldızı G2.1–G2.2):** değişmez 4 "Sultan dili zorunlu" oldu: deftere yazılan madde özeti tek cümle ve 80 harften kısa, adı 5-10 kelime. Betik değişmedi.
+> **1.20.2 (31 Eki, HEZARFEN · görev …9ABX5):** `ac`, `ekle`, `bulgu` odasız doğmaz (açık `--oda` > `GOREV_ODA` > koltuğun ekip kaydı > `agentic-os`, söylenir); `ac`/`ekle`/`ozet` 80 harf ve üstü özeti defteri çağırmadan reddeder (Kuzey G2.1 ≥80 sayar). Puan saatlik/10 dk Kuzey puanlama turunda.
+
 > **1.20.1 (31 Eki, BÂNİ · Kuzey G10 başlık 1. adım, kart gunluk-plan-baslik-esitle):** görev başlığı = son ad, tek okuyucu (cloudtop #1252): paket `gorev.sh` ve `dugum-bak.py` kanonikle bayt eşitlendi (başlığı defterin `baslik` alanından okur; alan yoksa eski defter için ham son ad). Y7 sapma kapısı kanoniği yalnız cloudtop `origin/main`'inden okur (okunamazsa ÖLÇÜLEMEDİ, çalışma ağacına düşmez) — ana checkout'un çalışma ağacı geriden gelince sapmayı değil checkout'un yaşını ölçüyordu (eşitlemeden önce sahte yeşil). `hasat.sh`'ın ham başlık okuması ayrı işe bırakıldı.
 > **1.20.0 (31 Eki, HEZARFEN · Kuzey Yıldızı G1.5/G1.6, görev …YEF3):** `hasat.sh ac` havuz kaydını açmak yerine YERİNDE bırakıp ondan yeni görev doğurur; açılış adımı kipi (Otomatik/Seanslı Hasat) söyler, bağ `dogan_gorevler`e yazılır; yeni `hasat.sh cevap` Seanslı Hasat'ın üç cevabını havuz kaydına adım olarak yazar. `ac` artık `--kip` ister (eski `ac <id> "<gerekçe>"` çağrısı rc 2). Paket `gorev.sh` değişmedi. Sınav 99 kapı + 5 mutant.
 
