@@ -42,6 +42,7 @@
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 #   kart.sh canli-ayarla <iş> --canli e|h --reis <AD=aldi> --gerekce "<≥20 karakter>"   AÇIK kartta canlı kanıt şartını SAHİP değiştirir:
 #          --reis kartın aldı alanıyla aynı olmalı (reis-dedi emsali; başkasının kararı gerekçede atıfla); karta canli_sebep + geçmiş satırı yazılır
+#   kart.sh gorev-bagla <iş> --reis <AD=aldi> --gorev gorev_<kimlik> --tahmin <dk>   --gorev olmadan açılmış AÇIK karta görev bağlar; biten, bağlı ya da başkasının kartı reddedilir; yazım düşerse bağ geri alınır
 #   kart.sh sultan-turu <iş> --reis <AD=aldi> --gorev gorev_<kimlik> --tur <N>   BEĞENİ DÖNGÜSÜ: Sultan'ın N. "değiştir" turunu kaydeder, göz tavanı sayacını o ana çeker
 #          (daralt'ın tur_sifir'i ile aynı mekanizma; yeni kart yok). Şartlar araçta: görev etiketi 'begeni-dongusu' (defterden) · görevde
 #          [tur N] kare: <yol/url> · Sultan: "<yorum>" satırı · reis = kart sahibi · defter okunamazsa hiçbir şey değişmez. Mutlak 4. tavan kalkmaz.
@@ -208,10 +209,12 @@ else:
   fi
   [ "$deneme" = 1 ] && [ -n "$MSURUM" ] && [[ "$sonuc" == "yazılamadı: http 409 · surum_catismasi"* ]] || break
   done
-  MEVCUT_DURUM="$MEVCUT" MEVCUT_HEDEF="$MHEDEF" MEVCUT_ATANAN="$MATANAN" MEVCUT_BASKASI="$MBASKASI" GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
-import json,sys,datetime
+  MEVCUT_DURUM="$MEVCUT" MEVCUT_HEDEF="$MHEDEF" MEVCUT_ATANAN="$MATANAN" MEVCUT_BASKASI="$MBASKASI" GOREV_BITTI="${GOREV_BITTI:-}" YAZIM_KIMLIK="${YAZIM_KIMLIK:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
+import json,sys,datetime,os as _os
 p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
-k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
+_y={"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc}
+if _os.environ.get("YAZIM_KIMLIK"): _y["kimlik"]=_os.environ["YAZIM_KIMLIK"]   # gorev-bagla geri alması yalnız bu kaydı söksün
+k.setdefault("gorev_yazimlari",[]).append(_y)
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
 d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor","goz":"göz adımı (durum değişmez)","gecti":"bekliyor (başka işe geçti)","daralt":"ölçüt adımı (görev durumu değişmez)"}[olay]
@@ -993,6 +996,57 @@ except Exception as e: print("olculemedi\tkart okunamadı: %s" % e); raise Syste
 d,a=izin_durumu(k); print(d+"\t"+a.replace("\n"," ").replace("\t"," "))
 raise SystemExit(3 if d=="olculemedi" else 0)
 PY
+    ;;
+  gorev-bagla)
+    # Kart --gorev olmadan açıldıysa bağ sonradan eklenir. Eskiden yol yoktu: ikinci 'ac' "kart zaten var" diyordu, görev kartsız sayılıp bekliyor'a çekiliyordu (31 Eki, kutu-kisayol).
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    [[ "$GOREV" =~ ^gorev_[A-Za-z0-9]{10,40}$ ]] || { _hata "--gorev gorev_<kimlik> gerekiyor ('$GOREV' değil)"; exit 1; }
+    [[ "$TAHMIN" =~ ^[1-9][0-9]*$ ]] || { _hata "--tahmin <dk> pozitif sayı olmalı ('$TAHMIN' değil)"; exit 1; }
+    [ -n "$REIS" ] || { _hata "--reis <AD> gerekiyor: görev bağını yalnız kartın sahibi (aldı alanı) ekler"; exit 1; }
+    # Bakma + yazma + defter + geri alma TEK kilit altında: iki eşzamanlı bağlama aynı görevi iki karta yazamaz (göz tur 1, #628). Kilit dizinin kendisinde: depoya dosya bırakmaz.
+    exec 9<"$KD"; flock -w 30 9 || { _hata "kart kilidi 30 sn alınamadı: başka bağlama sürüyor, yeniden dene"; exit 4; }
+    KART_YEDEK="$(cat "$KD/$IS.json")"; YAZIM_KIMLIK="bag-$$-$(date +%s%N)"
+    python3 - "$KD/$IS.json" "$GOREV" "$TAHMIN" "$REIS" "$KD" "$YAZIM_KIMLIK" <<'PY' || exit 1
+import glob,json,os,sys,datetime
+yol,gorev,tahmin,reis,kd,bag=sys.argv[1:]
+k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+if k.get("durum")!="acik":
+    print(f"✗ kart açık değil (durum: {k.get('durum')}) — biten kartın görev bağı sonradan değiştirilmez", file=sys.stderr); raise SystemExit(1)
+if reis != k.get("aldi"):
+    print(f"✗ --reis '{reis}' kartın sahibi değil (kartta aldı: {k.get('aldi')}) — görev bağını yalnız sahip ekler", file=sys.stderr); raise SystemExit(1)
+if k.get("gorev"):
+    print(f"✗ kart zaten bağlı: {k['gorev']} — bağ değiştirilmez, yeni iş yeni karttır", file=sys.stderr); raise SystemExit(1)
+for f in glob.glob(os.path.join(kd,"*.json")):
+    if os.path.abspath(f)==os.path.abspath(yol): continue
+    try: o=json.load(open(f,encoding="utf-8"))
+    except Exception: continue
+    if o.get("gorev")==gorev and o.get("durum") in ("acik","canli-borclu"):
+        print(f"✗ {gorev} başka açık karta bağlı: {o.get('is')} (sahibi {o.get('aldi')})", file=sys.stderr); raise SystemExit(1)
+k["gorev"]=gorev; k["tahmin_dk"]=int(tahmin)
+k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"gorev-bagla","reis":reis,"gorev":gorev,"kimlik":bag})
+g=f"{yol}.{os.getpid()}.gecici"; json.dump(k,open(g,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(g,yol)
+PY
+    if ! gorev_yaz "$KD/$IS.json" ac; then
+      # Geri alma yalnız bu bağın alanlarını söker; eski metni geri yazmaz, arada karta işlenen başka değişiklik (öteki kart.sh komutları kilit almaz) ezilmesin.
+      KART_YEDEK="$KART_YEDEK" python3 - "$KD/$IS.json" "$GOREV" "$YAZIM_KIMLIK" <<'PY' || { _hata "görev deftere yazılamadı, bağ da GERİ ALINAMADI: kartı elle düzelt"; exit 4; }
+import json,os,sys
+yol,gorev,bag=sys.argv[1:]; eski=json.loads(os.environ["KART_YEDEK"]); k=json.load(open(yol,encoding="utf-8"))
+if k.get("gorev")!=gorev: raise SystemExit(1)
+for a in ("gorev","tahmin_dk"):
+    if a in eski: k[a]=eski[a]
+    else: k.pop(a,None)
+k["gecmis"]=[x for x in k.get("gecmis",[]) if x.get("kimlik")!=bag]
+y=[x for x in (k.get("gorev_yazimlari") or []) if x.get("kimlik")!=bag]
+if "gorev_yazimlari" in k: k["gorev_yazimlari"]=y
+for a,v in (("gecmis",k.get("gecmis")),("gorev_yazimlari",y)):
+    if a not in eski and not v: k.pop(a,None)
+g=f"{yol}.{os.getpid()}.gecici"; json.dump(k,open(g,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(g,yol)
+PY
+      _hata "görev deftere yazılamadı, bağ GERİ ALINDI: kart eski hâlinde"; exit 4
+    fi
+    exec 9<&-
+    uzlastir "$REIS"
+    echo "✓ kart göreve bağlandı: $IS → $GOREV · tahmin $TAHMIN dk"
     ;;
   canli-ayarla)
     # Kartı açarken canlı şartı yanlış türemişse (cümlede "cron" geçen belge işi) ya da bu alandan ÖNCE açılmış kartta: şartı sahibi gerekçeyle

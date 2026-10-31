@@ -25,6 +25,23 @@ case "$k" in
       --oda) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--oda değersiz" >&2; exit 2; }; oda="$2"; shift 2 ;;   # 0.6.3: kaydın odası (Meşveret seansı geçirir; defterin oda alanı, gorev.sh ac --oda ile aynı)
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (kaydı kim açıyor?)" >&2; exit 2; }
+    # ── 0.6.5 (görev …9ABX5, SERDAR 31 Eki): kayıt ODASIZ ve ÖZETİ UZUN doğmaz (Kuzey G3.4 odasız 0 · G2.1 özet < 80 harf; bir günde 3 kez mühür düştü).
+    #    Oda sırası: açık --oda > GOREV_ODA > yazanın ekip kaydındaki odası (AGENT_NAME ya da --kim) > varsayılan agentic-os (SÖYLENİR, sessiz değil).
+    if [ -z "$oda" ]; then
+      oda="${GOREV_ODA:-}"
+      if [ -z "$oda" ] && [ -r "${GOREV_EKIP_KAYDI:-/config/projects/Nexus/_agents/handoff/aile-registry.yaml}" ]; then
+        oda="$(python3 -c 'import sys,re,unicodedata
+def n(s): return "".join(c for c in unicodedata.normalize("NFKD", s.casefold()) if not unicodedata.combining(c))
+ara=[n(a) for a in sys.argv[2:] if a]; bu=None
+for s in open(sys.argv[1],encoding="utf-8"):
+    m=re.match(r"^\s*-\s+id:\s*(\S+)",s)
+    if m: bu=n(m.group(1)); continue
+    m=re.match(r"^\s+oda:\s*([a-z][a-z0-9-]{1,30})\s*(#.*)?$",s)
+    if m and bu in ara: print(m.group(1),end=""); break' "${GOREV_EKIP_KAYDI:-/config/projects/Nexus/_agents/handoff/aile-registry.yaml}" "${AGENT_NAME:-}" "$kim" 2>/dev/null)" || oda=""
+      fi
+      [ -n "$oda" ] || { oda=agentic-os; echo "not: --oda verilmedi, koltuğun odası da bulunamadı → varsayılan oda agentic-os yazıldı (başka odaysa --oda ver)" >&2; }
+    fi
+    if [ "$(printf '%s' "$ozet" | python3 -c 'import sys; print(len(sys.stdin.read().strip()))')" -ge 80 ]; then echo "--ozet 80 harften KISA olmalı (Kuzey G2.1: ≥80 sayılır, mühür düşer); kısalt — kayıt YAZILMADI" >&2; exit 2; fi
     # defter 'acik' açılışta Sultan özeti ister (400 ozet_acilista_gerekli); defteri çağırmadan, anlaşılır sebeple dur — havuz (varsayılan) muaf
     if [ "$gorev" -eq 1 ] && [ -z "${ozet//[[:space:]]/}" ]; then echo "--gorev doğrudan iş açar; defter açılışta Sultan özeti ister: --ozet \"<tek cümle: sebep → ne yapılacak → bitince ne olur>\" (kayıt YAZILMADI)" >&2; exit 2; fi
     case "$etiket" in bug|ozellik) ;; *) echo "--etiket bug ya da ozellik olmalı (K1: bulgu = bu iki etiketten biriyle görev)" >&2; exit 2 ;; esac

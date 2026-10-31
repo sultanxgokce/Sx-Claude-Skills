@@ -27,7 +27,8 @@ case "$1" in
   has-session)   grep -qxF -- "${3#=}" "$SAHTE/oturumlar" ;;
   capture-pane)  case "$4" in =*) echo "can't find pane: $4" >&2; exit 1 ;; esac   # gerçek tmux gibi: bölme hedefinde '=ad' geçersiz
                  case "$4" in %*) t="${4#%}" ;; *) t="${4%:}" ;; esac; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
-  list-windows)  case "$*" in *window_width*) if [ -f "$SAHTE/pencereler" ]; then cat "$SAHTE/pencereler"; else echo "@1 200 50"; fi ;; *) echo "@1" ;; esac ;;
+  list-windows)  if [ "$2" = -a ]; then [ -n "${SAHTE_PENCERE_YOK:-}" ] && exit 1; while IFS= read -r n; do printf '%s\t0\t999x999\n%s\t1\t118x53\n' "$n" "$n"; done < "$SAHTE/oturumlar"; exit 0; fi   # 2.37.0: etkin olmayan pencere önde (etkin seçilmezse yanlış boy)
+                 case "$*" in *window_width*) if [ -f "$SAHTE/pencereler" ]; then cat "$SAHTE/pencereler"; else echo "@1 200 50"; fi ;; *) echo "@1" ;; esac ;;
   list-clients)  [ -n "${SAHTE_ISTEMCI_BOZUK:-}" ] && exit 1; cat "$SAHTE/istemciler" 2>/dev/null; exit 0 ;;
   show-options)  cat "$SAHTE/yerel-ws" 2>/dev/null; exit 0 ;;
   set-option|resize-window) echo "$*" >> "$SAHTE/iz-set" ;;
@@ -276,7 +277,7 @@ printf '%s\n' maiset-ana BASIRET 'a b' > "$S/oturumlar"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste-od"
 [ "$(grep -P '^BASIRET\t' "$S/liste-od" | cut -f9)" = "/oda-dizini/BASIRET" ] && ok "OD1 9. sütun = koltuğun çalışma dizini (BASIRET)" || bad OD1 "$(cat "$S/liste-od")"
 [ "$(grep -P '^a b\t' "$S/liste-od" | cut -f9)" = "/oda-dizini/a b" ] && ok "OD2 boşluklu adlı koltuğun dizini kendi satırında (ad tam eşleşme)" || bad OD2 "$(cat "$S/liste-od")"
-[ "$(awk -F'\t' '{print NF}' "$S/liste-od" | sort -u)" = "9" ] && ok "OD3 her satır 9 sütun (eski 8 sütun + dizin)" || bad OD3 "$(awk -F'\t' '{print NF}' "$S/liste-od" | sort -u | tr '\n' ' ')"
+[ "$(awk -F'\t' '{print NF}' "$S/liste-od" | sort -u)" = "10" ] && ok "OD3 her satır 10 sütun (9 + pencere)" || bad OD3 "$(awk -F'\t' '{print NF}' "$S/liste-od" | sort -u | tr '\n' ' ')"
 
 printf '%s\n' maiset-ana BASIRET '2026/85' 'a b' imglistener > "$S/oturumlar"   # E'nin listesi geri (D bölümü onunla koşar)
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
@@ -299,7 +300,9 @@ printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
 printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
 al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
-[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 9 ] && ok "D1 liste 9 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0) · soru (2.23.0) · dizin (2.33.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 10 ] && ok "D1 liste 10 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0) · soru (2.23.0) · dizin (2.33.0) · pencere (2.37.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$(al BASIRET 10)" = 118x53 ] && ok "PN1 10. sütun etkin pencerenin boyu (etkin olmayan 999x999 seçilmez)" || bad PN1 "$(al BASIRET 10)"
+PNY="$(SAHTE="$S" SAHTE_PENCERE_YOK=1 PATH="$S/bin:$PATH" bash "$B" --liste)"; pnrc=$?; [ "$pnrc" = 0 ] && [ -z "$(printf '%s\n' "$PNY" | grep -P '^BASIRET\t' | cut -f10)" ] && ok "PN2 pencere boyu alınamazsa liste düşmez, sütun boş" || bad PN2 "rc=$pnrc"
 [ "$(al BASIRET 4)" = ajan ] && ok "D2 Claude çalışan oturum 'ajan'" || bad D2 "$(al BASIRET 4)"
 [ "$(al maiset-ana 4)" = diger ] && ok "D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)" || bad D2b "$(al maiset-ana 4)"
 [ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
@@ -452,7 +455,7 @@ printf '%s\n' "⏺ Kurulum bitti." "Do you want to continue with the migration? 
 printf '%s\n' "⏺ Bash(curl)" "Bash command" "  curl -H \"Authorization: Bearer $SAHTE_ANAHTAR\" https://x" "  token=abcdef1234567" "Do you want to proceed?" "❯ 1. Yes" "  2. No" > "$S/ekran-NEDIM"
 printf '%s\n' "bitti." "❯ " > "$S/ekran-MUHASIP"
 qkos l1 2026-10-23T12:00:00.000Z
-[ "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')" = 9 ] && ok "Q1 liste 9 alan (… · hesap · soru · dizin)" || bad Q1 "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')"
+[ "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')" = 10 ] && ok "Q1 liste 10 alan (… · hesap · soru · dizin · pencere)" || bad Q1 "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')"
 [ "$(qal l1 ZAKIR 5)" = soru ] && [ "$(qjs "$(qal l1 ZAKIR 8)" 'j.tur+"/"+j.siklar.map(x=>x.no).join(",")')" = "menu/1,2" ] && ok "Q2 izin kutusu → hâl soru · 8. sütun menu, şıklar 1,2" || bad Q2 "$(qal l1 ZAKIR 5) $(qal l1 ZAKIR 8)"
 [ "$(qjs "$(qal l1 ZAKIR 8)" 'j.metin.includes("git branch -D eski-dal") && j.metin.includes("Do you want to proceed?") && !/[│╭╰]/.test(j.metin)')" = true ] && ok "Q2b soru metni komutu ve soruyu taşır, kutu çizgisi yok" || bad Q2b "$(qal l1 ZAKIR 8)"
 [ "$(qal l1 BASIRET 5)" != soru ] && [ -z "$(qal l1 BASIRET 8)" ] && ok "Q3 GERÇEK ekran: yazı kutusu duruyor + mesajda 'Do you want to'/'❯ 1.' → soru DEĞİL ($(qal l1 BASIRET 5)), soru sütunu boş" || bad Q3 "hal=$(qal l1 BASIRET 5) soru=$(qal l1 BASIRET 8)"

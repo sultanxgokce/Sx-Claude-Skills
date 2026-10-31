@@ -89,7 +89,17 @@ odaal(){ python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['govde'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "Meşveret Seansı mes_x · madde 1" --kim SERDAR --oda agentic-os 2>&1); r=$?
 ok "OD1 --oda merkez gövdesine 'oda' alanı olarak gider (gorev.sh ac --oda ile aynı alan), rc 0" '[ $r -eq 0 ] && [ "$(odaal)" = agentic-os ]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "odasız" --kim X 2>&1); r=$?
-ok "OD2 --oda verilmezse gövdede oda alanı YOK (eski yol aynen)" '[ $r -eq 0 ] && [ "$(odaal)" = YOK ]'
+ok "OD2 --oda verilmezse varsayılan oda agentic-os yazılır ve SÖYLENİR (0.6.5: odasız kayıt doğmaz)" '[ $r -eq 0 ] && [ "$(odaal)" = agentic-os ] && [[ "$o" == *"varsayılan oda agentic-os"* ]]'
+KAYIT="$T/ekip.yaml"; printf -- '- id: BILGE\n  oda: mesajlasma\n- id: DIGER\n  oda: kuzey\n' > "$KAYIT"
+o=$(GOREV_EKIP_KAYDI="$KAYIT" AGENT_NAME=bilge BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "koltuk odası" --kim X 2>&1); r=$?
+ok "OD5 --oda yoksa yazanın ekip kaydındaki odası kullanılır (AGENT_NAME)" '[ $r -eq 0 ] && [ "$(odaal)" = mesajlasma ]'
+o=$(GOREV_ODA=kuzey GOREV_EKIP_KAYDI="$KAYIT" AGENT_NAME=BILGE BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "env oda" --kim X 2>&1); r=$?
+ok "OD6 GOREV_ODA kayıttan önce gelir; açık --oda her ikisinden önce" '[ $r -eq 0 ] && [ "$(odaal)" = kuzey ]'
+once=$(md5sum < "$T/gelen.json")
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "uzun özet" --kim X --gorev --ozet "$(printf 'a%.0s' $(seq 1 80))" 2>&1); r=$?
+ok "OZ1 80 harflik özet reddedilir (rc 2), deftere HİÇ gidilmez" '[ $r -eq 2 ] && [[ "$o" == *"80 harften KISA"* ]] && [ "$(md5sum < "$T/gelen.json")" = "$once" ]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "sınırda özet" --kim X --gorev --ozet "$(printf 'a%.0s' $(seq 1 79))" 2>&1); r=$?
+ok "OZ2 79 harflik özet geçer" '[ $r -eq 0 ]'
 once=$(md5sum < "$T/gelen.json")
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --oda 2>&1); r=$?
 ok "OD3 --oda değersiz rc 2, deftere HİÇ gidilmez (son gelen gövde değişmedi)" '[ $r -eq 2 ] && [[ "$o" == *"--oda değersiz"* ]] && [ "$(md5sum < "$T/gelen.json")" = "$once" ]'

@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/once.sh
+# rc=1 sure=65.5s zaman=2026-10-31T23:31:22+03:00
+--- stdout ---
+sutun=9
+--- stderr ---
+⏳ agir-sira: kanit-terminal-pencere-sutunu-liste-sinav 65 sn bekledi (yuva 2, load1 17.87)
