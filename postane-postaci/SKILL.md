@@ -1,7 +1,7 @@
 ---
 name: postane-postaci
 type: tool
-version: 0.2.2
+version: 0.2.3
 description: >
   POSTANE postacısının (dakikada bir kutu içi tur: posta defterindeki mesajı alıcı ajanın CANLI Claude oturumuna yerel soketle iletir) bir kutuya kurulması için dosyalar ve kutu betiği.
   Kuru koşu varsayılan; --uygula yalnız izinli 17 ekip kutusundan birinde VE kutu jetonu dar iken (pilot code hariç; başka kutunun/merkezin ajan kuyruğunu okuyamıyorsa) cron + açma bayrağı yazar.
@@ -9,8 +9,9 @@ description: >
 ---
 # postane-postaci — postacıyı bir kutuya taşıyan paket
 
-**Ne:** `scripts/postaci.mjs` (+ `postane.mjs` · `ajan-adlari.mjs` · `ulid.mjs`) cloudtop `infra/postane` dosyalarının BİREBİR kopyasıdır (`scripts/KAYNAK.sha256`). Değişiklik kaynakta (cloudtop) yapılır, buraya taşınır; kopya elle düzenlenmez.
-**Kurulum betiği:** `bash scripts/postaci-kutu.sh` (KURU) · `--uygula` · `--kapat`. Sınav: `bash scripts/postaci-kutu.test.sh` (16 kapı).
+**Ne:** `scripts/postaci.mjs` (+ `postane.mjs` · `ajan-adlari.mjs` · `ulid.mjs` · `kutu-adlari.json` · `posta.mjs` · `posta.sh`) cloudtop `infra/postane` dosyalarının BİREBİR kopyasıdır (`scripts/KAYNAK.sha256`). Değişiklik kaynakta (cloudtop) yapılır, buraya taşınır; kopya elle düzenlenmez.
+**Ajan komutu:** kutularda `posta` PATH'te yok; mektup satırı tam yolu verir: `bash /config/.claude/skills/postane-postaci/scripts/posta.sh gordum <id> --kim AD`. Jeton `/config/defter-jeton`, yetkiyi postanenin izin dosyası belirler.
+**Kurulum betiği:** `bash scripts/postaci-kutu.sh` (KURU) · `--uygula` · `--kapat`. Sınav: `bash scripts/postaci-kutu.test.sh` (17 kapı).
 
 ## Sınırlar (kodda)
 1. **İzinli kutu listesi sabit** (17 ekip kutusu); listede olmayan kutuda `--uygula` reddedilir.
