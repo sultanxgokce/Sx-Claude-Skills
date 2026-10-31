@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-vendor-parite-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-mutant.sh
-# rc=1 sure=1.1s zaman=2026-10-31T23:38:58+03:00
+# rc=1 sure=1.1s zaman=2026-10-31T23:44:43+03:00
 --- stdout ---
   ✗ P8b paketle gelen vendor/yaml var (__init__.py) ve derlenmiş .so YOK (saf Python) 
   ✗ P8d GERÇEK vendor + yamlsız python → benimse rc 0 → rc=2

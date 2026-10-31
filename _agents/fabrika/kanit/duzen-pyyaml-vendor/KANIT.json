@@ -1,7 +1,7 @@
 {
   "is": "duzen-pyyaml-vendor",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T23:44:26+03:00",
+  "guncelleme": "2026-10-31T23:44:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,22 +25,22 @@
       "etiket": "vendor-mutant",
       "asama": "sonra",
       "dosya": "olcum-vendor-mutant-sonra.txt",
-      "sha256": "217ded05d5aa41f64e76ba138c652b7728836ac4319be67b891381ca00103639",
+      "sha256": "34246412af5a69508964fe3c0688124b2ca7873f7e169926f30e58e6ac7a77b1",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-mutant.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T23:38:58+03:00",
+      "zaman": "2026-10-31T23:44:43+03:00",
       "sure_sn": 1.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "vendor-parite",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "1e24c7c968c3417a952adab04f789ed4"
+      "olcum_id": "d2a0d7ec33e94b08b577a94c3d16e339"
     }
   ],
-  "imza": "d23afb1c04d1b15736a8a67dc039e280f0d72acfdc66c2a4ce093ed49f8082c9"
+  "imza": "9eeb0bfeeda21c8ea23b99f9bf67091ebbe2d6d61375ad1dfb34258423ed8038"
 }
