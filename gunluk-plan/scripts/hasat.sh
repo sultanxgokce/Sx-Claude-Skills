@@ -106,7 +106,7 @@ kayit_oku() {
 import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
 if kod!="200": print("kayıt okunamadı http=%s" % kod, file=sys.stderr); sys.exit(3)
 k=json.loads(g).get("kayit") or {}; c=k.get("canli",{}); tm=lambda s: str(s).replace("\t"," ").replace("\n"," ")
-print("KAYIT\t%s\t%s\t%s\t%s\t%s\t%s" % (k.get("id",""), tm(c.get("gorev_durumu","")), tm(c.get("atanan","-")), tm((k.get("adlar") or [{}])[-1].get("deger","")), tm(c.get("kutu","")), tm(c.get("ozet_sultan",""))))
+print("KAYIT\t%s\t%s\t%s\t%s\t%s\t%s" % (k.get("id",""), tm(c.get("gorev_durumu","")), tm(c.get("atanan","-")), tm(k["baslik"] if isinstance(k.get("baslik"),str) else ((k.get("adlar") or [{}])[-1].get("deger","") if isinstance((k.get("adlar") or [{}])[-1],dict) else "")), tm(c.get("kutu","")), tm(c.get("ozet_sultan",""))))
 for a in k.get("adimlar",[]): print("ADIM\t%s\t%s" % (tm(a.get("ts","")), tm(a.get("deger",""))))'
 }
 KAYIT="$(kayit_oku "$ID" 2>/dev/null)"; KRC=$?

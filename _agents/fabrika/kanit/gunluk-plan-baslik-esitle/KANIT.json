@@ -1,0 +1,114 @@
+{
+  "is": "gunluk-plan-baslik-esitle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T04:15:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "y7-sapma",
+      "asama": "once",
+      "dosya": "olcum-y7-sapma-once.txt",
+      "sha256": "a86007d40e87eeb0accfb72737d490af581eb165aba1c1212832ee688a775438",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:14:09+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fa948dd8a85c4cf1b57658ad65f783b2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanonik-esitlik",
+      "asama": "once",
+      "dosya": "olcum-kanonik-esitlik-once.txt",
+      "sha256": "63c3367430b7ad8bcfc2b52443389fea4a033f4e3260e1e1fdffde5d442132c7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-esit-olc.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-main-1793409271/gunluk-plan/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T04:14:32+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0e17d28657ad45f480f6ed6a67a46002"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanonik-esitlik",
+      "asama": "sonra",
+      "dosya": "olcum-kanonik-esitlik-sonra.txt",
+      "sha256": "14bd4785b38c8f8708b141c4e65b6ade22ff917fb4aabeb944d2ff21d890c886",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-esit-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-baslik-esitle/gunluk-plan/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:14:33+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6b71a8e9d6c44c24a9fb2384e5451628"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "y7-sapma",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-y7-sapma-once-eac34b6df83d.txt",
+      "sha256": "27c04bcedfbb173885990d10532e8a23d35e383e34f036018283274d0551ed2e",
+      "hedef_dosya": "olcum-y7-sapma-once.txt",
+      "hedef_olcum_id": "fa948dd8a85c4cf1b57658ad65f783b2",
+      "hedef_sha256": "a86007d40e87eeb0accfb72737d490af581eb165aba1c1212832ee688a775438",
+      "hedef_zaman": "2026-10-31T04:14:09+03:00",
+      "hedef_renk": "yesil",
+      "neden": "Y7 kanoniği cloudtop ANA checkout'undan okur; checkout #1251'de (bayat) — sapmayı değil checkout yaşını ölçtü; yerine origin/main ile doğrudan eşitlik",
+      "kim": "BANI",
+      "karsi": "olcum-kanonik-esitlik-once.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T04:14:33+03:00",
+      "olcum_id": "99b3ee9e642a4126b0a31faaa1029102"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin",
+      "asama": "once",
+      "dosya": "olcum-y7-origin-once.txt",
+      "sha256": "0a0b421f20613a43b0790e2a307f4094648b9515537ea89ce10fd12990a483a7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-main-1793409271/gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T04:15:37+03:00",
+      "sure_sn": 5.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "993fb35b2a5745efa7005b12eeac25cc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin",
+      "asama": "sonra",
+      "dosya": "olcum-y7-origin-sonra.txt",
+      "sha256": "7b351e622f84791ddf3277f2175b0690948028b0a682fbe2812a86a268ea21b1",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:15:38+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "26b7f3cdfb7e4c0dacf3e30e6bac4018"
+    }
+  ],
+  "imza": "50be4c92c994a6cfa7020ae4538dc2fdcc18a3ce147834e31b07e1ae268b7f92"
+}

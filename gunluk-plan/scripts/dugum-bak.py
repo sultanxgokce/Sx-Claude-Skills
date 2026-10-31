@@ -19,6 +19,11 @@ DUGUM_RE = re.compile(r'^([a-z][a-z0-9-]{1,30}):(gorev_[A-Za-z0-9]{10,40})$')
 KABUL_DK = 120   # protokol 4: teslimden iki saat sonra merkez bekçisi kendiliğinden kabul yazar
 
 
+def _bas(x):   # başlık = defterin baslik alanı (kural tek yerde: kayit.mjs baslik); boş dizgi geçerli; alan yoksa (defter <=1.53) geçiş: ham son ad
+    if isinstance(x, dict) and isinstance(x.get('baslik'), str): return x['baslik']
+    a = (x.get('adlar') if isinstance(x, dict) else None) or [None]; v = a[-1]; v = v.get('deger') if isinstance(v, dict) else v
+    return v if isinstance(v, str) else ''
+
 def cik(rc, satir):
     print(satir)
     sys.exit(rc)
@@ -48,7 +53,7 @@ def kutu(g):
 
 
 def bas(g):
-    return ((g.get('adlar') or [{}])[0].get('deger') or '')[:70]
+    return _bas(g)[:70]
 
 
 def ep(ts):
