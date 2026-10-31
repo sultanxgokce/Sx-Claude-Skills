@@ -1,0 +1,49 @@
+{
+  "tur": 6,
+  "is": "postaci-izinli-munavebe",
+  "pr": "616",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T19:14:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-izinli-munavebe",
+  "dal": "postaci-izinli-munavebe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23406,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 9377
+  },
+  "dalgic": "olculemedi",
+  "bas": "3cce24731c7c8546891bfd869ddfa6c60367febf",
+  "duzeltme_farki": {
+    "onceki_bas": "bdf79ad1fce029f9c191d85c3054783d9ebfc2ad",
+    "dosya": 6,
+    "bayt": 9377,
+    "tam_bayt": 41813
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Münâvebe yalnız izinli listeye alınmış; izin damgasından sonra yenilenen ölçümler 18 izinli kutu, münâvebe=True, S6b geçişi ve 18/18 sınav sonucu gösteriyor. B1 kapanmamış: yetki sınıfındaki üretim değişikliği izin verilmeden önce uygulanmış, bu turda üretim kodu değişmediği için süreç kusuru giderilmemiştir; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: Yetki sınıfındaki üretim değişikliği başlama izninden önce uygulanmış; izin sonrası kanıtları yenilemek geçmişteki izinsiz uygulamayı gidermez.",
+        "kanit": "İlk başarılı davranış ölçümü 2026-10-31T16:19:58+03:00 iken başlama izni 18:22:55'te verilmiş ve 18:24:28'de yazılmıştır. 18:43:36 ve 19:14:00 ölçümleri izin sonrasında başarıyı doğrulasa da değişiklik notu bu turdaki üretim kodu farkının boş, farkın tamamen kanıt dosyalarından ibaret olduğunu bildiriyor.",
+        "konum": "İŞ KARTI: siniflar, baslama_izni; KANIT MANİFESTİ: izinli-liste/sonra, izinli-liste-2/sonra, izinli-liste-3/sonra; DEĞİŞİKLİK notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 17 izinli kutu ve münâvebe=False değerinden 18 izinli kutu ve münâvebe=True değerine geçişi gösteriyor; izin damgasından sonraki iki tekrar aynı sonucu veriyor. Güncel sınav S6b'yi doğrudan sınayıp PASS=18 FAIL=0 veriyor, depo kapıları da yeşil; davranış kanıtı yeterli, ancak izin öncesi uygulama zamanlamasını aklamıyor."
+  }
+}
