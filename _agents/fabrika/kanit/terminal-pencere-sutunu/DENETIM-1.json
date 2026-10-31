@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "terminal-pencere-sutunu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:38:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-pencere-sutunu",
+  "dal": "terminal-pencere-sutunu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27129,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumlu",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Koltuk listesine etkin tmux penceresinin sütun ve satır ölçüsü 10. alan olarak eklenmiş, kapıda sayısal `pencere` nesnesine çevrilmiş ve ölçü alınamadığında eski kip korunmuş. Önce/sonra, gerçek tmux karşılaştırması ve iki etkili mutasyon sınavı talebin üretime hazır düzeyde karşılandığını gösteriyor; kanıtlanmış bir kusur yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Önce ölçümü listenin 9 sütun verdiğini, sonra ölçümü 138/138 sınavın geçtiğini; gerçek tmux ölçümü 13 koltuğun tamamında sıfır uyuşmazlık bulunduğunu gösteriyor. Ayrıştırıcı 33/33 geçiyor; etkin pencere seçimini ve bozuk boyun reddini hedefleyen iki mutasyon da ilgili kapıları düşürmüş. Görsel kare gerekmiyor: kartın teslim yüzeyi liste/veri sözleşmesi ve bunu doğrudan ölçen önce/sonra çifti mevcut."
+  }
+}
