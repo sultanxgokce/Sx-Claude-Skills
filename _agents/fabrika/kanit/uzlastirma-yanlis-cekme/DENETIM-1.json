@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "uzlastirma-yanlis-cekme",
+  "pr": "622",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T20:22:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastirma-yanlis-cekme",
+  "dal": "uzlastirma-yanlis-cekme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 61263,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 50591
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0136c469cc5be11212115db402bf1b034703593f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı borçlu kartı, 60 dakikalık beklemeyi ve birleşmiş PR kapanış açıklamasını hedefleyen değişiklik yapılmış; önce 46/55 iken sonra 55/55 geçen sınav ve altı mutasyon ölçümü ana davranışları doğruluyor. Önce aynı göreve bağlı birden çok kartta borç niteliğinin dosya sırasına göre kaybolmasını düzeltin ve kartta istenen kurulu betik kuru koşusunu kanıtlayın; bunlar çözülmeden üretime hazır diyemem.",
+    "bulgular": [
+      {
+        "ne": "Aynı göreve bağlı birden çok kart varsa canlı-borçlu niteliği güvenilir biçimde birleştirilmiyor; `acik[k[\"gorev\"]] = ... \"borclu\": ...` her kartta önceki kaydı eziyor. Açık kart canlı-borçlu karttan sonra gezilirse görev `borclu` kümesine girmeyip azami hesabına ve ilgili zillere yeniden katılabilir; dosya gezinme sırası davranışı değiştirir.",
+        "kanit": "Diffte `acik_kartlar` her kart için görev anahtarını doğrudan yeniden atıyor; `borclu` kümesi daha sonra yalnız bu son kaydın `k.get(\"borclu\")` değerinden kuruluyor. U4b üç farklı göreve bağlı kartları, U4k ise tek canlı-borçlu kartı sınamış; aynı göreve bağlı açık + canlı-borçlu kart birleşimi ölçülmemiş.",
+        "konum": "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.py: acik_kartlar içindeki acik[k[\"gorev\"]] ataması ve tek_ajan içindeki borclu kümesi; olcum-sinav-sonra.txt U4b/U4k",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartında kanıt yeri olarak istenen kurulu betikle kuru koşu sunulmamış; ölçülen gerçek sonraki komut yalnız depo içindeki test betiği.",
+        "kanit": "Manifestte gercek_olcum olan `sinav` sonrası komutu `bash yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh`; kayıtlarda kurulu `calisiliyor-uzlastir.py` ile kuru koşu komutu bulunmuyor. Z0 da sınavın sahte posta/koltuk/gh araçları kullandığını açıkça söylüyor.",
+        "konum": "kanıt manifesti: sinav/sonra; olcum-sinav-sonra.txt Z0",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm çifti kırmızı 46/55 → yeşil 55/55 ve altı mutasyon kapısı hedeflenen hataların sınavca yakalandığını gösteriyor. Bununla birlikte kare ya da gerçekçi canlı veri yok; testler sahte dış araçlarla çalışıyor ve iş kartında özellikle belirtilen kurulu betik kuru koşusu manifestte yer almıyor."
+  }
+}

@@ -15,9 +15,12 @@ PR BİRLEŞTİ (--pr-komut; TP00WX, X666 2. parçanın kapsam dışı kalan yar�
 başka kartın adı olan dal sayılmaz) sahibine TEK zil: "PR #N birleşti ama görev çalışılıyor: kart.sh bitti → onay bekliyor ya da bekliyor".
 Kendiliğinden ÇEKMEZ, yalnız önerir; tekrar anahtarı görev+PR. Liste her kart kökünün deposundan gh ile alınır; okunamazsa 'ölçülemedi' der,
 zil çalmaz (uydurma 'birleşmedi' yok). KURU kipte yalnız yazar. --pr-komut "" kapatır.
+CANLI BORÇ (kart durumu canli-borclu): iş dağıtım bekliyor, kart yaşıyor; kart.sh 'görev çalışılıyor kalır' der, uzlaştırma da öyle sayar. Azami sayısına girmez, PR-birleşti ve koltuk-boş zili çalmaz.
+KART BEKLEME (--kart-bekle-dk N, varsayılan 60; 0 kapatır): kartsız görev son hareketinden N dakika geçmeden çekilmez. Niçin: Sultan onayıyla ya da ustlen ile çalışılıyor olan görev, kart açılana kadarki aralıkta çekiliyordu (Sultan 31 Eki: "neden başlandıda değil"). Zamanı okunamayan görev taze sayılmaz.
+KAPANAN KART: kartsız görevin son kartı PR ile bitmişse not 'açık kartı yok' değil gerçek nedeni ve kapanış yolunu yazar (…VR933AS: 27 PR'ın 17'sinin görevi nedensiz bekliyor'a düşmüştü).
 rc 0 temiz/uygulandı · 4 en az bir yazım ya da okuma başarısız · 2 kullanım.
 """
-import argparse, glob, json, os, subprocess, sys, time, unicodedata, urllib.request, urllib.error
+import argparse, datetime, glob, json, os, subprocess, sys, time, unicodedata, urllib.request, urllib.error
 
 def norm(ad):
     s = unicodedata.normalize("NFKD", str(ad or "")).replace("ı", "I")
@@ -44,11 +47,25 @@ def acik_kartlar(kokler, ajan):
         for f in glob.glob(os.path.join(kok, "*.json")):
             try: k = json.load(open(f, encoding="utf-8"))
             except Exception: continue
-            if k.get("durum") == "acik" and k.get("gorev") and norm(k.get("aldi")) == ajan:
+            if k.get("durum") in ("acik", "canli-borclu") and k.get("gorev") and norm(k.get("aldi")) == ajan:
                 # kok: kart DOSYASININ gerçek dizini — --kart-kok tırnaklı glob gelebilir (süpürme cron'u: "/config/projects/*/_agents/fabrika/kartlar");
                 # glob dizgisinden depo türetilemez (QY2D-sonrası KALDI, 29 Eki): canlıda 'PR listesi okunamadı' basıyordu
-                acik[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k.get("pr"), "kok": os.path.dirname(os.path.abspath(f)), "adlar": adlar}
+                if k.get("durum") == "canli-borclu" and k["gorev"] in acik and not acik[k["gorev"]]["borclu"]: continue   # aynı görevde açık kart varsa iş yürüyor: açık kart kazanır, sonuç dosya sırasına bağlı kalmaz
+                acik[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k.get("pr"), "kok": os.path.dirname(os.path.abspath(f)), "adlar": adlar, "borclu": k.get("durum") == "canli-borclu"}
     return acik
+
+def kapanan_kartlar(kokler, ajan):
+    """→ {gorev: {"ad", "pr"}} ajanın PR ile bitmiş kartları; bir göreve birden çok kart bağlıysa en son biteni."""
+    son = {}
+    for kok in kokler:
+        for f in glob.glob(os.path.join(kok, "*.json")):
+            try: k = json.load(open(f, encoding="utf-8"))
+            except Exception: continue
+            if k.get("durum") != "bitti" or not k.get("gorev") or not k.get("pr") or norm(k.get("aldi")) != ajan: continue
+            b = str(k.get("bitis") or "")
+            if k["gorev"] not in son or b >= son[k["gorev"]]["bitis"]:
+                son[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k["pr"], "bitis": b}
+    return son
 
 def acik_gorevler(kokler, ajan):
     return set(acik_kartlar(kokler, ajan))
@@ -88,13 +105,30 @@ def birlesmis_pr_bul(kart, prler):
         if ad_h == ad or _re.fullmatch(_re.escape(ad) + r"-\d+", ad_h): return p
     return None
 
-def planla(gorevler, acik, ajan, azami):
+def hareket_yasi_dk(g, simdi):
+    """→ görevin son hareketinden bu yana dakika; zaman okunamazsa None (taze SAYILMAZ). Saf fonksiyon."""
+    try:
+        t = datetime.datetime.fromisoformat(str(g.get("son_adim") or "").replace("Z", "+00:00"))
+        if t.tzinfo is None: t = t.replace(tzinfo=datetime.timezone.utc)
+    except ValueError: return None
+    return (simdi - t.timestamp()) / 60
+
+def planla(gorevler, acik, ajan, azami, borclu=frozenset(), bekle_dk=0, simdi=0, kapanan=None):
     """→ [(gorev, neden)] bekliyor'a çekilecekler. Saf fonksiyon (sınavın ana hedefi)."""
     benim = [g for g in gorevler if (g.get("canli") or {}).get("gorev_durumu") == "calisiliyor"
              and norm((g.get("canli") or {}).get("atanan")) == ajan]
     kart_yok = [g for g in benim if g["id"] not in acik]
-    kartli = sorted([g for g in benim if g["id"] in acik], key=lambda g: g.get("son_adim", ""), reverse=True)
-    plan = [(g, "açık kartı yok") for g in kart_yok]
+    if bekle_dk > 0:
+        def taze(g):
+            y = hareket_yasi_dk(g, simdi)
+            return y is not None and -5 <= y < bekle_dk   # gelecek tarihli damga güvenilmez, taze sayılmaz (saat kayması payı 5 dk)
+        kart_yok = [g for g in kart_yok if not taze(g)]
+    kartli = sorted([g for g in benim if g["id"] in acik and g["id"] not in borclu], key=lambda g: g.get("son_adim", ""), reverse=True)
+    def neden(g):
+        k = (kapanan or {}).get(g["id"])
+        if not k: return "açık kartı yok"
+        return "kart '%s' PR #%s ile kapandı, görev açık kaldı. Bittiyse: gorev.sh bitti %s --pr %s" % (k["ad"], k["pr"], g["id"], k["pr"])
+    plan = [(g, neden(g)) for g in kart_yok]
     plan += [(g, "ajan başına en çok %d çalışılıyor" % azami) for g in kartli[azami:]]
     return plan
 
@@ -151,7 +185,8 @@ def tek_ajan(s, ajan, jeton, gorevler, acik, koltuklar, simdi, kartlar=None):
     rc = 0
     kimden = s.zil_kimden or ajan
     sahip_ad = next((((g.get("canli") or {}).get("atanan") or ajan) for g in gorevler if norm((g.get("canli") or {}).get("atanan")) == ajan), ajan)
-    plan = planla(gorevler, acik, ajan, s.azami)
+    borclu = {i for i, k in (kartlar or {}).items() if k.get("borclu")}
+    plan = planla(gorevler, acik, ajan, s.azami, borclu, s.kart_bekle_dk, simdi, kapanan_kartlar(s.kart_kok, ajan))
     if not plan: print("  ✓ çalışılıyor uzlaştırması: %s için fazla/sahipsiz çalışılıyor görev yok" % ajan)
     cekilen = set()
     for g, neden in plan:
@@ -170,7 +205,7 @@ def tek_ajan(s, ajan, jeton, gorevler, acik, koltuklar, simdi, kartlar=None):
                 print("  ⚠ %s: sahibine zil gidemedi (posta)" % g["id"]); rc = 4
         else: print("  ⚠ %s bekliyor'a çekilemedi (http %s)" % (g["id"], kod)); rc = 4
     kalan = [g for g in gorevler if (g.get("canli") or {}).get("gorev_durumu") == "calisiliyor"
-             and norm((g.get("canli") or {}).get("atanan")) == ajan and g["id"] not in cekilen]
+             and norm((g.get("canli") or {}).get("atanan")) == ajan and g["id"] not in cekilen and g["id"] not in borclu]
     # PR birleşti (TP00WX): kalan görevin açık kartının PR'ı birleşmişse sahibine TEK öneri zili; kendiliğinden çekmez
     if s.pr_komut and kartlar is not None:
         olculemedi = set()
@@ -210,6 +245,7 @@ def main():
     a.add_argument("--uygula", action="store_true"); a.add_argument("--kart-kok", action="append", default=[])
     a.add_argument("--koltuklardan", action="store_true", help="bu kutunun koltuklarındaki bütün ajanlar için koş (süpürme)")
     a.add_argument("--koltuk-bos-dk", type=int, default=60)
+    a.add_argument("--kart-bekle-dk", type=int, default=60, help="kartsız görev son hareketinden bu kadar dakika geçmeden çekilmez; 0 kapatır")
     a.add_argument("--koltuk-komut", default=os.environ.get("UZLASTIR_KOLTUK_KOMUT", "/config/.claude/skills/terminal-onar/scripts/koltuk-bagla.sh --liste"))
     a.add_argument("--zil-komut", default=os.environ.get("UZLASTIR_ZIL_KOMUT", "/config/projects/cloudtop/infra/postane/posta.sh"))
     a.add_argument("--zil-kimden", default="")
@@ -222,6 +258,7 @@ def main():
     if s.azami < 1: print("--azami en az 1", file=sys.stderr); return 2
     if not s.ajan and not s.koltuklardan: print("--ajan ya da --koltuklardan gerekli", file=sys.stderr); return 2
     if s.koltuk_bos_dk < 0: print("--koltuk-bos-dk 0 ya da pozitif", file=sys.stderr); return 2
+    if s.kart_bekle_dk < 0: print("--kart-bekle-dk 0 ya da pozitif", file=sys.stderr); return 2
     try: jeton = open(s.jeton_yol, encoding="utf-8").read().strip()
     except OSError: print("  ⚠ uzlaştırma atlandı: defter jetonu okunamadı"); return 4
     simdi = s.simdi or int(time.time())

@@ -1,0 +1,17 @@
+$ python3 yazilim-fabrikasi/scripts/calisiliyor-uzlastir.py --koltuklardan --kart-kok /config/projects/*/_agents/fabrika/kartlar
+# rc=0 sure=11.3s zaman=2026-10-31T20:24:13+03:00
+--- stdout ---
+  ✓ çalışılıyor uzlaştırması: MIRAHUR için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: BANI için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: BASIRET için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: BENNA için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: BERID için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: CODE-ANA için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: HENDESE için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: HEZARFEN için fazla/sahipsiz çalışılıyor görev yok
+  · koltuk 2765 dk'dır boş, çalışılıyor: gorev_01M68M9NZYBHKWDZ35SN06XGWS (Sabah paketine ölçülmemiş kazanç yazılmasın)
+  ✓ çalışılıyor uzlaştırması: MUAVIN için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: MUHAKKIK için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: MUZEHHIP için fazla/sahipsiz çalışılıyor görev yok
+  ✓ çalışılıyor uzlaştırması: SERDAR için fazla/sahipsiz çalışılıyor görev yok
+--- stderr ---
