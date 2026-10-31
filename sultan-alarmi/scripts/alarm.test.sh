@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# alarm.sh sınavı — hermetik: sahte curl/kapimda/gorev.sh, sahte saat; ağa ve gerçek deftere GİTMEZ.
+# alarm.sh sınavı — hermetik: sahte WhatsApp/curl/kapimda/gorev.sh, sahte saat; ağa ve gerçek deftere GİTMEZ.
 set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"; AL="${ALARM_SH:-$KOK/alarm.sh}"
 gec=0; kal=0
@@ -51,15 +51,13 @@ ok "G4c kuru koşu durum KAYDI yazmaz" "0" "$(cat "$T/d/durum.tsv" 2>/dev/null |
 o="$(G --telefon)"; yok "G4d kuru sonrası gerçek alarm SUSMAZ" "sustu" "$o"
 ok "G4e kuru sonrası gerçek alarm tekrar=1 sayılır" "1" "$(tail -1 "$T/d/kutuk.jsonl" | python3 -c 'import sys,json;print(json.loads(sys.stdin.read())["tekrar"])')"
 : > "$T/curl.log"
-rm -r -- "$T/d"; G --telefon >/dev/null; ok "G5 --telefon: ntfy'ye gider (öncelik 4)" "1:1" "$(grep -c 'Priority: 4' "$T/curl.log"):$(grep -c 'cloudtop-ntfy/alarm\|/alarm' "$T/curl.log")"
+rm -r -- "$T/d"; : > "$T/wa.log"; G --telefon >/dev/null; ok "G5 --telefon: WhatsApp'a gider, ntfy'ye hiç gitmez" "1:0" "$(grep -c . "$T/wa.log"):$(grep -c . "$T/curl.log")"
 ok "G5b kütükte gitti kaydı" "1" "$(grep -c '"telefon": "gitti"' "$T/d/kutuk.jsonl")"
-rm -r -- "$T/d"; : > "$T/curl.log"; SULTAN_EKRANDA=1 G --telefon >/dev/null; ok "G6 Sultan ekrandaysa telefon atlanır" "0" "$(grep -c . "$T/curl.log")"
+rm -r -- "$T/d"; : > "$T/wa.log"; SULTAN_EKRANDA=1 G --telefon >/dev/null; ok "G6 Sultan ekrandaysa telefon atlanır" "0" "$(grep -c . "$T/wa.log")"
 ok "G6b kütükte atlandı kaydı" "1" "$(grep -c '"telefon": "atlandi"' "$T/d/kutuk.jsonl")"
 rm -r -- "$T/d"; : > "$T/wa.log"; o="$(WA_RC=4 G --telefon 2>&1)"; var "G7 WhatsApp gitmediyse UYARI (sessiz başarı yok)" "telefon bildirimi gitmedi" "$o"
-yok "G7a ntfy 200 olsa da WhatsApp'sız 'gitti' denmez" "whatsapp: gitti" "$o"
+yok "G7a WhatsApp'sız 'gitti' denmez" "whatsapp: gitti" "$o"
 ok "G7b kütükte hata kaydı" "1" "$(grep -c '"telefon": "hata"' "$T/d/kutuk.jsonl")"
-rm -r -- "$T/d"; o="$(CURL_KOD=500 G --telefon 2>&1)"; var "G7c ntfy düşse de WhatsApp ulaştıysa gitti" "whatsapp: gitti" "$o"
-ok "G7d kütükte gitti kaydı (ntfy 500)" "1" "$(grep -c '"telefon": "gitti"' "$T/d/kutuk.jsonl")"
 rm -r -- "$T/d"; : > "$T/wa.log"; G --telefon >/dev/null; ok "G8a --telefon: WhatsApp'a tek mesaj, alarm metniyle" "1:1" "$(grep -c . "$T/wa.log"):$(grep -c 'SULTAN ALARMI — Revak disk silme' "$T/wa.log")"
 rm -r -- "$T/d"; : > "$T/wa.log"; G >/dev/null; ok "G8b --telefon yokken WhatsApp'a gitmez" "0" "$(grep -c . "$T/wa.log")"
 rm -r -- "$T/d"; : > "$T/wa.log"; G --telefon --kuru >/dev/null; ok "G8c --kuru WhatsApp'a gitmez" "0" "$(grep -c . "$T/wa.log")"
@@ -67,7 +65,7 @@ rm -r -- "$T/d"; : > "$T/wa.log"; SULTAN_EKRANDA=1 G --telefon >/dev/null; ok "G
 echo "— yükseltme"
 rm -r -- "$T/d"; for i in 1 2 3; do SULTAN_ALARMI_SIMDI=$((1800000000 + i*7200)) G >/dev/null; done
 o="$(SULTAN_ALARMI_SIMDI=$((1800000000 + 4*7200)) G --telefon)"; var "Y1 4. tekrarda YÜKSELTİLDİ" "TEKRAR 4 — YÜKSELTİLDİ" "$o"
-ok "Y1b yükseltmede öncelik 5" "1" "$(grep -c 'Priority: 5' "$T/curl.log")"
+ok "Y1b yükseltme WhatsApp metninde de görünür" "1" "$(grep -c 'YÜKSELTİLDİ' "$T/wa.log" | sed 's/^[1-9][0-9]*$/1/')"
 rm -r -- "$T/d"; for i in 1 2; do SULTAN_ALARMI_SIMDI=$((1800000000 + i*7200)) G >/dev/null; done
 o="$(SULTAN_ALARMI_SIMDI=$((1800000000 + 3*7200)) G)"; var "Y1c eşiğin TAM kendisinde (3.) yükseltilir" "TEKRAR 3 — YÜKSELTİLDİ" "$o"
 o="$(SULTAN_ALARMI_SIMDI=$((1800000000 + 3*7200)) G)"; var "Y1d 2. basışta yükseltme yok" "SULTAN ALARMI" "$(rm -r -- "$T/d"; SULTAN_ALARMI_SIMDI=1800000000 G >/dev/null; SULTAN_ALARMI_SIMDI=1800007200 G)"

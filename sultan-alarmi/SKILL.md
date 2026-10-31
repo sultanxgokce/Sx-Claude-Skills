@@ -9,7 +9,7 @@ description: >
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
-tags: [sultan, alarm, bildirim, onay, ntfy, kalfa]
+tags: [sultan, alarm, bildirim, onay, whatsapp, kalfa]
 ---
 
 # /sultan-alarmi — Sultan yüzünden duran iş görünür olsun
@@ -30,10 +30,10 @@ alarm.sh gonder --is … --kim … --ne … [--telefon] [--kuru]
 alarm.sh tara   [--esik-gun N]                      aday listesi (GÖNDERMEZ)
 alarm.sh ders   "<öğrenilen tek satır>"             DERSLER.md'ye tarihli satır
 ```
-- Terminal satırı kırmızıdır (`NO_COLOR` ile sade). Telefon yalnız `--telefon` ile gider: **asıl kanal WhatsApp** (`whatsapp-gonder`), `http://cloudtop-ntfy/alarm` yalnız ikincil. Başarıda çıktıya `whatsapp: gitti` yazılır (kota-uyari çift mesajı bununla önler).
+- Terminal satırı kırmızıdır (`NO_COLOR` ile sade). Telefon yalnız `--telefon` ile gider: **WhatsApp** (`whatsapp-gonder`). ntfy çıkarıldı. Başarıda çıktıya `whatsapp: gitti` yazılır (kota-uyari çift mesajı bununla önler).
 - `--kuru` telefona GİTMEZ, niyetini söyler. **Sultan ekrandaysa** (`SULTAN_EKRANDA=1`) telefon atlanır; terminal satırı yine basılır.
 - **Tekrar sınırı:** aynı iş (adı, büyük/küçük harf farkı yok) `--tekrar-dk` (varsayılan 60) içinde ikinci kez basılmaz, "sustu" der.
-- **Yükseltme:** `SULTAN_ALARMI_YUKSELT_N` (varsayılan 3). 3. basışta satır "TEKRAR n — YÜKSELTİLDİ" taşır, telefon önceliği 5 olur.
+- **Yükseltme:** `SULTAN_ALARMI_YUKSELT_N` (varsayılan 3). 3. basışta satır "TEKRAR n — YÜKSELTİLDİ" taşır, mesaj bu işareti taşır.
 - **Kütük:** her alarm `~/.cache/sultan-alarmi/kutuk.jsonl`'a yazılır (basıldı/sustu/gitti/atlandı/kuru/hata). "Bildirim kaydı" budur.
 - Bildirim gitmediyse (http ≠ 2xx) UYARI basılır ve kütüğe `hata` yazılır; sessiz başarı yoktur.
 
@@ -55,6 +55,6 @@ Her kullanımdan çıkan ders `alarm.sh ders "…"` ile `DERSLER.md`'ye eklenir;
 üzerinden bütün kutulara `sync-skills.mjs --skill sultan-alarmi` ile iner (kurulu kopya elle düzenlenmez).
 
 ## Sınır / dürüstlük
-- `gitti` yalnız WhatsApp geçidi kabul edince yazılır; ntfy http 200'ü başarı sayılmaz (31 Eki: Sultan ntfy kullanmıyor, 22 'gitti' alarm ona ulaşmadı). Sultan'ın okuduğunu bilmez.
+- `gitti` yalnız WhatsApp geçidi kabul edince yazılır; ntfy 0.2.0'da çıkarıldı (31 Eki: Sultan ntfy kullanmıyor, 22 'gitti' alarm ona ulaşmadı). Sultan'ın okuduğunu bilmez.
 - Kanon (ORTAK-MIMARI) "zorunlu" satırı ve her kutunun CLAUDE.md işaretçisi bu beceriden AYRI PR'dır (sınıflı; birleştirme Sultan'ın).
 - Sınav: `bash scripts/alarm.test.sh` (hermetik, sahte curl/defter/saat).
