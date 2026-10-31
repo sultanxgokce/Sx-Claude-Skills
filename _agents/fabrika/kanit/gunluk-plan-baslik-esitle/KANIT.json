@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-baslik-esitle",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T04:27:26+03:00",
+  "guncelleme": "2026-10-31T04:29:52+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -197,7 +197,115 @@
       "sure_sn": 15.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "53624fdfe13d41f5a6212447836963fa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-durumlar",
+      "asama": "sonra",
+      "dosya": "olcum-y7-durumlar-sonra.txt",
+      "sha256": "83b8a9c740fa6e914d452911f560297b6b0acffd1582a27b9031160298493065",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-y7-durumlar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:29:51+03:00",
+      "sure_sn": 5.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5177d91b983b406cab68fa1b23fad381"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin3",
+      "asama": "once",
+      "dosya": "olcum-y7-origin3-once.txt",
+      "sha256": "8ef0e0b19fee327e8aa3e641e8a94718514d7b90fdaf4cfba80db33621bfe961",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-main-1793409271/gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T04:29:52+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "182d99446eb042e79332d5802fc3f471"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin3",
+      "asama": "sonra",
+      "dosya": "olcum-y7-origin3-sonra.txt",
+      "sha256": "b449a22b9f1b963b9e4d2859351802b83ecf8fe7b78d8bd0098c7e136ca43089",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:29:52+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d7b0eb8cbdc14f85b61b00ce1af25e0c"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "y7-kanoniksiz",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-y7-kanoniksiz-sonra-47be0756591a.txt",
+      "sha256": "a3954b5759a9431ff15081f8e3171691d2c5805262ea907339a21f5991c50a09",
+      "hedef_dosya": "olcum-y7-kanoniksiz-sonra.txt",
+      "hedef_olcum_id": "53624fdfe13d41f5a6212447836963fa",
+      "hedef_sha256": "8a143a1be8a78ec5f0f742ae224ce0c3c7aa06d2130cf349cd276028806d541b",
+      "hedef_zaman": "2026-10-31T04:27:26+03:00",
+      "hedef_renk": "yesil",
+      "neden": "tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3",
+      "kim": "BANI",
+      "karsi": "olcum-y7-durumlar-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T04:29:52+03:00",
+      "olcum_id": "a4ef3fc85a8943b6bdc1344ad529366b"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "y7-origin2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-y7-origin2-once-4db213752f71.txt",
+      "sha256": "2da917ebd441311484b3a33c38303f7df91e9046b9df82a029a98ecac0b9d010",
+      "hedef_dosya": "olcum-y7-origin2-once.txt",
+      "hedef_olcum_id": "3e618d2a6ce94fd39e21504c93e69305",
+      "hedef_sha256": "64b45e5b80d9258f4a4cb5c273749fad8bee191c57d8411c918e0652b3830051",
+      "hedef_zaman": "2026-10-31T04:23:07+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3",
+      "kim": "BANI",
+      "karsi": "olcum-y7-origin3-once.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T04:29:52+03:00",
+      "olcum_id": "0591c7e51468479ba34de7beb8bdfec2"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "y7-origin2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-y7-origin2-sonra-6bd15d5e0ab8.txt",
+      "sha256": "987c3b58fc4a983bc99255e6f40c6f8bdc78897d02e6a79331eaa307beeb6cc2",
+      "hedef_dosya": "olcum-y7-origin2-sonra.txt",
+      "hedef_olcum_id": "4f6131c5c3e94b2eb2a5786198fa24b5",
+      "hedef_sha256": "b6d0e504c846b35ddf57fd1a1e4ce141f61a1f0d14899728c743e2550e6d3da8",
+      "hedef_zaman": "2026-10-31T04:23:08+03:00",
+      "hedef_renk": "yesil",
+      "neden": "tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3",
+      "kim": "BANI",
+      "karsi": "olcum-y7-origin3-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T04:29:52+03:00",
+      "olcum_id": "d05f2d13a0ee45b3afcc03bde44c6c8d"
     }
   ],
-  "imza": "f4c956a95f761469c256e5f8056e36de63c7563fa65112951fe61c72e1ae4794"
+  "imza": "f07c5b694907057026b4d16918374fe69ecb5fdbc5072744eda98aad367233bb"
 }

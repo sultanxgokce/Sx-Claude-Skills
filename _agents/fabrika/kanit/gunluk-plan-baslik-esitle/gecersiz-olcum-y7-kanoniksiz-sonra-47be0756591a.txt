@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-y7-kanoniksiz-sonra.txt
+hedef_sha256: 8a143a1be8a78ec5f0f742ae224ce0c3c7aa06d2130cf349cd276028806d541b
+hedef_zaman: 2026-10-31T04:27:26+03:00
+hedef_renk: yesil
+neden: tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3
+kim: BANI
+karsi: olcum-y7-durumlar-sonra.txt
+zaman: 2026-10-31T04:29:52+03:00

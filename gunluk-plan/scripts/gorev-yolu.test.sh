@@ -25,7 +25,9 @@ CT=/config/projects/cloudtop; KYOL=infra/defter-gecit/gorev
 kan() { git -C "$CT" show "origin/main:$KYOL/$1"; }
 if git -C "$CT" cat-file -e "origin/main:$KYOL/gorev.sh" 2>/dev/null; then
   cmp -s <(kan gorev.sh) "$HERE/gorev.sh" && cmp -s <(kan dugum-bak.py) "$HERE/dugum-bak.py" && cmp -s <(kan oda-dagit.py) "$HERE/oda-dagit.py" && [ -x "$HERE/oda-dagit.py" ]; ok "Y7 paketlenmiş kopya cloudtop kanoniğiyle (origin/main) bayt eşit (gorev.sh · dugum-bak.py · oda-dagit.py +x; sapmışsa kanoniği buraya yeniden kopyala)" "$?"
-else echo "  · Y7 ÖLÇÜLEMEDİ: cloudtop origin/main okunamadı (depo yok ya da çekilmemiş) — çalışma ağacıyla ölçülmez, eşitlik hüküm değil"; fi
+elif [ -d "$CT/.git" ] || [ -f "$CT/.git" ]; then
+  ok "Y7 cloudtop deposu VAR ama origin/main okunamadı — eşitlik ölçülemedi, yeşil sayılmaz (git -C $CT fetch origin)" 1
+else Y7_OLCULMEDI=1; echo "  · Y7 KAPSAM DIŞI: bu kutuda cloudtop deposu yok (CI · izole kutu) — eşitlik burada ÖLÇÜLMEDİ, geçti sayılmadı"; fi
 if [ -z "${YOL_BETIK:-}" ]; then
   echo "── mutasyon"
   mut() { local M="$HERE/.mutant-yol-$$-$1"; python3 -I - "$R" "$M" "$2" "$3" <<'PY' || { ok "mutant $1: desen tutmadı" 1; return; }
@@ -36,4 +38,4 @@ PY
   mut env-kesin-degil '[ -n "${GUNLUK_PLAN_GOREV_SH:-}" ] && {' '[ -n "${GUNLUK_PLAN_GOREV_SH:-}" ] && [ -f "$GUNLUK_PLAN_GOREV_SH" ] && {' Y1
   mut path-once '"$HERE/gorev.sh" "$(command -v gorev.sh 2>/dev/null)"' '"$(command -v gorev.sh 2>/dev/null)" "$HERE/gorev.sh"' Y4
 fi
-echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]
+echo "== $G geçti · $K düştü${Y7_OLCULMEDI:+ · Y7 ÖLÇÜLMEDİ (kanonik bu kutuda yok)} =="; [ "$K" -eq 0 ]
