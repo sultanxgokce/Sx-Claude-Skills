@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-baslik-esitle",
+  "pr": "609",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T04:28:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 3 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-y7-sapma-once.txt (yesil → gecersiz) — Y7 kanoniği cloudtop ANA checkout'undan okur; checkout #1251'de (bayat) — sapmayı değil checkout yaşını ölçtü; yerine origin/main ile doğrudan eşitlik · BANI · karşı kanıt: olcum-kanonik-esitlik-once.txt;olcum-y7-origin-once.txt (kirmizi → gecersiz) — Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2 · BANI · karşı kanıt: olcum-y7-origin2-once.txt;olcum-y7-origin-sonra.txt (yesil → gecersiz) — Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2 · BANI · karşı kanıt: olcum-y7-origin2-sonra.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-baslik-esitle",
+  "dal": "gunluk-plan-baslik-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29077,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 14056
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1d99b88928f89b98efc9cf8ed5e570850a4d3f2b",
+  "duzeltme_farki": {
+    "onceki_bas": "3f7c1b9b46a814f47d1ba5899214543736e55e17",
+    "dosya": 11,
+    "bayt": 21362,
+    "tam_bayt": 45746
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Paketli iki dosya kanonikle bayt eşitlenmiş; önceki turdaki bayat çalışma ağacına dönüş kaldırılmış, hasat.sh kapsam kayması geri alınmış ve böylece B1 ile B2 kapanmış. Ancak cloudtop origin/main bulunmadığında Y7 “ÖLÇÜLEMEDİ” demesine rağmen sınav rc=0 ve yeşil sonuç veriyor; üretime almadan önce ölçülemeyen Y7’nin başarı sayılması çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Y7 kanoniği okunamadığında eşitlik hiç sınanmadığı halde test başarılı çıkıyor; bu nedenle yeşil Y7 kapısı her ortamda eşitliği kanıtlamıyor.",
+        "kanit": "`olcum-y7-kanoniksiz-sonra.txt` çıktısı “Y7 ÖLÇÜLEMEDİ” dedikten sonra `== 9 geçti · 0 düştü ==` yazıyor ve ölçüm rc=0/yeşil. Diffteki bulunamama dalı yalnız mesaj basıyor; `ok` çağırmıyor veya rc=3 ile çıkmıyor.",
+        "konum": "gunluk-plan/scripts/gorev-yolu.test.sh: Y7 origin/main bulunamama dalı; olcum-y7-kanoniksiz-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; ilan edilen üç geçersiz kayıt değerlendirmeye alınmadı. Geçerli kanonik eşitlik ölçümü farkları gorev.sh için 28’den 0’a, dugum-bak.py için 7’den 0’a indiriyor; geçerli y7-origin2 çifti de Y7’yi 1 düşenden 0 düşene taşıyor. Buna karşılık kanoniksiz ölçüm, ölçülemeyen Y7’nin rc=0/yeşil kaldığını doğrudan gösteriyor; sarı kayıt yok."
+  }
+}

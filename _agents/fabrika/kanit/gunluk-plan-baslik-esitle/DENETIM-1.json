@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-baslik-esitle",
+  "pr": "609",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T04:20:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-y7-sapma-once.txt (yesil → gecersiz) — Y7 kanoniği cloudtop ANA checkout'undan okur; checkout #1251'de (bayat) — sapmayı değil checkout yaşını ölçtü; yerine origin/main ile doğrudan eşitlik · BANI · karşı kanıt: olcum-kanonik-esitlik-once.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-baslik-esitle",
+  "dal": "gunluk-plan-baslik-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35243,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 11080
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3f7c1b9b46a814f47d1ba5899214543736e55e17",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Paketli gorev.sh ve dugum-bak.py cloudtop origin/main kanoniğiyle bayt eşitlenmiş, Y7 de gerçek önce/sonra ölçümünde kırmızıdan yeşile dönmüş. Ancak origin/main okunamadığında Y7’nin bayat çalışma ağacına düşerek yine sahte yeşil üretebilmesi ve kartta istenmeyen hasat.sh davranış değişikliği nedeniyle önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Y7, origin/main okunamadığında çalışma ağacına düşüyor; bu ağaç bayatsa test tam da giderilmek istenen sahte yeşili yeniden üretebilir.",
+        "kanit": "Değişiklikte `elif [ -f \"$CT/$KYOL/gorev.sh\" ]; then KAYNAK=agac` dalı karşılaştırmayı çalışma ağacıyla sürdürüyor; hemen üstündeki yorum çalışma ağacının #1251’de kalıp kanoniğin #1252’ye geçtiği gerçek sahte-yeşil vakasını açıklıyor.",
+        "konum": "gunluk-plan/scripts/gorev-yolu.test.sh: Y7 KAYNAK=agac geri dönüş dalı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kartın açıkça saydığı paketli gorev.sh, dugum-bak.py ve Y7 dışında hasat.sh üretim davranışı da değiştirildi; bu kapsam kaymasıdır.",
+        "kanit": "İş kartı bayt eşitlenecek kopyaları `gorev.sh ve dugum-bak.py` diye sınırlar; diff ayrıca `hasat.sh` içindeki başlık seçimini `adlar[-1]` yerine `baslik` alanına çevirmektedir.",
+        "konum": "gunluk-plan/scripts/hasat.sh: kayit_oku başlık ifadesi",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. Geçersiz ilan edilen ilk Y7 yeşili kanıt sayılmamış; onun yerine origin/main tabanlı kanonik eşitlik ve Y7 için kırmızı→yeşil ölçüm çiftleri vardır: iki dosyada fark 28/7’den 0/0’a, Y7 ise 1 düşenden 0 düşene geçmiştir. Gerçekçi başlık verisiyle kullanıcı çıktısını gösteren kare/semantik ölçüm yoktur; kanıt esasen hedef kanoniğe bayt eşitliğini ve test kapısını doğrular."
+  }
+}

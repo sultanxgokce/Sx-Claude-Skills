@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-kanoniksiz.sh
+# rc=0 sure=15.3s zaman=2026-10-31T04:27:26+03:00
+--- stdout ---
+  · Y7 ÖLÇÜLEMEDİ: cloudtop origin/main okunamadı (depo yok ya da çekilmemiş) — çalışma ağacıyla ölçülmez, eşitlik hüküm değil
+== 9 geçti · 0 düştü ==
+--- stderr ---
+⏳ agir-sira: kanit-gunluk-plan-baslik-esitle-y7-kanoniksiz 15 sn bekledi (yuva 1, load1 15.18)

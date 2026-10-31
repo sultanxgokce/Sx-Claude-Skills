@@ -1,0 +1,16 @@
+$ bash gunluk-plan/scripts/gorev-yolu.test.sh
+# rc=0 sure=0.3s zaman=2026-10-31T04:23:08+03:00
+--- stdout ---
+  ✓ Y1 açık env KESİN (olmayan yol bile aynen basılır)
+  ✓ Y2 açık env var olan yolu basar
+  ✓ Y3 kanonik varsa PATH'ten ve paketlenmiş kopyadan önce o
+  ✓ Y4 kanonik yoksa becerinin KENDİ kopyası (PATH'teki eski sarmalayıcıdan önce)
+  ✓ Y5 hiçbir yerde yoksa rc 3 (ölçülemedi)
+  ✓ Y6 paketlenmiş gorev.sh sözdizimi geçerli ve dugum-bak.py yanında
+  ✓ Y7 paketlenmiş kopya cloudtop kanoniğiyle (origin/main) bayt eşit (gorev.sh · dugum-bak.py · oda-dagit.py +x; sapmışsa kanoniği buraya yeniden kopyala)
+── mutasyon
+  ✓ mutant 'kendi-kopya-yok' → Y4 kırmızı
+  ✓ mutant 'env-kesin-degil' → Y1 kırmızı
+  ✓ mutant 'path-once' → Y4 kırmızı
+== 10 geçti · 0 düştü ==
+--- stderr ---

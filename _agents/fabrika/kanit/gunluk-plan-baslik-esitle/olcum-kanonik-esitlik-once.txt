@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-esit-olc.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-main-1793409271/gunluk-plan/scripts
+# rc=1 sure=1.1s zaman=2026-10-31T04:14:32+03:00
+--- stdout ---
+cloudtop origin/main: 919d2c0c feat: görev başlığı = son ad, tek okuyucu (G10 başlık 1. adım) — defter 1.54.0 · merkez 1.174.0 (#1252)
+gorev.sh fark satırı: 28
+dugum-bak.py fark satırı: 7
+--- stderr ---

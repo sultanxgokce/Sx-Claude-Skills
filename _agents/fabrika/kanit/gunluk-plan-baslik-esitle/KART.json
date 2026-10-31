@@ -1,0 +1,25 @@
+{
+  "is": "gunluk-plan-baslik-esitle",
+  "cumle": "gunluk-plan becerisinin paketli gorev.sh ve dugum-bak.py kopyası cloudtop kanoniğiyle (tek başlık okuyucusu, #1252) bayt eşitlenir; Y7 sapma sınavı yeşil",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-31T04:13:59+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
