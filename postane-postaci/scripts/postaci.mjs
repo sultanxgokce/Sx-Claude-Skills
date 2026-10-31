@@ -86,11 +86,13 @@ export function iletSoket(soketYolu, jeton, metin, { sure = 4000 } = {}) {
 }
 
 /** Alıcının göreceği metin: yalnız mesajın kendi alanlarından kurulur. */
+// Kutularda `posta` PATH'te yok, cloudtop deposu da görünmez (31 Eki MEDDAH: 'command not found', mektup 3 denemede ölü). Beceri yolu her kutuda ortak.
+const POSTA_KOMUT = 'bash /config/.claude/skills/postane-postaci/scripts/posta.sh';
 export function metinKur(m) {
   const son = Number.isFinite(m.kalan_ms) ? ` · son tarihe ${Math.round(m.kalan_ms / 60000)} dk` : '';
   // Soket onay yollamaz (en az bir kez teslim): 2. ve sonraki teslim ilkinin kopyası olabilir — alıcı yanılmasın (SERDAR 26 Eki, …H7A2).
   const tekrar = Number.isInteger(m.deneme) && m.deneme >= 1 ? ` · TEKRAR ${m.deneme + 1}/${MAX_DENEME} — daha önce ulaşmış olabilir` : '';
-  return `[POSTANE ${m.id} · ${m.kimden} → ${m.kime} · ${m.aciliyet}${son}${tekrar}]\n${m.konu ? m.konu + '\n' : ''}${m.icerik}\n(görüldü: posta gordum ${m.id} --kim ${m.kime} · işlenince: posta isle ${m.id} --kim ${m.kime})`;
+  return `[POSTANE ${m.id} · ${m.kimden} → ${m.kime} · ${m.aciliyet}${son}${tekrar}]\n${m.konu ? m.konu + '\n' : ''}${m.icerik}\n(görüldü: ${POSTA_KOMUT} gordum ${m.id} --kim ${m.kime} · işlenince: ${POSTA_KOMUT} isle ${m.id} --kim ${m.kime})`;
 }
 
 async function cagir(taban, jetonDosya, yontem, yol, govde) {
