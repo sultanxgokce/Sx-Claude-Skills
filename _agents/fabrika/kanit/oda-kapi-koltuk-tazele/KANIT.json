@@ -1,0 +1,191 @@
+{
+  "is": "oda-kapi-koltuk-tazele",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T18:05:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "0380673d81f8dd32a48c30d5293c05569418b2ba47687fa5b41499d7d209029a",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:01:51+03:00",
+      "sure_sn": 9.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "49fa4082d23e4a9a8a90e913a6765684"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "betik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-betik-sinavi-sonra.txt",
+      "sha256": "8818eeea4fcaef8a9b1886d5d1dcfa03b5d4cea7081949c4a3d41019a33c3716",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:03:19+03:00",
+      "sure_sn": 87.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cacc8ad1ca26461495618380e69be880"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kayit",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kayit-tek.txt",
+      "sha256": "6d165014ff1f7e1d0f86e784c87343b2a0e47951a0b19010d13cc3747ebd5e57",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-mutant.sh",
+        "kayit"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:04:18+03:00",
+      "sure_sn": 8.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "9968eb6877cb444d85d3ef6eab239fb9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-oncelik",
+      "asama": "tek",
+      "dosya": "olcum-mutant-oncelik-tek.txt",
+      "sha256": "334f820264abe1a13487547ef0fe0d1867a815a8224551029e26e16b98456053",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-mutant.sh",
+        "oncelik"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:04:25+03:00",
+      "sure_sn": 7.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "900b557423004e69bf7d01d883770acf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-katla",
+      "asama": "tek",
+      "dosya": "olcum-mutant-katla-tek.txt",
+      "sha256": "45164419551bd4536daf7e17ac5b9b7488f0bbd6474d0bfda915881729d4b51b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-mutant.sh",
+        "katla"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:04:33+03:00",
+      "sure_sn": 7.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "2cef16262bdb46dcbcf152302ba01429"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kaynak",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kaynak-tek.txt",
+      "sha256": "d6000c7c1b2494e58391f92079960d99977facf126944223f1ec37379db496b7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-mutant.sh",
+        "kaynak"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:04:42+03:00",
+      "sure_sn": 8.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "b4b114a4a811448c96cdb98a8efed47c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-odalar",
+      "asama": "tek",
+      "dosya": "olcum-mutant-odalar-tek.txt",
+      "sha256": "11db53014924f81306b11b0e9d710d5418e5958ee5d2e29e2e230832a1a91beb",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-mutant.sh",
+        "odalar"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:04:55+03:00",
+      "sure_sn": 13.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0ac4b5f6c7af4ec490b37fc42ea3342b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-desen",
+      "asama": "tek",
+      "dosya": "olcum-mutant-desen-tek.txt",
+      "sha256": "098abce048e058349e17e482b659ecfdf659d9cfd7253bd36d41da3391c16cdf",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-mutant.sh",
+        "desen"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:05:02+03:00",
+      "sure_sn": 7.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d1d47e8eb2914a678084a6faf5e82e6a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kod-kutusu-gercek-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-kod-kutusu-gercek-kayit-sonra.txt",
+      "sha256": "f5c9fdf4a3abf785557b55465b65f2051537ddca8c4ae3c1271d291cf153625f",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/g12/oda-gercek.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:05:23+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b554865b9d0f460e9e245f14bd8ccd5f"
+    }
+  ],
+  "imza": "13685e7daac630ba417e0cc3e24e8032113a02a50d264552d0ed2fa34bb9a558"
+}

@@ -1,0 +1,72 @@
+{
+  "is": "oda-kapi-koltuk-tazele",
+  "cumle": "Kapı koltuk odasını SERDAR kararı A sırasıyla verir: oda.json varsa o, yoksa kayıttaki oda alanı, ikisi de yoksa oda dışı; koltukta oda_kaynak işareti, ad eşlemesi muzehhip MÜZEHHİP, odalar listesi kayıt odalarını da taşır; #506 yerine geçer",
+  "istedi": "BÂNİ",
+  "aldi": "BENNÂ",
+  "zaman": "2026-10-31T16:43:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "birleşme sonrası sunucu.test ve koltuk-bagla.test ölçümü",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-31T17:58:51+03:00",
+      "olay": "daralt",
+      "kalan_kart": "oda-kapi-canli",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlıya)",
+  "kapsam_uyarilari": [
+    "31.10 16:43 is-alani: PR #616 aynı dosyaya dokunuyor → catalog.json: 1890-1890 — PR'dan önce kapsam-olc",
+    "31.10 16:43 is-alani: PR #506 aynı dosyaya dokunuyor → catalog.json: 1567-1567 · terminal-onar/SKILL.md: 4-4 7-7 · terminal-onar/kapi/kadro.mjs: 46-46 · terminal-onar/kapi/koltuklar.mjs: 21-21 24-24 28-28 · terminal-onar/kapi/oda.mjs: yeni dosya (tümü) · terminal-onar/kapi/sunucu.mjs: 20-20 486-487 · terminal-onar/kapi/sunucu.test.mjs: 22-22 627-627 · terminal-onar/scripts/koltuk-bagla.sh: 13-13 58-58 275-275 · terminal-onar/scripts/koltuk-bagla.test.sh: 20-20 120-120 141-141 294-294 — PR'dan önce kapsam-olc"
+  ],
+  "sayi_uyarilari": [
+    "506 kapı"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BENNÂ",
+      "oturum": "ulak_1793458600-f54eb438",
+      "gerekce": "SERDAR kararı A (BÂNİ iletti): 'Kayıt yalnız denetler kararımı bu cümleyle değiştiriyorum.' Kaynak sırası işlenir, canlıya alma ayrı karta gider",
+      "zaman": "2026-10-31T17:58:51+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BENNÂ",
+      "oturum": "ulak_1793458600-f54eb438",
+      "gerekce": "daraltma: kalan bulgu yeni karta (oda-kapi-canli) — Kapı terminal-onar 2.36.8 kod kutusuna ve kutulara canlı iniş kaydı: dağıtım birleşmeden sonra, ayrı kart",
+      "zaman": "2026-10-31T17:58:51+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Sx 506 kapı oda dalı ana dala getirilir: üç çakışma davranış değiştirmeden çözülür, kapı ve koltuk-bagla sınavları yeşil kalır; oda kaynağı kuralı değişmez, birleştirme ve canlıya alma SERDAR kararı gelene dek yoktur",
+      "zaman": "2026-10-31T17:58:51+03:00",
+      "kalan_kart": "oda-kapi-canli"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-31T17:58:51+03:00",
+      "kalan_kart": "oda-kapi-canli",
+      "kalan": "Kapı terminal-onar 2.36.8 kod kutusuna ve kutulara canlı iniş kaydı: dağıtım birleşmeden sonra, ayrı kart",
+      "tur_sifir": 0,
+      "oturum": "ulak_1793458600-f54eb438"
+    }
+  ]
+}

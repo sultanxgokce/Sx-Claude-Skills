@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-bagla-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/mk.sh m4 scripts/koltuk-bagla.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/capa/a4 /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/capa/y4 bagla
+# rc=1 sure=128.0s zaman=2026-10-27T16:42:35+03:00
+--- stdout ---
+MUTASYON: m4 — scripts/koltuk-bagla.sh: {print $4; exit}'; }   # 9. sütun  → {print ""; exit}'; }   # 9. sütun 
+  ✗ D1 — rc=0 maiset-ana	1760000000	0	diger	bilinmiyor				 
+  ✗ Q1 — 9
+  ✗ OD1 — maiset-ana	1760000000	0	diger	bilinmiyor				 
+  ✗ OD2 — maiset-ana	1760000000	0	diger	bilinmiyor				 
+toplam=110 geçen=106 düşen=4
+mutantla sınav rc=1 (beklenen ≠0 = yakalandı)
+--- stderr ---

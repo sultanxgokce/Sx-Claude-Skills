@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-sinav-kapi-2-sonra.txt
+hedef_sha256: 6fbd8bcfdc54ffc8791051766004824c7ba5e86d3109f8ffd168cc2bc41f4efc
+hedef_zaman: 2026-10-27T17:06:06+03:00
+hedef_renk: kirmizi
+neden: port çakışması: ilk turun çöken önce koşusundan kalan üç yetim kapı (18771/18772/18797) portları tutuyordu; kapı açılamadı — kırmızı/yakalandı kodla ilgisizdi. Port bekçisi ss ile kurulmuştu ve ss bu kutuda YOK (pozitif kontrol atlanmıştı). Yetimler kapatıldı, -3 etiketiyle netstat bekçisiyle yeniden ölçüldü
+kim: BANI
+karsi: -
+zaman: 2026-10-27T17:08:31+03:00

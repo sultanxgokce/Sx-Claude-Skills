@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
+import { odaBul, odaUyarisi, odaSec, kayitOdaHaritasi, kayitOdaBul } from './oda.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
 import { tarifOku, uzmanlikOku } from './tarif.mjs';
 import { bugunOku } from './bugun.mjs';
@@ -484,8 +485,17 @@ const sunucu = http.createServer(async (req, res) => {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         // satır çözümü + ad süzgeci kapi/koltuklar.mjs'te (tek kaynak); ad HTML'de kaçışlı, adreste encodeURIComponent
-        const koltuklar = koltukSatirlari(r.out).map((k) => ({ ...k, ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) }));
-        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, koltuklar });
+        // ODA (2.36.8 · kutu–oda modeli 2 · SERDAR kararı A, 31 Eki): sıra oda.json → kayıttaki oda → oda dışı (kural kapi/oda.mjs'te); koltukta oda_kaynak klasor|kayit.
+        //   Ayrışmada klasör geçerli, oda_uyari döner. Dizin yanıta YAZILMAZ. Kayıt okunamazsa yalnız klasör basamağı kalır, liste düşmez.
+        let kayitOda = new Map(); try { kayitOda = kayitOdaHaritasi(kayitOku(PROJE).uyeler); } catch {}
+        const odalar = new Map();
+        const koltuklar = koltukSatirlari(r.out).map(({ dizin, ...k }) => {
+          const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta);
+          if (sec && sec.kaynak === 'klasor') odalar.set(sec.oda, bulunan);   // klasörün hedef · reis bilgisi kayıt satırını ezer
+          else if (sec && !odalar.has(sec.oda)) odalar.set(sec.oda, { ad: sec.oda, hedef: '', reis: '' });
+          return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
+        });
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı

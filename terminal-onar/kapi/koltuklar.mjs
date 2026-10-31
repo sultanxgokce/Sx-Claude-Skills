@@ -18,13 +18,14 @@ export function soruAyikla(ham, hal) {
   const beri = typeof s.beri === 'string' && Number.isFinite(Date.parse(s.beri)) ? s.beri : '';
   return { tur: s.tur, metin: s.metin.slice(0, 300), siklar: s.tur === 'menu' ? siklar : [], ...(beri ? { beri } : {}) };
 }
-// koltuk-bagla.sh --liste çıktısı → koltuklar. Satır: ad · son · claude(1|0) · tür · hâl · ne · hesap · soru (tür/hâl/hesap/soru eski betikte yok → alan yok, uydurulmaz).
+// koltuk-bagla.sh --liste çıktısı → koltuklar. Satır: ad · son · claude(1|0) · tür · hâl · ne · hesap · soru · dizin (tür/hâl/hesap/soru/dizin eski betikte yok → alan yok, uydurulmaz).
+// dizin (2.33.0 · kutu–oda modeli 2): etkin bölmenin çalışma dizini — kapı odayı bundan bulur; API'ye YOLLANMAZ (sunucu.mjs düşürür).
 export function koltukSatirlari(cikti) {
   return String(cikti || '').split('\n').filter(Boolean).map((l) => {
-    const [ad, son, claude, tur, hal, ne, hesap, soruHam] = l.split('\t');
+    const [ad, son, claude, tur, hal, ne, hesap, soruHam, dizin] = l.split('\t');
     const soru = soruAyikla(soruHam, hal);
     // ne: dış olay bekliyorsa NE beklediği (2.7.0); başka hâlde yok (uydurulmaz)
     // hesap (2.14.0): koltuktaki Claude'un hesap ADI (kapi · varsayilan · <ad> · bilinmiyor:<neden>); Claude'suz koltukta yok — merkez rozeti bundan okur
-    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}), ...(soru ? { soru } : {}) };
+    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}), ...(soru ? { soru } : {}), ...(dizin ? { dizin } : {}) };
   }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));
 }

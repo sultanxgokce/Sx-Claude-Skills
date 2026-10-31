@@ -18,6 +18,7 @@ case "$1" in
                  [ -n "${SAHTE_SUNUCU_YOK:-}" ] && { echo "no server running on /tmp/tmux-1000/default" >&2; exit 1; }
                  case "$3" in *session_activity*) sed 's/$/\t1760000000/' "$SAHTE/oturumlar" ;; *) cat "$SAHTE/oturumlar" ;; esac ;;
   list-panes)    if [ "$2" = -a ]; then   # tüm bölmeler: ad·pencere-etkin·bölme-etkin·kimlik·pid·komut (kimlik = %ad, sahte)
+                   case "$4" in *pane_current_path*) while IFS= read -r n; do printf '%s\t1\t1\t/oda-dizini/%s\n' "$n" "$n"; done < "$SAHTE/oturumlar"; exit 0 ;; esac   # 2.33.0: çalışma dizini sorusu
                    while IFS= read -r n; do case "$n" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) k=claude; p=100 ;; *) k=bash; p=200 ;; esac
                      printf '%s\t1\t1\t%%%s\t%s\t%s\n' "$n" "$n" "$p" "$k"; done < "$SAHTE/oturumlar"
                  else t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac; fi ;;
@@ -270,6 +271,14 @@ else
   echo "  … R ÖLÇÜLEMEDİ: tmux ya da python3 yok (yeşil değil, sayılmadı)"
 fi
 
+echo "OD · çalışma dizini (2.33.0 · kutu–oda modeli 2): --liste 9. sütunu etkin bölmenin dizini — kapı odayı buradan bulur"
+printf '%s\n' maiset-ana BASIRET 'a b' > "$S/oturumlar"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste-od"
+[ "$(grep -P '^BASIRET\t' "$S/liste-od" | cut -f9)" = "/oda-dizini/BASIRET" ] && ok "OD1 9. sütun = koltuğun çalışma dizini (BASIRET)" || bad OD1 "$(cat "$S/liste-od")"
+[ "$(grep -P '^a b\t' "$S/liste-od" | cut -f9)" = "/oda-dizini/a b" ] && ok "OD2 boşluklu adlı koltuğun dizini kendi satırında (ad tam eşleşme)" || bad OD2 "$(cat "$S/liste-od")"
+[ "$(awk -F'\t' '{print NF}' "$S/liste-od" | sort -u)" = "9" ] && ok "OD3 her satır 9 sütun (eski 8 sütun + dizin)" || bad OD3 "$(awk -F'\t' '{print NF}' "$S/liste-od" | sort -u | tr '\n' ' ')"
+
+printf '%s\n' maiset-ana BASIRET '2026/85' 'a b' imglistener > "$S/oturumlar"   # E'nin listesi geri (D bölümü onunla koşar)
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
 # ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──
 printf '%s\n' maiset-ana BASIRET '2026/85' 'a b' imglistener > "$S/oturumlar"
@@ -290,7 +299,7 @@ printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
 printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
 al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
-[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 8 ] && ok "D1 liste 8 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0) · soru (2.23.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 9 ] && ok "D1 liste 9 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0) · soru (2.23.0) · dizin (2.33.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
 [ "$(al BASIRET 4)" = ajan ] && ok "D2 Claude çalışan oturum 'ajan'" || bad D2 "$(al BASIRET 4)"
 [ "$(al maiset-ana 4)" = diger ] && ok "D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)" || bad D2b "$(al maiset-ana 4)"
 [ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
@@ -443,7 +452,7 @@ printf '%s\n' "⏺ Kurulum bitti." "Do you want to continue with the migration? 
 printf '%s\n' "⏺ Bash(curl)" "Bash command" "  curl -H \"Authorization: Bearer $SAHTE_ANAHTAR\" https://x" "  token=abcdef1234567" "Do you want to proceed?" "❯ 1. Yes" "  2. No" > "$S/ekran-NEDIM"
 printf '%s\n' "bitti." "❯ " > "$S/ekran-MUHASIP"
 qkos l1 2026-10-23T12:00:00.000Z
-[ "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')" = 8 ] && ok "Q1 liste 8 alan (… · hesap · soru)" || bad Q1 "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')"
+[ "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')" = 9 ] && ok "Q1 liste 9 alan (… · hesap · soru · dizin)" || bad Q1 "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')"
 [ "$(qal l1 ZAKIR 5)" = soru ] && [ "$(qjs "$(qal l1 ZAKIR 8)" 'j.tur+"/"+j.siklar.map(x=>x.no).join(",")')" = "menu/1,2" ] && ok "Q2 izin kutusu → hâl soru · 8. sütun menu, şıklar 1,2" || bad Q2 "$(qal l1 ZAKIR 5) $(qal l1 ZAKIR 8)"
 [ "$(qjs "$(qal l1 ZAKIR 8)" 'j.metin.includes("git branch -D eski-dal") && j.metin.includes("Do you want to proceed?") && !/[│╭╰]/.test(j.metin)')" = true ] && ok "Q2b soru metni komutu ve soruyu taşır, kutu çizgisi yok" || bad Q2b "$(qal l1 ZAKIR 8)"
 [ "$(qal l1 BASIRET 5)" != soru ] && [ -z "$(qal l1 BASIRET 8)" ] && ok "Q3 GERÇEK ekran: yazı kutusu duruyor + mesajda 'Do you want to'/'❯ 1.' → soru DEĞİL ($(qal l1 BASIRET 5)), soru sütunu boş" || bad Q3 "hal=$(qal l1 BASIRET 5) soru=$(qal l1 BASIRET 8)"

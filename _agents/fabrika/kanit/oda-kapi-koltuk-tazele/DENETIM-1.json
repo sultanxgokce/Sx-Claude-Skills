@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "oda-kapi-koltuk-tazele",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T18:23:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-kapi-koltuk-tazele",
+  "dal": "oda-kapi-koltuk-tazele",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 73034,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 45,
+    "bayt": 339490
+  },
+  "dalgic": "uyumlu",
+  "bas": "10422551a9fd0d159d9cc1d856d2bcf3a8b5184b",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, oda bilgisini istenen sırayla oda.json → kayıt → oda dışı seçiyor; oda_kaynak, ad eşlemesi ve kayıt odalarının listeye katılması da sınanmış. Gerçek ölçümler yeşil, hedefli mutasyonların tamamı kapıyı düşürüyor ve üretimi durduracak kanıtlı bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kod ölçümleri kapi-sinavi için 129/129, betik-sinavi için 136/136 geçiyor; OD1–OD9 talebin kaynak önceliğini, oda_kaynak işaretini, MÜZEHHİP eşlemesini, oda dışını ve odalar listesini doğrudan ölçüyor. Altı hedefli mutasyon rc=1 ile ilgili OD kapılarını düşürmüş ve her biri gercek_olcum olarak yeşil kapi-sinavi kaydına bağlanmış; ayrıca gerçek kayıt ölçümü kayıt/oda-dışı dağılımını gösteriyor."
+  }
+}
