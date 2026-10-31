@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-baslik-esitle",
+  "pr": "609",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T04:30:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 6 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-y7-sapma-once.txt (yesil → gecersiz) — Y7 kanoniği cloudtop ANA checkout'undan okur; checkout #1251'de (bayat) — sapmayı değil checkout yaşını ölçtü; yerine origin/main ile doğrudan eşitlik · BANI · karşı kanıt: olcum-kanonik-esitlik-once.txt;olcum-y7-origin-once.txt (kirmizi → gecersiz) — Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2 · BANI · karşı kanıt: olcum-y7-origin2-once.txt;olcum-y7-origin-sonra.txt (yesil → gecersiz) — Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2 · BANI · karşı kanıt: olcum-y7-origin2-sonra.txt;olcum-y7-origin2-once.txt (kirmizi → gecersiz) — tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3 · BANI · karşı kanıt: olcum-y7-origin3-once.txt;olcum-y7-origin2-sonra.txt (yesil → gecersiz) — tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3 · BANI · karşı kanıt: olcum-y7-origin3-sonra.txt;olcum-y7-kanoniksiz-sonra.txt (yesil → gecersiz) — tur 2 bulgusu: kanonik okunamayınca Y7 artık yeşil sayılmıyor (depo varsa düşer, yoksa özet satırı ölçülmedi der); yerine y7-durumlar / y7-origin3 · BANI · karşı kanıt: olcum-y7-durumlar-sonra.txt",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-baslik-esitle",
+  "dal": "gunluk-plan-baslik-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29227,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 14965
+  },
+  "dalgic": "uyumsuz",
+  "bas": "446f75743e4e5c5734f2f8a6cb8ac799fb3d302b",
+  "duzeltme_farki": {
+    "onceki_bas": "1d99b88928f89b98efc9cf8ed5e570850a4d3f2b",
+    "dosya": 9,
+    "bayt": 16907,
+    "tam_bayt": 60468
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Paketli gorev.sh ile dugum-bak.py cloudtop origin/main kanoniğine bayt eşitlenmiş ve Y7 sapma sınavı gerçek kanonik bulunan yüzeyde kırmızıdan yeşile dönmüş. Önceki turun B1’i de kapanmış: depo varken origin/main okunamazsa sınav artık düşüyor, depo hiç yoksa Y7 açıkça ölçülmedi diye raporlanıp geçmiş gibi yazılmıyor; üretimi durduracak kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; ilan edilen altı geçersiz kayıt kanıt sayılmadı. Geçerli kanonik-eşitlik çifti gorev.sh farkını 28’den 0’a, dugum-bak.py farkını 7’den 0’a indiriyor; geçerli y7-origin3 çifti de Y7’yi 1 düşenden 0 düşene taşıyor. olcum-y7-durumlar-sonra ayrıca önceki B1 düzeltmesini ölçüyor: depo varken origin/main yoksa rc=1, depo yoksa rc=0 olsa da özet Y7’nin ölçülmediğini ve geçti sayılmadığını açıkça belirtiyor. Sarı kayıt yok."
+  }
+}
