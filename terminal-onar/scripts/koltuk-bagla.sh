@@ -11,7 +11,7 @@
 #   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
 #                                                          yalnız kabuk istemi var (altında hiçbir süreç yok). Sunucu/izleme koşan
 #                                                          Claude'suz oturum boş DEĞİLDİR (ör. nova/kesif-ui web sunucusu).
-#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap · soru
+#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap · soru · dizin
 #                                                          soru (2.23.0 · K1 Engel kurgusu): hâl 'soru' iken tek satır JSON {tur menu|serbest, metin, siklar, beri}
 #                                                          (kapi/soru.mjs; sır süzgecinden geçmiş); başka hâlde ya da okunamazsa boş — uydurulmaz.
 #                                                          hesap (2.14.0 · G-BANI-0008 E1 zemini): koltuktaki Claude'un HESAP ADI — kapi · varsayilan · <ad> ·
@@ -57,6 +57,7 @@ koltuklar() {  # görünür oturum adları, satır satır · rc 3 = ölçülemed
 #    '$1' adlı koltuğun hâli/etkinliği BAŞKA oturumdan okunurdu. Tüm bölmeler bir kez listelenir, ada tam eşleşmeyle süzülür.
 bolmeler() { if [ -n "${BOLMELER_ONBELLEK+x}" ]; then printf '%s\n' "$BOLMELER_ONBELLEK"; return 0; fi
   tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_id}	#{pane_pid}	#{pane_current_command}' 2>/dev/null; }
+koltuk_dizini() { tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_current_path}' 2>/dev/null | awk -F'\t' -v s="$1" '$1==s && $2==1 && $3==1 {printf "%s", $4; exit}'; }   # 9. sütun (2.33.0): etkin bölmenin çalışma dizini — kapı odayı buradan bulur; satır sonu YOK (tr onu boşluğa çevirip yolu bozardı)
 bolme_bul() { bolmeler | awk -F'\t' -v s="$1" '$1==s && $2==1 && $3==1 {print $4; exit}'; }   # oturumun etkin bölmesi (%N)
 # 🔴 2.5.0 (SERDAR 14 Eki ölçümü): Claude yalnız ÇOCUK süreçte aranıyordu. Kutuların çoğu ajanı bir başlatma betiğiyle açar
 #    (bölme: bash → baslat-claude.sh → claude): Claude TORUN süreçtir, eski arama onu görmez → koltuk "Claude yok" sayılırdı
@@ -331,7 +332,7 @@ if [ "${1:-}" = "--liste" ]; then
     if [ "$c" = 1 ]; then hesap="$(koltuk_hesabi "$s")"; else hesap=""; fi
     soru=""
     if [ "$hal" = soru ]; then soru="$(soru_oku "$s")"; printf '%s\n' "$s" >> "$SORU_OTURUM"; fi
-    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')" "$(printf '%s' "$soru" | tr '\t\n' '  ')"
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')" "$(printf '%s' "$soru" | tr '\t\n' '  ')" "$(koltuk_dizini "$s" | tr '\t\n' '  ')"
   done
   # soru hâlinden çıkan koltuğun 'beri' kaydı silinir (aynı soru sonra yeniden gelirse eski an taşınmasın); durum dosyası yoksa node koşmaz
   if [ -s "$(soru_durum_yolu)" ] && command -v node >/dev/null 2>&1; then mapfile -t SO < "$SORU_OTURUM"; node "$KB_DIZIN/../kapi/soru.mjs" --tut "${SO[@]}" >/dev/null 2>&1; fi

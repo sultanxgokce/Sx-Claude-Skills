@@ -1,0 +1,24 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-kapi-3-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/mk.sh m1 kapi/oda.mjs /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/capa/a1 /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/capa/y1 kapi
+# rc=1 sure=8.1s zaman=2026-10-27T17:09:14+03:00
+--- stdout ---
+MUTASYON: m1 — kapi/oda.mjs:     const ust = path.dirname(d);  →     const ust = d; 
+  ✗ OD1 koltuk oda klasörünün ALTINDA açılmış: oda yukarıdaki oda.json'dan (agentic-os), kayıtla aynı → uyarı YOK → {"ad":"BASIRET","son":5,"claude":true,"tur":"ajan","hal":"bos","oda_uyari":"Ekip kaydında oda 'agentic-os', ama koltuk bir oda klasöründe açılmamış.","ana":false,"kabuk":false,"kimlik":"k1c4f6bc7c4ac782c","ekran":"/sedir/tty/?arg=k1c4f6bc7c4ac782c"}
+  ✗ OD6 yanıt kutunun odalarını taşır (ad · hedef · reis, sıralı); çalışma dizini yanıta SIZMAZ → [{"ad":"freelance","hedef":"Freelance işleri","reis":"BASIRET"}] sızıntı=false
+GECEN: 124  ·  KALAN: 2
+mutantla sınav rc=1 (beklenen ≠0 = yakalandı)
+--- stderr ---
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1913310/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1913345/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1913395/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1913457/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1914587/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1914599/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915132/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915133/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915149/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915150/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915151/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915153/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915154/cmdline: No such file or directory
+/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/yetim.sh: line 2: /proc/1915156/cmdline: No such file or directory

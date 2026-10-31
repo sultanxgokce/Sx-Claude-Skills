@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-kapi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/mk.sh m2 kapi/oda.mjs /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/capa/a2 /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/oda/capa/y2 kapi
+# rc=1 sure=475.4s zaman=2026-10-27T16:40:26+03:00
+--- stdout ---
+MUTASYON: m2 — kapi/oda.mjs:   if (klasor === kayitOda) return '';  →   return ''; 
+mutantla sınav rc=1 (beklenen ≠0 = yakalandı)
+--- stderr ---
+⏳ agir-sira: kanit-oda-kapi-koltuk-mutant-m2 474 sn bekledi (yuva 2, load1 8.56)

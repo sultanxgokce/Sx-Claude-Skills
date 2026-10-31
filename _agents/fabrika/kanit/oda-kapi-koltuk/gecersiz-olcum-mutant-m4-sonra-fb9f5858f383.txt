@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mutant-m4-sonra.txt
+hedef_sha256: bb8b5deb9481451ee87469c9c1725d5a94b454d442a33e65900facbd2644da35
+hedef_zaman: 2026-10-27T16:42:35+03:00
+hedef_renk: yesil
+neden: ilk ölçüm turu bozuktu: önce kopyası yalnız terminal-onar'dı (KT1 gerçek tarifi bulamadı, çöküş portları tuttu), sonra'da dizin sütununun sonunda boşluk hatası yakalandı ve düzeltildi; hepsi -2 etiketiyle yeniden ölçüldü
+kim: BANI
+karsi: -
+zaman: 2026-10-27T17:05:53+03:00

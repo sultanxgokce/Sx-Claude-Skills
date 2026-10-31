@@ -1,0 +1,14 @@
+$ bash -c cd terminal-onar && case kapi in kapi) timeout 300 node kapi/sunucu.test.mjs ;; bagla) timeout 300 bash scripts/koltuk-bagla.test.sh ;; esac
+# rc=1 sure=0.7s zaman=2026-10-27T16:23:14+03:00
+--- stdout ---
+--- stderr ---
+file:///config/projects/_wt/Sx-Claude-Skills-oda-kapi-koltuk/terminal-onar/kapi/sunucu.test.mjs:79
+    if (p.exitCode !== null) throw new Error('kapı açılmadı, rc=' + p.exitCode);
+                                   ^
+
+Error: kapı açılmadı, rc=1
+    at kapiAc (file:///config/projects/_wt/Sx-Claude-Skills-oda-kapi-koltuk/terminal-onar/kapi/sunucu.test.mjs:79:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///config/projects/_wt/Sx-Claude-Skills-oda-kapi-koltuk/terminal-onar/kapi/sunucu.test.mjs:94:19
+
+Node.js v22.23.0
