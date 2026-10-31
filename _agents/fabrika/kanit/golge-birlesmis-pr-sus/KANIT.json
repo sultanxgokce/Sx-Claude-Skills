@@ -1,0 +1,46 @@
+{
+  "is": "golge-birlesmis-pr-sus",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T17:42:06+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "golge-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-golge-sinavi-sonra.txt",
+      "sha256": "09b263722f1a9d1601e6b0141d0db6ed0e40ba6249d081661d42d980a793376c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gb-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T17:41:57+03:00",
+      "sure_sn": 53.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d48acb5d39c943c5baf2f5d16f7276ad"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "golge-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-golge-mutant-sonra.txt",
+      "sha256": "e853bf86ed9c8511f2b63d52444f499902e9421412e5ca077e2b6104e87f1731",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gb-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T17:42:06+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "golge-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "56964be4167d4769b0af80743b9f7c63"
+    }
+  ],
+  "imza": "3d51947889f26ac64e1d15ac1a9d11d4e46f6ef4d930b1ba3f962f96f6542421"
+}

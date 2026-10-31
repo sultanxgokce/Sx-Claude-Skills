@@ -129,4 +129,21 @@ import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='geri=birl and any(';
 open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'geri=False and any('))
 PYM
 O="$(bash "$MR" 2>&1)"; ! grep -q "SAHTE YEŞİL: 2 / 3" <<<"$O"; g $? "R9 mutant (geri alma tespiti söküldü): sahte yeşil eksik sayılır → R2 bu mutantta düşerdi"
+echo "════ G3 · birleşmiş PR'e bayat zil yok ════"
+cat > "$T/gh-sahte.sh" <<'SH'
+#!/usr/bin/env bash
+# gh pr view <no> --repo … --json state -q .state → no'ya göre sabit durum; 99 = okunamaz
+case "$3" in 30) echo MERGED ;; 31) echo CLOSED ;; 32) echo OPEN ;; *) exit 1 ;; esac
+SH
+chmod +x "$T/gh-sahte.sh"; : > "$GOREV_KAYIT"; : > "$ZIL_KAYIT"
+gg() { FABRIKA_GH="$T/gh-sahte.sh" FABRIKA_GOREV_SH="$T/gorev-sahte.sh" FABRIKA_AILE_NOTIFY="$T/zil-sahte.sh" bash "${GBX:-$GB}" is-a --depo "$D" --pr "$1" --sha "s$1" 2>&1; }
+O="$(gg 30)"; grep -q "zaten MERGED" <<<"$O" && ! grep -q '"pr": "30"' "$FABRIKA_GOLGE_DEFTER" && [ ! -s "$ZIL_KAYIT" ] && [ ! -s "$GOREV_KAYIT" ]; g $? "G20 birleşmiş PR (MERGED): kayıt yok, görev adımı yok, zil YOK" "→ $O"
+O="$(gg 31)"; grep -q "zaten CLOSED" <<<"$O" && ! grep -q '"pr": "31"' "$FABRIKA_GOLGE_DEFTER" && [ ! -s "$ZIL_KAYIT" ]; g $? "G21 kapanmış PR (CLOSED): kayıt ve zil yok" "→ $O"
+O="$(gg 32)"; grep -q '"pr": "32"' "$FABRIKA_GOLGE_DEFTER" && grep -q "^SERDAR|golge:" "$ZIL_KAYIT"; g $? "G22 açık PR (OPEN): eskisi gibi kayıt + zil" "→ $O"
+O="$(gg 33)"; grep -q "durumu okunamadı" <<<"$O" && grep -q '"pr": "33"' "$FABRIKA_GOLGE_DEFTER"; g $? "G23 durum okunamadı: kayıt eski davranışla sürer, not düşer (sessiz susma yok)" "→ $O"
+MG="$T/golge-mutant.sh"; python3 - "$GB" "$MG" <<'PYM'
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='MERGED|CLOSED) echo'; assert s.count(a)==1
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'XMERGED|XCLOSED) echo'))
+PYM
+cp "$HERE/golge-rapor.sh" "$T/" 2>/dev/null; : > "$ZIL_KAYIT"; O="$(GBX="$MG" gg 30)"; [ -s "$ZIL_KAYIT" ]; g $? "G24 mutant (durum süzgeci söküldü): birleşmiş PR'e zil GİDER → G20 bu mutantta düşerdi"
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

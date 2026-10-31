@@ -34,6 +34,17 @@ GOREV="$(printf '%s' "$BILGI" | cut -f2)"; ALDI="$(printf '%s' "$BILGI" | cut -f
 [ -n "$SHA" ] || SHA="$(git -C "$DEPO" rev-parse HEAD 2>/dev/null || echo bilinmiyor)"
 REPO="$(git -C "$DEPO" remote get-url origin 2>/dev/null | sed -E 's#^.*github\.com[:/]##; s#\.git$##')"
 
+# BAYAT ZİL (gorev …0J2M5C): kapı zaten birleşmiş/kapanmış PR için yeniden koşulunca "birleştirirdim" demek yalandır (31 Eki: #1260-62 üç kez).
+#   PR durumu canlı okunur; MERGED/CLOSED ise kayıt, görev adımı ve zil YOK. Durum okunamazsa (gh yok · ağ yok · PR yok) eski davranış sürer — eksik veri "birleşmemiş" değildir ama sessizce susmak da değil: not düşer.
+if [ -n "$PR" ] && [ -n "$REPO" ]; then
+  PRDURUM="$(timeout 20 "${FABRIKA_GH:-gh}" pr view "$PR" --repo "$REPO" --json state -q .state </dev/null 2>/dev/null)"
+  case "$PRDURUM" in
+    MERGED|CLOSED) echo "· golge: PR #$PR zaten $PRDURUM — 'birleştirirdim' kaydı ve zili YOK (bayat bildirim engellendi)"; exit 0 ;;
+    OPEN) ;;
+    *) echo "ⓘ golge: PR #$PR durumu okunamadı — kayıt eski davranışla sürer" >&2 ;;
+  esac
+fi
+
 DEFTER="${FABRIKA_GOLGE_DEFTER:-$HOME/.claude/fabrika/golge-birlestirme.jsonl}"
 mkdir -p "$(dirname "$DEFTER")" 2>/dev/null || { echo "⚠ golge-birlestirme: defter dizini açılamadı ($DEFTER) — kayıt yazılmadı" >&2; exit 0; }
 # Aynı (iş, PR, sha) ikinci kez yazılmaz: kapı birden çok koşabilir, her koşu yeni "birleştirirdim" değildir.
