@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-birim-* ===
+$ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m3/terminal-onar/kapi/koltuk-onbellek.test.mjs
+# rc=1 sure=0.0s zaman=2026-10-31T18:51:36+03:00
+--- stdout ---
+7 geçti · 1 kaldı
+  ✗ O5 başarısız üretim saklanmaz: sonraki istek yeniden dener: Expected values to be strictly equal:
+--- stderr ---

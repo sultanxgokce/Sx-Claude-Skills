@@ -1,0 +1,164 @@
+{
+  "is": "kapi-koltuk-onbellek",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T18:52:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "birim",
+      "asama": "sonra",
+      "dosya": "olcum-birim-sonra.txt",
+      "sha256": "ec0d7597ff1976adab0172d2028c2a8d39491b7e913651739db7b1fe2b126741",
+      "komut": [
+        "node",
+        "koltuk-onbellek.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:48:26+03:00",
+      "sure_sn": 155.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "64af96a1a64e4b8590fa7952408f02e9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu",
+      "asama": "once",
+      "dosya": "olcum-sunucu-once.txt",
+      "sha256": "8172d115871dc09b4219182c8ed89f40247d1d50098b7e47fba0f82da11f8673",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/once/terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T18:51:33+03:00",
+      "sure_sn": 128.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2fb4e29d2341434896c076133cc34ae1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sonra.txt",
+      "sha256": "f901c79c279894458bc9be0baa54c2a5bf46465f1ced8e0f9f13b37dd15cc69a",
+      "komut": [
+        "node",
+        "sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:52:11+03:00",
+      "sure_sn": 8.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6a282b06512641fcba52d31bc9252982"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-post-dusurme",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-post-dusurme-sonra.txt",
+      "sha256": "491c019a225a5dbd031991dd7becc55cd9153d3d2900366c0597ee9ab8704ab0",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m5/terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:52:20+03:00",
+      "sure_sn": 9.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sunucu",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "eb8facbb9630477894a6fb9292c04910"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-tekil",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-tekil-sonra.txt",
+      "sha256": "7eb2522b922461ed0e9d54610e1a8054a44c222dc0417c72d850364fd1ee36e8",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m1/terminal-onar/kapi/koltuk-onbellek.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:51:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "birim",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "80411b970d8b4f5abe0ef40d5f1c0785"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-taze",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-taze-sonra.txt",
+      "sha256": "f57f5a68a57c2fd6bc1b0062153ece0aabbd515b39be7c5793f252f34fd38b58",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m2/terminal-onar/kapi/koltuk-onbellek.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:51:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "birim",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "b43a48493d4644558bd036374266e4dc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-hata",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-hata-sonra.txt",
+      "sha256": "157f964684aeb3debbeef3a2767493dad2ad44ccf0ebb2fef264cb42a3cbc02a",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m3/terminal-onar/kapi/koltuk-onbellek.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:51:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "birim",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c9ea7a0fa1894d28beec0b037b2c28d6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kusak",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kusak-sonra.txt",
+      "sha256": "24f32cd5a5a2f3d060d4817cc897af814d91401d657dce9ec6cf56e7f9b3f612",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc2/m4/terminal-onar/kapi/koltuk-onbellek.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T18:51:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "birim",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d90d6684ed934ef2876d6ba5eea518d2"
+    }
+  ],
+  "imza": "228b831a202e753773529477b9b7e2604ee56c1b703799c70b4bf6405286ccd2"
+}

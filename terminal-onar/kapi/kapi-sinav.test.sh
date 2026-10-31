@@ -12,6 +12,7 @@ cd "$(dirname "${BASH_SOURCE[0]:-$0}")"
 command -v node >/dev/null || { echo "ÖLÇÜLEMEDİ: node yok"; exit 3; }
 echo "── kadro birleşimi (kadro.test.mjs)"
 node kadro.test.mjs || exit 1
+node koltuk-onbellek.test.mjs || exit 1   # 2.36.9: koltuk listesi önbelleği
 node soru.test.mjs || exit 1   # 2.23.0 K1: koltuk sorusu (tür · metin · şıklar · beri) + sır süzgeci
 echo "── kadro E2 kayıt yazıcısı (kadro-yaz.test.mjs)"
 node kadro-yaz.test.mjs || exit 1
