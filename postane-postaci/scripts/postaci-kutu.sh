@@ -6,7 +6,7 @@
 #   bash postaci-kutu.sh --kapat         açma bayrağını siler → cron satırı anında no-op
 #
 # Kaynak: cloudtop infra/postane (postaci.mjs · postane.mjs · ajan-adlari.mjs · ulid.mjs birebir kopya; KAYNAK.sha256). Değişiklik oradan yapılır, buraya taşınır.
-# Sınır (KODLA): kutu 17 ekip kutusundan biri olmalı VE kutu jetonu BAŞKA kutunun ajan kuyruğunu okuyamamalı (SERDAR kuyruğu 403).
+# Sınır (KODLA): kutu 18 ekip kutusundan biri olmalı VE kutu jetonu BAŞKA kutunun ajan kuyruğunu okuyamamalı (SERDAR kuyruğu 403).
 #   Jeton genişse (200) --uygula REDDEDİLİR: izin dosyasında bu kutunun jetonuna ajanlar:[kendi ajanları] verilmeden postacı kurulmaz.
 # Sır değeri basmaz (jeton yalnız dosya adıyla anılır). Test kancaları (yalnız ortam): POSTACI_JETON · OTURUM_DIZIN · POSTANE_URL · NODE · BAYRAK · CRONTAB_KOMUT · KALICI_CRON · FLOCK_DOSYA
 set -u
@@ -30,7 +30,7 @@ NODE_MUTLAK="$(command -v "$NODE" 2>/dev/null || echo "$NODE")"
 CRONTAB="${CRONTAB_KOMUT:-crontab}"
 KALICI="${KALICI_CRON:-/config/crontabs/abc}"
 LOCK="${FLOCK_DOSYA:-/config/.filo/postaci.lock}"
-IZINLI_KUTULAR="akar code enis huma huzur maiset medigate menzil mihenk mmex nazir nova revak sedir tellal tez vekatip"   # sabit; kutu eklemek = bu satırı değiştiren ayrı, sınıflı PR
+IZINLI_KUTULAR="akar code enis huma huzur maiset medigate menzil mihenk mmex munavebe nazir nova revak sedir tellal tez vekatip"   # sabit; kutu eklemek = bu satırı değiştiren ayrı, sınıflı PR
 PILOT_KUTU="code"   # tek istisna: pilot kutunun jetonu merkez yetkilidir (izin dosyasında merkez:true)
 OLCUM_AJANI="SERDAR"   # merkez ajanı: hiçbir ekip kutusunun kuyruğu değil; dar jeton bunu OKUYAMAZ
 SATIR_ISARET="# POSTANE postacısı (Sx postane-postaci)"
