@@ -15,7 +15,12 @@
   "kanit_nerede": "Sx PR, calisiliyor-uzlastir.test.sh, kurulu betikle kuru koşu",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-31T20:31:34+03:00",
+      "olay": "canli-borc"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "--canli e",
   "kapsam_uyarilari": [],
@@ -39,6 +44,17 @@
       "zaman": "2026-10-31T20:22:07+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T20:31:00+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
-  ]
+  ],
+  "canli_borc": {
+    "zaman": "2026-10-31T20:31:34+03:00",
+    "yazan": "BÂNİ",
+    "gerekce": "Kurulu betik yeni kodu ancak birleşmeden sonra taşır; kurulu betikle kuru koşu ve süpürme turu beceri kurulunca ölçülür",
+    "odendi": null
+  }
 }
