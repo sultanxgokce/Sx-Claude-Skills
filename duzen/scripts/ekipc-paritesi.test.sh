@@ -68,6 +68,9 @@ printf 'insan notu\n' > "$T/p8.md"
 PATH="$SHIM:$PATH" bash "$EK" benimse --dosya "$T/p8.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
 ok "P8d GERÇEK vendor + yamlsız python → benimse rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
 PATH="$SHIM:$PATH" bash "$EK" yenile --dosya "$T/p8.md" --baz manuel-claude --manifest "$T/yok.yaml" >/dev/null 2>&1; rc=$?
+printf 'insan notu\n' > "$T/p8kuru.md"; PATH="$SHIM:$PATH" bash "$EK" benimse --dosya "$T/p8kuru.md" --baz manuel-claude --manifest "$T/yok.yaml" >/dev/null 2>&1; rc=$?
+ok "P8d2 GERÇEK vendor + yamlsız python → benimse KURU koşu (--apply yok) rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
+ok "P8d3 kuru koşu dosyaya DOKUNMADI" "$([ "$(cat "$T/p8kuru.md")" = "insan notu" ] && echo 0 || echo 1)"
 ok "P8e GERÇEK vendor + yamlsız python → yenile (kuru) rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
 printf 'insan notu\n' > "$T/p8k.md"; bash "$EK" benimse --dosya "$T/p8k.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1
 ok "P8f vendor'lı (yamlsız) kimlik, sistem PyYAML'lı koşunun kimliğiyle BAYT-AYNI" "$(cmp -s "$T/p8.md" "$T/p8k.md" && echo 0 || echo 1)"
