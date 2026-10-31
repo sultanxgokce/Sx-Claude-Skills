@@ -22,11 +22,29 @@
   "canli_sebep": "",
   "kapsam_uyarilari": [],
   "baslama_izni": {
-    "durum": "bekliyor",
-    "istendi": "2026-10-31T16:17:31+03:00"
+    "durum": "basla",
+    "istendi": "2026-10-31T16:17:31+03:00",
+    "zaman": "2026-10-31T18:22:55+03:00",
+    "yazildi": "2026-10-31T18:24:28+03:00",
+    "zaman_kaynagi": "soz",
+    "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+    "soz": "olur birleştir",
+    "beyan": "SERDAR"
   },
   "kural_surumu": "0.21.0",
   "sayi_uyarilari": [],
   "sayi_bicim_eksikleri": [],
-  "sayi_bicim_uyarisi": false
+  "sayi_bicim_uyarisi": false,
+  "sultan_kararlari": [
+    {
+      "karar": "basla",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "olur birleştir",
+      "beyan": "SERDAR",
+      "gerekce": "SERDAR ileti damgası D1; söz Nexus oturum kaydında 4f6442d1 15:22:55Z, #1293 ve #616 sorusunun cevabı; işleyen BERİD",
+      "zaman": "2026-10-31T18:22:55+03:00",
+      "yazildi": "2026-10-31T18:24:28+03:00",
+      "zaman_kaynagi": "soz"
+    }
+  ]
 }

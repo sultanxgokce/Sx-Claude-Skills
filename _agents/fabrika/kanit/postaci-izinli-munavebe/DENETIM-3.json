@@ -1,0 +1,63 @@
+{
+  "tur": 3,
+  "is": "postaci-izinli-munavebe",
+  "pr": "616",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T18:29:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-izinli-munavebe",
+  "dal": "postaci-izinli-munavebe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17250,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 2527
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7eb67acb513cf24b66fcacda46a42686a1b68584",
+  "duzeltme_farki": {
+    "onceki_bas": "5fee6f2bd397a5c2379d6c18305f8e4566ce72a2",
+    "dosya": 4,
+    "bayt": 6190,
+    "tam_bayt": 20416
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Münâvebe izinli listeye eklenmiş ve 17/False → 18/True ölçüm çiftiyle talep edilen sonuç gösterilmiş. Ancak yetki izni ölçümlerden sonra verilmiş, ayrıca bu turda eklenen S10 kapısı güncel kanıtla koşturulmamış ve kart dışı belge/komut kapsamı açılmış; önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: Yetki sınıfındaki uygulama ve ölçümler, başlama izninden önce yapılmış.",
+        "kanit": "Manifest ölçümleri 2026-10-31 16:18:55–16:20:22 +03:00 arasında; iş kartındaki baslama_izni.zaman ise 18:22:55, yazildi ise 18:24:28. Sonradan verilen izin, önceki yetkisiz uygulama sırasını değiştirmiyor.",
+        "konum": "İŞ KARTI: siniflar, baslama_izni; KANIT MANİFESTİ: kayitlar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Bu turda eklenen S10 sınavı ve 18 kapı beyanı güncel ölçümle doğrulanmamış.",
+        "kanit": "Diff, postaci-kutu.test.sh sonuna S10 ekliyor ve SKILL.md metnini 18 kapı yapıyor; buna karşılık sunulan kutu-sinavi ölçümü S10 satırı içermiyor ve SONUÇ: PASS=17 FAIL=0 diyor.",
+        "konum": "postane-postaci/scripts/postaci-kutu.test.sh: son bölüm; postane-postaci/SKILL.md: Kurulum betiği; ölçüm-kutu-sinavi-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartı yalnız münâvebenin izinli listeye eklenmesini isterken posta komutu, kaynak dosya listesi ve buna ait S10 sınavı eklenerek kapsam dışına taşılmış.",
+        "kanit": "İş kartı cümlesi yalnız izinli kutu listesini hedefliyor; düzeltme farkı SKILL.md'ye posta kullanım yolu ve yeni kaynak dosyaları, test betiğine de posta.sh için S10 ekliyor.",
+        "konum": "İŞ KARTI: cumle; postane-postaci/SKILL.md; postane-postaci/scripts/postaci-kutu.test.sh",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İzinli liste için 17/False → 18/True önce/sonra ölçüm çifti ve S6b geçişi talebi destekliyor, depo kapıları da yeşil; fakat düzeltme farkında eklenen S10 ölçüm çıktısında bulunmadığından kanıt bu baş için güncel değil."
+  }
+}
