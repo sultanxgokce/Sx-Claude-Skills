@@ -1,7 +1,7 @@
 {
   "is": "uzlastirma-yanlis-cekme",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T20:24:13+03:00",
+  "guncelleme": "2026-10-31T20:33:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -203,7 +203,26 @@
       "sure_sn": 11.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "f6b4b913e2e94889b50fdb279147e01b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-plani",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-plani-sonra.txt",
+      "sha256": "a3aa0eeaa607c5f70d7de53e6dfeb7a8ffd900432e74601872c48dd1f1890937",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:33:55+03:00",
+      "sure_sn": 140.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ccfdc19b9bba4a3c810c2f9507727658"
     }
   ],
-  "imza": "4cf38aa5ce17fb3b61508ffd548f81255ddc499ee5e41b597633afb58ae6bf10"
+  "imza": "ff0e43a2e680fddec05257735eb9b7d07e86b514411611cc359f76e56a34fc37"
 }

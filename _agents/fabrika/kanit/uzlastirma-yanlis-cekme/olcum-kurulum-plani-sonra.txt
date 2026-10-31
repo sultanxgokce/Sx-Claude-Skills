@@ -1,0 +1,14 @@
+$ node sync-skills.mjs --skill yazilim-fabrikasi
+# rc=0 sure=140.7s zaman=2026-10-31T20:33:55+03:00
+--- stdout ---
+  kaynak: uzlastirma-yanlis-cekme@eb521814 · origin/main'e göre 0 commit geride · 0 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  ↑ yazilim-fabrikasi → _global: güncelle v0.27.36 → v0.27.37
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---
+⏳ agir-sira: kanit-uzlastirma-yanlis-cekme-kurulum-plani 140 sn bekledi (yuva 1, load1 17.90)
