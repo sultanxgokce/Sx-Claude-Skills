@@ -1,0 +1,99 @@
+{
+  "is": "postaci-izinli-munavebe-2",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T20:58:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "izinli-liste",
+      "asama": "once",
+      "dosya": "olcum-izinli-liste-once.txt",
+      "sha256": "cd432e687c2a74eb76da16eee8f9eced4ad17a62957bb6e0f8987c8c468eb6ed",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/izinli-liste-olc.py",
+        "postane-postaci/scripts/postaci-kutu.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T20:56:34+03:00",
+      "sure_sn": 130.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1038ab4751cd4d95a926413e27b75426"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "izinli-liste",
+      "asama": "sonra",
+      "dosya": "olcum-izinli-liste-sonra.txt",
+      "sha256": "2c0f7b664a0ff2f711392117ed7deb8b3445e0fda802aa6441c4ff401c5abd56",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/izinli-liste-olc.py",
+        "postane-postaci/scripts/postaci-kutu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:58:07+03:00",
+      "sure_sn": 65.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8ef82b1ec69e42c6b20822236f43f9a4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kutu-sinavi-tek.txt",
+      "sha256": "e20b77a716b3ee78a67b4f3e826c9b99072707d22203f2d1b9c196e571e563d3",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:58:14+03:00",
+      "sure_sn": 6.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "17622f082b81412fb9fc667923b31568"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "repo-kapilari",
+      "asama": "tek",
+      "dosya": "olcum-repo-kapilari-tek.txt",
+      "sha256": "7124ae60d6fdda965353a140c537db5d58c70bdade8a7537b8806b0ceca34105",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-kapilar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:58:16+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a2e6ef6bb21c471f8397b560f787fe30"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-liste",
+      "asama": "tek",
+      "dosya": "olcum-mutant-liste-tek.txt",
+      "sha256": "3b966b9b88bb60080213b348baff89c90d3bfc4a31fb8a47f0a8e9403a702b57",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:58:20+03:00",
+      "sure_sn": 4.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kutu-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "4eccb9db1f934a8fb7c968da3ad56c7c"
+    }
+  ],
+  "imza": "2c68f7f68d8538f176fb6ab588afd7feffaedd8ff83f9e30dccbbc40f8db873d"
+}
