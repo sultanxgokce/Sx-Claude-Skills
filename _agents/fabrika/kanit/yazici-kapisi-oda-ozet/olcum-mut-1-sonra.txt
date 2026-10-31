@@ -1,0 +1,66 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kapi-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/yk-mutant.sh 1
+# rc=1 sure=53.5s zaman=2026-10-31T22:46:20+03:00
+--- stdout ---
+  ✓ H1 hal: yazıcıya 'hal S-12 --hal uygulandi --gerekce … --kim MUAVİN --kok' gider, rc 0
+  ✓ H2 🔴 'onaylandi' ajan tarafından yazılamaz (A06): rc 2, yazıcı ÇAĞRILMADI
+  ✓ H3 numara S-N değilse rc 2
+  ✓ H4 bilinmeyen hâl rc 2
+  ✓ H5 --kim eksik rc 2
+  ✓ H6 --gerekce eksik rc 2
+  ✓ H7 defter kurulu değilse rc 3, hiçbir şey yazılmaz
+  ✓ H8 eski 'yaz' yolu (jetonsuz kutu) değişmedi (yazıcıya 'yeni --baslik … --kim X --kok')
+  ✓ H9 🔴 --kim son argüman ve DEĞERSİZ: rc 2, sonsuz döngü YOK (5 sn zaman aşımı değil), yazıcı çağrılmadı
+  ✓ H9b yaz: --not değersiz → rc 2, döngü yok
+  ✓ K1a jeton yoksa eski yol + 'jetonu yok' uyarısı
+  ✓ K1b jeton varsa MERKEZE yazar: tür gorev · etiket bug · kaynak_kim · kaynak_nereden 'bulgu komutu' · kanıt adımı; tek-format cevap
+  ✓ K1c eski kutu yazıcısı ÇAĞRILMADI (tek defter, ikilik yok)
+  ✓ K1d jeton değeri çıktıda YOK
+  ✓ K1e --etiket ozellik geçer
+  ✓ K1f bilinmeyen etiket rc 2, hiçbir yere gitmez
+  ✓ K1g merkez reddederse rc 1 + http kodu/sebep; eski deftere DÜŞMEZ
+  ✓ OD1 --oda merkez gövdesine 'oda' alanı olarak gider (gorev.sh ac --oda ile aynı alan), rc 0
+  ✗ OD2 --oda verilmezse varsayılan oda agentic-os yazılır ve SÖYLENİR (0.6.5: odasız kayıt doğmaz)
+  ✓ OD5 --oda yoksa yazanın ekip kaydındaki odası kullanılır (AGENT_NAME)
+  ✓ OD6 GOREV_ODA kayıttan önce gelir; açık --oda her ikisinden önce
+  ✓ OZ1 80 harflik özet reddedilir (rc 2), deftere HİÇ gidilmez
+  ✓ OZ2 79 harflik özet geçer
+  ✓ OD3 --oda değersiz rc 2, deftere HİÇ gidilmez (son gelen gövde değişmedi)
+  ✓ OD4 jetonsuz kutuda kayıt eski deftere yazılır, oda YAZILMADI diye SÖYLENİR (sessiz düşme yok)
+  ✓ D0 --dugum verilmezse gövdede dugum_acar YOK (eski yol aynen)
+  ✓ D1 kutulu biçim olduğu gibi dugum_acar olur; defterden okuma YAPILMAZ; düğüm + bekleyen sonucu söylenir
+  ✓ D1b kayıt yazıldı ama bekleyen notu YAZILAMADIYSA rc 4 (0 değil, 1 değil) + defterin sebebi
+  ✓ D2 çıplak kimlik: kutu defterden okunur (canlı kutu mmex, ekleyen akar DEĞİL) → mmex:gorev_BEKLEYEN00000001
+  ✓ D2b jeton değeri çıktıda YOK (okuma yolu da --config ile)
+  ✓ D3 çıplak kimlik defterde görünmüyorsa rc 1 + '<kutu>:… biçimiyle ver'; kayıt YAZILMADI
+  ✓ D4 🔴 jetonsuz kutuda --dugum RED (rc 2): eski deftere bağsız DÜŞMEZ, yazıcı çağrılmadı
+  ✓ D5 --dugum değersiz (son argüman) rc 2, döngü yok
+  ✓ D5b --dugum boş dize rc 2 (bağ sessizce düşmez)
+  ✓ D6 çıplak kimlik biçim dışıysa rc 2; defter adresine HİÇ gidilmez (yol kaçışı yok)
+  ✓ D7 defter düğümü reddederse rc 1 + defterin sebebi aynen (kural defterde, burada kopya yok)
+  ✓ D7b defter bağ reddinde (canlı 409 bag_hedefi_yok biçimi: neden/yerine ÜST düzeyde — 21 Eki canlıdan alındı) neden + yapılacak basılır, rc 1
+  ✓ HV1 varsayılan gorev_durumu 'havuz' + kaynak_sinif 'ajan' açıkça gövdede (0.5.0)
+  ✓ HV2 --gorev → gorev_durumu 'acik' (doğrudan İŞ, Sırada'ya düşer)
+  ✓ HV3 --dugum --gorev'siz RED (rc 2, 'havuzda bekleyemez'): sessizce acik'a çevrilmez, deftere gitmez
+  ✓ HV3b --dugum --gorev → acik + dugum_acar (tek istisna --gorev)
+  ✓ O1 --gorev --ozet: gövdede ozet_sultan aynen gider, durum acik
+  ✓ O2 🔴 --gorev özetsiz: rc 2, sebep '--ozet' söyler, deftere HİÇ gidilmez
+  ✓ O2b boşluktan ibaret özet de özetsizdir: rc 2, deftere gidilmez
+  ✓ O3 havuz (varsayılan) özetsiz geçer; gövdede ozet_sultan YOK (eski yol aynen)
+  ✓ O4 --ozet son argüman ve değersiz: rc 2, döngü yok
+  ✓ HV4 jetonsuz eski yolda havuz UYGULANMAZ ve bu SÖYLENİR (eski defter havuzu bilmez; sessiz değil)
+  ✓ HV5 defter 'havuz'u tanımıyorsa (1.18.0 öncesi 400 alan_degeri_gecersiz) rc 1 + sebep + sıra; acik'a DÜŞÜLMEZ, eski deftere gitmez
+  ✓ HC1 havuz-cek: bulgu kayıtları (bulgu komutu YA DA etiket bug/ozellik) gelir, bulgu olmayan görev ve adsız kayıt GELMEZ; sayı stderr'de
+  ✓ HC2 eşleme: havuz → durum 'ham' (defter_durumu havuz) · ilk [kanıt] adımı kanit/detay/gercek · tarih · bulan · kutu · sinif YOK · kaynak defter
+  ✓ HC3 göç kaydı eski_no taşır (tüketici kutu defteriyle iki kez saymasın); havuz dışı durum aynen kalır; çatışmalı durum listesi → son değer
+  ✓ HC4 jeton değeri çıktıda YOK
+  ✓ HC5 jetonsuz kutu: rc 3 + ÖLÇÜLEMEDİ (boş liste 'bulgu yok' sanılmaz)
+  ✓ HC6 defter reddederse (401) rc 3 + http kodu
+  ✓ HC7 yanıtta gorevler listesi yoksa rc 3 (0 kayıt 'temiz' sayılmaz)
+  ✓ HC7b gorevler LİSTE değilse ({}) rc 3 + ÖLÇÜLEMEDİ (Python hatası/rc 1 değil — göz #431 tur 1)
+  ✓ HC7c bozuk öğeler (metin · kimliksiz · canli/adlar/adimlar yanlış tür) çökertmez: sağlam kayıt gelir, '5 BOZUK kayıt atlandı' söylenir
+  ✓ HC8 defter ulaşılamazsa rc 3
+  ✓ K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir
+bulgu.test: 58 geçti · 1 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-yazici-kapisi-oda-ozet-mut-1 50 sn bekledi (yuva 1, load1 17.98)

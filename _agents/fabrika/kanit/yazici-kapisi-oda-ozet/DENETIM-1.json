@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "yazici-kapisi-oda-ozet",
+  "pr": "630",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T22:49:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-yazici-kapisi-oda-ozet",
+  "dal": "yazici-kapisi-oda-ozet",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42202,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 20681
+  },
+  "dalgic": "uyumlu",
+  "bas": "532fcbc52734b14a243a649cdc9bbde9cec2814f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kayıt yazıcılarına oda çözümleme sırası ve 80 harf sınırı eklenmiş; odasız ya da uzun özetli kaydın deftere ulaşması kapatılmış. Gerçek ölçümde kalan 10’dan 0’a inerken dört ayrı mutasyon kapıyı düşürdüğü için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; önce/sonra ölçüm çifti gerçek kodda kalan=10 → kalan=0 gösteriyor. Dört mutasyon kaydı oda varsayılanı ve özet sınırındaki kasıtlı bozulmaları yakalıyor; sarı kayıt yok. Ölçümün kirli çalışma ağacında yapılmış olması izlenebilirliği commit tek başına yeniden üretilebilir olmaktan çıkarıyor, ancak sunulan diff ve ölçüm sonucu arasında kanıtlanabilir bir kusur göstermediğinden bulgu yazılmadı."
+  }
+}
