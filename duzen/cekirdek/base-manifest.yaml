@@ -1,0 +1,44 @@
+# base-manifest.yaml — Nexus federe BASE-PERSONA kataloğu (FAZ-2 D3 · k0180 · E1/K3)
+#
+# NE: Filodaki tüm hücrelerin PAYLAŞTIĞI base-persona'ların tek YAZAR-kaynağı. Her base-persona =
+#     rol-künyesi (bu dosya) + ortak-şart METNİ (ayrı .md; Sultan-dili, GO-2 onaylı). ekip-os-base-derle.sh
+#     bunları TEK deterministik temel-kimliğe derler: _agents/ekip-os/base/<rol>.md (ÜRETİLEN; drift=kırmızı).
+# NE-DEĞİL: tenant ekip-modeli.yaml'ı (s01/yeni-tenant org-modeli) DEĞİL — o hücre-içi roster; bu FİLO-ortak
+#     temeli. Base'i gerçek MÜDÜR'lere UYGULAMAK (base⊕overlay) = D4 (ekipc benimse) — bu dosyanın işi değil.
+# MİNİMAL: base metni <~300 satır (derleyici K-uzunluk kapısıyla dayatır); şişerse içerik overlay'e (## ELLE) iner.
+# İLK base-persona = MÜDÜR (K3 "MÜDÜR-base önce"); MOTOR/MÜHÜRDAR... sonraki dilimlerde eklenir.
+
+meta:
+  katalog_surumu: "1.0"
+  kapsam: "federe filo — tüm hücre-yöneticileri (MÜDÜR'ler) bu temeli paylaşır"
+  onay: "GO-2 (MÜDÜR-base metni, Sultan-dili) — 2026-07-21"
+
+base_roller:
+  - ad: MÜDÜR
+    tek_cumle: "defteri akıtmak — triage + arz + istisna-yönetimi"
+    cekirdek: true
+    kademe: 3                       # 5-kademe (E6): Sultan1 · SADRAZAM2 · MÜDÜR3 · uzman4 · stajyer5
+    oturma_plani: pane
+    metin: mudur-base.md            # ortak-şart gövdesi (GO-2 onaylı); derleyici verbatim gömer
+    yapamaz:
+      - "akışın motoru olamaz — akış deterministik cron/script, MÜDÜR yalnız triyaj+istisna"
+      - "başka hücreye emir veremez / işini devralamaz (tek zirve: Sultan→SADRAZAM→MÜDÜR)"
+      - "kendi bölge-yetkisi dışına yazamaz (kesişen iş SADRAZAM'a eskalasyon)"
+      - "insan-onay alanına yazamaz / Ş2-sınıfı işi (merge/prod/sır/silme) kendisi kapatamaz — Sultan'a arz"
+
+# ── persona_baz — org-persona ORTAK-TEMELİ (FAZ-2 D5 · k0180 · E1 ikinci-üretici-birleşimi) ────────────
+# NE: base_roller SANCAK-hücre ROLLERİNİN (MÜDÜR gibi soyut koltuk) ortak temeli. persona_baz ise
+#     ADI-OLAN BİREYLERİN (org-persona: SİNAN/CABİR/ARES…) ortak temeli — İKİ AYRI EKSEN (rol ⟂ persona;
+#     bu dosyada birlikte dururlar ama karışmazlar). Kaynak: ise-alim'in emekli edilen agent-manuel/
+#     agent-otonom şablonlarının UNIFORM/drift-eğilimli kısmı (KANUNLAR + hafıza-vatandaşlığı + provenance).
+# NASIL TÜKETİLİR: `ekipc benimse --dosya <AGENT.md> --baz <tip> --apply` → charter'ı YÖNETİLEN-bölgeye
+#     verbatim gömer, personanın kendi içeriği `## ELLE`'ye iner (SERDAR↔MÜDÜR deseninin org-persona'ya
+#     genellemesi). ekip-os-base-derle.sh bunu DERLEMEZ (base_roller-özeldir; persona_baz canlı-tüketilir).
+# NE-DEĞİL: persona'nın KENDİSİ (etimoloji/proje/görev/otonom-daemon ayarı) buraya girmez → `## ELLE`.
+persona_baz:
+  - ad: manuel-claude
+    tek_cumle: "Sultan-eşli interaktif geliştirici-Claude ortak sözleşmesi"
+    metin: manuel-claude-base.md    # SİNAN/CABİR/ZÂKİR/NÂZIR/DERVİŞ/KÂHYA gibi manuel-eşli personalar miras alır
+  - ad: otonom-ajan
+    tek_cumle: "VPS'te 7/24 koşan otonom ajan ortak çekirdeği"
+    metin: otonom-ajan-base.md      # ARES/FORGE/İRFAN/PUSULA/HAFIZ/NEDİM gibi otonom ajanlar miras alır

@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/pk-gercek.sh
+# rc=0 sure=0.9s zaman=2026-10-31T20:50:19+03:00
+--- stdout ---
+== 12 geçti · 0 düştü ==
+rc=0
+--- stderr ---

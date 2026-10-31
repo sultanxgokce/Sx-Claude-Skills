@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.5.0
+version: 1.6.0
 ---
 
-# /duzen — filo düzen paketi (1.5.0 · iskelet + alt ajan istem üreticisi + otonom temel)
+# /duzen — filo düzen paketi (1.6.0 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -65,6 +65,9 @@ bölgeye gömer (`<!-- ekipc:uretilen:basla surum= hash= -->` … `bitti`, altı
 | `cekirdek/otonom-ajan-base.md` | Otonom ajan (ARES · FORGE · GÖZCÜ · HAFIZ · İRFAN · NEDİM · PUSULA) ortak temeli |
 | `cekirdek/durma-standardi.md` | Filo-ortak DUR kuralı: Ş2 fiili ∨ 6 eskalasyon sinyali ∨ kutu-🔴 |
 | `cekirdek/cevapsiz-birakma.md` | Gelen mesaj/zil cevapsız bırakılmaz kuralı |
+| `cekirdek/base-manifest.yaml` | Ortak temel kataloğu: hangi persona/rol hangi metni taşır (`ekipc --baz` bunu okur) |
+| `cekirdek/ana-hedef-sablonu.md` | Ana hedef şablonu (Nexus `ekip-os-base` aynası) |
+| `cekirdek/federe-inovasyon-charter.md` | Federe inovasyon şartı (Nexus `ekip-os-base` aynası) |
 
 Her dosyanın ilk satırı `<!-- kaynak: Sx duzen/cekirdek · Nexus kopyası bu dosyayı okur -->`; gerisi Nexus
 kopyasıyla bayt bayt aynıdır. **Nexus `ekip-os-base` bir sonraki adımda bu dizini işaret edecek** (bu PR Nexus
@@ -75,6 +78,7 @@ tarafına dokunmaz; o geçiş ayrı iş).
 | Araç | Ne yapar | Sınav |
 |---|---|---|
 | `el-defteri.sh [--ajan AD] [--n 25]` | Koltuğun el defterini tek metin basar: bugünkü ÇIPA · son KONUM · son N not · açık işler (gorev.sh). Alt ajan istemine eklenir. Defter yoksa **"el defteri yok" rc 3** (uydurmaz); gorev.sh yoksa "ölçülemedi" yazar | `el-defteri.test.sh` E1-E7 + 2 mutant |
+| `ekipc.sh benimse\|yenile --dosya KİMLİK --baz <persona> [--apply]` | Nexus `scripts/ekipc.sh`'ın **birebir** kopyası: izole kutuda (Nexus deposu ve manifesti YOK) kimliğe ortak temeli `## ELLE` bölgesine dokunmadan gömer ya da kaynak değişince yeniler. Katalog betiğin yanındaki `cekirdek/`'ten okunur; paket başlığı kimliğe gömülmez. `derle` ve `--rol` kipleri Nexus manifesti ister, bu pakette ÇALIŞMAZ (exit 3) | `ekipc-paritesi.test.sh` 12/12 (izole kutu + çivili md5 + Nexus ile bayt-aynı üretim) |
 | `append-note.sh` | Nexus `scripts/append-note.sh`'ın **birebir** kopyası: Read'siz güvenli ekleme, ajan defterinde ÇIPA başlığı + saat damgasını ARAÇ yazar. 19 kutu aynı not aracını alır | `append-note-paritesi.test.sh` P1-P4 (P4 = Nexus kopyasıyla md5 eşitliği) |
 | `alt-ajan-istem.sh <slug> --is "…" [--kart İŞ] [--dosyalar a,b] [--sure DK] [--depo KÖK]` | **Koltuksuz alt personel** (BENNÂ · MÜZEHHİP · ŞAKİRD · ÇAPAR · TATAR · MESSÂH · MEREMMETÇİ · MÜCERRİB · MÜTEFENNİN) için reisin Agent aracına yapıştıracağı **tek istem metnini** basar (yalnız stdout, dosyaya yazmaz). Altı blok: kimlik (`AGENT.md` `## ELLE` verbatim; ekipc üretilmiş ORTAK-TEMEL alınmaz) · reis/oda/yetki (aile-registry `oda:`+`amir:`; "birleştirme · canlı · host · sır reiste" sabit; 1.1.1: Sultan kararı satırı — alt personel kendi iş alanında küçük düzeltme PR'ı açabilir, birleştirme her durumda reiste, bütün odalar) · el defteri (`el-defteri.sh`; defter yoksa "defter boş, ilk görev" + ⚠, istem yine çıkar) · iş (`--is`; `--kart` varsa kartın `cumle`si önde) · dosyalar+süre · sabit kurallar (hat · Sultan-dili · kanıt · ölçmeden hüküm yok · scratchpad öneki · rerun yok). Slug'ın AGENT.md'si yoksa **rc 3 "kimlik yok: önce /ise-alim"**. `token|sifre|şifre|parola` geçen satır basılmaz → `[sır satırı süzüldü]` | `alt-ajan-istem.test.sh` A1-A9 + mutant `sir` (gömülü ve `--mutant sir`) |
 | `surum.sh goster` · `surum.sh denetle [--depo KÖK] [--kurulu DİZİN]` | Paket sürümü · kutudaki kurulu sürüm kaynakla aynı mı · `ekipc` işaretli AGENT.md'lerde hash tutuyor mu (EL-DEĞMİŞ) ve gömülü çekirdek birebir mi (BAYAT). **Yalnız raporlar, yazmaz** (`--kuru` varsayılan ve tek kip) | `surum.test.sh` S1-S9 + 2 mutant |
@@ -101,6 +105,11 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.6.0** (31 Eki 2026, MİRAHUR · Kuzey Hat E G3.6): `ekipc.sh` düzen paketine girdi (Nexus #1455 + #1456 ile paket kipi). İzole kutuda `ekipc benimse|yenile --baz` artık
+  çalışır: önceki durumda `ekipc benimse` kutuda `komut yok` (rc 127) veriyordu ve ortak bölge işi hiçbir izole kutuda yapılamıyordu. `cekirdek/`ye `base-manifest.yaml`,
+  `ana-hedef-sablonu.md` ve `federe-inovasyon-charter.md` eklendi. `manuel-claude-base.md`ye koltuksuz alt personel bölümü eklendi (G3.3: istem `alt-ajan-istem.sh`
+  ile, zil amire düşer; Nexus aynası #1457). Bu metin değişince manuel-claude kimlikleri BAYAT görünür ve gece işi yeniler. Sınav: `ekipc-paritesi.test.sh` 12/12 + mutant.
+  Kimliklerin kutularda bağlanması (`benimse`) her kutunun reisinin işidir; bu paket yalnız aracı ve temeli taşır.
 - **1.5.0** (31 Eki 2026, MİRAHUR · Kuzey G3.6): `surum.sh denetle` ve `duzen-gece.sh` `otonom-ajan` ortak temelini de tanır. `cekirdek/otonom-ajan-base.md` eklendi; gömülü temeli
   birebir olan otonom kimlik GÜNCEL sayılır, sapmışsa BAYAT (temel adıyla) ve gece işi onu `ekipc yenile --baz otonom-ajan` ile yeniler (günlükte `temel=otonom-ajan`).
   Öncesinde bu temel tanınmadığı için benimsenen otonom kimlikler her hafta sahte "bayat" bulgusu üretir, gece işi de "temel-bilinmiyor" diye atlardı. Ayrıca `duzen-gece.sh` gövdesi tek fonksiyona sarıldı: `sync-skills` bu dosyayı yerinde yeniden yazdığı için sarılmamış betik gece kurulumundan sonra kayık okur

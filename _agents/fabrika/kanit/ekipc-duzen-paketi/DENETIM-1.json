@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "ekipc-duzen-paketi",
+  "pr": "623",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T20:53:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ekipc-duzen-paketi",
+  "dal": "ekipc-duzen-paketi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 74626,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3438
+  },
+  "dalgic": "uyumsuz",
+  "bas": "54986eddb66da3ad7412f2673768c18655966689",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Düzen paketi 1.6.0'a çıkarılmış; izole kutuda `ekipc benimse|yenile --baz` çalışması, Nexus ile bayt paritesi ve koltuksuz alt personel kuralının ortak temele girmesi sağlanmış. Gerçek ölçüm 12/12 ve mutasyon kapısı sağlam, ancak sınav bağımlılık yokluğunu başarı sayıyor ve kartın ikinci kabul koşulunu doğrudan sınamıyor; üretim öncesi bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sınav, PyYAML bulunmadığında ölçülemedi durumunu başarılı çıkış koduyla kapatıyor; bu nedenle bağımlılığı eksik bir kutu yeşil görünebilir.",
+        "kanit": "`python3 -c \"import yaml\" ... || { echo \"... ölçülemez (unknown≠fail)\"; exit 0; }` satırı ölçülemeyen vakada rc=0 üretiyor. Mevcut gerçek ölçümün 12 geçti göstermesi bu koşuda PyYAML bulunduğunu kanıtlar, fakat sınavın hata yolunu düzeltmez.",
+        "konum": "duzen/scripts/ekipc-paritesi.test.sh:10",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kartın “ortak temele koltuksuz alt personel satırı aynı sürümde girer” kabulü üretim farkında yapılmış olsa da parite sınavında doğrudan bir kapıyla korunmuyor.",
+        "kanit": "Kural `manuel-claude-base.md` içine eklenmiş ve paket sürümü 1.6.0 yapılmış; buna karşılık P1-P6 denetimleri yalnız kopya md5'i, otonom-ajan benimse/yenile davranışı, başlık, manifest reddi ve Nexus paritesini ölçüyor. `manuel-claude` çıktısında `ALT PERSONEL` bölümünü veya 1.6.0 birlikteliğini arayan bir iddia yok.",
+        "konum": "duzen/cekirdek/manuel-claude-base.md:46; duzen/scripts/ekipc-paritesi.test.sh:2-56; duzen/SKILL.md:4",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `paket-paritesi` rc=0 ile 12 geçti/0 düştü, mutasyon kaydı da bilerek bozulan md5 ve paket-başlığı vakalarını rc=1 ile yakalıyor. Önce/sonra çifti yok; buna rağmen gerçek ölçüm ile mutasyon çifti ana paket/parite iddiası için güçlü, fakat koltuksuz alt personel kabulünün semantik sınaması eksik."
+  }
+}

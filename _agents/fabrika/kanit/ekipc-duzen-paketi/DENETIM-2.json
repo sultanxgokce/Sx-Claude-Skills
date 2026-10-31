@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "ekipc-duzen-paketi",
+  "pr": "623",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T20:58:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ekipc-duzen-paketi",
+  "dal": "ekipc-duzen-paketi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18280,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8292
+  },
+  "dalgic": "uyumsuz",
+  "bas": "ef9c7deab24cb585a35815eff86454d722b46509",
+  "duzeltme_farki": {
+    "onceki_bas": "54986eddb66da3ad7412f2673768c18655966689",
+    "dosya": 6,
+    "bayt": 12197,
+    "tam_bayt": 79515
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki iki açık kapı da kapanmış: PyYAML yokluğu artık rc=3 ile ölçülemedi sayılıyor; koltuksuz alt personel bölümü ile sürüm birliği P7 kapılarıyla doğrudan sınanıyor. Gerçek koşu 16/16 geçiyor ve yeni P7b mutasyonu kapıyı düşürüyor; üretimi durduracak uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. B1, `ekipc-paritesi.test.sh:10` değişikliğindeki `exit 3` ile kapanmış. B2, aynı dosyadaki P7a–P7d kapılarıyla kapanmış; özellikle `paket-mutant2` P7b iddiası bozulunca rc=1 üretmiş, bağlı gerçek ölçüm `paket-paritesi-t2` ise rc=0 ve 16 geçti/0 düştü vermiş. İlk gerçek ölçüm de 12/12, ilk mutasyon da beklenen rc=1 sonucunda. Klasik önce/sonra ölçüm çifti yok; ancak iki gerçek ölçüm ve bunlara bağlı iki mutasyon kaydı mevcut iddiaları yeterince destekliyor."
+  }
+}
