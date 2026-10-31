@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "duzen-pyyaml-vendor",
+  "pr": "629",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:17:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-pyyaml-vendor",
+  "dal": "duzen-pyyaml-vendor",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15448,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8331
+  },
+  "dalgic": "uyumsuz",
+  "bas": "aeff6c577f8aee9b939d562d000a5cf9c75e6cb2",
+  "duzeltme_farki": {
+    "onceki_bas": "a0dcd3e2bd2300ea1d88bd01d1380b5fc597a4d7",
+    "dosya": 6,
+    "bayt": 11424,
+    "tam_bayt": 21687
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki iki bulgu kapanmış: PyYAML’sız `benimse` dry-run artık P8d2/P8d3 ile sınanıyor ve görünen başlık 1.6.1’e yükseltilmiş; dolayısıyla iş kartındaki doğru davranış hedeflenmiş. Ancak yeni test yerleşimi P8e’nin `yenile` sonucunu kaybedip P8d2’nin çıkış kodunu yeniden sınamasına yol açıyor; kanıtın ölçülen commit ile sunulan başı da eşleşmediğinden üretim öncesi önce bunlar düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "P8e artık `yenile` komutunun çıkış kodunu sınamıyor; `rc`, P8e doğrulamasından önce çalıştırılan P8d2 `benimse` dry-run sonucu ile eziliyor.",
+        "kanit": "Farkta `yenile ...; rc=$?` satırından sonra `benimse ...; rc=$?` çalıştırılıyor; ardından P8d2 ve P8d3 doğrulanıp P8e aynı son `rc` değerini kullanıyor. Böylece 26/0 ölçümü `yenile` başarısız olsa bile P8e’nin geçebileceği bir test düzeninden geliyor.",
+        "konum": "duzen/scripts/ekipc-paritesi.test.sh:P8d-P8e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek ölçüm sunulan düzeltme başını tanımlamıyor; ölçülen commit farklı ve çalışma ağacı kirli olduğundan ölçümün incelenen üretim farkıyla birebir bağı kurulamıyor.",
+        "kanit": "Düzeltme notu başı `aeff6c577f8a` olarak verilirken manifestte hem `vendor-parite` hem `vendor-mutant` için `olculen_commit` değeri `22c6de7634060c915fb7b5421e479b08d535fa92` ve `olculen_kirli: true`.",
+        "konum": "KANIT MANİFESTİ:vendor-parite,vendor-mutant; DEĞİŞİKLİK notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; gerçek ölçüm rc=0 ile 26 geçti/0 düştü, mutasyon kaydı da beklenen rc=1 ve düşen kapıyla testi duyarlı gösteriyor. Önceki B1 P8d2/P8d3 ile, B2 başlığın 1.6.1 yapılmasıyla kapanmış; fakat P8e yanlış `rc` değerini sınadığı için `yenile` iddiası ölçülmüş sayılmaz ve ölçümün farklı, kirli committe alınması kanıtın sunulan başa bağını zayıflatır."
+  }
+}
