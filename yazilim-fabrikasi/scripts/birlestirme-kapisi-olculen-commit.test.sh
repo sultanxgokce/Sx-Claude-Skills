@@ -60,6 +60,19 @@ kur; B="$(bas_al)"; den "$B"
 git -C "$T" branch -q -f main HEAD 2>/dev/null; git -C "$T" checkout -q is-dal 2>/dev/null
 C="$(kapi)"; RC=$?; [ "$RC" -eq 0 ]; g $? "rc=0 (baska.txt ana hatta aynı)"
 
+echo "════ O13-O14 · PUANDAN SONRA ANA DAL BİRLEŞTİ (SERDAR 1 Kas, Sx #629): aynı dosyada iki ayrı iş → PR farkı aynıysa GEÇER, PR kodu değiştiyse ENGELLER ════"
+ana_birlesim() { # ana_birlesim → kur + main'de liste.txt, dalda a→A, puan; sonra main'de c→C ve dala birleştirme
+  kur
+  ( cd "$T" && printf 'a\nb\nc\n' > liste.txt && git add -A && git commit -q -m "chore: liste" && git checkout -q -b is-dal && printf 'A\nb\nc\n' > liste.txt && git add -A && git commit -q -m "feat: pr degisikligi" ) >/dev/null 2>&1
+  B="$(bas_al)"; den "$B"
+  ( cd "$T" && git checkout -q main && printf 'a\nb\nC\n' > liste.txt && git add -A && git commit -q -m "chore: baskasinin isi" && git checkout -q is-dal && git merge -q --no-edit main ) >/dev/null 2>&1
+}
+ana_birlesim
+C="$(kapi)"; RC=$?; [ "$RC" -eq 0 ] && grep -q "PR'ın ana dala göre farkı aynı" <<<"$C"; g $? "O13 · puandan sonra ana dal aynı dosyaya girdi, PR farkı aynı → rc=0 (kanıt: $(grep -c 'PR.ın ana dala' <<<"$C") satır)"
+ana_birlesim
+( cd "$T" && echo yeni-kod >> uygulama.sh && git add -A && git commit -q -m "fix: puandan sonra kod" ) >/dev/null 2>&1
+C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C" && grep -q "uygulama.sh" <<<"$C"; g $? "O14 · aynı kurulum + PR'a puandan sonra kod girdi → rc=1, uygulama.sh adıyla"
+
 echo "════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değil geçti de değil ════"
 kur; den "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"; C="$(kapi)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "rc=3"; grep -q "bu depoda yok" <<<"$C"; g $? "sebep yazıldı"
