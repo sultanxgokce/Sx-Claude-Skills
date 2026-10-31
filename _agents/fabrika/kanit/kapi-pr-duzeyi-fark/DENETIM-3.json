@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "kapi-pr-duzeyi-fark",
+  "pr": "634",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T01:05:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark",
+  "dal": "kapi-pr-duzeyi-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38774,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 12282
+  },
+  "dalgic": "uyumlu",
+  "bas": "8c629266596a5d98c8989ed53c34546771f12815",
+  "duzeltme_farki": {
+    "onceki_bas": "667afd528dad81a1d5bebbe2a333f36bfdde4ab0",
+    "dosya": 8,
+    "bayt": 20714,
+    "tam_bayt": 51676
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kapı artık ana dal birleşimini PR değişikliği saymıyor ve aynı dosyadaki konum taşınmasını bir satırlık bağlamla sınayarak önceki açığın yaygın hâlini kapatıyor. Ancak `-U1` sabit bağlamı, aynı komşu satırlara sahip tekrarlı bloklar arasında taşınan aynı değişikliği ayırt edemez; üretime almadan önce karşılaştırmayı çakışmasız hâle getirin.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 tam kapanmadı: hunk başlıkları hâlâ karşılaştırmadan çıkarılıyor ve yalnız birer bağlam satırı tutuluyor. Aynı dosyada, önceki ve sonraki konumların çevresindeki birer satır da aynıysa taşınmış gerçek PR değişikliği iki uçta eşit görünüp kapıdan geçebilir; O16 yalnız bağlamları farklı iki konumu kapsıyor.",
+        "kanit": "Üretim kodundaki `oc_pf`, `git diff -U1` çıktısını alıp yalnız `^[ +-]` ve `diff --git` satırlarını koruyor; `@@` konum bilgisini almıyor. O16 verisinde eski konumun bağlamı `p/q`, yeni konumunki `r/s` olduğundan sınav yalnız farklı bir satırlık bağlamla yakalama durumunu kanıtlıyor. `mut-baglam` da bağlam bütünü kaldırılınca O16'nın düştüğünü gösteriyor, aynı bağlamlı tekrarlı blok çakışmasını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh:386-391; yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh: O16; olcum-kapi-tam-sonra.txt: O16; olcum-mut-baglam-sonra.txt: O16",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra ölçümü `kalan=3`ten `kalan=0`a iniyor, tam denetçi 71/71 ve kapı 24/24 geçiyor. Mutasyonlardaki başarısızlıklar beklenen sonuçlar ve O13, O15, O16 kapılarının ilgili bozulmaları yakaladığını doğruluyor; fakat tüm kayıtlar kirli ağaçta ve aynı bir satırlık bağlama sahip tekrarlı konumlar için ölçüm yok."
+  }
+}

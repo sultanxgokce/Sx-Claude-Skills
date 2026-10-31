@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mut-baslik-sonra.txt
+hedef_sha256: cb1d34252ead084c8829258bb616a24d8e06b2ed17ae14f2fa751df5b5850739
+hedef_zaman: 2026-11-01T00:58:03+03:00
+hedef_renk: yesil
+neden: tur 4: karşılaştırma metin farkından git merge-tree ağaç kanıtına geçti; bu mutant kaldırılan koda aitti, yeni mutantlar mut-agac-1/2
+kim: HEZARFEN
+karsi: -
+zaman: 2026-11-01T01:16:57+03:00

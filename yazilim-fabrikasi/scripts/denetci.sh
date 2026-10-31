@@ -636,8 +636,18 @@ if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
     #   TAMAMEN geri alınan dosya net farktan düşer ve o geri alma göze gitmez → önceki başın PR dosyaları da listeye girer.
     _pd=(); [ -n "$_mb" ] && mapfile -d '' -t _pd < <( { git -C "$DEPO" diff --no-renames --name-only -z "$_mb" "$BAS" && git -C "$DEPO" diff --no-renames --name-only -z "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; } 2>/dev/null | sort -zu)
     : > "$TMP/diff-duz.patch"
+    #   ANA DAL BİRLEŞİMİNİ SÜZ (SERDAR 1 Kas, Sx #629): iki tur arasında ana dal dala birleştiyse `_ob..BAS` farkı başkasının işini (aynı
+    #   dosyadaki satırları) bu turun değişikliği gibi gösteriyordu; göz yalnız o farkı görüp 3/H verdi. Sol uç, önceki başa YENİ ortak atanın
+    #   (ana dalın) eklenmiş hâli olur (git merge-tree): fark yalnız PR'ın kendi artımını taşır. Birleştirme çatışırsa ya da ortak ata aynıysa
+    #   eski davranış (sol uç = önceki baş) sürer ve ekranda söylenir.
+    _sol="$_ob"; _omb="$(git -C "$DEPO" merge-base "$_ana" "$_ob" 2>/dev/null)"
+    if [ -n "$_mb" ] && [ -n "$_omb" ] && [ "$_mb" != "$_omb" ]; then
+      _mt="$(git -C "$DEPO" merge-tree --write-tree "$_ob" "$_mb" 2>/dev/null)" && [ -n "$_mt" ] && _sol="${_mt%%$'\n'*}" \
+        && _bilgi "· ana dal iki tur arasında dala birleşmiş (ortak ata ${_omb:0:8} → ${_mb:0:8}): artımlı fark ana dalın girdisinden süzüldü" \
+        || { _sol="$_ob"; _bilgi "· ana dal birleşimi süzülemedi (birleştirme çatıştı): artımlı fark ham gidiyor, göz ana dal satırlarını PR değişikliği sanabilir"; }
+    fi
     if [ -z "$_mb" ]; then _bilgi "· düzeltme farkı hesaplanamadı: $_ana ile ${BAS:0:8} ortak atası bulunamadı (PR dosyaları ölçülemedi) → tam fark gider"
-    elif [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" --literal-pathspecs diff "$_ob" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then
+    elif [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" --literal-pathspecs diff "$_sol" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then
       _bilgi "· düzeltme farkı hesaplanamadı: git diff ${_ob:0:8}..${BAS:0:8} düştü → tam fark gider"
     else
       DUZ_TAM_BAYT=$(wc -c < "$TMP/diff.patch"); DUZ_BAYT=$(wc -c < "$TMP/diff-duz.patch"); DUZ_DOSYA=$(grep -c '^diff --git ' "$TMP/diff-duz.patch")
