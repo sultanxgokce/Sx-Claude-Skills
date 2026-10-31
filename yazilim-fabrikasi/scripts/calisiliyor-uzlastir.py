@@ -50,6 +50,7 @@ def acik_kartlar(kokler, ajan):
             if k.get("durum") in ("acik", "canli-borclu") and k.get("gorev") and norm(k.get("aldi")) == ajan:
                 # kok: kart DOSYASININ gerçek dizini — --kart-kok tırnaklı glob gelebilir (süpürme cron'u: "/config/projects/*/_agents/fabrika/kartlar");
                 # glob dizgisinden depo türetilemez (QY2D-sonrası KALDI, 29 Eki): canlıda 'PR listesi okunamadı' basıyordu
+                if k.get("durum") == "canli-borclu" and k["gorev"] in acik and not acik[k["gorev"]]["borclu"]: continue   # aynı görevde açık kart varsa iş yürüyor: açık kart kazanır, sonuç dosya sırasına bağlı kalmaz
                 acik[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k.get("pr"), "kok": os.path.dirname(os.path.abspath(f)), "adlar": adlar, "borclu": k.get("durum") == "canli-borclu"}
     return acik
 

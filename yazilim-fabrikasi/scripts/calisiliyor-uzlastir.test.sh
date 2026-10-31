@@ -65,6 +65,14 @@ kart "$T/k1" a BERİD canli-borclu gorev_A; kart "$T/k1" c2 BERİD acik gorev_C;
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T11:00)" "$(gor gorev_B BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_C BERİD calisiliyor 2026-10-26T09:00)"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 0 ]; g $? "U4b canlı borçlu görev azami sayısına girmez (iki açık + bir borçlu: çekim yok)"
 rm -f "$T/k1/c2.json"; kart "$T/k2" b BERID acik gorev_B
+# U4l: aynı göreve açık + borçlu kart: açık kart kazanır, dosya sırası sonucu değiştirmez (iki ad sırasıyla da sınanır)
+for ad in "aa zz" "zz aa"; do set -- $ad
+  rm -f "$T/k1/a.json" "$T/k2/b.json"; kart "$T/k1" "$1" BERİD acik gorev_A; kart "$T/k1" "$2" BERİD canli-borclu gorev_A; kart "$T/k1" b1 BERİD acik gorev_B; kart "$T/k1" c1 BERİD acik gorev_C
+  defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T11:00)" "$(gor gorev_B BERİD calisiliyor 2026-10-26T10:00)" "$(gor gorev_C BERİD calisiliyor 2026-10-26T09:00)"
+  RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_C" "$T/yazim.jsonl"; g $? "U4l açık kartı da olan görev azamiye girer, en eski çekilir (açık=$1 borçlu=$2)"
+  rm -f "$T/k1/aa.json" "$T/k1/zz.json" "$T/k1/b1.json" "$T/k1/c1.json"
+done
+kart "$T/k2" b BERID acik gorev_B
 printf '{"is":"a","aldi":"BERİD","durum":"canli-borclu","gorev":"gorev_A","pr":"77"}' > "$T/k1/a.json"; prler '[{"number":77,"headRefName":"a","mergedAt":"2026-10-26T09:00:00Z"}]'
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
 RC=$(kos --uygula); prler '[]'; [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "U4k canlı borçlu görev için 'PR birleşti ama çalışılıyor' zili çalmaz"
