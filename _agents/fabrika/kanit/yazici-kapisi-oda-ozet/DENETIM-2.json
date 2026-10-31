@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "yazici-kapisi-oda-ozet",
+  "pr": "630",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:17:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-yazici-kapisi-oda-ozet",
+  "dal": "yazici-kapisi-oda-ozet",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22057,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2883
+  },
+  "dalgic": "uyumsuz",
+  "bas": "95736ac8d800188ceaaf2bb23446f57b7f53e90f",
+  "duzeltme_farki": {
+    "onceki_bas": "532fcbc52734b14a243a649cdc9bbde9cec2814f",
+    "dosya": 3,
+    "bayt": 3014,
+    "tam_bayt": 46077
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kayıt yazıcılarındaki oda varsayılanı ve özet uzunluk kapısı önceki turda üretime hazır bulunmuş; bu turdaki tek üretim farkı test dosyasını çalıştırılabilir yapıyor ve önceki turda kapatılacak bulgu yok. Gerçek ölçüm kalan=10’dan kalan=0’a inerken dört mutasyon da ilgili kapıları düşürdüğü için puan 5 olarak kalıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti gerçek kod için kalan=10 → kalan=0 gösteriyor; mut-1 ile mut-4 kayıtlarının rc=1 ve dusen_kapi=true sonuçları, oda varsayılanı ile 80 harflik özet kapısındaki kasıtlı bozulmaların sınavca yakalandığını doğruluyor. Sonraki gerçek ölçüm kirli çalışma ağacında alınmış olsa da ölçülen commit belirtilmiş ve sunulan fark yalnız yazici-kapisi.test.sh dosyasına çalıştırma biti ekliyor; bu verilerden somut bir kusur çıkmıyor."
+  }
+}
