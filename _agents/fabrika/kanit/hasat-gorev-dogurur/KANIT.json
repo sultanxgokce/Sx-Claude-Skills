@@ -1,7 +1,7 @@
 {
   "is": "hasat-gorev-dogurur",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T02:56:19+03:00",
+  "guncelleme": "2026-10-31T03:01:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,41 +25,41 @@
       "etiket": "sinav-sonucu",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonucu-sonra.txt",
-      "sha256": "d14955765e89c3e7f49709e93a02215dbb77b5f8dbe984672cc70da2914f84c2",
+      "sha256": "c83e15bca44c252e3cfcdc0cffad2029d65e8487c93036fd9af2fd99a4f6c3ce",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hd-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:53:58+03:00",
-      "sure_sn": 9.6,
+      "zaman": "2026-10-31T02:59:57+03:00",
+      "sure_sn": 44.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "6e48506b0e1240f8abbf7f6ba1a2906c"
+      "olcum_id": "25bb3d0be3e048fa8a6a6b34fd5d2637"
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "10c4d97eda9204eebfcfbe50e6bc1861036a108e8247d657dd13107b738c6310",
+      "sha256": "8e3d029164dda3ee6c1ca59dd07ffab49373d06b3d88a6777286b8496fd5461f",
       "komut": [
         "bash",
         "gunluk-plan/scripts/hasat.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:54:19+03:00",
-      "sure_sn": 21.1,
+      "zaman": "2026-10-31T03:00:01+03:00",
+      "sure_sn": 4.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "afb067314fbf4b0d8dd87b1c1ca9eaa8"
+      "olcum_id": "e8ddcfbfdb3a4a318af6ac4e4a952493"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-bag-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-bag-yok-sonra.txt",
-      "sha256": "d0437c2234d7b422c272c1229658b1b4307dd1b4065d2409c503730cabb2e1e0",
+      "sha256": "dbe414fef00775455a3e04611bc23e01d111ab81adead6ad22bcffbadfb2ca12",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
@@ -67,21 +67,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:56:19+03:00",
-      "sure_sn": 10.5,
+      "zaman": "2026-10-31T03:00:12+03:00",
+      "sure_sn": 11.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "86681471e16f42a7a4c513fef6e0e9ee"
+      "olcum_id": "80309836016d40af8157d316985f371d"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-seansli-cevap-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-seansli-cevap-yok-sonra.txt",
-      "sha256": "5909d54d6efbbdaab42263064a0330f5a5cc2657f2c0a2b9264629722b2f7e08",
+      "sha256": "ff2e8bcb1abb980c2a2be5e89e4fc273052cf488bed99cf74c7078a97d237f91",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
@@ -89,21 +89,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:54:42+03:00",
-      "sure_sn": 14.9,
+      "zaman": "2026-10-31T03:00:24+03:00",
+      "sure_sn": 12.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "a8e1b2a068b84852bc02d9efbb36d3a8"
+      "olcum_id": "6d253de2ef7042e19a48957857b310ca"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-a06-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-a06-yok-sonra.txt",
-      "sha256": "192b710ac20f3aaba3812ca79e622435691bb5e69074e7e213cefece1dbf615a",
+      "sha256": "61f295a0ce398a489116e8dc22c099b4c97dce365126c18074a1b92931054bb5",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
@@ -111,21 +111,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:54:51+03:00",
-      "sure_sn": 9.0,
+      "zaman": "2026-10-31T03:00:37+03:00",
+      "sure_sn": 13.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "6c7a2fa4d8ff4ca9b38cc7cf8681a866"
+      "olcum_id": "3492a3096d014c84a6cbe7c02a618eff"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-havuz-durum-yaz",
       "asama": "sonra",
       "dosya": "olcum-mutant-havuz-durum-yaz-sonra.txt",
-      "sha256": "ff514ae669e7466ff5d10299dac0b9479bbf053a75b27ca54900d0cc96e11ece",
+      "sha256": "352b16ce9ad0d883cb900d744ab67874d549c3b5d50d6e7c99cf0a8d0bfb7e7e",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
@@ -133,21 +133,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:55:02+03:00",
-      "sure_sn": 11.0,
+      "zaman": "2026-10-31T03:01:12+03:00",
+      "sure_sn": 35.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "0309c7a1fced468b9a38cf50aff0a2ce"
+      "olcum_id": "4a1ae1ecb482401ab58028a6feaf4b78"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-kip-hep-otomatik",
       "asama": "sonra",
       "dosya": "olcum-mutant-kip-hep-otomatik-sonra.txt",
-      "sha256": "b70cbbcc3f08e97a5b863675e6266cff04abb46034f7aad70576be29525c0fe1",
+      "sha256": "238b809dad465a3922c5843147930658808848893d16b22f3b73a1ef1b372cfe",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
@@ -155,21 +155,21 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:55:17+03:00",
-      "sure_sn": 14.1,
+      "zaman": "2026-10-31T03:01:21+03:00",
+      "sure_sn": 8.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "cfa5a178659440f69f69340c8b5e5a7f"
+      "olcum_id": "018c6b2adad84e6b8e0128b87e0ca1ca"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-geri-alma-yok",
       "asama": "sonra",
       "dosya": "olcum-mutant-geri-alma-yok-sonra.txt",
-      "sha256": "9b95a826f4f9e155fd5105a86ac9d40b40676ebe4ee963dd614d610243cdf805",
+      "sha256": "8b49836bcff11fcf8755e323fb8a9dc086b46e288801faed3fe3baf9519ecfd8",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
@@ -177,15 +177,37 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T02:55:26+03:00",
-      "sure_sn": 9.1,
+      "zaman": "2026-10-31T03:01:33+03:00",
+      "sure_sn": 11.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "73a1160f4e1343e189e154264a012511"
+      "olcum_id": "d41f08c203be42e68bfb59d066c7120e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kimliksiz-geri-alma-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kimliksiz-geri-alma-yok-sonra.txt",
+      "sha256": "d6de55051697d5ba19166b39e7179bcb682ba13a1707ae7c811787ce34554b7d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/hs-mut.sh",
+        "kimliksiz-geri-alma-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T03:01:42+03:00",
+      "sure_sn": 8.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c6740ed7761549bd9560852ab37a95c7"
     }
   ],
-  "imza": "ec9b7fc4bc216f2cedec96b3ccff39f6f2752e69d58a6e5997f6607458fe7b77"
+  "imza": "83b8419ecf276399fcea8ce5474273c9112a0b72026ae20fbc604cba3f85fbec"
 }
