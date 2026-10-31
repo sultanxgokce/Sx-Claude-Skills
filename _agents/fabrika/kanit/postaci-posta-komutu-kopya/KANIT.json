@@ -1,0 +1,78 @@
+{
+  "is": "postaci-posta-komutu-kopya",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T16:59:16+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "posta-kopya",
+      "asama": "once",
+      "dosya": "olcum-posta-kopya-once.txt",
+      "sha256": "898065c281e9550123216657db90cd806de459911c61119e2f097d63dc2f5ae5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/posta-kopya-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-posta-komutu-kopya/postane-postaci"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T16:59:08+03:00",
+      "sure_sn": 6.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3c734d132fc148edb017a579f4314155"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "posta-kopya",
+      "asama": "sonra",
+      "dosya": "olcum-posta-kopya-sonra.txt",
+      "sha256": "fdf1c2657d88263b1a7ed8bde2fda3c581c56493cae8424b0aeab0e903d9646b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/posta-kopya-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-posta-komutu-kopya/postane-postaci"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T16:59:09+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "06719e264e7f4cacbefaa0450aa36bf1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-sinavi-sonra.txt",
+      "sha256": "990f90d0852a07e630204ee6f16586459c36f14f0dbaf56dcfec1b2c98e46c4f",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T16:59:14+03:00",
+      "sure_sn": 4.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3a36281cec6d4a10a951bb623f33dc91"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-kapilari",
+      "asama": "sonra",
+      "dosya": "olcum-depo-kapilari-sonra.txt",
+      "sha256": "8ee656eda4b0ce34753e88b7174dfd0c7a58225cb5756d611f75a9dac98ee67d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-kapilar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T16:59:16+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a08d684b2d634bdc85c896b8b176690d"
+    }
+  ],
+  "imza": "eca553691ef7e72f989abd0b8b1fbbac0a2ccf2b9a2c3a68893bbbfd1dfd3619"
+}
