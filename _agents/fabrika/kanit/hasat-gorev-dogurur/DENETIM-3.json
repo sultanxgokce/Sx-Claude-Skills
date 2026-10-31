@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "hasat-gorev-dogurur",
+  "pr": "606",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T03:03:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-gorev-dogurur",
+  "dal": "hasat-gorev-dogurur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35055,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 25004
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2c35758fd8bdc8c3450b57803b1c3aa486eb7a62",
+  "duzeltme_farki": {
+    "onceki_bas": "d2159805a21db4726ef183289c71512edb6f67e3",
+    "dosya": 14,
+    "bayt": 33268,
+    "tam_bayt": 75934
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hasat havuz kaydını yerinde bırakırken yeni görevi doğuruyor, açılış kipini Otomatik/Seanslı olarak kaydedip bildiriyor ve yarım kalan yazımları geri alıyor. Önceki B1, kimliği çıktıdan okunamayan görevin liste farkından güvenli biçimde bulunup iptal edilmesi; belirsiz veya okunamayan durumda ise kayda dokunulmadan açık elle müdahale uyarısı verilmesiyle kapanmış, üretimi engelleyen kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti 76 geçti/23 kaldıdan 103 geçti/0 kaldıya ilerliyor ve gerçek `sinav` ölçümü rc 0. Yedi mutasyon kaydı rc 1 ve düşen kapıyla; havuz durumunu değiştirme, bağı kaldırma, kip ayrımını bozma, Seanslı cevap şartını kaldırma ve geri alma yollarını bozma gibi hataların sınavca yakalandığını gösteriyor. E3/E3b/E3c ölçümleri önceki B1’in tek adayda geri alma, belirsizlikte dokunmama ve liste okunamadığında açık elle müdahale davranışlarını kapsıyor."
+  }
+}
