@@ -1,0 +1,39 @@
+{
+  "is": "uzlastirma-yanlis-cekme",
+  "cumle": "Otomatik uzlaştırma canlı borçlu kartın görevini ve son 60 dakikada hareket görmüş kartsız görevi bekliyor'a çekmez; PR'ı birleşmiş dilimin görevini çekerken nedenini ve kapanış yolunu yazar",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-31T20:14:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "Sx PR, calisiliyor-uzlastir.test.sh, kurulu betikle kuru koşu",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "--canli e",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M68G1V1S1C9KT1CV4SZ568BB",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [
+    "60 dakikada"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T20:14:35+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
