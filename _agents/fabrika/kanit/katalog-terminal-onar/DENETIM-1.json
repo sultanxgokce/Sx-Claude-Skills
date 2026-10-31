@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "katalog-terminal-onar",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:43:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-katalog-terminal-onar",
+  "dal": "katalog-terminal-onar",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 6644,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "catalog.json içindeki terminal-onar sürümü 2.36.9'dan 2.37.0'a yükseltilmiş ve kartta tarif edilen katalog sürüm hizası sağlanmış. Araç imzalı önce/sonra ölçümünde aynı denetim 1 sapma ile kırmızıdan 0 sapma ile yeşile döndüğü, değişiklik de tek satırla sınırlı kaldığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı komutla alınmış ölçüm çifti önce rc=1 ve terminal-onar sürüm sapmasını, sonra rc=0 ve sapma 0 sonucunu gösteriyor; CLI tabanlı bu talep için ölçüm çifti yeterli ve diff hedeflenen tek sürüm değişikliğiyle uyumlu."
+  }
+}

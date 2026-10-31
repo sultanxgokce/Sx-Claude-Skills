@@ -1,0 +1,25 @@
+{
+  "is": "katalog-terminal-onar",
+  "cumle": "catalog.json terminal-onar sürümü 2.37.0 olur; ana dalın lint kırmızısı kapanır",
+  "istedi": "MÜZEHHİP (kendi hatası, #631)",
+  "aldi": "MÜZEHHİP",
+  "zaman": "2026-10-31T23:43:06+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
