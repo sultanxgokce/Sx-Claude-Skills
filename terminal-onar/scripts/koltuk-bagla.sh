@@ -11,7 +11,7 @@
 #   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
 #                                                          yalnız kabuk istemi var (altında hiçbir süreç yok). Sunucu/izleme koşan
 #                                                          Claude'suz oturum boş DEĞİLDİR (ör. nova/kesif-ui web sunucusu).
-#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap · soru · dizin
+#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap · soru · dizin · pencere (SxS)
 #                                                          soru (2.23.0 · K1 Engel kurgusu): hâl 'soru' iken tek satır JSON {tur menu|serbest, metin, siklar, beri}
 #                                                          (kapi/soru.mjs; sır süzgecinden geçmiş); başka hâlde ya da okunamazsa boş — uydurulmaz.
 #                                                          hesap (2.14.0 · G-BANI-0008 E1 zemini): koltuktaki Claude'un HESAP ADI — kapi · varsayilan · <ad> ·
@@ -320,6 +320,7 @@ if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
   SORU_OTURUM="$(mktemp)" || exit 3
   AKT="$(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)"   # son etkinlik: ada tam eşleşme, -t yok
+  PENC="$(tmux list-windows -a -F '#{session_name}	#{window_active}	#{window_width}x#{window_height}' 2>/dev/null)"   # 2.37.0: etkin pencerenin boyu; alınamazsa sütun boş (kapı alanı hiç yazmaz, telefon eski kipte kalır)
   printf '%s\n' "$LISTE" | while IFS= read -r s; do
     [ -n "$s" ] || continue
     son=$(printf '%s\n' "$AKT" | awk -F'\t' -v n="$s" '$1==n {print $2; exit}'); son="${son:-0}"
@@ -332,7 +333,8 @@ if [ "${1:-}" = "--liste" ]; then
     if [ "$c" = 1 ]; then hesap="$(koltuk_hesabi "$s")"; else hesap=""; fi
     soru=""
     if [ "$hal" = soru ]; then soru="$(soru_oku "$s")"; printf '%s\n' "$s" >> "$SORU_OTURUM"; fi
-    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')" "$(printf '%s' "$soru" | tr '\t\n' '  ')" "$(koltuk_dizini "$s" | tr '\t\n' '  ')"
+    pen="$(printf '%s\n' "$PENC" | awk -F'\t' -v n="$s" '$1==n && $2==1 {print $3; exit}')"
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')" "$(printf '%s' "$soru" | tr '\t\n' '  ')" "$(koltuk_dizini "$s" | tr '\t\n' '  ')" "$pen"
   done
   # soru hâlinden çıkan koltuğun 'beri' kaydı silinir (aynı soru sonra yeniden gelirse eski an taşınmasın); durum dosyası yoksa node koşmaz
   if [ -s "$(soru_durum_yolu)" ] && command -v node >/dev/null 2>&1; then mapfile -t SO < "$SORU_OTURUM"; node "$KB_DIZIN/../kapi/soru.mjs" --tut "${SO[@]}" >/dev/null 2>&1; fi

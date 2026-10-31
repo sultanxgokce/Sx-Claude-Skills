@@ -1,0 +1,6 @@
+$ bash -c bash terminal-onar/scripts/koltuk-bagla.sh --liste | awk -F"\t" "{print \$1,\$10}" | sort > /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/a.txt; tmux list-windows -a -F "#{session_name}	#{window_active}	#{window_width}x#{window_height}" | awk -F"\t" "\$2==1{print \$1,\$3}" | sort > /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/b.txt; wc -l < /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/a.txt; comm -23 /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/a.txt /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/b.txt | wc -l; test -z "$(comm -23 /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/a.txt /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/b.txt)"
+# rc=0 sure=2.2s zaman=2026-10-31T23:30:03+03:00
+--- stdout ---
+13
+0
+--- stderr ---

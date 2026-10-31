@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-ayristirici-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/tel/mut.sh kapi/koltuklar.mjs pm && +pm[1] > 0 && +pm[2] > 0 ? pm ? kapi/kadro.test.mjs
+# rc=1 sure=0.1s zaman=2026-10-31T23:35:17+03:00
+--- stdout ---
+  ✗ PN4 boş ya da bozuk boy alan yazmaz (uydurma yok, telefon eski kipte kalır) 
+SONUÇ: 32 geçti · 1 kaldı
+--- stderr ---
