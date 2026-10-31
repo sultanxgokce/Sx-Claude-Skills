@@ -1,0 +1,49 @@
+{
+  "tur": 6,
+  "is": "duzen-pyyaml-vendor",
+  "pr": "629",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T00:25:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-pyyaml-vendor",
+  "dal": "duzen-pyyaml-vendor",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16646,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 5178
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2f9d72f845eae681e2f0878121b17d8f7b6668a4",
+  "duzeltme_farki": {
+    "onceki_bas": "34e113b189dfed2deeef3992e5b78ed6700241f8",
+    "dosya": 3,
+    "bayt": 8970,
+    "tam_bayt": 35011
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Vendor paritesi tek gerçek ölçümde 26/26 geçiyor ve mutasyon ölçümü ilgili kapıların bozuk vendor’ı yakaladığını gösteriyor. Ancak kart açıkça “kod değişmez, yalnız kanıt yenilenir” derken bu tur üretim kataloğunda dört alakasız sürüm yükseltmiş; önce bu kapsam kaymasını geri almak gerekir.",
+    "bulgular": [
+      {
+        "ne": "Kanıt yenileme kartında üretim kodu değiştirildi ve vendor işiyle ilgisiz dört katalog sürümü yükseltildi; bu açık kapsam kaymasıdır.",
+        "kanit": "Talep “kod değişmez, yalnız kanıt ... yenilenir” diyor; diff ise `gunluk-plan` 1.20.1→1.20.2, `yazilim-fabrikasi` 0.27.38→0.27.40, `terminal-onar` 2.36.9→2.37.0 ve `bulgu` 0.6.4→0.6.5 değişikliklerini gösteriyor.",
+        "konum": "catalog.json:1426,1533,1567,1682",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `vendor-parite` tek gerçek ölçüm olarak rc=0 ve 26 geçti/0 düştü veriyor; `vendor-mutant` beklenen rc=1 ile beş kapının düştüğünü doğruluyor. Önceki turda bulgu yoktu; devredilmiş kanıt-bağı konusu bu kartta kapalı kalıyor. Buna karşılık mevcut kanıt, bu tur eklenen alakasız katalog sürüm değişikliklerini gerekçelendirmiyor ve kartın “kod değişmez” şartıyla doğrudan çelişiyor."
+  }
+}
