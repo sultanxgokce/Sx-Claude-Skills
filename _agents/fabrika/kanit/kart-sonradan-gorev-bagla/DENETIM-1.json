@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "kart-sonradan-gorev-bagla",
+  "pr": "628",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T22:22:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sonradan-gorev-bagla",
+  "dal": "kart-sonradan-gorev-bagla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54215,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 293994
+  },
+  "dalgic": "uyumsuz",
+  "bas": "de73fa315091c7f8ad76531ee9a1a00532e5f4c5",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Açık ve bağsız kartı sahibinin göreve bağlaması, görevi çalışılıyor yapması ve bağlı, bitmiş ya da başkasına ait kartı koruması uygulanmış. Gerçek sınav yeşil ve mutantlar kapıları doğruluyor; ancak eşzamanlı bağlama ile geri alma yolları atomik olmadığı için önce yarış koşulunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Görevin başka açık karta bağlı olup olmadığı denetlenip kart daha sonra ayrı bir işlemle yazılıyor; iki eşzamanlı gorev-bagla çağrısı aynı görevi iki karta birden bağlayabilir.",
+        "kanit": "Üretim farkında diğer kartları tarayan döngü bittikten sonra `json.dump` ile hedef kart yazılıyor; bu okuma-yazma dizisini koruyan kilit veya atomik karşılaştırmalı güncelleme yok. GBA3 yalnız ardışık çağrıyı sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:gorev-bagla, `for f in glob.glob(...)` ile `json.dump(...)` arası; kart.test.sh:GBA3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Defter yazımı başarısız olduğunda alınan eski metin koşulsuz geri yazılıyor; arada kartı güncelleyen başka bir süreç varsa onun değişikliği ezilebilir.",
+        "kanit": "`KART_YEDEK=\"$(cat ...)\"` bağlama öncesi alınıyor ve `gorev_yaz` hatasında güncel dosya sürümü denetlenmeden `printf ... > \"$KD/$IS.json\"` çalışıyor. GBA7 yalnız tek süreçli geri almayı ve bayt eşitliğini ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:gorev-bagla, KART_YEDEK ve `gorev_yaz` hata kolu; kart.test.sh:GBA7",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü rc=1 ve 454/458, sonra gerçek ölçüm rc=0 ve 458/458 olduğundan geçerli bir ölçüm çifti var. Beş mutasyon kaydı rc=1, yeşil ve düşen_kapi=true; sahiplik, açık kart, mevcut bağ, başka karta bağlı görev ve geri alma kusurlarını sınavın yakaladığını gösteriyor. Bununla birlikte eşzamanlılık ölçümü veya mutasyonu bulunmuyor."
+  }
+}
