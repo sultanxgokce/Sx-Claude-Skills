@@ -1,0 +1,34 @@
+{
+  "is": "ekipc-duzen-paketi",
+  "cumle": "Düzen paketi kurulu bir izole kutuda, Nexus deposu olmadan, ekipc benimse ve yenile çalışır ve ürettiği kimlik Nexus'ta üretilenle bayt aynıdır; ortak temele koltuksuz alt personel satırı aynı sürümde girer",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-31T19:34:09+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M684QN0JYBFRE4X4C0BJQ159",
+  "tahmin_dk": 240,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T19:34:09+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
