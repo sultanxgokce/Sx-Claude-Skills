@@ -1,6 +1,6 @@
 {
   "is": "duzen-pyyaml-vendor",
-  "cumle": "Düzen paketi saf Python PyYAML'ı kendi vendor dizininde taşır; sistem python3'ünde PyYAML olmayan izole kutuda paketten ekipc benimse dry-run exit 0 verir",
+  "cumle": "duzen paketi saf Python PyYAML vendor taşır, parite P8 ve SKILL 1.6.1; kod değişmez, yalnız kanıt temiz ağaçta tek gerçek ölçümle yenilenir",
   "istedi": "SERDAR",
   "aldi": "MİRAHUR",
   "zaman": "2026-10-31T21:24:28+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-31T23:44:16+03:00",
+      "olay": "daralt",
+      "kalan_kart": "duzen-pyyaml-vendor-kalan",
+      "tur_sifir": 4
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -49,6 +56,11 @@
       "zaman": "2026-10-31T23:22:41+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T23:42:41+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
@@ -58,6 +70,29 @@
       "oturum": "d26a1038",
       "gerekce": "Kalan tek bulgu kanıt izlenebilirliği: ölçülen commit aa07c50d ile PR başı arasında kanıt dizini DIŞINDA 0 dosya farkı ölçüldü; 'kirli' işareti ölçüm anında kanıt dizininin kendi değişmesinden. Kod ve sınav bulguları kapandı (tur 3: 4/E, tek bulgu bu).",
       "zaman": "2026-10-31T23:23:01+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "MİRAHUR",
+      "oturum": "d26a1038",
+      "gerekce": "daraltma: kalan bulgu yeni karta (duzen-pyyaml-vendor-kalan) — Kanıt bağı: ölçülen commit ile PR başı ve olculen_kirli; izli _agents/fabrika/tavan-defteri.log ölçümde değişip ağacı kirletiyor, kanit.py yaması 23:24 kurulumunda silinmiş (araç kökenli, ayrı sahip)",
+      "zaman": "2026-10-31T23:44:16+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Düzen paketi saf Python PyYAML'ı kendi vendor dizininde taşır; sistem python3'ünde PyYAML olmayan izole kutuda paketten ekipc benimse dry-run exit 0 verir",
+      "zaman": "2026-10-31T23:44:16+03:00",
+      "kalan_kart": "duzen-pyyaml-vendor-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-31T23:44:16+03:00",
+      "kalan_kart": "duzen-pyyaml-vendor-kalan",
+      "kalan": "Kanıt bağı: ölçülen commit ile PR başı ve olculen_kirli; izli _agents/fabrika/tavan-defteri.log ölçümde değişip ağacı kirletiyor, kanit.py yaması 23:24 kurulumunda silinmiş (araç kökenli, ayrı sahip)",
+      "tur_sifir": 4,
+      "oturum": "d26a1038"
     }
   ]
 }
