@@ -2,14 +2,14 @@
 # ekipc-paritesi.test.sh — paketlenmiş ekipc.sh'in izole kutuda (Nexus deposu YOK) çalıştığı ve Nexus kanoniğiyle eşit çıktı verdiği (Kuzey Hat E · G3.6).
 # P1 paket kopyası var, sözdizimi geçerli, ÇİVİLİ md5 ile eşit · P2 izole benimse (--baz, manifestsiz): ELLE bayt-verbatim, marker var
 # P3 paket başlığı kimliğe GÖMÜLMEZ · P4 yenile aynı temelde no-op, üretilen bölgeye el değmişse exit 5 · P5 manifest isteyen kipler (derle/--rol) hâlâ reddeder
-# P6 Nexus kanoniği varsa: kopya md5'i EŞİT ve aynı persona için üretilen kimlik BAYT-AYNI (kanonik yoksa atlanır, çivili eşitlik P1'de ölçüldü)
+# P7 ortak temele koltuksuz alt personel bölümü (G3.3) manuel-claude kimliğine gömülür ve paket sürümü 1.6.0+ · P6 Nexus kanoniği varsa: kopya md5'i EŞİT ve aynı persona için üretilen kimlik BAYT-AYNI (kanonik yoksa atlanır, çivili eşitlik P1'de ölçüldü)
 set -uo pipefail
 export LC_ALL=C.UTF-8
 HERE="$(cd "$(dirname "$0")" && pwd)"; PAKET="$(cd "$HERE/.." && pwd)"; E="$HERE/ekipc.sh"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null' EXIT
 G=0; K=0
 ok() { if [ "$2" -eq 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1 ${3:-}"; fi; }
-python3 -c "import yaml" 2>/dev/null || { echo "  · atlandı: PyYAML yok — ekipc ölçülemez (unknown≠fail)"; exit 0; }
+python3 -c "import yaml" 2>/dev/null || { echo "  ? ÖLÇÜLEMEDİ: PyYAML yok — ekipc çalıştırılamaz (rc 3; yeşil DEĞİL)"; exit 3; }
 
 # ÇİVİLİ md5 — paketleme anında Nexus kanoniğinden (scripts/ekipc.sh) ölçülen değer. Kanonik değişince: kopyala + bu satırı güncelle.
 CIVI="b54bddb9196dbe25d9c33f96da9c7558"
@@ -41,6 +41,22 @@ bash "$EK" derle --manifest "$T/yok.yaml" >/dev/null 2>&1; rc=$?
 ok "P5a manifest isteyen derle manifest yokken exit 3" "$([ $rc -eq 3 ] && echo 0 || echo 1)" "→ rc=$rc"
 bash "$EK" benimse --dosya "$T/ilk.md" --rol X --manifest "$T/yok.yaml" >/dev/null 2>&1; rc=$?
 ok "P5b --rol kipi manifest yokken exit 3" "$([ $rc -eq 3 ] && echo 0 || echo 1)" "→ rc=$rc"
+
+# P7 (G3.3): manuel-claude ortak temelindeki koltuksuz alt personel bölümü kimliğe gömülür; sürüm ile katalog tutarlı
+printf 'persona notu\n' > "$T/man.md"
+bash "$EK" benimse --dosya "$T/man.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
+ok "P7a izole benimse --baz manuel-claude → rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
+ok "P7b kimlikte ALT PERSONEL bölümü (alt-ajan-istem.sh göstergesiyle) var" "$(grep -q 'ALT PERSONEL — koltuksuz alt ajan' "$T/man.md" && grep -q 'alt-ajan-istem.sh <AD>' "$T/man.md" && echo 0 || echo 1)"
+SV="$(grep -m1 '^version:' "$PAKET/SKILL.md" | awk '{print $2}')"; CV="$(python3 - "$PAKET/.." <<'PY'
+import json,sys,os
+c=json.load(open(os.path.join(sys.argv[1],"catalog.json"),encoding="utf-8"))
+for k in (c if isinstance(c,list) else c.get("skills") or c.get("items") or []):
+    pass
+t=open(os.path.join(sys.argv[1],"catalog.json"),encoding="utf-8").read(); i=t.find('"id": "duzen"'); j=t.find('"version"',i); print(t[j:].split('"')[3])
+PY
+)"
+ok "P7c SKILL sürümü 1.6.0 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple(int(x) for x in sys.argv[1].split('.'));sys.exit(0 if v>=(1,6,0) else 1)" "${SV:-0.0.0}" && echo 0 || echo 1)"
+[ -f "$PAKET/../catalog.json" ] && ok "P7d catalog.json sürümü SKILL ile aynı ($CV)" "$([ "$CV" = "$SV" ] && echo 0 || echo 1)" "→ SKILL $SV ≠ catalog $CV" || echo "  · P7d atlandı: catalog.json paketin yanında yok (kutuya kurulu kopya)"
 
 KAN="${DUZEN_EKIPC_KANONIK:-/config/projects/Nexus/scripts/ekipc.sh}"
 if [ -f "$KAN" ]; then

@@ -1,7 +1,7 @@
 {
   "is": "ekipc-duzen-paketi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T20:50:20+03:00",
+  "guncelleme": "2026-10-31T20:56:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,7 +40,45 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "52f67c658e0c4a2eb481f82ad7b3405d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "paket-paritesi-t2",
+      "asama": "sonra",
+      "dosya": "olcum-paket-paritesi-t2-sonra.txt",
+      "sha256": "dba83065257946c1cecc4c5b936cc7ff8a9063428cacee813a4824e12b5fe296",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/pk-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:56:36+03:00",
+      "sure_sn": 162.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "180c46920485496b9ecac01aaa766603"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "paket-mutant2",
+      "asama": "sonra",
+      "dosya": "olcum-paket-mutant2-sonra.txt",
+      "sha256": "5562c9ba10f0da3adb17c6f43719cc29bd5dccb535c6e643b83207ccf36e9ec1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/pk-mutant2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T20:56:38+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "paket-paritesi-t2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d17d96625b8c4150a4bf20f7405f7c8b"
     }
   ],
-  "imza": "6ae85f36e7e59c3b69d573a6fcf392737286f85834c69c035ea2bcfc8b5cfcd9"
+  "imza": "ddf2aae436084f8484edd7713f04d73580866bdb3edb3a98f19a8cc5e5fc9e01"
 }

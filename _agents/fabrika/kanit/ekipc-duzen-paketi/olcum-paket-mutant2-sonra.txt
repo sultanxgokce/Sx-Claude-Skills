@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-paket-paritesi-t2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/pk-mutant2.sh
+# rc=1 sure=1.3s zaman=2026-10-31T20:56:38+03:00
+--- stdout ---
+  ✗ P7b kimlikte ALT PERSONEL bölümü (alt-ajan-istem.sh göstergesiyle) var 
+== 13 geçti · 1 düştü ==
+rc=1
+--- stderr ---
