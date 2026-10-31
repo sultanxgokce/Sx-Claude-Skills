@@ -1,0 +1,78 @@
+{
+  "is": "postaci-izinli-munavebe",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T16:20:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "izinli-liste",
+      "asama": "once",
+      "dosya": "olcum-izinli-liste-once.txt",
+      "sha256": "7c4344cbe497fe811d3d681c2d81cdbb69626dc91423cbdb06d2964a6dbd2d19",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/izinli-liste-olc.py",
+        "postane-postaci/scripts/postaci-kutu.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T16:18:55+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "81e361280bbf4666906d26beb7923b20"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "izinli-liste",
+      "asama": "sonra",
+      "dosya": "olcum-izinli-liste-sonra.txt",
+      "sha256": "80ba897611822e5491622c34e0c0f2c3c500da5c04f2a8412d2db0262741a64e",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/izinli-liste-olc.py",
+        "postane-postaci/scripts/postaci-kutu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T16:19:58+03:00",
+      "sure_sn": 45.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0fff62122a7e48d58ba3e804a4add186"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-sinavi-sonra.txt",
+      "sha256": "9d609333daddbc1d34fa9e05fcb3d936903a6128852e25e0e51d5e6c56234b2e",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T16:20:03+03:00",
+      "sure_sn": 4.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "93cdf25d6b8f47c9942708da4bee55c6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-kapilari",
+      "asama": "sonra",
+      "dosya": "olcum-depo-kapilari-sonra.txt",
+      "sha256": "e874061b5ad7e77c8140eff450425deb6f0d1094797d7356124e4e054510321d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-kapilar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T16:20:22+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b02fc756018b424c950235ea48a977d2"
+    }
+  ],
+  "imza": "3dedc73d2b1bde1ecc1e9711ed4a3ca92224efbb278fb29bb6f9658fd8a4cba1"
+}

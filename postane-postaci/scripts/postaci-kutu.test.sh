@@ -16,7 +16,7 @@ import http from 'node:http'; import fs from 'node:fs';
 const d = process.argv[2];
 const s = http.createServer((q, r) => {
   const var_ = (x) => fs.existsSync(d + '.' + x);
-  if (q.url === '/ben') { r.writeHead(200); return r.end(JSON.stringify({ ok: true, kutu: var_('sohbet') ? 'sohbet' : var_('menzil') ? 'menzil' : 'code' })); }
+  if (q.url === '/ben') { r.writeHead(200); return r.end(JSON.stringify({ ok: true, kutu: var_('sohbet') ? 'sohbet' : var_('menzil') ? 'menzil' : var_('munavebe') ? 'munavebe' : 'code' })); }
   if (q.url.startsWith('/kutu/')) { r.writeHead(var_('genis') ? 200 : var_('olcumsuz') ? 500 : 403); return r.end('{}'); }
   r.writeHead(q.url === '/saglik' ? 200 : 404); r.end('{}');
 });
@@ -49,6 +49,8 @@ touch "$T/port.sohbet"; rc=$(kos --uygula); rm -f "$T/port.sohbet"
 ok "S5 listede olmayan kutu (sohbet): rc 1, kurulum YOK" '[ "$rc" = 1 ] && [ ! -e "$T/ct-depo" ] && [ ! -e "$T/bayrak" ]'
 touch "$T/port.menzil"; rc=$(kos --uygula); rm -f "$T/port.menzil"
 ok "S6 listedeki ikinci kutu (menzil, dar jeton): kurulur" '[ "$rc" = 0 ] && [ -e "$T/bayrak" ]'
+touch "$T/port.munavebe"; rc=$(kos --uygula); rm -f "$T/port.munavebe"
+ok "S6b münâvebe izinli listede (dar jeton): kurulur" '[ "$rc" = 0 ] && [ -e "$T/bayrak" ] && grep -q "izinli kutu (jeton kutusu = munavebe)" "$T/cikti"'
 touch "$T/bayrak"; rc=$(BAYRAK="$T/bayrak" bash "$K" --kapat >"$T/cikti" 2>&1; echo $?); ok "S7 --kapat: bayrak silinir" '[ "$rc" = 0 ] && [ ! -e "$T/bayrak" ]'
 rc=$(POSTACI_JETON="$T/yok" POSTANE_URL="http://127.0.0.1:$PORT" OTURUM_DIZIN="$T/oturum" BAYRAK="$T/bayrak" CRONTAB_KOMUT="$T/crontab" bash "$K" --uygula >"$T/cikti" 2>&1; echo $?); ok "S8 jeton dosyası yok: rc 1" '[ "$rc" = 1 ] && [ ! -e "$T/bayrak" ]'
 rc=$(bash "$K" --bilinmeyen >/dev/null 2>&1; echo $?); ok "S9 bilinmeyen bayrak: rc 2" '[ "$rc" = 2 ]'

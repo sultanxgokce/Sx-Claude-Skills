@@ -1,0 +1,6 @@
+$ python3 /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/izinli-liste-olc.py postane-postaci/scripts/postaci-kutu.sh
+# rc=0 sure=45.1s zaman=2026-10-31T16:19:58+03:00
+--- stdout ---
+18 izinli kutu · munavebe True
+--- stderr ---
+⏳ agir-sira: kanit-postaci-izinli-munavebe-izinli-liste 45 sn bekledi (yuva 2, load1 7.60)
