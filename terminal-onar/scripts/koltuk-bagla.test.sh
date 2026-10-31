@@ -236,6 +236,14 @@ PYPTY
     [ -z "$S1Y" ] && [ "${S1G%x*}" = 80 ] || { S1K=1; S1B="tur $tur yerel=[$S1Y] pencere=$S1G"; break; }
   done
   [ "$S1K" = 0 ] && ok "S1 🔴 8 eşzamanlı tel-büyüt × 5 tur: pencere 80'e büyür ve yerel window-size HEP silinir (yarışta 'manual' kalmaz)" || bad S1 "→ $S1B"
+  # S2 kilit ALINAMAZSA gövde kilitsiz SÜRMEZ (bağımsız göz #611 tur 1): kilidi dışarıdan tut, KB_KILIT_SN=1 ile çağır → pencere DEĞİŞMEZ (30 sütun kalır)
+  rilk; rist 80 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.4
+  SC="$(rt list-clients -t =KALFA -F '#{client_name} #{client_flags}' | grep ignore-size | head -1 | cut -d' ' -f1)"
+  S2L="$RT/tmp-kilit"; mkdir -p "$S2L"; S2D="$S2L/koltuk-bagla-tel-buyut.$(id -u).KALFA.lock"
+  ( exec 8>"$S2D"; flock -x 8; sleep 6 ) & S2P=$!; sleep 0.5
+  TMPDIR="$S2L" KB_KILIT_SN=1 TERM=xterm-256color TMUX_TMPDIR="$RT" bash "$B" --tel-buyut "$SC" </dev/null >/dev/null 2>&1; S2G="$(rgen)"
+  kill "$S2P" 2>/dev/null; wait "$S2P" 2>/dev/null
+  [ "${S2G%x*}" = 30 ] && ok "S2 kilit başkasında (1 sn süre doldu): tel-büyüt kilitsiz SÜRMEZ, pencere değişmez (30 sütun)" || bad S2 "→ pencere=$S2G"
   rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
 else
   echo "  … R ÖLÇÜLEMEDİ: tmux ya da python3 yok (yeşil değil, sayılmadı)"

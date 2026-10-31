@@ -1,24 +1,24 @@
 {
   "is": "koltuk-bagla-ci-olcum",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T05:08:20+03:00",
+  "guncelleme": "2026-10-31T05:16:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav-kilitli",
       "asama": "sonra",
       "dosya": "olcum-sinav-kilitli-sonra.txt",
-      "sha256": "1ad13587deb20a8c30f62d71abcd6c4ab64f5b3d66b1a481e7cfc65aacc0c502",
+      "sha256": "1f474d42ab4837ab9f49ab29d853699ad027db35a6a7f9d5cd8d9baa5808f054",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T05:07:45+03:00",
-      "sure_sn": 53.7,
+      "zaman": "2026-10-31T05:16:08+03:00",
+      "sure_sn": 79.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "d6030c63b4b3433f97894874b11017cf"
+      "olcum_id": "46b33a779e3c4795a9c3cf74e7a2314a"
     },
     {
       "tur": "olcum",
@@ -40,7 +40,28 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "358f09090c1d4894986423c2a29f07d2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kilit-alinamazsa-surer",
+      "asama": "once",
+      "dosya": "olcum-mutant-kilit-alinamazsa-surer-once.txt",
+      "sha256": "81794f8597e7001cf556e2ff366e088da34b7eebedde7c1713f11863610bbeed",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T05:14:49+03:00",
+      "sure_sn": 146.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-kilitli",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "7cf6bb745a6a405fa35a26a0c83cf6f9"
     }
   ],
-  "imza": "4dbd5724225da56f6d5f7da848d4c50a16cd5666888d573db961e7b29fe7f945"
+  "imza": "143388ad8ce3401a46dd22ffb9f34a688aa1064363f6a0085d7adbe87972acbc"
 }
