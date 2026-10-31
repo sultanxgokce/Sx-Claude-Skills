@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "duzen-pyyaml-vendor",
+  "pr": "629",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T22:49:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-pyyaml-vendor",
+  "dal": "duzen-pyyaml-vendor",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19687,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5250
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a0dcd3e2bd2300ea1d88bd01d1380b5fc597a4d7",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Düzen paketi saf Python PyYAML’ı vendor altında taşıyor ve sistem PyYAML’ı görünmeyen koşulda ekipc akışlarının çalıştığı araç imzalı gerçek ölçüm ile mutasyon kapısında gösteriliyor. İstenen davranış yapılmış, ancak iş kartındaki tam kabul örneği olan “benimse dry-run exit 0” doğrudan sınanmamış; ayrıca görünen sürüm başlığı metadata ile uyumsuz kalmış, önce bunlar düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "İş kartının açık kabul koşulu olan PyYAML’sız ortamda `benimse` dry-run exit 0 doğrudan sınanmıyor; P8d `--apply` kullanıyor, kuru koşulan P8e ise `yenile` komutu.",
+        "kanit": "P8d komutu `ekipc.sh benimse ... --apply` olarak kurulmuş; P8e komutu `ekipc.sh yenile ...` ve açıklaması “yenile (kuru) rc 0”. Gerçek ölçüm 24/24 geçse de talepteki `benimse` dry-run birleşimini iddia eden ayrı kapı yok.",
+        "konum": "duzen/scripts/ekipc-paritesi.test.sh:P8d-P8e; iş kartı `cumle`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "SKILL belgesinin görünen başlığı eski 1.6.0 sürümünü gösterirken ön madde ve katalog 1.6.1’e yükseltilmiş.",
+        "kanit": "Diffte ön maddedeki `version` 1.6.1 ve catalog.json sürümü 1.6.1; buna karşılık başlık hâlâ `# /duzen — ... (1.6.0 ...)`.",
+        "konum": "duzen/SKILL.md:1-7",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `vendor-parite` gerçek ölçümü rc=0 ve 24 geçti/0 düştü bildiriyor; `vendor-mutant` ise `mutasyon:true`, `gercek_olcum:vendor-parite`, rc=1 ve düşen kapı ile vendor bozulunca sınavın P8b/P8d/P8e/P8f üzerinden yakaladığını gösteriyor. Bununla birlikte çıktı özetlenmiş ve gerçek ölçümde kabul koşullarının tek tek satırları görünmüyor; özellikle `benimse dry-run` zaten test tanımında bulunmadığından bu tam iddia kanıtlanmış sayılmaz."
+  }
+}
