@@ -52,4 +52,5 @@ ok "S6 listedeki ikinci kutu (menzil, dar jeton): kurulur" '[ "$rc" = 0 ] && [ -
 touch "$T/bayrak"; rc=$(BAYRAK="$T/bayrak" bash "$K" --kapat >"$T/cikti" 2>&1; echo $?); ok "S7 --kapat: bayrak silinir" '[ "$rc" = 0 ] && [ ! -e "$T/bayrak" ]'
 rc=$(POSTACI_JETON="$T/yok" POSTANE_URL="http://127.0.0.1:$PORT" OTURUM_DIZIN="$T/oturum" BAYRAK="$T/bayrak" CRONTAB_KOMUT="$T/crontab" bash "$K" --uygula >"$T/cikti" 2>&1; echo $?); ok "S8 jeton dosyası yok: rc 1" '[ "$rc" = 1 ] && [ ! -e "$T/bayrak" ]'
 rc=$(bash "$K" --bilinmeyen >/dev/null 2>&1; echo $?); ok "S9 bilinmeyen bayrak: rc 2" '[ "$rc" = 2 ]'
+c=$(cd / && bash "$HERE/posta.sh" 2>&1); ok "S10 ajan komutu paketle gelir, başka dizinden çalışır (kutuda onay yolu)" '[[ "$c" == *"kullanım: posta"* ]]'
 echo "── SONUÇ: PASS=$pass FAIL=$fail ──"; [ "$fail" = 0 ]

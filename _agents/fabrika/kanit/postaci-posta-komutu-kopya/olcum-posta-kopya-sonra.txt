@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/posta-kopya-olc.sh /config/projects/_wt/Sx-Claude-Skills-postaci-posta-komutu-kopya/postane-postaci
+# rc=0 sure=0.1s zaman=2026-10-31T16:59:09+03:00
+--- stdout ---
+komut çalışır
+açık: 0
+--- stderr ---
