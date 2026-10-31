@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "golge-birlesmis-pr-sus",
+  "pr": "618",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T19:21:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-golge-birlesmis-pr-sus",
+  "dal": "golge-birlesmis-pr-sus",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32838,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 15180
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1514846ea80b36eecbd469e64e4271f865674ad9",
+  "duzeltme_farki": {
+    "onceki_bas": "0582d06124131de0ff5a59724b3e43ee81ef648e",
+    "dosya": 9,
+    "bayt": 23463,
+    "tam_bayt": 33775
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gölge kapısı artık PR durumunu okuyup yalnız birleşmiş PR’de kaydı, görev adımını ve zili susturuyor; birleşmeden kapanmış PR eski akışta kalıyor. Önceki kapsam taşması kapanmış, son gerçek ölçüm 35/35 geçmiş ve mutant kapıyı düşürmüş; kod üretime hazır, yalnız canlı GitHub ile gerçek zil hattındaki “0 bayat zil” sonucu kutu dışında doğrulanmayı bekliyor.",
+    "bulgular": [
+      {
+        "ne": "Gerçek canlı GitHub durumu ve gerçek zil hattında 0 bayat zil sonucu doğrulanmamış.",
+        "kanit": "İş kartı `canli_gerekir: true` ve `canli_sebep: cümlede: zil` diyor; G20-G24 ölçümü ise `gh-sahte.sh` ve `zil-sahte.sh` kullanıyor. Bu nedenle yerel sınav kod davranışını kanıtlasa da canlı hatta 0 bayat zil sayısını ölçmüyor.",
+        "konum": "iş kartı:canli_gerekir/canli_sebep; yazilim-fabrikasi/scripts/golge.test.sh:138-146",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı GitHub + gerçek zil hattı ve gerekli yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Güncel gerçek ölçüm `golge-sinavi-t2` rc=0 ile 35/35 geçiyor ve G20 birleşmiş PR’in tamamen sustuğunu, G21 ise birleşmeden kapanmış PR’in kayıt ve zil üretmeye devam ettiğini göstererek önceki B1 bulgusunu kapatıyor. `golge-mutant-t2` rc=1 ve düşen kapıyla süzgeç söküldüğünde sınavın hatayı yakaladığını kanıtlıyor. İlk ölçüm önceki davranışı gösterse de düzeltme sonrası t2 kaydı güncel başı doğruluyor; canlı 0 bayat zil için ölçüm çifti yok."
+  }
+}
