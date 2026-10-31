@@ -227,14 +227,16 @@ PYPTY
   [ "$R4" = 120x40 ] && ok "R4 🔴 masaüstü bağlıyken ikinci telefon gelince pencere 120 kalır (masaüstü daralmaz)" || bad R4 "→ $R4"
   # S1 🔴 YARIŞ: iki kanca aynı anda koşunca yerel 'manual' geri yazılıp kalıyordu (CI ölçümü). 8 eşzamanlı --tel-buyut, 5 tur; her turda
   # pencere telefon boyuna büyür VE yerel window-size silinmiş olmalı. Kilitsiz kopyada bu tur(lar)dan biri 'manual' bırakır (mutant: S1 kırmızı).
-  S1K=0; S1B=""
+  S1K=0; S1B=""; S1O=0
   for tur in 1 2 3 4 5; do
     rilk; rist 80 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.4
     SC="$(rt list-clients -t =KALFA -F '#{client_name} #{client_flags}' | grep ignore-size | head -1 | cut -d' ' -f1)"
     for _ in 1 2 3 4 5 6 7 8; do ( TERM=xterm-256color TMUX_TMPDIR="$RT" bash "$B" --tel-buyut "$SC" </dev/null >/dev/null 2>&1 & ); done
     sleep 3; S1Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"; S1G="$(rgen)"
+    [ -n "$S1G" ] || { S1O=$((S1O+1)); continue; }   # oturum o an okunamadı = ölçülemedi turu (yanlış kırmızı da, yeşil de sayılmaz)
     [ -z "$S1Y" ] && [ "${S1G%x*}" = 80 ] || { S1K=1; S1B="tur $tur yerel=[$S1Y] pencere=$S1G"; break; }
   done
+  [ "$S1O" -le 2 ] || { S1K=1; S1B="ölçülemeyen tur $S1O/5 (en az 3 ölçülmeli)"; }
   [ "$S1K" = 0 ] && ok "S1 🔴 8 eşzamanlı tel-büyüt × 5 tur: pencere 80'e büyür ve yerel window-size HEP silinir (yarışta 'manual' kalmaz)" || bad S1 "→ $S1B"
   # S2 kilit ALINAMAZSA gövde kilitsiz SÜRMEZ (bağımsız göz #611 tur 1): kilidi dışarıdan tut, KB_KILIT_SN=1 ile çağır → pencere DEĞİŞMEZ (30 sütun kalır)
   rilk; rist 80 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.4
@@ -244,6 +246,18 @@ PYPTY
   TMPDIR="$S2L" KB_KILIT_SN=1 TERM=xterm-256color TMUX_TMPDIR="$RT" bash "$B" --tel-buyut "$SC" </dev/null >/dev/null 2>&1; S2G="$(rgen)"
   kill "$S2P" 2>/dev/null; wait "$S2P" 2>/dev/null
   [ "${S2G%x*}" = 30 ] && ok "S2 kilit başkasında (1 sn süre doldu): tel-büyüt kilitsiz SÜRMEZ, pencere değişmez (30 sütun)" || bad S2 "→ pencere=$S2G"
+  # S3 KİLİTSİZ kol (KB_KILIT_YOK=1: flock yok / kilit dosyası açılamıyor taklidi, bağımsız göz #611 tur 2): eşzamanlı 8 çağrı × 5 tur yine de 'manual' bırakmaz
+  S3K=0; S3B=""; S3O=0
+  for tur in 1 2 3 4 5; do
+    rilk; rist 80 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.4
+    SC="$(rt list-clients -t =KALFA -F '#{client_name} #{client_flags}' | grep ignore-size | head -1 | cut -d' ' -f1)"
+    for _ in 1 2 3 4 5 6 7 8; do ( KB_KILIT_YOK=1 TERM=xterm-256color TMUX_TMPDIR="$RT" bash "$B" --tel-buyut "$SC" </dev/null >/dev/null 2>&1 & ); done
+    sleep 3; S3Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"; S3G="$(rgen)"
+    [ -n "$S3G" ] || { S3O=$((S3O+1)); continue; }   # oturum o an okunamadı = ölçülemedi turu (yanlış kırmızı da, yeşil de sayılmaz)
+    [ -z "$S3Y" ] && [ "${S3G%x*}" = 80 ] || { S3K=1; S3B="tur $tur yerel=[$S3Y] pencere=$S3G oturumlar=[$(rt list-sessions -F '#{session_name}' 2>&1 | tr '\n' ' ')] istemci=[$SC]"; break; }
+  done
+  [ "$S3O" -le 2 ] || { S3K=1; S3B="ölçülemeyen tur $S3O/5 (en az 3 ölçülmeli)"; }
+  [ "$S3K" = 0 ] && ok "S3 kilitsiz kol (flock yok taklidi): 8 eşzamanlı × 5 tur, pencere 80'e büyür ve yerel ayar hep silinir" || bad S3 "→ $S3B"
   rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
 else
   echo "  … R ÖLÇÜLEMEDİ: tmux ya da python3 yok (yeşil değil, sayılmadı)"

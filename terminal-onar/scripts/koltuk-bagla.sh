@@ -265,8 +265,10 @@ tel_buyut() {  # $1 = istemci adı (kancadan) → istemci ignore-size ise ve otu
   # (CI'da R2/R3/R4; ölçüm: yerel-ayar=[manual], pencere 70x50, 120x40 istemci bağlı). Çözüm: oturum başına kilit — gövde sıralı koşar.
   # Kilit dosyası AÇILAMAZSA (salt-okur TMPDIR) ya da flock YOKSA kilitsiz sürer (özellik çalışsın); kilit AÇILDI ama süre içinde ALINAMADIYSA başka bir kanca
   # aynı işi yapıyor demektir → dokunma (kilitsiz sürmek yarışı geri getirirdi). Süre: KB_KILIT_SN (varsayılan 10).
-  if command -v flock >/dev/null 2>&1 && exec 9>"${TMPDIR:-/tmp}/koltuk-bagla-tel-buyut.$(id -u).${ses//[^A-Za-z0-9_.-]/_}.lock" 2>/dev/null; then
+  KILITLI=0
+  if [ -z "${KB_KILIT_YOK:-}" ] && command -v flock >/dev/null 2>&1 && exec 9>"${TMPDIR:-/tmp}/koltuk-bagla-tel-buyut.$(id -u).${ses//[^A-Za-z0-9_.-]/_}.lock" 2>/dev/null; then
     flock -w "${KB_KILIT_SN:-10}" 9 || return 0
+    KILITLI=1
   fi
   tmux list-windows -t "=$ses" -F '#{window_id} #{window_width} #{window_height}' 2>/dev/null | while read -r w ww wh; do
     [[ "$ww" =~ ^[0-9]+$ && "$wh" =~ ^[0-9]+$ ]] || continue
@@ -275,7 +277,9 @@ tel_buyut() {  # $1 = istemci adı (kancadan) → istemci ignore-size ise ve otu
     [ "$nx" = "$ww" ] && [ "$ny" = "$wh" ] && continue
     yerel="$(tmux show-options -wqv -t "$w" window-size 2>/dev/null)"
     tmux resize-window -t "$w" -x "$nx" -y "$ny" 2>/dev/null || continue
-    if [ -n "$yerel" ]; then tmux set-option -w -t "$w" window-size "$yerel" 2>/dev/null; else tmux set-option -w -u -t "$w" window-size 2>/dev/null; fi
+    # KİLİTSİZ kolda (flock yok / kilit dosyası açılamadı) eşzamanlı kanca 'manual'i eski değer sanabilir: resize-window'un kendi bıraktığı 'manual' geri yazılmaz, silinir
+    # (kilitliyken 'manual' yalnız kullanıcının bilerek koyduğu olabilir → korunur).
+    if [ -n "$yerel" ] && { [ "$KILITLI" = 1 ] || [ "$yerel" != manual ]; }; then tmux set-option -w -t "$w" window-size "$yerel" 2>/dev/null; else tmux set-option -w -u -t "$w" window-size 2>/dev/null; fi
   done
   return 0
 }
