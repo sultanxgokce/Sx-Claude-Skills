@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kapi-yenile-fikstur-zamani",
+  "pr": "610",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T04:25:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-yenile-fikstur-zamani",
+  "dal": "kapi-yenile-fikstur-zamani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15924,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 8391
+  },
+  "dalgic": "uyumsuz",
+  "bas": "9534685222fcf52d40291174538bd123b55e03e0",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sahte ps fikstürün başına taşınmış; böylece A-D senaryoları CI makinesindeki gerçek PID ve süreç yaşından etkilenmiyor, E senaryoları ise etimes fikstürüyle davranışını koruyor. Gerçek ölçüm 25/25 yeşil, eski düzen mutasyonu H2 kapısında beklendiği gibi düşüyor; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 25 geçti, 0 kaldı sonucunu veriyor; mutasyon ölçümü eski düzeni bilerek kurup rc=1 ve H2 başarısızlığıyla sınavın hatayı yakaladığını gösteriyor. Gerçekçi CI riski, var olan PID 1 üzerinden ayrıca sınanmış; ölçüm çifti talep edilen fikstür düzeltmesini doğrudan destekliyor."
+  }
+}
