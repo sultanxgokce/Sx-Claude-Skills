@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "kart-sonradan-gorev-bagla",
+  "pr": "628",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:12:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sonradan-gorev-bagla",
+  "dal": "kart-sonradan-gorev-bagla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 74238,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 91963
+  },
+  "dalgic": "uyumlu",
+  "bas": "a6d8e54beb7c9cc845f8e734d4b00601ef78e1b9",
+  "duzeltme_farki": {
+    "onceki_bas": "0407b05653822f51dd8294274fb29a18ab69bf70",
+    "dosya": 8,
+    "bayt": 101189,
+    "tam_bayt": 490977
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1, bağlama çağrısına özgü kimliğin hem geçmişe hem görev-yazımı kaydına taşınması ve geri almada yalnız bu kimliğin süzülmesiyle kapanmış; GBA7b ile iki yeni mutant yabancı kayıtların korunduğunu ölçüyor. Gerçek sınav 460/460 yeşil, ilgili bozuklukların tamamı mutasyon kapılarına düşüyor ve talepteki bağlama, çalışılıyor yapma, başkasının ya da biten kartın bağını koruma davranışları karşılanıyor; üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm çifti önce rc=1 ve 454 geçti/4 kaldı, sonra rc=0 ve 460 geçti/0 kaldı gösteriyor. Önceki B1 için düzeltme artık benzersiz `YAZIM_KIMLIK` değerini `gecmis` ve `gorev_yazimlari` kayıtlarına koyup geri almada yalnız eşleşen kimliği siliyor; genişletilmiş GBA7b yabancı geçmiş ve yazım kayıtlarının kaldığını doğruluyor. `mutant-kimliksiz-gecmis` ile `mutant-yazim-kaydi-toptan` dahil dokuz yeşil mutasyon ölçümü, sınavın sahiplik, açık/biten kart, mevcut bağ, başka kart, geri alma, kilit ve kayıt aidiyeti bozukluklarını yakaladığını gösteriyor. Son ölçümün `olculen_kirli=true` olması yeniden üretilebilirlik izini commit tek başına sabitlemiyor, ancak araç imzalı sunulan ölçüm ve diff arasında kanıtlanmış bir davranış kusuru oluşturmuyor."
+  }
+}
