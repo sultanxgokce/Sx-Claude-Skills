@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "duzen-cagri-kaydi",
+  "pr": "608",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T03:39:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-cagri-kaydi",
+  "dal": "duzen-cagri-kaydi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23535,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 6433
+  },
+  "dalgic": "uyumlu",
+  "bas": "729b75aa558af60f8c89a2590a9b88a116e759ba",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Her üretilen istem için içerik taşımayan tek satırlık JSONL çağrı kaydı eklenmiş ve aynı kimlik istem başlığına basılmış. Gerçek ölçüm C1-C3 ile kayıt, mahremiyet, boş defter ve yazma hatası davranışlarını; önce ölçümü de eski sürümde bu işlevlerin bulunmadığını gösterdiği için yalnız küçük rötuş düzeyinde dahi kanıtlanmış kusur yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü eski betikte C1-C3'ün düştüğünü, sonra ölçümü gerçek kodda bütün sınavların geçtiğini gösteriyor; ayrıca gömülü mutasyonlar sır süzgeci ve kayıt yazımı bozulduğunda sınavların hatayı yakaladığını doğruluyor. Kare gerektiren bir arayüz işi değil; gerçekçi fikstürlü ölçüm çifti talep için yeterli."
+  }
+}

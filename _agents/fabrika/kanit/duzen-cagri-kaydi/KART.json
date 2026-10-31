@@ -1,0 +1,25 @@
+{
+  "is": "duzen-cagri-kaydi",
+  "cumle": "alt-ajan-istem.sh her istem üretiminde /config/.filo/alt-ajan-istem.jsonl dosyasına içeriksiz tek satır yazar, istem başına kimlik basar (Kuzey G22 G3.3)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-31T03:36:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
