@@ -1,7 +1,7 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.6.0
+version: 1.6.1
 ---
 
 # /duzen — filo düzen paketi (1.6.0 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)

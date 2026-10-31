@@ -2,7 +2,7 @@
 # ekipc-paritesi.test.sh — paketlenmiş ekipc.sh'in izole kutuda (Nexus deposu YOK) çalıştığı ve Nexus kanoniğiyle eşit çıktı verdiği (Kuzey Hat E · G3.6).
 # P1 paket kopyası var, sözdizimi geçerli, ÇİVİLİ md5 ile eşit · P2 izole benimse (--baz, manifestsiz): ELLE bayt-verbatim, marker var
 # P3 paket başlığı kimliğe GÖMÜLMEZ · P4 yenile aynı temelde no-op, üretilen bölgeye el değmişse exit 5 · P5 manifest isteyen kipler (derle/--rol) hâlâ reddeder
-# P7 ortak temele koltuksuz alt personel bölümü (G3.3) manuel-claude kimliğine gömülür ve paket sürümü 1.6.0+ · P6 Nexus kanoniği varsa: kopya md5'i EŞİT ve aynı persona için üretilen kimlik BAYT-AYNI (kanonik yoksa atlanır, çivili eşitlik P1'de ölçüldü)
+# P8 PyYAML'sız python (-S) + paketle gelen vendor/yaml → benimse ve yenile exit 0, vendor silinirse dürüst exit 2 · P7 ortak temele koltuksuz alt personel bölümü (G3.3) manuel-claude kimliğine gömülür ve paket sürümü 1.6.0+ · P6 Nexus kanoniği varsa: kopya md5'i EŞİT ve aynı persona için üretilen kimlik BAYT-AYNI (kanonik yoksa atlanır, çivili eşitlik P1'de ölçüldü)
 set -uo pipefail
 export LC_ALL=C.UTF-8
 HERE="$(cd "$(dirname "$0")" && pwd)"; PAKET="$(cd "$HERE/.." && pwd)"; E="$HERE/ekipc.sh"
@@ -12,7 +12,7 @@ ok() { if [ "$2" -eq 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); ech
 python3 -c "import yaml" 2>/dev/null || { echo "  ? ÖLÇÜLEMEDİ: PyYAML yok — ekipc çalıştırılamaz (rc 3; yeşil DEĞİL)"; exit 3; }
 
 # ÇİVİLİ md5 — paketleme anında Nexus kanoniğinden (scripts/ekipc.sh) ölçülen değer. Kanonik değişince: kopyala + bu satırı güncelle.
-CIVI="b54bddb9196dbe25d9c33f96da9c7558"
+CIVI="2c966746023076570a796983fcd82a7c"
 b="$(md5sum < "$E" | cut -d' ' -f1)"
 bash -n "$E" 2>/dev/null; ok "P1a paketlenmiş ekipc.sh var ve sözdizimi geçerli" "$([ $? -eq 0 ] && [ -f "$E" ] && echo 0 || echo 1)"
 ok "P1b paket kopyası çivili md5 ile EŞİT ($CIVI)" "$([ "$b" = "$CIVI" ] && echo 0 || echo 1)" "→ paket $b (kanoniği yeniden kopyala ve çiviyi güncelle)"
@@ -57,6 +57,23 @@ PY
 )"
 ok "P7c SKILL sürümü 1.6.0 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple(int(x) for x in sys.argv[1].split('.'));sys.exit(0 if v>=(1,6,0) else 1)" "${SV:-0.0.0}" && echo 0 || echo 1)"
 [ -f "$PAKET/../catalog.json" ] && ok "P7d catalog.json sürümü SKILL ile aynı ($CV)" "$([ "$CV" = "$SV" ] && echo 0 || echo 1)" "→ SKILL $SV ≠ catalog $CV" || echo "  · P7d atlandı: catalog.json paketin yanında yok (kutuya kurulu kopya)"
+
+# P8 (Kuzey Hat E): izole kutuların çoğunda sistem python3'ünde PyYAML YOK. `python3 -S` site-packages'ı kapatır → PyYAML YALNIZ paketle gelen vendor/yaml'dan gelebilir.
+SHIM="$T/yamlsiz-bin"; mkdir -p "$SHIM"; printf '#!/bin/sh\nexec %s -S "$@"\n' "$(command -v python3)" > "$SHIM/python3"; chmod +x "$SHIM/python3"
+ok "P8a önkoşul: yamlsız python3 gerçekten PyYAML göremiyor" "$(PATH="$SHIM:$PATH" python3 -c 'import yaml' >/dev/null 2>&1; [ $? -eq 1 ] && echo 0 || echo 1)"
+ok "P8b paketle gelen vendor/yaml var (__init__.py) ve derlenmiş .so YOK (saf Python)" "$([ -f "$PAKET/vendor/yaml/__init__.py" ] && [ "$(find "$PAKET/vendor" -name '*.so' | wc -l)" -eq 0 ] && echo 0 || echo 1)"
+ok "P8c vendor lisansı paketle gelir (LICENSE-PyYAML)" "$([ -f "$PAKET/vendor/LICENSE-PyYAML" ] && echo 0 || echo 1)"
+printf 'insan notu\n' > "$T/p8.md"
+PATH="$SHIM:$PATH" bash "$EK" benimse --dosya "$T/p8.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
+ok "P8d GERÇEK vendor + yamlsız python → benimse rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
+PATH="$SHIM:$PATH" bash "$EK" yenile --dosya "$T/p8.md" --baz manuel-claude --manifest "$T/yok.yaml" >/dev/null 2>&1; rc=$?
+ok "P8e GERÇEK vendor + yamlsız python → yenile (kuru) rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
+printf 'insan notu\n' > "$T/p8k.md"; bash "$EK" benimse --dosya "$T/p8k.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1
+ok "P8f vendor'lı (yamlsız) kimlik, sistem PyYAML'lı koşunun kimliğiyle BAYT-AYNI" "$(cmp -s "$T/p8.md" "$T/p8k.md" && echo 0 || echo 1)"
+SV8="$T/kutu8"; mkdir -p "$SV8/skills"; cp -r "$PAKET" "$SV8/skills/duzen"; python3 -c "import shutil,sys;shutil.rmtree(sys.argv[1])" "$SV8/skills/duzen/vendor"
+printf 'insan notu\n' > "$T/p8s.md"; PATH="$SHIM:$PATH" bash "$SV8/skills/duzen/scripts/ekipc.sh" benimse --dosya "$T/p8s.md" --baz manuel-claude --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
+ok "P8g vendor YOK + yamlsız python → DÜRÜST exit 2 (sessiz yeşil yok)" "$([ $rc -eq 2 ] && echo 0 || echo 1)" "→ rc=$rc"
+ok "P8h exit 2'de dosyaya DOKUNULMADI" "$([ "$(cat "$T/p8s.md")" = "insan notu" ] && echo 0 || echo 1)"
 
 KAN="${DUZEN_EKIPC_KANONIK:-/config/projects/Nexus/scripts/ekipc.sh}"
 if [ -f "$KAN" ]; then
