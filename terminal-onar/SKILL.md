@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.9
+version: 2.37.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.37.0 · Koltuk listesi tmux pencere boyunu verir (31 Eki · kart terminal-pencere-sutunu · gorev …G3QJ)
+Telefon `ignore-size` bağlanır: pencere boyu masaüstü istemcisinden gelir, telefon sabit 1280 px dizildiği için fazla alan noktalı kalıyordu (Mac 118 sütun + telefon 204 sütun → pencere 118x53). `koltuk-bagla.sh --liste` artık 10. sütunda etkin pencerenin boyunu (`118x53`) basar, `koltuklar.mjs` bunu `pencere: {sutun, satir}` yapar, `/api/koltuklar` taşır. Merkez telefon görüntüsünü bundan sığdırır. Boy alınamazsa alan yazılmaz (uydurma yok); eski kapıda alan yok, telefon eski kipte kalır.
 
 ## 🆕 2.36.9 · Koltuk listesi kısa süreli önbellekten gelir (31 Eki · kart kapi-koltuk-onbellek)
 Ölçüm: `/api/koltuklar` her istekte `koltuk-bagla.sh --liste` koşuyordu; yük altında 1,4-3,1 sn, kapı üzerinden 1,7-5,9 sn. Artık 4 sn taze, 150 sn'ye kadar son cevap hemen döner ve arkada tek yenileme koşar; eşzamanlı istekler tek koşuya iner. Bayat pencere merkezin dakikalık soru bekçisine göre seçildi: bekçi önbelleği sıcak tutar, Sultan'ın ilk açılışı betiği beklemez (`kapi/koltuk-gecikme.olcum.mjs`, 1,5 sn'lik betikle ikinci istek 1.511 ms → 7 ms). Kapı yeniden açılınca ilk istek yine bekler. Önbelleği yalnız koltuğu değiştiren başarılı uçlar düşürür (`/api/koltuk/<ad>/ac` · `/api/kadro/hal` · `/api/onar`; zaman aşımı 504 de), giriş ve başarısız açma düşürmez. Başarısız koşu saklanmaz, cevap `yas_ms` taşır. Kadro ve koltuk açma gibi karar veren yollar önbellek KULLANMAZ. `KAPI_KOLTUK_TAZE_MS` · `KAPI_KOLTUK_BAYAT_MS`.

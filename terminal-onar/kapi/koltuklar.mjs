@@ -22,10 +22,12 @@ export function soruAyikla(ham, hal) {
 // dizin (2.33.0 · kutu–oda modeli 2): etkin bölmenin çalışma dizini — kapı odayı bundan bulur; API'ye YOLLANMAZ (sunucu.mjs düşürür).
 export function koltukSatirlari(cikti) {
   return String(cikti || '').split('\n').filter(Boolean).map((l) => {
-    const [ad, son, claude, tur, hal, ne, hesap, soruHam, dizin] = l.split('\t');
+    const [ad, son, claude, tur, hal, ne, hesap, soruHam, dizin, pencereHam] = l.split('\t');
+    // pencere (2.37.0): etkin pencerenin tmux boyu; telefon terminali bundan sığar (ignore-size istemci boyu etkilemez, fazla alan noktalı kalıyordu). Biçim tutmazsa alan YOK.
+    const pm = /^(\d{1,4})x(\d{1,4})$/.exec(pencereHam || ''); const pencere = pm && +pm[1] > 0 && +pm[2] > 0 ? { sutun: +pm[1], satir: +pm[2] } : null;
     const soru = soruAyikla(soruHam, hal);
     // ne: dış olay bekliyorsa NE beklediği (2.7.0); başka hâlde yok (uydurulmaz)
     // hesap (2.14.0): koltuktaki Claude'un hesap ADI (kapi · varsayilan · <ad> · bilinmiyor:<neden>); Claude'suz koltukta yok — merkez rozeti bundan okur
-    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}), ...(soru ? { soru } : {}), ...(dizin ? { dizin } : {}) };
+    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}), ...(pencere ? { pencere } : {}), ...(soru ? { soru } : {}), ...(dizin ? { dizin } : {}) };
   }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));
 }
