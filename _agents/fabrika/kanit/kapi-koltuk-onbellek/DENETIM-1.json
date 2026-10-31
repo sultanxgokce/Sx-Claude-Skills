@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "kapi-koltuk-onbellek",
+  "pr": "620",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T18:55:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-koltuk-onbellek",
+  "dal": "kapi-koltuk-onbellek",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41224,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 42810
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a96e62a20bc923744ce773bd36bfd4f0f5c30f35",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Koltuk listesine taze/bayat önbellek, tekilleştirilmiş eşzamanlı üretim ve değişiklik sonrası düşürme eklenmiş; gerçek ölçümler ile mutasyonlar bu çekirdek davranışları güçlü biçimde sınamış. Ancak soğuk ilk açılış hâlâ betiği bekliyor, sunulan önce/sonra süre farkı da 120 saniyelik kuyruk beklemesinden doğuyor; ayrıca ilgisiz veya başarısız bütün yazma istekleri önbelleği gereksiz yere düşürüyor, önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Kartın istediği “koltuk şeridi ilk açılışta belirgin hızlanır ve sonuç ölçülür” sonucu gösterilmemiş; soğuk ilk istek doğrudan üretimi bekliyor, hızlanan yalnız sonraki isteklerdir.",
+        "kanit": "onbellekKur.al içinde son kayıt yokken `return { deger: await yenile(), yas: 0 }` çalışıyor. Sunucu önce/sonra toplamları 128,2 sn ve 8,3 sn görünse de önce kaydının stderr'i bunun 120 saniyesini `agir-sira` beklemesi olarak bildiriyor; kuyruk çıkarılınca yaklaşık 8,2 sn ve 8,3 sn kalıyor. Manifestte uç gecikmesini ölçen ayrı bir önce/sonra çifti veya gerçekçi ilk-açılış karesi yok.",
+        "konum": "terminal-onar/kapi/koltuk-onbellek.mjs:16; olcum-sunucu-once.txt; olcum-sunucu-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önbellek yalnız koltuk durumunu değiştiren başarılı işlemlerde değil, ilgisiz ve hatta başarısız bütün GET/HEAD dışı isteklerin yanıtı bitince düşürülüyor; bu gereksiz betik koşuları ve önbellek çalkalanması yaratır.",
+        "kanit": "Sunucu genelinde `if (req.method !== 'GET' && req.method !== 'HEAD') res.once('finish', () => koltukOnbellek.dusur())` kullanılmış; durum kodu ve uç ayrımı yok. Entegrasyon sınavı da koltuk değişikliği yerine `/giris` POST çağrısıyla düşürmeyi doğruluyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:313; terminal-onar/kapi/sunucu.test.mjs:249-255",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek birim ölçümü 8/8, gerçek sunucu ölçümü 132/132 geçiyor; beş mutasyon da ilgili bozuklukları yakalıyor. Buna karşın kartın kullanıcıya dönük ilk-açılış hız iddiası için geçerli gecikme ölçüm çifti veya kare dizisi yok: görünen 128,2→8,3 sn farkı kuyruk beklemesiyle kirlenmiş ve üretim notundaki 1,4-5,9 sn değerleri manifestte ölçüm olarak bulunmuyor."
+  }
+}
