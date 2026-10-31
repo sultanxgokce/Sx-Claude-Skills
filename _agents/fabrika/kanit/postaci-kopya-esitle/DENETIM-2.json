@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "postaci-kopya-esitle",
+  "pr": "615",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T15:36:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle",
+  "dal": "postaci-kopya-esitle",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13152,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 12974
+  },
+  "dalgic": "olculemedi",
+  "bas": "3229b87ca1e2844fab77a28e92de6f5ca66224aa",
+  "duzeltme_farki": {
+    "onceki_bas": "0b94c58da8f972487846924391f1238e3871a2d4",
+    "dosya": 7,
+    "bayt": 12974,
+    "tam_bayt": 22727
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, postacı kopyası cloudtop ana dalıyla eşitlenmiş; düzeltilmiş ölçüm postaci.mjs, eksik kutu-adlari.json ve hatalı KAYNAK.sha256 olmak üzere başlangıçtaki 3 farkı açıkça sayıyor, sonrasında 0 gösteriyor. Önceki iki bulgu da yeni araçlı ölçüm çiftiyle kapanmış ve yeni bir kusur kanıtlanmamış; iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; aynı etiketli önce/sonra ölçüm çifti gerçek hedeflerde 3→0 sonucunu gösteriyor. B1 kapanmış: önce ölçümü eksik kutu-adlari.json dosyasını stderr hatasıyla kaybetmek yerine ayrı bir fark olarak sayıyor. B2 kapanmış: önce çıktısı postaci.mjs, kutu-adlari.json ve KAYNAK.sha256 kalemlerini tek tek göstererek karttaki 3 başlangıç değerini doğruluyor; sonra çıktısı 0. Eski kusurlu ölçümler de gerekçeleriyle araç manifestinde geçersiz kılınmış."
+  }
+}
