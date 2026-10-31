@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kapi-koltuk-onbellek",
+  "pr": "620",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T19:19:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-koltuk-onbellek",
+  "dal": "kapi-koltuk-onbellek",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 56497,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 40436
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f59cff40a45ced47763ffe162c9e3772322d3732",
+  "duzeltme_farki": {
+    "onceki_bas": "a96e62a20bc923744ce773bd36bfd4f0f5c30f35",
+    "dosya": 20,
+    "bayt": 57570,
+    "tam_bayt": 86989
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Koltuk listesi artık kısa süreli önbellekten geliyor, eşzamanlı okumalar tek koşuya iniyor ve yalnız koltuğu değiştiren başarılı uçlar önbelleği düşürüyor; önceki iki bulgu da bu turda kapanmış. Gerçek ölçüm 61 saniye sonraki ilk Sultan isteğini 1509 ms’den 7 ms’ye indiriyor, birim ve sunucu sınavları yeşil, hedefli mutasyonlar da kusurları yakalıyor; kod üretime hazır.",
+    "bulgular": [
+      {
+        "ne": "Canlıdaki dakikalık bekçinin kapıyı gerçekten sıcak tuttuğu ve Sultan’ın canlı ilk açılışında aynı hızlanmanın görüldüğü bu konteynerde doğrulanamaz; kontrollü ölçüm kod davranışını doğrulasa da canlı bağlantı ayrıca gözlenmelidir.",
+        "kanit": "İş kartında `canli_gerekir: true` ve `canli_sebep: \"--canli e\"` yazıyor. `olcum-gecikme-sonra.txt` kontrollü düzende bekçi isteğinden 61 saniye sonraki isteği 7 ms ölçüyor; manifestte canlı site üzerinde alınmış kare veya ölçüm kaydı bulunmuyor.",
+        "konum": "iş kartı canli_gerekir/canli_sebep; olcum-gecikme-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı site + yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. B1 kapandı: gerçek gecikme çifti aynı 1,5 saniyelik betikle önce 1509 ms, sonra 7 ms gösteriyor; bayat-60 mutasyonu bu ölçümün kusurlu kodu yakaladığını doğruluyor. B2 kapandı: genel POST düşürmesi kaldırılmış; giriş ve başarısız açmanın düşürmediği, başarılı açmanın düşürdüğü gerçek sunucu sınavında ölçülmüş. Birim ölçümü 10/10, sunucu ölçümü 134/134 geçiyor; mutasyon kayıtlarındaki kırmızı sonuçlar beklenen kusur yakalamalarıdır. Yalnız canlı bekçi bağlantısının fiilen kurulu olduğu kutu dışında doğrulanmalıdır."
+  }
+}
