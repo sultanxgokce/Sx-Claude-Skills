@@ -1,0 +1,49 @@
+{
+  "tur": 4,
+  "is": "duzen-pyyaml-vendor",
+  "pr": "629",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T23:42:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-pyyaml-vendor",
+  "dal": "duzen-pyyaml-vendor",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 12363,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8040
+  },
+  "dalgic": "olculemedi",
+  "bas": "0bcf6b96693f3a7738aea4d52349893a6329871f",
+  "duzeltme_farki": {
+    "onceki_bas": "2842741d45f4661b5a19494c6822c1f1359ae76d",
+    "dosya": 5,
+    "bayt": 8040,
+    "tam_bayt": 28025
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Paketin saf Python vendor kopyasıyla, sistem PyYAML’ı bulunmayan koşulda benimse dry-run hedefi gerçek ölçümde geçiyor; mutasyon da sınavın bozuk vendor durumunu yakaladığını gösteriyor. Ancak önceki izlenebilirlik bulgusu kapanmamış: ölçüm güncel başa bağlanmıyor ve kirli ağaçta alınmış; üretim öncesi bu kanıt bağı düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kapanmamış: gerçek ölçüm güncel PR başını tanımlamıyor ve kirli çalışma ağacında alınmış; ölçülen kod ile sunulan PR bütününün aynı olduğu araç ölçümüyle kanıtlanmıyor.",
+        "kanit": "Değişiklik notu güncel başı `0bcf6b96693f` olarak verirken `vendor-parite` kaydı `olculen_commit: dcdcbd3e5c5d646e4b86e7d0d7f7f20d281eca8c` ve `olculen_kirli: true` bildiriyor. Reis gerekçesindeki sıfır dosya farkı ise başka bir commit olan `aa07c50d` için ve manifestte ölçüm kaydı olarak yer almıyor.",
+        "konum": "KANIT MANİFESTİ:vendor-parite; DEĞİŞİKLİK notu; İŞ KARTI:reis_kararlari[0]",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 26 geçti/0 düştü; mutasyon kaydı beklenen rc=1, beş düşen kapı ve `gercek_olcum: vendor-parite` bağıyla sınav duyarlılığını gösteriyor. Buna karşılık gerçek ölçüm güncel baştan farklı bir committe ve kirli ağaçta alınmış; ayrıca güncel başla ölçülen commit arasında yalnız kanıt dosyalarının değiştiğini doğrulayan araç ölçümü sunulmadığından önceki izlenebilirlik bulgusu kapanmış sayılamaz."
+  }
+}

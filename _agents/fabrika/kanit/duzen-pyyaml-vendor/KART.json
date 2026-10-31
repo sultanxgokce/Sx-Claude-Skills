@@ -44,6 +44,20 @@
       "zaman": "2026-10-31T23:17:35+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-31T23:22:41+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "d26a1038",
+      "gerekce": "Kalan tek bulgu kanıt izlenebilirliği: ölçülen commit aa07c50d ile PR başı arasında kanıt dizini DIŞINDA 0 dosya farkı ölçüldü; 'kirli' işareti ölçüm anında kanıt dizininin kendi değişmesinden. Kod ve sınav bulguları kapandı (tur 3: 4/E, tek bulgu bu).",
+      "zaman": "2026-10-31T23:23:01+03:00"
     }
   ]
 }
