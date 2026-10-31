@@ -93,6 +93,10 @@ while [ $# -gt 0 ]; do
 done
 
 command -v python3 >/dev/null 2>&1 || { echo "DOĞRULANAMADI: python3 yok (unknown≠fail) — exit 2" >&2; exit 2; }
+# PAKET KİPİ (Kuzey Hat E): sistem python3'ünde PyYAML yoksa (izole kutuların çoğu) betiğin yanındaki vendor/ (saf Python PyYAML) kullanılır.
+if ! python3 -c "import yaml" 2>/dev/null && [ -f "$SCRIPT_DIR/../vendor/yaml/__init__.py" ]; then
+  export PYTHONPATH="$SCRIPT_DIR/../vendor${PYTHONPATH:+:$PYTHONPATH}"
+fi
 python3 -c "import yaml" 2>/dev/null || { echo "DOĞRULANAMADI: PyYAML yok (unknown≠fail) — exit 2" >&2; exit 2; }
 # --baz ile benimse/yenile ortak temelden üretir, ekip modeli GEREKMEZ (izole kutuda manifest yoktur); öteki komutlar manifest ister.
 MANIFESTSIZ=0

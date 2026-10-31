@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.6.0
+version: 1.6.1
 ---
 
-# /duzen — filo düzen paketi (1.6.0 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
+# /duzen — filo düzen paketi (1.6.1 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -105,6 +105,7 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.6.1** (31 Eki 2026, MİRAHUR · Kuzey Hat E): izole kutuların çoğunda sistem python3'ünde PyYAML yoktu (ekipc exit 2). Paket artık saf Python PyYAML 6.0.3'ü `vendor/yaml-saf.zip` (+ başlatıcı `vendor/yaml/__init__.py`, lisans `vendor/LICENSE-PyYAML`) olarak taşır; `ekipc.sh` (Nexus #1458) vendor'ı bulursa kullanır, yoksa dürüst exit 2. Parite P8: `python3 -S` ile PyYAML'sız ortamda benimse (kuru ve --apply) ve yenile exit 0.
 - **1.6.0** (31 Eki 2026, MİRAHUR · Kuzey Hat E G3.6): `ekipc.sh` düzen paketine girdi (Nexus #1455 + #1456 ile paket kipi). İzole kutuda `ekipc benimse|yenile --baz` artık
   çalışır: önceki durumda `ekipc benimse` kutuda `komut yok` (rc 127) veriyordu ve ortak bölge işi hiçbir izole kutuda yapılamıyordu. `cekirdek/`ye `base-manifest.yaml`,
   `ana-hedef-sablonu.md` ve `federe-inovasyon-charter.md` eklendi. `manuel-claude-base.md`ye koltuksuz alt personel bölümü eklendi (G3.3: istem `alt-ajan-istem.sh`
