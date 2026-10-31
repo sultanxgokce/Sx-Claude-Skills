@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "koltuk-bagla-ci-olcum",
+  "pr": "611",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T05:09:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-bagla-ci-olcum",
+  "dal": "koltuk-bagla-ci-olcum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23866,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 67477
+  },
+  "dalgic": "uyumsuz",
+  "bas": "322ee2e37506651ac123f5681dcc75f78e86353b",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Oturum başına `flock` ile R2/R3/R4 yarışının kökü onarılmış; gerçek ölçüm 130/130 yeşil, kilitsiz mutasyon ise S1 kapısında düşüyor. Önce kilit alınamadığında gövdenin kilitsiz devam etmesini düzeltin; ayrıca iş kartının istediği main kovası ve Sx PR sonuçları kanıtlanmadığı için işin tamamının doğru yapıldığı gösterilemiyor.",
+    "bulgular": [
+      {
+        "ne": "Kilit açılamaz veya 10 saniyede alınamazsa işlev durmuyor; `flock` başarısızlığından sonra gövde kilitsiz çalışarak giderilmeye çalışılan yarışı yeniden mümkün kılıyor.",
+        "kanit": "Eklenen satır `exec 9>... && flock -w 10 9; fi` ile bitiyor; başarısız `exec`/`flock` sonucunu izleyen `return` ya da koşullu gövde yok. Mevcut S1 yalnız kilidin kaldırıldığı mutasyonu ölçüyor, kilit edinme hatası veya zaman aşımını ölçmüyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:264",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Main kovasının ve Sx PR'larının yeşile döndüğü gösterilmemiş; sunulan kanıt yalnız yerel sınav komutunu doğruluyor.",
+        "kanit": "Manifestteki iki kaydın komutu da yalnız `bash terminal-onar/scripts/koltuk-bagla.test.sh`; gerçek ölçüm rc=0 ve 130/130 olsa da herhangi bir CI koşusu, main kovası veya Sx PR durum kaydı bulunmuyor.",
+        "konum": "kanıt manifesti: sinav-kilitli ve mutant-kilitsiz kayıtları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 130/130, mutasyon ölçümü rc=1 ve S1 düşüşüyle sınavın kilitsiz kodu yakaladığını gösteriyor. Buna karşılık önce/sonra CI ölçüm çifti ve main/Sx durum kanıtı yok; ayrıca kilit edinme başarısızlığı için mutasyon veya hata yolu ölçümü bulunmuyor."
+  }
+}
