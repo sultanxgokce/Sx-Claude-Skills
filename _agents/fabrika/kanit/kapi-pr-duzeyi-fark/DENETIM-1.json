@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kapi-pr-duzeyi-fark",
+  "pr": "634",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T00:55:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark",
+  "dal": "kapi-pr-duzeyi-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32512,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 17368
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2dbb5a364abc471019ddc94ab523fc32b1a1a346",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kapı ve denetçi karşılaştırmaları ana dal birleşimini PR değişikliği saymayacak biçimde PR düzeyine taşınmış; talep edilen şey yapılmış. Ancak kapı PR farklarını dosya ve konum bilgisini atıp yalnız eklenen/çıkarılan satır metinleriyle karşılaştırdığı için aynı içeriğin başka dosyaya veya başka konuma taşındığı puan sonrası kod değişimini kaçırabilir; önce bu açığı çözün.",
+    "bulgular": [
+      {
+        "ne": "Birleştirme kapısı PR farkının kimliğini korumuyor: `oc_pf`, diff çıktısından yalnız `+`/`-` içerik satırlarını alıp dosya başlıklarını ve hunk konumlarını dışlıyor. Böylece puanlı başta bir dosyaya eklenen satırın sonradan başka dosyaya ya da aynı dosyada başka konuma taşınması aynı metin dizisini üretebilir ve kapı değişiklik olmasına rağmen geçebilir.",
+        "kanit": "Üretim farkında `oc_pf` zinciri `grep -E '^[+-]' | grep -vE '^(\\+\\+\\+|---) '` kullanıyor ve ardından yalnız `[ \"$oc_pb\" = \"$oc_pu\" ]` eşitliğine bakıyor. O13 yalnız değişmeyen PR farkını, O14 ise `uygulama.sh` içine farklı içerik (`yeni-kod`) eklenmesini sınıyor; aynı +/- içeriğinin dosya veya konum değiştirdiği çarpışma vakası ölçülmemiş.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: PR DÜZEYİNDE KARŞILAŞTIRMA bloğu; yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh: O13-O14",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra ölçümü `kalan=3`ten `kalan=0`a iniyor, tam sınavlar 71/71 ve 22/22 geçiyor, mutasyon kaydı da bozuk kodda ilgili kapının düştüğünü gösteriyor. Bununla birlikte tüm kayıtlar kirli çalışma ağacında ölçülmüş ve mevcut sınavlar fark içeriği aynı kalırken dosya/konum kimliğinin değişmesi vakasını kapsamıyor; bu nedenle yeşil sonuç belirlenen uygulama açığını çürütmüyor."
+  }
+}
