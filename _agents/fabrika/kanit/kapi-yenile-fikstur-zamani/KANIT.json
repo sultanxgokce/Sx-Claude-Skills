@@ -1,0 +1,46 @@
+{
+  "is": "kapi-yenile-fikstur-zamani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T04:24:39+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sahte-ps-basta",
+      "asama": "sonra",
+      "dosya": "olcum-sahte-ps-basta-sonra.txt",
+      "sha256": "d1a1e9bd0b6ac0c276ec366a5420dc04276572a4637b212019a2e576358b9c8b",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kapi-yenile.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:23:55+03:00",
+      "sure_sn": 9.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ab22f46c4bd34e1893d2372c49875a72"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sahte-ps-sonradan",
+      "asama": "once",
+      "dosya": "olcum-mutant-sahte-ps-sonradan-once.txt",
+      "sha256": "acd55c3d65a2ce3d223c3915744e1784cd4754b219c58c29e0b9f62e4bfaa551",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/.eski-duzen-kapi-yenile.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:24:39+03:00",
+      "sure_sn": 37.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sahte-ps-basta",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "860f66089cf84801a2def01682cc6856"
+    }
+  ],
+  "imza": "2b3c82faf8bb742df594776db82604678adc58b01443c7e634a7d546649047d5"
+}
