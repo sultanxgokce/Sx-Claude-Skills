@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-baslik-esitle",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T04:15:38+03:00",
+  "guncelleme": "2026-10-31T04:27:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -108,7 +108,96 @@
       "sure_sn": 0.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "26b7f3cdfb7e4c0dacf3e30e6bac4018"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin2",
+      "asama": "once",
+      "dosya": "olcum-y7-origin2-once.txt",
+      "sha256": "64b45e5b80d9258f4a4cb5c273749fad8bee191c57d8411c918e0652b3830051",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-main-1793409271/gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T04:23:07+03:00",
+      "sure_sn": 125.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3e618d2a6ce94fd39e21504c93e69305"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-origin2",
+      "asama": "sonra",
+      "dosya": "olcum-y7-origin2-sonra.txt",
+      "sha256": "b6d0e504c846b35ddf57fd1a1e4ce141f61a1f0d14899728c743e2550e6d3da8",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-yolu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:23:08+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4f6131c5c3e94b2eb2a5786198fa24b5"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "y7-origin",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-y7-origin-once-0e9c9189ff07.txt",
+      "sha256": "61b41fca95b04c3f30e3f80aa5c36d1617fdc78fee9297a084eda814e06d2d05",
+      "hedef_dosya": "olcum-y7-origin-once.txt",
+      "hedef_olcum_id": "993fb35b2a5745efa7005b12eeac25cc",
+      "hedef_sha256": "0a0b421f20613a43b0790e2a307f4094648b9515537ea89ce10fd12990a483a7",
+      "hedef_zaman": "2026-10-31T04:15:37+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2",
+      "kim": "BANI",
+      "karsi": "olcum-y7-origin2-once.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T04:23:08+03:00",
+      "olcum_id": "1163181d23074012afe3f99b40f6af9c"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "y7-origin",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-y7-origin-sonra-f26d2fb5e031.txt",
+      "sha256": "80786108e996cc600a8a46c016cedf00f69eae174f62c4e5ec947e0418bb7faa",
+      "hedef_dosya": "olcum-y7-origin-sonra.txt",
+      "hedef_olcum_id": "26b7f3cdfb7e4c0dacf3e30e6bac4018",
+      "hedef_sha256": "7b351e622f84791ddf3277f2175b0690948028b0a682fbe2812a86a268ea21b1",
+      "hedef_zaman": "2026-10-31T04:15:38+03:00",
+      "hedef_renk": "yesil",
+      "neden": "Y7 tur 1 bulgusu: çalışma ağacına düşen dal kaldırıldı; sınav değişti, yerine y7-origin2",
+      "kim": "BANI",
+      "karsi": "olcum-y7-origin2-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-31T04:23:08+03:00",
+      "olcum_id": "9961d6d9acb24bb9aceff6c7b104061f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "y7-kanoniksiz",
+      "asama": "sonra",
+      "dosya": "olcum-y7-kanoniksiz-sonra.txt",
+      "sha256": "8a143a1be8a78ec5f0f742ae224ce0c3c7aa06d2130cf349cd276028806d541b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gp-kanoniksiz.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T04:27:26+03:00",
+      "sure_sn": 15.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "53624fdfe13d41f5a6212447836963fa"
     }
   ],
-  "imza": "50be4c92c994a6cfa7020ae4538dc2fdcc18a3ce147834e31b07e1ae268b7f92"
+  "imza": "f4c956a95f761469c256e5f8056e36de63c7563fa65112951fe61c72e1ae4794"
 }

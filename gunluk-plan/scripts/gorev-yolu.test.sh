@@ -20,13 +20,12 @@ env0 GUNLUK_PLAN_CLOUDTOP_GOREV=/yok/kanonik PATH="/usr/bin:/bin" bash "$T/bos/g
 bash -n "$HERE/gorev.sh" 2>/dev/null; a=$?; ok "Y6 paketlenmiş gorev.sh sözdizimi geçerli ve dugum-bak.py yanında" "$([ "$a" -eq 0 ] && [ -f "$HERE/dugum-bak.py" ] && echo 0 || echo 1)"
 # Y7 kanoniği cloudtop'un origin/main'inden okur (ana checkout'un ÇALIŞMA AĞACINDAN değil): paylaşılan checkout birleşmeleri geriden
 #   izleyebilir ve o zaman Y7 sapmayı değil checkout'un yaşını ölçer (31 Eki: ağaç #1251'de, kanonik #1252 → eşitlemeden önce sahte yeşil).
-#   origin/main okunamazsa çalışma ağacına düşer ve bunu söyler.
+#   origin/main okunamazsa çalışma ağacına DÜŞMEZ (bayat ağaç sahte yeşil üretir) — "ölçülemedi" der.
 CT=/config/projects/cloudtop; KYOL=infra/defter-gecit/gorev
-kan() { if [ "$KAYNAK" = origin ]; then git -C "$CT" show "origin/main:$KYOL/$1"; else cat "$CT/$KYOL/$1"; fi; }
-if git -C "$CT" cat-file -e "origin/main:$KYOL/gorev.sh" 2>/dev/null; then KAYNAK=origin; elif [ -f "$CT/$KYOL/gorev.sh" ]; then KAYNAK=agac; echo "  · Y7 origin/main okunamadı — çalışma ağacıyla ölçülüyor (bayat olabilir)"; else KAYNAK=; fi
-if [ -n "$KAYNAK" ]; then
-  cmp -s <(kan gorev.sh) "$HERE/gorev.sh" && cmp -s <(kan dugum-bak.py) "$HERE/dugum-bak.py" && cmp -s <(kan oda-dagit.py) "$HERE/oda-dagit.py" && [ -x "$HERE/oda-dagit.py" ]; ok "Y7 paketlenmiş kopya cloudtop kanoniğiyle ($KAYNAK) bayt eşit (gorev.sh · dugum-bak.py · oda-dagit.py +x; sapmışsa kanoniği buraya yeniden kopyala)" "$?"
-else echo "  · Y7 atlandı: cloudtop kanoniği bu kutuda yok (eşitlik ölçülemedi)"; fi
+kan() { git -C "$CT" show "origin/main:$KYOL/$1"; }
+if git -C "$CT" cat-file -e "origin/main:$KYOL/gorev.sh" 2>/dev/null; then
+  cmp -s <(kan gorev.sh) "$HERE/gorev.sh" && cmp -s <(kan dugum-bak.py) "$HERE/dugum-bak.py" && cmp -s <(kan oda-dagit.py) "$HERE/oda-dagit.py" && [ -x "$HERE/oda-dagit.py" ]; ok "Y7 paketlenmiş kopya cloudtop kanoniğiyle (origin/main) bayt eşit (gorev.sh · dugum-bak.py · oda-dagit.py +x; sapmışsa kanoniği buraya yeniden kopyala)" "$?"
+else echo "  · Y7 ÖLÇÜLEMEDİ: cloudtop origin/main okunamadı (depo yok ya da çekilmemiş) — çalışma ağacıyla ölçülmez, eşitlik hüküm değil"; fi
 if [ -z "${YOL_BETIK:-}" ]; then
   echo "── mutasyon"
   mut() { local M="$HERE/.mutant-yol-$$-$1"; python3 -I - "$R" "$M" "$2" "$3" <<'PY' || { ok "mutant $1: desen tutmadı" 1; return; }
