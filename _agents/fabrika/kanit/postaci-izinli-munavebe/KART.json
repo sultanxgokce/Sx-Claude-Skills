@@ -63,6 +63,15 @@
       "zaman": "2026-10-31T18:43:55+03:00",
       "sinifli": true,
       "izin": "basla"
+    },
+    {
+      "karar": "birlestir",
+      "reis": "BERİD",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR kararı 31 Eki 18:53 (NOTES): kalan bulgu geçmiş sıralama, Sultan D1 var, izin sonrası 18/18",
+      "zaman": "2026-10-31T18:53:30+03:00",
+      "sinifli": true,
+      "izin": "basla"
     }
   ],
   "cumle_gecmisi": [
