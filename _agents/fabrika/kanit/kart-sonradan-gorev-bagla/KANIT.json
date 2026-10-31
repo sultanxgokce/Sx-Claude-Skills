@@ -1,7 +1,7 @@
 {
   "is": "kart-sonradan-gorev-bagla",
-  "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T22:10:10+03:00",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-10-31T22:44:57+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -25,17 +25,19 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "9a9a4fb54ce410ef29be589b3ea4150572a1e2ca836413d6944a26c9f7e80342",
+      "sha256": "5c22ed6a8a181ab8f710a300fa92089c551d01b39ba29771763d66008c3b1c55",
       "komut": [
+        "timeout",
+        "280",
         "bash",
         "yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T21:40:08+03:00",
-      "sure_sn": 206.5,
+      "zaman": "2026-10-31T22:37:28+03:00",
+      "sure_sn": 591.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "0c5bdaf79e444fafb55fbb975290a6ac"
+      "olcum_id": "b9c2b6d716134a97a615d1882d6616f8"
     },
     {
       "tur": "olcum",
@@ -141,7 +143,55 @@
       "beklenen": "kirmizi",
       "dusen_kapi": true,
       "olcum_id": "466e6980d6904eb1aac12e3852b299d6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kilitsiz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kilitsiz-sonra.txt",
+      "sha256": "e014416f83e831d66b8886b80fab2da943d6686de382462575144cb8921cb96d",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/g11a/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:41:44+03:00",
+      "sure_sn": 255.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "b147cf3a8ce74b2dac7ee342651256de"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-tam-geri-yazma",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-tam-geri-yazma-sonra.txt",
+      "sha256": "07d46c8cac734ae6fc53a7b0bedd74e9aa209844c19a21be5c00409fb85b70f2",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/g11b/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T22:44:57+03:00",
+      "sure_sn": 192.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "f344f7bef72942a78b6521e2c9e20518",
+      "olculen_commit": "7309bc3631338fc9d5233c5700680ecd1d087653",
+      "olculen_kirli": true
     }
   ],
-  "imza": "3df0c2beac1b413dbe0aae60007d179040078c6de2d904fa9282b10bcfd21e75"
+  "imza": "72c7ba317b0e932a09ccdc66b9f7182df861c68761ad60b5241687be6ed664a8"
 }

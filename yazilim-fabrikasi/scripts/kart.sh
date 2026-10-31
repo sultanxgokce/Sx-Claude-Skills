@@ -1001,6 +1001,8 @@ PY
     [[ "$GOREV" =~ ^gorev_[A-Za-z0-9]{10,40}$ ]] || { _hata "--gorev gorev_<kimlik> gerekiyor ('$GOREV' değil)"; exit 1; }
     [[ "$TAHMIN" =~ ^[1-9][0-9]*$ ]] || { _hata "--tahmin <dk> pozitif sayı olmalı ('$TAHMIN' değil)"; exit 1; }
     [ -n "$REIS" ] || { _hata "--reis <AD> gerekiyor: görev bağını yalnız kartın sahibi (aldı alanı) ekler"; exit 1; }
+    # Bakma + yazma + defter + geri alma TEK kilit altında: iki eşzamanlı bağlama aynı görevi iki karta yazamaz (göz tur 1, #628). Kilit dizinin kendisinde: depoya dosya bırakmaz.
+    exec 9<"$KD"; flock -w 30 9 || { _hata "kart kilidi 30 sn alınamadı: başka bağlama sürüyor, yeniden dene"; exit 4; }
     KART_YEDEK="$(cat "$KD/$IS.json")"
     python3 - "$KD/$IS.json" "$GOREV" "$TAHMIN" "$REIS" "$KD" <<'PY' || exit 1
 import glob,json,os,sys,datetime
@@ -1020,9 +1022,27 @@ for f in glob.glob(os.path.join(kd,"*.json")):
         print(f"✗ {gorev} başka açık karta bağlı: {o.get('is')} (sahibi {o.get('aldi')})", file=sys.stderr); raise SystemExit(1)
 k["gorev"]=gorev; k["tahmin_dk"]=int(tahmin)
 k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"gorev-bagla","reis":reis,"gorev":gorev})
-json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+g=f"{yol}.{os.getpid()}.gecici"; json.dump(k,open(g,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(g,yol)
 PY
-    if ! gorev_yaz "$KD/$IS.json" ac; then printf '%s\n' "$KART_YEDEK" > "$KD/$IS.json"; _hata "görev deftere yazılamadı, bağ GERİ ALINDI: kart eski hâlinde"; exit 4; fi
+    if ! gorev_yaz "$KD/$IS.json" ac; then
+      # Geri alma yalnız bu bağın alanlarını söker; eski metni geri yazmaz, arada karta işlenen başka değişiklik (öteki kart.sh komutları kilit almaz) ezilmesin.
+      KART_YEDEK="$KART_YEDEK" python3 - "$KD/$IS.json" "$GOREV" <<'PY' || { _hata "görev deftere yazılamadı, bağ da GERİ ALINAMADI: kartı elle düzelt"; exit 4; }
+import json,os,sys
+yol,gorev=sys.argv[1:]; eski=json.loads(os.environ["KART_YEDEK"]); k=json.load(open(yol,encoding="utf-8"))
+if k.get("gorev")!=gorev: raise SystemExit(1)
+for a in ("gorev","tahmin_dk"):
+    if a in eski: k[a]=eski[a]
+    else: k.pop(a,None)
+k["gecmis"]=[x for x in k.get("gecmis",[]) if not (x.get("olay")=="gorev-bagla" and x.get("gorev")==gorev)]
+y=k.get("gorev_yazimlari") or []
+if y and y[-1].get("olay")=="ac": y.pop()
+for a,v in (("gecmis",k.get("gecmis")),("gorev_yazimlari",y)):
+    if a not in eski and not v: k.pop(a,None)
+g=f"{yol}.{os.getpid()}.gecici"; json.dump(k,open(g,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(g,yol)
+PY
+      _hata "görev deftere yazılamadı, bağ GERİ ALINDI: kart eski hâlinde"; exit 4
+    fi
+    exec 9<&-
     uzlastir "$REIS"
     echo "✓ kart göreve bağlandı: $IS → $GOREV · tahmin $TAHMIN dk"
     ;;

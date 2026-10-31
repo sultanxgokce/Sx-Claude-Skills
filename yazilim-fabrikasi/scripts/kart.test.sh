@@ -467,7 +467,9 @@ class H(http.server.BaseHTTPRequestHandler):
             if "yaris" in d: d=d["yaris"]; json.dump(d,open(kf,"w"))   # yarış: görev GET ile PATCH arasında değişti (Sultan onaya aldı)
             if "surum" in b and b["surum"]!=d["kayit"].get("surum"):
                 self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi"}).encode()); return
-        if self.path.endswith(("gorev_KARTRED000000001","gorev_KARTRED000000002")):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
+        if self.path.endswith("gorev_KARTRED000000003"):   # yarış: ret anında kartı başka bir komut değiştirmiş olsun (geri alma bunu ezmemeli)
+            y=open(os.path.join(T,"yaris-kart")).read().strip(); k=json.load(open(y)); k["eszamanli"]="evet"; json.dump(k,open(y,"w"),ensure_ascii=False,indent=2)
+        if self.path.endswith(("gorev_KARTRED000000001","gorev_KARTRED000000002","gorev_KARTRED000000003")):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
             self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi","yerine":"görev bu arada değişti, yeniden dene"},ensure_ascii=False).encode()); return
         self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"kayit":{"id":self.path.rsplit("/",1)[1]}}).encode())
 with socketserver.TCPServer(("127.0.0.1",0),H) as s:
@@ -540,6 +542,10 @@ bash "$KT" gorev-bagla gba-2 --reis SERDAR --gorev gorev_KARTTEST00000023 --tahm
 bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTTEST00000023 --tahmin yok >/dev/null 2>&1; [ $? -eq 1 ]; g $? "GBA5 tahmin sayı değilse rc 1"
 bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev bozuk --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "GBA6 görev kimliği biçimsizse rc 1"
 K0="$(cat "$KK/gba-2.json")"; bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTRED000000002 --tahmin 30 >/dev/null 2>&1; [ $? -eq 4 ] && [ "$(cat "$KK/gba-2.json")" = "$K0" ]; g $? "GBA7 defter reddederse bağ geri alınır, kart bayt bayt eski hâlinde (rc 4)"
+printf '%s\n' "$KK/gba-2.json" > "$T/yaris-kart"; bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTRED000000003 --tahmin 30 >/dev/null 2>&1; [ $? -eq 4 ] && python3 -c "import json;k=json.load(open('$KK/gba-2.json'));assert k.get('eszamanli')=='evet' and not k.get('gorev') and not any(x.get('olay')=='gorev-bagla' for x in k.get('gecmis',[]))"; g $? "GBA7b geri alma arada karta işlenen değişikliği ezmez, yalnız bağı söker"
+for i in 1 2 3 4 5 6 7 8; do bash "$KT" ac gbr-$i --is "yarış işi $i" --istedi SERDAR --aldi GBASINAV $SINIF >/dev/null 2>&1; done
+for i in 1 2 3 4 5 6 7 8; do bash "$KT" gorev-bagla gbr-$i --reis GBASINAV --gorev gorev_KARTTEST00000026 --tahmin 30 >/dev/null 2>&1 & done; wait $(jobs -p | grep -v "^$DSRV$")
+[ "$(grep -l '"gorev": "gorev_KARTTEST00000026"' "$KK"/gbr-*.json | wc -l)" -eq 1 ]; g $? "GBA10 sekiz eşzamanlı bağlamada görev yalnız bir karta yazılır"
 python3 - "$KK/gba-2.json" <<'PY'
 import json,sys
 k=json.load(open(sys.argv[1])); k["durum"]="bitti"; json.dump(k,open(sys.argv[1],"w"),ensure_ascii=False)

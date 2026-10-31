@@ -1,5 +1,5 @@
-$ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=206.5s zaman=2026-10-31T21:40:08+03:00
+$ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
+# rc=0 sure=591.8s zaman=2026-10-31T22:37:28+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -268,6 +268,8 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ GBA5 tahmin sayı değilse rc 1
   ✓ GBA6 görev kimliği biçimsizse rc 1
   ✓ GBA7 defter reddederse bağ geri alınır, kart bayt bayt eski hâlinde (rc 4)
+  ✓ GBA7b geri alma arada karta işlenen değişikliği ezmez, yalnız bağı söker
+  ✓ GBA10 sekiz eşzamanlı bağlamada görev yalnız bir karta yazılır
   ✓ GBA8 biten karta görev bağlanmaz
   ✓ GBA9 kart yoksa rc 3
   ✓ D1 tetik yok + --gorev → kart AÇILIR, göreve TEK açılış yazımı: çalışılıyor + adımda 'sınıf: para' ve 'başlama izni Sultan'da … dur'
@@ -503,6 +505,6 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ GB4 tikandi'da bu uyarı çıkmaz (yalnız bitti)
   ✓ GB5 kartta gorev JSON null → görevsiz sayılır, uyarı VAR (None dizgesi görev sanılmaz), rc 0
 
-── SONUÇ: 458 geçti · 0 kaldı ──
+── SONUÇ: 460 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-kart-sonradan-gorev-bagla-sinav 15 sn bekledi (yuva 2, load1 17.89)
+⏳ agir-sira: kanit-kart-sonradan-gorev-bagla-sinav 386 sn bekledi (yuva 1, load1 17.49)
