@@ -1,25 +1,25 @@
 {
   "is": "duzen-pyyaml-vendor",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-10-31T23:14:56+03:00",
+  "guncelleme": "2026-10-31T23:21:15+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "vendor-parite",
       "asama": "sonra",
       "dosya": "olcum-vendor-parite-sonra.txt",
-      "sha256": "5a732c6fb8e552fcc9c7ce016fb5ff140708e4670aafb540907131d6d414f105",
+      "sha256": "ca960f8e21df2f615b5c74ae537d914dade6aecc135d2bf2c491b53cc02938e5",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-gercek.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T23:14:54+03:00",
-      "sure_sn": 1491.0,
+      "zaman": "2026-10-31T23:21:14+03:00",
+      "sure_sn": 192.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b78af01ba09349b9a5c0a82d1235ff20",
-      "olculen_commit": "22c6de7634060c915fb7b5421e479b08d535fa92",
+      "olcum_id": "0b885097872c45329619c7e2511a73c7",
+      "olculen_commit": "aa07c50df0a3084da5834b5b741b464adc850780",
       "olculen_kirli": true
     },
     {
@@ -27,24 +27,24 @@
       "etiket": "vendor-mutant",
       "asama": "sonra",
       "dosya": "olcum-vendor-mutant-sonra.txt",
-      "sha256": "cc9aa7bc7d0cb4ce476f7ff6d01f9141da258e90f9362ec3be5266615596a4c6",
+      "sha256": "d062b679755d83d6f748aea5e9df0ef2faf8187b643c894aebcc79547f9fcc61",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-mutant.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-31T23:14:56+03:00",
-      "sure_sn": 1.7,
+      "zaman": "2026-10-31T23:21:15+03:00",
+      "sure_sn": 1.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "vendor-parite",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "bf9fd1411851425a94697eef59bd7a43",
-      "olculen_commit": "22c6de7634060c915fb7b5421e479b08d535fa92",
+      "olcum_id": "04cb05421ac840918c491ae846620b1a",
+      "olculen_commit": "aa07c50df0a3084da5834b5b741b464adc850780",
       "olculen_kirli": true
     }
   ],
-  "imza": "d12cb6ecb60404b2a40f1e8beceb254281bc144c37030df930f608c7eb1cf175"
+  "imza": "fd3b0863553298322adebc9236d25e734dea2b117d093d4a90f0095f42d6fd96"
 }
