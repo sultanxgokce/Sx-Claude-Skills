@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "postaci-izinli-munavebe-2",
+  "pr": "625",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T21:00:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-izinli-munavebe-2",
+  "dal": "postaci-izinli-munavebe-2",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20578,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 9501
+  },
+  "dalgic": "uyumsuz",
+  "bas": "31ab7425569e46106afbc3ddfe807866621f6281",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Postacı kurulum betiğinin izinli kutu listesine münâvebe eklenmiş; sürüm, katalog, belge ve sınav da 18 kutuya uyarlanmış. Önce/sonra ölçümü listeyi 17’den 18’e çıkarıp münâvebeyi doğruluyor; gerçek sınav 18/18 geçiyor ve mutasyon sınavın bu değişikliği gerçekten koruduğunu gösteriyor, bu nedenle üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. İzinli liste için önce/sonra ölçüm çifti mevcut: önce “17 izinli kutu · munavebe False” ve rc=1, sonra “18 izinli kutu · munavebe True” ve rc=0. Gerçek ölçümde kutu sınavı PASS=18 FAIL=0, repo kapıları rc=0. Mutasyon kaydı münâvebe eklemesi bilerek kaldırıldığında yalnız S6b kapısının düştüğünü gösteriyor; rc=1 burada beklenen sonuç ve gerçek kodun başarısızlığı değildir."
+  }
+}
