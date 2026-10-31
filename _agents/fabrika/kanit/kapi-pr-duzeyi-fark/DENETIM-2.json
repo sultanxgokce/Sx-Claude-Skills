@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kapi-pr-duzeyi-fark",
+  "pr": "634",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T01:00:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark",
+  "dal": "kapi-pr-duzeyi-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29575,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 11994
+  },
+  "dalgic": "uyumsuz",
+  "bas": "667afd528dad81a1d5bebbe2a333f36bfdde4ab0",
+  "duzeltme_farki": {
+    "onceki_bas": "2dbb5a364abc471019ddc94ab523fc32b1a1a346",
+    "dosya": 7,
+    "bayt": 15939,
+    "tam_bayt": 42427
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kapı, ana dal birleşimini PR kod değişikliği saymamak için PR düzeyindeki farkları karşılaştırıyor; talep edilen yön doğru ve başka dosyaya taşıma açığı kapanmış. Ancak önceki bulgunun aynı dosyada başka konuma taşıma kolu üretim kodundaki yorumla açıkça sürüyor; kapı böyle bir puan sonrası değişikliği kaçırabileceğinden önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 yalnız kısmen kapandı: dosya başlıklarının karşılaştırmaya katılması aynı +/- satırlarının başka dosyaya taşınmasını yakalıyor, fakat hunk konumları hâlâ atıldığı için aynı satırlar aynı dosyada başka konuma taşındığında PR farkı eşit görünebilir. Satır sırasının veya bulunduğu bloğun anlam taşıdığı kodda bu, puan sonrası gerçek değişikliğin kapıdan geçmesine yol açar.",
+        "kanit": "Üretim kodu `oc_pf` çıktısına `diff --git` başlıklarını ekliyor ama `@@` hunk başlıklarını almıyor; hemen üstündeki yeni yorum da \"aynı dosyada yer değiştirme bu ölçüyle ayırt edilemez\" diyor. O15 ve `kapi-tam` ölçümü yalnız başka dosyaya taşımayı sınayıp geçtiğini gösteriyor; aynı dosyada konum değiştirme vakası yok. Mutasyon ölçümü O15'in dosya başlığı kaldırılınca düştüğünü doğruluyor, fakat kalan konum açığını kapsamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: PR DÜZEYİNDE KARŞILAŞTIRMA bloğu (`oc_pf` ve üstündeki yorum); yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh: O15; olcum-kapi-tam-sonra.txt: O15",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra çifti `kalan=3`ten `kalan=0`a inerken tam denetçi ölçümü 71/71, kapı ölçümü 23/23 geçiyor. Mutasyon kayıtlarındaki beklenen başarısızlıklar gerçek kod bulgusu değil ve O13 ile O15 kapılarının bozuk kodu yakaladığını gösteriyor; ancak bütün ölçümler kirli ağaçta ve aynı dosya içindeki konum değişikliği için ölçüm bulunmadığından bu açık kanıtla kapanmış değil."
+  }
+}

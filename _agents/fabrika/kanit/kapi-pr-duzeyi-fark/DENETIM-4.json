@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "kapi-pr-duzeyi-fark",
+  "pr": "634",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T01:18:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 3 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-mut-kapi-sonra.txt (yesil → gecersiz) — tur 4: karşılaştırma metin farkından git merge-tree ağaç kanıtına geçti; bu mutant kaldırılan koda aitti, yeni mutantlar mut-agac-1/2 · HEZARFEN;olcum-mut-baslik-sonra.txt (yesil → gecersiz) — tur 4: karşılaştırma metin farkından git merge-tree ağaç kanıtına geçti; bu mutant kaldırılan koda aitti, yeni mutantlar mut-agac-1/2 · HEZARFEN;olcum-mut-baglam-sonra.txt (yesil → gecersiz) — tur 4: karşılaştırma metin farkından git merge-tree ağaç kanıtına geçti; bu mutant kaldırılan koda aitti, yeni mutantlar mut-agac-1/2 · HEZARFEN",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-pr-duzeyi-fark",
+  "dal": "kapi-pr-duzeyi-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47056,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 24509
+  },
+  "dalgic": "uyumsuz",
+  "bas": "44b80965c8080a1eb90065eba551e27e8a777743",
+  "duzeltme_farki": {
+    "onceki_bas": "8c629266596a5d98c8989ed53c34546771f12815",
+    "dosya": 12,
+    "bayt": 38038,
+    "tam_bayt": 74463
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, puanlı baş ile dalın aldığı ana dalı ağaç düzeyinde birleştirip sonucu uç ağacıyla karşılaştırıyor; denetçi de ana dal girdisini PR değişikliği dışında tutuyor. Önceki tekrarlı blok açığı O17 ve iki güncel mutasyonla kapanmış, gerçek kapı ile denetçi ölçümleri eksiksiz geçtiği için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; geçersiz ilan edilen eski üç mutasyon kaydı değerlendirmeye alınmadı. Önce/sonra ölçümü kalan=3'ten kalan=0'a iniyor; gerçek ölçümlerde denetçi 71/71 ve kapı 27/27 geçiyor. Güncel mut-agac-1 ve mut-agac-2 kayıtları ağaç kanıtının kaldırılan iki ayrı parçasında sınavın düştüğünü gösteriyor; özellikle önceki B1'i karşılayan O17 gerçek kodda geçerken mutantta düşüyor. Kayıtlar kirli ağaçta alınmış olsa da ölçülen commit bilgileri mevcut ve son kapı ölçümü ile iki güncel mutant aynı 8d7c3a5 commitini ölçüyor."
+  }
+}

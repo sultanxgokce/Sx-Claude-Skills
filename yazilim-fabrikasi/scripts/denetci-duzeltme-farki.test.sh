@@ -157,6 +157,21 @@ icermeyen "D11c 🔴 başkasının değişikliği göze GİTMEDİ" "baskasinin-d
 iceren "D11d bu PR'ın kendi değişikliği göze gitti" "+yeni-kanit-d11" "$KOK/istem.md"
 dogru "D11e kayıt: duzeltme_farki yok (PR farkı gitti)" "import json;d=json.load(open('$(kayit d11 2)'));assert d['duzeltme_farki'] is None"
 
+echo "════ D12 · tur arasında ANA DAL AYNI DOSYAYA girdi (SERDAR 1 Kas, Sx #629): fark yalnız PR'ın artımı; ana dalın satırı PR değişikliği diye gitmez ════"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nc\n' > "$KOK/baska/ortak.txt"
+git -C "$KOK/baska" add ortak.txt; git -C "$KOK/baska" commit -q -m ortak; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null
+yap d12; printf 'A\nb\nc\n' > "$KOK/w/ortak.txt"; git -C "$KOK/w" commit -q -am "pr ortak"; kanitla d12; : > "$KOK/istem.md"
+kapi "D12a tur 1 koştu (5/E → rc 0)" 0 den d12 "$J5"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nC-ANA-DAL\n' > "$KOK/baska/ortak.txt"
+git -C "$KOK/baska" commit -q -am "ana dal ortak"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" merge -q --no-edit origin/main 2>/dev/null
+printf 'ilk-satir\nyeni-satir-d12\n' > "$KOK/w/kod-d12.txt"; git -C "$KOK/w" commit -q -am "pr artimi"; : > "$KOK/istem.md"
+kapi "D12b tur 2 koştu (5/E → rc 0)" 0 den d12 "$J5"
+iceren "D12c istemde PR'ın artımı var" "+yeni-satir-d12" "$KOK/istem.md"
+icermeyen "D12d ana dalın aynı dosyaya girdisi farka GİRMEDİ" "C-ANA-DAL" "$KOK/istem.md"
+iceren "D12e ekranda süzme söylendi" "artımlı fark ana dalın girdisinden süzüldü" "$KOK/son.out"
+
 echo "════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
 if [ -z "${MUTANT_D:-}" ]; then
   mut() { local ad="$1" eski="$2" yeni="$3" kapi_adi="$4"; local P="$KOK/mutpkg-$ad"; mkdir -p "$P"; cp -p "$HERE"/* "$P/" 2>/dev/null
@@ -168,7 +183,8 @@ PY
       GECEN=$((GECEN+1)); echo "  ✓ mutant '$ad' → $kapi_adi düştü, kontrol D1a geçti"
     else DUSEN=$((DUSEN+1)); echo "  ✗ mutant '$ad' → $kapi_adi düşmedi ya da kontrol D1a da düştü (geçersiz mutant)"; fi; }
   mut duzeltme-yok 'if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then' 'if false; then' "D2e"
-  mut dosya-siniri-yok 'git -C "$DEPO" --literal-pathspecs diff "$_ob" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
+  mut dosya-siniri-yok 'git -C "$DEPO" --literal-pathspecs diff "$_sol" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
+  mut ana-dal-suzme-yok '_sol="$_ob"; _omb=' '_sol="$_ob"; _omb="";  _x=' "D12d"
   # iki ucun İKİSİ de NUL'suz (kaçışlı) okunur: tek ucu bozmak öbür uç aynı yolu getirdiği için örtülürdü (göz #436 tur 3)
   YOL_E="$(cat <<'MUTE'
 --name-only -z "$_mb" "$BAS" && git -C "$DEPO" diff --no-renames --name-only -z "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; } 2>/dev/null | sort -zu)
