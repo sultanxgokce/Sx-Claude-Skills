@@ -1887,7 +1887,7 @@
       "id": "postane-postaci",
       "type": "tool",
       "name": "postane-postaci — POSTANE postacısını bir kutuya kuran paket",
-      "version": "0.2.5",
+      "version": "0.2.6",
       "description": "Postacı dosyaları (cloudtop infra/postane birebir kopya) + kutu kurulum betiği: kuru varsayılan, yalnız izinli kutuda ve DAR jetonla cron + bayrak yazar. Etkinleştirme Sultan-eli.",
       "path": "postane-postaci"
     }

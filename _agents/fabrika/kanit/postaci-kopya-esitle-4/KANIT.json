@@ -1,0 +1,86 @@
+{
+  "is": "postaci-kopya-esitle-4",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T01:43:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kopya-farki",
+      "asama": "once",
+      "dosya": "olcum-kopya-farki-once.txt",
+      "sha256": "e72690b387826adac4847abf74c0d62962c1462d6d4c70c76f12585ec114d2a1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle-4/postane-postaci"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T01:43:49+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "794600bb76cc41edb2231e8a4e7fd0e1",
+      "olculen_commit": "243c478141bf6724fc9e1070d795f6372fbc1e08",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kopya-farki",
+      "asama": "sonra",
+      "dosya": "olcum-kopya-farki-sonra.txt",
+      "sha256": "91881d6ff39e8d642bcda0e8e70e57796c9368df360303801d75ca8986b31927",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/kopya-esit-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle-4/postane-postaci"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T01:43:49+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ace147189d9543528be5ef3145c147e3",
+      "olculen_commit": "243c478141bf6724fc9e1070d795f6372fbc1e08",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-sinavi-sonra.txt",
+      "sha256": "242679d34e6726038715e1b0a747693321567cd2530895872d527690c5a944d3",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T01:43:53+03:00",
+      "sure_sn": 4.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cbc54f90f8fe41fcabcef0a068256f69",
+      "olculen_commit": "243c478141bf6724fc9e1070d795f6372fbc1e08",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-kapilari",
+      "asama": "sonra",
+      "dosya": "olcum-depo-kapilari-sonra.txt",
+      "sha256": "e4870b42a4c505e73e41e959c74fd6a07c20870e67ff03d00e810dd355d58ac9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-kapilar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T01:43:55+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a04945703c00490db7261577014ad3bd",
+      "olculen_commit": "243c478141bf6724fc9e1070d795f6372fbc1e08",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "8a143a84c762e1f46dcd46f047ec238d56171ca8ffd4c8ffdd6e98894d55c6fc"
+}
