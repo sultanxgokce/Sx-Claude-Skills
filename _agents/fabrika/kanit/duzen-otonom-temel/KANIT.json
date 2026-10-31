@@ -1,0 +1,101 @@
+{
+  "is": "duzen-otonom-temel",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T07:59:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "yedi-kimlik",
+      "asama": "once",
+      "dosya": "olcum-yedi-kimlik-once.txt",
+      "sha256": "3a17b828a7dbd026af537566283651b573970e0adeece1e11a75a0e853ef6a9f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/otonom-denetle.sh",
+        "/config/.claude/skills/duzen/scripts/surum.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T07:55:54+03:00",
+      "sure_sn": 527.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d9b642297754462f85837b45825fc6f3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yedi-kimlik",
+      "asama": "sonra",
+      "dosya": "olcum-yedi-kimlik-sonra.txt",
+      "sha256": "328882ac98ddb80b9b212f723f60565346e16ee1cad75735c0c972b59318003a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/otonom-denetle.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-duzen-otonom-temel/duzen/scripts/surum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T07:55:54+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "38b4eba375ae461bb4344244923595e1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-surum",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-surum-sonra.txt",
+      "sha256": "c681e7009c9f9e1f5c331e59f93817a69e2b6389a0368a32a1c608376c6a8ebe",
+      "komut": [
+        "bash",
+        "duzen/scripts/surum.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T07:55:57+03:00",
+      "sure_sn": 3.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "39d821be461b4b25af488fcf6a4ab67e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gece",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-gece-sonra.txt",
+      "sha256": "2e454e106c0d337280b164f4522eff59459925ee31d0f0d9e73cd62cbc96b193",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T07:59:34+03:00",
+      "sure_sn": 166.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1ec8085cd87d430ab05f55ac334b4184"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sarmasiz-gece",
+      "asama": "once",
+      "dosya": "olcum-mutant-sarmasiz-gece-once.txt",
+      "sha256": "179af42c2d0ead9a7b3d86952e521011d8fc271f6727c5a933829f2257e37043",
+      "komut": [
+        "env",
+        "GECE_BETIK=/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/duzen-gece-sarmasiz.sh",
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-31T07:59:55+03:00",
+      "sure_sn": 21.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-gece",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "bf02842a34454d579f7b37363a45917a"
+    }
+  ],
+  "imza": "a4574c1c91dbc5027c253f1f2e90806d88819f6d84fc565862fdfd3e2949ee21"
+}

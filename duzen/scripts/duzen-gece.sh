@@ -11,11 +11,14 @@
 # Dikişler (sınav): DUZEN_SYNC_CMD · DUZEN_YENILE_CMD · DUZEN_MEKTUP_CMD · DUZEN_KURULU_KOK (kurulu beceriler kökü)
 # duzen_gunlugu satırları (key=value, tek satır):
 #   <ISO> kuruldu beceri=<ad> surum=<yeni> onceki=<eski|yok> kutu=<kutu> reis=<reis|->
-#   <ISO> yenilendi kimlik=<ad> temel=<manuel-claude|MÜDÜR> surum=<duzen sürümü> kutu=<kutu> reis=<reis|->
+#   <ISO> yenilendi kimlik=<ad> temel=<manuel-claude|MÜDÜR|otonom-ajan> surum=<duzen sürümü> kutu=<kutu> reis=<reis|->
 #   <ISO> atlandi beceri=<ad> sebep=<…> kutu=<kutu>        (kurulum yapılamadı: elle değişmiş kopya vb.)
 #   <ISO> mektup reis=<reis|-> surum=<v> durum=gitti|atlandi|hata kutu=<kutu>
 # rc: 0 iş yok ya da bitti · 1 en az bir adım atlandı/hata · 2 kullanım · 3 ölçülemedi (kaynak sürümü okunamadı)
 set -uo pipefail
+# TÜM gövde tek fonksiyonda: bash betiği artımlı okur, gece kurulumu bu dosyayı (duzen paketi) yerinde yeniden yazar → sarılmazsa kurulumdan sonraki satırlar kayık okunur.
+# Fonksiyon baştan ayrıştırıldığı için dosya koşarken değişse de bu çalışma etkilenmez; çağrı ile exit aynı satırda (dönüşte dosyadan başka satır okunmaz).
+main() {
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SURUM="$HERE/surum.sh"
 BECERILER=(duzen gunluk-plan mesveret bulgu)
@@ -59,12 +62,12 @@ for b in "${BECERILER[@]}"; do
   fi
 done
 
-# 2) bu depoda BAYAT ekipc kimliklerini yenile (temel adı gömülü metinden: manuel-claude-base → --baz manuel-claude · mudur-base → --rol MÜDÜR)
+# 2) bu depoda BAYAT ekipc kimliklerini yenile (temel adı gömülü metinden: manuel-claude-base → --baz manuel-claude · mudur-base → --rol MÜDÜR · otonom-ajan-base → --baz otonom-ajan)
 YENILENDI=0
 while IFS= read -r satir; do
   ad="$(sed -nE 's/^[[:space:]]*([^:[:space:]]+): BAYAT.*/\1/p' <<<"$satir")"; [ -n "$ad" ] || continue
   temel="$(sed -nE 's/.*temel: ([a-z-]+)-base.*/\1/p' <<<"$satir")"
-  case "$temel" in manuel-claude) arg=(--baz manuel-claude); t=manuel-claude ;; mudur) arg=(--rol MÜDÜR); t=MÜDÜR ;; *) yaz "atlandi beceri=kimlik:$ad sebep=temel-bilinmiyor kutu=$KUTU"; RC=1; continue ;; esac
+  case "$temel" in manuel-claude) arg=(--baz manuel-claude); t=manuel-claude ;; mudur) arg=(--rol MÜDÜR); t=MÜDÜR ;; otonom-ajan) arg=(--baz otonom-ajan); t=otonom-ajan ;; *) yaz "atlandi beceri=kimlik:$ad sebep=temel-bilinmiyor kutu=$KUTU"; RC=1; continue ;; esac
   if [ "$UYGULA" -eq 1 ]; then
     if $YENILE --dosya "$DEPO/_agents/$ad/AGENT.md" "${arg[@]}" --apply </dev/null >/dev/null 2>&1; then yaz "yenilendi kimlik=$ad temel=$t surum=$KAYNAK_DUZEN kutu=$KUTU reis=$REISYAZ"; YENILENDI=1
     else yaz "atlandi beceri=kimlik:$ad sebep=yenile-reddetti kutu=$KUTU"; RC=1; fi
@@ -86,3 +89,5 @@ if [ "$UYGULA" -eq 1 ] && { [ "$KURULDU" -eq 1 ] || [ "$YENILENDI" -eq 1 ]; }; t
   fi
 fi
 exit "$RC"
+}
+main "$@"; exit $?

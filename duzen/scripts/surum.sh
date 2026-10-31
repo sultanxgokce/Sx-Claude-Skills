@@ -8,7 +8,7 @@
 #        1) kurulu duzen (varsayılan /config/.claude/skills/duzen) sürümü = kaynak sürümü mü
 #        2) <depo>/_agents/*/AGENT.md içinde ekipc işaretli (<!-- ekipc:uretilen:basla … hash= -->) her kimlik:
 #           · hash gövdeyle tutuyor mu (tutmuyorsa EL-DEĞMİŞ)
-#           · gövdeye gömülü ORTAK-TEMEL metni cekirdek/{manuel-claude-base,mudur-base}.md ile birebir mi (değilse BAYAT)
+#           · gövdeye gömülü ORTAK-TEMEL metni cekirdek/{manuel-claude-base,mudur-base,otonom-ajan-base}.md ile birebir mi (değilse BAYAT)
 #           işaretsiz AGENT.md'ler sayılır, yargılanmaz ("işaretsiz N" — pakete dahil mi kararı Sultan'ın).
 # rc: 0 hepsi güncel · 1 bayat/el-değmiş/sürüm farkı var · 2 kullanım · 3 ölçülemedi (ne kurulu kopya ne AGENT.md bulundu)
 set -uo pipefail
@@ -63,7 +63,7 @@ def cekirdek(ad):
     s=oku(p); L=s.split("\n")
     if L and L[0].startswith("<!-- kaynak: Sx duzen/cekirdek"): L=L[1:]   # paket başlığı Nexus kopyasında yok
     return "\n".join(L).strip()
-temeller={a:cekirdek(a) for a in ("manuel-claude-base","mudur-base")}
+temeller={a:cekirdek(a) for a in ("manuel-claude-base","mudur-base","otonom-ajan-base")}
 dosyalar=sorted(glob.glob(os.path.join(depo,"_agents","*","AGENT.md")))
 isaretli=0; isaretsiz=0; sorun=0
 for p in dosyalar:

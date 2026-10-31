@@ -1,0 +1,24 @@
+$ bash duzen/scripts/duzen-gece.test.sh
+# rc=0 sure=166.4s zaman=2026-10-31T07:59:34+03:00
+--- stdout ---
+  ✓ G1 varsayılan KURU: komut çalışmaz, günlük yazılmaz
+  ✓ G2 --uygula: dört beceri kurulur, bayat kimlik yenilenir, reise mektup gider
+  ✓ G3 her şey güncel: komut yok, mektup yok, rc 0
+  ✓ G4 sync reddeder: atlandi + rc 1, 'kuruldu' yazılmaz
+  ✓ G5 reis yok: mektup tahminle yollanmaz (atlandi), rc 1
+  ✓ G9 iki kutu reisi: her birine AYRI mektup satırı (kutu+reis), rc 0
+  ✓ G10 yalnız duzen sürümü eski: düzen artınca dördü de kurulur, mektup kurulan adları sayar
+  ✓ G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ
+  ✓ G7 temeli bilinmeyen bayat kimlik: yenile çağrılmaz (atlandi), rc 1
+  ✓ G11 bayat otonom kimlik: yenile --baz otonom-ajan ile çağrılır, günlükte temel=otonom-ajan
+  ✓ G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: kurulum + yenileme + mektup satırları tamam
+  ✓ G8 hiçbir komuta --force geçmez
+── mutasyon
+  ✓ mutant 'her-zaman-kur' → G3 kırmızı
+  ✓ mutant 'duzen-surumu-tetik-degil' → G10 kırmızı
+  ✓ mutant 'reissiz-mektup' → G5 kırmızı
+  ✓ mutant 'otonom-temel-bilinmez' → G11 kırmızı
+  ✓ mutant 'force-gecir' → G8 kırmızı
+== 17 geçti · 0 düştü ==
+--- stderr ---
+⏳ agir-sira: kanit-duzen-otonom-temel-sinav-gece 156 sn bekledi (yuva 1, load1 17.90)
