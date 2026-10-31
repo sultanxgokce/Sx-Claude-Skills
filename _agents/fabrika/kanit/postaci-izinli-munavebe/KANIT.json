@@ -1,7 +1,7 @@
 {
   "is": "postaci-izinli-munavebe",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T18:43:43+03:00",
+  "guncelleme": "2026-10-31T19:14:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -124,7 +124,59 @@
       "sure_sn": 1.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "308059e693464349a28a546c6f78b13a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "izinli-liste-3",
+      "asama": "sonra",
+      "dosya": "olcum-izinli-liste-3-sonra.txt",
+      "sha256": "8760799a3eff8fc9135f7db6f14df2e4c0ceed26c03723787c39aff1180a1574",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/izinli-liste-olc.py",
+        "postane-postaci/scripts/postaci-kutu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T19:14:00+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cb824ec6f9544822bbaa02b30a167de2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-sinavi-3",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-sinavi-3-sonra.txt",
+      "sha256": "56c9e2ac93d99cf77a0ee268422ba9f586436e4164228c45e1a8186a38010ac7",
+      "komut": [
+        "bash",
+        "postane-postaci/scripts/postaci-kutu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T19:14:04+03:00",
+      "sure_sn": 4.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f8cecb3d5881464abae316e78b653576"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-kapilari-3",
+      "asama": "sonra",
+      "dosya": "olcum-depo-kapilari-3-sonra.txt",
+      "sha256": "73bec51a5d4a5cdd89f1a31186960d14bb508d149813ae05524a0e079c61afde",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/sx-kapilar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T19:14:06+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "49c6e73a77d1426ab047f9c9c4861515"
     }
   ],
-  "imza": "b345b54fe4d55801c51afa5ba9f35ed9f3deeca7a17b3c89aa314625b5da813f"
+  "imza": "65a24aa3d2406cb07242c5e7e2f5c8b828c475f1e71a82ae4a2a6d15b4bb6d0d"
 }
