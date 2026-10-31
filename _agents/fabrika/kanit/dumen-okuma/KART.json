@@ -1,0 +1,41 @@
+{
+  "is": "dumen-okuma",
+  "cumle": "Dümen sürücüsüne salt-okur iki yöntem: görünür sayfa metni ve ekran karesi; aynı Dümen kimde kapısıyla, eylem saymadan, metin kütüğe yazılmadan (SİNAN/VADE GİB borç ekranı)",
+  "istedi": "SULTAN",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-31T12:25:41+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-10-31T12:25:41+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M68MEPBSEMPPWWE0RJW3ZKKH",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-31T12:25:44+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
