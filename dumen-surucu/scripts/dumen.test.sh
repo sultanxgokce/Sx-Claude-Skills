@@ -37,5 +37,9 @@ mut "metin alanı da görülemeyen sayılır" "o.trusted === false);
 mut "uyarı merkeze iletilmez" "this.#yaz(ileti); this.#uyariIlet(kod, ayrinti.n); }" "this.#yaz(ileti); }"
 mut "uyarı iletimi jetonsuz da gider" "if (!jeton) { this.#yaz('⚠ Dümen: uyarı merkeze İLETİLEMEDİ (kutu jetonu okunamadı) — yalnız burada görünür'); return; }" ""
 mut "uyarı iletimi hedef/değer taşır" "body: JSON.stringify({ kod, n: sayi })" "body: JSON.stringify({ kod, n: sayi, hedef: this.#uyarilar.at(-1)?.hedef })"
+mut "okuma kapısız (Dümen Sultan'dayken de okur)" "    await this.kapi(ad, hedef);
+    if (this.#kopuk) throw new KapiHata('baglanti-koptu', 'okuma öncesi');" "    if (this.#kopuk) throw new KapiHata('baglanti-koptu', 'okuma öncesi');"
+mut "okunan metin terminale yazılır" "return m.length > enCok" "this.#yaz(m); return m.length > enCok"
+mut "metin hedefi durma noktasına gitmez" "this.#okuKapi('metin', sel === 'body' ? null : sel)" "this.#okuKapi('metin', null)"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 18/18 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 21/21 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

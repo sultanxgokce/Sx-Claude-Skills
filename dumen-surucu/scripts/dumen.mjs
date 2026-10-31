@@ -154,6 +154,25 @@ export class Dumen {
   click(sel, o) { return this.#uygula('click', sel, () => this.#page.click(sel, o)); }
   press(sel, k, o) { return this.#uygula('press', sel, () => this.#page.press(sel, k, o)); }
 
+  // SALT-OKUR (SİNAN/VADE 31 Eki): sayfa hiçbir şekilde değiştirilmez. Aynı "Dümen kimde" kapısından geçer (mod ajan değilse okuma da YOK),
+  // eylem penceresi AÇMAZ (okuma eylem sayılmaz), dönen metin/kare hiçbir kütüğe, merkeze ya da terminale YAZILMAZ — yalnız çağırana döner.
+  // Parola/SMS/kart alanını hedef gösteren okuma durma noktasına takılır (yazmadaki kapı okumada da geçerli). innerText giriş değerlerini içermez.
+  async #okuKapi(ad, hedef) {
+    await this.kapi(ad, hedef);
+    if (this.#kopuk) throw new KapiHata('baglanti-koptu', 'okuma öncesi');
+  }
+  async metin(sel = 'body', { enCok = 20000 } = {}) {
+    await this.#okuKapi('metin', sel === 'body' ? null : sel);
+    const m = await this.#page.locator(sel).first().innerText({ timeout: 5000 });
+    return m.length > enCok ? m.slice(0, enCok) : m;
+  }
+  async kare(yol, { tamSayfa = false } = {}) {
+    if (!yol) throw new KapiHata('kare-yolu-yok', 'kare(yol) dosya yolu ister');
+    await this.#okuKapi('kare', null);
+    await this.#page.screenshot({ path: yol, fullPage: tamSayfa });
+    return yol;
+  }
+
   // KÖR NOKTA (JN1K8K): fill(tarih/renk/aralık)/selectOption değeri sayfa JS'iyle yazar → CDP Input.* YOK, köprü bu eylemi GÖRMEZ.
   // O eylemin penceresine düşen isTrusted=false olay = "köprüde görünmeyen eylem": uyarı basılır (yalnız kayıt/uyarı; karar kapısı değil — KARAR.md).
   // Uyarıda alan DEĞERİ yok (parola gizleme dinleyicide; burada kimlik+tür+sayı).
