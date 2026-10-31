@@ -1,0 +1,49 @@
+{
+  "tur": 4,
+  "is": "postaci-izinli-munavebe",
+  "pr": "616",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T18:46:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-izinli-munavebe",
+  "dal": "postaci-izinli-munavebe",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20281,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10827
+  },
+  "dalgic": "olculemedi",
+  "bas": "519284ce410bd92879e18ccbf8e1a61553d5f742",
+  "duzeltme_farki": {
+    "onceki_bas": "7eb67acb513cf24b66fcacda46a42686a1b68584",
+    "dosya": 6,
+    "bayt": 10827,
+    "tam_bayt": 29672
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Münâvebe izinli listeye eklenmiş; izin sonrasında yeniden koşulan ölçüm 18 izinli kutu ve münâvebe=True sonucunu, güncel sınav da S6b ile S10 dâhil 18/18 geçişi gösteriyor. Önceki S10/18 kapı kanıt açığı ve kapsam kayması kapanmış, fakat yetki sınıfındaki üretim değişikliğinin başlama izninden önce yapılmış olması kapanmadığından önce bu süreç ihlalini çözün.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: Yetki sınıfındaki üretim değişikliği başlama izninden önce yapılmış; izin sonrası yeniden ölçüm bunu doğrular ancak geçmişteki izinsiz uygulamayı geri almaz.",
+        "kanit": "İlk sonra ölçümü 2026-10-31T16:19:58+03:00'da münâvebe=True gösteriyor; baslama_izni.zaman 18:22:55, yazildi 18:24:28. Yeni ölçümler 18:43:36–18:43:43 arasında koşulmuş olsa da bu başta üretim kodu farkının boş olduğu açıkça belirtiliyor.",
+        "konum": "İŞ KARTI: siniflar, baslama_izni; KANIT MANİFESTİ: izinli-liste/sonra, izinli-liste-2/sonra; DEĞİŞİKLİK notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. 17/False → 18/True önce/sonra çifti talep edilen liste değişimini gösteriyor; izin damgasından sonraki izinli-liste-2 ölçümü sonucu yeniden doğruluyor. Güncel kutu-sinavi-2 çıktısında S6b ve S10 yer alıyor ve SONUÇ PASS=18 FAIL=0; böylece B2 kapanmış. Güncel iş kartının kapsamı ana dala göre fark olarak belirlemesi ve S10'un güncel ölçümde doğrulanması nedeniyle B3 de kapanmış."
+  }
+}

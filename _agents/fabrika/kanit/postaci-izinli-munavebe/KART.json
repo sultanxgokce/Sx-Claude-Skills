@@ -1,6 +1,6 @@
 {
   "is": "postaci-izinli-munavebe",
-  "cumle": "Postacı kurulum betiğinin izinli kutu listesine münâvebe eklensin",
+  "cumle": "Yalnız izinli listeye münâvebe; kapsam ana dala göre fark; ölçümler izin damgasından (18:24) sonra yeniden koşulur.",
   "istedi": "SERDAR",
   "aldi": "BERİD",
   "zaman": "2026-10-31T16:17:31+03:00",
@@ -17,7 +17,14 @@
   "kanit_nerede": "",
   "oda": "code",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-31T18:43:55+03:00",
+      "olay": "daralt",
+      "kalan_kart": "postaci-izinli-munavebe-kalan",
+      "tur_sifir": 3
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -45,6 +52,33 @@
       "zaman": "2026-10-31T18:22:55+03:00",
       "yazildi": "2026-10-31T18:24:28+03:00",
       "zaman_kaynagi": "soz"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BERİD",
+      "oturum": "15c190e1",
+      "gerekce": "daraltma: kalan bulgu yeni karta (postaci-izinli-munavebe-kalan) — Kalan yok: tek açık, izin sonrası yeniden ölçüldü; posta komutu ve S10 #617 ile ana dalda",
+      "zaman": "2026-10-31T18:43:55+03:00",
+      "sinifli": true,
+      "izin": "basla"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Postacı kurulum betiğinin izinli kutu listesine münâvebe eklensin",
+      "zaman": "2026-10-31T18:43:55+03:00",
+      "kalan_kart": "postaci-izinli-munavebe-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-31T18:43:55+03:00",
+      "kalan_kart": "postaci-izinli-munavebe-kalan",
+      "kalan": "Kalan yok: tek açık, izin sonrası yeniden ölçüldü; posta komutu ve S10 #617 ile ana dalda",
+      "tur_sifir": 3,
+      "oturum": "15c190e1"
     }
   ]
 }
