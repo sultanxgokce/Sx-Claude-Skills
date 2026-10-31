@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "postaci-kopya-esitle-3",
+  "pr": "621",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T19:19:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-postaci-kopya-esitle-3",
+  "dal": "postaci-kopya-esitle-3",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14719,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 6951
+  },
+  "dalgic": "uyumsuz",
+  "bas": "22f47d86486d4cafab423938887fdf4add137e32",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Postacı beceri kopyası cloudtop ana dalıyla eşitlenmiş, kaynak sağlama toplamları ve sürüm kayıtları da buna göre güncellenmiş. Araç imzalı önce/sonra ölçümü fark sayısının 3'ten 0'a indiğini, kutu sınavları ile depo kapılarının geçtiğini gösterdiğinden üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve bütün kayıtlar yeşil; sarı kayıt yok. Talebi doğrudan ölçen gerçekçi bir önce/sonra çifti mevcut: cloudtop farkı 3'ten 0'a düşmüş; ayrıca kutu sınavı 17/17 PASS ve depo kapılarının tamamı rc=0."
+  }
+}
