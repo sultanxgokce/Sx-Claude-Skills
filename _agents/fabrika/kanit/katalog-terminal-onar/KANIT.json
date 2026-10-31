@@ -1,0 +1,44 @@
+{
+  "is": "katalog-terminal-onar",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-31T23:43:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "hiza",
+      "asama": "once",
+      "dosya": "olcum-hiza-once.txt",
+      "sha256": "23dc2f3078050e80e5632eb0447acd95520727aa1f2459db156fec5366ffefe0",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-31T23:43:27+03:00",
+      "sure_sn": 15.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "675f3b477de34139b12522798759f4ed"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "hiza",
+      "asama": "sonra",
+      "dosya": "olcum-hiza-sonra.txt",
+      "sha256": "2b87095b3f21273ca7c1c5f1a2034fe418db2d66e62c6617b819f45d113661b2",
+      "komut": [
+        "node",
+        "ahi/schema/katalog-surum-hiza.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-31T23:43:27+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "34da721f16344923a2a8090a6643aba2"
+    }
+  ],
+  "imza": "638e94b0caf4e83927f181a50030e810c63e0e79dcb7b10ec1991230f12c3aac"
+}
