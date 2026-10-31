@@ -138,12 +138,12 @@ SH
 chmod +x "$T/gh-sahte.sh"; : > "$GOREV_KAYIT"; : > "$ZIL_KAYIT"
 gg() { FABRIKA_GH="$T/gh-sahte.sh" FABRIKA_GOREV_SH="$T/gorev-sahte.sh" FABRIKA_AILE_NOTIFY="$T/zil-sahte.sh" bash "${GBX:-$GB}" is-a --depo "$D" --pr "$1" --sha "s$1" 2>&1; }
 O="$(gg 30)"; grep -q "zaten MERGED" <<<"$O" && ! grep -q '"pr": "30"' "$FABRIKA_GOLGE_DEFTER" && [ ! -s "$ZIL_KAYIT" ] && [ ! -s "$GOREV_KAYIT" ]; g $? "G20 birleşmiş PR (MERGED): kayıt yok, görev adımı yok, zil YOK" "→ $O"
-O="$(gg 31)"; grep -q "zaten CLOSED" <<<"$O" && ! grep -q '"pr": "31"' "$FABRIKA_GOLGE_DEFTER" && [ ! -s "$ZIL_KAYIT" ]; g $? "G21 kapanmış PR (CLOSED): kayıt ve zil yok" "→ $O"
+O="$(gg 31)"; ! grep -q "zaten" <<<"$O" && grep -q '"pr": "31"' "$FABRIKA_GOLGE_DEFTER" && [ -s "$ZIL_KAYIT" ]; g $? "G21 kapanmış ama BİRLEŞMEMİŞ PR (CLOSED): kapsam dışı, eski davranış (kayıt + zil)" "→ $O"
 O="$(gg 32)"; grep -q '"pr": "32"' "$FABRIKA_GOLGE_DEFTER" && grep -q "^SERDAR|golge:" "$ZIL_KAYIT"; g $? "G22 açık PR (OPEN): eskisi gibi kayıt + zil" "→ $O"
 O="$(gg 33)"; grep -q "durumu okunamadı" <<<"$O" && grep -q '"pr": "33"' "$FABRIKA_GOLGE_DEFTER"; g $? "G23 durum okunamadı: kayıt eski davranışla sürer, not düşer (sessiz susma yok)" "→ $O"
 MG="$T/golge-mutant.sh"; python3 - "$GB" "$MG" <<'PYM'
-import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='MERGED|CLOSED) echo'; assert s.count(a)==1
-open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'XMERGED|XCLOSED) echo'))
+import sys; s=open(sys.argv[1],encoding="utf-8").read(); a='MERGED) echo'; assert s.count(a)==1
+open(sys.argv[2],"w",encoding="utf-8").write(s.replace(a,'XMERGED) echo'))
 PYM
 cp "$HERE/golge-rapor.sh" "$T/" 2>/dev/null; : > "$ZIL_KAYIT"; O="$(GBX="$MG" gg 30)"; [ -s "$ZIL_KAYIT" ]; g $? "G24 mutant (durum süzgeci söküldü): birleşmiş PR'e zil GİDER → G20 bu mutantta düşerdi"
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
