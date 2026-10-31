@@ -1,26 +1,24 @@
 {
   "is": "duzen-pyyaml-vendor",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-31T23:38:58+03:00",
+  "guncelleme": "2026-10-31T23:44:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "vendor-parite",
       "asama": "sonra",
       "dosya": "olcum-vendor-parite-sonra.txt",
-      "sha256": "580ce62cbc0a9c19bb4f5b0e779c1db5313560ba24ba8b5e1c73bdfe64b66111",
+      "sha256": "ff763a47a0ed9d9025b97467fa1691dc35f5fa86416a3bea1ff1bd610761d8a8",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-gercek.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-31T23:38:56+03:00",
-      "sure_sn": 915.0,
+      "zaman": "2026-10-31T23:44:26+03:00",
+      "sure_sn": 1.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "5971d52bad9e451ab3265585f01391c6",
-      "olculen_commit": "dcdcbd3e5c5d646e4b86e7d0d7f7f20d281eca8c",
-      "olculen_kirli": true
+      "olcum_id": "38c39ef79a1943969269f688bb2ceebf"
     },
     {
       "tur": "olcum",
@@ -44,5 +42,5 @@
       "olcum_id": "1e24c7c968c3417a952adab04f789ed4"
     }
   ],
-  "imza": "9f26d1fce43454717ec9dd8ecab45b70dd9fba7dad68149fb837be073a91230c"
+  "imza": "d23afb1c04d1b15736a8a67dc039e280f0d72acfdc66c2a4ce093ed49f8082c9"
 }
