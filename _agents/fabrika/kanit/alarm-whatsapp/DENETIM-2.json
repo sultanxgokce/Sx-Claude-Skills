@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "alarm-whatsapp",
+  "pr": "614",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-31T15:14:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-alarm-whatsapp",
+  "dal": "alarm-whatsapp",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25880,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 11272
+  },
+  "dalgic": "uyumlu",
+  "bas": "b37f24178375a9b4dff3eca431541a2d6d468ce6",
+  "duzeltme_farki": {
+    "onceki_bas": "2f92c350007469fd8b4df317ef2c7afeb211e21f",
+    "dosya": 9,
+    "bayt": 22278,
+    "tam_bayt": 23818
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan alarmının telefon yolu yalnız WhatsApp’a indirilmiş; “gitti” kaydı da yalnız WhatsApp geçidi başarı döndürünce yazılıyor. Önceki turun iki uygulama bulgusu ntfy çağrısı ve ona bağlı bekleme bütünüyle kaldırılarak kapanmış; gerçek ölçüm 51/51 geçtiği için üretimi durduracak kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. Önce ölçümü ana dalda WhatsApp çağrısı bulunmadığını ve ntfy çağrısı bulunduğunu gösteriyor; sonra gerçek ölçüm 51 geçti, 0 kaldı sonucuyla yalnız WhatsApp gönderimini, başarısız WhatsApp’ta “gitti” yazılmamasını ve hata kaydını sınıyor. Bilerek bozulan kayıt altı ilgili sınavın düştüğünü gösteriyor, ancak manifestte `mutasyon: true` alanı bulunmadığından rubriğin resmî mutasyon kaydı sayılmaz; gerçek kodun durumu yine ayrı yeşil ölçümden açıkça okunabiliyor."
+  }
+}

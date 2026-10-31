@@ -8,8 +8,7 @@
 set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 DIZIN="${SULTAN_ALARMI_DIZIN:-${HOME:-/tmp}/.cache/sultan-alarmi}"
-NTFY="${SULTAN_ALARMI_NTFY:-http://cloudtop-ntfy/alarm}"
-CURL="${SULTAN_ALARMI_CURL:-curl}"
+WA="${SULTAN_ALARMI_WA:-/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh}"   # tek telefon kanalı (Sultan 31 Eki: ntfy kullanmıyor)
 GOREV_SH="${SULTAN_ALARMI_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
 KAPIMDA_SH="${SULTAN_ALARMI_KAPIMDA_SH:-/config/.claude/skills/kapimda/scripts/kapimda.sh}"
 SIMDI="${SULTAN_ALARMI_SIMDI:-$(date +%s)}"
@@ -60,14 +59,16 @@ gonder)
   # kuru koşu DURUM yazmaz: yazarsa sonraki gerçek alarm "sustu" olur ve yükseltme sayacı kuruyla artar
   [ "$KURU" -eq 1 ] || { { grep -v "^$ANAHTAR	" "$DURUM" 2>/dev/null; printf '%s\t%s\t%s\n' "$ANAHTAR" "$SIMDI" "$SAY"; } > "$DURUM.yeni" && mv "$DURUM.yeni" "$DURUM"; }
   flock -u 9
-  M="$(metin)"; ONCELIK=4
-  if [ "$SAY" -ge "$YUKSELT_N" ]; then M="$M · TEKRAR $SAY — YÜKSELTİLDİ"; ONCELIK=5; fi
+  M="$(metin)"
+  if [ "$SAY" -ge "$YUKSELT_N" ]; then M="$M · TEKRAR $SAY — YÜKSELTİLDİ"; fi
   if [ -z "${NO_COLOR:-}" ]; then printf '\033[1;31m%s\033[0m\n' "$M"; else printf '%s\n' "$M"; fi
   if [ "$TEL" -eq 0 ]; then kutuk "$SAY" yok terminal; exit 0; fi
   if [ "${SULTAN_EKRANDA:-0}" = 1 ]; then echo "(telefon atlandı: Sultan ekranda)"; kutuk "$SAY" atlandi ekranda; exit 0; fi
-  if [ "$KURU" -eq 1 ]; then echo "(kuru: telefona gidecekti → $NTFY · öncelik $ONCELIK)"; kutuk "$SAY" kuru -; exit 0; fi
-  KOD="$("$CURL" -s -m 8 -o /dev/null -w '%{http_code}' -H "Priority: $ONCELIK" -H "Title: SULTAN ALARMI" -d "$M" "$NTFY" 2>/dev/null)"; KOD="${KOD:-000}"
-  case "$KOD" in 2*) kutuk "$SAY" gitti "http=$KOD" ;; *) kutuk "$SAY" hata "http=$KOD"; echo "UYARI: telefon bildirimi gitmedi (http=$KOD); terminal satırı basıldı" >&2; exit 0 ;; esac ;;
+  if [ "$KURU" -eq 1 ]; then echo "(kuru: telefona gidecekti → WhatsApp)"; kutuk "$SAY" kuru -; exit 0; fi
+  # ntfy çıkarıldı: http 200'ü Sultan'a ulaştı demek değildi (31 Eki ölçümü: 22 'gitti' alarmın hiçbiri görülmedi).
+  bash "$WA" "$M" >/dev/null 2>&1; WA_RC=$?
+  if [ "$WA_RC" -eq 0 ]; then echo "whatsapp: gitti"; kutuk "$SAY" gitti "wa=0"
+  else kutuk "$SAY" hata "wa=$WA_RC"; echo "UYARI: telefon bildirimi gitmedi (WhatsApp rc=$WA_RC); terminal satırı basıldı" >&2; exit 0; fi ;;
 tara)
   OK=0; KAY=""
   if K="$("$KAPIMDA_SH" liste 2>/dev/null)"; then OK=1

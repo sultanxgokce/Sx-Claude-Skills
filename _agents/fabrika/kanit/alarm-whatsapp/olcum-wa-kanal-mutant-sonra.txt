@@ -1,0 +1,12 @@
+$ bash -c M=$(mktemp -d); cp -r sultan-alarmi $M/; sed -i "s/bash \"\$WA\" \"\$M\" >\/dev\/null 2>&1; WA_RC=\$?/WA_RC=0/" $M/sultan-alarmi/scripts/alarm.sh; o=$(bash $M/sultan-alarmi/scripts/alarm.test.sh); echo "$o" | grep -E "✗|sonuç:" | cut -c1-90; d=$(echo "$o" | grep -c "✗"); echo "kırmızı=$d"; ! echo "$o" | grep -q "✗ D1" && [ "$d" -ge 2 ]; exit $?
+# rc=0 sure=1.1s zaman=2026-10-31T15:12:45+03:00
+--- stdout ---
+  ✗ G5 --telefon: WhatsApp'a gider, ntfy'ye hiç gitmez — beklenen=[1:0] gerçek=[0:0]
+  ✗ G7 WhatsApp gitmediyse UYARI (sessiz başarı yok) — 'telefon bildirimi gitmedi' y
+  ✗ G7a WhatsApp'sız 'gitti' denmez — 'whatsapp: gitti' OLMAMALI: 🚨🔴 SULTAN ALA
+  ✗ G7b kütükte hata kaydı — beklenen=[1] gerçek=[0]
+  ✗ G8a --telefon: WhatsApp'a tek mesaj, alarm metniyle — beklenen=[1:1] gerçek=[0:0]
+  ✗ Y1b yükseltme WhatsApp metninde de görünür — beklenen=[1] gerçek=[0]
+sonuç: 45 geçti · 6 kaldı
+kırmızı=6
+--- stderr ---
