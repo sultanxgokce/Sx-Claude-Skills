@@ -1,9 +1,15 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.36.6
+version: 2.36.7
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.36.7 · Telefon boyu kancası artık sıralı koşar: eşzamanlı iki kanca pencereyi 'manual'de bırakmaz (31 Eki)
+`koltuk-bagla.sh --tel-buyut` (client-attached + client-resized kancaları) aynı anda koşunca ikincisi, birincinin `resize-window`'undan sonra ama yerel
+`window-size`'ı silmesinden önce ayarı okuyup `manual`'i eski değer sanıyor ve geri yazıyordu; pencere `manual`'de kalıyor, sonra bağlanan masaüstü
+boyu alamıyordu (CI ölçümü: yerel-ayar=[manual], pencere 70x50, 120x40 istemci bağlı). Oturum başına `flock` eklendi. Sınav S1: 8 eşzamanlı çağrı × 5 tur
+(kilitsiz kopyada yerelde de kırmızı). `flock` yoksa eski davranış (kilitsiz) sürer.
 
 ## 🆕 2.36.0 · Koltuk, kabuğa dönmüş eski node sürümünün claude'unu açmaz (29 Eki · gorev …JRCK8J · vekatip reisi düşmüştü)
 nvm'de iki sürüm yan yanaydı; eskisinde `claude.exe` 16 Eki'den beri 500 baytlık "native binary not installed" kabuğuydu. Bekçi bayat PATH'ten (`command -v node`) o sürümü seçti, koltuk `Permission denied` ile açılmadı. Artık `ortak.sh` `claude_yolu`: PATH'teki claude **gerçek ikili** mi (dosya, çalıştırılabilir, ≥1 MB) diye bakar; değilse nvm sürümlerini yeniden eskiye gezip ilk geçerli olanı verir; hiçbiri geçerli değilse boş + rc 1 (kabuğa düşmez). `onar.sh claude_baslat` komutu mutlak yolla yazar (panenin PATH'ine güvenmez), `koltuk-ac.sh` dava yolu aynı çözümleyiciyi kullanır, bekçinin PATH'e koyduğu dizin claude'un dizinidir. Sınav: `scripts/claude-yolu.test.sh` (10 kapı + mutant). Dürüst sınır: açılışta `--permission-mode auto` yerine bypass istenip istenmediği ayrı karardır, bu sürümde DEĞİŞMEDİ.

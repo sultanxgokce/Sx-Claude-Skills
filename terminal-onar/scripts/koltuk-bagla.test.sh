@@ -225,6 +225,17 @@ PYPTY
   rist 90 30 -- bash "$B" anaoturum / tel.KALFA; for _ in $(seq 1 80); do rt list-clients -t =KALFA -F '#{client_width}' 2>/dev/null | grep -qx 90 && break; sleep 0.1; done; sleep 1; R4="$(rgen)"
   [ "$R4" != 120x40 ] && echo "  ⓘ ÖLÇÜM R4 durumu: pencere=$R4 yerel-ayar=[$(rt show-options -wv -t KALFA: window-size 2>/dev/null)] istemciler=[$(rt list-clients -t =KALFA -F '#{client_width}x#{client_height}:#{client_flags}' | tr '\n' ' ')]"
   [ "$R4" = 120x40 ] && ok "R4 🔴 masaüstü bağlıyken ikinci telefon gelince pencere 120 kalır (masaüstü daralmaz)" || bad R4 "→ $R4"
+  # S1 🔴 YARIŞ: iki kanca aynı anda koşunca yerel 'manual' geri yazılıp kalıyordu (CI ölçümü). 8 eşzamanlı --tel-buyut, 5 tur; her turda
+  # pencere telefon boyuna büyür VE yerel window-size silinmiş olmalı. Kilitsiz kopyada bu tur(lar)dan biri 'manual' bırakır (mutant: S1 kırmızı).
+  S1K=0; S1B=""
+  for tur in 1 2 3 4 5; do
+    rilk; rist 80 30 -- tmux attach -f ignore-size -t =KALFA; rbek 2; sleep 0.4
+    SC="$(rt list-clients -t =KALFA -F '#{client_name} #{client_flags}' | grep ignore-size | head -1 | cut -d' ' -f1)"
+    for _ in 1 2 3 4 5 6 7 8; do ( TERM=xterm-256color TMUX_TMPDIR="$RT" bash "$B" --tel-buyut "$SC" </dev/null >/dev/null 2>&1 & ); done
+    sleep 3; S1Y="$(rt show-options -wv -t KALFA: window-size 2>/dev/null)"; S1G="$(rgen)"
+    [ -z "$S1Y" ] && [ "${S1G%x*}" = 80 ] || { S1K=1; S1B="tur $tur yerel=[$S1Y] pencere=$S1G"; break; }
+  done
+  [ "$S1K" = 0 ] && ok "S1 🔴 8 eşzamanlı tel-büyüt × 5 tur: pencere 80'e büyür ve yerel window-size HEP silinir (yarışta 'manual' kalmaz)" || bad S1 "→ $S1B"
   rt kill-server 2>/dev/null; python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$RT"
 else
   echo "  … R ÖLÇÜLEMEDİ: tmux ya da python3 yok (yeşil değil, sayılmadı)"
