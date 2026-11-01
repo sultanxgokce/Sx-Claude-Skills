@@ -1,7 +1,7 @@
 {
   "is": "sinav-boru-toplu",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T09:07:17+03:00",
+  "guncelleme": "2026-11-01T09:12:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -83,7 +83,45 @@
       "olcum_id": "6271ecf095a44193a1f5d346e9498d19",
       "olculen_commit": "fd6ebe2b5c4f5cb95c302430c15e22214baeef84",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi3",
+      "asama": "sonra",
+      "dosya": "olcum-kapi3-sonra.txt",
+      "sha256": "6d3a149387b63e1e347367529b8375245d671e92490384a65834a93cadb5819c",
+      "komut": [
+        "python3",
+        "scripts/sinav-boru-kapi.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:11:59+03:00",
+      "sure_sn": 20.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4d18fa3ddcf04c40802a5231e375a6ce",
+      "olculen_commit": "203e99d8afa5c541378718bbcf56ed730d6c3429",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav3",
+      "asama": "sonra",
+      "dosya": "olcum-sinav3-sonra.txt",
+      "sha256": "c29bf5eb08434a0b0965790be7021fe32eeb2ac56a0344e0f3f4694236ab5bd9",
+      "komut": [
+        "bash",
+        "scripts/sinav-boru-kapi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:12:00+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ac11638c93044271a6d9a74dfec7e769",
+      "olculen_commit": "203e99d8afa5c541378718bbcf56ed730d6c3429",
+      "olculen_kirli": true
     }
   ],
-  "imza": "048bb099fb4cdfa4466d0e1462b44bdf8f195ab381c52e0975dda0e3b224fa8a"
+  "imza": "6dbf428c939d9e6dc830c99f56712ac3b0c9f1ef92f7bc669389e12e7d43e723"
 }
