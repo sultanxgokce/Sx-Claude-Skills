@@ -1,0 +1,36 @@
+{
+  "is": "terminal-onar-ana-tmux-yonetici",
+  "cumle": "terminal-onar: ANA_TMUX varsayılanı ekip kaydındaki meta.yonetici oturumundan türesin (canlıysa), TO_ANA_TMUX üstün gelsin; bekçi satırı elle yazılan değeri silince NAZIR yanlış oturumu bekliyordu",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-01T08:33:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T08:35:11+03:00",
+      "olay": "canli-borc"
+    }
+  ],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: bekçi",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "canli_borc": {
+    "zaman": "2026-11-01T08:35:11+03:00",
+    "yazan": "MİRAHUR",
+    "gerekce": "Bekçi ancak kurulumdan sonra çalışır; kurulum SERDAR/Sultan kararı. Ödeme: NAZIR bekçi günlüğünde ANA_TMUX nazir-yon görülür ve nazir-ana yeniden kurulmaz",
+    "odendi": null
+  }
+}
