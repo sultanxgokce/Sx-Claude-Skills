@@ -1,0 +1,176 @@
+{
+  "is": "terminal-onar-kadro-iskan-oda",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-01T14:06:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kadro-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-gercek-sonra.txt",
+      "sha256": "cd241dc935abada33f5c8ac7e47175daf8415537bb10b9b2388692be5cb32a5a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kadro-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T13:25:48+03:00",
+      "sure_sn": 740.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e5834943e7b047648b9731279f06e592",
+      "olculen_commit": "2b27d900e30bfd2da5009139a33755c75f2d3c3a",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-mutant-sonra.txt",
+      "sha256": "35dabd84d2277863a446a37ecfa140832d2120454a8b6a2c5a7f42d2a0b220fa",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kadro-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T13:25:49+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kadro-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "cafe5500dabe45da97a952c08f3e20af",
+      "olculen_commit": "2b27d900e30bfd2da5009139a33755c75f2d3c3a",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-gercek-2",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-gercek-2-sonra.txt",
+      "sha256": "2690d1b8b71a0b53ec7285846fd111f9d570ba6ee72832fe6d7e788f8d1eacdd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kadro-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T13:55:33+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ee58864f5e944bb39f05b20b29ca5338",
+      "olculen_commit": "2b27d900e30bfd2da5009139a33755c75f2d3c3a",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-mutant-2",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-mutant-2-sonra.txt",
+      "sha256": "cf7d9f3be0ae344f5f35a45ea7c63126e4286495b919e105eeb6fa196b661eb3",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kadro-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T13:55:34+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kadro-gercek-2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "c19879ca97f24ffe86e7ba4130e893dd",
+      "olculen_commit": "2b27d900e30bfd2da5009139a33755c75f2d3c3a",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-gercek-sonra.txt",
+      "sha256": "1f8877745896501e1b403a70c64b1e0eb9dae4de7e2adbbbeae1719386e15f9f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-gercek.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T14:04:26+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b95ae4c7ef6a41e5bae8d6537147a033",
+      "olculen_commit": "08ea136661a4c3c2ba859e74f814a16300547e31",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-mutant-sonra.txt",
+      "sha256": "41474cd2607bc5f1e2e7b6fdbed1c7183894bd3880f9c2e8650f9a449eb6221c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-mutant.sh"
+      ],
+      "rc": 0,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T14:04:26+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "koltuk-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": false,
+      "olcum_id": "8ac52313acbc406ba0f76f1f4512f9f7",
+      "olculen_commit": "08ea136661a4c3c2ba859e74f814a16300547e31",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-gercek-2",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-gercek-2-sonra.txt",
+      "sha256": "f961a01f023796241b7ec3fae5eba68722d939fb9d9ff72b00e9c31d785c07ad",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:06:00+03:00",
+      "sure_sn": 28.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d347bb13b52d46348fd97a0b7bd335c4",
+      "olculen_commit": "348d7c2e32552f9243cf6bfcdf387f902429d1c0",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-mutant-2",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-mutant-2-sonra.txt",
+      "sha256": "d7afd9da571082c22ec9e7862c0bc7bcc27ae73c8922a962e3927f6a691f746d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:06:09+03:00",
+      "sure_sn": 8.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "koltuk-gercek-2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "f22df49043494da1a3e285f3756b98d4",
+      "olculen_commit": "348d7c2e32552f9243cf6bfcdf387f902429d1c0",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "ec20a837da0cf45e498bf6397362b7856b88288de914005e67fb1e8bc39c8e86"
+}

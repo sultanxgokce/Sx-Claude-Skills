@@ -43,7 +43,7 @@ function skaler(line, key) {
 }
 // Dava Rafı (Parça B · SERDAR 16 Eki 16:26): son_calisma (dondurulurken yazılan epoch) · dondurma (kural = bekçi dondurdu) ·
 // bagla_ile (kayda E4 bağlamayla girdi → 'bağlamayı geri al' sunulur) · bagla_once (kişiye bağlamada önceki session_id).
-const ALANLAR = ['tmux', 'oda', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id', 'son_calisma', 'dondurma', 'bagla_ile', 'bagla_once'];
+const ALANLAR = ['tmux', 'oda', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id', 'son_calisma', 'dondurma', 'bagla_ile', 'bagla_once', 'amir', 'oda_muduru'];
 
 // YAML metni → üyeler. Satır tabanlı: `- id: X` blok açar; blok içindeki bilinen skalerler alınır. `uyeler:` dışı
 // `- id:` (ör. meta) yoktur; `tmux: null` → ''. Bilinmeyen anahtar yok sayılır (şema genişlemesi kırmaz).
@@ -100,6 +100,10 @@ export function kayitOku(proje, ortam = process.env) {
     for (const y of [isaret && path.join(proje, isaret), path.join(proje, '_agents/handoff/ekip-registry.yaml'), path.join(proje, '_agents/ekip-os/ekip-registry.yaml')].filter(Boolean)) {
       if (fs.existsSync(y)) { const l2 = oku(y); if (l2) { listeler.push(l2); break; } }
     }
+    // 🔴 2.37.2 (1 Kas · NAZIR kadro sekmesi, SERDAR 13:05 karesi): İSKÂN kaydı olan kutuda `oda:` alanı yalnız AİLE kaydında yaşar
+    //    (nazir: iskan oda=0 · ekip oda=0 · aile oda=12). Bu dal aile kaydını hiç okumadığı için kapı odaları ve koltuk oda alanını
+    //    DÖNMÜYORDU. Aile kaydından YALNIZ `oda` alınır (id/tmux/rol İSKÂN'ınki kalır; yalniz kümesi bunu zorlar).
+    if (fs.existsSync(aile)) { const l4 = oku(aile); if (l4) { l4.yalniz = ['oda', 'amir', 'oda_muduru']; listeler.push(l4); } }
   } else if (fs.existsSync(aile)) {
     const l = oku(aile); if (l) listeler.push(l);
     // 🔴 E2: üretilmiş kutularda (s02 · sedir · nova …) `durum:` aile kaydında DEĞİL, ekipc'nin ürettiği ekip kaydında durur

@@ -1,0 +1,71 @@
+{
+  "is": "terminal-onar-kadro-iskan-oda",
+  "cumle": "terminal-onar kadro: iskan-registry olan kutuda (NAZIR) aile-registry'deki oda, amir ve oda_muduru alanları kayıt okumasında alınsın",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-01T13:12:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T14:02:50+03:00",
+      "olay": "daralt",
+      "kalan_kart": "terminal-onar-kadro-koltuk-oda-alani",
+      "tur_sifir": 3
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "ulak_1793530839-d49477a8",
+      "gerekce": "SERDAR ulak 14:00: amir ve oda_muduru eki reis kararı, Sultan rütbe gösterimi isteği gerekçe; koltuk çıktısı SERDAR'ın ayrı sürümü",
+      "zaman": "2026-11-01T14:01:05+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "MİRAHUR",
+      "oturum": "ulak_1793530947-c4c51afb",
+      "gerekce": "Tur 3 TIKANDI: kalan B1 koltuk çıktısı SERDAR'ın ayrı sürümü (ulak 13:54 ve 14:00); kayıt okuması kısmı 4/E, kapsam kayması reis kararıyla kapandı",
+      "zaman": "2026-11-01T14:02:46+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "MİRAHUR",
+      "oturum": "ulak_1793530947-c4c51afb",
+      "gerekce": "daraltma: kalan bulgu yeni karta (terminal-onar-kadro-koltuk-oda-alani) — Kadro çıktısına (kisiler) ve koltuk cevabına oda, amir, oda_muduru alanlarını taşımak; SERDAR ayrı sürümde yapacak",
+      "zaman": "2026-11-01T14:02:50+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "terminal-onar kadro: iskan-registry olan kutuda (NAZIR) aile-registry'deki oda alanı da okunsun; kapı odaları ve koltuk oda alanını dönsün",
+      "zaman": "2026-11-01T14:02:50+03:00",
+      "kalan_kart": "terminal-onar-kadro-koltuk-oda-alani"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-01T14:02:50+03:00",
+      "kalan_kart": "terminal-onar-kadro-koltuk-oda-alani",
+      "kalan": "Kadro çıktısına (kisiler) ve koltuk cevabına oda, amir, oda_muduru alanlarını taşımak; SERDAR ayrı sürümde yapacak",
+      "tur_sifir": 3,
+      "oturum": "ulak_1793530947-c4c51afb"
+    }
+  ]
+}

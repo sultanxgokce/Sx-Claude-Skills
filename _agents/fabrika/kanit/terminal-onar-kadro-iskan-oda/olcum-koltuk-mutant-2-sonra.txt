@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-koltuk-gercek-2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-mutant.sh
+# rc=1 sure=8.8s zaman=2026-11-01T14:06:09+03:00
+--- stdout ---
+  ✗ KD9 iskan+aile kaydı olan kutuda koltuğun oda alanı aile kaydından gelir (kayıt kaynaklı) [{"ad":"nz-yon","son":1760000100,"clau
+  ✗ KD10 ikinci koltuk kendi odasını alır (omnirouter) ve odalar listesinde iki oda var []
+--- stderr ---

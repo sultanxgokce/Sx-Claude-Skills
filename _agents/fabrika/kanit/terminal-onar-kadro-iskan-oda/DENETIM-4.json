@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "terminal-onar-kadro-iskan-oda",
+  "pr": "651",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T14:07:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kadro-iskan-oda",
+  "dal": "terminal-onar-kadro-iskan-oda",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25116,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 11204
+  },
+  "dalgic": "olculemedi",
+  "bas": "61b3fed0204a62934b4a02cc97a6f1a6ff0e3139",
+  "duzeltme_farki": {
+    "onceki_bas": "a5d1e8e9b886878dee0f1f30811f9237aabba527",
+    "dosya": 8,
+    "bayt": 14287,
+    "tam_bayt": 38686
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İSKÂN kutusundaki aile kaydından oda, amir ve oda_muduru okunması gerçek ölçümde geçiyor; önceki B1 de koltuk cevabını doğrudan sınayan KD9–KD11 ile kapanmış. Temiz çalışma ağacında alınan yeşil gerçek ölçümler ve bozuk davranışı yakalayan mutasyon kapıları yalnız rötuş dahi bırakmadığından iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. B1 kapanmış: olcum-koltuk-gercek-2-sonra.txt içindeki KD9 aile kaydındaki odanın koltuk çıktısına geldiğini, KD10 iki koltuğun kendi odalarını ve odalar listesini, KD11 kayıtsız koltuğa oda uydurulmadığını doğrudan doğruluyor; 137/137 geçiyor. Eşleşen koltuk-mutant-2 kaydı rc=1 ve dusen_kapi=true ile sınavın bozulan davranışı yakaladığını gösteriyor. Kadro tarafında OD1–OD5 oda, amir ve oda_muduru okumasını 38/38 doğruluyor; eşleşen mutasyon da kapıyı düşürüyor. En güncel iki gerçek ölçüm temiz çalışma ağacında alınmış."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-kadro-iskan-oda",
+  "pr": "651",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T13:58:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kadro-iskan-oda",
+  "dal": "terminal-onar-kadro-iskan-oda",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17913,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 4897
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4c6a4d0dede431e47115c83e0038681640f4f2f9",
+  "duzeltme_farki": {
+    "onceki_bas": "2133906f8e55cbc01aaf9253efee5880e6692d8e",
+    "dosya": 3,
+    "bayt": 6564,
+    "tam_bayt": 22293
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İSKÂN kutusunda aile kaydındaki oda alanı kadroya katılmış ve mevcut ölçümler kayıt birleştirme davranışının geçtiğini, mutasyon ölçümleri de sınavın bozuk kodu yakaladığını gösteriyor. Ancak koltuk çıktısında oda alanı hâlâ doğrudan sınanmıyor ve kart dışındaki amir/oda_muduru kapsam kayması sürüyor; önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: Kartın “koltuk oda alanını dönsün” kabul koşulu doğrudan ölçülmüyor; bu turdaki tek sınav değişikliği OD2 etiketini düzeltiyor, koltuk cevabını çağıran yeni bir doğrulama eklemiyor.",
+        "kanit": "Düzeltme farkında yalnız OD2 sınav metni değişmiş. Gerçek ölçümün OD1–OD5 satırları aile/iskân kayıtlarının birleşimini anlatıyor; koltuk çıktısında oda alanının döndüğünü belirten bir sınav sonucu yok.",
+        "konum": "terminal-onar/kapi/kadro.test.mjs:92 ve olcum-kadro-gercek-2-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 kapanmamış: İş kartı aile kaydından oda alanının okunmasını isterken amir ve oda_muduru alanlarının da alınması kapsam kayması olarak kalmış.",
+        "kanit": "Bu turdaki üretim farkı yalnız test adını değiştiriyor; OD5 gerçek ölçümü aile kaydından amir ve oda_muduru alındığını açıkça doğruluyor. Önceki turda gösterilen üretim değişikliği bu farkta geri alınmamış.",
+        "konum": "terminal-onar/kapi/kadro.mjs:46, terminal-onar/kapi/kadro.mjs:103 ve olcum-kadro-gercek-2-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçümler 37/37 ve 38/38 geçiyor, iki mutasyon ölçümü de bilinçli bozukluğu yakalıyor. B3 kapanmış: OD2 adı artık oda/amir/oda_muduru kapsamını doğru söylüyor. Bununla birlikte ölçümler önce/sonra davranış çifti değil ve kartın koltuk oda çıktısını uçtan uca sınamıyor; son 38/38 kaydı ayrıca kirli çalışma ağacında alınmış."
+  }
+}

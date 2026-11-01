@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-gercek.sh
+# rc=0 sure=28.5s zaman=2026-11-01T14:06:00+03:00
+--- stdout ---
+  ✓ KD9 iskan+aile kaydı olan kutuda koltuğun oda alanı aile kaydından gelir (kayıt kaynaklı)
+  ✓ KD10 ikinci koltuk kendi odasını alır (omnirouter) ve odalar listesinde iki oda var
+  ✓ KD11 kayıtta olmayan koltuk oda uydurmaz (oda alanı yok)
+GECEN: 137  ·  KALAN: 0
+--- stderr ---
+⏳ agir-sira: kanit-terminal-onar-kadro-iskan-oda-koltuk-gercek-2 20 sn bekledi (yuva 1, load1 17.51)

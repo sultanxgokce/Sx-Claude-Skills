@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-kadro-iskan-oda",
+  "pr": "651",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T13:56:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kadro-iskan-oda",
+  "dal": "terminal-onar-kadro-iskan-oda",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20681,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 7999
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2133906f8e55cbc01aaf9253efee5880e6692d8e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İSKÂN kaydı bulunan kutuda aile kaydındaki oda alanı kadroya katılmış, asıl alanların İSKÂN/ekip kaydından kalması korunmuş ve gerçek ölçüm ile mutasyon sınavı geçmiştir. Ancak kartın özellikle istediği koltuk çıktısı doğrudan sınanmamış; ayrıca kart dışındaki amir ve oda_muduru alanları aynı sürüme alınmış, önce bu kapsam ve doğrulama açıkları çözülmelidir.",
+    "bulgular": [
+      {
+        "ne": "Kartın “koltuk oda alanını dönsün” kabul koşulu doğrudan ölçülmüyor; eklenen OD sınavları kayitOku sonucunu denetliyor fakat koltuk cevabını çağırıp oda alanını doğrulamıyor.",
+        "kanit": "Gerçek ölçümde OD1–OD5 kayıt okuma ve kaynak birleştirmeyi doğruluyor; diffte yeni sınavların tamamı kayitOku(nz) üzerinden, koltukSatirlari için yalnız mevcut PN1–PN5 sınavları var ve bunlar pencere alanını ölçüyor.",
+        "konum": "terminal-onar/kapi/kadro.test.mjs:88 ve olcum-kadro-gercek-2-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartında yalnız oda alanı istenirken aile kaydından amir ve oda_muduru alanlarının da alınması kapsam kaymasıdır.",
+        "kanit": "Kart talebi oda alanıyla sınırlı; üretim farkı ALANLAR'a amir ve oda_muduru ekliyor ve l4.yalniz kümesini ['oda', 'amir', 'oda_muduru'] yapıyor. SKILL notu da koltuk cevabı eklemesinin ayrı sürümde olduğunu söylerken bu ek alanları aynı sürüme bağlıyor.",
+        "konum": "terminal-onar/kapi/kadro.mjs:46, terminal-onar/kapi/kadro.mjs:103 ve terminal-onar/SKILL.md:9",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "OD2 sınav adı ve açıklaması artık sınavın gerçek kapsamını yanlış anlatıyor; aile kaydı yalnız oda değil, amir ve oda_muduru da veriyor.",
+        "kanit": "OD2 etiketi “aile kaydı yalnız oda verir” diyor; aynı test verisi ve OD5 ise aile kaydından oda_muduru ile amir alındığını doğruluyor.",
+        "konum": "terminal-onar/kapi/kadro.test.mjs:101 ve terminal-onar/kapi/kadro.test.mjs:103",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Temiz committe gerçek ölçüm 37/37, sonraki kirli durumda 38/38 geçiyor; iki mutasyon ölçümü de bozulan kodu beklenen biçimde yakalıyor. Buna rağmen kanıt çifti önce/sonra davranış ölçümü değil ve kartın koltuk çıktısı kabul koşulu uçtan uca sınanmıyor; yeşil kayıt yalnız mevcut kayitOku odaklı sınavların geçtiğini gösteriyor."
+  }
+}
