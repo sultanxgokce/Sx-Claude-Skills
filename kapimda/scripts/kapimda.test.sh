@@ -108,7 +108,7 @@ grep -q "^olur: bloklu ajan doğruladı" "$KAPIMDA_DOSYA" && ok "S4 olur-satır�
 kos ac "Kanitsiz Kart" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1
 kos bitti "Kanitsiz Kart" --gerekce "artık gerek kalmadı" >/dev/null 2>&1
 [ $? -eq 0 ] && ok "S5 kanıtsız kapatma hâlâ mümkün (--federe-tamam opsiyonel)" || kotu "S5 kanıtsız kapatma kırıldı"
-awk '/^✅ KAPANDI .* · Kanitsiz Kart$/{f=1;next} f&&/^olur:/{print "VAR";exit} f&&/^$/{exit}' "$KAPIMDA_DOSYA" | grep -q VAR   && kotu "S6 kanıtsız kapanışa olur-satırı yazdı" || ok "S6 kanıtsız kapanışta olur-satırı YOK (ayırt edilebilir)"
+awk '/^✅ KAPANDI .* · Kanitsiz Kart$/{f=1;next} f&&/^olur:/{print "VAR";exit} f&&/^$/{exit}' "$KAPIMDA_DOSYA" | grep VAR >/dev/null   && kotu "S6 kanıtsız kapanışa olur-satırı yazdı" || ok "S6 kanıtsız kapanışta olur-satırı YOK (ayırt edilebilir)"
 
 printf '' > "$T/tetikler.txt"
 kos ac "Hayalet Tetik" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1
@@ -118,7 +118,7 @@ kos bitti "Hayalet Tetik" --gerekce "temizlik" >/dev/null 2>&1
 kos bitti "Olur Karti" --gerekce "temizlik" >/dev/null 2>&1
 
 # ── liste + lint ─────────────────────────────────────────────────────────────
-kos liste 2>/dev/null | grep -q "Ikinci Kart" && ok "L1 liste açık kartları basar" || kotu "L1 liste yanlış"
+kos liste 2>/dev/null | grep "Ikinci Kart" >/dev/null && ok "L1 liste açık kartları basar" || kotu "L1 liste yanlış"
 kos lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "L2 lint temiz dosyada RC=0" || kotu "L2 lint yanlış kırmızı"
 
 # ── adım motoru ──────────────────────────────────────────────────────────────
@@ -127,11 +127,11 @@ kos adim ekle "Ikinci Kart" --yapilacak "yeni kimlik oluştur" --nerede "aynı s
 [ -f "$T/adim/Ikinci Kart.md" ] && ok "A1 adım planı diske yazıldı" || kotu "A1 plan yok"
 grep -q "^toplam: 2" "$T/adim/Ikinci Kart.md" && ok "A2 toplam sayacı" || kotu "A2 sayaç yanlış"
 OUT="$(kos adim goster "Ikinci Kart" 2>&1)"
-printf '%s' "$OUT" | grep -q "adım 1/2" && ok "A3 SIRADAKİ tek adım basıldı" || kotu "A3 adım gösterimi yanlış"
-printf '%s' "$OUT" | grep -q "yeni kimlik" && kotu "A4 iki adımı birden bastı (L39 ihlali)" || ok "A4 yalnız TEK adım basıldı"
+printf '%s' "$OUT" | grep "adım 1/2" >/dev/null && ok "A3 SIRADAKİ tek adım basıldı" || kotu "A3 adım gösterimi yanlış"
+printf '%s' "$OUT" | grep "yeni kimlik" >/dev/null && kotu "A4 iki adımı birden bastı (L39 ihlali)" || ok "A4 yalnız TEK adım basıldı"
 kos adim ilerle "Ikinci Kart" >/dev/null 2>&1
-kos adim goster "Ikinci Kart" 2>&1 | grep -q "adım 2/2" && ok "A5 ilerle sıradakine geçti" || kotu "A5 ilerleme yanlış"
-kos adim ilerle "Ikinci Kart" 2>&1 | grep -q "tüm adımlar bitti" && ok "A6 son adımdan sonra TAMAM" || kotu "A6 bitiş yanlış"
+kos adim goster "Ikinci Kart" 2>&1 | grep "adım 2/2" >/dev/null && ok "A5 ilerle sıradakine geçti" || kotu "A5 ilerleme yanlış"
+kos adim ilerle "Ikinci Kart" 2>&1 | grep "tüm adımlar bitti" >/dev/null && ok "A6 son adımdan sonra TAMAM" || kotu "A6 bitiş yanlış"
 kos adim ekle "Yollu Adim" --yapilacak "şu dosyayı düzenle: /config/x.md" --nerede "editör" --bitince "oldu de" >/dev/null 2>&1
 [ $? -eq 1 ] && ok "A7 adım metninde yol → RED" || kotu "A7 adımda yol kaçtı"
 
@@ -142,7 +142,7 @@ _dk(){ KAPIMDA_DOSYA="$1" bash "$SUT" "${@:2}"; }
 
 D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SINAN --gerekce "başlangıç" --sultan-onayi "devret" >/dev/null 2>&1
 out="$(_dk "$D" devret "Test Kart" --sahip SERDAR --gerekce "altyapı işi" 2>&1)"
-{ printf '%s' "$out" | grep -q 'SINAN → SERDAR' && grep -q '^🎯 SERDAR · Test Kart$' "$D"; } \
+{ printf '%s' "$out" | grep 'SINAN → SERDAR' >/dev/null && grep -q '^🎯 SERDAR · Test Kart$' "$D"; } \
   && ok "D1 ajan→ajan devri serbest, damga 🎯 <AJAN>" || kotu "D1 ajan→ajan devri"
 
 D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SERDAR --gerekce "bana düşer" >/dev/null 2>&1
@@ -163,7 +163,7 @@ D="$(_dev_yeni)"
 _dk "$D" devret "Test Kart" --sahip A --gerekce g --sultan-onayi ok >/dev/null 2>&1
 _dk "$D" devret "Test Kart" --sahip B --gerekce g >/dev/null 2>&1
 out="$(_dk "$D" devret "Test Kart" --sahip C --gerekce g 2>&1)"
-{ printf '%s' "$out" | grep -q 'TIKANDI' && grep -q '^⚠️ TIKANDI · Test Kart$' "$D"; } \
+{ printf '%s' "$out" | grep 'TIKANDI' >/dev/null && grep -q '^⚠️ TIKANDI · Test Kart$' "$D"; } \
   && ok "D6 3. devirde kart Sultan'a döner (pinpon panzehiri)" || kotu "D6 pinpon panzehiri"
 [ "$(grep -c '^devir: ' "$D")" = "1" ] && ok "D7 devir sayacı tek satır" || kotu "D7 mükerrer sayaç"
 [ "$(grep -c '^↳ devir ' "$D")" -ge 3 ] && ok "D8 her devir gerekçesiyle kayda düşer" || kotu "D8 devir kaydı eksik"
@@ -221,12 +221,12 @@ grep -q '^oda: ' "$D" && kotu "O9 damgasız eski karta köken uyduruldu" \
   || ok "O9 damgasız eski karta köken UYDURULMAZ"
 
 O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" ac "Liste Kart" "${OG_AC[@]}" >/dev/null 2>&1
-DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" liste 2>/dev/null | grep -q 'Liste Kart  (oda: sedir)' \
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" liste 2>/dev/null | grep 'Liste Kart  (oda: sedir)' >/dev/null \
   && ok "O10 liste kaynağı gösterir" || kotu "O10 liste kaynağı göstermedi"
 
 # BUGÜNÜN REGRESYONU (ilk koşumda yakalandı): liste satır-satır yazınca erken kapanan
 # okuyucu SIGPIPE üretiyor, `pipefail` altında komut BAŞARISIZ görünüyordu.
-DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" liste 2>/dev/null | grep -q 'Liste Kart' \
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" liste 2>/dev/null | grep 'Liste Kart' >/dev/null \
   && ok "O12 liste erken-kapanan okuyucuya karşı düşmez (boru kırılması)" || kotu "O12 liste boruda düştü"
 
 # ── G2 · VARSAYILAN GÖRÜNÜM = KENDİ ODAN (2026-08-05) ──────────────────────────
@@ -236,28 +236,28 @@ DEFAULT_WORKSPACE=/config/projects/sedir _ok "$P" ac "Sedir Isi" "${OG_AC[@]}" >
 DEFAULT_WORKSPACE=/config/projects/tellal _ok "$P" ac "Tellal Isi" "${OG_AC[@]}" >/dev/null 2>&1
 
 CIK="$(DEFAULT_WORKSPACE=/config/projects/sedir _ok "$P" liste 2>/dev/null)"
-printf '%s' "$CIK" | grep -q 'Sedir Isi' \
+printf '%s' "$CIK" | grep 'Sedir Isi' >/dev/null \
   && ok "P1 varsayılan liste KENDİ odanın işini gösterir" || kotu "P1 kendi işi görünmüyor"
-printf '%s' "$CIK" | grep -q 'Tellal Isi' \
+printf '%s' "$CIK" | grep 'Tellal Isi' >/dev/null \
   && kotu "P2 başka odanın işi varsayılan listeye sızdı" || ok "P2 başka odanın işi varsayılan listede YOK"
-printf '%s' "$CIK" | grep -q '1 iş başka odalarda' \
+printf '%s' "$CIK" | grep '1 iş başka odalarda' >/dev/null \
   && ok "P3 saklanan iş SESSİZCE yutulmaz — dipnotta sayılır" || kotu "P3 dipnot yok (sessiz yutma)"
-printf '%s' "$CIK" | grep -q -- '--hepsi' \
+printf '%s' "$CIK" | grep -- '--hepsi' >/dev/null \
   && ok "P4 tam listeye çıkış yolu gösterilir" || kotu "P4 çıkış yolu gösterilmedi"
 
 CIK="$(DEFAULT_WORKSPACE=/config/projects/sedir _ok "$P" liste --hepsi 2>/dev/null)"
-printf '%s' "$CIK" | grep -q 'Sedir Isi' && printf '%s' "$CIK" | grep -q 'Tellal Isi' \
+printf '%s' "$CIK" | grep 'Sedir Isi' >/dev/null && printf '%s' "$CIK" | grep 'Tellal Isi' >/dev/null \
   && ok "P5 --hepsi tüm odaları gösterir" || kotu "P5 --hepsi eksik"
 
 # Damgasız (eski) kart "başka odanın" DEĞİL, "bilinmeyen"dir → gizlemek kanıtsız varsayım olur.
 Q="$(_oda_yeni)"
 printf '```\n🚦 SENDE · Damgasiz Is\nbugün açıldı\n\nozet\n\nNe yapman gerekiyor: x\nNiçin sen: y\nYapılmazsa: z\nBitince: w\n```\n' > "$Q"
-DEFAULT_WORKSPACE=/config/projects/sedir _ok "$Q" liste 2>/dev/null | grep -q 'Damgasiz Is' \
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$Q" liste 2>/dev/null | grep 'Damgasiz Is' >/dev/null \
   && ok "P6 damgasız eski kart GİZLENMEZ (kanıtsız varsayımla iş saklanmaz)" || kotu "P6 damgasız kart kayboldu"
 
 # Kendi odanda iş yokken ekran boş görünmemeli — kaç iş nerede, tek satır.
 CIK="$(DEFAULT_WORKSPACE=/config/projects/huma _ok "$P" liste 2>/dev/null)"
-printf '%s' "$CIK" | grep -q 'kapında iş yok' && printf '%s' "$CIK" | grep -q '2 iş başka odalarda' \
+printf '%s' "$CIK" | grep 'kapında iş yok' >/dev/null && printf '%s' "$CIK" | grep '2 iş başka odalarda' >/dev/null \
   && ok "P7 kendi odan boşken bile 'başka odada N iş' görünür" || kotu "P7 boş ekran sessiz kaldı"
 
 O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/mihenk _ok "$O" ac "Kapanan Kart" "${OG_AC[@]}" >/dev/null 2>&1
@@ -296,7 +296,7 @@ _l39(){ KAPIMDA_DOSYA="$L39D/kapimda.md" KAPIMDA_ADIM_DIZIN="$L39D/adim" bash "$
 # ── K9 · kart-çapası: kartsız adım-bloğu YASAK ────────────────────────────────
 _l39_env; touch "$L39D/kapimda.md"
 out="$(_l39 adim ekle "Hayalet Kart" --yapilacak "kasa panelini aç" --nerede "kasa paneli" --bitince "girdim de" 2>&1)"; rc=$?
-{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep -q "K9"; } \
+{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep "K9" >/dev/null; } \
   && ok "K9 kartsız adım-bloğu → RED (açık 🚦 SENDE kartı yok)" || kotu "K9 kartsız adım geçti"
 [ ! -f "$L39D/adim/Hayalet Kart.md" ] && ok "K9b RED yolunda plan dosyası HİÇ yazılmadı (fail-closed)" || kotu "K9b plan yazıldı"
 
@@ -312,7 +312,7 @@ _l39 adim ekle "N Karti" --yapilacak "kasa panelini aç" --nerede "kasa paneli" 
 _l39 adim ekle "N Karti" --yapilacak "yeni kimlik oluştur" --nerede "aynı sayfa" --bitince "oluşturdum de" >/dev/null 2>&1
 sed -i 's/^toplam: 2/toplam: 9/' "$L39D/adim/N Karti.md"
 out="$(_l39 adim goster "N Karti" 2>&1)"; rc=$?
-{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep -q "K10"; } \
+{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep "K10" >/dev/null; } \
   && ok "K10 uydurma N (toplam≠gerçek adım sayısı) → RED" || kotu "K10 uydurma N kaçtı"
 _l39 lint >/dev/null 2>&1; [ $? -eq 1 ] && ok "K10b bozuk plan genel lint'i de kırmızıya düşürür" || kotu "K10b lint yakalamadı"
 sed -i 's/^toplam: 9/toplam: 2/' "$L39D/adim/N Karti.md"
@@ -321,25 +321,25 @@ _l39 adim goster "N Karti" >/dev/null 2>&1
 
 # ── Damga şablonu — 🛠️ ŞİMDİ SEN · <Ad> · adım i/N (Sultan-kararı #1/#2) ────────
 out="$(_l39 adim goster "N Karti" 2>&1)"
-printf '%s' "$out" | grep -qF "🛠️ ŞİMDİ SEN · N Karti · adım 1/2" && ok "F1 damga şablonu birebir (#1/#2)" || kotu "F1 damga yanlış"
+printf '%s' "$out" | grep -F "🛠️ ŞİMDİ SEN · N Karti · adım 1/2" >/dev/null && ok "F1 damga şablonu birebir (#1/#2)" || kotu "F1 damga yanlış"
 
 # ── Yumuşak-kilit (Sultan-kararı #3): uyarı basılır, ENGELLENMEZ ───────────────
 out2="$(_l39 adim goster "N Karti" 2>&1)"; rc2=$?
-printf '%s' "$out2" | grep -q "yumuşak-kilit" && printf '%s' "$out2" | grep -q "2. kez" \
+printf '%s' "$out2" | grep "yumuşak-kilit" >/dev/null && printf '%s' "$out2" | grep "2. kez" >/dev/null \
   && ok "YK1 aynı karta 2. açık adım-bloğu → UYARI satırı" || kotu "YK1 uyarı basılmadı"
-printf '%s' "$out2" | grep -qF "🛠️ ŞİMDİ SEN · N Karti · adım 1/2" \
+printf '%s' "$out2" | grep -F "🛠️ ŞİMDİ SEN · N Karti · adım 1/2" >/dev/null \
   && ok "YK2 uyarıya rağmen blok yine de basılır" || kotu "YK2 blok bastırıldı"
 [ "$rc2" -eq 0 ] && ok "YK3 yumuşak-kilit ENGELLEMEZ (RC=0 — sert-kilit bilerek reddedildi)" || kotu "YK3 sert-kilide döndü"
 
 _l39 ac "N Karti 2" "${OG_AC[@]}" >/dev/null 2>&1
 _l39 adim ekle "N Karti 2" --yapilacak "ekranı aç" --nerede "panel" --bitince "açtım de" >/dev/null 2>&1
 out3="$(_l39 adim goster "N Karti 2" 2>&1)"
-printf '%s' "$out3" | grep -q "'N Karti' kartının adımı da Sultan'da açık bekliyor" \
+printf '%s' "$out3" | grep "'N Karti' kartının adımı da Sultan'da açık bekliyor" >/dev/null \
   && ok "YK4 başka kartın açık adımı çapraz-hatırlatılır" || kotu "YK4 çapraz hatırlatma yok"
 
 _l39 adim ilerle "N Karti" >/dev/null 2>&1
 out4="$(_l39 adim goster "N Karti" 2>&1)"
-printf '%s' "$out4" | grep -q "2. kez basılıyor" \
+printf '%s' "$out4" | grep "2. kez basılıyor" >/dev/null \
   && kotu "YK5 ilerle sonrası hâlâ kendi-tekrar uyarısı basıyor" || ok "YK5 ilerle sonrası aynı-kart uyarısı SUSAR (bekliyor=hayir)"
 
 # ── A06 cevap-alanı koruması (Sultan-kararı #6) ────────────────────────────────
@@ -438,7 +438,7 @@ cp "$KAPIMDA_DOSYA" "$TZD/ikinci-once.md"
 out="$(kos tazele "Sahipsiz Talepler" --ozet "Şu an 48 oda talebi cevapsız." --engel "48 oda talebi cevapsız" 2>&1)"
 [ $? -eq 0 ] && ok "T10 idempotent tazele RC 0" || kotu "T10 idempotent tazele düştü"
 cmp -s "$TZD/ikinci-once.md" "$KAPIMDA_DOSYA" && ok "T11 aynı içerikle 2. tazele dosyayı DEĞİŞTİRMEDİ" || kotu "T11 gereksiz yazım yapıldı"
-printf '%s' "$out" | grep -q "zaten güncel" && ok "T12 değişmediği kullanıcıya söylenir (sessiz değil)" || kotu "T12 sessiz geçti"
+printf '%s' "$out" | grep "zaten güncel" >/dev/null && ok "T12 değişmediği kullanıcıya söylenir (sessiz değil)" || kotu "T12 sessiz geçti"
 
 # ── YALNIZ VERİLEN ALAN: verilmeyen alana DOKUNULMAZ ──────────────────────────
 kos tazele "Sahipsiz Talepler" --engel "50 oda talebi cevapsız" >/dev/null 2>&1
@@ -514,6 +514,10 @@ kos bitti "D1 Iki" --gerekce '2026-09-18 Sultan: onayladı (sohbet · nöbet-125
 # D1-6 · Sultan'a ATIF YOKSA kapı hiç devreye girmez (kendi gözlemi serbest)
 kos bitti "D1 Iki" --gerekce "soru kendiliğinden düştü: ürün tarafında karar verildi" >/dev/null 2>&1
 [ $? -eq 0 ] && ok "D1-6 Sultan'a atıf yoksa kapı devreye girmez" || kotu "D1-6 masum gerekçe bloklandı"
+
+# ── boru + grep -q kalıbı: pipefail altında grep erken çıkınca yazan süreç SIGPIPE (141) alır, sınav rastgele kırmızı olur (Sx main 09781b28 L1)
+BORU_SAY="$(sed '/BORU_SAY=/d' "${BASH_SOURCE[0]}" | grep -cE '\|[[:space:]]*[ef]?grep[^|&;)]*[[:space:]](-[a-zA-Z]*q[a-zA-Z]*|--quiet|--silent)([[:space:]]|$)' || true)"
+[ "$BORU_SAY" -eq 0 ] && ok "BR1 sınavda boru arkasında grep -q yok" || kotu "BR1 boru arkasında grep -q var: $BORU_SAY satır"
 
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]
