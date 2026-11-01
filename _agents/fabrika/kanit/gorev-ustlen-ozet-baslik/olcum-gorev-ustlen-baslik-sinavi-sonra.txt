@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gub-sonra.sh
+# rc=0 sure=4.7s zaman=2026-11-01T06:10:10+03:00
+--- stdout ---
+== 20 geçti · 0 düştü ==
+--- stderr ---

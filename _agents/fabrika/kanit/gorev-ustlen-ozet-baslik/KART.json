@@ -1,0 +1,25 @@
+{
+  "is": "gorev-ustlen-ozet-baslik",
+  "cumle": "gorev.sh ustlen Sultan-dili özeti olmayan kaydı üstlendirmez (rc 2, özet yazmayı söyler); yeni baslik fiili görev başlığını ad ekleyerek düzeltir, eski ad kayıtta kalır",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-11-01T06:06:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}

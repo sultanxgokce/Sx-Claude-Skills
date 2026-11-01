@@ -1,0 +1,46 @@
+{
+  "is": "gorev-ustlen-ozet-baslik",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T06:10:10+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gorev-ustlen-baslik-sinavi",
+      "asama": "once",
+      "dosya": "olcum-gorev-ustlen-baslik-sinavi-once.txt",
+      "sha256": "f69bb178900ac8ee93723539130a74e0c1b730fcb63ea5a589913e6864456220",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gub-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T06:10:05+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "076a69bb09b84075a49339ba25171ad3",
+      "olculen_commit": "9ea62e4d15d2b479508e9f9d4a639d34610abaf2",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-ustlen-baslik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-ustlen-baslik-sinavi-sonra.txt",
+      "sha256": "67c88157db31a70fdb7642154f7be627f655b7e387f9234ddf873565ce7702af",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gub-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T06:10:10+03:00",
+      "sure_sn": 4.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1dcc0d1bb9824034b9d6dc3612c4edee",
+      "olculen_commit": "9ea62e4d15d2b479508e9f9d4a639d34610abaf2",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "76a8a26d4dd83698dad4ffbe567204f8486851d04ac204240972ce58738c72ef"
+}

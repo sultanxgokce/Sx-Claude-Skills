@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "gorev-ustlen-ozet-baslik",
+  "pr": "642",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T06:34:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-ustlen-ozet-baslik",
+  "dal": "gorev-ustlen-ozet-baslik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10400,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 2207
+  },
+  "dalgic": "uyumsuz",
+  "bas": "bb6b4c1b5e41bd4a32882e3f3e1fd8bddb029f23",
+  "duzeltme_farki": {
+    "onceki_bas": "419504e20caf93719c5e0b6aecb9a7c41645656e",
+    "dosya": 2,
+    "bayt": 2350,
+    "tam_bayt": 28456
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turda üretime hazır bulunan PR’da bu tur yalnız sınav betiğinin çalıştırılabilir biti eklenmiş; üretim davranışını gerileten bir değişiklik görünmüyor. Sağlam önce/sonra ölçümü talep edilen özetsiz üstlenmeme ve eski adı koruyarak başlık ekleme davranışlarını 20/20 doğruladığı için puan 5.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı etiketli ölçüm çifti önce 6 geçti/9 düştü, sonra 20 geçti/0 düştü sonucunu veriyor ve çıktıdaki U1/U2/U2b/U3 ile B1/B2/B3/B6/B7 maddeleri iş kartının ana ve hata yollarını kapsıyor. Önceki turda bulgu yoktu; dolayısıyla kapanması gereken açık bulgu bulunmuyor. Bu turdaki yalnızca 100644→100755 kip değişikliği sınavın doğrudan çağrılabilirliğini iyileştiriyor; ancak ölçümler kirli çalışma ağacında ve dış scratchpad betikleri üzerinden yapıldığından kanıtın commit’e birebir bağlanması ideal değil, burada sunulan kapsam içinde puanı düşürecek somut kusur oluşturmuyor."
+  }
+}
