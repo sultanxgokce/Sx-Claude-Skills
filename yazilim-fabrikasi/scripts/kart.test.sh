@@ -144,7 +144,7 @@ bash "$KT" ac is-ayarla-e --is "buton ekle" --istedi S --aldi BANI --geri-alinam
 bash "$KT" canli-ayarla is-ayarla-e --canli e --reis BANI --gerekce "buton işi ama kurulum cron'la yayılıyor" >/dev/null 2>&1 && [ "$(bash "$KT" canli-gerekir is-ayarla-e | cut -f1)" = "E" ]; g $? "canli-ayarla e: canlı istemeyen kart canlı ister hâle gelir"
 bash "$KT" canli-ayarla is-cron --canli h --reis BANI --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "bitmiş kartın canlı şartı sonradan değiştirilmez (rc=1)"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_gerekir'] is True"; g $? "bitmiş kart değişmedi (şart hâlâ E)"
-MA="$T/pkg-ayarla"; mkdir -p "$MA"; cp "$HERE"/*.py "$HERE"/*.sh "$MA/"; sed -i '/^yol,cevap,gerekce,reis=sys.argv/,/^k\["canli_gerekir"\]/ s/^if reis != k.get("aldi"):$/if False:/' "$MA/kart.sh"
+MA="$T/pkg-ayarla"; mkdir -p "$MA"; cp "$HERE"/*.py "$HERE"/*.sh "$MA/"; sed -i '/^yol,cevap,gerekce,reis=sys.argv/,/^k\["canli_gerekir"\]/ s/^if not ayni_ad(reis,k.get("aldi")):$/if False:/' "$MA/kart.sh"
 [ "$(grep -c '^if False:$' "$MA/kart.sh")" = 1 ]; g $? "mutant üretildi (sahip denetimi kapatıldı; çapa tam bir yerde)"
 bash "$KT" ac is-ayarla-mut --is "sahip denetimi mutantı için kart" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli e >/dev/null 2>&1
 bash "$MA/kart.sh" canli-ayarla is-ayarla-mut --canli h --reis SERDAR --gerekce "$GER" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant: sahip olmayan ad KABUL edilir — gerçek kart rc=1 verdi, yani sınav sahip denetimini ölçüyor"
@@ -552,6 +552,13 @@ k=json.load(open(sys.argv[1])); k["durum"]="bitti"; json.dump(k,open(sys.argv[1]
 PY
 bash "$KT" gorev-bagla gba-2 --reis GBASINAV --gorev gorev_KARTTEST00000024 --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && python3 -c "import json;assert not json.load(open('$KK/gba-2.json')).get('gorev')"; g $? "GBA8 biten karta görev bağlanmaz"
 bash "$KT" gorev-bagla gba-yok --reis GBASINAV --gorev gorev_KARTTEST00000025 --tahmin 30 >/dev/null 2>&1; [ $? -eq 3 ]; g $? "GBA9 kart yoksa rc 3"
+# AD: sahip denetimi yazım farkına takılmaz (bulgu …K8F: kartlarda BANI 198 · BÂNİ 95 yan yana)
+bash "$KT" ac ad-1 --is "ad eşleme işi" --istedi SERDAR --aldi ADASI $SINIF >/dev/null 2>&1
+bash "$KT" gorev-bagla ad-1 --reis ADAŞİ --gorev gorev_KARTTEST00000031 --tahmin 30 >/dev/null 2>&1; g $? "AD1 kartta ADASI, --reis ADAŞİ: gorev-bagla sahibi tanır"
+bash "$KT" ac ad-2 --is "ad eşleme ikinci" --istedi SERDAR --aldi "MUAVİN" $SINIF >/dev/null 2>&1
+bash "$KT" canli-ayarla ad-2 --canli e --reis MUAVIN --gerekce "ad eşleme sınavı için canlı şartı" >/dev/null 2>&1; g $? "AD2 canli-ayarla İ ile I farkına takılmaz"
+bash "$KT" canli-ayarla ad-2 --canli h --reis BENNÂ --gerekce "başkası değiştiremez sınavı" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "AD3 başka ajan yine reddedilir"
+bash "$KT" reis-dedi ad-2 --karar devam --reis SERDAR --gerekce "başkası karar yazamaz sınavı" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "AD4 reis-dedi başka ada kapalı"
 N0=$(yz); O="$(FABRIKA_TETIK="$YOKT" bash "$KT" ac dy-1 --is "tetiksiz kutuda sınıflı iş" $SNP --gorev gorev_KARTTEST00000011 --tahmin 40 2>&1)"; RC=$?
 python3 - "$T/yazim.jsonl" "$KK/dy-1.json" "$N0" <<'PY2'; g $? "D1 tetik yok + --gorev → kart AÇILIR, göreve TEK açılış yazımı: çalışılıyor + adımda 'sınıf: para' ve 'başlama izni Sultan'da … dur'"
 import json,sys
