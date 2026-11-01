@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "sirada-bak-sultan-karari",
+  "pr": "646",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T10:12:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-karari",
+  "dal": "sirada-bak-sultan-karari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28699,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 25953
+  },
+  "dalgic": "uyumsuz",
+  "bas": "8427854bb90166356f93087c9204568208a1dffd",
+  "duzeltme_farki": {
+    "onceki_bas": "1a68a3916a2cf4019e4b78870f2f78b8e567a197",
+    "dosya": 10,
+    "bayt": 27104,
+    "tam_bayt": 43198
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Liste işaretleri ile Sultan kararlarını sıradan işten ayırma davranışı gerçek ölçümde 3/11'den 11/11'e çıkmış; altı bilinçli bozulma da artık bağımsız koşulda sınava takılıyor. Önceki turun tek rötuşu kapanmış, yeni üretim sorunu görünmüyor; iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçüm çifti önce rc=1 ile 3 geçti/8 kaldı, sonra rc=0 ile 11 geçti/0 kaldı; liste işaretlerini, sayımdan/gösterimden çıkarmayı ve üstlenmemeyi ölçüyor. Önceki B1 kapanmış: SADECE_MUTANT akışı ayrıntılı çıktıyı açıp yakalanan mutantı rc=1'e çeviriyor; altı ayrı mutasyon kaydının tümü yeşil, dusen_kapi=true ve çıktılar beklenen ✗/kalan vaka satırlarını taşıyor. Mutasyon kayıtlarındaki rc=1 gerçek kod hatası değil; gercek_olcum etiketi sultan-karari-sinavi kaydını gösteriyor."
+  }
+}
