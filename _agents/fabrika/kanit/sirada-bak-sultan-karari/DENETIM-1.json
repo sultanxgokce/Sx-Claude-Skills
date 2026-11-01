@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "sirada-bak-sultan-karari",
+  "pr": "646",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T09:58:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-karari",
+  "dal": "sirada-bak-sultan-karari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35938,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 16575
+  },
+  "dalgic": "uyumlu",
+  "bas": "1a68a3916a2cf4019e4b78870f2f78b8e567a197",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Liste satırına sahip ve kapı işaretleri eklenmiş; sırada-bak bu karar kartlarını saymıyor, göstermiyor ve üstlenmiyor. Gerçek ölçüm 3/11'den 11/11'e çıkmış; üretim davranışı hazır, yalnız bağımsız mutasyon kanıtı rötuş istiyor.",
+    "bulgular": [
+      {
+        "ne": "Bağımsız mutasyon koşuları ölçüm aracının tanıyacağı düşen kapı çıktısını üretmiyor; altı mutantın yakalandığı iddiası bu kayıtlarla doğrulanamıyor.",
+        "kanit": "Altı mutasyon kaydının tamamı sari ve dusen_kapi=false; çıktılar yalnız “── mutantlar” satırını gösteriyor. Buna karşı gerçek koşunun toplu çıktısı mutantları yakaladığını söylüyor, fakat sarı kayıt bu iddiaya kanıt sayılamaz.",
+        "konum": "kanıt manifesti: mutant-* kayıtları; sirada-bak-sultan-karari.test.sh: SADECE_MUTANT akışı",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve gerçek davranış için geçerli bir önce/sonra ölçüm çifti var: önce rc=1 ile 3 geçti/8 kaldı, sonra rc=0 ile 11 geçti/0 kaldı. Bu çift talebin liste işaretleri, sayımdan çıkarma ve üstlenmeme bölümlerini gerçekçi sahte kayıtlarla ölçüyor; ancak altı ayrı mutasyon kaydı sarı olduğundan mutasyon dayanıklılığı ayrıca kanıtlanmış sayılmaz."
+  }
+}
