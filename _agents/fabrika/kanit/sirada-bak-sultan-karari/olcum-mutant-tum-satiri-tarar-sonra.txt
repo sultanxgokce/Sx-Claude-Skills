@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 2 ama düşen kapı satırı YOK (✗/FAIL/N kaldı/KALAN: N) = ÇÖKÜŞ ya da kurulum hatası → ÖLÇÜLEMEDİ (yakalandı DEĞİL). Gerçek kod ölçümü: olcum-sultan-karari-sinavi-* ===
+$ env SADECE_MUTANT=tum-satiri-tarar bash /config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-karari/gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
+# rc=2 sure=0.7s zaman=2026-11-01T09:53:39+03:00
+--- stdout ---
+── mutantlar
+--- stderr ---

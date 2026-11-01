@@ -1,0 +1,23 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sbk-once.sh
+# rc=1 sure=246.9s zaman=2026-11-01T09:41:50+03:00
+--- stdout ---
+  ✗ L1 Sultan kararı (sahip sultan + kapı karar): satır sonunda iki işaret de var
+  ✗ L2 yalnız sahip sultan: sahip işareti var, kapı işareti YOK
+  ✗ L3 yalnız kapı (ticari): kapı işareti var, sahip işareti YOK
+  ✓ L4 sıradan iş işaret taşımaz; oda işareti eskisi gibi kalır
+  ✓ L5 eski okuyucu (split(None,6)): ilk 6 sütun ve başlık işaretlerden etkilenmez
+  ✗ S1 Sırada yalnız sıradan işleri sayar (A, O, N3 = 3); Sultan kararları (S1, S2, K1) SAYILMAZ
+  ✗ S2 havuz da yalnız sıradan işi sayar (H2 = 1); Sultan kararı H1 SAYILMAZ
+  ✗ S3 ISI/MADDE satırlarında hiçbir Sultan kararı yok
+  ✓ S4 başlıkta geçen "sahip: sultan" metni sıradan işi ELEMEZ (işaret yalnız satır sonundan okunur)
+  ✗ S5 varsayılan koşuda ustlen YALNIZ sıradan işe gider (A); Sultan kararına PATCH yok
+  ✗ S6 kutuda yalnız Sultan kararı varsa: SIRADA=0, HAVUZDA=0, başlamaz, hiçbir şey yazılmaz
+── 3 geçti · 8 kaldı
+  ✗ mutant sirada-suzgeci-yok kurulamadı (desen tutmadı, rc=7)
+  ✗ mutant yalniz-kapi-suzer kurulamadı (desen tutmadı, rc=7)
+  ✗ mutant yalniz-sahip-suzer kurulamadı (desen tutmadı, rc=7)
+  ✗ mutant tum-satiri-tarar kurulamadı (desen tutmadı, rc=7)
+  ✗ mutant liste-sahip-isareti-yok kurulamadı (desen tutmadı, rc=7)
+  ✗ mutant liste-kapi-isareti-yok kurulamadı (desen tutmadı, rc=7)
+--- stderr ---
+⏳ agir-sira: kanit-sirada-bak-sultan-karari-sultan-karari-sinavi 246 sn bekledi (yuva 2, load1 17.39)

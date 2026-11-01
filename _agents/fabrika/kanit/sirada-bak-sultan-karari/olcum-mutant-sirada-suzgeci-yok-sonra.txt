@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 5 ama düşen kapı satırı YOK (✗/FAIL/N kaldı/KALAN: N) = ÇÖKÜŞ ya da kurulum hatası → ÖLÇÜLEMEDİ (yakalandı DEĞİL). Gerçek kod ölçümü: olcum-sultan-karari-sinavi-* ===
+$ env SADECE_MUTANT=sirada-suzgeci-yok bash /config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-karari/gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
+# rc=5 sure=136.2s zaman=2026-11-01T09:53:35+03:00
+--- stdout ---
+── mutantlar
+--- stderr ---
+⏳ agir-sira: kanit-sirada-bak-sultan-karari-mutant-sirada-suzgeci-yok 136 sn bekledi (yuva 2, load1 13.38)

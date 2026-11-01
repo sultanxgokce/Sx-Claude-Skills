@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 3 = ÖLÇÜLEMEDİ. Gerçek kod ölçümü: olcum-sultan-karari-sinavi-* ===
+$ env SADECE_MUTANT=yalniz-sahip-suzer bash /config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-karari/gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
+# rc=3 sure=1.4s zaman=2026-11-01T09:53:39+03:00
+--- stdout ---
+── mutantlar
+--- stderr ---
