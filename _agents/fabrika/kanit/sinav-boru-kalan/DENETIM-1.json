@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sinav-boru-kalan",
+  "pr": "647",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T10:59:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sinav-boru-kalan",
+  "dal": "sinav-boru-kalan",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 89354,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3485
+  },
+  "dalgic": "uyumlu",
+  "bas": "1eecd936f07c93f9114dbd384f5a67a45b245f75",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Federe ve kart sınavlarıyla iskân sınavının 1640. satıra kadarki bölümünde boru içindeki `grep -q` kullanımları, girdiyi erken kapatmayan `grep … >/dev/null` biçimine çevrilmiş. Araç imzalı önce/sonra ölçümü kapsam dışı aday sayısını 153'ten 0'a indirdiği için yalnız rötuş değil, talep edilen sınır içinde üretime hazır bir kapanış görüyorum.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA kayıtları tutarlı; sarı kayıt yok. Ölçüm çifti önce rc=1 ve `dosya disi 153`, sonra rc=0 ve `dosya disi 0` gösteriyor; fark da federe, kart ve iskânın ilk 1640 satırındaki ilgili boru kullanımlarını doğruluyor. Ölçüm betiğinin içeriği boru denetiminde görünmese de ölçülen commit/kirli durumları kayıtlı ve sunulan üretim farkıyla sonuç tutarlı."
+  }
+}
