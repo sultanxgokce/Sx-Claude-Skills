@@ -29,6 +29,7 @@ sahte_surum 1 'duzen · kaynak sürüm: 1.2.3\n  bani: BAYAT (gömülü eski)\n 
 O="$(kos)"; rc=$?
 ok "U1 sapma → rc 1, havuza 1 bug kaydı, günlükte sapma=1 durum=sapma" "$([ $rc -eq 1 ] && [ "$(n)" = 1 ] && grep -q -- '--etiket bug' "$BULGU_KAYIT" && grep -q 'sapma=1 durum=sapma' "$T/gunluk" && echo 0 || echo 1)" "→ rc=$rc"
 
+ok "U1b sapma kaydı bulgu komutuna '--kaynak uyum' ile gider (Kuzey G30 kaynak=uyum sayar)" "$(grep -q -- '--kaynak uyum' "$BULGU_KAYIT" && echo 0 || echo 1)" "→ $(cat "$BULGU_KAYIT")"
 sahte_surum 0 'duzen · kaynak sürüm: 1.2.3\n  bani: GÜNCEL (manuel-claude-base birebir gömülü)\n  ekipc işaretli 2 · işaretsiz 0\nSONUÇ: güncel'
 O="$(kos)"; rc=$?
 ok "U2 temiz → rc 0, havuza yazmaz, günlükte sapma=0 durum=temiz" "$([ $rc -eq 0 ] && [ "$(n)" = 0 ] && grep -q 'sapma=0 durum=temiz' "$T/gunluk" && echo 0 || echo 1)" "→ rc=$rc"
@@ -64,6 +65,7 @@ if [ -z "${UYUM_BETIK:-}" ]; then
 import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s; s=s.replace(sys.argv[3],sys.argv[4]); assert s!=o; open(sys.argv[2],'w',encoding='utf-8').write(s)
 PY
     local o; o="$(UYUM_BETIK="$M" bash "$0" 2>&1)"; ok "mutant '$1' → $4 kırmızı" "$(grep -q "✗ $4 " <<<"$o" && echo 0 || echo 1)" "→ $(grep -E '✗' <<<"$o" | head -2)"; }
+  mut kaynak-uyum-yazilmaz '--etiket "$ETIKET" --kaynak uyum --not' '--etiket "$ETIKET" --not' U1b
   mut sari-temiz-sayilir 'elif [ "$ISARETLI" -eq 0 ]; then DURUM=sari' 'elif false; then DURUM=sari' U3
   mut olculemedi-temiz 'if [ "$RC" -eq 3 ]; then DURUM=olculemedi; SAPMA=0' 'if false; then DURUM=olculemedi; SAPMA=0' U4
   mut havuza-yazmaz 'bash "$BULGU" yaz' 'true yaz' U1

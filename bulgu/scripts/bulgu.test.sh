@@ -79,6 +79,10 @@ ok "K1c eski kutu yazıcısı ÇAĞRILMADI (tek defter, ikilik yok)" '[[ "$o" !=
 ok "K1d jeton değeri çıktıda YOK" '[[ "$o" != *sinav-jeton-ABC* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "fikir" --kim X --etiket ozellik 2>&1); r=$?
 ok "K1e --etiket ozellik geçer" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"etiket\"]==\"ozellik\"" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "uyum kaydı" --kim X --kaynak uyum 2>&1); r=$?
+ok "K1e2 --kaynak uyum → defter kaydında kaynak_nereden 'uyum'; --kaynak yokken 'bulgu komutu' (K1b)" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"kaynak_nereden\"]==\"uyum\"" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --kaynak "Kötü Ad" 2>&1); r=$?
+ok "K1e3 geçersiz --kaynak rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"--kaynak"* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --etiket kusur 2>&1); r=$?
 ok "K1f bilinmeyen etiket rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"bug ya da ozellik"* ]]'
 printf 'yanlis-jeton\n' > "$T/jeton2"
