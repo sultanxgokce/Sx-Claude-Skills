@@ -1,0 +1,90 @@
+{
+  "is": "kapimda-sinav-boru",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T04:11:50+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "boru",
+      "asama": "once",
+      "dosya": "olcum-boru-once.txt",
+      "sha256": "debbfec9a790cd910407ae6171ce88f4030aca3be00e9db182a7f866b031f32c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/boru-olc.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapimda-once.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T04:11:40+03:00",
+      "sure_sn": 20.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "05dbe7c0c38740d09941f3b48a8efd2b",
+      "olculen_commit": "22ff4e64482220b1f27d95ee4eb889ae08d0c571",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "boru",
+      "asama": "sonra",
+      "dosya": "olcum-boru-sonra.txt",
+      "sha256": "1abb97b2da871328672a3864740e16032893e038ea8640e961b83c87308c2e83",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/boru-olc.sh",
+        "kapimda/scripts/kapimda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:11:41+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5f3754a7d078439696905797dcace480",
+      "olculen_commit": "22ff4e64482220b1f27d95ee4eb889ae08d0c571",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "28b68040942bfd56ce97977616a78db0ccfe91a8c7f2066bb428a48fe8412683",
+      "komut": [
+        "bash",
+        "kapimda/scripts/kapimda.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:11:45+03:00",
+      "sure_sn": 4.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "66f217e04fd2457d9eef45a88aa2027d",
+      "olculen_commit": "22ff4e64482220b1f27d95ee4eb889ae08d0c571",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kalip-doner",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kalip-doner-sonra.txt",
+      "sha256": "c68bdd44a1ba2fe0ef27cebb435535c258341abb95f656e22b0ff4957a15e049",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/k1/kapimda/scripts/kapimda.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:11:50+03:00",
+      "sure_sn": 4.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "fbae42edcb034df69c0dd4837dd42dc6",
+      "olculen_commit": "22ff4e64482220b1f27d95ee4eb889ae08d0c571",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "97a1fb51d0c05aa202e5b950b0b5a72b006eec2dd479b99e9a72bbee376278dd"
+}
