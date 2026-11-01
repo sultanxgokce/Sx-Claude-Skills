@@ -94,7 +94,7 @@ PY
   local prc=$?; [ $prc -eq 0 ] || { echo "  ✗ mutant $1 kurulamadı (desen tutmadı, rc=$prc)"; MUTK=$((MUTK+1)); return; }
   local q=1; [ -z "${SADECE_MUTANT:-}" ] || q=0   # tek-mutant kipi AYRINTILI basar: kanıt aracı düşen kapıyı (✗ satırı, "N kaldı") çıktıdan tanır
   kos "$d" "$q"; local r=$?
-  [ -z "${SADECE_MUTANT:-}" ] || exit "$r"
+  [ -z "${SADECE_MUTANT:-}" ] || exit $((r > 0 ? 1 : 0))   # yakalandı → rc 1 (kanıt aracı rc 3/9'u ÖLÇÜLEMEDİ okur: vaka sayısı rc OLMAZ), yaşıyor → 0
   if [ $r -gt 0 ]; then echo "  ✓ mutant $1 yakalandı ($r vaka kırmızı)"; else echo "  ✗ mutant $1 YAŞIYOR — sınav bu bozulmayı görmüyor"; MUTK=$((MUTK+1)); fi
 }
 MUTK=0
