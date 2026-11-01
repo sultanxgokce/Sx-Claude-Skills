@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.42
+version: 0.27.43
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -171,6 +171,8 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+
+- **0.27.43 (1 Kas 2026):** `kanit.py` kirli işareti kanıt dizinini saymaz. Aracın yazdığı KANIT.json ve ölçüm çıktısı temiz başı kirli gösteriyordu; göz bunu ölçülmemiş baş saydı. Kanıt dışındaki izlenen değişiklik yine kirlidir.
 - **0.25.4 (26 Eki, görev …898AX · kart kapi-pr-itilmemis-denetim):** `birlestirme-kapisi.sh --pr N` kanıt dizinini YEREL ağaçtan okuyorsa onu PR'ın başıyla (origin pull/N/head) bayt bayt karşılaştırır: yerel baş ≠ PR başı → `itilmemiş commit var`, dizindeki dosya PR başında yok ya da farklıysa ad ad söylenir (commit'lenmemiş DENETIM de burada yakalanır), PR başı çekilemezse ÖLÇÜLEMEDİ (rc=3). Eskiden itilmemiş DENETIM-1.json kapıyı geçiriyordu: Nexus #907 ve #908 denetim kaydı olmadan birleşti (PR başı 80987568, yerel 77e7bf21, rc0). `--pr` verilmeyen çağrı aynen eski. Sınav: `birlestirme-kapisi.test.sh` T14pr (çıplak uzak + itilmemiş commit, mutant). Not: `--pr` kullanan eski sınavlar kanıtı önce PR başına iter.
 - **0.25.5 (26 Eki, görev …57ZV1 · kart kart-canli-ayarla · retro W42 BÂNİ Ö2):** `kart.sh canli-ayarla <iş> --canli e|h --reis <AD> --gerekce "<en az 20 karakter>"` — AÇIK kartın canlı kanıt şartını SAHİBİ değiştirir (kartta cümleden yanlış türeyen şart, ya da bu alandan önce açılmış kart). Eskiden kart dosyası elle düzenleniyordu: aktör de gerekçe de kayıtsızdı. Kurallar: `--reis` kartın `aldi` alanıyla AYNI olmalı (reis-dedi emsali; başkasının kararı gerekçede atıfla); gerekçe ≥20 karakter (baş/son boşluk sayılmaz, `|` ve satır sonu yok); kapanmış (bitti/canlı borçlu) kart değişmez; kart yoksa rc 3. Karar karta `canli_sebep` (ad + gerekçe) ve `gecmis` satırı olarak yazılır, kapı eskisi gibi `canli-gerekir`'den okur, bağımsız göz gerekçeyi görür. Kapatma yolu değil: şartı kaldırmak için ayrıca gerçek gerekçe gerekir.
 - **0.25.6 (26 Eki, görev …S47706 · kart kapi-kacis-mesaji-dogru-yol):** `birlestirme-kapisi.sh` engel mesajındaki "FABRIKA_KAPISIZ=… ile kaçış" satırı yalnız depoda birleştirme kancası (`scripts/hooks/birlestirme-kapisi.sh`) varsa basılır. O değişkeni yalnız o kanca okur; izole kutuda (MMEx gibi) kanca yok, değişken hiçbir şey yapmıyordu ve mesaj ajanı boşa yönlendiriyordu. Kancasız depoda mesaj bunu söyler ve gerçek yolu gösterir: eksiği tamamla, karar gerekiyorsa `kart.sh sultan-dedi` / `kart.sh reis-dedi`. Yeni kaçış yolu eklenmedi.

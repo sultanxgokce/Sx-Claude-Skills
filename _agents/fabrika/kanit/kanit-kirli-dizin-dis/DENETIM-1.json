@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kanit-kirli-dizin-dis",
+  "pr": "648",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T11:24:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-kirli-dizin-dis",
+  "dal": "kanit-kirli-dizin-dis",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19310,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 9727
+  },
+  "dalgic": "uyumsuz",
+  "bas": "5913b4c4b0651eeb1c97c0ce6e5750b07c60f102",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`kanit.py`, kirli durum hesabından kanıt kökünü çıkarırken kanıt dışındaki izlenen değişiklikleri kirli saymayı sürdürüyor. Önce/sonra ölçümü ve iki yönlü mutasyon sınavı davranışın hem düzeldiğini hem de aşırı dışlamaya kaçmadığını gösterdiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Önce ölçümü K4'te 2 hata ve rc=1, sonra ölçümü aynı senaryolarda 8/8 başarı ve rc=0 gösteriyor; K5 kanıt dışı değişikliğin hâlâ yakalandığını doğruluyor. İki mutasyon kaydı da dışlamanın kaldırılması ve her şeyin dışlanması kusurlarında kapının düştüğünü gösteriyor; gerçek kod durumu `gercek_olcum: sinav-yeni-kod` kaydından okunmuş."
+  }
+}

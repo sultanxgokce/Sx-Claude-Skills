@@ -28,7 +28,7 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 """
 import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys, uuid
 
-SURUM = "kanit.py/0.6.0"   # 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
+SURUM = "kanit.py/0.6.1"   # 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
 # 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
 # bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
@@ -160,10 +160,11 @@ def birincil_reddi(depo, is_adi):
 def olculen_commit(dz):
     """Ölçümün koştuğu ağacın HEAD commit'i ve ağacın kirli olup olmadığı. Okunamazsa (None, None): ÖLÇÜLEMEDİ, uydurulmaz.
     Kapı (birlestirme-kapisi.sh) bunu puanın verildiği commit ile karşılaştırır: kayıt hangi koddan geldi, kayda bakan bilsin.
-    Kirli = izlenen dosyada commit'lenmemiş değişiklik var: ölçülen şey HEAD'in kendisi değil, HEAD + yerel fark."""
+    Kirli = izlenen dosyada commit'lenmemiş değişiklik var: ölçülen şey HEAD'in kendisi değil, HEAD + yerel fark.
+    Kanıt dizini dışarıda: aracın yazdığı KANIT.json ve ölçüm çıktısı ölçülen kodu değiştirmez (görev …NEBDQY)."""
     try:
         h = subprocess.check_output(["git", "-C", dz, "rev-parse", "--verify", "-q", "HEAD"], text=True, stderr=subprocess.DEVNULL).strip()
-        k = subprocess.run(["git", "-C", dz, "status", "--porcelain", "--untracked-files=no"], capture_output=True, text=True)
+        k = subprocess.run(["git", "-C", dz, "status", "--porcelain", "--untracked-files=no", "--", ":/", ":(top,exclude)_agents/fabrika/kanit"], capture_output=True, text=True)
         if not h or k.returncode != 0:
             return None, None
         return h, bool(k.stdout.strip())

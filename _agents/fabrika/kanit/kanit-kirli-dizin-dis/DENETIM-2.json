@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kanit-kirli-dizin-dis",
+  "pr": "648",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T12:17:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-kirli-dizin-dis",
+  "dal": "kanit-kirli-dizin-dis",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15480,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3087
+  },
+  "dalgic": "uyumsuz",
+  "bas": "8cff60990e71995df85f3f74e4f58b525e5404c3",
+  "duzeltme_farki": {
+    "onceki_bas": "5913b4c4b0651eeb1c97c0ce6e5750b07c60f102",
+    "dosya": 3,
+    "bayt": 4383,
+    "tam_bayt": 21561
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`kanit.py` için istenen davranış önceki turda üretime hazır bulunmuş; bu düzeltme turunda üretim mantığına dokunulmayıp yalnız katalog sürümü 0.27.43'e yükseltilmiş. Önceki turda bulgu bulunmadığından kapanacak madde yok; sağlam ölçümler hedef davranışın ve dar kapsamlı dışlamanın korunduğunu gösteriyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü K4'te 2 hata ve rc=1, gerçek sonraki ölçüm 8/8 başarı ve rc=0 gösteriyor; K5 kanıt dışındaki izlenen değişikliğin hâlâ kirli sayıldığını doğruluyor. İki mutasyon kaydında rc=1 ve düşen kapı beklenen sonuçtur; gerçek kod durumu `gercek_olcum: sinav-yeni-kod` kaydından okunmuş. Önceki tur 5/E ve sıfır bulguydu; yeni fark yalnız `catalog.json` sürüm artışıdır."
+  }
+}

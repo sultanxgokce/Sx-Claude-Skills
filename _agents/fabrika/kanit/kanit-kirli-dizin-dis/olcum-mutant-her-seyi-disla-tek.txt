@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-yeni-kod-* ===
+$ bash _agents/fabrika/kanit/kanit-kirli-dizin-dis/mutant.sh her-seyi-disla
+# rc=1 sure=0.7s zaman=2026-11-01T11:15:36+03:00
+--- stdout ---
+  ✗ olculen_kirli=True
+  ✗ kanıt dışı değişiklik True (dışlama yalnız kanıt dizini)
+── SONUÇ: 6 geçti · 2 kaldı ──
+YAKALANDI: kanıt dışı değişiklik True
+--- stderr ---

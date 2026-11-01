@@ -17,4 +17,15 @@ echo "════ K2 · izlenen dosyada commit'siz değişiklik: olculen_kirli 
 [ "$(alan olculen_kirli)" = "True" ]; g $? "olculen_kirli=True"
 echo "════ K3 · imza bozulmadı (dogrula rc=0) ════"
 ( cd "$T" && bash "$K" dogrula is-k ) >/dev/null 2>&1; g $? "dogrula rc=0"
+echo "════ K4 · kod temiz, izlenen kanıt dosyası değişmiş: kirli SAYILMAZ (aracın kendi yazımı koda dair bir şey söylemez) ════"
+( cd "$T" && git add -A && git commit -q -m "docs: kanıt" ) >/dev/null 2>&1
+( cd "$T" && bash "$K" olcum is-k uc --asama tek -- echo 3 ) >/dev/null 2>&1
+[ "$(alan olculen_kirli)" = "False" ]; g $? "temiz başta ilk kayıt False"
+( cd "$T" && bash "$K" olcum is-k dort --asama tek -- echo 4 ) >/dev/null 2>&1
+[ "$(alan olculen_kirli)" = "False" ]; g $? "aynı başta ikinci kayıt da False (KANIT.json izlenen ve değişmiş)"
+( cd "$T" && git add -A && git commit -q -m "docs: kanıt 2" && bash "$K" olcum is-k dort --asama tek -- echo 5 ) >/dev/null 2>&1
+[ "$(alan olculen_kirli)" = "False" ]; g $? "aynı etiket yeniden: izlenen ölçüm dosyası değişse de False"
+echo "════ K5 · kanıt dışındaki izlenen dosya değişince yine kirli ════"
+( cd "$T" && echo c > f.sh && bash "$K" olcum is-k bes --asama tek -- echo 6 ) >/dev/null 2>&1
+[ "$(alan olculen_kirli)" = "True" ]; g $? "kanıt dışı değişiklik True (dışlama yalnız kanıt dizini)"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
