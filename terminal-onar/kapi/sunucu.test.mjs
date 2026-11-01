@@ -585,7 +585,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
     return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
   const PROJE = join(T, 'proje'); mkdirSync(join(PROJE, '_agents/handoff'), { recursive: true });
-  writeFileSync(join(PROJE, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    rol: "gözcü"\n    hal: calisiyor\n  - id: KALFA\n    tmux: "kalfa:0"\n    rol: "kalfa"\n  - id: MIMAR\n    tmux: "mimar:0"\n    hal: emekli\n');
+  writeFileSync(join(PROJE, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    rol: "gözcü"\n    hal: calisiyor\n  - id: KALFA\n    tmux: "kalfa:0"\n    rol: "kalfa"\n    amir: BASIRET\n  - id: MIMAR\n    tmux: "mimar:0"\n    hal: emekli\n');
   const K6 = join(T, 'koltuk-sahte6.sh');
   writeFileSync(K6, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
     + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\t\\nBASIRET\\t1760000100\\t1\\tajan\\tdis-olay\\tCI bekleniyor\\nkalfa\\t5\\t0\\tajan\\tbilinmiyor\\t\\n2026/85\\t7\\t1\\tajan\\tgirdi\\t\\n"\n');
@@ -597,6 +597,9 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const r = await iste(18791, '/sedir/api/kadro', { cerez }); const j = await r.json();
   const K = (id) => (j.kisiler || []).find((x) => x.id === id);
   kapi('KD1 200 + kaynak aile kaydı + sayılar', r.status === 200 && j.kaynak.length === 1 && j.kaynak[0].endsWith('aile-registry.yaml') && JSON.stringify(j.sayilar) === JSON.stringify({ calisan: 1, dusen: 1, 'kayitta-var-calismiyor': 0, 'gecici-emekli': 1, kayitsiz: 1, altyapi: 1 }), `→ ${r.status} ${JSON.stringify(j.sayilar)} ${JSON.stringify(j.kaynak)}`);
+  const rk = await (await iste(18791, '/sedir/api/koltuklar', { cerez })).json(); const rk1 = (ad) => (rk.koltuklar || []).find((x) => x.ad === ad) || {};
+  kapi('RT1 koltuk cevabı kayıttan rütbe taşır: amiri olan personel, altı olan müdür', rk1('kalfa').kademe === 'personel' && rk1('kalfa').amir === 'BASIRET' && rk1('kalfa').amir_ad === 'BASIRET' && rk1('BASIRET').kademe === 'oda müdürü', JSON.stringify(rk1('kalfa')));
+  kapi('RT2 rütbe bilgisi olmayan koltukta alan yazılmaz', !('kademe' in rk1('2026/85')) && !('amir' in rk1('2026/85')), JSON.stringify(rk1('2026/85')));
   kapi('KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi', K('BASIRET').grup === 'calisan' && K('BASIRET').oturum.hal === 'dis-olay' && K('BASIRET').oturum.ne === 'CI bekleniyor' && adr(K('BASIRET').oturum, 'BASIRET'), JSON.stringify(K('BASIRET')));
   kapi('KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk boş kabuk olsa da DÜŞEN değil, altyapı (E2: "ana oturum")', K('KALFA').grup === 'dusen' && !j.kisiler.some((x) => x.tmux === 'sinavkutu-ana') && j.altyapi.length === 1 && j.altyapi[0].ana && j.altyapi[0].altyapi === 'ana oturum' && adr(j.altyapi[0], 'sinavkutu-ana'), JSON.stringify(j.altyapi));
   kapi('KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" ekran adresi adı değil kimliği taşır', K('MIMAR').grup === 'gecici-emekli' && j.kayitsiz.length === 1 && adr(j.kayitsiz[0], '2026/85'), JSON.stringify(j.kayitsiz));

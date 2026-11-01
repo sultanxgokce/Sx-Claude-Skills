@@ -1,0 +1,20 @@
+$ node rutbe.test.mjs
+# rc=0 sure=0.0s zaman=2026-11-01T14:26:22+03:00
+--- stdout ---
+  ✓ R1 amiri boş oda müdürü reis
+  ✓ R2 altı olan üye müdür, amiri koltuk adıyla, görünen adıyla gelir
+  ✓ R3 oda müdürü alanı altı olmasa da müdür yapar
+  ✓ R4 personel amirine bağlanır, diakritik fark engel değil
+  ✓ R5 büyük harfli tmux adı korunur
+  ✓ R6 bilgisiz üyeye rütbe uydurulmaz
+  ✓ R7 emekli üye sayılmaz
+  ✓ R8 çözülemeyen amir: rütbe yok, sahte bağ yok
+  ✓ R9 amiri boş ama altı olan üye reis değil müdürdür
+  ✓ R10 amiri Sultan olan reis
+  ✓ R11 kimlik ile görünen ad farklıyken amir görünen addan çözülür
+  ✓ R12 katlanmış adla bulur
+  ✓ R13 reisin koltuğu açık değilse reislik ana koltuğa düşer
+  ✓ R14 reisin koltuğu açıksa ana koltuk rütbe almaz
+  ✓ R15 boş kayıt boş harita, hata yok
+geçen 15 · kalan 0
+--- stderr ---
