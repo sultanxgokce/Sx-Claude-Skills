@@ -1,7 +1,7 @@
 {
   "is": "terminal-onar-kadro-iskan-oda",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-01T14:04:26+03:00",
+  "guncelleme": "2026-11-01T14:06:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -128,7 +128,49 @@
       "olcum_id": "8ac52313acbc406ba0f76f1f4512f9f7",
       "olculen_commit": "08ea136661a4c3c2ba859e74f814a16300547e31",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-gercek-2",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-gercek-2-sonra.txt",
+      "sha256": "f961a01f023796241b7ec3fae5eba68722d939fb9d9ff72b00e9c31d785c07ad",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:06:00+03:00",
+      "sure_sn": 28.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d347bb13b52d46348fd97a0b7bd335c4",
+      "olculen_commit": "348d7c2e32552f9243cf6bfcdf387f902429d1c0",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-mutant-2",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-mutant-2-sonra.txt",
+      "sha256": "d7afd9da571082c22ec9e7862c0bc7bcc27ae73c8922a962e3927f6a691f746d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:06:09+03:00",
+      "sure_sn": 8.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "koltuk-gercek-2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "f22df49043494da1a3e285f3756b98d4",
+      "olculen_commit": "348d7c2e32552f9243cf6bfcdf387f902429d1c0",
+      "olculen_kirli": false
     }
   ],
-  "imza": "e9821fcfd09c38a6bb760d36ecddfacf7e5bf0713595312bff0b0df38a9b29dd"
+  "imza": "ec20a837da0cf45e498bf6397362b7856b88288de914005e67fb1e8bc39c8e86"
 }
