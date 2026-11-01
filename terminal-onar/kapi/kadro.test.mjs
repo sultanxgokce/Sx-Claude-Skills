@@ -85,5 +85,17 @@ const pn = (h) => koltukSatirlari(`a\t1\t1\tajan\tbos\t\t\t\t/d\t${h}\n`)[0].pen
 kapi('PN3 pencere sütunu sayıya çevrilir', JSON.stringify(pn('118x53')) === '{"sutun":118,"satir":53}', JSON.stringify(pn('118x53')));
 kapi('PN4 boş ya da bozuk boy alan yazmaz (uydurma yok, telefon eski kipte kalır)', ['', '0x53', '118', 'x', '118x0', '99999x5', '1;2x3'].every((h) => pn(h) === undefined));
 kapi('PN5 eski 9 sütunlu kapı satırında alan yok', koltukSatirlari('a\t1\t1\tajan\tbos\t\t\t\t/d\n')[0].pencere === undefined);
+// OD · İSKÂN kaydı olan kutuda (NAZIR) `oda:` yalnız aile kaydında yaşar — iskan dalı onu da okumalı, ama id/rol/tmux iskan'ınki kalmalı
+const nz = join(T, 'nz'); mkdirSync(join(nz, '_agents/handoff'), { recursive: true });
+writeFileSync(join(nz, 'iskan-registry.yaml'), `proje: nz\nekip_registry_pointer: _agents/handoff/ekip-registry.yaml\nuyeler:\n  - id: nz-yon\n    tmux: "nz-yon:0"\n  - id: nz-motor\n    tmux: "nz-motor:0"\n`);
+writeFileSync(join(nz, '_agents/handoff/ekip-registry.yaml'), `uyeler:\n  - id: nz-yon\n    mod: motor\n    rol: "yönetici"\n    hal: calisiyor\n  - id: nz-motor\n    mod: motor\n    rol: "kodlayıcı"\n    hal: calisiyor\n`);
+writeFileSync(join(nz, '_agents/handoff/aile-registry.yaml'), `meta:\n  yonetici: nz-yon\nuyeler:\n- id: nz-yon\n  tmux: "SAHTE:9"\n  rol: "AILE ROLU"\n  oda: nezaret\n- id: nz-motor\n  oda: omnirouter\n`);
+const od = kayitOku(nz); const odu = Object.fromEntries(od.uyeler.map((u) => [u.id, u]));
+kapi('OD1 iskan kutusunda oda alanı aile kaydından gelir', odu['nz-yon']?.oda === 'nezaret' && odu['nz-motor']?.oda === 'omnirouter', JSON.stringify(od.uyeler));
+kapi('OD2 aile kaydı yalnız oda verir: tmux ve rol iskan/ekip kaydının kalır', odu['nz-yon']?.tmux === 'nz-yon:0' && odu['nz-yon']?.rol === 'yönetici', JSON.stringify(odu['nz-yon']));
+kapi('OD3 üç kaynak okundu (iskan + ekip + aile)', od.kaynak.length === 3 && od.kaynak[2].endsWith('aile-registry.yaml'), JSON.stringify(od.kaynak));
+const nz0 = join(T, 'nz0'); mkdirSync(join(nz0, '_agents/handoff'), { recursive: true });
+writeFileSync(join(nz0, 'iskan-registry.yaml'), `proje: nz0\nuyeler:\n  - id: a\n    tmux: "a:0"\n`);
+kapi('OD4 aile kaydı yoksa iskan kutusu eskisi gibi çalışır, oda alanı yok (uydurma yok)', kayitOku(nz0).uyeler.every((u) => u.oda === undefined) && kayitOku(nz0).uyeler.length === 1, JSON.stringify(kayitOku(nz0).uyeler));
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);
