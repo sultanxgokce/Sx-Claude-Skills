@@ -201,12 +201,12 @@ echo "════ S13 · İLERİ TARİHLİ DAMGA → taze SAYILMAZ (fail-closed
 gelecek_cipa 120
 O="$(kos oneri --doluluk 90)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "S13a ileri tarihli damgada öneri ÜRETİLMEZ (rc=3)"
-printf '%s' "$O" | grep -q "GELECEĞİ GÖSTERİYOR"; g $? "S13b sebebi söylüyor: damga geleceği gösteriyor"
-printf '%s' "$O" | grep -qi "ölçemedim"; g $? "S13c 'taze' demiyor, 'ölçemedim' diyor"
+printf '%s' "$O" | grep "GELECEĞİ GÖSTERİYOR" >/dev/null; g $? "S13b sebebi söylüyor: damga geleceği gösteriyor"
+printf '%s' "$O" | grep -i "ölçemedim" >/dev/null; g $? "S13c 'taze' demiyor, 'ölçemedim' diyor"
 O="$(kos hazir-mi --doluluk 90)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "S13d hazır-mı da ileri damgada 3 dönüyor"
 O="$(kos sonrasi)"; RC=$?
-printf '%s' "$O" | grep -q "geleceği gösteriyor"; g $? "S13e sonrası planı okurken uyarı basıyor"
+printf '%s' "$O" | grep "geleceği gösteriyor" >/dev/null; g $? "S13e sonrası planı okurken uyarı basıyor"
 # POZİTİF KONTROL: aynı fikstür damgası geri alınınca YEŞİL olmalı — yoksa S13 her şeyi reddeden
 # bir kapıdır ve hiçbir şey ölçmez.
 taze_cipa

@@ -42,11 +42,11 @@ SIRADAKİ:
 3. üçüncü iş
 EOF
 cikti="$(kos "$T/dolu.md" 2>&1)"
-printf '%s' "$cikti" | grep -q "kuyruğunda 3 iş var" && ok "G3a kuyruk sayısı doğru" || kotu "G3a sayı yanlış: $cikti"
-printf '%s' "$cikti" | grep -q "sıradaki: birinci iş" && ok "G3b sıradaki iş basıldı" || kotu "G3b sıradaki yok"
-printf '%s' "$cikti" | grep -q "ikinci iş" && kotu "G3c tüm kuyruğu döktü (ekran şişer)" || ok "G3c yalnız İLK iş basıldı"
-printf '%s' "$cikti" | grep -q "durmak ihlaldir" && ok "G3d durma-kuralı hatırlatıldı" || kotu "G3d kural satırı yok"
-printf '%s' "$cikti" | grep -q "bayat" && kotu "G3e taze damgaya bayat dedi" || ok "G3e taze damga sessiz"
+printf '%s' "$cikti" | grep "kuyruğunda 3 iş var" >/dev/null && ok "G3a kuyruk sayısı doğru" || kotu "G3a sayı yanlış: $cikti"
+printf '%s' "$cikti" | grep "sıradaki: birinci iş" >/dev/null && ok "G3b sıradaki iş basıldı" || kotu "G3b sıradaki yok"
+printf '%s' "$cikti" | grep "ikinci iş" >/dev/null && kotu "G3c tüm kuyruğu döktü (ekran şişer)" || ok "G3c yalnız İLK iş basıldı"
+printf '%s' "$cikti" | grep "durmak ihlaldir" >/dev/null && ok "G3d durma-kuralı hatırlatıldı" || kotu "G3d kural satırı yok"
+printf '%s' "$cikti" | grep "bayat" >/dev/null && kotu "G3e taze damgaya bayat dedi" || ok "G3e taze damga sessiz"
 
 # ── G4: kuyruk BOŞ → MÜDÜR'e bildir denir, SULTAN'a değil (kesme-enflasyonu panzehiri)
 cat > "$T/bos.md" <<EOF
@@ -58,9 +58,9 @@ HEDEF: bir cümle
 SIRADAKİ:
 EOF
 cikti="$(kos "$T/bos.md" 2>&1)"
-printf '%s' "$cikti" | grep -q "kuyruğun BOŞ" && ok "G4a boş kuyruk bildirildi" || kotu "G4a sessiz kaldı: $cikti"
-printf '%s' "$cikti" | grep -q "MÜDÜR" && ok "G4b MÜDÜR'e yönlendirdi" || kotu "G4b hedef yok"
-printf '%s' "$cikti" | grep -qi "Sultan'a değil" && ok "G4c Sultan'a gitme uyarısı var" || kotu "G4c Sultan'a yönlenebilir"
+printf '%s' "$cikti" | grep "kuyruğun BOŞ" >/dev/null && ok "G4a boş kuyruk bildirildi" || kotu "G4a sessiz kaldı: $cikti"
+printf '%s' "$cikti" | grep "MÜDÜR" >/dev/null && ok "G4b MÜDÜR'e yönlendirdi" || kotu "G4b hedef yok"
+printf '%s' "$cikti" | grep -i "Sultan'a değil" >/dev/null && ok "G4c Sultan'a gitme uyarısı var" || kotu "G4c Sultan'a yönlenebilir"
 
 # ── G5: damga bayat → sayı basılır AMA bayatlık da söylenir (sahte-yeşil yasak)
 cat > "$T/bayat.md" <<EOF
@@ -71,8 +71,8 @@ SIRADAKİ:
 1. tek iş
 EOF
 cikti="$(kos "$T/bayat.md" 2>&1)"
-printf '%s' "$cikti" | grep -q "bayat" && ok "G5a bayat damga söylendi" || kotu "G5a bayatlık gizlendi: $cikti"
-printf '%s' "$cikti" | grep -q "kuyruğunda 1 iş var" && ok "G5b bayatken de kuyruk gösterildi" || kotu "G5b kuyruk kayboldu"
+printf '%s' "$cikti" | grep "bayat" >/dev/null && ok "G5a bayat damga söylendi" || kotu "G5a bayatlık gizlendi: $cikti"
+printf '%s' "$cikti" | grep "kuyruğunda 1 iş var" >/dev/null && ok "G5b bayatken de kuyruk gösterildi" || kotu "G5b kuyruk kayboldu"
 
 # ── G6: çapa yok AMA şablon teslim edilmiş → yazması hatırlatılır (H4-1 zinciri)
 sablon_dizin="$T/proje/0-teslimat/gelen"; mkdir -p "$sablon_dizin"
@@ -85,7 +85,7 @@ cikti="$(ANA_HEDEF_DOSYA='' bash -c "
 # gerçek /config/projects taranır; bu kutuda çapa VARSA satır kuyruk gösterir — ikisi de meşru,
 # tek yasak: SESSİZ kalmak değil, YANLIŞ söylemek. Burada yalnız çökmediğini ve üç hâlden
 # birini ürettiğini doğruluyoruz (ortam-bağımlı dal; hermetik kısmı G2-G5 kapatıyor).
-printf '%s' "$cikti" | grep -qE 'ana-hedefin yazılı değil|kuyruğun BOŞ|kuyruğunda [0-9]+ iş var' \
+printf '%s' "$cikti" | grep -E 'ana-hedefin yazılı değil|kuyruğun BOŞ|kuyruğunda [0-9]+ iş var' >/dev/null \
   && ok "G6 gerçek ortamda üç hâlden birini üretti (sessiz-kayıp yok)" \
   || ok "G6 bu kutuda ne çapa ne şablon var → sessiz (meşru dördüncü hâl)"
 
@@ -102,7 +102,7 @@ cikti="$(cd "$T" && ANA_HEDEF_DOSYA='' bash -c "
   ls() { command ls \"\$@\"; }
   $(ayikla)
   _kuyruk_satiri" 2>&1)"
-printf '%s' "$cikti" | grep -qE 'aaa isi|bbb isi' && kotu "G8a belirsizken tahmin etti (yanlış kutunun hedefi)" || ok "G8a belirsizken tahmin ETMEDİ"
+printf '%s' "$cikti" | grep -E 'aaa isi|bbb isi' >/dev/null && kotu "G8a belirsizken tahmin etti (yanlış kutunun hedefi)" || ok "G8a belirsizken tahmin ETMEDİ"
 grep -qE '/config/projects/\*/.*\|\s*head -1' <(sed -n '/^_kuyruk_satiri() {/,/^}/p' "$SUT" | grep -v '^[[:space:]]*#') \
   && kotu "G8b 'ilkini seç' tahmini koda geri döndü" || ok "G8b 'ilkini seç' tahmini kodda YOK"
 grep -q 'rev-parse --show-toplevel' "$SUT" && ok "G8c kaynak = içinde bulunulan depo" || kotu "G8c depo-kökü çözülmüyor"
@@ -132,7 +132,7 @@ cikti="$(cd "$d2" && ANA_HEDEF_DOSYA='' bash -c "
   C_SAR=''; C_SIF=''; C_SOL=''; C_BAS=''
   $(ayikla)
   _kuyruk_satiri" 2>&1)"
-printf '%s' "$cikti" | grep -q "main-daki is" && ok "G10a başka daldayken çapa main'den okundu" || kotu "G10a kuyruk görünmedi: $cikti"
+printf '%s' "$cikti" | grep "main-daki is" >/dev/null && ok "G10a başka daldayken çapa main'den okundu" || kotu "G10a kuyruk görünmedi: $cikti"
 grep -qE 'git .*fetch' <(sed -n '/^_kuyruk_satiri() {/,/^}/p' "$SUT" | grep -v '^[[:space:]]*#') \
   && kotu "G10b ekran açılışında AĞA çıkıyor (fetch)" || ok "G10b ağa çıkmıyor (yalnız yerel ref)"
 

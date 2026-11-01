@@ -53,7 +53,7 @@ _kos() {  # _kos <scripts-dir> <PATH-ön-eki> [ortam…]
     --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE < /dev/null > "$T/son.log" 2>&1
 }
 _var() { grep -qxF -- "$1" "$2" 2>/dev/null; }                          # tam satır olarak argüman var mı
-_ardisik() { python3 -c "import sys;a=open(sys.argv[1]).read().split('\n');print(any(a[i]==sys.argv[2] and a[i+1]==sys.argv[3] for i in range(len(a)-1)))" "$1" "$2" "$3" 2>/dev/null | grep -q True; }
+_ardisik() { python3 -c "import sys;a=open(sys.argv[1]).read().split('\n');print(any(a[i]==sys.argv[2] and a[i+1]==sys.argv[3] for i in range(len(a)-1)))" "$1" "$2" "$3" 2>/dev/null | grep True >/dev/null; }
 _verdikt() { grep -m1 '^verdikt: ' "$T/out/MUHUR.md" 2>/dev/null | sed 's/^verdikt: //'; }
 _yargic() { grep -m1 '^yargic: ' "$T/out/MUHUR.md" 2>/dev/null | sed 's/^yargic: //'; }
 

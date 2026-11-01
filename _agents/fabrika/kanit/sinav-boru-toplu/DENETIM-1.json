@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sinav-boru-toplu",
+  "pr": "644",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T09:28:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 2 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-kapi2-sonra.txt (yesil → gecersiz) — Kart daraltıldı: üç büyük dosya bu PR'dan çıktı, kapı artık tüm depoda rc 0 vermez; kapi4 kalan dosyaları ölçer · BÂNİ;olcum-kapi3-sonra.txt (yesil → gecersiz) — Kart daraltıldı: üç büyük dosya bu PR'dan çıktı; kapi4 kalan dosyaları ölçer · BÂNİ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sinav-boru-toplu",
+  "dal": "sinav-boru-toplu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 82308,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 15467
+  },
+  "dalgic": "uyumsuz",
+  "bas": "de2cac3a072c95ac33ea18488c4d7e4250294288",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Erken kapanan `grep -q` borularını bulan ve güvenli biçime çeviren kapı ile dokuz senaryolu sınav eklenmiş; daraltılan kapsam uyarınca üç büyük dosya dışındaki sınavlar dönüştürülmüş. Geçerli kapi4 ölçümü, gerçek sınav ve mutasyon kaydı birlikte davranışı doğruladığından üretimi durduracak sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Geçersiz ilan edilen kapi2/kapi3 sonuçları değerlendirmeye alınmadı. Geçerli kapi4 kaydı rc=0 ile daraltılmış depo kapsamını ölçüyor; sinav kaydı 9/9 yeşil, mutasyon kaydı ise bilerek bozulan kodu kapının yakaladığını ve gerçek ölçümün sinav etiketi olduğunu gösteriyor. Önce kaydı kırmızı olsa da kapsam daraltmasından sonra doğrudan ölçüm çifti aynı hedefte kurulmamış; buna karşın geçerli son ölçüm, ayrıntılı davranış sınavı ve mutasyon kanıtı toplamda yeterli."
+  }
+}

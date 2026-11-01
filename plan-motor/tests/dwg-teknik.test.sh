@@ -44,7 +44,7 @@ M="$PAKET/demo/ornek-model.json"
 node cli.mjs ciz --model "$M" --cikti "$T/a.svg" --dwg "$T/a.dwg" >/dev/null 2>&1
 iddia 0 "DWG üretildi"                    test -s "$T/a.dwg"
 iddia 0 "sihirli bayt AC10xx (DXF yalanı değil)" \
-  bash -c "head -c 6 '$T/a.dwg' | grep -qE '^AC10[0-9][0-9]$'"
+  bash -c "head -c 6 '$T/a.dwg' | grep -E '^AC10[0-9][0-9]$' >/dev/null"
 iddia 0 "öz-denetim temiz"                node scripts/dwg-denetle.mjs "$T/a.dwg"
 iddia 0 "çizim tekniği (kontur·dolgu·font·kalem·renk·açıklık)" \
   node scripts/dwg-teknik-kapi.mjs teknik "$T/a.dwg" "$M"

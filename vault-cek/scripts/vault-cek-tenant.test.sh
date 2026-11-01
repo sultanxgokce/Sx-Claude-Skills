@@ -84,7 +84,7 @@ grep -qE "_LOGIN_JSON.*client_token" "$OB" && { ok=0; echo "    token _LOGIN_JSO
 
 echo "T12 · ağsız get: temiz hata, çökme yok (RC≠0)"
 o="$(bash "$OB" get PCLOUD_AUTH_TOKEN 2>&1)"; r=$?
-{ [ "$r" -ne 0 ] && printf '%s' "$o" | grep -q 'login başarısız'; } && gec T12 || kal T12 "rc=$r · $o"
+{ [ "$r" -ne 0 ] && printf '%s' "$o" | grep 'login başarısız' >/dev/null; } && gec T12 || kal T12 "rc=$r · $o"
 
 printf 'SONUÇ: %d geçti · %d kaldı\n' "$G" "$K"
 [ "$K" -eq 0 ]

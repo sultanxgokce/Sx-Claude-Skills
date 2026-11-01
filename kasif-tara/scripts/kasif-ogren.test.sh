@@ -47,7 +47,7 @@ echo "== Y6: TERFİ Sultan-onayı OLMADAN reddedilir (insan-adına yazma yasağ�
 ERR="$T/e1"; kos terfi y0001 >/dev/null 2>"$ERR"; rc=$?
 [ "$rc" -eq 2 ] && ok "onaysız terfi RC=2" || no "onay kapısı delik: rc=$rc"
 grep -qi 'sultan' "$ERR" && ok "ret gerekçesi Sultan-onayına atıf yapıyor" || no "gerekçe yok"
-jq -rs 'last|.durum' "$Y" | grep -q '^aday$' && ok "durum hâlâ aday" || no "durum değişti"
+jq -rs 'last|.durum' "$Y" | grep '^aday$' >/dev/null && ok "durum hâlâ aday" || no "durum değişti"
 
 echo "== Y7: COOLDOWN dolmadan terfi reddedilir (7 gün) =="
 ERR="$T/e2"; kos terfi y0001 --sultan-onay >/dev/null 2>"$ERR"; rc=$?
@@ -58,7 +58,7 @@ echo "== Y8: COOLDOWN dolunca + Sultan-onayı → kural olur =="
 TARIH=2026-08-05 kos terfi y0001 --sultan-onay --gerekce "Sultan: doğru, oraya gitmeyelim" >/dev/null 2>&1
 rc=$?
 [ "$rc" -eq 0 ] && ok "terfi geçti" || no "terfi başarısız: rc=$rc"
-jq -rs 'last|.durum' "$Y" | grep -q '^kural$' && ok "durum=kural" || no "durum kural olmadı"
+jq -rs 'last|.durum' "$Y" | grep '^kural$' >/dev/null && ok "durum=kural" || no "durum kural olmadı"
 
 echo "== Y9: kararı verilmiş kural YENİDEN aday olarak doğmaz =="
 ONCE="$(wc -l < "$Y")"; kos --yaz >/dev/null

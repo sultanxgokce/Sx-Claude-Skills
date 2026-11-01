@@ -49,16 +49,16 @@ kapi "M3 A06: söz/oturum yok → rc 2, adım yazılmadı" $([ $rc = 2 ] && [ ! 
 # M4 önem sözle D1 adımı yazar
 bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "bu çok önemli" --oturum session_TEST >/dev/null 2>&1; rc=$?
 kapi "M4 önem D1 adımı gorev.sh'a gitti" $([ $rc = 0 ] && grep -q 'adim gorev_01TEST1 D1 2026-10-30 Sultan: önem 3 (sohbet · session_TEST · "bu çok önemli" · beyan:SERDAR)' "$T/log/gorev.args" && echo 1 || echo 0)
-kapi "M4b önemden sonra Madde 2 şablonu AYNEN açılır" $(bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "bu çok önemli" --oturum session_TEST 2>&1 >/dev/null | grep -q "Madde 2'i çalışıyoruz" && bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "x y" --oturum s 2>&1 >/dev/null | grep -q "A) Sen anlat · B) Ben önereyim · C) Etkileşimli gidelim" && echo 1 || echo 0)
+kapi "M4b önemden sonra Madde 2 şablonu AYNEN açılır" $(bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "bu çok önemli" --oturum session_TEST 2>&1 >/dev/null | grep "Madde 2'i çalışıyoruz" >/dev/null && bash "$BET_KOS" onem "$S" 1 --onem 3 --soz "x y" --oturum s 2>&1 >/dev/null | grep "A) Sen anlat · B) Ben önereyim · C) Etkileşimli gidelim" >/dev/null && echo 1 || echo 0)
 # M4c adım yazılamazsa önem seansa İŞLENMEZ, rc 4
 MESVERET_GOREV="$T/yok-gorev.sh" bash "$BET_KOS" onem "$S" 1 --onem 2 --soz "orta" --oturum s >/dev/null 2>&1; rc=$?
-kapi "M4c gorev.sh yoksa rc 4 ve seans önemi değişmez (3 kalır)" $([ $rc = 4 ] && bash "$BET_KOS" durum "$S" | grep -q "^  1\. .* önem 3$" && echo 1 || echo 0)
+kapi "M4c gorev.sh yoksa rc 4 ve seans önemi değişmez (3 kalır)" $([ $rc = 4 ] && bash "$BET_KOS" durum "$S" | grep "^  1\. .* önem 3$" >/dev/null && echo 1 || echo 0)
 # M5 ikinci madde + bitir özeti
 bash "$BET_KOS" madde "$S" "Yaş rozeti kademeleri belirsiz" --kim SERDAR --etiket ozellik --sik A >/dev/null 2>&1
 oz=$(bash "$BET_KOS" bitir "$S" 2>/dev/null)
 kapi "M5 özet: 2 madde · önemi sorulmayan 1" $(grep -q "2 madde kaydedildi" <<<"$oz" && grep -q "önemi sorulmayan: 1" <<<"$oz" && echo 1 || echo 0)
-kapi "M5c durum 2. maddeyi 2 numarayla listeler (sayaç)" $(bash "$BET_KOS" durum "$S" | grep -q "^  2\. Yaş rozeti" && echo 1 || echo 0)
-kapi "M5b durum bitti, liste gösterir" $(bash "$BET_KOS" liste | grep -q "$S	bitti	2 madde" && echo 1 || echo 0)
+kapi "M5c durum 2. maddeyi 2 numarayla listeler (sayaç)" $(bash "$BET_KOS" durum "$S" | grep "^  2\. Yaş rozeti" >/dev/null && echo 1 || echo 0)
+kapi "M5b durum bitti, liste gösterir" $(bash "$BET_KOS" liste | grep "$S	bitti	2 madde" >/dev/null && echo 1 || echo 0)
 # M6 defter kurulu değilse yazılmaz
 MESVERET_BULGU="$T/yok.sh" bash "$BET_KOS" madde "$S" "Hiç yazılmamalı bu madde" --kim SERDAR --etiket bug --sik C >/dev/null 2>&1; rc=$?
 kapi "M6 bulgu.sh yoksa rc 3 ve seansa madde eklenmez" $([ $rc = 3 ] && [ "$(bash "$BET_KOS" durum "$S" | grep -c '^  ')" = 2 ] && echo 1 || echo 0)
@@ -85,7 +85,7 @@ sys.exit(0 if [x.get("sik") for x in m]==["A","B","C"] and all(x.get("onem") in 
 PY
 )
 kapi "M8d şık havuz notuna da yazıldı" $(grep -q "şık: B" "$T/log/bulgu.args" && echo 1 || echo 0)
-kapi "M8e bitir özeti şıkları basar" $(bash "$BET_KOS" bitir "$S2" 2>/dev/null | grep -q "şıklar: A B C" && echo 1 || echo 0)
+kapi "M8e bitir özeti şıkları basar" $(bash "$BET_KOS" bitir "$S2" 2>/dev/null | grep "şıklar: A B C" >/dev/null && echo 1 || echo 0)
 
 echo "== $G geçti · $K kaldı"
 [ $K = 0 ]

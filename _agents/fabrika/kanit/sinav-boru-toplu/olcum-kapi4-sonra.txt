@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi-daralt.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi4.txt
+# rc=0 sure=95.5s zaman=2026-11-01T09:27:04+03:00
+--- stdout ---
+     31 federe-os-cekirdek/scripts/federe.test.sh
+    231 iskan/scripts/iskan.test.sh
+      1 sınav boru kapısı
+      6 yazilim-fabrikasi/scripts/kart.test.sh
+--- stderr ---
+⏳ agir-sira: kanit-sinav-boru-toplu-kapi4 96 sn bekledi (yuva 2, load1 17.94)

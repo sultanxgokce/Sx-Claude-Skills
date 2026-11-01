@@ -51,14 +51,14 @@ out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --kontrol --porcelain 2>&
 n_oturum="$(tmux -L "$SOCK" ls 2>/dev/null | wc -l | tr -d ' ')"
 esit "T1 kontrol modu oturum açmaz" "0" "$n_oturum"
 esit "T1 eksik varken exit=1 (sahte-yeşil yok)" "1" "$rc"
-printf '%s' "$out" | grep -q 'oturum-yok' \
+printf '%s' "$out" | grep 'oturum-yok' >/dev/null \
   && ok "T1 durum 'oturum-yok' raporlanıyor" || no "T1 durum satırı yok" "$out"
 
 # ── T2: ONAR modu eksik oturumları AÇAR ve başlatıcıyı koşturur ──────────────
 out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --porcelain 2>&1)"; rc=$?
 sess="$(tmux -L "$SOCK" ls -F '#{session_name}' 2>/dev/null | sort | tr '\n' ' ')"
 esit "T2 iki oturum da açıldı" "t-uye t-yon " "$sess"
-printf '%s' "$out" | grep -q '#ONARIM' \
+printf '%s' "$out" | grep '#ONARIM' >/dev/null \
   && ok "T2 onarım raporlanıyor (ne yapıldığı görünür)" || no "T2 onarım raporu yok" "$out"
 
 # ── T3: ikinci koşu IDEMPOTENT — çalışanı yeniden başlatmaz ─────────────────
@@ -66,13 +66,13 @@ pid_once="$(tmux -L "$SOCK" list-panes -a -F '#{pane_pid}' 2>/dev/null | sort | 
 out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --porcelain 2>&1)"
 pid_sonra="$(tmux -L "$SOCK" list-panes -a -F '#{pane_pid}' 2>/dev/null | sort | tr '\n' ' ')"
 esit "T3 idempotent: pane süreçleri AYNI (yeniden başlatılmadı)" "$pid_once" "$pid_sonra"
-printf '%s' "$out" | grep -q '#ONARIM' \
+printf '%s' "$out" | grep '#ONARIM' >/dev/null \
   && no "T3 gereksiz onarım yapıldı" "$out" || ok "T3 ikinci koşuda onarım YOK (dokunulmadı)"
 
 # ── T4: kayıtta-olmayan oturum RAPORLANIR ama SİLİNMEZ (yıkıcı-değil) ───────
 tmux -L "$SOCK" new-session -d -s yabanci "sleep 300" 2>/dev/null
 out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --porcelain 2>&1)"
-printf '%s' "$out" | grep -q 'fazla=.*yabanci' \
+printf '%s' "$out" | grep 'fazla=.*yabanci' >/dev/null \
   && ok "T4 kayıt-dışı oturum raporlanıyor" || no "T4 kayıt-dışı oturum raporlanmadı" "$out"
 tmux -L "$SOCK" has-session -t yabanci 2>/dev/null \
   && ok "T4 kayıt-dışı oturum SİLİNMEDİ (yıkıcı-değil)" || no "T4 oturum silindi — yıkıcı davranış" ""
@@ -88,7 +88,7 @@ esit "T5 meşgul masaya dokunulmadı (pane süreci aynı)" "$pid_mesgul" "$pid_s
 # ── T6: fail-closed — kayıt yoksa exit=2, uydurma tablo YOK ────────────────
 out="$(EKIP_REPO_ROOT="$TMP/bos" EKIP_REGISTRY="$TMP/yok.yaml" PATH="$TMP/bin:$PATH" bash "$SUT" --kontrol 2>&1)"; rc=$?
 esit "T6 kayıt-yok exit=2" "2" "$rc"
-printf '%s' "$out" | grep -q 'AJAN\|çalışıyor' \
+printf '%s' "$out" | grep 'AJAN\|çalışıyor' >/dev/null \
   && no "T6 kayıt yokken tablo basıldı (uydurma)" "$out" || ok "T6 kayıt yokken tablo basılmadı"
 
 # ── T7: boş roster fail-closed (0 üye → 'hepsi ayakta' DEME) ───────────────
@@ -112,13 +112,13 @@ tmux -L "$SOCK" new-session -d -s t-yon "sleep 120" 2>/dev/null
 
 out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --kontrol --porcelain 2>&1)"
 satir="$(printf '%s\n' "$out" | grep '^t-yon' | head -1)"
-printf '%s' "$satir" | grep -q 'tmux-disi' \
+printf '%s' "$satir" | grep 'tmux-disi' >/dev/null \
   && ok "T8 tmux-DIŞI ajan doğru sınıflanıyor (masasında sanılmıyor)" \
   || no "T8 tmux-dışı ajan yanlış sınıflandı" "$satir"
-printf '%s' "$satir" | grep -q 'tmux attach -t t-yon' \
+printf '%s' "$satir" | grep 'tmux attach -t t-yon' >/dev/null \
   && no "T8 BOŞ KABUĞA bağlayan komut önerildi (asıl arıza)" "$satir" \
   || ok "T8 'tmux attach' ÖNERİLMİYOR (boş kabuğa bağlamaz)"
-printf '%s' "$out" | grep -q 'ayakta=0' \
+printf '%s' "$out" | grep 'ayakta=0' >/dev/null \
   && ok "T8 sayaç dürüst: masasında olmayan 'ayakta' sayılmıyor" \
   || no "T8 sayaç şişirildi" "$(printf '%s' "$out" | grep '#OZET')"
 
@@ -134,7 +134,7 @@ kill "$DISPID" 2>/dev/null; pkill -f -- "--name t-yon" 2>/dev/null
 tmux -L "$SOCK" kill-server >/dev/null 2>&1 || true
 sleep 1
 out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --porcelain 2>&1)"
-printf '%s' "$out" | grep -q 'ayakta=2' \
+printf '%s' "$out" | grep 'ayakta=2' >/dev/null \
   && ok "T10 pane İÇİNDE koşan ajanlar 'çalışıyor' sayılıyor (pozitif kontrol)" \
   || no "T10 pane-içi ajanlar sayılmadı" "$(printf '%s' "$out" | grep '#OZET')"
 

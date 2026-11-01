@@ -132,8 +132,8 @@ PY
   printf '{"skills":[{"id":"tescil","version":"9.9.10"}]}\n' > "$T/katalog.json"
   _d "$s" y-durust "$D" SICIL_DIZIN="$T/sicil-bos" -- durum MUHAKKİK; local h5b=$?
   printf '{"skills":[{"id":"tescil","version":"9.9.9"}]}\n' > "$T/katalog.json"
-  [ $h5a -eq 3 ] && printf '%s' "$h5l" | grep -q "durum: ölçülemedi" && printf '%s' "$h5l" | grep -q "sicil ölçülemedi" \
-    && ! printf '%s' "$h5l" | grep -q "durum: gecerli" && [ $h5b -eq 1 ] && grep -q "durum: bayat" "$T/son.log" && o="$o h5"
+  [ $h5a -eq 3 ] && printf '%s' "$h5l" | grep "durum: ölçülemedi" >/dev/null && printf '%s' "$h5l" | grep "sicil ölçülemedi" >/dev/null \
+    && ! printf '%s' "$h5l" | grep "durum: gecerli" >/dev/null && [ $h5b -eq 1 ] && grep -q "durum: bayat" "$T/son.log" && o="$o h5"
   # p · bozuk (yarım yazılmış) satır sessizce atlanmaz → ölçülemedi, satır numarasıyla
   cp "$D" "$T/defter/bozuk.jsonl"; printf '{"ts": "2026-10-22T09:00:00Z", "personel": "MUHAKKİK", "gec\n' >> "$T/defter/bozuk.jsonl"
   _d "$s" y-durust "$T/defter/bozuk.jsonl" -- durum MUHAKKİK; [ $? -eq 3 ] && grep -q "bozuk: 1" "$T/son.log" && o="$o p"

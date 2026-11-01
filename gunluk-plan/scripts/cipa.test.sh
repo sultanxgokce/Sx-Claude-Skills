@@ -231,7 +231,7 @@ KUTU=$(python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" 2>/dev/null)
 kapi "T21 varsayılan çıktı çerçevelidir (┌ ├ └)" "3" "$(printf '%s\n' "$KUTU" | grep -c '^[┌├└]')"
 kapi "T22 başlık satırı sayılı özet taşır (madde · ✅ · 🟡 · ⬜)" "1" "$(printf '%s\n' "$KUTU" | grep -c '^📋 BUGÜN · .* madde · [0-9]* ✅ kapandı · [0-9]* 🟡 yarım · [0-9]* ⬜ açık')"
 kapi "T23 durum sütunu işaretle basılır, kelimeyle değil" "0" "$(printf '%s\n' "$KUTU" | grep -cE '│ +(kapandı|açık|yarım) +│')"
-kapi "T24 beş durumun beşi işaretli (✅ 🟡 ⬜ ⏸ ➖)" "5" "$(for i in ✅ 🟡 ⬜ ⏸ ➖; do printf '%s\n' "$KUTU" | grep -q "$i" && echo x; done | wc -l)"
+kapi "T24 beş durumun beşi işaretli (✅ 🟡 ⬜ ⏸ ➖)" "5" "$(for i in ✅ 🟡 ⬜ ⏸ ➖; do printf '%s\n' "$KUTU" | grep "$i" >/dev/null && echo x; done | wc -l)"
 kapi "T25 --md eski düz biçimi verir (kokpit/metin kanalı)" "1" "$(python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" --md 2>/dev/null | grep -c '^|---|---|---|---|---|$')"
 MUT="$T/tablo-mut.py"; sed "s/ISARET\[m\['durum'\]\]/etiket(m)/" "$KOK/tablo.py" > "$MUT"
 kapi "T26 mutant (işaret yerine kelime) T23'ü düşürür — kapı ısırıyor" "1" "$( [ "$(python3 "$MUT" "$SEMA/ornek-cipa.md" 2>/dev/null | grep -cE '│ +(kapandı|açık|yarım) +│')" -gt 0 ] && echo 1 || echo 0)"

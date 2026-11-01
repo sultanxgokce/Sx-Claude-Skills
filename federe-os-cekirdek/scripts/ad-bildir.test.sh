@@ -13,8 +13,8 @@ PASS=0; FAIL=0
 ok()   { PASS=$((PASS+1)); echo "PASS  $1"; }
 kotu() { FAIL=$((FAIL+1)); echo "FAIL  $1 — beklenen [$2] · gelen [$3]"; }
 esit() { if [ "$2" = "$3" ]; then ok "$1"; else kotu "$1" "$2" "$3"; fi; }
-var()  { if printf '%s' "$2" | grep -q -- "$3"; then ok "$1"; else kotu "$1" "içerir: $3" "$2"; fi; }
-yok()  { if printf '%s' "$2" | grep -q -- "$3"; then kotu "$1" "SIZDI: $3" "$2"; else ok "$1"; fi; }
+var()  { if printf '%s' "$2" | grep -- "$3" >/dev/null; then ok "$1"; else kotu "$1" "içerir: $3" "$2"; fi; }
+yok()  { if printf '%s' "$2" | grep -- "$3" >/dev/null; then kotu "$1" "SIZDI: $3" "$2"; else ok "$1"; fi; }
 
 # sahte federe.sh — gönderileni dosyaya yazar, ağa çıkmaz
 SAHTE="$T/federe.sh"

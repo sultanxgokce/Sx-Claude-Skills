@@ -1,0 +1,20 @@
+$ bash scripts/sinav-boru-kapi.test.sh
+# rc=0 sure=1.3s zaman=2026-11-01T09:12:00+03:00
+--- stdout ---
+  ✓ S1 kalıp varken rc 1
+  ✓ S2 altı satırın altısı bulunur, sayaç (-c) sayılmaz
+  ✓ S3 pipefail açmayan dosyaya bakılmaz
+  ✓ S4 heredoc gövdesi sayılmaz
+  ✓ S5 --yaz sonrası rc 0
+  ✓ S6 çevrilen dosya sözdizimi sağlam
+  ✓ S7 çevrilen dosya aynı sonucu verir, çıktı sızmaz: EVET1
+EVET2
+EVET3
+EVET4
+HAYIR5
+SAYAC6
+DIS7
+  ✓ S8 sessiz bayrak kalmadı
+  ✓ S9 heredoc gövdesi değişmedi
+sinav-boru-kapi.test: 9 geçti · 0 kaldı
+--- stderr ---

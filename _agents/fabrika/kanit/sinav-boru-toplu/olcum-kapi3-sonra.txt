@@ -1,0 +1,6 @@
+$ python3 scripts/sinav-boru-kapi.py
+# rc=0 sure=20.1s zaman=2026-11-01T09:11:59+03:00
+--- stdout ---
+sınav boru kapısı: 0 satır
+--- stderr ---
+⏳ agir-sira: kanit-sinav-boru-toplu-kapi3 20 sn bekledi (yuva 2, load1 17.38)
