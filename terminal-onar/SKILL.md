@@ -7,6 +7,7 @@ version: 2.37.2
 
 ## 🆕 2.37.2 · Kadro: İSKÂN kaydı olan kutuda `oda` alanı aile kaydından da okunur (1 Kas · kart terminal-onar-kadro-iskan-oda · SERDAR, NAZIR sekmesi 13:05 karesi)
 Kök neden (NAZIR ölçümü): `kadro.mjs kayitOku` `iskan-registry.yaml` varsa yalnız iskan + ekip kaydını okuyordu; `oda:` alanı NAZIR'da yalnız `aile-registry.yaml`'da (12 üye) olduğu için kapı odaları ve koltuk oda alanını dönmüyor, sekmede oda gruplaması çıkmıyordu (aile kaydı yalnız iskan kaydı YOKSA okunuyordu). Düzeltme: iskan dalı da aile kaydını okur, ama `yalniz = ['oda']` ile — id/tmux/rol iskan ve ekip kaydının kalır. Aile kaydı yoksa davranış eskisi gibi (oda alanı uydurulmaz). Sınav: `kapi/kadro.test.mjs` OD1-OD4. Dürüst sınır: "yeni adlar" (arz_adi) NAZIR'ın hiçbir kaydında yok; kaynağı ayrıca doğrulanacak.
+Ek (SERDAR 1 Kas): aile kaydından `oda` ile birlikte `amir` ve `oda_muduru` alanları da alınır (rütbe gösterimi bunlara dayanacak); id/tmux/rol yine İSKÂN ve ekip kaydının kalır. Koltuk cevabına alan eklemesi ayrı sürümde SERDAR'ın.
 
 ## 🆕 2.37.1 · Ana oturum adı ekip kaydındaki yöneticiden türer (1 Kas · kart terminal-onar-ana-tmux-yonetici · SERDAR yol 1, NAZIR bulgusu)
 Bekçi satırı kanonik şablondan yeniden yazıldığı için crontab'a elle eklenen `TO_ANA_TMUX` her onarımda siliniyordu; NAZIR'da bekçi yöneticinin `nazir-yon` oturumu yerine `nazir-ana` açıyordu. Artık `ANA_TMUX` sırası: açık beyan `TO_ANA_TMUX` > ekip kaydındaki `meta.yonetici` > `<kutu>-ana` (`ortak.sh` `ana_tmux_turet`; kayıt `_agents/handoff/ekip-registry.yaml`, yoksa `aile-registry.yaml`).

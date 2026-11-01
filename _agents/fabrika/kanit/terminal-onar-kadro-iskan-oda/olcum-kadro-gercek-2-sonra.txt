@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kadro-gercek.sh
+# rc=0 sure=0.1s zaman=2026-11-01T13:55:33+03:00
+--- stdout ---
+  ✓ OD1 iskan kutusunda oda alanı aile kaydından gelir
+  ✓ OD2 aile kaydı yalnız oda verir: tmux ve rol iskan/ekip kaydının kalır
+  ✓ OD3 üç kaynak okundu (iskan + ekip + aile)
+  ✓ OD5 aile kaydından amir ve oda_muduru da gelir (rütbe gösterimi buna dayanır)
+  ✓ OD4 aile kaydı yoksa iskan kutusu eskisi gibi çalışır, oda alanı yok (uydurma yok)
+SONUÇ: 38 geçti · 0 kaldı
+--- stderr ---
