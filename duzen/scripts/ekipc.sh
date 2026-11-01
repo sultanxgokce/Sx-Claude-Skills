@@ -452,6 +452,16 @@ def parcala(icerik):
     elle = "\n".join(satirlar[b1+1:]).lstrip("\n")
     return (onek, stored, g, elle)
 
+_ON_BASLIK = _re.compile(r"\A---[ \t]*\n.*?\n---[ \t]*(?:\n|\Z)", _re.S)
+
+def on_baslik_ayir(metin):
+    """metin → (yaml_on_baslik, kalan). Dosya '---' ile başlayıp kapanıyorsa o blok BAYT-VERBATIM ayrılır;
+    yoksa ('', metin). Ajan kimlik dosyalarının YAML ön başlığı DOSYA BAŞINDA durmak zorundadır (okuyucu ilk satıra bakar);
+    benimse eskiden bütün dosyayı ELLE bölgesine gömüyor, başlık yönetilen çekirdeğin (~58 satır) altına düşüyordu."""
+    m = _ON_BASLIK.match(metin)
+    if not m: return ("", metin)
+    return (metin[:m.end()] if metin[:m.end()].endswith("\n") else metin[:m.end()] + "\n", metin[m.end():])
+
 def durum_bul(yol, beklenen_govde):
     """(durum, detay) — YOK · MARKERSIZ · TEMIZ · GUNCELLE(safe) · EL-DEGMIS. detay=(onek, govde, elle)."""
     if not os.path.exists(yol): return ("YOK", None)
@@ -561,8 +571,10 @@ elif KOMUT == "benimse":
         if not ROL or len(roller) != 1: print("benimse tek --rol <AD> (ya da --baz <tip>) ister", file=sys.stderr); sys.exit(3)
         g = govde(roller[0])
     stil = stil_of(DOSYA)
-    elle = f"{_P(stil)}{ELLE_BASLIK}\n\n{mevcut}"   # mevcut içerik BAYT-VERBATIM — hiçbir cümle yeniden yazılmaz
-    yeni = tam_dosya(g, elle, stil=stil)
+    # YAML ön başlığı (md kimlik dosyası '---' ile başlıyorsa) marker-ÖNCESİ bölgeye (önek) alınır: dosya başında kalır.
+    on_baslik, kalan = on_baslik_ayir(mevcut) if stil == "md" else ("", mevcut)
+    elle = f"{_P(stil)}{ELLE_BASLIK}\n\n{kalan}"   # kalan içerik BAYT-VERBATIM — hiçbir cümle yeniden yazılmaz
+    yeni = tam_dosya(g, elle, on_baslik, stil=stil)
     _kaynak = f"persona-base '{BAZ}'" if BAZ else f"rol '{ROL}'"
     if APPLY:
         with open(DOSYA, "w", encoding="utf-8") as f: f.write(yeni)
@@ -595,14 +607,24 @@ elif KOMUT == "yenile":
         for d in difflib.unified_diff(g.splitlines(), mevcut_govde.splitlines(), "beklenen", "mevcut", lineterm=""):
             print(f"    {d}", file=sys.stderr)
         sys.exit(5)
-    if durum == "TEMIZ":
+    # Önceki sürümler YAML ön başlığını ELLE bölgesinin ilk satırlarına gömmüştü (12 kutuda görüldü): başa geri al.
+    # Yalnız önek BOŞ ve ELLE başlığının hemen altında başlık varsa; başlık baytları aynen taşınır, başka hiçbir şey değişmez.
+    goc = False
+    if stil_of(DOSYA) == "md" and durum in ("TEMIZ", "GUNCELLE"):
+        _o, _g, _e = detay
+        _bas, _, _alt = _e.partition("\n")
+        if not _o.strip() and _bas == ELLE_BASLIK:
+            _ob, _kalan = on_baslik_ayir(_alt.lstrip("\n"))
+            if _ob:
+                detay = (_ob, _g, f"{ELLE_BASLIK}\n\n{_kalan}"); goc = True
+    if durum == "TEMIZ" and not goc:
         print(f"🟢 yenile: no-op — {DOSYA} yönetilen-gövdesi zaten güncel"); sys.exit(0)
     onek, mevcut_govde, elle = detay
     stil = stil_of(DOSYA)
     yeni = tam_dosya(g, elle if elle.strip() else "", onek, stil)
     if APPLY:
         with open(DOSYA, "w", encoding="utf-8") as f: f.write(yeni)
-        print(f"🟢 yenilendi: {DOSYA} — yönetilen-gövde bugünkü temelden; önek + ELLE bayt-aynı")
+        print(f"🟢 yenilendi: {DOSYA} — yönetilen-gövde bugünkü temelden; önek + ELLE bayt-aynı" + (" · YAML ön başlığı dosya başına alındı" if goc else ""))
     else:
         _f = sum(1 for d in difflib.unified_diff(mevcut_govde.splitlines(), g.splitlines(), lineterm="") if d[:1] in "+-" and d[:3] not in ("+++", "---"))
         print(f"📋 DRY-RUN yenile: {DOSYA} → yönetilen-gövdede {_f} satır değişecek — --apply ile uygula")

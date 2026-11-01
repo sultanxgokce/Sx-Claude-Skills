@@ -1,0 +1,46 @@
+{
+  "is": "duzen-1-6-3",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T05:19:02+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "temel-sinavlari",
+      "asama": "once",
+      "dosya": "olcum-temel-sinavlari-once.txt",
+      "sha256": "aeb9655875360523861db45ca02d4f9d42f2da4fe3e279a3f84a72fa6cdab5ce",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T05:16:48+03:00",
+      "sure_sn": 13.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d1877c43a24c4d198b73f675781b61cf",
+      "olculen_commit": "166a5f8254885d346bce94153852abc8cf0742c8",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "temel-sinavlari",
+      "asama": "sonra",
+      "dosya": "olcum-temel-sinavlari-sonra.txt",
+      "sha256": "aa427cf54274edb50dfafc16ae1d2ffa891399ae10036fc358282e0f8d58a62a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T05:19:02+03:00",
+      "sure_sn": 130.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "63a27350ecbf4cb4be6c8c5ce1a12e02",
+      "olculen_commit": "166a5f8254885d346bce94153852abc8cf0742c8",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "bfc2625f5820c18b1f21ea0af40c613f9014485fbbb90ed958bbcd304fa6a89b"
+}

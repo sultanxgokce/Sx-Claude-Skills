@@ -42,3 +42,9 @@ persona_baz:
   - ad: otonom-ajan
     tek_cumle: "VPS'te 7/24 koşan otonom ajan ortak çekirdeği"
     metin: otonom-ajan-base.md      # ARES/FORGE/İRFAN/PUSULA/HAFIZ/NEDİM gibi otonom ajanlar miras alır
+  - ad: izole-kutu
+    tek_cumle: "İzole kutuda yaşayan, Cortex'e yazmayan, 7/24 motoru olmayan ajan ortak çekirdeği"
+    metin: izole-kutu-base.md       # mahrem odalar (ENİS dahil) ve izole kutu ajanları; mahremiyet kilidi sıkıdır, gevşemez
+  - ad: alt-personel
+    tek_cumle: "Koltuksuz alt personel: Sultan-eşli değil, birleştirme yapmaz, amirine döner"
+    metin: alt-personel-base.md     # reisin Agent aracıyla doğurduğu koltuksuz personel (tellal 9 kimlik gibi); manuel-claude ona uymaz
