@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-yeni-kod-* ===
+$ bash _agents/fabrika/kanit/sync-drift-kip-onar/mutant.sh uyari-yok
+# rc=1 sure=4.0s zaman=2026-11-01T09:33:36+03:00
+--- stdout ---
+  ✗ S3 icerik sapması: uyarı ve rc 1 sürer (rc=0)
+  ✗ V3 kurulu kopyada gerçek kod farkı → İÇERİK-DRIFT, rc 1 (veri onu gizlemez)
+30 geçti · 2 kaldı
+YAKALANDI: S3 icerik
+--- stderr ---

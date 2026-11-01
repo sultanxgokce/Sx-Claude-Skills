@@ -171,7 +171,7 @@ function dumanTesti(dstDir, label) {
  * NİÇİN: sync "güncel" derken içerik hash'ine bakar; KİP hash'e girmez. Kaynak
  * düzeltildikten sonra bile kurulu kopyalar ölü kalıyordu (2026-08-05 ölçümü:
  * canlı rafta 35 çalıştırılamaz script, dağıtım hepsine "güncel" diyordu).
- * İçeriğe DOKUNMAZ — yalnız chmod. Bu yüzden --force gerektirmez.
+ * İçeriğe DOKUNMAZ — yalnız chmod. Bu yüzden --force gerektirmez, sapmış kopyada da koşar.
  */
 function kipOnar(srcDir, dstDir) {
   let onarilan = 0;
@@ -187,6 +187,12 @@ function kipOnar(srcDir, dstDir) {
     }
   }
   return onarilan;
+}
+
+/** Sapmış kopya (drift): içeriğe dokunulmaz ama izin onarılır, drift uyarısı olduğu gibi kalır (görev …2VP2SJ). */
+function sapmisKipOnar(srcDir, dstDir, label) {
+  const onarildi = kipOnar(srcDir, dstDir);
+  if (onarildi) console.log(`     ⟳ ${label}: ${onarildi} dosyanın çalıştırma izni ONARILDI (içerik korundu)`);
 }
 
 // ── manifest ─────────────────────────────────────────────────────────────────
@@ -279,13 +285,13 @@ for (const [skillId, targetKeys] of Object.entries(install)) {
           console.log(`     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;`);
           console.log(`        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).`);
           if (APPLY && FORCE) { copyDir(srcDir, dstDir); if (dumanTesti(dstDir, label).length) dumanDusen++; console.log(`     → --force: üzerine yazıldı v${srcVer}`); planned++; }
-          else warned++;
+          else { warned++; if (APPLY) sapmisKipOnar(srcDir, dstDir, label); }
         }
       } else {
         console.log(`  ⚠ ${label}: HEDEF DAHA YENİ (hedef v${dstVer} > kaynak v${srcVer}) — DRIFT!`);
         console.log(`     → kurulu kopya elle düzenlenmiş olabilir. Önce kaynağa geri taşı, ya da --force ile ez.`);
         if (APPLY && FORCE) { copyDir(srcDir, dstDir); if (dumanTesti(dstDir, label).length) dumanDusen++; console.log(`     → --force: üzerine yazıldı v${srcVer}`); planned++; }
-        else warned++;
+        else { warned++; if (APPLY) sapmisKipOnar(srcDir, dstDir, label); }
       }
     }
   }

@@ -94,6 +94,29 @@ chmod 644 "$R/hedef/deneme-skill/scripts/calis.sh"
 kapi "G10 dry-run onarmaz (yalnız --apply yazar)" $?
 
 
+echo "── sapmış kopyada çalıştırma izni (…2VP2SJ): içerik korunur, izin onarılır ──"
+# Kurulu kopyayı sapmış hâle getirir, izni bozar: $1=icerik (aynı sürüm, içerik farklı) ya da yeni (hedef sürümü daha yeni).
+_sapmis_kur() {
+  R="$(_kur 755 ok)"
+  (cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+  printf '#!/usr/bin/env bash\necho elle-duzenlendi\n' > "$R/hedef/deneme-skill/scripts/calis.sh"
+  chmod 644 "$R/hedef/deneme-skill/scripts/calis.sh"
+  [ "$1" = yeni ] && sed -i 's/version: 1.0.0/version: 1.0.1/' "$R/hedef/deneme-skill/SKILL.md"
+  return 0
+}
+_elle() { grep -q elle-duzenlendi "$R/hedef/deneme-skill/scripts/calis.sh"; }
+for tur in icerik yeni; do
+  _sapmis_kur "$tur"
+  out="$(cd "$R" && node sync-skills.mjs --apply 2>&1)"; rc=$?
+  [ -x "$R/hedef/deneme-skill/scripts/calis.sh" ]; kapi "S1 $tur sapması: --apply çalıştırma iznini onarır" $?
+  _elle; kapi "S2 $tur sapması: elle düzenlenmiş içerik korunur" $?
+  [ "$rc" = 1 ] && printf '%s' "$out" | grep -q 'DRIFT'; kapi "S3 $tur sapması: uyarı ve rc 1 sürer (rc=$rc)" $?
+  printf '%s' "$out" | grep -q '1 dosyanın çalıştırma izni ONARILDI'; kapi "S4 $tur sapması: onarım çıktıda söylenir" $?
+  _sapmis_kur "$tur"
+  (cd "$R" && node sync-skills.mjs >/dev/null 2>&1)
+  [ ! -x "$R/hedef/deneme-skill/scripts/calis.sh" ]; kapi "S5 $tur sapması: kuru koşu izne dokunmaz" $?
+done
+
 echo "── kaynak dal ilanı + bayat kaynak koruması (BHJS8W) ──"
 # Git'li sahte kaynak: uzak (bare) + çalışma kopyası; ikinci klon uzağı ilerletir, kopya fetch eder → origin/main'in gerisinde.
 _git_kur() {  # → $R (git'li kaynak), $UZ (bare uzak)
