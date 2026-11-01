@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/rutbe-gercek.sh
+# rc=0 sure=7.9s zaman=2026-11-01T20:33:55+03:00
+--- stdout ---
+  ✓ R13 reisin koltuğu açık değilse bile ana koltuğa rütbe düşmez (Sultan kararı)
+  ✓ R14 reisin kendi koltuğu hâlâ reis
+geçen 22 · kalan 0
+  ✓ RT3 ana koltukta rütbe yok (Sultan kararı: reis koltuğu açık olmasa da anaya düşmez)
+GECEN: 140  ·  KALAN: 0
+--- stderr ---

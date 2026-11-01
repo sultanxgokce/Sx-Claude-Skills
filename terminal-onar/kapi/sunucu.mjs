@@ -500,7 +500,7 @@ const sunucu = http.createServer(async (req, res) => {
           const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta);
           if (sec && sec.kaynak === 'klasor') odalar.set(sec.oda, bulunan);   // klasörün hedef · reis bilgisi kayıt satırını ezer
           else if (sec && !odalar.has(sec.oda)) odalar.set(sec.oda, { ad: sec.oda, hedef: '', reis: '' });
-          return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ...rutbeBul(rutbe, k.ad, { ana: ANA_TMUX, acik }), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
+          return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ...rutbeBul(rutbe, k.ad), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
         });
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar });
       }

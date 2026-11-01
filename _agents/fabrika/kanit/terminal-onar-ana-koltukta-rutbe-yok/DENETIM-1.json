@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-ana-koltukta-rutbe-yok",
+  "pr": "654",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T20:34:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-ana-koltukta-rutbe-yok",
+  "dal": "terminal-onar-ana-koltukta-rutbe-yok",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18646,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3869
+  },
+  "dalgic": "uyumlu",
+  "bas": "b575a65131cae70a97e23c699c6e20eabc1427ed",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan kararı uygulanmış: `rutbeBul` sonundaki ana koltuk yedeği kaldırılmış, reisin kendi koltuğundaki rütbe korunmuş ve sürüm belgeleri güncellenmiş. Gerçek ölçüm 140/140 ve mutasyon kapısı eski davranışı yakaladığı için üretimi durduracak bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `rutbe-gercek` kaydı temiz commit üzerinde rc=0 ile birim ve API düzeyinde toplam 140 sınavın geçtiğini, özellikle R13/R14 ve RT3'ün talep edilen davranışı ölçtüğünü gösteriyor. Mutasyon kaydı rc=1 ve düşen_kapi=true ile eski ana-koltuk yedeği geri getirildiğinde sınavın bozuk kodu yakaladığını doğruluyor; önce/sonra kare yok, ancak bu kod davranışı için gerçek ölçüm ile mutasyon çifti yeterli ve hedefe dönük."
+  }
+}
