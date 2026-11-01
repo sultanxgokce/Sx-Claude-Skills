@@ -1,0 +1,27 @@
+{
+  "is": "duzen-gece-yenile-paket-ekipc",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T03:25:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gece-paket-ekipc",
+      "asama": "sonra",
+      "dosya": "olcum-gece-paket-ekipc-sonra.txt",
+      "sha256": "a3688f82a1ae52928e38d2fb15a89d9148b460f1ae11625a4eb0a84ee738e27b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gece-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T03:25:49+03:00",
+      "sure_sn": 11.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "06bda8079f5c4a18b6f89c818d3568a7",
+      "olculen_commit": "db22c220115c49feb0a1033bf5de3ee60bb83a97",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "fc0ad16343683dc98903955107c93c403900f144c551a3a2d46390e6bb8b1053"
+}
