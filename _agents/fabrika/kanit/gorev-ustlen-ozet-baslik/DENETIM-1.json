@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "gorev-ustlen-ozet-baslik",
+  "pr": "642",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T06:09:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-ustlen-ozet-baslik",
+  "dal": "gorev-ustlen-ozet-baslik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24875,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3834
+  },
+  "dalgic": "uyumlu",
+  "bas": "5ceb76104ace8adbddd124e720f7b828f3ac6d0a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Özetsiz görevi üstlenmeme kapısı ile geçmişi koruyan başlık ekleme fiili talebe uygun biçimde kurulmuş ve önce/sonra ölçümünde 16/16 geçmiştir. Ancak boşlık denetimi yalnız normal boşluk karakterini temizlediği, başlık karşılaştırması da kırpılmadan yapıldığı için önce bu iki sınır durumu çözülmelidir.",
+    "bulgular": [
+      {
+        "ne": "Yalnız sekme veya satır sonundan oluşan özet, boş özet kapısını aşabilir.",
+        "kanit": "Kapı `[ -n \"${OZ// /}\" ]` kullanıyor; bu ifade yalnız U+0020 boşluklarını siler. Sınav U2 de yalnız `\"   \"` verisini ölçüyor, sekme/satır sonu vakasını kapsamıyor.",
+        "konum": "gunluk-plan/scripts/gorev.sh:260; gorev-ustlen-baslik.test.sh:13,43",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Başlık yalnız baştaki veya sondaki boşluklarla farklı verilirse aynı başlığın yeniden ad olarak eklenmesi mümkün.",
+        "kanit": "Eşitlik denetimi kırpılmamış `$3` ile yapılıyor, fakat PATCH gövdesindeki ad `sys.argv[1].strip()` ile kırpılıyor; dolayısıyla `\" Başlık \"` mevcut `\"Başlık\"` değerinden farklı kabul edilip aynı kırpılmış adı ekler. B4 yalnız birebir aynı metni sınıyor.",
+        "konum": "gunluk-plan/scripts/gorev.sh:244-245; gorev-ustlen-baslik.test.sh:58-59",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; aynı etiketli önce/sonra ölçüm çifti kırmızı 5/13'ten yeşil 16/16'ya geçiş gösteriyor. Sarı kayıt yok. Ölçüm çalışma ağacını kirli durumda sınamış olsa da sunulan üretim farkıyla hedef davranışlar doğrudan örtüşüyor; belirtilen iki sınır durumu ise mevcut sınavlarda ölçülmemiş."
+  }
+}
