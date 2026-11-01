@@ -22,8 +22,10 @@ const n = rutbeHaritasi(NAZIR);
 kapi('R10 amiri Sultan olan reis', n.get('nazir-yon')?.kademe === 'reis');
 kapi('R11 kimlik ile görünen ad farklıyken amir görünen addan çözülür', n.get('kilavuz')?.amir === 'cihannuma' && n.get('kilavuz').amir_ad === 'CİHANNÜMA' && n.get('cihannuma')?.kademe === 'oda müdürü' && n.get('cihannuma').amir === 'nazir-yon', JSON.stringify(n.get('kilavuz')));
 kapi('R12 katlanmış adla bulur', rutbeBul(m, 'BENNA').kademe === 'personel');
-kapi('R13 reisin koltuğu açık değilse bile ana koltuğa rütbe düşmez (Sultan kararı)', !rutbeBul(n, 'nazir-ana').kademe && !rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana', 'cihannuma'] }).kademe);
-kapi('R14 reisin kendi koltuğu hâlâ reis', rutbeBul(n, 'nazir-yon').kademe === 'reis');
+const nyonAd = n.get('nazir-yon')?.gorunen_ad;
+kapi('R13 ayrı reis koltuğu açık değilse ana koltuk reis rütbesi ve reis adını taşır (ana oturum reisin koltuğu)', rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana', 'cihannuma'] }).kademe === 'reis' && !!nyonAd && rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana'] }).gorunen_ad === nyonAd, JSON.stringify(rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana'] })));
+kapi('R14 ayrı reis koltuğu açıksa ana koltuk rütbesiz kalır (kod kutusu: SERDAR ayrı)', !rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana', 'nazir-yon'] }).kademe && !rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana', 'nazir-yon'] }).gorunen_ad);
+kapi('R14b ana verilmeden rütbe anaya düşmez', !rutbeBul(n, 'nazir-ana').kademe);
 kapi('R15 boş kayıt boş harita, hata yok', rutbeHaritasi(undefined).size === 0 && !rutbeBul(new Map(), 'x').kademe);
 const CANLI = [{ id: 'nazir-yon', ad: 'ŞEHBENDER', amir: 'Sultan', oda_muduru: 'evet', oda: 'nezaret', tmux: 'nazir-yon:0' }, { id: 'nazir-rasatci', ad: 'RASATÇI', amir: 'ŞEHBENDER', oda_muduru: 'evet', oda: 'omnirouter', tmux: 'nazir-rasatci:0' },
   { id: 'nazir-seyyah', ad: 'CİHANNÜMA', amir: 'ŞEHBENDER', oda_muduru: 'evet', oda: 'hermes', tmux: 'nazir-seyyah:0' }, { id: 'nazir-seritdar', ad: 'ŞERİTDAR', amir: 'ŞEHBENDER', oda: 'nezaret', tmux: 'nazir-seritdar:0' }, { id: 'nazir-mim', ad: 'MÜSTENSİH', amir: 'CİHANNÜMA', oda: 'hermes', tmux: 'nazir-mim:0' }];

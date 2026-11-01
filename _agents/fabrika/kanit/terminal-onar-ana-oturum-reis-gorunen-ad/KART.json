@@ -1,0 +1,25 @@
+{
+  "is": "terminal-onar-ana-oturum-reis-gorunen-ad",
+  "cumle": "Ana oturum reisin koltuğudur: ayrı reis koltuğu açık değilse ana koltuk reis rütbesi ve reis adını taşır, açıksa rütbesiz kalır; koltuk cevabı gorunen_ad yollar",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-01T21:46:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}

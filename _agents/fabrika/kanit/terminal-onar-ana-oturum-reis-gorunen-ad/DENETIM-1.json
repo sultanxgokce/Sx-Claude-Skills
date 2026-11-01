@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-ana-oturum-reis-gorunen-ad",
+  "pr": "655",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T21:48:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-ana-oturum-reis-gorunen-ad",
+  "dal": "terminal-onar-ana-oturum-reis-gorunen-ad",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21653,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4162
+  },
+  "dalgic": "uyumlu",
+  "bas": "4bb9e7634f6779d867b791fb4bcbf463181ee849",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ana oturum, ayrı reis koltuğu kapalıyken reis rütbesiyle görünen adını devralıyor; ayrı koltuk açıkken rütbesiz kalıyor ve koltuk cevabı gorunen_ad alanını taşıyor. Sultan’ın talebi doğrudan sınanmış, gerçek ölçümün 164 kapısı geçmiş ve mutasyon kapısı bozulan davranışı yakalamış; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. ana-gercek ölçümü rc=0 ile R13, R14, R14b, RT3 ve RT4 dahil 23/23 ile 141/141 kapıyı geçiriyor; ana-mutant kaydı mutasyon olarak doğru etiketlenmiş, rc=1 ve düşen kapı sınavın bozulan ana-oturum davranışını yakaladığını gösteriyor. Ayrı bir görsel önce/sonra karesi yok, ancak talep sunucu davranışı olduğundan gerçek ölçüm ile mutasyon ölçümü yeterli ve gerçekçi davranış kanıtı oluşturuyor."
+  }
+}

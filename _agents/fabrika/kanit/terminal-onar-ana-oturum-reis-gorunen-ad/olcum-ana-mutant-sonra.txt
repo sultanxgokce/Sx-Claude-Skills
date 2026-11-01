@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-ana-gercek-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/ana-mutant.sh
+# rc=1 sure=0.1s zaman=2026-11-01T21:48:05+03:00
+--- stdout ---
+  ✗ R13 ayrı reis koltuğu açık değilse ana koltuk reis rütbesi ve reis adını taşır (ana oturum reisin koltu�
+--- stderr ---
