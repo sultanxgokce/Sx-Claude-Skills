@@ -47,7 +47,7 @@ Jetonsuz kutuda eski defter oda alanı tanımaz: kayıt yazılır, odanın YAZIL
 
 ## 0.6.6 — `yaz --kaynak <ad>` (SERDAR 1 Kas 2026)
 
-Üretici betikler (uyum-haftalik → `uyum`) kaydın kaynağını kendi adıyla yazar; varsayılan hâlâ `bulgu komutu`. Geçersiz ad (küçük harf/rakam/tire dışı) rc 2, hiçbir yere yazılmaz. Neden: `uyum-haftalik.sh` kayıtlarını kaynak `bulgu komutu` yazıyordu, Kuzey G30 açık uyum kaydı 0 görüyordu.
+Üretici betikler (uyum-haftalik → `uyum`) kaydın kaynağını kendi adıyla yazar; varsayılan hâlâ `bulgu komutu`. Geçersiz ad (küçük harf/rakam/tire dışı) rc 2, hiçbir yere yazılmaz. Jetonsuz kutuda (eski kutu defteri) kaynak alanı yoktur: kayıt yazılır ama "--kaynak … YAZILMADI" uyarısı basılır (sessiz kayıp yok). Neden: `uyum-haftalik.sh` kayıtlarını kaynak `bulgu komutu` yazıyordu, Kuzey G30 açık uyum kaydı 0 görüyordu.
 
 ## 0.6.5 — odasız ve uzun özetli kayıt doğmaz (SERDAR 31 Eki, görev …9ABX5)
 `bulgu.sh yaz` oda sırası: açık `--oda` > `GOREV_ODA` > yazanın ekip kaydındaki odası > varsayılan `agentic-os` (stderr'de söylenir). `--ozet` 80 harf ve üstüyse rc 2, deftere gidilmez. Haftalık uyum denetimi gibi koltuksuz yazıcılar artık odasız bulgu üretmez.

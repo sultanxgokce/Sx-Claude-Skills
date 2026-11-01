@@ -103,6 +103,7 @@ if b and not b.get("yazildi"): sys.exit(4)'
       [ -f "$YAZ" ] || _kur_yok
       echo "ℹ bu kutuda defter jetonu yok ($JY) — kayıt ESKİ kutu defterine yazılıyor (merkeze taşınması için SERDAR'a: jeton-dagit)" >&2
       echo "⚠ havuz yalnız merkezî defterde var: bu kayıt eski kutu defterine 'acik' hâliyle düşüyor, Sırada ayrımı UYGULANMADI (--gorev burada anlamsız)" >&2
+      [ "$kaynak" != "bulgu komutu" ] && echo "⚠ eski kutu defteri kaynak alanı tanımıyor: --kaynak $kaynak bu kayda YAZILMADI (kaynak yalnız merkezî defterde)" >&2
       [ -n "$oda" ] && echo "⚠ eski kutu defteri oda alanı tanımıyor: --oda $oda bu kayda YAZILMADI (oda yalnız merkezî defterde)" >&2
       if [ -n "$notu" ]; then python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --not "$notu" --kok "$KOK"
       else python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --kok "$KOK"; fi

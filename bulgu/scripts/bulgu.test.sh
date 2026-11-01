@@ -30,6 +30,10 @@ ok "H9b yaz: --not değersiz → rc 2, döngü yok" '[ $r -eq 2 ] && [[ "$o" != 
 # ── K1 (0.3.0): jeton varsa MERKEZE, yoksa eski deftere ──
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz" --kim X 2>&1); r=$?
 ok "K1a jeton yoksa eski yol + 'jetonu yok' uyarısı" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz"* ]] && [[ "$o" == *"jetonu yok"* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz uyum" --kim X --kaynak uyum 2>&1); r=$?
+ok "K1a2 jetonsuz yolda --kaynak SESSİZ kaybolmaz: kayıt yazılır ama 'kaynak … YAZILMADI' uyarısı basılır" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz uyum"* ]] && [[ "$o" == *"--kaynak uyum bu kayda YAZILMADI"* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz sade" --kim X 2>&1); r=$?
+ok "K1a3 jetonsuz yolda --kaynak yoksa kaynak uyarısı YOK" '[ $r -eq 0 ] && [[ "$o" != *"kaynak alanı tanımıyor"* ]]'
 printf 'sinav-jeton-ABC\n' > "$T/jeton"
 python3 - "$T" <<'PY' &
 import sys, json, http.server, socketserver, os
