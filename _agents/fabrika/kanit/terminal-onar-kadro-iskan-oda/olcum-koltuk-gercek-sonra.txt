@@ -1,0 +1,4 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-gercek.sh
+# rc=1 sure=0.2s zaman=2026-11-01T14:04:26+03:00
+--- stdout ---
+--- stderr ---

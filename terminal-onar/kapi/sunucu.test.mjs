@@ -626,6 +626,22 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const c10 = await giris(18795, '/sedir'); const r10 = await iste(18795, '/sedir/api/kadro', { cerez: c10 }); const j10 = await r10.json();
   kapi('KD7 kayıt var ama okunamıyor → 500 + hangi dosya', r10.status === 500 && /Kayıt okunamadı: .*aile-registry\.yaml/.test(j10.hata || ''), `→ ${r10.status} ${JSON.stringify(j10)}`);
   p10.kill();
+  // KD9–KD11 (2.37.2 · SERDAR): İSKÂN kaydı olan kutuda (NAZIR) koltuk oda alanı AİLE kaydından gelir; id/tmux iskan'ınki kalır
+  const NZP = join(T, 'nz-proje'); mkdirSync(join(NZP, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(NZP, 'iskan-registry.yaml'), 'proje: nz\nuyeler:\n  - id: nz-yon\n    tmux: "nz-yon:0"\n  - id: nz-motor\n    tmux: "nz-motor:0"\n');
+  writeFileSync(join(NZP, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n- id: nz-yon\n  oda: nezaret\n- id: nz-motor\n  oda: omnirouter\n');
+  const K7 = join(T, 'koltuk-sahte7.sh');
+  writeFileSync(K7, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
+    + 'printf "nz-yon\\t1760000100\\t1\\tajan\\tbilinmiyor\\t\\nnz-motor\\t1760000200\\t0\\tajan\\tbilinmiyor\\t\\nnz-bos\\t5\\t0\\tdiger\\tbilinmiyor\\t\\n"\n');
+  const p12 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18811', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: NZP,
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), KAPI_TTYD_KISI_SOKET: join(T, 'ayse-ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_KOLTUK_BETIK: K7, TO_ANA_TMUX: 'nz-bos' }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18811/sedir/giris')).status === 200) break; } catch {} }
+  const c12 = await giris(18811, '/sedir'); const r12 = await iste(18811, '/sedir/api/koltuklar', { cerez: c12 }); const j12 = await r12.json();
+  const KT = (ad) => (j12.koltuklar || []).find((x) => x.ad === ad);
+  kapi('KD9 iskan+aile kaydı olan kutuda koltuğun oda alanı aile kaydından gelir (kayıt kaynaklı)', r12.status === 200 && KT('nz-yon')?.oda === 'nezaret' && KT('nz-yon')?.oda_kaynak === 'kayit', JSON.stringify(j12.koltuklar));
+  kapi('KD10 ikinci koltuk kendi odasını alır (omnirouter) ve odalar listesinde iki oda var', KT('nz-motor')?.oda === 'omnirouter' && (j12.odalar || []).map((o) => o.ad).join() === 'nezaret,omnirouter', JSON.stringify(j12.odalar));
+  kapi('KD11 kayıtta olmayan koltuk oda uydurmaz (oda alanı yok)', KT('nz-bos') !== undefined && KT('nz-bos').oda === undefined, JSON.stringify(KT('nz-bos')));
+  p12.kill();
 }
 
 // ── KT · /api/kadro/tarif + /api/kadro/uzmanlik (2.20.0 · Mühürdarlık G12): SALT OKUR, girişli, kaynak yoksa ölçülemedi ──

@@ -1,0 +1,5 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti). Gerçek kod ölçümü: olcum-koltuk-gercek-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/koltuk-mutant.sh
+# rc=0 sure=0.3s zaman=2026-11-01T14:04:26+03:00
+--- stdout ---
+--- stderr ---
