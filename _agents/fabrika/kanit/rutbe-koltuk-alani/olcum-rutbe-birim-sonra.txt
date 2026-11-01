@@ -1,9 +1,9 @@
 $ node rutbe.test.mjs
-# rc=0 sure=0.1s zaman=2026-11-01T14:22:02+03:00
+# rc=0 sure=80.5s zaman=2026-11-01T14:25:09+03:00
 --- stdout ---
   ✓ R1 amiri boş oda müdürü reis
   ✓ R2 altı olan üye müdür, amiri koltuk adıyla, görünen adıyla gelir
-  ✓ R3 oda müdürü alanı altı olmasa da müdür yapar
+  ✓ R3 oda müdürü alanı altı olmasa da müdür yapar, görünen adı oda müdürü
   ✓ R4 personel amirine bağlanır, diakritik fark engel değil
   ✓ R5 büyük harfli tmux adı korunur
   ✓ R6 bilgisiz üyeye rütbe uydurulmaz
@@ -18,3 +18,4 @@ $ node rutbe.test.mjs
   ✓ R15 boş kayıt boş harita, hata yok
 geçen 15 · kalan 0
 --- stderr ---
+⏳ agir-sira: kanit-rutbe-koltuk-alani-rutbe-birim 81 sn bekledi (yuva 1, load1 17.12)

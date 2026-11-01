@@ -8,9 +8,10 @@
 import { adKatla } from './oda.mjs';
 
 const PASIF = new Set(['emekli', 'arsiv', 'dondurulmus']);
+const KADEME_AD = { reis: 'reis', mudur: 'oda müdürü', personel: 'personel' };   // kademe makine kodu, kademe_ad ekranda okunan ad
 const koltukAdi = (u) => String(u.tmux ?? '').split(':')[0] || adKatla(u.id);
 
-/** Üyeler → koltuk adı ⟶ { kademe, amir, amir_ad }. amir koltuk adıdır (şerit bağı onunla kurar), amir_ad görünen addır. */
+/** Üyeler → koltuk adı ⟶ { kademe, kademe_ad, amir, amir_ad }. amir koltuk adıdır (şerit bağı onunla kurar), amir_ad görünen addır. */
 export function rutbeHaritasi(uyeler) {
   const aktif = (uyeler || []).filter((u) => u && u.id && !PASIF.has(u.durum) && !PASIF.has(u.hal));
   const dizin = new Map();
@@ -23,7 +24,7 @@ export function rutbeHaritasi(uyeler) {
     const ham = String(u.amir ?? '').trim(), a = amirBul(u), sultana = adKatla(ham) === 'sultan', mudur = u.oda_muduru === 'evet';
     const kademe = sultana || (!ham && mudur) ? 'reis' : mudur || altSay.get(u) ? 'mudur' : a ? 'personel' : '';
     if (!kademe) continue;
-    h.set(koltukAdi(u), { kademe, ...(a && a !== u ? { amir: koltukAdi(a), amir_ad: String(a.ad || a.id) } : {}) });
+    h.set(koltukAdi(u), { kademe, kademe_ad: KADEME_AD[kademe], ...(a && a !== u ? { amir: koltukAdi(a), amir_ad: String(a.ad || a.id) } : {}) });
   }
   return h;
 }

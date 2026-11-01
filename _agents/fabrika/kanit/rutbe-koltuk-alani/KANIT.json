@@ -1,25 +1,25 @@
 {
   "is": "rutbe-koltuk-alani",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-01T14:22:10+03:00",
+  "guncelleme": "2026-11-01T14:25:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "rutbe-birim",
       "asama": "sonra",
       "dosya": "olcum-rutbe-birim-sonra.txt",
-      "sha256": "7e14e46da77f768a86e055ca719ab19e9e00f72cac600e94808b9d588ec942d6",
+      "sha256": "effaf9b025f614b4b913ce683460a59e01cb72651016d82ce840386064966f3e",
       "komut": [
         "node",
         "rutbe.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T14:22:02+03:00",
-      "sure_sn": 0.1,
+      "zaman": "2026-11-01T14:25:09+03:00",
+      "sure_sn": 80.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "bb5320ca043949ef88b4634dd1e7c2bc",
-      "olculen_commit": "2cf8f189fefae523b12b24f81701b4693954699b",
+      "olcum_id": "7f2da71a845444d28178dddcada39b51",
+      "olculen_commit": "9d7fd08c2518665203b1396b98f47f5639a19c44",
       "olculen_kirli": true
     },
     {
@@ -27,18 +27,18 @@
       "etiket": "sunucu-uc",
       "asama": "sonra",
       "dosya": "olcum-sunucu-uc-sonra.txt",
-      "sha256": "9d24e54993a58a4eb50b0092fa0b3e8333a02b62a38fcad50796954dd1d6aec5",
+      "sha256": "94366ea6c1d42eca5d69895150679121b17e0bcb69c7c97175f73a449876948d",
       "komut": [
         "node",
         "sunucu.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T14:22:10+03:00",
-      "sure_sn": 7.8,
+      "zaman": "2026-11-01T14:25:17+03:00",
+      "sure_sn": 8.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "589d7083f6ba4098b4cd12174f80a673",
-      "olculen_commit": "2cf8f189fefae523b12b24f81701b4693954699b",
+      "olcum_id": "eb1cac3eed794f7e931ec5a46e25cb48",
+      "olculen_commit": "9d7fd08c2518665203b1396b98f47f5639a19c44",
       "olculen_kirli": true
     },
     {
@@ -65,5 +65,5 @@
       "olculen_kirli": true
     }
   ],
-  "imza": "0d916f41ce8ef96f2fa61c5cac7a74b48a25c547fbc784c9dddb8efbc86e2c5e"
+  "imza": "1f3251b6a6060337c23cc26da4e0103edc86a0d5851e1dda6e24be8275f936b5"
 }

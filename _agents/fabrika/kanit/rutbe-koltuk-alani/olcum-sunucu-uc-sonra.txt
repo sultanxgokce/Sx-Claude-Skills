@@ -1,5 +1,5 @@
 $ node sunucu.test.mjs
-# rc=0 sure=7.8s zaman=2026-11-01T14:22:10+03:00
+# rc=0 sure=8.5s zaman=2026-11-01T14:25:17+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──

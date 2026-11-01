@@ -8,7 +8,7 @@ const MERKEZ = [{ id: 'SERDAR', oda: 'agentic-os', oda_muduru: 'evet', tmux: 'se
 const m = rutbeHaritasi(MERKEZ);
 kapi('R1 amiri boş oda müdürü reis', m.get('serdar')?.kademe === 'reis' && !m.get('serdar').amir);
 kapi('R2 altı olan üye müdür, amiri koltuk adıyla, görünen adıyla gelir', m.get('bani')?.kademe === 'mudur' && m.get('bani').amir === 'serdar' && m.get('bani').amir_ad === 'SERDAR', JSON.stringify(m.get('bani')));
-kapi('R3 oda müdürü alanı altı olmasa da müdür yapar', m.get('berid')?.kademe === 'mudur');
+kapi('R3 oda müdürü alanı altı olmasa da müdür yapar, görünen adı oda müdürü', m.get('berid')?.kademe === 'mudur' && m.get('berid').kademe_ad === 'oda müdürü' && m.get('serdar')?.kademe_ad === 'reis' && m.get('benna')?.kademe_ad === 'personel');
 kapi('R4 personel amirine bağlanır, diakritik fark engel değil', m.get('benna')?.kademe === 'personel' && m.get('benna').amir === 'bani' && m.get('muzehhip')?.amir_ad === 'BÂNİ');
 kapi('R5 büyük harfli tmux adı korunur', m.get('MIRAHUR')?.kademe === 'personel');
 kapi('R6 bilgisiz üyeye rütbe uydurulmaz', !m.has('emanetci'));
