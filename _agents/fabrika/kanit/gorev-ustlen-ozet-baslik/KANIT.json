@@ -1,25 +1,25 @@
 {
   "is": "gorev-ustlen-ozet-baslik",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T06:08:18+03:00",
+  "guncelleme": "2026-11-01T06:10:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "gorev-ustlen-baslik-sinavi",
       "asama": "once",
       "dosya": "olcum-gorev-ustlen-baslik-sinavi-once.txt",
-      "sha256": "9703bf601676559007cd165ee323ffd4dc8e2f0c390425bdda944883a9a3fcea",
+      "sha256": "f69bb178900ac8ee93723539130a74e0c1b730fcb63ea5a589913e6864456220",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gub-once.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-11-01T06:08:15+03:00",
-      "sure_sn": 0.4,
+      "zaman": "2026-11-01T06:10:05+03:00",
+      "sure_sn": 0.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "ea317c68bed046958585e2cf431839d0",
-      "olculen_commit": "c92f35217052dd2dc8c4508130e5c5d81303c4ad",
+      "olcum_id": "076a69bb09b84075a49339ba25171ad3",
+      "olculen_commit": "9ea62e4d15d2b479508e9f9d4a639d34610abaf2",
       "olculen_kirli": true
     },
     {
@@ -27,20 +27,20 @@
       "etiket": "gorev-ustlen-baslik-sinavi",
       "asama": "sonra",
       "dosya": "olcum-gorev-ustlen-baslik-sinavi-sonra.txt",
-      "sha256": "f9a1f64f9bc020cbc36e92ae2688c78a1732afea5c1840f2ea5d990643d8b555",
+      "sha256": "67c88157db31a70fdb7642154f7be627f655b7e387f9234ddf873565ce7702af",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gub-sonra.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T06:08:18+03:00",
-      "sure_sn": 2.9,
+      "zaman": "2026-11-01T06:10:10+03:00",
+      "sure_sn": 4.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "309247123aca4274845e0ae77c7e9a8f",
-      "olculen_commit": "c92f35217052dd2dc8c4508130e5c5d81303c4ad",
+      "olcum_id": "1dcc0d1bb9824034b9d6dc3612c4edee",
+      "olculen_commit": "9ea62e4d15d2b479508e9f9d4a639d34610abaf2",
       "olculen_kirli": true
     }
   ],
-  "imza": "ced96bb588b1625fbd5f8044892fac6c1222152335c8c7e7173aea0ac0539569"
+  "imza": "76a8a26d4dd83698dad4ffbe567204f8486851d04ac204240972ce58738c72ef"
 }

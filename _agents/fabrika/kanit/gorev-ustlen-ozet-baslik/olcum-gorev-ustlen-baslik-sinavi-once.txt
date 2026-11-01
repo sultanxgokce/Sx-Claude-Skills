@@ -1,13 +1,14 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gub-once.sh
-# rc=1 sure=0.4s zaman=2026-11-01T06:08:15+03:00
+# rc=1 sure=0.5s zaman=2026-11-01T06:10:05+03:00
 --- stdout ---
   ✗ U1 özetsiz kayıt üstlenilemez: rc 2, özeti nasıl yazacağını söyler, hiçbir şey yazılmadı
   ✗ U2 yalnız boşluktan oluşan özet de yok sayılır: rc 2, yazım yok
+  ✗ U2b yalnız sekme ve satır sonundan oluşan özet de yok sayılır: rc 2, yazım yok
   ✗ U3 kayıt okunamazsa (sunucu 500) ÜSTLENİLMEZ: rc 1, özetli sayılmaz, yazım yok
   ✗ B1 baslik: rc 0, AD EKLENİR (adlar dizisi), tashih (yerine) KULLANILMAZ — eski ad kapanmaz
   ✗ B2 adım eski ve yeni başlığı birlikte taşır (eski ad kayıtta okunur)
   ✗ B3 çıktı yeni başlığı ve eski adın kayıtta kaldığını söyler
   ✗ B6 eksik argüman rc 2 + kullanım
   ✗ B7 kayıt yoksa rc 1, yazım yok
-== 5 geçti · 8 düştü ==
+== 6 geçti · 9 düştü ==
 --- stderr ---

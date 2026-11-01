@@ -239,10 +239,11 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN
   baslik)
     # BAŞLIK DÜZELTME (SERDAR 1 Kas 2026): başlık tashih edilmez, AD EKLENİR — başlık = adlar listesinin son adı (kayit.mjs baslik), eski ad
     #   listede ve adımda kalır (geçmiş silinmez). `yerine` kullanılmaz: o eski adı kapatır. Düz güncelleme: adlar (çoğul alan) + adım TEK istekte.
-    [ $# -ge 4 ] && [ -n "${3// /}" ] && [ "${#4}" -ge 5 ] || { echo "kullanım: gorev.sh baslik <gorev_id> \"<yeni başlık>\" \"<gerekçe ≥5>\"" >&2; exit 2; }
+    YENI="$(printf '%s' "${3:-}" | python3 -c 'import sys; print(sys.stdin.read().strip())')"
+    [ $# -ge 4 ] && [ -n "$YENI" ] && [ "${#4}" -ge 5 ] || { echo "kullanım: gorev.sh baslik <gorev_id> \"<yeni başlık>\" \"<gerekçe ≥5>\"" >&2; exit 2; }
     ESKI="$(_cagir GET "/kayit/$2" | _sonuc 200 'bas(j["kayit"])')" || { echo "baslik: kayıt okunamadı — $ESKI" >&2; exit 1; }
-    [ "$ESKI" != "$3" ] || { echo "baslik: yeni başlık mevcutla aynı, hiçbir şey yazılmadı" >&2; exit 2; }
-    G="$(python3 -c 'import sys,json; b=lambda x: x if len(x)<=80 else x[:79]+"…"; print(json.dumps({"adlar":[sys.argv[1].strip()],"gerekce":sys.argv[3],"adimlar":["[başlık düzeltildi] %s → %s · %s" % (b(sys.argv[2]), b(sys.argv[1].strip()), sys.argv[3])]},ensure_ascii=False))' "$3" "$ESKI" "$4")"
+    [ "$(printf '%s' "$ESKI" | python3 -c 'import sys; print(sys.stdin.read().strip())')" != "$YENI" ] || { echo "baslik: yeni başlık mevcutla aynı, hiçbir şey yazılmadı" >&2; exit 2; }
+    G="$(python3 -c 'import sys,json; b=lambda x: x if len(x)<=80 else x[:79]+"…"; print(json.dumps({"adlar":[sys.argv[1].strip()],"gerekce":sys.argv[3],"adimlar":["[başlık düzeltildi] %s → %s · %s" % (b(sys.argv[2]), b(sys.argv[1].strip()), sys.argv[3])]},ensure_ascii=False))' "$YENI" "$ESKI" "$4")"
     _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"başlık: %s · eski ad kayıtta kalır · adım yazıldı" % bas(j["kayit"])' ;;
   aciliyet)
     [ $# -ge 4 ] && [ "${#4}" -ge 5 ] || { echo "kullanım: gorev.sh aciliyet <gorev_id> <cok-acil|acil|esnek|rahat> \"<gerekçe ≥5>\"" >&2; exit 2; }
@@ -257,7 +258,7 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KUTU" "$ETIKET" "$ACIL" "$ATANAN
     #   düşürür; özetsiz ya da yalnız teknik başlıklı eski bulgu orada okunamaz (G9/G10 düştü, bir gecede iki kez). Kayıt okunamazsa ÜSTLENİLMEZ (rc 1):
     #   okuyamadığımızı "özetli" saymayız. Bu kapı yazıma dokunmaz; özet `gorev.sh ozet <id> "…"` ile ayrı yazılır, sonra üstlenme tekrarlanır.
     OZ="$(_cagir GET "/kayit/$ID" | _sonuc 200 'j["kayit"]["canli"].get("ozet_sultan") or ""')" || { echo "ustlen: kayıt okunamadı, özeti doğrulanamadığı için üstlenilmedi — $OZ" >&2; exit 1; }
-    [ -n "${OZ// /}" ] || { echo "ustlen: $ID için Sultan-dili özet yok — önce: gorev.sh ozet $ID \"<sebep → ne yapıldı → ne olacak>\" (başlık yol/komut taşıyorsa: gorev.sh baslik $ID \"<Sultan-dili başlık>\" \"<gerekçe>\"), sonra üstlen. Hiçbir şey yazılmadı." >&2; exit 2; }
+    [ -n "$(printf '%s' "$OZ" | tr -d '[:space:]')" ] || { echo "ustlen: $ID için Sultan-dili özet yok — önce: gorev.sh ozet $ID \"<sebep → ne yapıldı → ne olacak>\" (başlık yol/komut taşıyorsa: gorev.sh baslik $ID \"<Sultan-dili başlık>\" \"<gerekçe>\"), sonra üstlen. Hiçbir şey yazılmadı." >&2; exit 2; }
     # --duraklat (G2.6/G14): öne alınan iş yüzünden bırakılan işin sebebi kayda ve karta düşer. Önce iki kayıt okunur; eski iş çalışılıyor
     #   değilse ya da aynı işse hiçbir şey yazılmaz (rc 2). Sıra: önce yeni iş üstlenilir, sonra eskiye adım — yarıda kalırsa söylenir (rc 1).
     YB=""
