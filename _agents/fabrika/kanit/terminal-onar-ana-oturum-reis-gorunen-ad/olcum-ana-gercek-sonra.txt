@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/ana-gercek.sh
+# rc=0 sure=7.9s zaman=2026-11-01T21:48:05+03:00
+--- stdout ---
+  ✓ R13 ayrı reis koltuğu açık değilse ana koltuk reis rütbesi ve reis adını taşır (ana oturum reisin koltuğu)
+  ✓ R14 ayrı reis koltuğu açıksa ana koltuk rütbesiz kalır (kod kutusu: SERDAR ayrı)
+  ✓ R14b ana verilmeden rütbe anaya düşmez
+geçen 23 · kalan 0
+  ✓ RT3 ana oturum reisin koltuğudur: reisin ayrı koltuğu kapalıyken ana koltuk reis rütbesi ve reis adını taşır
+  ✓ RT4 koltuk cevabı kayıttaki görünen adı gorunen_ad olarak yollar, adı olmayana yazmaz
+GECEN: 141  ·  KALAN: 0
+--- stderr ---
