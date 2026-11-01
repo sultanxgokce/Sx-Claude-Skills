@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "rutbe-koltuk-eslesme",
+  "pr": "653",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T15:09:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-rutbe-koltuk-eslesme",
+  "dal": "rutbe-koltuk-eslesme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22935,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 7470
+  },
+  "dalgic": "uyumsuz",
+  "bas": "cc792ac96f1885d075fe108a7da6ac30b2891fc6",
+  "duzeltme_farki": {
+    "onceki_bas": "ec7485e0bed4c377b08c3d88e9a40addb41a87c4",
+    "dosya": 7,
+    "bayt": 11614,
+    "tam_bayt": 38449
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Canlı koltuk eşlemesi rütbe ve oda için korunmuş; ayrıca emekli, arşivlenmiş veya dondurulmuş üyelerin açık koltuğu adıyla ele geçirmesi engellenmiş. Önceki turda bulgu yoktu; yeni farkta üretimi engelleyen sorun görülmüyor ve güçlendirilen sınavlarla birlikte kod üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam, sarı kayıt yok. Gerçekçi NAZIR önce/sonra ölçümü rütbe ve oda doluluğunun 2/6'dan 6/6'ya çıktığını; R16-R17 özellikle RASATÇI ile CİHANNÜMA'nın oda müdürü ve doğru odalarda göründüğünü doğruluyor. Gerçek kod ölçümü 22/22 birim ve 139/139 sunucu sınavından geçiyor; mutasyon kaydındaki R16-R18 düşüşleri beklenen sonuç ve sınavın bozuk eşlemeyi yakaladığını gösteriyor."
+  }
+}

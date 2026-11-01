@@ -36,12 +36,29 @@ export function adKatla(ad) {
 }
 
 /** Ekip üyeleri → koltuk adı ⟶ oda. Anahtar tmux oturumu; tmux alanı olmayan üyede katlanmış kimlik. Geçersiz oda adı alınmaz. */
-export function kayitOdaHaritasi(uyeler) {
-  const h = new Map();
+export function kayitOdaHaritasi(uyeler, acik = []) {
+  const h = new Map(), koltuk = koltukEsle(uyeler, acik);
   for (const u of uyeler || []) {
     if (!u || !ODA_AD_DESEN.test(String(u.oda ?? ''))) continue;
-    const t = String(u.tmux ?? '').split(':')[0];
-    h.set(t || adKatla(u.id), String(u.oda));
+    h.set(koltuk.get(u) || adKatla(u.id), String(u.oda));
+  }
+  return h;
+}
+
+/**
+ * Üye → koltuk adı. Kayıttaki tmux adı canlıda yoksa üye görünen adıyla, sonra kimliğiyle açık koltuğa bağlanır
+ * (NAZIR: kayıtta nazir-rasatci, canlıda rasatci). Önce tmux adı tutanlar yerleşir; açık koltuğu kayıtlı sahibinden
+ * başkası alamaz. Hiçbiri tutmazsa kayıttaki ad kalır: kapalı koltuğa açık koltuk uydurulmaz.
+ */
+const PASIF_UYE = new Set(['emekli', 'arsiv', 'dondurulmus']);
+export function koltukEsle(uyeler, acik = []) {
+  const h = new Map(), liste = (uyeler || []).filter((u) => u && !PASIF_UYE.has(u.durum) && !PASIF_UYE.has(u.hal)), acikKatli = new Map(acik.map((a) => [adKatla(a), a])), dolu = new Set();
+  const kayitli = (u) => String(u.tmux ?? '').split(':')[0];
+  for (const u of liste) { const a = acikKatli.get(adKatla(kayitli(u))); if (kayitli(u) && a) { h.set(u, a); dolu.add(a); } }
+  for (const u of liste) {
+    if (h.has(u)) continue;
+    const a = [u.ad, u.id].map((x) => acikKatli.get(adKatla(x))).find((x) => x && !dolu.has(x));
+    if (a) { h.set(u, a); dolu.add(a); } else h.set(u, kayitli(u));
   }
   return h;
 }

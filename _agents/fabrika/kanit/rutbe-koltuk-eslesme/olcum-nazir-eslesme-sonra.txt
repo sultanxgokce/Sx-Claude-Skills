@@ -1,0 +1,11 @@
+$ node _agents/fabrika/kanit/rutbe-koltuk-eslesme/nazir-esle-olc.mjs terminal-onar/kapi
+# rc=0 sure=0.0s zaman=2026-11-01T15:08:17+03:00
+--- stdout ---
+nazir-yon   reis        -          nezaret
+rasatci     oda müdürü  nazir-yon  omnirouter
+cihannuma   oda müdürü  nazir-yon  hermes
+mizanci     personel    nazir-yon  nezaret
+seritdar    personel    nazir-yon  nezaret
+kilavuz     oda müdürü  nazir-yon  paperclip
+rutbe_ve_oda_dolu=6/6
+--- stderr ---

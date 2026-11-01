@@ -1,0 +1,109 @@
+{
+  "is": "rutbe-koltuk-eslesme",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-01T15:08:17+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "nazir-eslesme",
+      "asama": "once",
+      "dosya": "olcum-nazir-eslesme-once.txt",
+      "sha256": "fe276821795157d527291d67c598b7dfe0a0560dc4360020cbac81527d8d9653",
+      "komut": [
+        "node",
+        "_agents/fabrika/kanit/rutbe-koltuk-eslesme/nazir-esle-olc.mjs",
+        "/config/.claude/skills/terminal-onar/kapi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T15:03:54+03:00",
+      "sure_sn": 35.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7134291a45e74a48b2759548015b706d",
+      "olculen_commit": "dc8d41f33e91f9e39cf58e2e7a23e65f9d6f95bb",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nazir-eslesme",
+      "asama": "sonra",
+      "dosya": "olcum-nazir-eslesme-sonra.txt",
+      "sha256": "130065af44c5e26103ebf8df48a6407ea8ebe71448d8022a7ccc0fb1df2a4ee7",
+      "komut": [
+        "node",
+        "_agents/fabrika/kanit/rutbe-koltuk-eslesme/nazir-esle-olc.mjs",
+        "terminal-onar/kapi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T15:08:17+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f133909d3de94f1aa65271ef0bd3cd4c",
+      "olculen_commit": "c3dc54639039ee0306b895404958f44dd05c1d09",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rutbe-birim",
+      "asama": "sonra",
+      "dosya": "olcum-rutbe-birim-sonra.txt",
+      "sha256": "b7fd22412c30d3c5df1e3a478a1da1add97db322e8b1abbf6310d6d814d7e00c",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/rutbe.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T15:08:17+03:00",
+      "sure_sn": 10.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b26529e7c0a34cd2b7ff9f972e7fdaac",
+      "olculen_commit": "c3dc54639039ee0306b895404958f44dd05c1d09",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-uc",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-uc-sonra.txt",
+      "sha256": "a851bb5190a2b0f71068a4e077c7b51865529586900c50d019a15fe0aa847f31",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T15:04:18+03:00",
+      "sure_sn": 8.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c6e2e5f864414d84a4486270853560ed",
+      "olculen_commit": "dc8d41f33e91f9e39cf58e2e7a23e65f9d6f95bb",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ad-eslesmesi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-ad-eslesmesi-tek.txt",
+      "sha256": "4f7495ae231984eba50ec0a38bebd559ccfd0313dd8a6d823a937b01afc064e7",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/rutbe.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T15:04:18+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "rutbe-birim",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "aa5a9c41533d4293bd4673206e910c58",
+      "olculen_commit": "dc8d41f33e91f9e39cf58e2e7a23e65f9d6f95bb",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "e9b626cd8c28a7de26874f696ec3f960f026b76b45a2d2c577289d318b67a86c"
+}

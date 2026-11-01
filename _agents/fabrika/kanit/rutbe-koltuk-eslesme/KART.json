@@ -1,0 +1,25 @@
+{
+  "is": "rutbe-koltuk-eslesme",
+  "cumle": "Terminal üst şeridinde kayıttaki koltuk adı canlı koltukla tutmayan kutularda rütbe ve oda görünen adla eşleşsin; NAZIR'da RASATÇI ve CİHANNÜMA müdür görünsün, dördü oda dışı düşmesin",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-11-01T15:00:39+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canlı",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}

@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.38.0
+version: 2.38.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.38.1 · Rütbe ve oda canlı koltuğa bağlanır (1 Kas · kart rutbe-koltuk-eslesme · Sultan: "nazırda yanlış göründü")
+Kayıttaki tmux adı eskiyse (NAZIR: kayıtta `nazir-rasatci`, canlıda `rasatci`) üye açık koltuğa görünen adıyla, sonra kimliğiyle bağlanır (`koltukEsle`, kapi/oda.mjs). Ölçüm: NAZIR'ın altı açık koltuğunda rütbe ve oda 2/6 → 6/6. Açık koltuğu kayıtlı sahibinden başkası alamaz; kapalı koltuğa açık koltuk uydurulmaz.
 
 ## 🆕 2.38.0 · Koltuk cevabı rütbe taşır (1 Kas · kart rutbe-koltuk-alani · görev …1MXTDS)
 `/api/koltuklar` her koltuğa `kademe` (reis · oda müdürü · personel), `amir` (koltuk adı) ve `amir_ad` (görünen ad) ekler. Rütbe yeni alan değildir, kayıttaki `amir` ve `oda_muduru`dan türer (`kapi/rutbe.mjs`). Bilgi yoksa alan yazılmaz. Reisin kendi koltuğu açık değilse reislik ana koltuğa düşer. Kayıtta kimlik ile görünen ad ayrı olabilir (NAZIR: `nazir-seyyah` / CİHANNÜMA), bu yüzden `ad` alanı okunur. Merkezin üst şeridi 1.199.0 bu alanları çizer.
