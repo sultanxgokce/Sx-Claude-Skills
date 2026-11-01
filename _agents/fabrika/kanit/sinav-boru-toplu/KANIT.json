@@ -1,7 +1,7 @@
 {
   "is": "sinav-boru-toplu",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T09:12:00+03:00",
+  "guncelleme": "2026-11-01T09:27:04+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -121,7 +121,69 @@
       "olcum_id": "ac11638c93044271a6d9a74dfec7e769",
       "olculen_commit": "203e99d8afa5c541378718bbcf56ed730d6c3429",
       "olculen_kirli": true
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kapi2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kapi2-sonra-b73d94b2d1d0.txt",
+      "sha256": "c3cf98be1c7110abe5fc11f964b2a17bec99fc60843940ff358e57476850f8a0",
+      "hedef_dosya": "olcum-kapi2-sonra.txt",
+      "hedef_olcum_id": "e07a0118a16e435a8d1ac791ab162692",
+      "hedef_sha256": "6833b34347a6063635ad218e78f163841aa7717f96a0c75b08caab355f2900c0",
+      "hedef_zaman": "2026-11-01T09:07:14+03:00",
+      "hedef_renk": "yesil",
+      "neden": "Kart daraltıldı: üç büyük dosya bu PR'dan çıktı, kapı artık tüm depoda rc 0 vermez; kapi4 kalan dosyaları ölçer",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-11-01T09:25:28+03:00",
+      "olcum_id": "b12b8e13af50439fbf2789759df8abea",
+      "olculen_commit": "39528a573db8b390b36abc1602e6c4f59e74f74e",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "kapi3",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-kapi3-sonra-e22d73b88fc9.txt",
+      "sha256": "293793d6835e88abec3fe93fd75cad69a5a0b3b18b3bd0eeeb7d9b13f87b066a",
+      "hedef_dosya": "olcum-kapi3-sonra.txt",
+      "hedef_olcum_id": "4d18fa3ddcf04c40802a5231e375a6ce",
+      "hedef_sha256": "6d3a149387b63e1e347367529b8375245d671e92490384a65834a93cadb5819c",
+      "hedef_zaman": "2026-11-01T09:11:59+03:00",
+      "hedef_renk": "yesil",
+      "neden": "Kart daraltıldı: üç büyük dosya bu PR'dan çıktı; kapi4 kalan dosyaları ölçer",
+      "kim": "BÂNİ",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-11-01T09:25:28+03:00",
+      "olcum_id": "a2cd37061a804cdbb1189c4bc4c414de",
+      "olculen_commit": "39528a573db8b390b36abc1602e6c4f59e74f74e",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi4",
+      "asama": "sonra",
+      "dosya": "olcum-kapi4-sonra.txt",
+      "sha256": "d5530fb8b66c31457f5e73fe5ac1731eb890c5b981e6a37f23460fe3ebbbbc12",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi-daralt.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi4.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:27:04+03:00",
+      "sure_sn": 95.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3706dc3dc8384a6f8a122fe20e48d8e0",
+      "olculen_commit": "39528a573db8b390b36abc1602e6c4f59e74f74e",
+      "olculen_kirli": true
     }
   ],
-  "imza": "6dbf428c939d9e6dc830c99f56712ac3b0c9f1ef92f7bc669389e12e7d43e723"
+  "imza": "d16ec2c8a429a7668e8a39a4af39080127c34adb072fc477ecf1e91011f4ea7c"
 }

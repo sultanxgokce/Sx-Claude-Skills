@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-kapi2-sonra.txt
+hedef_sha256: 6833b34347a6063635ad218e78f163841aa7717f96a0c75b08caab355f2900c0
+hedef_zaman: 2026-11-01T09:07:14+03:00
+hedef_renk: yesil
+neden: Kart daraltıldı: üç büyük dosya bu PR'dan çıktı, kapı artık tüm depoda rc 0 vermez; kapi4 kalan dosyaları ölçer
+kim: BÂNİ
+karsi: -
+zaman: 2026-11-01T09:25:28+03:00
