@@ -1,0 +1,50 @@
+{
+  "is": "terminal-onar-ana-koltukta-rutbe-yok",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-01T20:33:56+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "rutbe-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-rutbe-gercek-sonra.txt",
+      "sha256": "070ff4fd35d8fa9d82ce91c54545ff0885c303cf83782e269485ead0d04f646a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/rutbe-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T20:33:55+03:00",
+      "sure_sn": 7.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7e095ee430a946c0a1946115af40f52a",
+      "olculen_commit": "b0192aab8638602af4ae4dc8bc37fd8a7843834c",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rutbe-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-rutbe-mutant-sonra.txt",
+      "sha256": "0662aa9317dd90b5697e8dc3b5fa2d503bdb0d95d2447a7fdbfd8019b6bd7c0a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/rutbe-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T20:33:56+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "rutbe-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "1ec2773a87c34a58a7152700e6151b86",
+      "olculen_commit": "b0192aab8638602af4ae4dc8bc37fd8a7843834c",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "3927d4841ce68da708339dc54dbac88c6919097e2b66586523e245b17f9b5bdf"
+}
