@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi-kalan.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/k-sonra.txt
+# rc=0 sure=0.1s zaman=2026-11-01T10:58:10+03:00
+--- stdout ---
+sınav boru kapısı: 115 satır
+dosya disi 0
+--- stderr ---

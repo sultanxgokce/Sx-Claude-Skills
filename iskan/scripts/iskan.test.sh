@@ -7,7 +7,7 @@
 #
 # Bu test canlı ssh/hostsrv gerektirmez (ISKAN_SSH_HOST bilinçli-bozuk-host'a işaret eder).
 set -uo pipefail
-# grep boruda stdin'i bayt bayt (geçici dosyaya) SONUNA kadar okur: `printf "$out" | grep -q` pipefail altında grep ilk eşleşmede çıkınca printf'e SIGPIPE
+# grep boruda stdin'i bayt bayt (geçici dosyaya) SONUNA kadar okur: `printf "$out" | grep >/dev/null` pipefail altında grep ilk eşleşmede çıkınca printf'e SIGPIPE
 # gider, boru rc=141 olur ve doğru eşleşme "yok" sayılırdı (CI'da 29 Eki 01:25 'kur --dry-run: eksik adım' — rastgele, yüke bağlı).
 grep() { if [ -p /dev/stdin ]; then local _f _rc; _f="$(mktemp)"; cat >"$_f"; command grep "$@" <"$_f"; _rc=$?; rm -f "$_f"; return $_rc; else command grep "$@"; fi; }
 
@@ -99,7 +99,7 @@ env -u ISKAN_FAZ3_GO bash "$SCRIPT_DIR/iskan.sh" seans-getir --container cloudto
 # 7. seans-getir: desteklenmeyen container → doğrulanmadı + exit=3 (yazım yapmaz)
 out="$(bash "$SCRIPT_DIR/iskan.sh" seans-getir --container cloudtop-baska-proje 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'doğrulanmadı' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'doğrulanmadı' >/dev/null \
   && ok "seans-getir: bilinmeyen-container doğrulanmadı+exit=3" \
   || bad "seans-getir: bilinmeyen-container beklenen doğrulanmadı+rc=3, gelen rc=$rc"
 
@@ -123,12 +123,12 @@ out="$(ISKAN_AILE_REGISTRY="$FIXTURE_REG" ISKAN_TRANSCRIPT_DIR="$FIXTURE_TRANSCR
   bash "$SCRIPT_DIR/iskan.sh" seans-getir --container cloudtop-code 2>&1)"
 rc=$?
 tmux kill-session -t "$ALIVE_SESS" 2>/dev/null
-if printf '%s' "$out" | grep -q "TESTALIVE" ; then
+if printf '%s' "$out" | grep "TESTALIVE" >/dev/null ; then
   bad "seans-getir fixture: TESTALIVE (canlı) yanlışlıkla kapalı-üye listelendi"
 else
   ok "seans-getir fixture: TESTALIVE (canlı) doğru-şekilde ATLANDI"
 fi
-printf '%s' "$out" | grep -q "TESTDEAD" && printf '%s' "$out" | grep -q "degraded-replay" \
+printf '%s' "$out" | grep "TESTDEAD" >/dev/null && printf '%s' "$out" | grep "degraded-replay" >/dev/null \
   && ok "seans-getir fixture: TESTDEAD tespit edildi + 0-aday→degraded-replay AÇIK-etiketli" \
   || bad "seans-getir fixture: TESTDEAD/degraded-replay beklenirdi"
 [ "$rc" = "3" ] && ok "seans-getir fixture: kuru-koşu exit=3" || bad "seans-getir fixture: rc beklenen 3, gelen $rc"
@@ -210,9 +210,9 @@ rc=$?
 SUM_AFTER="$(md5sum "$YP_FIXTURE")"
 [ "$rc" = "3" ] && ok "yeni-proje --dry-run: plan-exit=3" || bad "yeni-proje --dry-run: rc beklenen 3, gelen $rc"
 [ "$SUM_BEFORE" = "$SUM_AFTER" ] && ok "yeni-proje --dry-run: dosya değişmedi" || bad "yeni-proje --dry-run: dosya DEĞİŞTİ (yazmamalıydı)"
-printf '%s' "$out" | grep -q "cloudtop-testproje" && printf '%s' "$out" | grep -q "8449" \
+printf '%s' "$out" | grep "cloudtop-testproje" >/dev/null && printf '%s' "$out" | grep "8449" >/dev/null \
   && ok "yeni-proje --dry-run: önizleme container-adı+port içeriyor" || bad "yeni-proje --dry-run: beklenen içerik eksik"
-printf '%s' "$out" | grep -qx "      - DISABLE_AUTOUPDATER=1" \
+printf '%s' "$out" | grep -x "      - DISABLE_AUTOUPDATER=1" >/dev/null \
   && ok "yeni-proje: üretilen compose bloğu DISABLE_AUTOUPDATER=1 taşır (cloudtop CI kapısı: environment'ı olan her servis)" || bad "yeni-proje: üretilen blokta DISABLE_AUTOUPDATER=1 YOK (yeni kutu cloudtop main CI'ını kırar — #957)"
 find /tmp -maxdepth 1 -name "iskan-test-yp-dryrun.$$.yml" -delete 2>/dev/null
 
@@ -312,7 +312,7 @@ out_pq="$(ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIR3Q/docker-compose.server.ym
   bash "$SCRIPT_DIR/iskan.sh" yeni-proje panoyok --apply 2>&1)"; rc_pq=$?
 [ "$rc_pq" = "0" ] && ok "yeni-proje --apply: pano kurucusu YOKKEN doğum düşmedi (fail-soft)" \
   || bad "yeni-proje --apply: pano kurucusu yokken doğum düştü rc=$rc_pq (kutu pano'ya bağımlı olmamalı)"
-printf '%s' "$out_pq" | grep -q 'pano: kurucu bulunamadı' \
+printf '%s' "$out_pq" | grep 'pano: kurucu bulunamadı' >/dev/null \
   && ok "yeni-proje --apply: pano yokluğu SESSİZ değil (uyarı basılıyor)" || bad "yeni-proje --apply: pano yokluğu sessiz geçti"
 # ISKAN_PANO=0 ile bilinçli kapatma
 YP_DIR3R="/tmp/iskan-test-panokapali.$$"; mkdir -p "$YP_DIR3R/pano"
@@ -325,7 +325,7 @@ ISKAN_PANO=0 ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIR3R/docker-compose.server
   || bad "yeni-proje --apply: ISKAN_PANO=0 saygı görmedi"
 for _d in "$YP_DIR3P" "$YP_DIR3Q" "$YP_DIR3R"; do find "$_d" -type f -delete 2>/dev/null; find "$_d" -depth -type d -delete 2>/dev/null; done
 
-awk '/hostname: \$\{TESTPROJE_HOSTNAME\}/{f=1} f&&/http_status:404/{print "SIRALI"; exit}' "$YP_DIR3/setup-tunnel.sh" | grep -q SIRALI \
+awk '/hostname: \$\{TESTPROJE_HOSTNAME\}/{f=1} f&&/http_status:404/{print "SIRALI"; exit}' "$YP_DIR3/setup-tunnel.sh" | grep SIRALI >/dev/null \
   && ok "yeni-proje --apply: ingress-çifti catch-all 404'ün ÖNCESİNDE (sıra korunmuş)" \
   || bad "yeni-proje --apply: ingress-çifti 404'ten sonra/karışık (cloudflared onu asla eşlemez)"
 # sokum-simetrisi (golden): _sokum_satir_cikar eklenen üç-satırı geri alınca dosya pristine-fixture'a bayt-eş döner
@@ -359,7 +359,7 @@ rc=$?
 SUM_DUP_AFTER="$(cat "$YP_FIXTURE4" "$YP_DIR4/setup-tunnel.sh" "$YP_DIR4/setup-testproje.sh" 2>/dev/null | md5sum | awk '{print $1}')"
 [ "$rc" = "0" ] && ok "yeni-proje --apply: aynı-ad ikinci-kez İDEMPOTENT-geçiş (rc=0)" || bad "yeni-proje --apply: idempotent-geçiş beklenirdi (rc=0), gelen $rc"
 [ "$SUM_DUP_BEFORE" = "$SUM_DUP_AFTER" ] && ok "yeni-proje --apply: idempotent-geçişte ÜÇ dosya da DEĞİŞMEDİ" || bad "yeni-proje --apply: idempotent-geçişte dosya DEĞİŞTİ (yeniden-yazım ihlali)"
-printf '%s' "$out" | grep -q "İDEMPOTENT" && ok "yeni-proje --apply: idempotent-geçiş açıkça beyan edildi" || bad "yeni-proje --apply: idempotent-beyanı çıktıda yok"
+printf '%s' "$out" | grep "İDEMPOTENT" >/dev/null && ok "yeni-proje --apply: idempotent-geçiş açıkça beyan edildi" || bad "yeni-proje --apply: idempotent-beyanı çıktıda yok"
 rm -f "$YP_DIR4/setup-testproje.sh"
 ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_DIR4/.lock" \
   bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
@@ -488,11 +488,11 @@ cat >> "$YP_FIXTURE4C" <<'EOF'
       - "127.0.0.1:9003:9003"
 EOF
 out="$(ISKAN_REPO_COMPOSE="$YP_FIXTURE4C" bash "$SCRIPT_DIR/iskan.sh" yeni-proje allowtest --dry-run 2>&1)"
-printf '%s' "$out" | grep -q 'yeni-kesişim: 0' \
+printf '%s' "$out" | grep 'yeni-kesişim: 0' >/dev/null \
   && ok "B1 allowlist: ortak .claude kesişimi bilinçli-köprü sayıldı (yeni-kesişim: 0, mount-paketi kendi kapısına takılmıyor)" \
   || bad "B1 allowlist: mount-paketi kendi guard'ına takıldı (P-Y1 çarpışması geri geldi)"
 out="$(ISKAN_B1_BILINCLI_KOPRU="" ISKAN_REPO_COMPOSE="$YP_FIXTURE4C" bash "$SCRIPT_DIR/iskan.sh" yeni-proje allowtest --dry-run 2>&1)"
-printf '%s' "$out" | grep -qE 'yeni-kesişim: [1-9]' \
+printf '%s' "$out" | grep -E 'yeni-kesişim: [1-9]' >/dev/null \
   && ok "B1 allowlist: allowlist kapatılınca aynı kesişim yine RED-adayı (guard hâlâ dişli)" \
   || bad "B1 allowlist: allowlist kapalıyken kesişim görünmez oldu (guard köreldi)"
 find "$YP_DIR4C" -type f -delete 2>/dev/null; find "$YP_DIR4C" -depth -type d -delete 2>/dev/null
@@ -568,8 +568,8 @@ rc=$?
 SUM_CF_AFTER="$(md5sum "$CF_FIXTURE")"
 [ "$rc" = "3" ] && ok "cf-yayin --dry-run: plan-exit=3" || bad "cf-yayin --dry-run: rc beklenen 3, gelen $rc"
 [ "$SUM_CF_BEFORE" = "$SUM_CF_AFTER" ] && ok "cf-yayin --dry-run: dosya değişmedi" || bad "cf-yayin --dry-run: dosya DEĞİŞTİ"
-printf '%s' "$out" | grep -q "cftest.mmepanel.com" && printf '%s' "$out" | grep -q "onboard" \
-  && printf '%s' "$out" | grep -q "SERT-KAPI" \
+printf '%s' "$out" | grep "cftest.mmepanel.com" >/dev/null && printf '%s' "$out" | grep "onboard" >/dev/null \
+  && printf '%s' "$out" | grep "SERT-KAPI" >/dev/null \
   && ok "cf-yayin --dry-run: önizleme hostname+onboard+sert-kapı içeriyor" \
   || bad "cf-yayin --dry-run: beklenen önizleme-içeriği eksik"
 find /tmp -maxdepth 1 -name "iskan-test-cf-dryrun.$$.yml" -delete 2>/dev/null
@@ -646,10 +646,10 @@ out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
 rc=$?
 [ "$rc" = "3" ] && ok "ekip-yerlestir --dry-run: plan-exit=3" || bad "ekip-yerlestir --dry-run: rc beklenen 3, gelen $rc"
-printf '%s' "$out" | grep -q "denekAlfa" && printf '%s' "$out" | grep -q "denekBeta" \
+printf '%s' "$out" | grep "denekAlfa" >/dev/null && printf '%s' "$out" | grep "denekBeta" >/dev/null \
   && ok "ekip-yerlestir --dry-run: roster-adları (denekAlfa+denekBeta) önizlemede görünür" \
   || bad "ekip-yerlestir --dry-run: roster-adları önizlemede eksik"
-printf '%s' "$out" | grep -q "scaffold" && printf '%s' "$out" | grep -qi "rezerv" \
+printf '%s' "$out" | grep "scaffold" >/dev/null && printf '%s' "$out" | grep -i "rezerv" >/dev/null \
   && ok "ekip-yerlestir --dry-run: scaffold + rezerv-uuid adımları önizlemede görünür" \
   || bad "ekip-yerlestir --dry-run: scaffold/rezerv-uuid adımı önizlemede eksik"
 
@@ -658,7 +658,7 @@ printf '%s' "$out" | grep -q "scaffold" && printf '%s' "$out" | grep -qi "rezerv
 out="$(env -u ISKAN_EY_ROSTER ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-kaynağı yok' && ! printf '%s' "$out" | grep -q 'denekAlfa' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'roster-kaynağı yok' >/dev/null && ! printf '%s' "$out" | grep 'denekAlfa' >/dev/null \
   && ok "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı rc=1 + 'roster-kaynağı yok' + sahte-ekip adı basılmadı (D6 tuzak-fix)" \
   || bad "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
 
@@ -682,27 +682,27 @@ git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
 #        SARI 'uye-dusuyor' satırı yine basılır (hangi üye, görünür). Eski devam-et davranışı yalnız ISKAN_EY_DUSME=uyar ile.
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && printf '%s' "$out" | grep -q 'uye-dusme-reddi' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep '\[sarı\] uye-dusuyor: denekGama' >/dev/null && printf '%s' "$out" | grep 'uye-dusme-reddi' >/dev/null \
   && ok "A323/0.10.3 VARSAYILAN: anahtarsız koşum → rc=1 + 'uye-dusme-reddi' + düşen üye adıyla SARI satır (fail-closed)" \
   || bad "A323/0.10.3 VARSAYILAN fail-closed değil ya da üye adı basılmadı (rc=$rc)"
 out="$(ISKAN_EY_DUSME=uyar ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && printf '%s' "$out" | grep -q 'uye-dusme-uyari-modu' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '\[sarı\] uye-dusuyor: denekGama' >/dev/null && printf '%s' "$out" | grep 'uye-dusme-uyari-modu' >/dev/null \
   && ok "A323/0.10.3 uyar modu: ISKAN_EY_DUSME=uyar → SARI uyarı + 'uyari-modu' satırı, dry-run rc=3 korundu" \
   || bad "A323/0.10.3 uyar modu bozuk (rc=$rc)"
 out="$(ISKAN_EY_DUSME=bozuk ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "2" ] && printf '%s' "$out" | grep -q "ISKAN_EY_DUSME='bozuk' tanınmıyor" \
+[ "$rc" = "2" ] && printf '%s' "$out" | grep "ISKAN_EY_DUSME='bozuk' tanınmıyor" >/dev/null \
   && ok "A323/0.10.3 bilinmeyen değer: ISKAN_EY_DUSME=bozuk → rc=2 yapılandırma hatası (sessizce 'uyar' sayılmaz)" \
   || bad "A323/0.10.3 bilinmeyen değer sessizce yutuldu (rc=$rc)"
 out="$(ISKAN_EY_DUSME=ret ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'uye-dusme-reddi' >/dev/null \
   && ok "A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'" \
   || bad "A323: ISKAN_EY_DUSME=ret fail-closed değil (rc=$rc)"
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye denekGama:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "3" ] && ! printf '%s' "$out" | grep -q 'uye-dusuyor' && printf '%s' "$out" | grep -q 'denekGama.*rezerv-uuid: mevcut' \
+[ "$rc" = "3" ] && ! printf '%s' "$out" | grep 'uye-dusuyor' >/dev/null && printf '%s' "$out" | grep 'denekGama.*rezerv-uuid: mevcut' >/dev/null \
   && ok "A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı" \
   || bad "A323 altın bozuk (rc=$rc)"
 # 24d. A323 APPLY yolu (bağımsız göz tur 1): --apply + ISKAN_EY_DUSME=ret → rc=1 + 'uye-dusme-reddi' VE repo
@@ -712,19 +712,19 @@ reg_md5_once="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -
 out="$(ISKAN_EY_DUSME=ret ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
 reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'uye-dusme-reddi' >/dev/null && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
   && ok "A323 apply+ret: rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi (md5 eş)" \
   || bad "A323 apply+ret: kayıt değişti ya da sözleşme kırık (rc=$rc, md5 $reg_md5_once→$reg_md5_sonra)"
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
 reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'uye-dusme-reddi' >/dev/null && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
   && ok "A323/0.10.3 apply VARSAYILAN (anahtarsız): rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi" \
   || bad "A323/0.10.3 apply VARSAYILAN: kayıt değişti ya da fail-closed değil (rc=$rc)"
 out="$(ISKAN_EY_DUSME=uyar ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
 reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
-printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
+printf '%s' "$out" | grep '\[sarı\] uye-dusuyor: denekGama' >/dev/null && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
   && ok "A323 apply (uyar modu): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)" \
   || bad "A323 apply (uyar modu): uyarı apply yolunda yok ya da kayıt değişti (rc=$rc)"
 # 24e. A323 'kayıt biçimi değişmez': üretici (_ey_iskan_registry_icerik) sabit girdiyle ALTIN çıktıya bayt-eş.
@@ -765,7 +765,7 @@ git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm temizle >/dev/null
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir hayaletproje --apply 2>&1)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'kayitsiz-proje' \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep 'kayitsiz-proje' >/dev/null \
   && ok "ekip-yerlestir --apply: bilinmeyen-proje rc≠0 + 'kayitsiz-proje' marker" \
   || bad "ekip-yerlestir --apply: bilinmeyen-proje beklenen rc≠0+marker, gelen rc=$rc"
 for p in eytes EYTEST; do
@@ -801,10 +801,10 @@ git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" \
   ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
-printf '%s' "$out" | grep -q "$EY_UUID_SABIT" \
+printf '%s' "$out" | grep "$EY_UUID_SABIT" >/dev/null \
   && ok "ekip-yerlestir: kayıtlı rezerv-uuid YENİDEN-KULLANILIR (origin/main'den okundu, yeniden-üretilmedi)" \
   || bad "ekip-yerlestir: kayıtlı rezerv-uuid önizlemede yok (yeniden-kullanım kırık)"
-printf '%s' "$out" | grep "denekBeta" | grep -q "yeni" \
+printf '%s' "$out" | grep "denekBeta" | grep "yeni" >/dev/null \
   && ok "ekip-yerlestir: kayıtsız-üye (denekBeta) için 'yeni' uuid-kaynağı raporlanır" \
   || bad "ekip-yerlestir: kayıtsız-üye uuid-kaynağı 'yeni' değil"
 
@@ -830,7 +830,7 @@ uyeler:
 EOF
 out="$(PATH="/usr/bin:/bin" bash "$BC_DIR/scripts/baslat-claude.sh" denekAlfa 2>&1)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'claude-binary yok' \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep 'claude-binary yok' >/dev/null \
   && ok "baslat-claude.sh: claude yokken dürüst-kırmızı (rc=$rc + 'claude-binary yok' marker)" \
   || bad "baslat-claude.sh: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
 PATH="/usr/bin:/bin" bash "$BC_DIR/scripts/baslat-claude.sh" hayaletrol >/dev/null 2>&1
@@ -845,8 +845,8 @@ EOF
 chmod +x "$BC_DIR/claude"
 out="$(PATH="$BC_DIR:/usr/bin:/bin" bash "$BC_DIR/scripts/baslat-claude.sh" denekAlfa 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q -- "--session-id 12345678-1234-1234-1234-123456789abc" \
-  && printf '%s' "$out" | grep -q -- "--name denekAlfa" && printf '%s' "$out" | grep -q -- "--permission-mode default" \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -- "--session-id 12345678-1234-1234-1234-123456789abc" >/dev/null \
+  && printf '%s' "$out" | grep -- "--name denekAlfa" >/dev/null && printf '%s' "$out" | grep -- "--permission-mode default" >/dev/null \
   && ok "baslat-claude.sh: claude-varken rezerve-id+rol+permission-mode ile exec (K3 disiplini)" \
   || bad "baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=$rc: $out)"
 find "$BC_DIR" -type f -delete 2>/dev/null; find "$BC_DIR" -depth -type d -delete 2>/dev/null
@@ -873,8 +873,8 @@ bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest >/dev/null 2>&1; ppc2=$?
 out="$(ISKAN_EY_ROSTER='yon:yonetici motor1:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run 2>&1)"; rc=$?
 [ "$rc" = "3" ] \
-  && printf '%s' "$out" | grep -q "seat 'yon'" && printf '%s' "$out" | grep -q "seat 'motor1'" \
-  && printf '%s' "$out" | grep -q "kimlik 'rol: yon'" \
+  && printf '%s' "$out" | grep "seat 'yon'" >/dev/null && printf '%s' "$out" | grep "seat 'motor1'" >/dev/null \
+  && printf '%s' "$out" | grep "kimlik 'rol: yon'" >/dev/null \
   && ok "ekip-pong --dry-run: plan-exit=3 + her seat --kimlik-plan satırı (SAHTE-YEŞİL YOK ibaresi)" \
   || bad "ekip-pong --dry-run: plan sözleşmesi kırık (rc=$rc)"
 
@@ -882,7 +882,7 @@ out="$(ISKAN_EY_ROSTER='yon:yonetici motor1:uye' ISKAN_PONG_SH="$PONG_STUB" \
 # [doğrulanmadı] olarak sürdürür — ekip-yerlestir ile AYNI marker)
 out="$(env -u ISKAN_EY_ROSTER ISKAN_SSH_HOST='bilinçli-bozuk-host.invalid' ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-kaynağı yok' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'roster-kaynağı yok' >/dev/null \
   && ok "ekip-pong roster-kaynaksız: dürüst-kırmızı rc=1 + marker (kur dry-run doğrulanmadı-sürdürür)" \
   || bad "ekip-pong roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
 
@@ -890,21 +890,21 @@ out="$(env -u ISKAN_EY_ROSTER ISKAN_SSH_HOST='bilinçli-bozuk-host.invalid' ISKA
 out="$(ISKAN_EY_ROSTER='yon:yonetici motor1:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
 [ "$rc" = "0" ] && [ "$(printf '%s' "$out" | grep -c 'GEÇTİ')" = "2" ] \
-  && printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' \
+  && printf '%s' "$out" | grep 'canlılık-kapısı geçildi' >/dev/null \
   && ok "ekip-pong --apply hepsi-yeşil: rc=0 + 2 seat GEÇTİ + kapı-geçildi özeti" \
   || bad "ekip-pong --apply hepsi-yeşil: sözleşme kırık (rc=$rc)"
 
 # P3-5. ekip-pong --apply seat-ÖLÜ: fail-closed rc=1 + KIRMIZI + 'fail-closed DURDU' (SAHTE-YEŞİL yakalandı)
 out="$(ISKAN_EY_ROSTER='yon:yonetici deadmotor:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'SAHTE-YEŞİL yakalandı' && printf '%s' "$out" | grep -q 'fail-closed DURDU' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'SAHTE-YEŞİL yakalandı' >/dev/null && printf '%s' "$out" | grep 'fail-closed DURDU' >/dev/null \
   && ok "ekip-pong --apply seat-ölü: fail-closed rc=1 (bir seat KIRMIZI → zincir DURur)" \
   || bad "ekip-pong --apply seat-ölü: fail-closed sözleşmesi kırık (rc=$rc)"
 
 # P3-6. ekip-pong --apply seat-ÖLÇÜLEMEDİ: unknown≠fail → rc=0 (yerleşim düşmez) + [doğrulanmadı]
 out="$(ISKAN_EY_ROSTER='yon:yonetici unmseat:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q '\[doğrulanmadı\] ekip-pong unmseat' && printf '%s' "$out" | grep -q 'ölçülemedi=1' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep '\[doğrulanmadı\] ekip-pong unmseat' >/dev/null && printf '%s' "$out" | grep 'ölçülemedi=1' >/dev/null \
   && ok "ekip-pong --apply ölçülemedi: unknown≠fail (rc=0 + [doğrulanmadı], seat-KIRMIZI değil)" \
   || bad "ekip-pong --apply ölçülemedi: üç-durum sözleşmesi kırık (rc=$rc)"
 
@@ -912,7 +912,7 @@ out="$(ISKAN_EY_ROSTER='yon:yonetici unmseat:uye' ISKAN_PONG_SH="$PONG_STUB" \
 # F4-runbook script-varlığını+yeşilini kabul-kapısı yapar)
 out="$(ISKAN_EY_ROSTER='yon:yonetici' ISKAN_PONG_SH='/tmp/yok-olmayan-pong.invalid' \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'pong-script bulunamadı' && printf '%s' "$out" | grep -q 'DOĞRULANAMADI' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'pong-script bulunamadı' >/dev/null && printf '%s' "$out" | grep 'DOĞRULANAMADI' >/dev/null \
   && ok "ekip-pong --apply script-yok: [doğrulanmadı] non-blocking rc=0 (unknown≠fail)" \
   || bad "ekip-pong --apply script-yok: non-blocking sözleşmesi kırık (rc=$rc)"
 
@@ -920,14 +920,14 @@ out="$(ISKAN_EY_ROSTER='yon:yonetici' ISKAN_PONG_SH='/tmp/yok-olmayan-pong.inval
 # HİÇBİR prob koşulmaz (seat ssh/docker/tmux'a gömülür — tüketim-noktası kapısı)
 out="$(ISKAN_EY_ROSTER='yon:yonetici ba;rm-rf:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-hijyeni' && ! printf '%s' "$out" | grep -q 'GEÇTİ' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'roster-hijyeni' >/dev/null && ! printf '%s' "$out" | grep 'GEÇTİ' >/dev/null \
   && ok "ekip-pong charset-hijyeni: geçersiz seat-adı → fail-closed rc=1 (hiçbir prob koşulmadı)" \
   || bad "ekip-pong charset-hijyeni: injection-panzehiri kırık (rc=$rc)"
 
 # P3-9. ekip-pong --no-ping: plan/pong PONG'suz iletilir (post-claude re-verify yolu)
 out="$(ISKAN_EY_ROSTER='yon:yonetici' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run --no-ping 2>&1)"; rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q "PONG'suz" \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep "PONG'suz" >/dev/null \
   && ok "ekip-pong --no-ping: plan 'PONG'suz' işaretli (post-claude re-verify yolu)" \
   || bad "ekip-pong --no-ping: bayrak-iletim kırık (rc=$rc)"
 
@@ -935,7 +935,7 @@ out="$(ISKAN_EY_ROSTER='yon:yonetici' ISKAN_PONG_SH="$PONG_STUB" \
 # word-split 0 seat → fail-closed rc=1 + 'HİÇBİR seat-adı ayrıştırılamadı' + 'canlılık-kapısı geçildi' YOK
 out="$(ISKAN_EY_ROSTER='   ' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'HİÇBİR seat-adı ayrıştırılamadı' && ! printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'HİÇBİR seat-adı ayrıştırılamadı' >/dev/null && ! printf '%s' "$out" | grep 'canlılık-kapısı geçildi' >/dev/null \
   && ok "ekip-pong yalnız-boşluk roster: fail-closed rc=1 (0 seat → sahte-yeşil basmaz)" \
   || bad "ekip-pong yalnız-boşluk roster: sahte-yeşil kör-noktası açık (rc=$rc)"
 
@@ -943,8 +943,8 @@ out="$(ISKAN_EY_ROSTER='   ' ISKAN_PONG_SH="$PONG_STUB" \
 # ölçülemedi>0 ∧ kırmızı=0 → unknown≠fail (rc=0, zincir sürer) AMA unknown≠pass → 'canlılık-kapısı geçildi' YOK
 out="$(ISKAN_EY_ROSTER='unm1:yonetici unm2:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' \
-  && printf '%s' "$out" | grep -q 'POZİTİF doğrulanamadı' && printf '%s' "$out" | grep -q 'ölçülemedi=2' \
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep 'canlılık-kapısı geçildi' >/dev/null \
+  && printf '%s' "$out" | grep 'POZİTİF doğrulanamadı' >/dev/null && printf '%s' "$out" | grep 'ölçülemedi=2' >/dev/null \
   && ok "ekip-pong tümü-ölçülemedi: yeşil=0 → markörsüz [doğrulanmadı] rc=0 (unknown≠pass, sahte-GEÇTİ yok)" \
   || bad "ekip-pong tümü-ölçülemedi: pozitif-kanıt kapısı kırık (rc=$rc)"
 
@@ -952,14 +952,14 @@ out="$(ISKAN_EY_ROSTER='unm1:yonetici unm2:uye' ISKAN_PONG_SH="$PONG_STUB" \
 # 'en-az-bir-yeşil'; aşırı-sıkma regresyonu): 1 yeşil + 1 ölçülemedi → 'canlılık-kapısı geçildi' BASILIR
 out="$(ISKAN_EY_ROSTER='yon:yonetici unmseat:uye' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' && printf '%s' "$out" | grep -q 'yeşil=1' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'canlılık-kapısı geçildi' >/dev/null && printf '%s' "$out" | grep 'yeşil=1' >/dev/null \
   && ok "ekip-pong karışık yeşil≥1: 'geçildi' basılır (pozitif-kanıt alt-sınırı, aşırı-sıkı değil)" \
   || bad "ekip-pong karışık yeşil≥1: pozitif-kanıt alt-sınırı kırık (rc=$rc)"
 
 # P3-13. ekip-pong yalnız-boşluk roster --dry-run: guard dry-run bloğundan ÖNCE → erken fail-closed rc=1 (hem-mod)
 out="$(ISKAN_EY_ROSTER='   ' ISKAN_PONG_SH="$PONG_STUB" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'HİÇBİR seat-adı ayrıştırılamadı' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'HİÇBİR seat-adı ayrıştırılamadı' >/dev/null \
   && ok "ekip-pong yalnız-boşluk roster --dry-run: erken fail-closed rc=1 (hem-mod guard)" \
   || bad "ekip-pong yalnız-boşluk roster --dry-run: erken-guard kırık (rc=$rc)"
 
@@ -1003,7 +1003,7 @@ rc2=$?
 [ "$rc1" = "2" ] && [ "$rc2" = "2" ] && ok "uye-ekle: eksik-argüman/mod rc=2 (usage)" || bad "uye-ekle: usage rc beklenen 2, gelen $rc1/$rc2"
 # 30b. uye-ekle: boşluklu/geçersiz --gorev → kırmızı rc=1, "gecersiz-gorev" mesajı; hiçbir kelime ayrı üye olmaz
 gout="$(bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --gorev "hastane sistemi uzmani" --dry-run 2>&1)"; grc=$?
-[ "$grc" = "1" ] && echo "$gout" | grep -q "gecersiz-gorev" && ok "uye-ekle: boşluklu --gorev reddedildi (rc=1, gecersiz-gorev)" || bad "uye-ekle: boşluklu --gorev reddedilmedi (rc=$grc)"
+[ "$grc" = "1" ] && echo "$gout" | grep "gecersiz-gorev" >/dev/null && ok "uye-ekle: boşluklu --gorev reddedildi (rc=1, gecersiz-gorev)" || bad "uye-ekle: boşluklu --gorev reddedilmedi (rc=$grc)"
 
 # 31. uye-ekle --dry-run (yeni-üye): plan-exit=3 + üye-adı + 'sultan-bildirim' satırı (G2 sözleşmesi)
 SUM_UE_BEFORE="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
@@ -1012,7 +1012,7 @@ out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.i
 rc=$?
 SUM_UE_AFTER="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
 [ "$rc" = "3" ] && ok "uye-ekle --dry-run: plan-exit=3" || bad "uye-ekle --dry-run: rc beklenen 3, gelen $rc"
-printf '%s' "$out" | grep -q "denekGamma" && printf '%s' "$out" | grep -q "sultan-bildirim" \
+printf '%s' "$out" | grep "denekGamma" >/dev/null && printf '%s' "$out" | grep "sultan-bildirim" >/dev/null \
   && ok "uye-ekle --dry-run: üye-adı + 'sultan-bildirim' satırı önizlemede" \
   || bad "uye-ekle --dry-run: üye-adı/sultan-bildirim eksik"
 [ "$SUM_UE_BEFORE" = "$SUM_UE_AFTER" ] && ok "uye-ekle --dry-run: dosya değişmedi" || bad "uye-ekle --dry-run: dosya DEĞİŞTİ (yazmamalıydı)"
@@ -1022,7 +1022,7 @@ printf '%s' "$out" | grep -q "denekGamma" && printf '%s' "$out" | grep -q "sulta
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekAlfa --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q "sultan-bildirim" && printf '%s' "$out" | grep -q "uye-zaten-var" \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep "sultan-bildirim" >/dev/null && printf '%s' "$out" | grep "uye-zaten-var" >/dev/null \
   && ok "uye-ekle --dry-run: mevcut-üyede de rc=3 + sultan-bildirim koşulsuz + çakışma-önizlemesi" \
   || bad "uye-ekle --dry-run: mevcut-üye sözleşmesi kırık (rc=$rc)"
 
@@ -1032,7 +1032,7 @@ for p in cloudtop-code code; do
   out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
     bash "$SCRIPT_DIR/iskan.sh" uye-ekle "$p" denekGamma --apply 2>&1)"
   rc=$?
-  [ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'ise-alim' \
+  [ "$rc" != "0" ] && printf '%s' "$out" | grep 'ise-alim' >/dev/null \
     && ok "uye-ekle: Nexus-hedef '$p' rc≠0 + 'ise-alim' yönlendirme-marker'ı (İ1, canlı-invoke YOK)" \
     || bad "uye-ekle: Nexus-hedef '$p' beklenen rc≠0+ise-alim, gelen rc=$rc"
 done
@@ -1041,7 +1041,7 @@ done
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" uye-ekle hayaletproje denekGamma --apply 2>&1)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'kayitsiz-proje' \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep 'kayitsiz-proje' >/dev/null \
   && ok "uye-ekle --apply: bilinmeyen-proje rc≠0 + 'kayitsiz-proje' marker" \
   || bad "uye-ekle --apply: bilinmeyen-proje beklenen rc≠0+marker, gelen rc=$rc"
 for p in uetes UETEST; do
@@ -1057,7 +1057,7 @@ done
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekAlfa --apply 2>&1)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'uye-zaten-var' \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep 'uye-zaten-var' >/dev/null \
   && ok "uye-ekle --apply: mevcut-üye rc≠0 + 'uye-zaten-var' (çakışma-koruması, G4b)" \
   || bad "uye-ekle --apply: mevcut-üye beklenen rc≠0+uye-zaten-var, gelen rc=$rc"
 
@@ -1075,8 +1075,8 @@ done
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --settings-file /config/projects/uetest/_agents/izin.json --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q "koltuğa özel izin dosyası: /config/projects/uetest/_agents/izin.json" \
-  && printf '%s' "$out" | grep -q "mevcut-kayıt kaynağı: repo-eski" \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep "koltuğa özel izin dosyası: /config/projects/uetest/_agents/izin.json" >/dev/null \
+  && printf '%s' "$out" | grep "mevcut-kayıt kaynağı: repo-eski" >/dev/null \
   && ok "uye-ekle --settings-file: dry-run planında izin dosyası + kayıt kaynağı görünür (rc=3)" \
   || bad "uye-ekle --settings-file: plan satırı eksik (rc=$rc)"
 
@@ -1090,7 +1090,7 @@ _ey_reg_mevcut_oku akar 0 2>/dev/null
   && ok "_ey_reg_mevcut_oku: yabancı kiracı kaydı (uetest ≠ akar) reddedildi" \
   || bad "_ey_reg_mevcut_oku: yabancı kiracı kaydı KABUL edildi (kaynak=$EY_REG_KAYNAK)"
 _ey_reg_mevcut_oku uetest 0 2>/dev/null
-[ "$EY_REG_KAYNAK" = "repo-eski" ] && printf '%s' "$EY_REG_MEVCUT" | grep -q "$UE_UUID_SABIT" \
+[ "$EY_REG_KAYNAK" = "repo-eski" ] && printf '%s' "$EY_REG_MEVCUT" | grep "$UE_UUID_SABIT" >/dev/null \
   && ok "_ey_reg_mevcut_oku: aynı kiracının kaydı kabul edildi (uuid yeniden-kullanılabilir)" \
   || bad "_ey_reg_mevcut_oku: aynı kiracının kaydı okunamadı (kaynak=$EY_REG_KAYNAK)"
 unset EY_REPO_DIR EY_REG_MEVCUT EY_REG_KAYNAK
@@ -1105,15 +1105,15 @@ out="$(EY_PROJE=t EY_CNAME=c EY_HOSTNAME=h EY_PORT=1 EY_HOST_CFG=/x EY_HEDEF_ICI
   EY_REG_MEVCUT="$RG_ESKI" EY_YENI_UYE=YENI EY_YENI_SETTINGS=/config/projects/t/izin.json \
   _ey_iskan_registry_icerik < <(printf 'KOD\tuye\taaaaaaaa-0000-0000-0000-000000000001\nDAR\tuye\taaaaaaaa-0000-0000-0000-000000000002\nYENI\tuye\taaaaaaaa-0000-0000-0000-000000000003\n'))"
 blok(){ printf '%s\n' "$out" | awk -v id="$1" '$0 ~ "- id: "id"$"{f=1;next} /- id:/{f=0} f'; }
-blok KOD | grep -q "permission_mode: bypassPermissions" \
+blok KOD | grep "permission_mode: bypassPermissions" >/dev/null \
   && ok "registry-üretimi: KOD'un bypassPermissions kipi korundu" \
   || bad "registry-üretimi: KOD'un izin kipi SIFIRLANDI"
-blok KOD | grep -q "settings_file" && bad "registry-üretimi: alanı olmayan KOD'a settings_file eklendi" \
+blok KOD | grep "settings_file" >/dev/null && bad "registry-üretimi: alanı olmayan KOD'a settings_file eklendi" \
   || ok "registry-üretimi: alanı olmayan üyeye settings_file eklenmedi (bayt-aynı)"
-blok DAR | grep -q "settings_file: /config/projects/t/eski.json" \
+blok DAR | grep "settings_file: /config/projects/t/eski.json" >/dev/null \
   && ok "registry-üretimi: DAR'ın izin dosyası korundu" \
   || bad "registry-üretimi: DAR'ın izin dosyası SİLİNDİ"
-blok YENI | grep -q "settings_file: /config/projects/t/izin.json" && blok YENI | grep -q "permission_mode: default" \
+blok YENI | grep "settings_file: /config/projects/t/izin.json" >/dev/null && blok YENI | grep "permission_mode: default" >/dev/null \
   && ok "registry-üretimi: yeni üyeye bayraktaki izin dosyası yazıldı (kip default)" \
   || bad "registry-üretimi: yeni üyenin izin dosyası yazılmadı"
 
@@ -1124,16 +1124,16 @@ EK_HATA="$(mktemp)"
 out="$(EY_PROJE=t EY_CNAME=c EY_HOSTNAME=h EY_PORT=1 EY_HOST_CFG=/x EY_HEDEF_ICI=/config/projects/t \
   EY_REG_MEVCUT="$RG_ESKI" EY_EKIP_REG="$EK_REG" \
   _ey_iskan_registry_icerik < <(printf 'KOD\tuye\taaaaaaaa-0000-0000-0000-000000000001\nREZ\tuye\taaaaaaaa-0000-0000-0000-000000000004\nYOK\tuye\taaaaaaaa-0000-0000-0000-000000000005\n') 2>"$EK_HATA")"
-blok REZ | grep -q "permission_mode: bypassPermissions" && ! grep -q "izin kipi: 'REZ'" "$EK_HATA" \
+blok REZ | grep "permission_mode: bypassPermissions" >/dev/null && ! grep -q "izin kipi: 'REZ'" "$EK_HATA" \
   && ok "registry-üretimi 35f: mevcut kayıtta olmayan REZ'in kipi ekip-registry'den okundu (bypassPermissions) ve ona uyarı YOK" \
   || bad "registry-üretimi 35f: REZ'in ekip-registry kipi okunmadı ya da gereksiz uyarı: $(blok REZ | grep permission_mode) | $(cat "$EK_HATA")"
-blok YOK | grep -q "permission_mode: default" && grep -q "\[sarı\] izin kipi: 'YOK'" "$EK_HATA" \
+blok YOK | grep "permission_mode: default" >/dev/null && grep -q "\[sarı\] izin kipi: 'YOK'" "$EK_HATA" \
   && ok "registry-üretimi 35f: hiçbir kaynakta olmayan YOK 'default' aldı ve stderr'e görünür [sarı] uyarı düştü" \
   || bad "registry-üretimi 35f: YOK için default/uyarı yok: $(blok YOK | grep permission_mode) | $(cat "$EK_HATA")"
 out="$(EY_PROJE=t EY_CNAME=c EY_HOSTNAME=h EY_PORT=1 EY_HOST_CFG=/x EY_HEDEF_ICI=/config/projects/t \
   EY_REG_MEVCUT="$RG_ESKI" EY_EKIP_REG="" ISKAN_EY_PMODE_VARSAYILAN=acceptEdits \
   _ey_iskan_registry_icerik < <(printf 'YOK\tuye\taaaaaaaa-0000-0000-0000-000000000005\n') 2>"$EK_HATA")"
-blok YOK | grep -q "permission_mode: acceptEdits" && ! grep -q "izin kipi:" "$EK_HATA" \
+blok YOK | grep "permission_mode: acceptEdits" >/dev/null && ! grep -q "izin kipi:" "$EK_HATA" \
   && ok "registry-üretimi 35f: ISKAN_EY_PMODE_VARSAYILAN varsayılanı değiştirir (acceptEdits); bilinçli kip 'default' düşüşü değildir → uyarı YOK (göz tur 1)" \
   || bad "registry-üretimi 35f: ISKAN_EY_PMODE_VARSAYILAN işlemedi ya da gereksiz uyarı: $(blok YOK | grep permission_mode) | $(cat "$EK_HATA")"
 rm -f "$EK_HATA"; unset EK_REG EK_HATA
@@ -1177,11 +1177,11 @@ res="$(bash -c "source <(sed -n '/^_ey_ekip_roster_oku()/,/^}/p' '$SCRIPT_DIR/is
 #     permission_mode anahtarları; canlı KÂHYA-invoke YOK — İSKÂN'ın Nexus-katkısı yalnız bu dönüşüm)
 UE_ADP_SID="99999999-8888-7777-6666-555555555555"
 res="$(bash -c "source <(sed -n '/^_ue_kahya_adaptor()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _ue_kahya_adaptor '$SCRIPT_DIR/fixtures/kahya-ornek.json' '$UE_ADP_SID'")"
-printf '%s' "$res" | grep -q "id: DENEKKAHYA" \
-  && printf '%s' "$res" | grep -q 'tmux: "DENEKKAHYA:0"' \
-  && printf '%s' "$res" | grep -q "cwd: /opt/nexus/repo" \
-  && printf '%s' "$res" | grep -q "session_id: $UE_ADP_SID" \
-  && printf '%s' "$res" | grep -q "permission_mode: default" \
+printf '%s' "$res" | grep "id: DENEKKAHYA" >/dev/null \
+  && printf '%s' "$res" | grep 'tmux: "DENEKKAHYA:0"' >/dev/null \
+  && printf '%s' "$res" | grep "cwd: /opt/nexus/repo" >/dev/null \
+  && printf '%s' "$res" | grep "session_id: $UE_ADP_SID" >/dev/null \
+  && printf '%s' "$res" | grep "permission_mode: default" >/dev/null \
   && ok "_ue_kahya_adaptor: KÂHYA-şema → K2 üye-bloğu dönüşümü tam (5 anahtar)" \
   || bad "_ue_kahya_adaptor: dönüşüm eksik/bozuk: '$res'"
 
@@ -1230,10 +1230,10 @@ SUM_EG_0="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --dry-run 2>&1)"
 rc=$?
 SUM_EG_1="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'evergreen-onizleme' && [ "$SUM_EG_0" = "$SUM_EG_1" ] \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'evergreen-onizleme' >/dev/null && [ "$SUM_EG_0" = "$SUM_EG_1" ] \
   && ok "evergreen-kaydet --dry-run: rc=3 + evergreen-onizleme + yazımsız (md5 önce=sonra)" \
   || bad "evergreen-kaydet --dry-run: sözleşme kırık (rc=$rc)"
-printf '%s' "$out" | grep -q 'EKLENECEK' \
+printf '%s' "$out" | grep 'EKLENECEK' >/dev/null \
   && ok "evergreen-kaydet --dry-run: EKLENECEK satır-diff'i görünür" \
   || bad "evergreen-kaydet --dry-run: EKLENECEK diff'i yok"
 
@@ -1255,7 +1255,7 @@ SUM_EG_2="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
 rc=$?
 SUM_EG_3="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'mevcut' && [ "$SUM_EG_2" = "$SUM_EG_3" ] \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'mevcut' >/dev/null && [ "$SUM_EG_2" = "$SUM_EG_3" ] \
   && ok "evergreen-kaydet --apply 2.koşu: idempotent no-op (rc=0 + 'mevcut' + md5 değişmez)" \
   || bad "evergreen-kaydet --apply 2.koşu: idempotency kırık (rc=$rc)"
 
@@ -1263,7 +1263,7 @@ SUM_EG_3="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet hayaletproje --apply 2>&1)"
 rc=$?
 SUM_EG_4="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'kayitsiz-proje' && [ "$SUM_EG_3" = "$SUM_EG_4" ] \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep 'kayitsiz-proje' >/dev/null && [ "$SUM_EG_3" = "$SUM_EG_4" ] \
   && ok "evergreen-kaydet: kayıtsız-proje rc≠0 + 'kayitsiz-proje' + yazımsız" \
   || bad "evergreen-kaydet: kayıtsız-proje kapısı kırık (rc=$rc)"
 
@@ -1276,7 +1276,7 @@ SUM_BK_0="$(md5sum "$EG_REPO2/infra/backup.sh")"
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO2" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
 rc=$?
 SUM_BK_1="$(md5sum "$EG_REPO2/infra/backup.sh")"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'bash -n' && [ "$SUM_BK_0" = "$SUM_BK_1" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'bash -n' >/dev/null && [ "$SUM_BK_0" = "$SUM_BK_1" ] \
   && ok "evergreen-kaydet: bash -n kapısı düştü → rc=1 + backup.sh .bak-restore (byte-eş geri)" \
   || bad "evergreen-kaydet: bash -n kapısı sözleşmesi kırık (rc=$rc)"
 find "$EG_REPO2" -type f -delete 2>/dev/null; find "$EG_REPO2" -depth -type d -delete 2>/dev/null
@@ -1290,7 +1290,7 @@ SUM_PO_0="$(md5sum "$PO_FIXTURE")"
 out="$(ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --port 8448 --dry-run 2>&1)"
 rc=$?
 SUM_PO_1="$(md5sum "$PO_FIXTURE")"
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8448:8443' && printf '%s' "$out" | grep -q 'port-kaynağı: operatör-override' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '127.0.0.1:8448:8443' >/dev/null && printf '%s' "$out" | grep 'port-kaynağı: operatör-override' >/dev/null \
   && [ "$SUM_PO_0" = "$SUM_PO_1" ] \
   && ok "yeni-proje --port: override-port compose-önizlemede + kaynak-beyanı + rc=3 + yazımsız" \
   || bad "yeni-proje --port: override sözleşmesi kırık (rc=$rc)"
@@ -1298,7 +1298,7 @@ SUM_PO_1="$(md5sum "$PO_FIXTURE")"
 # 45. ISKAN_PORT env: --port ile aynı yol; ayrıca sayısal-olmayan değer rc=2
 out="$(ISKAN_PORT=8448 ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8448:8443' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '127.0.0.1:8448:8443' >/dev/null \
   && ok "yeni-proje ISKAN_PORT: env-override arg'la eş-davranış (rc=3 + 8448)" \
   || bad "yeni-proje ISKAN_PORT: env-override kırık (rc=$rc)"
 ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --port abc --dry-run >/dev/null 2>&1
@@ -1318,13 +1318,13 @@ SUM_PO_2="$(md5sum "$PO_FIXTURE")"
 out="$(ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --port 8448 --dry-run 2>&1)"
 rc=$?
 SUM_PO_3="$(md5sum "$PO_FIXTURE")"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'zaten repo-compose.da kullanımda' && [ "$SUM_PO_2" = "$SUM_PO_3" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'zaten repo-compose.da kullanımda' >/dev/null && [ "$SUM_PO_2" = "$SUM_PO_3" ] \
   && ok "yeni-proje --port: kullanımda-olan porta override rc=1 (çakışma-kapısı) + yazımsız" \
   || bad "yeni-proje --port: çakışma-kapısı kırık (rc=$rc)"
 # GOLDEN: override YOKKEN pick_port davranışı aynen (8448 dolu → floor 8449 seçilir, kaynak-beyanı YOK)
 out="$(ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8449:8443' && ! printf '%s' "$out" | grep -q 'port-kaynağı: operatör-override' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '127.0.0.1:8449:8443' >/dev/null && ! printf '%s' "$out" | grep 'port-kaynağı: operatör-override' >/dev/null \
   && ok "yeni-proje (override'sız): pick_port golden-davranış korunuyor (8449, beyan-yok)" \
   || bad "yeni-proje (override'sız): golden-davranış BOZULDU (rc=$rc)"
 find /tmp -maxdepth 1 -name "iskan-test-po.$$.yml" -delete 2>/dev/null
@@ -1332,7 +1332,7 @@ find /tmp -maxdepth 1 -name "iskan-test-po.$$.yml" -delete 2>/dev/null
 # 47. provizyon NEGATİF-KAPI (G7-sözleşmesi): marker-yokken --apply → rc=4 + stderr'de 'ISKAN_FAZ9_GO'
 err="$(env -u ISKAN_FAZ9_GO bash "$SCRIPT_DIR/iskan.sh" provizyon gatetest --apply 2>&1 >/dev/null)"
 rc=$?
-[ "$rc" = "4" ] && printf '%s' "$err" | grep -q 'ISKAN_FAZ9_GO' \
+[ "$rc" = "4" ] && printf '%s' "$err" | grep 'ISKAN_FAZ9_GO' >/dev/null \
   && ok "provizyon --apply: GO-marker yokken rc=4 + stderr'de marker-adı (FAZ-4 konvansiyonu)" \
   || bad "provizyon --apply: negatif-kapı sözleşmesi kırık (rc=$rc)"
 
@@ -1340,7 +1340,7 @@ rc=$?
 out="$(ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
   bash "$SCRIPT_DIR/iskan.sh" provizyon gatetest 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'doğrulanmadı' && printf '%s' "$out" | grep -q 'setsid -w bash' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'doğrulanmadı' >/dev/null && printf '%s' "$out" | grep 'setsid -w bash' >/dev/null \
   && ok "provizyon dry-run: offline'da rc=3 + doğrulanmadı-dili + plan-satırı" \
   || bad "provizyon dry-run: plan-sözleşmesi kırık (rc=$rc)"
 bash "$SCRIPT_DIR/iskan.sh" provizyon >/dev/null 2>&1
@@ -1369,7 +1369,7 @@ out="$(ISKAN_EY_ROSTER="nisanci:yonetici seyyah:uye mumeyyiz:uye vakanuvis:uye n
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir rostertest --dry-run 2>&1)"
 rc=$?
 n_uye="$(printf '%s\n' "$out" | grep -cE '^\s+- (nisanci|seyyah|mumeyyiz|vakanuvis|nakkas) \(')"
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'ISKAN_EY_ROSTER (açık-override)' && [ "$n_uye" = "5" ] \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'ISKAN_EY_ROSTER (açık-override)' >/dev/null && [ "$n_uye" = "5" ] \
   && ok "ekip-yerlestir ISKAN_EY_ROSTER: 5-üye küçük-ASCII override parse + planında 5 satır + rc=3" \
   || bad "ekip-yerlestir ISKAN_EY_ROSTER: override sözleşmesi kırık (rc=$rc, üye=$n_uye)"
 find "$EYR_REPO" -type f -delete 2>/dev/null; find "$EYR_REPO" -depth -type d -delete 2>/dev/null
@@ -1408,13 +1408,13 @@ git -C "$MM_REPO" fetch -q origin main 2>/dev/null
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici" ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir paylasimli --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '→ /opt/cloudtop/config/projects/paylasimli (host)' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '→ /opt/cloudtop/config/projects/paylasimli (host)' >/dev/null \
   && ok "mount-çözümü: paylaşımlı-mount → mount'un kendisi (gölgelenme-panzehiri)" \
   || bad "mount-çözümü: paylaşımlı-mount yanlış çözüldü (rc=$rc)"
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici" ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir tekmount --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '→ /opt/cloudtop/config-tekmount/projects/tekmount (host)' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '→ /opt/cloudtop/config-tekmount/projects/tekmount (host)' >/dev/null \
   && ok "mount-çözümü: tek-mount eski-davranış korunuyor (config-<ad>/projects/<ad>)" \
   || bad "mount-çözümü: tek-mount davranışı BOZULDU (rc=$rc)"
 find "$MM_REPO" -type f -delete 2>/dev/null; find "$MM_REPO" -depth -type d -delete 2>/dev/null
@@ -1497,7 +1497,7 @@ out="$(ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.i
   bash "$SCRIPT_DIR/iskan.sh" sokum sokumtest 2>&1)"
 rc=$?
 SUM_SK_1="$(md5sum "$SK_REPO"/infra/*)"
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'KURU-KOŞU' && printf '%s' "$out" | grep -q 'down cloudtop-sokumtest' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'KURU-KOŞU' >/dev/null && printf '%s' "$out" | grep 'down cloudtop-sokumtest' >/dev/null \
   && [ "$SUM_SK_0" = "$SUM_SK_1" ] \
   && ok "sokum dry-run (DEFAULT): rc=3 + servis-scoped down-planı + md5-değişmez" \
   || bad "sokum dry-run: sözleşme kırık (rc=$rc)"
@@ -1508,7 +1508,7 @@ err="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG" ISKAN_CLOUDTOP_REPO_DIR=
   bash "$SCRIPT_DIR/iskan.sh" sokum sokumtest --apply 2>&1 >/dev/null)"
 rc=$?
 SUM_SK_2="$(md5sum "$SK_REPO"/infra/*)"
-[ "$rc" = "4" ] && printf '%s' "$err" | grep -q 'ISKAN_SOKUM_GO' && [ "$SUM_SK_1" = "$SUM_SK_2" ] \
+[ "$rc" = "4" ] && printf '%s' "$err" | grep 'ISKAN_SOKUM_GO' >/dev/null && [ "$SUM_SK_1" = "$SUM_SK_2" ] \
   && [ "$(grep -c . "$SK_LOG")" = "0" ] \
   && ok "sokum marker-yok: rc=4 + stderr ISKAN_SOKUM_GO + md5-değişmez + ssh-stub-çağrı=0 (sıfır-dokunuş)" \
   || bad "sokum marker-yok: GO-kapısı kırık (rc=$rc ssh-çağrı=$(grep -c . "$SK_LOG"))"
@@ -1518,7 +1518,7 @@ out="$(ISKAN_SOKUM_GO=1 ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" ISKAN_SSH_HOST="bilin
   bash "$SCRIPT_DIR/iskan.sh" sokum hayalet --apply 2>&1)"
 rc=$?
 SUM_SK_3="$(md5sum "$SK_REPO"/infra/*)"
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -qi 'kayitsiz' && [ "$SUM_SK_2" = "$SUM_SK_3" ] \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -i 'kayitsiz' >/dev/null && [ "$SUM_SK_2" = "$SUM_SK_3" ] \
   && ok "sokum kayitsiz-proje: rc≠0 + 'kayitsiz' marker + md5-değişmez (fail-closed)" \
   || bad "sokum kayitsiz-proje: kapı kırık (rc=$rc)"
 
@@ -1527,7 +1527,7 @@ SK_LOG2="$(mktemp)"
 out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG2" ISKAN_SOKUM_GO=1 ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'zaten-sokuk' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'zaten-sokuk' >/dev/null \
   && ok "sokum zaten-sokuk: kayıt-yok + arşiv-var → rc=0 idempotent ('zaten-sokuk' sinyali)" \
   || bad "sokum zaten-sokuk: durum-sinyali kırık (rc=$rc)"
 
@@ -1536,7 +1536,7 @@ rc=$?
 SK_STATE_DIR="$(mktemp -d)"
 out="$(ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" sokum sokumtest 2>&1)"
-printf '%s' "$out" | grep -q 'kur-durum-dosyası temizliği' \
+printf '%s' "$out" | grep 'kur-durum-dosyası temizliği' >/dev/null \
   && ok "sokum dry-run: plan ADIM-8 kur-durum-temizliğini içeriyor (P1d)" \
   || bad "sokum dry-run: ADIM-8 planda yok (P1d eksik)"
 printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
@@ -1544,7 +1544,7 @@ SK_LOG3="$(mktemp)"
 out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası duruyor' \
+[ "$rc" = "0" ] && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep 'bayat kur-durum-dosyası duruyor' >/dev/null \
   && ok "sokum zaten-sokuk dry-run: bayat kur-izi UYARILIR ama SİLİNMEZ (dry-run yazmaz)" \
   || bad "sokum zaten-sokuk dry-run: state-dokunma sözleşmesi kırık (rc=$rc, dosya $([ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && echo var || echo YOK))"
 # PR-C yaşamdöngüsü: v2 state (pin-satırlı) da TEK-rm ile ölür — pinler sokum-sonrası hortlamaz
@@ -1552,14 +1552,14 @@ printf 'ekip-yerlestir\npin ISKAN_SSH_HOST=pinli-hayalet.invalid\n' > "$SK_STATE
 out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && [ ! -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası temizlendi' \
+[ "$rc" = "0" ] && [ ! -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep 'bayat kur-durum-dosyası temizlendi' >/dev/null \
   && ok "sokum zaten-sokuk --apply: bayat kur-izi (v2 pin-blok DAHİL) tek-rm ile TEMİZLENDİ (P1d + PR-C)" \
   || bad "sokum zaten-sokuk --apply: kur-izi temizliği kırık (rc=$rc)"
 # MINOR fix: state silindiğinde 'hiçbir şeye dokunulmadı' DEMEZ (çelişki) — 'yalnız lokal kur-izi temizlendi' der
 printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
 out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
-printf '%s' "$out" | grep -q 'yalnız bayat lokal kur-izi temizlendi' && ! printf '%s' "$out" | grep -q 'temizlendi.*idempotent.*hiçbir şeye dokunulmadı' \
+printf '%s' "$out" | grep 'yalnız bayat lokal kur-izi temizlendi' >/dev/null && ! printf '%s' "$out" | grep 'temizlendi.*idempotent.*hiçbir şeye dokunulmadı' >/dev/null \
   && ok "sokum zaten-sokuk --apply: state-silinince 'dokunulmadı' iddiası ayrıştırıldı (MINOR fix, çelişki yok)" \
   || bad "sokum zaten-sokuk --apply: 'dokunulmadı' çelişkisi sürüyor"
 # MAJOR fix: rm-başarısızlığı SESSİZ yutulmasın — state-dizini salt-oku iken kırmızı + rc≠0 (ADIM-8 simetrisi)
@@ -1569,7 +1569,7 @@ out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
 rc=$?
 chmod 755 "$SK_STATE_DIR"
-[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası silinemedi' \
+[ "$rc" != "0" ] && printf '%s' "$out" | grep 'bayat kur-durum-dosyası silinemedi' >/dev/null \
   && ok "sokum zaten-sokuk --apply: rm-başarısızlığı SESSİZ yutulmuyor → kırmızı + rc≠0 (MAJOR fix, ADIM-8 simetrisi)" \
   || bad "sokum zaten-sokuk --apply: rm-hatası sessiz yutuldu (rc=$rc — MAJOR regresyon)"
 # 51f. fix-2 (cycle-2 bulgu-2): KISMİ-SÖKÜM koruması — compose-kaydı temiz AMA config-dir hâlâ VAR
@@ -1578,7 +1578,7 @@ printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
 out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" STUB_CFG_DIR_VAR=var ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'KISMİ-SÖKÜM' && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'KISMİ-SÖKÜM' >/dev/null && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] \
   && ok "sokum KISMİ-SÖKÜM (fix-2): config-dir VAR → rc=1 REDDET + kur-state KORUNDU (false-zaten-sokuk kapandı)" \
   || bad "sokum KISMİ-SÖKÜM: config öksüz/state-silme riski (rc=$rc, state $([ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && echo var || echo YOK))"
 rm -f "$SK_LOG3"
@@ -1637,7 +1637,7 @@ bash "$SCRIPT_DIR/iskan.sh" kur kurtest --bilinmeyen >/dev/null 2>&1; rc2=$?
 for p in mihenk huma; do
   out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur "$p" --dry-run 2>&1)"
   rc=$?
-  [ "$rc" = "1" ] && printf '%s' "$out" | grep -q '3-Çit' && [ ! -e "$KR_STATE/iskan-kur-$p.state" ] \
+  [ "$rc" = "1" ] && printf '%s' "$out" | grep '3-Çit' >/dev/null && [ ! -e "$KR_STATE/iskan-kur-$p.state" ] \
     && ok "kur 3-Çit: '$p' reddedildi (rc=1 + marker + durum-dosyası yok)" \
     || bad "kur 3-Çit: '$p' reddi kırık (rc=$rc)"
 done
