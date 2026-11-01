@@ -75,7 +75,24 @@ kapi_kayit_ortami() {
 }
 DURUM_DIZ="${TO_DURUM_DIZ:-/config/.terminal-onar}"
 GUNLUK="$DURUM_DIZ/gunluk.log"
-ANA_TMUX="${TO_ANA_TMUX:-$KUTU-ana}"
+# Ana oturum adı — sıra: açık beyan (TO_ANA_TMUX) > ekip kaydındaki meta.yonetici (YALNIZ kutu önekli bir tmux adıysa VE o oturum
+#   şu an canlıysa) > <kutu>-ana. 🔴 NİÇİN (NAZIR, 1 Kas 2026): bekçi satırı kanonik şablondan yeniden yazılıyor (bekci_satirlari_duzelt);
+#   crontab'a elle eklenen TO_ANA_TMUX her onarımda siliniyordu, bekçi kaydın yöneticisi nazir-yon yerine nazir-ana'yı açıyordu.
+#   🔴 NİÇİN "CANLI" ŞARTI (ölçüldü 1 Kas, 14 kutu): huzur/sedir/tez kaydı da <kutu>-yon der ama Claude <kutu>-ana'da çalışır ve
+#   -yon oturumu YOK; kaydı körlemesine uygulamak bu üç kutuda bekçiye ikinci bir oturum açtırırdı. Kaydın adı insan adıysa
+#   (DEFTERDAR, SINAN …) hiç kullanılmaz. Sınırı: yönetici oturumu o an yoksa <kutu>-ana'ya düşer (eski davranış, bekçi yeni bir -ana kurar).
+ana_tmux_turet() {
+  local k="$1" kayit="" y=""
+  for kayit in "$PROJE/_agents/handoff/ekip-registry.yaml" "$PROJE/_agents/handoff/aile-registry.yaml"; do
+    [ -f "$kayit" ] || continue
+    y="$(awk '/^meta:/{m=1;next} m&&/^[^ #]/{exit} m&&/^  yonetici:/{sub(/^  yonetici:[ ]*/,""); sub(/[ ]*#.*$/,""); sub(/:[0-9]+$/,""); print; exit}' "$kayit" 2>/dev/null | tr -d "\"'")"
+    [ -n "$y" ] && break
+  done
+  case "$y" in "$k"-[a-z0-9]*) ;; *) y="" ;; esac
+  printf '%s' "$y" | grep -qE '^[a-z0-9][a-z0-9-]*$' || y=""
+  if [ -n "$y" ] && tmux has-session -t "=$y" 2>/dev/null; then printf '%s' "$y"; else printf '%s-ana' "$k"; fi
+}
+ANA_TMUX="${TO_ANA_TMUX:-$(ana_tmux_turet "$KUTU")}"
 # El kabuğu (Sultan · gorev_…GT5BTK, 22 Eki): Claude'dan bağımsız, sabit, BOŞ kabuk sekmesi — sabah paketi, kurtarma komutu.
 KABUK_TMUX="${TO_KABUK_TMUX:-$KUTU-kabuk}"
 KURT_TMUX="${TO_KURT_TMUX:-$KUTU-kurtarici}"

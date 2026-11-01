@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-ana-tmux-yonetici",
+  "pr": "643",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T09:00:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-ana-tmux-yonetici",
+  "dal": "terminal-onar-ana-tmux-yonetici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 12144,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5392
+  },
+  "dalgic": "uyumsuz",
+  "bas": "dc2d4838f517dd4dfbee3553ddd4a62445f3e28e",
+  "duzeltme_farki": {
+    "onceki_bas": "69d1bbd36dc2896043b7b93aaf1f0aebec68bf0a",
+    "dosya": 4,
+    "bayt": 5535,
+    "tam_bayt": 18680
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "ANA_TMUX türetme davranışı önceki turda üretime hazır bulunmuş; bu turdaki tek üretim farkı ilgili sınav betiğini çalıştırılabilir yapıyor ve yeni bir kusur oluşturmuyor. Gerçek ölçüm 10/10 geçiyor, mutasyon ölçümü sınavın kritik bozulmayı yakaladığını gösteriyor; yalnız kurulum sonrası NAZIR bekçisi doğrulaması canlı yüzeye borçlu.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kapanmamış: NAZIR bekçisinin kurulumdan sonra gerçekten nazir-yon oturumunu izlediği ve nazir-ana'yı yeniden kurmadığı canlı yüzeyde hâlâ doğrulanmamış.",
+        "kanit": "İş kartında canli_borc.odendi=null. Bu tur farkı yalnız terminal-onar/scripts/ana-tmux-yonetici.test.sh kipini 100644'ten 100755'e çeviriyor; ana-gercek ise yalıtılmış sınavda 10/10 geçiyor ve canlı bekçi günlüğü/yeniden kurulum sonucunu ölçmüyor.",
+        "konum": "iş kartı: canli_borc; diff: terminal-onar/scripts/ana-tmux-yonetici.test.sh dosya kipi; kanıt kaydı: ana-gercek",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "NAZIR canlı kutusu + kurulum yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. ana-gercek temiz commit üzerinde rc=0 ile 10/10 geçerek canlı yönetici seçimini, TO_ANA_TMUX üstünlüğünü ve geri dönüş vakalarını ölçüyor. ana-mutant mutasyon=true ve gercek_olcum=ana-gercek kaydıyla rc=1 üretiyor; A5/A7 başarısızlıkları beklenen mutasyon sonucu ve sınavın bozuk kodu yakaladığının kanıtı. Bu turda önceki B1'i kapatan canlı ölçüm bulunmuyor; bu eksik kutu-dışı olduğundan kod puanını düşürmüyor."
+  }
+}

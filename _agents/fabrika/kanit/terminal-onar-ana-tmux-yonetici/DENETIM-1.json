@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-ana-tmux-yonetici",
+  "pr": "643",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T08:36:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-ana-tmux-yonetici",
+  "dal": "terminal-onar-ana-tmux-yonetici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17628,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4214
+  },
+  "dalgic": "olculemedi",
+  "bas": "69d1bbd36dc2896043b7b93aaf1f0aebec68bf0a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "ANA_TMUX sırası açık TO_ANA_TMUX beyanı, canlı ve kutu önekli meta.yonetici oturumu, ardından <kutu>-ana olacak şekilde uygulanmış; sürüm ve açıklama da güncellenmiş. Gerçek ölçüm 10/10 geçiyor ve mutasyon ölçümü kritik geri dönüşleri yakalıyor; yalnız NAZIR bekçisindeki kurulum sonrası canlı doğrulama bu kutunun dışındaki yüzeye borçlu.",
+    "bulgular": [
+      {
+        "ne": "NAZIR bekçisinin kurulumdan sonra gerçekten nazir-yon oturumunu izlediği ve nazir-ana'yı yeniden kurmadığı henüz canlı yüzeyde doğrulanmamış.",
+        "kanit": "İş kartındaki canli_borc.odendi=null; gerekçe açıkça kurulum sonrası NAZIR bekçi günlüğünde ANA_TMUX= nazir-yon görülmesini ve nazir-ana'nın yeniden kurulmamasını ödeme şartı yapıyor. Sunulan ana-gercek ölçümü ise yalıtılmış sinav kutusunda 10/10 sonuç veriyor.",
+        "konum": "iş kartı: canli_borc; kanıt kaydı: ana-gercek",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "NAZIR canlı kutusu + kurulum yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. ana-gercek kaydı temiz commit üzerinde rc=0 ile 10 kapının tamamını ölçüyor; TO_ANA_TMUX üstünlüğü, canlı yönetici seçimi, cansız/yanlış önek/insan adı geri dönüşleri ve iki kayıt dosyası yolu kapsanmış. ana-mutant gerçek kod sonucu değildir; mutasyon=true, gercek_olcum=ana-gercek ve düşen_kapi=true olduğundan rc=1 ile A5/A7 hatalarını göstermesi sınavın bozuk kodu yakaladığını doğruluyor. Önce/sonra kare çifti yok, fakat davranış için gerçek ölçüm ile mutasyon çifti yeterli; eksik kalan yalnız canlı bekçi doğrulamasıdır."
+  }
+}
