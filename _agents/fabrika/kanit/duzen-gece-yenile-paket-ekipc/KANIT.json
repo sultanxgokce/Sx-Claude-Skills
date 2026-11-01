@@ -1,7 +1,7 @@
 {
   "is": "duzen-gece-yenile-paket-ekipc",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T03:25:50+03:00",
+  "guncelleme": "2026-11-01T03:28:40+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,7 +44,26 @@
       "olcum_id": "856210a41b02458cbca19dae1a28075c",
       "olculen_commit": "84b86b2e601a927a814ee1d60237ba721acd2893",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gece-paket-ekipc-2",
+      "asama": "sonra",
+      "dosya": "olcum-gece-paket-ekipc-2-sonra.txt",
+      "sha256": "2129f593f582b15675876838df383e8942f7e75e36f385ef3f88bcd2cec5c4b1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gece-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T03:28:40+03:00",
+      "sure_sn": 12.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "321d2bd4057c4a9c97d0849528aa3cc3",
+      "olculen_commit": "7f21cbc5e1e54f52da4b2707b982cfcd12b82006",
+      "olculen_kirli": false
     }
   ],
-  "imza": "b035536c1b1ad1f0b064a586ca182fa4120f6e7192e1f624bc9a3a4c6595f6d7"
+  "imza": "ba1dbbac9b50c447faedb49093729880ca3f3c081fba4a17c95d3bf129b5fccb"
 }
