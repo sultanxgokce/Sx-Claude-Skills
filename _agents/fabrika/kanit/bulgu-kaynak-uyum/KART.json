@@ -1,0 +1,27 @@
+{
+  "is": "bulgu-kaynak-uyum",
+  "cumle": "bulgu.sh yaz isteğe bağlı --kaynak alır (varsayılan 'bulgu komutu'), uyum-haftalik.sh havuz kaydını kaynak uyum ile yazar; bulgu 0.6.6, duzen 1.6.3",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-01T04:50:47+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [
+    "ÇOK GÜNLÜK KAPSAM (haftalik): bir PR'da teslim edilmez — gün başına kart öner: bulgu-kaynak-uyum-g1 · bulgu-kaynak-uyum-g2 … (her biri günün teslim birimi)"
+  ],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
