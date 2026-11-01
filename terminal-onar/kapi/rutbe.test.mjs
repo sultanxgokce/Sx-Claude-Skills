@@ -28,10 +28,13 @@ kapi('R15 boş kayıt boş harita, hata yok', rutbeHaritasi(undefined).size === 
 const CANLI = [{ id: 'nazir-yon', ad: 'ŞEHBENDER', amir: 'Sultan', oda_muduru: 'evet', oda: 'nezaret', tmux: 'nazir-yon:0' }, { id: 'nazir-rasatci', ad: 'RASATÇI', amir: 'ŞEHBENDER', oda_muduru: 'evet', oda: 'omnirouter', tmux: 'nazir-rasatci:0' },
   { id: 'nazir-seyyah', ad: 'CİHANNÜMA', amir: 'ŞEHBENDER', oda_muduru: 'evet', oda: 'hermes', tmux: 'nazir-seyyah:0' }, { id: 'nazir-seritdar', ad: 'ŞERİTDAR', amir: 'ŞEHBENDER', oda: 'nezaret', tmux: 'nazir-seritdar:0' }, { id: 'nazir-mim', ad: 'MÜSTENSİH', amir: 'CİHANNÜMA', oda: 'hermes', tmux: 'nazir-mim:0' }];
 const ACIK = ['nazir-yon', 'rasatci', 'cihannuma', 'seritdar'], c = rutbeHaritasi(CANLI, ACIK), co = kayitOdaHaritasi(CANLI, ACIK);
-kapi('R16 kayıttaki tmux eski, müdür canlı koltuğuna adından bağlanır', c.get('rasatci')?.kademe === 'oda müdürü' && c.get('cihannuma')?.amir === 'nazir-yon', JSON.stringify([...c]));
-kapi('R17 oda da canlı koltuğa bağlanır', co.get('rasatci') === 'omnirouter' && co.get('seritdar') === 'nezaret', JSON.stringify([...co]));
+kapi('R16 kayıttaki tmux eski, müdür canlı koltuğuna adından bağlanır', c.get('rasatci')?.kademe === 'oda müdürü' && c.get('cihannuma')?.kademe === 'oda müdürü' && c.get('cihannuma')?.amir === 'nazir-yon', JSON.stringify([...c]));
+kapi('R17 oda da canlı koltuğa bağlanır', co.get('rasatci') === 'omnirouter' && co.get('seritdar') === 'nezaret' && co.get('cihannuma') === 'hermes' && co.get('nazir-yon') === 'nezaret', JSON.stringify([...co]));
 kapi('R18 kapalı koltuğun rütbesi eski adında kalır, açık koltuğa uydurulmaz', c.get('nazir-mim')?.amir === 'cihannuma'  && !c.has('mustensih'));
 const SAHIP = koltukEsle([{ id: 'a', ad: 'BOSTAN', tmux: 'kapali:0' }, { id: 'b', ad: 'BAŞKA', tmux: 'bostan:0' }], ['bostan']);
 kapi('R19 açık koltuğu kayıtlı sahibinden adıyla kimse alamaz', [...SAHIP.entries()].every(([u, k]) => (u.id === 'b') === (k === 'bostan')), JSON.stringify([...SAHIP.values()]));
 kapi('R20 acik verilmeyen eski çağrı aynen çalışır', rutbeHaritasi(CANLI).has('nazir-rasatci') && kayitOdaHaritasi(CANLI).get('nazir-rasatci') === 'omnirouter');
+const EMEKLI = [{ id: 'eski', ad: 'RASATÇI', durum: 'emekli', oda: 'hermes', tmux: 'eski:0' }, { id: 'yeni', ad: 'YENİ', oda: 'nezaret', tmux: 'rasatci:0' }];
+kapi('R21 emekli üye adıyla açık koltuğun odasını alamaz', kayitOdaHaritasi(EMEKLI, ['rasatci']).get('rasatci') === 'nezaret' && !koltukEsle(EMEKLI, ['rasatci']).has(EMEKLI[0]));
+kapi('R22 emekli üyenin koltuğu boşken de açık koltuğa bağlanmaz', !kayitOdaHaritasi([EMEKLI[0]], ['rasatci']).has('rasatci'));
 console.log(`geçen ${g} · kalan ${k}`); process.exit(k ? 1 : 0);

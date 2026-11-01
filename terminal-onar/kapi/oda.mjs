@@ -50,8 +50,9 @@ export function kayitOdaHaritasi(uyeler, acik = []) {
  * (NAZIR: kayıtta nazir-rasatci, canlıda rasatci). Önce tmux adı tutanlar yerleşir; açık koltuğu kayıtlı sahibinden
  * başkası alamaz. Hiçbiri tutmazsa kayıttaki ad kalır: kapalı koltuğa açık koltuk uydurulmaz.
  */
+const PASIF_UYE = new Set(['emekli', 'arsiv', 'dondurulmus']);
 export function koltukEsle(uyeler, acik = []) {
-  const h = new Map(), liste = (uyeler || []).filter(Boolean), acikKatli = new Map(acik.map((a) => [adKatla(a), a])), dolu = new Set();
+  const h = new Map(), liste = (uyeler || []).filter((u) => u && !PASIF_UYE.has(u.durum) && !PASIF_UYE.has(u.hal)), acikKatli = new Map(acik.map((a) => [adKatla(a), a])), dolu = new Set();
   const kayitli = (u) => String(u.tmux ?? '').split(':')[0];
   for (const u of liste) { const a = acikKatli.get(adKatla(kayitli(u))); if (kayitli(u) && a) { h.set(u, a); dolu.add(a); } }
   for (const u of liste) {

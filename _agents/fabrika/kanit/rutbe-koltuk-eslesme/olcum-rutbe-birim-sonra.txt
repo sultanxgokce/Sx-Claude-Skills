@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/rutbe.test.mjs
-# rc=0 sure=0.0s zaman=2026-11-01T15:04:08+03:00
+# rc=0 sure=10.1s zaman=2026-11-01T15:08:17+03:00
 --- stdout ---
   ✓ R1 amiri boş oda müdürü reis
   ✓ R2 altı olan üye müdür, amiri koltuk adıyla, görünen adıyla gelir
@@ -21,5 +21,8 @@ $ node terminal-onar/kapi/rutbe.test.mjs
   ✓ R18 kapalı koltuğun rütbesi eski adında kalır, açık koltuğa uydurulmaz
   ✓ R19 açık koltuğu kayıtlı sahibinden adıyla kimse alamaz
   ✓ R20 acik verilmeyen eski çağrı aynen çalışır
-geçen 20 · kalan 0
+  ✓ R21 emekli üye adıyla açık koltuğun odasını alamaz
+  ✓ R22 emekli üyenin koltuğu boşken de açık koltuğa bağlanmaz
+geçen 22 · kalan 0
 --- stderr ---
+⏳ agir-sira: kanit-rutbe-koltuk-eslesme-rutbe-birim 10 sn bekledi (yuva 2, load1 17.65)

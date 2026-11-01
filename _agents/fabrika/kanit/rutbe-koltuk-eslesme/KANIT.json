@@ -1,7 +1,7 @@
 {
   "is": "rutbe-koltuk-eslesme",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-01T15:04:18+03:00",
+  "guncelleme": "2026-11-01T15:08:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -28,7 +28,7 @@
       "etiket": "nazir-eslesme",
       "asama": "sonra",
       "dosya": "olcum-nazir-eslesme-sonra.txt",
-      "sha256": "ff72b70cb85c7634062395af5d904365e7a06874d3746fc73defae47c403eaf2",
+      "sha256": "130065af44c5e26103ebf8df48a6407ea8ebe71448d8022a7ccc0fb1df2a4ee7",
       "komut": [
         "node",
         "_agents/fabrika/kanit/rutbe-koltuk-eslesme/nazir-esle-olc.mjs",
@@ -36,11 +36,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T15:03:55+03:00",
+      "zaman": "2026-11-01T15:08:17+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "03ec55fca5d44140b1cf5c9675ff2723",
-      "olculen_commit": "dc8d41f33e91f9e39cf58e2e7a23e65f9d6f95bb",
+      "olcum_id": "f133909d3de94f1aa65271ef0bd3cd4c",
+      "olculen_commit": "c3dc54639039ee0306b895404958f44dd05c1d09",
       "olculen_kirli": true
     },
     {
@@ -48,18 +48,18 @@
       "etiket": "rutbe-birim",
       "asama": "sonra",
       "dosya": "olcum-rutbe-birim-sonra.txt",
-      "sha256": "743986080b228a81ac5142fec350f096ef31d6c6ff5ebcc5d14ad0968e99304a",
+      "sha256": "b7fd22412c30d3c5df1e3a478a1da1add97db322e8b1abbf6310d6d814d7e00c",
       "komut": [
         "node",
         "terminal-onar/kapi/rutbe.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T15:04:08+03:00",
-      "sure_sn": 0.0,
+      "zaman": "2026-11-01T15:08:17+03:00",
+      "sure_sn": 10.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "db96187fed214acc9e77340588e5937d",
-      "olculen_commit": "dc8d41f33e91f9e39cf58e2e7a23e65f9d6f95bb",
+      "olcum_id": "b26529e7c0a34cd2b7ff9f972e7fdaac",
+      "olculen_commit": "c3dc54639039ee0306b895404958f44dd05c1d09",
       "olculen_kirli": true
     },
     {
@@ -105,5 +105,5 @@
       "olculen_kirli": true
     }
   ],
-  "imza": "bd9544c2b47bb6a8006a0104fa6418474e40ec75ce4b8f9ff2885c12e531a428"
+  "imza": "e9b626cd8c28a7de26874f696ec3f960f026b76b45a2d2c577289d318b67a86c"
 }
