@@ -1,0 +1,25 @@
+{
+  "is": "duzen-1-6-3",
+  "cumle": "duzen paketine izole-kutu ortak temeli (otonom temelden Cortex'e yazma ve 7/24 sözleri çıkar, mahremiyet kilidi girer), koltuksuz alt-personel temeli ve ekipc benimse'nin YAML ön başlığı dosya başında kalır düzeltmesi eklenir; sürüm 1.6.3",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-11-01T05:02:05+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
