@@ -92,7 +92,7 @@ writeFileSync(join(nz, '_agents/handoff/ekip-registry.yaml'), `uyeler:\n  - id: 
 writeFileSync(join(nz, '_agents/handoff/aile-registry.yaml'), `meta:\n  yonetici: nz-yon\nuyeler:\n- id: nz-yon\n  tmux: "SAHTE:9"\n  rol: "AILE ROLU"\n  oda: nezaret\n  oda_muduru: evet\n- id: nz-motor\n  oda: omnirouter\n  amir: nz-yon\n`);
 const od = kayitOku(nz); const odu = Object.fromEntries(od.uyeler.map((u) => [u.id, u]));
 kapi('OD1 iskan kutusunda oda alanı aile kaydından gelir', odu['nz-yon']?.oda === 'nezaret' && odu['nz-motor']?.oda === 'omnirouter', JSON.stringify(od.uyeler));
-kapi('OD2 aile kaydı yalnız oda verir: tmux ve rol iskan/ekip kaydının kalır', odu['nz-yon']?.tmux === 'nz-yon:0' && odu['nz-yon']?.rol === 'yönetici', JSON.stringify(odu['nz-yon']));
+kapi('OD2 aile kaydı yalnız oda/amir/oda_muduru verir: tmux ve rol iskan/ekip kaydının kalır', odu['nz-yon']?.tmux === 'nz-yon:0' && odu['nz-yon']?.rol === 'yönetici', JSON.stringify(odu['nz-yon']));
 kapi('OD3 üç kaynak okundu (iskan + ekip + aile)', od.kaynak.length === 3 && od.kaynak[2].endsWith('aile-registry.yaml'), JSON.stringify(od.kaynak));
 kapi('OD5 aile kaydından amir ve oda_muduru da gelir (rütbe gösterimi buna dayanır)', odu['nz-yon']?.oda_muduru === 'evet' && odu['nz-motor']?.amir === 'nz-yon' && odu['nz-yon']?.amir === undefined, JSON.stringify(od.uyeler));
 const nz0 = join(T, 'nz0'); mkdirSync(join(nz0, '_agents/handoff'), { recursive: true });
