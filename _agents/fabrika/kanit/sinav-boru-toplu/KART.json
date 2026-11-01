@@ -1,6 +1,6 @@
 {
   "is": "sinav-boru-toplu",
-  "cumle": "Sınav dosyalarında erken kapanan süzme kalıbı kalkar, CI bu kalıbın yeni sınava girmesini engeller; sınavlar aynı şeyi ölçmeye devam eder",
+  "cumle": "Sınavlarda erken kapanan süzme kalıbını bulan kapı aracı ve sınavı eklendi, üç büyük dosya dışındaki sınavlarda kalıp kalktı",
   "istedi": "SERDAR",
   "aldi": "BÂNİ",
   "zaman": "2026-11-01T09:05:21+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T09:25:17+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sinav-boru-kalan",
+      "tur_sifir": 0
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -29,6 +36,31 @@
       "zaman": "2026-11-01T09:05:21+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "ae3ee37a",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sinav-boru-kalan) — Kalan üç sınav dosyasında (iskan, federe, kart) kalıp kalksın, kapı CI adımı açılsın: tek PR'da göz tavanını aştı",
+      "zaman": "2026-11-01T09:25:17+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Sınav dosyalarında erken kapanan süzme kalıbı kalkar, CI bu kalıbın yeni sınava girmesini engeller; sınavlar aynı şeyi ölçmeye devam eder",
+      "zaman": "2026-11-01T09:25:17+03:00",
+      "kalan_kart": "sinav-boru-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-01T09:25:17+03:00",
+      "kalan_kart": "sinav-boru-kalan",
+      "kalan": "Kalan üç sınav dosyasında (iskan, federe, kart) kalıp kalksın, kapı CI adımı açılsın: tek PR'da göz tavanını aştı",
+      "tur_sifir": 0,
+      "oturum": "ae3ee37a"
     }
   ]
 }
