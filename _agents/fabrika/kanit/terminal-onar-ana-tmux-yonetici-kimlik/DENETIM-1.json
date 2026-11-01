@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-ana-tmux-yonetici-kimlik",
+  "pr": "656",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T22:08:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-ana-tmux-yonetici-kimlik",
+  "dal": "terminal-onar-ana-tmux-yonetici-kimlik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14325,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3955
+  },
+  "dalgic": "uyumlu",
+  "bas": "e1152d807934c78a34884646065f47ab3d16a891",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bekçinin ana oturum türetimi, kutu önekli yönetici kimliğini ekip kaydındaki tmux adına çevirip yalnız canlı oturumu seçiyor; açık beyan ve eski düşüş sırası da korunmuş. Gerçek ölçüm 14 kapıyı geçiriyor, mutasyon ölçümü ise hedef davranış bozulunca A11 kapısını düşürüyor; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm temiz commit üzerinde rc=0 ve 14/14 geçiş gösteriyor. Ayrı mutasyon kaydı, kimlikten tmux adına çevirme kaldırıldığında A11'in beklendiği gibi başarısız olduğunu doğruluyor; doğrudan önce karesi yok, ancak gerçek ölçüm ile mutasyon çifti hedef davranış için yeterli ve sarı kayıt bulunmuyor."
+  }
+}

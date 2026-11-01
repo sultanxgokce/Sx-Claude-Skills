@@ -34,5 +34,12 @@ printf 'meta:\n  yonetici: sinav-yon\n' > "$T/p/_agents/handoff/aile-registry.ya
 kapi "A9 yalnız aile-registry varsa ondan okunur" sinav-yon "$(ana)"
 printf 'ekip:\n  - yonetici: sinav-yon\n' > "$T/p/_agents/handoff/aile-registry.yaml"
 kapi "A10 meta bloğu dışındaki 'yonetici' satırı okunmaz" sinav-ana "$(ana)"
+# Yönetici ÜYE KİMLİĞİ ise (kart ana-tmux-yonetici-kimlik · NAZIR: nazir-sehbender → oturum sehbender)
+uyeli() { printf 'meta:\n  yonetici: %s\nuyeler:\n  - id: sinav-sehbender\n    ad: ŞEHBENDER\n    tmux: "%s"\n  - id: sinav-bos\n    ad: BOŞ\n' "$1" "$2" > "$T/p/_agents/handoff/aile-registry.yaml"; rm -f "$T/p/_agents/handoff/ekip-registry.yaml"; }
+tm new-session -d -s sehbender 'sleep 600'
+uyeli 'sinav-sehbender' 'sehbender:0';  kapi "A11 yönetici üye kimliği → kayıttaki tmux adına çevrilir (canlıysa)" sehbender "$(ana)"
+uyeli 'sinav-sehbender' 'yok-oturum:0'; kapi "A12 çevrilen oturum canlı değilse sinav-ana" sinav-ana "$(ana)"
+uyeli 'sinav-bos' 'x:0';                kapi "A13 kimliğin tmux alanı yoksa kimliğin kendisi aranır (canlı değil → sinav-ana)" sinav-ana "$(ana)"
+uyeli 'sinav-sehbender' 'sehbender:0';  kapi "A14 açık beyan çevrilmiş yöneticiden üstün" ozel-ana "$(ana ozel-ana)"
 echo "geçen=$gecen kalan=$kalan"
 [ "$kalan" = 0 ]

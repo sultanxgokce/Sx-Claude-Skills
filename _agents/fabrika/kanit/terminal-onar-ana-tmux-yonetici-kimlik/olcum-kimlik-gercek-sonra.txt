@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kimlik-gercek.sh
+# rc=0 sure=0.9s zaman=2026-11-01T22:06:48+03:00
+--- stdout ---
+  ✓ A11 yönetici üye kimliği → kayıttaki tmux adına çevrilir (canlıysa)
+  ✓ A12 çevrilen oturum canlı değilse sinav-ana
+  ✓ A13 kimliğin tmux alanı yoksa kimliğin kendisi aranır (canlı değil → sinav-ana)
+  ✓ A14 açık beyan çevrilmiş yöneticiden üstün
+geçen=14 kalan=0
+--- stderr ---
