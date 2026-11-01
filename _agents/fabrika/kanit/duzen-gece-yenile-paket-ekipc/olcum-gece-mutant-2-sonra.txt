@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-gece-paket-ekipc-2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gece-mutant.sh
+# rc=1 sure=13.5s zaman=2026-11-01T03:28:53+03:00
+--- stdout ---
+  ✗ G13 cron ortamında yenileme paket ekipc.sh ile (depo ekipc.sh çağrılmaz), kimlik yenilendi → rc=1 sync --skill duzen --apply
+  ✗ G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir) → rc=2 DOĞRULANAMADI: PyYAML yok (unknown≠fail) — exit 
+== 12 geçti · 2 düştü ==
+  ✗ G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir) → rc=2 DOĞRULANAMADI: PyYAML yok (unknown≠fail) — exit 
+== 19 geçti · 1 düştü ==
+--- stderr ---
