@@ -1,0 +1,27 @@
+{
+  "is": "bulgu-kaynak-uyum",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T04:52:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bk-parite",
+      "asama": "sonra",
+      "dosya": "olcum-bk-parite-sonra.txt",
+      "sha256": "e1ab316b071d39c491e7318313f336955c16d1bd34b41f2480caf42aa5ee1ca8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/bk-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:52:18+03:00",
+      "sure_sn": 6.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c790890e5be941e48b3ed9f50d9f06b8",
+      "olculen_commit": "b659e763cf95a04495942c6b0ff0789a0098bbd2",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "577341c675f3e081fde788b6e4669b381735d0c67539deff369a16bf7ee2e35a"
+}
