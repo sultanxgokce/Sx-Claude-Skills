@@ -1,0 +1,64 @@
+{
+  "is": "duzen-1-6-3",
+  "cumle": "duzen paketine izole-kutu ortak temeli, koltuksuz alt-personel temeli ve ekipc benimse'nin YAML ön başlığı dosya başında kalır düzeltmesi eklenir; sürüm 1.6.4 (1.6.3 numarasını MİRAHUR #639 aldı, çakışma kilidi)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-11-01T05:02:05+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T05:49:32+03:00",
+      "olay": "daralt",
+      "kalan_kart": "duzen-1-6-3-kalan",
+      "tur_sifir": 2
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "ulak_1793501341-a2fdc910",
+      "gerekce": "daraltma: kalan bulgu yeni karta (duzen-1-6-3-kalan) — Sürüm numarası: kartta 1.6.3 yazıyordu ama 1.6.3'ü MİRAHUR #639 aldı; denetçi tur 2 bulgu 1 (sürüm sapması) ve bulgu 2 (eski taban farkı)",
+      "zaman": "2026-11-01T05:49:32+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "ulak_1793501341-a2fdc910",
+      "gerekce": "Kart 1.6.3 yazıyordu; MİRAHUR #639 ile aynı numara birleşti, sürüm çakışması kuralı gereği 1.6.4. Sapma kart cümlemdeki numaradan, kod doğru.",
+      "zaman": "2026-11-01T05:49:32+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "duzen paketine izole-kutu ortak temeli (otonom temelden Cortex'e yazma ve 7/24 sözleri çıkar, mahremiyet kilidi girer), koltuksuz alt-personel temeli ve ekipc benimse'nin YAML ön başlığı dosya başında kalır düzeltmesi eklenir; sürüm 1.6.3",
+      "zaman": "2026-11-01T05:49:32+03:00",
+      "kalan_kart": "duzen-1-6-3-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-01T05:49:32+03:00",
+      "kalan_kart": "duzen-1-6-3-kalan",
+      "kalan": "Sürüm numarası: kartta 1.6.3 yazıyordu ama 1.6.3'ü MİRAHUR #639 aldı; denetçi tur 2 bulgu 1 (sürüm sapması) ve bulgu 2 (eski taban farkı)",
+      "tur_sifir": 2,
+      "oturum": "ulak_1793501341-a2fdc910"
+    }
+  ]
+}

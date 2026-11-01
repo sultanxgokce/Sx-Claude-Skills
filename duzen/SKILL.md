@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.6.3
+version: 1.6.4
 ---
 
-# /duzen — filo düzen paketi (1.6.3 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
+# /duzen — filo düzen paketi (1.6.4 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -63,6 +63,8 @@ bölgeye gömer (`<!-- ekipc:uretilen:basla surum= hash= -->` … `bitti`, altı
 | `cekirdek/manuel-claude-base.md` | Sultan-eşli interaktif Claude personasının ORTAK-TEMEL'i (18 Nexus kimliğinde gömülü) |
 | `cekirdek/mudur-base.md` | Kutu reisi (MÜDÜR) temeli (SERDAR'da gömülü) |
 | `cekirdek/otonom-ajan-base.md` | Otonom ajan (ARES · FORGE · GÖZCÜ · HAFIZ · İRFAN · NEDİM · PUSULA) ortak temeli |
+| `cekirdek/izole-kutu-base.md` | İzole kutu ajanının ORTAK-TEMEL'i (`--baz izole-kutu`): Cortex'e yazma ve 7/24 motor sözü yok, mahremiyet kilidi sıkı; mahrem odalar (ENİS dahil) bunu alır |
+| `cekirdek/alt-personel-base.md` | Koltuksuz alt personel temeli (`--baz alt-personel`): Sultan-eşli değil, birleştirme yapmaz, sonucu amirine döner |
 | `cekirdek/durma-standardi.md` | Filo-ortak DUR kuralı: Ş2 fiili ∨ 6 eskalasyon sinyali ∨ kutu-🔴 |
 | `cekirdek/cevapsiz-birakma.md` | Gelen mesaj/zil cevapsız bırakılmaz kuralı |
 | `cekirdek/base-manifest.yaml` | Ortak temel kataloğu: hangi persona/rol hangi metni taşır (`ekipc --baz` bunu okur) |
@@ -105,6 +107,7 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.6.4** (1 Kas 2026, HEZARFEN · SERDAR kararları G31): (1) **izole kutu temeli** `cekirdek/izole-kutu-base.md` (`ekipc --baz izole-kutu`): MİHENK/NECCÂR taslağı aynen; otonom temelden Cortex'e yazma ve 7/24 sözleri çıkar, mahremiyet kilidi (kutuda üretilen kayıt kutuda kalır, sır değeri düşmez) girer. ENİS mahrem odası da bu temelle çözülür; Cortex capture emri yok. (2) **koltuksuz alt personel temeli** `cekirdek/alt-personel-base.md` (`--baz alt-personel`): Sultan-eşli değil, birleştirme yapmaz, sonucu amirine döner (tellal 9 kimlik gibi manuel-claude'a uymayanlar için; temel seçimini kutu reisi yapar). (3) **ekipc benimse YAML ön başlığı**: `---` ile başlayıp kapanan kimlik başlığı dosya başında kalır (eskiden ELLE'ye gömülüp 58. satıra düşüyordu, 12 kutuda görüldü); `yenile` daha önce düşmüş başlığı başa alır. Kanonik düzeltme Nexus #1468; paket kopyası ona çivilidir. `surum.sh` yeni iki temeli de tanır. Gece kurulumu kurar, elle kurma yok. (1.6.3 numarasını MİRAHUR #639 aldı; bu sürüm onun üstüne çıktı.)
 - **1.6.3** (1 Kas 2026, MİRAHUR · SERDAR bulgusu): `uyum-haftalik.sh` havuz kaydını `bulgu.sh yaz --kaynak uyum` ile yazar (bulgu 0.6.6); önceden kaynak "bulgu komutu" olduğundan Kuzey G30 açık uyum kaydı 0 görüyordu. Sınav U1b + mutant.
 - **1.6.2** (1 Kas 2026, MİRAHUR · SERDAR bulgusu): `duzen-gece.sh` bayat kimlik yenilemesini Nexus `scripts/ekipc.sh` ile yapıyordu; zamanlayıcı PATH'inde PyYAML olmadığı için 03:17 koşusunda 37 kimlik atlandı (rc 2). Varsayılan artık betiğin yanındaki paket `ekipc.sh` (vendor/yaml taşır). Sınav G13 zamanlayıcı gibi çıplak ortamda (`env -i`) varsayılan yenilemenin paket ekipc.sh'ı çağırdığını, G14 PyYAML'sız python ile gerçek paket ekipc.sh'ın yenile kuru koşusunun exit 0 verdiğini doğrular; mutant eski yola dönen kopya G13'te kırmızı.
 - **1.6.1** (31 Eki 2026, MİRAHUR · Kuzey Hat E): izole kutuların çoğunda sistem python3'ünde PyYAML yoktu (ekipc exit 2). Paket artık saf Python PyYAML 6.0.3'ü `vendor/yaml-saf.zip` (+ başlatıcı `vendor/yaml/__init__.py`, lisans `vendor/LICENSE-PyYAML`) olarak taşır; `ekipc.sh` (Nexus #1458) vendor'ı bulursa kullanır, yoksa dürüst exit 2. Parite P8: `python3 -S` ile PyYAML'sız ortamda benimse (kuru ve --apply) ve yenile exit 0.

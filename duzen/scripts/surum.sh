@@ -63,7 +63,7 @@ def cekirdek(ad):
     s=oku(p); L=s.split("\n")
     if L and L[0].startswith("<!-- kaynak: Sx duzen/cekirdek"): L=L[1:]   # paket başlığı Nexus kopyasında yok
     return "\n".join(L).strip()
-temeller={a:cekirdek(a) for a in ("manuel-claude-base","mudur-base","otonom-ajan-base")}
+temeller={a:cekirdek(a) for a in ("manuel-claude-base","mudur-base","otonom-ajan-base","izole-kutu-base","alt-personel-base")}
 dosyalar=sorted(glob.glob(os.path.join(depo,"_agents","*","AGENT.md")))
 isaretli=0; isaretsiz=0; sorun=0
 for p in dosyalar:

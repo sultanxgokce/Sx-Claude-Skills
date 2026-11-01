@@ -12,7 +12,7 @@ ok() { if [ "$2" -eq 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); ech
 python3 -c "import yaml" 2>/dev/null || { echo "  ? ÖLÇÜLEMEDİ: PyYAML yok — ekipc çalıştırılamaz (rc 3; yeşil DEĞİL)"; exit 3; }
 
 # ÇİVİLİ md5 — paketleme anında Nexus kanoniğinden (scripts/ekipc.sh) ölçülen değer. Kanonik değişince: kopyala + bu satırı güncelle.
-CIVI="2c966746023076570a796983fcd82a7c"
+CIVI="b871e4b1df75f88674976bd03acd3ab2"
 b="$(md5sum < "$E" | cut -d' ' -f1)"
 bash -n "$E" 2>/dev/null; ok "P1a paketlenmiş ekipc.sh var ve sözdizimi geçerli" "$([ $? -eq 0 ] && [ -f "$E" ] && echo 0 || echo 1)"
 ok "P1b paket kopyası çivili md5 ile EŞİT ($CIVI)" "$([ "$b" = "$CIVI" ] && echo 0 || echo 1)" "→ paket $b (kanoniği yeniden kopyala ve çiviyi güncelle)"
@@ -55,7 +55,19 @@ for k in (c if isinstance(c,list) else c.get("skills") or c.get("items") or []):
 t=open(os.path.join(sys.argv[1],"catalog.json"),encoding="utf-8").read(); i=t.find('"id": "duzen"'); j=t.find('"version"',i); print(t[j:].split('"')[3])
 PY
 )"
-ok "P7c SKILL sürümü 1.6.0 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple(int(x) for x in sys.argv[1].split('.'));sys.exit(0 if v>=(1,6,0) else 1)" "${SV:-0.0.0}" && echo 0 || echo 1)"
+# P9 (duzen 1.6.3): izole kutu ve koltuksuz alt personel temelleri kimliğe gömülür; YAML ön başlığı dosya başında kalır
+printf -- '---\nname: enis\ndescription: mahrem oda\n---\n# ENİS\nodanın kendi notu\n' > "$T/izo.md"; cp "$T/izo.md" "$T/izo0.md"
+bash "$EK" benimse --dosya "$T/izo.md" --baz izole-kutu --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
+ok "P9a izole benimse --baz izole-kutu → rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
+ok "P9b izole-kutu kimliğinde KİM (izole kutu ajanı) ve mahremiyet sınırı var" "$(grep -q 'KİM (izole kutu ajanı)' "$T/izo.md" && grep -q 'mahremiyet kilidi olan oda kendi notlarını' "$T/izo.md" && echo 0 || echo 1)"
+ok "P9c izole-kutu temelinde Cortex'e yazma ve 7/24 sözü YOK" "$(grep -qiE 'cortex_add_capture|ingest-text|7/24|capture' "$PAKET/cekirdek/izole-kutu-base.md" && echo 1 || echo 0)"
+ok "P9d YAML ön başlığı dosya başında (ilk 4 satır özgün, marker 5. satır)" "$([ "$(head -n 4 "$T/izo.md" | md5sum)" = "$(head -n 4 "$T/izo0.md" | md5sum)" ] && [ "$(grep -n 'ekipc:uretilen:basla' "$T/izo.md" | head -n 1 | cut -d: -f1)" = 5 ] && echo 0 || echo 1)"
+printf 'alt personel notu\n' > "$T/alt.md"
+bash "$EK" benimse --dosya "$T/alt.md" --baz alt-personel --manifest "$T/yok.yaml" --apply >/dev/null 2>&1; rc=$?
+ok "P9e izole benimse --baz alt-personel → rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
+ok "P9f alt-personel kimliği: birleştirme yapmaz, amirine döner; Sultan-eşli/Merge'i SEN sözü yok" "$(grep -q 'Birleştirme yapmazsın' "$T/alt.md" && grep -q 'AMİRİNE DÖN' "$T/alt.md" && ! grep -qE "Sultan-eşli, interaktif|Merge'i SEN" "$T/alt.md" && echo 0 || echo 1)"
+ok "P9g iki yeni temel base-manifest persona_baz'da kayıtlı" "$(grep -q 'ad: izole-kutu' "$PAKET/cekirdek/base-manifest.yaml" && grep -q 'ad: alt-personel' "$PAKET/cekirdek/base-manifest.yaml" && echo 0 || echo 1)"
+ok "P7c SKILL sürümü 1.6.4 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple(int(x) for x in sys.argv[1].split('.'));sys.exit(0 if v>=(1,6,4) else 1)" "${SV:-0.0.0}" && echo 0 || echo 1)"
 [ -f "$PAKET/../catalog.json" ] && ok "P7d catalog.json sürümü SKILL ile aynı ($CV)" "$([ "$CV" = "$SV" ] && echo 0 || echo 1)" "→ SKILL $SV ≠ catalog $CV" || echo "  · P7d atlandı: catalog.json paketin yanında yok (kutuya kurulu kopya)"
 
 # P8 (Kuzey Hat E): izole kutuların çoğunda sistem python3'ünde PyYAML YOK. `python3 -S` site-packages'ı kapatır → PyYAML YALNIZ paketle gelen vendor/yaml'dan gelebilir.
