@@ -1,0 +1,59 @@
+{
+  "is": "sinav-boru-kalan",
+  "cumle": "Federe ve kart sınavlarında ve iskan sınavının ilk yarısında (1640. satıra kadar) erken kapanan süzme kalıbı kalktı",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-01T09:25:17+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T09:25:17+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "sinav-boru-toplu"
+    },
+    {
+      "zaman": "2026-11-01T10:57:20+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sinav-boru-son",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "koken": "sinav-boru-toplu",
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "ae3ee37a",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sinav-boru-son) — İskan sınavının ikinci yarısında kalıp kalksın ve kapı CI adımı açılsın: iskan farkı tek başına göz tavanını aşıyor",
+      "zaman": "2026-11-01T10:57:20+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Kalan üç sınav dosyasında (iskan, federe, kart) kalıp kalksın, kapı CI adımı açılsın: tek PR'da göz tavanını aştı",
+      "zaman": "2026-11-01T10:57:20+03:00",
+      "kalan_kart": "sinav-boru-son"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-01T10:57:20+03:00",
+      "kalan_kart": "sinav-boru-son",
+      "kalan": "İskan sınavının ikinci yarısında kalıp kalksın ve kapı CI adımı açılsın: iskan farkı tek başına göz tavanını aşıyor",
+      "tur_sifir": 0,
+      "oturum": "ae3ee37a"
+    }
+  ]
+}

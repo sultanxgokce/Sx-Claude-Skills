@@ -1,0 +1,48 @@
+{
+  "is": "sinav-boru-kalan",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T10:58:10+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi",
+      "asama": "once",
+      "dosya": "olcum-kapi-once.txt",
+      "sha256": "b03cbf3ddf12b7299143e40bfac3d34691f910469a1c25ea4a58b131336aaeaf",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi-kalan.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/k-once.txt"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T10:58:10+03:00",
+      "sure_sn": 40.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "48d7acdbf0f24026b29ef78b44a0946e",
+      "olculen_commit": "b29e4d55aef56b47f7e7532535b81bdd10c200cb",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sonra.txt",
+      "sha256": "a476819dd2f795b6ce60dbaefd9cb633b9c1c5af9b9e99d1b6a83a70890105b2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi-kalan.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/k-sonra.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T10:58:10+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d6dd2f2de1464895819988ac252b18fd",
+      "olculen_commit": "b29e4d55aef56b47f7e7532535b81bdd10c200cb",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "cb9425fdb0fec808884aeb885d7c39eab4838b6a3f102f9ac470036d616080af"
+}

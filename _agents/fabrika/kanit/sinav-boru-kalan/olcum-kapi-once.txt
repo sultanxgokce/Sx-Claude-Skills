@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/kapi-kalan.sh /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/k-once.txt
+# rc=1 sure=40.2s zaman=2026-11-01T10:58:10+03:00
+--- stdout ---
+sınav boru kapısı: 268 satır
+dosya disi 153
+--- stderr ---
+⏳ agir-sira: kanit-sinav-boru-kalan-kapi 40 sn bekledi (yuva 2, load1 8.08)

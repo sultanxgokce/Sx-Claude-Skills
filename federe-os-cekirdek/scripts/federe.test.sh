@@ -49,7 +49,7 @@ bash "$SUT" gelen yanlis >/dev/null 2>&1; [ $? -eq 2 ] && ok "durum-enum reddi" 
 
 echo "== T7: token-kaynağı yok → 2 (dürüst, değer-sızmadan) =="
 OUT="$(bash "$SUT" gonder s04 "test-başlık" 2>&1)"; RC=$?
-[ "$RC" -eq 2 ] && echo "$OUT" | grep -q "token kaynağı yok" && ok "token-yokluğu dürüst RC=2" || no "token-yolu yanlış (rc=$RC)"
+[ "$RC" -eq 2 ] && echo "$OUT" | grep "token kaynağı yok" >/dev/null && ok "token-yokluğu dürüst RC=2" || no "token-yolu yanlış (rc=$RC)"
 
 echo "== T8: gonder sır-desenli not → 2 (yerel ön-kapı) =="
 fs="sk-$(printf 'A%.0s' $(seq 1 20))"
@@ -59,7 +59,7 @@ echo "== T9: token-file çözümü → ağ-katına iner (RC=1) + değer sızmaz 
 TF="$(mktemp -d)/token"; printf 'TESTTOKEN-abc123\n' > "$TF"
 OUT="$(FEDERE_TOKEN_FILE="$TF" bash "$SUT" gonder s04 "test-başlık" 2>&1)"; RC=$?
 if [ "$RC" -eq 1 ]; then ok "token-file kaynağı kullanıldı (ağ-hatası RC=1)"; else no "token-file çözümü yanlış (rc=$RC)"; fi
-echo "$OUT" | grep -q "TESTTOKEN-abc123" && no "TOKEN DEĞERİ SIZDI" || ok "token değeri çıktıya sızmadı"
+echo "$OUT" | grep "TESTTOKEN-abc123" >/dev/null && no "TOKEN DEĞERİ SIZDI" || ok "token değeri çıktıya sızmadı"
 
 echo "== T10: nabiz özet-siz → 2 =="
 bash "$SUT" nabiz "" >/dev/null 2>&1; [ $? -eq 2 ] && ok "boş-özet reddi" || no "boş-özet kaçtı"
@@ -78,12 +78,12 @@ bash "$SUT" nabiz "özet" abc >/dev/null 2>&1; R2=$?
 
 echo "== T14: durum tokensız → RC=0 + DOĞRULANAMADI (sahte-yeşil yok) =="
 OUT="$(bash "$SUT" durum 2>&1)"; RC=$?
-[ "$RC" -eq 0 ] && echo "$OUT" | grep -q "DOĞRULANAMADI" && ok "durum dürüst-3-durum" || no "durum probe yanlış (rc=$RC)"
+[ "$RC" -eq 0 ] && echo "$OUT" | grep "DOĞRULANAMADI" >/dev/null && ok "durum dürüst-3-durum" || no "durum probe yanlış (rc=$RC)"
 
 echo "== T15: durum token-file'lı → API KIRMIZI (ağ yok) + RC=0 + değer sızmaz =="
 OUT="$(FEDERE_TOKEN_FILE="$TF" bash "$SUT" durum 2>&1)"; RC=$?
-[ "$RC" -eq 0 ] && echo "$OUT" | grep -q "KIRMIZI" && ok "durum kırmızıyı dürüst raporlar" || no "durum kırmızı-yolu yanlış (rc=$RC)"
-echo "$OUT" | grep -q "TESTTOKEN-abc123" && no "TOKEN DEĞERİ SIZDI (durum)" || ok "durum çıktısında değer yok"
+[ "$RC" -eq 0 ] && echo "$OUT" | grep "KIRMIZI" >/dev/null && ok "durum kırmızıyı dürüst raporlar" || no "durum kırmızı-yolu yanlış (rc=$RC)"
+echo "$OUT" | grep "TESTTOKEN-abc123" >/dev/null && no "TOKEN DEĞERİ SIZDI (durum)" || ok "durum çıktısında değer yok"
 
 echo "== T16-T18: [mock-API 127.0.0.1] kontrat + ACK-dayanıklılık golden'ları =="
 TMPD="$(mktemp -d)"
@@ -121,7 +121,7 @@ for _i in $(seq 1 20); do curl -s -o /dev/null "http://127.0.0.1:$MPORT/" && bre
 
 echo "-- T16: gonder yanıt-parse (snake kaynak_cell/hedef_cell) --"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" gonder s04 "test-başlık" 2>&1)"; RC=$?
-[ "$RC" -eq 0 ] && echo "$OUT" | grep -q "s01→s04" && ok "gonder kontrat-parse RC=0" || no "gonder mock yanlış (rc=$RC)"
+[ "$RC" -eq 0 ] && echo "$OUT" | grep "s01→s04" >/dev/null && ok "gonder kontrat-parse RC=0" || no "gonder mock yanlış (rc=$RC)"
 
 echo "-- T17: dinle --ack · ACK-409'da batch ÖLMEZ (kalan işlenir + RC=1 + uyarı) --"
 # NOT: ACK artık VARSAYILAN DEĞİL (L37-F0). Bu kapı geriye-uyum yolunu (`--ack`) sınar.
@@ -129,9 +129,9 @@ INB="$TMPD/inbox.md"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB" \
        FEDERE_GORULEN="$TMPD/gorulen-t17.txt" bash "$SUT" dinle --ack 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && ok "dinle --ack kısmi-ACK RC=1" || no "dinle RC yanlış (rc=$RC)"
-echo "$OUT" | grep -q "ACK düşmedi: t1" && ok "ACK-hata uyarısı basıldı (ölü-kod değil)" || no "ACK-uyarı yok"
+echo "$OUT" | grep "ACK düşmedi: t1" >/dev/null && ok "ACK-hata uyarısı basıldı (ölü-kod değil)" || no "ACK-uyarı yok"
 [ -f "$INB" ] && [ "$(grep -c '^- \[' "$INB")" -eq 2 ] && ok "batch tamamı inbox'a düştü (2/2)" || no "inbox eksik ($(grep -c '^- \[' "$INB" 2>/dev/null || echo 0)/2)"
-echo "$OUT" | grep -q "1 ok · 1 düşmedi" && ok "kısmi-ACK özeti dürüst" || no "özet-satırı yanlış"
+echo "$OUT" | grep "1 ok · 1 düşmedi" >/dev/null && ok "kısmi-ACK özeti dürüst" || no "özet-satırı yanlış"
 
 echo "-- T17b: TESLİMAT ≠ ÜSTLENME — varsayılan dinle ACK BASMAZ (L37-F0 sahte-makbuz panzehiri) --"
 # Bu kapının VAR OLMA sebebi: eski `dinle` koşulsuz `alindi` damgalıyordu → gönderen
@@ -141,28 +141,28 @@ INB2="$TMPD/inbox-noack.md"; GOR2="$TMPD/gorulen-noack.txt"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB2" \
        FEDERE_GORULEN="$GOR2" bash "$SUT" dinle 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && ok "varsayılan dinle RC=0" || no "varsayılan dinle rc=$RC"
-echo "$OUT" | grep -q "SAHİPSİZ" && ok "çıktı sahipsizliği AÇIKÇA söylüyor" || no "sahipsizlik bildirilmiyor"
-echo "$OUT" | grep -q "teslim-alındı" && no "hâlâ 'teslim-alındı' diyor (sahte-makbuz geri geldi)" || ok "'teslim-alındı' iddiası YOK"
-echo "$OUT" | grep -q "ACK düşmedi" && no "varsayılan yolda ACK denendi" || ok "varsayılan yolda ACK HİÇ denenmedi"
+echo "$OUT" | grep "SAHİPSİZ" >/dev/null && ok "çıktı sahipsizliği AÇIKÇA söylüyor" || no "sahipsizlik bildirilmiyor"
+echo "$OUT" | grep "teslim-alındı" >/dev/null && no "hâlâ 'teslim-alındı' diyor (sahte-makbuz geri geldi)" || ok "'teslim-alındı' iddiası YOK"
+echo "$OUT" | grep "ACK düşmedi" >/dev/null && no "varsayılan yolda ACK denendi" || ok "varsayılan yolda ACK HİÇ denenmedi"
 [ "$(grep -c '^- \[' "$INB2")" -eq 2 ] && ok "teslimat yine yapıldı (2/2 inbox'a düştü)" || no "teslimat kayboldu"
-echo "$OUT" | grep -q "2 yeni" && ok "yeni-sayısı bildirildi" || no "yeni-sayısı yok"
+echo "$OUT" | grep "2 yeni" >/dev/null && ok "yeni-sayısı bildirildi" || no "yeni-sayısı yok"
 
 echo "-- T17c: mükerrer-yazım YOK — ikinci poll aynı tetikleri tekrar yazmaz --"
 # ACK basılmadığı için sunucu aynı tetikleri tekrar döndürür; gelen-kutusu şişmemeli.
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB2" \
        FEDERE_GORULEN="$GOR2" bash "$SUT" dinle 2>&1)"
 [ "$(grep -c '^- \[' "$INB2")" -eq 2 ] && ok "ikinci poll mükerrer yazmadı (hâlâ 2)" || no "inbox şişti ($(grep -c '^- \[' "$INB2"))"
-echo "$OUT" | grep -q "0 yeni" && ok "ikinci poll '0 yeni' dedi" || no "yeni-sayısı yanlış"
-echo "$OUT" | grep -q "2 bekleyen" && ok "toplam bekleyen sayısı gerçeği söylüyor" || no "toplam yanlış"
+echo "$OUT" | grep "0 yeni" >/dev/null && ok "ikinci poll '0 yeni' dedi" || no "yeni-sayısı yanlış"
+echo "$OUT" | grep "2 bekleyen" >/dev/null && ok "toplam bekleyen sayısı gerçeği söylüyor" || no "toplam yanlış"
 
 echo "-- T18: nabiz 201 kontrat --"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" nabiz "mock-nabız" 2>&1)"; RC=$?
-[ "$RC" -eq 0 ] && echo "$OUT" | grep -q "cell=s09" && ok "nabiz kontrat-parse RC=0" || no "nabiz mock yanlış (rc=$RC)"
+[ "$RC" -eq 0 ] && echo "$OUT" | grep "cell=s09" >/dev/null && ok "nabiz kontrat-parse RC=0" || no "nabiz mock yanlış (rc=$RC)"
 
 echo "== T24: K4 --tip kapalı küme — enum-dışı RC=2 (curl'e inmeden) =="
 OUT="$(bash "$SUT" gonder --tip yanlis s04 "baslik" 2>&1)"; RC=$?
 [ "$RC" -eq 2 ] && ok "--tip enum-dışı RC=2" || no "--tip enum kaçtı (rc=$RC)"
-echo "$OUT" | grep -q "mesaj | is | devir" && ok "geçerli tip listesi basılıyor" || no "tip listesi yok"
+echo "$OUT" | grep "mesaj | is | devir" >/dev/null && ok "geçerli tip listesi basılıyor" || no "tip listesi yok"
 bash "$SUT" gonder --tip s04 "baslik" >/dev/null 2>&1; [ $? -eq 2 ] && ok "--tip değersiz RC=2 (kayma yok)" || no "--tip değersiz kaçtı"
 
 echo "== T25-T26: [mock-API gövde-kaydeden] K4 tip gönderimi + K5 geri-al ters-kayıt =="
@@ -199,13 +199,13 @@ m2() { FEDERE_API_BASE="http://127.0.0.1:$M2PORT" FEDERE_TETIK_TOKEN=dummytok ba
 echo "-- T25: --tip gövdeye yazılır; BAYRAKSIZ gövdede tip alanı YOK (bayt-aynı davranış) --"
 m2 gonder --tip devir s04 "devir-basligi" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && ok "gonder --tip devir RC=0" || no "gonder --tip devir rc=$RC"
-tail -1 "$BLOG" | grep -q '"tip":"devir"' && ok "gövdede tip:devir var" || no "gövdede tip yok"
+tail -1 "$BLOG" | grep '"tip":"devir"' >/dev/null && ok "gövdede tip:devir var" || no "gövdede tip yok"
 m2 gonder s04 "bayraksiz-baslik" >/dev/null 2>&1
-tail -1 "$BLOG" | grep -q '"tip"' && no "bayraksız gövdeye tip SIZDI (bayt-davranış bozuldu)" || ok "bayraksız gövdede tip alanı YOK"
+tail -1 "$BLOG" | grep '"tip"' >/dev/null && no "bayraksız gövdeye tip SIZDI (bayt-davranış bozuldu)" || ok "bayraksız gövdede tip alanı YOK"
 
 echo "-- T25b: okuma-uyumu — tip alanı olmayan kayıt 'mesaj' sayılır --"
 OUT="$(m2 giden all 2>&1)"
-echo "$OUT" | grep -q "tip-alani-yok" && echo "$OUT" | grep "e1" | grep -q "mesaj" \
+echo "$OUT" | grep "tip-alani-yok" >/dev/null && echo "$OUT" | grep "e1" | grep "mesaj" >/dev/null \
   && ok "tip'siz kayıt listede 'mesaj' olarak basıldı" || no "tip'siz kayıt okuma-uyumu yanlış"
 
 echo "-- T26: K5 geri-al — ters kayıt ekler, silmez; yalnız tip=devir --"
@@ -213,7 +213,7 @@ m2 geri-al d1 --gerekce "yanlis odaya devredilmisti" >"$TMPD/geri.out" 2>&1; RC=
 [ "$RC" -eq 0 ] && ok "geri-al devir-kaydında RC=0" || no "geri-al rc=$RC"
 grep -q "ters kayıt yazıldı" "$TMPD/geri.out" && ok "çıktı ters-kayıt diyor" || no "ters-kayıt çıktısı yok"
 grep -q "SİLİNMEDİ" "$TMPD/geri.out" && ok "silinmediği açıkça söyleniyor" || no "silme-yokluğu söylenmiyor"
-tail -1 "$BLOG" | grep -q '"tip":"devir"' && tail -1 "$BLOG" | grep -q 'GERİ-AL' && tail -1 "$BLOG" | grep -q '"kart_ref":"d1"' \
+tail -1 "$BLOG" | grep '"tip":"devir"' >/dev/null && tail -1 "$BLOG" | grep 'GERİ-AL' >/dev/null && tail -1 "$BLOG" | grep '"kart_ref":"d1"' >/dev/null \
   && ok "ters kayıt gövdesi doğru (devir + GERİ-AL + kart_ref=d1)" || no "ters-kayıt gövdesi eksik: $(tail -1 "$BLOG")"
 
 m2 geri-al m1 --gerekce "x y z" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tip≠devir geri-al RC=2" || no "mesaj-kaydı geri-al kaçtı"
@@ -228,10 +228,10 @@ echo "== T20: BAYRAK KAPISI — taninmayan bayrak sessizce yutulmaz (2026-08-08,
 # "--tip" oldu, mesaj BIR SAAT kuyrukta bekledi ve hedefi hic bulmadi.
 OUT="$(bash "$SUT" gonder --tipx s04 "baslik" 2>&1)"; RC=$?
 [ "$RC" -eq 2 ] && ok "taninmayan bayrak RC=2" || no "taninmayan bayrak RC=$RC (2 bekleniyordu)"
-echo "$OUT" | grep -q "tanınmayan bayrak" && ok "hata mesaji bayragi soyluyor" || no "hata mesaji bayragi sylemiyor"
-echo "$OUT" | grep -q -- "--tetikli" && ok "gecerli bayrak listesi basiliyor" || no "gecerli bayrak listesi yok"
+echo "$OUT" | grep "tanınmayan bayrak" >/dev/null && ok "hata mesaji bayragi soyluyor" || no "hata mesaji bayragi sylemiyor"
+echo "$OUT" | grep -- "--tetikli" >/dev/null && ok "gecerli bayrak listesi basiliyor" || no "gecerli bayrak listesi yok"
 # Bayrak ASLA hedef/baslik olarak SIZMAMALI (asil zarar buydu)
-echo "$OUT" | grep -qi "hedef sNN formatında" && no "bayrak konumsal-metin olarak sizdi" || ok "bayrak konumsal-metne SIZMIYOR"
+echo "$OUT" | grep -i "hedef sNN formatında" >/dev/null && no "bayrak konumsal-metin olarak sizdi" || ok "bayrak konumsal-metne SIZMIYOR"
 
 echo "== T21: geriye-uyum — --tetikli aynen calisir, gerekcesiz hala reddedilir =="
 OUT="$(bash "$SUT" gonder --tetikli s04 "baslik" 2>&1)"; RC=$?
@@ -242,28 +242,28 @@ echo "== T22: durum KAPI MODU — kirmizi ekrana yaziliyordu ama exit=0 idi (MUA
 # Varsayilan report-only KORUNUR; --kapi sonucu cikis-koduna da yazar.
 OUT="$(bash "$SUT" durum 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && ok "bayraksiz durum exit=0 (geriye-uyum bozulmadi)" || no "bayraksiz durum exit=$RC (0 bekleniyordu)"
-echo "$OUT" | grep -q "kapı:" && no "bayraksiz koşuda kapı-satiri sizdi" || ok "bayraksiz cikti degismedi (kapi-satiri yok)"
+echo "$OUT" | grep "kapı:" >/dev/null && no "bayraksiz koşuda kapı-satiri sizdi" || ok "bayraksiz cikti degismedi (kapi-satiri yok)"
 
 # token YOK + --kapi -> dogrulanamadi (3). "olculemedi != 0" fail-loud kurali.
 OUT="$(bash "$SUT" durum --kapi 2>&1)"; RC=$?
 [ "$RC" -eq 3 ] && ok "tokensiz --kapi exit=3 (dogrulanamadi)" || no "tokensiz --kapi exit=$RC (3 bekleniyordu)"
-echo "$OUT" | grep -q "DOĞRULANAMADI (exit=3)" && ok "kapi-satiri dogrulanamadi diyor" || no "kapi-satiri yok/yanlis"
+echo "$OUT" | grep "DOĞRULANAMADI (exit=3)" >/dev/null && ok "kapi-satiri dogrulanamadi diyor" || no "kapi-satiri yok/yanlis"
 
 # token VAR ama API erisilemez (sahte BASE) -> KIRMIZI (1). Asil kusurun kanidi.
 TF2="$(mktemp -d)/token"; printf 'TESTTOKEN-xyz789\n' > "$TF2"
 OUT="$(FEDERE_TOKEN_FILE="$TF2" bash "$SUT" durum --kapi 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && ok "erisilemez API + --kapi exit=1 (kirmizi)" || no "kirmizi --kapi exit=$RC (1 bekleniyordu)"
-echo "$OUT" | grep -q "KIRMIZI (exit=1)" && ok "kapi-satiri kirmizi diyor" || no "kirmizi kapi-satiri yok"
+echo "$OUT" | grep "KIRMIZI (exit=1)" >/dev/null && ok "kapi-satiri kirmizi diyor" || no "kirmizi kapi-satiri yok"
 # AYNI kosu bayraksizken hala 0 donmeli (varsayilan report-only degismedi)
 FEDERE_TOKEN_FILE="$TF2" bash "$SUT" durum >/dev/null 2>&1
 [ $? -eq 0 ] && ok "ayni kirmizi durum bayraksiz hala exit=0" || no "varsayilan davranis bozuldu"
 # Sir-sizmasi: token degeri hicbir kosuda basilmaz
-echo "$OUT" | grep -q "TESTTOKEN-xyz789" && no "TOKEN DEGERI SIZDI" || ok "token degeri sizmiyor"
+echo "$OUT" | grep "TESTTOKEN-xyz789" >/dev/null && no "TOKEN DEGERI SIZDI" || ok "token degeri sizmiyor"
 
 echo "== T23: durum taninmayan bayrak → 2 (kullanim; 3 ile karismaz) =="
 OUT="$(bash "$SUT" durum --kapii 2>&1)"; RC=$?
 [ "$RC" -eq 2 ] && ok "durum taninmayan bayrak RC=2" || no "durum bayrak-kapisi RC=$RC"
-echo "$OUT" | grep -q -- "--kapi" && ok "gecerli bayrak listeleniyor" || no "gecerli bayrak listelenmiyor"
+echo "$OUT" | grep -- "--kapi" >/dev/null && ok "gecerli bayrak listeleniyor" || no "gecerli bayrak listelenmiyor"
 
 echo "== T19: bash -n sözdizimi =="
 bash -n "$SUT" && ok "sözdizimi temiz" || no "sözdizimi hatası"
