@@ -43,10 +43,10 @@ n_kapali="$(printf '%s\n' "$o" | grep -c 'kapali-' || true)"
                        || g 1 "varsayılan liste kırpılmıyor (kapalı=$n_kapali)"
 
 # ── G2 · GİZLENEN SAYI SÖYLENİR (sessiz kırpma yasak — bugünkü üç arızanın ortak sınıfı)
-printf '%s\n' "$o" | grep -q 'kapalı seans daha var' \
+printf '%s\n' "$o" | grep 'kapalı seans daha var' >/dev/null \
   && g 0 "gizlenen kapalı seans sayısı açıkça yazılıyor" \
   || g 1 "SESSİZ KIRPMA — gizlenen sayı söylenmiyor"
-printf '%s\n' "$o" | grep -q '25 kapalı seans daha var' \
+printf '%s\n' "$o" | grep '25 kapalı seans daha var' >/dev/null \
   && g 0 "gizlenen sayı DOĞRU (40-15=25)" \
   || g 1 "gizlenen sayı yanlış: $(printf '%s\n' "$o" | grep -o '[0-9]* kapalı seans daha var' | head -1)"
 
@@ -54,13 +54,13 @@ printf '%s\n' "$o" | grep -q '25 kapalı seans daha var' \
 o2="$(_feed_dene --hepsi 40)"
 n2="$(printf '%s\n' "$o2" | grep -c 'kapali-' || true)"
 [ "$n2" -eq 40 ] && g 0 "--hepsi tüm kapalıları gösteriyor (40)" || g 1 "--hepsi eksik gösteriyor ($n2)"
-printf '%s\n' "$o2" | grep -q 'daha var' \
+printf '%s\n' "$o2" | grep 'daha var' >/dev/null \
   && g 1 "--hepsi'de hâlâ 'daha var' diyor (yanıltıcı)" \
   || g 0 "--hepsi'de 'daha var' satırı YOK"
 
 # ── G4 · gizlenecek şey yoksa satır BASILMAZ (gürültü yok)
 o3="$(_feed_dene "" 5)"
-printf '%s\n' "$o3" | grep -q 'daha var' \
+printf '%s\n' "$o3" | grep 'daha var' >/dev/null \
   && g 1 "gizlenen yokken bile 'daha var' basıyor" \
   || g 0 "gizlenecek yoksa satır basılmıyor"
 

@@ -51,7 +51,7 @@ with io.open(p,"w",encoding="utf-8") as f:
 PY
 buyuk="$(brief --gun 3650)"; n="$(printf '%s\n' "$buyuk" | wc -l)"
 [ "$n" -le 40 ] && ok "2000 kayıtla brifing $n satır (tavan 40)" || no "TAVAN AŞILDI: $n"
-printf '%s' "$buyuk" | grep -qE '^\{|"bulgu_id"|"verdikt"' && no "HAM KAYIT sızdı" || ok "ham JSONL basılmadı"
+printf '%s' "$buyuk" | grep -E '^\{|"bulgu_id"|"verdikt"' >/dev/null && no "HAM KAYIT sızdı" || ok "ham JSONL basılmadı"
 
 echo "== M5: brifing SALT-OKUR =="
 imza="$(md5sum "$D" "$H" | md5sum)"

@@ -16,8 +16,8 @@ PASS=0; FAIL=0
 ok()   { PASS=$((PASS+1)); echo "PASS  $1"; }
 kotu() { FAIL=$((FAIL+1)); echo "FAIL  $1 — beklenen [$2] · gelen [$3]"; }
 esit() { if [ "$2" = "$3" ]; then ok "$1"; else kotu "$1" "$2" "$3"; fi; }
-var()  { if printf '%s' "$2" | grep -q -- "$3"; then ok "$1"; else kotu "$1" "içerir: $3" "$2"; fi; }
-yok()  { if printf '%s' "$2" | grep -q -- "$3"; then kotu "$1" "içermemeli: $3" "$2"; else ok "$1"; fi; }
+var()  { if printf '%s' "$2" | grep -- "$3" >/dev/null; then ok "$1"; else kotu "$1" "içerir: $3" "$2"; fi; }
+yok()  { if printf '%s' "$2" | grep -- "$3" >/dev/null; then kotu "$1" "içermemeli: $3" "$2"; else ok "$1"; fi; }
 
 D="$T/defter.jsonl"; : > "$D"
 # HAT_ROOT = hat-yolu.lib.sh'in KANONİK test-dikişi (script kendi HAT_KOK'unu ondan türetir).
@@ -87,7 +87,7 @@ esit "G7 iki kayıt da yazıldı" "2" "$(grep -c . "$D7")"
 python3 -c "
 import json,sys
 ok=all(json.loads(l) for l in open('$D7') if l.strip())
-print('0' if ok else '1')" 2>/dev/null | grep -q '^0'
+print('0' if ok else '1')" 2>/dev/null | grep '^0' >/dev/null
 esit "G7 hiçbir satır yarım/bozuk değil" "0" "$?"
 
 echo

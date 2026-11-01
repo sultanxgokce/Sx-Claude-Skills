@@ -72,11 +72,11 @@ esit "G5d divan defteri layiha koşusundan sonra DEĞİŞMEDİ (3 satır)" "3" "
 OUT3="$(sut --profil divan --defter "$T/bos.jsonl")";
 esit "G6 divan periyot=hafta" "hafta" "$(jq -r '.periyot' <<<"$OUT3")"
 esit "G6b 'hafta' anahtarı hâlâ var (T2 kontratı kırılmadı)" "0" "$(jq -e 'has("hafta")' <<<"$OUT3" >/dev/null; echo $?)"
-esit "G6c hafta değeri ISO-hafta biçimi" "0" "$(jq -r '.hafta' <<<"$OUT3" | grep -qE '^[0-9]{4}-W[0-9]{2}$'; echo $?)"
+esit "G6c hafta değeri ISO-hafta biçimi" "0" "$(jq -r '.hafta' <<<"$OUT3" | grep -E '^[0-9]{4}-W[0-9]{2}$' >/dev/null; echo $?)"
 
 # G7 · gün biçimi
 OUT4="$(sut --profil layiha --defter "$T/bos2.jsonl")"
-esit "G7 layiha dönem değeri YYYY-MM-DD" "0" "$(jq -r '.donem' <<<"$OUT4" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; echo $?)"
+esit "G7 layiha dönem değeri YYYY-MM-DD" "0" "$(jq -r '.donem' <<<"$OUT4" | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' >/dev/null; echo $?)"
 
 # G8 · bilinmeyen profil reddedilir
 sut --profil yok >/dev/null 2>&1; esit "G8 bilinmeyen profil → RC=2" "2" "$?"

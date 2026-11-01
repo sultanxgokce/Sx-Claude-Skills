@@ -31,6 +31,8 @@ jobs:
         run: node ahi/schema/katalog-surum-hiza.mjs .
       - name: "Motor · sync-skills.mjs sözdizimi"
         run: node --check sync-skills.mjs
+      - name: "Sınav · boru arkasında sessiz grep yok (pipefail'de rastgele kırmızı üretir)"
+        run: python3 scripts/sinav-boru-kapi.py
 
       # Kapı sınavı: aşağıdaki keşif adımı "sınavlar geçiyor mu" diye sorar. Bu adım
       # onun SORMADIĞI üç soruyu sorar: kapı DEVREDE mi (çağıran var mı) · modül

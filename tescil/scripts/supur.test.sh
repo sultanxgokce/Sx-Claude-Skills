@@ -77,7 +77,7 @@ assert k['kacirma']=='e' and k['neden']=='ton sert' and k['kaynak']=='teslim:gor
   local eksik="$T/o$RANDOM"; mkdir -p "$eksik"; printf '{"z":9}' > "$eksik/muhur-ozet.json"
   env SICIL_MUHUR_KOK="$k8" bash "$S" muhur-kopya --gorev gorev_K --out "$eksik" >/dev/null 2>&1; local r12=$?
   [ $r11 -eq 0 ] && [ "$(cat "$k8/gorev_K/muhur-ozet.json")" = '{"a":2}' ] && [ "$(cat "$k8/gorev_K/gereklilik.json")" = '{"b":1}' ] && [ $r12 -eq 3 ] \
-    && [ "$(cat "$k8/gorev_K/muhur-ozet.json")" = '{"a":2}' ] && ! ls "$k8/gorev_K" | grep -q yeni && o="$o j"
+    && [ "$(cat "$k8/gorev_K/muhur-ozet.json")" = '{"a":2}' ] && ! ls "$k8/gorev_K" | grep yeni >/dev/null && o="$o j"
   # j2 · görev adı dizin kaçışı (../x) reddedilir, kökün dışına yazılmaz
   env SICIL_MUHUR_KOK="$k8/kok2" bash "$S" muhur-kopya --gorev ../disari --out "$out" >/dev/null 2>&1; local r13=$?
   [ $r13 -eq 2 ] && [ ! -e "$k8/disari" ] && o="$o j2"

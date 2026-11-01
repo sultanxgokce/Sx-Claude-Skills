@@ -116,7 +116,7 @@ _sen() {  # _sen <scripts-dir> → geçen anahtarlar
   "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$ts" --ders D-077 >/dev/null 2>&1; local rb=$?
   "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$ts" --ders D-001 >/dev/null 2>&1; local rg=$?
   [ $rb -eq 2 ] && [ $rg -eq 0 ] && python3 -c "import yaml,sys;x=yaml.safe_load(open(sys.argv[1]))['isabet'];a=[i for i in x if i.get('gorev')=='gorev_A'][0];b=x[-1];assert a['ders'] is None and b['tur']=='ders-bagi' and b['ders']=='D-001'" "$Y" 2>/dev/null \
-    && "${E[@]}" bash "$S" ders MUHURDAR1 | grep -q "e2e-check: 1 kaçırma · 1 görev$" && o="$o l"
+    && "${E[@]}" bash "$S" ders MUHURDAR1 | grep "e2e-check: 1 kaçırma · 1 görev$" >/dev/null && o="$o l"
   # m · kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz
   local tsh; tsh="$(python3 -c "import yaml,sys;print([x for x in yaml.safe_load(open(sys.argv[1]))['isabet'] if x.get('gorev')=='gorev_B'][0]['ts'])" "$Y")"
   "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$tsh" --ders D-001 >/dev/null 2>&1; local r5=$?

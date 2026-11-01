@@ -65,7 +65,7 @@ icerir "B4 · satır KDV oranı"             "<cbc:Percent>20</cbc:Percent>" "$C
 # rastlantısal olarak geçiyor ve kapı YANLIŞ-POZİTİF veriyordu. Kapı gevşetilmedi,
 # KESKİNLEŞTİRİLDİ: kaba dizi yerine gerçek bilimsel-gösterim deseni aranıyor.
 # Aradığımız şey para alanına sızmış float artığıydı (ör. 1.5E+10), base64 gürültüsü değil.
-if printf '%s' "$CIK" | grep -qE '>[0-9]+\.?[0-9]*[Ee][+-][0-9]+<'; then
+if printf '%s' "$CIK" | grep -E '>[0-9]+\.?[0-9]*[Ee][+-][0-9]+<' >/dev/null; then
   DUSEN=$((DUSEN+1)); echo "  ✗ B5 · bilimsel gösterim SIZDI (para alanında)"
 else
   GECEN=$((GECEN+1)); echo "  ✓ B5 · bilimsel gösterim sızmadı (eleman-içi desen)"

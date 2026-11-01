@@ -71,7 +71,7 @@ PY
 buyuk="$(brief --gun 30)"
 n="$(printf '%s\n' "$buyuk" | wc -l)"
 [ "$n" -le 40 ] && ok "3000 kayıtla brifing $n satır (tavan 40)" || no "TAVAN AŞILDI: $n satır"
-printf '%s' "$buyuk" | grep -qE '^\{|"url_key"|"dedup_key"' && no "HAM KAYIT sızdı (context kirliliği)" \
+printf '%s' "$buyuk" | grep -E '^\{|"url_key"|"dedup_key"' >/dev/null && no "HAM KAYIT sızdı (context kirliliği)" \
   || ok "ham JSONL basılmadı — yalnız damıtılmış satır"
 
 echo "== B5: brifing SALT-OKUR =="

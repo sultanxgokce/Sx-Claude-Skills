@@ -9,8 +9,8 @@ PASS=0; FAIL=0
 ok() { PASS=$((PASS+1)); echo "  ✓ $1"; }
 no() { FAIL=$((FAIL+1)); echo "  ✗ $1"; }
 esit() { if [ "$2" = "$3" ]; then ok "$1"; else no "$1 (beklenen '$2' · gelen '$3')"; fi; }
-icerir() { if printf '%s' "$2" | grep -qF -- "$3"; then ok "$1"; else no "$1 (yok: $3)"; fi; }
-icermez() { if printf '%s' "$2" | grep -qF -- "$3"; then no "$1 (var: $3)"; else ok "$1"; fi; }
+icerir() { if printf '%s' "$2" | grep -F -- "$3" >/dev/null; then ok "$1"; else no "$1 (yok: $3)"; fi; }
+icermez() { if printf '%s' "$2" | grep -F -- "$3" >/dev/null; then no "$1 (var: $3)"; else ok "$1"; fi; }
 
 KAPI='https://ekip.cloudflareaccess.com/cdn-cgi/access/login/x'
 kur() {

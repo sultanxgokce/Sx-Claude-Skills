@@ -35,7 +35,7 @@ esit "T3 karar defteri sayısı" "2" "$(alan "$OUT" karar 3)"
 esit "T4 aday havuzu sayısı" "1" "$(alan "$OUT" aday 3)"
 # ÇEKİRDEK KURAL: defterde kaydı olan (b0003) ve zaten elenen (b0004) süzmeye GİRMEZ → 2 kalır
 esit "T5 süzmeye-hazır = defterde kaydı olmayan ham'lar (b0003/b0004 hariç)" "2" "$(alan "$OUT" suzmeye-hazir 2)"
-printf '%s' "$OUT" | grep -q '^ornek	b0003' \
+printf '%s' "$OUT" | grep '^ornek	b0003' >/dev/null \
   && no "T5b defterde kararı olan bulgu örnek listesinde" "$OUT" \
   || ok "T5b defterde kararı olan bulgu örneklerde YOK (tekrar süzülmez)"
 esit "T6 son tur satırı taşınıyor" "1" "$(printf '%s' "$OUT" | grep -c '^son-tur	')"
@@ -47,16 +47,16 @@ OUT2="$(kos "$R2")"
 esit "T7 karar defteri YOKsa 'yok' der (0 demez)" "yok" "$(alan "$OUT2" karar 2)"
 esit "T8 aday havuzu YOKsa 'yok' der" "yok" "$(alan "$OUT2" aday 2)"
 HUM="$(KESIF_REPO_ROOT="$R2" bash "$SUT" 2>/dev/null)"
-printf '%s' "$HUM" | grep -q 'MUCİT bu kutuda hiç süzmemiş' \
+printf '%s' "$HUM" | grep 'MUCİT bu kutuda hiç süzmemiş' >/dev/null \
   && ok "T8b insan-çıktısı 'hiç süzmemiş' diyor (sıfır-sanılmasın)" \
   || no "T8b 'hiç süzmemiş' ifadesi yok" "$HUM"
 
 # ── SÜZME TAKLİDİ YASAĞI: çıktı 'en iyi' iddiası taşımamalı ────────────────
 HUM1="$(KESIF_REPO_ROOT="$R" bash "$SUT" 2>/dev/null)"
-if printf '%s' "$HUM1" | grep -qiE 'en iyi|en değerli|öneriyorum'; then
+if printf '%s' "$HUM1" | grep -iE 'en iyi|en değerli|öneriyorum' >/dev/null; then
   no "T9 süzme taklidi" "çıktı yargı-iddiası taşıyor"
 else ok "T9 süzme taklidi YOK (yargı iddiası yok)"; fi
-printf '%s' "$HUM1" | grep -q 'YARGI DEĞİL' \
+printf '%s' "$HUM1" | grep 'YARGI DEĞİL' >/dev/null \
   && ok "T9b örnek listesi açıkça 'yargı değil' diye etiketli" \
   || no "T9b uyarı etiketi yok" "$HUM1"
 

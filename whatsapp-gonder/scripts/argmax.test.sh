@@ -66,9 +66,9 @@ dene() { # rc → stderr metni
   ' 2>&1
 }
 PATH="$gecici/bin:$PATH"
-printf '%s' "$(dene 126)" | grep -q 'ağ hatası DEĞİL'; g $? "rc=126 → 'ağ hatası değil' diyor"
-printf '%s' "$(dene 28)"  | grep -q 'zaman aşımı';     g $? "rc=28 → zaman aşımı diyor"
-printf '%s' "$(dene 7)"   | grep -q 'ulaşılamadı';     g $? "rc=7 → geçide ulaşılamadı diyor"
+printf '%s' "$(dene 126)" | grep 'ağ hatası DEĞİL' >/dev/null; g $? "rc=126 → 'ağ hatası değil' diyor"
+printf '%s' "$(dene 28)"  | grep 'zaman aşımı' >/dev/null;     g $? "rc=28 → zaman aşımı diyor"
+printf '%s' "$(dene 7)"   | grep 'ulaşılamadı' >/dev/null;     g $? "rc=7 → geçide ulaşılamadı diyor"
 # Sözleşme korunuyor: her hâlde "000" basılır (çağıranlar buna bakıyor).
 k="$(SAHTE_RC=126 bash -c '
   YANIT="'"$gecici"'/yanit"; GECIT="http://sahte"

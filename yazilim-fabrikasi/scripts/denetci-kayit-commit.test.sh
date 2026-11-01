@@ -50,7 +50,7 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   # c · pathspec'li: önceden STAGED başka değişiklik commit'e GİRMEZ, staged kalır
   local Wc; Wc="$(alan is-c)"; echo baska > "$Wc/baska.txt"; git -C "$Wc" add baska.txt
   kos is-c "$Wc" "$GECTI"
-  [ "$(son_dosyalar "$Wc")" = "_agents/fabrika/kanit/is-c/DENETIM-1.json _agents/fabrika/kanit/is-c/KART.json " ] && git -C "$Wc" diff --cached --name-only | grep -qx baska.txt && o="$o c"
+  [ "$(son_dosyalar "$Wc")" = "_agents/fabrika/kanit/is-c/DENETIM-1.json _agents/fabrika/kanit/is-c/KART.json " ] && git -C "$Wc" diff --cached --name-only | grep -x baska.txt >/dev/null && o="$o c"
   # d · dal iş adı DEĞİLSE commit'lenmez ve söylenir
   local Wd; Wd="$(alan is-d baska-dal)"; local hd; hd="$(git -C "$Wd" rev-parse HEAD)"; kos is-d "$Wd" "$GECTI"
   [ "$(git -C "$Wd" rev-parse HEAD)" = "$hd" ] && grep -q "kayıt commit'lenmedi: dal 'baska-dal'" "$k/son.log" && o="$o d"

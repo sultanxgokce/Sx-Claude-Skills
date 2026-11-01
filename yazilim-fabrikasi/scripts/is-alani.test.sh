@@ -10,7 +10,7 @@ g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$(
 commit_gorunuyor() {
   local dizin="$1" mesaj="$2" i
   for i in 1 2 3 4 5; do
-    ( cd "$dizin" && git log --oneline 2>/dev/null | grep -q -- "$mesaj" ) && return 0
+    ( cd "$dizin" && git log --oneline 2>/dev/null | grep -- "$mesaj" >/dev/null ) && return 0
     sleep 0.05
   done
   return 1
@@ -33,7 +33,7 @@ echo "════ T0 · kanca-kur: şablondan kopyalar, hooksPath ayarlar, idem
 ( cd "$T/depo" && bash "$IS" kanca-kur ) >/dev/null 2>&1; g $? "kanca kuruldu"
 [ -x "$T/depo/.githooks/pre-commit" ]; g $? "pre-commit dosyası var ve çalıştırılabilir"
 [ "$(git -C "$T/depo" config core.hooksPath)" = ".githooks" ]; g $? "core.hooksPath=.githooks"
-# Not: `komut | grep -q` KULLANMA — grep ilk eşleşmede kapanır, üretici SIGPIPE alır, pipefail rc'yi kirletir (sahte kırmızı).
+# Not: `komut | grep >/dev/null` KULLANMA — grep ilk eşleşmede kapanır, üretici SIGPIPE alır, pipefail rc'yi kirletir (sahte kırmızı).
 CIKTI="$( cd "$T/depo" && bash "$IS" kanca-kur 2>&1 )"; grep -q "zaten" <<<"$CIKTI"; g $? "ikinci kurulum: dokunmadı (idempotent)"
 
 echo "════ T1 · paylaşılan ağaç · main → SERBEST ════"
@@ -46,7 +46,7 @@ echo "════ T2 · paylaşılan ağaç · özellik dalı → BLOKE ══�
 CIKTI="$( cd "$T/depo" && git commit -m "chore: ozellik" 2>&1 )"; RC=$?
 [ "$RC" -ne 0 ]; g $? "commit ENGELLENDİ (rc=$RC)"
 grep -q "is-alani.sh ac" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
-( cd "$T/depo" && ! git log --oneline | grep -q "chore: ozellik" ); g $? "commit gerçekten düşmedi"
+( cd "$T/depo" && ! git log --oneline | grep "chore: ozellik" >/dev/null ); g $? "commit gerçekten düşmedi"
 
 echo "════ T3 · acil kaçış ════"
 ( cd "$T/depo" && PAYLASILAN_COMMIT=1 git commit -qm "chore: acil" ) >/dev/null 2>&1

@@ -22,7 +22,7 @@ kapi() { # kapi <ad> <beklenen-rc> <fark-dosyasi> <yol>
   SON="$cikti"
 }
 icerir() {
-  if printf '%s' "$SON" | grep -qF -- "$2"; then printf '  ✓ %s\n' "$1"; GECTI=$((GECTI+1))
+  if printf '%s' "$SON" | grep -F -- "$2" >/dev/null; then printf '  ✓ %s\n' "$1"; GECTI=$((GECTI+1))
   else printf '  ✗ %s — çıktıda yok: %s\n' "$1" "$2"; KALDI=$((KALDI+1)); fi
 }
 

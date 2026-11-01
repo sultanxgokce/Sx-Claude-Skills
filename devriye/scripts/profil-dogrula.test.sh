@@ -8,7 +8,7 @@ D="${MUTANT:-$HERE/profil-dogrula.py}"
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"
-# 🔴 `kos ... | grep -q` KULLANMA: `set -o pipefail` açık, doğrulayıcı ihlalde rc=1 döner
+# 🔴 `kos ... | grep >/dev/null` KULLANMA: `set -o pipefail` açık, doğrulayıcı ihlalde rc=1 döner
 #    ve boru o 1'i yutmaz — grep EŞLEŞSE BİLE kapı kırmızı görünür. İlk yazımda dört kapı
 #    bu yüzden düştü; mesajlar DOĞRUYDU, ölçen ben yanlıştım. Çıktı önce değişkene alınır.
 kos() { python3 "$D" "$1" 2>&1 || true; }

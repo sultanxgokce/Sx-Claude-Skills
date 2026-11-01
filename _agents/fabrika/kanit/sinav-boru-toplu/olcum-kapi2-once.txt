@@ -1,0 +1,4 @@
+$ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/sx-ana && python3 /config/projects/_wt/Sx-Claude-Skills-sinav-boru-toplu/scripts/sinav-boru-kapi.py > /dev/null
+# rc=1 sure=0.1s zaman=2026-11-01T09:07:14+03:00
+--- stdout ---
+--- stderr ---

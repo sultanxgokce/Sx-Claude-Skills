@@ -112,7 +112,7 @@ ok "C1b kayıtta içerik/sır/iş cümlesi YOK" "$(! grep -qE 'GIZLI-IS-CUMLESI|
 : > "$T/cagri.jsonl"; SAHTE_DEFTER=yok kos sakird --is "x" >"$T/oc2" 2>&1; rc=$?
 ok "C2 boş defter el_defteri_bayt=0 yazar (istem yine basılır)" "$([ $rc -eq 0 ] && grep -q '"el_defteri_bayt": 0' "$T/cagri.jsonl" && grep -q 'ALT AJAN İSTEMİ' "$T/oc2" && echo 0 || echo 1)" "→ rc=$rc"
 : > "$T/dosya"; DUZEN_CAGRI_KAYDI="$T/dosya/kayit.jsonl" kos sakird --is "x" >"$T/oc3" 2>&1; rc=$?
-ok "C3 yazılamayan kayıt: istem yine basılır (rc 0), başlığın altında ⚠ çağrı kaydı YAZILAMADI" "$([ $rc -eq 0 ] && sed -n 2p "$T/oc3" | grep -q '^⚠ çağrı kaydı YAZILAMADI' && grep -q '## 1 · KİMLİK' "$T/oc3" && echo 0 || echo 1)" "→ rc=$rc"
+ok "C3 yazılamayan kayıt: istem yine basılır (rc 0), başlığın altında ⚠ çağrı kaydı YAZILAMADI" "$([ $rc -eq 0 ] && sed -n 2p "$T/oc3" | grep '^⚠ çağrı kaydı YAZILAMADI' >/dev/null && grep -q '## 1 · KİMLİK' "$T/oc3" && echo 0 || echo 1)" "→ rc=$rc"
 
 if [ -z "${AJAN_BETIK:-}" ]; then
   echo "── mutasyon (gömülü): süzgeç kapatılınca A5 düşmeli"

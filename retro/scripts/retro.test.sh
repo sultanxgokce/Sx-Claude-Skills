@@ -367,7 +367,7 @@ m_l5(){ python3 "$1" lint "$Z" >/dev/null 2>&1; [ $? -ne 0 ]; }       # L5 kalk�
 mut "M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli" 's/if not re.search(r"· ölçü: .\*\\d", metin_m):/if False:/' m_l5
 m_sari(){ local Y="$BOS/_agents/handoff/retro/2026-W42/Y.md" rc; rm -f "$Y"; python3 "$1" kutu Y --kok "$BOS" --koltuk y:0 >/dev/null 2>&1; grep -qF "ÖLÇÜLEMEDİ: fabrika kartları yok" "$Y"; rc=$?; rm -f "$Y"; return $rc; }
 mut "M2 kaynak yokluğu sıfıra çevrilince sarı kaybolmalı (kapı yakalar)" 's/"ÖLÇÜLEMEDİ: fabrika kartları yok"/"0 \/ 0 \/ 0"/' m_sari
-m_iz(){ python3 "$1" merkez --yenile 2>&1 | grep -qF "ÇALIŞMADI BASİRET"; }
+m_iz(){ python3 "$1" merkez --yenile 2>&1 | grep -F "ÇALIŞMADI BASİRET" >/dev/null; }
 # M4 için: Ö1'e gorev damgası ver, sonra kutu metnini değiştir; gerçek araç BAYAT der (rc 1), metin kıyası kalkmış mutant yeşil (rc 0) döner
 python3 - "$M" <<'PY'
 import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read()
@@ -408,7 +408,7 @@ mut "M13 tekilleştirme kalkınca aynı depo iki kez sayılır (kapı yakalar)" 
 m_uyari(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P2" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep -qF "origin/main OKUNAMADI: Sx" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
 m_uyari "$R" && ok "M14 pozitif kontrol: bozmasız araç okunamayan depoyu adıyla söyler" || kirmizi "M14 pozitif kontrol: gerçek araç uyarı basmıyor"
 mut "M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı yakalar)" 's/("`_agents\/fabrika\/kanit\/\*\/DENETIM-\*.json` (disk ∪ origin\/main)" if not k\["okunamadi"\] else/("`_agents\/fabrika\/kanit\/*\/DENETIM-*.json` (disk ∪ origin\/main)" if True else/' m_uyari
-m_goz(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep "^| bağımsız göz turu" "$SD" | grep -qF "depo başına: depo 1 · Sx 2"; rc=$?; rm -f "$SD"; return $rc; }
+m_goz(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep "^| bağımsız göz turu" "$SD" | grep -F "depo başına: depo 1 · Sx 2" >/dev/null; rc=$?; rm -f "$SD"; return $rc; }
 m_goz "$R" && ok "M15 pozitif kontrol: bozmasız araç göz turunu depo başına döker" || kirmizi "M15 pozitif kontrol: gerçek araç dökmüyor"
 mut "M15 depo başına göz sayacı artmazsa döküm yalan söyler (kapı yakalar)" 's/turlar.append(len(ad)); dg += len(ad); /turlar.append(len(ad)); /' m_goz
 
