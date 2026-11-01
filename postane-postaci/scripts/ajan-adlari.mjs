@@ -17,6 +17,7 @@ export const AJAN_ADLARI = [
   'MUAVİN', 'YAVER', 'NAKKAŞ', 'BASİRET', 'BÂNİ', 'BERİD', 'MUHAKKİK', 'MİRAHUR', 'HENDESE', 'HEZARFEN',
   'MÜTEVELLİ', 'MEDDAH', 'HAZİNEDAR', 'İMAR',
   'NECCÂR', 'BENNÂ',   // mihenk ekip kaydındaki yazım (id: NECCÂR · BENNÂ, 29 Eki ölçüldü); eski 'NECCAR' aynı katlanır → girdi NECCÂR'a çevrilir
+  'EMANETÇİ', 'MÜZEHHİP', 'ŞAKİRD', 'ÇAPAR', 'TATAR', 'MESSÂH', 'MEREMMETÇİ', 'MÜCERRİB', 'MÜTEFENNİN',   // merkez kaydında olup listede eksikti: mektup alici_bilinmiyor ile reddedilip zile düşüyordu (1 Kas)
   'Sultan',
 ];
 

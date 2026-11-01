@@ -1,7 +1,7 @@
 ---
 name: postane-postaci
 type: tool
-version: 0.2.6
+version: 0.2.7
 description: >
   POSTANE postacısının (dakikada bir kutu içi tur: posta defterindeki mesajı alıcı ajanın CANLI Claude oturumuna yerel soketle iletir) bir kutuya kurulması için dosyalar ve kutu betiği.
   Kuru koşu varsayılan; --uygula yalnız izinli 18 ekip kutusundan birinde VE kutu jetonu dar iken (pilot code hariç; başka kutunun/merkezin ajan kuyruğunu okuyamıyorsa) cron + açma bayrağı yazar.
