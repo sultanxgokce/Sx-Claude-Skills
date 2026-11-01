@@ -105,6 +105,11 @@ kaynak 1.2.0; kurulu 1.1.1; : > "$KAYIT"
 O="$(env -i PATH=/usr/bin:/bin LC_ALL=C.UTF-8 KAYIT="$KAYIT" DUZEN_SYNC_CMD="bash $T/sync" DUZEN_MEKTUP_CMD="bash $T/mektup" DUZEN_KURULU_KOK="$T/kur" bash "$T/pkg/duzen-gece.sh" --uygula --sx "$T/sx" --gunluk "$T/g12.log" --kutu code --depo "$T/bayat" --reis SERDAR 2>&1)"; rc=$?
 ok "G13 cron ortamında yenileme paket ekipc.sh ile (depo ekipc.sh çağrılmaz), kimlik yenilendi" "$([ $rc -eq 0 ] && grep -q '^PAKET-ekipc ' "$KAYIT" && ! grep -q '^DEPO-ekipc' "$KAYIT" && grep -q 'yenilendi kimlik=bani' "$T/g12.log" && echo 0 || echo 1)" "→ rc=$rc $(head -c 300 "$KAYIT")"
 
+# G14 aynı çıplak ortamda (PyYAML'sız python: -S) GERÇEK paket ekipc.sh (sahte değil) bayat kimliğin yenile KURU koşusunu exit 0 ile bitirir → vendor/yaml gerçekten yüklenir (eski davranış exit 2)
+mkdir -p "$T/yamlsiz"; printf '#!/bin/sh\nexec %s -S "$@"\n' "$(command -v python3)" > "$T/yamlsiz/python3"; chmod +x "$T/yamlsiz/python3"
+O="$(env -i PATH="$T/yamlsiz:/usr/bin:/bin" LC_ALL=C.UTF-8 bash "$HERE/ekipc.sh" yenile --dosya "$T/bayat/_agents/bani/AGENT.md" --baz manuel-claude 2>&1)"; rc=$?
+ok "G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir)" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc $(tail -c 200 <<<"$O")"
+
 if [ -z "${GECE_BETIK:-}" ]; then
   echo "── mutasyon"
   mut() { local M="$HERE/.mutant-gece-$$-$1"; python3 -I - "$R" "$M" "$2" "$3" <<'PY' || { ok "mutant $1: desen tutmadı" 1; return; }
