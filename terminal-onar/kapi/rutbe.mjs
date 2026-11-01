@@ -28,13 +28,8 @@ export function rutbeHaritasi(uyeler, acik = []) {
   return h;
 }
 
-/** Koltuğun rütbesi: önce birebir ad, sonra katlanmış ad; yoksa {}. Reisin kendi koltuğu açık değilse reislik ana koltuğa düşer (reis oradadır). */
-export function rutbeBul(harita, koltuk, { ana = '', acik = [] } = {}) {
+/** Koltuğun rütbesi: önce birebir ad, sonra katlanmış ad; yoksa {}. Ana koltukta rutbe olmaz (Sultan kararı): reisin koltuğu açık değilse bile rütbe anaya düşmez. */
+export function rutbeBul(harita, koltuk) {
   const bul = (ad) => harita.get(ad) || [...harita].find(([k]) => adKatla(k) === adKatla(ad))?.[1];
-  const r = bul(koltuk);
-  if (r) return r;
-  if (koltuk !== ana) return {};
-  const reis = [...harita].find(([, v]) => v.kademe === 'reis');
-  if (!reis || acik.some((a) => adKatla(a) === adKatla(reis[0]))) return {};
-  return reis[1];
+  return bul(koltuk) || {};
 }
