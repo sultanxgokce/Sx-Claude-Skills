@@ -1,0 +1,25 @@
+{
+  "is": "duzen-gece-yenile-paket-ekipc",
+  "cumle": "duzen-gece.sh bayat kimlik yenilemesini Nexus ekipc yerine betiğin yanındaki vendor'lı paket ekipc.sh ile yapar, sınav cron ortamında PyYAML'sız env -i koşar, duzen 1.6.2",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-01T03:23:56+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: cron",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
