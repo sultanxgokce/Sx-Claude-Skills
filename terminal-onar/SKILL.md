@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.38.3
+version: 2.38.4
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.38.4 · Bekçi ana oturumu yönetici KİMLİĞİNDEN de bulur (1 Kas · kart terminal-onar-ana-tmux-yonetici-kimlik · SERDAR NAZIR ölçümü)
+`meta.yonetici` bir üye kimliği olabilir (NAZIR: `nazir-sehbender`, oturumu `sehbender`). `ana_tmux_turet` artık kutu önekli kimliği kayıttaki `tmux` adına çevirir; çevrilen oturum canlıysa ana odur, değilse eski düşüş (`<kutu>-ana`). Önceden `sehbender` bulunamıyor, bekçi yeni bir ana oturum açıyordu. Kutu önek şartı ve canlılık şartı aynen durur.
 
 ## 🆕 2.38.3 · Ana oturum reisin koltuğudur, koltuk cevabı gorunen_ad yollar (1 Kas · kart terminal-onar-ana-oturum-reis-gorunen-ad · Sultan filo kuralı)
 Kutuda ayrı ana koltuk yoktur: ana oturum reisin koltuğudur. Reisin KENDİ koltuğu açık değilse ana koltuk reis rütbesini ve reisin adını (`gorunen_ad`) taşır. Reisin ayrı koltuğu açıksa (kod kutusu: SERDAR ayrı) ana rütbesiz kalır, 2.38.2 davranışı. `/api/koltuklar` her koltuğa kayıttaki görünen adı `gorunen_ad` olarak yollar (kayıtta `ad` yoksa alan yazılmaz); amirliği olmayan koltukların Türkçe adı böyle düzelir. Bekçinin ana oturumu ekip kaydındaki `meta.yonetici`den türetmesi 2.37.1'de zaten vardır; bu sürümde değişmedi.
