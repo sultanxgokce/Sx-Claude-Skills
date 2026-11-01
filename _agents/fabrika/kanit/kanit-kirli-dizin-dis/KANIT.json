@@ -1,0 +1,94 @@
+{
+  "is": "kanit-kirli-dizin-dis",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T11:15:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-eski-kod",
+      "asama": "once",
+      "dosya": "olcum-sinav-eski-kod-once.txt",
+      "sha256": "d912bb5b8db004d83dea1a51af29315d7ef88c140ecfbab44caab0f76cca82fa",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T11:15:06+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d734f41f869746f8a4d3ca3cf44529aa",
+      "olculen_commit": "b29e4d55aef56b47f7e7532535b81bdd10c200cb",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-yeni-kod",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-yeni-kod-sonra.txt",
+      "sha256": "4fe9828a75a3b18c60d161c443d28e081334b777a86fd96acb94f384c47d8d85",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T11:15:34+03:00",
+      "sure_sn": 6.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "288883a54bd749a6b8e25e0133fc2c98",
+      "olculen_commit": "b29e4d55aef56b47f7e7532535b81bdd10c200cb",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-dislama-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-dislama-yok-tek.txt",
+      "sha256": "6c9db5cb61b0ed78edced8e1167c05f170fbfd362f05df046f94b49068b881a0",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-kirli-dizin-dis/mutant.sh",
+        "dislama-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T11:15:35+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "27decfc96b63419d82180fe1d82cca07",
+      "olculen_commit": "b29e4d55aef56b47f7e7532535b81bdd10c200cb",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-her-seyi-disla",
+      "asama": "tek",
+      "dosya": "olcum-mutant-her-seyi-disla-tek.txt",
+      "sha256": "d8c0c72ec09ba960a9b6b200f20ef8f4d396f8427a67108a5671ebd3f1218ab2",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-kirli-dizin-dis/mutant.sh",
+        "her-seyi-disla"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T11:15:36+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d30b270d98da4cdb9a79688a05f3ddf6",
+      "olculen_commit": "b29e4d55aef56b47f7e7532535b81bdd10c200cb",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "6eb5570fd1a7e8fc80c1a0f412fe775b0a430bf0fabd88dffed6bc901bc54ed5"
+}
