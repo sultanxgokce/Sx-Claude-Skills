@@ -1,7 +1,7 @@
 {
   "is": "duzen-gece-yenile-paket-ekipc",
   "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T03:25:49+03:00",
+  "guncelleme": "2026-11-01T03:25:50+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -21,7 +21,30 @@
       "olcum_id": "06bda8079f5c4a18b6f89c818d3568a7",
       "olculen_commit": "db22c220115c49feb0a1033bf5de3ee60bb83a97",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gece-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-gece-mutant-sonra.txt",
+      "sha256": "db43b987d4f67cee23c5780a2d368ed3d7f8a939d2a9ff3223af93a56ffb49fe",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gece-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T03:25:50+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "gece-paket-ekipc",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "856210a41b02458cbca19dae1a28075c",
+      "olculen_commit": "84b86b2e601a927a814ee1d60237ba721acd2893",
+      "olculen_kirli": false
     }
   ],
-  "imza": "fc0ad16343683dc98903955107c93c403900f144c551a3a2d46390e6bb8b1053"
+  "imza": "b035536c1b1ad1f0b064a586ca182fa4120f6e7192e1f624bc9a3a4c6595f6d7"
 }
