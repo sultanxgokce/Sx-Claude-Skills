@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "rutbe-koltuk-alani",
+  "pr": "652",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T14:25:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-rutbe-koltuk-alani",
+  "dal": "rutbe-koltuk-alani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23335,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 7746
+  },
+  "dalgic": "uyumsuz",
+  "bas": "665e04c5187e202d22c86b43507fddae5585728f",
+  "duzeltme_farki": {
+    "onceki_bas": "dd3b48d3d7f55f15c6eadb6bd351c842e4753bfb",
+    "dosya": 9,
+    "bayt": 15165,
+    "tam_bayt": 40816
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kapı cevabı kayıttan türetilen rütbe ve amir bilgisini taşıyor, bilgisiz koltuklarda alan bırakmıyor; ayrıca görünen karşılık için `kademe_ad` eklenmiş. Ancak önceki turdaki sözleşme uyumsuzluğu kapanmamış: kart `kademe` değerini `oda müdürü` olarak isterken asıl `kademe` alanı hâlâ `mudur` dönüyor; önce bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: istenen `kademe` sözleşmesini düzeltmek yerine yeni bir `kademe_ad` alanı eklenmiş; müdür kaydında `kademe` hâlâ `mudur`, `oda müdürü` ise farklı bir alanda dönüyor.",
+        "kanit": "`KADEME_AD` eşlemesi `mudur` için `oda müdürü` üretse de kademe hesabı müdür dalında hâlâ `'mudur'` seçiyor ve cevap nesnesi ikisini `{ kademe, kademe_ad: KADEME_AD[kademe] }` olarak ayrı alanlarda yayıyor. Güncellenen R3 ve RT1 sınavları da `kademe === 'mudur'` ile birlikte yalnız `kademe_ad === 'oda müdürü'` kabul ederek bu sözleşmeyi doğruluyor.",
+        "konum": "terminal-onar/kapi/rutbe.mjs:10,24-27; terminal-onar/kapi/rutbe.test.mjs:11; terminal-onar/kapi/sunucu.test.mjs:601",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçümler birimde 15/15 ve sunucu ucunda 139/139 yeşil, mutasyon kaydı da bilerek bozulan kodun sınavı düşürdüğünü gösteriyor. Bununla birlikte ölçümler kirli çalışma ağacında alınmış ve sınavlar karttaki `kademe: oda müdürü` sözleşmesini değil, yeni `kademe: mudur` + `kademe_ad: oda müdürü` varsayımını ölçüyor; bu nedenle önceki bulgunun kapandığına kanıt oluşturmuyor."
+  }
+}
