@@ -92,7 +92,8 @@ if eski not in s: print("DESEN-YOK"); sys.exit(7)
 open(p, "w", encoding="utf-8").write(s.replace(eski, yeni, 1))
 PY
   local prc=$?; [ $prc -eq 0 ] || { echo "  ✗ mutant $1 kurulamadı (desen tutmadı, rc=$prc)"; MUTK=$((MUTK+1)); return; }
-  kos "$d" 1; local r=$?
+  local q=1; [ -z "${SADECE_MUTANT:-}" ] || q=0   # tek-mutant kipi AYRINTILI basar: kanıt aracı düşen kapıyı (✗ satırı, "N kaldı") çıktıdan tanır
+  kos "$d" "$q"; local r=$?
   [ -z "${SADECE_MUTANT:-}" ] || exit "$r"
   if [ $r -gt 0 ]; then echo "  ✓ mutant $1 yakalandı ($r vaka kırmızı)"; else echo "  ✗ mutant $1 YAŞIYOR — sınav bu bozulmayı görmüyor"; MUTK=$((MUTK+1)); fi
 }
