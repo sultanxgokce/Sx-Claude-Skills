@@ -1,7 +1,19 @@
-=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 5 ama düşen kapı satırı YOK (✗/FAIL/N kaldı/KALAN: N) = ÇÖKÜŞ ya da kurulum hatası → ÖLÇÜLEMEDİ (yakalandı DEĞİL). Gerçek kod ölçümü: olcum-sultan-karari-sinavi-* ===
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sultan-karari-sinavi-* ===
 $ env SADECE_MUTANT=sirada-suzgeci-yok bash /config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-karari/gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
-# rc=5 sure=136.2s zaman=2026-11-01T09:53:35+03:00
+# rc=1 sure=477.0s zaman=2026-11-01T10:07:56+03:00
 --- stdout ---
 ── mutantlar
+  ✓ L1 Sultan kararı (sahip sultan + kapı karar): satır sonunda iki işaret de var
+  ✓ L2 yalnız sahip sultan: sahip işareti var, kapı işareti YOK
+  ✓ L3 yalnız kapı (ticari): kapı işareti var, sahip işareti YOK
+  ✓ L4 sıradan iş işaret taşımaz; oda işareti eskisi gibi kalır
+  ✓ L5 eski okuyucu (split(None,6)): ilk 6 sütun ve başlık işaretlerden etkilenmez
+  ✗ S1 Sırada yalnız sıradan işleri sayar (A, O, N3 = 3); Sultan kararları (S1, S2, K1) SAYILMAZ
+  ✗ S2 havuz da yalnız sıradan işi sayar (H2 = 1); Sultan kararı H1 SAYILMAZ
+  ✗ S3 ISI/MADDE satırlarında hiçbir Sultan kararı yok
+  ✓ S4 başlıkta geçen "sahip: sultan" metni sıradan işi ELEMEZ (işaret yalnız satır sonundan okunur)
+  ✗ S5 varsayılan koşuda ustlen YALNIZ sıradan işe gider (A); Sultan kararına PATCH yok
+  ✗ S6 kutuda yalnız Sultan kararı varsa: SIRADA=0, HAVUZDA=0, başlamaz, hiçbir şey yazılmaz
+── 6 geçti · 5 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-sirada-bak-sultan-karari-mutant-sirada-suzgeci-yok 136 sn bekledi (yuva 2, load1 13.38)
+⏳ agir-sira: kanit-sirada-bak-sultan-karari-mutant-sirada-suzgeci-yok 476 sn bekledi (yuva 1, load1 17.45)
