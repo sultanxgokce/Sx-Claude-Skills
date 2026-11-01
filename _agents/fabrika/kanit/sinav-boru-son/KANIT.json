@@ -1,0 +1,65 @@
+{
+  "is": "sinav-boru-son",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T11:15:39+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi",
+      "asama": "once",
+      "dosya": "olcum-kapi-once.txt",
+      "sha256": "a59bf8aa2d1cf8bb1755ead5736be7f5e86cd21c0ea06c2da735528020533ca8",
+      "komut": [
+        "python3",
+        "scripts/sinav-boru-kapi.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T11:15:37+03:00",
+      "sure_sn": 25.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "24240c6af49148fdaa7ac73a615dbe0e",
+      "olculen_commit": "07c92e875756b72ce102ffd341cf5a0e8332eb19",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sonra.txt",
+      "sha256": "0b8b9ebfe71038145613a6fb314bfe718ccc28b9f0b682125df07ebbca9e2de7",
+      "komut": [
+        "python3",
+        "scripts/sinav-boru-kapi.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T11:15:37+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1311c059e5c3492f9dad2402c4c08d43",
+      "olculen_commit": "07c92e875756b72ce102ffd341cf5a0e8332eb19",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "4eb10c48485dae5cb46fadb8d5aba265ee59ea2b0ca791bb24eb9c28ee4606d6",
+      "komut": [
+        "bash",
+        "scripts/sinav-boru-kapi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T11:15:39+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "35319dea18b44381ac0e65ecf850492a",
+      "olculen_commit": "07c92e875756b72ce102ffd341cf5a0e8332eb19",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "15b647ebff59914dfee444b2a296d8c09b84152236973df3f06db9f61748c4ca"
+}
