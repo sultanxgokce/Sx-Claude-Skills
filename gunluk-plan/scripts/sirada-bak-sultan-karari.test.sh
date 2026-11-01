@@ -75,12 +75,14 @@ kos(){
   return $k
 }
 
-echo "── gerçek betikler"
-kos "$HERE" 0; RC=$?
+# SADECE_MUTANT=<ad>: yalnız o mutantı kurar ve sınavı koşar; çıkış kodu = kırmızı vaka sayısı (0 = mutant YAŞIYOR). Kanıt aracı mutant başına bu kipi kaydeder.
+RC=0
+if [ -z "${SADECE_MUTANT:-}" ]; then echo "── gerçek betikler"; kos "$HERE" 0; RC=$?; fi
 
 # Mutantlar: her biri betiklerin TEMİZ kopyasında tek bozulma; sınav o mutantta kırmızıya DÖNMELİ (dönmezse sınav süstür).
 echo "── mutantlar"
 mut(){  # <ad> <dosya> <python-değiştirme: eski||yeni>
+  [ -z "${SADECE_MUTANT:-}" ] || [ "$SADECE_MUTANT" = "$1" ] || return 0
   local d="$T/mut-$1"; mkdir -p "$d"; cp "$HERE"/*.sh "$d"/ 2>/dev/null
   python3 - "$d/$2" "$3" <<'PY'
 import sys
@@ -91,6 +93,7 @@ open(p, "w", encoding="utf-8").write(s.replace(eski, yeni, 1))
 PY
   local prc=$?; [ $prc -eq 0 ] || { echo "  ✗ mutant $1 kurulamadı (desen tutmadı, rc=$prc)"; MUTK=$((MUTK+1)); return; }
   kos "$d" 1; local r=$?
+  [ -z "${SADECE_MUTANT:-}" ] || exit "$r"
   if [ $r -gt 0 ]; then echo "  ✓ mutant $1 yakalandı ($r vaka kırmızı)"; else echo "  ✗ mutant $1 YAŞIYOR — sınav bu bozulmayı görmüyor"; MUTK=$((MUTK+1)); fi
 }
 MUTK=0
@@ -100,5 +103,6 @@ mut yalniz-sahip-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " i
 mut tum-satiri-tarar sirada-bak.sh 'ek=p[6].rsplit("(son:",1)[-1]||ek=p[6]'
 mut liste-sahip-isareti-yok gorev.sh '+ ("  sahip: sultan" if str(g["canli"].get("sahip","")).strip().lower()=="sultan" else "")||'
 mut liste-kapi-isareti-yok gorev.sh '+ (("  kapi: %s" % g["canli"]["kapi"].strip()) if isinstance(g["canli"].get("kapi"),str) and g["canli"]["kapi"].strip() else "")||'
+[ -z "${SADECE_MUTANT:-}" ] || { echo "SADECE_MUTANT=$SADECE_MUTANT tanımsız ad" >&2; exit 99; }
 echo "── mutant özeti: $MUTK yaşayan/kurulamayan"
 [ "$RC" -eq 0 ] && [ "$MUTK" -eq 0 ]
