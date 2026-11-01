@@ -1,0 +1,166 @@
+{
+  "is": "sync-drift-kip-onar",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T09:33:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-eski-kod",
+      "asama": "once",
+      "dosya": "olcum-sinav-eski-kod-once.txt",
+      "sha256": "47dbc6557dc8425c5b7ccdd2e8214ef3e836e83d03a1aae65c5f70d9b8fb5462",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T09:32:55+03:00",
+      "sure_sn": 3.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "435ffa93bd064fc19862dba1362949b3",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-yeni-kod",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-yeni-kod-sonra.txt",
+      "sha256": "e5daceeafab0937166cc15728ab5d3cd0f512a6d5ac09568f34caa3310f7cd72",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:33:19+03:00",
+      "sure_sn": 2.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "791eda015aa44ad8b370b2b0065c6fee",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-icerik-dali",
+      "asama": "tek",
+      "dosya": "olcum-mutant-icerik-dali-tek.txt",
+      "sha256": "7a939148cfea48acab183c1cec13d20f04e0ab82737ffd2005c3b5427b168e2e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sync-drift-kip-onar/mutant.sh",
+        "icerik-dali"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:33:21+03:00",
+      "sure_sn": 2.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "4ede488c6d1b460db265f0ee0f90e522",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-yeni-dali",
+      "asama": "tek",
+      "dosya": "olcum-mutant-yeni-dali-tek.txt",
+      "sha256": "8e0b87550f04ed32163777e77d9849774682cbb2f0c43d892f53496ebf1750e1",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sync-drift-kip-onar/mutant.sh",
+        "yeni-dali"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:33:24+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "4d3874622de0401c82f5ba8d61dc9ac7",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kuru-yazar",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kuru-yazar-tek.txt",
+      "sha256": "5d9f436cbabc780bacca037b567884fc090be14a2a43a0cf98f8faa3f30e0146",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sync-drift-kip-onar/mutant.sh",
+        "kuru-yazar"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:33:30+03:00",
+      "sure_sn": 6.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d904b47f7ef4420f8f7025906b380fe4",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sessiz",
+      "asama": "tek",
+      "dosya": "olcum-mutant-sessiz-tek.txt",
+      "sha256": "b7e4591ccf48945202e23a9a3558c74686b5910a815d97398b3f9e7acb45b81f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sync-drift-kip-onar/mutant.sh",
+        "sessiz"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:33:32+03:00",
+      "sure_sn": 2.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "d999c79a61314803b73a0ad4d5a54ba9",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-uyari-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-uyari-yok-tek.txt",
+      "sha256": "61136e655798cfa0755ebe1526282e44d7219c5c55e6df26b1cd2646f73872e9",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sync-drift-kip-onar/mutant.sh",
+        "uyari-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T09:33:36+03:00",
+      "sure_sn": 4.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-yeni-kod",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "33e8a41e17b540a8842a988d8e624eb7",
+      "olculen_commit": "4cdfa86fa80714d53cbcb23839bdafcccd3d3200",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "af94e76796097bfe05dbba27eee98c1c77334fa225075f38e7e34c019b98d68c"
+}
