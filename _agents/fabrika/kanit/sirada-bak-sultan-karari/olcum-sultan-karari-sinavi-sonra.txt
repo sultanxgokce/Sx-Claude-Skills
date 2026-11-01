@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sbk-sonra.sh
+# rc=0 sure=414.9s zaman=2026-11-01T09:50:48+03:00
+--- stdout ---
+── 11 geçti · 0 kaldı
+── mutantlar
+  ✓ mutant sirada-suzgeci-yok yakalandı (5 vaka kırmızı)
+  ✓ mutant yalniz-kapi-suzer yakalandı (3 vaka kırmızı)
+  ✓ mutant yalniz-sahip-suzer yakalandı (3 vaka kırmızı)
+  ✓ mutant tum-satiri-tarar yakalandı (2 vaka kırmızı)
+  ✓ mutant liste-sahip-isareti-yok yakalandı (5 vaka kırmızı)
+  ✓ mutant liste-kapi-isareti-yok yakalandı (5 vaka kırmızı)
+── mutant özeti: 0 yaşayan/kurulamayan
+--- stderr ---
+⏳ agir-sira: kanit-sirada-bak-sultan-karari-sultan-karari-sinavi 411 sn bekledi (yuva 2, load1 16.03)

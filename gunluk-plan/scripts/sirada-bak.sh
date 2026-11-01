@@ -68,6 +68,8 @@ for i,s in enumerate(sys.stdin):
     p=s.rstrip("\n").split(None,6)
     if len(p)<7 or not p[0].startswith("gorev_"): continue   # id kutu durum aciliyet etiket atanan BAŞLIK
     if p[1]!=kutu or p[2] not in sys.argv[3].split(","): continue
+    ek=p[6].rsplit("(son:",1)[-1]   # satır sonu işaretleri (gorev.sh liste): "  sahip: sultan" / "  kapi: <kapı>" = Sultan kararı bekleyen kayıt
+    if "  sahip: sultan" in ek or "  kapi: " in ek: continue   # Sultan kararı AJAN İŞİ DEĞİL: ne Sırada ne havuz sayısına girer, ne ustlen edilir (AAHWYF243, MÜZEHHİP iki kez yanıldı)
     ben="1" if (p[5]=="-" or (kim and n(p[5])==kim)) else "0"   # başlatma adayı: koltuğa atanmış ya da sahipsiz; başkasına atanmış iş ÜSTLENİLMEZ
     r.append((oncel.get(p[3],4),i,p[0],p[3],p[6].split("  (son:")[0],ben))
 for o,i,gid,ac,b,ben in sorted(r): print("%s\t%s\t%s\t%s"%(gid,ac,b,ben))
