@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-gece-paket-ekipc-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gece-mutant.sh
+# rc=1 sure=1.5s zaman=2026-11-01T03:25:50+03:00
+--- stdout ---
+  ✗ G13 cron ortamında yenileme paket ekipc.sh ile (depo ekipc.sh çağrılmaz), kimlik yenilendi → rc=1 sync --skill duzen --apply
+== 12 geçti · 1 düştü ==
+--- stderr ---

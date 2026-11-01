@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/gece-gercek.sh
+# rc=0 sure=12.3s zaman=2026-11-01T03:28:40+03:00
+--- stdout ---
+  ✓ mutant 'depo-ekipc-yoluna-don' → G13 kırmızı
+  ✓ mutant 'force-gecir' → G8 kırmızı
+== 20 geçti · 0 düştü ==
+--- stderr ---

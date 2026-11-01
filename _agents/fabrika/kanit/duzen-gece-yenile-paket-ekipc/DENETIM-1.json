@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "duzen-gece-yenile-paket-ekipc",
+  "pr": "637",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T03:27:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-yenile-paket-ekipc",
+  "dal": "duzen-gece-yenile-paket-ekipc",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14607,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3742
+  },
+  "dalgic": "uyumsuz",
+  "bas": "91bbbbb4a2584ada93c04b1994399e6c5831356f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Bayat kimlik yenilemesi paket yanındaki ekipc.sh’ye çevrilmiş, sürüm 1.6.2 yapılmış ve eski yola dönüşü yakalayan mutasyon sınavı eklenmiş. Ancak iş kartının açıkça istediği “PyYAML’sız cron ortamı” sınavı gerçek paket ekipc.sh’yi değil sahte bir betiği çalıştırdığı için bu koşul doğrulanmıyor; önce sınavı gerçek entegrasyonu ölçecek hale getirin.",
+    "bulgular": [
+      {
+        "ne": "G13, PyYAML’sız ortamda vendor’lı gerçek paket ekipc.sh’nin çalıştığını sınamıyor; test paket ekipc.sh’yi yalnız kayıt yazan sahte bir betikle değiştiriyor. Böylece vendor/PyYAML yükleme yolu bozuk olsa dahi sınav yeşil kalabilir.",
+        "kanit": "Testte `printf ... > \"$T/pkg/ekipc.sh\"` ile sahte ekipc oluşturuluyor; ardından `env -i` koşusu yalnız `PAKET-ekipc` kaydını ve `yenilendi` günlüğünü arıyor. Gerçek ölçüm 19/19 geçiş gösterse de ölçülen G13 bu sahte betiğe dayanıyor.",
+        "konum": "duzen/scripts/duzen-gece.test.sh:99",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sürüm notu yeni sınavı G12 diye adlandırırken test ve mutasyon kapısı G13 adını kullanıyor.",
+        "kanit": "SKILL.md eklenen 1.6.2 notunda “Sınav G12” yazıyor; testte açıklama, `ok` ve mutasyon hedefi G13.",
+        "konum": "duzen/SKILL.md:108",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm 19/19 yeşil, ayrıca eski depo yoluna dönüş mutasyonu G13’ü beklenen biçimde düşürüyor. Ancak önce/sonra çifti yok ve asıl eksik, yeşil sınavın gerçek vendor’lı ekipc/PyYAML’sız entegrasyonunu ölçmemesi; bu nedenle iş kartındaki tam iddia kanıtlanmış sayılmaz."
+  }
+}

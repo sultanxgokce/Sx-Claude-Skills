@@ -96,6 +96,20 @@ ok "G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: 
 kurulu 1.1.1; O="$(kos --uygula --depo "$T/bayat" --reis SERDAR)"
 ok "G8 hiçbir komuta --force geçmez" "$(! grep -q -- '--force' "$KAYIT" && echo 0 || echo 1)"
 
+# G13 cron ortamı: DUZEN_YENILE_CMD yokken (env -i, zamanlayıcı gibi çıplak ortam) yenileme betiğin YANINDAKİ paket ekipc.sh ile yapılır, depodaki (vendor'sız) scripts/ekipc.sh ile DEĞİL
+mkdir -p "$T/pkg" "$T/bayat/scripts"
+cp "$R" "$T/pkg/duzen-gece.sh"; cp "$HERE/surum.sh" "$T/pkg/surum.sh"
+printf '#!/usr/bin/env bash\nprintf "PAKET-ekipc %%s\\n" "$*" >> "$KAYIT"\n' > "$T/pkg/ekipc.sh"
+printf '#!/usr/bin/env bash\nprintf "DEPO-ekipc %%s\\n" "$*" >> "$KAYIT"\nexit 2\n' > "$T/bayat/scripts/ekipc.sh"
+kaynak 1.2.0; kurulu 1.1.1; : > "$KAYIT"
+O="$(env -i PATH=/usr/bin:/bin LC_ALL=C.UTF-8 KAYIT="$KAYIT" DUZEN_SYNC_CMD="bash $T/sync" DUZEN_MEKTUP_CMD="bash $T/mektup" DUZEN_KURULU_KOK="$T/kur" bash "$T/pkg/duzen-gece.sh" --uygula --sx "$T/sx" --gunluk "$T/g12.log" --kutu code --depo "$T/bayat" --reis SERDAR 2>&1)"; rc=$?
+ok "G13 cron ortamında yenileme paket ekipc.sh ile (depo ekipc.sh çağrılmaz), kimlik yenilendi" "$([ $rc -eq 0 ] && grep -q '^PAKET-ekipc ' "$KAYIT" && ! grep -q '^DEPO-ekipc' "$KAYIT" && grep -q 'yenilendi kimlik=bani' "$T/g12.log" && echo 0 || echo 1)" "→ rc=$rc $(head -c 300 "$KAYIT")"
+
+# G14 aynı çıplak ortamda (PyYAML'sız python: -S) GERÇEK paket ekipc.sh (sahte değil) bayat kimliğin yenile KURU koşusunu exit 0 ile bitirir → vendor/yaml gerçekten yüklenir (eski davranış exit 2)
+mkdir -p "$T/yamlsiz"; printf '#!/bin/sh\nexec %s -S "$@"\n' "$(command -v python3)" > "$T/yamlsiz/python3"; chmod +x "$T/yamlsiz/python3"
+O="$(env -i PATH="$T/yamlsiz:/usr/bin:/bin" LC_ALL=C.UTF-8 bash "$HERE/ekipc.sh" yenile --dosya "$T/bayat/_agents/bani/AGENT.md" --baz manuel-claude 2>&1)"; rc=$?
+ok "G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir)" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc $(tail -c 200 <<<"$O")"
+
 if [ -z "${GECE_BETIK:-}" ]; then
   echo "── mutasyon"
   mut() { local M="$HERE/.mutant-gece-$$-$1"; python3 -I - "$R" "$M" "$2" "$3" <<'PY' || { ok "mutant $1: desen tutmadı" 1; return; }
@@ -106,6 +120,7 @@ PY
   mut duzen-surumu-tetik-degil 'ZORLA=0; { [ -z "$dku" ] || yeni_mi "$dk" "$dku"; } && ZORLA=1' 'ZORLA=0' G10
   mut reissiz-mektup 'if [ -z "$REIS" ]; then yaz' 'if false; then yaz' G5
   mut otonom-temel-bilinmez 'otonom-ajan) arg=(--baz otonom-ajan); t=otonom-ajan ;; ' '' G11
+  mut depo-ekipc-yoluna-don 'bash $HERE/ekipc.sh yenile' 'bash $DEPO/scripts/ekipc.sh yenile' G13
   mut force-gecir '--skill "$b" --apply' '--skill "$b" --apply --force' G8
 fi
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]
