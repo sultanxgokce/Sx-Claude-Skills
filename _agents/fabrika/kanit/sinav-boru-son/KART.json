@@ -1,0 +1,45 @@
+{
+  "is": "sinav-boru-son",
+  "cumle": "İskan sınavının ikinci yarısında kalıp kalksın ve kapı CI adımı açılsın: iskan farkı tek başına göz tavanını aşıyor",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-01T10:57:20+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T10:57:20+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "sinav-boru-kalan"
+    },
+    {
+      "zaman": "2026-11-01T11:15:04+03:00",
+      "olay": "gorev-bagla",
+      "reis": "BÂNİ",
+      "gorev": "gorev_01M6AAMR2HK7DMV7B6EHT8WTGF",
+      "kimlik": "bag-1086920-1793520904975333361"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "koken": "sinav-boru-kalan",
+  "gorev": "gorev_01M6AAMR2HK7DMV7B6EHT8WTGF",
+  "tahmin_dk": 45,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-01T11:15:06+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı",
+      "kimlik": "bag-1086920-1793520904975333361"
+    }
+  ]
+}

@@ -1651,14 +1651,14 @@ SUM_KR_1="$(md5sum "$KR_REPO"/infra/*)"
 [ "$rc" = "3" ] && ok "kur --dry-run: plan-exit=3" || bad "kur --dry-run: rc beklenen 3, gelen $rc"
 adim_eksik=""
 for a in "1/8: yeni-proje" "2/8: durak1-cloudtop-pr" "3/8: iskan-host" "4/8: provizyon" "5/8: cf-yayin" "6/8: ekip-yerlestir" "7/8: ekip-pong" "8/8: evergreen-kaydet"; do
-  printf '%s' "$out" | grep -q "kur adım $a" || adim_eksik="$adim_eksik [$a]"
+  printf '%s' "$out" | grep "kur adım $a" >/dev/null || adim_eksik="$adim_eksik [$a]"
 done
 [ -z "$adim_eksik" ] && ok "kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)" \
   || bad "kur --dry-run: zincir-planında eksik adım:$adim_eksik"
 [ "$SUM_KR_0" = "$SUM_KR_1" ] && [ ! -e "$KR_STATE/iskan-kur-kurtest.state" ] \
   && ok "kur --dry-run: hiçbir yazma yok (fixture md5 değişmez + durum-dosyası doğmadı)" \
   || bad "kur --dry-run: yazma tespit edildi (dry-run sözleşme ihlali)"
-printf '%s' "$out" | grep -q 'DURAK-1' && ok "kur --dry-run: DURAK-1 (cloudtop-PR merge durağı) planda görünür" \
+printf '%s' "$out" | grep 'DURAK-1' >/dev/null && ok "kur --dry-run: DURAK-1 (cloudtop-PR merge durağı) planda görünür" \
   || bad "kur --dry-run: DURAK-1 planda yok"
 
 # 55. kur GO'suz apply: adım-1 yeni-proje --apply exit=4 AYNEN iletilir + zincir DURur
@@ -1667,14 +1667,14 @@ SUM_KR_2="$(md5sum "$KR_REPO/infra/docker-compose.server.yml")"
 out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurgo 2>&1)"
 rc=$?
 SUM_KR_3="$(md5sum "$KR_REPO/infra/docker-compose.server.yml")"
-[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' && printf '%s' "$out" | grep -q 'GO-durağında DURDU' \
+[ "$rc" = "4" ] && printf '%s' "$out" | grep 'ISKAN_FAZ4_GO' >/dev/null && printf '%s' "$out" | grep 'GO-durağında DURDU' >/dev/null \
   && ok "kur GO'suz: adım-1 exit=4 iletildi + GO-durağı Sultan-dilinde raporlandı" \
   || bad "kur GO'suz: exit-4 iletimi kırık (rc=$rc)"
 # regresyon: GO-durak mesajı adım-sayısını PARAMETRİK bassın (adım 1/8, magic-7 kalıntısı DEĞİL — adversaryal MINOR)
-printf '%s' "$out" | grep -q 'GO-durağında DURDU (adım 1/8:' && ! printf '%s' "$out" | grep -q 'adım 1/7' \
+printf '%s' "$out" | grep 'GO-durağında DURDU (adım 1/8:' >/dev/null && ! printf '%s' "$out" | grep 'adım 1/7' >/dev/null \
   && ok "kur GO'suz: GO-durak mesajı parametrik payda basar (adım 1/8, header ile tutarlı)" \
   || bad "kur GO'suz: GO-durak mesajı magic-7 kalıntısı basıyor (adım 1/7, header 1/8 ile çelişir)"
-[ "$SUM_KR_2" = "$SUM_KR_3" ] && [ ! -e "$KR_STATE/iskan-kur-kurgo.state" ] && ! printf '%s' "$out" | grep -q 'kur adım 2/8' \
+[ "$SUM_KR_2" = "$SUM_KR_3" ] && [ ! -e "$KR_STATE/iskan-kur-kurgo.state" ] && ! printf '%s' "$out" | grep 'kur adım 2/8' >/dev/null \
   && ok "kur GO'suz: zincir DURdu (adım-2 koşulmadı + md5 değişmez + durum-dosyası doğmadı)" \
   || bad "kur GO'suz: DUR sözleşmesi kırık"
 
@@ -1682,7 +1682,7 @@ printf '%s' "$out" | grep -q 'GO-durağında DURDU (adım 1/8:' && ! printf '%s'
 #     + durum-dosyası 'yeni-proje' (adım-scope'lu env; kalıcı export YOK)
 out="$(env "${KR_ENV[@]}" ISKAN_FAZ4_GO=1 bash "$SCRIPT_DIR/iskan.sh" kur kurdurak 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep "DURAK-1'de duraklatıldı" >/dev/null \
   && ok "kur DURAK-1: merge-öncesi zincir İNSAN-durağında durdu (exit=0 adım-tamam)" \
   || bad "kur DURAK-1: durak sözleşmesi kırık (rc=$rc)"
 # PR-C bilinçli-değişiklik: state v2 çok-satırlı (satır-1 adım + pin-blok) → tam-eş cat DEĞİL head-1
@@ -1695,21 +1695,21 @@ SUM_ST_0="$(md5sum "$KR_STATE/iskan-kur-kurdurak.state")"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurdurak --durum 2>&1)"
 rc=$?
 SUM_ST_1="$(md5sum "$KR_STATE/iskan-kur-kurdurak.state")"
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan: yeni-proje' \
-  && printf '%s' "$out" | grep -q 'sıradaki: durak1-cloudtop-pr' && [ "$SUM_ST_0" = "$SUM_ST_1" ] \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'son-tamamlanan: yeni-proje' >/dev/null \
+  && printf '%s' "$out" | grep 'sıradaki: durak1-cloudtop-pr' >/dev/null && [ "$SUM_ST_0" = "$SUM_ST_1" ] \
   && ok "kur --durum: salt-oku durum-raporu (son-tamamlanan + sıradaki + md5 değişmez)" \
   || bad "kur --durum: salt-oku sözleşmesi kırık (rc=$rc)"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurhic --durum 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'hiç koşulmamış' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'hiç koşulmamış' >/dev/null \
   && ok "kur --durum: durum-dosyası yokken 'hiç koşulmamış — baştan' (rc=0)" \
   || bad "kur --durum: dosyasız-durum raporu kırık (rc=$rc)"
 
 # 58. kur --devam: durum-dosyasından sürer (adım-1 TEKRAR koşulmaz), DURAK-1 hâlâ merge'siz → yine DURAK
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurdurak --devam 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan=yeni-proje' \
-  && ! printf '%s' "$out" | grep -q 'kur adım 1/8' && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'son-tamamlanan=yeni-proje' >/dev/null \
+  && ! printf '%s' "$out" | grep 'kur adım 1/8' >/dev/null && printf '%s' "$out" | grep "DURAK-1'de duraklatıldı" >/dev/null \
   && ok "kur --devam: state'ten adım-2'den sürdü (adım-1 atlandı) + DURAK-1 idempotent" \
   || bad "kur --devam: state-resume kırık (rc=$rc)"
 
@@ -1718,8 +1718,8 @@ rc=$?
 printf 'yeni-proje\n' > "$KR_STATE/iskan-kur-kurtest.state"
 out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --devam 2>&1)"
 rc=$?
-[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'kur adım 3/8: iskan-host' \
-  && ! printf '%s' "$out" | grep -q 'kur adım 1/8' && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' \
+[ "$rc" = "4" ] && printf '%s' "$out" | grep 'kur adım 3/8: iskan-host' >/dev/null \
+  && ! printf '%s' "$out" | grep 'kur adım 1/8' >/dev/null && printf '%s' "$out" | grep 'ISKAN_FAZ4_GO' >/dev/null \
   && ok "kur --devam ilerleme: DURAK-1 geçildi (origin/main'de blok) + adım-3 GO'suz exit=4 iletildi" \
   || bad "kur --devam ilerleme: sözleşme kırık (rc=$rc)"
 # PR-C bilinçli-değişiklik: v2 çok-satırlı state → head-1 (satır-1 sözleşmesi)
@@ -1734,40 +1734,40 @@ rc=$?
 rm -f "$KR_STATE/iskan-kur-kurtest.state"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'slug-kapısı' && ! printf '%s' "$out" | grep -q 'kur adım' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'slug-kapısı' >/dev/null && ! printf '%s' "$out" | grep 'kur adım' >/dev/null \
   && ok "kur slug-kapısı: kayıtlı-slug + iz-yok → zincir RED (rc=1, hiçbir adım koşulmadı — G-b)" \
   || bad "kur slug-kapısı: RED sözleşmesi kırık (rc=$rc)"
 out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --benimse 2>&1)"
 rc=$?
-[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'BİLİNÇLİ-devralındı' && printf '%s' "$out" | grep -q 'kur adım 1/8' \
+[ "$rc" = "4" ] && printf '%s' "$out" | grep 'BİLİNÇLİ-devralındı' >/dev/null && printf '%s' "$out" | grep 'kur adım 1/8' >/dev/null \
   && ok "kur slug-kapısı: --benimse bilinçli-devralma → zincir sürdü (adım-1 GO-durağına vardı)" \
   || bad "kur slug-kapısı: --benimse yolu kırık (rc=$rc)"
 # MAJOR fix: GO-durağı resume-komutu --benimse'yi TAŞIMALI (aksi hâlde tavsiyeyi izleyen --devam
 # state-boş kaldığından kapıya yeniden çarpar) — basılı komut 'kur kurtest --devam --benimse' olmalı
-printf '%s' "$out" | grep -q 'kur kurtest --devam --benimse' \
+printf '%s' "$out" | grep 'kur kurtest --devam --benimse' >/dev/null \
   && ok "kur slug-kapısı: GO-durağı resume-komutu --benimse'yi taşıdı (rıza kalıcı, MAJOR fix)" \
   || bad "kur slug-kapısı: GO-durağı --benimse'siz --devam bastı (tavsiye kapıya çarpar — MAJOR)"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'slug-kapısı önizleme' && printf '%s' "$out" | grep -q 'kur adım 8/8' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'slug-kapısı önizleme' >/dev/null && printf '%s' "$out" | grep 'kur adım 8/8' >/dev/null \
   && ok "kur slug-kapısı: dry-run REDDETMEZ — uyarı basar + tam-zincir önizlenir (salt-oku)" \
   || bad "kur slug-kapısı: dry-run uyarı-sözleşmesi kırık (rc=$rc)"
 # MINOR fix: --dry-run --benimse kombinasyonu 'devralındı, adımlar sürer' DEMEMELİ (hiçbir şey sürmez)
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --dry-run --benimse 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'gerçek koşuda BİLİNÇLİ-devralınır' && ! printf '%s' "$out" | grep -q 'adımlar idempotent-geçişlerle sürer' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'gerçek koşuda BİLİNÇLİ-devralınır' >/dev/null && ! printf '%s' "$out" | grep 'adımlar idempotent-geçişlerle sürer' >/dev/null \
   && ok "kur slug-kapısı: --dry-run --benimse doğru önizleme dili (MINOR fix, yanıltıcı 'sürer' yok)" \
   || bad "kur slug-kapısı: --dry-run --benimse mesajı yanıltıcı (rc=$rc)"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --durum 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -qE '\[(kırmızı|uyarı)\] slug-kapısı' && printf '%s' "$out" | grep -q -- 'kur kurtest --benimse' \
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -E '\[(kırmızı|uyarı)\] slug-kapısı' >/dev/null && printf '%s' "$out" | grep -- 'kur kurtest --benimse' >/dev/null \
   && ok "kur slug-kapısı: --durum kapıdan MUAF (ateşlemedi) ama şüpheli-durum notu (--benimse gerekir) düşer (MINOR fix)" \
   || bad "kur slug-kapısı: --durum muafiyet/not sözleşmesi kırık (rc=$rc)"
 
 # 59c. ROSTER CHARSET-KAPISI (ikincil, G-a): [A-Za-z0-9-] dışı üye-adı/görev fail-closed rc=1
 #      (üye-adları tırnaksız ssh/docker/tmux'a gömülür; container-içi registry yolu köprüyü bypass eder)
 out="$(bash -c "source <(sed -n '/^_ey_uye_satirlari()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _ey_uye_satirlari 'motor1:uye yonetici-x:yonetici' '' && printf 'SAYI=%s YON=%s' \"\$EY_UYE_SAYISI\" \"\$EY_YONETICI\"" 2>&1)"
-printf '%s' "$out" | grep -q 'SAYI=2 YON=yonetici-x' \
+printf '%s' "$out" | grep 'SAYI=2 YON=yonetici-x' >/dev/null \
   && ok "roster charset-kapısı: temiz-roster geçer (2 üye, yönetici doğru)" \
   || bad "roster charset-kapısı: temiz-roster yanlış-red/parse ('$out')"
 CG_KACAK=""
@@ -1786,7 +1786,7 @@ EOF
   || bad "roster charset-kapısı: KAÇAK var:$CG_KACAK"
 out="$(env "${KR_ENV[@]}" ISKAN_EY_ROSTER='pis$(id):uye' bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir kurtest --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-hijyeni' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'roster-hijyeni' >/dev/null \
   && ok "ekip-yerlestir: kötü-karakterli ISKAN_EY_ROSTER çağrı-yerinde de fail-closed (rc=1)" \
   || bad "ekip-yerlestir: charset-kapısı çağrı-yerinde delik (rc=$rc)"
 
@@ -1847,10 +1847,10 @@ done
 out="$(env ISKAN_STATE_DIR="$KR_STATE" ISKAN_EY_SSH_TIMEOUT=3 bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
 rc=$?
 pin_satir="$(printf '%s\n' "$out" | grep 'env-pin yüklendi')"
-[ "$rc" = "0" ] && printf '%s' "$pin_satir" | grep -q 'ISKAN_EY_ROSTER' \
-  && printf '%s' "$pin_satir" | grep -q 'ISKAN_CLOUDTOP_REPO_DIR' \
-  && ! printf '%s' "$pin_satir" | grep -q 'denekAlfa' \
-  && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+[ "$rc" = "0" ] && printf '%s' "$pin_satir" | grep 'ISKAN_EY_ROSTER' >/dev/null \
+  && printf '%s' "$pin_satir" | grep 'ISKAN_CLOUDTOP_REPO_DIR' >/dev/null \
+  && ! printf '%s' "$pin_satir" | grep 'denekAlfa' >/dev/null \
+  && printf '%s' "$out" | grep "DURAK-1'de duraklatıldı" >/dev/null \
   && ok "env-pin round-trip: env'siz --devam pinleri yükledi (adlar-only kanıt, değer YOK) + DURAK-1 pinli-repo'dan ölçüldü (F6 kapandı)" \
   || bad "env-pin round-trip: --devam pin-yüklemesi kırık (rc=$rc, satır: '$pin_satir')"
 
@@ -1870,8 +1870,8 @@ SUM_PIN_T0="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
 out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
 rc=$?
 SUM_PIN_T1="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'güvenlik-kapısı-pin tespit' \
-  && ! printf '%s' "$out" | grep -q '──── kur adım' && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'güvenlik-kapısı-pin tespit' >/dev/null \
+  && ! printf '%s' "$out" | grep '──── kur adım' >/dev/null && ! printf '%s' "$out" | grep 'env-pin yüklendi' >/dev/null \
   && [ "$SUM_PIN_T0" = "$SUM_PIN_T1" ] \
   && ok "env-pin K3 tamper: GO-pin görüldü → rc=1 kırmızı-DUR (sessiz-atlama YOK, sıfır pin yüklendi, dosya değişmedi)" \
   || bad "env-pin K3 tamper: GO-pin kapısı delik (rc=$rc)"
@@ -1880,8 +1880,8 @@ SUM_PIN_T1="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
 #      (PR-C bilinçli rc-değişimi: eski sözleşme --durum=0'dı; kurcalanmış state'te sahte-yeşil yok)
 out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --durum 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'son-tamamlanan: yeni-proje' \
-  && printf '%s' "$out" | grep -q 'GO-pin tespit' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'son-tamamlanan: yeni-proje' >/dev/null \
+  && printf '%s' "$out" | grep 'GO-pin tespit' >/dev/null \
   && ok "env-pin --durum tamper: rapor basıldı + sonda kırmızı GO-pin tespiti + rc=1 (sahte-yeşil yok)" \
   || bad "env-pin --durum tamper: sözleşme kırık (rc=$rc)"
 
@@ -1889,8 +1889,8 @@ rc=$?
 printf 'yeni-proje\npin ISKAN_PROD_HOSTS=pc code\n' > "$KR_STATE/iskan-kur-kurpin.state"
 out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'ISKAN_PROD_HOSTS' && printf '%s' "$out" | grep -q 'güvenlik-kapısı-pin tespit' \
-  && ! printf '%s' "$out" | grep -q '──── kur adım' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'ISKAN_PROD_HOSTS' >/dev/null && printf '%s' "$out" | grep 'güvenlik-kapısı-pin tespit' >/dev/null \
+  && ! printf '%s' "$out" | grep '──── kur adım' >/dev/null \
   && ok "env-pin deny-sınıfı-2: ISKAN_PROD_HOSTS pini → rc=1 kırmızı (7/8-hostname kapı setleri state'ten daraltılamaz)" \
   || bad "env-pin deny-sınıfı-2: PROD_HOSTS pini sessiz geçti (rc=$rc — mahrem-regresyon riski)"
 rm -f "$KR_STATE/iskan-kur-kurpin.state"
@@ -1904,8 +1904,8 @@ SUM_MF_T0="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
 out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
 rc=$?
 SUM_MF_T1="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'malforme GO/güvenlik-kapısı-pin tespit' \
-  && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' && ! printf '%s' "$out" | grep -q '──── kur adım' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'malforme GO/güvenlik-kapısı-pin tespit' >/dev/null \
+  && ! printf '%s' "$out" | grep 'env-pin yüklendi' >/dev/null && ! printf '%s' "$out" | grep '──── kur adım' >/dev/null \
   && [ "$SUM_MF_T0" = "$SUM_MF_T1" ] \
   && ok "env-pin fail-safe: malforme-GO ('ISKAN_FAZ4_GO ' trailing-space) → rc=1 refuse-all (geçerli allowlist-pin de yüklenmedi; sessiz-atlama YOK, dosya değişmedi)" \
   || bad "env-pin fail-safe: malforme-GO sessiz-atlandı (rc=$rc — kısmi-tamper onurlandırıldı)"
@@ -1915,13 +1915,13 @@ rm -f "$KR_STATE/iskan-kur-kurpin.state"
 printf 'yeni-proje\n' > "$KR_STATE/iskan-kur-kureski.state"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kureski --devam 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
-  && printf '%s' "$out" | grep -q 'son-tamamlanan=yeni-proje' && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep 'env-pin yüklendi' >/dev/null \
+  && printf '%s' "$out" | grep 'son-tamamlanan=yeni-proje' >/dev/null && printf '%s' "$out" | grep "DURAK-1'de duraklatıldı" >/dev/null \
   && ok "env-pin eski-format: tek-satır state ile --devam birebir eski davranış (pin-satırı yok, kanıt-satırı basılmaz)" \
   || bad "env-pin eski-format: geriye-uyum kırık (rc=$rc)"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kureski --durum 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan: yeni-proje' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'son-tamamlanan: yeni-proje' >/dev/null \
   && ok "env-pin eski-format: --durum rc=0 + rapor (salt-oku sözleşmesi temiz state'te DEĞİŞMEDİ)" \
   || bad "env-pin eski-format: --durum kırık (rc=$rc)"
 
@@ -1930,8 +1930,8 @@ rc=$?
 printf 'yeni-proje\npin ISKAN_SSH_HOST=pinli-host.invalid\n' > "$KR_STATE/iskan-kur-kurprec.state"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurprec --devam 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
-  && printf '%s' "$out" | grep -q 'ssh-hedef→ bilinçli-bozuk-host.invalid \[kaynak: açık-env\]' \
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep 'env-pin yüklendi' >/dev/null \
+  && printf '%s' "$out" | grep 'ssh-hedef→ bilinçli-bozuk-host.invalid \[kaynak: açık-env\]' >/dev/null \
   && ok "env-pin precedence: açık-env pin'i ezdi (harita kaynak=açık-env, pin yüklenmedi)" \
   || bad "env-pin precedence: öncelik-sırası kırık (rc=$rc)"
 out="$(env "${KR_ENV[@]}" ISKAN_FAZ4_GO=1 bash "$SCRIPT_DIR/iskan.sh" kur kurprec 2>&1)"
@@ -1946,8 +1946,8 @@ rc=$?
 printf 'yeni-proje\npin ISKAN_EY_ROSTER=denekAlfa:yonetici\n' > "$KR_STATE/iskan-kur-kuriptal.state"
 out="$(env "${KR_ENV[@]}" ISKAN_EY_ROSTER= bash "$SCRIPT_DIR/iskan.sh" kur kuriptal --devam 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
-  && printf '%s' "$out" | grep -q 'roster kaynak→ container-içi ekip-registry.yaml (default)' \
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep 'env-pin yüklendi' >/dev/null \
+  && printf '%s' "$out" | grep 'roster kaynak→ container-içi ekip-registry.yaml (default)' >/dev/null \
   && ok "env-pin pin-iptal: boş açık-env pini yok saydı → fallback yolu (container-registry) tek komutla geri geldi" \
   || bad "env-pin pin-iptal: set-ama-boş semantiği kırık (rc=$rc — bayat-roster panzehiri yok)"
 
@@ -1958,14 +1958,14 @@ out="$(env ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR="$V1_REPO" \
   ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" kur vbirtest 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'V1 hedef-ayrışma' \
-  && ! printf '%s' "$out" | grep -q '──── kur adım' && [ ! -e "$KR_STATE/iskan-kur-vbirtest.state" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'V1 hedef-ayrışma' >/dev/null \
+  && ! printf '%s' "$out" | grep '──── kur adım' >/dev/null && [ ! -e "$KR_STATE/iskan-kur-vbirtest.state" ] \
   && ok "harita V1: ayrışma ∧ compose=default → zincir adım-0 kırmızı (F1 üçlü-yazımı önlendi, state doğmadı)" \
   || bad "harita V1: F1-imzası kırmızısı kırık (rc=$rc)"
 # dry-run'da V1 BİLGİ-dilinde (plan-exit korunur) — izole-fonksiyon çağrısı (59c/59d sed-source deseni)
 out="$(bash -c "source <(sed -n '/^_kur_adim_no()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_kaynak()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_harita()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_KUR_ADIMLAR='yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir ekip-pong evergreen-kaydet'; ISKAN_KUR_PIN_YUKLENEN=''; ISKAN_CLOUDTOP_REPO_DIR='$V1_REPO' _kur_env_harita vbirtest dry-run ''" 2>&1)"
 v1rc=$?
-[ "$v1rc" = "0" ] && printf '%s' "$out" | grep -q '\[uyarı\] V1 hedef-ayrışma' \
+[ "$v1rc" = "0" ] && printf '%s' "$out" | grep '\[uyarı\] V1 hedef-ayrışma' >/dev/null \
   && ok "harita V1 dry-run: aynı ayrışma BİLGİ-dilinde [uyarı] + rc=0 (plan-exit sözleşmesi korunur)" \
   || bad "harita V1 dry-run: bilgi-dili kırık (rc=$v1rc)"
 # iki taraf da AÇIK (bilinçli worktree-PR deseni): zincir BLOKLANMAZ — adım-1'e ilerler (GO'suz exit=4)
@@ -1977,8 +1977,8 @@ out="$(env -u ISKAN_FAZ4_GO ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR=
   ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" kur vbirtest 2>&1)"
 rc=$?
-[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'BİLİNÇLİ (açık-env/pin) sayıldı' \
-  && printf '%s' "$out" | grep -q 'kur adım 1/8' \
+[ "$rc" = "4" ] && printf '%s' "$out" | grep 'BİLİNÇLİ (açık-env/pin) sayıldı' >/dev/null \
+  && printf '%s' "$out" | grep 'kur adım 1/8' >/dev/null \
   && ok "harita V1 rafine: iki taraf AÇIK → [uyarı]+devam, zincir adım-1'e ilerledi (meşru worktree-PR deseni bloklanmadı)" \
   || bad "harita V1 rafine: bilinçli-ayrışma false-positive bloklandı (rc=$rc)"
 
@@ -1993,8 +1993,8 @@ out="$(env ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR="$V2_REPO" \
   ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
   bash "$SCRIPT_DIR/iskan.sh" kur vikitest --devam 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'V2 worktree-checkout' && printf '%s' "$out" | grep -q 'ANA-checkout' \
-  && printf '%s' "$out" | grep -q 'iskan-host.sh REPO-KANIT' && ! printf '%s' "$out" | grep -q '──── kur adım' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'V2 worktree-checkout' >/dev/null && printf '%s' "$out" | grep 'ANA-checkout' >/dev/null \
+  && printf '%s' "$out" | grep 'iskan-host.sh REPO-KANIT' >/dev/null && ! printf '%s' "$out" | grep '──── kur adım' >/dev/null \
   && ok "harita V2: .git DOSYA + cf-yayin-öncesi → devam adım-0 kırmızı (üç '-d .git' kapısı erken teşhis, F2)" \
   || bad "harita V2: worktree kırmızısı kırık (rc=$rc)"
 # eşik-kanıtı (mutasyon-kalkanı): son=provizyon (<cf-yayin) hâlâ KIRMIZI; son=cf-yayin BİLGİ + rc=0
@@ -2002,7 +2002,7 @@ out="$(bash -c "source <(sed -n '/^_kur_adim_no()/,/^}/p' '$SCRIPT_DIR/iskan.sh'
 v2a=$?
 out2="$(bash -c "source <(sed -n '/^_kur_adim_no()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_kaynak()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_harita()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_KUR_ADIMLAR='yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir ekip-pong evergreen-kaydet'; ISKAN_KUR_PIN_YUKLENEN=''; ISKAN_CLOUDTOP_REPO_DIR='$V2_REPO' ISKAN_REPO_COMPOSE='$V2_REPO/infra/docker-compose.server.yml' _kur_env_harita vikitest devam cf-yayin" 2>&1)"
 v2b=$?
-[ "$v2a" = "1" ] && [ "$v2b" = "0" ] && printf '%s' "$out2" | grep -q 'cf-yayin geçilmiş' \
+[ "$v2a" = "1" ] && [ "$v2b" = "0" ] && printf '%s' "$out2" | grep 'cf-yayin geçilmiş' >/dev/null \
   && ok "harita V2 eşiği: son=provizyon→kırmızı · son=cf-yayin→bilgi+rc=0 ('<cf-yayin' eşiği birebir)" \
   || bad "harita V2 eşiği: sınır-davranışı kırık (provizyon=$v2a cf-yayin=$v2b)"
 
@@ -2018,19 +2018,19 @@ MEM_FIXTURE="/tmp/iskan-test-mem.$$.yml"
 cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$MEM_FIXTURE"
 out="$(ISKAN_REPO_COMPOSE="$MEM_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje memtest --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'mem_limit: 2g' && ! printf '%s' "$out" | grep -q '2g-altı' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'mem_limit: 2g' >/dev/null && ! printf '%s' "$out" | grep '2g-altı' >/dev/null \
   && ok "yeni-proje default mem_limit=2g (512m tuzağı kapandı; uyarısız)" \
   || bad "yeni-proje default mem_limit sözleşmesi kırık (rc=$rc)"
 
 # 61. D6 tuzak-fix (mem_limit): 2g-altı açık-beyan WARN'lanır ama hard-fail ETMEZ (bilinçli-küçük serbest)
 out="$(ISKAN_REPO_COMPOSE="$MEM_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje memtest --mem-limit 512m --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '2g-altı' && printf '%s' "$out" | grep -q 'mem_limit: 512m' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '2g-altı' >/dev/null && printf '%s' "$out" | grep 'mem_limit: 512m' >/dev/null \
   && ok "yeni-proje --mem-limit 512m: WARN basıldı + rc=3 korundu (hard-fail değil)" \
   || bad "yeni-proje --mem-limit 512m: WARN sözleşmesi kırık (rc=$rc)"
 out="$(ISKAN_REPO_COMPOSE="$MEM_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje memtest --mem-limit 4g --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && ! printf '%s' "$out" | grep -q '2g-altı' \
+[ "$rc" = "3" ] && ! printf '%s' "$out" | grep '2g-altı' >/dev/null \
   && ok "yeni-proje --mem-limit 4g: 2g-üstü uyarısız (golden)" \
   || bad "yeni-proje --mem-limit 4g: yanlış-uyarı (rc=$rc)"
 find /tmp -maxdepth 1 -name "iskan-test-mem.$$.yml" -delete 2>/dev/null
@@ -2051,33 +2051,33 @@ chmod +x "$HK_STUB/ssh"
 out="$(PATH="$HK_STUB:$PATH" HK_MEM=4096 HK_DISK=42 ISKAN_SSH_HOST=stubhost \
   ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'SIĞAR' && printf '%s' "$out" | grep -q 'boş 42G' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'SIĞAR' >/dev/null && printf '%s' "$out" | grep 'boş 42G' >/dev/null \
   && ok "iskan-host kapasite: avail 4096MB + 42G → SIĞAR satırı basıldı (rc=3 korunur)" \
   || bad "iskan-host kapasite: yeşil-yol kırık (rc=$rc)"
 out="$(PATH="$HK_STUB:$PATH" HK_MEM=1024 HK_DISK=6 ISKAN_SSH_HOST=stubhost \
   ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'SIĞMAZ' && printf '%s' "$out" | grep -q 'DAR' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'SIĞMAZ' >/dev/null && printf '%s' "$out" | grep 'DAR' >/dev/null \
   && ok "iskan-host kapasite: avail 1024MB + 6G → SIĞMAZ + disk-DAR uyarıları (dry-run karar vermez, rc=3)" \
   || bad "iskan-host kapasite: dar-yol kırık (rc=$rc)"
 out="$(ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" \
   bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
-printf '%s' "$out" | grep -q 'SIĞAR/SIĞMAZ verilemez' \
+printf '%s' "$out" | grep 'SIĞAR/SIĞMAZ verilemez' >/dev/null \
   && ok "iskan-host kapasite: erişilemez-host → dürüst 'doğrulanamadı' (sahte-verdikt yok)" \
   || bad "iskan-host kapasite: erişilemez-host 3-durum dili eksik"
 # MINOR fix: bozuk eşik-env (sayısal-olmayan) → SAHTE [kırmızı] SIĞMAZ değil, dürüst [doğrulanmadı]
 out="$(PATH="$HK_STUB:$PATH" HK_MEM=4096 HK_DISK=42 ISKAN_SSH_HOST=stubhost ISKAN_KAPASITE_MEM_MB='abc' ISKAN_KAPASITE_DISK_G='10 20' \
   ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'RAM eşiği geçersiz' && printf '%s' "$out" | grep -q 'disk eşiği geçersiz' \
-  && ! printf '%s' "$out" | grep -q 'integer expression' && ! printf '%s' "$out" | grep -qE '\[kırmızı\] (RAM|disk).*SIĞMAZ|\[kırmızı\] disk.*DAR' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'RAM eşiği geçersiz' >/dev/null && printf '%s' "$out" | grep 'disk eşiği geçersiz' >/dev/null \
+  && ! printf '%s' "$out" | grep 'integer expression' >/dev/null && ! printf '%s' "$out" | grep -E '\[kırmızı\] (RAM|disk).*SIĞMAZ|\[kırmızı\] disk.*DAR' >/dev/null \
   && ok "iskan-host kapasite: bozuk eşik-env → dürüst [doğrulanmadı] (SAHTE SIĞMAZ + ham bash-hatası yok, MINOR fix)" \
   || bad "iskan-host kapasite: bozuk-eşik sözleşmesi kırık (rc=$rc)"
 # re-verify MINOR: sayısal-AMA-taşan eşik (int64-üstü, 20 hane) da [doğrulanamadı] — ham hata+sahte SIĞMAZ yok
 out="$(PATH="$HK_STUB:$PATH" HK_MEM=4096 HK_DISK=42 ISKAN_SSH_HOST=stubhost ISKAN_KAPASITE_MEM_MB='99999999999999999999' \
   ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'RAM eşiği geçersiz' && ! printf '%s' "$out" | grep -q 'integer expression' && ! printf '%s' "$out" | grep -qE '\[kırmızı\] RAM.*SIĞMAZ' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'RAM eşiği geçersiz' >/dev/null && ! printf '%s' "$out" | grep 'integer expression' >/dev/null && ! printf '%s' "$out" | grep -E '\[kırmızı\] RAM.*SIĞMAZ' >/dev/null \
   && ok "iskan-host kapasite: taşan-sayı eşik (20-hane) → [doğrulanamadı] (int64-overflow ham-hata+sahte SIĞMAZ yok, re-verify MINOR fix)" \
   || bad "iskan-host kapasite: taşan-eşik hâlâ ham-hata/sahte-SIĞMAZ üretiyor (rc=$rc)"
 find "$HK_STUB" -type f -delete 2>/dev/null; find "$HK_STUB" -depth -type d -delete 2>/dev/null
@@ -2166,7 +2166,7 @@ CS_ENV_ORTAK=(ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_DIR="$CS_REPO" ISKAN_H
 out="$(ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" \
   bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'COMPOSE-SENKRON' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'COMPOSE-SENKRON' >/dev/null \
   && ok "senkron dry-run: plan-çıktısında COMPOSE-SENKRON satırı var (rc=3 korunur)" \
   || bad "senkron dry-run: plan-satırı eksik ya da rc bozuk (rc=$rc)"
 
@@ -2188,7 +2188,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DI
 rc=$?
 CS_MD5_1="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 n_bak="$(find "$CS_HOST_DIR" -name '*.bak-*' | wc -l | tr -d '[:space:]')"
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'yazım YOK (no-op)' && [ "$CS_MD5_0" = "$CS_MD5_1" ] \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'yazım YOK (no-op)' >/dev/null && [ "$CS_MD5_0" = "$CS_MD5_1" ] \
   && [ "$n_bak" = "0" ] && ! grep -q 'iskan-tmp' "$CS_LOG" \
   && ok "senkron bayt-eş: no-op (yazım=0, .bak=0, md5-değişmez, rc=0)" \
   || bad "senkron bayt-eş: no-op kapısı kırık (rc=$rc bak=$n_bak)"
@@ -2209,7 +2209,7 @@ rc=$?
 CS_MD5_REPO="$(git -C "$CS_REPO" show origin/main:infra/docker-compose.server.yml | md5sum | awk '{print $1}')"
 CS_MD5_2="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 n_bak="$(find "$CS_HOST_DIR" -name '*.bak-*' | wc -l | tr -d '[:space:]')"
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'origin/main.e eşitlendi' && [ "$CS_MD5_2" = "$CS_MD5_REPO" ] \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'origin/main.e eşitlendi' >/dev/null && [ "$CS_MD5_2" = "$CS_MD5_REPO" ] \
   && [ "$n_bak" = "1" ] && grep -q 'BAYT re-verify GEÇTİ' "$CS_KANIT2/compose-senkron.txt" \
   && grep -q 'komşu-servisler BAYT-eş' "$CS_KANIT2/compose-senkron.txt" \
   && grep -q 'aday-bitişik yorum-satırları repo-simetrik' "$CS_KANIT2/compose-senkron.txt" \
@@ -2224,7 +2224,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DI
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
 rc=$?
 n_bak2="$(find "$CS_HOST_DIR" -name '*.bak-*' | wc -l | tr -d '[:space:]')"
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'yazım YOK (no-op)' && [ "$n_bak2" = "1" ] \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'yazım YOK (no-op)' >/dev/null && [ "$n_bak2" = "1" ] \
   && ok "senkron idempotent re-run: ikinci koşu no-op (.bak artmadı)" \
   || bad "senkron idempotent re-run: kırık (rc=$rc bak=$n_bak2)"
 
@@ -2239,7 +2239,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3" ISKAN_KANIT_D
 rc=$?
 CS_MD5_K1="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 [ "$rc" = "5" ] && [ "$CS_MD5_K0" = "$CS_MD5_K1" ] && [ -s "$CS_KANIT3/compose-senkron-fark.txt" ] \
-  && ! grep -q 'iskan-tmp' "$CS_LOG3" && printf '%s' "$out" | grep -q 'komşular BAYT-eş değil' \
+  && ! grep -q 'iskan-tmp' "$CS_LOG3" && printf '%s' "$out" | grep 'komşular BAYT-eş değil' >/dev/null \
   && ok "senkron komşu-bayt-drift (LB): non-mahrem komşu 512m-drift'i → rc=5 + yazım=0 + fark-raporu (körü-körüne ezme YOK)" \
   || bad "senkron komşu-bayt-drift (LB): komşu-BAYT kapısı kırık — komşu ezilebilirdi (rc=$rc)"
 
@@ -2251,7 +2251,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DI
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
 rc=$?
 CS_MD5_3="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'origin/main.e eşitlendi' && [ "$CS_MD5_3" = "$CS_MD5_REPO" ] \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'origin/main.e eşitlendi' >/dev/null && [ "$CS_MD5_3" = "$CS_MD5_REPO" ] \
   && ok "senkron aday-bayat-blok: drift yalnız-adayda (512m) → host EZİLDİ, origin/main bayt-eş (sahte-no-op yok)" \
   || bad "senkron aday-bayat-blok: 512m sessiz-OOM tuzağı sürüyor — yazım olmadı (rc=$rc)"
 
@@ -2285,7 +2285,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3D" ISKAN_KANIT_
 rc=$?
 CS_MD5_Y1="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 [ "$rc" = "5" ] && [ "$CS_MD5_Y0" = "$CS_MD5_Y1" ] && ! grep -q 'iskan-tmp' "$CS_LOG3D" \
-  && printf '%s' "$out" | grep -q 'aday-bitişik satır' && grep -q 'HUMA-BAKIM' "$CS_KANIT3D/compose-senkron-fark.txt" \
+  && printf '%s' "$out" | grep 'aday-bitişik satır' >/dev/null && grep -q 'HUMA-BAKIM' "$CS_KANIT3D/compose-senkron-fark.txt" \
   && ok "senkron asimetrik-yutma (MAJOR-1): host-only bitişik yorum → rc=5 + yazım=0 (tam-dosya onu SİLERDİ; sahte-attestasyon kapandı)" \
   || bad "senkron asimetrik-yutma (MAJOR-1): host-only aday-bitişik yorum sessizce silinebilir (rc=$rc)"
 
@@ -2354,7 +2354,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG4" ISKAN_KANIT_D
 rc=$?
 CS_MD5_5="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 [ "$rc" = "5" ] && [ -s "$CS_KANIT4/compose-senkron-fark.txt" ] && [ "$CS_MD5_4" = "$CS_MD5_5" ] \
-  && ! grep -q 'iskan-tmp' "$CS_LOG4" && printf '%s' "$out" | grep -q 'muhtemel-neden: tamamlanmamış söküm' \
+  && ! grep -q 'iskan-tmp' "$CS_LOG4" && printf '%s' "$out" | grep 'muhtemel-neden: tamamlanmamış söküm' >/dev/null \
   && ok "senkron komşu-fark: rc=5 fail-closed + fark-raporu + yazım=0 + söküm teşhis-ipucu (körü-körüne ezme YOK)" \
   || bad "senkron komşu-fark: beklenen-delta kapısı kırık (rc=$rc)"
 
@@ -2364,7 +2364,7 @@ CS_KANIT5="$(mktemp -d)"
 out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DIR="$CS_KANIT5" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
 rc=$?
-[ "$rc" = "5" ] && printf '%s' "$out" | grep -q 'bootstrap işidir' && [ ! -e "$CS_HOSTFILE" ] \
+[ "$rc" = "5" ] && printf '%s' "$out" | grep 'bootstrap işidir' >/dev/null && [ ! -e "$CS_HOSTFILE" ] \
   && ok "senkron boş-host: rc=5 + 'bootstrap işidir, İSKÂN-doğumu değil' dili + dosya doğmadı" \
   || bad "senkron boş-host: bootstrap-reddi kırık (rc=$rc)"
 
@@ -2372,7 +2372,7 @@ rc=$?
 #     --haric olmayan-servis çıktısı bayraksız çıktıyla BAYT-eş (mevcut tüketiciler etkilenmez)
 out="$(python3 "$SCRIPT_DIR/lib/compose_parse.py" --haric alpha "$SCRIPT_DIR/fixtures/compose-collision.yml" 2>/dev/null)"
 n_int="$(printf '%s' "$out" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["intersections"]))' 2>/dev/null)"
-printf '%s' "$out" | grep -q '"alpha"' && haric_alpha_var=1 || haric_alpha_var=0
+printf '%s' "$out" | grep '"alpha"' >/dev/null && haric_alpha_var=1 || haric_alpha_var=0
 [ "$n_int" = "0" ] && [ "$haric_alpha_var" = "0" ] \
   && ok "compose_parse --haric alpha: servis düştü + kesişimler yeniden-hesaplandı (1→0)" \
   || bad "compose_parse --haric: düşürme/yeniden-hesap kırık (int=$n_int alpha-var=$haric_alpha_var)"
@@ -2418,7 +2418,7 @@ CB_HOST="$(mktemp)"
 { _cs_base_yaml; printf '  # HUMA-BAKIM elle-not\n'; printf '  cloudtop-senktest:\n    image: test\n'; } > "$CB_HOST"
 yut_host="$(python3 "$SCRIPT_DIR/lib/compose_block.py" yutulan cloudtop-senktest "$CB_HOST")"
 yut_repo="$(python3 "$SCRIPT_DIR/lib/compose_block.py" yutulan cloudtop-senktest "$CB_TMP")"
-printf '%s' "$yut_host" | grep -q 'HUMA-BAKIM' && ! printf '%s' "$yut_repo" | grep -q 'HUMA-BAKIM' \
+printf '%s' "$yut_host" | grep 'HUMA-BAKIM' >/dev/null && ! printf '%s' "$yut_repo" | grep 'HUMA-BAKIM' >/dev/null \
   && ok "compose_block yutulan: host-only bitişik-yorum ('HUMA-BAKIM') host-yutulanda VAR, repo-yutulanda YOK (asimetri görünür)" \
   || bad "compose_block yutulan: asimetrik-yutma tespiti kırık"
 yut_yok="$(python3 "$SCRIPT_DIR/lib/compose_block.py" yutulan cloudtop-hicyok "$CB_HOST")"; yut_yok_rc=$?
@@ -2441,19 +2441,19 @@ CS_LOG6="$(mktemp)"
 err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje vekatip 2>&1 >/dev/null)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$err" | grep -q '3-Çit' && [ "$(grep -c . "$CS_LOG6")" = "0" ] \
+[ "$rc" != "0" ] && printf '%s' "$err" | grep '3-Çit' >/dev/null && [ "$(grep -c . "$CS_LOG6")" = "0" ] \
   && ok "iskan-host 3-Çit: 'vekatip' GO'lu --apply REDDEDİLDİ (rc=$rc, ssh-çağrı=0 — kardeş-yol deliği kapandı)" \
   || bad "iskan-host 3-Çit: mahrem-apply hâlâ geçiyor (rc=$rc ssh-çağrı=$(grep -c . "$CS_LOG6"))"
 err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje mihenk 2>&1 >/dev/null)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$err" | grep -q '3-Çit' \
+[ "$rc" != "0" ] && printf '%s' "$err" | grep '3-Çit' >/dev/null \
   && ok "iskan-host 3-Çit: 'mihenk' de REDDEDİLDİ (rc=$rc — 5'li izole-aile tam)" \
   || bad "iskan-host 3-Çit: mihenk deliği (rc=$rc)"
 err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje '.*' 2>&1 >/dev/null)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$err" | grep -q 'ad-hijyeni' && ! grep -q 'iskan-tmp' "$CS_LOG6" \
+[ "$rc" != "0" ] && printf '%s' "$err" | grep 'ad-hijyeni' >/dev/null && ! grep -q 'iskan-tmp' "$CS_LOG6" \
   && ok "iskan-host ad-hijyeni: --proje '.*' charset-kapısında REDDEDİLDİ (ERE-enjeksiyon kökten kapalı, yazım=0)" \
   || bad "iskan-host ad-hijyeni: regex-meta proje-adı kapıyı geçti (rc=$rc)"
 # path-traversal + boşluk da reddedilir (güvenlik-regresyon)
@@ -2461,7 +2461,7 @@ err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORT
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje '../x' 2>&1 >/dev/null)"; rc1=$?
 err2="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje 'a b' 2>&1 >/dev/null)"; rc2=$?
-[ "$rc1" != "0" ] && [ "$rc2" != "0" ] && printf '%s' "$err" | grep -q 'ad-hijyeni' && printf '%s' "$err2" | grep -q 'ad-hijyeni' \
+[ "$rc1" != "0" ] && [ "$rc2" != "0" ] && printf '%s' "$err" | grep 'ad-hijyeni' >/dev/null && printf '%s' "$err2" | grep 'ad-hijyeni' >/dev/null \
   && ok "iskan-host ad-hijyeni: '../x' (path-traversal) + 'a b' (boşluk) REDDEDİLDİ (güvenlik korundu)" \
   || bad "iskan-host ad-hijyeni: path-traversal/boşluk kapıyı geçti (rc1=$rc1 rc2=$rc2)"
 rm -f "$CS_LOG6"
@@ -2492,13 +2492,13 @@ CS_LOG5="$(mktemp)"
 err="$(PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG5" ISKAN_SOKUM_GO=1 ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
   bash "$SCRIPT_DIR/iskan.sh" sokum vekatip --apply 2>&1 >/dev/null)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$err" | grep -q '3-Çit' && [ "$(grep -c . "$CS_LOG5")" = "0" ] \
+[ "$rc" != "0" ] && printf '%s' "$err" | grep '3-Çit' >/dev/null && [ "$(grep -c . "$CS_LOG5")" = "0" ] \
   && ok "sokum 3-Çit: 'vekatip' GO'lu --apply'da REDDEDİLDİ (rc=$rc, ssh-çağrı=0 — güvenlik-deliği kapandı)" \
   || bad "sokum 3-Çit: mahrem-tenant sökümü hâlâ geçiyor (rc=$rc ssh-çağrı=$(grep -c . "$CS_LOG5"))"
 err="$(PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG5" ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
   bash "$SCRIPT_DIR/iskan.sh" sokum mihenk 2>&1 >/dev/null)"
 rc=$?
-[ "$rc" != "0" ] && printf '%s' "$err" | grep -q '3-Çit' \
+[ "$rc" != "0" ] && printf '%s' "$err" | grep '3-Çit' >/dev/null \
   && ok "sokum 3-Çit: dry-run modda da ateşler (mihenk, rc=$rc — her-mod kapısı)" \
   || bad "sokum 3-Çit: dry-run modda delik (rc=$rc)"
 
@@ -2712,10 +2712,10 @@ EOF
 out="$(ISKAN_REPO_COMPOSE="$AH_D/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiport --dry-run 2>&1)"
 rc=$?
 # 8449 ana-compose'da, 8450 KARDEŞ dosyada dolu → ilk boş = 8451
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8451:8443' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '127.0.0.1:8451:8443' >/dev/null \
   && ok "DERS-A pick_port: kardeş compose'daki dolu port atlandı (8449+8450 dolu → 8451)" \
   || bad "DERS-A pick_port: kardeş-tarama kırık (rc=$rc — 8450 kardeşte doluyken seçildi mi?)"
-printf '%s' "$out" | grep -q 'port-taraması: 2 compose dosyası' \
+printf '%s' "$out" | grep 'port-taraması: 2 compose dosyası' >/dev/null \
   && ok "DERS-A şeffaflık: kaç compose dosyası tarandığı basılıyor" \
   || bad "DERS-A şeffaflık: tarama-beyanı yok"
 # override-çakışma kapısı da kardeşleri görmeli (yoksa operatör kardeşteki portu 'boş' sanır)
@@ -2727,7 +2727,7 @@ rc=$?
 # NEGATİF-GOLDEN: kardeş YOKKEN davranış aynen (regresyon-guard)
 AH_D2="$(mktemp -d)"; cp "$AH_D/docker-compose.server.yml" "$AH_D2/"
 out="$(ISKAN_REPO_COMPOSE="$AH_D2/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiport --dry-run 2>&1)"
-printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
+printf '%s' "$out" | grep '127.0.0.1:8450:8443' >/dev/null \
   && ok "DERS-A golden: kardeş yokken eski davranış korunuyor (8449 dolu → 8450)" \
   || bad "DERS-A golden: tek-dosya davranışı değişti"
 find "$AH_D" "$AH_D2" -type f -delete 2>/dev/null; rmdir "$AH_D" "$AH_D2" 2>/dev/null
@@ -2760,11 +2760,11 @@ git -C "$AH_G" reset -q --hard HEAD~1     # çalışma-kopyası BAYAT: 8449 der,
 out="$(ISKAN_REPO_COMPOSE="$AH_G/infra/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiorigin --dry-run 2>&1)"
 rc=$?
 # origin/main'de 8450 DOLU → seçilen port 8450 OLMAMALI (8449 boş, floor'dan ilk boş = 8449)
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8449:8443' \
-  && ! printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '127.0.0.1:8449:8443' >/dev/null \
+  && ! printf '%s' "$out" | grep '127.0.0.1:8450:8443' >/dev/null \
   && ok "DERS-A2 origin/main-okuma: bayat çalışma-kopyasına rağmen origin/main'de DOLU port seçilmedi" \
   || bad "DERS-A2 origin/main-okuma: bayat kopya okundu → çakışan port seçildi (rc=$rc)"
-printf '%s' "$out" | grep -q 'origin/main tercihli' \
+printf '%s' "$out" | grep 'origin/main tercihli' >/dev/null \
   && ok "DERS-A2 şeffaflık: kaynak-tercihi (origin/main) beyan ediliyor" \
   || bad "DERS-A2 şeffaflık: kaynak-tercihi beyanı yok"
 # git-DIŞI dosyada davranış değişmez (fallback çalışma-kopyası) — regresyon-guard
@@ -2777,7 +2777,7 @@ services:
       - "127.0.0.1:8449:8443"
 EOF
 out="$(ISKAN_REPO_COMPOSE="$AH_G2/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiorigin2 --dry-run 2>&1)"
-printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
+printf '%s' "$out" | grep '127.0.0.1:8450:8443' >/dev/null \
   && ok "DERS-A2 golden: git-dışı dosyada çalışma-kopyası okunur (davranış değişmedi)" \
   || bad "DERS-A2 golden: git-dışı fallback bozuldu"
 find "$AH_G" "$AH_G2" -type f -delete 2>/dev/null; find "$AH_G" "$AH_G2" -depth -type d -empty -delete 2>/dev/null
@@ -2809,10 +2809,10 @@ git -C "$AH_H" update-ref refs/remotes/origin/main HEAD
 rm -f "$AH_H/infra/docker-compose.ntfy.yml"    # BAYAT CHECKOUT: dosya diskte YOK, origin/main'de VAR
 out="$(ISKAN_REPO_COMPOSE="$AH_H/infra/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahikesif --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8451:8443' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep '127.0.0.1:8451:8443' >/dev/null \
   && ok "DERS-A3: diskte-yok/origin'de-var kardeş + iç-port 80 sayıldı (8449+8450 dolu → 8451)" \
   || bad "DERS-A3: gizli kardeş ya da iç-port-80 gözden kaçtı (rc=$rc)"
-printf '%s' "$out" | grep -q 'port-taraması: 2 compose dosyası' \
+printf '%s' "$out" | grep 'port-taraması: 2 compose dosyası' >/dev/null \
   && ok "DERS-A3 keşif: origin/main'deki kardeş sayıldı (2 dosya)" \
   || bad "DERS-A3 keşif: origin/main kardeşi keşfedilmedi"
 # override-kapısı da iç-port agnostik olmalı
@@ -2852,10 +2852,10 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$AH_STUB:$PATH" CS_LOG="$AH_LOG" ISKAN_KANIT_DI
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
 rc=$?
 AH_MD5_1="$(md5sum "$AH_HOSTFILE" | awk '{print $1}')"
-[ "$rc" = "5" ] && printf '%s' "$out" | grep -q 'UYUŞMUYOR' \
+[ "$rc" = "5" ] && printf '%s' "$out" | grep 'UYUŞMUYOR' >/dev/null \
   && ok "DERS-B R5: canlı-kutu hash'i compose ile uyuşmuyorsa apply rc=5 (sahte-yeşil kapandı)" \
   || bad "DERS-B R5: uyumsuz canlı-kutu KABUL edildi (rc=$rc)"
-printf '%s' "$out" | grep -q 'force-recreate' \
+printf '%s' "$out" | grep 'force-recreate' >/dev/null \
   && ok "DERS-B R5: reçete basılıyor (rm -f + force-recreate; yıkıcı adım Sultan-eli)" \
   || bad "DERS-B R5: reçetesiz kırmızı (operatör ne yapacağını bilmiyor)"
 [ "$AH_MD5_0" = "$AH_MD5_1" ] \
@@ -2911,7 +2911,7 @@ out="$(env ISKAN_FAZ4_GO=1 PATH="$AH_STUB:$PATH" CS_LOG="$AH_LOG" ISKAN_KANIT_DI
   ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_DIR="$AH_REPO" ISKAN_HOST_COMPOSE_PATH="$AH_HOSTFILE" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
 rc=$?
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'DIŞ PORT-EŞLEMESİ YOK' \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'DIŞ PORT-EŞLEMESİ YOK' >/dev/null \
   && ok "DERS-B port-kapısı: 'docker port' boşsa kırmızı + okunur teşhis (http_code=000 değil)" \
   || bad "DERS-B port-kapısı: dış-eşlemesiz kutu yeşil geçti (rc=$rc)"
 find "$AH_REPO" "$AH_HOSTDIR" "$AH_STUB" -type f -delete 2>/dev/null
@@ -2930,22 +2930,22 @@ AH_INV0="$(md5sum "$AH_EG/infra/provider-inventory.yaml" | awk '{print $1}')"
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$AH_EG" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
 rc=$?
 AH_INV1="$(md5sum "$AH_EG/infra/provider-inventory.yaml" | awk '{print $1}')"
-[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'commit GERİSİNDE' && [ "$AH_INV0" = "$AH_INV1" ] \
+[ "$rc" = "1" ] && printf '%s' "$out" | grep 'commit GERİSİNDE' >/dev/null && [ "$AH_INV0" = "$AH_INV1" ] \
   && ok "DERS-D tazelik: bayat working-tree'ye apply rc=1 + SIFIR-yazım (sessiz-geri-alma kapandı)" \
   || bad "DERS-D tazelik: bayat ağaca yazıldı (rc=$rc yazım=$([ "$AH_INV0" = "$AH_INV1" ] && echo yok || echo VAR))"
-printf '%s' "$out" | grep -q 'git -C .* pull' \
+printf '%s' "$out" | grep 'git -C .* pull' >/dev/null \
   && ok "DERS-D tazelik: çare (git pull / taze worktree) reçetesi basılıyor" \
   || bad "DERS-D tazelik: reçetesiz kırmızı"
 # dry-run AKIŞI KESMEZ — yalnız uyarır (önizleme yapılabilmeli)
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$AH_EG" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'commit GERİSİNDE' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep 'commit GERİSİNDE' >/dev/null \
   && ok "DERS-D tazelik: dry-run'da UYARI + akış devam (rc=3 korunur)" \
   || bad "DERS-D tazelik: dry-run kesildi ya da uyarmadı (rc=$rc)"
 # bilinçli-geçiş kapısı (operatör beyanı; kayda geçer)
 out="$(ISKAN_EG_BAYAT_KABUL=1 ISKAN_CLOUDTOP_REPO_DIR="$AH_EG" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
 rc=$?
-[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'bilinçli geçildi' \
+[ "$rc" = "0" ] && printf '%s' "$out" | grep 'bilinçli geçildi' >/dev/null \
   && ok "DERS-D tazelik: ISKAN_EG_BAYAT_KABUL=1 ile bilinçli geçiş çalışıyor + kayda geçiyor" \
   || bad "DERS-D tazelik: bilinçli-geçiş kapısı kırık (rc=$rc)"
 find "$AH_EG" -type f -delete 2>/dev/null; find "$AH_EG" -depth -type d -empty -delete 2>/dev/null

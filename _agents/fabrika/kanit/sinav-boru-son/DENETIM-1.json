@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sinav-boru-son",
+  "pr": "649",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T11:24:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sinav-boru-son",
+  "dal": "sinav-boru-son",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 60643,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 11477
+  },
+  "dalgic": "uyumlu",
+  "bas": "0397a5c8d0137587bd6ab7a9b8e5596c190ece8a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İskan sınavındaki 115 sessiz `grep -q` kalıbı, boru arkasında girdiyi erken kesmeyen `grep ... >/dev/null` biçimine çevrilmiş ve aynı kapı CI akışına bağlanmış. Araç imzalı önce/sonra ölçümü kapının 115 bulgudan sıfıra indiğini, dokuz yeşil sınav da dönüşümün hedeflenen sınırlarını ve davranış eşdeğerliğini doğruladığı için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı kapı için kırmızı önce (115 satır, rc=1) ve yeşil sonra (0 satır, rc=0) ölçüm çifti mevcut; ayrıca 9/9 geçen sınav kalıbın varlığı, kapsam seçimi, heredoc korunumu, sözdizimi, sonuç eşdeğerliği ve çıktı sızmamasını ölçüyor. CI çağrısı diff içinde açıkça görülüyor."
+  }
+}
