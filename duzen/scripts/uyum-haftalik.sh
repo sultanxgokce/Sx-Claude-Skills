@@ -53,7 +53,7 @@ if [ "$KURU" -eq 0 ]; then
     *) BASLIK="" ;;
   esac
   if [ -n "$BASLIK" ]; then
-    bash "$BULGU" yaz "$BASLIK" --kim "${AGENT_NAME:-MİRAHUR}" --etiket "$ETIKET" --not "$(grep -v '^SONUÇ' <<<"$CIKTI" | head -20)" </dev/null || YAZ_RC=$?
+    bash "$BULGU" yaz "$BASLIK" --kim "${AGENT_NAME:-MİRAHUR}" --etiket "$ETIKET" --kaynak uyum --not "$(grep -v '^SONUÇ' <<<"$CIKTI" | head -20)" </dev/null || YAZ_RC=$?
     [ "$YAZ_RC" -eq 0 ] || echo "uyum: havuza YAZILAMADI (bulgu-sh rc $YAZ_RC)" >&2
   fi
   mkdir -p "$(dirname "$GUNLUK")" 2>/dev/null; printf '%s\n' "$SATIR" >> "$GUNLUK" || echo "uyum: günlüğe yazılamadı ($GUNLUK)" >&2

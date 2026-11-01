@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "bulgu-kaynak-uyum",
+  "pr": "639",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T04:59:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-bulgu-kaynak-uyum",
+  "dal": "bulgu-kaynak-uyum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18331,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8397
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7dcf377c008935df1511240380767badbc3bc6a6",
+  "duzeltme_farki": {
+    "onceki_bas": "044e82da9dbdf0c1f8e11e50ba74bafc6aed5269",
+    "dosya": 8,
+    "bayt": 12203,
+    "tam_bayt": 28627
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen `--kaynak` uyumu, haftalık uyum kaynağı ve sürüm artışları PR bütününde tamamlanmış; önceki turdaki jetonsuz yolda sessiz kaynak kaybı da açık uyarı, belge ve sınavla kapatılmış. Gerçek ölçüm 63 birim ve 13 bütünleşik sınavın geçtiğini, mutasyon ölçümü ise yeni korumanın bozulmayı yakaladığını gösterdiğinden yalnız rötuş değil, üretime hazır düzeydedir.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `bk-parite-2` rc=0 ile `bulgu.test: 63 geçti · 0 kaldı` ve `13 geçti · 0 düştü` sonucunu veriyor. Önceki B1, `bulgu.sh` jetonsuz yoluna `--kaynak … YAZILMADI` uyarısının eklenmesi, SKILL.md sözleşmesinin açıklanması ve K1a2/K1a3 sınavlarıyla kapanmış; `bk-mutant-2` gerçek kod ölçümü değil, beklenen rc=1 ile özellikle K1a2 dahil kapıların düştüğünü gösteren geçerli mutasyon kanıtıdır."
+  }
+}

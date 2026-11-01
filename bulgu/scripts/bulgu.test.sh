@@ -30,6 +30,10 @@ ok "H9b yaz: --not değersiz → rc 2, döngü yok" '[ $r -eq 2 ] && [[ "$o" != 
 # ── K1 (0.3.0): jeton varsa MERKEZE, yoksa eski deftere ──
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz" --kim X 2>&1); r=$?
 ok "K1a jeton yoksa eski yol + 'jetonu yok' uyarısı" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz"* ]] && [[ "$o" == *"jetonu yok"* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz uyum" --kim X --kaynak uyum 2>&1); r=$?
+ok "K1a2 jetonsuz yolda --kaynak SESSİZ kaybolmaz: kayıt yazılır ama 'kaynak … YAZILMADI' uyarısı basılır" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz uyum"* ]] && [[ "$o" == *"--kaynak uyum bu kayda YAZILMADI"* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz sade" --kim X 2>&1); r=$?
+ok "K1a3 jetonsuz yolda --kaynak yoksa kaynak uyarısı YOK" '[ $r -eq 0 ] && [[ "$o" != *"kaynak alanı tanımıyor"* ]]'
 printf 'sinav-jeton-ABC\n' > "$T/jeton"
 python3 - "$T" <<'PY' &
 import sys, json, http.server, socketserver, os
@@ -79,6 +83,10 @@ ok "K1c eski kutu yazıcısı ÇAĞRILMADI (tek defter, ikilik yok)" '[[ "$o" !=
 ok "K1d jeton değeri çıktıda YOK" '[[ "$o" != *sinav-jeton-ABC* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "fikir" --kim X --etiket ozellik 2>&1); r=$?
 ok "K1e --etiket ozellik geçer" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"etiket\"]==\"ozellik\"" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "uyum kaydı" --kim X --kaynak uyum 2>&1); r=$?
+ok "K1e2 --kaynak uyum → defter kaydında kaynak_nereden 'uyum'; --kaynak yokken 'bulgu komutu' (K1b)" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"kaynak_nereden\"]==\"uyum\"" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --kaynak "Kötü Ad" 2>&1); r=$?
+ok "K1e3 geçersiz --kaynak rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"--kaynak"* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --etiket kusur 2>&1); r=$?
 ok "K1f bilinmeyen etiket rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"bug ya da ozellik"* ]]'
 printf 'yanlis-jeton\n' > "$T/jeton2"

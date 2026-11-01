@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-bk-parite-2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/bk-mutant.sh
+# rc=1 sure=3.6s zaman=2026-11-01T04:57:19+03:00
+--- stdout ---
+  ✗ U1b sapma kaydı bulgu komutuna '--kaynak uyum' ile gider (Kuzey G30 kaynak=uyum sayar) → yaz Düzen uyumu: depo deposunda 1 kimlik/kopya düzen paketinden sapmı
+  ✗ U8 gerçek surum.sh işaretsiz depoda rc 3 'güncel' der; uyum SARI rc 4 → rc=3 surum=3
+== 7 geçti · 2 düştü ==
+  ✗ K1a2 jetonsuz yolda --kaynak SESSİZ kaybolmaz: kayıt yazılır ama 'kaynak … YAZILMADI' uyarısı basılır
+bulgu.test: 62 geçti · 1 kaldı
+--- stderr ---
