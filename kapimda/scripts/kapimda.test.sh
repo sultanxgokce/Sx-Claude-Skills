@@ -516,7 +516,7 @@ kos bitti "D1 Iki" --gerekce "soru kendiliğinden düştü: ürün tarafında ka
 [ $? -eq 0 ] && ok "D1-6 Sultan'a atıf yoksa kapı devreye girmez" || kotu "D1-6 masum gerekçe bloklandı"
 
 # ── boru + grep -q kalıbı: pipefail altında grep erken çıkınca yazan süreç SIGPIPE (141) alır, sınav rastgele kırmızı olur (Sx main 09781b28 L1)
-BORU_SAY="$(sed '/BORU_SAY=/d' "${BASH_SOURCE[0]}" | grep -cE '\| *grep +-[a-zA-Z]*q' || true)"
+BORU_SAY="$(sed '/BORU_SAY=/d' "${BASH_SOURCE[0]}" | grep -cE '\|[[:space:]]*[ef]?grep[^|&;)]*[[:space:]](-[a-zA-Z]*q[a-zA-Z]*|--quiet|--silent)([[:space:]]|$)' || true)"
 [ "$BORU_SAY" -eq 0 ] && ok "BR1 sınavda boru arkasında grep -q yok" || kotu "BR1 boru arkasında grep -q var: $BORU_SAY satır"
 
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"

@@ -1,0 +1,144 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/k2/kapimda/scripts/kapimda.test.sh
+# rc=1 sure=8.7s zaman=2026-11-01T04:17:49+03:00
+--- stdout ---
+PASS  G0 sözdizimi
+PASS  K1 eksik alan (--bitince yok) → RED
+PASS  K2 'Niçin sen' cümle değil → RED
+PASS  K5 dosya-yolu → RED (Sultan-dili kalkanı)
+PASS  K5 komut-terimi → RED
+PASS  K6 çok-eylem → RED (adım-kartına böl)
+PASS  K7 sır-deseni → RED
+PASS  K8 uzunluk → RED
+PASS  RED yolları dosyaya HİÇ yazmadı (fail-closed)
+PASS  M1 geçerli kart açıldı
+PASS  M2 çizici sözleşmesi (satır-başı damga)
+PASS  M3 dört alan yazıldı
+PASS  M4 yaş+engel satırı
+PASS  M5 basla-çizicisi 1 kart görür
+PASS  K4 aynı ad ikinci kez → RED
+PASS  K3 tavan-3 aşıldı → RED (sessiz sıraya atmaz)
+PASS  K3b dosyada tam 3 kart
+PASS  B1 --gerekce yoksa kapatmaz
+PASS  B2 kart kapandı
+PASS  B3 KAPANDI damgası + tarih
+PASS  B4 gerekçe yazıldı
+PASS  B5 açık kart 3→2
+PASS  B6 olmayan kartı kapatmaya çalışınca RC=1 (sessiz başarı yok)
+PASS  S1 olur gelmeden kart KAPANMADI (RC=4)
+PASS  S2 kart açık kaldı
+PASS  S3 olur gelince kart kapandı
+PASS  S4 olur-satırı kanıtla yazıldı
+PASS  S5 kanıtsız kapatma hâlâ mümkün (--federe-tamam opsiyonel)
+PASS  S6 kanıtsız kapanışta olur-satırı YOK (ayırt edilebilir)
+PASS  S7 tetik bulunamadı → RC=2 (doğrulanamadı ≠ tamam)
+PASS  L1 liste açık kartları basar
+PASS  L2 lint temiz dosyada RC=0
+PASS  A1 adım planı diske yazıldı
+PASS  A2 toplam sayacı
+PASS  A3 SIRADAKİ tek adım basıldı
+PASS  A4 yalnız TEK adım basıldı
+PASS  A5 ilerle sıradakine geçti
+PASS  A6 son adımdan sonra TAMAM
+PASS  A7 adım metninde yol → RED
+PASS  D1 ajan→ajan devri serbest, damga 🎯 <AJAN>
+PASS  D2 Sultan kapısından onaysız iş çıkarılamaz (A06/RC=5)
+PASS  D3 Sultan-onayı verbatim karta yazılır
+PASS  D4 gerekçesiz devir reddedilir (sessiz devir yok)
+PASS  D5 ajana devredilen kart Sultan'ın kapısından düşer
+PASS  D6 3. devirde kart Sultan'a döner (pinpon panzehiri)
+PASS  D7 devir sayacı tek satır
+PASS  D8 her devir gerekçesiyle kayda düşer
+PASS  D9 olmayan kart devredilemez
+PASS  D10 dokunulmamış kartın damgası birebir aynı (geriye-uyum)
+PASS  O1 kart doğuş anında oda damgası taşır
+PASS  O2 damga başlığın HEMEN altında (L47 §7.1 şeması)
+PASS  O3 merkez kutusu 'nexus' (yolun son parçası 'projects' DEĞİL)
+PASS  O4 türetilemeyen kaynak UYDURULMAZ → bilinmiyor
+PASS  O5 açık kutu-üstgeçişi (KAPIMDA_ODA) türetimi ezer
+PASS  O6 çizici sözleşmesi BOZULMADI (satır-başı damga aynen)
+PASS  O7 devirde kaynak KORUNUR (devreden kutu kendi adını yazmaz)
+PASS  O8 devirden sonra tek oda satırı (mükerrer yok)
+PASS  O9 damgasız eski karta köken UYDURULMAZ
+PASS  O10 liste kaynağı gösterir
+PASS  O12 liste erken-kapanan okuyucuya karşı düşmez (boru kırılması)
+PASS  P1 varsayılan liste KENDİ odanın işini gösterir
+PASS  P2 başka odanın işi varsayılan listede YOK
+PASS  P3 saklanan iş SESSİZCE yutulmaz — dipnotta sayılır
+PASS  P4 tam listeye çıkış yolu gösterilir
+PASS  P5 --hepsi tüm odaları gösterir
+PASS  P6 damgasız eski kart GİZLENMEZ (kanıtsız varsayımla iş saklanmaz)
+PASS  P7 kendi odan boşken bile 'başka odada N iş' görünür
+PASS  O13 kart kapanınca kaynak izi SİLİNMEZ
+PASS  O14 yeni alan linti kırmızıya düşürmez
+PASS  A06B-1 gerçek vaka satırı YAKALANIR
+PASS  A06B-2 'onay verdi' yakalanır
+PASS  A06B-3 'izin verdi' yakalanır
+PASS  A06B-4 'olur dedi' yakalanır
+PASS  A06B-5 ihtiyaç kipi iddia SAYILMAZ
+PASS  A06B-6 kuralın kendisi iddia SAYILMAZ
+PASS  A06B-7 olumsuz kip iddia SAYILMAZ
+PASS  A06B-8 D1 damgalı iddia GEÇER
+PASS  K9 kartsız adım-bloğu → RED (açık 🚦 SENDE kartı yok)
+PASS  K9b RED yolunda plan dosyası HİÇ yazılmadı (fail-closed)
+PASS  K9c açık kartlı adım-bloğu normal ekleniyor (mutasyon geri alınca yeşil)
+PASS  K10 uydurma N (toplam≠gerçek adım sayısı) → RED
+PASS  K10b bozuk plan genel lint'i de kırmızıya düşürür
+PASS  K10c N düzeltilince yeşile döner (mutasyon geri alındı)
+PASS  F1 damga şablonu birebir (#1/#2)
+PASS  YK1 aynı karta 2. açık adım-bloğu → UYARI satırı
+PASS  YK2 uyarıya rağmen blok yine de basılır
+PASS  YK3 yumuşak-kilit ENGELLEMEZ (RC=0 — sert-kilit bilerek reddedildi)
+PASS  YK4 başka kartın açık adımı çapraz-hatırlatılır
+PASS  YK5 ilerle sonrası aynı-kart uyarısı SUSAR (bekliyor=hayir)
+PASS  A06-1 ajan-yazımı 'cevap:' alanı kapimda.md'de → lint RED
+PASS  A06-2 temiz plan lint'i kırmızıya düşürmez
+PASS  A06-3 plan dosyasındaki 'sultan_response:' alanı → lint RED
+PASS  L49-0 kart SERDAR'a devredildi (ön-koşul)
+PASS  L49-1 devredilmiş kartın adıyla İKİNCİ kart AÇILAMAZ (K4 sahip-kör değil)
+PASS  L49-1b dosyada tek kart satırı var
+PASS  L49-2 'sahip' devredilmiş kartın sahibini basar
+PASS  L49-2b olmayan kart → RC 1 (kart yok)
+PASS  L49-3 devredilmiş kart 'bitti' ile KAPANIR (eskiden RC 3'tü)
+PASS  L49-3b kapanış damgası yazıldı
+PASS  L49-4 üçüncü devirde TIKANDI damgası (ön-koşul)
+PASS  L49-4b TIKANDI kartın adıyla ikinci kart AÇILAMAZ
+PASS  L49-5 devredilmiş kart Sultan'ın TAVAN-3'ünü YEMEZ (3 Sultan kartı hâlâ açılır)
+PASS  L49-5b tavan hâlâ 3'te kapanıyor (gevşemedi)
+PASS  L49-6 'liste' Sultan-yüzü değişmedi (devredilmiş kart görünmez)
+PASS  T1 tazele RC 0
+PASS  T2 gövdedeki SAYI güncellendi (donmuş sayı panzehiri)
+PASS  T3 engel satırı güncellendi
+PASS  T4 eski sayı kalmadı
+PASS  T5 açılış damgası birebir aynı
+PASS  T6 oda (kaynak) damgası korundu
+PASS  T7 --yas verilmedi → açılış-yaşı KORUNDU
+PASS  T8 dört alan (kart sözleşmesi) DEĞİŞMEDİ
+PASS  T9 yalnız İKİ satır değişti (yaş/engel + özet) — başka hiçbir satıra dokunulmadı
+PASS  T10 idempotent tazele RC 0
+PASS  T11 aynı içerikle 2. tazele dosyayı DEĞİŞTİRMEDİ
+PASS  T12 değişmediği kullanıcıya söylenir (sessiz değil)
+PASS  T13 yalnız --engel verildi → özet DOKUNULMADI
+PASS  T14 --yas verilince yaş güncellenir, engel korunur
+PASS  T15 devredilmiş (🎯) kart da tazelenir
+PASS  T16 devir damgası korundu
+PASS  T17 devir geçmişi (↳) korundu
+PASS  T18 devir sayacı korundu
+PASS  T19 tıkanmış (⚠️) kart da tazelenir, damgası korunur
+PASS  T20 kart yoksa RC 1 + tek satır sebep (sessiz başarı yok)
+PASS  T21 alansız tazele → RC 2 (kullanım)
+PASS  T22 jargon/yol → RED (lint tazelemede de koşar)
+PASS  T23 sır-deseni → RED
+PASS  T24 uzunluk → RED
+PASS  T25 RED yolları dosyaya HİÇ yazmadı (fail-closed)
+PASS  T26 tazelenmiş dosya lint'ten geçer
+PASS  D1-1 damgasız Sultan-aktarımı → RED (rc=6)
+PASS  D1-2 reddedilen kapanış kartı AÇIK bıraktı
+PASS  D1-3 tam damgalı aktarım → GEÇER
+PASS  D1-4 beyan: eksikse RED
+PASS  D1-5 verbatim kırpık eksikse RED
+PASS  D1-6 Sultan'a atıf yoksa kapı devreye girmez
+FAIL  BR1 boru arkasında grep -q var: 1 satır
+
+── SONUÇ: 136 geçti · 1 kaldı ──
+--- stderr ---

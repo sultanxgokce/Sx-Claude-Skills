@@ -1,5 +1,5 @@
 $ bash kapimda/scripts/kapimda.test.sh
-# rc=0 sure=4.0s zaman=2026-11-01T04:11:45+03:00
+# rc=0 sure=6.5s zaman=2026-11-01T04:17:40+03:00
 --- stdout ---
 PASS  G0 sözdizimi
 PASS  K1 eksik alan (--bitince yok) → RED

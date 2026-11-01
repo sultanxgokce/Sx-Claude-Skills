@@ -1,7 +1,8 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/boru-olc.sh kapimda/scripts/kapimda.test.sh
-# rc=0 sure=0.5s zaman=2026-11-01T04:11:41+03:00
+# rc=0 sure=15.4s zaman=2026-11-01T04:17:34+03:00
 --- stdout ---
 grep_q_boru rc=141
 grep_dev_null rc=0
 kalip_sayisi=0
 --- stderr ---
+⏳ agir-sira: kanit-kapimda-sinav-boru-boru 15 sn bekledi (yuva 2, load1 17.86)
