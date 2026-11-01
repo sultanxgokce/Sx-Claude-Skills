@@ -1,0 +1,50 @@
+{
+  "is": "terminal-onar-ana-tmux-yonetici-kimlik",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-01T22:06:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kimlik-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-kimlik-gercek-sonra.txt",
+      "sha256": "e90d9f75097374966fc2515667d3b2b6bb3e9f7e5b1eff894e487216587dfbfe",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kimlik-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T22:06:48+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a7aa5f9c59e4429c80f2932e28b329b8",
+      "olculen_commit": "4052416b8d05051927abd58d2ae7c083289c3dc8",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kimlik-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-kimlik-mutant-sonra.txt",
+      "sha256": "4fa8e6807c53354709b1c6b08ddea5b2fb7011a9b11ac74b0185d82488bfca74",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kimlik-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T22:06:49+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kimlik-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "25fd18955aa94c13a3877ab4e3f369f1",
+      "olculen_commit": "4052416b8d05051927abd58d2ae7c083289c3dc8",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "43d32d4e8d3041817025cd3791d634aeec7b3c181434c6286add883184752ad6"
+}
