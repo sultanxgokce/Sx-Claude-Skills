@@ -21,5 +21,14 @@
   "kapsam_uyarilari": [],
   "sayi_uyarilari": [],
   "sayi_bicim_eksikleri": [],
-  "sayi_bicim_uyarisi": false
+  "sayi_bicim_uyarisi": false,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "ulak_1793530839-d49477a8",
+      "gerekce": "SERDAR ulak 14:00: amir ve oda_muduru eki reis kararı, Sultan rütbe gösterimi isteği gerekçe; koltuk çıktısı SERDAR'ın ayrı sürümü",
+      "zaman": "2026-11-01T14:01:05+03:00"
+    }
+  ]
 }

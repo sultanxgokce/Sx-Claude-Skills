@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "terminal-onar-kadro-iskan-oda",
+  "pr": "651",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T14:02:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kadro-iskan-oda",
+  "dal": "terminal-onar-kadro-iskan-oda",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15934,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 3491
+  },
+  "dalgic": "olculemedi",
+  "bas": "a5d1e8e9b886878dee0f1f30811f9237aabba527",
+  "duzeltme_farki": {
+    "onceki_bas": "4c6a4d0dede431e47115c83e0038681640f4f2f9",
+    "dosya": 1,
+    "bayt": 3491,
+    "tam_bayt": 25784
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İSKÂN kutusunda aile kaydındaki oda alanının okunması yeşil gerçek ölçümle, sınavın bu davranışı gerçekten yakalaması da mutasyon ölçümüyle destekleniyor. Ancak kartın açık kabul koşullarından “koltuk oda alanını dönsün” hâlâ doğrudan ölçülmediği için önce bu uygulama boşluğu çözülmeli; amir ve oda_muduru ekleri ise reis kararıyla yetkilendirildiğinden artık kapsam kayması değildir.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmamış: Kartın “koltuk oda alanını dönsün” kabul koşulu doğrudan sınanmıyor; yeni kanıt yalnız kayıtların birleşmesini gösteriyor, koltuk çıktısını çağırıp oda alanını doğrulamıyor.",
+        "kanit": "Gerçek ölçümde OD1–OD5 yalnız aile/iskân/ekip kayıtlarının okunması ve birleştirilmesini bildiriyor; hiçbir satır koltuk çıktısında oda alanının döndüğünü söylemiyor. Bu turda üretim kodu farkı da yok.",
+        "konum": "olcum-kadro-gercek-2-sonra.txt ve DEĞİŞİKLİK notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçümler 37/37 ile 38/38 geçiyor; iki mutasyon kaydı da bilinçli bozulan davranışı yakalıyor. B2 kapanmış: iş kartındaki reis kararı amir ve oda_muduru eklerini açıkça yetkilendiriyor, dolayısıyla bunlar kapsam kayması sayılamaz. Buna karşılık B1 için koltuk çıktısını doğrulayan kare, uçtan uca sınav veya ölçüm satırı hâlâ yok; ayrıca en güncel gerçek ölçüm kirli çalışma ağacında alınmış."
+  }
+}
