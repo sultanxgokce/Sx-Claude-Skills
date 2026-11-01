@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "duzen-1-6-3",
+  "pr": "641",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T05:50:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-1-6-3",
+  "dal": "duzen-1-6-3",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13963,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 3101
+  },
+  "dalgic": "olculemedi",
+  "bas": "d6cd398631f2988000c52ea5dacb510a5ff773f5",
+  "duzeltme_farki": {
+    "onceki_bas": "79480ec33ae174aba85497736ef93ee13bdcb2ee",
+    "dosya": 1,
+    "bayt": 3101,
+    "tam_bayt": 35705
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İzole-kutu ve alt-personel temelleri ile YAML ön başlık düzeltmesi, sağlam önce/sonra ölçüm çiftinde önce düşüp sonra eksiksiz geçiyor; güncel kart da çakışma kilidi nedeniyle 1.6.4 sürümünü açıkça istiyor. Önceki turdaki B1, kartın 1.6.4 olarak düzeltilmesiyle; B2 ise kapsam dışı sürüm değişikliklerinin “duzen-1-6-3-kalan” kartına daraltılmasıyla bu kart bakımından kapanmış, üretime engel bulgu kalmamıştır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce rc=1 ile 8+5 düşüş, sonra rc=0 ile 33+18 geçiş veren ölçüm çifti istenen iki temel ile YAML düzeltmesini doğrudan sınayan etiketler içeriyor. Ölçümler aynı committe kirli çalışma ağacından alınmış olsa da araç kayıtlı önce/sonra çifti tutarlı; bu tur yalnız kanıt dosyaları değişmiş ve önceki turda PR bütünü incelenmiş. B1 güncel kart cümlesindeki 1.6.4 çakışma kilidiyle, B2 ise açık daraltma kaydı ve kalan kartla kapanmıştır."
+  }
+}
