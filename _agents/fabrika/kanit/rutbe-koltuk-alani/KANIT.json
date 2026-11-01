@@ -1,0 +1,69 @@
+{
+  "is": "rutbe-koltuk-alani",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-01T14:22:10+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "rutbe-birim",
+      "asama": "sonra",
+      "dosya": "olcum-rutbe-birim-sonra.txt",
+      "sha256": "7e14e46da77f768a86e055ca719ab19e9e00f72cac600e94808b9d588ec942d6",
+      "komut": [
+        "node",
+        "rutbe.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:22:02+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bb5320ca043949ef88b4634dd1e7c2bc",
+      "olculen_commit": "2cf8f189fefae523b12b24f81701b4693954699b",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-uc",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-uc-sonra.txt",
+      "sha256": "9d24e54993a58a4eb50b0092fa0b3e8333a02b62a38fcad50796954dd1d6aec5",
+      "komut": [
+        "node",
+        "sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:22:10+03:00",
+      "sure_sn": 7.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "589d7083f6ba4098b4cd12174f80a673",
+      "olculen_commit": "2cf8f189fefae523b12b24f81701b4693954699b",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kademe",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kademe-tek.txt",
+      "sha256": "e8e2ff4743efdb4d83d0618d0c41a022890f402d3eaec7f8ff4b1e01a2f412db",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutk/kapi/rutbe.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T14:22:10+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "rutbe-birim",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "60668599a3404049b2c1f7236e44b8c0",
+      "olculen_commit": "2cf8f189fefae523b12b24f81701b4693954699b",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "0d916f41ce8ef96f2fa61c5cac7a74b48a25c547fbc784c9dddb8efbc86e2c5e"
+}

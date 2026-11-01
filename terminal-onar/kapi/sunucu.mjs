@@ -24,6 +24,7 @@ import { tarifOku, uzmanlikOku } from './tarif.mjs';
 import { bugunOku } from './bugun.mjs';
 import { kadroYazKilitAltinda, KadroHata, davaEkle, kisiyeBagla, baglaGeriAl, DOSYA_NO, kisaAdGecerli } from './kadro-yaz.mjs';
 import { etiketOku, etiketYaz, EtiketHata } from './kadro-etiket.mjs';
+import { rutbeHaritasi, rutbeBul } from './rutbe.mjs';
 import { dosyaKilit } from './kilit.mjs';
 import { onbellekKur, koltukDegistirir } from './koltuk-onbellek.mjs';   // /api/koltuklar kısa süreli önbellek (ölçüm notu dosyada)
 import { koltukKimlik } from './koltuk-kimlik.mjs';   // ad dışı kimlik (2.24.0 · P4GT2W): adres adı değil kimliği taşır
@@ -491,13 +492,15 @@ const sunucu = http.createServer(async (req, res) => {
         // satır çözümü + ad süzgeci kapi/koltuklar.mjs'te (tek kaynak); ad HTML'de kaçışlı, adreste encodeURIComponent
         // ODA (2.36.8 · kutu–oda modeli 2 · SERDAR kararı A, 31 Eki): sıra oda.json → kayıttaki oda → oda dışı (kural kapi/oda.mjs'te); koltukta oda_kaynak klasor|kayit.
         //   Ayrışmada klasör geçerli, oda_uyari döner. Dizin yanıta YAZILMAZ. Kayıt okunamazsa yalnız klasör basamağı kalır, liste düşmez.
-        let kayitOda = new Map(); try { kayitOda = kayitOdaHaritasi(kayitOku(PROJE).uyeler); } catch {}
+        // RÜTBE (2.38.0 · kart rutbe-koltuk-alani): kademe · amir · amir_ad kayıttan türer (kural kapi/rutbe.mjs); kayıt okunamazsa alan yazılmaz, liste düşmez.
+        let kayitOda = new Map(), rutbe = new Map(); try { const { uyeler } = kayitOku(PROJE); kayitOda = kayitOdaHaritasi(uyeler); rutbe = rutbeHaritasi(uyeler); } catch {}
         const odalar = new Map();
-        const koltuklar = koltukSatirlari(r.out).map(({ dizin, ...k }) => {
+        const satirlar = koltukSatirlari(r.out), acik = satirlar.map((k) => k.ad);
+        const koltuklar = satirlar.map(({ dizin, ...k }) => {
           const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta);
           if (sec && sec.kaynak === 'klasor') odalar.set(sec.oda, bulunan);   // klasörün hedef · reis bilgisi kayıt satırını ezer
           else if (sec && !odalar.has(sec.oda)) odalar.set(sec.oda, { ad: sec.oda, hedef: '', reis: '' });
-          return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
+          return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ...rutbeBul(rutbe, k.ad, { ana: ANA_TMUX, acik }), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
         });
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar });
       }
