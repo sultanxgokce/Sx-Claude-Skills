@@ -21,7 +21,30 @@
       "olcum_id": "c790890e5be941e48b3ed9f50d9f06b8",
       "olculen_commit": "b659e763cf95a04495942c6b0ff0789a0098bbd2",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bk-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-bk-mutant-sonra.txt",
+      "sha256": "4b74769d69a34abb98b08b5b5952370acffd31bd0905e3970b38771eb3ee15d6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/bk-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:52:18+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bk-parite",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "62d5c8e7fdf24341905079addfc68f06",
+      "olculen_commit": "9e142e079ffbc8772e3f4526b557a7c5ea1a2cb5",
+      "olculen_kirli": false
     }
   ],
-  "imza": "577341c675f3e081fde788b6e4669b381735d0c67539deff369a16bf7ee2e35a"
+  "imza": "2a72ec1ed3ed6ee490d7b9bd70a4e810990c05174c8e0b8a5699c607117e549e"
 }
