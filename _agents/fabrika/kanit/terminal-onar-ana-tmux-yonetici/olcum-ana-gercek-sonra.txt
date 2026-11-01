@@ -1,0 +1,16 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/ana-gercek.sh
+# rc=0 sure=0.4s zaman=2026-11-01T08:35:04+03:00
+--- stdout ---
+── ana_tmux_turet
+  ✓ A1 kayıt yöneticisi canlı oturum → o kullanılır
+  ✓ A2 ':0' son eki ve yorum soyulur
+  ✓ A3 tırnaklı değer
+  ✓ A4 açık beyan TO_ANA_TMUX kayıttan üstün
+  ✓ A5 yönetici oturumu canlı DEĞİL → sinav-ana (huzur/sedir/tez durumu)
+  ✓ A6 yönetici insan adı → sinav-ana
+  ✓ A7 başka kutu önekli ad (canlı olsa bile) → sinav-ana
+  ✓ A8 kayıt dosyası yok → sinav-ana
+  ✓ A9 yalnız aile-registry varsa ondan okunur
+  ✓ A10 meta bloğu dışındaki 'yonetici' satırı okunmaz
+geçen=10 kalan=0
+--- stderr ---
