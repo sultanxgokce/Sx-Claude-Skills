@@ -25,7 +25,7 @@ cat <<'E'
 yaz | grep -q heredoc-icinde
 E
 SH
-git add .; python3 "$B/sinav-boru-kapi.py" > k.txt; [ $? -eq 1 ]; g $? "S1 kalıp varken rc 1"
+cp c.test.sh c.once; git add .; python3 "$B/sinav-boru-kapi.py" > k.txt; [ $? -eq 1 ]; g $? "S1 kalıp varken rc 1"
 [ "$(grep -c '^a.test.sh:' k.txt)" -eq 6 ]; g $? "S2 altı satırın altısı bulunur, sayaç (-c) sayılmaz"
 ! grep -q '^b.test.sh' k.txt; g $? "S3 pipefail açmayan dosyaya bakılmaz"
 ! grep -q '^c.test.sh' k.txt; g $? "S4 heredoc gövdesi sayılmaz"
@@ -33,5 +33,5 @@ python3 "$B/sinav-boru-kapi.py" --yaz > /dev/null; [ $? -eq 0 ]; g $? "S5 --yaz 
 bash -n a.test.sh; g $? "S6 çevrilen dosya sözdizimi sağlam"
 O="$(bash a.test.sh 2>&1)"; [ "$(printf '%s\n' "$O" | tr '\n' ' ')" = "EVET1 EVET2 EVET3 EVET4 HAYIR5 SAYAC6 DIS7 " ]; g $? "S7 çevrilen dosya aynı sonucu verir, çıktı sızmaz: $O"
 ! grep -q -- '-q' a.test.sh || ! grep -E '\| *grep.* -q' a.test.sh > /dev/null; g $? "S8 sessiz bayrak kalmadı"
-cmp -s c.test.sh <(printf "set -o pipefail\ncat <<'E'\nyaz | grep -q heredoc-icinde\nE\n"); g $? "S9 heredoc gövdesi değişmedi"
+cmp -s c.test.sh c.once; g $? "S9 heredoc gövdesi değişmedi"
 echo "sinav-boru-kapi.test: $G geçti · $K kaldı"; [ $K -eq 0 ]
