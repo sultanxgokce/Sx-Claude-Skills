@@ -1,25 +1,25 @@
 {
   "is": "rutbe-koltuk-alani",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-01T14:25:17+03:00",
+  "guncelleme": "2026-11-01T14:26:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "rutbe-birim",
       "asama": "sonra",
       "dosya": "olcum-rutbe-birim-sonra.txt",
-      "sha256": "effaf9b025f614b4b913ce683460a59e01cb72651016d82ce840386064966f3e",
+      "sha256": "bc4c40721db9f83fa08ac4cdabd2486028188e0900c7b98bfcdb5464f5b98eed",
       "komut": [
         "node",
         "rutbe.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T14:25:09+03:00",
-      "sure_sn": 80.5,
+      "zaman": "2026-11-01T14:26:22+03:00",
+      "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "7f2da71a845444d28178dddcada39b51",
-      "olculen_commit": "9d7fd08c2518665203b1396b98f47f5639a19c44",
+      "olcum_id": "c9c68af5fd9440be9e0331795ac3c9a7",
+      "olculen_commit": "f3fd216e8ad8df2bff78e860064c63ed2a59bec6",
       "olculen_kirli": true
     },
     {
@@ -27,18 +27,18 @@
       "etiket": "sunucu-uc",
       "asama": "sonra",
       "dosya": "olcum-sunucu-uc-sonra.txt",
-      "sha256": "94366ea6c1d42eca5d69895150679121b17e0bcb69c7c97175f73a449876948d",
+      "sha256": "2a68c17e2433ce608d3bf2a3631ebeb6932f59bfc98c01890dd21c61ff5847d2",
       "komut": [
         "node",
         "sunucu.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-01T14:25:17+03:00",
+      "zaman": "2026-11-01T14:26:31+03:00",
       "sure_sn": 8.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "eb1cac3eed794f7e931ec5a46e25cb48",
-      "olculen_commit": "9d7fd08c2518665203b1396b98f47f5639a19c44",
+      "olcum_id": "a8ac8b67b0834809bb8a89602e225b6a",
+      "olculen_commit": "f3fd216e8ad8df2bff78e860064c63ed2a59bec6",
       "olculen_kirli": true
     },
     {
@@ -65,5 +65,5 @@
       "olculen_kirli": true
     }
   ],
-  "imza": "1f3251b6a6060337c23cc26da4e0103edc86a0d5851e1dda6e24be8275f936b5"
+  "imza": "38db9ddda0d4f77d0fa8a737c26f776da8391243c0f8c6154092ed997121432d"
 }

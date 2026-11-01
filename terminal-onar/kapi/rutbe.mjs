@@ -1,17 +1,16 @@
 // kapi/rutbe.mjs — koltuğun RÜTBESİ (kart rutbe-koltuk-alani · görev …1MXTDS · Sultan 1 Kas: üst sekmede reis, müdür, bağlı personel ayrışsın).
 // Rütbe yeni bir alan DEĞİLDİR, ekip kaydındaki 'amir' ve 'oda_muduru' alanlarından türer; ikinci kayıt tutulmaz:
 //   reis     : amiri Sultan olan ya da amiri boş ve oda müdürü olan üye (merkezde SERDAR, NAZIR'da ŞEHBENDER)
-//   mudur    : oda müdürü ya da altında en az bir üye olan
+//   oda müdürü: oda müdürü alanı 'evet' olan ya da altında en az bir üye olan
 //   personel : amiri kayıtta bulunan öteki üye
 //   (alan yok): amiri de altı da olmayan üye. Rütbe uydurulmaz.
 // Emekli, arşiv ve dondurulmuş üye amir sayılmaz. Çözülemeyen amir adı 'amir' alanına yazılmaz: koltuk adı olmayan değer bağ kuramaz.
 import { adKatla } from './oda.mjs';
 
 const PASIF = new Set(['emekli', 'arsiv', 'dondurulmus']);
-const KADEME_AD = { reis: 'reis', mudur: 'oda müdürü', personel: 'personel' };   // kademe makine kodu, kademe_ad ekranda okunan ad
 const koltukAdi = (u) => String(u.tmux ?? '').split(':')[0] || adKatla(u.id);
 
-/** Üyeler → koltuk adı ⟶ { kademe, kademe_ad, amir, amir_ad }. amir koltuk adıdır (şerit bağı onunla kurar), amir_ad görünen addır. */
+/** Üyeler → koltuk adı ⟶ { kademe, amir, amir_ad }. amir koltuk adıdır (şerit bağı onunla kurar), amir_ad görünen addır. */
 export function rutbeHaritasi(uyeler) {
   const aktif = (uyeler || []).filter((u) => u && u.id && !PASIF.has(u.durum) && !PASIF.has(u.hal));
   const dizin = new Map();
@@ -22,9 +21,9 @@ export function rutbeHaritasi(uyeler) {
   const h = new Map();
   for (const u of aktif) {
     const ham = String(u.amir ?? '').trim(), a = amirBul(u), sultana = adKatla(ham) === 'sultan', mudur = u.oda_muduru === 'evet';
-    const kademe = sultana || (!ham && mudur) ? 'reis' : mudur || altSay.get(u) ? 'mudur' : a ? 'personel' : '';
+    const kademe = sultana || (!ham && mudur) ? 'reis' : mudur || altSay.get(u) ? 'oda müdürü' : a ? 'personel' : '';
     if (!kademe) continue;
-    h.set(koltukAdi(u), { kademe, kademe_ad: KADEME_AD[kademe], ...(a && a !== u ? { amir: koltukAdi(a), amir_ad: String(a.ad || a.id) } : {}) });
+    h.set(koltukAdi(u), { kademe, ...(a && a !== u ? { amir: koltukAdi(a), amir_ad: String(a.ad || a.id) } : {}) });
   }
   return h;
 }
