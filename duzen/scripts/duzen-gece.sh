@@ -36,7 +36,8 @@ done
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 [ -n "$KUTU" ] || KUTU="$(hostname -s 2>/dev/null || echo kutu)"
 SYNC="${DUZEN_SYNC_CMD:-node $SX/sync-skills.mjs}"
-YENILE="${DUZEN_YENILE_CMD:-bash $DEPO/scripts/ekipc.sh yenile}"
+# Yenileme betiğin YANINDAKİ paket ekipc.sh ile yapılır (vendor/yaml taşır); Nexus scripts/ekipc.sh değil — zamanlayıcı PATH'inde PyYAML yok, Nexus kopyası exit 2 verir (1 Kas 2026 03:17: 37 kimlik atlandı).
+YENILE="${DUZEN_YENILE_CMD:-bash $HERE/ekipc.sh yenile}"
 MEKTUP="${DUZEN_MEKTUP_CMD:-bash /config/projects/Nexus/scripts/ulak.sh gonder}"
 surum_oku() { sed -nE 's/^[[:space:]]*version:[[:space:]]*["'"'"']?([0-9]+\.[0-9]+\.[0-9]+)["'"'"']?[[:space:]]*$/\1/p' "$1" 2>/dev/null | head -1; }
 yeni_mi() { [ "$1" != "$2" ] && [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | tail -1)" = "$1" ]; }   # $1 > $2
