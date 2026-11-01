@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "gorev-ustlen-ozet-baslik",
+  "pr": "642",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T06:10:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-ustlen-ozet-baslik",
+  "dal": "gorev-ustlen-ozet-baslik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19534,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8954
+  },
+  "dalgic": "uyumlu",
+  "bas": "419504e20caf93719c5e0b6aecb9a7c41645656e",
+  "duzeltme_farki": {
+    "onceki_bas": "5ceb76104ace8adbddd124e720f7b828f3ac6d0a",
+    "dosya": 7,
+    "bayt": 17054,
+    "tam_bayt": 26249
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Özetsiz görev artık boşluk, sekme ve satır sonu ayrımı olmadan üstlenilmiyor; başlık da çevresindeki boşluklar kırpılarak eski ad korunup yeni ad olarak ekleniyor. Önceki iki uygulama kusuru kod ve karşılık gelen sınavlarla kapanmış, sağlam önce/sonra ölçümü 20/20 geçtiği için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı etiketli ölçüm çifti önce 6 geçti/9 düştü durumundan sonra 20 geçti/0 düştü durumuna geçiyor; U2b sekme ve satır sonundan oluşan özeti, B4b ise çevresinde boşluk bulunan aynı başlığı doğrudan ölçüyor. Önceki B1, `tr -d '[:space:]'` kapısı ve U2b sınavıyla; önceki B2, kırpılmış `YENI` üzerinden karşılaştırma ve B4b sınavıyla kapanmış. Ölçüm kirli çalışma ağacında yapılmış olsa da sunulan fark ile sınanan düzeltmeler birebir örtüşüyor."
+  }
+}
