@@ -1,9 +1,13 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.37.0
+version: 2.37.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.37.1 · Ana oturum adı ekip kaydındaki yöneticiden türer (1 Kas · kart terminal-onar-ana-tmux-yonetici · SERDAR yol 1, NAZIR bulgusu)
+Bekçi satırı kanonik şablondan yeniden yazıldığı için crontab'a elle eklenen `TO_ANA_TMUX` her onarımda siliniyordu; NAZIR'da bekçi yöneticinin `nazir-yon` oturumu yerine `nazir-ana` açıyordu. Artık `ANA_TMUX` sırası: açık beyan `TO_ANA_TMUX` > ekip kaydındaki `meta.yonetici` > `<kutu>-ana` (`ortak.sh` `ana_tmux_turet`; kayıt `_agents/handoff/ekip-registry.yaml`, yoksa `aile-registry.yaml`).
+**Kayıt yalnız iki şartla uygulanır:** değer kutu önekli bir tmux adı olmalı (`DEFTERDAR`, `SINAN` gibi insan adı ya da başka kutunun adı kullanılmaz) VE o oturum o an canlı olmalı. Canlılık şartının nedeni ölçümdür (1 Kas, 14 kutu): `huzur`, `sedir`, `tez` kaydı da `<kutu>-yon` der ama Claude `<kutu>-ana`'da çalışır ve `-yon` oturumu yoktur; kaydı körlemesine uygulamak bu üç kutuda bekçiye ikinci bir oturum açtırırdı. Dürüst sınır: yönetici oturumu o an kapalıysa `<kutu>-ana`'ya düşer (eski davranış), kapalı oturumu bekçi yeniden kurmaz. Sınav: `scripts/ana-tmux-yonetici.test.sh` (10 kapı; tmux sunucusu yalıtılmış, `TMUX` boşaltılır).
 
 ## 🆕 2.37.0 · Koltuk listesi tmux pencere boyunu verir (31 Eki · kart terminal-pencere-sutunu · gorev …G3QJ)
 Telefon `ignore-size` bağlanır: pencere boyu masaüstü istemcisinden gelir, telefon sabit 1280 px dizildiği için fazla alan noktalı kalıyordu (Mac 118 sütun + telefon 204 sütun → pencere 118x53). `koltuk-bagla.sh --liste` artık 10. sütunda etkin pencerenin boyunu (`118x53`) basar, `koltuklar.mjs` bunu `pencere: {sutun, satir}` yapar, `/api/koltuklar` taşır. Merkez telefon görüntüsünü bundan sığdırır. Boy alınamazsa alan yazılmaz (uydurma yok); eski kapıda alan yok, telefon eski kipte kalır.
