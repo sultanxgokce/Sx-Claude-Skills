@@ -1,5 +1,6 @@
 // rutbe.test.mjs — koltuk rütbesinin kayıttan türetilmesi (kart rutbe-koltuk-alani). Hermetik; fikstürler gerçek merkez ve NAZIR kayıt biçiminde.
 import { rutbeHaritasi, rutbeBul } from './rutbe.mjs';
+import { koltukEsle, kayitOdaHaritasi } from './oda.mjs';
 let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log('  ✓ ' + ad); } else { k++; console.log('  ✗ ' + ad + ' ' + ek); } };
 const MERKEZ = [{ id: 'SERDAR', oda: 'agentic-os', oda_muduru: 'evet', tmux: 'serdar:0' }, { id: 'MUAVİN', oda: 'agentic-os', tmux: 'muavin:0' }, { id: 'YAVER', amir: 'MUAVİN', tmux: 'yaver:0' },
   { id: 'BÂNİ', oda: 'agentic-os', amir: 'SERDAR', tmux: 'bani:0' }, { id: 'BERİD', oda: 'mesajlasma', oda_muduru: 'evet', amir: 'SERDAR', tmux: 'berid:0' },
@@ -24,4 +25,13 @@ kapi('R12 katlanmış adla bulur', rutbeBul(m, 'BENNA').kademe === 'personel');
 kapi('R13 reisin koltuğu açık değilse reislik ana koltuğa düşer', rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana', 'cihannuma'] }).kademe === 'reis');
 kapi('R14 reisin koltuğu açıksa ana koltuk rütbe almaz', !rutbeBul(n, 'nazir-ana', { ana: 'nazir-ana', acik: ['nazir-ana', 'nazir-yon'] }).kademe);
 kapi('R15 boş kayıt boş harita, hata yok', rutbeHaritasi(undefined).size === 0 && !rutbeBul(new Map(), 'x').kademe);
+const CANLI = [{ id: 'nazir-yon', ad: 'ŞEHBENDER', amir: 'Sultan', oda_muduru: 'evet', oda: 'nezaret', tmux: 'nazir-yon:0' }, { id: 'nazir-rasatci', ad: 'RASATÇI', amir: 'ŞEHBENDER', oda_muduru: 'evet', oda: 'omnirouter', tmux: 'nazir-rasatci:0' },
+  { id: 'nazir-seyyah', ad: 'CİHANNÜMA', amir: 'ŞEHBENDER', oda_muduru: 'evet', oda: 'hermes', tmux: 'nazir-seyyah:0' }, { id: 'nazir-seritdar', ad: 'ŞERİTDAR', amir: 'ŞEHBENDER', oda: 'nezaret', tmux: 'nazir-seritdar:0' }, { id: 'nazir-mim', ad: 'MÜSTENSİH', amir: 'CİHANNÜMA', oda: 'hermes', tmux: 'nazir-mim:0' }];
+const ACIK = ['nazir-yon', 'rasatci', 'cihannuma', 'seritdar'], c = rutbeHaritasi(CANLI, ACIK), co = kayitOdaHaritasi(CANLI, ACIK);
+kapi('R16 kayıttaki tmux eski, müdür canlı koltuğuna adından bağlanır', c.get('rasatci')?.kademe === 'oda müdürü' && c.get('cihannuma')?.amir === 'nazir-yon', JSON.stringify([...c]));
+kapi('R17 oda da canlı koltuğa bağlanır', co.get('rasatci') === 'omnirouter' && co.get('seritdar') === 'nezaret', JSON.stringify([...co]));
+kapi('R18 kapalı koltuğun rütbesi eski adında kalır, açık koltuğa uydurulmaz', c.get('nazir-mim')?.amir === 'cihannuma'  && !c.has('mustensih'));
+const SAHIP = koltukEsle([{ id: 'a', ad: 'BOSTAN', tmux: 'kapali:0' }, { id: 'b', ad: 'BAŞKA', tmux: 'bostan:0' }], ['bostan']);
+kapi('R19 açık koltuğu kayıtlı sahibinden adıyla kimse alamaz', [...SAHIP.entries()].every(([u, k]) => (u.id === 'b') === (k === 'bostan')), JSON.stringify([...SAHIP.values()]));
+kapi('R20 acik verilmeyen eski çağrı aynen çalışır', rutbeHaritasi(CANLI).has('nazir-rasatci') && kayitOdaHaritasi(CANLI).get('nazir-rasatci') === 'omnirouter');
 console.log(`geçen ${g} · kalan ${k}`); process.exit(k ? 1 : 0);

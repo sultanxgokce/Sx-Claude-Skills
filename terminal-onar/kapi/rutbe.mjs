@@ -5,14 +5,14 @@
 //   personel : amiri kayıtta bulunan öteki üye
 //   (alan yok): amiri de altı da olmayan üye. Rütbe uydurulmaz.
 // Emekli, arşiv ve dondurulmuş üye amir sayılmaz. Çözülemeyen amir adı 'amir' alanına yazılmaz: koltuk adı olmayan değer bağ kuramaz.
-import { adKatla } from './oda.mjs';
+import { adKatla, koltukEsle } from './oda.mjs';
 
 const PASIF = new Set(['emekli', 'arsiv', 'dondurulmus']);
-const koltukAdi = (u) => String(u.tmux ?? '').split(':')[0] || adKatla(u.id);
 
-/** Üyeler → koltuk adı ⟶ { kademe, amir, amir_ad }. amir koltuk adıdır (şerit bağı onunla kurar), amir_ad görünen addır. */
-export function rutbeHaritasi(uyeler) {
+/** Üyeler → koltuk adı ⟶ { kademe, amir, amir_ad }. acik verilirse koltuk adı canlı koltuklarla eşlenir (kural koltukEsle). amir koltuk adıdır (şerit bağı onunla kurar), amir_ad görünen addır. */
+export function rutbeHaritasi(uyeler, acik = []) {
   const aktif = (uyeler || []).filter((u) => u && u.id && !PASIF.has(u.durum) && !PASIF.has(u.hal));
+  const koltuk = koltukEsle(aktif, acik), koltukAdi = (u) => koltuk.get(u) || adKatla(u.id);
   const dizin = new Map();
   for (const u of aktif) for (const a of [u.id, u.ad, koltukAdi(u)]) if (a) dizin.set(adKatla(a), u);
   const amirBul = (u) => dizin.get(adKatla(u.amir)) || null;

@@ -1,0 +1,12 @@
+$ node _agents/fabrika/kanit/rutbe-koltuk-eslesme/nazir-esle-olc.mjs /config/.claude/skills/terminal-onar/kapi
+# rc=0 sure=35.1s zaman=2026-11-01T15:03:54+03:00
+--- stdout ---
+nazir-yon   reis        -          nezaret
+rasatci     -           -          oda dışı
+cihannuma   -           -          oda dışı
+mizanci     -           -          oda dışı
+seritdar    -           -          oda dışı
+kilavuz     oda müdürü  nazir-yon  paperclip
+rutbe_ve_oda_dolu=2/6
+--- stderr ---
+⏳ agir-sira: kanit-rutbe-koltuk-eslesme-nazir-eslesme 35 sn bekledi (yuva 1, load1 17.88)

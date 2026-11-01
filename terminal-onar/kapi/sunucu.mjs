@@ -493,9 +493,9 @@ const sunucu = http.createServer(async (req, res) => {
         // ODA (2.36.8 · kutu–oda modeli 2 · SERDAR kararı A, 31 Eki): sıra oda.json → kayıttaki oda → oda dışı (kural kapi/oda.mjs'te); koltukta oda_kaynak klasor|kayit.
         //   Ayrışmada klasör geçerli, oda_uyari döner. Dizin yanıta YAZILMAZ. Kayıt okunamazsa yalnız klasör basamağı kalır, liste düşmez.
         // RÜTBE (2.38.0 · kart rutbe-koltuk-alani): kademe · amir · amir_ad kayıttan türer (kural kapi/rutbe.mjs); kayıt okunamazsa alan yazılmaz, liste düşmez.
-        let kayitOda = new Map(), rutbe = new Map(); try { const { uyeler } = kayitOku(PROJE); kayitOda = kayitOdaHaritasi(uyeler); rutbe = rutbeHaritasi(uyeler); } catch {}
         const odalar = new Map();
         const satirlar = koltukSatirlari(r.out), acik = satirlar.map((k) => k.ad);
+        let kayitOda = new Map(), rutbe = new Map(); try { const { uyeler } = kayitOku(PROJE); kayitOda = kayitOdaHaritasi(uyeler, acik); rutbe = rutbeHaritasi(uyeler, acik); } catch {}
         const koltuklar = satirlar.map(({ dizin, ...k }) => {
           const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta);
           if (sec && sec.kaynak === 'klasor') odalar.set(sec.oda, bulunan);   // klasörün hedef · reis bilgisi kayıt satırını ezer
