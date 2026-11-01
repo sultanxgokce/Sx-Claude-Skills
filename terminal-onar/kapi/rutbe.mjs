@@ -22,14 +22,22 @@ export function rutbeHaritasi(uyeler, acik = []) {
   for (const u of aktif) {
     const ham = String(u.amir ?? '').trim(), a = amirBul(u), sultana = adKatla(ham) === 'sultan', mudur = u.oda_muduru === 'evet';
     const kademe = sultana || (!ham && mudur) ? 'reis' : mudur || altSay.get(u) ? 'oda müdürü' : a ? 'personel' : '';
-    if (!kademe) continue;
-    h.set(koltukAdi(u), { kademe, ...(a && a !== u ? { amir: koltukAdi(a), amir_ad: String(a.ad || a.id) } : {}) });
+    const ad = String(u.ad || '').trim();
+    if (!kademe && !ad) continue;
+    h.set(koltukAdi(u), { ...(ad ? { gorunen_ad: ad } : {}), ...(kademe ? { kademe } : {}), ...(kademe && a && a !== u ? { amir: koltukAdi(a), amir_ad: String(a.ad || a.id) } : {}) });
   }
   return h;
 }
 
-/** Koltuğun rütbesi: önce birebir ad, sonra katlanmış ad; yoksa {}. Ana koltukta rutbe olmaz (Sultan kararı): reisin koltuğu açık değilse bile rütbe anaya düşmez. */
-export function rutbeBul(harita, koltuk) {
+/** Koltuğun rütbesi + görünen adı: önce birebir ad, sonra katlanmış ad; yoksa {}.
+ *  Ana oturum reisin koltuğudur (Sultan kararı, kutuda ayrı ana koltuk yok): reisin KENDİ koltuğu açık değilse ana koltuk reisin rütbesini ve adını alır.
+ *  Reisin ayrı koltuğu açıksa (kod kutusu: SERDAR ayrı) ana rütbesiz kalır. */
+export function rutbeBul(harita, koltuk, { ana = '', acik = [] } = {}) {
   const bul = (ad) => harita.get(ad) || [...harita].find(([k]) => adKatla(k) === adKatla(ad))?.[1];
-  return bul(koltuk) || {};
+  const r = bul(koltuk);
+  if (r) return r;
+  if (!ana || koltuk !== ana) return {};
+  const reis = [...harita].find(([, v]) => v.kademe === 'reis');
+  if (!reis || acik.some((a) => adKatla(a) === adKatla(reis[0]))) return {};
+  return reis[1];
 }
