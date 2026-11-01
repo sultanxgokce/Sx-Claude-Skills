@@ -67,7 +67,7 @@ bash "$EK" benimse --dosya "$T/alt.md" --baz alt-personel --manifest "$T/yok.yam
 ok "P9e izole benimse --baz alt-personel → rc 0" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc"
 ok "P9f alt-personel kimliği: birleştirme yapmaz, amirine döner; Sultan-eşli/Merge'i SEN sözü yok" "$(grep -q 'Birleştirme yapmazsın' "$T/alt.md" && grep -q 'AMİRİNE DÖN' "$T/alt.md" && ! grep -qE "Sultan-eşli, interaktif|Merge'i SEN" "$T/alt.md" && echo 0 || echo 1)"
 ok "P9g iki yeni temel base-manifest persona_baz'da kayıtlı" "$(grep -q 'ad: izole-kutu' "$PAKET/cekirdek/base-manifest.yaml" && grep -q 'ad: alt-personel' "$PAKET/cekirdek/base-manifest.yaml" && echo 0 || echo 1)"
-ok "P7c SKILL sürümü 1.6.3 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple(int(x) for x in sys.argv[1].split('.'));sys.exit(0 if v>=(1,6,3) else 1)" "${SV:-0.0.0}" && echo 0 || echo 1)"
+ok "P7c SKILL sürümü 1.6.4 ve üstü ($SV)" "$(python3 -c "import sys;v=tuple(int(x) for x in sys.argv[1].split('.'));sys.exit(0 if v>=(1,6,4) else 1)" "${SV:-0.0.0}" && echo 0 || echo 1)"
 [ -f "$PAKET/../catalog.json" ] && ok "P7d catalog.json sürümü SKILL ile aynı ($CV)" "$([ "$CV" = "$SV" ] && echo 0 || echo 1)" "→ SKILL $SV ≠ catalog $CV" || echo "  · P7d atlandı: catalog.json paketin yanında yok (kutuya kurulu kopya)"
 
 # P8 (Kuzey Hat E): izole kutuların çoğunda sistem python3'ünde PyYAML YOK. `python3 -S` site-packages'ı kapatır → PyYAML YALNIZ paketle gelen vendor/yaml'dan gelebilir.

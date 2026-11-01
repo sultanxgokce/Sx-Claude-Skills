@@ -1,0 +1,100 @@
+{
+  "is": "kart-ad-esleme",
+  "arac": "kanit.py/0.6.0",
+  "guncelleme": "2026-11-01T04:57:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "be1ff4632cb5a89d147bd254ee1e4e2c16fde99571fba0fb6edb88643247ea5a",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/a0/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-01T04:45:43+03:00",
+      "sure_sn": 165.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "476c3d30c4ea44a794e3e4ab2f092d1c",
+      "olculen_commit": "166a5f8254885d346bce94153852abc8cf0742c8",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "bb8fdf1ecf5dd8576596d9a3818963a99bf41dc24622a1365777657919e802a2",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:48:56+03:00",
+      "sure_sn": 192.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2a29c7c1ae844257824d30a7ca7f2ff2",
+      "olculen_commit": "166a5f8254885d346bce94153852abc8cf0742c8",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-birebir-ad",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-birebir-ad-sonra.txt",
+      "sha256": "6d54410f30342abe4901e2b5842f993993151f2586aca51e1382f05878f24df0",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/a1/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:53:06+03:00",
+      "sure_sn": 249.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "0844fdf49e1b43389aba713189157a3b",
+      "olculen_commit": "166a5f8254885d346bce94153852abc8cf0742c8",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-herkes-sahip",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-herkes-sahip-sonra.txt",
+      "sha256": "38040b47b7e2a024cf8ebf970f2ea1e024081a1262cdd7eb63f8a63a67ae9010",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kc3/a2/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-01T04:57:09+03:00",
+      "sure_sn": 243.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "4f9f839b52fc4b49a5bbbf7c7a04819e",
+      "olculen_commit": "166a5f8254885d346bce94153852abc8cf0742c8",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "0f241b99998f48999f22c164a63f430fea78f2e8289e48ba049fa83a0459b6d6"
+}

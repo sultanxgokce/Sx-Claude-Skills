@@ -1,0 +1,34 @@
+{
+  "is": "kart-ad-esleme",
+  "cumle": "Kart aracı sahibi yazım farkına takılmadan tanır: BANI ile BÂNİ aynı kişidir, sahip denetimleri ve kart süzgeçleri tek ad karşılaştırması kullanır",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-01T04:35:18+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6570PRWEC66XE6CP4XY3K8F",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-01T04:35:18+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

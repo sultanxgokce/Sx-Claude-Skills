@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/bk-gercek.sh
+# rc=0 sure=6.0s zaman=2026-11-01T04:52:18+03:00
+--- stdout ---
+bulgu.test: 61 geçti · 0 kaldı
+== 13 geçti · 0 düştü ==
+--- stderr ---

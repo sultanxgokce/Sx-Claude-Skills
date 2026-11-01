@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "bulgu-kaynak-uyum",
+  "pr": "639",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T04:53:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-bulgu-kaynak-uyum",
+  "dal": "bulgu-kaynak-uyum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23046,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3615
+  },
+  "dalgic": "uyumsuz",
+  "bas": "044e82da9dbdf0c1f8e11e50ba74bafc6aed5269",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen kaynak uyumu, sürüm artışları ve uyum-haftalik çağrısı uygulanmış; gerçek ölçüm 61+13 sınavın geçtiğini, mutasyon ölçümü de kaynak aktarımı bozulunca kapının düştüğünü gösteriyor. Ancak `--kaynak` yalnız merkezî kayıt gövdesine bağlanmış görünüyor; jetonsuz/eski defter yolunda kabul edilip sessizce etkisiz kalması nedeniyle önce bu yolun davranışı açıkça tamamlanmalı ya da reddedilmelidir.",
+    "bulgular": [
+      {
+        "ne": "`bulgu.sh yaz --kaynak` seçeneği genel olarak kabul ediliyor fakat üretim farkında `kaynak` yalnız merkezî Görev Defteri JSON gövdesindeki `kaynak_nereden` alanına aktarılıyor; jetonsuz/eski defter yoluna aktarım veya bu yolda açık ret gösterilmiyor. Bu, komutun ilan edilen genel sözleşmesinde sessiz kaynak kaybı riski doğuruyor.",
+        "kanit": "Değişiklikte `kaynak=\"bulgu komutu\"` ve seçenek ayrıştırması komutun ortak başında; değişkenin gösterilen tek tüketimi merkezî yolun `govde` üretimindeki `kaynak_nereden: kn`. K1e2 sınavı da yalnız `DEFTER_JETON_YOL` ile merkezî HTTP gövdesini denetliyor; jetonsuz yol için kaynak sınavı yok.",
+        "konum": "bulgu/scripts/bulgu.sh: yaz seçenekleri ve merkezî `govde` üretimi; bulgu/scripts/bulgu.test.sh: K1e2-K1e3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `bk-parite` gerçek ölçümü rc=0 ile `bulgu.test: 61 geçti · 0 kaldı` ve bütünleşik `13 geçti · 0 düştü` veriyor. `bk-mutant` gerçek kod sonucu değildir: `mutasyon:true`, `gercek_olcum:bk-parite` ve kaynak aktarımı kaldırılınca U1b’nin düşmesi sınavın ilgili kusuru yakaladığını doğruluyor. Bununla birlikte kanıt, jetonsuz/eski defter yolunda `--kaynak` davranışını açıkça ölçmüyor."
+  }
+}

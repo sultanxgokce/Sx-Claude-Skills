@@ -1530,7 +1530,7 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.27.41",
+      "version": "0.27.42",
       "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2: sergi-beceri.py → sergi.mmepanel.com canlı (22 Eyl). F3: kart.sh (sınıf soruları araçta; kartsız iş alanı açılmaz) + gun-sonu.sh (özet defterden). Kapılar: ana-dal Edit/Write kilidi + birleştirme kapısı (kanıtsız/puansız iş birleşemez).",
       "prerequisites": {
         "system": [
@@ -1679,7 +1679,7 @@
       "id": "bulgu",
       "type": "workflow",
       "name": "Bulgu — filonun tek bulgu komutu (kutunun Bulgu Defteri'ne yaz/listele/hâl)",
-      "version": "0.6.5",
+      "version": "0.6.6",
       "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06). 0.3.0: jeton varsa merkezî Görev Defteri'ne görev yazar. 0.4.0: --dugum ile başka kutunun bekleyen görevine düğüm bağı. 0.4.1: bağ reddinde defterin neden + yapılacak satırı basılır. 0.5.0: kayıt varsayılan 'havuz' durumunda açılır (Sırada'ya düşmez, haftalık süzmede görev olur); --gorev doğrudan iş; --dugum --gorev ister; defter havuzu tanımıyorsa söyler.",
       "tags": [
         "bulgu",
@@ -1851,7 +1851,7 @@
       "id": "duzen",
       "type": "workflow",
       "name": "Düzen — filo düzen paketi (çekirdek metinler · el defteri · not aracı · sürüm denetimi)",
-      "version": "1.6.3",
+      "version": "1.6.4",
       "sync_dagitim": true,
       "description": "Sultan'ın 'Serdar kutusundaki düzen tüm kutularda aynı olmalı' isteğinin paketi: altı başlık (görev · Bulgu Havuzu · Hasat · oda · haberleşme · çekirdek) için sahip beceriye işaret eder, master prompt çekirdeğini (manuel-claude-base · mudur-base · durma-standardi · cevapsiz-birakma) tek kaynakta taşır, koltuğun el defterini alt ajan istemi için tek metin basar (el-defteri.sh), koltuksuz alt personel için kimlik+oda/yetki+el defteri+iş+sabit kuralları tek istemde üretir (alt-ajan-istem.sh, 1.1.0), Nexus append-note.sh'ın birebir kopyasını 19 kutuya indirir (md5 paritesi sınavlı), kutudaki kurulu sürümü ve ekipc işaretli kimliklerin bayatlığını yalnız raporlar (surum.sh). Kopya değil işaretçi; çekirdek metin yalnız burada yaşar.",
       "installed_in": [

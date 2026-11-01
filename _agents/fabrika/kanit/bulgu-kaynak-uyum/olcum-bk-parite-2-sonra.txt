@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/bk-gercek.sh
+# rc=0 sure=135.5s zaman=2026-11-01T04:57:15+03:00
+--- stdout ---
+bulgu.test: 63 geçti · 0 kaldı
+== 13 geçti · 0 düştü ==
+--- stderr ---
+⏳ agir-sira: kanit-bulgu-kaynak-uyum-bk-parite-2 130 sn bekledi (yuva 1, load1 15.64)

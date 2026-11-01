@@ -84,6 +84,7 @@ kanit_agaci() {  # kanit_agaci <iş> → stdout: kanıt dizini · stderr: kaynak
 }
 KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
+export PYTHONPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)${PYTHONPATH:+:$PYTHONPATH}"   # gömülü python ad karşılaştırmasını soru.py'den alır: BANI ile BÂNİ aynı kişi, tek kural
 CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # tek argümanlı komut (liste · borclar) "tanınmayan argüman" olmasın
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
 KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""; SOZ_ZAMANI=""
@@ -534,10 +535,11 @@ PY
       for ONC in $(python3 - "$KD" "$IS" "$ALDI" "$GOREV" <<'PY'
 import json,glob,os,sys
 kd,yeni,aldi,gorev=sys.argv[1:]
+from soru import ayni_ad
 for f in sorted(glob.glob(kd+"/*.json")):
     try: k=json.load(open(f))
     except Exception: continue
-    if k.get("is")!=yeni and k.get("aldi")==aldi and k.get("durum")=="acik" and k.get("gorev") and k.get("gorev")!=gorev: print(k["is"])
+    if k.get("is")!=yeni and ayni_ad(k.get("aldi"),aldi) and k.get("durum")=="acik" and k.get("gorev") and k.get("gorev")!=gorev: print(k["is"])
 PY
 ); do GECTI_KART="$IS" gorev_yaz "$KD/$ONC.json" gecti || GRC=4; done
     fi
@@ -664,12 +666,13 @@ def dal_bul(ad):
             continue
         if eslesir: return pr_,"dal-adi-varyant"
     return None,"dal-adi"
+from soru import ayni_ad
 kapanan=[]; sinifli=[]; bozuk=[]; bekleyen=0; yazilacak=[]
 for f in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try: k=json.load(open(f,encoding="utf-8"))
     except Exception: bozuk.append(os.path.basename(f)); continue
     if k.get("durum") not in ("acik","tikandi"): continue
-    if aldi and k.get("aldi")!=aldi: continue
+    if aldi and not ayni_ad(k.get("aldi"),aldi): continue
     pn=str(k.get("pr") or "").strip().lstrip("#")
     if pn.isdigit(): p=no.get(int(pn)); yontem="kart-pr"
     else: p,yontem=dal_bul(k.get("is"))
@@ -799,7 +802,8 @@ k=json.load(open(yol,encoding="utf-8"))
 # 🔴 (bağımsız göz 8 Eki tur 1) kararı veren, KARTTA yazılı iş sahibi (aldi) olmalı — araç kimlik doğrulayamaz,
 #    ama en azından karta yazılı sahipten başka bir adı kabul etmez. Başka bir reisin kararı (ör. SERDAR'ın MUAVİN'in
 #    işine "devam" demesi) mektupla gelir; sahip kendi adıyla işler ve gerekçede o mektuba atıf yapar.
-if reis != k.get("aldi"):
+from soru import ayni_ad
+if not ayni_ad(reis,k.get("aldi")):
     print(f"✗ --reis '{reis}' kartın sahibi değil (kartta aldi: {k.get('aldi')}) — sahip kendi adıyla işler, başkasının kararına gerekçede atıf yapar", file=sys.stderr); raise SystemExit(1)
 sinifli=siniflimi(k); iz,iza=izin_durumu(k) if sinifli else ("gerekmiyor","")
 if sinifli and iz=="dur":   # VETO çiti · reis-dedi
@@ -1012,7 +1016,8 @@ yol,gorev,tahmin,reis,kd,bag=sys.argv[1:]
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 if k.get("durum")!="acik":
     print(f"✗ kart açık değil (durum: {k.get('durum')}) — biten kartın görev bağı sonradan değiştirilmez", file=sys.stderr); raise SystemExit(1)
-if reis != k.get("aldi"):
+from soru import ayni_ad
+if not ayni_ad(reis,k.get("aldi")):
     print(f"✗ --reis '{reis}' kartın sahibi değil (kartta aldı: {k.get('aldi')}) — görev bağını yalnız sahip ekler", file=sys.stderr); raise SystemExit(1)
 if k.get("gorev"):
     print(f"✗ kart zaten bağlı: {k['gorev']} — bağ değiştirilmez, yeni iş yeni karttır", file=sys.stderr); raise SystemExit(1)
@@ -1064,7 +1069,8 @@ yol,cevap,gerekce,reis=sys.argv[1:]
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 if k.get("durum")!="acik":
     print(f"✗ kart açık değil (durum: {k.get('durum')}) — kapanmış kartın canlı şartı sonradan değiştirilmez; bitmiş işe geriye dönük gerekçe yazılmaz", file=sys.stderr); raise SystemExit(1)
-if reis != k.get("aldi"):
+from soru import ayni_ad
+if not ayni_ad(reis,k.get("aldi")):
     print(f"✗ --reis '{reis}' kartın sahibi değil (kartta aldı: {k.get('aldi')}) — canlı şartını yalnız sahip ayarlar; başkasının kararı gerekçede atıfla", file=sys.stderr); raise SystemExit(1)
 k["canli_gerekir"]=(cevap=="e"); k["canli_sebep"]=f"sahip {reis} ayarladı (--canli {cevap}): {gerekce}"
 k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"canli-ayarla","reis":reis,"canli":cevap,"gerekce":gerekce})
@@ -1099,7 +1105,8 @@ yol,gj,reis,tur,ts,gorev=sys.argv[1:]; tur=int(tur); ts=int(ts)
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 def red(m): print("✗ "+m, file=sys.stderr); raise SystemExit(1)
 if k.get("durum")!="acik": red(f"kart açık değil (durum: {k.get('durum')}) — kapanmış kartta Sultan turu kaydedilmez")
-if reis!=k.get("aldi"): red(f"--reis '{reis}' kartın sahibi değil (aldı: {k.get('aldi')}) — Sultan turunu yalnız sahip kaydeder")
+from soru import ayni_ad
+if not ayni_ad(reis,k.get("aldi")): red(f"--reis '{reis}' kartın sahibi değil (aldı: {k.get('aldi')}) — Sultan turunu yalnız sahip kaydeder")
 try: g=json.load(open(gj,encoding="utf-8")).get("kayit") or {}
 except Exception as e: red(f"görev kaydı okunamadı ({e}) — tur KAYDEDİLMEDİ")
 et=(g.get("canli") or {}).get("etiket")

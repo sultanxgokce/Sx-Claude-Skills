@@ -13,14 +13,15 @@ k="${1:-}"; shift || true
 case "$k" in
   yaz)
     baslik="${1:-}"; shift || true
-    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--oda <oda>] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>] [--gorev --ozet \"<tek cümle: sebep → ne yapılacak → bitince ne olur>\"]" >&2; echo "  başlıkta sayı varsa TEK ölçüt biçimi (SERDAR 29 Eki): '<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)'; çok parçalı başlık sayılabilir maddelere bölünür ya da [ayri] ile ayrılır; süre/aşama içeren başlık süresi dolmadan bitti yazılmaz" >&2; exit 2; }
-    kim=""; notu=""; etiket="bug"; dugum=""; durum="havuz"; gorev=0; ozet=""; oda=""
+    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--oda <oda>] [--kaynak <ad>] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>] [--gorev --ozet \"<tek cümle: sebep → ne yapılacak → bitince ne olur>\"]" >&2; echo "  başlıkta sayı varsa TEK ölçüt biçimi (SERDAR 29 Eki): '<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)'; çok parçalı başlık sayılabilir maddelere bölünür ya da [ayri] ile ayrılır; süre/aşama içeren başlık süresi dolmadan bitti yazılmaz" >&2; exit 2; }
+    kim=""; notu=""; etiket="bug"; dugum=""; durum="havuz"; gorev=0; ozet=""; oda=""; kaynak="bulgu komutu"
     while [ $# -gt 0 ]; do case "$1" in
       --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;
       --not) [ $# -ge 2 ] || { echo "--not değersiz" >&2; exit 2; }; notu="$2"; shift 2 ;;
       --etiket) [ $# -ge 2 ] || { echo "--etiket değersiz" >&2; exit 2; }; etiket="$2"; shift 2 ;;
       --dugum) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--dugum değersiz" >&2; exit 2; }; dugum="$2"; shift 2 ;;
       --ozet) [ $# -ge 2 ] || { echo "--ozet değersiz" >&2; exit 2; }; ozet="$2"; shift 2 ;;   # 0.6.1: defter açılışta ozet_sultan ister (--gorev yolu)
+      --kaynak) [ $# -ge 2 ] && [[ "$2" =~ ^[a-z][a-z0-9-]{1,30}$ ]] || { echo "--kaynak küçük harf/rakam/tire olmalı (örn. uyum)" >&2; exit 2; }; kaynak="$2"; shift 2 ;;   # 0.6.6: kaydın kaynak_nereden alanı (varsayılan "bulgu komutu"); üretici betikler (uyum-haftalik → uyum) kendi kaynağını yazar, Kuzey G30 bunu sayar
       --gorev) durum="acik"; gorev=1; shift ;;   # 0.5.0: bulgu değil doğrudan İŞ (Sultan/reis talimatı) → Sırada'ya düşer
       --oda) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--oda değersiz" >&2; exit 2; }; oda="$2"; shift 2 ;;   # 0.6.3: kaydın odası (Meşveret seansı geçirir; defterin oda alanı, gorev.sh ac --oda ile aynı)
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
@@ -71,13 +72,13 @@ if kod!="200": print("⛔ düğümün bekleyen görevi %s görünmüyor (http %s
 k=json.loads(g)["kayit"]; print("%s:%s" % (k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["id"]), end="")' "$dugum")" || exit 1 ;;
       esac
       govde="$(python3 -c 'import sys,json
-b,kim,notu,et,dg,dr,oz,od=sys.argv[1:9]
-d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","kaynak_sinif":"ajan","gorev_durumu":dr}
+b,kim,notu,et,dg,dr,oz,od,kn=sys.argv[1:10]
+d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":kn,"kaynak_sinif":"ajan","gorev_durumu":dr}
 if od: d["oda"]=od
 if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
 if dg: d["dugum_acar"]=dg
 if oz.strip(): d["ozet_sultan"]=oz.strip()
-print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum" "$durum" "$ozet" "$oda")"
+print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum" "$durum" "$ozet" "$oda" "$kaynak")"
       cevap="$(curl -sS -m 15 --config "$cfg" -X POST -H 'content-type: application/json' --data-binary "$govde" "$UC/kayit" -w '\n%{http_code}' 2>&1)"; rc=$?
       rm -f -- "$cfg"
       if [ $rc -ne 0 ]; then echo "⛔ merkezî Görev Defteri'ne ulaşılamadı ($UC): $cevap — kayıt YAZILMADI (eski deftere de düşmedi: ikilik olmasın; sonra yeniden dene ya da SERDAR'a yaz)" >&2; exit 1; fi
@@ -102,6 +103,7 @@ if b and not b.get("yazildi"): sys.exit(4)'
       [ -f "$YAZ" ] || _kur_yok
       echo "ℹ bu kutuda defter jetonu yok ($JY) — kayıt ESKİ kutu defterine yazılıyor (merkeze taşınması için SERDAR'a: jeton-dagit)" >&2
       echo "⚠ havuz yalnız merkezî defterde var: bu kayıt eski kutu defterine 'acik' hâliyle düşüyor, Sırada ayrımı UYGULANMADI (--gorev burada anlamsız)" >&2
+      [ "$kaynak" != "bulgu komutu" ] && echo "⚠ eski kutu defteri kaynak alanı tanımıyor: --kaynak $kaynak bu kayda YAZILMADI (kaynak yalnız merkezî defterde)" >&2
       [ -n "$oda" ] && echo "⚠ eski kutu defteri oda alanı tanımıyor: --oda $oda bu kayda YAZILMADI (oda yalnız merkezî defterde)" >&2
       if [ -n "$notu" ]; then python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --not "$notu" --kok "$KOK"
       else python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --kok "$KOK"; fi
