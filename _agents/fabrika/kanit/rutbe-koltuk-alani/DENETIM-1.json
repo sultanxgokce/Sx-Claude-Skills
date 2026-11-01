@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "rutbe-koltuk-alani",
+  "pr": "652",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-01T14:23:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-rutbe-koltuk-alani",
+  "dal": "rutbe-koltuk-alani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__medium",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32228,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 17236
+  },
+  "dalgic": "uyumsuz",
+  "bas": "dd3b48d3d7f55f15c6eadb6bd351c842e4753bfb",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kapının `/api/koltuklar` cevabına kayıttan türetilen kademe ve amir bilgileri bağlanmış; bilgisiz koltuklarda alan bırakılmaması da sınanmış. Ancak kartın istediği `oda müdürü` kademe değeri yerine API `mudur` döndürüyor; sözleşme netleştirilip bu uyumsuzluk çözülmeden üretime verilmemeli.",
+    "bulgular": [
+      {
+        "ne": "Kademe sözleşmesi iş kartıyla birebir uyuşmuyor: talep `reis, oda müdürü, personel` derken uygulama müdürler için `mudur` üretiyor.",
+        "kanit": "`rutbeHaritasi` içindeki üçlü koşulun müdür dalı sabit olarak `'mudur'` döndürüyor; R2, R3, R9, R11 ve uçtan uca RT1 de yalnız bu değeri kabul ederek uyuşmazlığı onaylıyor.",
+        "konum": "terminal-onar/kapi/rutbe.mjs:27",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki gerçek ölçüm yeşil, sarı kayıt yok. Birim ölçümü 15/15, sunucu uçtan uca ölçümü 139/139 geçiyor; mutasyon kaydı da bilerek bozulan kademe kodunun sınavı düşürdüğünü gösteriyor. Ölçümler kirli çalışma ağacında alınmış olsa da ölçülen commit kaydedilmiş; kanıt davranış kapsamını güçlü biçimde gösteriyor, fakat sınavların iş kartındaki `oda müdürü` ifadesi yerine uygulamanın `mudur` sözleşmesini benimsemesi hedef doğruluğunu kanıtlamıyor."
+  }
+}
