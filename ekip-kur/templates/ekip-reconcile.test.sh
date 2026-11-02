@@ -3,6 +3,7 @@
 # kabuk-testleri: sure=120
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"; G=0; K=0
+has() { case "$2" in *"$1"*) return 0;; esac; return 1; }   # düz alt dize (boru arkasında grep -q yok)
 ok() { if [ "$2" = 1 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1  → ${3:-}"; fi; }
 kos() { local S="$1" T; T="$(mktemp -d)"; mkdir -p "$T/_agents/handoff"
   cat > "$T/ekip-registry.yaml" <<Y
@@ -21,8 +22,8 @@ uyeler:
     koltuk: "yok"   # uyuyan
 Y
   O="$(EKIP_REGISTRY="$T/ekip-registry.yaml" bash "$S" --dry-run 2>&1)"
-  ok "R1 koltuk:yok üyeler için tmux-alani-parse-edilemedi bayrağı YOK" "$(printf '%s' "$O" | grep -q 'parse-edilemedi' && echo 0 || echo 1)" "$O"
-  ok "R2 koltuklu ama ölü üye hâlâ bayraklanır (olu-oturum ANA)" "$(printf '%s' "$O" | grep -q $'olu-oturum\tANA' && echo 1 || echo 0)" "$O"
+  ok "R1 koltuk:yok üyeler için tmux-alani-parse-edilemedi bayrağı YOK" "$(has 'parse-edilemedi' "$O" && echo 0 || echo 1)" "$O"
+  ok "R2 koltuklu ama ölü üye hâlâ bayraklanır (olu-oturum ANA)" "$(has $'olu-oturum\tANA' "$O" && echo 1 || echo 0)" "$O"
   find "$T" -delete; }
 kos "$HERE/ekip-reconcile.sh"
 echo "SONUÇ: geçti=$G kaldı=$K"; [ "$K" -eq 0 ] || exit 1

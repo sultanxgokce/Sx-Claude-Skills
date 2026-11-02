@@ -4,7 +4,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 command -v tmux >/dev/null || { echo "ÖLÇÜLEMEDİ: tmux yok"; exit 3; }
-G=0; K=0; ok() { if [ "$2" = 1 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1  → ${3:-}"; fi; }
+G=0; K=0; has() { case "$2" in *"$1"*) return 0;; esac; return 1; }; ok() { if [ "$2" = 1 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); echo "  ✗ $1  → ${3:-}"; fi; }
 kos() { # <usta.sh yolu> ... ortamı kurar, SINAV bloğunu koşar; sonuç K sayısı
   local U="$1"; T="$(mktemp -d)"; SOK="usta-test-$$-$RANDOM"
   printf '#!/usr/bin/env bash\nexec tmux -L %s "$@"\n' "$SOK" > "$T/tm"; chmod +x "$T/tm"
@@ -25,9 +25,9 @@ Y
   mkdir -p "$P/ustalar/BASSIZ"
   local O r
   O="$(bash "$U" liste 2>&1)"
-  ok "U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok, BASSIZ kayit-eksik)" "$([ "$(printf '%s' "$O" | grep -c .)" = 4 ] && printf '%s' "$O" | grep -q $'BASSIZ\tkayit-eksik' && ! printf '%s' "$O" | grep -q 'MUDUR\|KLASORLU' && echo 1 || echo 0)" "$O"
+  ok "U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok, BASSIZ kayit-eksik)" "$([ "$(wc -l <<<"$O")" = 4 ] && has $'BASSIZ\tkayit-eksik' "$O" && ! has MUDUR "$O" && ! has KLASORLU "$O" && echo 1 || echo 0)" "$O"
   O="$(TO_KUTU=sinav TO_PROJE="$P" bash "$(dirname "$U")/koltuk-ac.sh" durum PERGEL 2>&1)"
-  ok "U10 koltuk-ac: usta koltuğu yol=usta olarak tanınır (kayıtsız koltuk gibi reddedilmez)" "$(printf '%s' "$O" | grep -q '"yol":"usta"' && echo 1 || echo 0)" "$O"
+  ok "U10 koltuk-ac: usta koltuğu yol=usta olarak tanınır (kayıtsız koltuk gibi reddedilmez)" "$(has '"yol":"usta"' "$O" && echo 1 || echo 0)" "$O"
   # prova: PERGEL'in sohbeti YANLIŞ klasörün proje dizinine konur
   local YK; YK="$T/cfg/projects/$(printf '%s' "$P/ustalar/KUKLACI" | sed 's#[/._]#-#g')"
   mv "$T/cfg/projects/$(printf '%s' "$P/ustalar/PERGEL" | sed 's#[/._]#-#g')/sid-PERGEL.jsonl" "$YK/sid-PERGEL.jsonl"
@@ -37,14 +37,14 @@ Y
   O="$(bash "$U" uyandir BASSIZ 2>&1)"; r=$?
   ok "U3 sohbet kimliği yok → rc 5, kimliksiz Claude açılmaz" "$([ "$r" = 5 ] && echo 1 || echo 0)" "rc=$r $O"
   O="$(bash "$U" uyandir PERGEL --kuru 2>&1)"; r=$?
-  ok "U4 kuru koşu: plan basar, oturum AÇMAZ" "$([ "$r" = 0 ] && printf '%s' "$O" | grep -q 'KURU' && ! "$T/tm" has-session -t =PERGEL 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
+  ok "U4 kuru koşu: plan basar, oturum AÇMAZ" "$([ "$r" = 0 ] && has 'KURU' "$O" && ! "$T/tm" has-session -t =PERGEL 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
   O="$(bash "$U" uyandir PERGEL 2>&1)"; r=$?; sleep 1
   ok "U5 uyandır: oturum açıldı, claude ustanın KENDİ klasöründe --resume <sohbet> ile koştu" "$([ "$r" = 0 ] && grep -q "pwd=$P/ustalar/PERGEL args=--resume sid-PERGEL" "$T/claude.log" && echo 1 || echo 0)" "rc=$r $O $(cat "$T/claude.log" 2>/dev/null)"
   # tavan 2: PERGEL uyanık; KUKLACI uyandır → 2; ORTA uyandır → en boşta (PERGEL) uyur
   export UST_TAVAN=2
   sleep 1; bash "$U" uyandir KUKLACI >/dev/null 2>&1; sleep 2
   O="$(bash "$U" uyandir ORTA --kuru 2>&1)"
-  ok "U6 tavan dolu (2/2): kuru koşu EN BOŞTAKİNİ (PERGEL) uyutacağını söyler" "$(printf '%s' "$O" | grep -q 'en boştaki uyutulur: PERGEL' && echo 1 || echo 0)" "$O"
+  ok "U6 tavan dolu (2/2): kuru koşu EN BOŞTAKİNİ (PERGEL) uyutacağını söyler" "$(has 'en boştaki uyutulur: PERGEL' "$O" && echo 1 || echo 0)" "$O"
   bash "$U" uyandir ORTA >/dev/null 2>&1; sleep 1
   ok "U7 tavan: gerçek koşuda PERGEL uyutuldu, ORTA uyandı, uyanık sayısı 2" "$(! "$T/tm" has-session -t =PERGEL 2>/dev/null && "$T/tm" has-session -t =ORTA 2>/dev/null && [ "$(bash "$U" liste | grep -c $'\tuyanik\t')" = 2 ] && echo 1 || echo 0)" "$(bash "$U" liste)"
   ok "U8 kapanış kancası: uyutulan ustanın DURUM.md dosyasına uyutma damgası düştü" "$(grep -q 'uyutuldu' "$P/ustalar/PERGEL/DURUM.md" 2>/dev/null && echo 1 || echo 0)" "$(cat "$P/ustalar/PERGEL/DURUM.md" 2>&1)"
