@@ -13,3 +13,4 @@ _agents/fabrika/karne.jsonl
 # ana kopya main'e geçemez ('untracked working tree files would be overwritten', 23 Eki ölçümü: 67 kart). PR'a giden donmuş
 # kopya kanit/<iş>/KART.json'dadır. Emsal: cloudtop #802 · Nexus #1148.
 _agents/fabrika/kartlar/*.json
+**/.mutant-*
