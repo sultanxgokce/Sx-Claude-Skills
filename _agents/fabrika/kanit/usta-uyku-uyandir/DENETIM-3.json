@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T23:50:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26763,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 6224
+  },
+  "dalgic": "uyumsuz",
+  "bas": "117f7e82a4ba011a89217841699c49cd0deea042",
+  "duzeltme_farki": {
+    "onceki_bas": "65f4bd583e30eab4c82b2cbca40966d97fe29ded",
+    "dosya": 5,
+    "bayt": 11937,
+    "tam_bayt": 50969
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turda açık bulgu yoktu; bu turdaki üretim farkı yalnız sınavların boru arkasındaki `grep -q` denetimlerini düz alt-dize yordamına çevirmiş ve son ölçüm 12/12 kapı ile 10/10 mutantı yeniden geçirmiş. Talep edilen usta uyandırma, yanlış-klasör kilidi, altı uyanık tavanı, en boştakini uyutma, DURUM.md kancası, sessiz reconcile ve koltuk-ac yolu ölçümlerde karşılandığından iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek davranış kapıları son usta ölçümünde 12/12, reconcile ölçümünde 2/2 ve koltuk-ac regresyonunda 45/45 geçiyor; mutant bölümleri de sırasıyla 10/10 ve 1/1 yakalama gösteriyor. Önceki turda bulgu bulunmadığından kapatılacak eski bulgu yok. Bununla birlikte son kayıt `835a6a...` commitini ölçerken düzeltme notu başı `117f7e82...` olarak veriyor; dolayısıyla kanıt güçlü olsa da incelenen başla birebir commit eşleşmesi manifestte görünmüyor."
+  }
+}
