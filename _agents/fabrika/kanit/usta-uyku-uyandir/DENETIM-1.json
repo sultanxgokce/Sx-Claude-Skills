@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T23:26:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__low",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36763,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 10763
+  },
+  "dalgic": "uyumsuz",
+  "bas": "18dbec8df5dcbec68c344c63fb2940a7f9ce1119",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Usta uyandırma/uyutma yolu, yanlış-klasör kilidi, kuru koşu, tavan seçimi, DURUM.md damgası, reconcile sessizliği ve koltuk-ac bağlantısı kurulmuş; ölçümler de ana mutlu yolları ve mutantları yakalıyor. Ancak usta ayrımı `koltuk: yok` yerine yalnız `klasor` alanına bağlandığı ve tavan/uyutma hataları yutulduğu için sıradan üyeler yanlış yola sapabilir ve “en çok 6 uyanık” güvencesi üretimde delinebilir; önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "Usta tespiti işin tanımındaki `koltuk: yok` şartını uygulamıyor; `klasor` alanı bulunan her üye usta sayılıyor. Böylece klasörü olan normal koltuklu bir üye `koltuk-ac` içinde diğer açıcı yollardan önce `yol=usta` dalına alınabilir.",
+        "kanit": "`ustalar()` çıktısı için tek koşul `if ad and u.get('klasor')`; `koltuk` hiç okunmuyor. `yol_bul()` ise ilk olarak `usta_mi` denetimini yapıyor. U1 sınavındaki MUDUR örneğinde `koltuk: var` bulunmasına rağmen `klasor` verilmediği için bu çakışma ölçülmüyor.",
+        "konum": "terminal-onar/scripts/usta.sh:55; terminal-onar/scripts/koltuk-ac.sh:139; terminal-onar/scripts/usta.test.sh:31-38",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“En çok 6 uyanık” tavanı hata durumunda fail-open: seçilen ustanın gerçekten uyuduğu doğrulanmadan yeni usta açılıyor.",
+        "kanit": "`uyut_et` içindeki DURUM.md yazımı ve `tmux kill-session` hataları `2>/dev/null` ile bastırılıyor ve fonksiyon koşulsuz `return 0` dönüyor; `uyandir` dalı bunun ardından doğrudan `new-session` çalıştırıyor. U7 yalnız başarılı kapatma vakasını ölçüyor, kill-session başarısızlığını sınamıyor.",
+        "konum": "terminal-onar/scripts/usta.sh:72-75,99-104; terminal-onar/scripts/usta.test.sh:58-59",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kapanış kancasının başarısı doğrulanmıyor; Claude'a komut gönderilemese veya DURUM.md damgası yazılamasa bile `uyut` başarı bildiriyor ve oturumu kapatabiliyor.",
+        "kanit": "`send-keys`, DURUM.md yönlendirmesi ve `kill-session` sonuçları denetlenmeden bastırılıyor; `uyut_et` daima 0 dönüyor ve çağıran dal `uyutuldu` yazıyor. U8/U9 yalnız damganın başarılı yazıldığı normal vakayı denetliyor; gerçek Claude güncellemesi veya hata yolları için kapı yok.",
+        "konum": "terminal-onar/scripts/usta.sh:62-75,110-111; terminal-onar/scripts/usta.test.sh:60-63",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam, temiz commit üzerinde ve üç ölçüm de yeşil; sarı kayıt yok. 10 ana kapı, 7 mutant, reconcile için 2 kapı/1 mutant ve 45 kapılı koltuk-ac regresyonu güçlü kanıt sağlıyor. Bununla birlikte kayıtlar `mutasyon: true` alanı taşımıyor; gerçek kod kapıları ile mutant denemeleri aynı ölçüm çıktısında birleştirilmiş. Ayrıca koltuklu+klasörlü üye, tmux kapatma/yazma hatası ve fail-open tavan senaryoları ölçülmediğinden yukarıdaki üretim riskleri kanıt kapsamının dışında kalıyor."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "is": "usta-uyku-uyandir",
+  "cumle": "Usta duzeni merkez tarafi: usta.sh uyandir (ayni klasorde claude --resume, YANLIS KLASOR KILIDI), en cok 6 uyanik + en bosta uyur + kapanista DURUM.md kancasi, reconcile koltuk:yok gurultusuz, koltuk-ac usta yolu; kuru kosu once",
+  "istedi": "SERDAR",
+  "aldi": "BENNA",
+  "zaman": "2026-11-02T23:12:23+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "6 uyanik"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}
