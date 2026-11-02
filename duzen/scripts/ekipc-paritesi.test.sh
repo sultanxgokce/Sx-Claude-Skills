@@ -112,6 +112,8 @@ bash "$L" --kapi yok >/dev/null 2>&1; rc=$?
 ok "P10c lint betiği çalışır: geçersiz bayrak rc 3 (bulunamadı 127 değil)" "$([ $rc -eq 3 ] && echo 0 || echo 1)" "→ rc=$rc"
 printf 'x: 1\n' > "$T/lintsiz.yaml"; cp -r "$PAKET" "$T/kutu/skills/duzen-lint"; ls "$T/kutu/skills/duzen-lint/scripts/ekip-modeli-lint.sh" >/dev/null 2>&1
 cikti="$(bash "$T/kutu/skills/duzen-lint/scripts/ekipc.sh" derle --manifest "$T/lintsiz.yaml" 2>&1)"; rc=$?
-ok "P10d izole kopyada derle lint'i bulur: 'rc=127' yok VE exit 3 değil" "$(printf '%s' "$cikti" | grep -q 'rc=127' && echo 1 || { [ "$rc" -ne 3 ] && echo 0 || echo 1; })" "→ rc=$rc $cikti"
-ok "P10e git dizininde lint betiği çalıştırılabilir kipte (100755) kayıtlı" "$(git -C "$PAKET" ls-files -s scripts/ekip-modeli-lint.sh 2>/dev/null | grep -q '^100755' && echo 0 || echo 1)" "→ $(git -C "$PAKET" ls-files -s scripts/ekip-modeli-lint.sh 2>&1 | cut -c1-60)"
+case "$cikti" in *rc=127*) v127=1 ;; *) v127=0 ;; esac
+ok "P10d izole kopyada derle lint'i bulur: 'rc=127' yok VE exit 3 değil" "$([ "$v127" -eq 0 ] && [ "$rc" -ne 3 ] && echo 0 || echo 1)" "→ rc=$rc $cikti"
+gm="$(git -C "$PAKET" ls-files -s scripts/ekip-modeli-lint.sh 2>&1)"
+ok "P10e git dizininde lint betiği çalıştırılabilir kipte (100755) kayıtlı" "$([ "${gm:0:6}" = "100755" ] && echo 0 || echo 1)" "→ ${gm:0:60}"
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]
