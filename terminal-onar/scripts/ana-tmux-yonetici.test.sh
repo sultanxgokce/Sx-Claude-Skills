@@ -41,5 +41,13 @@ uyeli 'sinav-sehbender' 'sehbender:0';  kapi "A11 yönetici üye kimliği → ka
 uyeli 'sinav-sehbender' 'yok-oturum:0'; kapi "A12 çevrilen oturum canlı değilse sinav-ana" sinav-ana "$(ana)"
 uyeli 'sinav-bos' 'x:0';                kapi "A13 kimliğin tmux alanı yoksa kimliğin kendisi aranır (canlı değil → sinav-ana)" sinav-ana "$(ana)"
 uyeli 'sinav-sehbender' 'sehbender:0';  kapi "A14 açık beyan çevrilmiş yöneticiden üstün" ozel-ana "$(ana ozel-ana)"
+# Yönetici ÜYESİ kutu önekli olmasa da (büyük harf dahil) kayıttaki tmux adıyla bulunur (kart ana-yonetici-uye-tmux · AKAR MUTEVELLI, MEDDAH, NISANCI)
+uyeb() { printf 'meta:\n  yonetici: %s\nuyeler:\n  - id: MUTEVELLI\n    tmux: "%s"\n    ad: "MÜTEVELLİ"\n' "$1" "$2" > "$T/p/_agents/handoff/aile-registry.yaml"; rm -f "$T/p/_agents/handoff/ekip-registry.yaml"; }
+tm new-session -d -s MUTEVELLI 'sleep 600'
+uyeb 'MUTEVELLI' 'MUTEVELLI:0';   kapi "A15 yönetici üyesi büyük harfli ve kutu öneksiz → kayıttaki tmux adı" MUTEVELLI "$(ana)"
+uyeb 'MUTEVELLI' 'YOKOTURUM:0';   kapi "A16 üyenin oturumu canlı değilse sinav-ana" sinav-ana "$(ana)"
+uyeb 'MEDDAH' 'MUTEVELLI:0';      kapi "A17 yönetici adıyla üye bulunamazsa (yanlış kayıt) eski yol → sinav-ana" sinav-ana "$(ana)"
+uyeb 'MUTEVELLI' 'kotu ad:0';     kapi "A18 üyenin tmux adı geçersiz karakterliyse eski yol → sinav-ana" sinav-ana "$(ana)"
+uyeb 'MUTEVELLI' 'MUTEVELLI:0';   kapi "A19 açık beyan üyeden üstün" ozel-ana "$(ana ozel-ana)"
 echo "geçen=$gecen kalan=$kalan"
 [ "$kalan" = 0 ]
