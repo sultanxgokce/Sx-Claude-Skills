@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "denetci-istem-stdin",
+  "pr": "664",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T01:27:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-istem-stdin",
+  "dal": "denetci-istem-stdin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33997,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 10930
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f3a9c171874bf8862e874514648cb234c5d1dde1",
+  "duzeltme_farki": {
+    "onceki_bas": "01c048c0b93fdcac7da7995cb06a44a76de65b76",
+    "dosya": 5,
+    "bayt": 15308,
+    "tam_bayt": 111728
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turda üretim kodu bütünüyle incelenmiş; bu turdaki fark yalnız 200 KB varsayılan tavanını doğru eşiklerle sınayan testleri güncelliyor. Gerçek koşular sıfır hatayla yeşil ve hedefli mutasyonlar eski tavanı, argüman aktarımını ve açık stdin davranışını yakaladığı için üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek `denetci-sinav` ölçümü rc=0 ve 282 geçti/0 kaldı, düzeltme-farkı ölçümü rc=0 ve 71 geçti/0 kaldı; üç mutasyon kaydı beklenen kırmızıyla ilgili kapıların etkili olduğunu gösteriyor. Önceki tur 5/E ve bulgusuz olduğundan kapanacak eski bulgu yok. Ölçümlerin `olculen_kirli=true` olması ve ölçülen commitlerin sunulan fark başlarıyla birebir aynı olmaması izlenebilirliği zayıflatıyor; ancak araç imzalı düzeltme-farkı sınavı, gerçek koşu ve hedefli mutasyonlar talebi doğrudan ölçüyor."
+  }
+}
