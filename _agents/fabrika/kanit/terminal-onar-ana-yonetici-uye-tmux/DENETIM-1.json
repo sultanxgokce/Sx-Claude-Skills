@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-ana-yonetici-uye-tmux",
+  "pr": "659",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T08:42:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-ana-yonetici-uye-tmux",
+  "dal": "terminal-onar-ana-yonetici-uye-tmux",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15724,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3929
+  },
+  "dalgic": "uyumlu",
+  "bas": "53e712328476766c1863968a6559cbc7d4559265",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bekçi, yönetici değeri bir üyeyle eşleştiğinde büyük harfli ve kutu öneksiz tmux adını kullanacak biçimde düzeltilmiş; canlılık, geçersiz ad, bulunamayan üye ve açık beyan önceliği de korunmuş. Gerçek ölçüm 19/19 geçiyor ve mutasyon kapısı hedef davranış bozulunca düşüyor; yalnız canlı bekçi yüzeyindeki son doğrulama kutu dışında kalıyor.",
+    "bulgular": [
+      {
+        "ne": "İş kartı canlı bekçi doğrulaması gerektiğini söylüyor ancak sunulan kanıt yalnız betik ölçümüdür; değişikliğin gerçek bekçi çevriminde doğru oturumu seçtiği bu konteynerde görülmemiştir.",
+        "kanit": "İş kartında `canli_gerekir: true` ve `canli_sebep: cümlede: bekçi` bulunurken manifestteki iki komut da `/scratchpad/uye-*.sh` betikleridir; canlı bekçi çalışmasına ait kare veya ölçüm yoktur.",
+        "konum": "iş kartı `canli_gerekir`; kanıt manifesti `uye-gercek` ve `uye-mutant`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı kutu + bekçiyi çalıştırma yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yoktur. `uye-gercek` ölçümü rc=0 ile 19/19 geçiyor; A15 hedeflenen büyük harfli, kutu öneksiz üye-tmux çözümünü doğrudan sınarken A16-A19 düşüş ve öncelik davranışlarını ölçüyor. Mutasyon kaydı gerçek kod sonucu değildir; rc=1 ve düşen kapı, A15 bozulduğunda sınavın hatayı yakaladığını göstererek gerçek ölçümü anlamlı biçimde destekliyor. MEDDAH ve NISANCI adları ayrı olumlu vakalar olarak koşturulmamış olsa da uygulanan eşleştirme genel ve karttaki davranışı karşılıyor."
+  }
+}
