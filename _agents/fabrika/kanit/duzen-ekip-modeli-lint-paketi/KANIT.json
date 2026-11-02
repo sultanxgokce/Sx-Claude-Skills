@@ -1,0 +1,50 @@
+{
+  "is": "duzen-ekip-modeli-lint-paketi",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T22:53:33+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "lint-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-lint-gercek-sonra.txt",
+      "sha256": "11c99cee1bfced168eda61f822baa29d99c2d1a334048b2e346da19c37cc8aec",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T22:53:30+03:00",
+      "sure_sn": 27.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "53287a867a434c108eb0d32a75692ac1",
+      "olculen_commit": "61917bef727cc4d401228c35d34b8429e36b146a",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-lint-mutant-sonra.txt",
+      "sha256": "0f110740bf6aa966e6638318e522235b3587244897327a5f2d538dfbfe1b861b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T22:53:33+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "lint-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "628019f5897c4fc3a0c34d1d03851afb",
+      "olculen_commit": "61917bef727cc4d401228c35d34b8429e36b146a",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "99ba1230da304316635421665c0932e4a3e748edcfb29f8ae876fade87edb462"
+}
