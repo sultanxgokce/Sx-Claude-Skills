@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kadro-okuyucu-blok-siniri",
+  "pr": "665",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T01:45:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kadro-okuyucu-blok-siniri",
+  "dal": "kadro-okuyucu-blok-siniri",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24419,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 15355
+  },
+  "dalgic": "uyumsuz",
+  "bas": "17de699c7a27b73c1fbe4a14a36dc64630ed9323",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kadro okuyucu, üye listesinden daha düşük girintili ilk içerik satırında üye bloğunu kapatıyor; boş ve yorum satırları ise üyeyi erken kapatmıyor. Talep doğrudan K-BLOK1/K-BLOK2 ile ölçülmüş, gerçek ölçüm 40/40 geçmiş ve sınır kaldırıldığında mutasyon kapısı hedeflenen sınavı düşürmüş; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Gerçek ölçüm kadro-sinav kaydında rc=0 ve 40 geçti/0 kaldı, ilgili K-BLOK1 ile kök oda/ad/rol alanlarının son üyeye karışmadığı ve K-BLOK2 ile boş/yorum satırlarının bloğu kapatmadığı ölçülüyor. Mutasyon kaydı rc=1 olsa da mutasyon:true ve yeşil; sınır kodu bilerek kaldırılınca yalnız hedef K-BLOK1’in düştüğünü göstererek sınavın kusuru gerçekten yakaladığını doğruluyor. Ek yazma sınavı da rc=0 ve 28/28; ölçümler kirli çalışma ağacında alınmış olsa da ölçülen commit ve durum manifestte açıkça kayıtlı."
+  }
+}
