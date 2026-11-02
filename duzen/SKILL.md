@@ -4,7 +4,7 @@ description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el
 version: 1.6.5
 ---
 
-# /duzen — filo düzen paketi (1.6.4 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
+# /duzen — filo düzen paketi (1.6.5 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
