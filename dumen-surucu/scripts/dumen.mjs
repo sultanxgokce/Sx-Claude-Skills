@@ -59,7 +59,7 @@ export class Dumen {
       const s = this.#sekme;
       if (s === 'ilk') { page = ctx.pages()[0] || null; this.#kendiSekmem = false; }
       else if (typeof s === 'string' && s !== 'yeni') { page = ctx.pages().find((p) => p.url().includes(s)) || null; this.#kendiSekmem = false; }
-      else if (s instanceof RegExp) { const re = new RegExp(s.source, s.flags.replace(/[gy]/g, '')); page = ctx.pages().find((p) => re.test(p.url())) || null;   // g/y durum taşır (lastIndex) — bayrağı atılmış kopyayla ara
+      else if (s instanceof RegExp) { const re = new RegExp(s.source, s.flags); page = ctx.pages().find((p) => re.test(p.url())) || null;   // çağıranın nesnesi değil taze kopya: g/y lastIndex taşımaz, bayrak anlamı korunur
         this.#kendiSekmem = false; }
       if (!page) { page = await ctx.newPage(); this.#kendiSekmem = true; }
     }
