@@ -1,7 +1,7 @@
 {
   "is": "duzen-gece-ret-gunluk-yeniden-baslat",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T03:43:25+03:00",
+  "guncelleme": "2026-11-02T03:46:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,7 +40,26 @@
       "olcum_id": "567b7f5795c44767b34aed25128b8260",
       "olculen_commit": "3efd522f9faff14a04517c13e12a5b6310138e36",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzen-gece sinavi mektup yolu kapsam disi, temizlik duzeltmesi dahil",
+      "asama": "tek",
+      "dosya": "olcum-duzen-gece sinavi mektup yolu kapsam disi, temizlik duzeltmesi dahil-tek.txt",
+      "sha256": "308f8add693d4752a3ae87c624e8388eca6055ef7b13855ae0453ed638e24bd7",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T03:46:46+03:00",
+      "sure_sn": 85.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "05b85510c6ed458a9e50b33eee20cb4d",
+      "olculen_commit": "6e69f0ea4c6edff040242f5fdf0f897d5ead43da",
+      "olculen_kirli": true
     }
   ],
-  "imza": "997f21281d1401e00ebafe406485af3bc10dfaa80a79951580cbf3f685b3d6c1"
+  "imza": "f1795b0cfa066020623ab09401dd349357129d51ce0c6ade90e0606434f5075b"
 }

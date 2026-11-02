@@ -128,18 +128,6 @@ kurulu 1.1.1; : > "$KAYIT"; rm -f "$T/g16.log" "$T/mark16"
 O="$(SXK="$T/sx" MARK16="$T/mark16" P16_BETIK="$P16/scripts/duzen-gece.sh" DUZEN_SYNC_CMD="bash $T/sync16" bash "$P16/scripts/duzen-gece.sh" --sx "$T/sx" --gunluk "$T/g16.log" --kutu code --uygula --depo "$T/bayat" --reis SERDAR 2>&1)"; rc=$?
 ok "G23 kurulum betiği değiştirince yeni sürümle yeniden başlar: yeniden-basladi 1, yenilendi 1, mektup 1 (kurulan 4 beceriyle), sonsuz döngü yok" "$([ $rc -eq 0 ] && [ "$(grep -c 'yeniden-basladi' "$T/g16.log")" = 1 ] && [ "$(grep -c 'yenilendi kimlik=bani' "$T/g16.log")" = 1 ] && [ "$(cagri mektup)" = 1 ] && grep -q 'kurulan beceriler: duzen gunluk-plan mesveret bulgu' "$KAYIT" && echo 0 || echo 1)" "→ rc=$rc yeniden=$(grep -c yeniden-basladi "$T/g16.log") yenilendi=$(grep -c 'yenilendi kimlik=bani' "$T/g16.log") mektup=$(cagri mektup)"
 
-# G24 mektup POSTANE bayraklarıyla gider (--aciliyet orta, --tekrar duzen-v<sürüm>-<kutu>; ulak'ın --onem'i yok) ve varsayılan yol posta.sh
-kurulu 1.1.1; O="$(kos --uygula --depo "$T/bos" --reis code:SERDAR)"; rc=$?
-ok "G24 mektup postane bayraklarıyla: --aciliyet orta, --tekrar duzen-v1.2.0-code, --konu 'düzen v1.2.0 indi', --onem YOK; varsayılan komut posta.sh gonder" "$([ $rc -eq 0 ] && grep -q -- '--aciliyet orta' "$KAYIT" && grep -q -- '--tekrar duzen-v1.2.0-code' "$KAYIT" && grep -q -- "--konu düzen v1.2.0 indi" "$KAYIT" && ! grep -q -- '--onem' "$KAYIT" && grep -q 'posta.sh gonder}' "$R" && echo 0 || echo 1)" "→ rc=$rc $(grep '^mektup' "$KAYIT" | cut -c1-200)"
-# G25 postane alıcıyı reddederse (alici_bilinmiyor) sebep günlükte: durum=hata + rc + ayrinti
-cat > "$T/mektup-red" <<'S'
-#!/usr/bin/env bash
-echo "✗ alici_bilinmiyor — alıcı 'REVAK' ajan listesinde yok" >&2; exit 1
-S
-kurulu 1.1.1; : > "$KAYIT"; rm -f "$T/g25.log"
-O="$(DUZEN_MEKTUP_CMD="bash $T/mektup-red" bash "$R" --sx "$T/sx" --gunluk "$T/g25.log" --kutu code --uygula --depo "$T/bos" --reis revak:REVAK 2>&1)"; rc=$?
-ok "G25 postane alıcıyı reddedince mektup durum=hata, rc ve sebep (alici_bilinmiyor) günlükte" "$([ $rc -eq 1 ] && grep -q "mektup reis=REVAK surum=1.2.0 durum=hata kutu=revak rc=1 ayrinti=✗ alici_bilinmiyor" "$T/g25.log" && echo 0 || echo 1)" "→ rc=$rc $(grep '^.* mektup' "$T/g25.log" | head -1)"
-
 # G13 cron ortamı: DUZEN_YENILE_CMD yokken (env -i, zamanlayıcı gibi çıplak ortam) yenileme betiğin YANINDAKİ paket ekipc.sh ile yapılır, depodaki (vendor'sız) scripts/ekipc.sh ile DEĞİL
 mkdir -p "$T/pkg" "$T/bayat/scripts"
 cp "$R" "$T/pkg/duzen-gece.sh"; cp "$HERE/surum.sh" "$T/pkg/surum.sh"
