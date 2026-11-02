@@ -1,7 +1,7 @@
 {
   "is": "duzen-gece-ret-gunluk-yeniden-baslat",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T03:38:11+03:00",
+  "guncelleme": "2026-11-02T03:43:25+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -21,7 +21,26 @@
       "olcum_id": "04a18dd247204d0aaf0fb72a9c81775f",
       "olculen_commit": "3908293009fa014c9d6bb76a512f2f5b8a0581ad",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzen-gece sinavi 27 kapi postane mektup G24 G25",
+      "asama": "tek",
+      "dosya": "olcum-duzen-gece sinavi 27 kapi postane mektup G24 G25-tek.txt",
+      "sha256": "ad39b077e6b35af0961e4126471ba1aabcd331fe47fa60fbffab91f77297cfe4",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T03:43:25+03:00",
+      "sure_sn": 27.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "567b7f5795c44767b34aed25128b8260",
+      "olculen_commit": "3efd522f9faff14a04517c13e12a5b6310138e36",
+      "olculen_kirli": true
     }
   ],
-  "imza": "e5a195ca798151514e44242622db3257754708fb653fe2bc2f25b8f33d528d6b"
+  "imza": "997f21281d1401e00ebafe406485af3bc10dfaa80a79951580cbf3f685b3d6c1"
 }

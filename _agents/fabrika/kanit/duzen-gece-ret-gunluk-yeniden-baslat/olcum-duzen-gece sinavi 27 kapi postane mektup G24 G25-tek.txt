@@ -1,0 +1,33 @@
+$ bash duzen/scripts/duzen-gece.test.sh
+# rc=0 sure=27.6s zaman=2026-11-02T03:43:25+03:00
+--- stdout ---
+  ✓ G1 varsayılan KURU: komut çalışmaz, günlük yazılmaz
+  ✓ G2 --uygula: dört beceri kurulur, bayat kimlik yenilenir, reise mektup gider
+  ✓ G3 her şey güncel: komut yok, mektup yok, rc 0
+  ✓ G4 sync reddeder: atlandi + rc 1, 'kuruldu' yazılmaz
+  ✓ G5 reis yok: mektup tahminle yollanmaz (atlandi), rc 1
+  ✓ G9 iki kutu reisi: her birine AYRI mektup satırı (kutu+reis), rc 0
+  ✓ G10 yalnız duzen sürümü eski: düzen artınca dördü de kurulur, mektup kurulan adları sayar
+  ✓ G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ
+  ✓ G7 temeli bilinmeyen bayat kimlik: yenile çağrılmaz (atlandi), rc 1
+  ✓ G11 bayat otonom kimlik: yenile --baz otonom-ajan ile çağrılır, günlükte temel=otonom-ajan
+  ✓ G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: kurulum + yenileme + mektup satırları tamam
+  ✓ G8 hiçbir komuta --force geçmez
+  ✓ G21 yenile reddi: günlükte rc ve stderr sebebi (rc=5 ayrinti=EL-DEĞMİŞ…), eski alanlar yerinde
+  ✓ G22 sync reddi: günlükte rc ve stderr sebebi (rc=1 ayrinti=Sürüm bump'lanmadan…)
+  ✓ G23 kurulum betiği değiştirince yeni sürümle yeniden başlar: yeniden-basladi 1, yenilendi 1, mektup 1 (kurulan 4 beceriyle), sonsuz döngü yok
+  ✓ G24 mektup postane bayraklarıyla: --aciliyet orta, --tekrar duzen-v1.2.0-code, --konu 'düzen v1.2.0 indi', --onem YOK; varsayılan komut posta.sh gonder
+  ✓ G25 postane alıcıyı reddedince mektup durum=hata, rc ve sebep (alici_bilinmiyor) günlükte
+  ✓ G13 cron ortamında yenileme paket ekipc.sh ile (depo ekipc.sh çağrılmaz), kimlik yenilendi
+  ✓ G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir)
+── mutasyon
+  ✓ mutant 'her-zaman-kur' → G3 kırmızı
+  ✓ mutant 'duzen-surumu-tetik-degil' → G10 kırmızı
+  ✓ mutant 'reissiz-mektup' → G5 kırmızı
+  ✓ mutant 'otonom-temel-bilinmez' → G11 kırmızı
+  ✓ mutant 'depo-ekipc-yoluna-don' → G13 kırmızı
+  ✓ mutant 'sebep-yutuluyor' → G21 kırmızı
+  ✓ mutant 'yeniden-baslama-yok' → G23 kırmızı
+  ✓ mutant 'force-gecir' → G8 kırmızı
+== 27 geçti · 0 düştü ==
+--- stderr ---
