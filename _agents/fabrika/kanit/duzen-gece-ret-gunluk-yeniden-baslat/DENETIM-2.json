@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "duzen-gece-ret-gunluk-yeniden-baslat",
+  "pr": "657",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T03:44:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-ret-gunluk-yeniden-baslat",
+  "dal": "duzen-gece-ret-gunluk-yeniden-baslat",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24275,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7946
+  },
+  "dalgic": "uyumsuz",
+  "bas": "8bcf209d761353e6b9183c9eda068d5fce2c1b4a",
+  "duzeltme_farki": {
+    "onceki_bas": "007ffd8f54ffb259c559cb90e70dcf278eecd506",
+    "dosya": 7,
+    "bayt": 18392,
+    "tam_bayt": 31666
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, önceki turdaki sürüm başlığı çelişkisi kapanmış; ret ayrıntısının günlüğe yazılması, güncellenen betiğin yeniden başlaması ve sürüm artışı yönündeki asıl talep korunuyor. Ancak bu düzeltme turu iş kartında istenmeyen biçimde mektup taşımasını ulak’tan POSTANE’ye geçiriyor; üretim davranışını genişleten bu kapsam kayması çözülmeden 5 verilemez.",
+    "bulgular": [
+      {
+        "ne": "İş kartı yalnız ret sebebinin günlüğe yazılmasını, güncelleme sonrasında yeni sürümle yeniden başlamayı ve meşveret sürüm artışını istiyor; buna rağmen düzeltme turu mektup sağlayıcısını, varsayılan yolunu ve komut bayraklarını değiştirerek kapsam dışı bir üretim davranışı ekliyor.",
+        "kanit": "Diffte `MEKTUP` varsayılanı `/config/projects/Nexus/scripts/ulak.sh gonder` yolundan `/config/.claude/skills/postane-postaci/scripts/posta.sh gonder` yoluna çevrilmiş; `--onem normal` kaldırılıp `--aciliyet orta` ve `--tekrar` eklenmiş, ayrıca G24-G25 sınavları bu yeni davranış için yazılmış. İş kartının `cumle` alanında mektup veya POSTANE talebi bulunmuyor.",
+        "konum": "duzen/scripts/duzen-gece.sh:43 ve duzen/scripts/duzen-gece.sh:98",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; G21-G23 asıl talep edilen davranışları, ilgili mutantlar da sınavların bozuk kodu yakaladığını gösteriyor. G24-G25 sonradan eklenen POSTANE davranışını sınasa da gerçek varsayılan POSTANE komutunu uçtan uca çalıştırmıyor; ayrıca iki ölçüm de `olculen_kirli: true` ve ölçülen commitler bildirilen 8bcf209d7613 başıyla eşleşmiyor, dolayısıyla hedef başın birebir yeşil ölçümü yok. Önceki B1 kapanmış: üstveri ve görünen başlık artık birlikte 1.6.5."
+  }
+}

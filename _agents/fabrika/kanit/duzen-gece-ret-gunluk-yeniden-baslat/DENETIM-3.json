@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "duzen-gece-ret-gunluk-yeniden-baslat",
+  "pr": "657",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T03:47:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-ret-gunluk-yeniden-baslat",
+  "dal": "duzen-gece-ret-gunluk-yeniden-baslat",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27893,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7724
+  },
+  "dalgic": "uyumsuz",
+  "bas": "b35ba4db55bf67294e32f4a74d052e3feba71910",
+  "duzeltme_farki": {
+    "onceki_bas": "8bcf209d761353e6b9183c9eda068d5fce2c1b4a",
+    "dosya": 6,
+    "bayt": 17716,
+    "tam_bayt": 34668
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, önceki turdaki kapsam kayması kapanmış; mektup sağlayıcısı ve bayrakları eski ulak davranışına döndürülürken ret sebebi günlüğü, yeni sürümle yeniden başlama ve meşveret sürüm artışı yönündeki asıl iş korunmuş. Görünen üretim farkında yeni bir kusur yok; bu nedenle kod üretime hazır ve talep edilen doğru işi yapıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır. Son 25/25 ölçümde G21 ret sebebini rc ve stderr ayrıntısıyla günlüğe yazmayı, G22 sync reddini, G23 güncellenen betiğin yeni sürümle tek kez yeniden başlamasını doğruluyor; ilgili mutantlar da sınavların bu davranışlar bozulduğunda kırmızı olduğunu gösteriyor. Önceki B1 kapanmış: varsayılan mektup yolu tekrar ulak.sh olmuş, POSTANE’ye özgü bayraklar ve G24-G25 kapsam dışı sınavları kaldırılmış. İlk 27/27 kayıt ara başa ait olup artık kaldırılan G24-G25’i içeriyor; en yeni kayıt 25/25’tir. Bununla birlikte bütün ölçümler `olculen_kirli: true` ve ölçülen commit kimlikleri bildirilen b35ba4db55bf başıyla eşleşmiyor; dolayısıyla hedef başın birebir temiz ölçüm kaydı yok, ancak sunulan son üretim farkı ile son ölçümün kapsadığı asıl davranışlar uyumludur."
+  }
+}
