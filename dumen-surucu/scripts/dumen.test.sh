@@ -41,5 +41,10 @@ mut "okuma kapısız (Dümen Sultan'dayken de okur)" "    await this.kapi(ad, he
     if (this.#kopuk) throw new KapiHata('baglanti-koptu', 'okuma öncesi');" "    if (this.#kopuk) throw new KapiHata('baglanti-koptu', 'okuma öncesi');"
 mut "okunan metin terminale yazılır" "return m.length > enCok" "this.#yaz(m); return m.length > enCok"
 mut "metin hedefi durma noktasına gitmez" "this.#okuKapi('metin', sel === 'body' ? null : sel)" "this.#okuKapi('metin', null)"
+mut "varsayılan yeni sekme yerine ilk sekmeyi alır" "if (!page) { page = await ctx.newPage(); this.#kendiSekmem = true; }" "if (!page) { page = ctx.pages()[0] || await ctx.newPage(); this.#kendiSekmem = true; }"
+mut "kapat() başkasının sekmesini de kapatır" "if (this.#kendiSekmem) await this.#page" "if (true) await this.#page"
+mut "RegExp çağıranın nesnesiyle aranır (lastIndex taşınır)" "const re = new RegExp(s.source, s.flags);" "const re = s;"
+mut "kapat() bulgu hatırlatması basmaz" "this.#yaz('Dümen bulgu hatırlatması:" "void ('Dümen bulgu hatırlatması:"
+mut "sekme deseni yok sayılır" "page = ctx.pages().find((p) => p.url().includes(s)) || null; this.#kendiSekmem = false;" "page = null; this.#kendiSekmem = false;"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 21/21 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 26/26 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

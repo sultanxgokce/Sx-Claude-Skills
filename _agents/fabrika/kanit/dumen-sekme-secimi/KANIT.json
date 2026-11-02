@@ -1,0 +1,122 @@
+{
+  "is": "dumen-sekme-secimi",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T11:02:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 56 kapi 24 mutant sekme",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 56 kapi 24 mutant sekme-tek.txt",
+      "sha256": "f356c8203dd197546b8749618a53245ba2756144292113db559328054c22e6ab",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T10:18:19+03:00",
+      "sure_sn": 282.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "03a8750183d04e0cbcc90ee1116e8964",
+      "olculen_commit": "736929b8578551c8786442861157a5ca22821feb",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 57 kapi 25 mutant sekme tur2",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 57 kapi 25 mutant sekme tur2-tek.txt",
+      "sha256": "6ab438b05e0b6098a79d4b7e818a9e82d089578d261b8a586f5a3a9816357700",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-02T10:25:23+03:00",
+      "sure_sn": 10.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9cb713cbc9a341c8bceeb992dea3600c",
+      "olculen_commit": "7f41069f511a6a486ab03abf675e059678cb56c1",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 57 kapi 25 mutant tur3",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 57 kapi 25 mutant tur3-tek.txt",
+      "sha256": "e43491bc4372f09b83691a5b2fab6b92e03f9dc26b628611ce7659c832b0f201",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T10:42:02+03:00",
+      "sure_sn": 299.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "288f2437266c43b2a9678c485f1a9a56",
+      "olculen_commit": "1fdd8244c99c01e70dff757f7f314415fcb30ee5",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 58 kapi 26 mutant bulgu hatirlatma",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 58 kapi 26 mutant bulgu hatirlatma-tek.txt",
+      "sha256": "6e6cfd62242da7e012c87663b58ffa33122c0b933445539d85bbaa03982f7a4a",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T10:53:54+03:00",
+      "sure_sn": 307.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "923eab92691144e597925c3924c05aa3",
+      "olculen_commit": "611018fcb2dfd4d7ae080e471eb11a7f53752486",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 58 kapi 26 mutant daraltma sonrasi",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 58 kapi 26 mutant daraltma sonrasi-tek.txt",
+      "sha256": "905a0aabf57ea5cc110755b36728f5247d8e3882e5601ae4e9b7b71c9dd4509c",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-02T10:56:35+03:00",
+      "sure_sn": 4.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d9914fe4faa342c19f3e03d0e610eab3",
+      "olculen_commit": "fc5e76baec55b718d6acd9d08722c78d360e7300",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 58 kapi 26 mutant tur6 yeniden",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 58 kapi 26 mutant tur6 yeniden-tek.txt",
+      "sha256": "a5c7d31e0512e6ccc5626f1408d951fa51367c35ae70172daeec638dd4e8e170",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T11:02:28+03:00",
+      "sure_sn": 300.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "86e9f3fa892749db906c2fef4b14fc93",
+      "olculen_commit": "3ade69deee803c63bfa54654fb90c7cf0de55b2e",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "c704ac76417feefe0be54c305be4e3437aa3a4f5b400cd629bb1743a73d7b6c3"
+}

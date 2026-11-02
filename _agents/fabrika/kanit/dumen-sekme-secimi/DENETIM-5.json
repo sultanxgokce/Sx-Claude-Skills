@@ -1,0 +1,49 @@
+{
+  "tur": 5,
+  "is": "dumen-sekme-secimi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T10:56:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-sekme-secimi",
+  "dal": "dumen-sekme-secimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27308,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 8584
+  },
+  "dalgic": "olculemedi",
+  "bas": "d286d303712dfd9d279f2c6a98b089a6838e35a6",
+  "duzeltme_farki": {
+    "onceki_bas": "60b7116243ea9249ecd615ddd4ad17087049665f",
+    "dosya": 3,
+    "bayt": 8584,
+    "tam_bayt": 59652
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sekme seçimi, yalnız kendi sekmesini kapatma, sert Bulgu Havuzu kuralı ve kapat() hatırlatması artık iş kartının açık kapsamıyla uyumlu; önceki kapsam kayması bulgusu kapanmış. Ancak daraltma sonrası güncel başta gerçek ölçüm kırmızıya düştüğü için üretime hazır denemez; önce kararsız gezinme hatasını çözün ve aynı başta yeşil ölçüm alın.",
+    "bulgular": [
+      {
+        "ne": "Güncel başın daraltma sonrası gerçek sınavı, mod sultan yeniden bağlanma akışında sayfaya giderken hata veriyor; son doğrulama başarısız.",
+        "kanit": "Araç imzalı son kayıt rc=1/kırmızı; çıktı D20 sonrasında kesiliyor ve dumen.mjs:163:69 için “navigating to http://127.0.0.1:39785/sayfa” hatasıyla Node kapanıyor. Kayıtta mutasyon:true bulunmadığından bu FAIL beklenen mutasyon sonucu sayılamaz.",
+        "konum": "olcum-dumen sinavi 58 kapi 26 mutant daraltma sonrasi-tek.txt; manifest ölçüm_id=d9914fe4faa342c19f3e03d0e610eab3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. 611018f başındaki yeşil ölçüm 58/58 kapı ve 26/26 mutantla kartın davranışlarını güçlü biçimde sınarken, incelenen güncel fc5e76b başındaki gerçek ölçüm rc=1 ile bitiyor; dolayısıyla güncel baş için yeşil doğrulama yok. Önceki B1 kapanmıştır: güncel iş kartı SKILL.md sert Bulgu Havuzu kuralını ve kapat() hatırlatmasını açıkça talep ediyor; bunlar artık kapsam kayması değildir."
+  }
+}

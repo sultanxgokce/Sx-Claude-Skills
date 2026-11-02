@@ -1,0 +1,60 @@
+$ bash dumen-surucu/scripts/dumen.test.sh
+# rc=1 sure=4.2s zaman=2026-11-02T10:56:35+03:00
+--- stdout ---
+── mod ajan
+  ✓ D1 mod ajan: metin alanı dolduruldu
+  ✓ D2 tarih ve seçim eylemleri sonuç verdi
+  ✓ D3 metin dışı alan değişimi dinleyiciyle YAKALANDI ve ajan eylemiyle eşleşti (isTrusted=false)
+  ✓ D4 yabancı (eylem penceresi dışı) olay yok
+  ✓ D3b fill(tarih) ve selectOption "köprüde GÖRÜNMEZ" uyarısı bastı (2 eylem)
+  ✓ D3c uyarı terminale de yazıldı
+  ✓ D3d metin alanı fill'i (Input.insertText, köprü görür) uyarı ÜRETMEDİ
+  ✓ D3e uyarı alan DEĞERİNİ taşımaz
+  ✓ D3f görünmez eylem uyarısı MERKEZE gitti (2 eylem × kod+sayı), jeton başlığıyla
+  ✓ D3g merkeze yalnız {kod, n} gitti — hedef/değer/adres/çerez YOK
+── sayfa sahte olay üretir → yabancı
+  ✓ D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)
+  ✓ D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)
+  ✓ D5f eylem dışı değişiklik uyarısı MERKEZE gitti (kod yabanci-olay, n=1)
+  ✓ D5g merkez uyarı ucu 500 verirse eylem YİNE yapıldı, terminale "İLETİLEMEDİ" yazıldı
+  ✓ D5h kutu jetonu okunamazsa uyarı JETONSUZ GÖNDERİLMEZ (merkeze istek yok), eylem sürer, terminale "kutu jetonu okunamadı" yazılır
+  ✓ D5b eylem dışı değişiklik UYARI üretti
+  ✓ D5d aynı olay ikinci kez uyarmaz
+── click sırasında sayfanın sentetik olayı "köprüde görünmez eylem" SAYILMAZ
+  ✓ D5e click sırasındaki sentetik olay görülemeyen-eylem UYARISI üretmedi
+── mod sultan
+  ✓ D6 mod sultan: eylem REDDEDİLDİ
+  ✓ D7 mod sultan: alan DEĞİŞMEDİ
+  ✓ D8 bekleme satırı terminale yazıldı
+── merkez cevapsız → fail-closed
+  ✓ D9 merkez cevapsız: eylem REDDEDİLDİ (fail-closed)
+  ✓ D10 merkez cevapsız: alan DEĞİŞMEDİ (DEGISMEZ2 yazılmadı)
+── durma noktaları
+  ✓ D11 parola alanı: eylem YAPILMADI, durak=sifre
+  ✓ D12 ad=otp alanı: durak=sms/sifre bildirildi, değer yazılmadı
+  ✓ D13 merkeze yalnız NEDEN gitti (değer/adres/çerez yok)
+  ✓ D14 ödeme sayfasında "Öde" tıklaması durdu, durak=odeme
+  ✓ D17 ham nesneler DIŞARIYA AÇIK DEĞİL (d.page/d.cdp/d.tarayici/d.merkez yok)
+  ✓ D18 durak ucu 500 verirse eylem yine YAPILMAZ ama bildirildi=false ve satır UYARIR
+  ✓ D15 ödeme sayfasında zararsız düğme tıklaması GEÇTİ (aşırı engelleme yok)
+  ✓ D16 parola alanı değişimi KAYDEDİLDİ ama DEĞER yok (<gizli>)
+── durak bildirimi jeton başlığı
+  ✓ D19 durak bildirimi x-defter-jeton başlığıyla gitti (her istek)
+  ✓ D20 jeton değeri günlük satırlarında YOK
+── mod sultan iken soket düşer
+--- stderr ---
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: Navigation to "http://127.0.0.1:39785/sayfa" is interrupted by another navigation to "chrome-error://chromewebdata/"
+Call log:
+[2m  - navigating to "http://127.0.0.1:39785/sayfa", waiting until "load"[22m
+
+    at /config/projects/_wt/Sx-Claude-Skills-dumen-sekme-secimi/dumen-surucu/scripts/dumen.mjs:163:69
+    at #uygula (/config/projects/_wt/Sx-Claude-Skills-dumen-sekme-secimi/dumen-surucu/scripts/dumen.mjs:150:24)
+    at async file:///config/projects/_wt/Sx-Claude-Skills-dumen-sekme-secimi/dumen-surucu/scripts/dumen.test.mjs:136:1 {
+  name: 'Error'
+}
+
+Node.js v22.23.0
