@@ -1,0 +1,25 @@
+{
+  "is": "dumen-sekme-secimi",
+  "cumle": "Dumen.baglan sekme secimi: varsayilan yeni sekme, ilk sekmeye dokunmaz; sekme deseni; kapat yalniz kendi sekmesi",
+  "istedi": "SERDAR",
+  "aldi": "BENNA",
+  "zaman": "2026-11-02T10:07:32+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
