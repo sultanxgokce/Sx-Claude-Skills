@@ -1,6 +1,6 @@
 // rutbe.test.mjs — koltuk rütbesinin kayıttan türetilmesi (kart rutbe-koltuk-alani). Hermetik; fikstürler gerçek merkez ve NAZIR kayıt biçiminde.
 import { rutbeHaritasi, rutbeBul } from './rutbe.mjs';
-import { koltukEsle, kayitOdaHaritasi } from './oda.mjs';
+import { koltukEsle, kayitOdaHaritasi, kayitOdaGecersizHaritasi, odaUyarisi } from './oda.mjs';
 let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log('  ✓ ' + ad); } else { k++; console.log('  ✗ ' + ad + ' ' + ek); } };
 const MERKEZ = [{ id: 'SERDAR', oda: 'agentic-os', oda_muduru: 'evet', tmux: 'serdar:0' }, { id: 'MUAVİN', oda: 'agentic-os', tmux: 'muavin:0' }, { id: 'YAVER', amir: 'MUAVİN', tmux: 'yaver:0' },
   { id: 'BÂNİ', oda: 'agentic-os', amir: 'SERDAR', tmux: 'bani:0' }, { id: 'BERİD', oda: 'mesajlasma', oda_muduru: 'evet', amir: 'SERDAR', tmux: 'berid:0' },
@@ -39,4 +39,16 @@ kapi('R20 acik verilmeyen eski çağrı aynen çalışır', rutbeHaritasi(CANLI)
 const EMEKLI = [{ id: 'eski', ad: 'RASATÇI', durum: 'emekli', oda: 'hermes', tmux: 'eski:0' }, { id: 'yeni', ad: 'YENİ', oda: 'nezaret', tmux: 'rasatci:0' }];
 kapi('R21 emekli üye adıyla açık koltuğun odasını alamaz', kayitOdaHaritasi(EMEKLI, ['rasatci']).get('rasatci') === 'nezaret' && !koltukEsle(EMEKLI, ['rasatci']).has(EMEKLI[0]));
 kapi('R22 emekli üyenin koltuğu boşken de açık koltuğa bağlanmaz', !kayitOdaHaritasi([EMEKLI[0]], ['rasatci']).has('rasatci'));
+// 2.38.6 · kurala uymayan oda adı sessizce atılmaz (tellal 3 Kas: 'Mimari Cizim', 'Bakim' kayıtta, şeritte oda yok, sebep yok)
+const TELLAL = [{ id: 'MEDDAH', amir: 'Sultan', oda: 'ortak-kapilar', tmux: 'MEDDAH:0' }, { id: 'MUCESSEM', amir: 'MEDDAH', oda: 'Mimari Cizim', oda_muduru: 'evet', tmux: 'MUCESSEM:0' },
+  { id: 'MUDEVVIN', amir: 'MUCESSEM', oda: 'Mimari Cizim', tmux: 'MUDEVVIN:0' }, { id: 'USTABAS', amir: 'MEDDAH', oda: 'Bakim', oda_muduru: 'evet' }, { id: 'ESKI', oda: 'Eski Oda', durum: 'arsiv', tmux: 'ESKI:0' }];
+const tg = kayitOdaGecersizHaritasi(TELLAL, ['MEDDAH', 'MUCESSEM', 'MUDEVVIN']), to = kayitOdaHaritasi(TELLAL, ['MEDDAH', 'MUCESSEM', 'MUDEVVIN']);
+kapi('R23 kurala uymayan oda adı geçersiz haritasında koltuk adıyla, kurala uyan (ortak-kapilar) orada değil, oda haritasında', tg.get('MUCESSEM') === 'Mimari Cizim' && tg.get('MUDEVVIN') === 'Mimari Cizim' && !tg.has('MEDDAH') && to.get('MEDDAH') === 'ortak-kapilar' && !to.has('MUCESSEM'), JSON.stringify([...tg]));
+kapi('R23b koltuksuz üye katlanmış kimliğiyle, büyük harf tek kelime de kurala uymaz (\'Bakim\' → B)', tg.get('ustabas') === 'Bakim');
+kapi('R23c arşiv üye geçersiz haritasına girmez', !tg.has('ESKI') && !tg.has('eski'));
+const u1 = odaUyarisi(null, '', 'Mimari Cizim');
+kapi('R24 klasör de kayıt odası da yokken geçersiz ad uyarı cümlesi olur (ad ve kural yazılı)', /Mimari Cizim/.test(u1) && /küçük harf, rakam, tire/.test(u1) && /odasız/.test(u1), u1);
+kapi('R24b klasörde geçerli oda.json varsa geçersiz kayıt adı uyarı üretmez (klasör kazanır)', odaUyarisi({ ad: 'mimari-cizim', hedef: '', reis: '' }, '', 'Mimari Cizim') === '');
+kapi('R24c geçersiz ad verilmeyen eski çağrı aynen: uyarı yok', odaUyarisi(null, '') === '' && odaUyarisi(null, 'nezaret') === '');
+kapi('R24d bozuk oda.json uyarısı geçersiz addan önce gelir', /oda\.json okunamadı/.test(odaUyarisi({ bozuk: true }, '', 'Mimari Cizim')));
 console.log(`geçen ${g} · kalan ${k}`); process.exit(k ? 1 : 0);

@@ -1,0 +1,8 @@
+$ node terminal-onar/kapi/oda-uyari-olc.tmp.mjs /config/projects/Sx-Claude-Skills/terminal-onar/kapi
+# rc=0 sure=0.1s zaman=2026-11-03T00:27:43+03:00
+--- stdout ---
+MEDDAH: oda=ortak-kapilar uyari=-
+MUCESSEM: oda=- uyari=-
+MUDEVVIN: oda=- uyari=-
+SONUÇ: kurala uymayan oda adı olan 2 koltuktan uyarılı 0 · oda listesi ortak-kapilar
+--- stderr ---
