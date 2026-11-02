@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.6.0
+version: 0.7.0
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -26,6 +26,14 @@ const d = await Dumen.baglan({ cdpUrl: 'http://127.0.0.1:9222', merkez: process.
 try { await d.fill('#ad', 'Ayşe'); } catch (e) { if (e instanceof KapiHata) { /* dur; mod ajana dönünce kaldığın yerden sür */ } }
 ```
 `playwright-core` bulunamazsa `DUMEN_PLAYWRIGHT=<playwright-core dizini>`.
+
+## Sekme seçimi (0.7.0 · SERDAR/NARH · 2 Kas) — Sultan'ın sekmesine dokunulmaz
+Dümen'de ilk sekme çoğu zaman Sultan'ın terminalidir; `goto` onu bozar. Bu yüzden `baglan` seçeneği **`sekme`**:
+- **verilmezse / `'yeni'`** → her zaman **YENİ sekme** açılır (varsayılan). İlk sekmeye ve başkasının sekmelerine dokunulmaz.
+- **`'ilk'`** → ilk sekme (eski davranış). Yalnız çağıran **açıkça** isterse.
+- **string** (adres parçası) ya da **RegExp** → adresi eşleşen sekme; eşleşen yoksa yeni sekme açılır.
+- `kapat()` yalnız **kendi açtığı** sekmeyi kapatır; `'ilk'` ya da desenle seçilen sekme kapanmaz. Yeniden bağlanmada aynı sekmeye dönülür (hedef kimliğiyle).
+- Eski çağıranlar (amazon-etiket, gib): çerez/oturum tarayıcı bağlamında ortaktır, yeni sekmede de geçerlidir; ilk sekmeyi gerçekten bekleyen varsa `sekme: 'ilk'` ekler.
 
 ## Salt-okur: sayfayı oku, kare al (0.6.0 · SİNAN/VADE 31 Eki · görev …W3ZKKH)
 ```js

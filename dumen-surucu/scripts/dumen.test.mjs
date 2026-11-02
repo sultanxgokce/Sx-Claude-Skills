@@ -34,7 +34,7 @@ const ok = (ad, kosul, ayrinti = '') => { if (kosul) { G++; console.log('  ✓ '
 const satirlar = [];
 const { chromium } = await (await import(LIB)).playwrightYukle();
 const ham = (await chromium.connectOverCDP(`http://127.0.0.1:${PORT}`)).contexts()[0].pages()[0];   // TEST'in kendi bağlantısı: 'insan/sayfa' rolü + okuma
-const d = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => satirlar.push(s) });
+const d = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => satirlar.push(s), sekme: 'ilk' });
 const hata = async (f) => { try { await f(); return null; } catch (e) { return e; } };
 const deger = (sel) => ham.evaluate((s) => document.querySelector(s).value, sel);
 await d.goto(MERKEZ + '/sayfa');
@@ -94,7 +94,7 @@ ok('D8 bekleme satırı terminale yazıldı', satirlar.some((s) => s.includes("S
 mod = 'ajan';
 
 console.log('── merkez cevapsız → fail-closed');
-const dM = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT}`, merkez: 'http://127.0.0.1:1', zamanAsimiMs: 800, yaz: () => {} });
+const dM = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT}`, merkez: 'http://127.0.0.1:1', zamanAsimiMs: 800, yaz: () => {}, sekme: 'ilk' });
 const eM = await hata(() => dM.fill('#t', 'DEGISMEZ2'));
 ok('D9 merkez cevapsız: eylem REDDEDİLDİ (fail-closed)', eM instanceof KapiHata && eM.neden === 'merkez-cevapsiz', String(eM));
 ok('D10 merkez cevapsız: alan DEĞİŞMEDİ (DEGISMEZ2 yazılmadı)', (await deger('#t')) !== 'DEGISMEZ2');
@@ -132,7 +132,7 @@ const baslat = () => spawn(CHROME, [`--remote-debugging-port=${PORT2}`, `--user-
 const bekle = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT2}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
 let ch2 = baslat(); await bekle();
 const sat2 = [];
-const dS = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT2}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => sat2.push(s) });
+const dS = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT2}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => sat2.push(s), sekme: 'ilk' });
 await dS.goto(MERKEZ + '/sayfa');
 mod = 'sultan';
 ch2.kill('SIGKILL'); await new Promise((r) => setTimeout(r, 600));   // köprü soketi düştü (Dümen Sultan'a geçti)
@@ -154,7 +154,7 @@ const PORT3 = PORT + 200; const prof3 = mkdtempSync(join(tmpdir(), 'dumen-test3-
 const baslat3 = () => spawn(CHROME, [`--remote-debugging-port=${PORT3}`, `--user-data-dir=${prof3}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 const bekle3 = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT3}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
 let ch3 = baslat3(); await bekle3();
-const dZ = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT3}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {} });
+const dZ = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT3}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: 'ilk' });
 mod = 'ajan';
 modSonra = () => { mod = 'sultan'; setTimeout(() => ch3.kill('SIGKILL'), 300); };
 const eZ = await hata(() => dZ.goto(MERKEZ + '/yavas', { timeout: 6000 }));
@@ -190,6 +190,38 @@ ok('O6 Dümen Sultanda iken okuma da YOK (metin + kare "sultanda", dosya yazılm
 mod = 'ajan';
 const eOY = await hata(() => d.kare());
 ok('O7 kare() yolsuz reddedilir', eOY instanceof KapiHata && eOY.neden === 'kare-yolu-yok', String(eOY));
+
+console.log('── sekme seçimi (Sultan\'ın terminal sekmesine dokunulmaz)');
+const PORT4 = 19950 + Math.floor(Math.random() * 40);
+const prof4 = mkdtempSync(join(tmpdir(), 'dumen-test-'));
+const ch4 = spawn(CHROME, [`--remote-debugging-port=${PORT4}`, `--user-data-dir=${prof4}`, '--no-sandbox', '--headless', MERKEZ + '/terminal-sultan'], { stdio: 'ignore' });
+for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT4}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
+const cdp4 = `http://127.0.0.1:${PORT4}`;
+const sekmeler = async () => (await (await fetch(`${cdp4}/json/list`)).json()).filter((t) => t.type === 'page').map((t) => t.url);
+await new Promise((r) => setTimeout(r, 800));
+const sekOnce = await sekmeler();
+ok('D40 ön koşul: Sultan\'ın terminal sekmesi açık', sekOnce.length === 1 && sekOnce[0].endsWith('/terminal-sultan'), JSON.stringify(sekOnce));
+const dY = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {} });   // sekme verilmedi → varsayılan
+await dY.goto(MERKEZ + '/sayfa');
+const sonra = await sekmeler();
+ok('D41 varsayılan: Sultan\'ın sekmesi ADRESİNDE kaldı, ajan yeni sekmede gezdi', sonra.length === 2 && sonra.some((u) => u.endsWith('/terminal-sultan')) && sonra.some((u) => u.endsWith('/sayfa')), JSON.stringify(sonra));
+await dY.kapat();
+const kapaninca = await sekmeler();
+ok('D42 kapat() yalnız KENDİ açtığı sekmeyi kapattı; terminal sekmesi yerinde', kapaninca.length === 1 && kapaninca[0].endsWith('/terminal-sultan'), JSON.stringify(kapaninca));
+const dD = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: '/terminal-sultan' });
+const dDn = (await sekmeler()).length;
+ok('D43 sekme deseni: eşleşen sekme seçildi, yeni sekme AÇILMADI', dDn === 1, String(dDn));
+await dD.kapat();
+const kD = await sekmeler();
+ok('D44 desenle seçilen (başkasının) sekme kapat() ile KAPANMADI', kD.length === 1 && kD[0].endsWith('/terminal-sultan'), JSON.stringify(kD));
+const dN = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: /yok-boyle-adres/ });
+const nN = (await sekmeler()).length;
+ok('D45 desen eşleşmezse yeni sekme açılır, ilk sekmeye dokunulmaz', nN === 2, String(nN));
+await dN.kapat();
+const dI = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: 'ilk' });
+ok('D46 sekme:"ilk" açıkça istenirse eski davranış (yeni sekme yok)', (await sekmeler()).length === 1);
+await dI.kapat();
+ch4.kill();
 
 console.log(`SONUÇ: geçti=${G} kaldı=${K}`);
 await ham.context().browser().close().catch(() => {}); await d.kapat(); await dM.kapat(); ch.kill(); srv.close();

@@ -35,13 +35,15 @@ const ODEME_YOL = /(checkout|odeme|ödeme|payment|3d-?secure)/i;
 
 export class Dumen {
   // Ham nesneler ÖZELDİR (#): çağıran d.page / d.cdp / d.tarayici ile kapıyı atlayamaz. Zorlama yine de köprüdedir (SKILL.md).
-  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #uyarilar = []; #uyariVerilen = new Set(); #aktif = 0; #iletimler = new Set(); #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0;
-  constructor({ cdpUrl, merkez, zamanAsimiMs = 3000, yaz = (s) => console.log(s) }) {
-    this.#cdpUrl = cdpUrl; this.#merkez = merkez.replace(/\/$/, ''); this.#zamanAsimiMs = zamanAsimiMs; this.#yaz = yaz;
+  #page; #cdp; #tarayici; #cdpUrl; #merkez; #zamanAsimiMs; #yaz; #olaylar = []; #uyarilar = []; #uyariVerilen = new Set(); #aktif = 0; #iletimler = new Set(); #pencereler = []; #sayac = 0; #kopuk = false; #baglanmaSayisi = 0; #sekme; #hedefId = null; #kendiSekmem = false;
+  constructor({ cdpUrl, merkez, zamanAsimiMs = 3000, yaz = (s) => console.log(s), sekme }) {
+    this.#sekme = sekme; this.#cdpUrl = cdpUrl; this.#merkez = merkez.replace(/\/$/, ''); this.#zamanAsimiMs = zamanAsimiMs; this.#yaz = yaz;
   }
 
-  static async baglan({ cdpUrl, merkez, zamanAsimiMs, yaz }) {
-    const d = new Dumen({ cdpUrl, merkez, zamanAsimiMs, yaz });
+  // sekme: yok/'yeni' → YENİ sekme açılır (varsayılan: Sultan'ın sekmelerine dokunulmaz) · 'ilk' → ilk sekme (eski davranış, açıkça istenir)
+  //        · string (adres parçası) ya da RegExp → adresi eşleşen sekme, yoksa yeni sekme. kapat() yalnız KENDİ açtığı sekmeyi kapatır.
+  static async baglan({ cdpUrl, merkez, zamanAsimiMs, yaz, sekme }) {
+    const d = new Dumen({ cdpUrl, merkez, zamanAsimiMs, yaz, sekme });
     await d.#bagla();
     return d;
   }
@@ -50,8 +52,18 @@ export class Dumen {
     const { chromium } = await playwrightYukle();
     const tarayici = await chromium.connectOverCDP(this.#cdpUrl);
     const ctx = tarayici.contexts()[0] || await tarayici.newContext();
-    const page = ctx.pages()[0] || await ctx.newPage();
+    const hedefId = async (p) => { const o = await ctx.newCDPSession(p); try { return (await o.send('Target.getTargetInfo')).targetInfo.targetId; } finally { await o.detach().catch(() => {}); } };
+    let page = null;
+    if (this.#hedefId) { for (const p of ctx.pages()) { if (await hedefId(p).catch(() => null) === this.#hedefId) { page = p; break; } } }   // yeniden bağlanma: AYNI sekmeye dön
+    if (!page) {
+      const s = this.#sekme;
+      if (s === 'ilk') { page = ctx.pages()[0] || null; this.#kendiSekmem = false; }
+      else if (typeof s === 'string' && s !== 'yeni') { page = ctx.pages().find((p) => p.url().includes(s)) || null; this.#kendiSekmem = false; }
+      else if (s instanceof RegExp) { page = ctx.pages().find((p) => s.test(p.url())) || null; this.#kendiSekmem = false; }
+      if (!page) { page = await ctx.newPage(); this.#kendiSekmem = true; }
+    }
     this.#tarayici = tarayici; this.#page = page; this.#cdp = await ctx.newCDPSession(page);
+    this.#hedefId = await hedefId(page).catch(() => this.#hedefId);
     tarayici.on('disconnected', () => { if (this.#tarayici === tarayici) this.#kopuk = true; });
     this.#kopuk = false; this.#baglanmaSayisi++;
     await this.dinleyiciKur();   // yeniden bağlanınca sayfa yeniden okunur (reload) — insan eylemi aktarılmaz
@@ -208,5 +220,5 @@ export class Dumen {
   olayKaydi() { return this.#olaylar.map((o) => ({ ...o })); }   // salt-okur kopya (ham nesne değil)
   eslesmis() { return this.#olaylar.filter((o) => this.#pencereler.some((p) => o.t >= p.t0 && o.t <= p.t1 + 50)); }
   yabanci() { return this.#olaylar.filter((o) => !this.#pencereler.some((p) => o.t >= p.t0 && o.t <= p.t1 + 50)); }
-  async kapat() { await this.#tarayici?.close().catch(() => {}); }
+  async kapat() { if (this.#kendiSekmem) await this.#page?.close().catch(() => {}); await this.#tarayici?.close().catch(() => {}); }   // yalnız KENDİ açtığı sekme kapanır
 }
