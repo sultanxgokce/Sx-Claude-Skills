@@ -1,0 +1,27 @@
+{
+  "is": "dumen-sekme-secimi",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T10:18:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 56 kapi 24 mutant sekme",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 56 kapi 24 mutant sekme-tek.txt",
+      "sha256": "f356c8203dd197546b8749618a53245ba2756144292113db559328054c22e6ab",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T10:18:19+03:00",
+      "sure_sn": 282.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "03a8750183d04e0cbcc90ee1116e8964",
+      "olculen_commit": "736929b8578551c8786442861157a5ca22821feb",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "541818402ce5b89179b5dea164754ac521e8623b3a06582ca75dad0407775129"
+}
