@@ -8,9 +8,6 @@ version: 0.7.0
 
 Karar belgesi: Nexus `_agents/hezarfen/bilgi-havuzu/dumen-arastirma-20261027/KARAR.md` (Z8E7K7 devral/geri ver · JN1K8K bekçi kör noktası).
 
-## 🔴 SERT KURAL — Dümen'de gördüğünü bulguya yaz (Sultan zorunlu kıldı · 2 Kas)
-Dümen'i kullanan **her ajan**, kullanırken gördüğü her **hatayı** ve **geliştirme önerisini** Bulgu Havuzu'na yazar: `bash /config/.claude/skills/bulgu/scripts/bulgu.sh yaz …`. Ne kadar çok geri bildirim, o kadar gelişir. Bulgu yoksa "bulgu yok" demek de bir karardır; ama sormadan geçmek ihlaldir. `Dumen.kapat()` her çıkışta tek satır hatırlatma basar (`Dümen bulgu hatırlatması: …`); sınav bu satırı kilitler (D48).
-
 ## Ne yapar
 `scripts/dumen.mjs` → `Dumen.baglan({cdpUrl, merkez})` ajana `goto/fill/selectOption/check/click/press` verir. **Ham `page.evaluate` ve ham CDP verilmez** (`page`/`cdp`/`tarayici` özel alanlardır; `d.page` yoktur). Her eylem:
 1. `GET <merkez>/dumen/mod` — `ajan` değilse ya da merkez cevap vermezse **reddedilir**, terminale tek satır: `⏸ Dümen Sultan'da · bekliyorum` (`KapiHata.neden = sultanda | merkez-cevapsiz`).

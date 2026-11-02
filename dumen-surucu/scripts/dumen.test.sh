@@ -44,7 +44,6 @@ mut "metin hedefi durma noktasına gitmez" "this.#okuKapi('metin', sel === 'body
 mut "varsayılan yeni sekme yerine ilk sekmeyi alır" "if (!page) { page = await ctx.newPage(); this.#kendiSekmem = true; }" "if (!page) { page = ctx.pages()[0] || await ctx.newPage(); this.#kendiSekmem = true; }"
 mut "kapat() başkasının sekmesini de kapatır" "if (this.#kendiSekmem) await this.#page" "if (true) await this.#page"
 mut "RegExp çağıranın nesnesiyle aranır (lastIndex taşınır)" "const re = new RegExp(s.source, s.flags);" "const re = s;"
-mut "kapat() bulgu hatırlatması basmaz" "this.#yaz('Dümen bulgu hatırlatması:" "void ('Dümen bulgu hatırlatması:"
 mut "sekme deseni yok sayılır" "page = ctx.pages().find((p) => p.url().includes(s)) || null; this.#kendiSekmem = false;" "page = null; this.#kendiSekmem = false;"
 find "$T" -mindepth 1 -delete; rmdir "$T"
-[ "$MK" -eq 0 ] && echo "MUTANT: 26/26 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 25/25 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
