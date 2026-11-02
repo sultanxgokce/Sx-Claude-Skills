@@ -1,0 +1,41 @@
+{
+  "tur": 8,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T01:20:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28955,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 4042
+  },
+  "dalgic": "olculemedi",
+  "bas": "45cdb579a7242f455df68ba5861c81629cc3643e",
+  "duzeltme_farki": {
+    "onceki_bas": "90bcf49be27d269d3ada4ae807ab9a814e21e805",
+    "dosya": 2,
+    "bayt": 4042,
+    "tam_bayt": 70388
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, usta.sh uyandır/uyut akışı, koltuk-ac usta yolu ve reconcile koltuk:yok sessizliği yeşil gerçek ölçümlerle; kritik davranışlar da mutant sınavlarıyla doğrulanmış. Önceki B1 kapanmıştır: iş kartı 2.38.6 bölümünü açıkça main’den gelen ve bu işin dışında kalan içerik olarak tanımlıyor, bu turda da üretim kodu değişmediğinden üretime engel kanıtlı bir kusur kalmamıştır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Usta ölçümü 12/12 kapı ve 10/10 mutant, reconcile ölçümü 2/2 kapı ve 1/1 mutant, koltuk-ac regresyonu 45/45 kapı geçiriyor; son ölçümden nihai başa yalnız kanıt dosyalarının değiştiği bildirildiği için davranış kanıtı geçerliliğini koruyor. Önceki B1, talebin 2.38.6 bölümünü açıkça kapsam dışında bırakması ve bu turda üretim farkının boş olması nedeniyle sürdürülmemiştir."
+  }
+}

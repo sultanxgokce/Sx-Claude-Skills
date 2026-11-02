@@ -1,0 +1,49 @@
+{
+  "tur": 6,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T01:19:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29187,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 2005
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7484b2b2fe2147a51c996796abfa8599a384f915",
+  "duzeltme_farki": {
+    "onceki_bas": "3a98bb3deab5f45bae013db72d190028d0f0288c",
+    "dosya": 2,
+    "bayt": 5234,
+    "tam_bayt": 64297
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, usta uyandırma/uyutma çekirdeği önceki turdaki temiz 5/E durumunu koruyor ve son ölçümlerde bütün ilgili kapılarla mutantlar geçiyor. Ancak bu karta başka bir işin oda-adı değişiklik kaydı karışmış; davranışı bozmuyor ama kapsam temizlenmeden üretime alınmamalıdır.",
+    "bulgular": [
+      {
+        "ne": "İş kartıyla ilgisiz “oda-adi-kebab-uyarisi” sürüm kaydı bu değişikliğe eklenmiş; bu açık bir kapsam kaymasıdır ve ilgili karta taşınmalıdır.",
+        "kanit": "Değişiklikte `usta-uyku-uyandir` kaydının hemen altına, ayrı `oda-adi-kebab-uyarisi` kartını ve `/api/koltuklar`, `oda_uyari`, `kayitOdaGecersizHaritasi`, R23–R24d sınavlarını anlatan 2.38.6 bölümü eklenmiş; iş kartının usta/reconcile/koltuk-ac kapsamıyla bağı yoktur.",
+        "konum": "terminal-onar/SKILL.md:11",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son gerçek usta ölçümü 12/12 kapı ve 10/10 mutant, reconcile ölçümü 2/2 kapı ve 1/1 mutant, koltuk-ac ölçümü 45/45 kapı gösteriyor; önceki turda bulgu olmadığından kapanması gereken eski kayıt yok. Ölçülen commit son baş değil, fakat bu turdaki üretim farkı yalnız belge kaydı olduğundan ölçülmüş davranışın değiştiğine dair işaret bulunmuyor; buna karşılık ilgisiz 2.38.6 kaydının kendi iddiaları bu kartın manifestiyle kanıtlanmıyor."
+  }
+}

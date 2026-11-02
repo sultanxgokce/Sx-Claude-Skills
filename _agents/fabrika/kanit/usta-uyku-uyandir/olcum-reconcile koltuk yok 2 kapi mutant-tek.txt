@@ -1,0 +1,9 @@
+$ bash ekip-kur/templates/ekip-reconcile.test.sh
+# rc=0 sure=75.3s zaman=2026-11-02T23:25:51+03:00
+--- stdout ---
+  ✓ R1 koltuk:yok üyeler için tmux-alani-parse-edilemedi bayrağı YOK
+  ✓ R2 koltuklu ama ölü üye hâlâ bayraklanır (olu-oturum ANA)
+SONUÇ: geçti=2 kaldı=0
+MUTANT: 1/1 yakalandı
+--- stderr ---
+⏳ agir-sira: kanit-usta-uyku-uyandir-reconcile koltuk yok 2 kapi mutant 75 sn bekledi (yuva 2, load1 17.90)

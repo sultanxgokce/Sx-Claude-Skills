@@ -1,0 +1,41 @@
+{
+  "tur": 5,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T00:45:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27226,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 6028
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3a98bb3deab5f45bae013db72d190028d0f0288c",
+  "duzeltme_farki": {
+    "onceki_bas": "5097c9d80ac2bc892c05cb6340e7a8a49e69df91",
+    "dosya": 3,
+    "bayt": 7031,
+    "tam_bayt": 62129
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turda açık bulgu yoktu; bu tur yalnız README’de ekip-kur sürümünü 1.8.0’dan 1.8.1’e yükseltmiş, incelenmiş üretim davranışına dokunmamıştır. Talebin bütün çekirdek parçaları sağlam manifestteki kapı ve mutant ölçümleriyle karşılandığından iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Usta ölçümü 12/12 kapı ve 10/10 mutant, reconcile ölçümü 2/2 kapı ve 1/1 mutant, koltuk-ac ölçümü 45/45 kapı gösteriyor; önceki turda bulgu bulunmadığından kapatılacak kayıt yok. Ölçümler mevcut baştan önceki üretim koduna aittir, fakat bu turdaki tek üretim farkı README sürüm satırıdır ve ölçülen davranışı değiştirmez."
+  }
+}

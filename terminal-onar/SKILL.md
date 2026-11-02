@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.38.6
+version: 2.39.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.39.0 · USTA = uyuyan oturum: `usta.sh uyandir|uyut|liste` + koltuk-ac usta yolu (2 Kas · kart usta-uyku-uyandir · Sultan onaylı usta düzeni, SERDAR)
+Koltuğu olmayan ama ekip kaydında `klasor` alanı olan üye (usta) tmux'ta uyur; koltuk açılınca `usta.sh uyandir <AD>` ustanın KENDİ klasöründe `claude --resume <sohbet>` açar. 🔴 **Yanlış klasör kilidi**: sohbet dosyası ustanın klasör kodlu proje dizininde yoksa AÇILMAZ (rc 4; başka klasörde resume hata vermeden hafızayı karıştırıyor). 🔴 **Tavan** `UST_TAVAN` (vars. 6): dolunca en boşta olan uyur; uyurken **kapanış kancası** Claude'a DURUM.md'yi güncelletir ve araç ayrıca DURUM.md'ye uyutma damgası ekler. Kayıttan okuma PyYAML'sız (ortam PATH'i yaml göstermeyebiliyor). `koltuk-ac.sh` usta adını `yol=usta` olarak tanır. Sınav: `usta.test.sh` (12 kapı, 10 mutant); usta = ekip kaydında `klasor` + `koltuk: yok` olan üye; kanca/damga/kapanış doğrulanmazsa uyutma REDDEDİLİR (rc 3). Şeritte gri "uyuyor" görünümü ve usta başına `sohbet` kaydı bu sürümde YOK (kayıt sahibi kutu / şerit sahibi ayrı iş).
 
 ## 🆕 2.38.6 · Kurala uymayan oda adı sessizce atılmaz, koltukta uyarı olur (3 Kas · kart oda-adi-kebab-uyarisi · bulgu …WZ4PAX)
 Ekip kaydındaki `oda:` değeri kebab kuralına (`^[a-z0-9][a-z0-9-]{0,29}[a-z0-9]$`) uymuyorsa kapı eskiden odayı almıyor ve hiçbir şey söylemiyordu: tellal'da beş odadan dördü ('Mimari Cizim', 'Reklam Videosu', 'Web Tanitim', 'Sosyal Medya', 'Bakim') şeritte görünmüyordu, sebebi hiçbir yerde yazmıyordu (ölçüm 3 Kas, `/tellal/api/koltuklar`: oda listesi yalnız `ortak-kapilar`). Artık `/api/koltuklar` o koltukta `oda_uyari` döner: *"Ekip kaydındaki oda adı 'Mimari Cizim' kurala uymuyor (küçük harf, rakam, tire; 2–31 karakter) — koltuk odasız gösteriliyor."* Kural değişmedi (geçersiz ad yine alınmaz, uydurulmaz); klasördeki geçerli `oda.json` yine kazanır ve uyarı üretmez. Yeni dışa aktarım `kayitOdaGecersizHaritasi`; `odaUyarisi` üçüncü (isteğe bağlı) parametre alır, eski çağrılar aynen. Sınav `rutbe.test.mjs` R23–R24d.

@@ -1,0 +1,122 @@
+{
+  "is": "usta-uyku-uyandir",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T00:07:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "usta sinavi 10 kapi 7 mutant",
+      "asama": "tek",
+      "dosya": "olcum-usta sinavi 10 kapi 7 mutant-tek.txt",
+      "sha256": "810b080ed79aaa18ae412c1ff8d192dd1060555aa7ffa670eb1ab297bae43816",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:24:36+03:00",
+      "sure_sn": 221.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f1ca48b513604fd0966c2cdfc7545c2d",
+      "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "reconcile koltuk yok 2 kapi mutant",
+      "asama": "tek",
+      "dosya": "olcum-reconcile koltuk yok 2 kapi mutant-tek.txt",
+      "sha256": "5d5d041b07b29d674c468d09d85991e41d15702f4c9c14cf874b72f10f29cecf",
+      "komut": [
+        "bash",
+        "ekip-kur/templates/ekip-reconcile.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:25:51+03:00",
+      "sure_sn": 75.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8503d76197bb4d25a284f6bbcc9862fa",
+      "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac regresyon 45 kapi",
+      "asama": "tek",
+      "dosya": "olcum-koltuk-ac regresyon 45 kapi-tek.txt",
+      "sha256": "08aafe285d768de64d51030f0fb8a5dfed0f1680b38f905c9e2fe7071a51dc4e",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:26:15+03:00",
+      "sure_sn": 24.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dbe7792522ab4ccb8898c8f9f92a2fca",
+      "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "usta sinavi 12 kapi 10 mutant tur2",
+      "asama": "tek",
+      "dosya": "olcum-usta sinavi 12 kapi 10 mutant tur2-tek.txt",
+      "sha256": "780c34ddd4bb4c0e3e92c6c4b4aa37cf21ca4db0eea0f9a3a2cb33153d3deaff",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:35:45+03:00",
+      "sure_sn": 187.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "eff27c3b7d3c4071acfded80472edb80",
+      "olculen_commit": "b67654c2ece37588e5684f9b043a93f9c4030c89",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "usta sinavi 12 kapi 10 mutant lint duzeltme",
+      "asama": "tek",
+      "dosya": "olcum-usta sinavi 12 kapi 10 mutant lint duzeltme-tek.txt",
+      "sha256": "f6fd032e381eebd836ac60f464185d296a8db4c6213dc77e0bfeec25bac9be59",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:48:12+03:00",
+      "sure_sn": 154.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b6409860699a422e9951c25375bf6c3e",
+      "olculen_commit": "835a6a346db98c3592f670746cfac43e8ec23e5b",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "usta sinavi 12 kapi 10 mutant calistirma biti",
+      "asama": "tek",
+      "dosya": "olcum-usta sinavi 12 kapi 10 mutant calistirma biti-tek.txt",
+      "sha256": "117091cc1fba1b6a13f1ad4792e0fee62fe11c0ce13e43119e455994e27f4c79",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T00:07:28+03:00",
+      "sure_sn": 146.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f8d19b3724864484b4f93a7b16ca04d5",
+      "olculen_commit": "4762321b01623b877c2cdca40b0196955b94ac48",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "da26c14ea1731b907a0b52d6e5add515d0a8dc6e3eba3abecb7af74130afdd8a"
+}
