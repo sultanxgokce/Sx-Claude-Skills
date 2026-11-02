@@ -26,5 +26,14 @@
     "şimdi → hedef iki SAYI olarak yok",
     "(kaynak: <komut/ekran>, <gün>) parantezi yok"
   ],
-  "sayi_bicim_uyarisi": true
+  "sayi_bicim_uyarisi": true,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "d26a1038",
+      "gerekce": "Tur 3 bulgusu yalnız kanıt kaydının ölçülen commit ile PR başı arasındaki docs farkı; kod ve sınav aynı. Bir tur daha: ölçümü güncel başta yenileyip göze vermek yeter",
+      "zaman": "2026-11-02T23:19:18+03:00"
+    }
+  ]
 }
