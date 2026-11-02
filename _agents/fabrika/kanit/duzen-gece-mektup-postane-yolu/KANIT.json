@@ -1,0 +1,27 @@
+{
+  "is": "duzen-gece-mektup-postane-yolu",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T04:04:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duzen-gece sinavi 27 kapi G24 G25 postane mektubu",
+      "asama": "tek",
+      "dosya": "olcum-duzen-gece sinavi 27 kapi G24 G25 postane mektubu-tek.txt",
+      "sha256": "e79921e9bf02fb233cdf4513e27552976aa191c629ea41b3f315a3b9f24cec24",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T04:04:20+03:00",
+      "sure_sn": 27.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e0e8c24f9f5b4c42b11e58ac19ed7188",
+      "olculen_commit": "00344e3ea4290a648895eb7db379f173caac2330",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "4b08d520e431c40e5c964624059674a754da657f81d9981da6efb8853b3d574d"
+}
