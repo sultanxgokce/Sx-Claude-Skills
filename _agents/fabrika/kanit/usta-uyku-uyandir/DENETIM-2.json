@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T23:40:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__low",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33172,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 9572
+  },
+  "dalgic": "uyumsuz",
+  "bas": "65f4bd583e30eab4c82b2cbca40966d97fe29ded",
+  "duzeltme_farki": {
+    "onceki_bas": "18dbec8df5dcbec68c344c63fb2940a7f9ce1119",
+    "dosya": 7,
+    "bayt": 21421,
+    "tam_bayt": 45533
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun üç uygulama bulgusu da kapanmış: usta seçimi artık `koltuk: yok` ile sınırlı, uyutma başarısızlığında yeni oturum açılmıyor ve kanca/damga/kapanış hata yolları rc 3 ile duruyor. Talep edilen yanlış-klasör kilidi, kuru koşu, tavan, en boştakini uyutma, DURUM.md kapanışı, sessiz reconcile ve koltuk-ac usta yolu ölçülmüş; üretimi durduracak açık kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son ölçüm 12/12 gerçek kod kapısı ve 10/10 mutant, reconcile 2/2 ve 1/1 mutant, koltuk-ac regresyonu 45/45 veriyor; önceki B1 `usta.sh:55` ve U1/koltuklu mutantıyla, B2 `usta.sh:104-105` ile U12/tavan mutantıyla, B3 `usta.sh:66-80,115` ile U11 ve ilgili mutantla kapanmış görünüyor. Ancak kanıtın son kaydı `b67654c...` commitini ölçerken düzeltme notu incelenen başı `65f4bd...` olarak belirtiyor; bu nedenle ölçümler güçlü olsa da verilen baş ile birebir commit eşleşmesi gösterilmiyor."
+  }
+}
