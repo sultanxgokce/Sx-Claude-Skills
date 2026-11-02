@@ -1,0 +1,50 @@
+{
+  "is": "terminal-onar-ana-yonetici-uye-tmux",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T08:41:43+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "uye-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-uye-gercek-sonra.txt",
+      "sha256": "4a5c99b63ee8a35480cbf1a79f73b06f8dd446e5963e4f9798c7fc215f2c742d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/uye-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T08:41:43+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f43125e6bcd348238b113ab5a7487312",
+      "olculen_commit": "6517af72d4f7a48e921ac817a8a009ecbb910b72",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "uye-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-uye-mutant-sonra.txt",
+      "sha256": "1f638e3f34f82cef231902af76ed0a162c525c34cc152c10965150030c991da8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/uye-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T08:41:43+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "uye-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "3e6e0e40bc3142a59f19439dff24c145",
+      "olculen_commit": "6517af72d4f7a48e921ac817a8a009ecbb910b72",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "d0d965bbd476e7db3a420ea6a5acd5be877d5573337069a97dc34f4354b99c73"
+}

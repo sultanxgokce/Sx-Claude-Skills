@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/uye-gercek.sh
+# rc=0 sure=1.2s zaman=2026-11-02T08:41:43+03:00
+--- stdout ---
+  ✓ A15 yönetici üyesi büyük harfli ve kutu öneksiz → kayıttaki tmux adı
+  ✓ A16 üyenin oturumu canlı değilse sinav-ana
+  ✓ A17 yönetici adıyla üye bulunamazsa (yanlış kayıt) eski yol → sinav-ana
+  ✓ A18 üyenin tmux adı geçersiz karakterliyse eski yol → sinav-ana
+  ✓ A19 açık beyan üyeden üstün
+geçen=19 kalan=0
+--- stderr ---
