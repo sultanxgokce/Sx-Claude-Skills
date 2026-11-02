@@ -1,0 +1,39 @@
+{
+  "is": "oda-adi-kebab-uyarisi",
+  "cumle": "Kapı, ekip kaydındaki kurala uymayan oda adını (boşluk/büyük harf) sessizce atmak yerine koltukta uyarı olarak söyler; tellal'da 5 odadan 4'ü şeritte görünmüyordu, sebebi kimse görmüyordu",
+  "istedi": "BÂNİ (bulgu …WZ4PAX)",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-03T00:25:34+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6F02XE8GGCWFN4JQDWZ4PAX",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [
+    "5 odadan"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T00:25:34+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

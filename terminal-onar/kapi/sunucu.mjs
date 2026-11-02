@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
-import { odaBul, odaUyarisi, odaSec, kayitOdaHaritasi, kayitOdaBul } from './oda.mjs';
+import { odaBul, odaUyarisi, odaSec, kayitOdaHaritasi, kayitOdaBul, kayitOdaGecersizHaritasi } from './oda.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
 import { tarifOku, uzmanlikOku } from './tarif.mjs';
 import { bugunOku } from './bugun.mjs';
@@ -495,9 +495,9 @@ const sunucu = http.createServer(async (req, res) => {
         // RÜTBE (2.38.0 · kart rutbe-koltuk-alani): kademe · amir · amir_ad kayıttan türer (kural kapi/rutbe.mjs); kayıt okunamazsa alan yazılmaz, liste düşmez.
         const odalar = new Map();
         const satirlar = koltukSatirlari(r.out), acik = satirlar.map((k) => k.ad);
-        let kayitOda = new Map(), rutbe = new Map(); try { const { uyeler } = kayitOku(PROJE); kayitOda = kayitOdaHaritasi(uyeler, acik); rutbe = rutbeHaritasi(uyeler, acik); } catch {}
+        let kayitOda = new Map(), gecersizOda = new Map(), rutbe = new Map(); try { const { uyeler } = kayitOku(PROJE); kayitOda = kayitOdaHaritasi(uyeler, acik); gecersizOda = kayitOdaGecersizHaritasi(uyeler, acik); rutbe = rutbeHaritasi(uyeler, acik); } catch {}   // 2.38.6: kurala uymayan oda adı uyarı olarak döner
         const koltuklar = satirlar.map(({ dizin, ...k }) => {
-          const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta);
+          const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta, kayitOdaBul(gecersizOda, k.ad));
           if (sec && sec.kaynak === 'klasor') odalar.set(sec.oda, bulunan);   // klasörün hedef · reis bilgisi kayıt satırını ezer
           else if (sec && !odalar.has(sec.oda)) odalar.set(sec.oda, { ad: sec.oda, hedef: '', reis: '' });
           return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ...rutbeBul(rutbe, k.ad, { ana: ANA_TMUX, acik }), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
