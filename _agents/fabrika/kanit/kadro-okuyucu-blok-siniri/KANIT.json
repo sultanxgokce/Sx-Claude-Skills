@@ -1,0 +1,70 @@
+{
+  "is": "kadro-okuyucu-blok-siniri",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T01:44:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kadro-sinav",
+      "asama": "tek",
+      "dosya": "olcum-kadro-sinav-tek.txt",
+      "sha256": "9c7d72e5ade37b41e30209d2e80d4ca6c827089e1f034ea011d79779e5a65950",
+      "komut": [
+        "node",
+        "kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T01:43:49+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f00804d516794df4a5060f3d75ad78f5",
+      "olculen_commit": "9d20838167af23e457d88f070d4ec769f1e7f107",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-yaz-sinav",
+      "asama": "tek",
+      "dosya": "olcum-kadro-yaz-sinav-tek.txt",
+      "sha256": "f94acada73f27a9be954e548da5fc617197e6f2d7bf8b28fbd6a83e6028a009a",
+      "komut": [
+        "node",
+        "kadro-yaz.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T01:44:20+03:00",
+      "sure_sn": 30.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "867b652ba819455ea946961b9b7dc7e6",
+      "olculen_commit": "9d20838167af23e457d88f070d4ec769f1e7f107",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-mutant-blok-siniri",
+      "asama": "tek",
+      "dosya": "olcum-kadro-mutant-blok-siniri-tek.txt",
+      "sha256": "164a3aa6941a566b81eecf0c686e4c1f3f0d19c694ccf8df6187d5e8c9023d5e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/kadro-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-okuyucu-blok-siniri/terminal-onar/kapi"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T01:44:20+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kadro-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "33e5a71561e64557a1b01d5be9a25d70",
+      "olculen_commit": "9d20838167af23e457d88f070d4ec769f1e7f107",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "da417b84367801789527ba8bd2f9d7b8fa0364e97300ff6b0ce0a35e512aa14d"
+}

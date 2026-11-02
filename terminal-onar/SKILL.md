@@ -1,9 +1,14 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.39.0
+version: 2.39.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.39.1 · Kadro kayıt okuyucu liste bitince bloğu kapatır (3 Kas · kart kadro-okuyucu-blok-siniri · bulgu …EQ1GGG)
+`kapi/kadro.mjs` `kayitAyristir`: `uyeler:` listesi bitince (`- id:` satırından daha az girintili, yorum olmayan ilk satır) blok kapanır;
+kökteki `oda_muduru:` / `ad:` ve sonraki `odalar:` bloğunun `ad:`/`rol:`/`oda:` satırları artık SON ÜYEYE yazılmıyor (NAZIR ve MİHENK
+kadro sekmesinde yanlış rütbe ve oda görünüyordu). Boş satır ve yorum bloğu kapatmaz. Sınav K-BLOK1/K-BLOK2; mutant (sınır satırı silinince) K-BLOK1 kırmızı.
 
 ## 🆕 2.39.0 · USTA = uyuyan oturum: `usta.sh uyandir|uyut|liste` + koltuk-ac usta yolu (2 Kas · kart usta-uyku-uyandir · Sultan onaylı usta düzeni, SERDAR)
 Koltuğu olmayan ama ekip kaydında `klasor` alanı olan üye (usta) tmux'ta uyur; koltuk açılınca `usta.sh uyandir <AD>` ustanın KENDİ klasöründe `claude --resume <sohbet>` açar. 🔴 **Yanlış klasör kilidi**: sohbet dosyası ustanın klasör kodlu proje dizininde yoksa AÇILMAZ (rc 4; başka klasörde resume hata vermeden hafızayı karıştırıyor). 🔴 **Tavan** `UST_TAVAN` (vars. 6): dolunca en boşta olan uyur; uyurken **kapanış kancası** Claude'a DURUM.md'yi güncelletir ve araç ayrıca DURUM.md'ye uyutma damgası ekler. Kayıttan okuma PyYAML'sız (ortam PATH'i yaml göstermeyebiliyor). `koltuk-ac.sh` usta adını `yol=usta` olarak tanır. Sınav: `usta.test.sh` (12 kapı, 10 mutant); usta = ekip kaydında `klasor` + `koltuk: yok` olan üye; kanca/damga/kapanış doğrulanmazsa uyutma REDDEDİLİR (rc 3). Şeritte gri "uyuyor" görünümü ve usta başına `sohbet` kaydı bu sürümde YOK (kayıt sahibi kutu / şerit sahibi ayrı iş).
