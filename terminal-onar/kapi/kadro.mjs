@@ -49,12 +49,16 @@ const ALANLAR = ['tmux', 'oda', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz
 // `- id:` (ör. meta) yoktur; `tmux: null` → ''. Bilinmeyen anahtar yok sayılır (şema genişlemesi kırmaz).
 // anahtar: blok açan alan — kayıtlarda `id`, ekip modelinde (`_agents/ekip-modeli.yaml` örnekleri) `kayit` (E2).
 export function kayitAyristir(metin, anahtar = 'id') {
-  const uyeler = []; let cur = null;
+  const uyeler = []; let cur = null, girinti = -1;
   const ac = new RegExp('^\\s*-\\s*' + anahtar + ':\\s*("([^"]*)"|\'([^\']*)\'|(\\S+))');
   for (const line of String(metin || '').split('\n')) {
     const m = line.match(ac);
-    if (m) { cur = { id: m[2] ?? m[3] ?? m[4] }; uyeler.push(cur); continue; }
+    if (m) { cur = { id: m[2] ?? m[3] ?? m[4] }; girinti = line.search(/\S/); uyeler.push(cur); continue; }
     if (!cur) continue;
+    // 🔴 BLOK SINIRI (2.39.1 · bulgu gorev_…EQ1GGG, SERDAR 2 Kas): liste bitince (`- id:` satırından daha az girintili, boş/yorum olmayan
+    //    satır) blok KAPANIR; yoksa kökteki `oda_muduru:` / `ad:` / sonraki `odalar:` bloğunun satırları SON ÜYEYE yazılıyordu
+    //    (NAZIR ve MİHENK kadro sekmesinde yanlış rütbe ve oda). Yorum ve boş satır bloğu kapatmaz.
+    const g = line.search(/\S/); if (g >= 0 && line[g] !== '#' && g < girinti) { cur = null; continue; }
     for (const k of ALANLAR) { const v = skaler(line, k); if (v !== null) { cur[k] = v === 'null' || v === '~' ? '' : v; break; } }
   }
   return uyeler;

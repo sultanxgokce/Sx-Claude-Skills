@@ -10,6 +10,10 @@ let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log
 
 console.log('── A · kayıt ayrıştırma');
 const AILE = `meta:\n  aile: SERDAR\nuyeler:\n  - id: SERDAR\n    tmux: "serdar:0"   # yorum\n    mod: kod\n    rol: "yönetici"\n  - id: BERİD\n    tmux: 'berid:0'\n    mod: kod\n    hal: calisiyor\n  - id: ESKI\n    tmux: eski:0\n    hal: emekli\n    rol: eski üye\n  - id: TMUXSUZ\n    tmux: null\n    hal: saçma\n`;
+// BLOK SINIRI (2.39.1 · bulgu …EQ1GGG): üyeler listesi bitince kökteki oda_muduru/ad ve sonraki odalar bloğu SON ÜYEYE yazılmaz; yorum ve boş satır bloğu kapatmaz
+{ const u = kayitAyristir('uyeler:\n  - id: A\n    rol: reis\n\n    # yorum\n    oda: merkez\n  - id: B\n    rol: usta\noda_muduru: KETHUDA\nad: KUTU\nodalar:\n  - ad: Mimari\n    rol: oda\n    oda: cizim\n');
+  kapi('K-BLOK1 liste bitince kök satırları son üyeye yazılmaz (oda_muduru · ad · odalar/rol · oda)', u.length === 2 && u[1].rol === 'usta' && !('oda_muduru' in u[1]) && !('ad' in u[1]) && !('oda' in u[1]), JSON.stringify(u));
+  kapi('K-BLOK2 blok içindeki boş satır ve yorum bloğu kapatmaz (A: rol reis · oda merkez)', u[0].rol === 'reis' && u[0].oda === 'merkez', JSON.stringify(u[0])); }
 const a = kayitAyristir(AILE);
 kapi('A1 dört üye, üç tırnak biçimi de okunur', a.length === 4 && a[0].tmux === 'serdar:0' && a[1].tmux === 'berid:0' && a[2].tmux === 'eski:0', JSON.stringify(a));
 kapi('A2 rol/mod/hal alanları; yorum atılır', a[0].rol === 'yönetici' && a[0].mod === 'kod' && a[1].hal === 'calisiyor' && a[2].hal === 'emekli');
