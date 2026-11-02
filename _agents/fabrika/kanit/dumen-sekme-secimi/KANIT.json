@@ -1,7 +1,7 @@
 {
   "is": "dumen-sekme-secimi",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T10:42:02+03:00",
+  "guncelleme": "2026-11-02T10:53:54+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -59,7 +59,26 @@
       "olcum_id": "288f2437266c43b2a9678c485f1a9a56",
       "olculen_commit": "1fdd8244c99c01e70dff757f7f314415fcb30ee5",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 58 kapi 26 mutant bulgu hatirlatma",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 58 kapi 26 mutant bulgu hatirlatma-tek.txt",
+      "sha256": "6e6cfd62242da7e012c87663b58ffa33122c0b933445539d85bbaa03982f7a4a",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T10:53:54+03:00",
+      "sure_sn": 307.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "923eab92691144e597925c3924c05aa3",
+      "olculen_commit": "611018fcb2dfd4d7ae080e471eb11a7f53752486",
+      "olculen_kirli": false
     }
   ],
-  "imza": "43504ebfd09e22af26aba74733e9bd1587727f1fa84a88a0dcdd6b9c47e6347c"
+  "imza": "9ef407d6372f05550765cf03ea5cd540ad4ef358521b930caf0a66435e6e46a7"
 }
