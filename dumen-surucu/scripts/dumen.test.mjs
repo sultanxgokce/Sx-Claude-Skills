@@ -218,6 +218,12 @@ const dN = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500
 const nN = (await sekmeler()).length;
 ok('D45 desen eşleşmezse yeni sekme açılır, ilk sekmeye dokunulmaz', nN === 2, String(nN));
 await dN.kapat();
+const reG = /terminal-sultan/g;   // aynı nesne iki kez kullanılır: lastIndex taşınırsa ikinci arama kaçırır
+const dG1 = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: reG }); await dG1.kapat();
+const dG = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: reG });
+const nG = (await sekmeler()).length;
+ok('D47 durum taşıyan (g bayraklı) RegExp ikinci kullanımda da eşleşen sekmeyi bulur, yeni sekme açılmaz', nG === 1, String(nG));
+await dG.kapat();
 const dI = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: 'ilk' });
 ok('D46 sekme:"ilk" açıkça istenirse eski davranış (yeni sekme yok)', (await sekmeler()).length === 1);
 await dI.kapat();
