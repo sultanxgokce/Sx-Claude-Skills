@@ -490,6 +490,23 @@ bash "$K" olcum is-y8 olc --asama tek -- echo 1 >/dev/null 2>&1
 [ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y8/DENETIM-1.json'));assert d['denetci'].startswith('codex')"; g $? "🔴 stdin 30 sn açık boruyken denetçi 10 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil"
 rm -f "$FAKE/codex"
 fi
+# Y9 yalnız ANA koşumda ve kendi mutantlarında (codex-istem-argumanla · istem-tavani-eski) koşar (Y8 ile aynı sebep: CI süresi)
+if [ -z "${IC_KOSUM:-}" ] || [[ "${MUTANT_D:-}" == *codex-istem-argumanla* ]] || [[ "${MUTANT_D:-}" == *istem-tavani-eski* ]]; then
+echo "════ Y9 · istem Codex'e STDIN'den gider, argümanla değil: 150 KB'lık üretim farkı göze sığar (BÂNİ #1375 143 KB, 3 Kas) ════"
+cat > "$FAKE/codex" <<'SH'
+#!/usr/bin/env bash
+# sahte codex: stdin'den okuduğu bayt sayısını ve argümanlarda istem metni var mı yazar, sonra JSON
+n=$(wc -c); printf '%s\n' "$n" > "$CODEX_STDIN_BAYT"; : > "$CODEX_ARG_ISTEM"
+for a in "$@"; do case "$a" in *"Hiçbir komut koşma"*) echo arguman >> "$CODEX_ARG_ISTEM";; esac; done
+for ((i=1;i<=$#;i++)); do if [ "${!i}" = -o ]; then j=$((i+1)); printf '%s' "$SAHTE_JSON" > "${!j}"; fi; done
+SH
+chmod +x "$FAKE/codex"
+{ printf 'diff --git a/b b/b\n'; for _i in $(seq 1 3000); do printf '+satır %05d: %s\n' "$_i" "$(printf 'x%.0s' $(seq 1 40))"; done; } > "$T/y9.patch"   # ~150 KB
+bash "$K" olcum is-y9 olc --asama tek -- echo 1 >/dev/null 2>&1
+( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" CODEX_STDIN_BAYT="$T/y9.stdin" CODEX_ARG_ISTEM="$T/y9.arg" timeout 60 bash "$D" is-y9 --diff "$T/y9.patch" --kart "$T/kart.md" </dev/null >"$T/y9.out" 2>&1 ); RC=$?
+[ "$RC" -eq 0 ] && [ "$(cat "$T/y9.stdin" 2>/dev/null || echo 0)" -gt 140000 ] && [ ! -s "$T/y9.arg" ]; g $? "🔴 150 KB fark: denetçi rc=0, codex istemi stdin'den aldı ($(cat "$T/y9.stdin" 2>/dev/null) bayt), argümanda istem yok — tavan 200 KB"
+rm -f "$FAKE/codex"
+fi
 
 # ════ K · KARE (--kare, 15 Eki: göz "kabul karesi sunulmadı" — kare codex'e GÖRSEL ek olarak gider) ════
 # Yalnız ANA koşumda (mutant iç koşumlarında tekrarlanırsa CI'nın 300 sn tavanı aşılır — Y8 emsali).
@@ -833,7 +850,9 @@ mut "reis-sinifli-isaret-kontrolunu-kaldir" 's@^if SINIFLI and x.get("sinifli") 
 mut "mutlak-tavani-kaldir" 's@^if \[ "$SAYILI" -ge "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
-mut "codex-stdin-acik" 's@"$TMP/istem.md")" </dev/null >"$TMP/log"@"$TMP/istem.md")" >"$TMP/log"@'
+mut "codex-stdin-acik" 's@-o "$HAM" <"$TMP/istem-codex.md" >"$TMP/log"@-o "$HAM" >"$TMP/log"@'
+mut "codex-istem-argumanla" 's@--output-schema "$SEMA" -o "$HAM" <"$TMP/istem-codex.md" >"$TMP/log"@--output-schema "$SEMA" -o "$HAM" "$(cat "$TMP/istem-codex.md")" </dev/null >"$TMP/log"@'
+mut "istem-tavani-eski" 's@^ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"; BOL_SINIR="$ISTEM_TAVAN"@ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"; BOL_SINIR="$ISTEM_TAVAN"@'
 mut "kart-yolu-harici-kalir" 's@then KART="$BIRINCIL"; _bilgi@then _bilgi@'
 mut "kart-secenegi-tek-kaynagi-asar" 's@&& ! cmp -s "$KART" "$BIRINCIL"; then@\&\& false; then@'
 mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="$(kart_yolu 2>/dev/null)";@'

@@ -915,7 +915,11 @@ KIRP_ESIK="${DENETCI_KIRP_ESIK:-110000}"; KIRP_TETIK=$((KIRP_ESIK + KIRP_ESIK/11
 #    kipte durur. Eskiden ayıklama kapalıyken (DENETCI_KANIT_AYIKLA=0, yalnız sınav dikişi) istem KIRPILIP gönderiliyordu;
 #    göz #436 tur 1: kart istisna tanımıyor → kırpma yolu kaldırıldı, kırpık istem hiçbir kipte gitmez. `kirpildi` kayıt
 #    alanı geriye uyum için durur (artık hep oldu=false).
-ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"; BOL_SINIR=$(( ISTEM_TAVAN < KIRP_TETIK ? ISTEM_TAVAN : KIRP_TETIK ))
+# ── TAVAN 200 KB, ARGÜMAN SINIRI YOK (kart denetci-istem-stdin, 3 Kas): istem artık stdin'den gider, 120 KB kırpma tetiği argüman sınırıydı
+#    ve kapıdan çıktı; KIRP_* yalnız kayıt alanı (kirpildi) için durur. Tavan kalite kararıdır (SERDAR): 200 KB ≈ 50 bin jeton, Codex ve
+#    claude -p için bütün bağlam; üstü "işi böl" kalır. Ölçülen vaka: teslim sekmesi 143 KB (üretim farkı 58 + sınav beklentileri 86).
+ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"; BOL_SINIR="$ISTEM_TAVAN"
+[ -n "${DENETCI_KIRP_ESIK:-}" ] && BOL_SINIR=$(( ISTEM_TAVAN < KIRP_TETIK ? ISTEM_TAVAN : KIRP_TETIK ))   # sınav dikişi: açıkça verilen eşik tavanı düşürür
 ISTEM_BAYT=$(wc -c < "$TMP/istem.md"); KIRPILDI=0
 if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then
   declare -A _AD=([sablon]="istem şablonu" [kart]="iş kartı" [kanit]="kanıt manifesti" [olcum]="ölçüm çıktıları" [fark]="üretim farkı" [onceki]="önceki tur kaydı" [kare]="kare listesi")
@@ -937,12 +941,16 @@ if [ -n "${DENETCI_KOMUT:-}" ]; then
   DENETCI_AD="$DENETCI_KOMUT (sınav)"; _sinirli $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
 else
   kos_codex() {
-    # 🔴 STDIN KAPALI (15 Eki, 68 dk boşa): istem argümanla verildiği hâlde Codex stdin TTY değilse "Reading additional input
-    #    from stdin..." deyip EOF bekler; arka plandan (run_in_background, cron) çağrıda stdin açık socket olunca denetim sonsuza
-    #    dek asılı kalır (CPU 0, log boş). Girdi her koşulda /dev/null'dan: çağıranın stdin'i ne olursa olsun denetçi biter.
+    # 🔴 STDIN KAPALI (15 Eki, 68 dk boşa): Codex stdin TTY değilse EOF bekler; arka plandan (run_in_background, cron) çağrıda stdin
+    #    açık socket olunca denetim sonsuza dek asılı kalırdı. Girdi her koşulda SONLU bir dosyadan gelir: çağıranın stdin'i ne olursa
+    #    olsun denetçi biter (sınav Y8: 30 sn açık boru).
+    # 🔴 İSTEM DOSYADAN, ARGÜMANDAN DEĞİL (kart denetci-istem-stdin · BÂNİ #1375, 3 Kas): istem "$(cat …)" ile komut ARGÜMANI olarak
+    #    gidiyordu; çekirdeğin tek-argüman sınırı (~128 KB) 143 KB'lık PR'ı hiçbir bölmeyle göze sokmuyordu. codex exec istemi stdin'den
+    #    okur ("instructions are read from stdin"); argüman sınırı kalktı, geriye yalnız kalite tavanı (DENETCI_ISTEM_TAVAN) kaldı.
+    { printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md"; } > "$TMP/istem-codex.md"
     local kare_arg=(); for _k in "${KARELER[@]}"; do kare_arg+=(-i "$_k"); done   # kareler GÖRSEL ek (codex exec -i)
     _sinirli codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
-      --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" </dev/null >"$TMP/log" 2>"$TMP/err"; DRC=$?
+      --output-schema "$SEMA" -o "$HAM" <"$TMP/istem-codex.md" >"$TMP/log" 2>"$TMP/err"; DRC=$?
   }
   kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
     command -v claude >/dev/null || { _hata "claude yok — denetçi ölçemedi"; exit 3; }
