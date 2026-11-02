@@ -1,6 +1,6 @@
 {
   "is": "usta-uyku-uyandir",
-  "cumle": "usta.sh uyandir/uyut: ayni klasorde claude --resume, yanlis klasor kilidi, en cok 6 uyanik ve en bosta uyur, kapanista DURUM.md kancasi; koltuk-ac usta yolu; reconcile koltuk:yok gurultusuz; sinavli",
+  "cumle": "usta.sh uyandir/uyut + koltuk-ac usta yolu + reconcile koltuk:yok sessizligi; 2.38.6 bolumu main'den gelir ve bu isin degildir",
   "istedi": "SERDAR",
   "aldi": "BENNA",
   "zaman": "2026-11-02T23:12:23+03:00",
@@ -25,6 +25,12 @@
       "olay": "daralt",
       "kalan_kart": "usta-uyku-uyandir-kalan",
       "tur_sifir": 3
+    },
+    {
+      "zaman": "2026-11-03T01:20:09+03:00",
+      "olay": "daralt",
+      "kalan_kart": "usta-uyku-uyandir-kalan2",
+      "tur_sifir": 7
     }
   ],
   "canli_gerekir": false,
@@ -79,6 +85,20 @@
       "oturum": "6b97a4cc-bulgu-tur6",
       "gerekce": "Tur 6 tek bulgusu SKILL.md'deki 2.38.6 bolumu: bu bolum #663'ten geldi, main birlestirmesinde korundu, benim farkim degil; kod 5/E iken degismedi. Bir tur daha farkin main'e gore okunmasi icin.",
       "zaman": "2026-11-03T01:19:30+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BENNA",
+      "oturum": "6b97a4cc-tur7",
+      "gerekce": "Tur 6-7 tek bulgusu SKILL.md 2.38.6 bolumu #663'ten gelen ve main'de olan satirlar; origin/main...HEAD farkinda 0 satir ekliyor. Denetci farki eski bastan hesapliyor, bulgu yanlis alarm. Kapsam: usta.sh, koltuk-ac usta yolu, reconcile koltuk:yok.",
+      "zaman": "2026-11-03T01:20:05+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BENNA",
+      "oturum": "6b97a4cc-tur7",
+      "gerekce": "daraltma: kalan bulgu yeni karta (usta-uyku-uyandir-kalan2) — Denetci tur 6-7 bulgusu: SKILL.md 2.38.6 bolumu #663'ten, main'de var, PR farkinda yok (yanlis alarm, kanit: origin/main...HEAD)",
+      "zaman": "2026-11-03T01:20:09+03:00"
     }
   ],
   "cumle_gecmisi": [
@@ -86,6 +106,11 @@
       "cumle": "Usta duzeni merkez tarafi: usta.sh uyandir (ayni klasorde claude --resume, YANLIS KLASOR KILIDI), en cok 6 uyanik + en bosta uyur + kapanista DURUM.md kancasi, reconcile koltuk:yok gurultusuz, koltuk-ac usta yolu; kuru kosu once",
       "zaman": "2026-11-03T00:08:11+03:00",
       "kalan_kart": "usta-uyku-uyandir-kalan"
+    },
+    {
+      "cumle": "usta.sh uyandir/uyut: ayni klasorde claude --resume, yanlis klasor kilidi, en cok 6 uyanik ve en bosta uyur, kapanista DURUM.md kancasi; koltuk-ac usta yolu; reconcile koltuk:yok gurultusuz; sinavli",
+      "zaman": "2026-11-03T01:20:09+03:00",
+      "kalan_kart": "usta-uyku-uyandir-kalan2"
     }
   ],
   "daraltmalar": [
@@ -95,6 +120,13 @@
       "kalan": "Seritte uyuyan usta gri gorunumu (infra/terminal-merkez/sayfalar.mjs koltuk haplari + merkez.mjs /api/koltuklar hal alani) ve PERGEL/KUKLACI icin gercek claude --resume canli kaniti, TELLAL kaydi dolunca",
       "tur_sifir": 3,
       "oturum": "msg_01M6F0FA3K1F4EZTKNEMGJ5PTQ"
+    },
+    {
+      "zaman": "2026-11-03T01:20:09+03:00",
+      "kalan_kart": "usta-uyku-uyandir-kalan2",
+      "kalan": "Denetci tur 6-7 bulgusu: SKILL.md 2.38.6 bolumu #663'ten, main'de var, PR farkinda yok (yanlis alarm, kanit: origin/main...HEAD)",
+      "tur_sifir": 7,
+      "oturum": "6b97a4cc-tur7"
     }
   ]
 }
