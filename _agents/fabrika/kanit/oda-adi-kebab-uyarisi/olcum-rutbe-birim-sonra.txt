@@ -1,0 +1,35 @@
+$ bash -c cd terminal-onar && node kapi/rutbe.test.mjs
+# rc=0 sure=0.1s zaman=2026-11-03T00:27:43+03:00
+--- stdout ---
+  ✓ R1 amiri boş oda müdürü reis
+  ✓ R2 altı olan üye müdür, amiri koltuk adıyla, görünen adıyla gelir
+  ✓ R3 oda müdürü alanı altı olmasa da müdür yapar
+  ✓ R4 personel amirine bağlanır, diakritik fark engel değil
+  ✓ R5 büyük harfli tmux adı korunur
+  ✓ R6 bilgisiz üyeye rütbe uydurulmaz
+  ✓ R7 emekli üye sayılmaz
+  ✓ R8 çözülemeyen amir: rütbe yok, sahte bağ yok
+  ✓ R9 amiri boş ama altı olan üye reis değil müdürdür
+  ✓ R10 amiri Sultan olan reis
+  ✓ R11 kimlik ile görünen ad farklıyken amir görünen addan çözülür
+  ✓ R12 katlanmış adla bulur
+  ✓ R13 ayrı reis koltuğu açık değilse ana koltuk reis rütbesi ve reis adını taşır (ana oturum reisin koltuğu)
+  ✓ R14 ayrı reis koltuğu açıksa ana koltuk rütbesiz kalır (kod kutusu: SERDAR ayrı)
+  ✓ R14b ana verilmeden rütbe anaya düşmez
+  ✓ R15 boş kayıt boş harita, hata yok
+  ✓ R16 kayıttaki tmux eski, müdür canlı koltuğuna adından bağlanır
+  ✓ R17 oda da canlı koltuğa bağlanır
+  ✓ R18 kapalı koltuğun rütbesi eski adında kalır, açık koltuğa uydurulmaz
+  ✓ R19 açık koltuğu kayıtlı sahibinden adıyla kimse alamaz
+  ✓ R20 acik verilmeyen eski çağrı aynen çalışır
+  ✓ R21 emekli üye adıyla açık koltuğun odasını alamaz
+  ✓ R22 emekli üyenin koltuğu boşken de açık koltuğa bağlanmaz
+  ✓ R23 kurala uymayan oda adı geçersiz haritasında koltuk adıyla, kurala uyan (ortak-kapilar) orada değil, oda haritasında
+  ✓ R23b koltuksuz üye katlanmış kimliğiyle, büyük harf tek kelime de kurala uymaz ('Bakim' → B)
+  ✓ R23c arşiv üye geçersiz haritasına girmez
+  ✓ R24 klasör de kayıt odası da yokken geçersiz ad uyarı cümlesi olur (ad ve kural yazılı)
+  ✓ R24b klasörde geçerli oda.json varsa geçersiz kayıt adı uyarı üretmez (klasör kazanır)
+  ✓ R24c geçersiz ad verilmeyen eski çağrı aynen: uyarı yok
+  ✓ R24d bozuk oda.json uyarısı geçersiz addan önce gelir
+geçen 30 · kalan 0
+--- stderr ---

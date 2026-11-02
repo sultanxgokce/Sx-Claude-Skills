@@ -63,6 +63,18 @@ export function koltukEsle(uyeler, acik = []) {
   return h;
 }
 
+/** 2.38.6 · Ekip kaydında yazılı ama KURALA UYMAYAN oda adları (koltuk adı → yazılan ad). Sessiz atlama yerine koltukta uyarı için.
+ *  Ölçüldü (tellal, 3 Kas): 'Mimari Cizim' · 'Reklam Videosu' · 'Web Tanitim' · 'Sosyal Medya' · 'Bakim' kayıtta vardı, şeritte oda listesi yalnız 'ortak-kapilar'dı; sebebi hiçbir yerde yazmıyordu. */
+export function kayitOdaGecersizHaritasi(uyeler, acik = []) {
+  const h = new Map(), koltuk = koltukEsle(uyeler, acik);
+  for (const u of uyeler || []) {
+    const ad = String(u && u.oda != null ? u.oda : '').trim();
+    if (!u || !ad || ODA_AD_DESEN.test(ad) || PASIF_UYE.has(u.durum) || PASIF_UYE.has(u.hal)) continue;   // arşiv/emekli üye uyarı üretmez
+    h.set(koltuk.get(u) || adKatla(u.id), ad);
+  }
+  return h;
+}
+
 /** Koltuğun kayıttaki odası: önce birebir ad, sonra katlanmış ad. */
 export function kayitOdaBul(harita, koltuk) {
   return harita.get(koltuk) || harita.get(adKatla(koltuk)) || '';
@@ -75,8 +87,9 @@ export function odaSec(bulunan, kayitOda) {
 }
 
 /** Sultan-dilinde tek cümle ya da ''. Kayıttan gelen oda olağan durumdur, uyarı değildir; uyarı yalnız ayrışma ve bozuk oda.json içindir. */
-export function odaUyarisi(bulunan, kayitOda) {
+export function odaUyarisi(bulunan, kayitOda, gecersizOda = '') {
   if (bulunan && bulunan.bozuk) return kayitOda ? `Çalışma klasöründeki oda.json okunamadı; kayıttaki oda '${kayitOda}' gösteriliyor.` : 'Çalışma klasöründeki oda.json okunamadı; koltuk odasız gösteriliyor.';
+  if (!kayitOda && gecersizOda && !(bulunan && bulunan.ad)) return `Ekip kaydındaki oda adı '${gecersizOda}' kurala uymuyor (küçük harf, rakam, tire; 2–31 karakter) — koltuk odasız gösteriliyor.`;   // 2.38.6: sessiz atlama yok
   if (!kayitOda || !bulunan || !bulunan.ad || bulunan.ad === kayitOda) return '';
   return `Ekip kaydında oda '${kayitOda}', çalışma klasöründe '${bulunan.ad}'. Geçerli olan klasör.`;
 }

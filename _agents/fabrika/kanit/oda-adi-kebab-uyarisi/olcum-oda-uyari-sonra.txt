@@ -1,0 +1,8 @@
+$ node terminal-onar/kapi/oda-uyari-olc.tmp.mjs /config/projects/_wt/Sx-Claude-Skills-oda-adi-kebab-uyarisi/terminal-onar/kapi
+# rc=0 sure=0.1s zaman=2026-11-03T00:27:43+03:00
+--- stdout ---
+MEDDAH: oda=ortak-kapilar uyari=-
+MUCESSEM: oda=- uyari="Ekip kaydındaki oda adı 'Mimari Cizim' kurala uymuyor (küçük harf, rakam, tire; 2–31 karakter) — koltuk odasız gösteriliyor."
+MUDEVVIN: oda=- uyari="Ekip kaydındaki oda adı 'Mimari Cizim' kurala uymuyor (küçük harf, rakam, tire; 2–31 karakter) — koltuk odasız gösteriliyor."
+SONUÇ: kurala uymayan oda adı olan 2 koltuktan uyarılı 2 · oda listesi ortak-kapilar
+--- stderr ---

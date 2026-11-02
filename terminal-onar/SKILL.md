@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.38.5
+version: 2.38.6
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.38.6 · Kurala uymayan oda adı sessizce atılmaz, koltukta uyarı olur (3 Kas · kart oda-adi-kebab-uyarisi · bulgu …WZ4PAX)
+Ekip kaydındaki `oda:` değeri kebab kuralına (`^[a-z0-9][a-z0-9-]{0,29}[a-z0-9]$`) uymuyorsa kapı eskiden odayı almıyor ve hiçbir şey söylemiyordu: tellal'da beş odadan dördü ('Mimari Cizim', 'Reklam Videosu', 'Web Tanitim', 'Sosyal Medya', 'Bakim') şeritte görünmüyordu, sebebi hiçbir yerde yazmıyordu (ölçüm 3 Kas, `/tellal/api/koltuklar`: oda listesi yalnız `ortak-kapilar`). Artık `/api/koltuklar` o koltukta `oda_uyari` döner: *"Ekip kaydındaki oda adı 'Mimari Cizim' kurala uymuyor (küçük harf, rakam, tire; 2–31 karakter) — koltuk odasız gösteriliyor."* Kural değişmedi (geçersiz ad yine alınmaz, uydurulmaz); klasördeki geçerli `oda.json` yine kazanır ve uyarı üretmez. Yeni dışa aktarım `kayitOdaGecersizHaritasi`; `odaUyarisi` üçüncü (isteğe bağlı) parametre alır, eski çağrılar aynen. Sınav `rutbe.test.mjs` R23–R24d.
 
 ## 🆕 2.38.5 · Bekçi ana oturumu yönetici üyesinin tmux adından bulur, büyük harf ve kutu öneksiz dahil (2 Kas · kart terminal-onar-ana-yonetici-uye-tmux · SERDAR kadro işi, Sultan isteği)
 `meta.yonetici` bir üye kimliğiyse ana oturum o üyenin kayıttaki `tmux` adıdır; kutu öneki ve küçük harf şartı artık yoktur (AKAR: `MUTEVELLI`, TELLAL: `MEDDAH`, MİHENK: `NISANCI`). Oturum canlı değilse ya da kayıtta üye yoksa eski yol: kutu önekli küçük harfli ad, o da yoksa `<kutu>-ana`. Önceden büyük harfli yöneticiler yok sayılıyor, bekçi boş bir `<kutu>-ana` açıyordu (AKAR'da `akar-ana` yeniden adlandırılınca 75 sn içinde yenisi doğdu). Ölçüm: AKAR eski `akar-ana`, yeni `MUTEVELLI`; HUMA `Huma`, VEKATİP `reisulKuttab` (ikisi de ekranda açık reis koltuğu), NAZIR/HUZUR/MEDİGATE/REVAK/SEDİR/TEZ değişmedi.

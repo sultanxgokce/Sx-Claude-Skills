@@ -1,0 +1,68 @@
+{
+  "is": "oda-adi-kebab-uyarisi",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T00:27:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "oda-uyari",
+      "asama": "once",
+      "dosya": "olcum-oda-uyari-once.txt",
+      "sha256": "df95c3a6efc488e9f7e8330a4e2982cb2b0b7696213182f7bada2fca5ced4809",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/oda-uyari-olc.tmp.mjs",
+        "/config/projects/Sx-Claude-Skills/terminal-onar/kapi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T00:27:43+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "09a4c434fda046098893ea19e109b2c9",
+      "olculen_commit": "75dd820aa04249a4de615df6a0310fbe323d0abd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oda-uyari",
+      "asama": "sonra",
+      "dosya": "olcum-oda-uyari-sonra.txt",
+      "sha256": "eee5c26ce7808ac676181e29b38a8e47f684b87f57660b45deb475e3a1860e13",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/oda-uyari-olc.tmp.mjs",
+        "/config/projects/_wt/Sx-Claude-Skills-oda-adi-kebab-uyarisi/terminal-onar/kapi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T00:27:43+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ef2e540b390d467a86c4f51643f6ef57",
+      "olculen_commit": "75dd820aa04249a4de615df6a0310fbe323d0abd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rutbe-birim",
+      "asama": "sonra",
+      "dosya": "olcum-rutbe-birim-sonra.txt",
+      "sha256": "ded08aae49ef2356927dacda4c147671d2ba23e38918c9375df3bbc2bd34cd71",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && node kapi/rutbe.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T00:27:43+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "54fa56457e2f49a897c9ff422748312a",
+      "olculen_commit": "75dd820aa04249a4de615df6a0310fbe323d0abd",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "bed53d22f178a16470e511b47a290f67d286097a4aa911159c29f124af3270f5"
+}
