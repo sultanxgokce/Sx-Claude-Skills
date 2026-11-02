@@ -422,7 +422,7 @@
       "id": "ekip-kur",
       "type": "agent",
       "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar ve mevcut tenant'larda immutable updater ile yalnız notify/preflight kodunu atomik günceller: varsayılan dry-run, hash/mode/registry-schema/worktree ortak-ledger check'i, state/hook/ürün korunumu, exact tmux hedefi ve strict-ack sözleşmesi. Tmux-tetik primitifi 3-adım-ayrı-Enter · self-loop-guard · exact-session dürüst-warn · python3-parse fix'lerini taşır; roster parametrik ve state yüzeyleri updater allowlist'i dışındadır.",
       "prerequisites": {
         "system": [
@@ -1564,7 +1564,7 @@
     {
       "id": "terminal-onar",
       "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
-      "version": "2.38.5",
+      "version": "2.39.0",
       "type": "capability",
       "sync_dagitim": true,
       "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",

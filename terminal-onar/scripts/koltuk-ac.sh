@@ -133,9 +133,13 @@ for reg in regs:
         if m and cur == rol: print(m.group(1)); sys.exit(0)
 PY2
 }
-yol_bul() {  # $1 ad → YOL ∈ baslat | ekip-ac | onar | yok ; ROL
+# USTA = uyuyan oturum (kart usta-uyku-uyandir): ekip kaydında klasor alanı olan üye; açıcı usta.sh (kilitli resume + tavan)
+USTA_BETIK="${TO_USTA_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/usta.sh}"
+usta_mi() { [ -f "$USTA_BETIK" ] && bash "$USTA_BETIK" liste 2>/dev/null | awk -F'\t' -v a="$1" '$1==a{f=1} END{exit !f}'; }
+yol_bul() {  # $1 ad → YOL ∈ baslat | ekip-ac | usta | onar | yok ; ROL
   ROL="$(rol_bul "$1")"
-  if [ -n "$ROL" ] && [ "$(alan_bul "$ROL" rol)" = dava ]; then YOL=dava
+  if usta_mi "$1"; then YOL=usta
+  elif [ -n "$ROL" ] && [ "$(alan_bul "$ROL" rol)" = dava ]; then YOL=dava
   elif [ -n "$ROL" ] && [ -n "$ACICI" ]; then YOL="$ACICI"
   elif [ "$1" = "$ANA_TMUX" ]; then YOL=onar
   else YOL=yok; fi
@@ -156,6 +160,7 @@ case "$KOMUT" in
   ac)
     durum_olc "$AD"; yol_bul "$AD"
     gunluk "koltuk-ac: $AD durum=$DURUM yol=$YOL eski=$ESKI"
+    if [ "$YOL" = usta ]; then bash "$USTA_BETIK" uyandir "$AD"; exit $?; fi   # kilit/tavan/kimlik kararları usta.sh'in
     case "$YOL" in yok)
       echo "açılamadı: '$AD' kayıtlı bir koltuk değil (kutunun kaydında rolü yok ya da kutuda koltuk açan betik yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
     esac

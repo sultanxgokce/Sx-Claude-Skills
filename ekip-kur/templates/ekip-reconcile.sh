@@ -69,6 +69,9 @@ for i, line in enumerate(raw):
         continue
     if cur is None:
         continue
+    if re.match(r'\s*koltuk:\s*"?yok"?\s*(#.*)?$', line):
+        cur["koltuk_yok"] = True   # USTA = uyuyan oturum: koltuğu bilerek yok, tmux alanı aranmaz
+        continue
     mt = re.match(r'(\s*tmux:\s*")([^"]*)(".*)', line)
     if mt:
         cur["tmux"] = mt.group(2); cur["tmux_idx"] = i
@@ -90,6 +93,8 @@ for m in members:
     sess = m["tmux"].split(":")[0] if m.get("tmux") else ""
     if sess and sess in live_set:
         continue  # zaten canlı-geçerli, dokunma
+    if m.get("koltuk_yok") and not sess:
+        continue  # koltuk: yok = uyuyan usta; tmux alanı/ölü oturum bayrağı gürültüdür
     if "tmux_idx" not in m:
         flags.append(f"tmux-alani-parse-edilemedi\t{mid}\tsatır bulunamadı (registry biçimi beklenenden farklı olabilir)")
         continue

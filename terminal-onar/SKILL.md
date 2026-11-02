@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.38.5
+version: 2.39.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.39.0 · USTA = uyuyan oturum: `usta.sh uyandir|uyut|liste` + koltuk-ac usta yolu (2 Kas · kart usta-uyku-uyandir · Sultan onaylı usta düzeni, SERDAR)
+Koltuğu olmayan ama ekip kaydında `klasor` alanı olan üye (usta) tmux'ta uyur; koltuk açılınca `usta.sh uyandir <AD>` ustanın KENDİ klasöründe `claude --resume <sohbet>` açar. 🔴 **Yanlış klasör kilidi**: sohbet dosyası ustanın klasör kodlu proje dizininde yoksa AÇILMAZ (rc 4; başka klasörde resume hata vermeden hafızayı karıştırıyor). 🔴 **Tavan** `UST_TAVAN` (vars. 6): dolunca en boşta olan uyur; uyurken **kapanış kancası** Claude'a DURUM.md'yi güncelletir ve araç ayrıca DURUM.md'ye uyutma damgası ekler. Kayıttan okuma PyYAML'sız (ortam PATH'i yaml göstermeyebiliyor). `koltuk-ac.sh` usta adını `yol=usta` olarak tanır. Sınav: `usta.test.sh` (10 kapı, 7 mutant). Şeritte gri "uyuyor" görünümü ve usta başına `sohbet` kaydı bu sürümde YOK (kayıt sahibi kutu / şerit sahibi ayrı iş).
 
 ## 🆕 2.38.5 · Bekçi ana oturumu yönetici üyesinin tmux adından bulur, büyük harf ve kutu öneksiz dahil (2 Kas · kart terminal-onar-ana-yonetici-uye-tmux · SERDAR kadro işi, Sultan isteği)
 `meta.yonetici` bir üye kimliğiyse ana oturum o üyenin kayıttaki `tmux` adıdır; kutu öneki ve küçük harf şartı artık yoktur (AKAR: `MUTEVELLI`, TELLAL: `MEDDAH`, MİHENK: `NISANCI`). Oturum canlı değilse ya da kayıtta üye yoksa eski yol: kutu önekli küçük harfli ad, o da yoksa `<kutu>-ana`. Önceden büyük harfli yöneticiler yok sayılıyor, bekçi boş bir `<kutu>-ana` açıyordu (AKAR'da `akar-ana` yeniden adlandırılınca 75 sn içinde yenisi doğdu). Ölçüm: AKAR eski `akar-ana`, yeni `MUTEVELLI`; HUMA `Huma`, VEKATİP `reisulKuttab` (ikisi de ekranda açık reis koltuğu), NAZIR/HUZUR/MEDİGATE/REVAK/SEDİR/TEZ değişmedi.
