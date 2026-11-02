@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "duzen-gece-mektup-postane-yolu",
+  "pr": "658",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T04:04:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-mektup-postane-yolu",
+  "dal": "duzen-gece-mektup-postane-yolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19233,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 4055
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a0c8e8d6a6ff9179c5d1047282b447a827eb93e1",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gece düzeni sürüm mektubunu ulaktan POSTANE yoluna çevirmiş, izlenebilir tekrar anahtarını eklemiş ve ret halinde çıkış koduyla sebebi günlüğe bağlamış. Üretim farkı talebi doğrudan karşılıyor; ilgili başarı ve ret yolları yeşil sınavla ölçüldüğü için yalnız kanıtın gerçek POSTANE teslim izi göstermemesi not olarak kalıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek ölçüm yeşil (rc=0) ve G24-G25 sırasıyla POSTANE komutunu/bayraklarını ve ret sebebinin günlüğe yazılmasını doğruluyor. Ölçüm kirli çalışma ağacında alınmış olsa da kayıt ölçülen durumu kimliklendiriyor. Gerçekçi bir POSTANE teslim/görüldü/işlendi izi veya önce-sonra karesi yok; bu nedenle teslim izinin sağlayıcı tarafındaki oluşumu doğrudan kanıtlanmış değil, ancak iş kartındaki kod değişikliği ve ret günlüğü yeterli biçimde sınanmış."
+  }
+}
