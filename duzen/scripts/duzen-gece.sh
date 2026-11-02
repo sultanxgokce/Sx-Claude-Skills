@@ -14,7 +14,7 @@
 #   <ISO> yenilendi kimlik=<ad> temel=<manuel-claude|MÜDÜR|otonom-ajan> surum=<duzen sürümü> kutu=<kutu> reis=<reis|->
 #   <ISO> atlandi beceri=<ad> sebep=<…> kutu=<kutu> rc=<çıkış> ayrinti=<stderr'in ilk satırları>   (kurulum/yenileme yapılamadı: elle değişmiş kopya vb. — sebep artık günlükte)
 #   <ISO> yeniden-basladi sebep=betik-guncellendi kutu=<kutu>   (kurulum bu betiği değiştirdi: yeni sürümle baştan koşulur, eski sürümün mantığıyla bitirilmez)
-#   <ISO> mektup reis=<reis|-> surum=<v> durum=gitti|atlandi|hata kutu=<kutu>
+#   <ISO> mektup reis=<reis|-> surum=<v> durum=gitti|atlandi|hata kutu=<kutu> [rc=<çıkış> ayrinti=<sebep>]   (mektup POSTANE ile gider: --tekrar duzen-v<sürüm>-<kutu> aynı mektubu ikinci kez yollamaz)
 # rc: 0 iş yok ya da bitti · 1 en az bir adım atlandı/hata · 2 kullanım · 3 ölçülemedi (kaynak sürümü okunamadı)
 set -uo pipefail
 # TÜM gövde tek fonksiyonda: bash betiği artımlı okur, gece kurulumu bu dosyayı (duzen paketi) yerinde yeniden yazar → sarılmazsa kurulumdan sonraki satırlar kayık okunur.
@@ -40,7 +40,7 @@ done
 SYNC="${DUZEN_SYNC_CMD:-node $SX/sync-skills.mjs}"
 # Yenileme betiğin YANINDAKİ paket ekipc.sh ile yapılır (vendor/yaml taşır); Nexus scripts/ekipc.sh değil — zamanlayıcı PATH'inde PyYAML yok, Nexus kopyası exit 2 verir (1 Kas 2026 03:17: 37 kimlik atlandı).
 YENILE="${DUZEN_YENILE_CMD:-bash $HERE/ekipc.sh yenile}"
-MEKTUP="${DUZEN_MEKTUP_CMD:-bash /config/projects/Nexus/scripts/ulak.sh gonder}"
+MEKTUP="${DUZEN_MEKTUP_CMD:-bash /config/.claude/skills/postane-postaci/scripts/posta.sh gonder}"   # POSTANE yolu (ulak değil): teslim/görüldü/işlendi izi var, kutu reisine ulaştığı ölçülebilir; ulak teslimi ölçülemiyordu (2 Kas, Hat E bulgu 3)
 surum_oku() { sed -nE 's/^[[:space:]]*version:[[:space:]]*["'"'"']?([0-9]+\.[0-9]+\.[0-9]+)["'"'"']?[[:space:]]*$/\1/p' "$1" 2>/dev/null | head -1; }
 yeni_mi() { [ "$1" != "$2" ] && [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | tail -1)" = "$1" ]; }   # $1 > $2
 sebep() { tr '\n\t' '  ' < "$1" 2>/dev/null | LC_ALL=C.UTF-8 sed -E 's/[[:cntrl:]]+/ /g; s/  +/ /g' | LC_ALL=C.UTF-8 cut -c1-200; }   # stderr'in ilk 200 yazdırılabilir karakteri, tek satır (kural/yol/sebep metni)
@@ -95,9 +95,9 @@ if [ "$UYGULA" -eq 1 ] && { [ "$KURULDU" -eq 1 ] || [ "$YENILENDI" -eq 1 ]; }; t
     for oge in "${LISTE[@]}"; do
       case "$oge" in *:*) mk="${oge%%:*}"; mr="${oge#*:}" ;; *) mk="$KUTU"; mr="$oge" ;; esac
       if [ -z "$mr" ] || [ "$mr" = "-" ]; then yaz "mektup reis=- surum=$KAYNAK_DUZEN durum=atlandi kutu=$mk"; RC=1; continue; fi
-      if $MEKTUP "$mr" "düzen v$KAYNAK_DUZEN indi ($mk): kurulan beceriler: ${KURULANLAR[*]:-yok}; yenilenen kimlik: $YENILENDI (1=var, 0=yok). 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc yenile' ile tazele." --kimden MİRAHUR --onem normal --konu "düzen v$KAYNAK_DUZEN indi" </dev/null >/dev/null 2>&1
+      if $MEKTUP "$mr" "düzen v$KAYNAK_DUZEN indi ($mk): kurulan beceriler: ${KURULANLAR[*]:-yok}; yenilenen kimlik: $YENILENDI (1=var, 0=yok). 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc yenile' ile tazele." --kimden MİRAHUR --aciliyet orta --konu "düzen v$KAYNAK_DUZEN indi" --tekrar "duzen-v$KAYNAK_DUZEN-$mk" </dev/null >/dev/null 2>"$HATA"
       then yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=gitti kutu=$mk"
-      else yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=hata kutu=$mk"; RC=1; fi
+      else src=$?; yaz "mektup reis=$mr surum=$KAYNAK_DUZEN durum=hata kutu=$mk rc=$src ayrinti=$(sebep "$HATA")"; RC=1; fi
     done
   fi
 fi
