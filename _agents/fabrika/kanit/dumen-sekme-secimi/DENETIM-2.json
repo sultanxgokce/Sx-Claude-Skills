@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "dumen-sekme-secimi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T10:26:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-sekme-secimi",
+  "dal": "dumen-sekme-secimi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16839,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5983
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0d170ddbf9fbca44cc301633b923c1e6e8f93556",
+  "duzeltme_farki": {
+    "onceki_bas": "e4b55f7b0e028301d99b99de63527588be903a4e",
+    "dosya": 7,
+    "bayt": 9559,
+    "tam_bayt": 29092
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1, durum taşıyan desen nesnesinin `lastIndex` değerini paylaşmayan bir kopya ve yeni D47 sınamasıyla `g` bayrağı için kapanmış; ana sekme seçimi talebi doğru hedeflenmiş. Ancak çözüm `y` bayrağını da silerek desenin yapışkan eşleşme anlamını değiştiriyor ve son ölçüm gerçek kapılara ulaşmadan kırmızı bitti; önce `lastIndex` sorununu bayrak semantiğini koruyarak çözün.",
+    "bulgular": [
+      {
+        "ne": "RegExp kopyasından `y` bayrağının çıkarılması, yalnız durum taşınmasını önlemiyor; yapışkan eşleşme semantiğini de değiştirerek aslında eşleşmemesi gereken bir URL içi parçayı eşleştirebilir.",
+        "kanit": "Üretim farkı `s.flags.replace(/[gy]/g, '')` ile hem `g` hem `y` bayrağını kaldırıyor. Eklenen D47 yalnız `/terminal-sultan/g` desenini ölçüyor; `y` bayrağının korunması gereken davranış için kapı yok. Doğru yaklaşım her URL denemesinden önce kopyanın `lastIndex` değerini sıfırlayıp bayrakları korumaktır.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:RegExp sekme seçimi dalı; dumen-surucu/scripts/dumen.test.mjs:D47",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı. İlk yeşil kayıt 56/56 kapı ile 24/24 mutant gösteriyor fakat düzeltmeden önceki farklı commit'i ölçüyor; yeni 25. mutantı ve D47'yi doğrulamıyor. Son kayıt farklı commit'te rc=1 ve kırmızı: CDP bağlantısı ECONNREFUSED olduğu için hiçbir gerçek kapı sonucu üretmemiş; sarı ya da mutasyon kanıtı değildir ve son başın çalıştığını kanıtlamaz."
+  }
+}
