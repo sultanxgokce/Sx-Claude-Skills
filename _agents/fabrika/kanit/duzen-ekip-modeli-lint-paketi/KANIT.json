@@ -1,7 +1,7 @@
 {
   "is": "duzen-ekip-modeli-lint-paketi",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T23:01:23+03:00",
+  "guncelleme": "2026-11-02T23:16:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -86,7 +86,49 @@
       "olcum_id": "bd2d0c98fbc34928a2bed5b49f4d9aa6",
       "olculen_commit": "ecec5b7c39b68a748088a5f6fc43e5ef67ed01d8",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-gercek-3",
+      "asama": "sonra",
+      "dosya": "olcum-lint-gercek-3-sonra.txt",
+      "sha256": "14daf4542063e8ebb2dd98fc6e20d52acbf26d55e3898a56787684ad1937121b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:16:11+03:00",
+      "sure_sn": 77.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2fc29f17ffe44d9da76aba641d8d9ea1",
+      "olculen_commit": "7f12e4113460be61e23f5efa104ea969e7cf6e3f",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-mutant-3",
+      "asama": "sonra",
+      "dosya": "olcum-lint-mutant-3-sonra.txt",
+      "sha256": "18836cbea2ef0536bd6baae1f90202b04ce90e7c7dc1bb320a0f978eff9c9d5a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:16:16+03:00",
+      "sure_sn": 4.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "lint-gercek-3",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "60338919107e4cf6afef31eab5e08ef2",
+      "olculen_commit": "7f12e4113460be61e23f5efa104ea969e7cf6e3f",
+      "olculen_kirli": false
     }
   ],
-  "imza": "012d9a2ece96dd93d82a5499bc33ecc26ca535eeb314cf417615915ecfbe685b"
+  "imza": "97abe53cf2930c4399c36315b8dcc1763f73a7dd7627798de0b0c9e8f31b236f"
 }
