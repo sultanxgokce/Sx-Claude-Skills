@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T00:09:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26578,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 6234
+  },
+  "dalgic": "uyumsuz",
+  "bas": "5097c9d80ac2bc892c05cb6340e7a8a49e69df91",
+  "duzeltme_farki": {
+    "onceki_bas": "117f7e82a4ba011a89217841699c49cd0deea042",
+    "dosya": 6,
+    "bayt": 6589,
+    "tam_bayt": 56378
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turda açık bulgu yoktu; bu tur üretim davranışını değiştirmeden üç sınav/betik dosyasına çalıştırma biti vermiş ve son usta ölçümü 12/12 kapı ile 10/10 mutantı geçmiştir. Talebin usta uyandırma-uyutma, yanlış klasör kilidi, uyanık tavanı, en boştakini uyutma, DURUM.md kancası, koltuk-ac yolu ve sessiz reconcile parçaları yeşil davranış ölçümleriyle karşılandığı için iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son usta kaydı 12/12 kapı ve 10/10 mutant, reconcile kaydı 2/2 kapı ve 1/1 mutant, koltuk-ac kaydı 45/45 kapı gösteriyor; önceki turda bulgu olmadığından kapatılacak kayıt yok. Son ölçüm 4762321b... commitinde, verilen son baş ise 5097c9d8...; ancak gösterilen sonraki üretim farkı yalnız aynı üç dosyanın çalıştırma bitidir ve ölçüm doğrudan bu çalıştırma bitli betiği başarıyla çağırdığı için davranış bakımından yeterli kanıt vardır."
+  }
+}

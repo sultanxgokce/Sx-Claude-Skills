@@ -1,6 +1,6 @@
 {
   "is": "usta-uyku-uyandir",
-  "cumle": "Usta duzeni merkez tarafi: usta.sh uyandir (ayni klasorde claude --resume, YANLIS KLASOR KILIDI), en cok 6 uyanik + en bosta uyur + kapanista DURUM.md kancasi, reconcile koltuk:yok gurultusuz, koltuk-ac usta yolu; kuru kosu once",
+  "cumle": "usta.sh uyandir/uyut: ayni klasorde claude --resume, yanlis klasor kilidi, en cok 6 uyanik ve en bosta uyur, kapanista DURUM.md kancasi; koltuk-ac usta yolu; reconcile koltuk:yok gurultusuz; sinavli",
   "istedi": "SERDAR",
   "aldi": "BENNA",
   "zaman": "2026-11-02T23:12:23+03:00",
@@ -15,7 +15,18 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-03T00:07:44+03:00",
+      "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-11-03T00:08:11+03:00",
+      "olay": "daralt",
+      "kalan_kart": "usta-uyku-uyandir-kalan",
+      "tur_sifir": 3
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -26,5 +37,57 @@
     "şimdi → hedef iki SAYI olarak yok",
     "(kaynak: <komut/ekran>, <gün>) parantezi yok"
   ],
-  "sayi_bicim_uyarisi": true
+  "sayi_bicim_uyarisi": true,
+  "canli_kanit": "yok",
+  "bitis": "2026-11-03T00:07:44+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "Tur 3 5/E bulgu 0; sonraki iki degisiklik koddan bagimsiz: lint (boru grep) ve git calistirma biti. Kod ayni, yalniz kip degisti; son goz yalniz kip farki icin"
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BENNA",
+      "oturum": "msg_01M6F0FA3K1F4EZTKNEMGJ5PTQ",
+      "gerekce": "Tur tavani: son iki degisiklik koda dokunmayan lint ve git kipi duzeltmesi, tur 3 5/E; tek ek goz kip farki icin",
+      "zaman": "2026-11-03T00:07:52+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BENNA",
+      "oturum": "msg_01M6F0FA3K1F4EZTKNEMGJ5PTQ",
+      "gerekce": "Tur tavani; kapsam usta.sh/koltuk-ac/reconcile cekirdegine iner, serit gri gorunumu ve canli resume kaniti ayri kart",
+      "zaman": "2026-11-03T00:08:10+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BENNA",
+      "oturum": "msg_01M6F0FA3K1F4EZTKNEMGJ5PTQ",
+      "gerekce": "daraltma: kalan bulgu yeni karta (usta-uyku-uyandir-kalan) — Seritte uyuyan usta gri gorunumu (infra/terminal-merkez/sayfalar.mjs koltuk haplari + merkez.mjs /api/koltuklar hal alani) ve PERGEL/KUKLACI icin gercek claude --resume canli kaniti, TELLAL kaydi dolunca",
+      "zaman": "2026-11-03T00:08:11+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Usta duzeni merkez tarafi: usta.sh uyandir (ayni klasorde claude --resume, YANLIS KLASOR KILIDI), en cok 6 uyanik + en bosta uyur + kapanista DURUM.md kancasi, reconcile koltuk:yok gurultusuz, koltuk-ac usta yolu; kuru kosu once",
+      "zaman": "2026-11-03T00:08:11+03:00",
+      "kalan_kart": "usta-uyku-uyandir-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-03T00:08:11+03:00",
+      "kalan_kart": "usta-uyku-uyandir-kalan",
+      "kalan": "Seritte uyuyan usta gri gorunumu (infra/terminal-merkez/sayfalar.mjs koltuk haplari + merkez.mjs /api/koltuklar hal alani) ve PERGEL/KUKLACI icin gercek claude --resume canli kaniti, TELLAL kaydi dolunca",
+      "tur_sifir": 3,
+      "oturum": "msg_01M6F0FA3K1F4EZTKNEMGJ5PTQ"
+    }
+  ]
 }
