@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-uye-gercek-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/uye-mutant.sh
+# rc=1 sure=0.6s zaman=2026-11-02T08:41:43+03:00
+--- stdout ---
+  ✗ A15 yönetici üyesi büyük harfli ve kutu öneksiz → kayıttaki tmux adı — beklenen=MUTEVELLI gerçek=sinav
+--- stderr ---
