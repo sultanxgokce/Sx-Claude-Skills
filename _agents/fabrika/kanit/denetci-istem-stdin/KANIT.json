@@ -1,7 +1,7 @@
 {
   "is": "denetci-istem-stdin",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T01:05:59+03:00",
+  "guncelleme": "2026-11-03T01:27:05+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -109,7 +109,28 @@
       "olcum_id": "4b65bd3cc78546c38464c3f4a66c9f70",
       "olculen_commit": "75dd820aa04249a4de615df6a0310fbe323d0abd",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme-farki-sinav",
+      "asama": "tek",
+      "dosya": "olcum-duzeltme-farki-sinav-tek.txt",
+      "sha256": "a758f3f2893042fd9d3db36dce686081fa941fafa346ad649fe3b7301b50b5ba",
+      "komut": [
+        "timeout",
+        "600",
+        "bash",
+        "denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T01:27:05+03:00",
+      "sure_sn": 185.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f9c76c84966a4a1193f52f5d47628766",
+      "olculen_commit": "ad5df6c8cf381e53549963933f5038fd2b70bfe5",
+      "olculen_kirli": true
     }
   ],
-  "imza": "900af68ad6899ec752438d1532a1fb64e0e64b193ab560052254cff7382a9bf7"
+  "imza": "b251cec1b4ab73327efd031fb69f43f164045c3e54d5e4490a407d3e3c47c3a6"
 }

@@ -103,15 +103,15 @@ printf 'diff --git a/x b/x\n+satir\n' > "$KOK/d.patch"; kanitla d5
 kapi "D5a --diff ile koştu" 0 den d5 "$J5" --diff "$KOK/d.patch"
 dogru "D5b DENETIM-1.bas = null" "import json;d=json.load(open('$(kayit d5 1)'));assert d['bas'] is None"
 
-echo "════ D6 · istem 100 KB'ı aşınca HER denetçide gönderim durur (sahte denetçi, eşik dikişi YOK) ════"
-yap d6; python3 -c "open('$KOK/w/buyuk-d6.txt','w').write(''.join('satir-%05d-%s\n'%(i,'b'*80) for i in range(1100)))"
+echo "════ D6 · istem 200 KB'ı aşınca HER denetçide gönderim durur (sahte denetçi, eşik dikişi YOK; tavan 100→200 KB, kart denetci-istem-stdin 3 Kas) ════"
+yap d6; python3 -c "open('$KOK/w/buyuk-d6.txt','w').write(''.join('satir-%05d-%s\n'%(i,'b'*80) for i in range(2500)))"
 git -C "$KOK/w" add buyuk-d6.txt; git -C "$KOK/w" commit -q -m buyuk; kanitla d6; : > "$KOK/istem.md"
 unset DENETCI_KIRP_ESIK DENETCI_ISTEM_TAVAN
-kapi "D6a ~100 KB üstü istem → rc 1 (İŞİ BÖL)" 1 den d6 "$J5"
-iceren "D6b sınır 100000 olarak söyleniyor" "> 100000 (istem tavanı" "$KOK/son.out"
+kapi "D6a ~200 KB üstü istem → rc 1 (İŞİ BÖL)" 1 den d6 "$J5"
+iceren "D6b sınır 200000 olarak söyleniyor" "> 200000 (istem tavanı" "$KOK/son.out"
 [ ! -e "$(kayit d6 1)" ] && [ ! -s "$KOK/istem.md" ] && { GECEN=$((GECEN+1)); echo "  ✓ D6c tur yakılmadı, denetçiye istem gitmedi"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ D6c tur yandı ya da istem gitti"; }
 kapi "D6e 🔴 ayıklama KAPALIYKEN de durur (göz #436 tur 1)" 1 env DENETCI_KANIT_AYIKLA=0 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" d6 --kart "$4" < /dev/null' _ "$KOK/w" "$J5" "$D" "$KOK/kart.md"
-DENETCI_ISTEM_TAVAN=200000 kapi "D6d DENETCI_ISTEM_TAVAN=200000 ile aynı iş denetlenir (rc 0)" 0 den d6 "$J5"
+DENETCI_ISTEM_TAVAN=400000 kapi "D6d DENETCI_ISTEM_TAVAN=400000 ile aynı iş denetlenir (rc 0)" 0 den d6 "$J5"
 
 echo "════ D7 · boşluklu + Türkçe harfli dosya adı: git'in kaçışladığı yol düzeltme farkına girer (göz #436 tur 2) ════"
 yap d7; printf 'ilk\n' > "$KOK/w/çok özel ad.txt"; git -C "$KOK/w" add "çok özel ad.txt"; git -C "$KOK/w" commit -q -m d7ozel
@@ -198,12 +198,12 @@ MUTY
   mut kutu-disi-ayiklanir 'b=list(s.get("bulgular") or [])' 'b=[x for x in (s.get("bulgular") or []) if x.get("agirlik")!="kutu-disi"]' "D2i"
   mut bas-yazilmaz '"bas":(bas or None),' '"bas":None,' "D1c"
   mut onceki-bulgu-sayilmaz 'for i,x in enumerate(b,1): print(' 'for i,x in []: print(' "D2g"
-  mut tavan-yalniz-codex 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then' "D6a"
+  mut tavan-yalniz-dikis 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ -n "${DENETCI_KIRP_ESIK:-}" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6a"   # tavan yalnız sınav dikişiyle uygulanırsa (varsayılanda kapı yok) D6a düşer
   mut tavan-ayiklamaya-bagli 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6e"
   mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
   mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null \' '  elif false \' "D10c"
   mut eski-bas-ana-hatta '       || git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' '       || false && git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' "D11b"
-  mut tavan-120k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' "D6a"
+  mut tavan-400k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-400000}"' "D6a"
 fi
 
 echo ""; echo "── SONUÇ (düzeltme-farkı): $GECEN geçti · $DUSEN kaldı ──"
