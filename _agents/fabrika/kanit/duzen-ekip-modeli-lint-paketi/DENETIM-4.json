@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "duzen-ekip-modeli-lint-paketi",
+  "pr": "661",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T23:26:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-ekip-modeli-lint-paketi",
+  "dal": "duzen-ekip-modeli-lint-paketi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__low",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22618,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7695
+  },
+  "dalgic": "olculemedi",
+  "bas": "b9b772a220027d261e077516ab8cd609d76d73b3",
+  "duzeltme_farki": {
+    "onceki_bas": "5911be5fe298455090fb7976d4a795604a04ffa8",
+    "dosya": 4,
+    "bayt": 7695,
+    "tam_bayt": 56817
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düzen paketi lint betiğini çalıştırılabilir kipte taşıyor ve izole kopyadaki derleme artık lint yokluğu yüzünden rc 3’e düşmüyor. Önceki turun güncellik bulgusu, son gerçek ölçümden PR başına kadar yalnız kanıt dosyalarının değiştiğinin açıkça verilmesi ve üretim kodunun aynı kalmasıyla kapanmış; elde uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı kayıt yoktur. `lint-gercek-4` ölçümü temiz committe rc 0 ve 39 geçti/0 düştü verir; P10a-P10e pakette bulunma, kanonik kopyayla eşitlik, çalıştırılabilirlik, izole kutuda rc 127/3 olmaması ve Git kipini doğrudan ölçer. Bağlı `lint-mutant-4` kaydı bilerek kaldırılan betiği rc 1 ile yakalayarak kapının gerçekten düştüğünü gösterir. Önceki B1 kapanmıştır: ölçülen `91d1abc...` ile sunulan baş arasındaki farkın tamamen kanıt dosyaları olduğu ve üretim kodu farkının boş olduğu değişiklik notunda açıkça belirtilmiştir."
+  }
+}

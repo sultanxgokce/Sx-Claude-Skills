@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh
+# rc=0 sure=217.6s zaman=2026-11-02T23:23:05+03:00
+--- stdout ---
+  ✓ P10a lint betiği pakette var, çalıştırılabilir, sözdizimi geçerli
+  ✓ P10b lint kopyası çivili md5 ile EŞİT (e8e09c5a4b2149b840acff37857c3460)
+  ✓ P10c lint betiği çalışır: geçersiz bayrak rc 3 (bulunamadı 127 değil)
+  ✓ P10d izole kopyada derle lint'i bulur: 'rc=127' yok VE exit 3 değil
+  ✓ P10e git dizininde lint betiği çalıştırılabilir kipte (100755) kayıtlı
+== 39 geçti · 0 düştü ==
+--- stderr ---
+⏳ agir-sira: kanit-duzen-ekip-modeli-lint-paketi-lint-gercek-4 211 sn bekledi (yuva 2, load1 17.80)

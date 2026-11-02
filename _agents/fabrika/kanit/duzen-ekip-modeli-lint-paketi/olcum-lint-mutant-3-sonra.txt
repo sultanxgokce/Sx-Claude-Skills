@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-lint-gercek-3-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh
+# rc=1 sure=4.4s zaman=2026-11-02T23:16:16+03:00
+--- stdout ---
+  ✗ P10a lint betiği pakette var, çalıştırılabilir, sözdizimi geçerli 
+  ✗ P10b lint kopyası çivili md5 ile EŞİT (e8e09c5a4b2149b840acff37857c3460) → paket  (kanonik scripts
+  ✗ P10c lint betiği çalışır: geçersiz bayrak rc 3 (bulunamadı 127 değil) → rc=127
+  ✗ P10d izole kopyada derle lint'i bulur: 'rc=127' yok VE exit 3 değil → rc=3 lint beklenmedik rc=127 �
+  ✗ P10e git dizininde lint betiği çalıştırılabilir kipte (100755) kayıtlı → fatal: not a git repo
+--- stderr ---

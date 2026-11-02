@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "duzen-ekip-modeli-lint-paketi",
+  "pr": "661",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T23:18:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-ekip-modeli-lint-paketi",
+  "dal": "duzen-ekip-modeli-lint-paketi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__low",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19947,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7259
+  },
+  "dalgic": "uyumsuz",
+  "bas": "5911be5fe298455090fb7976d4a795604a04ffa8",
+  "duzeltme_farki": {
+    "onceki_bas": "e5c1aa0785f03bdf9267fbec5d9e0d8015f601dc",
+    "dosya": 5,
+    "bayt": 8899,
+    "tam_bayt": 50009
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "P10d’nin koşulu borusuz ve açık bir denetime, P10e’nin kip denetimi de doğrudan Git çıktısının başına bağlanmış; talep edilen izole kutu davranışı korunuyor. Lakin son yeşil ölçüm sunulan başı ölçmediği için üretime hazır damgasından evvel güncel başta sınav yeniden koşturulmalıdır.",
+    "bulgular": [
+      {
+        "ne": "Kanıt güncel PR başına ait değil; son üretim değişikliği ölçümden sonra kalmış görünüyor.",
+        "kanit": "Değişiklik notu incelenen başı `5911be5fe298` olarak verirken en yeni gerçek ölçüm `lint-gercek-3` için `olculen_commit` değeri `7f12e4113460be61e23f5efa104ea969e7cf6e3f`tir. Dolayısıyla P10d/P10e’de gösterilen son düzenleme, verilen manifestte aynı commit üzerinde doğrulanmamıştır.",
+        "konum": "DEĞİŞİKLİK baş notu; kanıt manifesti `lint-gercek-3`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yoktur. Gerçek ölçümler rc 0 ve 39/0; bağlı mutasyonlar da betik kaldırıldığında kapıların düştüğünü gösteriyor. Önceki turda bulgu bulunmadığından kapatılacak eski bulgu yoktur. Bununla birlikte ölçüm çifti sunulan `5911be5fe298` başını değil başka bir commit’i ölçtüğünden son fark için kanıt zinciri tamamlanmış sayılmaz."
+  }
+}

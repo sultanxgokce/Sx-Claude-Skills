@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "duzen-ekip-modeli-lint-paketi",
+  "pr": "661",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T23:02:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-ekip-modeli-lint-paketi",
+  "dal": "duzen-ekip-modeli-lint-paketi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__low",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26128,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9599
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e5c1aa0785f03bdf9267fbec5d9e0d8015f601dc",
+  "duzeltme_farki": {
+    "onceki_bas": "31a52d9eb39f89c3f388fc096aea756580fbc0f3",
+    "dosya": 8,
+    "bayt": 18941,
+    "tam_bayt": 43672
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Evvelki iki gedik kapanmış: lint betiği 100755 kipine alınmış, P10d de izole derlemenin hem rc=127 izini hem rc 3 sonucunu reddedecek biçimde sıkılaştırılmıştır. Temiz committe 39/0 gerçek ölçüm ve iki mutasyon kapısı talep edilen pakete taşıma davranışını doğruladığından iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı kayıt yoktur, iki gerçek ölçüm temiz commitlerde rc 0 vermiştir. B1, üretim farkındaki `old mode 100644 / new mode 100755`, P10e’nin Git kipini doğrulaması ve `lint-gercek-2` içindeki P10a/P10e geçişleriyle kapanmıştır. B2, P10d başarı koşuluna `[ \"$rc\" -ne 3 ]` eklenmesi ve `lint-gercek-2` içindeki P10d geçişiyle kapanmıştır. `lint-mutant-2` gerçek koddaki bulgu değildir; betik kaldırılınca P10a-e kapılarının düştüğünü göstererek sınavın değişikliğe duyarlı olduğunu kanıtlar. Ayrı bir önce ölçümü yoktur; buna karşın gerçek ölçüm ile bağlı mutasyon çifti hedef davranış için yeterlidir."
+  }
+}

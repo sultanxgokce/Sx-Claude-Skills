@@ -103,4 +103,17 @@ if [ -f "$KAN" ]; then
     ok "P6b aynı persona: paket ile Nexus kimliği BAYT-AYNI" "$(cmp -s "$T/nexus.md" "$T/paket.md" && echo 0 || echo 1)"
   else echo "  · P6b atlandı: Nexus katalogu/manifesti bu kutuda yok"; fi
 else echo "  · P6 atlandı: Nexus kanoniği bu kutuda yok — çivili eşitlik (P1b) ve izole çalışma (P2-P5) ölçüldü"; fi
+# P10 ekip-modeli-lint.sh paketle gelir (kart duzen-ekip-modeli-lint-paketi · SERDAR 1 Kas: HUZUR'da `ekipc derle` "lint beklenmedik rc=127" ile rc 3 veriyordu)
+L="$PAKET/scripts/ekip-modeli-lint.sh"; LCIVI="e8e09c5a4b2149b840acff37857c3460"
+ok "P10a lint betiği pakette var, çalıştırılabilir, sözdizimi geçerli" "$([ -x "$L" ] && bash -n "$L" 2>/dev/null && echo 0 || echo 1)"
+lb="$(md5sum < "$L" 2>/dev/null | cut -d' ' -f1)"
+ok "P10b lint kopyası çivili md5 ile EŞİT ($LCIVI)" "$([ "$lb" = "$LCIVI" ] && echo 0 || echo 1)" "→ paket $lb (kanonik scripts/ekip-modeli-lint.sh yeniden kopyala + çiviyi güncelle)"
+bash "$L" --kapi yok >/dev/null 2>&1; rc=$?
+ok "P10c lint betiği çalışır: geçersiz bayrak rc 3 (bulunamadı 127 değil)" "$([ $rc -eq 3 ] && echo 0 || echo 1)" "→ rc=$rc"
+printf 'x: 1\n' > "$T/lintsiz.yaml"; cp -r "$PAKET" "$T/kutu/skills/duzen-lint"; ls "$T/kutu/skills/duzen-lint/scripts/ekip-modeli-lint.sh" >/dev/null 2>&1
+cikti="$(bash "$T/kutu/skills/duzen-lint/scripts/ekipc.sh" derle --manifest "$T/lintsiz.yaml" 2>&1)"; rc=$?
+case "$cikti" in *rc=127*) v127=1 ;; *) v127=0 ;; esac
+ok "P10d izole kopyada derle lint'i bulur: 'rc=127' yok VE exit 3 değil" "$([ "$v127" -eq 0 ] && [ "$rc" -ne 3 ] && echo 0 || echo 1)" "→ rc=$rc $cikti"
+gm="$(git -C "$PAKET" ls-files -s scripts/ekip-modeli-lint.sh 2>&1)"
+ok "P10e git dizininde lint betiği çalıştırılabilir kipte (100755) kayıtlı" "$([ "${gm:0:6}" = "100755" ] && echo 0 || echo 1)" "→ ${gm:0:60}"
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]
