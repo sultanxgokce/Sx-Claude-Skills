@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "duzen-ekip-modeli-lint-paketi",
+  "pr": "661",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-02T22:55:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-ekip-modeli-lint-paketi",
+  "dal": "duzen-ekip-modeli-lint-paketi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "codex-gpt-5.6-sol__low",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38611,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4771
+  },
+  "dalgic": "uyumsuz",
+  "bas": "31a52d9eb39f89c3f388fc096aea756580fbc0f3",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Lint betiği pakete eklenmiş, sürüm yükseltilmiş ve izole kopyada `rc=127` yokluğu gerçek ölçüm ile mutasyon kapısında sınanmış; talep edilen doğru şey yapılmış. Ancak dosyanın Git modu ile yeşil sınav birbiriyle çelişiyor ve izole derleme sınavı başarıyı değil yalnız `rc=127` metninin yokluğunu ölçüyor; üretim öncesi bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Yeni lint betiği çalıştırılabilir modda taşınmıyor; buna rağmen sınav `-x` denetiminin geçtiğini söylüyor. Üretim farkı ile ölçüm sonucu arasındaki bu çelişki giderilmeden paketleme güvencesi sağlam değil.",
+        "kanit": "Üretim farkında `duzen/scripts/ekip-modeli-lint.sh` için `new file mode 100644` yazıyor; P9a ise açıkça `[ -x \"$L\" ]` koşulunu arıyor ve gerçek ölçüm çıktısında P9a geçti gösteriliyor.",
+        "konum": "duzen/scripts/ekip-modeli-lint.sh:dosya modu; duzen/scripts/ekipc-paritesi.test.sh:P9a; olcum-lint-gercek-sonra.txt:P9a",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "P9d hedef davranışı yeterince sıkı sınamıyor: izole `ekipc derle` çağrısının başarılı olmasını veya rc 3 vermemesini istemek yerine yalnız çıktıda `rc=127` bulunmamasını başarı sayıyor; başka bir eksiklik ya da yine rc 3 sonucu yeşil geçebilir.",
+        "kanit": "P9d sonucu yalnız `grep -q 'rc=127'` ile belirleniyor; yakalanan `$rc` sadece hata açıklamasına yazılıyor ve başarı koşuluna katılmıyor. Gerçek ölçüm de yalnız “çıktıda 'rc=127' yok” iddiasını raporluyor.",
+        "konum": "duzen/scripts/ekipc-paritesi.test.sh:P9d; olcum-lint-gercek-sonra.txt:P9d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve temiz commit üzerinde gerçek ölçüm ile mutasyon ölçümünü bağlıyor; mutasyonun rc 1/yeşil sonucu beklenen kapı düşüşüdür. Bununla birlikte gerçek ölçümdeki P9a geçişi diffteki 100644 moduyla çelişiyor; ayrıca P9d ölçümü hedef rc sonucunu doğrulamadığı için yeşil kayıt iddianın tamamını ölçmüyor. Ayrı bir önce karesi/ölçümü yok, fakat mutasyon mevcut sınavın bozuk paketi yakaladığını gösteriyor."
+  }
+}

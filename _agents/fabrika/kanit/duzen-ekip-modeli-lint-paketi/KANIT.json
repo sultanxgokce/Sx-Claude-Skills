@@ -1,0 +1,176 @@
+{
+  "is": "duzen-ekip-modeli-lint-paketi",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T23:23:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "lint-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-lint-gercek-sonra.txt",
+      "sha256": "11c99cee1bfced168eda61f822baa29d99c2d1a334048b2e346da19c37cc8aec",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T22:53:30+03:00",
+      "sure_sn": 27.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "53287a867a434c108eb0d32a75692ac1",
+      "olculen_commit": "61917bef727cc4d401228c35d34b8429e36b146a",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-lint-mutant-sonra.txt",
+      "sha256": "0f110740bf6aa966e6638318e522235b3587244897327a5f2d538dfbfe1b861b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T22:53:33+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "lint-gercek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "628019f5897c4fc3a0c34d1d03851afb",
+      "olculen_commit": "61917bef727cc4d401228c35d34b8429e36b146a",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-gercek-2",
+      "asama": "sonra",
+      "dosya": "olcum-lint-gercek-2-sonra.txt",
+      "sha256": "4b1ce34e7ab95a749674e3ae525999384c6ef39a739f1a3ca0a06fc1d2487ebe",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:01:15+03:00",
+      "sure_sn": 308.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b937d38852b745b5bc2f6891ed0a53fc",
+      "olculen_commit": "ecec5b7c39b68a748088a5f6fc43e5ef67ed01d8",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-mutant-2",
+      "asama": "sonra",
+      "dosya": "olcum-lint-mutant-2-sonra.txt",
+      "sha256": "54bbc7f7a08fb77384de023096706c9e7ec1b1ace177864b7cca1aa9b78bda38",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:01:23+03:00",
+      "sure_sn": 8.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "lint-gercek-2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "bd2d0c98fbc34928a2bed5b49f4d9aa6",
+      "olculen_commit": "ecec5b7c39b68a748088a5f6fc43e5ef67ed01d8",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-gercek-3",
+      "asama": "sonra",
+      "dosya": "olcum-lint-gercek-3-sonra.txt",
+      "sha256": "14daf4542063e8ebb2dd98fc6e20d52acbf26d55e3898a56787684ad1937121b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:16:11+03:00",
+      "sure_sn": 77.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2fc29f17ffe44d9da76aba641d8d9ea1",
+      "olculen_commit": "7f12e4113460be61e23f5efa104ea969e7cf6e3f",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-mutant-3",
+      "asama": "sonra",
+      "dosya": "olcum-lint-mutant-3-sonra.txt",
+      "sha256": "18836cbea2ef0536bd6baae1f90202b04ce90e7c7dc1bb320a0f978eff9c9d5a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:16:16+03:00",
+      "sure_sn": 4.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "lint-gercek-3",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "60338919107e4cf6afef31eab5e08ef2",
+      "olculen_commit": "7f12e4113460be61e23f5efa104ea969e7cf6e3f",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-gercek-4",
+      "asama": "sonra",
+      "dosya": "olcum-lint-gercek-4-sonra.txt",
+      "sha256": "3c7bbf014cff31a2e8140eb7b16538a4e03d9acfbd80eeadaf2d7777f86916f1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:23:05+03:00",
+      "sure_sn": 217.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1b618657de5a4c25b49c00929f00d7e0",
+      "olculen_commit": "91d1abc785c472403bf5287ea22d6842ae2405b1",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-mutant-4",
+      "asama": "sonra",
+      "dosya": "olcum-lint-mutant-4-sonra.txt",
+      "sha256": "232523b1ce0d72de63a901f702c9b5b5c304112c0cf189d600c91ce0ee50312c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/lint-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:23:18+03:00",
+      "sure_sn": 13.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "lint-gercek-4",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "e06d01ea9fb04735b435ee5dd194c50a",
+      "olculen_commit": "91d1abc785c472403bf5287ea22d6842ae2405b1",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "f00aef8e5a4b68cd5a7cd4d52ca528d2738456273a1b1a92eb0fc99b77fbf4cb"
+}
