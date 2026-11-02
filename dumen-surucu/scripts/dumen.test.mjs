@@ -224,6 +224,8 @@ const dG = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500
 const nG = (await sekmeler()).length;
 ok('D47 durum taşıyan (g bayraklı) RegExp ikinci kullanımda da eşleşen sekmeyi bulur, yeni sekme açılmaz', nG === 1, String(nG));
 await dG.kapat();
+const hatSat = []; const dH = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: (s) => hatSat.push(s), sekme: 'ilk' }); await dH.kapat();
+ok('D48 kapat() çıkışında bulgu hatırlatma satırı basılır (bulgu.sh yaz)', hatSat.filter((x) => /bulgu hatırlatması/.test(x) && /bulgu\.sh yaz/.test(x)).length === 1, JSON.stringify(hatSat));
 const dI = await Dumen.baglan({ cdpUrl: cdp4, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: 'ilk' });
 ok('D46 sekme:"ilk" açıkça istenirse eski davranış (yeni sekme yok)', (await sekmeler()).length === 1);
 await dI.kapat();

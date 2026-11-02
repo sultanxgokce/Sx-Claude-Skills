@@ -221,5 +221,5 @@ export class Dumen {
   olayKaydi() { return this.#olaylar.map((o) => ({ ...o })); }   // salt-okur kopya (ham nesne değil)
   eslesmis() { return this.#olaylar.filter((o) => this.#pencereler.some((p) => o.t >= p.t0 && o.t <= p.t1 + 50)); }
   yabanci() { return this.#olaylar.filter((o) => !this.#pencereler.some((p) => o.t >= p.t0 && o.t <= p.t1 + 50)); }
-  async kapat() { if (this.#kendiSekmem) await this.#page?.close().catch(() => {}); await this.#tarayici?.close().catch(() => {}); }   // yalnız KENDİ açtığı sekme kapanır
+  async kapat() { this.#yaz('Dümen bulgu hatırlatması: gördüğün hata ya da geliştirme önerisini yazdın mı? → bash /config/.claude/skills/bulgu/scripts/bulgu.sh yaz …'); if (this.#kendiSekmem) await this.#page?.close().catch(() => {}); await this.#tarayici?.close().catch(() => {}); }   // yalnız KENDİ açtığı sekme kapanır
 }
