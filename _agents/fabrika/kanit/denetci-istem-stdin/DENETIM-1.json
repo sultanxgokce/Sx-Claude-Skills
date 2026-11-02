@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-istem-stdin",
+  "pr": "664",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T01:08:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-istem-stdin",
+  "dal": "denetci-istem-stdin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36414,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 84699
+  },
+  "dalgic": "uyumsuz",
+  "bas": "01c048c0b93fdcac7da7995cb06a44a76de65b76",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, denetçi istemi Codex’e sonlu bir dosyadan stdin ile veriliyor ve varsayılan kalite tavanı 200.000 bayta çıkarılıyor. Gerçek ölçüm 282/282 yeşil; üç hedefli mutasyon da stdin, argüman ve eski tavan davranışlarının sınav tarafından yakalandığını gösterdiği için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `denetci-sinav` rc=0 ile 282 geçti, 0 kaldı sonucunu veriyor; 150 KB istemin stdin’den geçtiği, argümana konmadığı ve 200 KB tavanın korunduğu hedefli ölçüm mevcut. Üç mutasyon kaydı beklenen kırmızıyı üretip ilgili kapıların gerçekten sınandığını gösteriyor. Ölçüm `olculen_kirli=true` durumunda alınmış; bu izlenebilirliği commit’e göre zayıflatır, ancak sunulan üretim farkı ve hedefli gerçek/mutasyon ölçümleri talebi doğrudan kapsıyor."
+  }
+}

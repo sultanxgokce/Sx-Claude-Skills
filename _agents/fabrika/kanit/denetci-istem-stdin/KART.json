@@ -1,0 +1,25 @@
+{
+  "is": "denetci-istem-stdin",
+  "cumle": "Bağımsız göz aracı istemi Codex'e komut argümanı yerine girdi akışından verir; 120 KB argüman sınırı kalkar, istem tavanı kalite kararı olarak 200 KB'a çıkar; büyük PR'lar (teslim sekmesi 143 KB) göze gidebilir",
+  "istedi": "BÂNİ",
+  "aldi": "SERDAR",
+  "zaman": "2026-11-03T00:30:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
