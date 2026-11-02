@@ -1,0 +1,17 @@
+$ bash dumen-surucu/scripts/dumen.test.sh
+# rc=1 sure=10.5s zaman=2026-11-02T10:25:23+03:00
+--- stdout ---
+--- stderr ---
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+browserType.connectOverCDP: connect ECONNREFUSED 127.0.0.1:19894
+Call log:
+[2m  - <ws preparing> retrieving websocket url from http://127.0.0.1:19894[22m
+
+    at /config/projects/_wt/Sx-Claude-Skills-dumen-sekme-secimi/dumen-surucu/scripts/dumen.test.mjs:36:29 {
+  name: 'Error'
+}
+
+Node.js v22.23.0

@@ -1,7 +1,7 @@
 {
   "is": "dumen-sekme-secimi",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T10:18:19+03:00",
+  "guncelleme": "2026-11-02T10:25:23+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -21,7 +21,26 @@
       "olcum_id": "03a8750183d04e0cbcc90ee1116e8964",
       "olculen_commit": "736929b8578551c8786442861157a5ca22821feb",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 57 kapi 25 mutant sekme tur2",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 57 kapi 25 mutant sekme tur2-tek.txt",
+      "sha256": "6ab438b05e0b6098a79d4b7e818a9e82d089578d261b8a586f5a3a9816357700",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-02T10:25:23+03:00",
+      "sure_sn": 10.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9cb713cbc9a341c8bceeb992dea3600c",
+      "olculen_commit": "7f41069f511a6a486ab03abf675e059678cb56c1",
+      "olculen_kirli": false
     }
   ],
-  "imza": "541818402ce5b89179b5dea164754ac521e8623b3a06582ca75dad0407775129"
+  "imza": "3eb20cca3f18e869eec1bb06c6121a94abb648a1ad0ec359f6921248df668933"
 }
