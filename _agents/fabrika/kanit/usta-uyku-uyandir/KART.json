@@ -72,6 +72,13 @@
       "oturum": "msg_01M6F0FA3K1F4EZTKNEMGJ5PTQ",
       "gerekce": "daraltma: kalan bulgu yeni karta (usta-uyku-uyandir-kalan) — Seritte uyuyan usta gri gorunumu (infra/terminal-merkez/sayfalar.mjs koltuk haplari + merkez.mjs /api/koltuklar hal alani) ve PERGEL/KUKLACI icin gercek claude --resume canli kaniti, TELLAL kaydi dolunca",
       "zaman": "2026-11-03T00:08:11+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "BENNA",
+      "oturum": "6b97a4cc-bulgu-tur6",
+      "gerekce": "Tur 6 tek bulgusu SKILL.md'deki 2.38.6 bolumu: bu bolum #663'ten geldi, main birlestirmesinde korundu, benim farkim degil; kod 5/E iken degismedi. Bir tur daha farkin main'e gore okunmasi icin.",
+      "zaman": "2026-11-03T01:19:30+03:00"
     }
   ],
   "cumle_gecmisi": [

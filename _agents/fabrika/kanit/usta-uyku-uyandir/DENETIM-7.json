@@ -1,0 +1,49 @@
+{
+  "tur": 7,
+  "is": "usta-uyku-uyandir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T01:19:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-uyku-uyandir",
+  "dal": "usta-uyku-uyandir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27195,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 2744
+  },
+  "dalgic": "olculemedi",
+  "bas": "90bcf49be27d269d3ada4ae807ab9a814e21e805",
+  "duzeltme_farki": {
+    "onceki_bas": "7484b2b2fe2147a51c996796abfa8599a384f915",
+    "dosya": 1,
+    "bayt": 2744,
+    "tam_bayt": 67041
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, usta uyandırma/uyutma çekirdeği talep edilen davranışları kapsayan yeşil ölçümler ve güçlü mutant sınavlarıyla doğrulanmış; bu turda üretim kodu da değişmemiştir. Ancak önceki turdaki ilgisiz “oda-adi-kebab-uyarisi” kapsam kayması bu farkla kaldırılmadığından B1 kapanmamış, üretim öncesi ilgili karta ayrılması gerekmektedir.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmadı: iş kartıyla ilgisiz “oda-adi-kebab-uyarisi” sürüm kaydı PR bütününde kalmaya devam ediyor; bu karta ait olmayan değişiklik ilgili karta taşınmalıdır.",
+        "kanit": "Önceki tur kaydı, ayrı kartı ve `/api/koltuklar`, `oda_uyari`, `kayitOdaGecersizHaritasi`, R23–R24d sınavlarını anlatan 2.38.6 bölümünü açıkça saptıyor. Bu turun farkı tamamen tek bir kanıt dosyasından oluşuyor ve üretim/belge kodu farkı boş olduğundan söz konusu bölümün kaldırıldığına dair bir değişiklik yoktur; “main’den geldi” açıklaması tek başına PR tabanına göre kapsam dışı olmadığını kanıtlamaz.",
+        "konum": "terminal-onar/SKILL.md:11; önceki tur B1; bu tur değişiklik notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son gerçek usta ölçümü 12/12 kapı ile 10/10 mutantı, reconcile 2/2 kapı ile 1/1 mutantı, koltuk-ac 45/45 kapıyı geçiriyor. Ölçülen son commit nihai baş değil; fakat bu turda üretim kodu değişmediği açıkça bildirildiğinden davranış kanıtı geçerliliğini koruyor. Buna karşılık önceki kapsam bulgusunun kapandığını gösteren bir fark veya PR tabanı karşılaştırması sunulmamış."
+  }
+}
