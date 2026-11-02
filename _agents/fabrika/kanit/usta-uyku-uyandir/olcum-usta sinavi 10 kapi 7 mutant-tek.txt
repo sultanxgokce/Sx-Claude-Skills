@@ -1,0 +1,26 @@
+$ bash terminal-onar/scripts/usta.test.sh
+# rc=0 sure=221.9s zaman=2026-11-02T23:24:36+03:00
+--- stdout ---
+── usta.sh
+  ✓ U1 liste: yalnız klasor alanlı üyeler, durumlarıyla (MUDUR yok, BASSIZ kayit-eksik)
+  ✓ U10 koltuk-ac: usta koltuğu yol=usta olarak tanınır (kayıtsız koltuk gibi reddedilmez)
+  ✓ U2 YANLIŞ KLASÖR KİLİDİ: sohbet başka klasörün dizininde → rc 4, oturum AÇILMADI
+  ✓ U3 sohbet kimliği yok → rc 5, kimliksiz Claude açılmaz
+  ✓ U4 kuru koşu: plan basar, oturum AÇMAZ
+  ✓ U5 uyandır: oturum açıldı, claude ustanın KENDİ klasöründe --resume <sohbet> ile koştu
+  ✓ U6 tavan dolu (2/2): kuru koşu EN BOŞTAKİNİ (PERGEL) uyutacağını söyler
+  ✓ U7 tavan: gerçek koşuda PERGEL uyutuldu, ORTA uyandı, uyanık sayısı 2
+  ✓ U8 kapanış kancası: uyutulan ustanın DURUM.md dosyasına uyutma damgası düştü
+  ✓ U9 uyut: oturum kapandı + DURUM.md damgası
+SONUÇ: geçti=10 kaldı=0
+── mutantlar (her biri sınavı KIRMALI)
+  ✓ kilit yok (her klasörde resume): yakalandı (5 kapı kırmızı)
+  ✓ tavan yok sayılır: yakalandı (3 kapı kırmızı)
+  ✓ en boştaki yerine listedeki son usta uyutulur: yakalandı (3 kapı kırmızı)
+  ✓ DURUM.md damgası yok: yakalandı (2 kapı kırmızı)
+  ✓ claude ustanın klasöründe açılmaz: yakalandı (1 kapı kırmızı)
+  ✓ sohbetsiz usta açılır: yakalandı (6 kapı kırmızı)
+  ✓ koltuk-ac usta yolunu tanımaz: yakalandı (1 kapı kırmızı)
+MUTANT: 7/7 yakalandı
+--- stderr ---
+⏳ agir-sira: kanit-usta-uyku-uyandir-usta sinavi 10 kapi 7 mutant 145 sn bekledi (yuva 2, load1 16.84)

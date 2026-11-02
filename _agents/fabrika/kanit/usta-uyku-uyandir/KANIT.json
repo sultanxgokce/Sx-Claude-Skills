@@ -1,0 +1,65 @@
+{
+  "is": "usta-uyku-uyandir",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T23:26:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "usta sinavi 10 kapi 7 mutant",
+      "asama": "tek",
+      "dosya": "olcum-usta sinavi 10 kapi 7 mutant-tek.txt",
+      "sha256": "810b080ed79aaa18ae412c1ff8d192dd1060555aa7ffa670eb1ab297bae43816",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:24:36+03:00",
+      "sure_sn": 221.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f1ca48b513604fd0966c2cdfc7545c2d",
+      "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "reconcile koltuk yok 2 kapi mutant",
+      "asama": "tek",
+      "dosya": "olcum-reconcile koltuk yok 2 kapi mutant-tek.txt",
+      "sha256": "5d5d041b07b29d674c468d09d85991e41d15702f4c9c14cf874b72f10f29cecf",
+      "komut": [
+        "bash",
+        "ekip-kur/templates/ekip-reconcile.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:25:51+03:00",
+      "sure_sn": 75.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8503d76197bb4d25a284f6bbcc9862fa",
+      "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac regresyon 45 kapi",
+      "asama": "tek",
+      "dosya": "olcum-koltuk-ac regresyon 45 kapi-tek.txt",
+      "sha256": "08aafe285d768de64d51030f0fb8a5dfed0f1680b38f905c9e2fe7071a51dc4e",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:26:15+03:00",
+      "sure_sn": 24.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dbe7792522ab4ccb8898c8f9f92a2fca",
+      "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "f4d460a419564ae500cc89201a3590360e8383a009acb7603f0e5cc17ff6ce58"
+}
