@@ -1,7 +1,7 @@
 {
   "is": "usta-uyku-uyandir",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T23:26:15+03:00",
+  "guncelleme": "2026-11-02T23:35:45+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -59,7 +59,26 @@
       "olcum_id": "dbe7792522ab4ccb8898c8f9f92a2fca",
       "olculen_commit": "4db6bacca2c38a4f49eeaa79c6001b69ad6d9a58",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "usta sinavi 12 kapi 10 mutant tur2",
+      "asama": "tek",
+      "dosya": "olcum-usta sinavi 12 kapi 10 mutant tur2-tek.txt",
+      "sha256": "780c34ddd4bb4c0e3e92c6c4b4aa37cf21ca4db0eea0f9a3a2cb33153d3deaff",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T23:35:45+03:00",
+      "sure_sn": 187.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "eff27c3b7d3c4071acfded80472edb80",
+      "olculen_commit": "b67654c2ece37588e5684f9b043a93f9c4030c89",
+      "olculen_kirli": false
     }
   ],
-  "imza": "f4d460a419564ae500cc89201a3590360e8383a009acb7603f0e5cc17ff6ce58"
+  "imza": "06e8ce36693f0439e8fb5ae634c682c2180f7e5b3a1937d9f528193c67933c74"
 }
