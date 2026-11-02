@@ -1,7 +1,7 @@
 ---
 name: mesveret
 type: agent
-version: 0.2.0
+version: 0.2.1
 description: >
   Meşveret Seansı — Sultan tek komutla reisle bulgu toplama seansı açar. Seans madde madde, sabit ve emojili bir
   şablonla ilerler (A sen anlat · B ben önereyim · C etkileşimli gidelim); her madde kaydedilince Sultan'a önemi

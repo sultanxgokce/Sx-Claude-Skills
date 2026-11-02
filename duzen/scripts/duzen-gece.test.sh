@@ -96,6 +96,38 @@ ok "G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: 
 kurulu 1.1.1; O="$(kos --uygula --depo "$T/bayat" --reis SERDAR)"
 ok "G8 hiçbir komuta --force geçmez" "$(! grep -q -- '--force' "$KAYIT" && echo 0 || echo 1)"
 
+# G21 yenile reddedince SEBEP günlükte: rc + stderr'in ilk satırı (2 Kas 03:17: 37 ret, sebep stderr atıldığı için bilinmiyordu)
+cat > "$T/yenile-red" <<'S'
+#!/usr/bin/env bash
+echo "EL-DEĞMİŞ: ornek dosya yonetilen bolgeye insan yazmis" >&2; exit 5
+S
+kurulu 1.1.1; : > "$KAYIT"; rm -f "$T/g14.log"
+O="$(DUZEN_YENILE_CMD="bash $T/yenile-red" bash "$R" --sx "$T/sx" --gunluk "$T/g14.log" --kutu code --uygula --depo "$T/bayat" --reis SERDAR 2>&1)"; rc=$?
+ok "G21 yenile reddi: günlükte rc ve stderr sebebi (rc=5 ayrinti=EL-DEĞMİŞ…), eski alanlar yerinde" "$([ $rc -eq 1 ] && grep -q 'atlandi beceri=kimlik:bani sebep=yenile-reddetti kutu=code rc=5 ayrinti=EL-DEĞMİŞ: ornek dosya yonetilen bolgeye insan yazmis' "$T/g14.log" && echo 0 || echo 1)" "→ rc=$rc $(grep atlandi "$T/g14.log" | head -1)"
+# G22 sync reddi de sebebini taşır
+cat > "$T/sync-red" <<'S'
+#!/usr/bin/env bash
+echo "Sürüm bump'lanmadan düzenlenmiş: kurulu kopya kaynaktan farklı" >&2; exit 1
+S
+kurulu 1.1.1; : > "$KAYIT"; rm -f "$T/g15.log"
+O="$(DUZEN_SYNC_CMD="bash $T/sync-red" bash "$R" --sx "$T/sx" --gunluk "$T/g15.log" --kutu code --uygula --depo "$T/bos" --reis SERDAR 2>&1)"; rc=$?
+ok "G22 sync reddi: günlükte rc ve stderr sebebi (rc=1 ayrinti=Sürüm bump'lanmadan…)" "$([ $rc -eq 1 ] && grep -q "atlandi beceri=duzen sebep=sync-reddetti-rc1 kutu=code rc=1 ayrinti=Sürüm bump'lanmadan düzenlenmiş" "$T/g15.log" && echo 0 || echo 1)" "→ rc=$rc $(grep atlandi "$T/g15.log" | head -1)"
+# G16 kurulum BU betiği değiştirirse yeni sürümle baştan koşulur: yeniden-basladi bir kez, yenileme + mektup (kurulan becerilerle) bir kez, döngü yok
+P16="$T/paket16"; mkdir -p "$P16"; cp -r "$HERE/../scripts" "$HERE/../cekirdek" "$P16/" 2>/dev/null; cp "$HERE/../SKILL.md" "$P16/" 2>/dev/null; cp "$R" "$P16/scripts/duzen-gece.sh"
+cat > "$T/sync16" <<'S'
+#!/usr/bin/env bash
+printf 'sync %s\n' "$*" >> "$KAYIT"; b="$2"; mkdir -p "$DUZEN_KURULU_KOK/$b"; cp "$SXK/$b/SKILL.md" "$DUZEN_KURULU_KOK/$b/SKILL.md"
+[ -e "$MARK16" ] || { : > "$MARK16"; python3 -I - "$P16_BETIK" <<'PY'
+import sys; p=sys.argv[1]; b=open(p,'rb').read(); i=b.index(b'\n')+1
+open(p,'r+b').write(b[:i]+b'# yeni surum\n'+b[i:])
+PY
+}
+exit 0
+S
+kurulu 1.1.1; : > "$KAYIT"; rm -f "$T/g16.log" "$T/mark16"
+O="$(SXK="$T/sx" MARK16="$T/mark16" P16_BETIK="$P16/scripts/duzen-gece.sh" DUZEN_SYNC_CMD="bash $T/sync16" bash "$P16/scripts/duzen-gece.sh" --sx "$T/sx" --gunluk "$T/g16.log" --kutu code --uygula --depo "$T/bayat" --reis SERDAR 2>&1)"; rc=$?
+ok "G23 kurulum betiği değiştirince yeni sürümle yeniden başlar: yeniden-basladi 1, yenilendi 1, mektup 1 (kurulan 4 beceriyle), sonsuz döngü yok" "$([ $rc -eq 0 ] && [ "$(grep -c 'yeniden-basladi' "$T/g16.log")" = 1 ] && [ "$(grep -c 'yenilendi kimlik=bani' "$T/g16.log")" = 1 ] && [ "$(cagri mektup)" = 1 ] && grep -q 'kurulan beceriler: duzen gunluk-plan mesveret bulgu' "$KAYIT" && echo 0 || echo 1)" "→ rc=$rc yeniden=$(grep -c yeniden-basladi "$T/g16.log") yenilendi=$(grep -c 'yenilendi kimlik=bani' "$T/g16.log") mektup=$(cagri mektup)"
+
 # G13 cron ortamı: DUZEN_YENILE_CMD yokken (env -i, zamanlayıcı gibi çıplak ortam) yenileme betiğin YANINDAKİ paket ekipc.sh ile yapılır, depodaki (vendor'sız) scripts/ekipc.sh ile DEĞİL
 mkdir -p "$T/pkg" "$T/bayat/scripts"
 cp "$R" "$T/pkg/duzen-gece.sh"; cp "$HERE/surum.sh" "$T/pkg/surum.sh"
@@ -121,6 +153,8 @@ PY
   mut reissiz-mektup 'if [ -z "$REIS" ]; then yaz' 'if false; then yaz' G5
   mut otonom-temel-bilinmez 'otonom-ajan) arg=(--baz otonom-ajan); t=otonom-ajan ;; ' '' G11
   mut depo-ekipc-yoluna-don 'bash $HERE/ekipc.sh yenile' 'bash $DEPO/scripts/ekipc.sh yenile' G13
+  mut sebep-yutuluyor 'sebep=yenile-reddetti kutu=$KUTU rc=$src ayrinti=$(sebep "$HATA")' 'sebep=yenile-reddetti kutu=$KUTU' G21
+  mut yeniden-baslama-yok 'if [ "$UYGULA" -eq 1 ] && [ -z "${DUZEN_GECE_YENIDEN:-}" ] &&' 'if false &&' G23
   mut force-gecir '--skill "$b" --apply' '--skill "$b" --apply --force' G8
 fi
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]

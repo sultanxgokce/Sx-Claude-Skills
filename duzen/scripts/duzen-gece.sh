@@ -12,13 +12,15 @@
 # duzen_gunlugu satırları (key=value, tek satır):
 #   <ISO> kuruldu beceri=<ad> surum=<yeni> onceki=<eski|yok> kutu=<kutu> reis=<reis|->
 #   <ISO> yenilendi kimlik=<ad> temel=<manuel-claude|MÜDÜR|otonom-ajan> surum=<duzen sürümü> kutu=<kutu> reis=<reis|->
-#   <ISO> atlandi beceri=<ad> sebep=<…> kutu=<kutu>        (kurulum yapılamadı: elle değişmiş kopya vb.)
+#   <ISO> atlandi beceri=<ad> sebep=<…> kutu=<kutu> rc=<çıkış> ayrinti=<stderr'in ilk satırları>   (kurulum/yenileme yapılamadı: elle değişmiş kopya vb. — sebep artık günlükte)
+#   <ISO> yeniden-basladi sebep=betik-guncellendi kutu=<kutu>   (kurulum bu betiği değiştirdi: yeni sürümle baştan koşulur, eski sürümün mantığıyla bitirilmez)
 #   <ISO> mektup reis=<reis|-> surum=<v> durum=gitti|atlandi|hata kutu=<kutu>
 # rc: 0 iş yok ya da bitti · 1 en az bir adım atlandı/hata · 2 kullanım · 3 ölçülemedi (kaynak sürümü okunamadı)
 set -uo pipefail
 # TÜM gövde tek fonksiyonda: bash betiği artımlı okur, gece kurulumu bu dosyayı (duzen paketi) yerinde yeniden yazar → sarılmazsa kurulumdan sonraki satırlar kayık okunur.
 # Fonksiyon baştan ayrıştırıldığı için dosya koşarken değişse de bu çalışma etkilenmez; çağrı ile exit aynı satırda (dönüşte dosyadan başka satır okunmaz).
 main() {
+ORIG_ARGS=("$@"); SHA0="$(sha256sum "${BASH_SOURCE[0]}" 2>/dev/null | cut -d' ' -f1)"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SURUM="$HERE/surum.sh"
 BECERILER=(duzen gunluk-plan mesveret bulgu)
@@ -41,6 +43,7 @@ YENILE="${DUZEN_YENILE_CMD:-bash $HERE/ekipc.sh yenile}"
 MEKTUP="${DUZEN_MEKTUP_CMD:-bash /config/projects/Nexus/scripts/ulak.sh gonder}"
 surum_oku() { sed -nE 's/^[[:space:]]*version:[[:space:]]*["'"'"']?([0-9]+\.[0-9]+\.[0-9]+)["'"'"']?[[:space:]]*$/\1/p' "$1" 2>/dev/null | head -1; }
 yeni_mi() { [ "$1" != "$2" ] && [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | tail -1)" = "$1" ]; }   # $1 > $2
+sebep() { tr '\n\t' '  ' < "$1" 2>/dev/null | tr -cd '[:print:]ÇĞİÖŞÜçğıöşü' | sed -E 's/  +/ /g' | cut -c1-200; }   # stderr'in ilk 200 yazdırılabilir karakteri, tek satır (kural/yol/sebep metni)
 yaz() { local s; s="$(date -Iseconds) $*"; echo "$s"; [ "$UYGULA" -eq 1 ] || return 0; mkdir -p "$(dirname "$GUNLUK")" 2>/dev/null; printf '%s\n' "$s" >> "$GUNLUK" || echo "duzen-gece: günlüğe yazılamadı" >&2; }
 
 KAYNAK_DUZEN="$(surum_oku "$SX/duzen/SKILL.md")"
@@ -48,7 +51,8 @@ KAYNAK_DUZEN="$(surum_oku "$SX/duzen/SKILL.md")"
 RC=0; REISYAZ="${REIS:--}"; REISYAZ="${REISYAZ//,/+}"; REISYAZ="${REISYAZ//[^[:alnum:]_+:ÇĞİÖŞÜçğıöşü-]/}"; [ "$UYGULA" -eq 1 ] || echo "KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)"
 
 # 1) dört beceriyi kur (kaynak > kurulu olanı; --force YOK — elle değişmiş kopya ezilmez, atlanır ve günlüğe yazılır)
-KURULDU=0; KURULANLAR=()
+HATA="$(mktemp 2>/dev/null || echo /tmp/duzen-gece-hata.$$)"; trap 'rm -f "$HATA" 2>/dev/null' EXIT
+KURULDU=0; KURULANLAR=(); if [ -n "${DUZEN_GECE_KURULANLAR:-}" ]; then read -r -a KURULANLAR <<<"$DUZEN_GECE_KURULANLAR"; KURULDU=1; fi   # yeniden başlatılan koşu: önceki koşunun kurduklarını mektup için devralır
 # tetik: düzen paketinin sürümü artınca dört becerinin TAMAMI kurulur; düzen aynıysa yalnız kendi sürümü artan beceri
 dk="$(surum_oku "$SX/duzen/SKILL.md")"; dku="$(surum_oku "$KURULU_KOK/duzen/SKILL.md")"
 ZORLA=0; { [ -z "$dku" ] || yeni_mi "$dk" "$dku"; } && ZORLA=1
@@ -57,11 +61,19 @@ for b in "${BECERILER[@]}"; do
   [ -n "$kv" ] || { yaz "atlandi beceri=$b sebep=kaynak-surum-okunamadi kutu=$KUTU"; RC=1; continue; }
   if [ "$ZORLA" -eq 1 ] || [ -z "$ku" ] || yeni_mi "$kv" "$ku"; then
     if [ "$UYGULA" -eq 1 ]; then
-      if $SYNC --skill "$b" --apply </dev/null >/dev/null 2>&1; then yaz "kuruldu beceri=$b surum=$kv onceki=${ku:-yok} kutu=$KUTU reis=$REISYAZ"; KURULDU=1; KURULANLAR+=("$b")
-      else yaz "atlandi beceri=$b sebep=sync-reddetti-rc$? kutu=$KUTU"; RC=1; fi
+      if $SYNC --skill "$b" --apply </dev/null >/dev/null 2>"$HATA"; then yaz "kuruldu beceri=$b surum=$kv onceki=${ku:-yok} kutu=$KUTU reis=$REISYAZ"; KURULDU=1; KURULANLAR+=("$b")
+      else src=$?; yaz "atlandi beceri=$b sebep=sync-reddetti-rc$src kutu=$KUTU rc=$src ayrinti=$(sebep "$HATA")"; RC=1; fi
     else echo "KURU: $b ${ku:-yok} → $kv kurulacaktı"; KURULDU=1; fi
   fi
 done
+
+# 1b) kurulum BU betiği değiştirdiyse (2 Kas 03:17: cron kurulu eski kopyayı koşturdu, düzeltme koşunun İÇİNDE kuruldu → 37 kimlik eski mantıkla reddedildi) yeni sürümle baştan koş.
+#     Döngü yok: DUZEN_GECE_YENIDEN=1 ile başlatılan koşu bir daha yeniden başlamaz.
+SHA1="$(sha256sum "${BASH_SOURCE[0]}" 2>/dev/null | cut -d' ' -f1)"
+if [ "$UYGULA" -eq 1 ] && [ -z "${DUZEN_GECE_YENIDEN:-}" ] && [ -n "$SHA0" ] && [ -n "$SHA1" ] && [ "$SHA0" != "$SHA1" ]; then
+  yaz "yeniden-basladi sebep=betik-guncellendi kutu=$KUTU"
+  rm -f "$HATA" 2>/dev/null; export DUZEN_GECE_YENIDEN=1 DUZEN_GECE_KURULANLAR="${KURULANLAR[*]:-}"; exec bash "${BASH_SOURCE[0]}" "${ORIG_ARGS[@]}"
+fi
 
 # 2) bu depoda BAYAT ekipc kimliklerini yenile (temel adı gömülü metinden: manuel-claude-base → --baz manuel-claude · mudur-base → --rol MÜDÜR · otonom-ajan-base → --baz otonom-ajan)
 YENILENDI=0
@@ -70,8 +82,8 @@ while IFS= read -r satir; do
   temel="$(sed -nE 's/.*temel: ([a-z-]+)-base.*/\1/p' <<<"$satir")"
   case "$temel" in manuel-claude) arg=(--baz manuel-claude); t=manuel-claude ;; mudur) arg=(--rol MÜDÜR); t=MÜDÜR ;; otonom-ajan) arg=(--baz otonom-ajan); t=otonom-ajan ;; *) yaz "atlandi beceri=kimlik:$ad sebep=temel-bilinmiyor kutu=$KUTU"; RC=1; continue ;; esac
   if [ "$UYGULA" -eq 1 ]; then
-    if $YENILE --dosya "$DEPO/_agents/$ad/AGENT.md" "${arg[@]}" --apply </dev/null >/dev/null 2>&1; then yaz "yenilendi kimlik=$ad temel=$t surum=$KAYNAK_DUZEN kutu=$KUTU reis=$REISYAZ"; YENILENDI=1
-    else yaz "atlandi beceri=kimlik:$ad sebep=yenile-reddetti kutu=$KUTU"; RC=1; fi
+    if $YENILE --dosya "$DEPO/_agents/$ad/AGENT.md" "${arg[@]}" --apply </dev/null >/dev/null 2>"$HATA"; then yaz "yenilendi kimlik=$ad temel=$t surum=$KAYNAK_DUZEN kutu=$KUTU reis=$REISYAZ"; YENILENDI=1
+    else src=$?; yaz "atlandi beceri=kimlik:$ad sebep=yenile-reddetti kutu=$KUTU rc=$src ayrinti=$(sebep "$HATA")"; RC=1; fi
   else echo "KURU: $ad yenilenecekti ($t)"; YENILENDI=1; fi
 done < <(bash "$SURUM" denetle --depo "$DEPO" --kurulu "$KURULU_KOK/duzen" 2>/dev/null)
 

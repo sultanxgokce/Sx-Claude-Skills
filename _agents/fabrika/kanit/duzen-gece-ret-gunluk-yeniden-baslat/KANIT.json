@@ -1,0 +1,27 @@
+{
+  "is": "duzen-gece-ret-gunluk-yeniden-baslat",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-02T03:38:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duzen-gece sinavi G21 G22 G23 ve iki mutant",
+      "asama": "tek",
+      "dosya": "olcum-duzen-gece sinavi G21 G22 G23 ve iki mutant-tek.txt",
+      "sha256": "780184fbe9daf01893c705d1fa980cab4087b59dcade597a4273a9c9258004ec",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T03:38:11+03:00",
+      "sure_sn": 30.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "04a18dd247204d0aaf0fb72a9c81775f",
+      "olculen_commit": "3908293009fa014c9d6bb76a512f2f5b8a0581ad",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "e5a195ca798151514e44242622db3257754708fb653fe2bc2f25b8f33d528d6b"
+}
