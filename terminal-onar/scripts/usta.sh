@@ -53,7 +53,7 @@ for line in open(sys.argv[1], encoding='utf-8'):
     if m and cur is not None: cur.setdefault(m.group(1), temiz(m.group(2)))
 for u in uyeler:
     ad = u.get('ad') or u.get('id') or ''
-    if ad and u.get('klasor'): print('\t'.join([ad, u['klasor'], u.get('sohbet') or u.get('session_id', '')]))
+    if ad and u.get('klasor') and u.get('koltuk', '').lower() == 'yok': print('\t'.join([ad, u['klasor'], u.get('sohbet') or u.get('session_id', '')]))
 PY
 }
 usta_satir() { ustalar | awk -F'\t' -v a="$1" '$1==a{print; exit}'; }
@@ -61,19 +61,23 @@ kod() { printf '%s' "$1" | sed 's#[/._]#-#g'; }     # mutlak yol → claude proj
 uyanik_mi() { "$TM" has-session -t "=$1" 2>/dev/null; }
 son_etkinlik() { local v; v="$("$TM" list-sessions -F '#{session_name} #{session_activity}' 2>/dev/null | awk -v a="$1" '$1==a{print $2; exit}')"; case "$v" in ''|*[!0-9]*) echo 0;; *) echo "$v";; esac; }
 
-uyut_et() { # <AD> <klasor-mutlak>
+uyut_et() { # <AD> <klasor-mutlak> → rc 0 yalnız kanca + damga + kapanış DOĞRULANDIYSA; aksi hâlde oturuma DOKUNULMAZ/açık kalır, rc 3
   local ad="$1" kl="$2" t0 sk=0 h="" n
   if uyanik_mi "$ad"; then
-    "$TM" send-keys -t "=$ad" "DURUM.md dosyasını şimdi güncelle: yaptığın, bıraktığın ve sıradaki adımı yaz; sonra bekle." Enter 2>/dev/null
+    "$TM" send-keys -t "=$ad:" "DURUM.md dosyasını şimdi güncelle: yaptığın, bıraktığın ve sıradaki adımı yaz; sonra bekle." Enter 2>/dev/null \
+      || { echo "uyutulamadı: $ad — kapanış kancası Claude'a iletilemedi" >&2; return 3; }
     t0=$(date +%s)
     while [ $(( $(date +%s) - t0 )) -lt "$BEKLE" ]; do
-      sleep 1; n="$("$TM" capture-pane -p -t "=$ad" 2>/dev/null | md5sum)"
+      sleep 1; n="$("$TM" capture-pane -p -t "=$ad:" 2>/dev/null | md5sum)"
       if [ "$n" = "$h" ]; then sk=$((sk+1)); else sk=0; h="$n"; fi
       [ "$sk" -ge "$SAKIN" ] && break
     done
   fi
-  printf '\n- uyutuldu %s (usta.sh)\n' "$(date '+%Y-%m-%d %H:%M')" >> "$kl/DURUM.md" 2>/dev/null
-  "$TM" kill-session -t "=$ad" 2>/dev/null; return 0
+  printf '\n- uyutuldu %s (usta.sh)\n' "$(date '+%Y-%m-%d %H:%M')" >> "$kl/DURUM.md" 2>/dev/null \
+    || { echo "uyutulamadı: $ad — $kl/DURUM.md yazılamadı (oturum açık bırakıldı)" >&2; return 3; }
+  "$TM" kill-session -t "=$ad" 2>/dev/null
+  if uyanik_mi "$ad"; then echo "uyutulamadı: $ad — oturum kapanmadı" >&2; return 3; fi
+  return 0
 }
 mutlak() { case "$1" in /*) printf '%s' "$1";; *) printf '%s/%s' "$PROJE" "$1";; esac; }
 
@@ -97,7 +101,8 @@ case "$KOMUT" in
       en=""; ens=9999999999
       for a in "${uyanikler[@]}"; do e="$(son_etkinlik "$a")"; [ "$e" -lt "$ens" ] && { ens="$e"; en="$a"; }; done
       if [ "$KURU" = 1 ]; then echo "KURU: tavan $TAVAN dolu → en boştaki uyutulur: $en"
-      else uyut_et "$en" "$(mutlak "$(usta_satir "$en" | cut -f2)")"; echo "uyutuldu (tavan): $en"; fi
+      else uyut_et "$en" "$(mutlak "$(usta_satir "$en" | cut -f2)")" || { echo "tavan dolu ($TAVAN) ve en boştaki ($en) uyutulamadı — yeni usta AÇILMADI" >&2; exit 3; }
+        echo "uyutuldu (tavan): $en"; fi
     fi
     if [ "$KURU" = 1 ]; then echo "KURU: $AD ← cd $MK && $CL --resume $S (kilit geçti)"; exit 0; fi
     "$TM" new-session -d -s "$AD" -c "$MK" "$(printf '%q' "$CL") --resume $(printf '%q' "$S")" 2>/dev/null
@@ -107,5 +112,5 @@ case "$KOMUT" in
     sat="$(usta_satir "$AD")"; [ -n "$sat" ] || { echo "usta yok: '$AD'" >&2; exit 5; }
     K="$(mutlak "$(printf '%s' "$sat" | cut -f2)")"
     if [ "$KURU" = 1 ]; then echo "KURU: $AD uyutulur (kanca + $K/DURUM.md damgası)"; exit 0; fi
-    uyut_et "$AD" "$K"; echo "uyutuldu: $AD" ;;
+    uyut_et "$AD" "$K" || exit 3; echo "uyutuldu: $AD" ;;
 esac

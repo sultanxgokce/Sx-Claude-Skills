@@ -19,12 +19,13 @@ uyeler:
   - {ad: ORTA, klasor: ustalar/ORTA, sohbet: sid-ORTA, koltuk: yok}
   - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok}
   - {ad: MUDUR, koltuk: var}
+  - {ad: KLASORLU, klasor: ustalar/KLASORLU, sohbet: sid-K, koltuk: var}
 Y
   export USTA_TMUX="$T/tm" USTA_CLAUDE="$T/claude" USTA_CONFIG="$T/cfg" USTA_PROJE="$P" UYUT_BEKLE_SN=3 UYUT_SAKIN_SN=1
   mkdir -p "$P/ustalar/BASSIZ"
   local O r
   O="$(bash "$U" liste 2>&1)"
-  ok "U1 liste: yalnız klasor alanlı üyeler, durumlarıyla (MUDUR yok, BASSIZ kayit-eksik)" "$([ "$(printf '%s' "$O" | grep -c .)" = 4 ] && printf '%s' "$O" | grep -q $'BASSIZ\tkayit-eksik' && ! printf '%s' "$O" | grep -q MUDUR && echo 1 || echo 0)" "$O"
+  ok "U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok, BASSIZ kayit-eksik)" "$([ "$(printf '%s' "$O" | grep -c .)" = 4 ] && printf '%s' "$O" | grep -q $'BASSIZ\tkayit-eksik' && ! printf '%s' "$O" | grep -q 'MUDUR\|KLASORLU' && echo 1 || echo 0)" "$O"
   O="$(TO_KUTU=sinav TO_PROJE="$P" bash "$(dirname "$U")/koltuk-ac.sh" durum PERGEL 2>&1)"
   ok "U10 koltuk-ac: usta koltuğu yol=usta olarak tanınır (kayıtsız koltuk gibi reddedilmez)" "$(printf '%s' "$O" | grep -q '"yol":"usta"' && echo 1 || echo 0)" "$O"
   # prova: PERGEL'in sohbeti YANLIŞ klasörün proje dizinine konur
@@ -47,6 +48,15 @@ Y
   bash "$U" uyandir ORTA >/dev/null 2>&1; sleep 1
   ok "U7 tavan: gerçek koşuda PERGEL uyutuldu, ORTA uyandı, uyanık sayısı 2" "$(! "$T/tm" has-session -t =PERGEL 2>/dev/null && "$T/tm" has-session -t =ORTA 2>/dev/null && [ "$(bash "$U" liste | grep -c $'\tuyanik\t')" = 2 ] && echo 1 || echo 0)" "$(bash "$U" liste)"
   ok "U8 kapanış kancası: uyutulan ustanın DURUM.md dosyasına uyutma damgası düştü" "$(grep -q 'uyutuldu' "$P/ustalar/PERGEL/DURUM.md" 2>/dev/null && echo 1 || echo 0)" "$(cat "$P/ustalar/PERGEL/DURUM.md" 2>&1)"
+  # başarısızlık: DURUM.md yazılamıyorsa (salt-okur klasör) uyut REDDEDER, oturum açık kalır
+  bash "$U" uyandir KUKLACI >/dev/null 2>&1; sleep 1; chmod a-w "$P/ustalar/KUKLACI"; rm -f "$P/ustalar/KUKLACI/DURUM.md" 2>/dev/null
+  O="$(bash "$U" uyut KUKLACI 2>&1)"; r=$?
+  ok "U11 DURUM.md yazılamazsa uyut rc 3 ve oturum AÇIK kalır (sessiz başarı yok)" "$([ "$r" = 3 ] && "$T/tm" has-session -t =KUKLACI 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
+  # tavan + uyutulamayan en boştaki → yeni usta AÇILMAZ (fail-closed)
+  export UST_TAVAN=2; chmod a-w "$P/ustalar/ORTA"; rm -f "$P/ustalar/ORTA/DURUM.md" 2>/dev/null
+  O="$(bash "$U" uyandir PERGEL 2>&1)"; r=$?
+  ok "U12 tavan dolu + en boştaki uyutulamıyor → rc 3, yeni usta AÇILMADI" "$([ "$r" = 0 ] && echo 0 || { [ "$r" = 3 ] && echo 1 || echo 0; })" "rc=$r $O"
+  chmod u+w "$P/ustalar/KUKLACI" "$P/ustalar/ORTA"; unset UST_TAVAN
   bash "$U" uyut KUKLACI >/dev/null 2>&1
   ok "U9 uyut: oturum kapandı + DURUM.md damgası" "$(! "$T/tm" has-session -t =KUKLACI 2>/dev/null && grep -q uyutuldu "$P/ustalar/KUKLACI/DURUM.md" && echo 1 || echo 0)"
   "$T/tm" kill-server 2>/dev/null; find "$T" -delete 2>/dev/null; unset UST_TAVAN
@@ -66,6 +76,9 @@ mut "tavan yok sayılır" '[ "${#uyanikler[@]}" -ge "$TAVAN" ]' 'false'
 mut "en boştaki yerine listedeki son usta uyutulur" '[ "$e" -lt "$ens" ] &&' 'true &&'
 mut "DURUM.md damgası yok" "printf '\\n- uyutuldu" "true '\\n- uyutuldu"
 mut "claude ustanın klasöründe açılmaz" '-c "$MK"' '-c "$PROJE"'
+mut "koltuklu üye de usta sayılır" "u.get('koltuk', '').lower() == 'yok'" "True"
+mut "tavanda uyutulamayan olsa da yeni usta açılır" 'uyutulamadı — yeni usta AÇILMADI" >&2; exit 3; }' 'uyutulamadı — yeni usta AÇILMADI" >&2; }'
+mut "DURUM.md yazılamasa da oturum kapatılır" 'yazılamadı (oturum açık bırakıldı)" >&2; return 3; }' 'yazılamadı (oturum açık bırakıldı)" >&2; }'
 mut "sohbetsiz usta açılır" '[ -n "$S" ] || {' 'false || {'
 # koltuk-ac mutantı: usta yolu tanınmaz
 cp "$HERE/usta.sh" "$M/usta.sh"; cp "$HERE/koltuk-ac.sh" "$M/koltuk-ac.sh"
@@ -73,4 +86,4 @@ python3 -I -c "import sys;p=sys.argv[1];s=open(p,encoding='utf-8').read();a='if 
 g=$G; k=$K; G=0; K=0; kos "$M/usta.sh" >"$M/o.txt" 2>&1; kk=$K; G=$g; K=$k
 if [ "$kk" -gt 0 ]; then echo "  ✓ koltuk-ac usta yolunu tanımaz: yakalandı ($kk kapı kırmızı)"; else echo "  ✗ koltuk-ac usta yolunu tanımaz: sınav YEŞİL kaldı"; MK=$((MK+1)); fi
 find "$M" -delete 2>/dev/null
-[ "$MK" -eq 0 ] && echo "MUTANT: 7/7 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: 10/10 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
