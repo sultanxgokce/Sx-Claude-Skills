@@ -1,7 +1,7 @@
 {
   "is": "dumen-sekme-secimi",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-02T10:56:35+03:00",
+  "guncelleme": "2026-11-02T11:02:28+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -97,7 +97,26 @@
       "olcum_id": "d9914fe4faa342c19f3e03d0e610eab3",
       "olculen_commit": "fc5e76baec55b718d6acd9d08722c78d360e7300",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen sinavi 58 kapi 26 mutant tur6 yeniden",
+      "asama": "tek",
+      "dosya": "olcum-dumen sinavi 58 kapi 26 mutant tur6 yeniden-tek.txt",
+      "sha256": "a5c7d31e0512e6ccc5626f1408d951fa51367c35ae70172daeec638dd4e8e170",
+      "komut": [
+        "bash",
+        "dumen-surucu/scripts/dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-02T11:02:28+03:00",
+      "sure_sn": 300.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "86e9f3fa892749db906c2fef4b14fc93",
+      "olculen_commit": "3ade69deee803c63bfa54654fb90c7cf0de55b2e",
+      "olculen_kirli": false
     }
   ],
-  "imza": "dbb61efc0d74286ca804cc7ee0a1099b0f28d4eeef6fa22311bd484e20aa7005"
+  "imza": "c704ac76417feefe0be54c305be4e3437aa3a4f5b400cd629bb1743a73d7b6c3"
 }
