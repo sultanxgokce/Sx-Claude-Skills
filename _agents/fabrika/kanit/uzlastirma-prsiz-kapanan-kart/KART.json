@@ -34,6 +34,20 @@
       "zaman": "2026-11-03T20:06:09+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-03T20:08:23+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c",
+      "gerekce": "Tur 2 bulgusu yanlış pozitif: göz tavanı değişikliği #680 main birleşmesinden geldi, PR'ın main'e karşı farkında yok; ölçüm kanıt dizininde (olcum-PR farkı main'e karşı). Kod değişmedi, tur 1 5/E idi.",
+      "zaman": "2026-11-03T20:10:24+03:00"
     }
   ]
 }
