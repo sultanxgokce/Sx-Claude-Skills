@@ -683,6 +683,9 @@ _s27() {   # _s27 <kanit.py> <depo> → geçen kapı anahtarları
   KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-kacti --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✓ K1"; exit 0' >/dev/null 2>&1; r=$?
   [ $r -eq 0 ] && [ "$(_r27 m-kacti)" = "kirmizi K1 False" ] && o="$o h"
   # i · özet tablosu hedef kapıyı gösterir
+  # k · benzer ad: --kapi K1, düşen '✗ K10' satırı K1 sayılmaz (tam sözcük eşleşmesi) → SARI
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-benzer --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✗ K10 başka kapı"; echo "  ✗ K12 öteki"; exit 1' >/dev/null 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r27 m-benzer)" = "sari K1 False" ] && o="$o k"
   KANIT_DEPO="$d" python3 "$py" ozet is-m27 > "$d/oz" 2>&1; grep -E '\| m-hedef \|' "$d/oz" | grep -q "hedef kapı K1" && o="$o i"
   KANIT_DEPO="$d" python3 "$py" dogrula is-m27 >/dev/null 2>&1 && o="$o j"
   echo "$o"
@@ -697,6 +700,7 @@ _k25 f "$s27"; g $? "T27f kapı adı çıktıda düşen satırdan başka yerde g
 _k25 g "$s27"; g $? "T27g kurulamayan mutant (rc 9) hedef adı düşen satırda geçse de yakalandı değil, SARI"
 _k25 h "$s27"; g $? "T27h kaçan mutant (rc 0) eskisi gibi KIRMIZI"
 _k25 i "$s27"; g $? "T27i özet tablosu hedef kapıyı gösterir"
+_k25 k "$s27"; g $? "T27k benzer ad (K1 ⟷ ✗ K10 · ✗ K12) hedef sayılmaz: tam sözcük eşleşmesi, SARI"
 _k25 j "$s27"; g $? "T27j manifest imzası sağlam (dogrula)"
 echo "── T27 · MUTASYON (tam kopyada, kontrol şartlı) ──"
 _m27() {   # _m27 <anahtar> <eski> <yeni> <açıklama>
@@ -710,8 +714,9 @@ PY
 }
 _kd27="$T/m27-kontrol"; mkdir -p "$_kd27/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" "$_kd27/pkg/"; [ "$(_s27 "$_kd27/pkg/kanit.py" "$_kd27/depo")" = "$s27" ] && [ -n "$s27" ]; g $? "T27 kontrol kopyası gerçek araçla aynı kapıları geçiyor"
 _m27 a '    if a.mutasyon is not None and not kapi_adi:' '    if False:' "kapı adı istenmiyor"
-_m27 e '    hedef_dustu = bool(mut) and any(kapi_adi in l for l in dusen_satirlar(p.stdout + "\n" + p.stderr))' '    hedef_dustu = bool(mut) and dusen_kapi' "başka kapı düşmesi de yakalandı sayılıyor"
-_m27 f 'any(kapi_adi in l for l in dusen_satirlar(' 'any(kapi_adi in l for l in (p.stdout + "\n" + p.stderr).splitlines() or dusen_satirlar(' "ad çıktının her satırında aranıyor"
+_m27 e '    hedef_dustu = bool(mut) and any(hedef_kapi_re.search(l) for l in dusen_satirlar(p.stdout + "\n" + p.stderr))' '    hedef_dustu = bool(mut) and dusen_kapi' "başka kapı düşmesi de yakalandı sayılıyor"
+_m27 f 'for l in dusen_satirlar(p.stdout' 'for l in (p.stdout + "\n" + p.stderr).splitlines() or dusen_satirlar(p.stdout' "ad çıktının her satırında aranıyor"
+_m27 k '(?<!\w)" + re.escape(kapi_adi) + r"(?!\w)' '" + re.escape(kapi_adi) + r"' "kapı adı alt dize olarak aranıyor"
 _m27 g '        elif p.returncode in (3, 9) or not dusen_kapi or not hedef_dustu:' '        elif p.returncode == 3 or not hedef_dustu:' "rc 9 kurulum hatası yine yakalandı sayılıyor"
 _m27 c '    if kapi_adi and (DUSEN_KAPI_RE.search(kapi_adi)' '    if kapi_adi and (False' "genel ad (FAIL · ✗) kapı adı sayılıyor"
 

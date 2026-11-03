@@ -1,5 +1,5 @@
 $ timeout 1500 bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=37.6s zaman=2026-11-03T15:43:32+03:00
+# rc=0 sure=41.3s zaman=2026-11-03T16:11:50+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -271,12 +271,14 @@ $ timeout 1500 bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ T27g kurulamayan mutant (rc 9) hedef adı düşen satırda geçse de yakalandı değil, SARI
   ✓ T27h kaçan mutant (rc 0) eskisi gibi KIRMIZI
   ✓ T27i özet tablosu hedef kapıyı gösterir
+  ✓ T27k benzer ad (K1 ⟷ ✗ K10 · ✗ K12) hedef sayılmaz: tam sözcük eşleşmesi, SARI
   ✓ T27j manifest imzası sağlam (dogrula)
 ── T27 · MUTASYON (tam kopyada, kontrol şartlı) ──
   ✓ T27 kontrol kopyası gerçek araçla aynı kapıları geçiyor
   ✓ T27 mutant (kapı adı istenmiyor) → 'a' kapısı düşüyor
   ✓ T27 mutant (başka kapı düşmesi de yakalandı sayılıyor) → 'e' kapısı düşüyor
   ✓ T27 mutant (ad çıktının her satırında aranıyor) → 'f' kapısı düşüyor
+  ✓ T27 mutant (kapı adı alt dize olarak aranıyor) → 'k' kapısı düşüyor
   ✓ T27 mutant (rc 9 kurulum hatası yine yakalandı sayılıyor) → 'g' kapısı düşüyor
   ✓ T27 mutant (genel ad (FAIL · ✗) kapı adı sayılıyor) → 'c' kapısı düşüyor
 ════ T-UB · ÜÇ BOY (görev 4PZV4): tek komut → 1440/1280/390 her boy AYRI imzalı kayıt; bir boy düşerse komut yeşil DÖNMEZ ════
@@ -309,5 +311,5 @@ $ timeout 1500 bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ TB6 mutant üretildi (desen tuttu)
   ✓ TB6b MUTASYON: kapı sökülünce birincile yazılır (kapı gerçekten çalışıyor)
 
-── SONUÇ: 273 geçti · 0 kaldı ──
+── SONUÇ: 275 geçti · 0 kaldı ──
 --- stderr ---

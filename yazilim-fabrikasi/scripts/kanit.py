@@ -417,7 +417,8 @@ def cmd_olcum(a):
     p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
     dusen_kapi = bool(DUSEN_KAPI_RE.search(p.stdout + "\n" + p.stderr)) if mut else None   # düşen kapı satırı var mı (yalnız mutasyonda anlamlı)
-    hedef_dustu = bool(mut) and any(kapi_adi in l for l in dusen_satirlar(p.stdout + "\n" + p.stderr))   # ADI VERİLEN kapı düşen bir satırda mı
+    hedef_kapi_re = re.compile(r"(?<!\w)" + re.escape(kapi_adi) + r"(?!\w)") if kapi_adi else None   # TAM sözcük: K1, K10'u yakalamaz (göz tur 1)
+    hedef_dustu = bool(mut) and any(hedef_kapi_re.search(l) for l in dusen_satirlar(p.stdout + "\n" + p.stderr))   # ADI VERİLEN kapı düşen bir satırda mı
     with open(yol, "w", encoding="utf-8") as f:
         if mut:
             if p.returncode == 0: hukum = "rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti)"

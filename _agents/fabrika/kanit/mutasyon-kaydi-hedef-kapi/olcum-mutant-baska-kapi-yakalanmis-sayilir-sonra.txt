@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: T27e · rc≠0 + hedef kapı 'T27e' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kanit-sinavi-* ===
 $ timeout 1500 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/mk-mut/kanit.test.sh
-# rc=1 sure=35.7s zaman=2026-11-03T15:44:08+03:00
+# rc=1 sure=44.7s zaman=2026-11-03T16:12:35+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -272,12 +272,14 @@ $ timeout 1500 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-9
   ✓ T27g kurulamayan mutant (rc 9) hedef adı düşen satırda geçse de yakalandı değil, SARI
   ✓ T27h kaçan mutant (rc 0) eskisi gibi KIRMIZI
   ✓ T27i özet tablosu hedef kapıyı gösterir
+  ✗ T27k benzer ad (K1 ⟷ ✗ K10 · ✗ K12) hedef sayılmaz: tam sözcük eşleşmesi, SARI
   ✓ T27j manifest imzası sağlam (dogrula)
 ── T27 · MUTASYON (tam kopyada, kontrol şartlı) ──
   ✓ T27 kontrol kopyası gerçek araçla aynı kapıları geçiyor
   ✓ T27 mutant (kapı adı istenmiyor) → 'a' kapısı düşüyor
   ✗ T27 mutant e: desen tutmadı (başka kapı düşmesi de yakalandı sayılıyor)
   ✗ T27 mutant f: desen tutmadı (ad çıktının her satırında aranıyor)
+  ✓ T27 mutant (kapı adı alt dize olarak aranıyor) → 'k' kapısı düşüyor
   ✓ T27 mutant (rc 9 kurulum hatası yine yakalandı sayılıyor) → 'g' kapısı düşüyor
   ✓ T27 mutant (genel ad (FAIL · ✗) kapı adı sayılıyor) → 'c' kapısı düşüyor
 ════ T-UB · ÜÇ BOY (görev 4PZV4): tek komut → 1440/1280/390 her boy AYRI imzalı kayıt; bir boy düşerse komut yeşil DÖNMEZ ════
@@ -310,11 +312,11 @@ $ timeout 1500 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-9
   ✓ TB6 mutant üretildi (desen tuttu)
   ✓ TB6b MUTASYON: kapı sökülünce birincile yazılır (kapı gerçekten çalışıyor)
 
-── SONUÇ: 269 geçti · 4 kaldı ──
+── SONUÇ: 270 geçti · 5 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
-AssertionError: mutasyon deseni tek değil:     hedef_dustu = bool(mut) and any(kapi_adi in l for l in dusen_satirlar(p.stdout + "\n" + p.stderr))
+AssertionError: mutasyon deseni tek değil:     hedef_dustu = bool(mut) and any(hedef_kapi_re.search(l) for l in dusen_satirlar(p.stdout + "\n" + p.stderr))
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
-AssertionError: mutasyon deseni tek değil: any(kapi_adi in l for l in dusen_satirlar(
+AssertionError: mutasyon deseni tek değil: for l in dusen_satirlar(p.stdout
