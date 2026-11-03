@@ -688,7 +688,7 @@ fi   # IC_BOLUM=zil atlaması sonu
 if [ "${IC_BOLUM:-}" != zil ] && [ "$GERCEK_BENDE" = e ]; then
 echo "════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════"
 kartac is-mutk; bash "$K" olcum is-mutk gercek --asama tek -- bash -c 'echo "  ✓ K5 kilit tutuyor"; exit 0' >/dev/null 2>&1
-bash "$K" olcum is-mutk mut-k5 --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K5 kilit tutuyor"; exit 1' >/dev/null 2>&1
+bash "$K" olcum is-mutk mut-k5 --asama tek --mutasyon gercek --kapi K5 -- bash -c 'echo "  ✗ K5 kilit tutuyor"; exit 1' >/dev/null 2>&1
 printf 'diff --git a/x b/x\n+mut\n' > "$T/mut.patch"   # ortak d.patch ve sahte.sh önceki bölümlerde silinir → kendi patch'i ve sahtesi
 MS="$T/mut-sahte.sh"; printf '#!/usr/bin/env bash\ncp "$1" "%s"; printf "%%s" "$SAHTE_JSON"\n' "$T/istem-mut.md" > "$MS"; chmod +x "$MS"
 SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$MS" bash "$D" is-mutk --diff "$T/mut.patch" >/dev/null 2>&1
