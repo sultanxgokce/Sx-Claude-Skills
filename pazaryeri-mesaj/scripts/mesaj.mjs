@@ -10,7 +10,7 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { haritaYukle, cevapsizlariOku, cevapGonder, damgaDogrula, gondermeAcikMi, sohbetCoz, kirp, MesajHata, PAZARLAR } from './pazar.mjs';
+import { haritaYukle, cevapsizlariOku, cevapGonder, damgaDogrula, gondermeAcikMi, sohbetCoz, kirp, parmakIzi, kilitOku, kilitYaz, MesajHata, PAZARLAR } from './pazar.mjs';
 
 const BURASI = dirname(fileURLToPath(import.meta.url));
 const DUMEN_LIB = process.env.DUMEN_LIB || resolve(BURASI, '..', '..', 'dumen-surucu', 'scripts', 'dumen.mjs');
@@ -70,12 +70,14 @@ function taslak() {
   const harita = haritaYukle(); const k = gondermeAcikMi(harita, pazar);
   const g = gorevSh();
   if (!g) throw new MesajHata('defter', 'görev defteri komutu bulunamadı (PAZARYERI_GOREV_SH ver)', 3);
-  const baslik = `Pazaryeri cevabı onayı · ${harita[pazar].ad} · sohbet ${sohbet}`;
-  const not = `Müşteri mesajı: ${ozet || '(özet verilmedi)'} | Cevap taslağı: ${kirp(metin, 600)}${k.acik ? '' : ' | DİKKAT: bu pazarda gönderme kapalı (' + k.neden + ')'}`;
+  const iz = parmakIzi(metin);
+  const baslik = `Pazaryeri cevabı onayı · ${harita[pazar].ad} · sohbet ${sohbet} · ${iz}`;
+  const not = `Müşteri mesajı: ${ozet || '(özet verilmedi)'} | Cevap taslağı (${iz}): ${kirp(metin, 600)}${k.acik ? '' : ' | DİKKAT: bu pazarda gönderme kapalı (' + k.neden + ')'}`;
   const r = spawnSync('bash', [g, 'ac', baslik, '--durum', 'sira-bende', '--kapi', 'karar', '--eylem', 'onay', '--not', not, '--ozet', `Sultan'ın onayı bekleniyor: ${harita[pazar].ad} sohbet ${sohbet} cevabı`], { encoding: 'utf8' });
   process.stdout.write(r.stdout || ''); process.stderr.write(r.stderr || '');
   if (r.status !== 0) throw new MesajHata('defter', `görev defteri yazımı başarısız (rc ${r.status})`, 3);
-  yaz(`taslak Sultan'a sunuldu · onaylayınca: node mesaj.mjs gonder ${pazar}:${sohbet} --metin-dosya <yol> --onay "<Sultan D1 damgası (sohbet ${sohbet} anılsın)>"`);
+  const gid = (/(gorev_[0-9A-Za-z]{8,})/.exec(r.stdout || '') || [])[1] || '';
+  yaz(`taslak Sultan'a sunuldu${gid ? ' · görev ' + gid : ''} · parmak izi ${iz} · onaylayınca (damgada sohbet ${sohbet} VE ${iz} anılsın): node mesaj.mjs gonder ${pazar}:${sohbet} --metin-dosya <taslağın aynısı> --onay "<Sultan D1 damgası>"${gid ? ' --gorev ' + gid : ''}`);
   return 0;
 }
 
@@ -88,14 +90,17 @@ async function gonder() {
   const harita = haritaYukle();
   const k = gondermeAcikMi(harita, pazar);
   if (!k.acik) throw new MesajHata('karar', `${harita[pazar].ad}: gönderme KAPALI — ${k.neden}`, 2);
-  const dmg = damgaDogrula(onay, sohbet);
+  const dmg = damgaDogrula(onay, sohbet, metin);
   const gorev = sec('--gorev', '');
+  const kilit = kilitOku(pazar, sohbet); const yeniden = sec('--yeniden', '');
+  if (kilit && kilit.durum === 'gonderildi') throw new MesajHata('kilit', `${pazar}:${sohbet} için cevap ${kilit.an} anında GÖNDERİLDİ — ikinci gönderim yok (yeni bir cevap yeni taslak+onay ister; kilit: ${kilit.parmak})`, 2);
+  if (kilit && kilit.durum === 'belirsiz' && yeniden.length < 10) throw new MesajHata('kilit', `${pazar}:${sohbet} için ${kilit.an} anında gönder düğmesine basıldı, sonucu DOĞRULANAMADI — çift mesaj riski; Dümen'den bak, gitmediyse --yeniden "<ne gördüğün>" ile yeniden dene`, 2);
   const d = await dumenAc();
   let s;
-  try { s = await cevapGonder(d, harita, pazar, sohbet, metin); }
+  try { s = await cevapGonder(d, harita, pazar, sohbet, metin, { parmak: parmakIzi(metin) }); }
   catch (e) { const rc = kapiHatasi(e); if (rc) return rc; throw e; }
   finally { await d.kapat().catch(() => {}); }
-  if (!s.gonderildi) { hata(`ÖLÇÜLEMEDİ: gönder düğmesine basıldı ama cevabın izi ("${s.iz}") sayfada görülmedi — Dümen'den bak, bulgu yaz`); return 3; }
+  if (!s.gonderildi) { hata(`BELİRSİZ: gönder düğmesine basıldı ama cevabın izi ("${s.iz}") sayfada görülmedi — GÖNDERİLMİŞ OLABİLİR; yeniden DENEME, Dümen'den bak (kilit yazıldı, ikinci deneme --yeniden ister), bulgu yaz`); return 3; }
   yaz(`gönderildi · ${pazar}:${sohbet} · onay ${dmg.tarih} (${dmg.kaynak} · ${dmg.ref}) · beyan:${dmg.beyan}`);
   const g = gorevSh();
   if (gorev && g) { const r = spawnSync('bash', [g, 'adim', gorev, `[gönderildi] ${harita[pazar].ad} sohbet ${sohbet} · onay: ${String(onay).slice(0, 160)}`], { encoding: 'utf8' }); if (r.status !== 0) hata(`⚠ görev adımı yazılamadı (rc ${r.status}) — gönderim oldu, defter kaydı elle`); }

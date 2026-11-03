@@ -8,7 +8,7 @@ version: 0.1.0
 
 **Durum (3 Kas 2026): İSKELET KURULU, GERÇEK SAYFADA ÖLÇÜLMEDİ.** Sayfa haritası (`HARITA.json`) tahminle yazıldı ve `olculdu:false`; seçici
 tutmayınca araç **ÖLÇÜLEMEDİ** (rc 3) der, tahmin etmez. İlk gerçek tur NARH'ta (mmex): seçicileri gerçek sayfadan düzelt, `olculdu:true` yap,
-ders yaz. Sınav hermetik (sahte paneller + gerçek Chromium + gerçek Dümen sürücüsü): 29 kapı + 8 mutant.
+ders yaz. Sınav hermetik (sahte paneller + gerçek Chromium + gerçek Dümen sürücüsü): 41 kapı + 13 mutant.
 
 ## Niçin var
 Görev …ZB3C0Q (Sultan D1 2 Kas: *"NARH giriş için sürekli izin istemez; açık oturumda yürür, kapalıysa tek satır yazar"*). HEZARFEN bıraktı
@@ -17,10 +17,16 @@ soruldu — karar gelene dek Amazon'da **gönderme kapalı**, okuma + taslak aç
 
 ## Değişmezler (pazarlıksız)
 - **Onaysız tek mesaj gitmez.** `gonder` Sultan'ın D1 damgasını ister: `YYYY-MM-DD Sultan: onay (<kaynak> · <ref> · "<kırpık>" · beyan:<AJAN>)`,
-  tarih BUGÜN, damga metni **o sohbetin kimliğini** anmalı. Başka mesajın onayı taşınmaz, dünkü onay yetmez. Ajan Sultan'ın sözünü ÜRETMEZ,
-  gördüğünü referanslar (A06).
-- **Amazon'da gönderme kilidi:** `/config/.claude/pazaryeri-mesaj/amazon-gonderme.json` → `{"gonderme":"acik","karar":"<Sultan D1 damgası>"}`
-  olmadan `gonder amazon:…` rc 2. Dosyayı yalnız Sultan'ın kararıyla reis yazar. Trendyol'da kilit yok.
+  tarih BUGÜN, damga metni **o sohbetin kimliğini VE cevabın parmak izini** (`cevap#…`, `taslak` üretir, görev başlığına/notuna girer) anmalı.
+  Başka mesajın onayı taşınmaz, dünkü onay yetmez, **onaydan sonra değişen metin gitmez** (göz tur 1). Ajan Sultan'ın sözünü ÜRETMEZ, gördüğünü
+  referanslar (A06).
+- **Çift mesaj yok (gönderim kilidi):** düğmeye basmadan önce `<kilit dizini>/<pazar>-<sohbet>.json` yazılır; iz doğrulanınca `gonderildi`
+  (aynı sohbete ikinci `gonder` rc 2 — yeni cevap yeni taslak+onay ister), doğrulanamazsa `belirsiz` (rc 3 "GÖNDERİLMİŞ OLABİLİR", ikinci deneme
+  yalnız `--yeniden "<Dümen'den ne gördüğün>"` ile). Düğmeden ÖNCE sayfada cevabın izi zaten varsa gönderilmez (rc 2). Kilit dizini
+  `PAZARYERI_KILIT` (varsayılan `/config/.claude/pazaryeri-mesaj/gonderim`).
+- **Amazon'da gönderme kilidi:** `/config/.claude/pazaryeri-mesaj/amazon-gonderme.json` → `{"gonderme":"acik","karar":"<Sultan D1 damgası>",
+  "gecerli_gun":90}` olmadan `gonder amazon:…` rc 2. Karar **süresiz değil**: damga tarihinden `gecerli_gun` (varsayılan 90, en çok 365) sonra
+  kapanır, tazelenir. Dosyayı yalnız Sultan'ın kararıyla reis yazar. Trendyol'da kilit yok.
 - **Parola / SMS / kod / ödeme alanına ajan yazmaz** (dumen-surucu durma noktası). Oturum kapalıysa rc 10 + "Sultan Dümen'de girsin"; giriş
   sayfasına düşünce başka eylem yok.
 - **Dümen Sultan'daysa** okuma da gönderme de yok: rc 20, "⏸ Dümen Sultan'da · bekliyorum"; geri verince komut yeniden koşulur.
@@ -61,7 +67,8 @@ HARITA'ya işle (müşteri adı seçicisi YOK), yeniden koş. 3. Bir mesaj için
 - Trendyol tarafında "ürün sorusu" ile "sipariş mesajı" ayrı sayfalar olabilir (Ticimax rehberi); harita ilk turda bölünebilir.
 
 ## Sınav
-`bash scripts/mesaj.test.sh` — K1–K10 çekirdek (kırpma · damga · Amazon kilidi), O1–O6 okuma (Dümen + sahte paneller: giriş sayfası, Sultan modu,
+`bash scripts/mesaj.test.sh` — K1–K12 çekirdek (kırpma · damga + parmak izi · Amazon kilidi + süre), O1–O6 okuma (+ seçici alternatifleri) (Dümen + sahte paneller: giriş sayfası, Sultan modu,
 harita tutmama), T1–T4 taslak (sahte gorev.sh: sıra sende · karar · onay, maskeli not), G1–G9 gönderme (onaysız · başka sohbet · dünkü · Amazon
-kilidi · onaylı Trendyol · Sultan kararlı Amazon · Sultan modu · komut satırı metni). 8 mutant: onay/damga/karar/giriş/KVKK/harita/Sultan-modu
-kapıları gevşeyince sınav kırmızıya döner. Chromium yoksa rc 3 (ÖLÇÜLEMEDİ).
+kilidi · onaylı Trendyol · Sultan kararlı Amazon · değişmiş metin · ikinci gönderim kilidi · belirsiz gönderim + --yeniden · iz zaten var · Sultan modu
+· komut satırı metni). 13 mutant (üçer paralel): onay/parmak izi/damga/karar+süre/giriş/KVKK/harita/kilit/Sultan-modu kapıları gevşeyince sınav
+kırmızıya döner. Chromium yoksa rc 3 (ÖLÇÜLEMEDİ).

@@ -1,7 +1,7 @@
 {
   "is": "pazaryeri-mesaj",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T08:52:19+03:00",
+  "guncelleme": "2026-11-03T09:15:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -62,7 +62,47 @@
       "olcum_id": "4e96afca826a4e3f82a44745665e9644",
       "olculen_commit": "c6befefeeda9836b419fb6e78e817da4a4b571c6",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mesaj-sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-mesaj-sinav-tur2-sonra.txt",
+      "sha256": "32608f894d5f4878bb33753659566d80a4981fb95f6a737cac29c95de3046a01",
+      "komut": [
+        "bash",
+        "-c",
+        "cd pazaryeri-mesaj/scripts && timeout 580 bash mesaj.test.sh"
+      ],
+      "rc": 124,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T09:07:46+03:00",
+      "sure_sn": 580.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1a798e9aaf3c42369ffd3d513923870f",
+      "olculen_commit": "3f94d5cac1590178f80e1e1aedc54c32bca48018",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mesaj-sinav-tur2b",
+      "asama": "sonra",
+      "dosya": "olcum-mesaj-sinav-tur2b-sonra.txt",
+      "sha256": "5da317276f971c3fcd2b5337f8e6971017881f65be3280e73bbc1dfe92e4d2bc",
+      "komut": [
+        "bash",
+        "-c",
+        "cd pazaryeri-mesaj/scripts && timeout 880 bash mesaj.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T09:15:08+03:00",
+      "sure_sn": 403.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "2f6d6fa0735e4958a9de62b0c0010b86",
+      "olculen_commit": "3f94d5cac1590178f80e1e1aedc54c32bca48018",
+      "olculen_kirli": true
     }
   ],
-  "imza": "355aee924ac9def9bada42c0acbd3e74b94441df65eb82043ad9c0973297ce9e"
+  "imza": "9efc0c4bacbf78d6a8684b2debd2d31dc6bf73815a8042478ba19538e074581b"
 }

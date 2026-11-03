@@ -1,0 +1,66 @@
+$ bash -c cd pazaryeri-mesaj/scripts && timeout 880 bash mesaj.test.sh
+# rc=0 sure=403.1s zaman=2026-11-03T09:15:08+03:00
+--- stdout ---
+── çekirdek (Chromium gerekmez)
+  ✓ K1 kırpma: telefon, e-posta, IBAN, kart desenleri maskelenir
+  ✓ K2 kırpma: uzunluk tavanı 160
+  ✓ K3 damga: biçimsiz reddedilir
+  ✓ K4 damga: dünkü tarih reddedilir
+  ✓ K5 damga: başka sohbetin onayı taşınmaz
+  ✓ K5b damga: onaylanan metin değiştiyse (parmak izi tutmaz) reddedilir
+  ✓ K5c damga: parmak izi olmayan damga reddedilir
+  ✓ K6 damga: doğru damga geçer, parçaları döner
+  ✓ K7 Amazon gönderme: karar dosyası yokken KAPALI
+  ✓ K8 Amazon gönderme: dosya var ama Sultan damgası yoksa KAPALI
+  ✓ K9 Amazon gönderme: Sultan kararıyla AÇIK
+  ✓ K10 Trendyol gönderme: karar gerekmez
+  ✓ K11 Amazon gönderme: 90 günden eski karar KAPALI (karar süresiz değil)
+  ✓ K12 Amazon gönderme: gecerli_gun tavanı 365 (4000 verilse de bir yıldan eski karar kapalı)
+── oku (Dümen + sahte sayfalar)
+  ✓ O1 oku: iki pazardan üç cevapsız sohbet (cevaplanmışlar yok)
+  ✓ O2 oku: özet mesaj gövdesinden, müşteri adı ve telefonu HİÇ yok, e-posta maskeli
+  ✓ O3 oku --pazar trendyol: yalnız Trendyol, insan okunur satır
+  ✓ O4 oku: giriş sayfasına düşünce rc 10, parola yazılmaz, "Sultan Dümen'de girsin"
+  ✓ O5 oku: Dümen Sultan'dayken rc 20, eylem yok
+  ✓ O5b oku: önizleme seçicisinin İKİNCİ alternatifi de denenir (ilk tutmayınca)
+  ✓ O6 oku: harita tutmazsa ÖLÇÜLEMEDİ rc 3 (tahmin yok)
+── taslak (görev defteri)
+  ✓ T1 taslak: görev defterine sıra sende · karar · onay kaydı açıldı
+  ✓ T2 taslak: notta müşteri özeti + cevap taslağı, telefon maskeli
+  ✓ T3 taslak: sonraki adım (gonder --onay) yazdırılır, parmak izi ve görev kimliği verilir
+  ✓ T3b taslak: parmak izi görev başlığında ve notta (Sultan onayladığı metni tanır)
+  ✓ T4 taslak Amazon: gönderme kapalı uyarısı notta (karar dosyası sıfırlandı)
+── gonder (onay kapısı + Dümen)
+  ✓ G1 gonder onaysız: rc 2, hiçbir şey gitmedi
+  ✓ G2 gonder başka sohbetin damgasıyla: rc 2, gitmedi
+  ✓ G3 gonder dünkü damgayla: rc 2, gitmedi
+  ✓ G3b gonder onaydan SONRA değişmiş metinle: rc 2 (parmak izi tutmaz), gitmedi
+  ✓ G4 gonder Amazon Sultan kararı yokken: rc 2, gitmedi (okuma/taslak açık, gönderme kapalı)
+  ✓ G5 gonder Trendyol onaylı: cevap sahte panele ulaştı, metin birebir
+  ✓ G6 gonder: çıktıda onay tarihi/ref/beyan, görev defterine [gönderildi] adımı
+  ✓ G7 gonder Amazon Sultan kararı + damga: gitti
+  ✓ G7b gonder aynı sohbete İKİNCİ kez: kilit (gönderildi) → rc 2, çift mesaj yok
+  ✓ G7z gonder: cevabın izi sayfada ZATEN varsa (daha önce gitmiş) rc 2, gönderilmez
+  ✓ G7c gonder izi doğrulanamayınca: rc 3 "BELİRSİZ, gönderilmiş olabilir", kilit belirsiz, yeniden DENEME der
+  ✓ G7d belirsiz kilit varken ikinci gonder: rc 2, --yeniden ister, gitmedi
+  ✓ G7e --yeniden "<ne gördüğün>" ile belirsiz kilit açılır, gönderim doğrulanır
+  ✓ G8 gonder Dümen Sultan'dayken: rc 20, gitmedi
+  ✓ G9 gonder: metin dosyadan okunur, --metin yok (komut satırı/geçmiş kirlenmez)
+SONUÇ: geçti=41 kaldı=0
+── mutantlar (her biri sınavı KIRMALI)
+  ✓ onaysız gönderme serbest: yakalandı (7 kapı düştü)
+  ✓ başka sohbetin damgası geçer: yakalandı (7 kapı düştü)
+  ✓ dünkü damga geçer: yakalandı (6 kapı düştü)
+  ✓ Amazon kararsız gönderir: yakalandı (3 kapı düştü)
+  ✓ giriş sayfası tespiti kapalı: yakalandı (1 kapı düştü)
+  ✓ KVKK kırpma kapalı (telefon/e-posta çıplak): yakalandı (4 kapı düştü)
+  ✓ harita tutmayınca tahmin eder: yakalandı (1 kapı düştü)
+  ✓ onay cevap metnine bağlı değil (parmak izi kontrolü yok): yakalandı (6 kapı düştü)
+  ✓ gönderim kilidi yok (aynı sohbete ikinci gönderim): yakalandı (6 kapı düştü)
+  ✓ belirsiz gönderim sonrası yeniden deneme serbest: yakalandı (3 kapı düştü)
+  ✓ Amazon kararı süresiz geçerli: yakalandı (2 kapı düştü)
+  ✓ gönderim izi düğmeden ÖNCE de aranmıyor (zaten var kontrolü yok): yakalandı (5 kapı düştü)
+  ✓ Dümen Sultan'dayken rc 0: yakalandı (2 kapı düştü)
+SONUÇ: sınav yeşil · mutant 13/13 yakalandı
+--- stderr ---
+⏳ agir-sira: kanit-pazaryeri-mesaj-mesaj-sinav-tur2b 90 sn bekledi (yuva 1, load1 17.34)
