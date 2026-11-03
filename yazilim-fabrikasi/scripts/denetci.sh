@@ -610,13 +610,21 @@ BAS=""; DUZ_ONCEKI_BAS=""; DUZ_DOSYA=0; DUZ_BAYT=0; DUZ_TAM_BAYT=0
 #   (ana hatta göre) gider; yeni fark boşsa (PR dosyayı ana hat hâline geri aldı) önceki başla yeni baş arasındaki fark gider. Kapsam: _ana _mb _omb _ob BAS _pd.
 _duz_norm() { sed -n '/^[+-]/{/^\(+++\|---\) /!p}'; }   # yalnız eklenen/çıkan satırlar: bağlam satırı (ana dalın girdisi olabilir) karşılaştırmaya girmez
 _duz_dosya_bazli() {
-  : > "$TMP/diff-duz.patch"; local f eski yeni
+  : > "$TMP/diff-duz.patch"; local f eski yeni eskiham yeniham ikili
   for f in "${_pd[@]}"; do
-    eski="$(git -C "$DEPO" --literal-pathspecs diff --no-renames "$_omb" "$_ob" -- "$f" 2>/dev/null | _duz_norm)"
-    yeni="$(git -C "$DEPO" --literal-pathspecs diff --no-renames "$_mb" "$BAS" -- "$f" 2>/dev/null | _duz_norm)"
+    #   Okuma hatası yutulmaz (göz #682 tur 1): nesne okunamazsa iki taraf da boş çıkıp dosya "değişmedi" sayılırdı → tam fark.
+    eskiham="$(git -C "$DEPO" --literal-pathspecs diff --no-renames --binary "$_omb" "$_ob" -- "$f" 2>/dev/null)" || return 1
+    yeniham="$(git -C "$DEPO" --literal-pathspecs diff --no-renames --binary "$_mb" "$BAS" -- "$f" 2>/dev/null)" || return 1
+    #   İKİLİ dosyada +/- satırı yoktur (iki taraf boş=eşit görünüp değişiklik düşerdi, göz #682 tur 1): ikili farkın kendisi karşılaştırılır
+    #   (index satırı hariç; ikili yama gövdesi içeriğin tamamıdır, ana dal farkı bu dosyada ikiliyse PR dosyası zaten ikilidir).
+    if grep -q '^GIT binary patch' <<<"$eskiham$yeniham"; then
+      eski="$(grep -v '^index ' <<<"$eskiham")"; yeni="$(grep -v '^index ' <<<"$yeniham")"
+    else eski="$(_duz_norm <<<"$eskiham")"; yeni="$(_duz_norm <<<"$yeniham")"; fi
     [ "$eski" = "$yeni" ] && continue
-    if [ -n "$yeni" ]; then git -C "$DEPO" --literal-pathspecs diff --no-renames "$_mb" "$BAS" -- "$f" >> "$TMP/diff-duz.patch" 2>/dev/null || return 1
-    else git -C "$DEPO" --literal-pathspecs diff --no-renames "$_ob" "$BAS" -- "$f" >> "$TMP/diff-duz.patch" 2>/dev/null || return 1; fi
+    if [ -n "$yeniham" ]; then printf '%s\n' "$yeniham" >> "$TMP/diff-duz.patch"
+    #   PR dosyayı ana hat hâline geri aldı (yeni PR farkı boş): önceki PR farkının TERSİ gider — yalnız PR'ın kendi önceki eklemesinin geri alınması;
+    #   iki baş arasındaki ham fark ana dalın girdisini de "+" taşırdı (göz #682 tur 1, ön-göz).
+    else git -C "$DEPO" --literal-pathspecs diff --no-renames --binary -R "$_omb" "$_ob" -- "$f" >> "$TMP/diff-duz.patch" 2>/dev/null || return 1; fi
   done
   return 0
 }
