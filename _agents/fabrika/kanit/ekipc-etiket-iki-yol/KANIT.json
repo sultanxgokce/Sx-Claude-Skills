@@ -1,0 +1,50 @@
+{
+  "is": "ekipc-etiket-iki-yol",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T12:35:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "yenile-bayt-ayni",
+      "asama": "sonra",
+      "dosya": "olcum-yenile-bayt-ayni-sonra.txt",
+      "sha256": "ce661ca68af0e6f76c7dcf2b01ca24db7be464834f44f6b4ae1501ac34efc03c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/yenile-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T12:35:06+03:00",
+      "sure_sn": 2.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "49babf9b04e44475bb03e082e43f0f09",
+      "olculen_commit": "b742a9579cafd37ee07f7e848dd2fe8a4003ec4d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yenile-bayt-ayni-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-yenile-bayt-ayni-mutant-sonra.txt",
+      "sha256": "81fc7d084fb5807b44bd827dfc1450c5a4ac3365f0d8f552928511e10e6db8b8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/yenile-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T12:35:10+03:00",
+      "sure_sn": 4.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "yenile-bayt-ayni",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "146b9045c4294f5784f12bf13f6e3870",
+      "olculen_commit": "b742a9579cafd37ee07f7e848dd2fe8a4003ec4d",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "47d3c8e047188e770d63d0784d9f779e608e70a6e36bac173a2cde541fe069e6"
+}
