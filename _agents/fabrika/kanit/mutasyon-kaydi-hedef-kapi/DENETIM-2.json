@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "mutasyon-kaydi-hedef-kapi",
+  "pr": "678",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T16:13:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-mutasyon-kaydi-hedef-kapi",
+  "dal": "mutasyon-kaydi-hedef-kapi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29694,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 12381
+  },
+  "dalgic": "uyumsuz",
+  "bas": "093322581003320743d1d696e3f438979609e320",
+  "duzeltme_farki": {
+    "onceki_bas": "f643e5e5ae2f75c3b86abaa3a8572aa316820375",
+    "dosya": 7,
+    "bayt": 17046,
+    "tam_bayt": 120774
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Mutasyon ölçümü hedef kapıyı zorunlu tutuyor; mutant yalnız hedef kapı düşen satırda eşleştiğinde yakalanmış sayılıyor, kurulamayan veya başka kapıdan düşen durumlar ölçülemedi kalıyor. Önceki turdaki K1/K10 alt-dize kusuru sınırlandırılmış eşleşme ve doğrudan T27k sınavıyla kapatılmış; gerçek ölçümün 275/275 geçmesi ve mutasyonun hedef kapıyı düşürmesiyle üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı gerçek ölçüm kaydı yok. Önce ölçümü 247 geçti/26 kaldı ve kırmızı, gerçek sonra ölçümü 275 geçti/0 kaldı ve yeşil; T27k K1 ile K10/K12 çakışmasını doğrudan ölçüyor. Ayrıca mutasyon kaydı bilerek bozulan alt-dize davranışında rc=1 üretip hedef T27e kapısını düşürmüş; manifestte mutasyon=true, hedef_dustu=true ve gercek_olcum=kanit-sinavi bağlantısı mevcut. Kayıtların olculen_kirli=true olması commit tek başına yeniden üretilebilirlik sağlamasa da sunulan imzalı ölçüm çifti ve hedefli mutasyon, iddiayı yeterince destekliyor."
+  }
+}
