@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "usta-seridi-api",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T04:55:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-seridi-api",
+  "dal": "usta-seridi-api",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25056,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 20709
+  },
+  "dalgic": "uyumsuz",
+  "bas": "aa5c3210ee7675b192d8636569ceb0d942c52c2e",
+  "duzeltme_farki": {
+    "onceki_bas": "6a8b674da0b198cc8655af83197a458eed121204",
+    "dosya": 8,
+    "bayt": 26109,
+    "tam_bayt": 48349
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, gerçek usta.sh liste kaynağından uyuyan ustaları ayrı uyuyanlar alanında hal:uyuyor ile sunuyor; önceki turdaki gerçek betik entegrasyonu açığı UY4 ile kapanmış. Sultan’ım, talep doğru karşılanmış ve kanıtlanan bir kod kusuru kalmadığı için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek kod ölçümünde 145/145 sınav yeşil, UY1-UY3 davranışları ile UY4’te gerçek usta.sh, --proje aktarımı ve gerçek çıktı biçimi ölçülüyor. Önceki B1 böylece kapanmış; ancak son gerçek ölçüm kirli çalışma ağacında alınmış. Üç mutant kaydı mutasyon:true taşımadığından rubriğe göre resmî mutasyon kanıtı sayılamaz; bu eksikler ana 145/145 gerçek ölçümü geçersiz kılmıyor."
+  }
+}
