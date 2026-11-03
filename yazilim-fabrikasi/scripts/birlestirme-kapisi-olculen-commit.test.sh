@@ -148,6 +148,12 @@ echo "════ O8d · once ölçümü kirli + izinsiz olsa da muaf ═══
 kur; B="$(bas_al)"; den "$B"; kayit_duzenle 1 0 once; C="$(kapi)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "rc=0 (once muaf)"
 
+echo "════ O8e · eski kirli+izinsiz kayıt, SONRA aynı etiket/aşamada temiz yeniden ölçüm → geçer (son kayıt belirler) ════"
+kur; B="$(bas_al)"; den "$B"; kayit_duzenle 1 0 tek
+( cd "$T" && bash "$K" olcum is-oc olc --asama tek -- echo 3 ) >/dev/null 2>&1; ( cd "$T" && git add -A && git commit -q -m "chore: temiz olcum" ) >/dev/null 2>&1
+B="$(bas_al)"; den "$B"; C="$(kapi)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "rc=0 (yerini alan temiz kayıt)"; grep -q "izinsiz ölçülmüş" <<<"$C"; [ $? -ne 0 ]; g $? "engel söylenmedi"
+
 echo "════ O9 · git diff düşerse kapı geçti SAYMAZ (fail-closed, rc=3) ════"
 kur; B="$(bas_al)"; den "$B"; ( cd "$T" && git add -A && git commit -q -m "docs: goz kaydi" ) >/dev/null 2>&1
 SH="$(mktemp -d)"; GERCEK="$(command -v git)"

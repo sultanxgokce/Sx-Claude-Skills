@@ -39,4 +39,7 @@ echo "════ K8 · izinli kayıt kirli_kurali + kirli_izin taşır; temiz 
 [ "$(alan kirli_kurali)" = "1" ]; g $? "kirli_kurali=1"; [ "$(alan kirli_izin)" = "sınav: ikinci izinli ölçüm" ]; g $? "kirli_izin yazıldı"
 ( cd "$T" && git checkout -q -- f.sh && bash "$K" olcum is-k dokuz --asama tek --kirli-izin "temiz ağaçta gereksiz izin" -- echo 10 ) >/dev/null 2>&1
 [ "$(alan kirli_kurali)" = "1" ]; g $? "temiz ağaçta kirli_kurali=1"; [ "$(alan kirli_izin)" = "YOK" ]; g $? "temiz ağaçta kirli_izin yazılmadı"
+echo "════ K9 · dosya kaydı kirli ağaçta kural damgası taşımaz (kapı onu engellemesin) ════"
+( cd "$T" && echo e > f.sh && echo veri > ek.txt && bash "$K" dosya is-k onbir ek.txt --asama tek ) >/dev/null 2>&1
+[ "$(alan etiket)" = "onbir" ]; g $? "dosya kaydı yazıldı"; [ "$(alan kirli_kurali)" = "YOK" ]; g $? "dosya kaydında kirli_kurali yok"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

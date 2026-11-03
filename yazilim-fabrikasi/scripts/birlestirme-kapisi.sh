@@ -340,9 +340,11 @@ import json,sys
 try: m=json.load(open(sys.argv[1],encoding="utf-8"))
 except FileNotFoundError: raise SystemExit
 except Exception: print("bozuk - -"); raise SystemExit
-for r in m.get("kayitlar",[]):
+_son={}
+for i,r in enumerate(m.get("kayitlar",[])): _son[(r.get("etiket"),r.get("asama"))]=i
+for i,r in enumerate(m.get("kayitlar",[])):
     c=r.get("olculen_commit")
-    if c: print(("kirli" if r.get("olculen_kirli") else "temiz"), c, r.get("etiket","?")+"/"+str(r.get("asama","?")), 1 if r.get("kirli_kurali") else 0, 1 if r.get("kirli_izin") else 0, " ".join(str(r.get("kirli_izin") or "").split()))
+    if c: print(("kirli" if r.get("olculen_kirli") else "temiz"), c, r.get("etiket","?")+"/"+str(r.get("asama","?")), 1 if r.get("kirli_kurali") else 0, 1 if r.get("kirli_izin") else 0, 1 if _son[(r.get("etiket"),r.get("asama"))]==i else 0, " ".join(str(r.get("kirli_izin") or "").split()))
 PYK
 )"
   oc_agac="${DZ_AGAC:-$DEPO}"; oc_uc=""; oc_atla=0; oc_kirli_ad=""; oc_yabanci=""
@@ -355,7 +357,7 @@ PYK
   if [ -n "$oc_kanit" ] && [ -n "$oc_uc" ]; then
     oc_kirli_say=0
     oc_kirli_engel=""; oc_kirli_izinli=""
-    while read -r durum c ad kurali izinli gerekce; do
+    while read -r durum c ad kurali izinli son gerekce; do
       [ -n "$c" ] || continue
       [ "$durum" = bozuk ] && { _y "  ⚠ KANIT.json okunamadı — kayıtların ölçülen commit'i kontrol EDİLEMEDİ"; continue; }
       #   🧹 KİRLİ AĞAÇ KURALI (görev …QHN4, kılıç bileme 3 Kas; kanit.py 0.7.0): kirli ağaçta ölçmeyi araç artık açık bayrak olmadan yapmaz
@@ -364,7 +366,7 @@ PYK
       if [ "$durum" = kirli ]; then
         case "$ad" in
           */once) : ;;
-          *) if [ "${kurali:-0}" = 1 ] && [ "${izinli:-0}" != 1 ]; then oc_kirli_engel="${oc_kirli_engel:-} $ad"
+          *) if [ "${kurali:-0}" = 1 ] && [ "${izinli:-0}" != 1 ] && [ "${son:-1}" = 1 ]; then oc_kirli_engel="${oc_kirli_engel:-} $ad"
              elif [ "${izinli:-0}" = 1 ]; then oc_kirli_izinli="${oc_kirli_izinli:-}
     $ad — gerekçe: ${gerekce:0:160}"; fi ;;
         esac

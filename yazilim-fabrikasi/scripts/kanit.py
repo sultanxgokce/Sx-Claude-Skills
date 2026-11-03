@@ -175,6 +175,7 @@ def olculen_commit(dz):
         return None, None
 
 
+KIRLI_KAPI_KOSTU = False   # kapı yalnız kodu ölçen yollarda (olcum/ekran) koşar; dosya/canli kayıtları kural damgası taşımaz
 KIRLI_IZIN = None   # --kirli-izin gerekçesi (yalnız ağaç GERÇEKTEN kirliyse kayda yazılır)
 
 
@@ -182,7 +183,8 @@ def kirli_kapisi(a, dz):
     """Commit'lenmemiş değişikliği olan ağaçta ölçüm DURUR (görev …QHN4, kılıç bileme 3 Kas): son 3 günde 71 ölçümün 49'u kirli ağaçta alındı, göz turları
     'hangi kod ölçüldü' tartışmasına gitti. Ölçüm yalnız HEAD'in kendisini ölçer; kirliyse ya commit'le ya da açık bayrakla (--kirli-izin "<gerekçe ≥15>")
     kirli ölçtüğünü söyle — gerekçe kayda yazılır, kapı ölçümü adıyla ve gerekçesiyle gösterir. Ağaç okunamazsa (commit yok) DURMAZ: ölçülemedi ≠ kirli."""
-    global KIRLI_IZIN
+    global KIRLI_IZIN, KIRLI_KAPI_KOSTU
+    KIRLI_KAPI_KOSTU = True
     izin = (getattr(a, "kirli_izin", None) or "").strip()
     _oc, _ok = olculen_commit(dz)
     if izin and len(izin) < 15:
@@ -222,7 +224,7 @@ def kayit_ekle(depo, is_adi, kayit):
     if _oc:
         kayit.setdefault("olculen_commit", _oc)
         kayit.setdefault("olculen_kirli", _ok)
-        kayit.setdefault("kirli_kurali", 1)   # bu kayıt kirli-ağaç kuralını bilen araçtan: kapı kirli+izinsiz kaydı ENGELLER (eski kayıt yalnız uyarılır)
+        if KIRLI_KAPI_KOSTU: kayit.setdefault("kirli_kurali", 1)   # bu kayıt kirli-ağaç kuralını bilen araçtan: kapı kirli+izinsiz kaydı ENGELLER (eski kayıt yalnız uyarılır)
         if KIRLI_IZIN and _ok:
             kayit.setdefault("kirli_izin", KIRLI_IZIN)
     eski_sira = next((i for i, k in enumerate(kayitlar) if k.get("dosya") == kayit.get("dosya")), None)
