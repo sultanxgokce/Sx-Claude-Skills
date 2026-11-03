@@ -1,0 +1,50 @@
+{
+  "is": "dumen-sekme-yeniden-baglan",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T08:28:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dumen.test.mjs: yeniden bağlanma sınavı D50 D51 dahil 60 geçti 0 kaldı",
+      "asama": "tek",
+      "dosya": "olcum-dumen.test.mjs: yeniden bağlanma sınavı D50 D51 dahil 60 geçti 0 kaldı-tek.txt",
+      "sha256": "84171190b0b2b9363faabedafa1d441c0895dfc2bee8330ddbfa9c7ac74d0b3a",
+      "komut": [
+        "node",
+        "dumen.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:28:08+03:00",
+      "sure_sn": 10.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2b2db00247b4475eb55af7990dcc7694",
+      "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: eski yeniden bağlanma döngüsü (her sekmeye oturum) D51 oturum=4 ile kırmızı",
+      "asama": "tek",
+      "dosya": "olcum-mutant: eski yeniden bağlanma döngüsü (her sekmeye oturum) D51 oturum=4 ile kırmızı-tek.txt",
+      "sha256": "645e018ff5977e83f4f7f29a836ed990db7726c1245909c4892d81bc339baa45",
+      "komut": [
+        "node",
+        "dumen.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:28:24+03:00",
+      "sure_sn": 10.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "dumen.test.mjs: yeniden bağlanma sınavı D50 D51 dahil 60 geçti 0 kaldı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "fbe56ef06b9c4fcd8d95dec817999c92",
+      "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "bb5283516edd82093ccdb908d851ff859487b9418652f6dcb5f5ce20cef0705f"
+}
