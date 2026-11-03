@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "duzen-surum-yenileme-g25",
+  "pr": "671",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T12:26:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-surum-yenileme-g25",
+  "dal": "duzen-surum-yenileme-g25",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11101,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3542
+  },
+  "dalgic": "uyumsuz",
+  "bas": "fd98df59d68f1679be4dd7063ec24bb873a9e1a6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düzen sürümü katalogda ve beceri ön bilgisinde 1.6.7’den 1.6.8’e çıkarılmış; bu, mevcut gece işini tetikleme talebiyle uyumlu. Üretimi durduracak kusur görünmüyor, ancak beceri başlığındaki eski sürüm metni düzeltilmeli ve sunulan ölçüm talep edilen yenileme/günlük sonucunu gerçekten göstermiyor.",
+    "bulgular": [
+      {
+        "ne": "Beceri gövdesindeki başlık hâlâ 1.6.6 diyor; 1.6.8 sürüm bilgisiyle çelişiyor.",
+        "kanit": "Ön bilgi `version: 1.6.8` yapılırken hemen altındaki `# /duzen — ... (1.6.6 ...)` satırı değiştirilmemiş.",
+        "konum": "duzen/SKILL.md:7",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve kayıtlar yeşil, fakat önce/sonra ölçüm çifti aynı girdiyi kullanmıyor: önce `--sx /config/projects/Sx-Claude-Skills`, sonra `--sx .`. Sonraki kuru koşu yalnız `duzen 1.6.7 → 1.6.8 kurulacaktı` sonucunu gösteriyor; bayat el defterlerinin yenilendiğini veya günlüğe `yenilendi kimlik=<ad>` yazıldığını ölçmüyor. Ayrıca iki kayıt da kirli çalışma ağacında aynı commit’i ölçmüş; bu nedenle kanıt, sürüm tetikleyicisini kısmen destekliyor ama iş kartındaki uçtan uca sonucu kanıtlamıyor."
+  }
+}
