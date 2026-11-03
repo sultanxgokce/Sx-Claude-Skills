@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "ekipc-etiket-iki-yol",
+  "pr": "673",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T12:36:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ekipc-etiket-iki-yol",
+  "dal": "ekipc-etiket-iki-yol",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15647,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 9303
+  },
+  "dalgic": "uyumsuz",
+  "bas": "44fb1161f99a9a78c041eb8e31c484cf31202531",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "MİRAHUR, kaynak etiketini istenen iki yolu açıkça söyleyen tek bir mantıksal biçime çevirmiş; gerçek ölçüm Nexus ile izole kutu kimliğinin bayt-aynı olduğunu doğruluyor. Kod üretime hazır; yalnız etiket metninin iki yolu birebir içerdiğini ayrıca çivileyen küçük bir sınav rötuşu kalmış.",
+    "bulgular": [
+      {
+        "ne": "Parite sınavı iki çıktının bayt-aynı olduğunu ölçüyor, fakat kaynak etiketinde talep edilen iki yolun birebir bulunduğunu ayrı bir kapıyla doğrulamıyor.",
+        "kanit": "Gerçek ölçümde P6a yalnız kanonik md5 eşitliğini, P6b yalnız iki kimliğin bayt eşitliğini sınıyor; üretim kodundaki yeni sabit metin için `_agents/ekip-os-base/` ve `cekirdek/` içerik iddiasını adlandıran bir sınav satırı yok.",
+        "konum": "duzen/scripts/ekipc-paritesi.test.sh:12 ve olcum-yenile-bayt-ayni-sonra.txt P6a-P6b",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm 39/39 yeşil olup Nexus kanoniği ile paket kopyasını ve üretilen kimlikleri bayt düzeyinde karşılaştırıyor. Mutasyon kaydı beklenen biçimde kapıyı düşürmüş ve gerçek ölçüme açıkça bağlanmış; önce/sonra karesi yok ama bu bayt eşitliği talebi için doğrudan ölçüm ile mutasyon çifti yeterli."
+  }
+}
