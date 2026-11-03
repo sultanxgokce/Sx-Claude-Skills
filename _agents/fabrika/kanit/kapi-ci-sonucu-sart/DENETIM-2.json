@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kapi-ci-sonucu-sart",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T14:03:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-ci-sonucu-sart",
+  "dal": "kapi-ci-sonucu-sart",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30204,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 29434
+  },
+  "dalgic": "uyumsuz",
+  "bas": "aa762dc6352b1fdebd206fc62d845b920ba883d5",
+  "duzeltme_farki": {
+    "onceki_bas": "c63a542d998900ce6876c2536c4bd167ee778fab",
+    "dosya": 6,
+    "bayt": 36630,
+    "tam_bayt": 78244
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı artık PR başında kontrol yokken önceki sonuca ancak aradaki commitlerin yalnız kanıt dizinine dokunduğunu doğrulayarak dönüyor; kod değiştiren kontrolsüz başı ÖLÇÜLEMEDİ sayıyor ve eski StatusContext sonuçlarını da hesaba katıyor. Önceki turun B1 ciddi bulgusu böylece kapanmış; yeni ölçümler hedef davranışı ve bozulmaya karşı sınav duyarlılığını gösterdiğinden yalnız rötuş değil, üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; üç kayıt da yeşil, sarı kayıt yok. Önceki B1’in kapandığı, üretim kodundaki yalnız-kanıt commit zinciri denetimi ile T20m’de kod değiştiren kontrolsüz başın önceki yeşili ödünç alamayıp rc=3 vermesi üzerinden doğrudan ölçülmüş; T20n de eski StatusContext kırmızısının engellendiğini gösteriyor. Son gerçek ölçüm 226 geçti, 0 kaldı ve ilgili mutant kontrolleri sınavın kapıyı gerçekten yokladığını destekliyor. Ölçümlerin `olculen_kirli: true` olması yeniden üretilebilirlik açısından zayıflık olsa da sunulan sağlam manifest ve hedefe özgü ölçümde kanıtlanan bir davranış kusuru oluşturmuyor."
+  }
+}
