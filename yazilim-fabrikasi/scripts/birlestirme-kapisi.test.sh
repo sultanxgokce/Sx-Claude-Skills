@@ -507,6 +507,12 @@ p=sys.argv[1]; k=json.load(open(p)); k["canli_borc"]["zaman"]=(datetime.datetime
 PY
 CIKTI="$(bash "$KT" borclar 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "SÜRE AŞILDI" <<<"$CIKTI"; g $? "T14l 24 saati aşan borç → borclar rc=1 + SÜRE AŞILDI (bekçi/nabız bunu okur)"
+SAH="$(kj is-b1 "k['aldi']")"
+bash "$KT" borclar-sahip "$SAH" >/dev/null 2>&1; g $? "T14l2 30 saatlik borç varsayılan eşikte (48) listelenmez → borclar-sahip rc=0 (görev …W41XNS)"
+CIKTI="$(bash "$KT" borclar-sahip "$SAH" --esik-saat 24 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "^BORC	is-b1	30	" <<<"$CIKTI"; g $? "T14l3 eşik 24: sahibinin borcu 'BORC<TAB>iş<TAB>saat<TAB>gerekçe' satırıyla listelenir, rc=1"
+bash "$KT" borclar-sahip BASKASI --esik-saat 24 >/dev/null 2>&1; g $? "T14l4 başka koltuğun borcu bu sahibi etkilemez (rc=0)"
+bash "$KT" borclar-sahip >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T14l5 sahip adı verilmezse rc=3 (ölçülemedi; temiz DENMEZ)"
 # ödeme: borçtan SONRA alınan bağlı yeşil canlı kayıt
 mkdir -p "$LGK"; sleep 1; printf '%s boşta-bekcisi çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/b1.log"
 bash "$K" canli is-b1 bb --desen boşta-bekcisi --kaynak "dosya:$LGK/b1.log" >/dev/null 2>&1
