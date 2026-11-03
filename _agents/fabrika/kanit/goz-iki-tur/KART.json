@@ -1,6 +1,6 @@
 {
   "is": "goz-iki-tur",
-  "cumle": "Bağımsız göz tavanı üç turdan iki ture iner (bir bulgu turu, bir düzeltme turu), tıkanma üçüncüde söylenir; kutu dışı bulgu puana girmez ve canlı borca yazılır",
+  "cumle": "Bağımsız göz turu tavanı üçten ikiye iner; tavan ölçümü eski kodda kırmızı, yeni kodda yeşil",
   "istedi": "Sultan",
   "aldi": "HEZARFEN",
   "zaman": "2026-11-03T16:51:29+03:00",
@@ -22,6 +22,12 @@
       "reis": "HEZARFEN",
       "gorev": "gorev_01M6GSTZ0V5CG4VBZPV3B0VX5E",
       "kimlik": "bag-37535-1793718505802497767"
+    },
+    {
+      "zaman": "2026-11-03T19:33:19+03:00",
+      "olay": "daralt",
+      "kalan_kart": "goz-kutu-disi-canli-borc",
+      "tur_sifir": 4
     }
   ],
   "canli_gerekir": true,
@@ -53,6 +59,11 @@
       "zaman": "2026-11-03T19:30:16+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-03T19:32:42+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
@@ -62,6 +73,29 @@
       "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
       "gerekce": "SERDAR DEVAM dedi (postane msg_01M6H3ZGZAC7FYM1GV279RNKB4): bulgu 2den 1e indi; once olcumu eklendi, eski kodda da yesil (kutu-disi davranisi 0.27.46dan beri var)",
       "zaman": "2026-11-03T19:32:17+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "daraltma: kalan bulgu yeni karta (goz-kutu-disi-canli-borc) — kutu dışı bulgu tur yakmaz ve ikinci gelişte canlı borca yazılır: eski kodda kırmızı ölçüm yok, sınav eski kodu ayırt etmiyor",
+      "zaman": "2026-11-03T19:33:19+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Bağımsız göz tavanı üç turdan iki ture iner (bir bulgu turu, bir düzeltme turu), tıkanma üçüncüde söylenir; kutu dışı bulgu puana girmez ve canlı borca yazılır",
+      "zaman": "2026-11-03T19:33:19+03:00",
+      "kalan_kart": "goz-kutu-disi-canli-borc"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-03T19:33:19+03:00",
+      "kalan_kart": "goz-kutu-disi-canli-borc",
+      "kalan": "kutu dışı bulgu tur yakmaz ve ikinci gelişte canlı borca yazılır: eski kodda kırmızı ölçüm yok, sınav eski kodu ayırt etmiyor",
+      "tur_sifir": 4,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF"
     }
   ]
 }
