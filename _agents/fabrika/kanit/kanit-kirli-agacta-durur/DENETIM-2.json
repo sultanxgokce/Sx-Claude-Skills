@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kanit-kirli-agacta-durur",
+  "pr": "684",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T00:32:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-kirli-agacta-durur",
+  "dal": "kanit-kirli-agacta-durur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24501,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9818
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7c5bc9046a2eb341c84caace6afeda027874aba4",
+  "duzeltme_farki": {
+    "onceki_bas": "4897c57243a529f8f330d10b387925e7bd64f843",
+    "dosya": 9,
+    "bayt": 16857,
+    "tam_bayt": 42028
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kirli ağaçta izinsiz ölçüm durdurulmuş, açık izin kayda taşınmış ve birleşme kapısında yeni araç kayıtları engellenirken eski kayıtların uyarı davranışı korunmuş. Önceki turdaki son kayıt kusuru, aynı etiket/aşamanın yalnız en son kaydını seçen mantık ve O8e sınavıyla kapanmış; ciddi ya da işi bozan uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. Kirli-ağaç aracı için kırmızı önce/yeşil sonra ölçüm çifti vardır: önce 8 geçti/7 kaldı, sonra 17 geçti/0 kaldı; kapı ölçümü de 35 geçti/0 kaldı. Önceki B1, birlestirme-kapisi.sh içindeki son etiket/aşama seçimi ve eski kirli kaydın temiz yeniden ölçümle yer değiştirmesini doğrulayan O8e ile doğrudan ölçülerek kapanmıştır; sarı kayıt yoktur."
+  }
+}
