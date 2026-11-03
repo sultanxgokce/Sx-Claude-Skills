@@ -1,0 +1,72 @@
+{
+  "is": "uzlastirma-prsiz-kapanan-kart",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T20:04:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "yeni sınav eski koda karşı (main uzlaştırma)",
+      "asama": "once",
+      "dosya": "olcum-yeni sınav eski koda karşı (main uzlaştırma)-once.txt",
+      "sha256": "5d7ccb6d52342cd41ee7e9c52cacaf5380b148c89c8b35bc07b6b74cf4275844",
+      "komut": [
+        "bash",
+        "/tmp/tmp.rsTbd00XBU/s/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T20:04:08+03:00",
+      "sure_sn": 5.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ce4e85fe517a48be8021a8b18ad57cb2",
+      "olculen_commit": "072fa0c8fb52efe40b373ab3a0953748df77adbd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "uzlaştırma sınavı",
+      "asama": "sonra",
+      "dosya": "olcum-uzlaştırma sınavı-sonra.txt",
+      "sha256": "1050ce0072cbb6d720311fe886b68a6da22e807e3a61983fa7ececb08c78a250",
+      "komut": [
+        "bash",
+        "calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:04:14+03:00",
+      "sure_sn": 6.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2bf3c92cdb9b4a92b64769658faf9f7e",
+      "olculen_commit": "072fa0c8fb52efe40b373ab3a0953748df77adbd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "UM18 PR'sız kapanan kart yine yok sayılır (mutant)",
+      "asama": "sonra",
+      "dosya": "olcum-UM18 PR'sız kapanan kart yine yok sayılır (mutant)-sonra.txt",
+      "sha256": "4ff3b30b18b1f4354b7bdbddd85d0e3de29ebba9f7bd308ef037f8d8add9d1f1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/um18.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-uzlastirma-prsiz-kapanan-kart/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:04:30+03:00",
+      "sure_sn": 5.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "uzlaştırma sınavı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "U4c",
+      "hedef_dustu": true,
+      "olcum_id": "a809fc64869f444bb1f4375c12aa7b10",
+      "olculen_commit": "072fa0c8fb52efe40b373ab3a0953748df77adbd",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "032ba97e99fc86eded19c93ac75df8a7229d7fa5281587fc3a7c8434ea427c2e"
+}

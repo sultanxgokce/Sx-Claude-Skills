@@ -55,16 +55,18 @@ def acik_kartlar(kokler, ajan):
     return acik
 
 def kapanan_kartlar(kokler, ajan):
-    """→ {gorev: {"ad", "pr"}} ajanın PR ile bitmiş kartları; bir göreve birden çok kart bağlıysa en son biteni."""
+    """→ {gorev: {"ad", "pr"}} ajanın BİTMİŞ kartları (PR'lı ya da PR'sız; pr None olabilir); bir göreve birden çok kart bağlıysa en son biteni.
+    PR'SIZ KAPANAN (görev …REJ, 3 Kas): kart.sh bitti --pr'sız koşulunca görev eskiden "açık kartı yok" diye çekiliyordu — sahibi işin bittiğini
+    ama görevin kapanmadığını hiç duymuyordu (BENNÂ 12CBFA · 38ZKVT). Artık PR'sız biten kart da gerçek nedeni ve kapanış yolunu yazar."""
     son = {}
     for kok in kokler:
         for f in glob.glob(os.path.join(kok, "*.json")):
             try: k = json.load(open(f, encoding="utf-8"))
             except Exception: continue
-            if k.get("durum") != "bitti" or not k.get("gorev") or not k.get("pr") or norm(k.get("aldi")) != ajan: continue
+            if k.get("durum") != "bitti" or not k.get("gorev") or norm(k.get("aldi")) != ajan: continue
             b = str(k.get("bitis") or "")
             if k["gorev"] not in son or b >= son[k["gorev"]]["bitis"]:
-                son[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k["pr"], "bitis": b}
+                son[k["gorev"]] = {"ad": k.get("is") or os.path.basename(f)[:-5], "pr": k.get("pr") or None, "bitis": b}
     return son
 
 def acik_gorevler(kokler, ajan):
@@ -127,6 +129,8 @@ def planla(gorevler, acik, ajan, azami, borclu=frozenset(), bekle_dk=0, simdi=0,
     def neden(g):
         k = (kapanan or {}).get(g["id"])
         if not k: return "açık kartı yok"
+        if not k["pr"]:
+            return "kart '%s' bitti (PR kaydı yok), görev açık kaldı. Bittiyse: gorev.sh bitti %s --kim <AD> (--olcum \"önce=N sonra=M …\" | --kare <yol> --surum <sürüm>)" % (k["ad"], g["id"])
         return "kart '%s' PR #%s ile kapandı, görev açık kaldı. Bittiyse: gorev.sh bitti %s --pr %s" % (k["ad"], k["pr"], g["id"], k["pr"])
     plan = [(g, neden(g)) for g in kart_yok]
     plan += [(g, "ajan başına en çok %d çalışılıyor" % azami) for g in kartli[azami:]]
