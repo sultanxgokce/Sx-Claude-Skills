@@ -62,7 +62,7 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-a --diff "$T/d.patch" >/dev/null 2>&1; [ $
 [ ! -f "$T/_agents/fabrika/kanit/is-a/DENETIM-1.json" ]; g $? "DENETIM yazılmadı"
 
 echo "════ T2 · kanıt var, 3/H → rc=1, tur 1 ════"
-bash "$K" olcum is-a olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-a olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-a --diff "$T/d.patch" --kart "$T/kart.md" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "rc=1 (adım 2'ye dön)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-a/DENETIM-1.json'));assert d['tur']==1 and d['sonuc']['kod_puani']==3 and d['yazan']=='claude' and d['sonuc']['dogru_sey']=='H'"; g $? "DENETIM-1.json araç yazdı, tur=1, alanlar doğru"
 
@@ -73,20 +73,20 @@ grep -q "GEÇTİ" <<<"$CIKTI" && grep -q "tur 2" <<<"$CIKTI"; g $? "GEÇTİ ve t
 
 echo "════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════"
 KS="$T/kart-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s/goz-cagri.log"\n' "$T" > "$KS"; chmod +x "$KS"; export DENETCI_KART_SH="$KS"
-kartac is-g; bash "$K" olcum is-g olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-g; bash "$K" olcum is-g olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-g --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 1 ] && [ "$(grep -c . "$T/goz-cagri.log")" -eq 1 ] && grep -qxF -- 'goz-adim is-g --not [🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' "$T/goz-cagri.log"; g $? "G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)"
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-g --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && [ "$(grep -c . "$T/goz-cagri.log")" -eq 2 ] && tail -1 "$T/goz-cagri.log" | grep -F 'tur 2 · kod 5/5 · doğru şey E · bulgu 0' >/dev/null; g $? "G-b 5/E turu: ikinci satır tur 2 · 5/5 · E · bulgu 0 (rc 0 değişmedi)"
-N0=$(grep -c . "$T/goz-cagri.log"); bash "$K" olcum is-h olc --asama tek -- echo 1 >/dev/null 2>&1; SAHTE_JSON="$(J 5 E "")" bash "$D" is-h --diff "$T/d.patch" >/dev/null 2>&1
+N0=$(grep -c . "$T/goz-cagri.log"); bash "$K" olcum is-h olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1; SAHTE_JSON="$(J 5 E "")" bash "$D" is-h --diff "$T/d.patch" >/dev/null 2>&1
 [ "$(grep -c . "$T/goz-cagri.log")" -eq "$N0" ]; g $? "G-c kartsız iş (kart.json yok): göz adımı çağrılmaz"
-printf '#!/usr/bin/env bash\nexit 9\n' > "$KS"; bash "$K" olcum is-g olc2 --asama tek -- echo 1 >/dev/null 2>&1
+printf '#!/usr/bin/env bash\nexit 9\n' > "$KS"; bash "$K" olcum is-g olc2 --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-g --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "göz adımı göreve yazılamadı" <<<"$CIKTI"; g $? "G-d kart aracı düşerse turun sonucu DEĞİŞMEZ (rc 0) ama uyarı söylenir"
 unset DENETCI_KART_SH
 
 echo "════ T4 · 5 ama H → geçmez (doğru şey sütunu puanı ezer) ════"
-bash "$K" olcum is-b olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-b olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 5 H "")" bash "$D" is-b --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "5/H → rc=1"
 
 echo "════ T5 · yazan=denetleyen reddedilir (K1) ════"
@@ -94,7 +94,7 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-b --diff "$T/d.patch" --yazan codex --dene
 [ ! -f "$T/_agents/fabrika/kanit/is-b/DENETIM-2.json" ]; g $? "denetim koşulmadı"
 
 echo "════ T6 · tavan: üç düşük tur ilerlemeden → 3. turda tıkandı (rc=4), 4. çağrı reddedilir ════"
-bash "$K" olcum is-c olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-c olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-c --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "tur1 rc=1"
 SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-c --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "tur2 rc=1"
 CIKTI="$(SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-c --diff "$T/d.patch" 2>&1)"; RC=$?
@@ -104,7 +104,7 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-c --diff "$T/d.patch" >/dev/null 2>&1; [ $
 [ ! -f "$T/_agents/fabrika/kanit/is-c/DENETIM-4.json" ]; g $? "DENETIM-4 yazılmadı"
 
 echo "════ T7 · ilerleyen iş +1 tur alır; 4 mutlak ════"
-bash "$K" olcum is-d olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-d olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B,$B,$B")" bash "$D" is-d --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-d --diff "$T/d.patch" >/dev/null 2>&1
 CIKTI="$(SAHTE_JSON="$(J 4 H "$B")" bash "$D" is-d --diff "$T/d.patch" 2>&1)"; RC=$?
@@ -124,7 +124,7 @@ echo "════ T7b · 🚪 SULTAN KAPISI: karar KARTTAN okunur, serbest meti
 #    açıyordum — yani komutu çalıştıran herkes 20 karakterlik herhangi bir şeyle yetki kapısını
 #    açabiliyordu. Artık karar KARTA işlenir (kart.sh sultan-dedi, D1: oturum-ref · kırpık · beyan)
 #    ve kapı oradan okur. Uydurmayı imkânsız kılmaz; uydurmayı KAYITLI ve denetlenebilir yapar.
-kartac is-s; bash "$K" olcum is-s olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-s; bash "$K" olcum is-s olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "puan düşünce tur3 tıkandı (rc=4)"
@@ -153,7 +153,7 @@ echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KAR
 # yalnız Sultan'ın kararını okuyordu. Sınıfsız işin sahibi kendi yetkisindeki kararı yazdıramıyor; kapı ya kapalı
 # kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka: DEVRİYE doğrulayıcısı · kokpit A2).
 # (a) SINIFLI kart: reis yolu ancak araçla yazılmış (sinifli:true) kayıtla açılır
-kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-r1; bash "$K" olcum is-r1 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıflı iş tur3 tıkandı (rc=4)"
@@ -178,7 +178,7 @@ grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "açılış ekrana yazıldı"
 grep -q "is=is-r1" "$T/_agents/fabrika/tavan-defteri.log" 2>/dev/null; g $? "açılış tavan defterine yazıldı"
 # (b) SINIFSIZ kart: karar karttan okunur, serbest metinle açılmaz
 bash "$KT" ac is-r2 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
-bash "$K" olcum is-r2 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-r2 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r2 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r2 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıfsız iş tur3 tıkandı (rc=4)"
@@ -204,7 +204,7 @@ echo "════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) ko�
 W="$T/alan-is-w"; git -C "$T" worktree add -q -b is-w "$W" >/dev/null 2>&1; [ -d "$W" ]; g $? "iş alanı (worktree) açıldı"
 bash "$KT" ac is-w --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 mkdir -p "$W/_agents/fabrika/kartlar"; cp "$T/_agents/fabrika/kartlar/is-w.json" "$W/_agents/fabrika/kartlar/"   # eski aracın bıraktığı kopya
-KANIT_DEPO="$W" bash "$K" olcum is-w olc --asama tek -- echo 1 >/dev/null 2>&1
+KANIT_DEPO="$W" bash "$K" olcum is-w olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" >/dev/null 2>&1; done
 bash "$KT" reis-dedi is-w --karar devam --reis MUAVIN --oturum ref-w-birincil --gerekce "bulgular kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; g $? "reis kararı BİRİNCİL karta işlendi (kart.sh)"
 python3 -c "import json;assert not json.load(open('$W/_agents/fabrika/kartlar/is-w.json')).get('reis_kararlari')"; g $? "iş alanındaki kopya BAYAT (reis kararı yok) — eski araç bunu okur, kapıyı kapalı sanırdı"
@@ -218,7 +218,7 @@ SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" --re
 # 🔴 göz tur 1: birincilde kart yokken alandaki BAYAT kopyaya geri dönmek talebi çürütür ("bayat kopya okunmaz") → okunmaz, rc=3
 #    (taze iş is-w2: is-w tavanını yemiş durumda; tavan kapısı kart okumadan ÖNCE koşar, rc=4 bu kapıyı maskelerdi)
 bash "$KT" ac is-w2 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
-KANIT_DEPO="$W" bash "$K" olcum is-w2 olc --asama tek -- echo 1 >/dev/null 2>&1
+KANIT_DEPO="$W" bash "$K" olcum is-w2 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 mv "$T/_agents/fabrika/kartlar/is-w2.json" "$T/is-w2.kart.yedek"; mkdir -p "$W/_agents/fabrika/kartlar"; cp "$T/is-w2.kart.yedek" "$W/_agents/fabrika/kartlar/is-w2.json"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2.txt" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 3 ] && grep -q "OKUNMAZ" <<<"$CIKTI"; g $? "🔴 birincilde kart YOKKEN alandaki kopya OKUNMAZ: rc=3 + 'OKUNMAZ' (eski geri-dönüş kapandı)"
@@ -226,7 +226,7 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2.txt" KANIT_DEPO
 mv "$T/is-w2.kart.yedek" "$T/_agents/fabrika/kartlar/is-w2.json"; rm -f "$W/_agents/fabrika/kartlar/is-w2.json"
 # 🔴 göz tur 2: reis/Sultan kapısı da kart hatasını BASTIRMAZ — tavandaki işte bayat kopya varken --reis-devam "karar YOK" reddi değil, açık rc=3 'OKUNMAZ'
 bash "$KT" ac is-w3 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
-KANIT_DEPO="$W" bash "$K" olcum is-w3 olc --asama tek -- echo 1 >/dev/null 2>&1
+KANIT_DEPO="$W" bash "$K" olcum is-w3 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B")" KANIT_DEPO="$W" bash "$D" is-w3 --diff "$T/d.patch" >/dev/null 2>&1; done
 mv "$T/_agents/fabrika/kartlar/is-w3.json" "$T/is-w3.kart.yedek"; cp "$T/is-w3.kart.yedek" "$W/_agents/fabrika/kartlar/is-w3.json"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w3 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
@@ -280,7 +280,7 @@ grep -q "olur bir tur daha devam" "$T/_agents/fabrika/tavan-defteri.log"; g $? "
 grep -q "beyan=MUAVIN" "$T/_agents/fabrika/tavan-defteri.log"; g $? "beyan eden ajan defterde (kim aktardı)"
 grep -q "kapinin amacini curutur" "$T/_agents/fabrika/tavan-defteri.log"; g $? "gerekçe defterde (Sultan gün sonunda niçin'i görür)"
 # 🔴 Deftere YAZILAMIYORSA kapı açılmaz — kaydedilemeyen istisna delikTİR
-kartac is-u; bash "$K" olcum is-u olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-u; bash "$K" olcum is-u olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-u --diff "$T/d.patch" >/dev/null 2>&1; done
 bash "$KT" sultan-dedi is-u --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" --karar devam --oturum ref9 --soz "devam et" --beyan MUAVIN >/dev/null 2>&1
 # 🔴 Dizini kilitlemek YETMEZ: var olan bir dosyaya eklemek dizin izni değil DOSYA izni
@@ -292,7 +292,7 @@ chmod u+w "$T/_agents/fabrika/tavan-defteri.log" 2>/dev/null
 grep -q "geri OKUNAMADI" <<<"$CIKTI"; g $? "sebebi yazılı"
 # 🔴 İKİNCİ YÜZEY: yazma BAŞARILI görünüp içerik kaybolursa da kapı açılmamalı (defter /dev/null'a
 #    bağlıysa append rc=0 döner ama satır yoktur). Geri-okuma kontrolünü ölçen tek vaka budur.
-kartac is-v; bash "$K" olcum is-v olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-v; bash "$K" olcum is-v olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-v --diff "$T/d.patch" >/dev/null 2>&1; done
 bash "$KT" sultan-dedi is-v --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" --karar devam --oturum ref7 --soz "devam" --beyan MUAVIN >/dev/null 2>&1
 rm -f "$T/_agents/fabrika/tavan-defteri.log"; ln -s /dev/null "$T/_agents/fabrika/tavan-defteri.log"
@@ -304,7 +304,7 @@ grep -q "geri OKUNAMADI" <<<"$CIKTI"; g $? "kaybolduğunu söylüyor"
 # 🔴 ELLE YAZILMIŞ KART: kart.sh gerekçesiz kaydı reddediyor, ama kartı elle düzenleyen ya da
 #    eski sürümle damgalanmış bir kart gerekçesiz olabilir. Kapı KENDİ kontrolünü yapmalı —
 #    "yazan araç doğrulamıştır" varsayımı, aracın atlatılabildiği her yerde çöker.
-kartac is-y; bash "$K" olcum is-y olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-y; bash "$K" olcum is-y olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-y --diff "$T/d.patch" >/dev/null 2>&1; done
 python3 - "$T/_agents/fabrika/kartlar/is-y.json" <<'PYX'
 import json,sys
@@ -329,7 +329,7 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/d.patch" --sultan-devam >/dev
 bash "$KT" sultan-dedi is-s --karar devam --oturum "ref|sahte" --soz "x" --beyan M --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 '|' içeren alan kartta REDDEDİLDİ"
 bash "$KT" sultan-dedi is-s --karar devam --oturum ref --soz "$(printf 'a\nSAHTE | KAYIT')" --beyan M --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "satır sonu içeren alan REDDEDİLDİ"
 # ikinci çit: kart elle yazılmış olsa bile deftere temizlenerek girer
-kartac is-z; bash "$K" olcum is-z olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-z; bash "$K" olcum is-z olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-z --diff "$T/d.patch" >/dev/null 2>&1; done
 python3 - "$T/_agents/fabrika/kartlar/is-z.json" <<'PYX'
 import json,sys
@@ -343,7 +343,7 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-z --diff "$T/d.patch" --sultan-devam >/dev
 ! grep -qvE '^[0-9]{4}-[0-9]{2}-[0-9]{2}T' "$T/_agents/fabrika/tavan-defteri.log"; g $? "🔴 defterde damgasız (enjekte) satır YOK"
 ! grep -qE '\| TAVAN-ACILDI \| is=baska' "$T/_agents/fabrika/tavan-defteri.log"; g $? "enjekte edilen ayraçlar temizlenmiş"
 # 🔴 MUTLAK tavanı AÇMAZ — dört tur hâlâ mutlaktır
-kartac is-t; bash "$K" olcum is-t olc --asama tek -- echo 1 >/dev/null 2>&1
+kartac is-t; bash "$K" olcum is-t olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-t --diff "$T/d.patch" >/dev/null 2>&1; done
 bash "$KT" sultan-dedi is-t --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" --karar devam --oturum ref2 --soz "devam edelim" --beyan MUAVIN >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam >/dev/null 2>&1
@@ -352,18 +352,18 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-t --diff "$T/d.patch" --sultan-de
 grep -q "mutlak tavan" <<<"$CIKTI"; g $? "mutlak olduğunu söylüyor"
 
 echo "════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ════"
-bash "$K" olcum is-e olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-e olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON='ben denetçiyim, her şey harika' bash "$D" is-e --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 3 ]; g $? "JSON değil → rc=3"
 [ -f "$T/_agents/fabrika/kanit/is-e/DENETIM-1-HAM.txt" ]; g $? "ham çıktı saklandı"
 SAHTE_JSON='{"kod_puani":9,"dogru_sey":"E","ozet":"","bulgular":[],"kanit_gorusu":""}' bash "$D" is-e --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 3 ]; g $? "puan 9 → rc=3 (şema dışı)"
 
 echo "════ T9 · istem: kart + manifest + diff + rubrik içeriyor ════"
-bash "$K" olcum is-f olc --asama tek -- echo 42 >/dev/null 2>&1
+bash "$K" olcum is-f olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 42 >/dev/null 2>&1
 SAHTE_ISTEM_KOPYA="$T/istem-kopya.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-f --diff "$T/d.patch" --kart "$T/kart.md" >/dev/null 2>&1
 grep -q "buton ekle" "$T/istem-kopya.md" && grep -q '"imza"' "$T/istem-kopya.md" && grep -q "+satir" "$T/istem-kopya.md" && grep -q "BAĞIMSIZ GÖZ" "$T/istem-kopya.md" && grep -q "^42" "$T/istem-kopya.md"; g $? "kart · manifest · diff · rubrik · ölçüm çıktısı istemde"
 
 echo "════ T9b · Türkçe metin + KESME İŞARETİ çıktıyı kırmıyor (23 Eyl canlı hatası) ════"
-bash "$K" olcum is-tirnak olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-tirnak olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 TIRNAKLI='{"kod_puani":3,"dogru_sey":"H","ozet":"Ajanın kendi işi; kapının kaçışı kapatılmamış.","bulgular":[{"ne":"Kapının açığı var, ajanın yolu boş","kanit":"betiğin 31. satırı","konum":"a.sh:31","agirlik":"uygulama"}],"kanit_gorusu":"Manifest sağlam; ölçümün çifti yok."}'
 CIKTI="$(SAHTE_JSON="$TIRNAKLI" bash "$D" is-tirnak --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "rc=1 (3/H) — kesme işaretli metinde de karar verildi"
@@ -375,14 +375,14 @@ python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-tirnak/DEN
 echo "════ T9c · KIRPMA KAYDI: kırpılan tur DENETIM json'da kirpildi.oldu=true + bayt + eşik; kırpılmayan tur false (NÂZIR/RASATÇI 8 Eki) ════"
 # NİÇİN: kırpma yalnız ekrana ve istemin sonuna düşüyordu, ikisi de kayboluyordu → kırpılan denetim "diff'in tamamını gördü"
 # sanılıyordu. İki yanlı: aynı araç, tek değişken (istem boyutu ↔ eşik).
-bash "$K" olcum is-kirp olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-kirp olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_ISTEM_KOPYA="$T/istem-kucuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=200000 bash "$D" is-kirp --diff "$T/d.patch" >/dev/null 2>&1
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-1.json'));k=d['kirpildi'];assert k['oldu'] is False and k['istem_bayt']>0 and k['esik']==200000"; g $? "kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı"
 ! grep -q "KIRPILDI" "$T/istem-kucuk.md"; g $? "küçük istemde kırpma uyarısı YOK"
 # (PCP7J, 18 Eki) büyük ÜRETİM farkı kırpılmaz, "İŞİ BÖL" der (T-BOL); (BÂNİ 21:59) istemin TAMAMI da öyle (T-ISTEM).
 # (göz #436 tur 1, SYV3F) kırpma yolu ayıklama KAPALIYKEN de kalktı: kart "istem tavanı aşınca gönderim durur" diyor, istisna yok.
 # Burada fark küçük (d.patch), istem büyük kanıt ölçüm çıktısıyla şişiyor, ayıklama kapalı → yine İŞİ BÖL, tur yanmaz.
-bash "$K" olcum is-kirp buyuk-olcum --asama tek -- python3 -c 'print("x"*6000)' >/dev/null 2>&1   # eski `head | tr` boru reddine (0.10.1) takılıp kayda girmiyordu; istem yalnız şablonla şişiyordu
+bash "$K" olcum is-kirp buyuk-olcum --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- python3 -c 'print("x"*6000)' >/dev/null 2>&1   # eski `head | tr` boru reddine (0.10.1) takılıp kayda girmiyordu; istem yalnız şablonla şişiyordu
 rm -f "$T/istem-buyuk.md"
 CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 DENETCI_KANIT_AYIKLA=0 bash "$D" is-kirp --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "İŞİ BÖL — göze giden istem [0-9]* bayt > 2400" <<<"$CIKTI"; g $? "🔴 ayıklama kapalıyken de istem tavanı aşılınca İŞİ BÖL (rc 1) — kırpık istem gönderilmez"
@@ -390,8 +390,8 @@ CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETC
 ! grep -q "KIRPILDI" <<<"$CIKTI"; g $? "kırpma uyarısı hiçbir yerde yok (kırpma yolu kalktı)"
 
 echo "════ T9d · GEÇERSİZ ilan (4K938) göze söylenir: kanıt durumu satırında, istemde ve DENETIM kaydında ════"
-bash "$K" olcum is-gec olc --asama tek -- echo 1 >/dev/null 2>&1
-bash "$K" olcum is-gec olc2 --asama tek -- echo 2 >/dev/null 2>&1
+bash "$K" olcum is-gec olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-gec olc2 --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 2 >/dev/null 2>&1
 bash "$K" gecersiz is-gec olc --neden "boru çıkış kodunu maskeledi, yanlış ölçüm" --kim T >/dev/null 2>&1
 CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-gec.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-gec --diff "$T/d.patch" 2>&1)"
 grep -q "kanıt: sağlam.*1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-olc-tek.txt (yesil → gecersiz) — boru çıkış kodunu" <<<"$CIKTI"; g $? "puan satırındaki kanıt durumu geçersiz ilanı nedeniyle söylüyor"
@@ -399,8 +399,8 @@ grep -q "durum: sağlam.*GEÇERSİZ ilan edildi" "$T/istem-gec.md"; g $? "istemd
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-gec/DENETIM-1.json'));assert 'GEÇERSİZ' in json.dumps(d,ensure_ascii=False)"; g $? "DENETIM kaydına da işlendi"
 
 echo "════ T9e · 7KKSJK-EK: GEÇERSİZ ilanlı kaydın GÖVDESİ isteme girmez (istem baytı düşer), geçerli kayıt tam girer ════"
-bash "$K" olcum is-gec2 yanlis --asama tek -- bash -c 'for i in $(seq 1 40); do echo "GOVDE_GECERSIZ_ISARETI_$((i+0)) $(head -c 180 /dev/zero | tr "\\0" x)"; done' >/dev/null 2>&1
-bash "$K" olcum is-gec2 dogru --asama tek -- bash -c 'for i in $(seq 1 40); do echo "GOVDE_GECERLI_ISARETI_$((i+0)) $(head -c 180 /dev/zero | tr "\\0" x)"; done' >/dev/null 2>&1
+bash "$K" olcum is-gec2 yanlis --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- bash -c 'for i in $(seq 1 40); do echo "GOVDE_GECERSIZ_ISARETI_$((i+0)) $(head -c 180 /dev/zero | tr "\\0" x)"; done' >/dev/null 2>&1
+bash "$K" olcum is-gec2 dogru --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- bash -c 'for i in $(seq 1 40); do echo "GOVDE_GECERLI_ISARETI_$((i+0)) $(head -c 180 /dev/zero | tr "\\0" x)"; done' >/dev/null 2>&1
 SAHTE_ISTEM_KOPYA="$T/istem-g2a.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-gec2 --diff "$T/d.patch" >/dev/null 2>&1
 grep -q "GOVDE_GECERSIZ_ISARETI_40" "$T/istem-g2a.md" && grep -q "GOVDE_GECERLI_ISARETI_40" "$T/istem-g2a.md"; g $? "ilandan ÖNCE iki kaydın gövdesi de istemde (taban)"
 bash "$K" gecersiz is-gec2 yanlis --neden "boru çıkış kodunu maskeledi, yanlış ölçüm" --kim T >/dev/null 2>&1
@@ -433,11 +433,11 @@ SH
 chmod +x "$FAKE"/*
 printf 'diff --git a/y b/y\n+satir\n' > "$T/y.patch"   # d.patch önceki bölümlerde kaldırılabiliyor; kendi diffimiz
 YP="$FAKE:$(dirname "$(command -v python3)"):/usr/bin:/bin"   # codex YOK, sahte claude VAR; python3 bu kutuda ayrı dizinde olabilir
-bash "$K" olcum is-y olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-y olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 ( unset DENETCI_KOMUT CLAUDE_PID; PATH="$YP" HOME="$T/evsiz" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0.out" 2>&1 ); RC=$?
 [ "$RC" -eq 3 ] && grep -q "DENETCI_YAZAN_MODEL" "$T/y0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-y/DENETIM-1.json" ]; g $? "Y0 🔴 yazanın modeli hiçbir yüzeyden ÖLÇÜLEMEZSE yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)"
 # Y0b/Y0c: model BİLDİRİLMEDEN de ölçülür (iş durmaz) — oturum komut satırı ve ayar dosyası (tur 4 bulgusu)
-bash "$K" olcum is-y0 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-y0 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 mkdir -p "$T/ev/.claude"; printf '{"model":"opus"}' > "$T/ev/.claude/settings.json"
 ( unset DENETCI_KOMUT CLAUDE_PID; PATH="$YP" HOME="$T/ev" CLAUDE_ARGV_LOG="$T/cl0.log" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y0 --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0b.out" 2>&1 ); RC=$?
 [ "$RC" -eq 0 ] && grep -q -- "--model sonnet" "$T/cl0.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y0/DENETIM-1.json'));assert d['yazan_model']=='opus' and d['yazan_model_kaynak']=='ayar-dosyasi' and d['yedek_model']=='sonnet'"; g $? "Y0b bildirim yokken AYAR DOSYASINDAKİ model yazanın modeli sayılır (opus) → yedek sonnet, kaynak kayıtta; iş DURMAZ"
@@ -449,7 +449,7 @@ bash -c 'sleep 20; :' claude --model sonnet & SP=$!; sleep 0.2   # ':' eklenmezs
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-1.json'));assert d['yedek']=='codex yok' and 'YEDEK' in d['denetci'] and d['sonuc']['kod_puani']==5"; g $? "Y1b kayıtta yedek='codex yok' ve denetçi adında YEDEK GÖZ (codex puanı sanılmaz)"
 grep -q "YEDEK GÖZ" "$T/y1.out"; g $? "Y1c ekranda da söylenir (sessiz yedek yok)"
 # Y6/Y6b kendi işinde (is-y6) koşar: is-y'nin üç turluk tavanını yemesin (ölçüldü: Y2/Y5 "tavan doldu" rc=4 alıyordu)
-bash "$K" olcum is-y6 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-y6 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 ( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl.log" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
 grep -q -- "--model sonnet" "$T/cl.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y6/DENETIM-1.json'));assert '(sonnet)' in d['denetci'] and 'farklı model kademesi' in d['denetci']"; g $? "Y6 🔴 yedek göz yazanla AYNI modelde koşmaz: farklı kademe (sonnet) + yeni oturum, kayda yazılı (K1 yeniden)"
 ( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl2.log" DENETCI_YAZAN_MODEL=fable DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
@@ -458,7 +458,7 @@ python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y6/DENETIM
 ( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=haiku DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y6d.out" 2>&1 ); RC=$?
 [ "$RC" -eq 0 ] && ! grep -q -- "--model haiku" "$T/y6d.out"; g $? "Y6d yazanla aynı yedek istenirse merdiven onu ATLAR (haiku→sonnet), aynı modelle koşmaz"
 # Y7: yazanın modeli BİLDİRİLİNCE yedek ona EŞİT OLAMAZ (tur 2 bulgusu: varsayılan ad farkı örtmesin)
-bash "$K" olcum is-y7 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-y7 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 ( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl3.log" DENETCI_YAZAN_MODEL=sonnet SAHTE_JSON="$(J 5 E "")" bash "$D" is-y7 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
 grep -q -- "--model haiku" "$T/cl3.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y7/DENETIM-1.json'));assert d['yazan_model']=='sonnet' and d['yedek_model']=='haiku' and '[yazan: sonnet]' in d['denetci']"; g $? "Y7 yazan sonnet ise varsayılan yedek sonnet OLMAZ → merdivende haiku; ikisi de kayıtta"
 ( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl4.log" DENETCI_YAZAN_MODEL=claude-haiku-4-5 DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y7 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
@@ -486,7 +486,7 @@ cat >/dev/null
 for ((i=1;i<=$#;i++)); do if [ "${!i}" = -o ]; then j=$((i+1)); printf '%s' "$SAHTE_JSON" > "${!j}"; fi; done
 SH
 chmod +x "$FAKE/codex"
-bash "$K" olcum is-y8 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-y8 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 ( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" timeout 10 bash "$D" is-y8 --diff "$T/y.patch" --kart "$T/kart.md" < <(sleep 30) >"$T/y8.out" 2>&1 ); RC=$?
 [ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y8/DENETIM-1.json'));assert d['denetci'].startswith('codex')"; g $? "🔴 stdin 30 sn açık boruyken denetçi 10 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil"
 rm -f "$FAKE/codex"
@@ -503,7 +503,7 @@ for ((i=1;i<=$#;i++)); do if [ "${!i}" = -o ]; then j=$((i+1)); printf '%s' "$SA
 SH
 chmod +x "$FAKE/codex"
 { printf 'diff --git a/b b/b\n'; for _i in $(seq 1 3000); do printf '+satır %05d: %s\n' "$_i" "$(printf 'x%.0s' $(seq 1 40))"; done; } > "$T/y9.patch"   # ~150 KB
-bash "$K" olcum is-y9 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-y9 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 ( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" CODEX_STDIN_BAYT="$T/y9.stdin" CODEX_ARG_ISTEM="$T/y9.arg" timeout 60 bash "$D" is-y9 --diff "$T/y9.patch" --kart "$T/kart.md" </dev/null >"$T/y9.out" 2>&1 ); RC=$?
 [ "$RC" -eq 0 ] && [ "$(cat "$T/y9.stdin" 2>/dev/null || echo 0)" -gt 140000 ] && [ ! -s "$T/y9.arg" ]; g $? "🔴 150 KB fark: denetçi rc=0, codex istemi stdin'den aldı ($(cat "$T/y9.stdin" 2>/dev/null) bayt), argümanda istem yok — tavan 200 KB"
 rm -f "$FAKE/codex"
@@ -545,7 +545,7 @@ import sys
 b=open(sys.argv[1],'rb').read(); i=b.index(b'\xff\xda'); L=(b[i+2]<<8)|b[i+3]
 open(sys.argv[2],'wb').write(b[:i+2+L]+b'\xff\xd9')
 PYJ
-  bash "$K" olcum is-k olc --asama tek -- echo 1 >/dev/null 2>&1
+  bash "$K" olcum is-k olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/yok.png" >"$T/k0.out" 2>&1; RC=$?
   [ "$RC" -eq 2 ] && grep -q "dosyası yok" "$T/k0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-k/DENETIM-1.json" ]; g $? "K1 --kare dosyası yoksa rc=2, denetim AÇILMAZ (sessiz atlama yok)"
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k3.png" >"$T/k0b.out" 2>&1; RC=$?
@@ -559,7 +559,7 @@ PYJ
     [ "$RC" -eq 2 ] && grep -q "geçerli görsel değil" "$T/k0f.out"; g $? "${_s#*:}"
   done
   # kendi iş adıyla (is-k2i): tam denetim koşar ve DENETIM-1 yazar — is-k'nin tur sayacına dokunmasın (K4/K5/K7 tur 1'i okur)
-  bash "$K" olcum is-k2i olc --asama tek -- echo 1 >/dev/null 2>&1
+  bash "$K" olcum is-k2i olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k2i --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k9-adam7.png" >"$T/k0g.out" 2>&1; RC=$?
   [ "$RC" -eq 0 ] && ! grep -q "geçerli görsel değil" "$T/k0g.out" && [ -f "$T/_agents/fabrika/kanit/is-k2i/DENETIM-1.json" ]; g $? "K2i ALTIN: doğru Adam7 geçişli PNG kapıdan GEÇER ve denetim tamamlanır (kapı katılaşıp gerçek görseli reddetmesin)"
   ( K9=(); for i in 1 2 3 4 5 6 7 8 9; do K9+=(--kare "$T/k1.png"); done; SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" "${K9[@]}" >"$T/k0c.out" 2>&1; echo $? > "$T/k0c.rc" )
@@ -584,7 +584,7 @@ TI="$(mktemp -d)"; TEMIZ+=("$TI"); ( cd "$TI" && git init -q -b main ) >/dev/nul
 printf '#!/usr/bin/env bash\ncp "$1" "${SAHTE_ISTEM_KOPYA:-/dev/null}"; printf "%%s" "$SAHTE_JSON"\n' > "$TI/sahte.sh"; chmod +x "$TI/sahte.sh"
 _T_ONCE="$T"; _DK_ONCE="${DENETCI_KOMUT:-}"; T="$TI"; export KANIT_DEPO="$TI" DENETCI_KOMUT="$TI/sahte.sh"
 # (a) fark minik, istemi ölçüm çıktısı şişiriyor (eski kapı burada kırpıp turu yakıyordu)
-bash "$K" olcum is-ist buyuk-olcum --asama tek -- python3 -c '[print(i, "x"*150) for i in range(100)]' >/dev/null 2>&1   # boru yok: boru reddi (0.10.1) maskesiz boruyu kayda almaz; 100 kısa satır: özet kuralı (60 satır/3 KB) sonrası da 5 KB üstü kalır (tek 6000 karakterlik satır artık 200'e kesilir)
+bash "$K" olcum is-ist buyuk-olcum --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- python3 -c '[print(i, "x"*150) for i in range(100)]' >/dev/null 2>&1   # boru yok: boru reddi (0.10.1) maskesiz boruyu kayda almaz; 100 kısa satır: özet kuralı (60 satır/3 KB) sonrası da 5 KB üstü kalır (tek 6000 karakterlik satır artık 200'e kesilir)
 rm -f "$T/istem-ist.md"; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/ist1.patch"   # kendi farkı: d.patch önceki sınavlarda silinebiliyor
 CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-ist.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=2200 bash "$D" is-ist --diff "$T/ist1.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "fark küçük, istem > eşik → rc=1"
@@ -593,7 +593,7 @@ grep -q "parçalar (bayt):.*iş kartı [0-9]*.*kanıt manifesti [0-9]*.*ölçüm
 grep -q "en büyük parça: ölçüm çıktıları" <<<"$CIKTI" && grep -q "kanit.sh gecersiz" <<<"$CIKTI"; g $? "şişen parça (ölçüm) ve ona uygun yol söylendi"
 [ ! -f "$T/_agents/fabrika/kanit/is-ist/DENETIM-1.json" ] && [ ! -f "$T/istem-ist.md" ]; g $? "tur yakılmadı, denetçi hiç çağrılmadı"
 # (b) BÂNİ'nin vakası: fark TEK BAŞINA eşiğin altında, ama fark + diğer parçalar eşiği aşıyor
-bash "$K" olcum is-ist2 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-ist2 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 python3 -c '
 import sys
 with open(sys.argv[1],"w") as f:
@@ -621,10 +621,10 @@ i=[s.find(x) for x in b]; assert all(v>=0 for v in i) and i==sorted(i), i
 ' "$T/istem-ist2b.md"; g $? "istemde bütün başlıklar eski sırasıyla var (iş kartı · manifest · ölçüm · fark · önceki tur)"
 # (e) ÖLÇÜM ÇIKTISININ SONU (gorev_01M5890SCNMSR4DFTGHVWEJEC3): 60 satırı aşan ölçümde sonuç satırı göze gider
 echo "════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölçüm aynen; uzun stderr sonucu itmez ════"
-bash "$K" olcum is-son uzun --asama tek -- python3 -c 'for i in range(184): print("kapi %d" % i)
+bash "$K" olcum is-son uzun --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- python3 -c 'for i in range(184): print("kapi %d" % i)
 print("── SONUÇ: %d geçti · 0 kaldı ──" % 156)' >/dev/null 2>&1   # sonuç metni komutta DÜZ geçmesin: dosyanın 1. satırı komuttur
-bash "$K" olcum is-son kisa --asama tek -- python3 -c 'for i in range(5): print("kisa-satir-%d" % i)' >/dev/null 2>&1
-bash "$K" olcum is-son hata --asama tek -- python3 -c 'import sys
+bash "$K" olcum is-son kisa --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- python3 -c 'for i in range(5): print("kisa-satir-%d" % i)' >/dev/null 2>&1
+bash "$K" olcum is-son hata --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- python3 -c 'import sys
 for i in range(100): print("cikti %d" % i)
 print("SONUC-SATIRI-" + "X")
 for i in range(50): print("hata %d" % i, file=sys.stderr)' >/dev/null 2>&1
@@ -642,7 +642,7 @@ grep -qx "kapi 0" <<<"$U" && ! grep -qx "kapi 100" <<<"$U" && grep -qx "kapi 183
 [ "$(grep -c '^kisa-satir-' <<<"$KS")" -eq 5 ] && ! grep -q "atlandı" <<<"$KS"; g $? "O5 kısa ölçüm aynen, işaretsiz"
 grep -qx "SONUC-SATIRI-X" <<<"$H" && grep -q "stderr'den [0-9]* satır atlandı" <<<"$H" && grep -qx "hata 49" <<<"$H"; g $? "O6 uzun stderr stdout'un sonucunu dışarı itmez; stderr'in de sonu gelir"
 # göz #392 tur 2: sonuç en sonda olmayabilir · ortadaki kırmızı kapı kırpmada saklanmamalı
-bash "$K" olcum is-son2 orta --asama tek -- python3 -c 'for i in range(80): print("  ✓ kapi %d" % i)
+bash "$K" olcum is-son2 orta --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- python3 -c 'for i in range(80): print("  ✓ kapi %d" % i)
 print("  ✗ kapi " + "kirmizi-orta")
 for i in range(40): print("  ✓ kapi2 %d" % i)
 print("── SONUÇ: %d geçti · 1 kaldı ──" % 120)
@@ -688,8 +688,8 @@ T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 fi   # IC_BOLUM=zil atlaması sonu
 if [ "${IC_BOLUM:-}" != zil ] && [ "$GERCEK_BENDE" = e ]; then
 echo "════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════"
-kartac is-mutk; bash "$K" olcum is-mutk gercek --asama tek -- bash -c 'echo "  ✓ K5 kilit tutuyor"; exit 0' >/dev/null 2>&1
-bash "$K" olcum is-mutk mut-k5 --asama tek --mutasyon gercek --kapi K5 -- bash -c 'echo "  ✗ K5 kilit tutuyor"; exit 1' >/dev/null 2>&1
+kartac is-mutk; bash "$K" olcum is-mutk gercek --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- bash -c 'echo "  ✓ K5 kilit tutuyor"; exit 0' >/dev/null 2>&1
+bash "$K" olcum is-mutk mut-k5 --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" --mutasyon gercek --kapi K5 -- bash -c 'echo "  ✗ K5 kilit tutuyor"; exit 1' >/dev/null 2>&1
 printf 'diff --git a/x b/x\n+mut\n' > "$T/mut.patch"   # ortak d.patch ve sahte.sh önceki bölümlerde silinir → kendi patch'i ve sahtesi
 MS="$T/mut-sahte.sh"; printf '#!/usr/bin/env bash\ncp "$1" "%s"; printf "%%s" "$SAHTE_JSON"\n' "$T/istem-mut.md" > "$MS"; chmod +x "$MS"
 SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$MS" bash "$D" is-mutk --diff "$T/mut.patch" >/dev/null 2>&1
@@ -701,7 +701,7 @@ if { [ -z "${IC_KOSUM:-}" ] || [ "${IC_BOLUM:-}" = zil ]; } && [ "$GERCEK_BENDE"
 echo "════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════"
 ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\nprintf "tmux=%%s pane=%%s\\n" "${TMUX:-yok}" "${TMUX_PANE:-yok}" >> "%s"\nprintf "kimden=%%s\\n" "${AILE_KIMDEN:-yok}" >> "%s"\n[ -n "${SAHTE_ZIL_ERR:-}" ] && printf "%%s\\n" "$SAHTE_ZIL_ERR" >&2\nexit "${SAHTE_ZIL_RC:-0}"\n' "$ZL" "$ZL" "$ZL" > "$ZS"; chmod +x "$ZS"
 printf "diff --git a/x b/x\n+zil\n" > "$T/zd.patch"; ZK="$T/zil-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s" "$SAHTE_JSON"\n' > "$ZK"; chmod +x "$ZK"; _DK_ZIL="$DENETCI_KOMUT"; export DENETCI_KOMUT="$ZK";   # önceki bölümler ortak sahteyi silebiliyor — bu bölüm kendi sahtesiyle
- kartac is-z; bash "$K" olcum is-z olc --asama tek -- true >/dev/null 2>&1
+ kartac is-z; bash "$K" olcum is-z olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
 DZZ="$T/_agents/fabrika/kanit/is-z"
 # Z1 koşuyor izi: denetçi KOŞARKEN izi görür, bitince iz yok
 ZD="$T/zil-denetci.sh"; printf '#!/usr/bin/env bash\nls "%s" > "%s"; cat "%s"/DENETIM-*.kosuyor > "%s" 2>/dev/null; printf "%%s" "$SAHTE_JSON"\n' "$DZZ" "$T/z-ls" "$DZZ" "$T/z-izi" > "$ZD"; chmod +x "$ZD"
@@ -725,10 +725,10 @@ import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s; s=s.replace(sys.ar
   : > "$ZL"; env "${@:3}" FABRIKA_AILE_NOTIFY="$ZS" bash "$DM" $MZ_ARG >/dev/null 2>&1; rm -f "$DM"; [ -s "$ZL" ]; }
 MZ_ARG=""; _mz 'if [ -z "${IS:-}" ]; then printf' 'if false; then printf' AGENT_NAME=HENDESE; g $? "M-Z3d iş-adı korkuluğu kalkarsa bilgisiz zil çalar (Z3d bunu yakalar; mutant yakalandı)"
 MZ_ARG="is-yok-z3f"; _mz 'if [ -z "${TUR:-}" ] && [ "$yazansiz" = 1 ]; then printf' 'if false; then printf' -u AGENT_NAME KART_DEPO="$T/kartsiz-depo"; g $? "M-Z3f tur-yok+yazan-yok korkuluğu kalkarsa reise bilgisiz zil çalar (Z3f bunu yakalar; mutant yakalandı)"; MZ_ARG=""
-kartac is-zb; bash "$K" olcum is-zb olc --asama tek -- true >/dev/null 2>&1
+kartac is-zb; bash "$K" olcum is-zb olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY= bash "$D" is-zb --diff "$T/zd.patch" > /dev/null 2> "$T/z-err"; [ ! -s "$ZL" ] && grep -q "sınav kipi" "$T/z-err"; g $? "Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir"
 # Z2 zaman aşımı: rc 3 · HAM'da ZAMAN AŞIMI · beklemeden biter · zil + reis (kendi işi: önceki turlar tavanı doldurmasın)
-kartac is-za; bash "$K" olcum is-za olc --asama tek -- true >/dev/null 2>&1; DZA="$T/_agents/fabrika/kanit/is-za"
+kartac is-za; bash "$K" olcum is-za olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1; DZA="$T/_agents/fabrika/kanit/is-za"
 ZY="$T/yavas.sh"; printf '#!/usr/bin/env bash\nsleep 8; printf "%%s" "$SAHTE_JSON"\n' > "$ZY"; chmod +x "$ZY"
 : > "$ZL"; bas=$(date +%s); SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZY" DENETCI_ZAMAN_ASIMI=1 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-za --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; sure=$(( $(date +%s) - bas ))
 [ $RC -eq 3 ] && [ "$sure" -lt 6 ]; g $? "Z2a zaman aşımı → rc 3, beklemedi (${sure} sn < 6)"
@@ -736,23 +736,23 @@ grep -q "ZAMAN AŞIMI" "$DZA/DENETIM-1-HAM.txt" 2>/dev/null; g $? "Z2b DENETIM-1
 grep -q -- "MUAVIN denetçi: is-za tur 1: —/— · bulgu — · rc 3 · ZAMAN AŞIMI" "$ZL" && grep -q -- "--waiting --amir SERDAR" "$ZL"; g $? "Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)"
 ! ls "$DZA"/DENETIM-*.kosuyor >/dev/null 2>&1; g $? "Z2d aşımda da koşuyor izi silindi"
 # Z4 tıkanınca (rc 4) reise: sahibi yazandan farklı kartta reis kartın istedi'sidir
-bash "$KT" ac is-t --is x --istedi BANI --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; bash "$K" olcum is-t olc --asama tek -- true >/dev/null 2>&1
+bash "$KT" ac is-t --is x --istedi BANI --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; bash "$K" olcum is-t olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
 for i in 1 2 3; do : > "$ZL"; SAHTE_JSON="$(J 2 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-t --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; done
 [ $RC -eq 4 ] && grep -q -- "rc 4 · TIKANDI" "$ZL" && grep -q -- "--waiting --amir BANI denetçi (MUAVIN): is-t tur 3" "$ZL"; g $? "Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting"
 : > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$T/olmayan-zil.sh" bash "$D" is-zb --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; [ $? -eq 1 ] && grep -q "zili ATLANDI" "$T/z-err"; g $? "Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır"
 # göz tur 1 (#404) — Z6 TERM'i yutan denetçi de kesilir (-k) · Z7 geçersiz süre varsayılana döner · Z8 bayat iz silinir · Z9 canlı iz korunur
-kartac is-zk; bash "$K" olcum is-zk olc --asama tek -- true >/dev/null 2>&1
+kartac is-zk; bash "$K" olcum is-zk olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
 ZI="$T/inatci.sh"; printf '#!/usr/bin/env bash\ntrap "" TERM; sleep 8; printf "%%s" "$SAHTE_JSON"\n' > "$ZI"; chmod +x "$ZI"
 bas=$(date +%s); SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZI" DENETCI_ZAMAN_ASIMI=1 DENETCI_ZAMAN_ASIMI_K=1 bash "$D" is-zk --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; sure=$(( $(date +%s) - bas ))
 [ $RC -eq 3 ] && [ "$sure" -lt 6 ] && grep -q "ZAMAN AŞIMI" "$T/_agents/fabrika/kanit/is-zk/DENETIM-1-HAM.txt" 2>/dev/null; g $? "Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (${sure} sn < 6)"
-kartac is-zv; bash "$K" olcum is-zv olc --asama tek -- true >/dev/null 2>&1
+kartac is-zv; bash "$K" olcum is-zv olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B")" DENETCI_ZAMAN_ASIMI=abc bash "$D" is-zv --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
 [ $RC -eq 1 ] && grep -q "DENETCI_ZAMAN_ASIMI=abc geçersiz" "$T/z-err"; g $? "Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)"
-kartac is-zs; bash "$K" olcum is-zs olc --asama tek -- true >/dev/null 2>&1; DZS="$T/_agents/fabrika/kanit/is-zs"
+kartac is-zs; bash "$K" olcum is-zs olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1; DZS="$T/_agents/fabrika/kanit/is-zs"
 ( exit 0 ) & olu=$!; wait "$olu"; printf 'pid=%s\nbaslangic=2026-01-01T00:00:00\n' "$olu" > "$DZS/DENETIM-1.kosuyor"
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-zs --diff "$T/zd.patch" >"$T/z-out" 2>&1; RC=$?
 [ $RC -eq 1 ] && grep -q "bayat koşuyor izi silindi" "$T/z-out" && ! ls "$DZS"/DENETIM-*.kosuyor >/dev/null 2>&1; g $? "Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar"
-kartac is-zc; bash "$K" olcum is-zc olc --asama tek -- true >/dev/null 2>&1; DZC="$T/_agents/fabrika/kanit/is-zc"
+kartac is-zc; bash "$K" olcum is-zc olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1; DZC="$T/_agents/fabrika/kanit/is-zc"
 sleep 30 & canli=$!; printf 'pid=%s\npid_kimlik=%s\nbaslangic=2026-01-01T00:00:00\n' "$canli" "$(ps -o lstart= -p "$canli" | sed 's/^ *//')" > "$DZC/DENETIM-1.kosuyor"
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
 [ $RC -eq 3 ] && grep -q "başka denetçi koşuyor" "$T/z-err" && grep -q "pid=$canli" "$DZC/DENETIM-1.kosuyor" && ! ls "$DZC"/DENETIM-*.json >/dev/null 2>&1; g $? "Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz"
@@ -771,7 +771,7 @@ python3 -I -c 'import sys; open(sys.argv[1],"rb").read().decode("utf-8","strict"
 python3 -I -c '
 import sys; L=[x for x in open(sys.argv[1],"rb").read().decode("utf-8","replace").splitlines() if "· sebep: " in x]
 assert L and all(len(x.split("· sebep: ",1)[1])==140 and "�" not in x for x in L)' "$ZL" 2>/dev/null; g $? "Z9d3 sebep 140 HARF (bayt değil) ile kesildi, yerine-koyma işareti yok"
-kartac is-zr; bash "$K" olcum is-zr olc --asama tek -- true >/dev/null 2>&1; DZR="$T/_agents/fabrika/kanit/is-zr"
+kartac is-zr; bash "$K" olcum is-zr olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1; DZR="$T/_agents/fabrika/kanit/is-zr"
 printf 'pid=%s\npid_kimlik=Thu Jan  1 00:00:00 2026\nbaslangic=2026-01-01T00:00:00\n' "$canli" > "$DZR/DENETIM-1.kosuyor"
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-zr --diff "$T/zd.patch" >"$T/z-out" 2>&1; RC=$?
 [ $RC -eq 1 ] && grep -q "başka sürece geçmiş" "$T/z-out" && ! ls "$DZR"/DENETIM-*.kosuyor >/dev/null 2>&1; g $? "Z11 pid canlı ama başka sürece verilmiş (başlangıç anı tutmuyor) → bayat sayılır, denetim koşar"
@@ -780,7 +780,7 @@ kill "$canli" 2>/dev/null; wait "$canli" 2>/dev/null
 grep -q -- "^MUAVIN denetçi:" "$ZL" && grep -qx "tmux=yok pane=yok" "$ZL" && ! grep -q "pane=%9" "$ZL"; g $? "Z10 yazanın zili TMUX kimliği soyularak çağrılır (kendi penceresine giden zil self-loop'ta atlanmaz — HEZARFEN ölçümü)"
 # Z13 (B843Q, 22 Eki): yazana DÜZ PING — gönderen adı yok (Nexus #1235 'alıcı = gönderen kuyruğa girmez' korumasında meşgul
 #     yazanın zili düşüyordu), '--done' yok (sahte 'YAZAN iş-bitti' kaydı); ping meşgulde rc 1 döner → 'kuyrukta' KUYRUK satırından
-kartac is-zg; bash "$K" olcum is-zg olc --asama tek -- true >/dev/null 2>&1
+kartac is-zg; bash "$K" olcum is-zg olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
 : > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" AGENT_NAME=HENDESE FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>&1
 grep -A2 -- "^HENDESE denetçi:" "$ZL" | grep -qx "kimden=yok"; g $? "Z13a yazanın zili gönderen adı TAŞIMAZ (kuyrukta 'kendine' sayılıp düşmesin)"
 : > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>&1
@@ -949,7 +949,7 @@ echo "════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle s�
 export KANIT_DEPO="$T"
 mkdir -p "$T"; cd "$T" 2>/dev/null; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/d.patch"   # önceki sınav farkı/dizini kaldırmış olabilir
 bash "$HERE/kart.sh" ac is-dar --is "iki yarım iş tek kartta bu yüzden üç tur boyunca tıkandı" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
-bash "$K" olcum is-dar olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-dar olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; done
 SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "3 tur ilerlemeyince rc=4 (tıkandı)"
 CIKTI="$(bash "$HERE/kart.sh" daralt is-dar --kalan "ikinci yarım iş: raporu da üretsin, bu kartta değil" --cumle "yalnız birinci yarım iş: ölçümü yazsın ve kaydetsin" --oturum ref-dar 2>&1)"; RC=$?
@@ -962,7 +962,7 @@ grep -q "DARALTILMIŞ: ilk 3 tur" <<<"$CIKTI"; g $? "denetçi daraltmayı söyle
 [ -f "$T/_agents/fabrika/kanit/is-dar/DENETIM-4.json" ]; g $? "DENETIM-4 yazıldı (tur numarası sürdü, sayım sıfırlandı)"
 # daraltmadan sonra da üç düşük tur → yine tıkanır (sıfırlama sınırsız tur değildir)
 bash "$HERE/kart.sh" ac is-dar2 --is "daraltma sonrası da tıkanabilen iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
-bash "$K" olcum is-dar2 olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-dar2 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
 bash "$HERE/kart.sh" daralt is-dar2 --kalan "kalan yarı burada yirmi karakterden uzun" --cumle "daraltılmış cümle burada yirmi karakterden uzun" --oturum ref-dar2 >/dev/null 2>&1
 for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
@@ -971,7 +971,7 @@ unset KANIT_DEPO; export KANIT_DEPO="$T"
 
 echo "════ T-SULTAN · Sultan turu kaydı (kart.sh sultan-turu) göz tur sayımını sıfırlar; daralt gibi (beğeni döngüsü, 2BXA6J) ════"
 bash "$HERE/kart.sh" ac is-stur --is "beğeni döngüsünde Sultan turları sonrası göz sayacı sıfırlanır" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
-bash "$K" olcum is-stur olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-stur olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-stur --diff "$T/d.patch" >/dev/null 2>&1; done
 python3 - "$T/_agents/fabrika/kartlar/is-stur.json" <<'PYK'
 import json,sys
@@ -987,7 +987,7 @@ unset KANIT_DEPO; export KANIT_DEPO="$T"
 
 echo "════ T-ONGOZ · DALGIÇ ön-göz gönder akışında kendiliğinden koşar, YALNIZ bilgidir (ZP640T) ════"
 bash "$HERE/kart.sh" ac is-on --is "ön-göz sınavı için küçük bir iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
-bash "$K" olcum is-on olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-on olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for sonuc in 0 1 3; do printf '#!/usr/bin/env bash\necho "sahte dalgic rapor rc=%s"; exit %s\n' "$sonuc" "$sonuc" > "$T/dalgic-$sonuc.sh"; done
 on() { DALGIC_KAPALI= DALGIC_BIN="$1" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1; }
 CIKTI="$(on "$T/dalgic-0.sh")"; RC=$?; [ "$RC" -eq 0 ] && grep -q "ön-göz (DALGIÇ): UYUMLU" <<<"$CIKTI"; g $? "ön-göz UYUMLU: bilgi satırı basıldı, denetim aynen geçti (rc 0)"
@@ -1026,7 +1026,7 @@ CIKTI="$(DALGIC_KAPALI= DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bas
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 
 echo "════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════"
-bash "$K" olcum is-bol olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-bol olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 python3 - "$T/bol.patch" <<'PY'
 import sys
 p=sys.argv[1]
@@ -1047,14 +1047,14 @@ echo "════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.22.0 · gorev_01
 TP="$(mktemp -d)"; TEMIZ+=("$TP"); ( cd "$TP" && git init -q -b main && git -c user.email=t@t -c user.name=T commit -q --allow-empty -m "ilk" ) >/dev/null 2>&1
 AKP="$TP/alanlar"; mkdir -p "$AKP"; WP="$AKP/$(basename "$TP")-is-p"; git -C "$TP" worktree add -q -b is-p "$WP" >/dev/null 2>&1; [ -d "$WP" ]; g $? "TP0 fikstür: birincil kopya + iş alanı"
 ( cd "$TP" && bash "$KT" ac is-p --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h ) >/dev/null 2>&1
-IS_ALANI_KOK="$AKP" KANIT_DEPO="$WP" bash "$K" olcum is-p olc --asama tek -- echo 1 >/dev/null 2>&1
+IS_ALANI_KOK="$AKP" KANIT_DEPO="$WP" bash "$K" olcum is-p olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-p --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 2 ] && grep -q "BİRİNCİL kopyadasın" <<<"$CIKTI" && grep -q "$WP" <<<"$CIKTI"; g $? "TP1 birincilden, alan varken: rc 2 + 'BİRİNCİL kopyadasın' + alan yolu söylenir"
 [ ! -e "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ] && [ ! -e "$TP/_agents/fabrika/kanit/is-p/KART.json" ]; g $? "TP1b birincile DENETIM / KART.json yazılmadı"
 SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$WP" bash "$D" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$WP/_agents/fabrika/kanit/is-p/DENETIM-1.json'));assert d['depo']=='$WP' and d['dal']=='is-p' and d['birincil_mi'] is False, d" 2>/dev/null; g $? "TP2 alandan koşum yazar (rc 0); DENETIM'de depo=alan, dal=is-p, birincil_mi=false"
 ( cd "$TP" && bash "$KT" ac is-q --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h ) >/dev/null 2>&1
-IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$K" olcum is-q olc --asama tek -- echo 1 >/dev/null 2>&1
+IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$K" olcum is-q olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-q --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$TP/_agents/fabrika/kanit/is-q/DENETIM-1.json'));assert d['birincil_mi'] is True and d['dal']=='main', d" 2>/dev/null; g $? "TP3 alanı OLMAYAN iş birincilden eskisi gibi denetlenir; DENETIM birincil_mi=true, dal=main"
 # MUTASYON: betiğin bütün dizini kopyalanır (denetci.sh kardeşlerini \$HERE'den bulur), kopyada birincil tespiti sökülür → TP1 senaryosu birincile yazar
@@ -1062,7 +1062,7 @@ MPD="$TP/scripts"; cp -r "$HERE" "$MPD"; sed -i 's/^\[ -n "\$_gd" \] && \[ "\$_g
 # Mutantın yazabilmesi için birincilde de kanıt olmalı (denetçi kanıtı KANIT_DEPO'dan okur; kanıtsız rc 2 kapıdan ÖNCE düşer ve mutantı
 #   yanlışlıkla "yakalanmış" gösterirdi — tur 1 ölçümü: TP4b eski araçta da yeni araçta da aynı sebeple kırmızıydı). Kanıt alan tespiti
 #   kapalıyken (IS_ALANI_KOK boş dizin) birincile yazılır; sonra GERÇEK betik aynı kanıtla yine rc 2 vermeli (kapıyı kanıt değil tespit kapatıyor).
-IS_ALANI_KOK="$TP/alan-yok" KANIT_DEPO="$TP" bash "$K" olcum is-p olc --asama tek -- echo 1 >/dev/null 2>&1; [ -f "$TP/_agents/fabrika/kanit/is-p/KANIT.json" ]; g $? "TP4a fikstür: birincilde de kanıt var (alan tespiti kapalıyken yazıldı)"
+IS_ALANI_KOK="$TP/alan-yok" KANIT_DEPO="$TP" bash "$K" olcum is-p olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1; [ -f "$TP/_agents/fabrika/kanit/is-p/KANIT.json" ]; g $? "TP4a fikstür: birincilde de kanıt var (alan tespiti kapalıyken yazıldı)"
 SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 2 ] && [ ! -e "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ]; g $? "TP4c kanıt birincilde VARKEN gerçek betik yine rc 2, DENETIM yok (kapıyı kanıt değil birincil tespiti kapatıyor)"
 SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$MPD/denetci.sh" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?

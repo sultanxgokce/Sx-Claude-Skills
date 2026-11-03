@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kanit-kirli-agacta-durur",
+  "pr": "684",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T00:23:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-kirli-agacta-durur",
+  "dal": "kanit-kirli-agacta-durur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38572,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 10948
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4897c57243a529f8f330d10b387925e7bd64f843",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Kanıt aracı kirli ağaçta izinsiz ölçümü durduruyor, izin bilgisini kayda geçiriyor ve kapıya geriye uyumluluk davranışı ekliyor. Ancak kapı talep edilen “son kanıt kaydı kirliyse” kuralını uygulamayıp bütün kayıtları taradığı için eski bir kirli kayıt daha sonra temiz kayıt bulunsa bile birleşmeyi engelleyebilir; önce bu uygulanış düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Birleştirme kapısı yalnız son kanıt kaydını değerlendirmek yerine manifestteki tüm kirli ve izinsiz yeni-araç kayıtlarını engel listesine ekliyor; bu, iş kartındaki açık “son kanıt kaydı kirliyse” koşulundan farklı sonuç üretir.",
+        "kanit": "Python çıktısı bütün `m.get(\"kayitlar\",[])` kayıtlarını basıyor; kabuk tarafındaki `while read` döngüsü her uygun kaydı `oc_kirli_engel` değişkenine ekliyor. O8b–O8d sınavları yalnız tek değiştirilmiş kayıtlı kurulumları ölçüyor; önce kirli/izinsiz, ardından temiz son kayıt senaryosu yok.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh:342 ve 354; yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh:O8b-O8d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kirli-ağaç davranışı için kırmızı önce/yeşil sonra ölçüm çifti, kapı için de 33/33 yeşil ölçüm var. Ancak kanıt, kartın kritik “son kayıt” seçimini sınamıyor; bu nedenle mevcut yeşil kayıt yanlış kapsamlı kapı mantığını doğrulamıyor."
+  }
+}

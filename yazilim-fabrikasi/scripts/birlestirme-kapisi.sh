@@ -340,9 +340,11 @@ import json,sys
 try: m=json.load(open(sys.argv[1],encoding="utf-8"))
 except FileNotFoundError: raise SystemExit
 except Exception: print("bozuk - -"); raise SystemExit
-for r in m.get("kayitlar",[]):
+_son={}
+for i,r in enumerate(m.get("kayitlar",[])): _son[(r.get("etiket"),r.get("asama"))]=i
+for i,r in enumerate(m.get("kayitlar",[])):
     c=r.get("olculen_commit")
-    if c: print(("kirli" if r.get("olculen_kirli") else "temiz"), c, r.get("etiket","?")+"/"+str(r.get("asama","?")))
+    if c: print(("kirli" if r.get("olculen_kirli") else "temiz"), c, r.get("etiket","?")+"/"+str(r.get("asama","?")), 1 if r.get("kirli_kurali") else 0, 1 if r.get("kirli_izin") else 0, 1 if _son[(r.get("etiket"),r.get("asama"))]==i else 0, " ".join(str(r.get("kirli_izin") or "").split()))
 PYK
 )"
   oc_agac="${DZ_AGAC:-$DEPO}"; oc_uc=""; oc_atla=0; oc_kirli_ad=""; oc_yabanci=""
@@ -354,12 +356,26 @@ PYK
   fi
   if [ -n "$oc_kanit" ] && [ -n "$oc_uc" ]; then
     oc_kirli_say=0
-    while read -r durum c ad; do
+    oc_kirli_engel=""; oc_kirli_izinli=""
+    while read -r durum c ad kurali izinli son gerekce; do
       [ -n "$c" ] || continue
       [ "$durum" = bozuk ] && { _y "  ⚠ KANIT.json okunamadı — kayıtların ölçülen commit'i kontrol EDİLEMEDİ"; continue; }
+      #   🧹 KİRLİ AĞAÇ KURALI (görev …QHN4, kılıç bileme 3 Kas; kanit.py 0.7.0): kirli ağaçta ölçmeyi araç artık açık bayrak olmadan yapmaz
+      #   (kayıt `kirli_kurali` taşır). Kirli + izinsiz + o araçtan kayıt → ENGEL (yalnız 'önce' ölçümü hariç: eski kodu ölçer). İzinli kayıt gerekçesiyle
+      #   söylenir. `kirli_kurali` taşımayan kayıt (eski araç) eskisi gibi yalnız uyarılır: açık PR'ları geriye dönük kırmak bu işin kapsamı değil.
+      if [ "$durum" = kirli ]; then
+        case "$ad" in
+          */once) : ;;
+          *) if [ "${kurali:-0}" = 1 ] && [ "${izinli:-0}" != 1 ] && [ "${son:-1}" = 1 ]; then oc_kirli_engel="${oc_kirli_engel:-} $ad"
+             elif [ "${izinli:-0}" = 1 ]; then oc_kirli_izinli="${oc_kirli_izinli:-}
+    $ad — gerekçe: ${gerekce:0:160}"; fi ;;
+        esac
+      fi
       [ "$durum" = kirli ] && { oc_kirli_say=$((oc_kirli_say+1)); oc_kirli_ad="${oc_kirli_ad:-} $ad"; }
       git -C "$oc_agac" merge-base --is-ancestor "$c" "$oc_uc" 2>/dev/null || oc_yabanci="$oc_yabanci $ad"
     done <<< "$oc_kanit"
+    [ -n "$oc_kirli_engel" ] && { _h "kanıt kaydı commit'lenmemiş değişikliği olan ağaçta ve izinsiz ölçülmüş:${oc_kirli_engel:0:200} — ölçülen şey HEAD'in kendisi değil; commit'le ve yeniden ölç (kanit.sh olcum …). Bilerek kirli ölçüldüyse kayıt --kirli-izin \"<gerekçe>\" taşımalı"; eksik=$((eksik+1)); }
+    [ -n "$oc_kirli_izinli" ] && _y "  ⚠ bilerek kirli ağaçta ölçülmüş (izinli), gerekçeleriyle:$oc_kirli_izinli"
     [ "$oc_kirli_say" -gt 0 ] && _y "  ⚠ $oc_kirli_say kanıt kaydı commit'lenmemiş değişiklikli ağaçta ölçülmüş (HEAD'in kendisi değil):${oc_kirli_ad:0:200}"
     [ -n "$oc_yabanci" ] && _y "  ⚠ kanıt kaydı birleşen uçun soyundan olmayan commit'te ölçülmüş:${oc_yabanci:0:200}"
   fi
