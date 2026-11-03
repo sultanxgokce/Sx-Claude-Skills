@@ -634,9 +634,14 @@ cat > "$GS/gh" <<'GHS'
 # sahte gh: pr view → FAKE_DAL (gövde istenirse FAKE_GOVDE) · pr diff --name-only → FAKE_DOSYALAR (boşlukla ayrık) ya da FAKE_DOSYA_YOK varsa hata
 CI_VARS='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
 API_VARS='{"check_runs":[]}'
+ST_VARS='{"statuses":[]}'
+KOMUT_VARS='{"files":[{"filename":"_agents/fabrika/kanit/x/KANIT.json"}]}'
 case "$1 $2" in
   "pr view") case " $* " in *statusCheckRollup*) [ -n "${FAKE_CI_YOK:-}" ] && exit 1; printf '%s\n' "${FAKE_CI:-$CI_VARS}";; *" body "*|*",body"*|*"body,"*|*".body"*) printf '%s\n' "${FAKE_GOVDE:-}" ;; *) echo "$FAKE_DAL" ;; esac ;;
   "api repos/{owner}/{repo}/commits/bbbbbbbb22222222/check-runs") printf '%s\n' "${FAKE_API:-$API_VARS}" ;;
+  "api repos/{owner}/{repo}/commits/bbbbbbbb22222222/status") printf '%s\n' "${FAKE_ST:-$ST_VARS}" ;;
+  "api repos/{owner}/{repo}/commits/aaaaaaaa11111111/check-runs"|"api repos/{owner}/{repo}/commits/aaaaaaaa11111111/status") echo '{"check_runs":[],"statuses":[]}' ;;
+  "api repos/{owner}/{repo}/commits/aaaaaaaa11111111"|"api repos/{owner}/{repo}/commits/bbbbbbbb22222222") printf '%s\n' "${FAKE_DOSYA_KOMUT:-$KOMUT_VARS}" ;;
   "pr diff") [ -n "${FAKE_DOSYA_YOK:-}" ] && exit 1; printf '%s\n' $FAKE_DOSYALAR ;;
   *) exit 2 ;;
 esac
@@ -654,7 +659,7 @@ CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/i
 echo "════ T20 · CI SONUCU (gorev …BV5W2F): kırmızı/bitmemiş geçmez, kontrolsüz baş son kontrole bakar, okunamazsa ÖLÇÜLEMEDİ ════"
 CIK='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"},{"name":"kabuk","status":"COMPLETED","conclusion":"FAILURE"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
 CIB='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"},{"name":"kabuk","status":"IN_PROGRESS","conclusion":""}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
-CIE='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[],"commits":[{"oid":"aaaaaaaa11111111"},{"oid":"bbbbbbbb22222222"}]}'
+CIE='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[],"commits":[{"oid":"bbbbbbbb22222222"},{"oid":"aaaaaaaa11111111"}]}'
 ci_kos() { ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" "$@" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 31"; }
 CIKTI="$(ci_kos FAKE_CI="$CIK" 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "CI KIRMIZI" <<<"$CIKTI" && grep -q "kabuk" <<<"$CIKTI"; g $? "T20a kırmızı kontrol → kapı ENGELLER (rc=1), hangisi kırmızı yazılır"
@@ -672,6 +677,10 @@ CIKTI="$(ci_kos FAKE_CI_YOK=1 2>&1)"; RC=$?
 [ "$RC" -eq 3 ] && grep -q "CI sonucu ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "T20g CI okunamadı (gh hata) → ÖLÇÜLEMEDİ (rc=3)"
 # --pr yokken CI sorulmaz (yerel kullanım değişmedi)
 CIKTI="$(ghk env FAKE_CI_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' is-asil" 2>&1)"; ! grep -q "CI sonucu" <<<"$CIKTI"; g $? "T20h --pr verilmediyse CI sorgusu yok (eski çağrılar bozulmaz)"
+CIKTI="$(ci_kos FAKE_CI="$CIE" FAKE_API='{"check_runs":[{"name":"kabuk","status":"completed","conclusion":"success"}]}' FAKE_DOSYA_KOMUT='{"files":[{"filename":"yazilim-fabrikasi/scripts/kart.sh"}]}' 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "kod değiştiriyor ama kontrolü yok" <<<"$CIKTI"; g $? "🔴 T20m kontrolsüz baş KOD değiştiriyor (kontroller henüz oluşmamış olabilir) → önceki commit yeşil olsa da ÖLÇÜLEMEDİ (rc=3), ödünç yeşil yok"
+CIKTI="$(ci_kos FAKE_CI="$CIE" FAKE_ST='{"statuses":[{"context":"eski-durum","state":"failure"}]}' 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "eski-durum" <<<"$CIKTI"; g $? "T20n geriye bakışta kırmızı eski tip durum (StatusContext) da okunur → ENGELLER"
 M15="$PKG/mutant15.sh"; sed 's/^ci_olc$/:/' "$G" > "$M15"; ! cmp -s "$G" "$M15"; g $? "T20i mutant 15 üretildi (CI ölçümü çağrılmıyor)"
 CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" FAKE_CI="$CIK" bash -c "$(declare -f kapi); G='$M15'; kapi '$P' --pr 31" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "T20j mutant 15: kırmızı CI kapıyı GEÇİRİYOR → T20a bu mutantta düşerdi"

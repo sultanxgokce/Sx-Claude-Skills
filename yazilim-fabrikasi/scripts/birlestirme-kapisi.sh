@@ -547,15 +547,22 @@ try:
             og.append((c.get("name", "?"), (c.get("status") or "").upper() == "COMPLETED", c.get("conclusion")))
     yer = "PR başı " + d["headRefOid"][:8]
     if not og:
-        # kontrol koşmayan baş (yol süzgeci): sondan geriye en çok 8 commit'te kontrol ara
+        # kontrol koşmayan baş: iki sebebi olabilir — (a) yol süzgeci (yalnız kanıt dosyası değişti) ya da (b) kontroller HENÜZ oluşmadı.
+        # (b)'yi önceki commit'in sonucuyla örtmek YASAK: geriye yalnız, aradaki her commit YALNIZ kanıt dizinine dokunuyorsa
+        # (kod aynı → önceki kodun sonucu bu kodun sonucudur) bakılır; kod değiştiren kontrolsüz commit ÖLÇÜLEMEDİ der.
         oidler = [c["oid"] for c in (d.get("commits") or [])][::-1][:8]
         for oid in oidler:
             r = gh("api", f"repos/{{owner}}/{{repo}}/commits/{oid}/check-runs")
-            runs = r.get("check_runs") or []
-            if runs:
+            st = gh("api", f"repos/{{owner}}/{{repo}}/commits/{oid}/status")
+            runs = r.get("check_runs") or []; sts = st.get("statuses") or []
+            if runs or sts:
                 og = [(x.get("name", "?"), x.get("status") == "completed", x.get("conclusion")) for x in runs]
-                yer = f"son kontrol koşmuş commit {oid[:8]} (PR başı {d['headRefOid'][:8]} yol süzgecine takıldı)"
+                og += [(x.get("context", "?"), (x.get("state") or "").lower() not in ("pending", "expected"), "SUCCESS" if (x.get("state") or "").lower() == "success" else (x.get("state") or "")) for x in sts]
+                yer = f"son kontrol koşmuş commit {oid[:8]} (PR başı {d['headRefOid'][:8]}; aradaki commit'ler yalnız kanıt)"
                 break
+            dosyalar = [f.get("filename", "") for f in (gh("api", f"repos/{{owner}}/{{repo}}/commits/{oid}").get("files") or [])]
+            if not dosyalar or any(not f.startswith("_agents/fabrika/kanit/") for f in dosyalar):
+                print("OLCEMEDI|commit " + oid[:8] + " kod değiştiriyor ama kontrolü yok (kontroller henüz oluşmamış olabilir; bitince tekrar dene)"); raise SystemExit
     if not og:
         print("OLCEMEDI|PR başında da, son 8 commit'te de kontrol yok"); raise SystemExit
     k, b, y = hukum(og)
