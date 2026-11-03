@@ -604,6 +604,22 @@ echo "· fark: $FARK_KAYNAK"
 #    tur 1). Tam fark YALNIZ düzeltme farkı HESAPLANAMAZSA gider: önceki bas yok (eski kayıt) · nesne bu depoda yok · git diff
 #    düştü; sebebi ekranda yazar. --diff kipinde baş ölçülemez (çağıranın dosyası) → bas boş, düzeltme farkı kurulmaz.
 BAS=""; DUZ_ONCEKI_BAS=""; DUZ_DOSYA=0; DUZ_BAYT=0; DUZ_TAM_BAYT=0
+# Ana dal birleşimi ÇATIŞINCA (iki taraf da aynı dosyaya, ör. sürüm satırına, dokundu; gorev …519DN6, Sx #678 tur 3 · #681 tur 2) merge-tree temiz
+#   sol uç veremez. O zaman her PR dosyası için iki PR farkı (önceki: ortak ata→önceki baş; yeni: ortak ata→yeni baş) yalnız
+#   eklenen/çıkan satırlara indirgenip karşılaştırılır: aynıysa dosya bu turda DEĞİŞMEMİŞTİR (ana dalın girdisi dışarıda kalır), farklıysa dosyanın YENİ PR farkı
+#   (ana hatta göre) gider; yeni fark boşsa (PR dosyayı ana hat hâline geri aldı) önceki başla yeni baş arasındaki fark gider. Kapsam: _ana _mb _omb _ob BAS _pd.
+_duz_norm() { sed -n '/^[+-]/{/^\(+++\|---\) /!p}'; }   # yalnız eklenen/çıkan satırlar: bağlam satırı (ana dalın girdisi olabilir) karşılaştırmaya girmez
+_duz_dosya_bazli() {
+  : > "$TMP/diff-duz.patch"; local f eski yeni
+  for f in "${_pd[@]}"; do
+    eski="$(git -C "$DEPO" --literal-pathspecs diff --no-renames "$_omb" "$_ob" -- "$f" 2>/dev/null | _duz_norm)"
+    yeni="$(git -C "$DEPO" --literal-pathspecs diff --no-renames "$_mb" "$BAS" -- "$f" 2>/dev/null | _duz_norm)"
+    [ "$eski" = "$yeni" ] && continue
+    if [ -n "$yeni" ]; then git -C "$DEPO" --literal-pathspecs diff --no-renames "$_mb" "$BAS" -- "$f" >> "$TMP/diff-duz.patch" 2>/dev/null || return 1
+    else git -C "$DEPO" --literal-pathspecs diff --no-renames "$_ob" "$BAS" -- "$f" >> "$TMP/diff-duz.patch" 2>/dev/null || return 1; fi
+  done
+  return 0
+}
 if [ -n "$PR" ] && [ -z "$DIFF" ]; then BAS="$PR_SHA"
 elif [ -z "$DIFF" ]; then BAS="$(git -C "$DEPO" rev-parse -q --verify HEAD 2>/dev/null)"; fi
 if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
@@ -646,14 +662,16 @@ if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
     #   dosyadaki satırları) bu turun değişikliği gibi gösteriyordu; göz yalnız o farkı görüp 3/H verdi. Sol uç, önceki başa YENİ ortak atanın
     #   (ana dalın) eklenmiş hâli olur (git merge-tree): fark yalnız PR'ın kendi artımını taşır. Birleştirme çatışırsa ya da ortak ata aynıysa
     #   eski davranış (sol uç = önceki baş) sürer ve ekranda söylenir.
-    _sol="$_ob"; _omb="$(git -C "$DEPO" merge-base "$_ana" "$_ob" 2>/dev/null)"
+    _sol="$_ob"; _CAKIS=0; _omb="$(git -C "$DEPO" merge-base "$_ana" "$_ob" 2>/dev/null)"
     if [ -n "$_mb" ] && [ -n "$_omb" ] && [ "$_mb" != "$_omb" ]; then
       _mt="$(git -C "$DEPO" merge-tree --write-tree "$_ob" "$_mb" 2>/dev/null)" && [ -n "$_mt" ] && _sol="${_mt%%$'\n'*}" \
         && _bilgi "· ana dal iki tur arasında dala birleşmiş (ortak ata ${_omb:0:8} → ${_mb:0:8}): artımlı fark ana dalın girdisinden süzüldü" \
-        || { _sol="$_ob"; _bilgi "· ana dal birleşimi süzülemedi (birleştirme çatıştı): artımlı fark ham gidiyor, göz ana dal satırlarını PR değişikliği sanabilir"; }
+        || { _sol="$_ob"; _CAKIS=1; _bilgi "· ana dal birleşimi çatıştı (ör. iki tarafın da dokunduğu sürüm dosyası): artımlı fark dosya bazlı PR farkından kurulur (her iki ucun ana hatla ortak atasına göre farkı karşılaştırılır; ana dalın girdisi bu turun eklemesi sayılmaz)"; }
     fi
     if [ -z "$_mb" ]; then _bilgi "· düzeltme farkı hesaplanamadı: $_ana ile ${BAS:0:8} ortak atası bulunamadı (PR dosyaları ölçülemedi) → tam fark gider"
-    elif [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" --literal-pathspecs diff "$_sol" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then
+    elif [ "$_CAKIS" = 1 ] && [ "${#_pd[@]}" -gt 0 ] && ! _duz_dosya_bazli; then
+      _bilgi "· düzeltme farkı hesaplanamadı: dosya bazlı PR farkı kurulamadı → tam fark gider"
+    elif [ "$_CAKIS" != 1 ] && [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" --literal-pathspecs diff "$_sol" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then
       _bilgi "· düzeltme farkı hesaplanamadı: git diff ${_ob:0:8}..${BAS:0:8} düştü → tam fark gider"
     else
       DUZ_TAM_BAYT=$(wc -c < "$TMP/diff.patch"); DUZ_BAYT=$(wc -c < "$TMP/diff-duz.patch"); DUZ_DOSYA=$(grep -c '^diff --git ' "$TMP/diff-duz.patch")

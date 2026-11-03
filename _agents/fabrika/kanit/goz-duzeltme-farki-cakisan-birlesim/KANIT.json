@@ -1,0 +1,52 @@
+{
+  "is": "goz-duzeltme-farki-cakisan-birlesim",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T20:50:00+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme farki sinavi (D13 yeni)",
+      "asama": "tek",
+      "dosya": "olcum-duzeltme farki sinavi (D13 yeni)-tek.txt",
+      "sha256": "0ac76680400f6e7b96f360bd3c469f4072c170056dbe392d325e06d1bc52cfbb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:49:35+03:00",
+      "sure_sn": 237.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4a7602dcc080475d89d1974faa35c2ed",
+      "olculen_commit": "800994bae9897815b97d68ecb9d344aaeb3a0acd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant cakisan birlesimde dosya bazli fark kapali",
+      "asama": "tek",
+      "dosya": "olcum-mutant cakisan birlesimde dosya bazli fark kapali-tek.txt",
+      "sha256": "f86bba0de4982547ffe5c6c7a8ad7d102cee05a8297b860a9d4d58107459290b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-cakisma.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:50:00+03:00",
+      "sure_sn": 18.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "duzeltme farki sinavi (D13 yeni)",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D13c",
+      "hedef_dustu": true,
+      "olcum_id": "466f5cb33cc947ca8e5011b7d8607289",
+      "olculen_commit": "800994bae9897815b97d68ecb9d344aaeb3a0acd",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "d1eaed8cf62aa99b92143e53c7f1af007f66526ba77ac9c6da2cb8ba0f49ac4c"
+}
