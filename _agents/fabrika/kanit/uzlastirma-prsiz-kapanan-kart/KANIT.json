@@ -1,7 +1,7 @@
 {
   "is": "uzlastirma-prsiz-kapanan-kart",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T20:09:44+03:00",
+  "guncelleme": "2026-11-03T20:33:12+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -86,7 +86,26 @@
       "olcum_id": "30476803ffc642d2ae75a7e433ddd9e3",
       "olculen_commit": "fca958b2939f4273df21c629b679a5913f4f3a0a",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart aracı sınavı (G10c yeni sözleşme; CI 'kalan' kovası kırmızısı)",
+      "asama": "sonra",
+      "dosya": "olcum-kart aracı sınavı (G10c yeni sözleşme; CI 'kalan' kovası kırmızısı)-sonra.txt",
+      "sha256": "dd34ac91d273eb2a04193e9086daa846c308a23d2729e94a13b5b4cff55cc67d",
+      "komut": [
+        "bash",
+        "kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:33:12+03:00",
+      "sure_sn": 178.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "696a47e2c2da46039407ca1b65c20bad",
+      "olculen_commit": "ac8bedf6db363ced57145a5a72c1ec3d0547d84f",
+      "olculen_kirli": true
     }
   ],
-  "imza": "f6f1d78aee421267554c3245ff199f53bcd9658cca19a2fc2b6b7235025b47f5"
+  "imza": "635e4318f46f3e8fbcd8d5b9c6a99f5fa49f91385c948ca6b587b9b4bfa806bf"
 }
