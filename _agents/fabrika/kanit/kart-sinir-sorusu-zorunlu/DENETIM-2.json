@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "kart-sinir-sorusu-zorunlu",
+  "pr": "669",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T10:23:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sinir-sorusu-zorunlu",
+  "dal": "kart-sinir-sorusu-zorunlu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32165,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 18934
+  },
+  "dalgic": "uyumlu",
+  "bas": "3265014698b449643ecb1d7842cd3db8cd06f5ad",
+  "duzeltme_farki": {
+    "onceki_bas": "07c733ad6f428fa345da052797844554bcdc4f47",
+    "dosya": 9,
+    "bayt": 28104,
+    "tam_bayt": 149395
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "“Tüm” ve “bütün” kapsamdan çıkarılmış, kapının ret/kabul yolları yeşile dönmüş ve mutasyon kapının kaldırılmasını yakalıyor. Ancak önceki kapsam kayması yalnız kısmen kapanmış: iş kartında yazmayan çekimli biçimler hâlâ engelleyici kapıyı çalıştırdığı için önce hedef sınırı talebe tam uydurmak gerekir.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kısmen kapandı: “tüm” ve “bütün” artık tetiklemiyor, fakat “tamamını” dahil çeşitli çekimli biçimler talepte sayılmadığı hâlde engelleyici kapsama alınmaya devam ediyor; SKILL açıklamasının sonradan “çekimli biçimleriyle” diye değiştirilmesi iş kartındaki talebi genişletemez.",
+        "kanit": "İş kartı yalnız “tamamı, hepsi ya da tümü geçerse” diyor. Üretim regex'i `tamam[ıi](?:n[ıi]|nda|nd[ae]n|n[ıi]n)?`, `hepsi(?:ni|nde|nden|nin)?` ve `tümü(?:nü|nde|nden|nün)?` biçimlerini kabul ediyor; T18 SN11 de talepte bulunmayan “tamamını” biçiminin kapıyı çalıştırdığını ve kabul yönünü doğruluyor. Buna karşılık SN9, “tüm” ve “bütün”ün artık sayılmadığını gösteriyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:sinir_kapsami; yazilim-fabrikasi/scripts/kart.test.sh:T18 SN9 ve SN11; olcum-sinav-sonra.txt:T18 SN9 ve SN11",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 469/7 kırmızıdan sonra ölçümü 476/0 yeşile dönüyor; gerçek ölçüm `sinav` etiketiyle açıkça ayrılmış. Mutasyon kaydı beklenen 4 hatayla sınır kapısının devreden çıkarılmasını yakalıyor. Bununla birlikte SN11 talep dışındaki çekimli biçimi özellikle onayladığından yeşil sonuç hedef doğruluğunu kanıtlamıyor."
+  }
+}

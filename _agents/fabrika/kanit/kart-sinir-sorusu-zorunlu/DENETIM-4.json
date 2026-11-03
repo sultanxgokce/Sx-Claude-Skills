@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "kart-sinir-sorusu-zorunlu",
+  "pr": "669",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T12:30:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sinir-sorusu-zorunlu",
+  "dal": "kart-sinir-sorusu-zorunlu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26187,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6717
+  },
+  "dalgic": "uyumlu",
+  "bas": "84ba7754742d22b4bda062ff3f914269b4525716",
+  "duzeltme_farki": {
+    "onceki_bas": "b6a2f9124c9e2defe604ae25825ff293d7931b9d",
+    "dosya": 6,
+    "bayt": 8680,
+    "tam_bayt": 157004
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapandı: üretim regex’inden talep dışı ASCII “tamami” çıkarılmış ve bunun sınır istemediği negatif sınavla sabitlenmiş. Gerçek ölçüm 478/0 yeşil, kabul-ret yolları ve mutasyon kapısı da çalışır durumda; yalnız küçük rötuş dahi gerektiren kanıtlı bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra gerçek ölçüm çifti kırmızı rc=1’den yeşil rc=0 ve 478/0 sonuca geçişi gösteriyor; T18, talepteki üç sözcük için eksik/geçersiz sınır retlerini, sayı ve “hariç <ne>” kabullerini, sözcük sınırlarını ve yeni SN11b ile ASCII “tamami” negatif vakasını ölçüyor. Mutasyon kaydı beklenen 4 hatayla sınır kapısının kaldırılmasını yakalıyor; bunlar gerçek kod bulgusu değil."
+  }
+}
