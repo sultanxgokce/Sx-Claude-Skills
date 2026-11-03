@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.49
+version: 0.27.50
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -10,7 +10,7 @@ description: >
   sha ile denetler). Tetik: "/fabrika", "iş başlat", "iş alanı aç", "hat dosyasını kur",
   "fabrika denetle", "kanıtla", "gönder", "bağımsız göz". F0 sürümü: hat dosyası + iş alanı;
   F1: kanıt (kanit.sh, manifesti araç yazar) +
-  bağımsız göz (denetci.sh, Codex/Claude çapraz, tavan 3+1) + karne. F2: sergi. F3: kart.sh (0. adım: sınıf sorularını araç sorar, kartsız alan açılmaz) + gun-sonu.sh (özet defterden). Kalan F4: ana-dal kilidi.
+  bağımsız göz (denetci.sh, Codex/Claude çapraz, tavan 2+1) + karne. F2: sergi. F3: kart.sh (0. adım: sınıf sorularını araç sorar, kartsız alan açılmaz) + gun-sonu.sh (özet defterden). Kalan F4: ana-dal kilidi.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -62,7 +62,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 2. **İNŞA** — `adimlar/2-insa.md`. Üç kat: yüzey · servis · depo. Tek gerekçe: hata olduğunda nerede olduğunu bil.
 3. **KANITLA** — `adimlar/3-kanit.md`. Görüntü / ölçüm / video. "Çalışıyor" demek kanıt değil. Kanıtsız adım 4 yok.
 4. **GÖNDER** — `adimlar/4-gonder.md`. PR (`pr-onay`) + bağımsız göz (yazandan farklı model). Puan iki satır:
-   **kod iyi mi** 0-5 · **doğru şey mi** E/H. 5+E değilse adım 2. Tavan 3 tur (+1 ilerleyene), 4 mutlak.
+   **kod iyi mi** 0-5 · **doğru şey mi** E/H. 5+E değilse adım 2. Tavan 2 tur (+1 ilerleyene), 3 mutlak.
 
 ## Kurulum (bir kutuda bir kez)
 
@@ -78,7 +78,7 @@ Hat dosyası **düzenlenmez**; kutuya özel kural `.claude/skills/` katmanına g
 | Parça | Durum |
 |---|---|
 | FABRIKA.md şablonu + fabrika-kur.sh + is-alani.sh + 5 adım belgesi | **F0 — bu sürümde var**, sınavlı |
-| `kanit.sh` (KANIT.json'u araç yazar, imzalı) · `denetci.sh` (Codex/Claude çapraz, tavan 3+1/4) · `karne.sh` | **F1 — bu sürümde var**, sınavlı (21+25+9); Codex canlı koşuldu |
+| `kanit.sh` (KANIT.json'u araç yazar, imzalı) · `denetci.sh` (Codex/Claude çapraz, tavan 2+1/3) · `karne.sh` | **F1 — bu sürümde var**, sınavlı (21+25+9); Codex canlı koşuldu |
 | `sergi-beceri.py` → sergi.mmepanel.com | **F2 — var**: manifest üretir (katalog ∪ kurulu ∪ depo-yerel; öksüz görünür), `sergi` becerisi basar, Nexus `scripts/sergi-yayinla.sh` yayınlar. Canlı 22 Eyl: 117 kayıt, Access arkasında |
 | `kart.sh` (sınıf soruları araçta, kartsız alan açılmaz) · `gun-sonu.sh` (defterden özet) · tetik entegrasyonu (`--oda`) | **F3 — var**, sınavlı (25) |
 | akış videosu (grafik ortam) | yok — konteynerde grafik ortam yok; `ekran` kare dizisi, video SARI kalır |
@@ -114,6 +114,7 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - **Ölçülen commit + puandan sonra kod değişimi (0.27.40, 31 Eki · NAZIR yaması Sx kaynağına, bulgu SERDAR):** `kanit.py` 0.6.0 her kayda `olculen_commit` ve `olculen_kirli` yazar; `birlestirme-kapisi.sh` denetimin `bas` commit'ini birleşen uçla karşılaştırır — puandan sonra kanıt dizini dışında kod değiştiyse "yeniden göze gönder" der. Yama kurulu kopyada yaşıyordu, Sx kaynağında yoktu; 23:24 kurulumu ezdi.
 - **Sahip adı yazım farkına takılmaz (0.27.42, 1 Kas · bulgu …K8F):** `kart.sh` sahip denetimleri ve kart süzgeçleri `soru.ayni_ad` kullanır: `BANI` ile `BÂNİ`, `MUAVIN` ile `MUAVİN` aynı kişidir. Kartta yazılı ad değişmez; başka ad yine reddedilir.
 - **Kapsam sözcüğü varsa sınır sorulur (0.27.45, 3 Kas · kılıç bileme, görev …KSQSERN):** `kart.sh ac` cümlede tamamı, hepsi ya da tümü sözcüğü (birebir; tamamını, hepsini gibi çekimler yakalanmaz) geçerse `--sinir` ister: sayı ("11 kutu") ya da "hariç <ne>". Yoksa kart AÇILMAZ (rc 1). Ölçüm: 63 turda 15 kapsam kayması, 22 sınır vakası. Kapı yalnız sözcüğü ve değerin biçimini ölçer; sınırın doğru olduğunu bilmez.
+- **Bağımsız göz iki tura iner (0.27.50, 3 Kas · Sultan öneri #2 · görev …B0VX5E · kart goz-iki-tur):** `denetci.sh` tavanı 3 → **2** (bir bulgu turu + bir düzeltme turu), ilerleyene +1, mutlak 4 → **3**. Gerekçe (ölçüm): 660 gerçek kusurun çoğu 1. turda çıkıyor, 2. turdan sonrası gürültü; çok turlu işte p90 78-102 dk. Kutu dışı bulgu tur yakmaz (SAYILI tur, 0.27.46'dan beri) ve ikinci gelişinde canlı borca devredilir. `denetci-istem.md`: göz yalnız `ciddi` ve işi bozan `uygulama` bulgusu yazar, `rotus` listeye girmez. `FABRIKA.md` şablonu aynı cümleyle güncellendi; depolardaki kopya `fabrika-kur.sh` ile yenilenir (sha değişir).
 - **Mutasyon kaydı hedef kapının adını ister (0.27.49, 3 Kas · kılıç bileme, görev …02RBP8):** `kanit.sh olcum --mutasyon <gerçek etiket>` artık `--kapi <ad>` ister (sınavın ✗ satırında geçen kapı adı, ör. `--kapi K1`); adsız çağrı rc 2, kayıt yazılmaz. "Yakalandı" yalnız adı verilen kapı **düşen kapı satırında** göründüğünde yazılır; başka kapı düşerse, ad yalnız geçen satırda ya da yığın izinde geçerse, rc 9 kurulum hatası olursa kayıt SARI "ölçülemedi" kalır ve hedef kapının düşmediği söylenir. Her düşen satırda geçen genel ad (`FAIL` · `✗` · "N kaldı") ve tek karakter ad hedef olamaz. Kayıt `hedef_kapi` + `hedef_dustu` taşır, özet tablosu hedef kapıyı gösterir. Eski kayıtlar etkilenmez; kapı yalnız yeni koşuyu sıkılaştırır, mutantın doğru yere yama olduğunu yine ölçmez.
 - **Eski canlı borç sahibinin sırasında en üste çıkar (0.27.48, 3 Kas · kart borc-sahibi-sirada-en-ust · görev …W41XNS):** `kart.sh borclar-sahip <AD> [--esik-saat N]` bir koltuğun eşiği (varsayılan 48 saat) aşan canlı borçlarını `BORC<TAB>iş<TAB>saat<TAB>gerekçe` satırlarıyla verir (rc 1 var · 0 yok · 3 okunamadı; yaşı bilinmeyen borç eşiği aşmış sayılır). `gunluk-plan` 1.22.0 `sirada-bak.sh` bunu karardan ÖNCE okur: borç varsa `BORC=` satırları en üstte basılır, `KARAR=BORC` olur ve yeni iş ÜSTLENİLMEZ; okunamazsa `BORC=ÖLÇÜLEMEDİ` (temiz denmez, sırayı kilitlemez). Sınır: yalnız cwd deposunun kartlarına bakar; defterde borç alanı olmadığından "deftere bitti yazılamasın" yarısı BU DİLİMDE YOK. Sınav kapı T14l2-l7 (6 kapı: İ/I eşleşmesi, bozuk kart rc 3) + sirada-bak B1-B4 (14 kapı; mutant: borçta çıkış kalkarsa üstlenme geri gelir).
 - **Kutu dışı bulgu ikinci gelişinde canlı borca devredilir (0.27.47, 3 Kas · kılıç bileme, görev …JDDN1N; #674 de 0.27.46'ydı, sürüm çakışması bu girdiyle çözüldü):** `denetci.sh` aynı kutu dışı bulguyu (aynı `ne`) ikinci kez görünce, kart canlı kanıt istiyorsa (`canli_gerekir`) ve sınıfsızsa, kartın sahibi adına `kart.sh canli-borc` yazar; tur yeniden açılmaz, borç 24 saatte ödenmezse `kart.sh borclar` kırmızı verir. İlk gelişte, sınıflı kartta (ajan Sultan adına borç yazamaz), canlı kanıt istemeyen kartta ve normal bulgu tekrarında borç yazılmaz; sebep ekranda kalır. `DENETCI_KD_BORC=0` kapatır. Kapı borcu kaydeder, kapıyı gevşetmez; bulgunun gerçekten kapandığını ölçmez, onu dağıtımdan sonra `kanit.sh canli` ölçer.

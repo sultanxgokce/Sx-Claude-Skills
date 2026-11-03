@@ -1,0 +1,68 @@
+{
+  "is": "goz-iki-tur",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T18:59:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "tavan-eski-denetci",
+      "asama": "once",
+      "dosya": "olcum-tavan-eski-denetci-once.txt",
+      "sha256": "8b87069db6dd4ad862f119b1c90719dcbef68501b1a7773c57fdd1449c8e3acf",
+      "komut": [
+        "env",
+        "MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur/yazilim-fabrikasi/scripts/denetci-eski-gecici.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-tavan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T18:33:27+03:00",
+      "sure_sn": 4.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0c3353a6ccc1431ebe71ac066324d3cd",
+      "olculen_commit": "c2d7ef105dc3a329142a00029cb8a21a9f22dd4b",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tavan-yeni-denetci",
+      "asama": "sonra",
+      "dosya": "olcum-tavan-yeni-denetci-sonra.txt",
+      "sha256": "b1675214b9a42bfe74e7a9c0a12fc4c252e24b4b03c6dfb0c706b3e37a92f46a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-tavan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T18:33:31+03:00",
+      "sure_sn": 3.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3af2d06ceba14c38854cfafc67f471b3",
+      "olculen_commit": "c2d7ef105dc3a329142a00029cb8a21a9f22dd4b",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tam-paket-denetci",
+      "asama": "sonra",
+      "dosya": "olcum-tam-paket-denetci-sonra.txt",
+      "sha256": "57f606154c5a47c9c45550bab2a70573f71640170b0216c6064f2b1915529357",
+      "komut": [
+        "bash",
+        "-c",
+        "tail -2 /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/denetci-dort.log; grep -c \"SONUÇ: 339 geçti · 0 kaldı\" /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/denetci-dort.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T18:59:55+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "b134badf587e48bbb841c26d144bf2f6",
+      "olculen_commit": "c2d7ef105dc3a329142a00029cb8a21a9f22dd4b",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "7f5c0ed3508c332d2c0f8eb4eac9c3346cdb88c2379a0a9c833efed878451934"
+}

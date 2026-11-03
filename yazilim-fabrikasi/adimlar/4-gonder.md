@@ -22,7 +22,7 @@
    `kart.sh canli-borc <iş> --yazan <sahip> --gerekce "…"` → kapı borçla geçer (sınıflı işte önce `kart.sh sultan-dedi --karar canli-borc`; ajan Sultan adına yazmaz)
    → birleştir → kur → `kanit.sh canli …` (borçtan SONRA, bağlı yeşil) → `kart.sh bitti`. Kart o zamana dek `canli-borclu`dur (bitti değil); `kart.sh borclar` 24 saati aşanı kırmızı gösterir.
 4. **5 ve E değilse adım 2'ye dön:** düzelt → yeniden kanıtla → yeniden gönder.
-   - Tavan **3 tur**. İlerleyen işe (puan yükseldi **ve** açık bulgu azaldı) **+1**. **Dört mutlak.**
+   - Tavan **2 tur** (bir bulgu turu + bir düzeltme turu). İlerleyen işe (puan yükseldi **ve** açık bulgu azaldı) **+1**. **Üç mutlak.**
    - 🔴 **Tavan SAYILI tura uygulanır** (15 Eki 2026, görev WC3VBZAA). Bir bulgu gerçek olabilir ama bu
      kutuda **ölçülemez/düzeltilemez** olabilir: Sultan'ın Mac'i, canlı yetki, dış hesap, fiziksel cihaz.
      Denetçi onu `agirlik: "kutu-disi"` + `kutu_disi_yuzey` ile yazar; o bulgu **puanı düşürmez** ve
@@ -43,7 +43,7 @@
      etiket `begeni-dongusu` değilse, sıradaki tur numarası tutmuyorsa ya da `[tur N]` satırı görevde yoksa kaydetmez; defter okunamazsa hiçbir şey değişmez (rc 4). Kayıttan sonra
      `denetci.sh` göz tur sayımını o ana kadarki denetim sayısına çeker (`kart.sh daralt` ile aynı sıfırlama; ikisinin büyüğü geçerli) ve `birlestirme-kapisi.sh` son denetimin Sultan turundan
      SONRA koştuğunu ister: Sultan değiştir dedikten sonra denetlenmemiş eski 5/E birleştirmez.
-     🔴 **Dürüst sınır:** tavan yine `DENETIM-N` dosyalarını sayar; Sultan turu yalnız sayımı o noktadan başlatır, 4. tur mutlak tavanı her Sultan turundan sonraki bölümde geçerlidir (toplam göz turu Sultan turu sayısıyla büyür, ayrı bir üst sınırı yoktur) ve etiketsiz işte hiçbir şey sıfırlanmaz. Araç satırı Sultan'ın yazdığını doğrulayamaz; yalnız etiketi, tur sırasını, satırın varlığını, kartın tek göreve bağlı olmasını ve görevin başka kartta kullanılmamış olmasını denetler. Görevi açan ve etiketi koyan Sultan'dır, o yüzden sahte tur Sultan'ın görev kaydına yazılmış bir satırı gerektirir.
+     🔴 **Dürüst sınır:** tavan yine `DENETIM-N` dosyalarını sayar; Sultan turu yalnız sayımı o noktadan başlatır, 3. tur mutlak tavanı her Sultan turundan sonraki bölümde geçerlidir (toplam göz turu Sultan turu sayısıyla büyür, ayrı bir üst sınırı yoktur) ve etiketsiz işte hiçbir şey sıfırlanmaz. Araç satırı Sultan'ın yazdığını doğrulayamaz; yalnız etiketi, tur sırasını, satırın varlığını, kartın tek göreve bağlı olmasını ve görevin başka kartta kullanılmamış olmasını denetler. Görevi açan ve etiketi koyan Sultan'dır, o yüzden sahte tur Sultan'ın görev kaydına yazılmış bir satırı gerektirir.
      Sultan turundan sonra göz yeniden koşulursa o göz turu yeni sayıma girer. Tavan dolarsa çıkış yolu değişmedi: `kart.sh daralt` (Sultan'ın yeni istekleri yeni karta). Tasarım: Nexus `_agents/spec/begeni-dongusu-DESIGN.md`.
    - Üçte 5'e ulaşamayan iş "**tıkandı + üç yol**" raporuyla gelir: devam et (gerekçe) · kapsamı daralt · geri al.
    - **Kapsamı daralt = hattın adımıdır, elle yeni kart/dal/PR açmak değil** (0.8.0, PCP7J): `kart.sh daralt <iş>

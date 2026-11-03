@@ -11,6 +11,7 @@
 #
 # HERMETİK: gerçek denetçi (codex/claude) çağrılmaz — DENETCI_KOMUT ile sahte bir betik kullanılır.
 set -uo pipefail
+export DENETCI_TAVAN=3 DENETCI_MUTLAK=4   # eski turlu sınavlar 3(+1)/4 ile koşar (0.27.50: varsayılan 2(+1)/3; yeni varsayılanın kendi sınavı T7n, değişkensiz)
 export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
