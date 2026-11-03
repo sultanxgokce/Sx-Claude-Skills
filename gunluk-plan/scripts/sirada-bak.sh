@@ -125,6 +125,22 @@ case "$TZ_D" in
      if [ "$HTS" -eq 0 ]; then echo "TAZELIK_NEDEN=bugünün tarihi okunamadı (GUNLUK_PLAN_TARIH='$BUGUN') — tazelik hesaplanamaz, bayat da taze de DENMEZ"
      else echo "TAZELIK_NEDEN=havuzdaki $HTS kaydın tarihi okunamadı ya da gelecekte, taze kayıt da görünmüyor — bayat DENMEZ, ekranda (son:) damgasını kontrol et"; fi ;;
 esac
+# 1.22.0 (görev …W41XNS · kılıç bileme 3 Kas): ESKİ CANLI BORÇ SIRANIN EN ÜSTÜNDEDİR. Fabrika kartlarında canlı borçlu 24 iş (en eskisi 11 gün) sahiplerinin sırasında görünmüyordu;
+#   sahibi yeni iş üstlenip borcu unutuyordu. Bu koltuğun borcu BORC_ESIK_SAAT'i (varsayılan 48) aşmışsa: borçlar KARAR'dan ÖNCE basılır, KARAR=BORC olur ve yeni iş
+#   ÜSTLENİLMEZ (önce borç ödenir: dağıtımı sor/kur → kanit.sh canli → kart.sh bitti). Kaynak kart.sh borclar-sahip (cwd'deki deponun kartları; başka depodakiler o depoda bakılır —
+#   dürüst sınır). Okuyamazsa BORC=ÖLÇÜLEMEDİ (temiz DENMEZ) ama sırayı kilitlemez. NOT: defterde canlı/borç alanı yok → "deftere bitti yazılamasın" yarısı bu dilimde YOK.
+BORC_ESIK="${GUNLUK_PLAN_BORC_ESIK_SAAT:-48}"; KARTSH="${GUNLUK_PLAN_KART_SH:-/config/.claude/skills/yazilim-fabrikasi/scripts/kart.sh}"
+if [ -n "$KIM" ] && [ -r "$KARTSH" ]; then
+  BORCLAR="$(bash "$KARTSH" borclar-sahip "$KIM" --esik-saat "$BORC_ESIK" 2>/dev/null </dev/null)"; BORC_RC=$?
+  case "$BORC_RC" in
+    0) : ;;
+    1) printf '%s\n' "$BORCLAR" | awk -F'\t' '$1=="BORC" {printf "BORC=%s · %s saat · %s\n",$2,$3,$4}'
+       echo "KARAR=BORC"
+       echo "ZORUNLU=ESKİ CANLI BORÇ (${BORC_ESIK} saati geçti): yeni iş ÜSTLENİLMEDİ. Sırayla: dağıtım indiyse kanit.sh canli <iş> … sonra kart.sh bitti <iş>; inmediyse dağıtımı yapacak kutuya mektup (posta.sh gonder). Borç ödenince sirada-bak.sh'ı yeniden koş."
+       exit 0 ;;
+    *) echo "BORC=ÖLÇÜLEMEDİ (kart.sh borclar-sahip rc $BORC_RC) — borç yok DENMEZ; kart.sh borclar elle koş" ;;
+  esac
+fi
 if [ "$N" -lt "$ESIK" ] && [ "$H" -ge 1 ]; then
   HAVUZDAN=1; SIRA="$(printf '%s\n%s\n' "$SIRA" "$HAVUZ" | sed '/^$/d')"; NB=$(printf '%s\n' "$SIRA" | wc -l)
 fi

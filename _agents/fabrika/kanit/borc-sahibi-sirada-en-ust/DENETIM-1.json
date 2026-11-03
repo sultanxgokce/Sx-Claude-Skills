@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "borc-sahibi-sirada-en-ust",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T15:51:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-borc-sahibi-sirada-en-ust",
+  "dal": "borc-sahibi-sirada-en-ust",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31720,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 36198
+  },
+  "dalgic": "uyumsuz",
+  "bas": "8b523b556aa086618ce7bc8adeb619f1db48504f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen ana davranış kurulmuş: 48 saati aşan canlı borçlar sıra kararından önce gösteriliyor ve borç varken yeni iş üstlenilmiyor. Ancak borç kaynağı okunamadığında temizmiş gibi devam edebilen ve sahip eşlemesini kaçırabilen yollar var; üretimden önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Bozuk veya okunamayan kartlar sessizce atlanıyor; tüm kartlar atlanırsa komut rc=0 ile “borç yok” sonucu vererek yeni iş üstlenilmesine izin verebilir.",
+        "kanit": "Kart döngüsündeki `except Exception: continue` okuma hatasını rc=3'e çevirmiyor; döngü sonunda yalnız `gec` sayısına göre `SystemExit(1 if gec else 0)` çalışıyor. B3 sınavı ise gerçek kart okuma bozukluğunu değil, sahte kart.sh'ın doğrudan rc=3 vermesini ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: borclar-sahip Python bloğu; gunluk-plan/scripts/sirada-bak.test.sh B3-B3b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sahip adı normalleştirmesi mevcut ad-eşitliği kuralından daha dar; örneğin `MUAVİN` ile `MUAVIN` eşleşmez ve gerçek borç görünmeyebilir.",
+        "kanit": "Yeni `norm` yalnız boşluk, `â/Â` ve büyük harf dönüşümü yapıyor; `İ` harfini `I` yapmıyor. Aynı değişiklikteki SKILL kaydı sahip denetimlerinin `MUAVIN` ile `MUAVİN` adlarını aynı saydığını açıkça belirtiyor; T14l4 yalnız tamamen başka bir adı sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: borclar-sahip `norm`; yazilim-fabrikasi/SKILL.md sahip adı kuralı; birlestirme-kapisi.test.sh T14l4",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil, sarı kayıt yok. B1-B4 ana akışı ve iç mutant, borç halinde üstlenmenin kesildiğini güçlü biçimde ölçüyor; kapı sınavı da temel borç üretimini kapsıyor. Bununla birlikte iki ölçüm de `olculen_kirli: true`, dolayısıyla sonuçların sunulan üretim farkına commit düzeyinde birebir bağlandığı kanıtlanmıyor; ayrıca gerçek bozuk kart okuması ve aksanlı sahip eşleşmesi sınanmamış."
+  }
+}

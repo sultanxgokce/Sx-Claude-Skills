@@ -95,7 +95,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;; --gorev-bitti) GOREV_BITTI=1; shift ;; --kare) KARE="$2"; shift 2 ;; --surum) SURUM="$2"; shift 2 ;; --olcum) OLCUM="$2"; shift 2 ;; --belge) BELGE="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --soz-zamani) SOZ_ZAMANI="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
-  --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
+  --gerekce) GEREKCE="$2"; shift 2 ;; --esik-saat) ESIK_SAAT="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;; --sinir) SINIR="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
@@ -1017,6 +1017,36 @@ if not ac: print("◻ açık canlı borç yok"); raise SystemExit(0)
 for is_,y,kr,al,sn in ac: print(f"{'🔴' if kr else '🟡'} {is_:34} {('?' if y is None else '%.1f sa'%y):>8} {al:10} {sn}  {'SÜRE AŞILDI' if kr else ''}")
 print(f"── {len(ac)} açık canlı borç · {gec} süresi aşılmış")
 raise SystemExit(1 if gec else 0)
+PY
+    ;;
+  borclar-sahip)
+    # 0.27.47 (görev …W41XNS · kılıç bileme 3 Kas): bir koltuğun ESKİ canlı borçları (varsayılan 48 saati geçen) — sirada-bak.sh bunu sıranın EN ÜSTÜNE koyar.
+    #   kart.sh borclar-sahip <AD> [--esik-saat N]  → her satır "BORC<TAB>iş<TAB>saat<TAB>gerekçe"; rc 1 = eşiği aşan borç var, rc 0 = yok, rc 3 = okunamadı.
+    #   Sahip = kartın 'aldı' alanı (norm: büyük harf, Â→A). Yaşı bilinmeyen borç (yas None) eşiği AŞMIŞ sayılır (ölçülemeyen temiz değildir).
+    python3 - "$KD" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" "$IS" "${ESIK_SAAT:-48}" <<'PY'
+import json,sys,glob,os
+kd,hdir,ad,esik=sys.argv[1:]
+sys.path.insert(0,hdir); from canli_borc import yas_saat
+def norm(x):
+    t=(x or "").strip()
+    for a_,b_ in (("İ","I"),("ı","I"),("â","a"),("Â","A"),("î","i"),("Î","I")): t=t.replace(a_,b_)
+    return t.upper()
+try: esik=float(esik)
+except ValueError: print("esik-saat sayı olmalı", file=sys.stderr); raise SystemExit(3)
+if not ad: print("kullanım: kart.sh borclar-sahip <AD> [--esik-saat N]", file=sys.stderr); raise SystemExit(3)
+gec=0; bozuk=0
+for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
+    try: k=json.load(open(p,encoding="utf-8"))
+    except Exception: bozuk+=1; continue
+    if k.get("durum")!="canli-borclu" or norm(k.get("aldi"))!=norm(ad): continue
+    y=yas_saat(k)
+    if y is not None and y<=esik: continue
+    gec+=1
+    g=((k.get("canli_borc") or {}).get("gerekce") or "").replace("\t"," ").replace("\n"," ")[:140]
+    print("BORC\t%s\t%s\t%s" % (k["is"], "?" if y is None else "%.0f" % y, g))
+if gec: raise SystemExit(1)
+if bozuk: print("OKUNAMADI\t%d kart okunamadı — borç yok DENMEZ" % bozuk, file=sys.stderr); raise SystemExit(3)
+raise SystemExit(0)
 PY
     ;;
   izin-durum)
