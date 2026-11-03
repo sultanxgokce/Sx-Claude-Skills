@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti). Gerçek kod ölçümü: olcum-sirada-bak sınavı Nexus dizininden: S18 tmux ve depo kaydından yalıtıldı (141 geçti 0 kaldı)-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-s18.sh
+# rc=0 sure=11.3s zaman=2026-11-03T16:55:11+03:00
+--- stdout ---
+1
+  ✗ S18 kim yokken başlatma rc 3 (tmux ve depo kaydı kimlik vermez) — beklenen=3 gerçek=0
+sonuç: 140 geçti · 1 kaldı
+--- stderr ---

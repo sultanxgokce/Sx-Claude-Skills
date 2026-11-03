@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sirada-bak-sinavi-dizinden-bagimsiz",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T16:57:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-sinavi-dizinden-bagimsiz",
+  "dal": "sirada-bak-sinavi-dizinden-bagimsiz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19138,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 17989
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3ecf86e17362b772d99dcbb449f277537f15f03f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "S18 artık ortam kimliğini, tmux bağını ve depo kaydından gelebilecek kimliği birlikte yalıtıyor; talep edilen dizinden bağımsız sınav davranışı doğrudan sağlanmış. Gerçek ölçümde 141 sınavın tamamı geçiyor ve son mutasyon ölçümü yalıtım kaldırılınca S18’in düştüğünü gösterdiği için üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 141 geçti, 0 kaldı sonucunu veriyor; gercek_olcum etiketine bağlı son mutasyon kaydı rc=1 ve düşen_kapi=true ile değişikliğin hedef kusuru gerçekten yakaladığını kanıtlıyor. İlk mutasyon kaydı rc=0 ile mutantın kaçtığını gösteren başarısız bir ara kanıt düzeneği olsa da sonraki, çıkış kodunu taşıyan mutasyon ölçümü bunu gideriyor; gerçek kod ölçümü de yeşil. Ölçülen çalışma ağacı kirli olduğundan commit tek başına yeniden üretilebilirlik sağlamıyor, ancak verilen üretim farkı ile ölçüm hedefi birbiriyle uyumlu."
+  }
+}
