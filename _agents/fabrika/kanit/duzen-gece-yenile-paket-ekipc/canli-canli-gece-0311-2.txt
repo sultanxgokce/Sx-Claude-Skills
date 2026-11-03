@@ -1,0 +1,11 @@
+$ tail -n 2000 -- /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/olc2-out.txt
+# kaynak=dosya:/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/olc2-out.txt tur=dosya desen=yenilendi kimlik=.* surum=1.6.7 en_az=3 son=2000 atesleme=3 rc=0 sure=0.0s zaman=2026-11-03T10:38:07+03:00
+--- stdout ---
+✓ ölçüm kaydedildi: olcum-canli-gece-0311-sonra.txt rc=0 renk=yesil
+olcum_saati=2026-11-03T10:38:07+03:00
+yenile_reddetti_0311=0
+yenilendi_0311=37
+2026-11-03T03:17:02+03:00 yenilendi kimlik=bani temel=manuel-claude surum=1.6.7 kutu=6a25475ebd9e reis=akar:MU
+2026-11-03T03:17:07+03:00 yenilendi kimlik=mirahur temel=manuel-claude surum=1.6.7 kutu=6a25475ebd9e reis=akar
+2026-11-03T03:17:10+03:00 yenilendi kimlik=nazir temel=manuel-claude surum=1.6.7 kutu=6a25475ebd9e reis=akar:M
+--- stderr ---
