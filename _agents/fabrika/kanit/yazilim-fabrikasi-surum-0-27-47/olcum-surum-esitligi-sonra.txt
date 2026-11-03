@@ -1,0 +1,5 @@
+$ python3 -I /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sv-kontrol.py
+# rc=0 sure=0.0s zaman=2026-11-03T14:44:54+03:00
+--- stdout ---
+SKILL.md=0.27.47 katalog=0.27.47  #675 girdisi bu sürümde=True  #674 girdisi 0.27.46'da=True
+--- stderr ---

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "yazilim-fabrikasi-surum-0-27-47",
+  "pr": "676",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T14:45:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-yazilim-fabrikasi-surum-0-27-47",
+  "dal": "yazilim-fabrikasi-surum-0-27-47",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 12228,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 1932
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d930f2a970bf906d483f8a1398cf475565d1f70d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Yazılım Fabrikası sürümü hem katalogda hem beceri kaynağında 0.27.47'ye yükseltilmiş; #675 girdisi de sürüm çakışmasının nedenini kayda geçiriyor. Değişiklik iş kartındaki dar talebi karşılıyor ve üretimi engelleyen kanıtlı bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve kayıt yeşil; ölçüm temiz commit üzerinde SKILL.md ile katalog sürümlerinin 0.27.47 eşitliğini, #675 girdisinin bu sürümde ve #674 girdisinin 0.27.46'da bulunduğunu doğruluyor. Ayrı bir önce ölçümü yok; önceki 0.27.46 değerleri diffte görülüyor, bu dar sürüm düzeltmesi için kanıt yeterli."
+  }
+}

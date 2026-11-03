@@ -1,0 +1,28 @@
+{
+  "is": "yazilim-fabrikasi-surum-0-27-47",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T14:44:54+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "surum-esitligi",
+      "asama": "sonra",
+      "dosya": "olcum-surum-esitligi-sonra.txt",
+      "sha256": "3affcd955d2cf53c36d389c548567be981414f0867f9370ac1c53d26c3c51962",
+      "komut": [
+        "python3",
+        "-I",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sv-kontrol.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T14:44:54+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c135bb289fae4353a08c61572c3d1cae",
+      "olculen_commit": "c346caa099389ac1f779ad91deb9a80e37ccf0bf",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "24b7c8a828725a41eea74316328b166cf76c7c49123e7a63ecc573901a5404fe"
+}
