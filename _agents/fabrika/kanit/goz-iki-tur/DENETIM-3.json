@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "goz-iki-tur",
+  "pr": "680",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T19:30:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur",
+  "dal": "goz-iki-tur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18825,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 9024
+  },
+  "dalgic": "olculemedi",
+  "bas": "395d862b2d35e5d585129575ceb1efe6deb13d2a",
+  "duzeltme_farki": {
+    "onceki_bas": "f77eaec68c47f12980687017c8b77301da39fd0e",
+    "dosya": 4,
+    "bayt": 9024,
+    "tam_bayt": 169580
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: `denetci-kutu-disi.test.sh` artık doğrudan koşulmuş ve kutu-dışı turun puana girmemesi ile ikinci gelişte canlı borca devri ayrıntılı olarak yeşil ölçülmüş. Talep edilen davranış yapılmış, ancak kartın açıkça istediği bu sınava ait kırmızıdan yeşile ölçüm çifti hâlâ tamamlanmadığı için üretime hazır 5 veremem.",
+    "bulgular": [
+      {
+        "ne": "`denetci-kutu-disi.test.sh` için yalnız sonrasındaki yeşil koşu sunulmuş; kartta istenen kırmızıdan yeşile çiftin kırmızı/önce ayağı yok.",
+        "kanit": "Manifestte `kutu-disi-sinavi` etiketiyle yalnız `asama=sonra`, `rc=0` kaydı bulunuyor. Çıktı 54/54 yeşil olsa da aynı sınavın değişiklik öncesinde kırmızı olduğunu gösteren bir `once` kaydı veya ölçüm çifti yer almıyor.",
+        "konum": "İŞ KARTI.kanit_nerede; KANIT MANİFESTİ.kayitlar[kutu-disi-sinavi]; olcum-kutu-disi-sinavi-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, sarı kayıt yok. Tavan değişikliği için gerçek kırmızı/yeşil çift mevcut: eski uygulama 6/14, yeni uygulama 14/14; kutu-dışı sınavının 54/54 doğrudan koşusu da önceki turun B1 bulgusunu kapatıyor ve puan muafiyeti ile canlı-borç senaryolarını açıkça sınıyor. Ancak kutu-dışı sınavına özgü kırmızı `once` ölçümü bulunmadığından iş kartında istenen iki kırmızıdan-yeşile çiftinden biri eksik; ayrıca canlı kayıt yalnız ilk denetim ateşlemesini gösteriyor, borç devrinin canlı gerçekleşmesini değil."
+  }
+}
