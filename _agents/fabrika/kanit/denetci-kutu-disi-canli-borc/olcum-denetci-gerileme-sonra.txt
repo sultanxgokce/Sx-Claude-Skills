@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/dk-hepsi.sh
+# rc=1 sure=1134.0s zaman=2026-11-03T13:59:10+03:00
+--- stdout ---
+denetci.test.sh rc=124   ✓ O14 🔴 az satırlı çok baytlı ölçüm kısalır (27503 → 6665 bayt); ✗ ve SONUÇ satırı kalır
+denetci-duzeltme-farki.test.sh rc=0 ── SONUÇ (düzeltme-farkı): 71 geçti · 0 kaldı ──
+denetci-fark-ayikla.test.sh rc=0 toplam=30 geçen=30 düşen=0
+denetci-fark-kendisi.test.sh rc=0 ── SONUÇ (fark-kendisi): 37 geçti · 0 kaldı ──
+denetci-karne.test.sh rc=0 ── SONUÇ: 22 geçti · 0 kaldı ──
+denetci-kayit-commit.test.sh rc=0 ── SONUÇ: 14 geçti · 0 kaldı ──
+denetci-klon-kart.test.sh rc=0 SONUÇ: 12 geçti · 0 kaldı
+--- stderr ---

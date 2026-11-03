@@ -1082,9 +1082,10 @@ PY
 _bilgi "   kayıt: $DZ/DENETIM-$TUR.json"
 # 🔴 Kutu-dışı bulgu "tur yakmadı" diye KAYBOLMAMALI: muafiyetin karşılığı izlenebilirliktir.
 #    Ayrı bir deftere (append-only) yazılır; işin sahibi buradan kart/görev açar.
-python3 - "$DOGRULANMIS" "$DZ/KUTU-DISI.jsonl" "$TUR" "$IS" <<'PYKD'
+KDT="$TMP/kutu-disi-tekrar.json"; rm -f "$KDT"   # ikinci gelişte dolar (JDDN1N): aşağıdaki canlı borca devir okur
+python3 - "$DOGRULANMIS" "$DZ/KUTU-DISI.jsonl" "$TUR" "$IS" "$KDT" <<'PYKD'
 import json,sys,datetime
-sonuc,defter,tur,is_=sys.argv[1:]
+sonuc,defter,tur,is_,tekrar_yolu=sys.argv[1:]
 kd=[b for b in json.load(open(sonuc,encoding="utf-8"))["bulgular"] if b.get("agirlik")=="kutu-disi"]
 if kd:
     var=set()
@@ -1093,15 +1094,38 @@ if kd:
             sat=sat.strip()
             if sat: var.add(json.loads(sat).get("ne",""))
     except FileNotFoundError: pass
+    tekrar=[]
     with open(defter,"a",encoding="utf-8") as f:
         for b in kd:
-            if b.get("ne","") in var: continue      # aynı bulgu her turda yeniden yazılmaz
+            if b.get("ne","") in var:               # aynı bulgu her turda yeniden yazılmaz
+                tekrar.append({"ne":b.get("ne"),"yuzey":b.get("kutu_disi_yuzey")}); continue
             f.write(json.dumps({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
                                 "is":is_,"tur":int(tur),"ne":b.get("ne"),
                                 "yuzey":b.get("kutu_disi_yuzey"),"konum":b.get("konum"),
                                 "kanit":b.get("kanit")},ensure_ascii=False)+"\n")
     print(f"   kutu-dışı defteri: {defter}")
+    if tekrar: json.dump(tekrar,open(tekrar_yolu,"w",encoding="utf-8"),ensure_ascii=False)
 PYKD
+# 🔴 İKİNCİ GELİŞTE CANLI BORCA DEVİR (görev JDDN1N): kutuda kapanmayan bulgu aynı yüzeyle ikinci kez geliyorsa
+#    kapanması başka yüzeyde (dağıtım sonrası canlı) demektir; kapıyı GEVŞETMEZ, kartı canlı borca bağlar
+#    (kart.sh canli-borc: 24 sa içinde ödenmezse kırmızı). Yalnız canlı kanıt isteyen SINIFSIZ kartta; sınıflıda borcu
+#    ajan yazamaz (Sultan sözü şart) — kart.sh reddeder ve sebebi ekranda kalır. DENETCI_KD_BORC=0 kapatır.
+kd_borca_devret() {
+  [ "${DENETCI_KD_BORC:-1}" = 1 ] || return 0
+  [ -s "$KDT" ] || return 0
+  local kj="$KART_DEPO/_agents/fabrika/kartlar/$IS.json"; [ -f "$kj" ] || return 0
+  local aldi yuzey gerekce e
+  aldi="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1],encoding='utf-8')).get('aldi',''))" "$kj" 2>/dev/null)"
+  yuzey="$(python3 -c "import json,sys; print('; '.join(sorted({str(x.get('yuzey') or '?') for x in json.load(open(sys.argv[1],encoding='utf-8'))})))" "$KDT" 2>/dev/null)"
+  [ -n "$aldi" ] || { _bilgi "   ⚠ kutu-dışı bulgu ikinci kez geldi ama kartın sahibi okunamadı — canlı borca devredilemedi"; return 0; }
+  gerekce="denetçi tur $TUR: kutu dışı bulgu ikinci kez geldi, kutuda kapanmaz; kapanacağı yüzey: ${yuzey}"
+  gerekce="$(printf '%s' "$gerekce" | tr '|\n' '  ' | cut -c1-300)"
+  if e="$(cd "$DEPO" && KANIT_DEPO="" bash "${DENETCI_KART_SH:-$HERE/kart.sh}" canli-borc "$IS" --yazan "$aldi" --gerekce "$gerekce" 2>&1)"; then
+    _bilgi "🧾 KUTU-DIŞI BULGU CANLI BORCA DEVREDİLDİ (ikinci geliş): $(printf '%s' "$e" | head -1)"
+    _bilgi "   tur yeniden açılmaz; borç dağıtımdan sonra kanit.sh canli ile ödenir"
+  else _bilgi "   ⚠ kutu-dışı bulgu ikinci kez geldi, canlı borca devredilemedi: $(printf '%s' "$e" | tail -1) — bulgu ayrı kart/göreve gitmeli"; fi
+}
+kd_borca_devret
 # 🔴 KAYIT DALDA (görev B2DBS6 · 22 Eki ölçümü: iki PR'ın 9 göz turunun 9'unda DENETIM-N.json iş alanında kayıtsız kaldı, elle
 #    commit'lendi; kapı ve alan kapatma onu dalda arar). Bu turun kaydı (+ KUTU-DISI.jsonl + denetçinin yazdığı KART.json kopyası)
 #    iş dalına commit'lenir: YALNIZ dal = iş

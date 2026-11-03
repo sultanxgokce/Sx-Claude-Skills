@@ -1,0 +1,115 @@
+{
+  "is": "denetci-kutu-disi-canli-borc",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T14:26:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-disi-sinav",
+      "asama": "once",
+      "dosya": "olcum-kutu-disi-sinav-once.txt",
+      "sha256": "595b89efba119a63e47edbd186686911e2b61da2830890b8db0be2bfb8808af7",
+      "komut": [
+        "timeout",
+        "600",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/dk-once/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T13:39:08+03:00",
+      "sure_sn": 28.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "545612a43aa3434791e06900011a4c11",
+      "olculen_commit": "958844cc965b2bcc2c5d59b3f74ba43e385a6322",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-disi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-disi-sinav-sonra.txt",
+      "sha256": "5b7d203c01cfc51f52831dfc0aa1a6f5616423eabec6e2df2ea966d84c150ea4",
+      "komut": [
+        "timeout",
+        "600",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T13:39:39+03:00",
+      "sure_sn": 29.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5ac554031e07444cb99f3e4ba372a35b",
+      "olculen_commit": "958844cc965b2bcc2c5d59b3f74ba43e385a6322",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-devir-cagrilmaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-devir-cagrilmaz-sonra.txt",
+      "sha256": "44a6dc448f1da390fee5fce6b1a10afcb5a269e454e813d6ad14c646661f7f33",
+      "komut": [
+        "timeout",
+        "600",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/dk-mut/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T13:40:06+03:00",
+      "sure_sn": 27.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kutu-disi-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "e89308af3f1a41c5a88d2db3404cbdc3",
+      "olculen_commit": "958844cc965b2bcc2c5d59b3f74ba43e385a6322",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-gerileme",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-gerileme-sonra.txt",
+      "sha256": "2e6ea2ab0dcecd9497e33a3d2131e27d3f05d2213ffb10f3271e380e2b597f2e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/dk-hepsi.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T13:59:10+03:00",
+      "sure_sn": 1134.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "75f58a5b21b84cecbb825b0cfbeee8bb",
+      "olculen_commit": "958844cc965b2bcc2c5d59b3f74ba43e385a6322",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-ana-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-ana-sinav-sonra.txt",
+      "sha256": "39eca5f23a92747ca91e1efeb808f16eb6d279efd944d2d40e127c769f52d782",
+      "komut": [
+        "timeout",
+        "1700",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T14:26:52+03:00",
+      "sure_sn": 1647.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "62992685e5e344e7bf3c9f41af5fe988",
+      "olculen_commit": "958844cc965b2bcc2c5d59b3f74ba43e385a6322",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "5616588beca59ae4eb73deff2ea0b8e4f615b2a62d753b0b6d9cca80b9dbb381"
+}

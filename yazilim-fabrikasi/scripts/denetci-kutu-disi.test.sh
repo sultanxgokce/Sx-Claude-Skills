@@ -171,6 +171,49 @@ iceren "G2 kutu-dışı bulgular AYRI başlıkta listelenir" "── KUTU-DIŞI"
 iceren "G3 gereken yüzey yazdırılır" "gereken yüzey: canli site + yetki" kos is-g2 "$KARISIK"
 iceren "G4 işin sahibine gideceği söylenir" "işin SAHIBINE gider" kos is-g2 "$KARISIK"
 
+echo "J · 🔴 kutu-dışı bulgu İKİNCİ gelişinde canlı borca devredilir (JDDN1N)"
+kartj() {  # kartj <is> <canli e|h> [sinifli]
+  local sf='[]' sl=false; [ "${3:-}" = sinifli ] && { sf='["para"]'; sl=true; }
+  cat > "$KOK/_agents/fabrika/kartlar/$1.json" <<JSON
+{"is":"$1","cumle":"s","istedi":"s","aldi":"s","canli_gerekir":$([ "$2" = e ] && echo true || echo false),
+ "cevaplar":{"geri_alinamaz":"h","para":"$([ "${3:-}" = sinifli ] && echo e || echo h)","dis_yuzey":"h","yetki":"h"},
+ "siniflar":$sf,"sultan":$sl,"durum":"acik","gecmis":[]}
+JSON
+  KANIT_DEPO="$KOK" python3 "$PWD/kanit.py" olcum "$1" s --asama tek -- echo o >/dev/null 2>&1
+}
+borc_var() { python3 -c "
+import json,sys
+k=json.load(open('$KOK/_agents/fabrika/kartlar/$1.json',encoding='utf-8'))
+sys.exit(0 if k.get('canli_borc') else 1)"; }
+JORT=(DENETCI_KUTU_DISI_TAVAN=9)
+kartj is-j e
+kos is-j "$KD" "${JORT[@]}" >/dev/null 2>&1
+kapi "J1 🔴 İLK gelişte borç YAZILMAZ (yalnız ikinci gelişte)" 1 borc_var is-j
+iceren "J2 🔴 ikinci gelişte devir SÖYLENİR" "CANLI BORCA DEVREDİLDİ" kos is-j "$KD" "${JORT[@]}"
+kapi "J3 🔴 ikinci gelişte karta canlı borç YAZILDI" 0 borc_var is-j
+kapi "J4 borcu kartın sahibi yazdı (yazan = aldi)" 0 python3 -c "
+import json
+b=json.load(open('$KOK/_agents/fabrika/kartlar/is-j.json',encoding='utf-8'))['canli_borc']
+assert b['yazan']=='s', b
+assert 'Sultan' in b['gerekce'], b"
+iceren "J5 üçüncü gelişte ikinci borç yazılmaz, sebebi söylenir" "canlı borca devredilemedi" kos is-j "$KD" "${JORT[@]}"
+kartj is-j2 h
+kos is-j2 "$KD" "${JORT[@]}" >/dev/null 2>&1
+iceren "J6 canlı kanıt İSTEMEYEN kartta devir REDDEDİLİR, sebebi söylenir" "canlı borca devredilemedi" kos is-j2 "$KD" "${JORT[@]}"
+kapi "J7 🔴 canlı kanıt istemeyen karta borç YAZILMADI" 1 borc_var is-j2
+kartj is-j3 e sinifli
+kos is-j3 "$KD" "${JORT[@]}" >/dev/null 2>&1
+kos is-j3 "$KD" "${JORT[@]}" >/dev/null 2>&1
+kapi "J8 🔴 SINIFLI kartta ajan borç YAZAMAZ (Sultan sözü şart)" 1 borc_var is-j3
+kartj is-j4 e
+kos is-j4 "$KD" "${JORT[@]}" DENETCI_KD_BORC=0 >/dev/null 2>&1
+kos is-j4 "$KD" "${JORT[@]}" DENETCI_KD_BORC=0 >/dev/null 2>&1
+kapi "J9 DENETCI_KD_BORC=0 devri kapatır" 1 borc_var is-j4
+kartj is-j5 e
+kos is-j5 "$NORMAL" "${JORT[@]}" >/dev/null 2>&1
+kos is-j5 "$NORMAL" "${JORT[@]}" >/dev/null 2>&1
+kapi "J10 🔴 normal (kutuda kapanan) bulgu tekrarında borç YAZILMAZ" 1 borc_var is-j5
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]
