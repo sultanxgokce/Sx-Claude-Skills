@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.44
+version: 0.27.45
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -172,6 +172,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.45 (3 Kas 2026, kart kapi-ci-sonucu-sart · görev …VNK0M7):** `birlestirme-kapisi.sh --pr N` dördüncü ölçümü yapar: PR başının CI sonucu. Başta kırmızı ya da bitmemiş kontrol varsa rc 1 (kapı kapalı); yeşil/atlandı/nötr geçer. Baş commit yalnız kanıt içerdiği için kontrolü yoksa (yol süzgeci) en çok 8 önceki commit geriye bakılır ve ilk kontrollü commit karar verir; hiçbir yerde kontrol bulunamazsa ya da `gh` okunamazsa rc 3 ÖLÇÜLEMEDİ, asla yeşil değil. `--pr` verilmezse CI sorgulanmaz. `KAPI_CI_GH` yalnız sınav dikişi (üretimde tanımsız, gerçek `gh`); `--pr` ile kapıyı çağıran her sınav sahte `gh` vermeli. Sınav kapı T20 (12 kapı) + 2 mutant (CI çağrısı kalkarsa kırmızı geçer; bitmemiş dalı kalkarsa bekleyen geçer).
 - **0.27.44 (3 Kas 2026, kart denetci-istem-stdin):** `denetci.sh` istemi Codex'e komut argümanı yerine stdin'den verir (çekirdeğin ~128 KB tek-argüman sınırı kalktı; BÂNİ #1375 143 KB'lık istem hiçbir bölmeyle sığmıyordu). İstem tavanı kalite kararı olarak 200 KB (DENETCI_ISTEM_TAVAN); 120 KB kırpma tetiği yalnız açık DENETCI_KIRP_ESIK verilince tavanı düşürür (sınav dikişi). Sınav Y9 + 2 mutant.
 - **0.27.43 (1 Kas 2026):** `kanit.py` kirli işareti kanıt dizinini saymaz. Aracın yazdığı KANIT.json ve ölçüm çıktısı temiz başı kirli gösteriyordu; göz bunu ölçülmemiş baş saydı. Kanıt dışındaki izlenen değişiklik yine kirlidir.
 - **0.25.4 (26 Eki, görev …898AX · kart kapi-pr-itilmemis-denetim):** `birlestirme-kapisi.sh --pr N` kanıt dizinini YEREL ağaçtan okuyorsa onu PR'ın başıyla (origin pull/N/head) bayt bayt karşılaştırır: yerel baş ≠ PR başı → `itilmemiş commit var`, dizindeki dosya PR başında yok ya da farklıysa ad ad söylenir (commit'lenmemiş DENETIM de burada yakalanır), PR başı çekilemezse ÖLÇÜLEMEDİ (rc=3). Eskiden itilmemiş DENETIM-1.json kapıyı geçiriyordu: Nexus #907 ve #908 denetim kaydı olmadan birleşti (PR başı 80987568, yerel 77e7bf21, rc0). `--pr` verilmeyen çağrı aynen eski. Sınav: `birlestirme-kapisi.test.sh` T14pr (çıplak uzak + itilmemiş commit, mutant). Not: `--pr` kullanan eski sınavlar kanıtı önce PR başına iter.

@@ -29,6 +29,8 @@ if bas!="-": d["bas"]=bas
 json.dump(d,open(p,"w"))
 PY
 }
+CIGH="$(mktemp -d)"; printf '%s\n' '#!/bin/sh' "case \" \$* \" in *statusCheckRollup*) echo '{\"headRefOid\":\"aaaaaaaa11111111\",\"statusCheckRollup\":[{\"name\":\"lint\",\"status\":\"COMPLETED\",\"conclusion\":\"SUCCESS\"}],\"commits\":[{\"oid\":\"aaaaaaaa11111111\"}]}' ;; *) exit 1 ;; esac" > "$CIGH/gh"; chmod +x "$CIGH/gh"   # CI ölçümü için sahte gh (bu sınav CI'ı sınamaz)
+export KAPI_CI_GH="$CIGH/gh"
 kapi() { bash "$G" is-oc 2>&1; }
 bas_al() { git -C "$T" rev-parse HEAD; }
 

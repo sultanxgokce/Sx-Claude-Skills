@@ -386,7 +386,13 @@ PY
 it() { # it <ağaç> <PR no> → ağaçtaki kanıtı commit'le ve PR başına (refs/pull/<N>/head) it
   ( cd "$1" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q -f origin "HEAD:refs/pull/$2/head" ) >/dev/null 2>&1; }
 kartP() { ( cd "$P" && KANIT_DEPO="$P" bash "$KT" ac "$1" --is "örnek iş cümlesi burada" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1 ); }
-kapi() { ( cd "$1" && shift && env -u KANIT_DEPO bash "$G" "$@" 2>&1 ); }   # KANIT_DEPO yok: kapı birincili git'ten bulur (canlıdaki gibi)
+GH0="$R/gh0"; mkdir -p "$GH0"; cat > "$GH0/gh" <<'GH0S'
+#!/bin/sh
+# varsayılan sahte gh (yalnız CI ölçümü için): tek yeşil kontrol; başka sorgu yok
+case " $* " in *statusCheckRollup*) printf '%s\n' '{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"}],"commits":[{"oid":"aaaaaaaa11111111"}]}' ;; *) exit 1 ;; esac
+GH0S
+chmod +x "$GH0/gh"
+kapi() { ( cd "$1" && shift && env -u KANIT_DEPO KAPI_CI_GH="${KAPI_CI_GH:-$GH0/gh}" bash "$G" "$@" 2>&1 ); }   # KANIT_DEPO yok: kapı birincili git'ten bulur (canlıdaki gibi)
 
 kartP is-ck; A="$(alan is-ck)"; kanitla "$A" is-ck 5 E; it "$A" 7
 CIKTI="$(kapi "$P" is-ck --pr 7)"; RC=$?
@@ -457,7 +463,7 @@ CIKTI="$(kapi "$P" is-itil --pr 71)"; RC=$?
 PKG2="$(mktemp -d)"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$HERE/izin.py" "$PKG2/"
 sed 's|^if \[ -n "\$PR" \] \&\& \[ -n "\$DZ_AGAC" \]; then$|if false; then|' "$G" > "$PKG2/mutant-prbas.sh"; chmod +x "$PKG2/mutant-prbas.sh"
 [ "$(grep -c '^if false; then$' "$PKG2/mutant-prbas.sh")" = 1 ]; g $? "mutant üretildi (PR başı bloğu kapatıldı; çapa bulundu — çapa kayarsa sınav sessiz yeşil vermez)"
-( cd "$P" && env -u KANIT_DEPO bash "$PKG2/mutant-prbas.sh" is-itil --pr 71 >/dev/null 2>&1 ); MRC=$?
+( cd "$P" && env -u KANIT_DEPO KAPI_CI_GH="$GH0/gh" bash "$PKG2/mutant-prbas.sh" is-itil --pr 71 >/dev/null 2>&1 ); MRC=$?
 [ "$MRC" -eq 0 ]; g $? "🔴 mutant (PR başı denetimi kapalı) itilmemiş DENETİM'e rc=0 verir — gerçek kapı rc=1 verdi: sınav bu bloğu ölçüyor (#907/#908 davranışı)"
 find "$PKG2" -delete
 ( cd "$I" && git push -q -f origin "HEAD:refs/pull/71/head" ) >/dev/null 2>&1
@@ -626,21 +632,52 @@ GS="$R/golge"; mkdir -p "$GS"
 cat > "$GS/gh" <<'GHS'
 #!/bin/sh
 # sahte gh: pr view → FAKE_DAL (gövde istenirse FAKE_GOVDE) · pr diff --name-only → FAKE_DOSYALAR (boşlukla ayrık) ya da FAKE_DOSYA_YOK varsa hata
+CI_VARS='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+API_VARS='{"check_runs":[]}'
 case "$1 $2" in
-  "pr view") case " $* " in *" body "*|*",body"*|*"body,"*|*".body"*) printf '%s\n' "${FAKE_GOVDE:-}" ;; *) echo "$FAKE_DAL" ;; esac ;;
+  "pr view") case " $* " in *statusCheckRollup*) [ -n "${FAKE_CI_YOK:-}" ] && exit 1; printf '%s\n' "${FAKE_CI:-$CI_VARS}";; *" body "*|*",body"*|*"body,"*|*".body"*) printf '%s\n' "${FAKE_GOVDE:-}" ;; *) echo "$FAKE_DAL" ;; esac ;;
+  "api repos/{owner}/{repo}/commits/bbbbbbbb22222222/check-runs") printf '%s\n' "${FAKE_API:-$API_VARS}" ;;
   "pr diff") [ -n "${FAKE_DOSYA_YOK:-}" ] && exit 1; printf '%s\n' $FAKE_DOSYALAR ;;
   *) exit 2 ;;
 esac
 GHS
 chmod +x "$GS/gh"
 KD="_agents/fabrika/kanit"
-ghk() { ( export PATH="$GS:$PATH"; "$@" ); }   # sahte gh'li çağrı
+ghk() { ( export PATH="$GS:$PATH" KAPI_CI_GH="$GS/gh"; "$@" ); }   # sahte gh'li çağrı
 
 kartP is-asil; A2="$(alan kanit-dali)"; kanitla "$A2" is-asil 5 E
 ( cd "$A2" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/31/head" ) >/dev/null 2>&1
 git -C "$P" worktree remove --force "$A2" >/dev/null 2>&1
 CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 31")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "kapı iş: is-asil\|iş: is-asil" <<<"$CIKTI" && grep -q "iş adı PR'ın tek kanıt dizininden türetildi: 'is-asil' (PR dalı 'kanit-dali' ayrışıyor)" <<<"$CIKTI" && grep -q "kanıt yeri: PR #31 başı" <<<"$CIKTI"; g $? "🔴 T17a GEÇTİ yüzü: dal 'kanit-dali' ≠ iş 'is-asil' → iş PR'ın kanıt dizininden türedi, kart+kanıt+puan bulundu (rc=0)"
+
+echo "════ T20 · CI SONUCU (gorev …BV5W2F): kırmızı/bitmemiş geçmez, kontrolsüz baş son kontrole bakar, okunamazsa ÖLÇÜLEMEDİ ════"
+CIK='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"},{"name":"kabuk","status":"COMPLETED","conclusion":"FAILURE"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+CIB='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"},{"name":"kabuk","status":"IN_PROGRESS","conclusion":""}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+CIE='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[],"commits":[{"oid":"aaaaaaaa11111111"},{"oid":"bbbbbbbb22222222"}]}'
+ci_kos() { ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" "$@" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 31"; }
+CIKTI="$(ci_kos FAKE_CI="$CIK" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "CI KIRMIZI" <<<"$CIKTI" && grep -q "kabuk" <<<"$CIKTI"; g $? "T20a kırmızı kontrol → kapı ENGELLER (rc=1), hangisi kırmızı yazılır"
+CIKTI="$(ci_kos FAKE_CI="$CIB" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "CI BİTMEMİŞ" <<<"$CIKTI"; g $? "T20b bitmemiş kontrol → ENGELLER (rc=1)"
+CIKTI="$(ci_kos 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "CI: PR başı aaaaaaaa · 1 kontrol yeşil" <<<"$CIKTI"; g $? "T20c yeşil kontrol → geçer (rc=0), satır görünür"
+CIKTI="$(ci_kos FAKE_CI="$CIE" FAKE_API='{"check_runs":[{"name":"kabuk","status":"completed","conclusion":"success"}]}' 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "son kontrol koşmuş commit bbbbbbbb" <<<"$CIKTI"; g $? "T20d kontrolsüz baş (yol süzgeci): önceki commit'in yeşil kontrolü okunur, nerede okunduğu yazılır"
+CIKTI="$(ci_kos FAKE_CI="$CIE" FAKE_API='{"check_runs":[{"name":"kabuk","status":"completed","conclusion":"failure"}]}' 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "CI KIRMIZI" <<<"$CIKTI"; g $? "T20e kontrolsüz baş + önceki commit kırmızı → ENGELLER"
+CIKTI="$(ci_kos FAKE_CI="$CIE" 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "CI sonucu ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "T20f hiçbir commit'te kontrol yok → ÖLÇÜLEMEDİ (rc=3), yeşil değil"
+CIKTI="$(ci_kos FAKE_CI_YOK=1 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "CI sonucu ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "T20g CI okunamadı (gh hata) → ÖLÇÜLEMEDİ (rc=3)"
+# --pr yokken CI sorulmaz (yerel kullanım değişmedi)
+CIKTI="$(ghk env FAKE_CI_YOK=1 bash -c "$(declare -f kapi); G='$G'; kapi '$P' is-asil" 2>&1)"; ! grep -q "CI sonucu" <<<"$CIKTI"; g $? "T20h --pr verilmediyse CI sorgusu yok (eski çağrılar bozulmaz)"
+M15="$PKG/mutant15.sh"; sed 's/^ci_olc$/:/' "$G" > "$M15"; ! cmp -s "$G" "$M15"; g $? "T20i mutant 15 üretildi (CI ölçümü çağrılmıyor)"
+CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" FAKE_CI="$CIK" bash -c "$(declare -f kapi); G='$M15'; kapi '$P' --pr 31" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T20j mutant 15: kırmızı CI kapıyı GEÇİRİYOR → T20a bu mutantta düşerdi"
+M16="$PKG/mutant16.sh"; sed '/^    BITMEMIS) /d' "$G" > "$M16"; ! cmp -s "$G" "$M16"; g $? "T20k mutant 16 üretildi (bitmemiş sayılmıyor)"
+CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" FAKE_CI="$CIB" bash -c "$(declare -f kapi); G='$M16'; kapi '$P' --pr 31" 2>&1)"; RC=$?
+[ "$RC" -ne 1 ]; g $? "T20l mutant 16: bitmemiş CI engel sayılmıyor → T20b bu mutantta düşerdi"
 
 kartP is-zayif; A3="$(alan kanit-dali2)"; kanitla "$A3" is-zayif 3 E
 ( cd "$A3" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/32/head" ) >/dev/null 2>&1

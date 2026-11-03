@@ -11,6 +11,7 @@
 #   2) KANIT    — `kanit.py dogrula` rc=0: manifest ARAÇ imzalı, dosya sha'ları tutuyor
 #   2b) CANLI   — cron/servis/sunucu kartı: yeşil `canli` kaydı (gerçek ateşleme) şart; sarı canlı her kartta engel (17 Eki 2026)
 #   3) PUAN     — son DENETIM-<tur>.json: kod_puani=5 VE dogru_sey=E VE denetçi ≠ yazan
+#   4) CI       — (yalnız --pr ile) PR başındaki kontroller: kırmızı ya da bitmemiş → engel; hiç kontrol yoksa/okunamazsa ÖLÇÜLEMEDİ (rc 3)
 #
 # 🔴 NE ÖLÇMEZ (dürüstlük): kanıtın DOĞRU şeyi ölçtüğünü ölçmez — onu bağımsız göz yapar.
 #    Sınıf işinde Sultan onayını da ölçmez (A06: onay üretilemez, yalnız insan verir) — yalnız
@@ -507,6 +508,73 @@ canli_uyari() {
   return 0
 }
 canli_uyari
+
+# 4) CI — SERDAR 3 Kas 2026 (gorev …BV5W2F): "kapı temiz" derken testlerin gerçekten GEÇTİĞİ ölçülmüyordu (#631 kırmızıyken birleşti). --pr verilmişse
+#    PR başındaki kontroller okunur: kırmızı (failure/cancelled/timed_out/…) → EKSİK · bitmemiş (pending/queued/in_progress) → EKSİK · hiç kontrol yok
+#    (evidence-only baş yol süzgecine takılır) → son kontrol koşmuş commit'e bakılır; hiçbir yerde kontrol yoksa ya da gh/okuma düşerse ÖLÇÜLEMEDİ (yeşil değil).
+#    Ölçmediği: hangi kontrolün gerekli olduğunu (GitHub dal koruması onu söyler) — yalnız var olan kontrollerin hepsini yeşil ister.
+ci_olc() {
+  [ -n "$PR" ] || return 0
+  local ghb="${KAPI_CI_GH:-gh}"   # yalnız sınav sahte gh verir; canlıda değişken yok → gerçek gh
+  command -v "$ghb" >/dev/null 2>&1 || { _h "gh yok — PR #$PR CI sonucu ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); return 0; }
+  local sonuc
+  sonuc="$(cd "$DEPO" && PR="$PR" GHB="$ghb" python3 - <<'PYCI' 2>/dev/null
+import json, os, subprocess
+pr = os.environ["PR"]
+def gh(*a):
+    r = subprocess.run([os.environ["GHB"], *a], capture_output=True, text=True, timeout=60)
+    if r.returncode != 0: raise RuntimeError(r.stderr.strip()[:120])
+    return json.loads(r.stdout)
+KIRMIZI = {"FAILURE", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED", "STARTUP_FAILURE", "STALE", "ERROR"}
+YESIL = {"SUCCESS", "SKIPPED", "NEUTRAL"}
+def hukum(ogeler):
+    """ogeler: [(ad, durum_tamam_mi, sonuc)] → (kirmizi, bitmemis, yesil)"""
+    k, b, y = [], [], []
+    for ad, tamam, son in ogeler:
+        son = (son or "").upper()
+        if not tamam: b.append(ad)
+        elif son in KIRMIZI: k.append(ad)
+        elif son in YESIL: y.append(ad)
+        else: k.append(ad + "(" + (son or "sonuçsuz") + ")")
+    return k, b, y
+try:
+    d = gh("pr", "view", pr, "--json", "headRefOid,statusCheckRollup,commits")
+    og = []
+    for c in d.get("statusCheckRollup") or []:
+        if c.get("__typename") == "StatusContext":
+            st = (c.get("state") or "").upper(); og.append((c.get("context", "?"), st not in ("PENDING", "EXPECTED"), "SUCCESS" if st == "SUCCESS" else st))
+        else:
+            og.append((c.get("name", "?"), (c.get("status") or "").upper() == "COMPLETED", c.get("conclusion")))
+    yer = "PR başı " + d["headRefOid"][:8]
+    if not og:
+        # kontrol koşmayan baş (yol süzgeci): sondan geriye en çok 8 commit'te kontrol ara
+        oidler = [c["oid"] for c in (d.get("commits") or [])][::-1][:8]
+        for oid in oidler:
+            r = gh("api", f"repos/{{owner}}/{{repo}}/commits/{oid}/check-runs")
+            runs = r.get("check_runs") or []
+            if runs:
+                og = [(x.get("name", "?"), x.get("status") == "completed", x.get("conclusion")) for x in runs]
+                yer = f"son kontrol koşmuş commit {oid[:8]} (PR başı {d['headRefOid'][:8]} yol süzgecine takıldı)"
+                break
+    if not og:
+        print("OLCEMEDI|PR başında da, son 8 commit'te de kontrol yok"); raise SystemExit
+    k, b, y = hukum(og)
+    if k: print("KIRMIZI|" + yer + " · kırmızı: " + ", ".join(k)[:300])
+    elif b: print("BITMEMIS|" + yer + " · bitmemiş: " + ", ".join(b)[:300])
+    else: print("YESIL|" + yer + f" · {len(y)} kontrol yeşil/atlandı")
+except SystemExit: pass
+except Exception as e:
+    print("OLCEMEDI|" + str(e)[:160])
+PYCI
+)"
+  case "${sonuc%%|*}" in
+    YESIL) _y "  ✓ CI: ${sonuc#*|}" ;;
+    KIRMIZI) _h "CI KIRMIZI — ${sonuc#*|}"; eksik=$((eksik+1)) ;;
+    BITMEMIS) _h "CI BİTMEMİŞ — ${sonuc#*|} (bitince tekrar dene)"; eksik=$((eksik+1)) ;;
+    *) _h "CI sonucu ÖLÇÜLEMEDİ — ${sonuc#*|}"; olcemedi=$((olcemedi+1)) ;;
+  esac
+}
+ci_olc
 
 if [ "$olcemedi" -gt 0 ]; then _y ""; _h "ÖLÇÜLEMEDİ — kapı yeşil demiyor (rc=3)"; exit 3; fi
 if [ "$eksik" -gt 0 ]; then
