@@ -231,6 +231,28 @@ ok('D46 sekme:"ilk" açıkça istenirse eski davranış (yeni sekme yok)', (awai
 await dI.kapat();
 ch4.kill();
 
+console.log('── yeniden bağlanma: aynı sekmeye döner, öteki sekmelere oturum açmaz');
+const { playwrightYukle } = await import(LIB);
+const PORT5 = PORT + 300; const prof5 = mkdtempSync(join(tmpdir(), 'dumen-test5-'));
+const ch5 = spawn(CHROME, [`--remote-debugging-port=${PORT5}`, `--user-data-dir=${prof5}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT5}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
+const cdp5 = `http://127.0.0.1:${PORT5}`;
+const { chromium: cr5 } = await playwrightYukle();
+const eskiBaglan = cr5.connectOverCDP.bind(cr5); let oturumSay = 0; let sonTarayici = null;
+cr5.connectOverCDP = async (...a) => { const b = await eskiBaglan(...a); sonTarayici = b; const c = b.contexts()[0]; if (c && !c.__say) { const e = c.newCDPSession.bind(c); c.newCDPSession = async (p) => { oturumSay++; return e(p); }; c.__say = true; } return b; };
+for (const ad of ['yan-a', 'yan-b', 'yan-c']) await fetch(`${cdp5}/json/new?${MERKEZ}/${ad}`, { method: 'PUT' }).catch(() => fetch(`${cdp5}/json/new?${MERKEZ}/${ad}`));
+const sek5 = async () => (await (await fetch(`${cdp5}/json/list`)).json()).filter((t) => t.type === 'page').map((t) => t.url);
+const dR = await Dumen.baglan({ cdpUrl: cdp5, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {} });   // varsayılan: kendi YENİ sekmesi
+await dR.goto(MERKEZ + '/benim-sekmem');
+const onceSek = (await sek5()).length;
+oturumSay = 0; await sonTarayici.close();   // soket düşer, Chromium yaşar
+const eR5 = await hata(() => dR.goto(MERKEZ + '/yeniden'));
+const sonSek = await sek5();
+ok('D50 yeniden bağlanınca AYNI sekmeye döndü: yeni sekme açılmadı, adres güncel', eR5 === null && sonSek.length === onceSek && sonSek.some((u) => u.endsWith('/yeniden')) && dR.durum().baglanmaSayisi === 2, JSON.stringify({ eR: String(eR5), sonSek, durum: dR.durum() }));
+ok('D51 yeniden bağlanırken öteki sekmelere (yan-a/b/c) kısa CDP oturumu AÇILMADI: oturum sayısı ≤ 2 (sayfa+dinleyici)', oturumSay <= 2, 'oturum=' + oturumSay);
+await dR.kapat();
+ch5.kill();
+
 console.log(`SONUÇ: geçti=${G} kaldı=${K}`);
 await ham.context().browser().close().catch(() => {}); await d.kapat(); await dM.kapat(); ch.kill(); srv.close();
 process.exit(K === 0 ? 0 : 1);

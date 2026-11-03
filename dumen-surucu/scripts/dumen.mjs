@@ -54,7 +54,17 @@ export class Dumen {
     const ctx = tarayici.contexts()[0] || await tarayici.newContext();
     const hedefId = async (p) => { const o = await ctx.newCDPSession(p); try { return (await o.send('Target.getTargetInfo')).targetInfo.targetId; } finally { await o.detach().catch(() => {}); } };
     let page = null;
-    if (this.#hedefId) { for (const p of ctx.pages()) { if (await hedefId(p).catch(() => null) === this.#hedefId) { page = p; break; } } }   // yeniden bağlanma: AYNI sekmeye dön
+    if (this.#hedefId) {   // yeniden bağlanma: AYNI sekmeye dön — öteki sekmelere oturum AÇILMAZ: aranan sekmenin adresi /json/list'ten (tek sorgu) okunur, oturum yalnız aynı adresli adaylarda doğrulama için açılır
+      let liste = null;
+      try { const r = await fetch(`${this.#cdpUrl.replace(/\/$/, '')}/json/list`, { signal: AbortSignal.timeout(this.#zamanAsimiMs) }); if (r.ok) liste = await r.json(); } catch { liste = null; }
+      const kayit = liste ? liste.find((t) => t.id === this.#hedefId && t.type === 'page') : null;
+      if (liste && !kayit) { page = null; }   // sekme kapanmış: hiçbir sekmeye oturum açmadan yenisi seçilir
+      else {
+        let adaylar = kayit ? ctx.pages().filter((p) => p.url() === kayit.url) : ctx.pages();   // liste okunamadıysa eski davranış (tüm sekmeler)
+        if (!adaylar.length) adaylar = ctx.pages();   // adres biçimi farklı çıktıysa aday boş kalmasın: eski doğrulama yolu
+        for (const p of adaylar) { if (adaylar.length === 1 && kayit) { page = p; break; } if (await hedefId(p).catch(() => null) === this.#hedefId) { page = p; break; } }
+      }
+    }
     if (!page) {
       const s = this.#sekme;
       if (s === 'ilk') { page = ctx.pages()[0] || null; this.#kendiSekmem = false; }
