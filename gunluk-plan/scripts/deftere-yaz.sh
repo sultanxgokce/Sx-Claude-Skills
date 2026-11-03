@@ -143,7 +143,14 @@ while IFS= read -r sat; do
   fi
   if [ "$UYGULA" -eq 1 ]; then
     # --ozet ZORUNLU: geçit Sultan-dili açılış özeti ister (400 ozet_acilista_gerekli); eskiden verilmiyordu, üç madde sessizce yazılamadı (mihenk/s08, 27 Eki)
-    OZET="${KIM} günlük planında bugün yapılacak diye yazdı → henüz başlanmadı → yapılınca bu iş defterde kapanır: ${m}"
+    #   ÖZET 80 HARFİN ALTINDA (gorev …T36CWF, tellal ölçtü 4 Kas): eski özet 100 harflik önek + madde taşıyordu, her madde reddedildi
+    #   (ozet_sultan 80 karakterden KISA, tek cümle, ilk bölüm 5-10 kelime). Madde kısaltılır; içindeki cümle/bölüm ayracı ('. ' ': ' '; ' '→') düzleştirilir.
+    OZET="$(python3 -c '
+import re,sys
+m=re.sub(r"\s*(?:→|[.!?;:])\s+"," ",sys.argv[1]).strip()
+ad="Günlük plandan açılan yeni iş: "
+k=79-len(ad)
+print(ad+(m if len(m)<=k else m[:k-1].rstrip()+"…"))' "$m")"
     if CIKTI="$(bash "$GOREV" ekle "$m" --kutu "$KUTU" --etiket ozellik --aciliyet "$ACIL" --atanan "$KIM" --kaynak-kim "$KIM" --kaynak-nereden "günlük plan" --ozet "$OZET" 2>&1)"; then
       echo "  ✓ yazıldı: $m"; yazilan=$((yazilan+1)); ACIK_N+="$n"$'\n'
     else echo "  ✗ YAZILAMADI: $m"; echo "      sebep: $(printf '%s' "$CIKTI" | tr '\n' ' ' | cut -c1-300)"; hata=$((hata+1)); fi

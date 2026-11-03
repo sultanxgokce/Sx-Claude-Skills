@@ -1,0 +1,14 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: D19b · rc≠0 + hedef kapı 'D19b' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-deftere-yaz sinavi ozet 80 harf-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-dy.sh
+# rc=1 sure=16.3s zaman=2026-11-04T00:16:25+03:00
+--- stdout ---
+  ✗ D5 uygula rc=0 — beklenen=0 gerçek=1
+  ✗ D17f doğru imza + bugün + biçim → KABUL (rc=0, 1 görev yazıldı) — beklenen=0:1 gerçek=1:1
+  ✗ D17i tam 15 kelimelik alıntı KABUL (sınır dahil) — beklenen=0 gerçek=1
+  ✗ D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle) — beklenen=1 gerçek=0
+  ✗ D19b 🔴 uzun ve ayraçlı madde: özet 80 harfin altında, tek cümle, geçit kabul eder (rc 0, yazıldı) — beklenen=0:1 gerçek=1:0
+  ✓ D21 kuru: kimlikli iki madde 'bağlardım' (yeni kayıt yok), ikiz iki madde ✗, bir yeni madde yazardım; rc 1 (ikiz var)
+  ✓ D23 son-ek iki kayda uyuyor (…1R33ZG) → ✗ çözülemedi; defterde olmayan son-ek ve tam kimlik → ✗; rc 1, tahmin yok
+  ✓ D25 adim yazılamazsa ✗ ADIM YAZILAMADI + sebep, rc 1 (bağlandı denmez)
+── SONUÇ: 37 geçti · 5 kaldı ──
+--- stderr ---
