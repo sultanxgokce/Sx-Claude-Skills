@@ -1,0 +1,43 @@
+{
+  "is": "mutasyon-kaydi-hedef-kapi",
+  "cumle": "kanit.sh olcum --mutasyon bir hedef kapı adı (--kapi) istesin; mutant yalnız o kapı düşünce yakalandı sayılsın, kurulamayan ya da başka kapıdan düşen ölçülemedi kalsın",
+  "istedi": "SERDAR",
+  "aldi": "MÜZEHHİP",
+  "zaman": "2026-11-03T15:35:56+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-03T15:36:08+03:00",
+      "olay": "gorev-bagla",
+      "reis": "MÜZEHHİP",
+      "gorev": "gorev_01M6G1XM23YYEEXB68P402RBP8",
+      "kimlik": "bag-523140-1793709368934105683"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev": "gorev_01M6G1XM23YYEEXB68P402RBP8",
+  "tahmin_dk": 30,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T15:36:09+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı",
+      "kimlik": "bag-523140-1793709368934105683"
+    }
+  ]
+}
