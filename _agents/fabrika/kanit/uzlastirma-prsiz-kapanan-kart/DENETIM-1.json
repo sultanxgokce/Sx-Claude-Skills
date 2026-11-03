@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "uzlastirma-prsiz-kapanan-kart",
+  "pr": "681",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T20:06:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastirma-prsiz-kapanan-kart",
+  "dal": "uzlastirma-prsiz-kapanan-kart",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26927,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 20568
+  },
+  "dalgic": "uyumsuz",
+  "bas": "9e5eb288b1e9c89f95dd93af5f04921dcf3045f1",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "PR numarası olmayan bitmiş kart artık görevle ilişkilendiriliyor; görev bekliyor’a çekilirken gerçek kapanma nedeni ve gorev.sh bitti yolu bildiriliyor. Hedef vaka önce eski kodda düşmüş, sonra gerçek ölçümde geçmiş ve UM18 mutasyonu aynı kapıyı yeniden düşürmüş; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı ve SHA'ları doğrulanmış manifest yeterli: U4c önce ölçümünde FAIL (56/1), gerçek sonra ölçümünde PASS (57/0); UM18 mutasyonu yalnız hedef U4c kapısını düşürerek sınavın değişikliği gerçekten yakaladığını gösteriyor. Sarı kayıt yok. Ölçümlerin olculen_kirli=true olması commit üzerinden birebir yeniden üretilebilirliği zayıflatır, ancak sunulan önce/sonra çifti, gerçek ölçüm ve hedefli mutasyon birlikte iddiayı doğrudan ölçüyor."
+  }
+}
