@@ -48,6 +48,20 @@
       "zaman": "2026-11-03T19:28:20+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-03T19:30:16+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HEZARFEN",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR DEVAM dedi (postane msg_01M6H3ZGZAC7FYM1GV279RNKB4): bulgu 2den 1e indi; once olcumu eklendi, eski kodda da yesil (kutu-disi davranisi 0.27.46dan beri var)",
+      "zaman": "2026-11-03T19:32:17+03:00"
     }
   ]
 }
