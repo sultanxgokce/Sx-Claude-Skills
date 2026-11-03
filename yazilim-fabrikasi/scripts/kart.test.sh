@@ -1223,6 +1223,7 @@ bash "$KT" ac is-sn8 --is "kart açılışı sade kalsın" $D4S >/dev/null 2>&1;
 bash "$KT" ac is-sn9 --is "tüm kutularda ve bütün kartlarda panel güncellensin" $D4S >/dev/null 2>&1; g $? "SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)"
 bash "$KT" ac is-sn10 --is "tümü için panel güncellensin" $D4S --sinir "11 kutu" >/dev/null 2>&1; g $? "SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)"
 bash "$KT" ac is-sn11 --is "tamamını yap, hepsini düzelt" $D4S >/dev/null 2>&1; g $? "SN11 çekimli biçimler (tamamını, hepsini) kartın saymadığı sözcük: sınır istenmez (birebir eşleşme)"
+bash "$KT" ac is-sn11b --is "tamami için panel güncellensin" $D4S >/dev/null 2>&1; g $? "SN11b ASCII 'tamami' kartın yazdığı 'tamamı' değil: sınır istenmez (birebir, negatif kapı)"
 bash "$KT" ac is-sn12 --is "hepsi için sınır sorulsun" $D4S --sinir "hariç medigate kartları" >/dev/null 2>&1; g $? "SN12 'hepsi' + 'hariç …' → açıldı (kabul yönü)"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

@@ -1,7 +1,7 @@
 {
   "is": "kart-sinir-sorusu-zorunlu",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T11:28:51+03:00",
+  "guncelleme": "2026-11-03T12:28:32+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -29,7 +29,7 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "1dc7e0319a222b5826ff68fcd151ab2161b3e51b6bf4de19f9ba343b31a8f64b",
+      "sha256": "c40efe78530719283ac4a30ab73dca38a4a2d11f5798ab1f99aac570ae3f9372",
       "komut": [
         "timeout",
         "900",
@@ -38,11 +38,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-03T11:28:51+03:00",
-      "sure_sn": 280.2,
+      "zaman": "2026-11-03T12:28:32+03:00",
+      "sure_sn": 219.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "6c99c685125c41e8b0ee1d3406916efb",
-      "olculen_commit": "d85d0f2b821234df91351239e0ed809ff006c452",
+      "olcum_id": "b9170527d1474e2a9ec5bf7c3080fa23",
+      "olculen_commit": "8ab2e2b780f892b80739fe8101ecfba6391212cb",
       "olculen_kirli": true
     },
     {
@@ -71,5 +71,5 @@
       "olculen_kirli": true
     }
   ],
-  "imza": "8574042a6bcc771417c8d4cc4039c16cd2dfdf760c82ffc536a12b391c2d1bf5"
+  "imza": "d0c6e7dd4d8170f45498331e17ac8e84472c121406d66774d1c3aeb5ab4c734e"
 }
