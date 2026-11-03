@@ -89,7 +89,7 @@ CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # 
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
 KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""; SOZ_ZAMANI=""
 KIME=""; SORU=""; EYLEM=""; SNO=""; KIM=""   # cevap bekle (soru.py)
-OLCUM_YERI=""; SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
+SINIR=""; OLCUM_YERI=""; SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
@@ -97,7 +97,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --soz-zamani) SOZ_ZAMANI="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
-  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;;
+  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;; --sinir) SINIR="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
   --senaryo) SENARYO="$2"; shift 2 ;; --kare-onay) KARE_ONAY="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
@@ -355,6 +355,34 @@ olcut_zorunlu() {  # olcut_zorunlu <cümle> <nerede: ac|daralt> → rc 0 uygun �
   return 1
 }
 
+# 🔴 SINIR SORUSU (görev …KSQSERN, kılıç bileme 3 Kas): "tamamı/hepsi/tümü" denen kartta sınır açıkça yazılmadan iş başlarsa kapsam kayar —
+#    63 turlu ölçümde 15 tur kapsam kayması, 22 tur sınır vakası; 12 iş 4+ tur (kuzey-g18-uc-yargi: 'ilk 3 kart' / 'ilk 8 kart').
+#    Kapı kart CÜMLESİNDEN tetiklenir (kaçış bayrağı yok): cümlede kapsam sözcüğü varsa --sinir ZORUNLU ve sınır SAYI içerir ya da
+#    'hariç' ile neyin dışarıda kaldığını söyler. DÜRÜST SINIR: yalnız kartın üç sözcüğünü BİREBİR yakalar (tamamını, hepsini gibi çekimler yakalanmaz) ve değerin biçimini ölçer; sınırın doğru olduğunu bilmez.
+sinir_kapsami() {  # sinir_kapsami <cümle> → her satır cümledeki bir kapsam sözcüğü (boş = yok)
+  python3 - "$1" <<'PY'
+import re, sys
+c = sys.argv[1].replace("İ", "i").replace("I", "ı").lower()
+for m in re.finditer(r"(?<![\w])(tamamı|hepsi|tümü)(?![\w])", c):
+    print(m.group(1))
+PY
+}
+sinir_gecerli() {  # sinir_gecerli <değer> → rc 0: bir sayı var ya da 'hariç' ile dışarıda kalan söylenmiş
+  python3 - "$1" <<'PY'
+import re, sys
+d = sys.argv[1].strip()
+ok = bool(re.search(r"\d", d)) or bool(re.search(r"(?<!\w)hariç(?!\w)\s+\S{3,}", d, re.I))
+raise SystemExit(0 if ok and len(d) >= 6 else 1)
+PY
+}
+sinir_zorunlu() {  # sinir_zorunlu <cümle> → rc 0 uygun · rc 1 hata basılmış
+  local k; k="$(sinir_kapsami "$1")" || { _hata "sınır aracı düştü — kart AÇILMADI (ölçemediğine temiz denmez)"; return 1; }
+  [ -n "$k" ] || return 0
+  sinir_gecerli "$SINIR" && return 0
+  _hata "cümlede kapsam sözcüğü var ($(printf '%s' "$k" | head -3 | tr '\n' ';' | sed 's/;$//')) ama SINIRI yok: --sinir \"11 kutu\" | \"hariç medigate\" (sayı ya da 'hariç <ne>' şart; 'tamamı' dediğin kümenin kaç parça olduğunu yaz — kapsam kayması 15 tur yedirdi)"
+  return 1
+}
+
 sayi_uyar() {  # sayi_uyar <cümle> → her satır bir ölçümsüz sayı iddiası (boş = yok)
   python3 - "$1" <<'PY'
 import re, sys
@@ -421,6 +449,7 @@ case "$CMD" in
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
     olcut_zorunlu "$IS_C" "AÇILMADI" || exit 1
+    sinir_zorunlu "$IS_C" || exit 1
     ekran_kapisi || exit 1
     OLCUT="$(olcut_bul "$IS_C")"
     # 🔴 SULTAN'A ULAŞIM YOLU (göz 23 Eki tur 2 · fabrika-merge-reise): sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart
@@ -457,7 +486,7 @@ case "$CMD" in
     #    yayımlanır. Tetik sırasında süreç kesilirse görünür kart KALMAZ (izin isteği gitmemiş kart yok); başarısızlıkta yalnız KENDİ geçici
     #    dosyamız silinir — aynı kimlikle eşzamanlı açılan başkasının kartına dokunulmaz.
     KART_TMP="$KD/$IS.json.acilis-$$"
-    SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    SINIR="$SINIR" SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,datetime
 yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import KURAL_SURUMU
@@ -474,6 +503,7 @@ if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
 import os
 if os.environ.get("SENARYO"): kart["senaryo"]=os.environ["SENARYO"]
 if os.environ.get("KARE_ONAY"): kart["kare_onayi"]=os.environ["KARE_ONAY"]
+if os.environ.get("SINIR"): kart["sinir"]=os.environ["SINIR"]
 if os.environ.get("OLCUT") or os.environ.get("OLCUM_YERI"):
     kart["olcut"]=[x for x in os.environ.get("OLCUT","").splitlines() if x.strip()]; kart["olcum_yeri"]=os.environ.get("OLCUM_YERI","")
 sayilar=[u for u in suyari.splitlines() if u.strip()]

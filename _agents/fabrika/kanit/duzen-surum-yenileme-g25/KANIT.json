@@ -1,0 +1,60 @@
+{
+  "is": "duzen-surum-yenileme-g25",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T12:24:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gece-kuru",
+      "asama": "once",
+      "dosya": "olcum-gece-kuru-once.txt",
+      "sha256": "9a1c355a1c1c0621851019eab0d916af5907f4a12e442a0b3766f44823e4b734",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.sh",
+        "--kuru",
+        "--kutu",
+        "code",
+        "--depo",
+        "/config/projects/Nexus",
+        "--sx",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T12:24:48+03:00",
+      "sure_sn": 165.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ea4fb61eaae84f6391838b55c873ca29",
+      "olculen_commit": "b742a9579cafd37ee07f7e848dd2fe8a4003ec4d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gece-kuru",
+      "asama": "sonra",
+      "dosya": "olcum-gece-kuru-sonra.txt",
+      "sha256": "ffe4c60222a95a71908db81079f1394b17058d28ccb86ae998d177891d02c36e",
+      "komut": [
+        "bash",
+        "duzen/scripts/duzen-gece.sh",
+        "--kuru",
+        "--kutu",
+        "code",
+        "--depo",
+        "/config/projects/Nexus",
+        "--sx",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T12:24:48+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6777d3c1606d4484bae826ae8fcca090",
+      "olculen_commit": "b742a9579cafd37ee07f7e848dd2fe8a4003ec4d",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "f6df2f2b6176fb1d1618c14fec47b72fd64a337814dcd33127cad406fafb4702"
+}

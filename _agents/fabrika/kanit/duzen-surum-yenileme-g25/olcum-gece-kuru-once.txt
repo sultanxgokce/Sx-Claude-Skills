@@ -1,0 +1,6 @@
+$ bash duzen/scripts/duzen-gece.sh --kuru --kutu code --depo /config/projects/Nexus --sx /config/projects/Sx-Claude-Skills
+# rc=0 sure=165.7s zaman=2026-11-03T12:24:48+03:00
+--- stdout ---
+KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)
+--- stderr ---
+⏳ agir-sira: kanit-duzen-surum-yenileme-g25-gece-kuru 165 sn bekledi (yuva 1, load1 13.23)

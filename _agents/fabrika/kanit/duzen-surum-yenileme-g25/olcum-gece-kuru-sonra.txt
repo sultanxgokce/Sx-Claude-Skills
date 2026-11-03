@@ -1,0 +1,9 @@
+$ bash duzen/scripts/duzen-gece.sh --kuru --kutu code --depo /config/projects/Nexus --sx .
+# rc=0 sure=0.3s zaman=2026-11-03T12:24:48+03:00
+--- stdout ---
+KURU: yazılmayacak, yollanmayacak (uygulamak için --uygula)
+KURU: duzen 1.6.7 → 1.6.8 kurulacaktı
+KURU: gunluk-plan 1.21.1 → 1.21.1 kurulacaktı
+KURU: mesveret 0.2.1 → 0.2.1 kurulacaktı
+KURU: bulgu 0.6.6 → 0.6.6 kurulacaktı
+--- stderr ---

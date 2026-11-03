@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kart-sinir-sorusu-zorunlu",
+  "pr": "669",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T10:10:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sinir-sorusu-zorunlu",
+  "dal": "kart-sinir-sorusu-zorunlu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35278,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 129562
+  },
+  "dalgic": "uyumsuz",
+  "bas": "07c733ad6f428fa345da052797844554bcdc4f47",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sınır kapısı eklenmiş, sınır karta yazılmış ve gerçek ölçüm 473/473 yeşile dönmüş; mutasyon da kapının kaldırılmasını yakalıyor. Ancak talep yalnız “tamamı, hepsi, tümü” derken üretim kodu “tüm”, “bütün” ve çeşitli çekimleri de engelleyici kapsama alıyor; geçerli kartları talep dışı reddedebilecek bu kapsam kayması önce çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Engelleyici kapı iş kartında sayılmayan “tüm” ve “bütün” sözcüklerini, ayrıca çeşitli çekimli biçimleri de tetikliyor; bu nedenle değişiklik talep edilen davranıştan daha geniş ve kart açılışlarını gereksiz yere durdurabilir.",
+        "kanit": "İş kartı tetikleyicileri “tamamı, hepsi ya da tümü” olarak sınırlar. Buna karşılık regex `tamam...|hepsi...|tümü...|bütün...|tüm` biçimlerini kabul ediyor; SN1 doğrudan “tüm”, SN5 ise “bütün” ile bu ek davranışı doğruluyor ve sonraki ölçümde ikisi de geçiyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:sinir_kapsami; yazilim-fabrikasi/scripts/kart.test.sh:T18 SN1 ve SN5; olcum-sinav-sonra.txt:T18",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçümü 454/19 kırmızıdan 473/0 yeşile dönüyor, gerçek ölçüm açıkça ayrılmış. Mutasyon kaydı beklenen dört hatayla sınır kapısının kaldırılmasını yakalıyor; ancak yeşil sınavlar talep dışındaki “tüm/bütün” genişlemesini özellikle onayladığı için hedef doğruluğunu kanıtlamıyor."
+  }
+}

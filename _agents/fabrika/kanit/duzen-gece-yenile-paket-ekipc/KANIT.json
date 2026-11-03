@@ -1,7 +1,7 @@
 {
   "is": "duzen-gece-yenile-paket-ekipc",
-  "arac": "kanit.py/0.6.0",
-  "guncelleme": "2026-11-01T03:28:53+03:00",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T10:38:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -86,7 +86,63 @@
       "olcum_id": "fb95cbbf468c4969971534ee65c02f91",
       "olculen_commit": "b5a4fc7b132c5f22f74e0955491fa89bbd2372cb",
       "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-gece-0311",
+      "asama": "sonra",
+      "dosya": "olcum-canli-gece-0311-sonra.txt",
+      "sha256": "7fe59117e3a839d655448fb83bafe241fec45c124e763396afaf39e872e2ac23",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/canli-yenile-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T10:38:07+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "aa7978e3440240acb456d15002bb9f7a",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-gece-0311-2",
+      "asama": "canli",
+      "dosya": "canli-canli-gece-0311-2.txt",
+      "sha256": "467b30e3c91fdb95a161b621106ce61ad533a3162e6d330d5d585ee3e70d1789",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/olc2-out.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/olc2-out.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "yenilendi kimlik=.* surum=1.6.7",
+      "en_az": 3,
+      "atesleme_sayisi": 3,
+      "ilk_atesleme": {
+        "satir": "2026-11-03T03:17:02+03:00 yenilendi kimlik=bani temel=manuel-claude surum=1.6.7 kutu=6a25475ebd9e reis=akar:MU",
+        "saat": "2026-11-03T03:17:02+03:00",
+        "saat_iso": "2026-11-03T03:17:02+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-03T03:17:10+03:00 yenilendi kimlik=nazir temel=manuel-claude surum=1.6.7 kutu=6a25475ebd9e reis=akar:M",
+        "saat": "2026-11-03T03:17:10+03:00",
+        "saat_iso": "2026-11-03T03:17:10+03:00"
+      },
+      "zaman": "2026-11-03T10:38:07+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "40abb8969d144932b0575db998812108",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": false
     }
   ],
-  "imza": "fc9050dc48d5373e618db323aa5e6bf2da2827496c1f682aae84b53b51d7aac0"
+  "imza": "5a451b3b007acf1a1e87bf9681c233d0429b4ccb3fa0dbf538eb957404561e68"
 }

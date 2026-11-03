@@ -14,12 +14,36 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "acik",
-  "gecmis": [],
+  "durum": "canli-borclu",
+  "gecmis": [
+    {
+      "zaman": "2026-11-01T03:41:30+03:00",
+      "olay": "canli-borc"
+    },
+    {
+      "zaman": "2026-11-01T03:41:47+03:00",
+      "olay": "bitti"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "cümlede: cron",
   "kapsam_uyarilari": [],
   "sayi_uyarilari": [],
   "sayi_bicim_eksikleri": [],
-  "sayi_bicim_uyarisi": false
+  "sayi_bicim_uyarisi": false,
+  "canli_borc": {
+    "zaman": "2026-11-01T03:41:30+03:00",
+    "yazan": "MİRAHUR",
+    "gerekce": "Gerçek ateşleme birleşmeden sonra: SERDAR kararıyla elle kurulmaz, 2 Kas 03:17 gece kurulumu kurar; kanıt o koşunun günlüğünden alınacak (G29)",
+    "odendi": null
+  },
+  "canli_kanit": "yok",
+  "bitis": null,
+  "pr": "637",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 2
+  },
+  "kanit_var": true
 }
