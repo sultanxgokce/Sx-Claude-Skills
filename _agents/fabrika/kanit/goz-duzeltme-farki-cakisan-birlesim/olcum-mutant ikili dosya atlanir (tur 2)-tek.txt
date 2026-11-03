@@ -1,12 +1,9 @@
-=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: D14c · rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti). Gerçek kod ölçümü: olcum-duzeltme farki sinavi tur 2 (D13 D14 D15)-* ===
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: D14c · rc≠0 + hedef kapı 'D14c' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-duzeltme farki sinavi tur 2 (D13 D14 D15)-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-ikili.sh
-# rc=0 sure=16.6s zaman=2026-11-03T21:14:04+03:00
+# rc=1 sure=17.8s zaman=2026-11-03T21:14:59+03:00
 --- stdout ---
   ✓ D1a tur 1 koştu (4/E → rc 1)
+  ✗ D14c 🔴 ikili dosyanın değişikliği göze gitti ('x14.bin' /tmp/tmp.88jHJEygKT/istem.md içinde yok)
 ════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════
-── SONUÇ (düzeltme-farkı): 70 geçti · 0 kaldı ──
+── SONUÇ (düzeltme-farkı): 69 geçti · 1 kaldı ──
 --- stderr ---
-<stdin>:2: SyntaxWarning: invalid escape sequence '\$'
-Traceback (most recent call last):
-  File "<stdin>", line 2, in <module>
-AssertionError

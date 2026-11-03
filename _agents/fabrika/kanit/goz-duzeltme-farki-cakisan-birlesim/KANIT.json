@@ -1,7 +1,7 @@
 {
   "is": "goz-duzeltme-farki-cakisan-birlesim",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T21:14:29+03:00",
+  "guncelleme": "2026-11-03T21:14:59+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -71,25 +71,25 @@
       "etiket": "mutant ikili dosya atlanir (tur 2)",
       "asama": "tek",
       "dosya": "olcum-mutant ikili dosya atlanir (tur 2)-tek.txt",
-      "sha256": "c9e829cd09f2ee314b01e5abb384133615f07fb925dc84fb23844c9911beccf0",
+      "sha256": "159706d960fb1d305c467ac263cd9c85ff9a47f788a7ec02927b963b8901c973",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-ikili.sh"
       ],
-      "rc": 0,
-      "renk": "kirmizi",
-      "zaman": "2026-11-03T21:14:04+03:00",
-      "sure_sn": 16.6,
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T21:14:59+03:00",
+      "sure_sn": 17.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "duzeltme farki sinavi tur 2 (D13 D14 D15)",
       "beklenen": "kirmizi",
-      "dusen_kapi": false,
+      "dusen_kapi": true,
       "hedef_kapi": "D14c",
-      "hedef_dustu": false,
-      "olcum_id": "4a09c89ff258407baa2ed5f77edc66fd",
-      "olculen_commit": "f161ac851950ac0ee85fdf72227c114198f6c68d",
-      "olculen_kirli": true
+      "hedef_dustu": true,
+      "olcum_id": "6a73ceb02d36447f9416cc50c4f38698",
+      "olculen_commit": "ad2d4e94dca99bd8b831f69933a94dd452909115",
+      "olculen_kirli": false
     },
     {
       "tur": "olcum",
@@ -117,5 +117,5 @@
       "olculen_kirli": true
     }
   ],
-  "imza": "ef743afa2b44f60cef4d4246d2287762973667e8551e1f24afee1cb3a8bbecc2"
+  "imza": "1017f4aab989a0028c5565aa028f919e6cdf2e32b59c79cc857099322f0adaa1"
 }
