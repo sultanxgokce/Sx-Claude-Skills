@@ -1,0 +1,46 @@
+{
+  "is": "borc-sahibi-sirada-en-ust",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T15:50:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak sınavı: B1-B4 borç en üstte, ustlen yok, ölçülemeyen kilitlemez, iç mutant (141 geçti 0 kaldı)",
+      "asama": "tek",
+      "dosya": "olcum-sirada-bak sınavı: B1-B4 borç en üstte, ustlen yok, ölçülemeyen kilitlemez, iç mutant (141 geçti 0 kaldı)-tek.txt",
+      "sha256": "51d7af95e6b272697db7181cebe217f9df9c3c39091fa307a4a886e96e1a98d3",
+      "komut": [
+        "bash",
+        "sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T15:46:00+03:00",
+      "sure_sn": 6.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bfd68f36c5554263b6ebc612dd723fef",
+      "olculen_commit": "f9e1e279d3f544465d2d7693e2d423c99336504d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapı sınavı birlestirme-kapisi.test.sh: T14l2-l5 borclar-sahip (230 geçti 0 kaldı)",
+      "asama": "tek",
+      "dosya": "olcum-kapı sınavı birlestirme-kapisi.test.sh: T14l2-l5 borclar-sahip (230 geçti 0 kaldı)-tek.txt",
+      "sha256": "990065e4482ad370cb4029d823143a333c3a09b2dca34c4628af1e6226bdc536",
+      "komut": [
+        "bash",
+        "birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T15:50:38+03:00",
+      "sure_sn": 278.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "aba2a7a6556c4547af5e89cb797ba893",
+      "olculen_commit": "f9e1e279d3f544465d2d7693e2d423c99336504d",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "fb8778648c1333d6ebfefbc4204bc56c4ace4ccb70310dead50769ea73125a02"
+}

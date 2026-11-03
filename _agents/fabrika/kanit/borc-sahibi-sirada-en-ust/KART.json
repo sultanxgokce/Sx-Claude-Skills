@@ -1,0 +1,44 @@
+{
+  "is": "borc-sahibi-sirada-en-ust",
+  "cumle": "Canlı borcu 48 saati geçen kart sahibinin sıra bakışında (sirada-bak) en üstte görünür ve yeni iş üstlenilmez; borç listesi kart tarafından üretilir",
+  "istedi": "SERDAR: kılıç bileme, gorev_01M6G1W41XNSJ0QJC34812CBFA (İki günü geçen canlı borç sahibinin sırasında en üste çıksın)",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-03T15:36:22+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6G1W41XNSJ0QJC34812CBFA",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [
+    "48 saati"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T15:36:23+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-03T15:51:47+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

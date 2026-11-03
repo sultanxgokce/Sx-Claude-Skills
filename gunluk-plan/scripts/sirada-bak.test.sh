@@ -23,6 +23,14 @@ case "$1" in
 esac
 EOS
 chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"
+cat > "$T/kart.sh" <<'EOK'
+#!/usr/bin/env bash
+T="$(dirname "${BASH_SOURCE[0]}")"; printf '%s\n' "$*" >> "$T/kart.log"
+[ "$1" = borclar-sahip ] || exit 2
+[ -z "${KART_CIKTI:-}" ] || printf '%b' "$KART_CIKTI"
+exit "${KART_RC:-0}"
+EOK
+chmod +x "$T/kart.sh"; export GUNLUK_PLAN_KART_SH="$T/kart.sh"   # gerçek kartlara GİTMEZ (1.22.0)
 printf '#!/usr/bin/env bash\ncat "%s/kayit-$1.txt" 2>/dev/null || exit 3\n' "$T" > "$T/oku.sh"; export HASAT_KAYIT_OKU="$T/oku.sh"   # hasat kapısı kayıt okuyucusu (1.19.0)
 # satır biçimi: id kutu durum aciliyet etiket atanan BAŞLIK  (son: …)
 satir(){ printf 'gorev_%s  %-10s %-14s %-9s %-8s %-10s %s  (son: 2026-01-01)\n' "$@"; }
@@ -248,4 +256,25 @@ c="$("${KIMSIZ[@]}" bash "$SB" 2>&1)"; rc=$?
 kapi "X4 ortam boş ve tmux yok: ÖLÇÜLEMEDİ rc 3, KARAR satırı basılmaz (kutu düzeyinde 'başkasının işi' sevki YOK), hata satırı yolu söyler" "3:0:0:1" "$rc:$(grep -c '^KARAR=' <<<"$c"):$(grep -c 'BASLAMADI=yok' <<<"$c"):$(grep -c 'ajan kimliği yok' <<<"$c")"
 c="$("${KIMSIZ[@]}" AGENT_NAME=MUAVIN TMUX=sahte PATH="$T/sahte-tmux:$PATH" GUNLUK_PLAN_REGISTRY="$T/aile.yaml" bash "$SB" --bak 2>&1)"
 iceriyor "X5 AGENT_NAME tmux türetmesinden ÖNCE gelir (MUAVIN → kutu code)" "KUTU=code" "$c"
+echo "— B · eski canlı borç sıranın en üstünde (1.22.0 · görev …W41XNS)"
+liste_menzil; : > "$T/ustlen.log"; : > "$T/kart.log"
+c="$(KART_RC=1 KART_CIKTI='BORC\tkart-a\t72\tdağıtım bekliyor\nBORC\tkart-b\t200\tkur\n' bash "$SB" --kutu menzil 2>&1)"; rc=$?
+iceriyor "B1 48 saati geçen borç: KARAR=BORC basılır, rc 0" "KARAR=BORC" "$c"
+iceriyor "B1b borçlar iş, saat ve gerekçeyle listelenir" "BORC=kart-a · 72 saat · dağıtım bekliyor" "$c"
+iceriyor "B1c ikinci borç da listelenir" "BORC=kart-b · 200 saat" "$c"
+icermiyor "B1d borçluyken KARAR=BAS basılmaz" "KARAR=BAS" "$c"
+kapi "B1e borçluyken ustlen ÇAĞRILMAZ (yeni iş alınmaz)" "0" "$(wc -l < "$T/ustlen.log" | tr -d ' ')"
+kapi "B1f çıkış kodu 0" "0" "$rc"
+iceriyor "B1g ZORUNLU satırı ne yapılacağını söyler" "ZORUNLU=ESKİ CANLI BORÇ" "$c"
+iceriyor "B1h eşik 48 saat olarak kart.sh'a geçti" "borclar-sahip MENZILCI --esik-saat 48" "$(cat "$T/kart.log")"
+c="$(GUNLUK_PLAN_BORC_ESIK_SAAT=72 KART_RC=0 bash "$SB" --kutu menzil 2>&1)"
+iceriyor "B2 borç yok (rc 0): normal karar akar (KARAR=BAS)" "KARAR=BAS" "$c"
+iceriyor "B2b eşik ortamdan geçer (72)" "--esik-saat 72" "$(cat "$T/kart.log")"
+c="$(KART_RC=3 bash "$SB" --kutu menzil 2>&1)"
+iceriyor "B3 kart okunamadı: BORC=ÖLÇÜLEMEDİ basılır (temiz DENMEZ)" "BORC=ÖLÇÜLEMEDİ" "$c"
+iceriyor "B3b ölçülemeyen borç sırayı kilitlemez (KARAR=BAS)" "KARAR=BAS" "$c"
+MB="$KOK/.mutant-borc-$$.sh"; sed 's/^       exit 0 ;;$/       ;;/' "$SB" > "$MB"; ! cmp -s "$SB" "$MB"; kapi "B4 mutant üretildi (borçta çıkış kalkıyor)" "0" "$?"
+: > "$T/ustlen.log"; KART_RC=1 KART_CIKTI='BORC\tkart-a\t72\tx\n' bash "$MB" --kutu menzil >/dev/null 2>&1
+kapi "B4b mutant: borçluyken yine de ustlen ÇAĞRILIYOR → B1e bu mutantta düşerdi" "1" "$(wc -l < "$T/ustlen.log" | tr -d ' ')"
+rm -f -- "$MB"
 echo "sonuç: $gecen geçti · $kalan kaldı"; [ "$kalan" -eq 0 ]

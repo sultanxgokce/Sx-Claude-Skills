@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "borc-sahibi-sirada-en-ust",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T15:57:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-borc-sahibi-sirada-en-ust",
+  "dal": "borc-sahibi-sirada-en-ust",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26540,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 4913
+  },
+  "dalgic": "uyumsuz",
+  "bas": "dc46c9e6d3b7a4fdd11f35dc27bfaa51bee200b2",
+  "duzeltme_farki": {
+    "onceki_bas": "8b523b556aa086618ce7bc8adeb619f1db48504f",
+    "dosya": 5,
+    "bayt": 13494,
+    "tam_bayt": 60350
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen iş yapılmış: 48 saati geçen canlı borç kartlardan üretilip sıra bakışının en üstüne taşınıyor ve borç varken yeni iş üstlenilmiyor. Önceki iki uygulama bulgusu da bu turda doğrudan kod ve sınavla kapatılmış; üretimi durduracak kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt yeşil, sarı kayıt yok. Önceki B1, kart okuma hatalarının artık bozuk kart sayılıp borç bulunamadığında rc=3 vermesi ve T14l7'nin gerçek bozuk JSON ile bunu ölçmesiyle kapandı; önceki B2, İ/I normalleştirmesi ve T14l6'nın MUAVİN↔MUAVIN eşleşmesini ölçmesiyle kapandı. B1-B4 ölçümleri borcun üstte gösterilmesini, BORC kararını ve üstlenmenin çağrılmamasını; iç mutant da bu korumanın etkili olduğunu gösteriyor. Kapı sınavı 230/230, sıra sınavı 141/141 geçti. Kayıtların `olculen_kirli: true` olması commit düzeyinde temiz ağaç bağı vermiyor; ancak sunulan düzeltmeler hedef vakaları doğrudan ölçen sınavlarla desteklenmiş."
+  }
+}
