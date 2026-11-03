@@ -1,0 +1,67 @@
+{
+  "is": "kanit-kirli-agacta-durur",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-04T00:21:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kirli-agac",
+      "asama": "once",
+      "dosya": "olcum-kirli-agac-once.txt",
+      "sha256": "55332268c12d05be9e9cc807fd9337e1281c0b0b83ef10fedebd9f6d9eaa3bb6",
+      "komut": [
+        "env",
+        "KANIT=/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/eski-kanit/kanit.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T00:20:07+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1f038c3a767a42e58f3fad229ca6382c",
+      "olculen_commit": "e12f663bf8bf70b7a5637d7fd38d5d7f2a88a5bf",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kirli-agac",
+      "asama": "sonra",
+      "dosya": "olcum-kirli-agac-sonra.txt",
+      "sha256": "51d2468923ed5b4312eaef5062fafb2ae5c70d1b30f883f74d400b053da84c77",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T00:20:00+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "aa9580bb58d34d74b2e080a822fdf994",
+      "olculen_commit": "e12f663bf8bf70b7a5637d7fd38d5d7f2a88a5bf",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "619198359451faa9b78ce5c6a4a51370a927cc3a64fc5dcce1b4b799123efe2b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T00:21:13+03:00",
+      "sure_sn": 65.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b18cff6aab8845afb3ed141d5cf72eaf",
+      "olculen_commit": "e12f663bf8bf70b7a5637d7fd38d5d7f2a88a5bf",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "9a3de4a6bd9cdb9f54a3efdf8169b175201ef939bc46b94d328a06a3a614b3ce"
+}

@@ -1,0 +1,28 @@
+$ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
+# rc=0 sure=1.0s zaman=2026-11-04T00:20:00+03:00
+--- stdout ---
+════ K1 · temiz ağaç: olculen_commit = HEAD, olculen_kirli = False ════
+  ✓ olculen_commit HEAD ile aynı
+  ✓ olculen_kirli=False
+════ K2 · izlenen dosyada commit'siz değişiklik: olculen_kirli = True ════
+  ✓ olculen_kirli=True
+════ K3 · imza bozulmadı (dogrula rc=0) ════
+  ✓ dogrula rc=0
+════ K4 · kod temiz, izlenen kanıt dosyası değişmiş: kirli SAYILMAZ (aracın kendi yazımı koda dair bir şey söylemez) ════
+  ✓ temiz başta ilk kayıt False
+  ✓ aynı başta ikinci kayıt da False (KANIT.json izlenen ve değişmiş)
+  ✓ aynı etiket yeniden: izlenen ölçüm dosyası değişse de False
+════ K5 · kanıt dışındaki izlenen dosya değişince yine kirli ════
+  ✓ kanıt dışı değişiklik True (dışlama yalnız kanıt dizini)
+════ K6 · kirli ağaç, izinsiz: ölçüm KOŞMAZ (rc 2) ════
+  ✓ rc=2
+  ✓ kayıt yazılmadı
+════ K7 · izin gerekçesi 15 karakterden kısa → rc 2 ════
+  ✓ kısa gerekçe rc=2
+════ K8 · izinli kayıt kirli_kurali + kirli_izin taşır; temiz ağaçta izin yazılmaz ════
+  ✓ kirli_kurali=1
+  ✓ kirli_izin yazıldı
+  ✓ temiz ağaçta kirli_kurali=1
+  ✓ temiz ağaçta kirli_izin yazılmadı
+── SONUÇ: 15 geçti · 0 kaldı ──
+--- stderr ---
