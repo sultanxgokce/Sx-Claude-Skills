@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.7.0
+version: 0.8.0
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -47,6 +47,15 @@ await d.kare('/tmp/gib.png');            // ekran karesi dosyaya; { tamSayfa: tr
 - Okuma **eylem değildir**: eylem penceresi açmaz, sayfaya dokunmaz. Okunan metin ya da kare hiçbir kütüğe, merkeze, terminale yazılmaz; yalnız çağırana döner.
 - Parola/SMS/kart alanını hedefleyen `metin(sel)` durma noktasına takılır (yazmadaki kapı). `innerText` giriş alanlarının değerini içermez.
 - Ne işe yarar: Sultan Dümen'de bir siteye kendisi girer (ör. GİB, resimli güvenlik kodu), Dümen'i ajana verir; ajan yalnız okur, tıklama yalnız gezinmedir.
+
+## Liste okuma (0.8.0 · BÂNİ 3 Kas · pazaryeri-mesaj)
+```js
+const kimlikler = await d.nitelikler('[data-thread-id].unresponded', 'data-thread-id');   // seçiciye uyan öğelerin niteliği (en çok 50)
+const onizlemeler = await d.metinler('.unresponded .message-preview');                   // öğelerin görünür yazısı (en çok 50 × 2000 harf)
+const adres = await d.adres();                                                           // sayfa adresi (giriş sayfası tespiti)
+```
+- Aynı salt-okur kapı: Dümen Sultan'daysa okuma yok; eylem penceresi açılmaz; dönen değer kütüğe/merkeze yazılmaz.
+- `nitelikler` hassas nitelik adını (parola/çerez/jeton/kod/kart) **reddeder** (`KapiHata.neden = durak`); `metin()` tek öğe verirken bunlar listeyi verir.
 
 ## Masaüstü (0.2.0 · görev …F9Y2Y) — terminal dahil tüm masaüstü
 `scripts/masa.mjs` → `new Masa({ merkez })` ajana `ekranAl / tik / yaz / tus / kaydir / durum` verir; hepsi masaüstü bekçisine (`masa-kopru.py`, `172.30.0.2:9224`) gider. Sözleşme: cloudtop `infra/dumen/SOZLESME.md` §5.

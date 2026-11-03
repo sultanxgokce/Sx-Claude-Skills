@@ -185,6 +185,21 @@ export class Dumen {
     await this.#page.screenshot({ path: yol, fullPage: tamSayfa });
     return yol;
   }
+  // 0.8.0 (pazaryeri-mesaj · BÂNİ 3 Kas): liste okuma — aynı salt-okur kapı; metin() tek öğe verirken metinler()/nitelikler() seçiciye uyan
+  // ÖĞELERİN HEPSİNİ (tavanlı) verir. nitelikler() hassas nitelik adlarını (parola/çerez/jeton/kod) reddeder; adres() sayfa adresini verir (giriş sayfası tespiti).
+  async adres() { await this.#okuKapi('adres', null); return this.#page.url(); }
+  async metinler(sel, { enCok = 50, enCokHarf = 2000 } = {}) {
+    await this.#okuKapi('metinler', sel);
+    const l = await this.#page.locator(sel).allInnerTexts();
+    return l.slice(0, enCok).map((m) => (m.length > enCokHarf ? m.slice(0, enCokHarf) : m));
+  }
+  async nitelikler(sel, ad, { enCok = 50 } = {}) {
+    if (/password|parola|sifre|şifre|otp|sms|cookie|cerez|çerez|token|jeton|secret|cvv|cvc/i.test(String(ad))) throw new KapiHata('durak', `hassas nitelik okunmaz: ${ad}`);
+    await this.#okuKapi('nitelikler', sel);
+    const l = this.#page.locator(sel); const n = Math.min(await l.count(), enCok); const out = [];
+    for (let i = 0; i < n; i++) out.push(await l.nth(i).getAttribute(ad));
+    return out;
+  }
 
   // KÖR NOKTA (JN1K8K): fill(tarih/renk/aralık)/selectOption değeri sayfa JS'iyle yazar → CDP Input.* YOK, köprü bu eylemi GÖRMEZ.
   // O eylemin penceresine düşen isTrusted=false olay = "köprüde görünmeyen eylem": uyarı basılır (yalnız kayıt/uyarı; karar kapısı değil — KARAR.md).

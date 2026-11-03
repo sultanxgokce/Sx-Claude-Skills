@@ -1,0 +1,34 @@
+{
+  "_not": "Pazar sayfa haritası. 'olculdu:false' = seçiciler henüz gerçek sayfada DOĞRULANMADI (ilk gerçek tur NARH'ta; tutmayan seçici ÖLÇÜLEMEDİ rc 3 verir, tahmin etmez). {sohbet} yer tutucusu sohbet kimliğiyle dolar. Seçiciler müşteri ADINI hedeflemez: yalnız kimlik niteliği, son mesaj gövdesi, cevap alanı, gönder düğmesi.",
+  "amazon": {
+    "ad": "Amazon Seller Central (TR)",
+    "olculdu": false,
+    "gelen_kutusu": "https://sellercentral.amazon.com.tr/messaging/inbox?folder=UNRESPONDED",
+    "sohbet_adresi": "https://sellercentral.amazon.com.tr/messaging/thread/{sohbet}",
+    "giris_deseni": "/ap/(signin|mfa|cvf)|/signin|/mfa",
+    "secici": {
+      "sohbet_cevapsiz": "[data-thread-id].unresponded, [data-thread-id][data-status='UNRESPONDED']",
+      "sohbet_kimlik": "data-thread-id",
+      "son_mesaj": ".message-preview, .thread-preview, [class*='preview']",
+      "cevap_alani": "textarea[name='message'], textarea#reply-text, textarea",
+      "gonder": "button[type='submit'].send, button#send-message, button[type='submit']"
+    },
+    "gonderme_karari": "/config/.claude/pazaryeri-mesaj/amazon-gonderme.json",
+    "_gonderme_notu": "Amazon'un ajan/otomasyon politikası riski 2 Kas'ta Sultan'a soruldu; karar dosyası {\"gonderme\":\"acik\",\"karar\":\"<Sultan D1 damgası>\"} olana dek gönderme KAPALI (okuma + taslak açık)."
+  },
+  "trendyol": {
+    "ad": "Trendyol partner paneli",
+    "olculdu": false,
+    "gelen_kutusu": "https://partner.trendyol.com/customer-questions?status=WAITING",
+    "sohbet_adresi": "https://partner.trendyol.com/customer-questions/{sohbet}",
+    "giris_deseni": "/login|/auth|/giris",
+    "secici": {
+      "sohbet_cevapsiz": "[data-question-id].waiting, [data-question-id][data-status='WAITING']",
+      "sohbet_kimlik": "data-question-id",
+      "son_mesaj": ".question-text, .message-text, [class*='question-content']",
+      "cevap_alani": "textarea[name='answer'], textarea#answer, textarea",
+      "gonder": "button[type='submit'].answer, button#answer-send, button[type='submit']"
+    },
+    "gonderme_karari": null
+  }
+}

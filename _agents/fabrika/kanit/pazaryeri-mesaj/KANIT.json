@@ -1,0 +1,48 @@
+{
+  "is": "pazaryeri-mesaj",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T08:46:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mesaj-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-mesaj-sinav-sonra.txt",
+      "sha256": "257570452931f00e566835873192d673d68dc1ff39c038d6e4c7c997c2765af5",
+      "komut": [
+        "bash",
+        "-c",
+        "cd pazaryeri-mesaj/scripts && timeout 560 bash mesaj.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:46:33+03:00",
+      "sure_sn": 402.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "e0aa9597b51c4ad98be5ba650ac51c5b",
+      "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "beceri-var",
+      "asama": "once",
+      "dosya": "olcum-beceri-var-once.txt",
+      "sha256": "aeebd4bc5b324041d65127550e8b84c2bff83f1bb0ed2d7c6f3122a6736a702b",
+      "komut": [
+        "bash",
+        "-c",
+        "if test -f /config/.claude/skills/pazaryeri-mesaj/SKILL.md; then echo \"beceri VAR\"; else echo \"beceri YOK (kurulu değil, NARH için standart yetenek yok)\"; fi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:46:46+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f38b6fc0f0b445f79436793b8755a936",
+      "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "26137c72636830593164a8a95032cfd9a8a5008b77c14759c9ee5e2ce1cf5803"
+}
