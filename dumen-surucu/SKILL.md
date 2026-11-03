@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver".
-version: 0.7.0
+version: 0.7.1
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -36,6 +36,7 @@ Dümen'de ilk sekme çoğu zaman Sultan'ın terminalidir; `goto` onu bozar. Bu y
 - **`'ilk'`** → ilk sekme (eski davranış). Yalnız çağıran **açıkça** isterse.
 - **string** (adres parçası) ya da **RegExp** → adresi eşleşen sekme; eşleşen yoksa yeni sekme açılır.
 - `kapat()` yalnız **kendi açtığı** sekmeyi kapatır; `'ilk'` ya da desenle seçilen sekme kapanmaz. Yeniden bağlanmada aynı sekmeye dönülür (hedef kimliğiyle).
+- **Yeniden bağlanma öteki sekmelere dokunmaz (0.7.1 · BENNÂ · 3 Kas):** aranan sekmenin adresi `/json/list`'ten tek sorguyla okunur; kısa CDP oturumu YALNIZ aynı adresli adaylarda kimlik doğrulaması için açılır. Liste okunamazsa ya da sekme kapanmışsa hiçbir eski sekmeye oturum açılmaz; sekme yukarıdaki seçim ilkesiyle (yeni sekme / desen) seçilir. Önce: 4 sekmede 4 oturum; sonra yalnız aranan sekmede (sınav D51-D54).
 - Eski çağıranlar (amazon-etiket, gib): çerez/oturum tarayıcı bağlamında ortaktır, yeni sekmede de geçerlidir; ilk sekmeyi gerçekten bekleyen varsa `sekme: 'ilk'` ekler.
 
 ## Salt-okur: sayfayı oku, kare al (0.6.0 · SİNAN/VADE 31 Eki · görev …W3ZKKH)
