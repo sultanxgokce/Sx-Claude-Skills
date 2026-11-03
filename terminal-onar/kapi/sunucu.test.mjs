@@ -16,7 +16,7 @@ import { koltukKimlik as _kk, KOLTUK_KIMLIK_DESEN as _KD } from './koltuk-kimlik
 // beklenen ekran adresi: ad DEĞİL kimlik (aynı tuz) · ADI TAŞIMADIĞI ayrıca ölçülür (adr)
 const ekr = (ad) => '/sedir/tty/?arg=' + _kk(ad);
 const adr = (o, ad) => !!o && o.ekran === ekr(ad) && _KD.test(o.kimlik || '') && o.kimlik === _kk(ad) && !o.ekran.includes(encodeURIComponent(ad)) && !o.ekran.includes(ad);
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, rmSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -722,6 +722,19 @@ console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-serid
   kapi('UY3 usta betiği düşerse liste DÜŞMEZ: 200, koltuklar tam, uyuyanlar boş (ölçülemeyen şeridi bozmaz)',
     rz.status === 200 && jz.koltuklar?.length === 3 && Array.isArray(jz.uyuyanlar) && jz.uyuyanlar.length === 0, `→ ${rz.status} ${JSON.stringify(jz.uyuyanlar)}`);
   kz.kill();
+  // UY4 · GERÇEK usta.sh (sahte değil): argüman (--proje) ve çıktı biçimi (ad·durum·klasör) uyumu. Özel tmux soketi: hiçbir oturum yok → kayıttaki koltuk:yok ustalar 'uyuyor' çıkar.
+  const PU = join(T, 'usta-proje'); mkdirSync(join(PU, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(PU, '_agents/handoff/ekip-registry.yaml'), 'uyeler:\n'
+    + '  - {ad: PERGEL, klasor: ustalar/PERGEL, sohbet: sid-PERGEL, koltuk: yok}\n  - {ad: KUKLACI, klasor: ustalar/KUKLACI, sohbet: sid-KUKLACI, koltuk: yok}\n'
+    + '  - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok}\n  - {ad: MUDUR, koltuk: var}\n  - {ad: KLASORLU, klasor: ustalar/KLASORLU, sohbet: sid-K, koltuk: var}\n');
+  const TMUY = join(T, 'tm-uy'); writeFileSync(TMUY, `#!/usr/bin/env bash\nexec tmux -L uy4-${process.pid} "$@"\n`); chmodSync(TMUY, 0o755);
+  const kg = await kapiAc('/sedir', 18873, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, TO_PROJE: PU, USTA_TMUX: TMUY });   // KAPI_USTA_BETIK yok → gerçek terminal-onar/scripts/usta.sh
+  const okg = await iste(18873, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cg = 'kapi=' + ((okg.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const jg = await (await iste(18873, '/sedir/api/koltuklar', { cerez: cg })).json();
+  kapi('UY4 GERÇEK usta.sh ile: kayıttaki koltuk:yok + sohbetli ustalar uyuyanlar\'da; sohbetsiz (BASSIZ) ve koltuklu (KLASORLU) YOK',
+    JSON.stringify((jg.uyuyanlar || []).map((u) => u.ad).sort()) === JSON.stringify(['KUKLACI', 'PERGEL']) && (jg.uyuyanlar || []).every((u) => u.hal === 'uyuyor'), `→ ${JSON.stringify(jg.uyuyanlar)}`);
+  kg.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close(); ttydKisi.close();
