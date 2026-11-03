@@ -698,6 +698,32 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   pd.kill();
 }
 
+console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-seridi-api) ──');
+{
+  // sahte usta.sh: liste → ad<TAB>durum<TAB>klasör. İlk üçü anlamlı; BASIRET koltuklar'da zaten var (uyanık sayılır, tekrar eklenmez); kotu:ad süzgeçten düşer; kayit-eksik gösterilmez
+  const USTA_SAHTE = join(T, 'usta-sahte.sh');
+  writeFileSync(USTA_SAHTE, '#!/usr/bin/env bash\n[ "$1" = liste ] || exit 2\n'
+    + 'printf "PERGEL\\tuyuyor\\t/x/pergel\\nKUKLACI\\tuyuyor\\t/x/kuklaci\\nBASIRET\\tuyuyor\\t/x/b\\nSOHBETSIZ\\tkayit-eksik\\t/x/s\\nUYANIK1\\tuyanik\\t/x/u\\nkotu:ad\\tuyuyor\\t/x/k\\nPERGEL\\tuyuyor\\t/x/pergel\\n"\n');
+  const USTA_BOZUK = join(T, 'usta-bozuk.sh');
+  writeFileSync(USTA_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
+  const ku = await kapiAc('/sedir', 18871, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, KAPI_USTA_BETIK: USTA_SAHTE });
+  const oku = await iste(18871, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cu = 'kapi=' + ((oku.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const ju = await (await iste(18871, '/sedir/api/koltuklar', { cerez: cu })).json();
+  kapi('UY1 uyuyan ustalar ayrı alanda, hal:uyuyor; yalnız uyuyor olanlar (uyanık·kayıt-eksik·bozuk ad·tekrar·koltukta olan YOK)',
+    JSON.stringify(ju.uyuyanlar) === JSON.stringify([{ ad: 'PERGEL', hal: 'uyuyor' }, { ad: 'KUKLACI', hal: 'uyuyor' }]), `→ ${JSON.stringify(ju.uyuyanlar)}`);
+  kapi('UY2 koltuklar dizisi uyuyanlarla KARIŞMAZ (tüketiciler bozulmaz) ve klasör yanıta yazılmaz',
+    ju.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET,sinavkutu-kabuk' && !JSON.stringify(ju).includes('/x/'), `→ ${JSON.stringify(ju).slice(0, 200)}`);
+  ku.kill();
+  const kz = await kapiAc('/sedir', 18872, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, KAPI_USTA_BETIK: USTA_BOZUK });
+  const okz = await iste(18872, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cz = 'kapi=' + ((okz.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const rz = await iste(18872, '/sedir/api/koltuklar', { cerez: cz }); const jz = await rz.json();
+  kapi('UY3 usta betiği düşerse liste DÜŞMEZ: 200, koltuklar tam, uyuyanlar boş (ölçülemeyen şeridi bozmaz)',
+    rz.status === 200 && jz.koltuklar?.length === 3 && Array.isArray(jz.uyuyanlar) && jz.uyuyanlar.length === 0, `→ ${rz.status} ${JSON.stringify(jz.uyuyanlar)}`);
+  kz.kill();
+}
+
 kapiTaban.kill(); kapiKok.kill(); ttyd.close(); ttydKisi.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);
