@@ -1,7 +1,7 @@
 {
   "is": "pazaryeri-mesaj",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T08:46:46+03:00",
+  "guncelleme": "2026-11-03T08:52:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -42,7 +42,27 @@
       "olcum_id": "f38b6fc0f0b445f79436793b8755a936",
       "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-dumen-sinav-sonra.txt",
+      "sha256": "a039d5c620e2930ebfa1aa4f1f69818c6cf902aaeb7752b3fc739c3f2bab65ef",
+      "komut": [
+        "bash",
+        "-c",
+        "cd dumen-surucu/scripts && timeout 880 bash dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:52:19+03:00",
+      "sure_sn": 344.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "4e96afca826a4e3f82a44745665e9644",
+      "olculen_commit": "c6befefeeda9836b419fb6e78e817da4a4b571c6",
+      "olculen_kirli": false
     }
   ],
-  "imza": "26137c72636830593164a8a95032cfd9a8a5008b77c14759c9ee5e2ce1cf5803"
+  "imza": "355aee924ac9def9bada42c0acbd3e74b94441df65eb82043ad9c0973297ce9e"
 }
