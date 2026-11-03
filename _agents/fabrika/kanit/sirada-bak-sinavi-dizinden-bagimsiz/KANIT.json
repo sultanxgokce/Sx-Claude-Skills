@@ -1,0 +1,74 @@
+{
+  "is": "sirada-bak-sinavi-dizinden-bagimsiz",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T16:55:31+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak sınavı Nexus dizininden: S18 tmux ve depo kaydından yalıtıldı (141 geçti 0 kaldı)",
+      "asama": "tek",
+      "dosya": "olcum-sirada-bak sınavı Nexus dizininden: S18 tmux ve depo kaydından yalıtıldı (141 geçti 0 kaldı)-tek.txt",
+      "sha256": "15ab075414a967edb1a733c31a21ebbe6efd908a1e604d9fe92d76da8971fc42",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Nexus && bash /config/projects/_wt/Sx-Claude-Skills-sirada-bak-sinavi-dizinden-bagimsiz/gunluk-plan/scripts/sirada-bak.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T16:54:52+03:00",
+      "sure_sn": 148.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "b8f6aeaf600742c6a06fc485f71ad4c7",
+      "olculen_commit": "9e0ea9580d31d49eedee16cb521d041a737e5407",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant S18 yalıtımı kalkar: Nexus dizininden sınav düşmeli",
+      "asama": "tek",
+      "dosya": "olcum-mutant S18 yalıtımı kalkar: Nexus dizininden sınav düşmeli-tek.txt",
+      "sha256": "9de2493cc92a05a358ac3ca4a6e4a7cefaab6b6d5f23b0c1e6f4a96538b5f046",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-s18.sh"
+      ],
+      "rc": 0,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T16:55:11+03:00",
+      "sure_sn": 11.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak sınavı Nexus dizininden: S18 tmux ve depo kaydından yalıtıldı (141 geçti 0 kaldı)",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "015d228116d94bf2b910555e80fada7e",
+      "olculen_commit": "9e0ea9580d31d49eedee16cb521d041a737e5407",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant S18 yalıtımı kalkar (çıkış kodu taşınır): Nexus dizininden sınav düşmeli",
+      "asama": "tek",
+      "dosya": "olcum-mutant S18 yalıtımı kalkar (çıkış kodu taşınır): Nexus dizininden sınav düşmeli-tek.txt",
+      "sha256": "f648fd629946c820066804062442fce3f33357544966572a68a01b9451790e40",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-s18.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T16:55:31+03:00",
+      "sure_sn": 11.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak sınavı Nexus dizininden: S18 tmux ve depo kaydından yalıtıldı (141 geçti 0 kaldı)",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "3e41f35afc214035b194cf40227daf04",
+      "olculen_commit": "9e0ea9580d31d49eedee16cb521d041a737e5407",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "f003b1716926c05ccfb7bfa60686cb7ebaf1e93bfe80a517810ad1003c12d225"
+}

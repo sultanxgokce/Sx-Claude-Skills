@@ -86,7 +86,7 @@ out="$(LISTE_RC=5 bash "$SB" 2>&1)"; icermiyor "S14 ölçülemeyende KARAR satı
 bash "$SB" --esik abc >/dev/null 2>&1; kapi "S15 bozuk eşik rc 2" "2" "$?"
 bash "$SB" --esik 0 >/dev/null 2>&1; kapi "S16 eşik 0 rc 2" "2" "$?"
 USTLEN_RC=1 bash "$SB" >/dev/null 2>&1; kapi "S17 ustlen reddedilirse rc 1 (sessiz başarı yok)" "1" "$?"
-GUNLUK_PLAN_AJAN="" AGENT_NAME="" bash "$SB" --kutu menzil >/dev/null 2>&1; kapi "S18 kim yokken başlatma rc 3" "3" "$?"
+env -u AILE_KIMDEN -u TMUX -u TMUX_PANE GUNLUK_PLAN_AJAN="" AGENT_NAME="" bash "$SB" --kutu menzil >/dev/null 2>&1; kapi "S18 kim yokken başlatma rc 3 (tmux ve depo kaydı kimlik vermez)" "3" "$?"
 echo "— başkasının işi üstlenilmez (kutu-düzeyi sayım ≠ koltuk-düzeyi başlatma)"
 liste_menzil; satir M0 menzil acik cok-acil ozellik SERDAR "serdarın işi (en acil, en üstte)" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
 c="$(bash "$SB" 2>&1)"; rc=$?
