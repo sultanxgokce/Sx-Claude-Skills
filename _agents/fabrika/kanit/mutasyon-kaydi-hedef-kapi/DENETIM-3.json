@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "mutasyon-kaydi-hedef-kapi",
+  "pr": "678",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T16:43:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-mutasyon-kaydi-hedef-kapi",
+  "dal": "mutasyon-kaydi-hedef-kapi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32985,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2953
+  },
+  "dalgic": "uyumsuz",
+  "bas": "85a2e1b898031e2ef57f806ed6497fc70f270f09",
+  "duzeltme_farki": {
+    "onceki_bas": "093322581003320743d1d696e3f438979609e320",
+    "dosya": 4,
+    "bayt": 11260,
+    "tam_bayt": 123687
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Hedef kapılı mutasyon kaydı talep edildiği gibi çalışıyor; gerçek ölçüm 275/275 geçiyor ve hedefli mutasyon sınav tarafından yakalanıyor. Ancak bu düzeltme turuna aynı kartla ilgisiz canlı-borç/sıralama belgesi ve sürüm değişiklikleri karışmış; önce bu kapsam kaymasını ayırın.",
+    "bulgular": [
+      {
+        "ne": "İş kartı yalnız mutasyon ölçümünün hedef kapı davranışını isterken değişiklik, başka bir kartın canlı borç ve günlük plan sıralaması özelliğini de aynı PR'a katıyor.",
+        "kanit": "Diff, SKILL.md'ye “Eski canlı borç sahibinin sırasında en üste çıkar” başlıklı, ayrı kart ve görev kimliği taşıyan yeni maddeyi ekliyor; ayrıca catalog.json içinde ilgisiz gunluk-plan sürümünü 1.21.1'den 1.22.0'a yükseltiyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md: “Eski canlı borç sahibinin sırasında en üste çıkar” eklemesi; catalog.json: gunluk-plan version",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı gerçek ölçüm yok. Önce ölçümü kırmızı 247/273, gerçek sonra ölçümü yeşil 275/275; mutasyon kaydı mutasyon=true, gercek_olcum=kanit-sinavi, hedef_kapi=T27e ve hedef_dustu=true alanlarıyla hedef kapının gerçekten düştüğünü gösteriyor. Önceki turda bulgu yoktu; dolayısıyla kapanacak önceki bulgu bulunmuyor. olculen_kirli=true yeniden üretilebilirliği zayıflatıyor, fakat sunulan imzalı önce/sonra çifti ve hedefli mutasyon talep için yeterli."
+  }
+}
