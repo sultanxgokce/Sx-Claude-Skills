@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "goz-duzeltme-farki-cakisan-birlesim",
+  "pr": "682",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T21:15:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-duzeltme-farki-cakisan-birlesim",
+  "dal": "goz-duzeltme-farki-cakisan-birlesim",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30746,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 17863
+  },
+  "dalgic": "uyumlu",
+  "bas": "5c0371d29047ef24111899f637486419b907d437",
+  "duzeltme_farki": {
+    "onceki_bas": "527bfbf1836659ed1f3aad12461b4526776dc97c",
+    "dosya": 8,
+    "bayt": 26739,
+    "tam_bayt": 42850
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Çatışan birleşimde ikili dosyanın PR değişikliğini düşüren önceki B1 kusuru, ikili yamayı ayrıca karşılaştırıp taşıyan yol ile kapatılmış; ana dal girdisinin bu turda eklenmiş sayılmaması da korunmuş. Gerçek ölçüm 87/87 geçiyor ve hedefli mutasyonlar ikili dosya ile geri-alma kapılarını gerçekten düşürüyor; üretimi engelleyen ciddi veya uygulama kusuru görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm “duzeltme farki sinavi tur 2 (D13 D14 D15)” kaydında rc=0 ve 87/87 sonuç veriyor; D14c ve D15d dahil hedef kapılar ölçülüyor. İkili dosya kusuruna ait mutasyon kanıtlarında rc=1 ve hedef D14c düşüşü beklenen biçimde görülerek sınavın bozuk kodu yakaladığı doğrulanıyor. Son gerçek ölçüm olculen_kirli=true olduğundan temiz commit bağı ideal değil, ancak sunulan üretim farkı, gerçek ölçüm ve hedefli mutasyon birlikte talebi yeterince kanıtlıyor."
+  }
+}

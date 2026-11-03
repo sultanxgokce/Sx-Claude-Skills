@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: D13c · rc≠0 + hedef kapı 'D13c' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-duzeltme farki sinavi (D13 yeni)-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-cakisma.sh
+# rc=1 sure=18.2s zaman=2026-11-03T20:50:00+03:00
+--- stdout ---
+  ✓ D1a tur 1 koştu (4/E → rc 1)
+  ✗ D13c istemde PR'ın artımı var ('+yeni-satir-d13' /tmp/tmp.VoIo3okRI5/istem.md içinde yok)
+════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════
+── SONUÇ (düzeltme-farkı): 61 geçti · 1 kaldı ──
+--- stderr ---
