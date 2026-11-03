@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "dumen-sekme-yeniden-baglan",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T08:30:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-sekme-yeniden-baglan",
+  "dal": "dumen-sekme-yeniden-baglan",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20787,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 14093
+  },
+  "dalgic": "uyumsuz",
+  "bas": "aa6cdafeef03210c8ffe2ec3b38a24759f6a3571",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, yeniden bağlanmada `/json/list` ile aday daraltılmış ve gerçek ölçüm 60/60 geçerken mutasyon sınavı eski çok-sekmeli davranışı yakalamıştır. Lakin listenin okunamadığı veya adres adayının bulunamadığı yollarda kod bütün sekmelere döndüğü için kartın temel güvencesi tamam değildir; önce bu yollar kapatılmalıdır.",
+    "bulgular": [
+      {
+        "ne": "`/json/list` okunamazsa kod `ctx.pages()` ile eski davranışa dönerek bütün sekmelerde kısa CDP oturumu açabilir; bu, kartın “oturum yalnız adayda açılır” talebini doğrudan bozar.",
+        "kanit": "Değişiklikte `liste` hata halinde `null` bırakılıyor, ardından `kayit ? ... : ctx.pages()` ile tüm sayfalar aday yapılıyor ve döngüde her aday için `hedefId(p)` çağrılıyor. D51 yalnız başarılı `/json/list` yolunu çalıştırıyor; ölçümde bu senaryo için ayrı bir kapı yok.",
+        "konum": "dumen-surucu/scripts/dumen.mjs: yeniden bağlanma bloğu (`liste=null`, `adaylar=...ctx.pages()`, `for (const p of adaylar)`); dumen-surucu/scripts/dumen.test.mjs:D51",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`/json/list` kaydı bulunduğu halde URL ile eşleşen aday çıkmazsa kod yine bütün sekmeleri tarıyor; ayrıca D51'in yalnız toplam oturum sayısını `≤2` ölçmesi, oturumların gerçekten yalnız doğru adayda açıldığını kanıtlamıyor.",
+        "kanit": "Üretim kodundaki `if (!adaylar.length) adaylar = ctx.pages()` satırı tüm sekmelere geri dönüyor. D51 koşulu `oturumSay <= 2`; hangi sayfaya `newCDPSession` açıldığını kaydetmediğinden yanlış bir sekmeye açılan oturum da sayı sınırı içinde geçebilir.",
+        "konum": "dumen-surucu/scripts/dumen.mjs: `if (!adaylar.length)` geri dönüşü; dumen-surucu/scripts/dumen.test.mjs:D51",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. Gerçek ölçüm rc=0 ile 60/60 geçmiştir; mutasyon kaydı rc=1 ve düşen D51 kapısıyla sınavın eski tüm-sekme davranışını yakaladığını gösterir. Ancak ölçülen çalışma ağacı kirli ve sınav yalnız başarılı `/json/list` yolunda toplam oturum sayısını ölçüyor; hata/boş-aday yolları ile oturumun hangi sekmede açıldığı kanıtlanmıyor."
+  }
+}
