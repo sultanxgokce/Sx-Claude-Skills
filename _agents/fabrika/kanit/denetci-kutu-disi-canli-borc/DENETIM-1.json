@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-kutu-disi-canli-borc",
+  "pr": "675",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T14:28:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-kutu-disi-canli-borc",
+  "dal": "denetci-kutu-disi-canli-borc",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34311,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 56020
+  },
+  "dalgic": "uyumsuz",
+  "bas": "974bf85b628c4f058137e6adee01535f1e23a13f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Denetçi, aynı kutu-dışı bulgunun ikinci gelişini yalnız canlı kanıt isteyen sınıfsız kartta sahibinin adına canlı borca devrediyor; ilk geliş, sınıflı/canlı istemeyen kart, normal bulgu ve kapatma anahtarı da korunmuş. İlgili önce/sonra ölçümü 49/54’ten 54/54’e çıkmış, mutasyon devrin gerçekten sınandığını ve daha sonraki ana sınav 338/338 sonucu gerileme bırakmadığını gösteriyor; üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İlgili ölçüm çifti önce rc=1 ve J2-J6 başarısızken sonra rc=0 ve 54/54 başarı gösteriyor; mutasyon kaydı rc=1 ile devir çağrısı söküldüğünde aynı kapıların düştüğünü doğruluyor. Ara gerileme kaydı, ana sınavın zaman aşımıyla rc=124 olmasından ötürü kırmızı; ancak daha sonraki doğrudan ana sınav rc=0 ve 338/338 olduğundan bu başarısızlık güncel gerçek kod kusuru kanıtı değil. Ölçümler kirli çalışma ağacında alınmış olsa da aynı commit kimliği kayıtlı ve verilen manifestte bütünlük doğrulanmış."
+  }
+}
