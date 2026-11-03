@@ -1,0 +1,21 @@
+$ bash yazilim-fabrikasi/scripts/denetci-tavan.test.sh
+# rc=0 sure=3.6s zaman=2026-11-03T19:26:56+03:00
+--- stdout ---
+════ T7n · VARSAYILAN tavan 2 (+1 ilerleyene), 3 mutlak ════
+  ✓ T7n tur1 rc=1
+  ✓ T7n tur2 (düzeltme turu) geçmedi: 'düzelt' rc=1, henüz tıkanma yok
+  ✓ T7n iki göz turu koştu (DENETIM-2 yazıldı)
+  ✓ 🔴 T7n ilerlemeyen iş: TIKANMA 3. çağrıda, göz koşmadan rc=4
+  ✓ T7n tıkandı raporu 'tavan 2' diyor
+  ✓ T7n DENETIM-3 yazılmadı (3. göz turu YOK)
+  ✓ T7n ilerleyen iş: tur1 rc=1
+  ✓ T7n ilerleyen iş: tur2 rc=1 (puan↑ bulgu↓, tıkanmadı)
+  ✓ T7n ilerleyen iş 3. tur payını alır ve 5/E ile GEÇER (rc=0)
+  ✓ T7n +1 tur payı yazılı
+  ✓ T7n pay turu da geçmediyse rc=4 (3 mutlak)
+  ✓ 🔴 T7n 4. çağrı MUTLAK: pay ile bile en çok 3 göz turu
+  ✓ T7n DENETIM-4 yazılmadı
+  ✓ T7n tavan dikişi yalnız sahte göz varken açılır (gerçek koşuda ortamdan okunmaz)
+
+── SONUÇ: 14 geçti · 0 kaldı ──
+--- stderr ---

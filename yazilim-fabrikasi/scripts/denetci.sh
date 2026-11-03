@@ -5,9 +5,9 @@
 # Kurallar (Sultan K1/K4, 21-22 Eyl 2026):
 #   · denetleyen model yazanla AYNI OLAMAZ (Claude→Codex, Codex→Claude; --denetci ile açıkça seçilebilir)
 #   · kanıt yoksa ya da manifest bozuksa denetim AÇILMAZ (rc=2) — "kanıtsız adım 4 yok"
-#   · tavan 3 tur; ilerleyen işe (puan↑ VE açık bulgu↓) +1; DÖRT mutlak → sonrası "tıkandı + üç yol" (rc=4)
+#   · tavan 2 tur (1 bulgu + 1 düzeltme); ilerleyen işe (puan↑ VE açık bulgu↓) +1; ÜÇ mutlak → sonrası "tıkandı + üç yol" (rc=4)
 #   · --sultan-devam : KARTA işlenmiş Sultan kararını (kart.sh sultan-dedi) okur ve "ilerlemiyor"
-#     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (4) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
+#     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (3) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
 #   · --reis-devam   : SINIFSIZ işte KARTA işlenmiş sahip/reis kararını (kart.sh reis-dedi) okur; aynı sınırlar.
 #     Sınıflı kartta AÇILMAZ (o kararın merci Sultan'dır). Defter satırı TAVAN-ACILDI-REIS, gün sonu özetinde görünür.
 #
@@ -23,7 +23,13 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SEMA="$HERE/../sablon/denetim-sema.json"
 ISTEM="$HERE/../adimlar/denetci-istem.md"
-TAVAN=3; MUTLAK=4
+TAVAN=2; MUTLAK=3   # Sultan 3 Kas 2026 (öneri #2): bir bulgu turu + bir düzeltme turu; ilerleyene +1 = 3 mutlak
+# Sınav dikişi: tavan YALNIZ sahte göz varken (DENETCI_KOMUT/SAHTE_JSON) değiştirilebilir; gerçek koşuda ortamdan okunmaz
+# (tavanı ajan yükseltemez). Eski turlu sınavlar DENETCI_TAVAN=3 DENETCI_MUTLAK=4 verir; varsayılanın kendi sınavı değişkensiz koşar.
+if [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; then
+  case "${DENETCI_TAVAN:-}" in [1-9]) TAVAN="$DENETCI_TAVAN" ;; esac
+  case "${DENETCI_MUTLAK:-}" in [1-9]) MUTLAK="$DENETCI_MUTLAK" ;; esac
+fi
 
 SON_HATA=""; KILIT_RED=0   # SON_HATA: bitiş zilinin 'sebep' parçası (rc 3 'ölçülemedi' tek başına sebebi söylemiyordu); KILIT_RED: başka denetçi koşuyor reddi
 _hata() { SON_HATA="$*"; printf '✗ %s\n' "$*" >&2; }
@@ -419,7 +425,7 @@ PY
 #    Canlı vaka: kapı onarımında puanlar 3·3·2 gitti; düşüşün sebebi işin kötüleşmesi değil,
 #    denetçinin her turda DAHA CİDDİ bir kusur bulmasıydı. "ilerliyor_mu" bu ikisini ayırt edemez.
 #    Kapı gerekçesiz açılmaz (≥20 karakter), deftere yazılır, gün sonu özetinde Sultan'a görünür.
-#    ⚠ MUTLAK tavanı AÇMAZ: dört tur hâlâ mutlaktır. Bu kapı yalnız "ilerlemiyor" hükmünü aşar.
+#    ⚠ MUTLAK tavanı AÇMAZ: üç tur mutlaktır. Bu kapı yalnız "ilerlemiyor" hükmünü aşar.
 #    ⚠ A06: bu bayrağı yazan ajan Sultan'ın onayını ÜRETMEZ; aldığı onayı AKTARIR. Gerekçe metni
 #      denetlenebilir olsun diye deftere düşer — uyduran, defterde yakalanır.
 sultan_kapisi() {
@@ -1192,7 +1198,11 @@ if [ "$YAKMAYAN" -gt "$KD_TAVAN" ]; then
   _bilgi "   3) GERİ AL — alanı kapat, ders deftere"
   exit 4
 fi
-if [ "$SAYILI_SON" -ge "$TAVAN" ]; then
+# TIKANMA 3'TE (Sultan 3 Kas 2026, öneri #2: "tavan 2, tıkanma 3'te"): tavan iki göz turudur (1 bulgu + 1 düzeltme); 2. tur da geçmediyse
+# iş "adım 2'ye dön" (rc=1) alır, tıkanma ÜÇÜNCÜ çağrıda söylenir (ilerlemiyorsa üstteki kapı koşmadan rc=4; ilerliyorsa +1 pay turu koşar
+# ve geçmezse orada rc=4). Eşik sabit 3: eski 3/4 dikişli sınavlarda tavanla çakışır, davranış değişmez.
+TIKANMA=3
+if [ "$SAYILI_SON" -ge "$TIKANMA" ]; then
   ONCEKI=$TUR
   if [ "$SAYILI_SON" -lt "$MUTLAK" ] && ilerliyor_mu; then _bilgi "↩ adım 2'ye dön (sayılı tur $SAYILI_SON/$TAVAN) — iş ilerliyor, +1 tur payı var"; exit 1; fi
   tikandi_raporu; exit 4

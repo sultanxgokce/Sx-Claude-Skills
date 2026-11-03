@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # denetci.test.sh — bağımsız göz betiğini SAHTE denetçiyle (DENETCI_KOMUT) sahte depoda koşturur.
-# Ölçtüğü: kanıt kapısı · yazan≠denetleyen · puan/karar · tavan 3(+1)/4 · geçersiz çıktı=ölçemedi · istem içeriği.
+# Ölçtüğü: kanıt kapısı · yazan≠denetleyen · puan/karar · tavan 3(+1)/4 (eski, dikişle) ve 2(+1)/3 (varsayılan, denetci-tavan.test.sh) · geçersiz çıktı=ölçemedi · istem içeriği.
 # kabuk-testleri: sure=900
 #   (#404, 21 Eki ölçümü: süit yerelde 778 sn, CI'da 700 sn tavanında Terminated — 44 mutant. Zil mutantları yalnız T-ZIL'i,
 #   zil dışı mutantlar T-ZIL'siz koşar; sure kabuk tavanına (900) çekildi. Ana dal CI'da 472 sn idi.)
 #   (T11'de 15 mutant var, her biri TÜM süiti IC_KOSUM ile yeniden koşuyor — mutant sayısı büyüdükçe
 #   toplam süre büyüyor; CI'da varsayılan 300 sn'de üst üste Terminated oldu, 2026-10-15.)
 set -uo pipefail
+export DENETCI_TAVAN=3 DENETCI_MUTLAK=4   # eski turlu sınavlar 3(+1)/4 ile koşar (0.27.50: varsayılan 2(+1)/3; yeni varsayılanın kendi sınavı denetci-tavan.test.sh, değişkensiz)
 export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
@@ -920,6 +921,13 @@ fi
 # Gövde AYRI dosyadadır (denetci-kutu-disi.test.sh) çünkü bu dosya o sırada açık PR #331'in
 # (--kare, 0.6.5) elindeydi. "Test yazmak onu koşturmaz": asıl sınav o dosyayı ÇAĞIRIR, böylece
 # denetci.test.sh kırmızıysa kutu-dışı kapıları da kırmızıdır. #331 inince gövde buraya taşınır.
+# ── VARSAYILAN TAVAN 2/3 (0.27.50): gövde AYRI dosyada (denetci-tavan.test.sh), buradan çağrılır; yukarıdaki eski turlu sınavlar 3/4'e dikişle sabit.
+echo ""; echo "── VARSAYILAN TAVAN 2(+1)/3 (ayrı dosya, buradan çağrılır) ──"
+if env -u DENETCI_TAVAN -u DENETCI_MUTLAK bash "$(dirname "$0")/denetci-tavan.test.sh"; then
+  gecen=$((gecen+1)); echo "  ✓ varsayılan tavan kapıları (denetci-tavan.test.sh) GEÇTİ"
+else
+  kalan=$((kalan+1)); echo "  ✗ varsayılan tavan kapıları (denetci-tavan.test.sh) DÜŞTÜ"
+fi
 echo ""; echo "── KUTU-DIŞI SINIF (ayrı dosya, buradan çağrılır) ──"
 if bash "$(dirname "$0")/denetci-kutu-disi.test.sh"; then
   gecen=$((gecen+1)); echo "  ✓ kutu-dışı sınıf kapıları (denetci-kutu-disi.test.sh) GEÇTİ"

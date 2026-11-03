@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "goz-iki-tur",
+  "pr": "680",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T19:28:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur",
+  "dal": "goz-iki-tur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30330,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 134812
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f77eaec68c47f12980687017c8b77301da39fd0e",
+  "duzeltme_farki": {
+    "onceki_bas": "4ab47fdb51820390b25ad4971b8f04a8dd37d720",
+    "dosya": 12,
+    "bayt": 149197,
+    "tam_bayt": 161746
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Önceki iki bulgu kapanmış: ilerlemeyen iş üçüncü çağrıda göz koşmadan tıkanıyor ve katalog artık tavanı 2+1 diye anlatıyor. İstenen ana davranış doğru, fakat kartta adı verilen kutu-dışı/canlı-borç sınavının doğrudan koşu kaydı yok; üretime hazır demeden önce bu kanıt tamamlanmalı.",
+    "bulgular": [
+      {
+        "ne": "İş kartında özellikle istenen `denetci-kutu-disi.test.sh` kırmızıdan yeşile ölçümü sunulmamış; bu nedenle kutu-dışı bulgunun puanı düşürmemesi ve canlı borca yazılması bu teslimde doğrudan doğrulanmıyor.",
+        "kanit": "Sağlam manifestte yalnız `denetci-tavan.test.sh`, bir scratchpad günlüğünün son iki satırını okuyan `tail -2` komutu ve karne dosyasını okuyan canlı kayıt var. Kartın `kanit_nerede` alanında adı geçen `denetci-kutu-disi.test.sh` komutu veya ona ait önce/sonra ölçüm çifti kayıtlar arasında bulunmuyor; `339 geçti · 0 kaldı` çıktısı da hangi kutu-dışı/canlı-borç iddialarını sınadığını göstermiyor.",
+        "konum": "İŞ KARTI.kanit_nerede; KANIT MANİFESTİ.kayitlar; olcum-tam-paket-denetci-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve tavan davranışı için gerçek bir kırmızı/yeşil çift var: eski betik 6/14, yeni betik 14/14; bu çift önceki B1'in kapandığını güçlü biçimde gösteriyor. B2 diffte doğrudan kapanmış (`catalog.json` 3+1 → 2+1). Buna karşılık tam paket kaydı sınavı çalıştırmıyor, yalnız önceden oluşmuş günlüğü okuyor; canlı kayıt da tek bir birinci-tur denetimini gösteriyor. Dolayısıyla kutu-dışı bulgu ve canlı-borç kısmına özgü ölçüm çifti eksik."
+  }
+}
