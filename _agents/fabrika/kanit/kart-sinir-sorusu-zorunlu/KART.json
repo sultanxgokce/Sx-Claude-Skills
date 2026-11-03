@@ -39,6 +39,20 @@
       "zaman": "2026-11-03T10:23:21+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-03T12:24:11+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MÜZEHHİP",
+      "oturum": "aile-notify SERDAR→MÜZEHHİP 3 Kas: TIKANDI kararı DEVAM",
+      "gerekce": "Puan 3→4→4, bulgu 1; kalan tek küçük: regex ASCII tamami'yi da yakalıyor, birebir indirilecek",
+      "zaman": "2026-11-03T12:24:54+03:00"
     }
   ]
 }
