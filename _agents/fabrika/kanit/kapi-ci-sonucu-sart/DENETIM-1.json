@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kapi-ci-sonucu-sart",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T13:42:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-ci-sonucu-sart",
+  "dal": "kapi-ci-sonucu-sart",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32373,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 28692
+  },
+  "dalgic": "uyumsuz",
+  "bas": "c63a542d998900ce6876c2536c4bd167ee778fab",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Kapıya `--pr` kipinde CI sorgusu eklenmiş; kırmızı, bitmemiş ve okuma hatası için sınavlar da var. Ancak PR başında henüz hiçbir kontrol görünmediğinde önceki commit’in yeşil sonucuyla kapı açılabildiği için başın bitmemiş/ölçülememiş hali yeşile çevriliyor; bu, iş kartının temel güvenli-kapanma şartını deliyor.",
+    "bulgular": [
+      {
+        "ne": "PR başında kontrol bulunmaması, kontrollerin henüz oluşmadığı bir yarış durumu ile yol süzgecini ayırt etmeden önceki commit’in sonucu üzerinden geçişe çevriliyor. Böylece yeni PR başı için CI henüz başlamamışken önceki yeşil commit kapıyı rc=0 ile açabilir; talepteki “PR başındaki CI”, “bitmemiş geçmez” ve “ölçülemezse yeşil demez” şartları ihlal ediliyor.",
+        "kanit": "`if not og:` dalı başta kontrol bulunmayınca son 8 commit’i sorguluyor ve bulunan ilk check-run kümesini hükme bağlıyor; `T20d` ise kontrolsüz PR başı + önceki yeşil commit için açıkça `rc=0` bekliyor. Başın gerçekten yalnız kanıt değişikliği olduğu veya CI’ın o baş için uygulanamaz olduğu doğrulanmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: CI `if not og` geri-bakış bloğu; yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh: T20d",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki yeşil gerçek ölçüm var, sarı kayıt yok. T20 ve iç mutantlar sınavın uygulanan davranışı yakaladığını gösteriyor, fakat sınav yanlış güven varsayımını da özellikle `T20d` ile yeşil kabul ediyor; dolayısıyla 224/0 sonucu iş kartındaki hedefin doğru karşılandığını kanıtlamıyor. Ölçümler ayrıca `olculen_kirli: true`, yani commit kimliği tek başına ölçülen çalışma ağacını yeniden üretmeye yetmiyor."
+  }
+}

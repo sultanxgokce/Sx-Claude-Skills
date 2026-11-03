@@ -1,0 +1,65 @@
+{
+  "is": "kapi-ci-sonucu-sart",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T14:03:01+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapı sınavı birlestirme-kapisi.test.sh: T20 CI ölçümü 12 kapı + M15 M16 iç mutant (224 geçti 0 kaldı)",
+      "asama": "tek",
+      "dosya": "olcum-kapı sınavı birlestirme-kapisi.test.sh: T20 CI ölçümü 12 kapı + M15 M16 iç mutant (224 geçti 0 kaldı)-tek.txt",
+      "sha256": "cb646cac1e8f6e79f3dfd18ff1aaa14dfb8172cc6a69f7280ba7f6f798db4736",
+      "komut": [
+        "bash",
+        "birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T13:40:32+03:00",
+      "sure_sn": 241.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "83d94a637c39416384d3985d24f1f075",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eşlik eden sınav birlestirme-kapisi-olculen-commit.test.sh CI sahte gh ile (27 geçti 0 kaldı)",
+      "asama": "tek",
+      "dosya": "olcum-eşlik eden sınav birlestirme-kapisi-olculen-commit.test.sh CI sahte gh ile (27 geçti 0 kaldı)-tek.txt",
+      "sha256": "da48a2e136dbbd6f69de65d2e78bd149f53cc24372cd449e88076920f6168465",
+      "komut": [
+        "bash",
+        "birlestirme-kapisi-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T13:41:27+03:00",
+      "sure_sn": 51.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a1eb380a129f42d98b2ff5350fbe935f",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur 2 kapı sınavı: T20 CI ölçümü geriye bakış yalnız kanıt commitlerinde (T20m kod commiti ödünç yeşil almaz, T20n StatusContext) 226 geçti 0 kaldı",
+      "asama": "tek",
+      "dosya": "olcum-tur 2 kapı sınavı: T20 CI ölçümü geriye bakış yalnız kanıt commitlerinde (T20m kod commiti ödünç yeşil almaz, T20n StatusContext) 226 geçti 0 kaldı-tek.txt",
+      "sha256": "76c2eff9a900289bfe1d4dcd4938e5c1ab0f2230cc40052b5f873d4accf03683",
+      "komut": [
+        "bash",
+        "birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T14:03:01+03:00",
+      "sure_sn": 487.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "898919b638b5423592e5f371d4830fb2",
+      "olculen_commit": "391504e1d0c6db163462124ca9b512576e28b61e",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "4c05c18d696c709b60c96c8e2a43bf575ab75468bc4fef342e93c6b3a97c8a13"
+}
