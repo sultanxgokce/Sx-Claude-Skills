@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-ozet-seksen-harf",
+  "pr": "683",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T00:17:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-ozet-seksen-harf",
+  "dal": "gunluk-plan-ozet-seksen-harf",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17080,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7783
+  },
+  "dalgic": "uyumlu",
+  "bas": "6d7cb8feacc61af4de6afe3d5fcc75def7c1a653",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Deftere-yaz açılış özeti, madde ayraçları düzleştirilip gerekirse kısaltılarak 80 karakter sınırının altında kurulmuş; gerçek ölçüm 42/42 geçiyor. Talep doğrudan karşılanmış, hedef D19b mutasyonla da gerçekten sınanmış; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm rc=0 ile 42 geçti, 0 kaldı sonucunu veriyor ve D19b gerçekçi uzun, çok ayraçlı bir madde üzerinde özetin 80 harfin altında, tek cümle ve geçitçe kabul edildiğini ölçüyor. Ayrı mutasyon kaydı hedef kapı D19b'yi düşürerek sınavın eski uzun özeti yakaladığını gösteriyor; gerçek kodun durumu doğru biçimde gercek_olcum kaydından okunabiliyor."
+  }
+}

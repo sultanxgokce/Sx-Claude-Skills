@@ -1,0 +1,52 @@
+{
+  "is": "gunluk-plan-ozet-seksen-harf",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-04T00:16:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "deftere-yaz sinavi ozet 80 harf",
+      "asama": "tek",
+      "dosya": "olcum-deftere-yaz sinavi ozet 80 harf-tek.txt",
+      "sha256": "a2f90ba8a494f71b3ce09579ed49a7059094ae67996ed6857828dbfb14289370",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/deftere-yaz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T00:16:09+03:00",
+      "sure_sn": 12.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1e2dd6afef59491eb6b93a989a172f5a",
+      "olculen_commit": "1e8b64de1bf99239041a12ee689f07084426e390",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant eski uzun ozet",
+      "asama": "tek",
+      "dosya": "olcum-mutant eski uzun ozet-tek.txt",
+      "sha256": "47e19a838d844f5fdd4b315387a8a41788fea87995c3bab005b826a40bbe6f0d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-dy.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T00:16:25+03:00",
+      "sure_sn": 16.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "deftere-yaz sinavi ozet 80 harf",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D19b",
+      "hedef_dustu": true,
+      "olcum_id": "8af6af590b324bc0b053be91cbda86f0",
+      "olculen_commit": "1e8b64de1bf99239041a12ee689f07084426e390",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "bf75f7bfeaa52348e1920e7f53553891e2f81fc741bca72557442e23e39795e3"
+}

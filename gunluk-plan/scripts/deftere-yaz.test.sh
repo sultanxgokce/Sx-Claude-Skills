@@ -24,6 +24,13 @@ case "$1" in
   ekle) printf '%s\n' "$*" >> "$T/ekle.log"
         # gerçek geçidin açılış kapısı: --ozet yoksa 400 (mihenk/s08, 27 Eki — sahte betik bunu hiç sormuyordu, birim yeşil yol kırık kaldı)
         case "$*" in *" --ozet "?*) ;; *) echo "HTTP 400 ozet_acilista_gerekli" >&2; exit 1 ;; esac
+        # gerçek geçidin ikinci kapısı (gorev …T36CWF, 4 Kas): özet 80 harften KISA, tek cümle, ilk bölüm (": "a kadar) 5-10 kelime — sahte betik bunu da sormazsa uzun özet sessiz geçerdi
+        ozet=""; onc=""; for a in "$@"; do [ "$onc" = "--ozet" ] && ozet="$a"; onc="$a"; done
+        python3 - "$ozet" <<'PY2' || { echo "HTTP 400 alan_degeri_gecersiz ozet_sultan" >&2; exit 1; }
+import re,sys
+d=sys.argv[1]; ad=re.split(r"(?:[.!?;:])\s",d,1)[0]
+sys.exit(0 if len(d)<80 and not re.search(r"[.!?;]\s+\S",d) and 5<=len(ad.split())<=10 else 1)
+PY2
         [ "${EKLE_RC:-0}" -eq 0 ] || exit "$EKLE_RC" ;;
   adim) printf '%s\n' "$*" >> "$T/adim.log"; [ "${ADIM_RC:-0}" -eq 0 ] || exit "$ADIM_RC" ;;
 esac
@@ -111,7 +118,10 @@ kapi "D15 --kutu/--kim/--aciliyet ayarları ekle'ye geçer" "1" "$(grep -c -- '-
 echo "── AÇILIŞ ÖZETİ (mihenk/s08): ekle --ozet taşır, hata sebebi ekrana basılır"
 bash "$KOK/cipa.sh" yaz --plan "1) Ozetli is" >/dev/null 2>&1; yenile_onay; : > "$T/ekle.log"
 bash "$ARAC" --uygula --onay "$ONAY" --kutu huma >/dev/null 2>&1
-kapi "D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle)" "1" "$(grep -c -- '--ozet .*→ henüz başlanmadı → .*Ozetli is' "$T/ekle.log")"
+kapi "D19 ekle çağrısı --ozet taşır (Sultan-dili, madde metniyle)" "1" "$(grep -c -- '--ozet Günlük plandan açılan yeni iş: Ozetli is' "$T/ekle.log")"
+bash "$KOK/cipa.sh" yaz --plan "1) Kira ekranının bir düzeltmesi yapıldı. Öteki iş ayrı işe devredildi: sonra bakılacak; hepsi → ayrı kartta kapanacak, çünkü ekran sözleşmesi değişti ve panel yenilenecek" >/dev/null 2>&1; yenile_onay; : > "$T/ekle.log"
+c="$(bash "$ARAC" --uygula --onay "$ONAY" --kutu huma 2>&1)"; rc=$?
+kapi "D19b 🔴 uzun ve ayraçlı madde: özet 80 harfin altında, tek cümle, geçit kabul eder (rc 0, yazıldı)" "0:1" "$rc:$(grep -c 'yazıldı' <<<"$c")"
 c="$(EKLE_RC=9 bash "$ARAC" --uygula --onay "$ONAY" --kutu huma 2>&1)"
 kapi "D20 reddedilen yazım YAZILAMADI + sebep satırı basar" "1:1" "$(printf '%s' "$c" | grep -c 'YAZILAMADI'):$(printf '%s' "$c" | grep -c 'sebep:')"
 echo "── GÖREV KİMLİKLİ MADDE ve İKİZ (GJRBF1T8): sırada duran işin ikizi açılmaz"
