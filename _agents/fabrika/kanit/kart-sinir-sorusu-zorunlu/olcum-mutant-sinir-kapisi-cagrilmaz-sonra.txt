@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sn-mut/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=1 sure=245.1s zaman=2026-11-03T10:09:11+03:00
+# rc=1 sure=219.3s zaman=2026-11-03T10:21:30+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -510,7 +510,7 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✓ GB4 tikandi'da bu uyarı çıkmaz (yalnız bitti)
   ✓ GB5 kartta gorev JSON null → görevsiz sayılır, uyarı VAR (None dizgesi görev sanılmaz), rc 0
 ════ T18 · SINIR SORUSU (görev …KSQSERN): cümlede tamamı/hepsi/tümü varsa --sinir ZORUNLU (sayı ya da 'hariç <ne>') ════
-  ✗ SN1 'tüm' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI
+  ✗ SN1 'tümü' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI
   ✗ SN2 sınırda sayı da 'hariç' de yok → rc 1 (laf kalabalığı sınır sayılmaz)
   ✗ SN3 'hariç x' (3 harften kısa nesne) sınır değil → rc 1
   ✓ SN4 '11 kutu' sayı içerir → açıldı
@@ -519,7 +519,9 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✗ SN6 büyük harf ve İ ile yazılsa da sözcük yakalanır (Türkçe küçültme)
   ✓ SN7 'tamamlandı' / 'tümevarım' kapsam sözcüğü SAYILMAZ (sözcük sınırı) → sınır istenmez
   ✓ SN8 kapsam sözcüğü yok → sınır istenmez (altın)
+  ✓ SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)
+  ✓ SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)
+  ✓ SN11 'tamamını' (çekimli) + 'hariç …' → açıldı
 
-── SONUÇ: 469 geçti · 4 kaldı ──
+── SONUÇ: 472 geçti · 4 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-kart-sinir-sorusu-zorunlu-mutant-sinir-kapisi-cagrilmaz 20 sn bekledi (yuva 1, load1 17.57)

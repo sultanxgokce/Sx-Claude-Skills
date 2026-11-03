@@ -377,7 +377,7 @@ CIKTI="$(ac13 is-gun "W42 boyunca her gün tur kaydı")"
 grep -q "ÇOK GÜNLÜK KAPSAM (W42, her gün)" <<<"$CIKTI"; g $? "hafta kodu ve 'her gün' de çok günlük sayılır"
 
 echo "════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════"
-ac13m() { bash "$1" ac "$2" --is "$3" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sinir "11 kutu" 2>&1; }
+ac13m() { bash "$1" ac "$2" --is "$3" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
 ATIF=("birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506PY0B6X92R0NEK0NSPCR7 + hafta raporu E3)"
       "denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1)"
       "kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders M2)"
@@ -1210,15 +1210,18 @@ O="$(bash "$KT" bitti gbu-5 --pr 8 2>&1)"; RC=$?
 
 echo "════ T18 · SINIR SORUSU (görev …KSQSERN): cümlede tamamı/hepsi/tümü varsa --sinir ZORUNLU (sayı ya da 'hariç <ne>') ════"
 cd "$T/depo17" && export KANIT_DEPO="$T/depo17"; KU="$T/depo17/_agents/fabrika/kartlar"
-O="$(bash "$KT" ac is-sn1 --is "tüm kutularda panel güncellensin" $D4S 2>&1)"; rc=$?
-[ $rc -eq 1 ] && grep -q "SINIRI yok" <<<"$O" && grep -q "tüm" <<<"$O" && [ ! -f "$KU/is-sn1.json" ]; g $? "SN1 'tüm' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI"
+O="$(bash "$KT" ac is-sn1 --is "tümü için panel güncellensin" $D4S 2>&1)"; rc=$?
+[ $rc -eq 1 ] && grep -q "SINIRI yok" <<<"$O" && grep -q "tümü" <<<"$O" && [ ! -f "$KU/is-sn1.json" ]; g $? "SN1 'tümü' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI"
 bash "$KT" ac is-sn2 --is "hepsini düzelt" $D4S --sinir "hepsi" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "SN2 sınırda sayı da 'hariç' de yok → rc 1 (laf kalabalığı sınır sayılmaz)"
 bash "$KT" ac is-sn3 --is "tamamı bitsin" $D4S --sinir "hariç x" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "SN3 'hariç x' (3 harften kısa nesne) sınır değil → rc 1"
-bash "$KT" ac is-sn4 --is "tüm kutularda panel güncellensin" $D4S --sinir "11 kutu" >/dev/null 2>&1; g $? "SN4 '11 kutu' sayı içerir → açıldı"
+bash "$KT" ac is-sn4 --is "tamamı için panel güncellensin" $D4S --sinir "11 kutu" >/dev/null 2>&1; g $? "SN4 '11 kutu' sayı içerir → açıldı"
 python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['sinir']=='11 kutu',k" "$KU/is-sn4.json"; g $? "SN4b kartta sinir alanı yazılı"
-bash "$KT" ac is-sn5 --is "bütün kartlar düzelsin" $D4S --sinir "hariç medigate kartları" >/dev/null 2>&1; g $? "SN5 'hariç medigate kartları' kabul"
+bash "$KT" ac is-sn5 --is "hepsi düzelsin" $D4S --sinir "hariç medigate kartları" >/dev/null 2>&1; g $? "SN5 'hariç medigate kartları' kabul"
 bash "$KT" ac is-sn6 --is "Hepsi İçin sınır sorulsun" $D4S >/dev/null 2>&1; [ $? -eq 1 ]; g $? "SN6 büyük harf ve İ ile yazılsa da sözcük yakalanır (Türkçe küçültme)"
 bash "$KT" ac is-sn7 --is "tamamlandı denen işlerde zil çalsın, tümevarım yok" $D4S >/dev/null 2>&1; g $? "SN7 'tamamlandı' / 'tümevarım' kapsam sözcüğü SAYILMAZ (sözcük sınırı) → sınır istenmez"
 bash "$KT" ac is-sn8 --is "kart açılışı sade kalsın" $D4S >/dev/null 2>&1; g $? "SN8 kapsam sözcüğü yok → sınır istenmez (altın)"
+bash "$KT" ac is-sn9 --is "tüm kutularda ve bütün kartlarda panel güncellensin" $D4S >/dev/null 2>&1; g $? "SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)"
+bash "$KT" ac is-sn10 --is "tümü için panel güncellensin" $D4S --sinir "11 kutu" >/dev/null 2>&1; g $? "SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)"
+bash "$KT" ac is-sn11 --is "tamamını yap" $D4S --sinir "hariç medigate kartları" >/dev/null 2>&1; g $? "SN11 'tamamını' (çekimli) + 'hariç …' → açıldı"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

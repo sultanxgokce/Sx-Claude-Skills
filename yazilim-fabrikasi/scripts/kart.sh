@@ -363,7 +363,7 @@ sinir_kapsami() {  # sinir_kapsami <cümle> → her satır cümledeki bir kapsam
   python3 - "$1" <<'PY'
 import re, sys
 c = sys.argv[1].replace("İ", "i").replace("I", "ı").lower()
-for m in re.finditer(r"(?<![\w])(tamam[ıi](?:n[ıi]|nda|nd[ae]n|n[ıi]n)?|hepsi(?:ni|nde|nden|nin)?|tümü(?:nü|nde|nden|nün)?|bütün(?:ü|ünü)?|tüm)(?![\w])", c):
+for m in re.finditer(r"(?<![\w])(tamam[ıi](?:n[ıi]|nda|nd[ae]n|n[ıi]n)?|hepsi(?:ni|nde|nden|nin)?|tümü(?:nü|nde|nden|nün)?)(?![\w])", c):
     print(m.group(1))
 PY
 }

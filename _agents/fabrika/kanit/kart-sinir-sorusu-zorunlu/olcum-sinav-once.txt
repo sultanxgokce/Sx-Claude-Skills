@@ -1,5 +1,5 @@
 $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sn-once/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=1 sure=186.8s zaman=2026-11-03T10:01:32+03:00
+# rc=1 sure=202.9s zaman=2026-11-03T10:14:21+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -204,20 +204,20 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✓ düz cümlede uyarı yok, karta boş liste yazıldı
   ✓ hafta kodu ve 'her gün' de çok günlük sayılır
 ════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════
-  ✗ atıf uyarmaz: birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506
-  ✗ atıf uyarmaz: denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (go
-  ✗ atıf uyarmaz: kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders
-  ✗ atıf uyarmaz: hafta kapısı D13 PR gövdesinde retro işaretini arasın
-  ✗ atıf uyarmaz: W42 retrosu için kutu dosyasını doldur
-  ✗ gerçek kapsam uyarır: W42 boyunca her gün tur kaydı
-  ✗ gerçek kapsam uyarır: haftalık rapor üretimi kur ve her gün koştur
-  ✗ gerçek kapsam uyarır: bu hafta tüm kutuların retrosunu topla
-  ✗ gerçek kapsam uyarır: 3 gün sürecek göç
+  ✓ atıf uyarmaz: birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506
+  ✓ atıf uyarmaz: denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (go
+  ✓ atıf uyarmaz: kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders
+  ✓ atıf uyarmaz: hafta kapısı D13 PR gövdesinde retro işaretini arasın
+  ✓ atıf uyarmaz: W42 retrosu için kutu dosyasını doldur
+  ✓ gerçek kapsam uyarır: W42 boyunca her gün tur kaydı
+  ✓ gerçek kapsam uyarır: haftalık rapor üretimi kur ve her gün koştur
+  ✓ gerçek kapsam uyarır: bu hafta tüm kutuların retrosunu topla
+  ✓ gerçek kapsam uyarır: 3 gün sürecek göç
 ── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──
-  ✗ mutant 'retro-onu-sayilir' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
-  ✗ mutant 'atif-sonra-bos' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
-  ✗ mutant 'hafta-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
-  ✗ mutant 'W-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'retro-onu-sayilir' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'atif-sonra-bos' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'hafta-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'W-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
 ════ T13c · SAYI UYARISI (WNMSQ · SERDAR: uyarı, red değil): ölçümsüz '13 görev' kartı açar ama uyarır + karta yazar; --sayi-olcum kaynağı karta işler ════
   ✓ Nexus #1213 vakası: kart AÇILDI (red yok) · karta üç sayı iddiası yazıldı (13 görev | 173 kez | %50)
   ✓ uyarı satırı sayıları ve çareyi (--sayi-olcum) söylüyor
@@ -240,7 +240,7 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✓ iki ölçüt [ayri] ile ayrılmış → uyarı yok
   ✓ ISO gün de kabul
 ── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──
-  ✗ mutant (sayı uyarısı kapalı) #1213 cümlesini sessiz geçiriyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant (sayı uyarısı kapalı) #1213 cümlesini sessiz geçiriyor → üstteki kapı bu mutantta düşerdi
 ════ T14 · görev durumu (Y7J3Q): --gorev bağlı kart açılış/bitti/tıkandı'da defterdeki görevi yazar; yazamazsa söyler, rc 4 ════
   ✓ G1 --gorev verilip --tahmin verilmezse kart AÇILMAZ (rc 1; defter tahminsiz çalışılıyor'a geçmez)
   ✓ G1b biçimsiz görev kimliği rc 1
@@ -509,7 +509,7 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✓ GB4 tikandi'da bu uyarı çıkmaz (yalnız bitti)
   ✓ GB5 kartta gorev JSON null → görevsiz sayılır, uyarı VAR (None dizgesi görev sanılmaz), rc 0
 ════ T18 · SINIR SORUSU (görev …KSQSERN): cümlede tamamı/hepsi/tümü varsa --sinir ZORUNLU (sayı ya da 'hariç <ne>') ════
-  ✗ SN1 'tüm' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI
+  ✗ SN1 'tümü' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI
   ✓ SN2 sınırda sayı da 'hariç' de yok → rc 1 (laf kalabalığı sınır sayılmaz)
   ✓ SN3 'hariç x' (3 harften kısa nesne) sınır değil → rc 1
   ✗ SN4 '11 kutu' sayı içerir → açıldı
@@ -518,9 +518,12 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✗ SN6 büyük harf ve İ ile yazılsa da sözcük yakalanır (Türkçe küçültme)
   ✓ SN7 'tamamlandı' / 'tümevarım' kapsam sözcüğü SAYILMAZ (sözcük sınırı) → sınır istenmez
   ✓ SN8 kapsam sözcüğü yok → sınır istenmez (altın)
+  ✓ SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)
+  ✗ SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)
+  ✗ SN11 'tamamını' (çekimli) + 'hariç …' → açıldı
 
-── SONUÇ: 454 geçti · 19 kaldı ──
+── SONUÇ: 469 geçti · 7 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.1b52fSTz51/depo17/_agents/fabrika/kartlar/is-sn4.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.yugZLrfVAM/depo17/_agents/fabrika/kartlar/is-sn4.json'

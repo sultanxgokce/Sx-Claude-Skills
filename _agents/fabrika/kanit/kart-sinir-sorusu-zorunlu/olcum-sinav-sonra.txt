@@ -1,5 +1,5 @@
 $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=201.5s zaman=2026-11-03T10:04:59+03:00
+# rc=0 sure=201.7s zaman=2026-11-03T10:17:47+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -509,7 +509,7 @@ $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ GB4 tikandi'da bu uyarı çıkmaz (yalnız bitti)
   ✓ GB5 kartta gorev JSON null → görevsiz sayılır, uyarı VAR (None dizgesi görev sanılmaz), rc 0
 ════ T18 · SINIR SORUSU (görev …KSQSERN): cümlede tamamı/hepsi/tümü varsa --sinir ZORUNLU (sayı ya da 'hariç <ne>') ════
-  ✓ SN1 'tüm' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI
+  ✓ SN1 'tümü' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI
   ✓ SN2 sınırda sayı da 'hariç' de yok → rc 1 (laf kalabalığı sınır sayılmaz)
   ✓ SN3 'hariç x' (3 harften kısa nesne) sınır değil → rc 1
   ✓ SN4 '11 kutu' sayı içerir → açıldı
@@ -518,6 +518,9 @@ $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ SN6 büyük harf ve İ ile yazılsa da sözcük yakalanır (Türkçe küçültme)
   ✓ SN7 'tamamlandı' / 'tümevarım' kapsam sözcüğü SAYILMAZ (sözcük sınırı) → sınır istenmez
   ✓ SN8 kapsam sözcüğü yok → sınır istenmez (altın)
+  ✓ SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)
+  ✓ SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)
+  ✓ SN11 'tamamını' (çekimli) + 'hariç …' → açıldı
 
-── SONUÇ: 473 geçti · 0 kaldı ──
+── SONUÇ: 476 geçti · 0 kaldı ──
 --- stderr ---

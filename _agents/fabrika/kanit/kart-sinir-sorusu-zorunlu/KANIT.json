@@ -1,14 +1,14 @@
 {
   "is": "kart-sinir-sorusu-zorunlu",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T10:09:11+03:00",
+  "guncelleme": "2026-11-03T10:21:30+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "once",
       "dosya": "olcum-sinav-once.txt",
-      "sha256": "ec41eb31e2b10cb58e504a4cb1af16af8613f2fdaae8183eafb4da8504fe48ea",
+      "sha256": "4bc7000e35c99cdaafb7285d1751c04eb98527cd2f786ce5dd30fbcdc6bed522",
       "komut": [
         "timeout",
         "280",
@@ -17,11 +17,11 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-11-03T10:01:32+03:00",
-      "sure_sn": 186.8,
+      "zaman": "2026-11-03T10:14:21+03:00",
+      "sure_sn": 202.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "bf86a4e059464e34887ddc2173f2554c",
-      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olcum_id": "d9993b3b32304e4fa8bfedb693e2cc32",
+      "olculen_commit": "9ddad0c9bde11866f1cd6a479d059f3b2f7c45d4",
       "olculen_kirli": true
     },
     {
@@ -29,7 +29,7 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "32e085c52e7155ce4650985e341fdcf6501317850d6a120814564a0d2bde3978",
+      "sha256": "0483018bc7eb4e4dba6bddbde32376c1c0d4ab5130f4877205c79a4541de4f5f",
       "komut": [
         "timeout",
         "280",
@@ -38,11 +38,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-03T10:04:59+03:00",
-      "sure_sn": 201.5,
+      "zaman": "2026-11-03T10:17:47+03:00",
+      "sure_sn": 201.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "9cef56e7e0f849c5b4c60eabae06f22f",
-      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olcum_id": "5c69b105ad41404f8ebf03479ccbe1af",
+      "olculen_commit": "9ddad0c9bde11866f1cd6a479d059f3b2f7c45d4",
       "olculen_kirli": true
     },
     {
@@ -50,7 +50,7 @@
       "etiket": "mutant-sinir-kapisi-cagrilmaz",
       "asama": "sonra",
       "dosya": "olcum-mutant-sinir-kapisi-cagrilmaz-sonra.txt",
-      "sha256": "0838b9a654149d334026021c646a7bde43c96732bd4ac26841037e3950f16089",
+      "sha256": "dd2c8323b356fe51f489f8a41b47e15098f57fcc2552f394768fee98b71a2f6a",
       "komut": [
         "timeout",
         "280",
@@ -59,17 +59,17 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-03T10:09:11+03:00",
-      "sure_sn": 245.1,
+      "zaman": "2026-11-03T10:21:30+03:00",
+      "sure_sn": 219.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "olcum_id": "f097021f0da64aadaa8c01a003bd9179",
-      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olcum_id": "3e5b576aa33e48e4b25bd1f05f125fa0",
+      "olculen_commit": "9ddad0c9bde11866f1cd6a479d059f3b2f7c45d4",
       "olculen_kirli": true
     }
   ],
-  "imza": "c8cbb0d34f22e247ed9442dd585a7ba1b276173bc07d81608a9a16cd059e3238"
+  "imza": "3b001a88b659f5b0839648e31944c8418ae56db2574fe03836039b4935681b32"
 }
