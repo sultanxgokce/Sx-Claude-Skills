@@ -1,0 +1,108 @@
+{
+  "is": "pazaryeri-mesaj",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T09:15:08+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mesaj-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-mesaj-sinav-sonra.txt",
+      "sha256": "257570452931f00e566835873192d673d68dc1ff39c038d6e4c7c997c2765af5",
+      "komut": [
+        "bash",
+        "-c",
+        "cd pazaryeri-mesaj/scripts && timeout 560 bash mesaj.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:46:33+03:00",
+      "sure_sn": 402.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "e0aa9597b51c4ad98be5ba650ac51c5b",
+      "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "beceri-var",
+      "asama": "once",
+      "dosya": "olcum-beceri-var-once.txt",
+      "sha256": "aeebd4bc5b324041d65127550e8b84c2bff83f1bb0ed2d7c6f3122a6736a702b",
+      "komut": [
+        "bash",
+        "-c",
+        "if test -f /config/.claude/skills/pazaryeri-mesaj/SKILL.md; then echo \"beceri VAR\"; else echo \"beceri YOK (kurulu değil, NARH için standart yetenek yok)\"; fi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:46:46+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "f38b6fc0f0b445f79436793b8755a936",
+      "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-dumen-sinav-sonra.txt",
+      "sha256": "a039d5c620e2930ebfa1aa4f1f69818c6cf902aaeb7752b3fc739c3f2bab65ef",
+      "komut": [
+        "bash",
+        "-c",
+        "cd dumen-surucu/scripts && timeout 880 bash dumen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:52:19+03:00",
+      "sure_sn": 344.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "4e96afca826a4e3f82a44745665e9644",
+      "olculen_commit": "c6befefeeda9836b419fb6e78e817da4a4b571c6",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mesaj-sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-mesaj-sinav-tur2-sonra.txt",
+      "sha256": "32608f894d5f4878bb33753659566d80a4981fb95f6a737cac29c95de3046a01",
+      "komut": [
+        "bash",
+        "-c",
+        "cd pazaryeri-mesaj/scripts && timeout 580 bash mesaj.test.sh"
+      ],
+      "rc": 124,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T09:07:46+03:00",
+      "sure_sn": 580.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1a798e9aaf3c42369ffd3d513923870f",
+      "olculen_commit": "3f94d5cac1590178f80e1e1aedc54c32bca48018",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mesaj-sinav-tur2b",
+      "asama": "sonra",
+      "dosya": "olcum-mesaj-sinav-tur2b-sonra.txt",
+      "sha256": "5da317276f971c3fcd2b5337f8e6971017881f65be3280e73bbc1dfe92e4d2bc",
+      "komut": [
+        "bash",
+        "-c",
+        "cd pazaryeri-mesaj/scripts && timeout 880 bash mesaj.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T09:15:08+03:00",
+      "sure_sn": 403.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "2f6d6fa0735e4958a9de62b0c0010b86",
+      "olculen_commit": "3f94d5cac1590178f80e1e1aedc54c32bca48018",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "9efc0c4bacbf78d6a8684b2debd2d31dc6bf73815a8042478ba19538e074581b"
+}

@@ -17,6 +17,7 @@ const FORM = `<!doctype html><title>f</title><input id=t type=text><input id=d t
 let modSonra = null;   // /dumen/mod cevaplandıktan SONRA bir kez çalışır (kapı geçti, tam o sırada soket düşsün)
 const srv = http.createServer((q, r) => {
   if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); r.end(JSON.stringify({ mod, an: '' })); if (modSonra) { const f = modSonra; modSonra = null; f(); } return; }
+  if (q.url === '/liste') { r.setHeader('content-type', 'text/html; charset=utf-8'); return r.end('<!doctype html><div class="satir" data-k="k1">bir</div><div class="satir" data-k="k2">iki</div><div class="satir" data-k="k3">üç</div>'); }
   if (q.url === '/yavas') { return setTimeout(() => { r.setHeader('content-type', 'text/html; charset=utf-8'); r.end(FORM); }, 4000); }
   if (q.url === '/api/dumen/uyari' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { uyariGelen.push(JSON.parse(b)); uyariBaslik.push(q.headers['x-defter-jeton'] || null); r.statusCode = uyariKod; r.end('{}'); }); }
   if (q.url === '/api/dumen/durak' && q.method === 'POST') { let b = ''; q.on('data', (c) => b += c); return q.on('end', () => { duraklar.push(JSON.parse(b)); durakBaslik.push(q.headers['x-defter-jeton'] || null); r.statusCode = durakKod; r.end('{}'); }); }
@@ -270,6 +271,20 @@ const eK5 = await hata(() => dR.goto(MERKEZ + '/kapaninca'));
 ok('D54 aranan sekme kapanmışsa eski sekmelere oturum açılmaz, yeni sekmede sürülür', eK5 === null && oturumUrl.every((u) => !/\/(yan-[abc]|ortak-adres)$/.test(u)), JSON.stringify({ eK: String(eK5), oturumUrl }));
 await dR.kapat();
 ch5.kill();
+console.log('── 0.8.0 liste okuma (metinler · nitelikler · adres)');
+await d.goto(MERKEZ + '/liste');
+const mL = await d.metinler('.satir');
+ok('D55 metinler(): seçiciye uyan BÜTÜN öğelerin yazısı (3), sıra korunur', mL.length === 3 && mL[0] === 'bir' && mL[2] === 'üç', JSON.stringify(mL));
+const nL = await d.nitelikler('.satir', 'data-k');
+ok('D56 nitelikler(): her öğenin niteliği', nL.join() === 'k1,k2,k3', JSON.stringify(nL));
+ok('D57 nitelikler() tavan: enCok=2', (await d.nitelikler('.satir', 'data-k', { enCok: 2 })).length === 2);
+const hN = await hata(() => d.nitelikler('.satir', 'data-password'));
+ok('D58 nitelikler(): hassas nitelik adı (parola/çerez/jeton) REDDEDİLİR', hN instanceof KapiHata && hN.neden === 'durak', String(hN && hN.message));
+ok('D59 adres(): sayfa adresi', (await d.adres()).endsWith('/liste'));
+mod = 'sultan';
+const hM = await hata(() => d.metinler('.satir'));
+ok('D60 metinler() Dümen Sultan\'dayken okumaz (sultanda)', hM instanceof KapiHata && hM.neden === 'sultanda');
+mod = 'ajan';
 
 console.log(`SONUÇ: geçti=${G} kaldı=${K}`);
 await ham.context().browser().close().catch(() => {}); await d.kapat(); await dM.kapat(); ch.kill(); srv.close();

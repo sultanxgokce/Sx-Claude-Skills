@@ -1,0 +1,44 @@
+{
+  "tur": 2,
+  "is": "pazaryeri-mesaj",
+  "pr": "668",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T09:17:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-pazaryeri-mesaj",
+  "dal": "pazaryeri-mesaj",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 92606,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 32147
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Pazaryeri mesajlarını okuyan, taslağı Sultan onayına taşıyan ve yalnız metne bağlı güncel onayla gönderim yapan global beceri iskeleti kurulmuş; Amazon risk kapısı ve çift gönderim kilidi de eklenmiş. Önceki ciddi B1 ile uygulama B2 kapanmış ve son yeşil ölçümde 41 sınav ile 13/13 mutant bunu destekliyor; yalnız NARH kurulumu ve gerçek pazar sayfalarındaki ilk tur kutu dışında bekliyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B3 kapanmadı: global becerinin NARH ortamına kurulması ile gerçek Amazon ve Trendyol sayfalarındaki adres/seçicilerin ilk turda doğrulanması hâlâ gerekiyor.",
+        "kanit": "HARITA.json iki pazar için de olculdu:false; SKILL.md açıkça “GERÇEK SAYFADA ÖLÇÜLMEDİ” diyor. beceri-var ölçümü kurulum öncesinde “beceri YOK” gösteriyor ve manifestte kurulum sonrası ölçüm bulunmuyor; yeşil mesaj sınavı sahte panellerle çalışıyor.",
+        "konum": "pazaryeri-mesaj/HARITA.json:5; pazaryeri-mesaj/HARITA.json:20; pazaryeri-mesaj/SKILL.md:9; olcum-beceri-var-once.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "NARH ortamı + Dümen'deki canlı Amazon Seller Central ve Trendyol satıcı oturumları"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önceki B1, cevabın parmak izinin damgaya bağlanması ve değiştirilmiş metin testleriyle kapandı; önceki B2, gönderim öncesi kalıcı kilit, belirsiz sonuçta tekrar yasağı, sayfada önceden bulunan iz denetimi ve ilgili mutantlarla kapandı. Aradaki kırmızı tur zaman aşımı ve iki mutant açığını gösteriyor, fakat aynı commit için sonraki tur2b ölçümü rc=0, 41/0 sınav ve 13/13 mutant sonucu vererek onu geçersiz kılıyor. Çekirdek için güçlü hermetik ölçüm var; gerçekçi canlı kare/ölçüm çifti ve kurulum-sonrası beceri ölçümü bulunmadığından yalnız kutu-dışı B3 kanıtsız kalıyor."
+  }
+}

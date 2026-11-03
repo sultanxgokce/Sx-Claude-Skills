@@ -1,0 +1,48 @@
+$ bash -c cd pazaryeri-mesaj/scripts && timeout 560 bash mesaj.test.sh
+# rc=0 sure=402.3s zaman=2026-11-03T08:46:33+03:00
+--- stdout ---
+── çekirdek (Chromium gerekmez)
+  ✓ K1 kırpma: telefon, e-posta, IBAN, kart desenleri maskelenir
+  ✓ K2 kırpma: uzunluk tavanı 160
+  ✓ K3 damga: biçimsiz reddedilir
+  ✓ K4 damga: dünkü tarih reddedilir
+  ✓ K5 damga: başka sohbetin onayı taşınmaz
+  ✓ K6 damga: doğru damga geçer, parçaları döner
+  ✓ K7 Amazon gönderme: karar dosyası yokken KAPALI
+  ✓ K8 Amazon gönderme: dosya var ama Sultan damgası yoksa KAPALI
+  ✓ K9 Amazon gönderme: Sultan kararıyla AÇIK
+  ✓ K10 Trendyol gönderme: karar gerekmez
+── oku (Dümen + sahte sayfalar)
+  ✓ O1 oku: iki pazardan üç cevapsız sohbet (cevaplanmışlar yok)
+  ✓ O2 oku: özet mesaj gövdesinden, müşteri adı ve telefonu HİÇ yok, e-posta maskeli
+  ✓ O3 oku --pazar trendyol: yalnız Trendyol, insan okunur satır
+  ✓ O4 oku: giriş sayfasına düşünce rc 10, parola yazılmaz, "Sultan Dümen'de girsin"
+  ✓ O5 oku: Dümen Sultan'dayken rc 20, eylem yok
+  ✓ O6 oku: harita tutmazsa ÖLÇÜLEMEDİ rc 3 (tahmin yok)
+── taslak (görev defteri)
+  ✓ T1 taslak: görev defterine sıra sende · karar · onay kaydı açıldı
+  ✓ T2 taslak: notta müşteri özeti + cevap taslağı, telefon maskeli
+  ✓ T3 taslak: sonraki adım (gonder --onay) yazdırılır
+  ✓ T4 taslak Amazon: gönderme kapalı uyarısı notta (karar dosyası sıfırlandı)
+── gonder (onay kapısı + Dümen)
+  ✓ G1 gonder onaysız: rc 2, hiçbir şey gitmedi
+  ✓ G2 gonder başka sohbetin damgasıyla: rc 2, gitmedi
+  ✓ G3 gonder dünkü damgayla: rc 2, gitmedi
+  ✓ G4 gonder Amazon Sultan kararı yokken: rc 2, gitmedi (okuma/taslak açık, gönderme kapalı)
+  ✓ G5 gonder Trendyol onaylı: cevap sahte panele ulaştı, metin birebir
+  ✓ G6 gonder: çıktıda onay tarihi/ref/beyan, görev defterine [gönderildi] adımı
+  ✓ G7 gonder Amazon Sultan kararı + damga: gitti
+  ✓ G8 gonder Dümen Sultan'dayken: rc 20, gitmedi
+  ✓ G9 gonder: metin dosyadan okunur, --metin yok (komut satırı/geçmiş kirlenmez)
+SONUÇ: geçti=29 kaldı=0
+── mutantlar (her biri sınavı KIRMALI)
+  ✓ onaysız gönderme serbest: yakalandı (8 kapı düştü)
+  ✓ başka sohbetin damgası geçer: yakalandı (7 kapı düştü)
+  ✓ dünkü damga geçer: yakalandı (6 kapı düştü)
+  ✓ Amazon kararsız gönderir: yakalandı (4 kapı düştü)
+  ✓ giriş sayfası tespiti kapalı: yakalandı (1 kapı düştü)
+  ✓ KVKK kırpma kapalı (telefon/e-posta çıplak): yakalandı (4 kapı düştü)
+  ✓ harita tutmayınca tahmin eder: yakalandı (1 kapı düştü)
+  ✓ Dümen Sultan'dayken rc 0: yakalandı (2 kapı düştü)
+SONUÇ: sınav yeşil · mutant 8/8 yakalandı
+--- stderr ---

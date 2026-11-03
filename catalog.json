@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-10-29",
+  "updated": "2026-11-03",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1824,8 +1824,8 @@
       "id": "dumen-surucu",
       "type": "workflow",
       "name": "Dümen'i kapıdan sür — eylem kapısı",
-      "version": "0.7.1",
-      "description": "Ajanın Dümen Chrome'unu Playwright connectOverCDP ile sürmesinin tek yolu: her eylemden önce Dümen kimde okunur (Sultan'da ya da merkez cevapsızsa eylem yapılmaz), parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir, izole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir.",
+      "version": "0.8.0",
+      "description": "Ajanın Dümen Chrome'unu Playwright connectOverCDP ile sürmesinin tek yolu: her eylemden önce Dümen kimde okunur (Sultan'da ya da merkez cevapsızsa eylem yapılmaz), parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir, izole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. 0.8.0: salt-okur liste okuma — metinler()/nitelikler()/adres() (pazaryeri-mesaj için; hassas nitelik adı reddedilir)",
       "tags": [
         "dumen",
         "tarayici",
@@ -1890,6 +1890,21 @@
       "version": "0.2.7",
       "description": "Postacı dosyaları (cloudtop infra/postane birebir kopya) + kutu kurulum betiği: kuru varsayılan, yalnız izinli kutuda ve DAR jetonla cron + bayrak yazar. Etkinleştirme Sultan-eli.",
       "path": "postane-postaci"
+    },
+    {
+      "id": "pazaryeri-mesaj",
+      "type": "workflow",
+      "name": "Pazaryeri mesajları — oku, onayla gönder (NARH · Dümen)",
+      "version": "0.1.0",
+      "description": "Dümen'den Amazon Seller Central ve Trendyol partner panelindeki müşteri mesajlarını okur, cevap taslağını görev defterinde Sultan'ın onayına sunar, yalnız bugünkü ve o sohbeti anan D1 damgasıyla gönderir. Parola/kod yazmaz, müşteri kişisel verisini hiçbir yere yazmaz, Amazon'da gönderme Sultan'ın risk kararı dosyasına bağlı. Gerçek sayfada ölçülmedi: ilk tur NARH'ta.",
+      "tags": [
+        "dumen",
+        "pazaryeri",
+        "amazon",
+        "trendyol",
+        "mesaj",
+        "onay"
+      ]
     }
   ]
 }

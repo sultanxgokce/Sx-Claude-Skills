@@ -11,7 +11,7 @@
 # bayatlarsa KIRMIZI, sınama başına süre tavanı (`# kabuk-testleri: sure=N`, varsayılan 300, tavan 900), arçelik sınavı ayrı işte.
 set -uo pipefail
 KOVA="${1:-}"
-case "$KOVA" in diploma|denetci|dumen|kalan|diploma-1|diploma-2|denetci-1|denetci-2|denetci-3) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|diploma-1|diploma-2|denetci|denetci-1|denetci-2|denetci-3|dumen|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
+case "$KOVA" in diploma|denetci|dumen|pazaryeri|kalan|diploma-1|diploma-2|denetci-1|denetci-2|denetci-3) ;; *) echo "::error::kullanım: kabuk-sinamalari.sh diploma|diploma-1|diploma-2|denetci|denetci-1|denetci-2|denetci-3|dumen|pazaryeri|kalan (verilen: '${KOVA}')"; exit 2 ;; esac
 # diploma-k: diploma sınavı tek başına tavana dayandı (CI 28 Eki: 879–884 sn / 900) → iki runner'a bölünür; sınav kendi senaryolarını
 #   DIPLOMA_PARCA=k/2 ile paylaştırır (gerçek koşu 1. parçada). Düz `diploma` = bölünmemiş (yerel tek koşu).
 # denetci-k: denetci sınavı da tavana çarptı (CI 28-29 Eki: 53 mutant × tam süit, 900 sn'de rc 124, son 3 main koşusu kırmızı) → üç runner'a
@@ -35,6 +35,7 @@ kova() {   # kova <sınama yolu> → bu sınama hangi kovada
     ./tescil/scripts/diploma.test.sh)                  echo diploma ;;
     ./yazilim-fabrikasi/scripts/denetci.test.sh)       echo denetci ;;
     ./dumen-surucu/scripts/dumen.test.sh)              echo dumen ;;   # gerçek Chromium + 10 mutant: paralel kovada ilgisiz sınamalara yük bindirip onları düşürdü (CI #40491126187)
+    ./pazaryeri-mesaj/scripts/mesaj.test.sh)           echo pazaryeri ;;   # gerçek Chromium + 13 mutant (3 Kas, Sx #668): kalan kovasında Chromium yok → rc 3 kırmızı; dumen kovasıyla aynı anda iki tarayıcı sınavı birbirine yük bindirmesin diye ayrı kova
     *)                                                 echo kalan ;;
   esac
 }
