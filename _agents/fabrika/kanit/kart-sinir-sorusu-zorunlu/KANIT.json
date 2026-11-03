@@ -1,0 +1,75 @@
+{
+  "is": "kart-sinir-sorusu-zorunlu",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T10:09:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "ec41eb31e2b10cb58e504a4cb1af16af8613f2fdaae8183eafb4da8504fe48ea",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sn-once/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T10:01:32+03:00",
+      "sure_sn": 186.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bf86a4e059464e34887ddc2173f2554c",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "32e085c52e7155ce4650985e341fdcf6501317850d6a120814564a0d2bde3978",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T10:04:59+03:00",
+      "sure_sn": 201.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9cef56e7e0f849c5b4c60eabae06f22f",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-sinir-kapisi-cagrilmaz",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-sinir-kapisi-cagrilmaz-sonra.txt",
+      "sha256": "0838b9a654149d334026021c646a7bde43c96732bd4ac26841037e3950f16089",
+      "komut": [
+        "timeout",
+        "280",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sn-mut/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T10:09:11+03:00",
+      "sure_sn": 245.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "f097021f0da64aadaa8c01a003bd9179",
+      "olculen_commit": "5a41d681f4eca86ac54455ea8e0e99014aa062a0",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "c8cbb0d34f22e247ed9442dd585a7ba1b276173bc07d81608a9a16cd059e3238"
+}
