@@ -1,0 +1,19 @@
+$ bash -c git fetch -q origin; echo "== git diff --stat origin/main...HEAD (kanıt dizini hariç)"; git diff --stat origin/main...HEAD -- . ":(exclude)_agents"; echo "== SKILL.md + catalog.json satır farkı"; git diff origin/main...HEAD -- yazilim-fabrikasi/SKILL.md catalog.json | grep "^[+-]" | grep -v "^+++" | grep -v "^---"; echo "== göz tavanı değişikliğinin geldiği commit"; git log --oneline -1 800994ba; exit 0
+# rc=0 sure=50.6s zaman=2026-11-03T20:09:44+03:00
+--- stdout ---
+== git diff --stat origin/main...HEAD (kanıt dizini hariç)
+ catalog.json                                               |  2 +-
+ yazilim-fabrikasi/SKILL.md                                 |  2 +-
+ yazilim-fabrikasi/scripts/calisiliyor-uzlastir-mutasyon.sh |  1 +
+ yazilim-fabrikasi/scripts/calisiliyor-uzlastir.py          | 10 +++++++---
+ yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh     |  2 +-
+ 5 files changed, 11 insertions(+), 6 deletions(-)
+== SKILL.md + catalog.json satır farkı
+-      "version": "0.27.50",
++      "version": "0.27.51",
+-version: 0.27.50
++version: 0.27.51
+== göz tavanı değişikliğinin geldiği commit
+800994ba feat: bağımsız göz tavanı iki tura iner, mutlak üç; göz yalnız ciddi bulgu yazar (yazilim-fabrikasi 0.27.50) (#680)
+--- stderr ---
+⏳ agir-sira: kanit-uzlastirma-prsiz-kapanan-kart-PR farkı main'e karşı (göz tur 2 kapsam bulgusu): göz-tavanı değişikliği bu PR'da yok, main birleşmesinden (#682) 50 sn bekledi (yuva 1, load1 17.21)

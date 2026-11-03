@@ -1,7 +1,7 @@
 {
   "is": "uzlastirma-prsiz-kapanan-kart",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T20:04:30+03:00",
+  "guncelleme": "2026-11-03T20:09:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -66,7 +66,27 @@
       "olcum_id": "a809fc64869f444bb1f4375c12aa7b10",
       "olculen_commit": "072fa0c8fb52efe40b373ab3a0953748df77adbd",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "PR farkı main'e karşı (göz tur 2 kapsam bulgusu): göz-tavanı değişikliği bu PR'da yok, main birleşmesinden (#682)",
+      "asama": "sonra",
+      "dosya": "olcum-PR farkı main'e karşı (göz tur 2 kapsam bulgusu): göz-tavanı değişikliği bu PR'da yok, main birleşmesinden (#682)-sonra.txt",
+      "sha256": "5b57745342094299a8e7c54c982995fb47baaaeb753f7a75f5113f6fa4dee73a",
+      "komut": [
+        "bash",
+        "-c",
+        "git fetch -q origin; echo \"== git diff --stat origin/main...HEAD (kanıt dizini hariç)\"; git diff --stat origin/main...HEAD -- . \":(exclude)_agents\"; echo \"== SKILL.md + catalog.json satır farkı\"; git diff origin/main...HEAD -- yazilim-fabrikasi/SKILL.md catalog.json | grep \"^[+-]\" | grep -v \"^+++\" | grep -v \"^---\"; echo \"== göz tavanı değişikliğinin geldiği commit\"; git log --oneline -1 800994ba; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:09:44+03:00",
+      "sure_sn": 50.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "30476803ffc642d2ae75a7e433ddd9e3",
+      "olculen_commit": "fca958b2939f4273df21c629b679a5913f4f3a0a",
+      "olculen_kirli": false
     }
   ],
-  "imza": "032ba97e99fc86eded19c93ac75df8a7229d7fa5281587fc3a7c8434ea427c2e"
+  "imza": "f6f1d78aee421267554c3245ff199f53bcd9658cca19a2fc2b6b7235025b47f5"
 }
