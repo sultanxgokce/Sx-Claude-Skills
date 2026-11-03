@@ -1,0 +1,69 @@
+{
+  "is": "ekipc-etiket-yolsuz",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T12:33:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "etiket-iki-yol",
+      "asama": "once",
+      "dosya": "olcum-etiket-iki-yol-once.txt",
+      "sha256": "000b121362aed4d451fbeb936d9cdc006590e2d696d0c3c97922d6a58fd2c588",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/etiket-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T12:33:27+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "26dc36f45ac449c2ba683d32d53dd01e",
+      "olculen_commit": "052614b6ba84610c5ae0883838daabfcf9718dc1",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "etiket-iki-yol",
+      "asama": "sonra",
+      "dosya": "olcum-etiket-iki-yol-sonra.txt",
+      "sha256": "d4c37326ac124317f51c98210b8e9a61c72b19240901078dbcc40788a99c7602",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/etiket-sx-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T12:33:27+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6e74ff6b00974390b37949aa55a2bcb0",
+      "olculen_commit": "052614b6ba84610c5ae0883838daabfcf9718dc1",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "etiket-iki-yol-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-etiket-iki-yol-mutant-sonra.txt",
+      "sha256": "05e423aa900c38469073172d7d2f168359e9326780225a4977aaf56467ba9cf2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/etiket-once.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T12:33:27+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "etiket-iki-yol",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "cbaac0eaa28042f3982b7ed4282cc7e1",
+      "olculen_commit": "052614b6ba84610c5ae0883838daabfcf9718dc1",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "2b6fb4c706ec3ddc7b3e7e354736faad8c9d5cea9584505d946647cf37835fd2"
+}
