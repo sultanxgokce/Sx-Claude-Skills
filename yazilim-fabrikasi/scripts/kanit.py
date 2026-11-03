@@ -9,7 +9,9 @@ Renkler: yesil (ölçtü, korudu) · kirmizi (ölçtü, korumuyor) · sari (ÖL�
 
 Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
-                  [--mutasyon <gerçek etiket>]  bilerek bozulmuş kodla koşum: dosya başı MUTASYON KANITI der, renk ters (kırmızı = yakalandı)
+                  [--mutasyon <gerçek etiket> --kapi <düşmesi beklenen kapı adı>]  bilerek bozulmuş kodla koşum: dosya başı MUTASYON KANITI der,
+                  renk ters (kırmızı = yakalandı). --kapi ZORUNLU: yakalandı = ADI VERİLEN kapı düşen kapı satırında görünür; başka kapı
+                  düşmesi, çöküş ya da kurulamayan mutant (rc 9) SARI "ölçülemedi"dir
                   BORU DENETİMİ: komut `bash|sh -c '<betik>'` ise çıkış kodunu maskeleyen betik REDDEDİLİR (rc=1, kayıt yok):
                   `|| true` / `|| :` · başka komuttan sonra gelen son echo/printf/true/: · pipefail'siz boruyla biten son komut. Meşru istisna:
                   --boru-izin "<gerekçe ≥15 karakter>" → kayıt alınır, gerekçe manifeste `boru_denetimi` olarak yazılır.
@@ -388,6 +390,18 @@ def cmd_olcum(a):
     #    mutasyon diye işaretlenir, dosyanın İLK satırı bunu söyler, renk tersine döner (kırmızı sınav = bozuk kod YAKALANDI = yeşil;
     #    yeşil sınav = mutant kaçtı = kırmızı). Bağlandığı gerçek ölçüm manifestte yoksa kayıt üretilmez: neyin mutantı olduğu bilinmeli.
     mut = (a.mutasyon or "").strip() or None
+    kapi_adi = (a.kapi or "").strip()
+    # 🎯 HEDEF KAPI ADI (görev …02RBP8, 3 Kas): "bir kapı düştü" yakalandı demek değil — mutant sınavın BAŞKA bir kapısını düşürürse hedeflenen
+    #    kural hiç sınanmamış olur. Mutasyon kaydı hangi kapıyı düşürmeyi hedeflediğini ADIYLA söyler; düşen kapı satırında o ad aranır.
+    #    Her düşen satırda geçen genel ad (FAIL · ✗ · "N kaldı") ya da boş ad hedef olamaz: bu ad hiçbir şeyi ayırt etmez.
+    if a.mutasyon is None and a.kapi is not None:
+        hata("--kapi yalnız --mutasyon ile verilir (hedef kapı mutant kaydının parçasıdır). Kayıt ÜRETİLMEDİ.", 2)
+    if a.mutasyon is not None and not kapi_adi:
+        hata("--mutasyon düşmesi beklenen kapının adını ister: --kapi <ad> (sınavın ✗ satırında geçen ad, ör. --kapi K1). "
+             "Adsız mutasyon 'bir kapı düştü'yü yakalandı sayardı. Kayıt ÜRETİLMEDİ.", 2)
+    if kapi_adi and (DUSEN_KAPI_RE.search(kapi_adi) or len(kapi_adi) < 2):
+        hata(f"--kapi '{kapi_adi}' kapı adı olamaz: her düşen satırda geçen genel ad (✗ · FAIL · 'N kaldı' · 'KALAN: N') ya da tek karakter hiçbir kapıyı ayırt etmez. "
+             "Sınavın düşen satırındaki gerçek kapı adını ver. Kayıt ÜRETİLMEDİ.", 2)
     if a.mutasyon is not None:
         if not mut:
             hata("--mutasyon gerçek ölçümün etiketini ister (boş verildi). Kayıt ÜRETİLMEDİ.", 2)
@@ -403,15 +417,18 @@ def cmd_olcum(a):
     p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
     dusen_kapi = bool(DUSEN_KAPI_RE.search(p.stdout + "\n" + p.stderr)) if mut else None   # düşen kapı satırı var mı (yalnız mutasyonda anlamlı)
+    hedef_kapi_re = re.compile(r"(?<!\w)" + re.escape(kapi_adi) + r"(?!\w)") if kapi_adi else None   # TAM sözcük: K1, K10'u yakalamaz (göz tur 1)
+    hedef_dustu = bool(mut) and any(hedef_kapi_re.search(l) for l in dusen_satirlar(p.stdout + "\n" + p.stderr))   # ADI VERİLEN kapı düşen bir satırda mı
     with open(yol, "w", encoding="utf-8") as f:
         if mut:
             if p.returncode == 0: hukum = "rc 0 = mutant KAÇTI (sınav bozuk kodda da geçti)"
             elif p.returncode == 9: hukum = "rc 9 = KURULUM HATASI, mutant hiç çalışmadı → ÖLÇÜLEMEDİ (yakalandı DEĞİL)"
             elif p.returncode == 3: hukum = "rc 3 = ÖLÇÜLEMEDİ"
-            elif dusen_kapi: hukum = "rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI"
+            elif dusen_kapi and not hedef_dustu: hukum = f"rc≠0 + düşen kapı var AMA hedef kapı '{kapi_adi}' düşmedi = başka kapı düştü → ÖLÇÜLEMEDİ (yakalandı DEĞİL)"
+            elif dusen_kapi: hukum = f"rc≠0 + hedef kapı '{kapi_adi}' düşen satırda = sınav bozuk kodu YAKALADI"
             else: hukum = f"rc {p.returncode} ama düşen kapı satırı YOK (✗/FAIL/N kaldı/KALAN: N) = ÇÖKÜŞ ya da kurulum hatası → ÖLÇÜLEMEDİ (yakalandı DEĞİL)"
             f.write(f"=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; "
-                    f"{hukum}. Gerçek kod ölçümü: olcum-{mut}-* ===\n")
+                    f"hedef kapı: {kapi_adi} · {hukum}. Gerçek kod ölçümü: olcum-{mut}-* ===\n")
         f.write(f"$ {' '.join(a.komut)}\n# rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
     if mut:   # rc 3 yine ölçülemedi; bunun dışında renk TERS: kırmızı sınav beklenen sonuçtur
         # 🔴 ÇÖKEN MUTANT ≠ YAKALANAN MUTANT (görev …2AX9GX, 29 Eki · gorev-klasor-merkez emsali): mutant betiği geçici kopyada
@@ -420,7 +437,7 @@ def cmd_olcum(a):
         #    olmalı. rc 9 = kurulum hatası (mutant hiç çalışmadı). Düşen kapı satırı olmayan rc≠0 → SARI "ölçülemedi" (rc 3).
         if p.returncode == 0:
             renk = "kirmizi"
-        elif p.returncode in (3, 9) or not dusen_kapi:
+        elif p.returncode in (3, 9) or not dusen_kapi or not hedef_dustu:
             renk = "sari"
         else:
             renk = "yesil"
@@ -430,13 +447,15 @@ def cmd_olcum(a):
              "komut": a.komut, "rc": p.returncode, "renk": renk, "zaman": simdi(), "sure_sn": round(sure, 1),
              "boru_denetimi": boru}
     if mut:
-        kayit.update({"mutasyon": True, "gercek_olcum": mut, "beklenen": "kirmizi", "dusen_kapi": dusen_kapi})
+        kayit.update({"mutasyon": True, "gercek_olcum": mut, "beklenen": "kirmizi", "dusen_kapi": dusen_kapi,
+                      "hedef_kapi": kapi_adi, "hedef_dustu": hedef_dustu})
     kayit_ekle(depo, a.is_adi, kayit)
     if mut:
-        if renk == "yesil": soz = "sınav bozuk kodu YAKALADI (düşen kapı satırı var)"
+        if renk == "yesil": soz = f"sınav bozuk kodu YAKALADI (hedef kapı '{kapi_adi}' düşen satırda)"
         elif renk == "kirmizi": soz = "mutant KAÇTI: sınav bozuk kodda da geçti"
         elif p.returncode == 9: soz = f"ölçülemedi: mutant KURULAMADI (rc 9 kurulum hatası) — sınav bozuk kodu hiç görmedi"
         elif p.returncode == 3: soz = "ölçülemedi (rc 3)"
+        elif dusen_kapi and not hedef_dustu: soz = f"ölçülemedi: hedef kapı '{kapi_adi}' düşmedi — başka kapı düştü, mutant hedeflenen kuralı sınamadı (yakalandı DEĞİL)"
         else: soz = (f"ölçülemedi: mutant ÇÖKTÜ ya da kurulamadı (rc {p.returncode}, düşen kapı satırı yok: ✗ / FAIL / N kaldı / KALAN: N "
                      f"hiçbiri çıktıda değil) — rc≠0 tek başına 'yakalandı' sayılmaz; yığın izi/çöküş sınav değildir")
         print(f"🧬 MUTASYON kaydı (gerçek ölçüm: {mut}) — {soz}")
@@ -449,6 +468,11 @@ def cmd_olcum(a):
 # 🧬 Mutasyon kaydında "yakalandı" kanıtı: düşen kapı satırı. ✗ ile başlayan satır · FAIL kelimesi · "N kaldı" (N≥1) · "KALAN: N" (N≥1).
 #    ✗ satır başında aranır; FAIL / N kaldı / KALAN: N satırın herhangi bir yerinde kelime olarak. "0 kaldı" / "KALAN: 0" / "FAILED" düşen kapı DEĞİLDİR. Yığın izi (Traceback, Error:) kapı değildir — o çöküştür, sınav değildir.
 DUSEN_KAPI_RE = re.compile(r"^\s*✗|\bFAIL\b|\bKALAN:\s*[1-9]|\b[1-9]\d*\s+kaldı\b", re.M)
+
+
+def dusen_satirlar(metin):
+    """Düşen kapı satırları (DUSEN_KAPI_RE tutan satırlar) — hedef kapı adı YALNIZ bunların içinde aranır."""
+    return [l for l in metin.splitlines() if DUSEN_KAPI_RE.search(l)]
 
 
 # ── ekran ────────────────────────────────────────────────────────────────────────
@@ -907,7 +931,8 @@ def cmd_ozet(a):
         if renk == "gecersiz":
             renk = f"**GEÇERSİZ** (ölçülen: {k.get('renk')}): {k.get('gecersiz_neden')}"
         elif k.get("mutasyon"):
-            renk = f"{renk} · 🧬 MUTASYON (gerçek ölçüm: `{k.get('gercek_olcum')}`; beklenen kırmızı" + (" — yakalandı)" if renk == "yesil" else ")")
+            hk = f"; hedef kapı {k['hedef_kapi']}" if k.get("hedef_kapi") else ""   # 0.27.48 öncesi kayıtlarda hedef kapı yok
+            renk = f"{renk} · 🧬 MUTASYON (gerçek ölçüm: `{k.get('gercek_olcum')}`{hk}; beklenen kırmızı" + (" — yakalandı)" if renk == "yesil" else ")")
         elif renk == "ilan":
             renk = f"ilan → `{k.get('hedef_dosya')}`" + ("" if k.get("uygulaniyor") else " (uygulanmıyor: yeniden ölçüldü)")
         print(f"| {i} | {k['tur']} | {k['etiket']} | {k.get('asama','')} | {renk} | {k.get('rc','')} | `{k['dosya']}` |")
@@ -938,7 +963,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
-    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.set_defaults(f=cmd_olcum)
+    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.add_argument("--kapi", dest="kapi", default=None, metavar="HEDEF_KAPI_ADI"); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
     e.add_argument("--uc-boy", action="store_true", help="1440 · 1280 · 390 — her boy ayrı kayıt (etiket-<boy>)"); e.add_argument("--boylar", type=_boylar, help="virgüllü genişlik listesi")
     e.add_argument("--gelen", metavar="KUTU", help="yeşil kareleri Sultan'ın gelen klasörüne <kutu>_<iş>-kare-… adıyla kopyala"); e.set_defaults(f=cmd_ekran)

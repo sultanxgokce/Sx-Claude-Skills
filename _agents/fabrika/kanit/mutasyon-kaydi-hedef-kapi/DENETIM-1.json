@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "mutasyon-kaydi-hedef-kapi",
+  "pr": "678",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T16:08:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-mutasyon-kaydi-hedef-kapi",
+  "dal": "mutasyon-kaydi-hedef-kapi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 56474,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 80970
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f643e5e5ae2f75c3b86abaa3a8572aa316820375",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Mutasyon ölçümüne zorunlu hedef kapı adı eklenmiş; başka kapı düşmesi ve kurulum hatası sarı bırakılıyor, gerçek ölçüm de yeşil. Ancak hedef adı düz alt-dize aramasıyla eşleştirildiği için benzer kapı adlarında yanlış mutant yakalandı sayılabilir; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Hedef kapı adı tam kimlik olarak değil alt-dize olarak aranıyor; örneğin `--kapi K1`, düşen `✗ K10 ...` satırında da eşleşerek `hedef_dustu=true` ve yeşil kayıt üretebilir. Bu, talebin “yalnız o kapı düşünce” şartını ihlal eder.",
+        "kanit": "Üretim kodu `any(kapi_adi in l for l in dusen_satirlar(...))` kullanıyor. T27 senaryoları K1/K2 ayrımını ölçüyor fakat K1/K10 gibi önek çakışmasını ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:418; yazilim-fabrikasi/scripts/kanit.test.sh:T27",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 247/273 ile kırmızı, gerçek sonra ölçümü 273/273 ile yeşil; ayrıca hedef-kapı mantığını bilerek bozan mutasyon kaydı T27e kapısının düştüğünü gösteriyor. Kanıt güçlüdür, ancak önek çakışması vakası ölçülmemiştir."
+  }
+}

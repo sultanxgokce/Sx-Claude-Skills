@@ -1,0 +1,77 @@
+{
+  "is": "mutasyon-kaydi-hedef-kapi",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T16:12:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kanit-sinavi-once.txt",
+      "sha256": "7a2651d59d5bc114ef7e9d80bb8029ae71f0da518841a903d5396dac94ab0138",
+      "komut": [
+        "timeout",
+        "1500",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/mk-once/kanit.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-03T15:42:54+03:00",
+      "sure_sn": 29.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "37ab0400b7264df8a46137b4d7b72244",
+      "olculen_commit": "f9e1e279d3f544465d2d7693e2d423c99336504d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-sinavi-sonra.txt",
+      "sha256": "478fde31db04ed528f4d4f55a4c292bd425367a202551a69abb1a5ba23963806",
+      "komut": [
+        "timeout",
+        "1500",
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T16:11:50+03:00",
+      "sure_sn": 41.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "af74d286097249eebe74f010d194912b",
+      "olculen_commit": "c1d00e3f45b2efc749184a4c669ec8d17fced3c5",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-baska-kapi-yakalanmis-sayilir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-baska-kapi-yakalanmis-sayilir-sonra.txt",
+      "sha256": "9f46165ffac14c66a307212fb8ae1b36c3c63ba2e3ae588384ab46e7e6f509ee",
+      "komut": [
+        "timeout",
+        "1500",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/mk-mut/kanit.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T16:12:35+03:00",
+      "sure_sn": 44.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kanit-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T27e",
+      "hedef_dustu": true,
+      "olcum_id": "22776968f2404e4baf4daac7794dc4ea",
+      "olculen_commit": "c1d00e3f45b2efc749184a4c669ec8d17fced3c5",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "c40062f274716e00a05d5bcaa910200ca02d4a260bf041f86250395be088b9ea"
+}

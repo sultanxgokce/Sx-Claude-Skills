@@ -543,22 +543,22 @@ echo "════ T25 · MUTASYON KAYDI (FR7M76 · #1136 tur 3): --mutasyon <ge
 _s25() {   # _s25 <kanit.py> <depo> → geçen kapı anahtarları (boşlukla)
   local py="$1" d="$2" z="$2/_agents/fabrika/kanit/is-mut" o=""
   mkdir -p "$d"; ( cd "$d" && git init -q -b main ) >/dev/null 2>&1
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-yok --asama tek --mutasyon gercek -- bash -c 'exit 1' >/dev/null 2>"$d/e"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-yok --asama tek --mutasyon gercek --kapi K1 -- bash -c 'exit 1' >/dev/null 2>"$d/e"
   [ $? -eq 2 ] && grep -q "GERÇEK ölçüm yok" "$d/e" && [ ! -f "$z/olcum-m-yok-tek.txt" ] && o="$o a"
   KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama tek -- bash -c 'echo "  ✓ K1 kilit tutuyor"; exit 0' >/dev/null 2>&1
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama sonra --mutasyon gercek -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o b"
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-bos --asama tek --mutasyon '' -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o c"
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-k1 --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K1 kilit tutuyor"; exit 1' > "$d/o" 2>&1; local r=$?
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama sonra --mutasyon gercek --kapi K1 -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o b"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-bos --asama tek --mutasyon '' --kapi K1 -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o c"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-k1 --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✗ K1 kilit tutuyor"; exit 1' > "$d/o" 2>&1; local r=$?
   [ $r -eq 0 ] && head -1 "$z/olcum-mut-k1-tek.txt" | grep -q '^=== MUTASYON KANITI: kod BİLEREK bozuldu.*Gerçek kod ölçümü: olcum-gercek-\* ===$' && o="$o d"
   python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-k1'][-1];assert k['renk']=='yesil' and k['mutasyon'] is True and k['gercek_olcum']=='gercek' and k['beklenen']=='kirmizi'" "$z/KANIT.json" 2>/dev/null && grep -q "YAKALADI" "$d/o" && o="$o e"
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kacan --asama tek --mutasyon gercek -- bash -c 'echo "  ✓ K1"; exit 0' > "$d/o2" 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kacan --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✓ K1"; exit 0' > "$d/o2" 2>&1
   python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-kacan'][-1];assert k['renk']=='kirmizi'" "$z/KANIT.json" 2>/dev/null && grep -q "KAÇTI" "$d/o2" && o="$o f"
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kor --asama tek --mutasyon gercek -- bash -c 'exit 3' >/dev/null 2>&1; local r3=$?
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kor --asama tek --mutasyon gercek --kapi K1 -- bash -c 'exit 3' >/dev/null 2>&1; local r3=$?
   python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-kor'][-1];assert k['renk']=='sari'" "$z/KANIT.json" 2>/dev/null && [ $r3 -eq 3 ] && o="$o g"
   KANIT_DEPO="$d" python3 "$py" ozet is-mut > "$d/oz" 2>&1
   grep -E '\| mut-k1 \|' "$d/oz" | grep -q "🧬 MUTASYON (gerçek ölçüm: \`gercek\`" && ! grep -E '\| gercek \|' "$d/oz" | grep -q "MUTASYON" && o="$o h"
   KANIT_DEPO="$d" python3 "$py" dogrula is-mut >/dev/null 2>&1 && o="$o i"
-  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-zincir --asama tek --mutasyon mut-k1 -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o j"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-zincir --asama tek --mutasyon mut-k1 --kapi K1 -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o j"
   head -1 "$z/olcum-gercek-tek.txt" | grep -q '^\$ ' && o="$o k"
   echo "$o"
 }
@@ -601,23 +601,23 @@ _s26() {   # _s26 <kanit.py> <depo> → geçen kapı anahtarları
   KANIT_DEPO="$d" python3 "$py" olcum is-m26 gercek --asama tek -- bash -c 'echo "  ✓ K1"; exit 0' >/dev/null 2>&1
   _r26() { python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']==sys.argv[2]][-1];print(k['renk'],k.get('dusen_kapi'))" "$z/KANIT.json" "$1" 2>/dev/null; }
   # a · çöken mutant: yığın izi, rc 1, düşen kapı satırı yok → SARI, araç rc 3, sebep yazılı
-  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-cokus --asama tek --mutasyon gercek -- bash -c 'echo "Traceback (most recent call last):"; echo "FileNotFoundError: [Errno 2] ../docker-compose.defter.yml" >&2; exit 1' > "$d/oa" 2>&1; r=$?
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-cokus --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "Traceback (most recent call last):"; echo "FileNotFoundError: [Errno 2] ../docker-compose.defter.yml" >&2; exit 1' > "$d/oa" 2>&1; r=$?
   [ $r -eq 3 ] && [ "$(_r26 m-cokus)" = "sari False" ] && grep -q "mutant ÇÖKTÜ" "$d/oa" && grep -q "düşen kapı satırı yok" "$d/oa" && ! grep -q "YAKALADI" "$d/oa" && head -1 "$z/olcum-m-cokus-tek.txt" | grep -q "düşen kapı satırı YOK .* ÖLÇÜLEMEDİ (yakalandı DEĞİL)" && o="$o a"
   # b · rc 9 kurulum hatası: ✗ satırı olsa bile mutant hiç çalışmadı → SARI, araç rc 3
-  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-kurulum --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K1"; echo "mutasyon deseni tutmadı"; exit 9' > "$d/ob" 2>&1; r=$?
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-kurulum --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✗ K1"; echo "mutasyon deseni tutmadı"; exit 9' > "$d/ob" 2>&1; r=$?
   [ $r -eq 3 ] && [ "$(_r26 m-kurulum)" = "sari True" ] && grep -q "KURULAMADI (rc 9" "$d/ob" && ! grep -q "YAKALADI" "$d/ob" && head -1 "$z/olcum-m-kurulum-tek.txt" | grep -q "rc 9 = KURULUM HATASI.*ÖLÇÜLEMEDİ (yakalandı DEĞİL)" && o="$o b"
   # c · gerçek düşen kapı satırı: dört biçim de yakalandı sayılır → YEŞİL, araç rc 0
   local ok=1 e
-  for e in 'echo "  ✗ K1 kilit tutuyor"' 'echo "── SONUÇ: 5 geçti · 2 kaldı ──"' 'echo "KALAN: 2"' 'echo " ❯ sinav/a.test.mjs  FAIL  (3 test)"'; do
-    KANIT_DEPO="$d" python3 "$py" olcum is-m26 "m-dusen-$ok" --asama tek --mutasyon gercek -- bash -c "$e; exit 1" > "$d/oc" 2>&1; r=$?
+  for e in 'echo "  ✗ K1 kilit tutuyor"' 'echo "── K1 SONUÇ: 5 geçti · 2 kaldı ──"' 'echo "KALAN: 2 (K1)"' 'echo " ❯ sinav/K1.test.mjs  FAIL  (3 test)"'; do
+    KANIT_DEPO="$d" python3 "$py" olcum is-m26 "m-dusen-$ok" --asama tek --mutasyon gercek --kapi K1 -- bash -c "$e; exit 1" > "$d/oc" 2>&1; r=$?
     { [ $r -eq 0 ] && [ "$(_r26 "m-dusen-$ok")" = "yesil True" ] && grep -q "YAKALADI" "$d/oc"; } || ok=0
     [ "$ok" = 0 ] && break; ok=$((ok+1))
   done
   [ "$ok" = 5 ] && o="$o c"
   # d/e · eski davranış korunur: rc 0 kırmızı (mutant kaçtı) · "0 kaldı" düşen kapı DEĞİL → sarı
-  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-kacan --asama tek --mutasyon gercek -- bash -c 'echo "── SONUÇ: 7 geçti · 0 kaldı ──"; exit 0' >/dev/null 2>&1; r=$?
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-kacan --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "── SONUÇ: 7 geçti · 0 kaldı ──"; exit 0' >/dev/null 2>&1; r=$?
   [ $r -eq 0 ] && [ "$(_r26 m-kacan)" = "kirmizi False" ] && o="$o d"
-  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-sifir --asama tek --mutasyon gercek -- bash -c 'echo "── SONUÇ: 7 geçti · 0 kaldı ──"; exit 1' >/dev/null 2>&1; r=$?
+  KANIT_DEPO="$d" python3 "$py" olcum is-m26 m-sifir --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "── SONUÇ: 7 geçti · 0 kaldı ──"; exit 1' >/dev/null 2>&1; r=$?
   [ $r -eq 3 ] && [ "$(_r26 m-sifir)" = "sari False" ] && o="$o e"
   # f · mutasyonsuz ölçüm bu kapıdan GEÇMEZ: yığın izli rc 1 eskisi gibi kırmızı, dusen_kapi alanı yok
   KANIT_DEPO="$d" python3 "$py" olcum is-m26 duz --asama tek -- bash -c 'echo "Traceback (most recent call last):"; exit 1' >/dev/null 2>&1; r=$?
@@ -645,8 +645,80 @@ PY
 }
 _kd26="$T/m26-kontrol"; mkdir -p "$_kd26/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" "$_kd26/pkg/"; [ "$(_s26 "$_kd26/pkg/kanit.py" "$_kd26/depo")" = "$s26" ] && [ -n "$s26" ]; g $? "T26 kontrol kopyası gerçek araçla aynı kapıları geçiyor"
 _m26 a '    dusen_kapi = bool(DUSEN_KAPI_RE.search(p.stdout + "\n" + p.stderr)) if mut else None' '    dusen_kapi = True if mut else None' "düşen kapı satırı aranmıyor (eski davranış: rc≠0 = yakalandı)"
-_m26 b '        elif p.returncode in (3, 9) or not dusen_kapi:' '        elif p.returncode == 3 or not dusen_kapi:' "rc 9 kurulum hatası sarı sayılmıyor"
+_m26 b '        elif p.returncode in (3, 9) or not dusen_kapi or not hedef_dustu:' '        elif p.returncode == 3 or not dusen_kapi or not hedef_dustu:' "rc 9 kurulum hatası sarı sayılmıyor"
 _m26 e 'KALAN:\s*[1-9]|\b[1-9]\d*\s+kaldı\b' 'KALAN:\s*\d|\b\d+\s+kaldı\b' "'0 kaldı' düşen kapı sayılıyor"
+
+echo "════ T27 · MUTASYON HEDEF KAPISINI ADIYLA İSTER (görev …02RBP8, 3 Kas): yakalandı = ADI VERİLEN kapı düştü; başka kapı düşmesi ya da kurulamayan mutant yakalandı DEĞİL ════"
+# NİÇİN: T26 çöken mutantı eledi ama "bir kapı düştü" hâlâ "yakalandı" sayılıyordu: mutant sınavın BAŞKA bir kapısını düşürürse (ör. yanlış yere
+#        yama) kayıt yeşil çıkar, hedeflenen kural hiç sınanmamış olur. Mutasyon kaydı hangi kapıyı düşürmeyi hedeflediğini ADIYLA söyler.
+_s27() {   # _s27 <kanit.py> <depo> → geçen kapı anahtarları
+  local py="$1" d="$2" z="$2/_agents/fabrika/kanit/is-m27" o="" r
+  mkdir -p "$d"; ( cd "$d" && git init -q -b main ) >/dev/null 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 gercek --asama tek -- bash -c 'echo "  ✓ K1"; echo "  ✓ K2"; exit 0' >/dev/null 2>&1
+  _r27() { python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']==sys.argv[2]][-1];print(k['renk'],k.get('hedef_kapi'),k.get('hedef_dustu'))" "$z/KANIT.json" "$1" 2>/dev/null; }
+  # a · --mutasyon kapı adsız → rc 2, iz yok
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-adsiz --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K1"; exit 1' >/dev/null 2>"$d/ea"; r=$?
+  [ $r -eq 2 ] && grep -q -- "--kapi" "$d/ea" && [ ! -f "$z/olcum-m-adsiz-tek.txt" ] && o="$o a"
+  # b · --kapi mutasyonsuz → rc 2
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 b-tek --asama tek --kapi K1 -- bash -c 'exit 0' >/dev/null 2>&1; [ $? -eq 2 ] && [ ! -f "$z/olcum-b-tek-tek.txt" ] && o="$o b"
+  # c · her düşen satırda geçen genel ad (FAIL · ✗) ya da boş ad kapı adı olamaz → rc 2
+  local ok=1 ad
+  for ad in "FAIL" "✗" "" "   "; do
+    KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-genel --asama tek --mutasyon gercek --kapi "$ad" -- bash -c 'echo "  ✗ K1"; exit 1' >/dev/null 2>&1; [ $? -eq 2 ] || ok=0
+  done
+  [ "$ok" = 1 ] && [ ! -f "$z/olcum-m-genel-tek.txt" ] && o="$o c"
+  # d · adı verilen kapı düştü → YEŞİL, rc 0, kayıtta hedef_kapi + hedef_dustu, dosya başı hedef kapıyı söyler
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-hedef --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✗ K1 kilit tutuyor"; echo "  ✓ K2"; exit 1' > "$d/od" 2>&1; r=$?
+  [ $r -eq 0 ] && [ "$(_r27 m-hedef)" = "yesil K1 True" ] && grep -q "YAKALADI" "$d/od" && head -1 "$z/olcum-m-hedef-tek.txt" | grep -q "hedef kapı: K1" && o="$o d"
+  # e · BAŞKA kapı düştü → SARI, rc 3, hedef kapının düşmediği söylenir, YAKALADI denmez
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-baska --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✓ K1 kilit tutuyor"; echo "  ✗ K2 başka kapı"; exit 1' > "$d/oe" 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r27 m-baska)" = "sari K1 False" ] && grep -q "hedef kapı 'K1' düşmedi" "$d/oe" && ! grep -q "YAKALADI" "$d/oe" && o="$o e"
+  # f · kapı adı yalnız GEÇEN satırda ya da düşen satırdan başka yerde (yığın izi) görünür → SARI (ad çıktıda bir yerde geçmesi yetmez)
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-iz --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "K1 kurulumu hazır"; echo "  ✗ K2 başka"; exit 1' >/dev/null 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r27 m-iz)" = "sari K1 False" ] && o="$o f"
+  # g · kurulamayan mutant (rc 9) hedef kapı adı düşen satırda geçse bile YAKALANDI değil
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-kurulamadi --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✗ K1"; exit 9' >/dev/null 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r27 m-kurulamadi)" = "sari K1 True" ] && o="$o g"
+  # h · kaçan mutant (rc 0) eskisi gibi kırmızı, hedef_dustu False
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-kacti --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✓ K1"; exit 0' >/dev/null 2>&1; r=$?
+  [ $r -eq 0 ] && [ "$(_r27 m-kacti)" = "kirmizi K1 False" ] && o="$o h"
+  # i · özet tablosu hedef kapıyı gösterir
+  # k · benzer ad: --kapi K1, düşen '✗ K10' satırı K1 sayılmaz (tam sözcük eşleşmesi) → SARI
+  KANIT_DEPO="$d" python3 "$py" olcum is-m27 m-benzer --asama tek --mutasyon gercek --kapi K1 -- bash -c 'echo "  ✗ K10 başka kapı"; echo "  ✗ K12 öteki"; exit 1' >/dev/null 2>&1; r=$?
+  [ $r -eq 3 ] && [ "$(_r27 m-benzer)" = "sari K1 False" ] && o="$o k"
+  KANIT_DEPO="$d" python3 "$py" ozet is-m27 > "$d/oz" 2>&1; grep -E '\| m-hedef \|' "$d/oz" | grep -q "hedef kapı K1" && o="$o i"
+  KANIT_DEPO="$d" python3 "$py" dogrula is-m27 >/dev/null 2>&1 && o="$o j"
+  echo "$o"
+}
+s27="$(_s27 "$HERE/kanit.py" "$T/d27")"
+_k25 a "$s27"; g $? "T27a --mutasyon kapı adsız rc 2, iz yok (hangi kapıyı düşürmeyi hedeflediği söylenmeli)"
+_k25 b "$s27"; g $? "T27b --kapi mutasyonsuz rc 2"
+_k25 c "$s27"; g $? "T27c genel ad (FAIL · ✗) ve boş ad kapı adı olamaz, rc 2"
+_k25 d "$s27"; g $? "T27d adı verilen kapı düştü → YEŞİL yakalandı; kayıtta hedef_kapi + hedef_dustu; dosya başı 'hedef kapı: K1'"
+_k25 e "$s27"; g $? "T27e BAŞKA kapı düştü → SARI, araç rc 3, \"hedef kapı 'K1' düşmedi\", YAKALADI denmez"
+_k25 f "$s27"; g $? "T27f kapı adı çıktıda düşen satırdan başka yerde geçerse yetmez → SARI"
+_k25 g "$s27"; g $? "T27g kurulamayan mutant (rc 9) hedef adı düşen satırda geçse de yakalandı değil, SARI"
+_k25 h "$s27"; g $? "T27h kaçan mutant (rc 0) eskisi gibi KIRMIZI"
+_k25 i "$s27"; g $? "T27i özet tablosu hedef kapıyı gösterir"
+_k25 k "$s27"; g $? "T27k benzer ad (K1 ⟷ ✗ K10 · ✗ K12) hedef sayılmaz: tam sözcük eşleşmesi, SARI"
+_k25 j "$s27"; g $? "T27j manifest imzası sağlam (dogrula)"
+echo "── T27 · MUTASYON (tam kopyada, kontrol şartlı) ──"
+_m27() {   # _m27 <anahtar> <eski> <yeni> <açıklama>
+  local d="$T/m27-$1"; mkdir -p "$d/pkg"; cp "$HERE/kanit.sh" "$d/pkg/"
+  python3 - "$HERE/kanit.py" "$d/pkg/kanit.py" "$2" "$3" <<'PY'
+import sys; src,dst,eski,yeni=sys.argv[1:]; s=open(src,encoding='utf-8').read()
+assert s.count(eski)==1, "mutasyon deseni tek değil: "+eski; s=s.replace(eski,yeni); open(dst,'w',encoding='utf-8').write(s)
+PY
+  [ $? -eq 0 ] || { g 1 "T27 mutant $1: desen tutmadı ($4)"; return; }
+  local s; s="$(_s27 "$d/pkg/kanit.py" "$d/depo")"; ! _k25 "$1" "$s"; g $? "T27 mutant ($4) → '$1' kapısı düşüyor"
+}
+_kd27="$T/m27-kontrol"; mkdir -p "$_kd27/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" "$_kd27/pkg/"; [ "$(_s27 "$_kd27/pkg/kanit.py" "$_kd27/depo")" = "$s27" ] && [ -n "$s27" ]; g $? "T27 kontrol kopyası gerçek araçla aynı kapıları geçiyor"
+_m27 a '    if a.mutasyon is not None and not kapi_adi:' '    if False:' "kapı adı istenmiyor"
+_m27 e '    hedef_dustu = bool(mut) and any(hedef_kapi_re.search(l) for l in dusen_satirlar(p.stdout + "\n" + p.stderr))' '    hedef_dustu = bool(mut) and dusen_kapi' "başka kapı düşmesi de yakalandı sayılıyor"
+_m27 f 'for l in dusen_satirlar(p.stdout' 'for l in (p.stdout + "\n" + p.stderr).splitlines() or dusen_satirlar(p.stdout' "ad çıktının her satırında aranıyor"
+_m27 k '(?<!\w)" + re.escape(kapi_adi) + r"(?!\w)' '" + re.escape(kapi_adi) + r"' "kapı adı alt dize olarak aranıyor"
+_m27 g '        elif p.returncode in (3, 9) or not dusen_kapi or not hedef_dustu:' '        elif p.returncode == 3 or not hedef_dustu:' "rc 9 kurulum hatası yine yakalandı sayılıyor"
+_m27 c '    if kapi_adi and (DUSEN_KAPI_RE.search(kapi_adi)' '    if kapi_adi and (False' "genel ad (FAIL · ✗) kapı adı sayılıyor"
 
 echo "════ T-UB · ÜÇ BOY (görev 4PZV4): tek komut → 1440/1280/390 her boy AYRI imzalı kayıt; bir boy düşerse komut yeşil DÖNMEZ ════"
 # 🔴 HERMETİK: varsayılan gelen klasörü (/config/evraklar/Sultan/0-Gelen) bu kutuda GERÇEKTEN var ve Sultan'ın cihazına senkronlanır —

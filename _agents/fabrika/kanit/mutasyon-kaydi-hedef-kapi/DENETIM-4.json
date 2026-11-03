@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "mutasyon-kaydi-hedef-kapi",
+  "pr": "678",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T16:46:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-mutasyon-kaydi-hedef-kapi",
+  "dal": "mutasyon-kaydi-hedef-kapi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25973,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3442
+  },
+  "dalgic": "olculemedi",
+  "bas": "57f6ec73321ddf4829f97dfab4c8e21697175f3a",
+  "duzeltme_farki": {
+    "onceki_bas": "85a2e1b898031e2ef57f806ed6497fc70f270f09",
+    "dosya": 2,
+    "bayt": 3442,
+    "tam_bayt": 126681
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hedef kapı adı artık mutasyon ölçümünün hükmüne bağlanmış; gerçek sınav 275/275 geçiyor ve bilerek bozulan sürüm yalnız hedef T27e düştüğünde yakalanıyor. Önceki kapsam kayması ana dal birleşmesinin PR farkı sanılmasından doğmuş ve bu turdaki kayıt PR kapsamının yalnız kanıt aracı ile sınavlar olduğunu açıkladığı için üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti kırmızı 247/273'ten yeşil 275/275'e geçişi gösteriyor; gerçek kodun kaydı gercek_olcum=kanit-sinavi ile yeşil, mutasyon kaydı ise mutasyon=true, hedef_kapi=T27e ve hedef_dustu=true alanlarıyla bozuk kodun hedef kapı üzerinden yakalandığını kanıtlıyor. Mutasyon çıktısındaki FAIL/✗ sonuçları beklenen davranıştır. Önceki turdaki B1, ana dal birleşmesinin PR kapsamı sanıldığı açıklaması ve ana dala göre farkın yalnız kanit.py ile sınavlardan oluştuğu kapsam kaydıyla kapanmış kabul edilmiştir; ancak olculen_kirli=true yeniden üretilebilirliği bir miktar zayıflatır."
+  }
+}
