@@ -1,0 +1,80 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-dumen.test.mjs tur 2: D50-D54 dahil 63 geçti 0 kaldı-* ===
+$ node dumen.test.mjs
+# rc=1 sure=11.9s zaman=2026-11-03T08:32:16+03:00
+--- stdout ---
+── mod ajan
+  ✓ D1 mod ajan: metin alanı dolduruldu
+  ✓ D2 tarih ve seçim eylemleri sonuç verdi
+  ✓ D3 metin dışı alan değişimi dinleyiciyle YAKALANDI ve ajan eylemiyle eşleşti (isTrusted=false)
+  ✓ D4 yabancı (eylem penceresi dışı) olay yok
+  ✓ D3b fill(tarih) ve selectOption "köprüde GÖRÜNMEZ" uyarısı bastı (2 eylem)
+  ✓ D3c uyarı terminale de yazıldı
+  ✓ D3d metin alanı fill'i (Input.insertText, köprü görür) uyarı ÜRETMEDİ
+  ✓ D3e uyarı alan DEĞERİNİ taşımaz
+  ✓ D3f görünmez eylem uyarısı MERKEZE gitti (2 eylem × kod+sayı), jeton başlığıyla
+  ✓ D3g merkeze yalnız {kod, n} gitti — hedef/değer/adres/çerez YOK
+── sayfa sahte olay üretir → yabancı
+  ✓ D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)
+  ✓ D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)
+  ✓ D5f eylem dışı değişiklik uyarısı MERKEZE gitti (kod yabanci-olay, n=1)
+  ✓ D5g merkez uyarı ucu 500 verirse eylem YİNE yapıldı, terminale "İLETİLEMEDİ" yazıldı
+  ✓ D5h kutu jetonu okunamazsa uyarı JETONSUZ GÖNDERİLMEZ (merkeze istek yok), eylem sürer, terminale "kutu jetonu okunamadı" yazılır
+  ✓ D5b eylem dışı değişiklik UYARI üretti
+  ✓ D5d aynı olay ikinci kez uyarmaz
+── click sırasında sayfanın sentetik olayı "köprüde görünmez eylem" SAYILMAZ
+  ✓ D5e click sırasındaki sentetik olay görülemeyen-eylem UYARISI üretmedi
+── mod sultan
+  ✓ D6 mod sultan: eylem REDDEDİLDİ
+  ✓ D7 mod sultan: alan DEĞİŞMEDİ
+  ✓ D8 bekleme satırı terminale yazıldı
+── merkez cevapsız → fail-closed
+  ✓ D9 merkez cevapsız: eylem REDDEDİLDİ (fail-closed)
+  ✓ D10 merkez cevapsız: alan DEĞİŞMEDİ (DEGISMEZ2 yazılmadı)
+── durma noktaları
+  ✓ D11 parola alanı: eylem YAPILMADI, durak=sifre
+  ✓ D12 ad=otp alanı: durak=sms/sifre bildirildi, değer yazılmadı
+  ✓ D13 merkeze yalnız NEDEN gitti (değer/adres/çerez yok)
+  ✓ D14 ödeme sayfasında "Öde" tıklaması durdu, durak=odeme
+  ✓ D17 ham nesneler DIŞARIYA AÇIK DEĞİL (d.page/d.cdp/d.tarayici/d.merkez yok)
+  ✓ D18 durak ucu 500 verirse eylem yine YAPILMAZ ama bildirildi=false ve satır UYARIR
+  ✓ D15 ödeme sayfasında zararsız düğme tıklaması GEÇTİ (aşırı engelleme yok)
+  ✓ D16 parola alanı değişimi KAYDEDİLDİ ama DEĞER yok (<gizli>)
+── durak bildirimi jeton başlığı
+  ✓ D19 durak bildirimi x-defter-jeton başlığıyla gitti (her istek)
+  ✓ D20 jeton değeri günlük satırlarında YOK
+── mod sultan iken soket düşer
+  ✓ D21 sultan + soket düşük: eylem "sultanda" (ham bağlantı hatası DEĞİL)
+  ✓ D22 sultan iken tekrar denenince yine "sultanda", yeniden bağlanma YOK
+  ✓ D23 bekleme satırı yazıldı
+  ✓ D24 uç yeniden açıldı ama mod hâlâ sultan: yine bağlanmadı
+  ✓ D25 mod ajan olunca YENİDEN bağlandı ve eylem yapıldı
+── kapı geçtikten SONRA soket düşer (eylem sırasında)
+  ✓ D26 eylem sırasında Sultan aldı + soket düştü: "sultanda" (ham hata ya da baglanti-koptu DEĞİL)
+  ✓ D27 geri verildi (mod ajan): kopukluk durumda görünür
+  ✓ D28 mod ajan olunca bir sonraki eylemde yeniden bağlandı
+  ✓ D29 mod ajan iken soket düşerse: açık hata "baglanti-koptu" (sessiz yutulmaz)
+  ✓ O1 metin(): görünür sayfa yazısı döner
+  ✓ O2 metin(): giriş alanının DEĞERİ metne girmez
+  ✓ O3 okuma sayfayı değiştirmez, terminale/merkeze metin yazmaz, uyarı üretmez
+  ✓ O4 parola alanını hedefleyen okuma durma noktasına takılır
+  ✓ O5 kare(yol): PNG dosyası yazılır
+  ✓ O6 Dümen Sultanda iken okuma da YOK (metin + kare "sultanda", dosya yazılmaz)
+  ✓ O7 kare() yolsuz reddedilir
+── sekme seçimi (Sultan'ın terminal sekmesine dokunulmaz)
+  ✓ D40 ön koşul: Sultan'ın terminal sekmesi açık
+  ✓ D41 varsayılan: Sultan'ın sekmesi ADRESİNDE kaldı, ajan yeni sekmede gezdi
+  ✓ D42 kapat() yalnız KENDİ açtığı sekmeyi kapattı; terminal sekmesi yerinde
+  ✓ D43 sekme deseni: eşleşen sekme seçildi, yeni sekme AÇILMADI
+  ✓ D44 desenle seçilen (başkasının) sekme kapat() ile KAPANMADI
+  ✓ D45 desen eşleşmezse yeni sekme açılır, ilk sekmeye dokunulmaz
+  ✓ D47 durum taşıyan (g bayraklı) RegExp ikinci kullanımda da eşleşen sekmeyi bulur, yeni sekme açılmaz
+  ✓ D48 kapat() çıkışında bulgu hatırlatma satırı basılır (bulgu.sh yaz)
+  ✓ D46 sekme:"ilk" açıkça istenirse eski davranış (yeni sekme yok)
+── yeniden bağlanma: aynı sekmeye döner, öteki sekmelere oturum açmaz
+  ✓ D50 yeniden bağlanınca AYNI sekmeye döndü: yeni sekme açılmadı, adres güncel
+  ✓ D51 yeniden bağlanırken oturumlar YALNIZ aranan sekmede açıldı (yan-a/b/c'ye hiç)
+  ✓ D52 aynı adresli yabancı sekme: yalnız adaylarda oturum (yan-* ya da başka adreste yok), doğru sekme seçildi, yabancı yerinde
+  ✗ D53 /json/list okunamazsa eski sekmelerin hiçbirine oturum açılmaz  → {"eL":"null","oturumUrl":["http://127.0.0.1:46327/yeniden2","http://127.0.0.1:46327/yeniden2","http://127.0.0.1:46327/yeniden2"]}
+  ✗ D54 aranan sekme kapanmışsa eski sekmelere oturum açılmaz, yeni sekmede sürülür  → {"eK":"null","oturumUrl":["http://127.0.0.1:46327/yan-b","http://127.0.0.1:46327/ortak-adres","about:blank","http://127.0.0.1:46327/yan-a","http://127.0.0.1:46327/yan-c","about:blank","about:blank"]}
+SONUÇ: geçti=61 kaldı=2
+--- stderr ---

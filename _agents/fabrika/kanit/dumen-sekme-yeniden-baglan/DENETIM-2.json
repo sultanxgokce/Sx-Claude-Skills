@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "dumen-sekme-yeniden-baglan",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T08:33:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-sekme-yeniden-baglan",
+  "dal": "dumen-sekme-yeniden-baglan",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40555,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 27355
+  },
+  "dalgic": "uyumlu",
+  "bas": "61a975750c5df8d7522d3c74e26c157e008024c5",
+  "duzeltme_farki": {
+    "onceki_bas": "aa6cdafeef03210c8ffe2ec3b38a24759f6a3571",
+    "dosya": 9,
+    "bayt": 36360,
+    "tam_bayt": 49880
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, önceki iki uygulama bulgusu da kapanmış; liste okunamadığında, hedef kaydı yokken veya URL adayı bulunamadığında bütün sekmelere dönüş kaldırılmış, CDP oturumları yalnız `/json/list` ile belirlenen aynı adresli adaylarda açılmıştır. Gerçek ölçüm 63/63 geçiyor ve üç mutasyon kapısı eski ile hata-yolu davranışlarını yakalıyor; üretime engel kanıtlanmış kusur kalmamıştır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı kayıt yoktur. Gerçek ölçümde D50-D54 dahil 63/63 geçmiştir: D51 oturumların yalnız aranan sekmede, D52 yalnız aynı adresli adaylarda açıldığını, D53 liste okunamadığında ve D54 hedef kapandığında eski sekmelere oturum açılmadığını ölçer. Üç mutasyon kaydı beklenen rc=1 ve düşen kapılarla sınavların eski bütün-sekmeler davranışını gerçekten yakaladığını gösterir. Önceki B1, `liste/kayit` yokken adayların boş bırakılması ve D53 ile; B2, boş-aday `ctx.pages()` geri dönüşünün kaldırılması, URL bazlı oturum kaydı ile D51-D52 ve ilgili mutasyonlarla kapanmıştır. Ölçümlerin `olculen_kirli=true` olması ve son gerçek ölçüm commitinin diff başı olarak bildirilen başla aynı görünmemesi sürüm bağını zayıflatır; ancak sunulan üretim farkı ile ölçülen D50-D54 davranışı birbiriyle tutarlıdır."
+  }
+}
