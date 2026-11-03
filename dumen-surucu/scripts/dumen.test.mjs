@@ -238,18 +238,36 @@ const ch5 = spawn(CHROME, [`--remote-debugging-port=${PORT5}`, `--user-data-dir=
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT5}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 const cdp5 = `http://127.0.0.1:${PORT5}`;
 const { chromium: cr5 } = await playwrightYukle();
-const eskiBaglan = cr5.connectOverCDP.bind(cr5); let oturumSay = 0; let sonTarayici = null;
-cr5.connectOverCDP = async (...a) => { const b = await eskiBaglan(...a); sonTarayici = b; const c = b.contexts()[0]; if (c && !c.__say) { const e = c.newCDPSession.bind(c); c.newCDPSession = async (p) => { oturumSay++; return e(p); }; c.__say = true; } return b; };
-for (const ad of ['yan-a', 'yan-b', 'yan-c']) await fetch(`${cdp5}/json/new?${MERKEZ}/${ad}`, { method: 'PUT' }).catch(() => fetch(`${cdp5}/json/new?${MERKEZ}/${ad}`));
+const eskiBaglan = cr5.connectOverCDP.bind(cr5); let oturumUrl = []; let sonTarayici = null;
+cr5.connectOverCDP = async (...a) => { const b = await eskiBaglan(...a); sonTarayici = b; const c = b.contexts()[0]; if (c && !c.__say) { const e = c.newCDPSession.bind(c); c.newCDPSession = async (p) => { oturumUrl.push(p.url()); return e(p); }; c.__say = true; } return b; };
+const yeniSek = async (yol) => { const u = `${cdp5}/json/new?${MERKEZ}/${yol}`; const r = await fetch(u, { method: 'PUT' }).catch(() => fetch(u)); return r.json(); };
+for (const ad of ['yan-a', 'yan-b', 'yan-c']) await yeniSek(ad);
 const sek5 = async () => (await (await fetch(`${cdp5}/json/list`)).json()).filter((t) => t.type === 'page').map((t) => t.url);
+const dusur = async () => { oturumUrl = []; await sonTarayici.close(); };   // soket düşer, Chromium yaşar
 const dR = await Dumen.baglan({ cdpUrl: cdp5, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {} });   // varsayılan: kendi YENİ sekmesi
 await dR.goto(MERKEZ + '/benim-sekmem');
 const onceSek = (await sek5()).length;
-oturumSay = 0; await sonTarayici.close();   // soket düşer, Chromium yaşar
+await dusur();
 const eR5 = await hata(() => dR.goto(MERKEZ + '/yeniden'));
 const sonSek = await sek5();
 ok('D50 yeniden bağlanınca AYNI sekmeye döndü: yeni sekme açılmadı, adres güncel', eR5 === null && sonSek.length === onceSek && sonSek.some((u) => u.endsWith('/yeniden')) && dR.durum().baglanmaSayisi === 2, JSON.stringify({ eR: String(eR5), sonSek, durum: dR.durum() }));
-ok('D51 yeniden bağlanırken öteki sekmelere (yan-a/b/c) kısa CDP oturumu AÇILMADI: oturum sayısı ≤ 2 (sayfa+dinleyici)', oturumSay <= 2, 'oturum=' + oturumSay);
+ok('D51 yeniden bağlanırken oturumlar YALNIZ aranan sekmede açıldı (yan-a/b/c\'ye hiç)', oturumUrl.length > 0 && oturumUrl.every((u) => u.endsWith('/benim-sekmem')), JSON.stringify(oturumUrl));
+// D52: aynı adresli bir yabancı sekme var → yalnız ADAYLARA (aynı adres) oturum, doğru olan seçilir, yabancı yerinde kalır
+await dR.goto(MERKEZ + '/ortak-adres'); await yeniSek('ortak-adres');
+await dusur();
+const eA = await hata(() => dR.goto(MERKEZ + '/yeniden2'));
+const sA = await sek5();
+ok('D52 aynı adresli yabancı sekme: yalnız adaylarda oturum (yan-* ya da başka adreste yok), doğru sekme seçildi, yabancı yerinde', eA === null && oturumUrl.length > 0 && oturumUrl.every((u) => u.endsWith('/ortak-adres')) && sA.filter((u) => u.endsWith('/ortak-adres')).length === 1 && sA.some((u) => u.endsWith('/yeniden2')), JSON.stringify({ eA: String(eA), oturumUrl, sA }));
+// D53: /json/list okunamaz → HİÇBİR eski sekmeye oturum açılmaz (kapalı hata yolu); sekme yeniden seçilir
+const eskiFetch = globalThis.fetch; globalThis.fetch = (u, ...a) => (String(u).endsWith('/json/list') ? Promise.reject(new Error('liste yok')) : eskiFetch(u, ...a));
+await dusur(); let eL; try { eL = await hata(() => dR.goto(MERKEZ + '/liste-yok')); } finally { globalThis.fetch = eskiFetch; }
+ok('D53 /json/list okunamazsa eski sekmelerin hiçbirine oturum açılmaz', eL === null && oturumUrl.every((u) => u.endsWith('/liste-yok') || u === 'about:blank' || u === ''), JSON.stringify({ eL: String(eL), oturumUrl }));
+// D54: aranan sekme kapanmış → hiçbir eski sekmeye oturum açılmaz, yeni sekmede sürülür
+const lst = await (await fetch(`${cdp5}/json/list`)).json(); const hedef = lst.find((t) => t.url.endsWith('/liste-yok')) || lst.find((t) => t.url.endsWith('/yeniden2'));
+await fetch(`${cdp5}/json/close/${hedef.id}`).catch(() => {});
+await dusur();
+const eK5 = await hata(() => dR.goto(MERKEZ + '/kapaninca'));
+ok('D54 aranan sekme kapanmışsa eski sekmelere oturum açılmaz, yeni sekmede sürülür', eK5 === null && oturumUrl.every((u) => !/\/(yan-[abc]|ortak-adres)$/.test(u)), JSON.stringify({ eK: String(eK5), oturumUrl }));
 await dR.kapat();
 ch5.kill();
 

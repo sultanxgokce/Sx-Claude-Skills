@@ -1,7 +1,7 @@
 {
   "is": "dumen-sekme-yeniden-baglan",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T08:28:24+03:00",
+  "guncelleme": "2026-11-03T08:32:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,7 +44,72 @@
       "olcum_id": "fbe56ef06b9c4fcd8d95dec817999c92",
       "olculen_commit": "48a4502c8f037d6e6ec6bd5afb3b239f2ecb0ec0",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen.test.mjs tur 2: D50-D54 dahil 63 geçti 0 kaldı",
+      "asama": "tek",
+      "dosya": "olcum-dumen.test.mjs tur 2: D50-D54 dahil 63 geçti 0 kaldı-tek.txt",
+      "sha256": "32f1b83eca19d30613c2271aa57a83987e088ae25ba78a81dc40f87afa456c76",
+      "komut": [
+        "node",
+        "dumen.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:31:53+03:00",
+      "sure_sn": 10.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6e11b75be3184191b3840d68e5caa9e6",
+      "olculen_commit": "9a5f5a24de5dd6c875c06d43b26cae2a9a89ed6d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant tur 2: liste yok ya da aday yok iken tüm sekmelere dönüş (D53 D54 kırmızı)",
+      "asama": "tek",
+      "dosya": "olcum-mutant tur 2: liste yok ya da aday yok iken tüm sekmelere dönüş (D53 D54 kırmızı)-tek.txt",
+      "sha256": "6538d22f67b0f1144f37b6205262908f4601b6bdbc92078f1dcc1fb60ee59113",
+      "komut": [
+        "node",
+        "dumen.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:32:04+03:00",
+      "sure_sn": 10.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "dumen.test.mjs tur 2: D50-D54 dahil 63 geçti 0 kaldı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "5425bb2f734f4f138051f9e2212dcbd3",
+      "olculen_commit": "9a5f5a24de5dd6c875c06d43b26cae2a9a89ed6d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant tur 2: eski her-sekmeye-oturum döngüsü (D51 D52 D53 D54 kırmızı)",
+      "asama": "tek",
+      "dosya": "olcum-mutant tur 2: eski her-sekmeye-oturum döngüsü (D51 D52 D53 D54 kırmızı)-tek.txt",
+      "sha256": "f48507d8e098e51e06f9d4b5f34aebd690dcbe1f89732f9532ceb83eadb38106",
+      "komut": [
+        "node",
+        "dumen.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T08:32:16+03:00",
+      "sure_sn": 11.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "dumen.test.mjs tur 2: D50-D54 dahil 63 geçti 0 kaldı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "olcum_id": "97f5e7f2791645d8aaddf35765ac6805",
+      "olculen_commit": "9a5f5a24de5dd6c875c06d43b26cae2a9a89ed6d",
+      "olculen_kirli": true
     }
   ],
-  "imza": "bb5283516edd82093ccdb908d851ff859487b9418652f6dcb5f5ce20cef0705f"
+  "imza": "0d7d18cdcec79097739307f662fe9b9d5e1d589804dc424d5f91f62318ec756f"
 }

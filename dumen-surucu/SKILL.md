@@ -36,7 +36,7 @@ Dümen'de ilk sekme çoğu zaman Sultan'ın terminalidir; `goto` onu bozar. Bu y
 - **`'ilk'`** → ilk sekme (eski davranış). Yalnız çağıran **açıkça** isterse.
 - **string** (adres parçası) ya da **RegExp** → adresi eşleşen sekme; eşleşen yoksa yeni sekme açılır.
 - `kapat()` yalnız **kendi açtığı** sekmeyi kapatır; `'ilk'` ya da desenle seçilen sekme kapanmaz. Yeniden bağlanmada aynı sekmeye dönülür (hedef kimliğiyle).
-- **Yeniden bağlanma öteki sekmelere dokunmaz (0.7.1 · BENNÂ · 3 Kas):** aranan sekmenin adresi `/json/list`'ten tek sorguyla okunur; kısa CDP oturumu yalnız aynı adresli adayda doğrulama için açılır, sekme kapanmışsa hiçbirine açılmaz. Önce: 4 sekmede 4 oturum (3'ü Sultan'ın/başkasının sekmesi); sonra ≤2 (sınav D51).
+- **Yeniden bağlanma öteki sekmelere dokunmaz (0.7.1 · BENNÂ · 3 Kas):** aranan sekmenin adresi `/json/list`'ten tek sorguyla okunur; kısa CDP oturumu YALNIZ aynı adresli adaylarda kimlik doğrulaması için açılır. Liste okunamazsa ya da sekme kapanmışsa hiçbir eski sekmeye oturum açılmaz; sekme yukarıdaki seçim ilkesiyle (yeni sekme / desen) seçilir. Önce: 4 sekmede 4 oturum; sonra yalnız aranan sekmede (sınav D51-D54).
 - Eski çağıranlar (amazon-etiket, gib): çerez/oturum tarayıcı bağlamında ortaktır, yeni sekmede de geçerlidir; ilk sekmeyi gerçekten bekleyen varsa `sekme: 'ilk'` ekler.
 
 ## Salt-okur: sayfayı oku, kare al (0.6.0 · SİNAN/VADE 31 Eki · görev …W3ZKKH)
