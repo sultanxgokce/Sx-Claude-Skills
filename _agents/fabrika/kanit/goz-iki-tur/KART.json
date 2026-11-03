@@ -1,0 +1,43 @@
+{
+  "is": "goz-iki-tur",
+  "cumle": "Bağımsız göz tavanı üç turdan iki ture iner (bir bulgu turu, bir düzeltme turu), tıkanma üçüncüde söylenir; kutu dışı bulgu puana girmez ve canlı borca yazılır",
+  "istedi": "Sultan",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-11-03T16:51:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "yazilim-fabrikasi/scripts/denetci.test.sh ve denetci-kutu-disi.test.sh kırmızıdan yeşile; önce/sonra tur sayımı",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-03T18:08:25+03:00",
+      "olay": "gorev-bagla",
+      "reis": "HEZARFEN",
+      "gorev": "gorev_01M6GSTZ0V5CG4VBZPV3B0VX5E",
+      "kimlik": "bag-37535-1793718505802497767"
+    }
+  ],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canlı",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev": "gorev_01M6GSTZ0V5CG4VBZPV3B0VX5E",
+  "tahmin_dk": 150,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T18:08:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı",
+      "kimlik": "bag-37535-1793718505802497767"
+    }
+  ]
+}
