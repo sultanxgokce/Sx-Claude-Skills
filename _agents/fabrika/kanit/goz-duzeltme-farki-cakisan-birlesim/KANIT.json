@@ -1,0 +1,121 @@
+{
+  "is": "goz-duzeltme-farki-cakisan-birlesim",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T21:14:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme farki sinavi (D13 yeni)",
+      "asama": "tek",
+      "dosya": "olcum-duzeltme farki sinavi (D13 yeni)-tek.txt",
+      "sha256": "0ac76680400f6e7b96f360bd3c469f4072c170056dbe392d325e06d1bc52cfbb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:49:35+03:00",
+      "sure_sn": 237.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4a7602dcc080475d89d1974faa35c2ed",
+      "olculen_commit": "800994bae9897815b97d68ecb9d344aaeb3a0acd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant cakisan birlesimde dosya bazli fark kapali",
+      "asama": "tek",
+      "dosya": "olcum-mutant cakisan birlesimde dosya bazli fark kapali-tek.txt",
+      "sha256": "f86bba0de4982547ffe5c6c7a8ad7d102cee05a8297b860a9d4d58107459290b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-cakisma.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T20:50:00+03:00",
+      "sure_sn": 18.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "duzeltme farki sinavi (D13 yeni)",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D13c",
+      "hedef_dustu": true,
+      "olcum_id": "466f5cb33cc947ca8e5011b7d8607289",
+      "olculen_commit": "800994bae9897815b97d68ecb9d344aaeb3a0acd",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme farki sinavi tur 2 (D13 D14 D15)",
+      "asama": "tek",
+      "dosya": "olcum-duzeltme farki sinavi tur 2 (D13 D14 D15)-tek.txt",
+      "sha256": "93cf41b782f06c122c323eaccdf56d1aaf434641776a9ddaa7cd33d210c419bb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T21:13:47+03:00",
+      "sure_sn": 342.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b98439174033456f9b08769b29390538",
+      "olculen_commit": "f161ac851950ac0ee85fdf72227c114198f6c68d",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant ikili dosya atlanir (tur 2)",
+      "asama": "tek",
+      "dosya": "olcum-mutant ikili dosya atlanir (tur 2)-tek.txt",
+      "sha256": "159706d960fb1d305c467ac263cd9c85ff9a47f788a7ec02927b963b8901c973",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-ikili.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T21:14:59+03:00",
+      "sure_sn": 17.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "duzeltme farki sinavi tur 2 (D13 D14 D15)",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D14c",
+      "hedef_dustu": true,
+      "olcum_id": "6a73ceb02d36447f9416cc50c4f38698",
+      "olculen_commit": "ad2d4e94dca99bd8b831f69933a94dd452909115",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant ikili dosya atlanir tur 2 duzeltilmis",
+      "asama": "tek",
+      "dosya": "olcum-mutant ikili dosya atlanir tur 2 duzeltilmis-tek.txt",
+      "sha256": "546ae182995910a8456c6c0727425c18140c877b5312619d60eee5c7134bc455",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-ikili.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-03T21:14:29+03:00",
+      "sure_sn": 15.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "duzeltme farki sinavi tur 2 (D13 D14 D15)",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D14c",
+      "hedef_dustu": true,
+      "olcum_id": "da2dd0f4b4124bd6b7fc607da0a4c951",
+      "olculen_commit": "f161ac851950ac0ee85fdf72227c114198f6c68d",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "1017f4aab989a0028c5565aa028f919e6cdf2e32b59c79cc857099322f0adaa1"
+}

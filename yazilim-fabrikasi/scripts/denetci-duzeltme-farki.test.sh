@@ -172,6 +172,51 @@ iceren "D12c istemde PR'ın artımı var" "+yeni-satir-d12" "$KOK/istem.md"
 icermeyen "D12d ana dalın aynı dosyaya girdisi farka GİRMEDİ" "C-ANA-DAL" "$KOK/istem.md"
 iceren "D12e ekranda süzme söylendi" "artımlı fark ana dalın girdisinden süzüldü" "$KOK/son.out"
 
+echo "════ D13 · ana dal birleşimi ÇATIŞIRSA (iki taraf bitişik satıra dokundu) ana dalın girdisi yine farka girmez (gorev …519DN6 · Sx #678 tur 3, #681 tur 2) ════"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nc\n' > "$KOK/baska/cak.txt"
+git -C "$KOK/baska" add cak.txt; git -C "$KOK/baska" commit -q -m cak; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null
+yap d13; printf 'a\nB-PR\nc\n' > "$KOK/w/cak.txt"; git -C "$KOK/w" commit -q -am "pr cak"; kanitla d13; : > "$KOK/istem.md"
+kapi "D13a tur 1 koştu (5/E → rc 0)" 0 den d13 "$J5"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nC-ANA-DAL-D13\n' > "$KOK/baska/cak.txt"
+git -C "$KOK/baska" commit -q -am "ana dal cak"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" merge -q --no-edit origin/main >/dev/null 2>&1
+printf 'a\nB-PR\nC-ANA-DAL-D13\n' > "$KOK/w/cak.txt"; git -C "$KOK/w" add cak.txt; git -C "$KOK/w" commit -q --no-edit
+printf 'ilk-satir\nyeni-satir-d13\n' > "$KOK/w/kod-d13.txt"; git -C "$KOK/w" add kod-d13.txt; git -C "$KOK/w" commit -q -m "pr artimi d13"; : > "$KOK/istem.md"
+kapi "D13b tur 2 koştu (5/E → rc 0)" 0 den d13 "$J5"
+iceren "D13c istemde PR'ın artımı var" "+yeni-satir-d13" "$KOK/istem.md"
+icermeyen "D13d 🔴 çatışan birleşimde ana dalın satırı farka GİRMEDİ" "C-ANA-DAL-D13" "$KOK/istem.md"
+iceren "D13e ekranda çatışma söylendi" "ana dal birleşimi çatıştı" "$KOK/son.out"
+
+echo "════ D14 · çatışan birleşimde İKİLİ dosyanın PR değişikliği düşmez (göz #682 tur 1) ════"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nc\n' > "$KOK/baska/cak14.txt"
+git -C "$KOK/baska" add cak14.txt; git -C "$KOK/baska" commit -q -m cak14; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null
+yap d14; printf 'a\nB-PR\nc\n' > "$KOK/w/cak14.txt"; printf '\000\001ikili-v1\n' > "$KOK/w/x14.bin"; git -C "$KOK/w" add x14.bin; git -C "$KOK/w" commit -q -am "pr cak14"; kanitla d14; : > "$KOK/istem.md"
+kapi "D14a tur 1 koştu (5/E → rc 0)" 0 den d14 "$J5"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nC-ANA-14\n' > "$KOK/baska/cak14.txt"
+git -C "$KOK/baska" commit -q -am "ana dal cak14"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" merge -q --no-edit origin/main >/dev/null 2>&1
+printf 'a\nB-PR\nC-ANA-14\n' > "$KOK/w/cak14.txt"; git -C "$KOK/w" add cak14.txt; git -C "$KOK/w" commit -q --no-edit
+printf '\000\001ikili-v2\n' > "$KOK/w/x14.bin"; git -C "$KOK/w" commit -q -am "pr ikili artimi"; : > "$KOK/istem.md"
+kapi "D14b tur 2 koştu (5/E → rc 0)" 0 den d14 "$J5"
+iceren "D14c 🔴 ikili dosyanın değişikliği göze gitti" "x14.bin" "$KOK/istem.md"
+icermeyen "D14d ana dalın satırı farka GİRMEDİ" "C-ANA-14" "$KOK/istem.md"
+
+echo "════ D15 · çatışan birleşimde PR dosyayı ana hat hâline geri alırsa fark yalnız PR'ın kendi eklemesinin geri alınmasıdır (göz #682 tur 1 ön-göz) ════"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nc\n' > "$KOK/baska/cak15.txt"
+git -C "$KOK/baska" add cak15.txt; git -C "$KOK/baska" commit -q -m cak15; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null
+yap d15; printf 'a\nR-PR-D15\nc\n' > "$KOK/w/cak15.txt"; git -C "$KOK/w" commit -q -am "pr cak15"; kanitla d15; : > "$KOK/istem.md"
+kapi "D15a tur 1 koştu (5/E → rc 0)" 0 den d15 "$J5"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; printf 'a\nb\nC-ANA-15\n' > "$KOK/baska/cak15.txt"
+git -C "$KOK/baska" commit -q -am "ana dal cak15"; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" merge -q --no-edit origin/main >/dev/null 2>&1
+git -C "$KOK/w" show origin/main:cak15.txt > "$KOK/w/cak15.txt"; git -C "$KOK/w" add cak15.txt; git -C "$KOK/w" commit -q --no-edit; : > "$KOK/istem.md"
+kapi "D15b tur 2 koştu (5/E → rc 0)" 0 den d15 "$J5"
+iceren "D15c PR'ın kendi eklemesinin geri alınması göze gitti" "-R-PR-D15" "$KOK/istem.md"
+icermeyen "D15d 🔴 ana dalın satırı '+' olarak farka GİRMEDİ" "+C-ANA-15" "$KOK/istem.md"
+
 echo "════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
 if [ -z "${MUTANT_D:-}" ]; then
   mut() { local ad="$1" eski="$2" yeni="$3" kapi_adi="$4"; local P="$KOK/mutpkg-$ad"; mkdir -p "$P"; cp -p "$HERE"/* "$P/" 2>/dev/null
@@ -184,7 +229,10 @@ PY
     else DUSEN=$((DUSEN+1)); echo "  ✗ mutant '$ad' → $kapi_adi düşmedi ya da kontrol D1a da düştü (geçersiz mutant)"; fi; }
   mut duzeltme-yok 'if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then' 'if false; then' "D2e"
   mut dosya-siniri-yok 'git -C "$DEPO" --literal-pathspecs diff "$_sol" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
-  mut ana-dal-suzme-yok '_sol="$_ob"; _omb=' '_sol="$_ob"; _omb="";  _x=' "D12d"
+  mut ana-dal-suzme-yok '_sol="$_ob"; _CAKIS=0; _omb=' '_sol="$_ob"; _CAKIS=0; _omb="";  _x=' "D12d"
+  mut ikili-atlanir "    if grep -q '^GIT binary patch' <<<\"\$eskiham\$yeniham\"; then" "    if false; then" "D14c"
+  mut geri-alma-ham-fark '--binary -R "$_omb" "$_ob" -- "$f" >>' '--binary "$_ob" "$BAS" -- "$f" >>' "D15d"
+  mut cakisma-ham-fark '[ "$_CAKIS" = 1 ] && [ "${#_pd[@]}" -gt 0 ] && ! _duz_dosya_bazli' '[ "$_CAKIS" = 99 ] && [ "${#_pd[@]}" -gt 0 ] && ! _duz_dosya_bazli' "D13c"
   # iki ucun İKİSİ de NUL'suz (kaçışlı) okunur: tek ucu bozmak öbür uç aynı yolu getirdiği için örtülürdü (göz #436 tur 3)
   YOL_E="$(cat <<'MUTE'
 --name-only -z "$_mb" "$BAS" && git -C "$DEPO" diff --no-renames --name-only -z "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; } 2>/dev/null | sort -zu)
@@ -201,7 +249,7 @@ MUTY
   mut tavan-yalniz-dikis 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ -n "${DENETCI_KIRP_ESIK:-}" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6a"   # tavan yalnız sınav dikişiyle uygulanırsa (varsayılanda kapı yok) D6a düşer
   mut tavan-ayiklamaya-bagli 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6e"
   mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
-  mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null \' '  elif false \' "D10c"
+  mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null \' '  elif false \' "D10b"   # çatışma kolu squash vakasında da başkasının işini göstermez (D10c artık geçer); sebep satırı ve kayıt D10b/D10e ile ölçülür
   mut eski-bas-ana-hatta '       || git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' '       || false && git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' "D11b"
   mut tavan-400k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-400000}"' "D6a"
 fi

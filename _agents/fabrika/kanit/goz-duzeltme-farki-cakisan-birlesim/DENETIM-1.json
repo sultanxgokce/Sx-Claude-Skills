@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "goz-duzeltme-farki-cakisan-birlesim",
+  "pr": "682",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T20:51:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-duzeltme-farki-cakisan-birlesim",
+  "dal": "goz-duzeltme-farki-cakisan-birlesim",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21082,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 10410
+  },
+  "dalgic": "uyumsuz",
+  "bas": "527bfbf1836659ed1f3aad12461b4526776dc97c",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Çatışan ana dal birleşiminde ana dal satırlarını düzeltme farkından ayıran dosya bazlı yol eklenmiş ve hedeflenen metin senaryosu gerçek ölçüm ile mutasyonda doğrulanmış. Ancak bu yol ikili dosya değişikliklerini sessizce yok sayabildiğinden önce bu uygulama kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Çatışma yolunda ikili dosyanın PR değişikliği atlanabilir: `_duz_norm` yalnız `+`/`-` satırlarını çıkarır; ikili difflerde bunlar bulunmadığından eski ve yeni değerler boş ve eşit görülüp dosya `continue` ile dışarıda bırakılır.",
+        "kanit": "`_duz_dosya_bazli` içinde eski ve yeni farklar `_duz_norm` çıktısından kuruluyor, ardından `[ \"$eski\" = \"$yeni\" ] && continue` uygulanıyor. D13 ölçümü yalnız metin dosyaları (`cak.txt`, `kod-d13.txt`) kullanıyor; bu davranışı sınayan ikili dosya vakası yok.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:611",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm 77/77 yeşil, hedef D13c mutasyonu da bozuk kodu yakalıyor. Bununla birlikte ölçüm `olculen_kirli: true` olduğundan sonuç temiz bir commit’e birebir bağlanmıyor; ayrıca kanıt hedeflenen metin çatışmasını güçlü biçimde ölçse de ikili dosya dalını kapsamıyor."
+  }
+}
