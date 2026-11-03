@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "pazaryeri-mesaj",
+  "pr": "668",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T08:53:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-pazaryeri-mesaj",
+  "dal": "pazaryeri-mesaj",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 69526,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 13940
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Pazaryeri mesajlarını okuma, taslak açma ve Amazon risk kilidiyle gönderme iskeleti kurulmuş; hermetik sınavlar ve mutantlar temel kapıları ölçüyor. Ancak dışarıya gerçek mesaj gönderen akışta onay, onaylanan cevap metnine bağlanmadığı için başka bir metin geçerli damgayla gönderilebilir; bu ciddi hata çözülmeden üretime hazır değildir.",
+    "bulgular": [
+      {
+        "ne": "Onay damgası yalnız tarih ve sohbet kimliğini doğruluyor; damgadaki onay kırpığı gönderilecek dosya içeriğiyle karşılaştırılmıyor. Böylece aynı sohbet için alınmış bir damga, sonradan değiştirilmiş veya tamamen farklı bir cevabı göndermeye yetiyor; “yalnız onaylı cevabı gönder” güvencesi sağlanmıyor.",
+        "kanit": "gonder() metni dosyadan okuyor, ardından damgaDogrula(onay, sohbet) çağırıyor; damgaDogrula yalnız tarih ile sohbetin damga metninde bulunmasını denetleyip m[5] kırpığını döndürüyor, fakat metin parametresi almıyor ve kırpığı cevapla bağlamıyor. G1–G3 testleri eksik/yanlış sohbet/eski tarih durumlarını ölçüyor, onaydan sonra cevap dosyasının değiştirilmesini ölçmüyor.",
+        "konum": "pazaryeri-mesaj/scripts/mesaj.mjs:88; pazaryeri-mesaj/scripts/pazar.mjs:37; pazaryeri-mesaj/scripts/mesaj.test.mjs:132",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gönder düğmesine basıldıktan sonra doğrulama başarısız olursa komut rc 3 dönüyor; mesaj gerçekte gönderilmiş olabileceğinden yeniden deneme mükerrer müşteri mesajına yol açabilir. Ayrıca ilk 40 karakterin tüm sayfa gövdesinde bulunması, eski içerik veya taslak metni nedeniyle yanlış başarı üretebilir.",
+        "kanit": "cevapGonder önce d.click(p.secici.gonder) çalıştırıyor, sonra body içinde metnin ilk 40 karakterini arıyor; gonder() iz bulunmazsa açıkça “gönder düğmesine basıldı ama … görülmedi” diyerek rc 3 döndürüyor. Sınav yalnız başarılı sahte panel dönüşünü ölçüyor; gönderimin gerçekleşip doğrulama izinin görünmediği vaka yok.",
+        "konum": "pazaryeri-mesaj/scripts/pazar.mjs:84; pazaryeri-mesaj/scripts/mesaj.mjs:94; pazaryeri-mesaj/scripts/mesaj.test.mjs:137",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek Amazon/Trendyol seçicileri, gerçek ilk tur ve NARH'taki global kurulum bu kutuda doğrulanmamış; ilk turda harita düzeltme ve dağıtım gerekebilir.",
+        "kanit": "HARITA.json her iki pazar için olculdu:false diyor; SKILL.md “GERÇEK SAYFADA ÖLÇÜLMEDİ” ve “ilk gerçek tur NARH'ta” diyor. Manifestteki beceri-var kaydı yalnız önce ölçümünde “beceri YOK” gösteriyor ve kurulum sonrası karşılığı bulunmuyor; mesaj sınavı sahte paneller kullanıyor.",
+        "konum": "pazaryeri-mesaj/HARITA.json:5; pazaryeri-mesaj/HARITA.json:20; pazaryeri-mesaj/SKILL.md:9; olcum-beceri-var-once.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "NARH ortamı + Dümen'deki canlı Amazon Seller Central ve Trendyol satıcı oturumları"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki yeşil gerçek ölçüm ile mutant yakalama sonuçları güçlü biçimde sunulmuş, sarı kayıt yok. Bununla birlikte mesaj sınavı gerçek pazaryeri verisi yerine sahte panelleri ölçüyor, önce/sonra gerçek akış karesi veya canlı ölçüm çifti yok ve global beceri için yalnız kurulum öncesi “YOK” kaydı bulunuyor; dolayısıyla çekirdek kapılar kanıtlı, gerçek seçiciler, kurulum ve ilk NARH turu kanıtsızdır."
+  }
+}

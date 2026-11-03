@@ -1,0 +1,42 @@
+{
+  "is": "pazaryeri-mesaj",
+  "cumle": "NARH için standart yetenek: Dümen'den Amazon Seller Central ve Trendyol satıcı panelindeki müşteri mesajlarını okuyan, cevap taslağını Sultan onayına sunan ve yalnız onaylı cevabı gönderen global beceri (pazaryeri-mesaj); ilk gerçek tur NARH'ta, Amazon'da gönderme Sultan'ın risk kararına bağlı",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-11-03T08:29:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "?",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-11-03T08:29:28+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M6DHDVYF4SZHZPN9DDZB3C0Q",
+  "tahmin_dk": 180,
+  "senaryo": "_agents/fabrika/senaryolar/pazaryeri-mesaj.md",
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T08:29:33+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
