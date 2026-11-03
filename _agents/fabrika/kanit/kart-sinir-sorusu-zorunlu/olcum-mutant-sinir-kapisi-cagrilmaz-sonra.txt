@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 + düşen kapı satırı = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sn-mut/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=1 sure=219.3s zaman=2026-11-03T10:21:30+03:00
+# rc=1 sure=316.5s zaman=2026-11-03T11:23:52+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -521,7 +521,9 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✓ SN8 kapsam sözcüğü yok → sınır istenmez (altın)
   ✓ SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)
   ✓ SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)
-  ✓ SN11 'tamamını' (çekimli) + 'hariç …' → açıldı
+  ✓ SN11 çekimli biçimler (tamamını, hepsini) kartın saymadığı sözcük: sınır istenmez (birebir eşleşme)
+  ✓ SN12 'hepsi' + 'hariç …' → açıldı (kabul yönü)
 
-── SONUÇ: 472 geçti · 4 kaldı ──
+── SONUÇ: 473 geçti · 4 kaldı ──
 --- stderr ---
+⏳ agir-sira: kanit-kart-sinir-sorusu-zorunlu-mutant-sinir-kapisi-cagrilmaz 40 sn bekledi (yuva 1, load1 17.72)

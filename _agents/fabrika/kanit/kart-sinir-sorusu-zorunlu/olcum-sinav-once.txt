@@ -1,5 +1,5 @@
 $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sn-once/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=1 sure=202.9s zaman=2026-11-03T10:14:21+03:00
+# rc=1 sure=300.2s zaman=2026-11-03T11:13:55+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -520,10 +520,12 @@ $ timeout 280 bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91
   ✓ SN8 kapsam sözcüğü yok → sınır istenmez (altın)
   ✓ SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)
   ✗ SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)
-  ✗ SN11 'tamamını' (çekimli) + 'hariç …' → açıldı
+  ✓ SN11 çekimli biçimler (tamamını, hepsini) kartın saymadığı sözcük: sınır istenmez (birebir eşleşme)
+  ✗ SN12 'hepsi' + 'hariç …' → açıldı (kabul yönü)
 
-── SONUÇ: 469 geçti · 7 kaldı ──
+── SONUÇ: 470 geçti · 7 kaldı ──
 --- stderr ---
+⏳ agir-sira: kanit-kart-sinir-sorusu-zorunlu-sinav 86 sn bekledi (yuva 2, load1 17.54)
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.yugZLrfVAM/depo17/_agents/fabrika/kartlar/is-sn4.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.EPAWjCYkaO/depo17/_agents/fabrika/kartlar/is-sn4.json'

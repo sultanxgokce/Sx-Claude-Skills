@@ -358,12 +358,12 @@ olcut_zorunlu() {  # olcut_zorunlu <cümle> <nerede: ac|daralt> → rc 0 uygun �
 # 🔴 SINIR SORUSU (görev …KSQSERN, kılıç bileme 3 Kas): "tamamı/hepsi/tümü" denen kartta sınır açıkça yazılmadan iş başlarsa kapsam kayar —
 #    63 turlu ölçümde 15 tur kapsam kayması, 22 tur sınır vakası; 12 iş 4+ tur (kuzey-g18-uc-yargi: 'ilk 3 kart' / 'ilk 8 kart').
 #    Kapı kart CÜMLESİNDEN tetiklenir (kaçış bayrağı yok): cümlede kapsam sözcüğü varsa --sinir ZORUNLU ve sınır SAYI içerir ya da
-#    'hariç' ile neyin dışarıda kaldığını söyler. DÜRÜST SINIR: yalnız sözcüğü ve değerin biçimini ölçer; sınırın doğru olduğunu bilmez.
+#    'hariç' ile neyin dışarıda kaldığını söyler. DÜRÜST SINIR: yalnız kartın üç sözcüğünü BİREBİR yakalar (tamamını, hepsini gibi çekimler yakalanmaz) ve değerin biçimini ölçer; sınırın doğru olduğunu bilmez.
 sinir_kapsami() {  # sinir_kapsami <cümle> → her satır cümledeki bir kapsam sözcüğü (boş = yok)
   python3 - "$1" <<'PY'
 import re, sys
 c = sys.argv[1].replace("İ", "i").replace("I", "ı").lower()
-for m in re.finditer(r"(?<![\w])(tamam[ıi](?:n[ıi]|nda|nd[ae]n|n[ıi]n)?|hepsi(?:ni|nde|nden|nin)?|tümü(?:nü|nde|nden|nün)?)(?![\w])", c):
+for m in re.finditer(r"(?<![\w])(tamamı|tamami|hepsi|tümü)(?![\w])", c):
     print(m.group(1))
 PY
 }

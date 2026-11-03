@@ -1,5 +1,5 @@
-$ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=201.7s zaman=2026-11-03T10:17:47+03:00
+$ timeout 900 bash yazilim-fabrikasi/scripts/kart.test.sh
+# rc=0 sure=280.2s zaman=2026-11-03T11:28:51+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -520,7 +520,9 @@ $ timeout 280 bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ SN8 kapsam sözcüğü yok → sınır istenmez (altın)
   ✓ SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)
   ✓ SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)
-  ✓ SN11 'tamamını' (çekimli) + 'hariç …' → açıldı
+  ✓ SN11 çekimli biçimler (tamamını, hepsini) kartın saymadığı sözcük: sınır istenmez (birebir eşleşme)
+  ✓ SN12 'hepsi' + 'hariç …' → açıldı (kabul yönü)
 
-── SONUÇ: 476 geçti · 0 kaldı ──
+── SONUÇ: 477 geçti · 0 kaldı ──
 --- stderr ---
+⏳ agir-sira: kanit-kart-sinir-sorusu-zorunlu-sinav 45 sn bekledi (yuva 1, load1 17.29)

@@ -1212,7 +1212,7 @@ echo "════ T18 · SINIR SORUSU (görev …KSQSERN): cümlede tamamı/hep
 cd "$T/depo17" && export KANIT_DEPO="$T/depo17"; KU="$T/depo17/_agents/fabrika/kartlar"
 O="$(bash "$KT" ac is-sn1 --is "tümü için panel güncellensin" $D4S 2>&1)"; rc=$?
 [ $rc -eq 1 ] && grep -q "SINIRI yok" <<<"$O" && grep -q "tümü" <<<"$O" && [ ! -f "$KU/is-sn1.json" ]; g $? "SN1 'tümü' var, --sinir YOK → rc 1, sebep sözcüğü söyler, kart AÇILMADI"
-bash "$KT" ac is-sn2 --is "hepsini düzelt" $D4S --sinir "hepsi" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "SN2 sınırda sayı da 'hariç' de yok → rc 1 (laf kalabalığı sınır sayılmaz)"
+bash "$KT" ac is-sn2 --is "hepsi düzelsin" $D4S --sinir "hepsi" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "SN2 sınırda sayı da 'hariç' de yok → rc 1 (laf kalabalığı sınır sayılmaz)"
 bash "$KT" ac is-sn3 --is "tamamı bitsin" $D4S --sinir "hariç x" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "SN3 'hariç x' (3 harften kısa nesne) sınır değil → rc 1"
 bash "$KT" ac is-sn4 --is "tamamı için panel güncellensin" $D4S --sinir "11 kutu" >/dev/null 2>&1; g $? "SN4 '11 kutu' sayı içerir → açıldı"
 python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['sinir']=='11 kutu',k" "$KU/is-sn4.json"; g $? "SN4b kartta sinir alanı yazılı"
@@ -1222,6 +1222,7 @@ bash "$KT" ac is-sn7 --is "tamamlandı denen işlerde zil çalsın, tümevarım 
 bash "$KT" ac is-sn8 --is "kart açılışı sade kalsın" $D4S >/dev/null 2>&1; g $? "SN8 kapsam sözcüğü yok → sınır istenmez (altın)"
 bash "$KT" ac is-sn9 --is "tüm kutularda ve bütün kartlarda panel güncellensin" $D4S >/dev/null 2>&1; g $? "SN9 'tüm' / 'bütün' kartın saymadığı sözcük: sınır istenmez (kapı kartın üç sözcüğüyle sınırlı)"
 bash "$KT" ac is-sn10 --is "tümü için panel güncellensin" $D4S --sinir "11 kutu" >/dev/null 2>&1; g $? "SN10 'tümü' + '11 kutu' → açıldı (kabul yönü)"
-bash "$KT" ac is-sn11 --is "tamamını yap" $D4S --sinir "hariç medigate kartları" >/dev/null 2>&1; g $? "SN11 'tamamını' (çekimli) + 'hariç …' → açıldı"
+bash "$KT" ac is-sn11 --is "tamamını yap, hepsini düzelt" $D4S >/dev/null 2>&1; g $? "SN11 çekimli biçimler (tamamını, hepsini) kartın saymadığı sözcük: sınır istenmez (birebir eşleşme)"
+bash "$KT" ac is-sn12 --is "hepsi için sınır sorulsun" $D4S --sinir "hariç medigate kartları" >/dev/null 2>&1; g $? "SN12 'hepsi' + 'hariç …' → açıldı (kabul yönü)"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
