@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "goz-iki-tur",
+  "pr": "680",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T19:01:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur",
+  "dal": "goz-iki-tur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36821,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6189
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4ab47fdb51820390b25ad4971b8f04a8dd37d720",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Varsayılan tavan 2+1/3 yapılmış ve yeni sınav eski davranışta kırmızı, yeni davranışta yeşil gösterilmiş. Ancak kartın açıkça istediği “tıkanma üçüncüde söylenir” yerine ilerlemeyen iş ikinci turda tıkandırıldığı için çekirdek davranış yanlış; ayrıca katalog hâlâ 3+1 diyor.",
+    "bulgular": [
+      {
+        "ne": "İlerlemeyen iş ikinci turda tıkandırılıyor; iş kartı tıkanmanın üçüncüde söylenmesini istiyor.",
+        "kanit": "Yeni sınav ikinci çağrının rc=4 olmasını şart koşuyor: `CIKTI=\"$(N ... is-n1)\"` ardından `[ \"$RC\" -eq 4 ]`; ölçüm de “ilerlemeyen iş 2. turda TIKANDI” kapısının geçtiğini gösteriyor. Buna karşılık iş kartının cümlesi “tıkanma üçüncüde söylenir” diyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci-tavan.test.sh:28; olcum-tavan-yeni-denetci-sonra.txt; İŞ KARTI.cumle",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Katalog açıklaması yeni tavanla güncellenmemiş ve yayımlanan sürümü hâlâ “tavan 3+1” diye tanıtıyor.",
+        "kanit": "Aynı diff içinde sürüm 0.27.50'ye yükseltilirken `catalog.json` açıklamasındaki `denetci.sh ... tavan 3+1` metni değişmeden kalmış; SKILL.md ve üretim betiği ise 2+1/3'e geçirilmiş.",
+        "konum": "catalog.json:1533",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve önce/sonra tavan ölçüm çifti güçlü: eski davranış 4/13, yeni davranış 13/13. Ancak bu çift, kartta istenen üçüncü çağrıda tıkanmayı değil ikinci çağrıda tıkanmayı doğruluyor. Kutu-dışı ve canlı-borç davranışı için sunulan tek ek kayıt süiti gerçekten çalıştırmıyor; mevcut bir scratchpad günlüğünün sonunu ve `339 geçti · 0 kaldı` metnini grep ediyor, dolayısıyla bu iki iddiaya özgü doğrudan ölçüm kanıtı zayıf."
+  }
+}

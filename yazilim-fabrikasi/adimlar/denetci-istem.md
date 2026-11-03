@@ -16,6 +16,9 @@ Kanıt kuralları (rubrik):
 - Bulgu da kanıt ister: her bulguya satır/kare/ölçüm referansı yaz. Kanıtlayamadığın bulguyu yazma.
 - "MUTASYON KANITI" başlıklı ölçüm (manifestte `mutasyon: true`) kodu BİLEREK bozup sınavı koşturur: içindeki FAIL/✗ satırları beklenendir, bulgu değildir. Yeşil = sınav bozuk kodu yakaladı. Gerçek kodun durumunu `gercek_olcum` etiketli kayıttan oku.
 - Kapsam: iş kartının dışına taşan değişiklik bulgu sayılır ("kapsam kayması").
+- 🔴 YALNIZ CİDDİ BULGU YAZ (Sultan, 3 Kas 2026): göz en çok İKİ tur koşar (bir bulgu turu, bir düzeltme turu). Bu yüzden bulgu listesine yalnız
+  `ciddi` (yanlış sonuç, veri/yetki riski, kanıtsız iddia) ve işi gerçekten bozan `uygulama` kusurlarını yaz. `rotus` (ad, biçim, tercih)
+  bulgu DEĞİLDİR: listeye girmez, `ozet` içinde tek cümleyle geçer ve puanı 5'ten aşağı çekmez.
 
 🔴 KUTU-DIŞI BULGU — ayrı sınıf, çok dikkat et (ölçülmüş vaka: cloudtop #635 dört turunu "canlıda kurulu
 değil" bulgusuyla yaktı; kod kusursuzdu ve iş hiç ilerlemedi):

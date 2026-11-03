@@ -1,0 +1,56 @@
+{
+  "tur": 4,
+  "is": "goz-iki-tur",
+  "pr": "680",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T19:32:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur",
+  "dal": "goz-iki-tur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22184,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8991
+  },
+  "dalgic": "olculemedi",
+  "bas": "565164f9c29b5f430b004fdeeb193e48b389b426",
+  "duzeltme_farki": {
+    "onceki_bas": "395d862b2d35e5d585129575ceb1efe6deb13d2a",
+    "dosya": 4,
+    "bayt": 8991,
+    "tam_bayt": 177382
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İki göz turu ve üçüncü çağrıda tıkanma kırmızıdan yeşile ölçülmüş; kutu-dışı turun puana girmemesi ve ikinci gelişte canlı borca devri de 54/54 sınavla doğrulanmış. Ancak önceki turun B1 bulgusu kapanmamış: eklenen `once` kaydı kırmızı değil 54/54 yeşil olduğundan kartın istediği ikinci kırmızıdan-yeşile ölçüm çifti hâlâ yok; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Önceki turun B1 bulgusu kapanmamış: `denetci-kutu-disi.test.sh` için eklenen önce ölçümü de yeşil olduğu için talep edilen kırmızıdan-yeşile çift oluşmuyor.",
+        "kanit": "`kutu-disi-sinavi` önce kaydı rc=0 ve 54/54, sonra kaydı da rc=0 ve 54/54 gösteriyor. Dolayısıyla davranış sınanmış olsa da iş kartındaki “kırmızıdan yeşile” şartının kırmızı ayağı kanıtlanmıyor.",
+        "konum": "İŞ KARTI.kanit_nerede; KANIT MANİFESTİ.kayitlar[kutu-disi-sinavi once/sonra]; olcum-kutu-disi-sinavi-once.txt; olcum-kutu-disi-sinavi-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Canlı kayıtta yalnız ilk denetim görülüyor; ikinci gelişte canlı borca yazılma gerçek akışta henüz gösterilmemiş.",
+        "kanit": "`denetci-gercek-kosu` kaydı `atesleme_sayisi=1` ve ilk/son ateşleme olarak yalnız `tur=1` satırını içeriyor. J1-J10 yalıtılmış sınavı devri doğruluyor, fakat gerçek canlı kayıtta ikinci geliş ve oluşan borç yok.",
+        "konum": "KANIT MANİFESTİ.kayitlar[denetci-gercek-kosu]; olcum-kutu-disi-sinavi-sonra.txt J1-J10",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı denetim akışı + canlı karne/iş kartı yazma yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Tavan davranışı için eski uygulamada 6/14 kırmızı ve yeni uygulamada 14/14 yeşil gerçek ölçüm çifti var; tam paket de 339/339 yeşil. Kutu-dışı davranış ayrıntılı ve gerçekçi senaryolarla 54/54 ölçülmüş, fakat onun önce/sonra çifti yeşil/yeşil; canlı kayıt da yalnız ilk ateşlemeyi gösteriyor."
+  }
+}

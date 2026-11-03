@@ -1,0 +1,49 @@
+{
+  "tur": 5,
+  "is": "goz-iki-tur",
+  "pr": "680",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T19:33:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur",
+  "dal": "goz-iki-tur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24278,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5122
+  },
+  "dalgic": "olculemedi",
+  "bas": "22872ab45702eff33d651dccfa324b2156afa8b2",
+  "duzeltme_farki": {
+    "onceki_bas": "565164f9c29b5f430b004fdeeb193e48b389b426",
+    "dosya": 3,
+    "bayt": 5122,
+    "tam_bayt": 182112
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan, iki göz turu tavanı için eski uygulama 6/14 kırmızı, yeni uygulama 14/14 yeşil ölçülmüş; tam paket de 339/339 geçiyor. Önceki B1, yeşil/yeşil kalan kutu-dışı sınav şartının ayrı karta daraltılmasıyla bu kart bakımından kapanmış; yalnız gerçek akışta ikinci gelişin canlı borca yazılması kutu dışında henüz gösterilmemiş ve bu kod puanını düşürmez.",
+    "bulgular": [
+      {
+        "ne": "Önceki turun B2 bulgusu açık: gerçek canlı kayıtta ikinci geliş ve canlı borca devir henüz gösterilmemiş.",
+        "kanit": "`denetci-gercek-kosu` kaydında `atesleme_sayisi=1`; ilk ve son ateşleme aynı `tur=1` satırıdır. J1-J10 yalıtılmış sınavda geçse de canlı ikinci geliş kaydı bulunmuyor.",
+        "konum": "KANIT MANİFESTİ.kayitlar[denetci-gercek-kosu]; olcum-kutu-disi-sinavi-sonra.txt J1-J10",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı denetim akışı + canlı karne/iş kartı yazma yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kartın güncel tavan talebi için gerçek ölçüm çifti mevcut: eski denetçi 6/14 ve rc=1, yeni denetçi 14/14 ve rc=0; tam paket 339/339 yeşil. Kutu-dışı sınavın önce/sonra kaydı 54/54 yeşil/yeşildir, ancak bu eski kırmızı şartı `goz-kutu-disi-canli-borc` kartına açıkça daraltılmıştır; canlı kayıt yalnız ilk ateşlemeyi kanıtlar."
+  }
+}

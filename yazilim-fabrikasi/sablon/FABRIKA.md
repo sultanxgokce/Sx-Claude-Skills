@@ -22,7 +22,7 @@ F=/config/.claude/skills/yazilim-fabrikasi
 
 4. GÖNDER — PR'ı `pr-onay` ile aç. Bağımsız göz: YAZANDAN FARKLI model inceler (Claude ↔ Codex ↔ Fable).
    Puan iki satır: KOD İYİ Mİ 0-5 · DOĞRU ŞEY Mİ E/H (talep ⟷ kanıt yan yana). Bulgu da kanıt ister.
-   5 ve E değilse adım 2'ye dön. Tavan 3 tur; ilerleyen işe (puan↑, açık bulgu↓) +1; DÖRT mutlak.
+   5 ve E değilse adım 2'ye dön. Tavan 2 tur (1 bulgu + 1 düzeltme); ilerleyen işe (puan↑, açık bulgu↓) +1; ÜÇ mutlak; kutu dışı bulgu tur yakmaz.
    Tıkanınca: "tıkandı + üç yol" raporu (devam · daralt · geri al). Sonsuz döngü yok.
    Daralt sonrası tur sayacı yeniden başlar (kart.sh daralt damgası); iki daraltmadan sonra üçüncüsü yok → geri al.
    Merge: sınıf işi SULTAN; sınıfsız iş kutu reisi → deftere kanıt+puan+damga. ($F/adimlar/4-gonder.md)
