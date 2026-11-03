@@ -117,11 +117,36 @@ echo "════ O7 · bas bu depoda yok → ÖLÇÜLEMEDİ (rc=3), engel değ
 kur; den "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"; C="$(kapi)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "rc=3"; grep -q "bu depoda yok" <<<"$C"; g $? "sebep yazıldı"
 
-echo "════ O8 · kirli ağaçta ölçülmüş KANIT kaydı → engellemez ama söylenir ════"
-kur; ( cd "$T" && echo kirli > uygulama.sh && bash "$K" olcum is-oc kirli --asama tek -- echo 2 ) >/dev/null 2>&1
+echo "════ O8 · kirli ağaçta BİLEREK (--kirli-izin) ölçülmüş KANIT kaydı → engellemez, gerekçesiyle söylenir ════"
+kur; ( cd "$T" && echo kirli > uygulama.sh && bash "$K" olcum is-oc kirli --asama tek --kirli-izin "ölçülen şey sınav fikstürü, kod değil" -- echo 2 ) >/dev/null 2>&1
 ( cd "$T" && git add -A && git commit -q -m "chore: kanit2" ) >/dev/null 2>&1
 B="$(bas_al)"; den "$B"; C="$(kapi)"; RC=$?
-[ "$RC" -eq 0 ]; g $? "rc=0 (uyarı, engel değil)"; grep -q "commit'lenmemiş değişiklikli ağaçta ölçülmüş" <<<"$C" && grep -q "kirli/tek" <<<"$C"; g $? "kirli kayıt adıyla söylendi"
+[ "$RC" -eq 0 ]; g $? "rc=0 (izinli: uyarı, engel değil)"; grep -q "commit'lenmemiş değişiklikli ağaçta ölçülmüş" <<<"$C" && grep -q "kirli/tek" <<<"$C"; g $? "kirli kayıt adıyla söylendi"
+grep -q "bilerek kirli ağaçta ölçülmüş (izinli)" <<<"$C" && grep -q "sınav fikstürü" <<<"$C"; g $? "izin gerekçesi yazıldı"
+
+kayit_duzenle() { # <kurali 0|1> <izin 0|1> <asama>
+  python3 - "$T/_agents/fabrika/kanit/is-oc/KANIT.json" "$1" "$2" "$3" "$HERE" <<'PY2'
+import json,sys
+p,k,i,a,here=sys.argv[1:]
+sys.path.insert(0,here); import kanit; m=json.load(open(p)); r=m["kayitlar"][-1]
+r["olculen_kirli"]=True; r["asama"]=a
+if k=="1": r["kirli_kurali"]=1
+else: r.pop("kirli_kurali",None)
+if i=="0": r.pop("kirli_izin",None)
+m["imza"]=kanit.imza(m["kayitlar"])
+json.dump(m,open(p,"w"))
+PY2
+  ( cd "$T" && git add -A && git commit -q -m "chore: kayit" ) >/dev/null 2>&1
+}
+echo "════ O8b · yeni araç kaydı: kirli + izinsiz → ENGELLER (rc=1) ════"
+kur; B="$(bas_al)"; den "$B"; kayit_duzenle 1 0 tek; C="$(kapi)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "rc=1"; grep -q "izinsiz ölçülmüş" <<<"$C" && grep -q "olc/tek" <<<"$C"; g $? "kayıt adıyla engel söylendi"
+echo "════ O8c · eski araç kaydı (kirli_kurali yok): kirli yalnız UYARILIR ════"
+kur; B="$(bas_al)"; den "$B"; kayit_duzenle 0 0 tek; C="$(kapi)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "rc=0"; grep -q "commit'lenmemiş değişiklikli ağaçta ölçülmüş" <<<"$C"; g $? "uyarı söylendi"
+echo "════ O8d · once ölçümü kirli + izinsiz olsa da muaf ════"
+kur; B="$(bas_al)"; den "$B"; kayit_duzenle 1 0 once; C="$(kapi)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "rc=0 (once muaf)"
 
 echo "════ O9 · git diff düşerse kapı geçti SAYMAZ (fail-closed, rc=3) ════"
 kur; B="$(bas_al)"; den "$B"; ( cd "$T" && git add -A && git commit -q -m "docs: goz kaydi" ) >/dev/null 2>&1

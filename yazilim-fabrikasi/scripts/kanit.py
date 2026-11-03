@@ -9,6 +9,7 @@ Renkler: yesil (ölçtü, korudu) · kirmizi (ölçtü, korumuyor) · sari (ÖL�
 
 Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
+                  [--kirli-izin "<gerekçe ≥15>"]  ağaçta commit'lenmemiş değişiklik varsa ölçüm DURUR (rc 2); bilerek kirli ölçmenin açık bayrağı, gerekçe kayda yazılır
                   [--mutasyon <gerçek etiket> --kapi <düşmesi beklenen kapı adı>]  bilerek bozulmuş kodla koşum: dosya başı MUTASYON KANITI der,
                   renk ters (kırmızı = yakalandı). --kapi ZORUNLU: yakalandı = ADI VERİLEN kapı düşen kapı satırında görünür; başka kapı
                   düşmesi, çöküş ya da kurulamayan mutant (rc 9) SARI "ölçülemedi"dir
@@ -30,7 +31,7 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 """
 import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys, uuid
 
-SURUM = "kanit.py/0.6.1"   # 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
+SURUM = "kanit.py/0.7.0"   # 0.7.0: kirli ağaçta ölçüm DURUR, açık bayrak --kirli-izin ister; kayıt `kirli_kurali` + `kirli_izin` taşır (4 Kas 2026) · 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
 # 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
 # bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
@@ -174,6 +175,24 @@ def olculen_commit(dz):
         return None, None
 
 
+KIRLI_IZIN = None   # --kirli-izin gerekçesi (yalnız ağaç GERÇEKTEN kirliyse kayda yazılır)
+
+
+def kirli_kapisi(a, dz):
+    """Commit'lenmemiş değişikliği olan ağaçta ölçüm DURUR (görev …QHN4, kılıç bileme 3 Kas): son 3 günde 71 ölçümün 49'u kirli ağaçta alındı, göz turları
+    'hangi kod ölçüldü' tartışmasına gitti. Ölçüm yalnız HEAD'in kendisini ölçer; kirliyse ya commit'le ya da açık bayrakla (--kirli-izin "<gerekçe ≥15>")
+    kirli ölçtüğünü söyle — gerekçe kayda yazılır, kapı ölçümü adıyla ve gerekçesiyle gösterir. Ağaç okunamazsa (commit yok) DURMAZ: ölçülemedi ≠ kirli."""
+    global KIRLI_IZIN
+    izin = (getattr(a, "kirli_izin", None) or "").strip()
+    _oc, _ok = olculen_commit(dz)
+    if izin and len(izin) < 15:
+        hata("--kirli-izin gerekçesi en az 15 karakter ister (neden kirli ağaçta ölçüyorsun?). Ölçüm KOŞMADI.", 2)
+    if _ok and not izin:
+        hata("ağaçta commit'lenmemiş değişiklik var — ölçüm HEAD'in kendisini değil 'HEAD + yerel fark'ı ölçerdi (göz hangi kod ölçüldü diye soruyor). "
+             "Önce commit'le, sonra ölç. Bilerek kirli ölçeceksen: --kirli-izin \"<gerekçe ≥15 karakter>\" (kayda yazılır, kapı gösterir). Ölçüm KOŞMADI.", 2)
+    KIRLI_IZIN = izin if (_ok and izin) else None
+
+
 def kayit_ekle(depo, is_adi, kayit):
     birincil_reddi(depo, is_adi)
     dz = kanit_dizin(depo, is_adi); os.makedirs(dz, exist_ok=True)
@@ -203,6 +222,9 @@ def kayit_ekle(depo, is_adi, kayit):
     if _oc:
         kayit.setdefault("olculen_commit", _oc)
         kayit.setdefault("olculen_kirli", _ok)
+        kayit.setdefault("kirli_kurali", 1)   # bu kayıt kirli-ağaç kuralını bilen araçtan: kapı kirli+izinsiz kaydı ENGELLER (eski kayıt yalnız uyarılır)
+        if KIRLI_IZIN and _ok:
+            kayit.setdefault("kirli_izin", KIRLI_IZIN)
     eski_sira = next((i for i, k in enumerate(kayitlar) if k.get("dosya") == kayit.get("dosya")), None)
     if eski_sira is None:
         kayitlar.append(kayit)
@@ -385,6 +407,7 @@ def cmd_olcum(a):
     else:
         boru = {"temiz": "temiz", "kapsam-disi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"}[durum]
     depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    kirli_kapisi(a, dz)
     # 🧬 MUTASYON KAYDI (FR7M76 · #1136 tur 3, 15 Eki): bilerek bozulmuş kodla koşan sınavın ✗ satırları göze verilince GERÇEK ölçüm
     #    sanıldı ("kilit çalışmıyor" bulgusu, iş tıkandı); etiketteki "mutasyon" kelimesi yetmedi. --mutasyon <gerçek etiket>: kayıt
     #    mutasyon diye işaretlenir, dosyanın İLK satırı bunu söyler, renk tersine döner (kırmızı sınav = bozuk kod YAKALANDI = yeşil;
@@ -562,6 +585,7 @@ def _gelene_kopyala(a, yol, etiket):   # → kopya gerekmediyse ya da yazıldıy
 
 def _ekran_tek(a, etiket, genislik):
     depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    kirli_kapisi(a, dz)
     ad = f"ekran-{etiket}-{a.asama}.png"; yol = os.path.join(dz, ad)
     pw = playwright_dizin()
     temel = {"tur": "ekran", "etiket": etiket, "asama": a.asama, "dosya": ad, "url": a.url, "zaman": simdi()}
@@ -963,8 +987,8 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
-    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.add_argument("--kapi", dest="kapi", default=None, metavar="HEDEF_KAPI_ADI"); o.set_defaults(f=cmd_olcum)
-    e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
+    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.add_argument("--kapi", dest="kapi", default=None, metavar="HEDEF_KAPI_ADI"); o.set_defaults(f=cmd_olcum)
+    e = s.add_parser("ekran"); e.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
     e.add_argument("--uc-boy", action="store_true", help="1440 · 1280 · 390 — her boy ayrı kayıt (etiket-<boy>)"); e.add_argument("--boylar", type=_boylar, help="virgüllü genişlik listesi")
     e.add_argument("--gelen", metavar="KUTU", help="yeşil kareleri Sultan'ın gelen klasörüne <kutu>_<iş>-kare-… adıyla kopyala"); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
