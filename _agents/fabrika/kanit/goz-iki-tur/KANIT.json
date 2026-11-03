@@ -1,14 +1,14 @@
 {
   "is": "goz-iki-tur",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T18:59:55+03:00",
+  "guncelleme": "2026-11-03T19:27:05+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "tavan-eski-denetci",
       "asama": "once",
       "dosya": "olcum-tavan-eski-denetci-once.txt",
-      "sha256": "8b87069db6dd4ad862f119b1c90719dcbef68501b1a7773c57fdd1449c8e3acf",
+      "sha256": "e9a7dc777c13f6929f77f74019c60aef2bed4e72d4bbca2acab651d25a95ad63",
       "komut": [
         "env",
         "MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur/yazilim-fabrikasi/scripts/denetci-eski-gecici.sh",
@@ -17,11 +17,11 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-11-03T18:33:27+03:00",
+      "zaman": "2026-11-03T19:26:52+03:00",
       "sure_sn": 4.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "0c3353a6ccc1431ebe71ac066324d3cd",
-      "olculen_commit": "c2d7ef105dc3a329142a00029cb8a21a9f22dd4b",
+      "olcum_id": "3aa08fcf63e54e449155f08d867b75db",
+      "olculen_commit": "bf64fb210d41f8f5b38712cbec64d2ba33e4d7ac",
       "olculen_kirli": true
     },
     {
@@ -29,18 +29,18 @@
       "etiket": "tavan-yeni-denetci",
       "asama": "sonra",
       "dosya": "olcum-tavan-yeni-denetci-sonra.txt",
-      "sha256": "b1675214b9a42bfe74e7a9c0a12fc4c252e24b4b03c6dfb0c706b3e37a92f46a",
+      "sha256": "d9895ab922284059f9122a944a9681b630ba934e53ee32ce231bee85de321781",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/denetci-tavan.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-03T18:33:31+03:00",
-      "sure_sn": 3.7,
+      "zaman": "2026-11-03T19:26:56+03:00",
+      "sure_sn": 3.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "3af2d06ceba14c38854cfafc67f471b3",
-      "olculen_commit": "c2d7ef105dc3a329142a00029cb8a21a9f22dd4b",
+      "olcum_id": "d012fb3a0eb945dc8fd31d5e2db2a65f",
+      "olculen_commit": "bf64fb210d41f8f5b38712cbec64d2ba33e4d7ac",
       "olculen_kirli": true
     },
     {
@@ -48,21 +48,58 @@
       "etiket": "tam-paket-denetci",
       "asama": "sonra",
       "dosya": "olcum-tam-paket-denetci-sonra.txt",
-      "sha256": "57f606154c5a47c9c45550bab2a70573f71640170b0216c6064f2b1915529357",
+      "sha256": "0125b2b63efb9d68f163da49196c7b613ba648944f146314a0337e712777bb31",
       "komut": [
         "bash",
         "-c",
-        "tail -2 /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/denetci-dort.log; grep -c \"SONUÇ: 339 geçti · 0 kaldı\" /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/denetci-dort.log"
+        "tail -2 /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/denetci-bes.log"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-03T18:59:55+03:00",
+      "zaman": "2026-11-03T19:26:56+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "temiz",
-      "olcum_id": "b134badf587e48bbb841c26d144bf2f6",
-      "olculen_commit": "c2d7ef105dc3a329142a00029cb8a21a9f22dd4b",
+      "olcum_id": "5f191b436ba74afcb32d48a00c1aa793",
+      "olculen_commit": "bf64fb210d41f8f5b38712cbec64d2ba33e4d7ac",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "canli",
+      "etiket": "denetci-gercek-kosu",
+      "asama": "canli",
+      "dosya": "canli-denetci-gercek-kosu.txt",
+      "sha256": "fc81c18df98f19be0e8d6fc3d391ad7a26c4df895e514483c8b5a12dde0faecb",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/projects/Sx-Claude-Skills/_agents/fabrika/karne.jsonl"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/projects/Sx-Claude-Skills/_agents/fabrika/karne.jsonl",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "goz-iki-tur",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "{\"olay\": \"denetim\", \"is\": \"goz-iki-tur\", \"pr\": \"680\", \"zaman\": \"2026-11-03T19:01:23+03:00\", \"yazan\": \"claude\", \"denetci\": \"codex\", \"tur\": 1, \"puan\": 2, \"dogru\": \"H\", \"bulgu\": 2, \"gecti\": false, \"sure_dk\": 0.0, \"kirildi\": null, \"dalgic\": \"uyumsuz\"}",
+        "saat": "2026-11-03T19:01:23+03:00",
+        "saat_iso": "2026-11-03T19:01:23+03:00"
+      },
+      "son_atesleme": {
+        "satir": "{\"olay\": \"denetim\", \"is\": \"goz-iki-tur\", \"pr\": \"680\", \"zaman\": \"2026-11-03T19:01:23+03:00\", \"yazan\": \"claude\", \"denetci\": \"codex\", \"tur\": 1, \"puan\": 2, \"dogru\": \"H\", \"bulgu\": 2, \"gecti\": false, \"sure_dk\": 0.0, \"kirildi\": null, \"dalgic\": \"uyumsuz\"}",
+        "saat": "2026-11-03T19:01:23+03:00",
+        "saat_iso": "2026-11-03T19:01:23+03:00"
+      },
+      "zaman": "2026-11-03T19:27:05+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "55876bd1866f44a7ad84625cc3f8c663",
+      "olculen_commit": "bf64fb210d41f8f5b38712cbec64d2ba33e4d7ac",
       "olculen_kirli": true
     }
   ],
-  "imza": "7f5c0ed3508c332d2c0f8eb4eac9c3346cdb88c2379a0a9c833efed878451934"
+  "imza": "a3fd38908d2c30d72cf879176140fb3966dc6212d5564737a2f22daf29d0721b"
 }

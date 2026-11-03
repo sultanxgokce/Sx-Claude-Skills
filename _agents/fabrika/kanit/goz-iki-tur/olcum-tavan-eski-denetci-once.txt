@@ -1,12 +1,13 @@
 $ env MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur/yazilim-fabrikasi/scripts/denetci-eski-gecici.sh bash yazilim-fabrikasi/scripts/denetci-tavan.test.sh
-# rc=1 sure=4.2s zaman=2026-11-03T18:33:27+03:00
+# rc=1 sure=4.2s zaman=2026-11-03T19:26:52+03:00
 --- stdout ---
 ════ T7n · VARSAYILAN tavan 2 (+1 ilerleyene), 3 mutlak ════
   ✓ T7n tur1 rc=1
-  ✗ 🔴 T7n ilerlemeyen iş 2. turda TIKANDI (eski varsayılan 3. turdu), rc=4
+  ✓ T7n tur2 (düzeltme turu) geçmedi: 'düzelt' rc=1, henüz tıkanma yok
+  ✓ T7n iki göz turu koştu (DENETIM-2 yazıldı)
+  ✗ 🔴 T7n ilerlemeyen iş: TIKANMA 3. çağrıda, göz koşmadan rc=4
   ✗ T7n tıkandı raporu 'tavan 2' diyor
-  ✗ T7n 3. çağrı (ilerlemiyor) koşulmadı rc=4
-  ✗ T7n DENETIM-3 yazılmadı
+  ✗ T7n DENETIM-3 yazılmadı (3. göz turu YOK)
   ✓ T7n ilerleyen iş: tur1 rc=1
   ✓ T7n ilerleyen iş: tur2 rc=1 (puan↑ bulgu↓, tıkanmadı)
   ✓ T7n ilerleyen iş 3. tur payını alır ve 5/E ile GEÇER (rc=0)
@@ -16,5 +17,5 @@ $ env MUTANT_D=/config/projects/_wt/Sx-Claude-Skills-goz-iki-tur/yazilim-fabrika
   ✗ T7n DENETIM-4 yazılmadı
   ✗ T7n tavan dikişi yalnız sahte göz varken açılır (gerçek koşuda ortamdan okunmaz)
 
-── SONUÇ: 4 geçti · 9 kaldı ──
+── SONUÇ: 6 geçti · 8 kaldı ──
 --- stderr ---

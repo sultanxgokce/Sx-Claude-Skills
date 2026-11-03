@@ -7,7 +7,7 @@
 #   · kanıt yoksa ya da manifest bozuksa denetim AÇILMAZ (rc=2) — "kanıtsız adım 4 yok"
 #   · tavan 2 tur (1 bulgu + 1 düzeltme); ilerleyen işe (puan↑ VE açık bulgu↓) +1; ÜÇ mutlak → sonrası "tıkandı + üç yol" (rc=4)
 #   · --sultan-devam : KARTA işlenmiş Sultan kararını (kart.sh sultan-dedi) okur ve "ilerlemiyor"
-#     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (4) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
+#     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (3) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
 #   · --reis-devam   : SINIFSIZ işte KARTA işlenmiş sahip/reis kararını (kart.sh reis-dedi) okur; aynı sınırlar.
 #     Sınıflı kartta AÇILMAZ (o kararın merci Sultan'dır). Defter satırı TAVAN-ACILDI-REIS, gün sonu özetinde görünür.
 #
@@ -1198,7 +1198,11 @@ if [ "$YAKMAYAN" -gt "$KD_TAVAN" ]; then
   _bilgi "   3) GERİ AL — alanı kapat, ders deftere"
   exit 4
 fi
-if [ "$SAYILI_SON" -ge "$TAVAN" ]; then
+# TIKANMA 3'TE (Sultan 3 Kas 2026, öneri #2: "tavan 2, tıkanma 3'te"): tavan iki göz turudur (1 bulgu + 1 düzeltme); 2. tur da geçmediyse
+# iş "adım 2'ye dön" (rc=1) alır, tıkanma ÜÇÜNCÜ çağrıda söylenir (ilerlemiyorsa üstteki kapı koşmadan rc=4; ilerliyorsa +1 pay turu koşar
+# ve geçmezse orada rc=4). Eşik sabit 3: eski 3/4 dikişli sınavlarda tavanla çakışır, davranış değişmez.
+TIKANMA=3
+if [ "$SAYILI_SON" -ge "$TIKANMA" ]; then
   ONCEKI=$TUR
   if [ "$SAYILI_SON" -lt "$MUTLAK" ] && ilerliyor_mu; then _bilgi "↩ adım 2'ye dön (sayılı tur $SAYILI_SON/$TAVAN) — iş ilerliyor, +1 tur payı var"; exit 1; fi
   tikandi_raporu; exit 4

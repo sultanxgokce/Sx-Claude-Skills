@@ -22,14 +22,16 @@ unset DENETCI_TAVAN DENETCI_MUTLAK   # ölçülen şey VARSAYILAN: dikiş açık
 N() { SAHTE_JSON="$1" bash "$D" "$2" --diff "$T/d.patch" 2>&1; }
 
 echo "════ T7n · VARSAYILAN tavan 2 (+1 ilerleyene), 3 mutlak ════"
-# Anlam: 1. tur bulgu, 2. tur düzeltme. İlerlemeyen iş 2. turda tıkanır (eski varsayılan 3. turdu). İlerleyen iş 3. turu alır, orada mutlak.
+# Anlam: tavan iki göz turu (1 bulgu + 1 düzeltme). 2. tur da geçmediyse iş "düzelt" (rc=1) alır; TIKANMA ÜÇÜNCÜ çağrıda söylenir.
+# İlerlemeyen iş 3. çağrıda göz koşmadan rc=4 alır; ilerleyen iş 3. turu (+1 pay) koşar, orada mutlak.
 bash "$K" olcum is-n1 olc --asama tek -- echo 1 >/dev/null 2>&1
 N "$(J 2 H "$B,$B")" is-n1 >/dev/null; [ $? -eq 1 ]; g $? "T7n tur1 rc=1"
-CIKTI="$(N "$(J 2 H "$B,$B")" is-n1)"; RC=$?
-[ "$RC" -eq 4 ]; g $? "🔴 T7n ilerlemeyen iş 2. turda TIKANDI (eski varsayılan 3. turdu), rc=4"
+N "$(J 2 H "$B,$B")" is-n1 >/dev/null; [ $? -eq 1 ]; g $? "T7n tur2 (düzeltme turu) geçmedi: 'düzelt' rc=1, henüz tıkanma yok"
+[ -f "$T/_agents/fabrika/kanit/is-n1/DENETIM-2.json" ]; g $? "T7n iki göz turu koştu (DENETIM-2 yazıldı)"
+CIKTI="$(N "$(J 5 E "")" is-n1)"; RC=$?
+[ "$RC" -eq 4 ]; g $? "🔴 T7n ilerlemeyen iş: TIKANMA 3. çağrıda, göz koşmadan rc=4"
 grep -q "tavan 2" <<<"$CIKTI"; g $? "T7n tıkandı raporu 'tavan 2' diyor"
-N "$(J 5 E "")" is-n1 >/dev/null; [ $? -eq 4 ]; g $? "T7n 3. çağrı (ilerlemiyor) koşulmadı rc=4"
-[ ! -f "$T/_agents/fabrika/kanit/is-n1/DENETIM-3.json" ]; g $? "T7n DENETIM-3 yazılmadı"
+[ ! -f "$T/_agents/fabrika/kanit/is-n1/DENETIM-3.json" ]; g $? "T7n DENETIM-3 yazılmadı (3. göz turu YOK)"
 bash "$K" olcum is-n2 olc --asama tek -- echo 1 >/dev/null 2>&1
 N "$(J 2 H "$B,$B,$B")" is-n2 >/dev/null; [ $? -eq 1 ]; g $? "T7n ilerleyen iş: tur1 rc=1"
 N "$(J 3 H "$B,$B")" is-n2 >/dev/null; [ $? -eq 1 ]; g $? "T7n ilerleyen iş: tur2 rc=1 (puan↑ bulgu↓, tıkanmadı)"
@@ -42,6 +44,6 @@ N "$(J 4 H "$B")" is-n3 >/dev/null; [ $? -eq 4 ]; g $? "T7n pay turu da geçmedi
 N "$(J 5 E "")" is-n3 >/dev/null; [ $? -eq 4 ]; g $? "🔴 T7n 4. çağrı MUTLAK: pay ile bile en çok 3 göz turu"
 [ ! -f "$T/_agents/fabrika/kanit/is-n3/DENETIM-4.json" ]; g $? "T7n DENETIM-4 yazılmadı"
 # Dikiş yalnız sahte göz varken açılır: gerçek koşuda ortam değişkeni tavanı yükseltemez
-( export DENETCI_TAVAN=9 DENETCI_MUTLAK=9; unset DENETCI_KOMUT SAHTE_JSON; sed -n '/^TAVAN=2; MUTLAK=3/,/^fi$/p' "$D" | grep -q 'DENETCI_KOMUT' ); g $? "T7n tavan dikişi yalnız sahte göz varken açılır (gerçek koşuda ortamdan okunmaz)"
+DIKIS="$(sed -n '/^TAVAN=2; MUTLAK=3/,/^fi$/p' "$D")"; grep -q 'DENETCI_KOMUT' <<<"$DIKIS"; g $? "T7n tavan dikişi yalnız sahte göz varken açılır (gerçek koşuda ortamdan okunmaz)"
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

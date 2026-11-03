@@ -22,7 +22,7 @@
    `kart.sh canli-borc <iş> --yazan <sahip> --gerekce "…"` → kapı borçla geçer (sınıflı işte önce `kart.sh sultan-dedi --karar canli-borc`; ajan Sultan adına yazmaz)
    → birleştir → kur → `kanit.sh canli …` (borçtan SONRA, bağlı yeşil) → `kart.sh bitti`. Kart o zamana dek `canli-borclu`dur (bitti değil); `kart.sh borclar` 24 saati aşanı kırmızı gösterir.
 4. **5 ve E değilse adım 2'ye dön:** düzelt → yeniden kanıtla → yeniden gönder.
-   - Tavan **2 tur** (bir bulgu turu + bir düzeltme turu). İlerleyen işe (puan yükseldi **ve** açık bulgu azaldı) **+1**. **Üç mutlak.**
+   - Tavan **2 tur** (bir bulgu turu + bir düzeltme turu). İlerleyen işe (puan yükseldi **ve** açık bulgu azaldı) **+1**. **Üç mutlak.** Tıkanma üçüncü çağrıda söylenir (ikinci tur geçmediyse önce "düzelt" dönersiniz).
    - 🔴 **Tavan SAYILI tura uygulanır** (15 Eki 2026, görev WC3VBZAA). Bir bulgu gerçek olabilir ama bu
      kutuda **ölçülemez/düzeltilemez** olabilir: Sultan'ın Mac'i, canlı yetki, dış hesap, fiziksel cihaz.
      Denetçi onu `agirlik: "kutu-disi"` + `kutu_disi_yuzey` ile yazar; o bulgu **puanı düşürmez** ve
