@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "duzen-surum-yenileme-g25",
+  "pr": "671",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T12:44:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-surum-yenileme-g25",
+  "dal": "duzen-surum-yenileme-g25",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10809,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3453
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2e0b3e4b3766e19a8886a0ff4c4f7819e10ce703",
+  "duzeltme_farki": {
+    "onceki_bas": "fd98df59d68f1679be4dd7063ec24bb873a9e1a6",
+    "dosya": 3,
+    "bayt": 3985,
+    "tam_bayt": 10851
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düzen becerisinin gövde başlığı 1.6.6’dan 1.6.8’e yükseltilerek önceki turdaki sürüm çelişkisi giderilmiş; B1 kapanmış. PR bütününde üretimi engelleyen veya yeni bir uygulama kusuru gösterilmediğinden kod üretime hazır, ancak kanıt gece işinin gerçek yenileme ve kimlikli günlük sonucunu doğrulamıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve iki kayıt yeşil; fakat ölçüm çifti karşılaştırılabilir değil: önce `--sx /config/projects/Sx-Claude-Skills`, sonra `--sx .` kullanıyor ve iki kayıt da kirli çalışma ağacındaki aynı commit’i ölçüyor. Sonraki kayıt yalnız kuru kipte `duzen 1.6.7 → 1.6.8 kurulacaktı` diyor; 03:17 işinin bayat el defterlerini gerçekten yenilediğini ve günlüğe kimlik adıyla yazdığını ölçmüyor. Bu kanıt eksikliği, verilen farkta somut bir kod kusurunu kanıtlamadığından ayrıca bulguya çevrilmedi."
+  }
+}
