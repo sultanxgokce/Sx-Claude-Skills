@@ -1,0 +1,43 @@
+{
+  "is": "sirada-bak-sinavi-dizinden-bagimsiz",
+  "cumle": "sirada-bak.test.sh S18 kimliği tmux oturumundan ve depo kökündeki kayıttan alıyor; sınav ortamı yalıtılır",
+  "istedi": "BÂNİ",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-03T16:51:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-03T16:51:33+03:00",
+      "olay": "gorev-bagla",
+      "reis": "BENNÂ",
+      "gorev": "gorev_01M6GTTFKBEA01W7K08KJ51J7T",
+      "kimlik": "bag-3263427-1793713893109122169"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev": "gorev_01M6GTTFKBEA01W7K08KJ51J7T",
+  "tahmin_dk": 45,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T16:51:34+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı",
+      "kimlik": "bag-3263427-1793713893109122169"
+    }
+  ]
+}
