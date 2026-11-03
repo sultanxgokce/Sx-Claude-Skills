@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh
-# rc=0 sure=65.4s zaman=2026-11-04T00:21:13+03:00
+# rc=0 sure=66.7s zaman=2026-11-04T00:30:53+03:00
 --- stdout ---
 ════ O1 · bas = birleşen uç → GEÇER ════
   ✓ rc=0 (bas = uç)
@@ -46,6 +46,9 @@ $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh
   ✓ uyarı söylendi
 ════ O8d · once ölçümü kirli + izinsiz olsa da muaf ════
   ✓ rc=0 (once muaf)
+════ O8e · eski kirli+izinsiz kayıt, SONRA aynı etiket/aşamada temiz yeniden ölçüm → geçer (son kayıt belirler) ════
+  ✓ rc=0 (yerini alan temiz kayıt)
+  ✓ engel söylenmedi
 ════ O9 · git diff düşerse kapı geçti SAYMAZ (fail-closed, rc=3) ════
   ✓ rc=3 (fark alınamadı)
   ✓ yeşil ✓ basılmadı
@@ -54,5 +57,5 @@ $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh
   ✓ O11 · PR başına puandan sonra kod girdi → rc=1, dosya adıyla
 ════ O12 · KANIT kaydı uçun soyundan OLMAYAN commit'te ölçülmüş → engellemez, söylenir ════
   ✓ yabancı commit'te ölçülmüş kayıt adıyla uyarıldı, engellenmedi
-── SONUÇ: 33 geçti · 0 kaldı ──
+── SONUÇ: 35 geçti · 0 kaldı ──
 --- stderr ---

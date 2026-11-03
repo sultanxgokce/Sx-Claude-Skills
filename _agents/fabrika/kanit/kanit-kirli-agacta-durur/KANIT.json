@@ -1,7 +1,7 @@
 {
   "is": "kanit-kirli-agacta-durur",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-04T00:21:13+03:00",
+  "guncelleme": "2026-11-04T00:30:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -29,18 +29,18 @@
       "etiket": "kirli-agac",
       "asama": "sonra",
       "dosya": "olcum-kirli-agac-sonra.txt",
-      "sha256": "51d2468923ed5b4312eaef5062fafb2ae5c70d1b30f883f74d400b053da84c77",
+      "sha256": "010b0db30465eb50cc1bc95da8cd83148e506e2738085384c909475609669f34",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-04T00:20:00+03:00",
-      "sure_sn": 1.0,
+      "zaman": "2026-11-04T00:29:46+03:00",
+      "sure_sn": 1.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "aa9580bb58d34d74b2e080a822fdf994",
-      "olculen_commit": "e12f663bf8bf70b7a5637d7fd38d5d7f2a88a5bf",
+      "olcum_id": "c7c567b24e4c41b4b25f19c515d73e2a",
+      "olculen_commit": "01a5187151bb7640ad22d69dec9d6a9f32258a35",
       "olculen_kirli": false
     },
     {
@@ -48,20 +48,20 @@
       "etiket": "kapi-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinavi-sonra.txt",
-      "sha256": "619198359451faa9b78ce5c6a4a51370a927cc3a64fc5dcce1b4b799123efe2b",
+      "sha256": "66e20e01285e98200c955fd06032ddabc0b02e8c48f3a287b1221d3662c84bf9",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-04T00:21:13+03:00",
-      "sure_sn": 65.4,
+      "zaman": "2026-11-04T00:30:53+03:00",
+      "sure_sn": 66.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b18cff6aab8845afb3ed141d5cf72eaf",
-      "olculen_commit": "e12f663bf8bf70b7a5637d7fd38d5d7f2a88a5bf",
+      "olcum_id": "af65508bf7704ab0abdff530825688a5",
+      "olculen_commit": "01a5187151bb7640ad22d69dec9d6a9f32258a35",
       "olculen_kirli": false
     }
   ],
-  "imza": "9a3de4a6bd9cdb9f54a3efdf8169b175201ef939bc46b94d328a06a3a614b3ce"
+  "imza": "3a9993156e330b21ffd92359c8e6b46b3154ed7fe1064d192d9db7b81c4bf97f"
 }

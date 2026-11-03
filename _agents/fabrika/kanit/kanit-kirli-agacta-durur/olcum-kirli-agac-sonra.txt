@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
-# rc=0 sure=1.0s zaman=2026-11-04T00:20:00+03:00
+# rc=0 sure=1.1s zaman=2026-11-04T00:29:46+03:00
 --- stdout ---
 ════ K1 · temiz ağaç: olculen_commit = HEAD, olculen_kirli = False ════
   ✓ olculen_commit HEAD ile aynı
@@ -24,5 +24,8 @@ $ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
   ✓ kirli_izin yazıldı
   ✓ temiz ağaçta kirli_kurali=1
   ✓ temiz ağaçta kirli_izin yazılmadı
-── SONUÇ: 15 geçti · 0 kaldı ──
+════ K9 · dosya kaydı kirli ağaçta kural damgası taşımaz (kapı onu engellemesin) ════
+  ✓ dosya kaydı yazıldı
+  ✓ dosya kaydında kirli_kurali yok
+── SONUÇ: 17 geçti · 0 kaldı ──
 --- stderr ---
