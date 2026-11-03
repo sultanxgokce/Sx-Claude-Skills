@@ -1,7 +1,7 @@
 {
   "is": "goz-iki-tur",
   "arac": "kanit.py/0.6.1",
-  "guncelleme": "2026-11-03T19:27:05+03:00",
+  "guncelleme": "2026-11-03T19:29:18+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -99,7 +99,26 @@
       "olcum_id": "55876bd1866f44a7ad84625cc3f8c663",
       "olculen_commit": "bf64fb210d41f8f5b38712cbec64d2ba33e4d7ac",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-disi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-disi-sinavi-sonra.txt",
+      "sha256": "6ea731d7718425a1f61f5f5f8bf793ea841aeae3b9b2aff24ad26def0c298a60",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T19:29:18+03:00",
+      "sure_sn": 48.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c3be4439ec704de5bd47a6670fb527d9",
+      "olculen_commit": "062e6b73e93d480e1617657dc95be27ef904c4e5",
+      "olculen_kirli": false
     }
   ],
-  "imza": "a3fd38908d2c30d72cf879176140fb3966dc6212d5564737a2f22daf29d0721b"
+  "imza": "2f9bdde8a1726d407bdc32699f86b2b8547efef4d4e44423eee7946565b1f654"
 }
