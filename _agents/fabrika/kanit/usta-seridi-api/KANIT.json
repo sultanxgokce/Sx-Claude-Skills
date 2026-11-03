@@ -1,0 +1,47 @@
+{
+  "is": "usta-seridi-api",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T04:52:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sunucu.test.mjs 144 kapi (UY1-UY3)",
+      "asama": "tek",
+      "dosya": "olcum-sunucu.test.mjs 144 kapi (UY1-UY3)-tek.txt",
+      "sha256": "1c13c643c590a322793a2ffc42d1bc23d47a497e4a77233f7c2e8ace4184c16a",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:52:03+03:00",
+      "sure_sn": 8.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "447125e756cc4b8ea13776526f1fcbc2",
+      "olculen_commit": "01c219ae5bbd7672544b88f7daf7e15c09daa1ca",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: koltukta-olan elemesi kalkinca UY1 kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutant: koltukta-olan elemesi kalkinca UY1 kirmizi-tek.txt",
+      "sha256": "9aae118238e01dc31608693cf6355986c50d5d90525688979dbf63cf3d9ca78b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-usta-seridi-api"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:52:19+03:00",
+      "sure_sn": 9.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "61b3edf40ed74f6f83f42bba4eeb48fb",
+      "olculen_commit": "01c219ae5bbd7672544b88f7daf7e15c09daa1ca",
+      "olculen_kirli": false
+    }
+  ],
+  "imza": "1af430124a9e42f44d48d06a5af6003bebfa042b1c084da6ca9d8a4578bd92d3"
+}
