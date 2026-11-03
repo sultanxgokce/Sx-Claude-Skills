@@ -1027,21 +1027,26 @@ PY
 import json,sys,glob,os
 kd,hdir,ad,esik=sys.argv[1:]
 sys.path.insert(0,hdir); from canli_borc import yas_saat
-def norm(x): return (x or "").strip().replace("â","a").replace("Â","A").upper()
+def norm(x):
+    t=(x or "").strip()
+    for a_,b_ in (("İ","I"),("ı","I"),("â","a"),("Â","A"),("î","i"),("Î","I")): t=t.replace(a_,b_)
+    return t.upper()
 try: esik=float(esik)
 except ValueError: print("esik-saat sayı olmalı", file=sys.stderr); raise SystemExit(3)
 if not ad: print("kullanım: kart.sh borclar-sahip <AD> [--esik-saat N]", file=sys.stderr); raise SystemExit(3)
-gec=0
+gec=0; bozuk=0
 for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try: k=json.load(open(p,encoding="utf-8"))
-    except Exception: continue
+    except Exception: bozuk+=1; continue
     if k.get("durum")!="canli-borclu" or norm(k.get("aldi"))!=norm(ad): continue
     y=yas_saat(k)
     if y is not None and y<=esik: continue
     gec+=1
     g=((k.get("canli_borc") or {}).get("gerekce") or "").replace("\t"," ").replace("\n"," ")[:140]
     print("BORC\t%s\t%s\t%s" % (k["is"], "?" if y is None else "%.0f" % y, g))
-raise SystemExit(1 if gec else 0)
+if gec: raise SystemExit(1)
+if bozuk: print("OKUNAMADI\t%d kart okunamadı — borç yok DENMEZ" % bozuk, file=sys.stderr); raise SystemExit(3)
+raise SystemExit(0)
 PY
     ;;
   izin-durum)

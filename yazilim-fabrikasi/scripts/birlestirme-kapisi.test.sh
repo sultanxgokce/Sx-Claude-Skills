@@ -512,6 +512,16 @@ bash "$KT" borclar-sahip "$SAH" >/dev/null 2>&1; g $? "T14l2 30 saatlik borç va
 CIKTI="$(bash "$KT" borclar-sahip "$SAH" --esik-saat 24 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "^BORC	is-b1	30	" <<<"$CIKTI"; g $? "T14l3 eşik 24: sahibinin borcu 'BORC<TAB>iş<TAB>saat<TAB>gerekçe' satırıyla listelenir, rc=1"
 bash "$KT" borclar-sahip BASKASI --esik-saat 24 >/dev/null 2>&1; g $? "T14l4 başka koltuğun borcu bu sahibi etkilemez (rc=0)"
+python3 - "$T/_agents/fabrika/kartlar/is-b1.json" <<'PY'
+import json,sys; p=sys.argv[1]; k=json.load(open(p)); k["aldi"]="MUAVİN"; json.dump(k,open(p,"w"))
+PY
+bash "$KT" borclar-sahip MUAVIN --esik-saat 24 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14l6 sahip adı İ/I farkını yutar: kartta MUAVİN, sorgu MUAVIN → borç görünür (rc=1 beklenir)"
+printf '{bozuk' > "$T/_agents/fabrika/kartlar/zz-bozuk.json"
+bash "$KT" borclar-sahip BASKASI --esik-saat 24 >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T14l7 okunamayan kart varken borç bulunamazsa rc=3 (ölçülemedi), 'borç yok' DENMEZ"
+find "$T/_agents/fabrika/kartlar" -name zz-bozuk.json -delete
+python3 - "$T/_agents/fabrika/kartlar/is-b1.json" "$SAH" <<'PY'
+import json,sys; p=sys.argv[1]; k=json.load(open(p)); k["aldi"]=sys.argv[2]; json.dump(k,open(p,"w"))
+PY
 bash "$KT" borclar-sahip >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T14l5 sahip adı verilmezse rc=3 (ölçülemedi; temiz DENMEZ)"
 # ödeme: borçtan SONRA alınan bağlı yeşil canlı kayıt
 mkdir -p "$LGK"; sleep 1; printf '%s boşta-bekcisi çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/b1.log"
