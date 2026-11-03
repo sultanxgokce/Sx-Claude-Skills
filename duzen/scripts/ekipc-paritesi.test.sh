@@ -12,7 +12,7 @@ ok() { if [ "$2" -eq 0 ]; then G=$((G+1)); echo "  ✓ $1"; else K=$((K+1)); ech
 python3 -c "import yaml" 2>/dev/null || { echo "  ? ÖLÇÜLEMEDİ: PyYAML yok — ekipc çalıştırılamaz (rc 3; yeşil DEĞİL)"; exit 3; }
 
 # ÇİVİLİ md5 — paketleme anında Nexus kanoniğinden (scripts/ekipc.sh) ölçülen değer. Kanonik değişince: kopyala + bu satırı güncelle.
-CIVI="8dc47be0c338dc523fbb60e1fe798820"
+CIVI="51f23e96bc581dbaa5e38441250b4079"
 b="$(md5sum < "$E" | cut -d' ' -f1)"
 bash -n "$E" 2>/dev/null; ok "P1a paketlenmiş ekipc.sh var ve sözdizimi geçerli" "$([ $? -eq 0 ] && [ -f "$E" ] && echo 0 || echo 1)"
 ok "P1b paket kopyası çivili md5 ile EŞİT ($CIVI)" "$([ "$b" = "$CIVI" ] && echo 0 || echo 1)" "→ paket $b (kanoniği yeniden kopyala ve çiviyi güncelle)"

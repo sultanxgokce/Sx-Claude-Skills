@@ -230,9 +230,9 @@ def temel_oku(yol):
     return (k[1] if len(k) > 1 else "") if (k[0].startswith(PAKET_BASLIK) and k[0].rstrip().endswith("-->")) else t
 
 def kaynak_etiketi(yol):
-    """Üretilen bölgeye giren kaynak etiketi: YOLA BAĞLI DEĞİL, tek mantıksal ad (ekip-os-base/<dosya>). Nexus'ta katalog _agents/ekip-os-base/,
-    izole kutuda betiğin yanındaki cekirdek/ — iki ortamda üretilen bölge bayt-aynıdır (hash'ler uyuşur) ve etiket olmayan bir yolu iddia etmez."""
-    return "ekip-os-base/" + os.path.basename(yol)
+    """Üretilen bölgeye giren kaynak etiketi: iki ortamda BAYT-AYNI ve iki yolu da doğru söyler. Nexus'ta katalog _agents/ekip-os-base/, izole kutuda betiğin yanındaki
+    cekirdek/; etiket mantıksal adı verir ve her iki yeri adıyla gösterir — böylece hash'ler uyuşur ve okuyan hangi kutuda neye bakacağını bilir."""
+    return "ekip-os-base/" + os.path.basename(yol) + " (Nexus: _agents/ekip-os-base/ · düzen paketi: cekirdek/)"
 
 BASE_ROL = {}       # {rol-adı: charter-dosya-adı} — HÜCRE-ROLÜ base'i (base_roller; govde ORTAK-TEMEL'i buradan)
 PERSONA_BAZ = {}    # {persona-tip: charter-dosya-adı} — ORG-PERSONA ortak-temeli (persona_baz; benimse --baz, D5).
