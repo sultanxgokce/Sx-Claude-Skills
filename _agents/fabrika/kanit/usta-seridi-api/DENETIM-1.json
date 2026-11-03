@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "usta-seridi-api",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T04:53:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-seridi-api",
+  "dal": "usta-seridi-api",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20962,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 15101
+  },
+  "dalgic": "uyumlu",
+  "bas": "6a8b674da0b198cc8655af83197a458eed121204",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kapı, usta.sh liste kaynağındaki uyuyan ustaları ayrı uyuyanlar alanında hal:uyuyor ile döndürüyor; mevcut koltuklar sözleşmesini koruyor ve hata halinde güvenli biçimde boş liste veriyor. Talep doğru karşılanmış, ancak asıl usta.sh ile sözleşme entegrasyonu ölçülmediği için üretime hazır damgasından önce bu sınav çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "UY sınavı gerçek usta.sh yerine sınavın kendi tanımladığı sahte betiği kullanıyor; dolayısıyla gerçek betiğin argümanları ve çıktı biçimiyle uyum kanıtlanmış değil.",
+        "kanit": "UY bloğu usta-sahte.sh dosyasını kendi üretip KAPI_USTA_BETIK üzerinden sunucuya veriyor; ölçümde yalnız UY1-UY3 geçişleri var, gerçek terminal-onar/scripts/usta.sh çağrısına ait kayıt yok.",
+        "konum": "terminal-onar/kapi/sunucu.test.mjs:702",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve gerçek kod ölçümü yeşil: 144/144 sınav geçiyor; UY1-UY3 ayrıştırma, geriye uyumluluk ve hata dönüşünü kapsıyor. Ancak gerçek usta.sh entegrasyonu ölçülmemiş; ayrıca mutant kaydı manifestte mutasyon:true taşımadığı için rubriğe göre resmî mutasyon kanıtı sayılamaz ve bir önce/sonra ya da gerçek kaynakla ölçüm çifti yoktur."
+  }
+}
