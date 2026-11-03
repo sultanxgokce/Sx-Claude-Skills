@@ -1,0 +1,34 @@
+{
+  "is": "goz-duzeltme-farki-cakisan-birlesim",
+  "cumle": "Göz düzeltme farkı: ana dal birleşimi çatışınca (sürüm dosyaları) main değişikliği 'bu turda eklendi' sanılmasın",
+  "istedi": "BÂNİ",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-03T20:35:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6H67EC81HVF6F7WK3519DN6",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-03T20:35:51+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
