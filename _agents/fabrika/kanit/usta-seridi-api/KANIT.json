@@ -1,0 +1,106 @@
+{
+  "is": "usta-seridi-api",
+  "arac": "kanit.py/0.6.1",
+  "guncelleme": "2026-11-03T04:55:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sunucu.test.mjs 144 kapi (UY1-UY3)",
+      "asama": "tek",
+      "dosya": "olcum-sunucu.test.mjs 144 kapi (UY1-UY3)-tek.txt",
+      "sha256": "1c13c643c590a322793a2ffc42d1bc23d47a497e4a77233f7c2e8ace4184c16a",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:52:03+03:00",
+      "sure_sn": 8.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "447125e756cc4b8ea13776526f1fcbc2",
+      "olculen_commit": "01c219ae5bbd7672544b88f7daf7e15c09daa1ca",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: koltukta-olan elemesi kalkinca UY1 kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutant: koltukta-olan elemesi kalkinca UY1 kirmizi-tek.txt",
+      "sha256": "9aae118238e01dc31608693cf6355986c50d5d90525688979dbf63cf3d9ca78b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-usta-seridi-api"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:52:19+03:00",
+      "sure_sn": 9.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "61b3edf40ed74f6f83f42bba4eeb48fb",
+      "olculen_commit": "01c219ae5bbd7672544b88f7daf7e15c09daa1ca",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu.test.mjs 145 kapi (UY1-UY4, UY4 gercek usta.sh)",
+      "asama": "tek",
+      "dosya": "olcum-sunucu.test.mjs 145 kapi (UY1-UY4, UY4 gercek usta.sh)-tek.txt",
+      "sha256": "6930c5cd2b7b440118867db97e6d5fd4b1db69df7ad68573bda123e6c5f40a80",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:54:30+03:00",
+      "sure_sn": 8.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e6aaade2099c48fc8dd2bbe7dcf8ad00",
+      "olculen_commit": "4b5c94d10ae84475e1e7cba257d5558344532d6e",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: kapi --proje gondermezse UY4 kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutant: kapi --proje gondermezse UY4 kirmizi-tek.txt",
+      "sha256": "c6517de6516b24fb776d3ceb91f76bea340a260dfefef2a11d709c5848c0957d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut2.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-usta-seridi-api"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:55:03+03:00",
+      "sure_sn": 8.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3de90e3b04ae4ab795cd0e9d6de179f5",
+      "olculen_commit": "4b5c94d10ae84475e1e7cba257d5558344532d6e",
+      "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: usta.sh liste sutun sirasi bozulursa yalniz UY4 kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutant: usta.sh liste sutun sirasi bozulursa yalniz UY4 kirmizi-tek.txt",
+      "sha256": "b03dae105799e30e3cc64db3c1f470e9f4ea60208f65764f0c7777ed55cc8900",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut2.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-usta-seridi-api"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-03T04:55:19+03:00",
+      "sure_sn": 8.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "15d20520b4e34a4985b661439e3a0a24",
+      "olculen_commit": "4b5c94d10ae84475e1e7cba257d5558344532d6e",
+      "olculen_kirli": true
+    }
+  ],
+  "imza": "ae33fbef3474ec82d0920ee9b3461bb54bcce99d5c61a98bb6c66bf4c190b592"
+}

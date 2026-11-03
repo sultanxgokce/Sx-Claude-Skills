@@ -1,9 +1,12 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.39.1
+version: 2.40.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.40.0 · Uyuyan ustalar `/api/koltuklar` yanıtında ayrı alan: `uyuyanlar` (3 Kas · kart usta-seridi-api · şerit gri koltuk için veri tarafı)
+Kapı, `usta.sh liste` çıktısından yalnız `uyuyor` olan ustaları `uyuyanlar: [{ad, hal:"uyuyor"}]` olarak yanıta ekler. 🔴 `koltuklar` dizisine KARIŞMAZ (koltuk-fark ve kadro tüketicileri bozulmasın). Uyanık usta zaten koltuktur, `kayit-eksik` olan uyandırılamaz → ikisi de yok; koltukta olan ad ve tekrar atlanır, süzgeçten geçmeyen ad düşer, klasör yanıta YAZILMAZ. `usta.sh` düşerse ya da yoksa liste DÜŞMEZ: `uyuyanlar` boş döner. Uyandırma yolu değişmedi: `POST /api/koltuk/<ad>/ac` → koltuk-ac usta yolu. Betik yolu `KAPI_USTA_BETIK` ile değişir. Sınav: `kapi/sunucu.test.mjs` UY1–UY4 (145 kapı; UY4 GERÇEK usta.sh ile) + 2 mutant (koltukta-olan elemesi kalkınca UY1, usta.sh liste sütun sırası bozulursa yalnız UY4 kırmızı). Şeritte GRİ çizim bu sürümde YOK: cloudtop `sayfalar.mjs` ayrı kart ve ayrı PR.
 
 ## 🆕 2.39.1 · Kadro kayıt okuyucu liste bitince bloğu kapatır (3 Kas · kart kadro-okuyucu-blok-siniri · bulgu …EQ1GGG)
 `kapi/kadro.mjs` `kayitAyristir`: `uyeler:` listesi bitince (`- id:` satırından daha az girintili, yorum olmayan ilk satır) blok kapanır;

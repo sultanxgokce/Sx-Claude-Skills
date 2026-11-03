@@ -16,7 +16,7 @@ import { koltukKimlik as _kk, KOLTUK_KIMLIK_DESEN as _KD } from './koltuk-kimlik
 // beklenen ekran adresi: ad DEĞİL kimlik (aynı tuz) · ADI TAŞIMADIĞI ayrıca ölçülür (adr)
 const ekr = (ad) => '/sedir/tty/?arg=' + _kk(ad);
 const adr = (o, ad) => !!o && o.ekran === ekr(ad) && _KD.test(o.kimlik || '') && o.kimlik === _kk(ad) && !o.ekran.includes(encodeURIComponent(ad)) && !o.ekran.includes(ad);
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, rmSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -696,6 +696,45 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const { odaBul } = await import(pathToFileURL(join(KOK, 'oda.mjs')).href);
   kapi('OD7 göreli ya da boş dizin → oda aranmaz (null)', odaBul('agentic-os') === null && odaBul('') === null && odaBul(undefined) === null);
   pd.kill();
+}
+
+console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-seridi-api) ──');
+{
+  // sahte usta.sh: liste → ad<TAB>durum<TAB>klasör. İlk üçü anlamlı; BASIRET koltuklar'da zaten var (uyanık sayılır, tekrar eklenmez); kotu:ad süzgeçten düşer; kayit-eksik gösterilmez
+  const USTA_SAHTE = join(T, 'usta-sahte.sh');
+  writeFileSync(USTA_SAHTE, '#!/usr/bin/env bash\n[ "$1" = liste ] || exit 2\n'
+    + 'printf "PERGEL\\tuyuyor\\t/x/pergel\\nKUKLACI\\tuyuyor\\t/x/kuklaci\\nBASIRET\\tuyuyor\\t/x/b\\nSOHBETSIZ\\tkayit-eksik\\t/x/s\\nUYANIK1\\tuyanik\\t/x/u\\nkotu:ad\\tuyuyor\\t/x/k\\nPERGEL\\tuyuyor\\t/x/pergel\\n"\n');
+  const USTA_BOZUK = join(T, 'usta-bozuk.sh');
+  writeFileSync(USTA_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
+  const ku = await kapiAc('/sedir', 18871, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, KAPI_USTA_BETIK: USTA_SAHTE });
+  const oku = await iste(18871, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cu = 'kapi=' + ((oku.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const ju = await (await iste(18871, '/sedir/api/koltuklar', { cerez: cu })).json();
+  kapi('UY1 uyuyan ustalar ayrı alanda, hal:uyuyor; yalnız uyuyor olanlar (uyanık·kayıt-eksik·bozuk ad·tekrar·koltukta olan YOK)',
+    JSON.stringify(ju.uyuyanlar) === JSON.stringify([{ ad: 'PERGEL', hal: 'uyuyor' }, { ad: 'KUKLACI', hal: 'uyuyor' }]), `→ ${JSON.stringify(ju.uyuyanlar)}`);
+  kapi('UY2 koltuklar dizisi uyuyanlarla KARIŞMAZ (tüketiciler bozulmaz) ve klasör yanıta yazılmaz',
+    ju.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET,sinavkutu-kabuk' && !JSON.stringify(ju).includes('/x/'), `→ ${JSON.stringify(ju).slice(0, 200)}`);
+  ku.kill();
+  const kz = await kapiAc('/sedir', 18872, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, KAPI_USTA_BETIK: USTA_BOZUK });
+  const okz = await iste(18872, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cz = 'kapi=' + ((okz.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const rz = await iste(18872, '/sedir/api/koltuklar', { cerez: cz }); const jz = await rz.json();
+  kapi('UY3 usta betiği düşerse liste DÜŞMEZ: 200, koltuklar tam, uyuyanlar boş (ölçülemeyen şeridi bozmaz)',
+    rz.status === 200 && jz.koltuklar?.length === 3 && Array.isArray(jz.uyuyanlar) && jz.uyuyanlar.length === 0, `→ ${rz.status} ${JSON.stringify(jz.uyuyanlar)}`);
+  kz.kill();
+  // UY4 · GERÇEK usta.sh (sahte değil): argüman (--proje) ve çıktı biçimi (ad·durum·klasör) uyumu. Özel tmux soketi: hiçbir oturum yok → kayıttaki koltuk:yok ustalar 'uyuyor' çıkar.
+  const PU = join(T, 'usta-proje'); mkdirSync(join(PU, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(PU, '_agents/handoff/ekip-registry.yaml'), 'uyeler:\n'
+    + '  - {ad: PERGEL, klasor: ustalar/PERGEL, sohbet: sid-PERGEL, koltuk: yok}\n  - {ad: KUKLACI, klasor: ustalar/KUKLACI, sohbet: sid-KUKLACI, koltuk: yok}\n'
+    + '  - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok}\n  - {ad: MUDUR, koltuk: var}\n  - {ad: KLASORLU, klasor: ustalar/KLASORLU, sohbet: sid-K, koltuk: var}\n');
+  const TMUY = join(T, 'tm-uy'); writeFileSync(TMUY, `#!/usr/bin/env bash\nexec tmux -L uy4-${process.pid} "$@"\n`); chmodSync(TMUY, 0o755);
+  const kg = await kapiAc('/sedir', 18873, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, TO_PROJE: PU, USTA_TMUX: TMUY });   // KAPI_USTA_BETIK yok → gerçek terminal-onar/scripts/usta.sh
+  const okg = await iste(18873, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cg = 'kapi=' + ((okg.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const jg = await (await iste(18873, '/sedir/api/koltuklar', { cerez: cg })).json();
+  kapi('UY4 GERÇEK usta.sh ile: kayıttaki koltuk:yok + sohbetli ustalar uyuyanlar\'da; sohbetsiz (BASSIZ) ve koltuklu (KLASORLU) YOK',
+    JSON.stringify((jg.uyuyanlar || []).map((u) => u.ad).sort()) === JSON.stringify(['KUKLACI', 'PERGEL']) && (jg.uyuyanlar || []).every((u) => u.hal === 'uyuyor'), `→ ${JSON.stringify(jg.uyuyanlar)}`);
+  kg.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close(); ttydKisi.close();

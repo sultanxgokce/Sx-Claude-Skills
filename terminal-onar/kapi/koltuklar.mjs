@@ -31,3 +31,11 @@ export function koltukSatirlari(cikti) {
     return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}), ...(pencere ? { pencere } : {}), ...(soru ? { soru } : {}), ...(dizin ? { dizin } : {}) };
   }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));
 }
+// usta.sh liste çıktısı → uyuyan ustalar (2.40.0 · kart usta-seridi-api). Satır: ad · durum(uyuyor|uyanik|kayit-eksik) · klasör.
+// Yalnız 'uyuyor' döner: uyanık usta zaten tmux koltuğudur (koltuklar'da), kayıt-eksik olan uyandırılamaz (sohbet kimliği yok → şeritte gösterilmez).
+// Klasör YANITA YAZILMAZ. Koltuk adı süzgecinden geçmeyen ad atılır; aynı koltuk adı koltuklar'da varsa o zaten uyanıktır → atlanır.
+export function uyuyanUstalar(cikti, acik = []) {
+  const var_ = new Set(acik), gor = new Set();
+  return String(cikti || '').split('\n').filter(Boolean).map((l) => l.split('\t')).filter(([ad, durum]) =>
+    durum === 'uyuyor' && KOLTUK_AD_DESEN.test(ad || '') && !var_.has(ad) && !gor.has(ad) && gor.add(ad)).map(([ad]) => ({ ad, hal: 'uyuyor' }));
+}

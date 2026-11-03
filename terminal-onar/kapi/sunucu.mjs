@@ -17,7 +17,7 @@ import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
-import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
+import { KOLTUK_AD_DESEN, koltukSatirlari, uyuyanUstalar } from './koltuklar.mjs';
 import { odaBul, odaUyarisi, odaSec, kayitOdaHaritasi, kayitOdaBul, kayitOdaGecersizHaritasi } from './oda.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
 import { tarifOku, uzmanlikOku } from './tarif.mjs';
@@ -54,6 +54,7 @@ const ANA_TMUX = process.env.TO_ANA_TMUX || 'sedir-ana';
 const PROJE = process.env.TO_PROJE || ('/config/projects/' + (process.env.TO_KUTU || (process.env.KAPI_TABAN || '').replace(/^\/+|\/+$/g, '') || 'kutu'));
 // Koltuk listesinin TEK kaynağı (ttyd de aynı betiği çalıştırır). Sınav başka bir betik verebilir.
 const KOLTUK_BETIK = process.env.KAPI_KOLTUK_BETIK || path.join(BETIK, 'koltuk-bagla.sh');
+const USTA_BETIK = process.env.KAPI_USTA_BETIK || path.join(BETIK, 'usta.sh');   // uyuyan usta listesi (2.40.0): şeritte gri koltuk
 const KOLTUK_AC_BETIK = process.env.KAPI_KOLTUK_AC_BETIK || path.join(BETIK, 'koltuk-ac.sh');
 // ── TABAN YOLU ───────────────────────────────────────────────────────────────
 // 🔴 NİÇİN: merkez sayfa (terminal.mmepanel.com) kutuları YOL ile ayırır — /sedir/ ·
@@ -502,7 +503,9 @@ const sunucu = http.createServer(async (req, res) => {
           else if (sec && !odalar.has(sec.oda)) odalar.set(sec.oda, { ad: sec.oda, hedef: '', reis: '' });
           return { ...k, ...(sec ? { oda: sec.oda, oda_kaynak: sec.kaynak } : {}), ...(uyari ? { oda_uyari: uyari } : {}), ...rutbeBul(rutbe, k.ad, { ana: ANA_TMUX, acik }), ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ...ekranAdresi(k.ad) };
         });
-        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar });
+        // UYUYAN USTALAR (2.40.0 · kart usta-seridi-api): koltuğu olmayan usta tmux'ta yoktur → koltuklar'a KARIŞMAZ (koltuk-fark/kadro tüketicileri bozulmasın), ayrı alan. Ölçülemezse boş (liste düşmez).
+        let uyuyanlar = []; try { const u = await calistir('bash', [USTA_BETIK, 'liste', '--proje', PROJE], undefined, 5000); if (u.kod === 0) uyuyanlar = uyuyanUstalar(u.out, acik); } catch { uyuyanlar = []; }
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar, uyuyanlar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
