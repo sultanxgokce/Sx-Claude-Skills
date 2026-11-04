@@ -6,6 +6,7 @@
 # "Kabuk sınamaları" adımı depodaki her *.test.sh'ı find ile türetir — denetci.test.sh'a bağlanmadı ki o tavanı aşmasın.
 # HERMETİK: denetçi DENETCI_KOMUT ile sahte betik (istemi diske bırakır, SAHTE_JSON basar); zil kapalı.
 # Mutant kipi: MUTANT_D=<bozuk denetci.sh> ile koşunca kapılar o dosyayı sınar.
+# kabuk-testleri: sure=620   (ölçülmüş en kötü koşu 411 sn ×1,5: aynı yükte main 399 sn, dal 411 sn; CI'da varsayılan 300'de 3 koşunun 2'si düştü, Sx 4 Kas)
 set -uo pipefail
 export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model çağrısı yok; kendi sınavı denetci.test.sh T-ONGOZ
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
