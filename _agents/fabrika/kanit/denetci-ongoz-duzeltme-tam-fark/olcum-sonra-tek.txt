@@ -1,0 +1,16 @@
+$ bash yazilim-fabrikasi/scripts/denetci-ongoz-tam-fark.test.sh
+# rc=0 sure=1.4s zaman=2026-11-05T02:30:39+03:00
+--- stdout ---
+════ O1 · tur 1: ön göz tam farkı alır ════
+  ✓ O1a tur 1 koştu (4/E → rc 1)
+  ✓ O1b ön göz farkında değişmeyen dosya var
+════ O2 · tur 2 (düzeltme): göze artım, ön göze TAM fark ════
+  ✓ O2a tur 2 koştu (5/E → rc 0)
+  ✓ O2b göze giden fark artımlı (DÜZELTME TURU)
+  ✓ O2c bağımsız göz istemi değişmeyen dosyayı İÇERMEZ
+  ✓ O2d ön göz farkında değişmeyen dosya VAR (tam fark)
+  ✓ O2e ön göz farkında yeni satır da var
+  ✓ O2f ön göz farkında kanıt dizini bloğu YOK
+  ✓ O2g ekranda ön göz tam fark bilgisi
+SONUÇ: 9 geçti, 0 düştü
+--- stderr ---
