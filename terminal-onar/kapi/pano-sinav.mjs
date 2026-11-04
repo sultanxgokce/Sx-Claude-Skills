@@ -172,6 +172,15 @@ try {
   const ekrandaYol11 = yol11 ? await ekranda(pg, yol11, 1500) : false;
   kapi('Y11 yazma penceresi kancası varken: yükleme gitti, yol TERMİNALE YAZILMADI, pencereye basla(blob) + bitti(yol) verildi, sağ alt bildirim BASILMADI (pencere kendi durumunu gösterir)',
        yuklemeler.length === onceK + 1 && !ekrandaYol11 && pk.length === 2 && /^basla:image\/png:\d+$/.test(pk[0]) && pk[1] === 'bitti:' + yol11 && !/yazıldı|eklendi/.test(bd11), `→ pk=${JSON.stringify(pk)} ekranda=${ekrandaYol11} bildirim="${bd11}" yükleme ${yuklemeler.length - onceK}`);
+  // Y11c (bağımsız göz tur 1): pencerenin bitti() kancası HATA atarsa yüklenmiş yol kaybolmaz — pencereye hata söylenir, yol eski yoldan terminale yazılır
+  const onceK3 = yuklemeler.length; await bekle(1600);
+  await pg.evaluate(() => { window.__pk = []; const bk = document.getElementById('kapi-pano-bildirim'); if (bk) { bk.style.display = 'none'; bk.textContent = ''; } window.__kapiResimPencere = { basla: function () { window.__pk.push('basla'); return true; }, bitti: function () { window.__pk.push('bitti'); throw new Error('pencere bozuk'); }, hata: function (m) { window.__pk.push('hata:' + m); } }; });
+  await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Control+u'); await yapistir(pg, { tip: 'image/png', b64: PNG1 });
+  for (let k = 0; k < 50 && yuklemeler.length === onceK3; k++) await bekle(200);
+  await pg.waitForFunction(() => /yazıldı|✗/.test((document.getElementById('kapi-pano-bildirim') || {}).textContent || ''), null, { timeout: 10000 }).catch(() => {});
+  const pk3 = await pg.evaluate(() => window.__pk.slice()), bd11c = await bildirim(pg), yol11c = yuklemeler[onceK3] ? yuklemeler[onceK3].yol : '';
+  kapi('Y11c pencerenin bitti() kancası hata atarsa: pencereye hata söylenir, yol ESKİ yoldan terminale yazılır, bildirim "terminale yazıldı" (yol kaybolmaz)',
+       yuklemeler.length === onceK3 + 1 && pk3.length === 3 && pk3[0] === 'basla' && pk3[1] === 'bitti' && /^hata:/.test(pk3[2]) && !!yol11c && await ekranda(pg, yol11c) && /terminale yazıldı/.test(bd11c), `→ pk=${JSON.stringify(pk3)} bildirim="${bd11c}" yükleme ${yuklemeler.length - onceK3}`);
   await pg.evaluate(() => { delete window.__kapiResimPencere; });
   const onceK2 = yuklemeler.length; await bekle(1600);
   await pg.focus('.xterm-helper-textarea'); await yapistir(pg, { tip: 'image/png', b64: PNG1 });

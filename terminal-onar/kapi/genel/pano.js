@@ -113,10 +113,16 @@
       sonOlcum = { kucultMs: Math.round(t1 - t0), yukleMs: Math.round(t2 - t1), ilkBayt: blob.size, bayt: govde.size, tip: govde.type || '' };
       var sure = 'küçültme ' + sn(t1 - t0) + ' · yükleme ' + sn(t2 - t1) + ' · ' + kb(govde.size);
       log('süreler', sonOlcum);
+      var verildi = false;
       if (r.ok && j && j.yol && pencereye) {
-        try { P.bitti(j.yol); } catch (e) { log('pencere kancası bitti hatası:', e && e.message); }
-        log('pencereye', j.yol, sure);
-      } else if (r.ok && j && j.yol) {
+        try { P.bitti(j.yol); verildi = true; } catch (e) { log('pencere kancası bitti hatası:', e && e.message); }
+        if (verildi) log('pencereye', j.yol, sure);
+        else {   // bağımsız göz tur 1: pencere yolu alamazsa yüklenmiş yol kaybolmaz — pencereye hata söylenir, yol ESKİ yoldan terminale yazılır (bildirimle)
+          try { P.hata('pencere eki alamadı; yol terminale yazıldı'); } catch (x) { /* pencere */ }
+          pencereye = false;
+        }
+      }
+      if (r.ok && j && j.yol && !verildi) {
         var nasil = terminaleYaz(' ' + j.yol + ' ');
         if (nasil) { bildir('✓ resmin yolu terminale yazıldı — Enter ile gönder\n' + sure, '#7ee787', 6000); log('yazıldı', nasil, j.yol); }
         else {
