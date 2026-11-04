@@ -1,0 +1,48 @@
+{
+  "is": "usta-oda-alani",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T13:18:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "usta-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-usta-sinavi-sonra.txt",
+      "sha256": "0c9e16c0aa925f54c987eb37071e3921c5010232365cd197936d4cd76c411595",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/usta.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T13:18:38+03:00",
+      "sure_sn": 183.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "57bf1460ddf0455c893d08a1f62a600e",
+      "olculen_commit": "befc9b13b5ec9ea1fd694c2e8baff155137ab8be",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "d0aff480d984542bdb779448ddae98e417982a14e552662d33499afb1a95bdcd",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T13:18:52+03:00",
+      "sure_sn": 13.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "07d9dbd55593478399497bfdc0006f08",
+      "olculen_commit": "befc9b13b5ec9ea1fd694c2e8baff155137ab8be",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "8043a6a82137dc9aa8c93c43df86a882d367e5540f70236cdc92ce5e8e1ea352"
+}
