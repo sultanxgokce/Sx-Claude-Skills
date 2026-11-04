@@ -3,6 +3,8 @@
 // kopyasını değil kendisini ölçer (kopya ölçüm ilk değişiklikte ayrışır, sessiz yeşil verir).
 // Kabuk tarafının kuralı scripts/koltuk-adi.sh — iki dilin eşdeğerliği koltuk-adi.test.sh'te sınanır.
 
+import { ODA_AD_DESEN } from './oda.mjs';
+
 // tmux kuralı (. ve :) + tek tercihimiz (başta/sonda boşluk, kontrol karakteri yok); '/' gibi adlar DÜŞMEZ.
 // /u: uzunluk KOD NOKTASI sayılır (kabukla aynı; emoji 2 değil 1).
 export const KOLTUK_AD_DESEN = /^(?![\s$@%=])(?!.*\s$)[^\x00-\x1f\x7f:.]{1,200}$/u;
@@ -37,5 +39,6 @@ export function koltukSatirlari(cikti) {
 export function uyuyanUstalar(cikti, acik = []) {
   const var_ = new Set(acik), gor = new Set();
   return String(cikti || '').split('\n').filter(Boolean).map((l) => l.split('\t')).filter(([ad, durum]) =>
-    durum === 'uyuyor' && KOLTUK_AD_DESEN.test(ad || '') && !var_.has(ad) && !gor.has(ad) && gor.add(ad)).map(([ad]) => ({ ad, hal: 'uyuyor' }));
+    durum === 'uyuyor' && KOLTUK_AD_DESEN.test(ad || '') && !var_.has(ad) && !gor.has(ad) && gor.add(ad))
+    .map(([ad, , , oda]) => (ODA_AD_DESEN.test(oda || '') ? { ad, hal: 'uyuyor', oda } : { ad, hal: 'uyuyor' }));   // 2.41.0: 4. sütun = kayıttaki oda (kurala uymayan ad alınmaz)
 }

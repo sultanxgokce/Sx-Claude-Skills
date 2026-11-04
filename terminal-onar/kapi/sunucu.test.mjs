@@ -725,7 +725,8 @@ console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-serid
   // UY4 · GERÇEK usta.sh (sahte değil): argüman (--proje) ve çıktı biçimi (ad·durum·klasör) uyumu. Özel tmux soketi: hiçbir oturum yok → kayıttaki koltuk:yok ustalar 'uyuyor' çıkar.
   const PU = join(T, 'usta-proje'); mkdirSync(join(PU, '_agents/handoff'), { recursive: true });
   writeFileSync(join(PU, '_agents/handoff/ekip-registry.yaml'), 'uyeler:\n'
-    + '  - {ad: PERGEL, klasor: ustalar/PERGEL, sohbet: sid-PERGEL, koltuk: yok}\n  - {ad: KUKLACI, klasor: ustalar/KUKLACI, sohbet: sid-KUKLACI, koltuk: yok}\n'
+    + '  - {ad: PERGEL, klasor: ustalar/PERGEL, sohbet: sid-PERGEL, koltuk: yok, oda: mimari-cizim}\n  - {ad: KUKLACI, klasor: ustalar/KUKLACI, sohbet: sid-KUKLACI, koltuk: yok}\n'
+    + '  - id: demirci\n    ad: DEMIRCI\n    klasor: ustalar/DEMIRCI\n    sohbet: sid-DEMIRCI\n    koltuk: yok\n    oda: bakim\n'
     + '  - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok}\n  - {ad: MUDUR, koltuk: var}\n  - {ad: KLASORLU, klasor: ustalar/KLASORLU, sohbet: sid-K, koltuk: var}\n');
   const TMUY = join(T, 'tm-uy'); writeFileSync(TMUY, `#!/usr/bin/env bash\nexec tmux -L uy4-${process.pid} "$@"\n`); chmodSync(TMUY, 0o755);
   const kg = await kapiAc('/sedir', 18873, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, TO_PROJE: PU, USTA_TMUX: TMUY });   // KAPI_USTA_BETIK yok → gerçek terminal-onar/scripts/usta.sh
@@ -733,7 +734,10 @@ console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-serid
   const cg = 'kapi=' + ((okg.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
   const jg = await (await iste(18873, '/sedir/api/koltuklar', { cerez: cg })).json();
   kapi('UY4 GERÇEK usta.sh ile: kayıttaki koltuk:yok + sohbetli ustalar uyuyanlar\'da; sohbetsiz (BASSIZ) ve koltuklu (KLASORLU) YOK',
-    JSON.stringify((jg.uyuyanlar || []).map((u) => u.ad).sort()) === JSON.stringify(['KUKLACI', 'PERGEL']) && (jg.uyuyanlar || []).every((u) => u.hal === 'uyuyor'), `→ ${JSON.stringify(jg.uyuyanlar)}`);
+    JSON.stringify((jg.uyuyanlar || []).map((u) => u.ad).sort()) === JSON.stringify(['DEMIRCI', 'KUKLACI', 'PERGEL']) && (jg.uyuyanlar || []).every((u) => u.hal === 'uyuyor'), `→ ${JSON.stringify(jg.uyuyanlar)}`);
+  const od = Object.fromEntries((jg.uyuyanlar || []).map((u) => [u.ad, u.oda === undefined ? '-' : u.oda]));
+  kapi('UY5 uyuyan usta kayıttaki odasını taşır (akış biçimi PERGEL → mimari-cizim, blok biçimi id:demirci → bakim); odasız ustada (KUKLACI) alan YOK (uydurulmaz)',
+    od.PERGEL === 'mimari-cizim' && od.DEMIRCI === 'bakim' && od.KUKLACI === '-', `→ ${JSON.stringify(jg.uyuyanlar)}`);
   kg.kill();
 }
 

@@ -14,10 +14,10 @@ kos() { # <usta.sh yolu> ... ortamı kurar, SINAV bloğunu koşar; sonuç K say�
   for a in PERGEL KUKLACI ORTA; do mkdir -p "$T/cfg/projects/$(printf '%s' "$P/ustalar/$a" | sed 's#[/._]#-#g')"; : > "$T/cfg/projects/$(printf '%s' "$P/ustalar/$a" | sed 's#[/._]#-#g')/sid-$a.jsonl"; done
   cat > "$T/p/_agents/handoff/ekip-registry.yaml" <<Y
 uyeler:
-  - {ad: PERGEL, klasor: ustalar/PERGEL, sohbet: sid-PERGEL, koltuk: yok}
+  - {ad: PERGEL, klasor: ustalar/PERGEL, sohbet: sid-PERGEL, koltuk: yok, oda: mimari-cizim}
   - {ad: KUKLACI, klasor: ustalar/KUKLACI, sohbet: sid-KUKLACI, koltuk: yok}
   - {ad: ORTA, klasor: ustalar/ORTA, sohbet: sid-ORTA, koltuk: yok}
-  - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok}
+  - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok, oda: bakim}
   - {ad: MUDUR, koltuk: var}
   - {ad: KLASORLU, klasor: ustalar/KLASORLU, sohbet: sid-K, koltuk: var}
 Y
@@ -26,6 +26,7 @@ Y
   local O r
   O="$(bash "$U" liste 2>&1)"
   ok "U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok, BASSIZ kayit-eksik)" "$([ "$(wc -l <<<"$O")" = 4 ] && has $'BASSIZ\tkayit-eksik' "$O" && ! has MUDUR "$O" && ! has KLASORLU "$O" && echo 1 || echo 0)" "$O"
+  ok "U1b liste 4. sütun = kayıttaki oda (PERGEL mimari-cizim · odasız KUKLACI boş); sohbetsiz BASSIZ'in odası sohbete KAYMAZ (kayit-eksik kalır)" "$(has $'PERGEL\tuyuyor\tustalar/PERGEL\tmimari-cizim' "$O" && has $'KUKLACI\tuyuyor\tustalar/KUKLACI\t\n' "$O"$'\n' && has $'BASSIZ\tkayit-eksik\tustalar/BASSIZ\tbakim' "$O" && echo 1 || echo 0)" "$O"
   O="$(TO_KUTU=sinav TO_PROJE="$P" bash "$(dirname "$U")/koltuk-ac.sh" durum PERGEL 2>&1)"
   ok "U10 koltuk-ac: usta koltuğu yol=usta olarak tanınır (kayıtsız koltuk gibi reddedilmez)" "$(has '"yol":"usta"' "$O" && echo 1 || echo 0)" "$O"
   # prova: PERGEL'in sohbeti YANLIŞ klasörün proje dizinine konur
@@ -67,12 +68,14 @@ echo "SONUÇ: geçti=$G kaldı=$K"; [ "$K" -eq 0 ] || exit 1
 [ "${USTA_MUTANT:-1}" = 0 ] && exit 0
 echo "── mutantlar (her biri sınavı KIRMALI)"
 M="$(mktemp -d)"; MK=0; cp "$HERE/koltuk-ac.sh" "$HERE/ortak.sh" "$HERE/koltuk-adi.sh" "$HERE/koltuk-bagla.sh" "$M/" 2>/dev/null
-mut() { cp "$HERE/usta.sh" "$M/usta.sh"
+MN=0; mut() { MN=$((MN+1)); cp "$HERE/usta.sh" "$M/usta.sh"
   python3 -I -c "import sys;p=sys.argv[1];s=open(p,encoding='utf-8').read();a,b=sys.argv[2],sys.argv[3];assert s.count(a)==1,'çapa '+str(s.count(a));open(p,'w',encoding='utf-8').write(s.replace(a,b))" "$M/usta.sh" "$2" "$3" || { echo "  ✗ $1: MUTASYON ÜRETİLEMEDİ"; MK=$((MK+1)); return; }
   local g=$G k=$K; G=0; K=0; kos "$M/usta.sh" >"$M/o.txt" 2>&1; local kk=$K; G=$g; K=$k
   if [ "$kk" -gt 0 ]; then echo "  ✓ $1: yakalandı ($kk kapı kırmızı)"; else echo "  ✗ $1: sınav YEŞİL kaldı"; MK=$((MK+1)); fi; }
 mut "kilit yok (her klasörde resume)" '[ -f "$DOSYA" ] || {' 'false || {'
 mut "tavan yok sayılır" '[ "${#uyanikler[@]}" -ge "$TAVAN" ]' 'false'
+mut "liste sekmeyi ayırıcı bırakır (boş sohbet alanı yutulur, oda sohbete kayar)" "tr '\\t' '\\037' | while IFS=\$'\\037' read -r a k s o" "while IFS=\$'\\t' read -r a k s o"
+mut "liste oda sütununu basmaz" '"$a" "$d" "$k" "$o"' '"$a" "$d" "$k" ""'
 mut "en boştaki yerine listedeki son usta uyutulur" '[ "$e" -lt "$ens" ] &&' 'true &&'
 mut "DURUM.md damgası yok" "printf '\\n- uyutuldu" "true '\\n- uyutuldu"
 mut "claude ustanın klasöründe açılmaz" '-c "$MK"' '-c "$PROJE"'
@@ -86,4 +89,4 @@ python3 -I -c "import sys;p=sys.argv[1];s=open(p,encoding='utf-8').read();a='if 
 g=$G; k=$K; G=0; K=0; kos "$M/usta.sh" >"$M/o.txt" 2>&1; kk=$K; G=$g; K=$k
 if [ "$kk" -gt 0 ]; then echo "  ✓ koltuk-ac usta yolunu tanımaz: yakalandı ($kk kapı kırmızı)"; else echo "  ✗ koltuk-ac usta yolunu tanımaz: sınav YEŞİL kaldı"; MK=$((MK+1)); fi
 find "$M" -delete 2>/dev/null
-[ "$MK" -eq 0 ] && echo "MUTANT: 10/10 yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
+[ "$MK" -eq 0 ] && echo "MUTANT: $MN/$MN yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }
