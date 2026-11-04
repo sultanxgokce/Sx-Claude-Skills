@@ -1,0 +1,33 @@
+$ bash gunluk-plan/scripts/hasat-gece.test.sh
+# rc=0 sure=161.0s zaman=2026-11-04T16:57:11+03:00
+--- stdout ---
+── KURU kip (varsayılan)
+  ✓ K1 koştu rc=0
+  ✓ K2 🔴 kuru kipte hasat.sh ac HİÇ çağrılmadı
+  ✓ K3 varsayılan kip kuru
+  ✓ K4 🔴 tavan 3: açılabilir temiz kayıtlardan en çok 3 'açardı'
+  ✓ K5 dördüncüsü tavan-doldu diye günlükte
+  ✓ K6 🔴 'sil' sözlü kayıt sınıflı: atlandı (günlükte)
+  ✓ K7 🔴 kapı alanı dolu kayıt sınıflı: atlandı
+  ✓ K8 🔴 atanan ve odası yok: sahipsiz → AÇILMADI, günlükte
+  ✓ K9 bayat doğrulama olmaz sayıldı
+  ✓ K10 🔴 sahip = odanın müdürü (aile-registry oda_muduru)
+  ✓ K11 havuz dışı kayıt hiç işlenmedi
+  ✓ K12 🔴 doğan görevi olan kayıt TEKRAR açılmaz (tekilleştirme: hasat.sh ac kendisi yapmıyor)
+  ✓ K13 doğmuş kayıt özet satırında sayıldı
+── GERÇEK kip (açık --gercek)
+  ✓ G1 hasat.sh ac tam 3 kez çağrıldı (tavan)
+  ✓ G2 kip otomatik
+  ✓ G3 🔴 --atanan verildi (sahipsiz görev yok)
+  ✓ G4 🔴 sınıflı/sahipsiz/doğmuş kayıt için ac ÇAĞRILMADI
+── OLUR=0 ve bozuk girdi
+  ✓ Z1 🔴 hiçbiri OLUR değil: günlüğe olur=0 yazıldı
+  ✓ Z2 🔴 defter boş/okunamadı: rc=3 ÖLÇÜLEMEDİ, olur=0 UYDURULMADI
+  ✓ Z3 sayısız --tavan rc=2
+  ✓ Z4 bilinmeyen bayrak rc=2
+  ✓ Z5 registry okunamıyor: sahipsiz → açılmadı (fail-closed)
+  ✓ Z6 🔴 doğan görev okunamadı: AÇILMADI (fail-closed), ölçülemedi diye günlükte
+
+── SONUÇ: 23 geçti · 0 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-hasat-gece-zamanlayici-hasat-gece-sinavi 160 sn bekledi (yuva 1, load1 6.87)
