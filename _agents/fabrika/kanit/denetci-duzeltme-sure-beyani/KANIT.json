@@ -1,25 +1,25 @@
 {
   "is": "denetci-duzeltme-sure-beyani",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-04T16:18:16+03:00",
+  "guncelleme": "2026-11-04T16:18:50+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sure-okuma",
       "asama": "tek",
       "dosya": "olcum-sure-okuma-tek.txt",
-      "sha256": "85126716fd59b2bb8d4f7af4642f99de28f303f09be517bf6c1373eaf8269cd9",
+      "sha256": "cd9a3c290508ebfed068a7db94150d8e3463d72866a2557a1818201d705d4614",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-duzeltme-sure-beyani/sure-oku.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-04T16:08:22+03:00",
-      "sure_sn": 261.4,
+      "zaman": "2026-11-04T16:18:50+03:00",
+      "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "9b9e943fa7b643eab4618ae1065ce981",
-      "olculen_commit": "755d7d219a34a222bd7858731173052d61c71ddf",
+      "olcum_id": "9750dd151b6c45f2889a43b566ac3136",
+      "olculen_commit": "e3c7f60f51ed4840d915328b5795b43e0b5a53d8",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -70,5 +70,5 @@
       "kirli_kurali": 1
     }
   ],
-  "imza": "9c650ef1b160f925f5ac44fbaabf299ceb8111197e5586e7795b791d9ad0af60"
+  "imza": "76d19314625298e05528583e774f18bd00fd4a972c590cbdcea58cd9b5fdc359"
 }
