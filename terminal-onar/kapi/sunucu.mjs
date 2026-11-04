@@ -508,6 +508,9 @@ const sunucu = http.createServer(async (req, res) => {
         // 2.41.0 (kart usta-oda-alani · SERDAR 4 Kas 12:37, Sultan tellal ekranı): uyuyan usta kayıttaki ODASINI taşır → merkez şeridi onu kendi oda kümesine dizer
         //   (önceden yalnız {ad, hal}: PERGEL mimari-cizim, USTABASI ve DEMIRCI bakim şeridin sonuna yığılıyordu). Oda kayıt haritasından (koltuklarla aynı kaynak); bulunamazsa alan YAZILMAZ, uydurulmaz.
         uyuyanlar = uyuyanlar.map((u) => { const o = kayitOda.get(u.ad) || kayitOda.get(adKatla(u.ad)); return o ? { ...u, oda: o } : u; });
+        // 2.41.1 (kart uyuyan-oda-listesi · Sultan tellal karesi 15:41): yalnız uyuyan ustası olan oda da `odalar` listesine girer — liste yalnız açık koltuklardan
+        //   kurulduğu için bakim · reklam-videosu · web-tanitim · sosyal-medya odaları listede yoktu; merkez listede olmayan odayı (uydurma sayıp) açmadığından bu ustalar sona yığılıyordu.
+        for (const u of uyuyanlar) if (u.oda && !odalar.has(u.oda)) odalar.set(u.oda, { ad: u.oda, hedef: '', reis: '' });
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar, uyuyanlar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —

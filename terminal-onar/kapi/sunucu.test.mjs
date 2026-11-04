@@ -738,6 +738,9 @@ console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-serid
   const od = Object.fromEntries((jg.uyuyanlar || []).map((u) => [u.ad, u.oda === undefined ? '-' : u.oda]));
   kapi('UY5 uyuyan usta kayıttaki odasını taşır (akış biçimi PERGEL → mimari-cizim, blok biçimi id:demirci → bakim); odasız ustada (KUKLACI) alan YOK (uydurulmaz)',
     od.PERGEL === 'mimari-cizim' && od.DEMIRCI === 'bakim' && od.KUKLACI === '-', `→ ${JSON.stringify(jg.uyuyanlar)}`);
+  const oa = (jg.odalar || []).map((o) => o.ad);
+  kapi('UY6 yalnız uyuyan ustası olan oda (bakim · DEMIRCI) odalar listesinde; odasız usta (KUKLACI) liste uydurmaz, her oda bir kez',
+    oa.includes('bakim') && oa.includes('mimari-cizim') && new Set(oa).size === oa.length && !oa.includes(''), `→ ${JSON.stringify(jg.odalar)}`);
   kg.kill();
 }
 
