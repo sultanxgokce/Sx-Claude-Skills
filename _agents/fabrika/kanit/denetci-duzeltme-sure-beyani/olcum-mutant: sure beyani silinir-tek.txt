@@ -1,7 +1,9 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: okunan sure=620 · rc≠0 + hedef kapı 'okunan sure=620' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sure-okuma-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-sure.sh
-# rc=1 sure=0.1s zaman=2026-11-04T16:02:01+03:00
+# rc=1 sure=125.5s zaman=2026-11-04T16:10:35+03:00
 --- stdout ---
+en kötü ölçülmüş koşu = 411 sn · x1,5 = 616,5 · 5 sn'ye yukarı yuvarlanmış beklenen = 620
 denetci-duzeltme-farki okunan sure=300 (beklenen 620) · beyansız kontrol dosyası sure=300 (beklenen 300)
-✗ okunan sure=620 kapısı düştü (mutantta beyan yok)
+✗ okunan sure=620 kapısı düştü
 --- stderr ---
+⏳ agir-sira: kanit-denetci-duzeltme-sure-beyani-mutant: sure beyani silinir 125 sn bekledi (yuva 1, load1 17.67)

@@ -1,25 +1,25 @@
 {
   "is": "denetci-duzeltme-sure-beyani",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-04T16:02:01+03:00",
+  "guncelleme": "2026-11-04T16:10:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sure-okuma",
       "asama": "tek",
       "dosya": "olcum-sure-okuma-tek.txt",
-      "sha256": "0f9fe42c246e8952432fc0f15da93a8cfc4017572d5fb3ef01c737f7de82f721",
+      "sha256": "85126716fd59b2bb8d4f7af4642f99de28f303f09be517bf6c1373eaf8269cd9",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-duzeltme-sure-beyani/sure-oku.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-04T16:01:32+03:00",
-      "sure_sn": 0.0,
+      "zaman": "2026-11-04T16:08:22+03:00",
+      "sure_sn": 261.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "7bc92e2bbb8448a791d259fa3790e87b",
-      "olculen_commit": "3aa1effc9664994ae6a88f735a231a5823871b35",
+      "olcum_id": "9b9e943fa7b643eab4618ae1065ce981",
+      "olculen_commit": "755d7d219a34a222bd7858731173052d61c71ddf",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -28,15 +28,15 @@
       "etiket": "mutant: sure beyani silinir",
       "asama": "tek",
       "dosya": "olcum-mutant: sure beyani silinir-tek.txt",
-      "sha256": "ea1b090c058e7d0a1acaa80b3b5d50911c7176638f354595cc20623d9e391f03",
+      "sha256": "880fc1987a77d38fd4d0a3cc7f6826e2b06a401ed66f279e7104e0267a6aa04a",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-sure.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-04T16:02:01+03:00",
-      "sure_sn": 0.1,
+      "zaman": "2026-11-04T16:10:35+03:00",
+      "sure_sn": 125.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sure-okuma",
@@ -44,11 +44,11 @@
       "dusen_kapi": true,
       "hedef_kapi": "okunan sure=620",
       "hedef_dustu": true,
-      "olcum_id": "dffdbb026dcf4319945a1897b71aeaeb",
-      "olculen_commit": "3aa1effc9664994ae6a88f735a231a5823871b35",
+      "olcum_id": "0ffaecc155a540ea9fadf3e9c06d5fff",
+      "olculen_commit": "755d7d219a34a222bd7858731173052d61c71ddf",
       "olculen_kirli": false,
       "kirli_kurali": 1
     }
   ],
-  "imza": "8addcdd8a1c7012a176f6e1d95fbbc399056209354bf1783fc2a06dd34d743d5"
+  "imza": "3e195abb2972d7400626f678b268b91bb134f0fcf90240a3a588cdd72c8b4bea"
 }
