@@ -1,0 +1,15 @@
+$ bash yazilim-fabrikasi/scripts/denetci-daralt-tam-fark.test.sh
+# rc=0 sure=1.9s zaman=2026-11-05T01:40:39+03:00
+--- stdout ---
+════ E1 · tur 1: tam fark ════
+  ✓ E1a tur 1 koştu (4/E → rc 1)
+════ E2 · kart daraltıldı (tur_sifir=1) + yeni commit: tur 2 = daraltmadan SONRAKİ ilk tur → TAM fark ════
+  ✓ E2a tur 2 koştu (5/E → rc 0)
+  ✓ E2b DÜZELTME TURU satırı YOK (daralma sonrası ilk tur artımlı değil)
+  ✓ E2c istemde değişmeyen dosya VAR (PR bütünü gitti)
+════ E3 · aynı daraltılmış cümlede ikinci tur (tur 3): artımlı fark geri gelir ════
+  ✓ E3a tur 3 koştu (5/E → rc 0)
+  ✓ E3b DÜZELTME TURU satırı VAR
+  ✓ E3c değişmeyen dosya istemde YOK (yalnız yeni fark)
+SONUÇ: 7 geçti, 0 düştü
+--- stderr ---
