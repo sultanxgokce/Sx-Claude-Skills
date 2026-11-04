@@ -1,0 +1,14 @@
+$ bash -c node sync-skills.mjs --skill yazilim-fabrikasi; exit $?
+# rc=0 sure=50.4s zaman=2026-11-04T03:51:41+03:00
+--- stdout ---
+  kaynak: fabrika-surum-0-27-54@930faf4d · origin/main'e göre 0 commit geride · 1 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  ↑ yazilim-fabrikasi → _global: güncelle v0.27.53 → v0.27.54
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+
+--- stderr ---
+⏳ agir-sira: kanit-fabrika-surum-0-27-54-kurulum kuru kosusu ana dal 0.27.53 51 sn bekledi (yuva 1, load1 17.58)

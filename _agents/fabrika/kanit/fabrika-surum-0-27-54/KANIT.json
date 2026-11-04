@@ -1,0 +1,50 @@
+{
+  "is": "fabrika-surum-0-27-54",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T03:51:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kurulum kuru kosusu ana dal 0.27.53",
+      "asama": "once",
+      "dosya": "olcum-kurulum kuru kosusu ana dal 0.27.53-once.txt",
+      "sha256": "c066c6595ca77e8fb3042a9353a23438d70bf9cf1243c37e95220bef687f0cae",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-sync-c279ad40 && node sync-skills.mjs --skill yazilim-fabrikasi; exit $?"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T03:50:47+03:00",
+      "sure_sn": 15.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "bf107555c9c345b89e8c0e3722707b05",
+      "olculen_commit": "930faf4dce319112d463c67a80187a6fba0ab346",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum kuru kosusu ana dal 0.27.53",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum kuru kosusu ana dal 0.27.53-sonra.txt",
+      "sha256": "9008d24441753f0354c54906363754750ac77f8976496f73664eef9966cc5fde",
+      "komut": [
+        "bash",
+        "-c",
+        "node sync-skills.mjs --skill yazilim-fabrikasi; exit $?"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T03:51:41+03:00",
+      "sure_sn": 50.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "e55deb188b6647f48a3c57bbed4d4c93",
+      "olculen_commit": "930faf4dce319112d463c67a80187a6fba0ab346",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "bb0c349793b2060761c151856ab017d2f5140921a1806ab51e7f8cb6a3ab8dd6"
+}
