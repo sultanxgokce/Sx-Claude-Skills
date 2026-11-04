@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "sirada-bak-sultan-isi",
+  "pr": "692",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T18:31:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-isi",
+  "dal": "sirada-bak-sultan-isi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38135,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 20763
+  },
+  "dalgic": "uyumsuz",
+  "bas": "7bdc60d27a9a679b74eb54174b7c8a5e8b9ade2f",
+  "duzeltme_farki": {
+    "onceki_bas": "3acffca0bacd9e1d2aaac866e7376e6698e63082",
+    "dosya": 12,
+    "bayt": 33047,
+    "tam_bayt": 40730
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Önceki B1, açık `GUNLUK_PLAN_GOREV_SH` yolundan muafiyet kaldırılıp K5 ve mutasyonla ölçülerek kapatılmış. Ama yeni `GUNLUK_PLAN_ISARET_SH=-` kapağı kör kopyada ikinci okumayı bütünüyle atlatabildiği için aynı yanlış üstlenme riski başka bir açık ortam değişkeni üzerinden sürüyor; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "`GUNLUK_PLAN_ISARET_SH=-` verildiğinde ikinci doğrulama koşulsuz kapatılıyor; seçilen `gorev.sh` işaretsiz liste üretiyorsa Sultan/karar işi süzülmeden üstlenilebilir. Yorumda bunun yalnız sınav kapağı olduğu söylenmesi üretim davranışını sınırlamıyor ve kartın “hangi görev betiği kopyasıyla okursa okusun” şartını deliyor.",
+        "kanit": "Kod önce farklı seçilmiş kopya için `ISARET_SH` boşsa paketli ikinci kaynağı seçiyor, ardından `[ \"$ISARET_SH\" != \"-\" ] || ISARET_SH=\"\"` ile açık `-` değerini boşaltıyor; böylece aşağıdaki ikinci `liste` okuması çalışmıyor. Regresyon sınavı da tam bu ortam değişkenini dışarı açarak kullanıyor. Gerçek ölçümün K5 kapısı yalnız `GUNLUK_PLAN_GOREV_SH=\"$KOR\"` veriyor, `GUNLUK_PLAN_ISARET_SH=-` kaçışını sınamıyor.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh:65-70; gunluk-plan/scripts/sirada-bak.test.sh:25; olcum-sirada-bak-sinavi-tek.txt K5",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm 18/18 ile 10 mutantın tamamını geçiriyor, ayrıca B1 düzeltmesini K5 ve `acik-gorev-muaf` mutasyonu anlamlı biçimde ölçüyor. Ancak yeni `GUNLUK_PLAN_ISARET_SH=-` doğrulama kaçışı için hedef kapı veya mutasyon yok; bu nedenle evrensel güvenlik iddiası kanıtlanmış değil."
+  }
+}
