@@ -824,7 +824,9 @@ fi
 # aşınca HANGİ parçanın şiştiğini söyler. Birleşen metin eskisiyle bayt bayt aynıdır.
 { cat "$ISTEM"; } > "$TMP/p-sablon.md"
 { printf '\n\n===== İŞ KARTI (talep) =====\n'; cat "$TMP/kart.md"; } > "$TMP/p-kart.md"
-{ printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"; } > "$TMP/p-kanit.md"
+# gorev_01M6AX7Y31S4R4GK6NMDKT29NK (mihenk PYBNNV: 51 kaydın 28'i geçersizlik, istem 114 KB > 100 KB tavan): geçersiz ilan + hedef ölçüm
+# TEK SATIRA iner (manifest-ozet.py); imzalı KANIT.json diskte AYNEN durur. Özet çıkmazsa ham dosyaya DÜŞER (eksik veri vermemek için).
+{ printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; python3 "$HERE/manifest-ozet.py" "$DZ/KANIT.json" 2>/dev/null || cat "$DZ/KANIT.json"; } > "$TMP/p-kanit.md"
 # ÖLÇÜM ÇIKTISININ SONU DA GİDER (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1): eskiden her ölçüm dosyasının
 #   ilk 60 satırı gidiyordu. Sınavın sonuç satırı ("SONUÇ: 156 geçti · 0 kaldı") dosyanın SONUNDA; 184 satırlık bir sınav
 #   ölçümünde göz yalnız baştaki kapıları görüyor, sonucu hiç görmüyordu. Artık 60 satırı aşan dosyada: stdout'un başı +
