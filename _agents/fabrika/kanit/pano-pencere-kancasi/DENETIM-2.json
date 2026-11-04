@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "pano-pencere-kancasi",
+  "pr": "694",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T21:02:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-pano-pencere-kancasi",
+  "dal": "pano-pencere-kancasi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38652,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 22165
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e27efaf74b1b1e0ac5e758055c39cc774d52d388",
+  "duzeltme_farki": {
+    "onceki_bas": "1c3d897e86f593230a2d9e7f5cb7e5523837092e",
+    "dosya": 9,
+    "bayt": 28132,
+    "tam_bayt": 67831
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen kapı akışı yerinde: kanca varsa resim basla/bitti/hata ile pencereye veriliyor, kanca yoksa eski terminal yolu sürüyor; önceki turdaki bitti() istisnasında yolun kaybolması da terminal geri dönüşü ve Y11c sınavıyla kapatılmış. Üretim kodunu engelleyen ciddi ya da uygulama kusuru kalmadığı ve gerçek pano.js ile F9 uçtan uca ölçümü son başta yeşil olduğu için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son baş d8a7050 üzerinde gerçek pano.js kullanan merkez-telefon-fotograf-uctan-uca-2 ölçümü rc=0/yeşil ve F9, yolun önce pencereye düşüp ancak Gönder ile terminale gitmesini gerçekçi PNG yüklemesiyle doğruluyor; M1 kancasız masaüstü davranışını da koruyor. Önceki B1, pano.js:116 çevresindeki verildi bayrağı ve bitti() istisnasında P.hata ardından eski terminal yoluna düşen akışla kapanmış; eklenen Y11c bu vakayı sınıyor ve son pano-sinav-4 özetinde kalanlar yalnız değişiklik öncesinde de kırmızı olan Y0 ile N1. Pano-sinav kayıtları rc=1/kırmızı olduğundan bütünüyle yeşil sayılamaz; buna karşın hedef kapılar son ölçümde düşmüyor ve mutasyon kaydı Y11'in bozuk kodu yakaladığını gösteriyor."
+  }
+}
