@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K4 işaret ikinci kaynaktan · rc≠0 + hedef kapı 'K4 işaret ikinci kaynaktan' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sirada-bak-sinavi-* ===
 $ env SADECE_MUTANT=okunamazsa-devam bash gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
-# rc=1 sure=2.7s zaman=2026-11-04T18:28:31+03:00
+# rc=1 sure=4.9s zaman=2026-11-04T18:34:22+03:00
 --- stdout ---
 ── mutantlar
   ✓ L1 Sultan kararı (sahip sultan + kapı karar): satır sonunda iki işaret de var
@@ -21,5 +21,6 @@ $ env SADECE_MUTANT=okunamazsa-devam bash gunluk-plan/scripts/sirada-bak-sultan-
   ✗ K4 işaret ikinci kaynaktan okunamazsa ÖLÇÜLEMEDİ (rc 3), hiçbir şey üstlenilmez
   ✓ K6 paketli ikinci kaynak (scripts/gorev.sh) yoksa ve seçilen kopya başkaysa ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (doğrulanamayan Sultan işi sayılmaz)
   ✓ K5 🔴 AÇIK GUNLUK_PLAN_GOREV_SH ile seçilen KÖR kopya da ikinci okumadan muaf DEĞİL: ISI/MADDE'de Sultan kararı yok, ustlen yalnız sıradan işe (göz tur 1)
-── 17 geçti · 1 kaldı
+  ✗ K7 🔴 ikinci okuma ortam değişkeniyle KAPATILAMAZ: GUNLUK_PLAN_ISARET_SH=- → ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (göz tur 2)
+── 17 geçti · 2 kaldı
 --- stderr ---

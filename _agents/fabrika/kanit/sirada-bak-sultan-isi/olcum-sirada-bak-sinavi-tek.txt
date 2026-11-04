@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
-# rc=0 sure=25.3s zaman=2026-11-04T18:28:19+03:00
+# rc=0 sure=28.5s zaman=2026-11-04T18:34:06+03:00
 --- stdout ---
 ── gerçek betikler
   ✓ L1 Sultan kararı (sahip sultan + kapı karar): satır sonunda iki işaret de var
@@ -20,16 +20,18 @@ $ bash gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh
   ✓ K4 işaret ikinci kaynaktan okunamazsa ÖLÇÜLEMEDİ (rc 3), hiçbir şey üstlenilmez
   ✓ K6 paketli ikinci kaynak (scripts/gorev.sh) yoksa ve seçilen kopya başkaysa ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (doğrulanamayan Sultan işi sayılmaz)
   ✓ K5 🔴 AÇIK GUNLUK_PLAN_GOREV_SH ile seçilen KÖR kopya da ikinci okumadan muaf DEĞİL: ISI/MADDE'de Sultan kararı yok, ustlen yalnız sıradan işe (göz tur 1)
-── 18 geçti · 0 kaldı
+  ✓ K7 🔴 ikinci okuma ortam değişkeniyle KAPATILAMAZ: GUNLUK_PLAN_ISARET_SH=- → ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (göz tur 2)
+── 19 geçti · 0 kaldı
 ── mutantlar
   ✓ mutant sirada-suzgeci-yok yakalandı (5 vaka kırmızı)
   ✓ mutant yalniz-kapi-suzer yakalandı (3 vaka kırmızı)
   ✓ mutant yalniz-sahip-suzer yakalandı (3 vaka kırmızı)
   ✓ mutant tum-satiri-tarar yakalandı (1 vaka kırmızı)
   ✓ mutant ikinci-okuma-yok yakalandı (5 vaka kırmızı)
+  ✓ mutant isaret-kapagi-var yakalandı (1 vaka kırmızı)
   ✓ mutant acik-gorev-muaf yakalandı (2 vaka kırmızı)
   ✓ mutant isaret-suzgeci-yok yakalandı (4 vaka kırmızı)
-  ✓ mutant okunamazsa-devam yakalandı (1 vaka kırmızı)
+  ✓ mutant okunamazsa-devam yakalandı (2 vaka kırmızı)
   ✓ mutant liste-sahip-isareti-yok yakalandı (7 vaka kırmızı)
   ✓ mutant liste-kapi-isareti-yok yakalandı (7 vaka kırmızı)
 ── mutant özeti: 0 yaşayan/kurulamayan
