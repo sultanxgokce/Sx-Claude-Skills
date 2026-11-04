@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "usta-oda-alani",
+  "pr": "686",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T14:17:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-oda-alani",
+  "dal": "usta-oda-alani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15794,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2996
+  },
+  "dalgic": "uyumsuz",
+  "bas": "6afa9ac8697ee080d8db8fb4d78649e5ea0b4e94",
+  "duzeltme_farki": {
+    "onceki_bas": "24d0010909c8c2572dcd7f3e426dc220db402a40",
+    "dosya": 3,
+    "bayt": 3886,
+    "tam_bayt": 38323
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turda üretime hazır bulunan oda aktarımı korunmuş; bu düzeltme turunda yalnız terminal-onar sürümü 2.40.0'dan 2.41.0'a yükseltilmiş ve önceki turda kapatılacak bulgu yoktur. Temiz committe geçen API ve usta ölçümleri kartın terminal-onar tarafını güçlü biçimde doğruladığı için puan 5; merkez şeridinin oda kümesine dizilmesi ise hâlâ doğrudan ölçülmemiştir.",
+    "bulgular": [
+      {
+        "ne": "Merkez şeridinin uyuyan ustayı kendi oda kümesine dizdiği sonuç bu konteynerde doğrulanmamış.",
+        "kanit": "Manifestte yalnız terminal-onar/scripts/usta.test.sh ve terminal-onar/kapi/sunucu.test.mjs ölçümleri var; UY5 API yanıtındaki oda alanını ölçüyor, fakat merkez tüketicisine ait ölçüm veya önce/sonra kare bulunmuyor.",
+        "konum": "kanıt manifesti: usta-sinavi ve kapi-sinavi kayıtları; olcum-kapi-sinavi-sonra.txt: UY5",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "merkez şeridi uygulaması + çalışır merkez arayüzü"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil, rc=0 ve aynı temiz commit üzerinde. U1b oda sütununu ve boş sohbet alanında kaymayı, UY5 gerçek usta.sh ile akış/blok kayıt biçimlerinde oda aktarımını ve odasız ustada alan uydurulmamasını ölçüyor; mutantlar ilgili sınavların hatayı yakaladığını gösteriyor. Önce/sonra kare ve merkez tüketici ölçümü yok, dolayısıyla görsel merkez yerleşimi kutu dışında kalıyor."
+  }
+}
