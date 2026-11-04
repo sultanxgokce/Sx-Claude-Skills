@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "birlestirme-kapisi-reis-birlestir",
+  "pr": "693",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T19:32:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-birlestirme-kapisi-reis-birlestir",
+  "dal": "birlestirme-kapisi-reis-birlestir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27126,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 21979
+  },
+  "dalgic": "uyumsuz",
+  "bas": "bcc3f78f4d02bbf762aec5071e5142ac6ae71771",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Birleştirme kapısı, puan sonrası kod değişikliğini yalnız uç commit zamanından sonraki “birlestir” kararıyla geçiriyor; önceki karar ve “devam” kararı engeli kaldırmıyor. Ana davranış yeşil ölçüm ve iki hedef mutantla doğrulanmış, ancak sürüm notundaki “tam kapı sınavı 232/0, 3 mutant” iddiası sunulan kanıtta karşılıksız olduğu için önce bu kanıt/idda uyuşmazlığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sürüm notu “tam kapı sınavı 232/0, 3 mutant” diyor; manifestte tam kapı ölçümü yok ve yalnız iki mutasyon kaydı bulunuyor. Bu nedenle yayımlanan doğrulama iddiasının bir bölümü kanıtsız.",
+        "kanit": "Manifestte gerçek ölçümler 38 geçti · 0 kaldı sonucunu veren aynı olculen-commit sınavına ait; mutasyon kayıtları yalnız mut-karar-zamani-yok (O21) ve mut-her-karar-sayilir (O22). 232/0 ölçümü veya üçüncü mutant kaydı bulunmuyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md sürüm notu 0.27.56; KANIT manifesti kayitlar",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek kod ölçümü rc=0 ile 38/0, O20-O22 vakalarını kapsıyor; iki mutasyon kaydı hedef O21 ve O22’yi beklendiği gibi düşürüyor. Ancak sürüm notunda ayrıca ileri sürülen 232/0 tam kapı sonucu ile üçüncü mutant için manifest kaydı veya ölçüm çıktısı yok."
+  }
+}

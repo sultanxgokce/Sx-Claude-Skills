@@ -1,0 +1,25 @@
+{
+  "is": "birlestirme-kapisi-reis-birlestir",
+  "cumle": "Birleştirme kapısı kartın reis-dedi birlestir kararını okur: puan sonrası kod değişmişse (sürüm satırı gibi) ve karar uç commit'ten sonra verilmişse engel yerine kararı gösterir; karardan sonra yeni commit gelirse engel sürer. Sınav + mutant (ölçüt: kapı sınavı yeni vakalarla yeşil, mutantlar kırmızı)",
+  "istedi": "SERDAR",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-04T19:08:52+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
