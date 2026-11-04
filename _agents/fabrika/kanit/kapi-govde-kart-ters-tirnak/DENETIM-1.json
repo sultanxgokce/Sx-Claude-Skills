@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kapi-govde-kart-ters-tirnak",
+  "pr": "696",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T01:20:36+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-govde-kart-ters-tirnak",
+  "dal": "kapi-govde-kart-ters-tirnak",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21318,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 28366
+  },
+  "dalgic": "uyumlu",
+  "bas": "cf4a09ac8c5780ce5f0612ff0fa7895ef6eb41fe",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, PR gövdesindeki kart adını ters tırnak, tırnak, yıldız ve sondaki noktalama sarmalından arındırarak okuyor; dört gerçekçi biçim de aynı karta çözülüyor. Gerçek ölçüm 236/236 yeşil, iki mutasyon da T19a2 kapısını beklendiği gibi düşürdüğü için üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm temiz commit üzerinde rc=0 ve 236/236 geçiyor; dört hedef örneği ters tırnak, çift tırnak, yıldızlı başlık ve sondaki noktayı kapsıyor. İki mutasyon kaydı, eski biçim ile tırnağı içeride bırakan bozuklukların T19a2 tarafından yakalandığını gösteriyor; klasik önce/sonra çifti yok, ancak gerçek ölçüm ile hedefli mutasyon çifti iddiayı yeterince sınamış."
+  }
+}
