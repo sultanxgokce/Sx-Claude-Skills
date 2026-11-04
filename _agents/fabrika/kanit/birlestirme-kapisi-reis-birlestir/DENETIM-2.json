@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "birlestirme-kapisi-reis-birlestir",
+  "pr": "693",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T19:37:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-birlestirme-kapisi-reis-birlestir",
+  "dal": "birlestirme-kapisi-reis-birlestir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29148,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 28112
+  },
+  "dalgic": "uyumsuz",
+  "bas": "daf7a2d6394b0dc35502824e2e7bc08b7356a390",
+  "duzeltme_farki": {
+    "onceki_bas": "bcc3f78f4d02bbf762aec5071e5142ac6ae71771",
+    "dosya": 5,
+    "bayt": 31024,
+    "tam_bayt": 57548
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Birleştirme kapısı, puan sonrası kod değişikliğinde yalnız uç commit’ten sonra verilmiş “birlestir” kararını geçiriyor; daha eski karar ile “devam” kararı engeli sürdürüyor. Önceki kanıt uyuşmazlığı, sürüm notunun mevcut kayıtlara düzeltilmesi ve 232/0 tam kapı ölçümünün araç imzalı manifeste eklenmesiyle kapanmış; üretimi engelleyen kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek kod ölçümü “sonra” kaydında rc=0 ve 38/0; O20-O22 istenen karar-zamanı ve karar-türü davranışlarını doğruluyor. O21 ve O22 mutantları hedef kapıları beklendiği gibi düşürüyor; ayrıca “tam-kapi” kaydı rc=0 ile 232/0 sonucunu doğruluyor. Önceki turdaki “3 mutant” ifadesi “2 mutant yakalandı (O21, O22)” olarak düzeltilmiş ve kanıtla uyumlu hale gelmiş."
+  }
+}
