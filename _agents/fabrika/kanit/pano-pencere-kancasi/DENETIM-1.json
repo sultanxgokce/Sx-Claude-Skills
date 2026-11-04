@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "pano-pencere-kancasi",
+  "pr": "694",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T20:55:36+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-pano-pencere-kancasi",
+  "dal": "pano-pencere-kancasi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32114,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 32112
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1c3d897e86f593230a2d9e7f5cb7e5523837092e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen kanca akışı yapılmış: pencere sahiplenirse basla/bitti/hata kullanılıyor, yol terminale yazılmıyor; kanca yokken eski akış sürüyor ve uçtan uca F9 ölçümü yeşil. Ancak bitti çağrısı hata atarsa yüklenmiş yol sessizce kaybolduğu için önce bu dayanıklılık kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Pencerenin bitti(yol) kancası hata atarsa kod yalnız günlük yazıyor; yolu terminale verme, panoya alma veya pencereye hata bildirme geri dönüşü yok. Kullanıcı pencereyi hâlâ yükleniyor durumunda ve yüklenmiş yol erişilemez halde bırakılabilir.",
+        "kanit": "Üretim farkında `try { P.bitti(j.yol); } catch (e) { log(...) }` sonrasında koşulsuz `log('pencereye', ...)` ile dal tamamlanıyor; eski `terminaleYaz` yolu yalnız sonraki `else if` dalında ve artık çalıştırılmıyor. Mevcut F9 kanıtı yalnız başarılı bitti çağrısını ölçüyor; istisna vakasını sınamıyor.",
+        "konum": "terminal-onar/kapi/genel/pano.js:116",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Hedef davranış için gerçek pano.js kullanan yeşil F9 uçtan uca ölçümü, masaüstü değişmezliği M1 ve mutantın Y11 kapısını düşürdüğünü gösteren geçerli mutasyon kaydı güçlü kanıt sağlıyor; ayrıca pano-sinav-2 özetinde Y11/Y11b kalanlar arasında değil. Bununla birlikte genel pano-sinav ölçümü rc=1/kırmızı; kalan Y0 ve N1 önceki ölçümde de aynı olduğundan hedef değişikliğin gerilemesi görünmüyor, fakat bu kayıt bütünüyle yeşil kabul edilemez."
+  }
+}

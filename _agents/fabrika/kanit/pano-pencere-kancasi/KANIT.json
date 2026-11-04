@@ -1,0 +1,179 @@
+{
+  "is": "pano-pencere-kancasi",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T21:01:02+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav",
+      "asama": "once",
+      "dosya": "olcum-pano-sinav-once.txt",
+      "sha256": "aad4f83ebe2e4542ded02616896c5762c2e94e7d770c313e1403ec2387eb2a79",
+      "komut": [
+        "node",
+        "/config/projects/Sx-Claude-Skills/terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T20:47:46+03:00",
+      "sure_sn": 98.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "29cf62a2c08c42ce92cffb499b363227",
+      "olculen_commit": "5a275138a51e1697544660f31546e39bae2fce66",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-sonra.txt",
+      "sha256": "4a91398b868ad903035d6429a2229d1442fb9ff34d9222cfe468a85581fba2e2",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T20:49:31+03:00",
+      "sure_sn": 104.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fabd7ba289034a46aabab8500ee0e59f",
+      "olculen_commit": "5a275138a51e1697544660f31546e39bae2fce66",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "merkez-telefon-fotograf-uctan-uca",
+      "asama": "sonra",
+      "dosya": "olcum-merkez-telefon-fotograf-uctan-uca-sonra.txt",
+      "sha256": "b57d60d46de59a8ff6a9425f8a61caea3e0a309ceeaa72f37387e5209549274c",
+      "komut": [
+        "node",
+        "/config/projects/_wt/cloudtop-telefon-fotograf/infra/terminal-merkez/telefon-fotograf-sinav.mjs",
+        "--pano",
+        "terminal-onar/kapi/genel/pano.js"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T20:49:39+03:00",
+      "sure_sn": 8.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "722165420f8842ec8136e99de8a63dff",
+      "olculen_commit": "5a275138a51e1697544660f31546e39bae2fce66",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kanca-yok-sayilir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kanca-yok-sayilir-sonra.txt",
+      "sha256": "053aab154e155c143ff321492a6382e94a8dd701d3b5696222e8333af8c719db",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T20:51:22+03:00",
+      "sure_sn": 102.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "pano-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "Y11",
+      "hedef_dustu": true,
+      "olcum_id": "cc74535c890f4b028368d218c9b73724",
+      "olculen_commit": "5a275138a51e1697544660f31546e39bae2fce66",
+      "olculen_kirli": true,
+      "kirli_kurali": 1,
+      "kirli_izin": "mutant: kanca çağrılsa da yol terminale yazılıyor; Y11 düşmeli"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-2",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-2-sonra.txt",
+      "sha256": "f9d8271f212cd7308b190c7d66257d5eeefd07d369ce8d2540be49e4dc60621e",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T20:54:07+03:00",
+      "sure_sn": 105.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "79fc77cd0c884236b0ff32c63b743ad1",
+      "olculen_commit": "43c8f2e70651ac203bdb2a97dc34178c7efaa107",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-3",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-3-sonra.txt",
+      "sha256": "c24a71572c5bab36b16c334b8381e75e6f36213673292d2e286483f78aa7170d",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T20:58:07+03:00",
+      "sure_sn": 107.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6cb6db06ee4048d1b866eeb04849b967",
+      "olculen_commit": "584d7bdd34db35aabed1abdc7409481e9e92b295",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-4",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-4-sonra.txt",
+      "sha256": "d0fd04a77ce66727602926f3d7b0a1eed5705b336da2f202059b9c31136467c9",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T21:00:55+03:00",
+      "sure_sn": 108.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f3b9871782484fe7a828ae4f6bfc5f6e",
+      "olculen_commit": "d8a7050028f299408f27094ec0a326a90a4c5df2",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "merkez-telefon-fotograf-uctan-uca-2",
+      "asama": "sonra",
+      "dosya": "olcum-merkez-telefon-fotograf-uctan-uca-2-sonra.txt",
+      "sha256": "ff274b7ef06ad45486257a2fe465e0f6b8037b3ba4576b6e714b0a78bafe297f",
+      "komut": [
+        "node",
+        "/config/projects/cloudtop/infra/terminal-merkez/telefon-fotograf-sinav.mjs",
+        "--pano",
+        "terminal-onar/kapi/genel/pano.js"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T21:01:02+03:00",
+      "sure_sn": 7.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "95a04ad0f370407bb4ebeeffc709e520",
+      "olculen_commit": "d8a7050028f299408f27094ec0a326a90a4c5df2",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "04ba22d86cfb6f91af2ed8a24d75fe4faecd951d1ed02d4fb72fb124b625c76d"
+}

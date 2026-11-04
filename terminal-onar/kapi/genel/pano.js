@@ -91,13 +91,21 @@
   function kb(b) { return b >= 1024 * 1024 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.round(b / 1024) + ' KB'; }
   var sonOlcum = null;
   var mesgul = false;
+  // ── YAZMA PENCERESİ KANCASI (1.2.0 · BÂNİ 4 Kas, görev …ANA8GF dilim 4, kart pano-pencere-kancasi): merkezin telefon yazma penceresi
+  //    window.__kapiResimPencere = { basla(blob) → true|false, bitti(yol), hata(mesaj) } sunuyorsa yüklenen resmin yolu TERMİNALE DEĞİL
+  //    pencereye verilir (pencere ek olarak gösterir, Gönder yol + metni tek satırda gönderir). Kanca yoksa ya da basla() false dönerse eski yol:
+  //    yol terminale yazılır. basla() yüklemeden ÖNCE çağrılır ki pencere "yükleniyor" desin ve Gönder beklesin; hata da pencereye gider.
+  function pencereKancasi() { var P = window.__kapiResimPencere; return (P && typeof P.basla === 'function' && typeof P.bitti === 'function' && typeof P.hata === 'function') ? P : null; }
   async function resimIsle(blob) {
     if (mesgul) return; mesgul = true;
-    var t0 = performance.now();
-    bildir('⏳ resim küçültülüyor… (' + kb(blob.size) + ')', '#c9914f', 60000);
+    var t0 = performance.now(), P = pencereKancasi(), pencereye = false;
+    try { pencereye = !!(P && P.basla(blob)); } catch (e) { pencereye = false; log('pencere kancası basla hatası:', e && e.message); }
+    // pencere sahipse sağ alt bildirim BASILMAZ: pencere kendi durumunu gösterir ("Resim yükleniyor…" · ek · hata notu); bildirim telefonda Gönder'in üstüne biniyordu (kare ölçümü)
+    var bildirP = function (m, r, sn_) { if (!pencereye) bildir(m, r, sn_); };
+    bildirP('⏳ resim küçültülüyor… (' + kb(blob.size) + ')', '#c9914f', 60000);
     try {
       var kucuk = await kucult(blob); var govde = kucuk || blob, t1 = performance.now();
-      bildir('⬆ resim yükleniyor… (' + kb(govde.size) + ' · küçültme ' + sn(t1 - t0) + ')', '#c9914f', 60000);
+      bildirP('⬆ resim yükleniyor… (' + kb(govde.size) + ' · küçültme ' + sn(t1 - t0) + ')', '#c9914f', 60000);
       var r = await fetch(RESIM_URL, { method: 'POST', credentials: 'same-origin',
         headers: { 'x-kapi': '1', 'content-type': govde.type || 'application/octet-stream' }, body: govde });
       var j = null; try { j = await r.json(); } catch (e) { /* gövde json değil */ }
@@ -105,15 +113,24 @@
       sonOlcum = { kucultMs: Math.round(t1 - t0), yukleMs: Math.round(t2 - t1), ilkBayt: blob.size, bayt: govde.size, tip: govde.type || '' };
       var sure = 'küçültme ' + sn(t1 - t0) + ' · yükleme ' + sn(t2 - t1) + ' · ' + kb(govde.size);
       log('süreler', sonOlcum);
-      if (r.ok && j && j.yol) {
+      var verildi = false;
+      if (r.ok && j && j.yol && pencereye) {
+        try { P.bitti(j.yol); verildi = true; } catch (e) { log('pencere kancası bitti hatası:', e && e.message); }
+        if (verildi) log('pencereye', j.yol, sure);
+        else {   // bağımsız göz tur 1: pencere yolu alamazsa yüklenmiş yol kaybolmaz — pencereye hata söylenir, yol ESKİ yoldan terminale yazılır (bildirimle)
+          try { P.hata('pencere eki alamadı; yol terminale yazıldı'); } catch (x) { /* pencere */ }
+          pencereye = false;
+        }
+      }
+      if (r.ok && j && j.yol && !verildi) {
         var nasil = terminaleYaz(' ' + j.yol + ' ');
         if (nasil) { bildir('✓ resmin yolu terminale yazıldı — Enter ile gönder\n' + sure, '#7ee787', 6000); log('yazıldı', nasil, j.yol); }
         else {
           try { await navigator.clipboard.writeText(j.yol); bildir('📋 yol panoda — Cmd+V ile yapıştır', '#79c0ff', 6000); }
           catch (e) { bildir('✗ yol terminale yazılamadı: ' + j.yol, '#ff7b72', 9000); }
         }
-      } else bildir('✗ ' + ((j && j.hata) || ('HTTP ' + r.status)), '#ff7b72', 7000);
-    } catch (e) { bildir('✗ ' + (e && e.message), '#ff7b72', 7000); }
+      } else if (!(r.ok && j && j.yol)) { var neden = (j && j.hata) || ('HTTP ' + r.status); if (pencereye) { try { P.hata(neden); } catch (e) { /* pencere */ } } bildirP('✗ ' + neden, '#ff7b72', 7000); }   // yalnız yükleme başarısızsa (pencereye verilmiş yol 'hata' almaz — Y11 yakaladı)
+    } catch (e) { if (pencereye) { try { P.hata(e && e.message); } catch (x) { /* pencere */ } } bildirP('✗ ' + (e && e.message), '#ff7b72', 7000); }
     finally { mesgul = false; }
   }
 
@@ -343,7 +360,7 @@
     kap.style.marginTop = RESIM_SERIT + 'px'; kap.style.height = 'calc(100% - ' + RESIM_SERIT + 'px)';
     try { window.dispatchEvent(new Event('resize')); } catch (e) { /* eski tarayıcı */ }
     var klavye = klavyeUyumKur(kap);
-    window.__kapiResim = { surum: '1.1.0', dugme: true, serit: RESIM_SERIT, klavye: klavye };
+    window.__kapiResim = { surum: '1.2.0', dugme: true, serit: RESIM_SERIT, klavye: klavye, pencere: true };
     return true;
   }
   // ── KLAVYE AÇIKKEN YAZI ALANI GÖRÜNÜR (1.1.0 · BÂNİ 30 Eki, Kuzey Yıldızı G2.9): telefonda klavye açılınca tarayıcı yalnız GÖRÜNEN alanı

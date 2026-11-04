@@ -1,0 +1,17 @@
+$ node /config/projects/cloudtop/infra/terminal-merkez/telefon-fotograf-sinav.mjs --pano terminal-onar/kapi/genel/pano.js
+# rc=0 sure=7.8s zaman=2026-11-04T21:01:02+03:00
+--- stdout ---
+  ✓ F1 pencere kancayı sunar (window.__kapiResimPencere.basla); başta ek şeridi yok, Gönder metne göre açık
+  ✓ F2 basla(blob) → true; ek şeridi "Resim yükleniyor…" (küçük resim var), Gönder BEKLER (kapalı), metin durur
+  ✓ F3 bitti(yol) → ek şeridi dosya adını gösterir, küçük resim durur, Kaldır görünür, Gönder açık, yol bu sekmede saklı, terminale henüz hiçbir şey gitmedi
+  ✓ F4 Gönder → terminale TEK satır "yol metin" + Enter; ek temizlendi, saklı yol silindi, pencere kapandı, düğme "Yaz"
+  ✓ F5 hata(mesaj) → ek yok, not "Resim eklenemedi: HTTP 500…", metin durur, Gönder metne göre açık
+  ✓ F6 yalnız ek (metin boş): Gönder açık; Küçült → düğme etiketi "SERDAR · Resim eklendi"
+  ✓ F7 yenilemede ek kalır (ad gösterilir, küçük resim yok), Gönder açık
+  ✓ F8 Kaldır → ek yok, saklı yol silindi, Gönder (metin boş) kapalı, terminale hiçbir şey gitmedi
+  ✓ F9 gerçek pano.js: Görüntü ekle → yükleme /api/resim'e gitti, yol TERMİNALE DEĞİL pencereye düştü (ek şeridi img-9.png), Gönder → tek satır "yol metin" + Enter; Yaz → + → Görüntü ekle → Gönder = 4 dokunuş
+  · ölçüm: Yaz→+→Görüntü ekle→Gönder dokunuş = 4 · pano.js /config/projects/_wt/Sx-Claude-Skills-pano-pencere-kancasi/terminal-onar/kapi/genel/pano.js · yükleme [{"ct":"image/png","bayt":70}] · pano bildirimi: 
+  ✓ M1 1280 masaüstü DEĞİŞMEDİ: yazma çubuğu yok, kanca yok, şerit 57 px
+  ✓ F10 sayfa hatası 0
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---
