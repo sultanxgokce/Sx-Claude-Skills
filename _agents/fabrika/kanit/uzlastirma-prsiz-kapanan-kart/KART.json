@@ -1,6 +1,6 @@
 {
   "is": "uzlastirma-prsiz-kapanan-kart",
-  "cumle": "Çalışılıyor uzlaştırması PR numarasız kapanmış kartı da görür: görevi 'açık kartı yok' diye değil 'kart X bitti, görev açık kaldı; bittiyse gorev.sh bitti' diye bekliyor'a çeker",
+  "cumle": "Çalışılıyor uzlaştırması PR numarasız kapanmış kartı da görür ve görevi 'kart X bitti (PR kaydı yok), görev açık kaldı' notuyla bekliyor'a çeker; kart aracı sınavı bu yeni notu bekler",
   "istedi": "SERDAR",
   "aldi": "BANI",
   "zaman": "2026-11-03T20:02:46+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "_agents/fabrika/kanit/uzlastirma-prsiz-kapanan-kart/ (uzlaştırma sınavı + mutant)",
   "oda": "code",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-04T03:28:58+03:00",
+      "olay": "daralt",
+      "kalan_kart": "kapi-turkce-kanit-yolu",
+      "tur_sifir": 3
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -39,6 +46,11 @@
       "zaman": "2026-11-03T20:08:23+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-03T20:11:08+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
@@ -48,6 +60,43 @@
       "oturum": "ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c",
       "gerekce": "Tur 2 bulgusu yanlış pozitif: göz tavanı değişikliği #680 main birleşmesinden geldi, PR'ın main'e karşı farkında yok; ölçüm kanıt dizininde (olcum-PR farkı main'e karşı). Kod değişmedi, tur 1 5/E idi.",
       "zaman": "2026-11-03T20:10:24+03:00"
+    },
+    {
+      "karar": "birlestir",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR kararı (ulak_1793729098-f8301a89 · postane msg_01M6H9BWK3GFMDBVJ7JZQ6KKJ6): puan sonrası fark yalnız sınavın beklenen notunu kartın davranışına eşitler, kod değişmedi, CI yeşil",
+      "zaman": "2026-11-03T21:06:51+03:00"
+    },
+    {
+      "karar": "birlestir",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR kararı 3 Kas 20:5x (ulak_1793737924-51f22d56): puan sonrası fark yalnız G10c beklenen notu + ana dal birleşimi sürüm 0.27.53, davranış kodu değişmedi, CI yeşil",
+      "zaman": "2026-11-03T23:32:18+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "daraltma: kalan bulgu yeni karta (kapi-turkce-kanit-yolu) — Birleştirme kapısı Türkçe adlı kanıt dosyasını git tırnaklı yazımı yüzünden kod değişikliği sayıyor (bulgu gorev_01M6H9GMQF04HXYER6V21RNY9N); SERDAR 4 Kas 03:28 daralt kararı",
+      "zaman": "2026-11-04T03:28:58+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Çalışılıyor uzlaştırması PR numarasız kapanmış kartı da görür: görevi 'açık kartı yok' diye değil 'kart X bitti, görev açık kaldı; bittiyse gorev.sh bitti' diye bekliyor'a çeker",
+      "zaman": "2026-11-04T03:28:58+03:00",
+      "kalan_kart": "kapi-turkce-kanit-yolu"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-04T03:28:58+03:00",
+      "kalan_kart": "kapi-turkce-kanit-yolu",
+      "kalan": "Birleştirme kapısı Türkçe adlı kanıt dosyasını git tırnaklı yazımı yüzünden kod değişikliği sayıyor (bulgu gorev_01M6H9GMQF04HXYER6V21RNY9N); SERDAR 4 Kas 03:28 daralt kararı",
+      "tur_sifir": 3,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF"
     }
   ]
 }

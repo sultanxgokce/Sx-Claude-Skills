@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "uzlastirma-prsiz-kapanan-kart",
+  "pr": "681",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T03:29:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastirma-prsiz-kapanan-kart",
+  "dal": "uzlastirma-prsiz-kapanan-kart",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36319,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 52338
+  },
+  "dalgic": "uyumsuz",
+  "bas": "fd16dea7d8b671bb8896b1a1870905e6f70a21bd",
+  "duzeltme_farki": {
+    "onceki_bas": "0aef88c05ec6454edd8940062eb76e169b4892e0",
+    "dosya": 7,
+    "bayt": 55812,
+    "tam_bayt": 86500
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "PR’sız kapanan kartın görevi doğru gerekçeli notla bekliyor’a çekiliyor; kart aracı sınavının beklentisi de aynı sözleşmeye eşitlenmiş. Önceki turda bulgu yoktu; bu düzeltme farkında ciddi veya işi bozan yeni kusur görünmediği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve SHA’ları sağlam; sarı kayıt yok. Önce/sonra ölçümü eski kodda U4c FAIL ve 56/1, gerçek kodda U4c PASS ve 57/0 gösteriyor; hedefli UM18 mutasyonu yalnız U4c’yi düşürerek sınavın gerilemeyi yakaladığını doğruluyor. Kart aracı ölçümü de G10c’nin yeni not sözleşmesiyle birlikte 478/0 geçtiğini gösteriyor; main’e karşı fark ölçümü önceki kapsam şüphesinin bu PR’dan kaynaklanmadığını destekliyor."
+  }
+}
