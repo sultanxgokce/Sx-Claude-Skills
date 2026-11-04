@@ -1,0 +1,26 @@
+$ bash yazilim-fabrikasi/scripts/manifest-ozet.test.sh
+# rc=0 sure=85.4s zaman=2026-11-04T14:08:13+03:00
+--- stdout ---
+── manifest-ozet.py ──
+  ✓ K1 karma manifest rc=0
+  ✓ K2 iki ilan = iki TEK satır
+  ✓ K3 üç geçerli kayıt tam duruyor
+  ✓ K4 ilan kaydı JSON gövdesinde YOK (tek satıra indi)
+  ✓ K5 sha/kimlik alanları geçersizden gelmiyor
+  ✓ K6 üst alanlar (is, imza) korundu
+  ✓ K7 başlık görünümün özet olduğunu ve diskteki imzalı dosyanın aynen durduğunu söylüyor
+  ✓ K8 hedefin komutu (kısaltılmış) satırda
+  ✓ T1 geçersizsiz manifest: 4 kayıt aynen, bölüm yok
+  ✓ B1 bozuk dosya rc=2 (çağıran ham cat'e düşer)
+  ✓ B2 olmayan dosya rc=2
+  ✓ E1 hedefi bulunamayan ilan YİNE tek satır, geçerli kayıt düşmedi
+     mihenk ölçeği (51 kayıt, 28'i geçersizlik): ham=39668 özet=14352 bayt
+  ✓ M1 mihenk ölçeğinde görünüm ham dosyanın YARISINDAN küçük
+  ✓ M2 14 ilan = 14 satır (28 kayıt → 14 satır)
+── denetci.sh bağlantısı ──
+  ✓ D1 denetci.sh manifest-ozet.py'yi çağırıyor
+  ✓ D2 özet çıkmazsa ham dosyaya düşer (eksik veri yok)
+
+SONUÇ: PASS=16 FAIL=0
+--- stderr ---
+⏳ agir-sira: kanit-manifest-gecersiz-tek-satir-manifest-ozet sınavı 85 sn bekledi (yuva 2, load1 17.27)
