@@ -636,10 +636,10 @@ assert not [x for x in l if x["yol"].endswith("gorev_KARTSIZ0000000001")], l
 PY2
 printf '{"gorevler":[{"id":"gorev_KARTTEST00000009","canli":{"gorev_durumu":"calisiliyor","atanan":"BANI"},"adlar":[{"deger":"bağlı iş"}],"son_adim":"2026-10-26T01:00"}]}' > "$T/gorevler-kart.json"
 N0=$(yz); bash "$KT" bitti gb-9 >/dev/null 2>&1; RC=$?
-[ $RC -eq 0 ] && python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G10c bitti sonrası kartı kapanan görev (açık kartı kalmadı) bekliyor'a çekilir (X666: 0MHE6C biçimi)"
+[ $RC -eq 0 ] && python3 - "$T/yazim.jsonl" "$N0" <<'PY2'; g $? "G10c bitti sonrası kartı kapanan görev (açık kartı kalmadı) bekliyor'a çekilir; not 'açık kartı yok' DEĞİL 'kart gb-9 bitti (PR kaydı yok)' (X666 + …REJ)"
 import json,sys
 l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
-m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000009") and "açık kartı yok" in json.dumps(x["govde"],ensure_ascii=False)]
+m=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000009") and "kart 'gb-9' bitti (PR kaydı yok)" in json.dumps(x["govde"],ensure_ascii=False) and "açık kartı yok" not in json.dumps(x["govde"],ensure_ascii=False)]   # …REJ (0.27.53): PR'sız biten kart gerçek nedeni yazar
 assert len(m)==1, l
 PY2
 O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" bitti gb-9 2>&1)"; RC=$?   # jeton okunamazsa uzlaştırma SESSİZ atlamaz: söyler, kart rc'si bozulmaz

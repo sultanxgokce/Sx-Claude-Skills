@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "uzlastirma-prsiz-kapanan-kart",
+  "pr": "681",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-03T20:11:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastirma-prsiz-kapanan-kart",
+  "dal": "uzlastirma-prsiz-kapanan-kart",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26993,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8161
+  },
+  "dalgic": "olculemedi",
+  "bas": "0aef88c05ec6454edd8940062eb76e169b4892e0",
+  "duzeltme_farki": {
+    "onceki_bas": "524d5e90f5ccb66f68ab76d3aab4fc155a8fc040",
+    "dosya": 4,
+    "bayt": 8161,
+    "tam_bayt": 38277
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "PR’sız kapanan kart artık “açık kartı yok” diye değil, kartın bittiğini ve görevin açık kaldığını belirten doğru gerekçeyle bekliyor’a çekiliyor; kapanış yolu da bildiriliyor. Önceki kapsam kayması bulgusu, main’e karşı PR farkı ölçümünün göz-tavanı değişikliğinin bu PR’dan değil #680 birleşmesinden geldiğini göstermesiyle kapanmış; ciddi veya işi bozan uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı, SHA’ları sağlam ve sarı kayıt yok. Önce/sonra çifti hedef davranışı doğrudan ölçüyor: eski kodda U4c FAIL ve toplam 56/1 iken gerçek ölçümde U4c PASS ve 57/0; hedefli UM18 mutasyonu yalnız U4c kapısını düşürerek sınavın gerilemeyi yakaladığını gösteriyor. Main’e karşı temiz PR farkı ölçümü de önceki B1 bulgusunun yanlış pozitif olduğunu kanıtlıyor: göz-tavanı değişikliği #680 commitinden gelmiş, bu PR’ın farkında yalnız uzlaştırma kodu/sınavı, mutasyon betiği ve sürüm artışı bulunuyor."
+  }
+}

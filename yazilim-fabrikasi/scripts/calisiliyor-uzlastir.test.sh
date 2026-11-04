@@ -78,7 +78,7 @@ defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
 RC=$(kos --uygula); prler '[]'; [ "$RC" = 0 ] && [ "$(zl)" = 0 ]; g $? "U4k canlı borçlu görev için 'PR birleşti ama çalışılıyor' zili çalmaz"
 kart "$T/k1" a BERİD bitti gorev_A
 defter "$(gor gorev_A BERİD calisiliyor 2026-10-26T10:00)"
-RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_A" "$T/yazim.jsonl" && grep -q "açık kartı yok" "$T/yazim.jsonl"; g $? "U4c biten kart (PR'sız) açık sayılmaz: çekilir, not eskisi gibi"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_A" "$T/yazim.jsonl" && grep -q "kart 'a' bitti (PR kaydı yok)" "$T/yazim.jsonl" && grep -q "gorev.sh bitti gorev_A --kim" "$T/zil.log" && ! grep -q "açık kartı yok" "$T/yazim.jsonl"; g $? "U4c biten kart (PR'sız) açık sayılmaz: çekilir; not 'açık kartı yok' DEĞİL gerçek neden, zil kapanış yolunu söyler (…REJ)"
 printf '{"is":"a","aldi":"BERİD","durum":"bitti","gorev":"gorev_A","pr":"77","bitis":"2026-10-26T12:00"}' > "$T/k1/a.json"
 RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "PR #77 ile kapandı" "$T/yazim.jsonl" && grep -q "gorev.sh bitti gorev_A --pr 77" "$T/zil.log" && ! grep -q "açık kartı yok" "$T/yazim.jsonl"; g $? "U4d PR ile biten kartın görevi: not gerçek nedeni, zil kapanış yolunu söyler"
 TAZE=$(python3 -c "import datetime as d;print((d.datetime.now(d.timezone.utc)-d.timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%S.000Z'))")

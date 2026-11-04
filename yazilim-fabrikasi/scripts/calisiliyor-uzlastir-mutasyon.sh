@@ -39,6 +39,7 @@ dene "UM15 koltuk listesi okunamazsa boş sayılır" $P $U 'if c.returncode != 0
         return None' 'if c.returncode != 0:
         return []'
 dene "UM16 süpürme tür=ajan şartını atlar (ajan olmayan koltuk da taranır)" $P $U 'if k["tur"] == "ajan" and norm(k["ad"]) not in ajanlar' 'if norm(k["ad"]) not in ajanlar'
+dene "UM18 PR'sız kapanan kart yine yok sayılır (görev 'açık kartı yok' ile çekilir — …REJ öncesi hâl)" $P $U 'if k.get("durum") != "bitti" or not k.get("gorev") or norm(k.get("aldi")) != ajan: continue' 'if k.get("durum") != "bitti" or not k.get("gorev") or not k.get("pr") or norm(k.get("aldi")) != ajan: continue'
 dene "UM17 süpürmede koltuk listesi okunamazsa devam eder" $P $U 'print("  ⚠ süpürme atlandı: koltuk listesi okunamadı"); return 4' 'pass'
 dene "UP1 PR-birleşti zili çalınmaz (TP00WX)" $P $U 'if s.zil_komut and not zil(s.zil_komut, kimden, sahip_ad, metin, "uzlastir-pr-%s-%s" % (g["id"], pr["number"])):' 'if False:'
 dene "UP2 PR-birleşti zilinin tekrar anahtarı yok" $P $U '"uzlastir-pr-%s-%s" % (g["id"], pr["number"])' '"%s" % os.urandom(4).hex()'
