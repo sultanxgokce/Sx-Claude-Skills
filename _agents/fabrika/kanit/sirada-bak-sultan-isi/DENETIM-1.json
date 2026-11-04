@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "sirada-bak-sultan-isi",
+  "pr": "692",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T18:24:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-isi",
+  "dal": "sirada-bak-sultan-isi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33124,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 13730
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3acffca0bacd9e1d2aaac866e7376e6698e63082",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Kör cloudtop kopyası için ikinci okuma eklenmiş ve sınavlar bu yolu sağlam ölçmüş. Ama açık `GUNLUK_PLAN_GOREV_SH` ile seçilen kör kopya ikinci okumadan muaf tutulduğu için “hangi görev betiği kopyasıyla okursa okusun” emri delinmiş; Sultan işi hâlâ üstlenilebilir.",
+    "bulgular": [
+      {
+        "ne": "Açıkça verilen `GUNLUK_PLAN_GOREV_SH` kör bir liste üretirse ikinci doğrulama yapılmıyor; böylece sahibi Sultan veya kapısı dolu iş süzgeçten geçip üstlenilebilir.",
+        "kanit": "İkinci kaynak seçme koşulu `[ -z \"${GUNLUK_PLAN_GOREV_SH:-}\" ]` şartını taşıyor; değişiklik açıklaması da açık değişken için “ikinci okuma yok” diyor. K0–K3 kanıtı ise kör kopyayı `GUNLUK_PLAN_CLOUDTOP_GOREV` ile seçiyor, bu istisna yolunu sınamıyor. İş kartı açıkça “hangi görev betiği kopyasıyla okursa okusun” ve işaretsiz listede ikinci okumayla doğrulama istiyor.",
+        "konum": "gunluk-plan/scripts/sirada-bak.sh:62; gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh:78",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm 16/16 yeşil, üç mutasyon da hedef kapıları düşürerek sınavın ilgili bozulmaları yakaladığını gösteriyor. Ancak ölçüm, açık `GUNLUK_PLAN_GOREV_SH` ile kör liste senaryosunu kapsamıyor; dolayısıyla kartın evrensel “hangi kopya olursa olsun” iddiası bu kanıtla doğrulanmış değil."
+  }
+}
