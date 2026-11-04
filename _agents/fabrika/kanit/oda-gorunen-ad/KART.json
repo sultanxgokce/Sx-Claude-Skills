@@ -1,0 +1,25 @@
+{
+  "is": "oda-gorunen-ad",
+  "cumle": "terminal-onar kapısı kayıttaki odalar bloğundan oda görünen adını okur, /api/koltuklar odalar[].gorunen_ad olarak döner; anahtar değişmez",
+  "istedi": "SERDAR",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-05T00:00:42+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
