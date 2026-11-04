@@ -1,0 +1,55 @@
+{
+  "is": "uyuyan-oda-listesi",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T15:49:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "396f8600fd358eb9f66680ce4424af795b1268f2bde4dc82d57edc695da1e723",
+      "komut": [
+        "node",
+        "kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T15:49:25+03:00",
+      "sure_sn": 9.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2ecdbd68b98148a7a0305dcd7e3575d1",
+      "olculen_commit": "790e8952d16813dc945413dadb5bf94c47856c54",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-mutant",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinavi-mutant-once.txt",
+      "sha256": "d41074876f99eceb4e33c70c0c18c2be128e31dd86925b37afff6c69c4416c85",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/uy6-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-uyuyan-oda-listesi"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T15:49:42+03:00",
+      "sure_sn": 12.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "UY6",
+      "hedef_dustu": true,
+      "olcum_id": "bf4e0789564448f88decab1149b4486b",
+      "olculen_commit": "790e8952d16813dc945413dadb5bf94c47856c54",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "70ffbf60a21c626dbdc13d03019642eb24d60a98b36b7c6e708dd5c6e66f1409"
+}
