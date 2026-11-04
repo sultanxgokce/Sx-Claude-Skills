@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari, uyuyanUstalar } from './koltuklar.mjs';
-import { odaBul, odaUyarisi, odaSec, kayitOdaHaritasi, kayitOdaBul, kayitOdaGecersizHaritasi } from './oda.mjs';
+import { odaBul, odaUyarisi, odaSec, kayitOdaHaritasi, kayitOdaBul, kayitOdaGecersizHaritasi, adKatla } from './oda.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
 import { tarifOku, uzmanlikOku } from './tarif.mjs';
 import { bugunOku } from './bugun.mjs';
@@ -505,6 +505,9 @@ const sunucu = http.createServer(async (req, res) => {
         });
         // UYUYAN USTALAR (2.40.0 · kart usta-seridi-api): koltuğu olmayan usta tmux'ta yoktur → koltuklar'a KARIŞMAZ (koltuk-fark/kadro tüketicileri bozulmasın), ayrı alan. Ölçülemezse boş (liste düşmez).
         let uyuyanlar = []; try { const u = await calistir('bash', [USTA_BETIK, 'liste', '--proje', PROJE], undefined, 5000); if (u.kod === 0) uyuyanlar = uyuyanUstalar(u.out, acik); } catch { uyuyanlar = []; }
+        // 2.41.0 (kart usta-oda-alani · SERDAR 4 Kas 12:37, Sultan tellal ekranı): uyuyan usta kayıttaki ODASINI taşır → merkez şeridi onu kendi oda kümesine dizer
+        //   (önceden yalnız {ad, hal}: PERGEL mimari-cizim, USTABASI ve DEMIRCI bakim şeridin sonuna yığılıyordu). Oda kayıt haritasından (koltuklarla aynı kaynak); bulunamazsa alan YAZILMAZ, uydurulmaz.
+        uyuyanlar = uyuyanlar.map((u) => { const o = kayitOda.get(u.ad) || kayitOda.get(adKatla(u.ad)); return o ? { ...u, oda: o } : u; });
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar, uyuyanlar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # usta.sh — USTA = UYUYAN OTURUM (Sultan onaylı usta düzeni, 2 Kas 2026 · kart usta-uyku-uyandir)
 #
-#   usta.sh liste   [--kayit F] [--proje D]               → her usta: ad · durum (uyanik|uyuyor|kayit-eksik) · klasor
+#   usta.sh liste   [--kayit F] [--proje D]               → her usta: ad · durum (uyanik|uyuyor|kayit-eksik) · klasor · oda (kayıtta yoksa boş)
 #   usta.sh uyandir <AD> [--kuru] [--kayit F] [--proje D] → ustanın KENDİ klasöründe `claude --resume <sohbet>`; kilit + tavan
 #   usta.sh uyut    <AD> [--kuru] [--kayit F]             → kapanış kancası (DURUM.md) sonra oturumu kapatır
 #
@@ -30,7 +30,7 @@ case "$KOMUT" in liste|uyandir|uyut) ;; *) sed -n 2,14p "$0" | sed 's/^# \{0,1\}
 [ -n "$KAYIT" ] || KAYIT="$PROJE/_agents/handoff/ekip-registry.yaml"
 [ -f "$KAYIT" ] || { echo "usta.sh: kayıt yok: $KAYIT" >&2; exit 5; }
 
-# kayıttan ustaları oku: ad<TAB>klasor<TAB>sohbet  (yalnız klasor alanı olan üyeler usta sayılır)
+# kayıttan ustaları oku: ad<TAB>klasor<TAB>sohbet<TAB>oda  (yalnız klasor alanı olan üyeler usta sayılır)
 ustalar() { python3 -I - "$KAYIT" <<'PY'
 # PyYAML'a BAĞLI DEĞİL (ortam-yukle PATH'i değişince yaml görünmeyebiliyor): düz satır ayrıştırma. İki biçim: akış `- {ad: X, klasor: Y}`
 # ve blok (`- id:`/`- ad:` + girintili alanlar). Yorum (#) ve tırnak atılır.
@@ -53,7 +53,7 @@ for line in open(sys.argv[1], encoding='utf-8'):
     if m and cur is not None: cur.setdefault(m.group(1), temiz(m.group(2)))
 for u in uyeler:
     ad = u.get('ad') or u.get('id') or ''
-    if ad and u.get('klasor') and u.get('koltuk', '').lower() == 'yok': print('\t'.join([ad, u['klasor'], u.get('sohbet') or u.get('session_id', '')]))
+    if ad and u.get('klasor') and u.get('koltuk', '').lower() == 'yok': print('\t'.join([ad, u['klasor'], u.get('sohbet') or u.get('session_id', ''), u.get('oda', '')]))
 PY
 }
 usta_satir() { ustalar | awk -F'\t' -v a="$1" '$1==a{print; exit}'; }
@@ -83,13 +83,13 @@ mutlak() { case "$1" in /*) printf '%s' "$1";; *) printf '%s/%s' "$PROJE" "$1";;
 
 case "$KOMUT" in
   liste)
-    ustalar | while IFS=$'\t' read -r a k s; do
+    ustalar | tr '\t' '\037' | while IFS=$'\037' read -r a k s o; do   # sekme boşluk sayılır, ardışık sekme tek olur: boş sohbet alanı odayı sohbete kaydırırdı
       d=uyuyor; uyanik_mi "$a" && d=uyanik; { [ -n "$s" ] && [ -n "$k" ]; } || d=kayit-eksik
-      printf '%s\t%s\t%s\n' "$a" "$d" "$k"; done ;;
+      printf '%s\t%s\t%s\t%s\n' "$a" "$d" "$k" "$o"; done ;;
   uyandir)
     [ -n "$AD" ] || { echo "kullanım: usta.sh uyandir <AD> [--kuru]" >&2; exit 2; }
     sat="$(usta_satir "$AD")"; [ -n "$sat" ] || { echo "usta yok: '$AD' (kayıtta klasor alanlı üye değil)" >&2; exit 5; }
-    IFS=$'\t' read -r _ K S <<<"$sat"
+    IFS=$'\037' read -r _ K S _ <<<"$(printf '%s' "$sat" | tr '\t' '\037')"
     [ -n "$S" ] || { echo "kayıt eksik: '$AD' için sohbet kimliği yok — kimliksiz Claude açılmaz" >&2; exit 5; }
     MK="$(mutlak "$K")"; [ -d "$MK" ] || { echo "klasör yok: $MK" >&2; exit 5; }
     MK="$(cd "$MK" && pwd -P)"

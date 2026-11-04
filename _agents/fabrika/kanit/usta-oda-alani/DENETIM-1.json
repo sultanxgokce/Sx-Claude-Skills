@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "usta-oda-alani",
+  "pr": "686",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T13:49:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-oda-alani",
+  "dal": "usta-oda-alani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29798,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 17190
+  },
+  "dalgic": "uyumsuz",
+  "bas": "24d0010909c8c2572dcd7f3e426dc220db402a40",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`usta.sh liste` kayıttaki odayı dördüncü sütunda taşıyor; `/api/koltuklar` da geçerli oda adını `uyuyanlar[].oda` olarak verip odasız ustada alan uydurmuyor. Gerçek betikle akış ve blok kayıt biçimleri, boş sohbet sütunu, geçersiz/eksik oda davranışı ve ilgili mutantlar geçtiği için üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam, iki kayıt da yeşil ve temiz commit üzerinde. UY5 ile gerçek `usta.sh` üzerinden PERGEL/DEMIRCI/KUKLACI vakaları, U1b ile sütun kayması ve oda aktarımı ölçülmüş; ilgili iki mutant da sınavın hatayı yakaladığını gösteriyor. Ancak merkez şeridinin gerçekten oda kümesine dizildiğini gösteren önce/sonra kare veya merkez tüketici ölçümü yok; kanıt doğrudan bu kartın terminal-onar/API kısmını güçlü biçimde doğruluyor, görsel merkez sonucu ise ayrıca doğrulanmamış."
+  }
+}

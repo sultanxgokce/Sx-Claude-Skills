@@ -1,9 +1,17 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.40.0
+version: 2.41.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.41.0 · Uyuyan usta kendi odasını taşır: `uyuyanlar[].oda` (4 Kas · kart usta-oda-alani · tellal şeridi)
+Ölçülen kusur (SERDAR, tellal karesi): PERGEL (mimari-cizim), USTABASI ve DEMIRCI (bakim) uyurken kendi oda başlığının altına değil şeridin
+sonuna yığılıyordu — çünkü kapı uyuyan ustaya oda alanı hiç vermiyordu. Artık `usta.sh liste` 4. sütunda kayıttaki odayı basar
+(kayıtta yoksa boş; oda adı kurala uymazsa kapı almaz, uydurmaz); usta listesinde oda yoksa aile/iskân kaydındaki oda adla eşlenir.
+🔴 Tuzak (sınavda yakalandı): sekme ayırıcısı kabukta boşluk sayılır, ardışık sekme tek olur — sohbeti boş ustada oda sohbet alanına
+kayıp ustayı `kayit-eksik` yerine `uyuyor` gösterirdi. Okuma artık sekmeyi \037'ye çevirerek yapılır. Sınav: kapi UY5, usta U1b + 2 mutant.
+Merkez tarafı (oda başlığının altına dizme) cloudtop 1.205.14'te.
 
 ## 🆕 2.40.0 · Uyuyan ustalar `/api/koltuklar` yanıtında ayrı alan: `uyuyanlar` (3 Kas · kart usta-seridi-api · şerit gri koltuk için veri tarafı)
 Kapı, `usta.sh liste` çıktısından yalnız `uyuyor` olan ustaları `uyuyanlar: [{ad, hal:"uyuyor"}]` olarak yanıta ekler. 🔴 `koltuklar` dizisine KARIŞMAZ (koltuk-fark ve kadro tüketicileri bozulmasın). Uyanık usta zaten koltuktur, `kayit-eksik` olan uyandırılamaz → ikisi de yok; koltukta olan ad ve tekrar atlanır, süzgeçten geçmeyen ad düşer, klasör yanıta YAZILMAZ. `usta.sh` düşerse ya da yoksa liste DÜŞMEZ: `uyuyanlar` boş döner. Uyandırma yolu değişmedi: `POST /api/koltuk/<ad>/ac` → koltuk-ac usta yolu. Betik yolu `KAPI_USTA_BETIK` ile değişir. Sınav: `kapi/sunucu.test.mjs` UY1–UY4 (145 kapı; UY4 GERÇEK usta.sh ile) + 2 mutant (koltukta-olan elemesi kalkınca UY1, usta.sh liste sütun sırası bozulursa yalnız UY4 kırmızı). Şeritte GRİ çizim bu sürümde YOK: cloudtop `sayfalar.mjs` ayrı kart ve ayrı PR.

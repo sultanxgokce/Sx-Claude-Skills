@@ -1,0 +1,25 @@
+{
+  "is": "usta-oda-alani",
+  "cumle": "terminal-onar kapısı /api/koltuklar uyuyanlar listesinde her uyuyan ustaya kayıttaki odasını (oda alanı) ekler; merkez şeridi onu kendi oda kümesine dizer (SERDAR 12:37 tellal)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-11-04T12:52:25+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
