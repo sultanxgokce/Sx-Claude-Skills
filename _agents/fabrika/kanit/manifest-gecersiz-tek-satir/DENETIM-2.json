@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "manifest-gecersiz-tek-satir",
+  "pr": "687",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T14:21:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-manifest-gecersiz-tek-satir",
+  "dal": "manifest-gecersiz-tek-satir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23956,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9618
+  },
+  "dalgic": "olculemedi",
+  "bas": "a6959b3adbc3c9952ffd22066852c25da16982e3",
+  "duzeltme_farki": {
+    "onceki_bas": "2db5c903a49b17196680f2d1ff1830eed62326db",
+    "dosya": 6,
+    "bayt": 14969,
+    "tam_bayt": 34311
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Geçersiz ölçüm ve ilanlar denetçi görünümünde tek satıra indirilirken geçerli ölçümler tam korunmuş; önceki turdaki B1, tam istemin 43464 bayttan 22132 bayta indiğini ve aynı 32798 bayt tavanında eski sürümün kalıp yeni sürümün geçtiğini ölçen sınavla kapanmış. Gerçek ölçümler yeşil, ilgili mutasyonlar hedef kapıları düşürüyor ve üretimi engelleyen ciddi ya da uygulama kusuru görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçümlerde manifest sınavı 16/16, tam istem sınavı 9/9 geçiyor; tam istem için önce=43464 ve sonra=22132 bayt ölçüm çifti ile eski rc=1/yeni rc=0 tavan karşılaştırması mevcut. Üç mutasyon kaydı da beklenen biçimde rc=1 olup D1, K4 ve “yeni istem ESKİden küçük” kapılarını düşürerek sınavların bozulan davranışı yakaladığını gösteriyor."
+  }
+}
