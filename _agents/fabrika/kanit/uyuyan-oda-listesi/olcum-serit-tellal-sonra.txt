@@ -1,0 +1,12 @@
+$ node /config/projects/_wt/Sx-Claude-Skills-uyuyan-oda-listesi/_agents/fabrika/kanit/uyuyan-oda-listesi/serit-olc.mjs sonra
+# rc=0 sure=0.1s zaman=2026-11-04T15:51:48+03:00
+--- stdout ---
+oda ortak-kapilar: 0 uyuyan []
+oda mimari-cizim: 1 uyuyan [PERGEL]
+oda bakim: 2 uyuyan [USTABAŞI, DEMİRCİ]
+oda reklam-videosu: 3 uyuyan [HAYALBAZ, KUKLACI, TEZHİPÇİ]
+oda web-tanitim: 3 uyuyan [MÜNŞİ, MÜZEYYİN, CİLTÇİ]
+oda sosyal-medya: 3 uyuyan [NÂŞİR, TAKVİMCİ, MUHARRİR]
+kümede uyuyan: 12/12 · sonda: 0 []
+dört oda (bakim 2 · reklam-videosu 3 · web-tanitim 3 · sosyal-medya 3) kendi kümesinde ve sonda 0: EVET
+--- stderr ---

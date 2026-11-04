@@ -1,7 +1,7 @@
 {
   "is": "uyuyan-oda-listesi",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-04T15:49:42+03:00",
+  "guncelleme": "2026-11-04T15:51:48+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -49,7 +49,49 @@
       "olculen_commit": "790e8952d16813dc945413dadb5bf94c47856c54",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "serit-tellal",
+      "asama": "once",
+      "dosya": "olcum-serit-tellal-once.txt",
+      "sha256": "ebf52ace1c59f74edd1cfba1d9c6b1cd05c9e8b0ca8929b43eb0b372832f1109",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-uyuyan-oda-listesi/_agents/fabrika/kanit/uyuyan-oda-listesi/serit-olc.mjs",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T15:51:48+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d06a18313ce64d5db8406ca57941f0b4",
+      "olculen_commit": "fb013c6cf3382624c9b256359e6cca97c759fcba",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "serit-tellal",
+      "asama": "sonra",
+      "dosya": "olcum-serit-tellal-sonra.txt",
+      "sha256": "11d1f0f9f60d15984207dc9a46e98c91ba5bf33ce5facc19ba389901e9be6ade",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-uyuyan-oda-listesi/_agents/fabrika/kanit/uyuyan-oda-listesi/serit-olc.mjs",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T15:51:48+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b97d85b4672f43329280551dc9819277",
+      "olculen_commit": "fb013c6cf3382624c9b256359e6cca97c759fcba",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "70ffbf60a21c626dbdc13d03019642eb24d60a98b36b7c6e708dd5c6e66f1409"
+  "imza": "3ea7ba544011473f31921e68b661260689e5841960714076cd0168f53dff2a33"
 }
