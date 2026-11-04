@@ -57,7 +57,7 @@ echo "     mihenk ölçeği (51 kayıt, 28'i geçersizlik): ham=$HAM özet=$OZ b
 [ "$(python3 "$OZET" "$T/mihenk.json" | grep -c '^⛔ GEÇERSİZ')" -eq 14 ] && ok "M2 14 ilan = 14 satır (28 kayıt → 14 satır)" || fail "M2"
 
 echo "── denetci.sh bağlantısı ──"
-grep -q 'manifest-ozet.py' "$DEN" && ok "D1 denetci.sh manifest-ozet.py'yi çağırıyor" || fail "D1 çağrı YOK (ham cat kalmış)"
+grep -v '^ *#' "$DEN" | grep -q 'python3 "\$HERE/manifest-ozet.py"' && ok "D1 denetci.sh manifest-ozet.py'yi çağırıyor" || fail "D1 çağrı YOK (ham cat kalmış)"
 grep -q 'manifest-ozet.py" "\$DZ/KANIT.json" 2>/dev/null || cat "\$DZ/KANIT.json"' "$DEN" && ok "D2 özet çıkmazsa ham dosyaya düşer (eksik veri yok)" || fail "D2 yedek yol yok"
 
 echo
