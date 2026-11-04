@@ -71,6 +71,20 @@ kos(){
   local C2; C2="$("${E[@]}" bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"
   ok "S6 kutuda yalnız Sultan kararı varsa: SIRADA=0, HAVUZDA=0, başlamaz, hiçbir şey yazılmaz" '[ "$(printf "%s\n" "$C2" | grep "^SIRADA=")" = "SIRADA=0" ] && [ "$(printf "%s\n" "$C2" | grep "^HAVUZDA=")" = "HAVUZDA=0" ] && ! printf "%s\n" "$C2" | grep -q "^BASLADI=" && [ ! -e "$T/yama.log" ]'
   rm -f "$T/sadece-sultan"
+  rm -f "$T/sadece-sultan"
+  # KÖR KANON KOPYASI (kart sirada-bak-sultan-isi · SERDAR 4 Kas, bulgu …7411VJ): gorev-yolu.sh cloudtop'taki kanonik gorev.sh'ı seçer; o kopyanın `liste`si Sultan/kapı işaretlerini BASMAZ.
+  #   Eskiden süzgeç kör kalıyor, Sultan'ın karar işi üstlenilebiliyordu. Kör kopya = gerçek betiğin liste çıktısından işaretlerin sökülmüş hâli (diğer komutlar aynen geçer).
+  local KOR="$T/kor-$$-$RANDOM.sh"
+  printf '#!/usr/bin/env bash\ncase "${1:-}" in liste) bash "%s/gorev.sh" liste | sed -E -e "s/  sahip: sultan//" -e "s/  kapi: [^ ]+//";; *) exec bash "%s/gorev.sh" "$@";; esac\n' "$D" "$D" > "$KOR"; chmod +x "$KOR"
+  local E2=(env DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton" GUNLUK_PLAN_AJAN=MENZILCI GUNLUK_PLAN_TARIH=2026-01-02 GUNLUK_PLAN_ESLEME="$T/esleme.tsv" GUNLUK_PLAN_CLOUDTOP_GOREV="$KOR")
+  ok "K0 kör kopya gerçekten kör: liste çıktısında hiçbir işaret yok (sınavın ön koşulu)" '! bash "$KOR" liste 2>&1 | grep -qE "  sahip: sultan|  kapi: "'
+  local C3; C3="$("${E2[@]}" bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI --bak 2>&1)"
+  ok "K1 kör kopyayla bile Sırada yalnız sıradan işleri sayar (3) ve ISI/MADDE'de Sultan kararı YOK" '[ "$(printf "%s\n" "$C3" | grep "^SIRADA=")" = "SIRADA=3" ] && ! printf "%s\n" "$C3" | grep -E "^(ISI|MADDE)=" | grep -qE "S1|S2|K1|H1"'
+  ok "K2 kör kopyayla havuz da yalnız sıradan işi sayar (1)" '[ "$(printf "%s\n" "$C3" | grep "^HAVUZDA=")" = "HAVUZDA=1" ]'
+  rm -f "$T/yama.log"; "${E2[@]}" bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI >/dev/null 2>&1
+  ok "K3 kör kopyayla varsayılan koşuda ustlen YALNIZ sıradan işe gider; Sultan kararına PATCH yok" '[ "$(cat "$T/yama.log" 2>/dev/null | sort -u | tr "\n" " ")" = "gorev_A " ]'
+  rm -f "$T/yama.log"; local C4; C4="$("${E2[@]}" GUNLUK_PLAN_ISARET_SH=/yok/gorev.sh bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"; local R4=$?
+  ok "K4 işaret ikinci kaynaktan okunamazsa ÖLÇÜLEMEDİ (rc 3), hiçbir şey üstlenilmez" '[ "$R4" = 3 ] && printf "%s\n" "$C4" | grep -q "ÖLÇÜLEMEDİ" && [ ! -s "$T/yama.log" ]'
   [ "$S" = 1 ] || echo "── $g geçti · $k kaldı"
   return $k
 }
@@ -102,6 +116,9 @@ mut sirada-suzgeci-yok sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " i
 mut yalniz-kapi-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " in ek: continue||if "  kapi: " in ek: continue'
 mut yalniz-sahip-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " in ek: continue||if "  sahip: sultan" in ek: continue'
 mut tum-satiri-tarar sirada-bak.sh 'ek=p[6].rsplit("(son:",1)[-1]||ek=p[6]'
+mut ikinci-okuma-yok sirada-bak.sh 'if [ -z "$ISARET_SH" ] && [ -z "${GUNLUK_PLAN_GOREV_SH:-}" ]||if false'
+mut isaret-suzgeci-yok sirada-bak.sh 'if p[0] in sultan: continue||pass'
+mut okunamazsa-devam sirada-bak.sh 'üstlenme yapılmadı" >&2; exit 3; }||üstlenme yapılmadı" >&2; }'
 mut liste-sahip-isareti-yok gorev.sh '+ ("  sahip: sultan" if str(g["canli"].get("sahip","")).strip().lower()=="sultan" else "")||'
 mut liste-kapi-isareti-yok gorev.sh '+ (("  kapi: %s" % g["canli"]["kapi"].strip()) if isinstance(g["canli"].get("kapi"),str) and g["canli"]["kapi"].strip() else "")||'
 [ -z "${SADECE_MUTANT:-}" ] || { echo "SADECE_MUTANT=$SADECE_MUTANT tanımsız ad" >&2; exit 99; }

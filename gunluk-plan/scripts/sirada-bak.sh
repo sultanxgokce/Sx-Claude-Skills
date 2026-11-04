@@ -55,6 +55,26 @@ case "$TAZE_GUN" in ''|*[!0-9]*) echo "HATA: --taze-gun pozitif tam sayı olmal�
 [ -z "$KIM" ] || KIM="$(bash "$KOK/kimlik-coz.sh" "$KIM")" || { echo "ÖLÇÜLEMEDİ: koltuk adı defter adına çevrilemedi (koltuk-esleme.tsv)" >&2; exit 3; }   # koltuk adı → defter adı (tablo)
 LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 [ "$LRC" -eq 0 ] && [ -n "$LISTE" ] || { echo "ÖLÇÜLEMEDİ: görev listesi okunamadı (rc=$LRC) — 'Sırada 0' DENMEZ" >&2; exit 3; }
+# 1.24.0 (kart sirada-bak-sultan-isi · SERDAR 4 Kas, bulgu …7411VJ): SULTAN İŞİ İŞARETİ ikinci kaynaktan DOĞRULANIR. Kök: gorev-yolu.sh önce cloudtop'taki kanonik gorev.sh'ı seçer;
+#   o kopyanın `liste`si "  sahip: sultan" / "  kapi: <kapı>" işaretlerini HİÇ basmıyordu (paketli kopya basıyordu) → aşağıdaki süzgeç kör kalıyor, Sultan'ın karar işi
+#   ÜSTLENİLİYORDU. Artık: seçilen kopya paketli kopyadan (KOK/gorev.sh) farklıysa işaret listesi paketli kopyadan da okunur; işaretli kimlikler süzgece SULTAN_ID olarak girer.
+#   Okunamazsa ÖLÇÜLEMEDİ rc 3: "Sultan işi yok" DENMEZ, üstlenme yapılmaz. Açıkça verilen GUNLUK_PLAN_GOREV_SH kesindir (sınav hermetik kalır) → ikinci okuma yok;
+#   GUNLUK_PLAN_ISARET_SH ikinci kaynağı elle verir.
+SULTAN_ID=""
+ISARET_SH="${GUNLUK_PLAN_ISARET_SH:-}"
+if [ -z "$ISARET_SH" ] && [ -z "${GUNLUK_PLAN_GOREV_SH:-}" ] && [ "$GOREV" != "$KOK/gorev.sh" ] && [ -f "$KOK/gorev.sh" ]; then ISARET_SH="$KOK/gorev.sh"; fi
+if [ -n "$ISARET_SH" ]; then
+  ILISTE="$(bash "$ISARET_SH" liste 2>/dev/null)"; IRC=$?
+  [ "$IRC" -eq 0 ] && [ -n "$ILISTE" ] || { echo "ÖLÇÜLEMEDİ: Sultan işi işareti ikinci kaynaktan okunamadı (rc=$IRC, $ISARET_SH) — 'Sultan işi yok' DENMEZ, üstlenme yapılmadı" >&2; exit 3; }
+  SULTAN_ID="$(printf '%s\n' "$ILISTE" | python3 -c '
+import sys
+for s in sys.stdin:
+    p=s.rstrip("\n").split(None,6)
+    if len(p)<7 or not p[0].startswith("gorev_"): continue
+    ek=p[6].rsplit("(son:",1)[-1]
+    if "  sahip: sultan" in ek or "  kapi: " in ek: print(p[0])
+' | tr '\n' ' ')"
+fi
 if [ -z "$KUTU" ]; then
   KUTU="$(printf '%s\n' "$LISTE" | bash "$KOK/kutu-bul.sh" ${KIM:+--kim "$KIM" --cozulmus} --liste /dev/stdin 2>/dev/null)" || { echo "ÖLÇÜLEMEDİ: kutu adı çıkmadı (--kutu ver)" >&2; exit 3; }
 fi
@@ -63,19 +83,20 @@ PY='
 import sys
 import unicodedata
 def n(t): return unicodedata.normalize("NFKC",t).replace("İ","i").replace("I","i").replace("ı","i").lower().replace("â","a").replace("î","i").replace("û","u").replace("ü","u").replace("ö","o").replace("ç","c").replace("ş","s").replace("ğ","g")
-kutu=sys.argv[1]; kim=n(sys.argv[2]); oncel={"cok-acil":0,"acil":1,"esnek":2,"rahat":3}; r=[]
+kutu=sys.argv[1]; kim=n(sys.argv[2]); oncel={"cok-acil":0,"acil":1,"esnek":2,"rahat":3}; r=[]; sultan=set(sys.argv[4].split()) if len(sys.argv)>4 else set()
 for i,s in enumerate(sys.stdin):
     p=s.rstrip("\n").split(None,6)
     if len(p)<7 or not p[0].startswith("gorev_"): continue   # id kutu durum aciliyet etiket atanan BAŞLIK
     if p[1]!=kutu or p[2] not in sys.argv[3].split(","): continue
+    if p[0] in sultan: continue   # 1.24.0: işaret ikinci kaynaktan (paketli gorev.sh) geldi; seçilen kopya işareti basmasa da Sultan işi elenir
     ek=p[6].rsplit("(son:",1)[-1]   # satır sonu işaretleri (gorev.sh liste): "  sahip: sultan" / "  kapi: <kapı>" = Sultan kararı bekleyen kayıt
     if "  sahip: sultan" in ek or "  kapi: " in ek: continue   # Sultan kararı AJAN İŞİ DEĞİL: ne Sırada ne havuz sayısına girer, ne ustlen edilir (AAHWYF243, MÜZEHHİP iki kez yanıldı)
     ben="1" if (p[5]=="-" or (kim and n(p[5])==kim)) else "0"   # başlatma adayı: koltuğa atanmış ya da sahipsiz; başkasına atanmış iş ÜSTLENİLMEZ
     r.append((oncel.get(p[3],4),i,p[0],p[3],p[6].split("  (son:")[0],ben))
 for o,i,gid,ac,b,ben in sorted(r): print("%s\t%s\t%s\t%s"%(gid,ac,b,ben))
 '
-SIRA="$(printf '%s\n' "$LISTE" | python3 -c "$PY" "$KUTU" "$KIM" "acik,sira-bende")"
-HAVUZ="$(printf '%s\n' "$LISTE" | python3 -c "$PY" "$KUTU" "$KIM" "havuz")"
+SIRA="$(printf '%s\n' "$LISTE" | python3 -c "$PY" "$KUTU" "$KIM" "acik,sira-bende" "$SULTAN_ID")"
+HAVUZ="$(printf '%s\n' "$LISTE" | python3 -c "$PY" "$KUTU" "$KIM" "havuz" "$SULTAN_ID")"
 N=0; [ -n "$SIRA" ] && N=$(printf '%s\n' "$SIRA" | wc -l)
 # 1.14.0 (SERDAR 29 Eki, Sultan "ilerleme durdu"): HAVUZ da iştir. Sırada eşiğin altında kalsa bile bu koltuğa atanmış ya da sahipsiz HAVUZ işi varsa
 #   Sultan'a "iş çıkaralım mı" SORULMAZ: iş vardır, sormadan başlanır. Sırada sayısı (ekranın tanımı) DEĞİŞMEZ; havuz ayrı sayılır (HAVUZDA=).
