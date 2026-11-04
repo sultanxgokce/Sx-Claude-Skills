@@ -32,7 +32,7 @@ if [ "\$1" = durum ]; then
     gorev_ERR0) echo "HASAT=ÖLÇÜLEMEDİ"; exit 3 ;;
     *) echo "HASAT=OLUR"; exit 0 ;;
   esac
-elif [ "\$1" = ac ]; then echo "\$*" >> "$T/ac.log"; exit 0; fi
+elif [ "\$1" = ac ]; then echo "\$*" >> "$T/ac.log"; sleep "\${AC_BEKLE:-0}"; [ -z "\${AC_FAIL:-}" ]; exit \$?; fi
 EOF
 chmod +x "$T/gorev.sh" "$T/hasat.sh"
 cat > "$T/reg.yaml" <<'EOF'
@@ -90,6 +90,15 @@ C="$(DURUM="$T/durum7" koş --kuru)"; son 'acilan=0'; g $? "Z8 kuru kip günün 
 [ "$(wc -l < "$T/durum7")" -eq 3 ]; g $? "Z9 kuru kip durum dosyasına YAZMADI (3 satır kaldı)"
 rm -f "$T/ac.log"; mkdir -p "$T/ro"; chmod 555 "$T/ro"; C="$(DURUM="$T/ro/x/durum" koş --gercek)"; RC=$?
 [ "$RC" -eq 3 ] && [ ! -s "$T/ac.log" ]; g $? "Z10 🔴 durum dosyası yazılamıyor: gerçek kip rc=3 ve HİÇBİR ŞEY AÇMADI (fail-closed)"; chmod 755 "$T/ro"
+rm -f "$T/ac.log" "$T/durum10b"; : > "$T/durum10b"; chmod 444 "$T/durum10b"; C="$(DURUM="$T/durum10b" koş --gercek)"; RC=$?
+[ "$RC" -eq 3 ] && [ ! -s "$T/ac.log" ]; g $? "Z10b 🔴 dizin yazılabilir ama durum DOSYASI salt-okur: rc=3, HİÇBİR ŞEY AÇILMADI (kilit değil dosya koruması)"; chmod 644 "$T/durum10b"
+
+# eşzamanlılık (göz tur 2 B1): iki gerçek koşu AYNI ANDA → toplam 3 (kilitsizde 6 olurdu)
+rm -f "$T/ac.log" "$T/durum11"; ( DURUM="$T/durum11" AC_BEKLE=1 koş --gercek >/dev/null & DURUM="$T/durum11" AC_BEKLE=1 koş --gercek >/dev/null & wait )
+[ "$(wc -l < "$T/ac.log")" -eq 3 ]; g $? "Z11 🔴 iki EŞZAMANLI gerçek koşu: TOPLAM 3 açıldı (kilit; kilitsizde 6)"
+# başarısız açış da sayılır (rezerve-sonra-aç): ac hep düşerse bile ikinci koşu ek deneme yapmaz
+rm -f "$T/ac.log" "$T/durum12"; AC_FAIL=1 DURUM="$T/durum12" koş --gercek >/dev/null; AC_FAIL=1 DURUM="$T/durum12" koş --gercek >/dev/null
+[ "$(wc -l < "$T/durum12")" -eq 3 ] && [ "$(wc -l < "$T/ac.log")" -eq 3 ]; g $? "Z12 🔴 açış 3 kez başarısız: rezerve satırları kaldı (3), ikinci koşu yeniden denemedi"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

@@ -12,7 +12,7 @@
 #   · doğan görev SAHİPSİZ kalmaz: kaydın atananı, yoksa kaydın odasının müdürü (aile-registry oda_muduru). Çözülemezse AÇILMAZ → "atlandi-sahipsiz".
 #   · ölçülemeyen kayıt (HASAT=ÖLÇÜLEMEDİ) açılmaz, sayılır. Aynı kayıttan ikinci görev açmayı hasat.sh'ın tekilleştirmesi önler.
 #   · "GÜNDE EN ÇOK TAVAN" KOŞULAR ARASI korunur: gerçek kipte her açılış HASAT_GECE_DURUM dosyasına "<gün> <kayıt> <atanan>" yazılır; aynı günün ikinci koşusu
-#     (elle ya da cron tekrarı) o günkü açılışları tavandan düşer. Kuru kip dosyayı yalnız OKUR (açardı sayısı gerçek kiple aynı çıksın), hiç yazmaz.
+#     (elle ya da cron tekrarı) o günkü açılışları tavandan düşer. Okuma→rezerve→açma flock altındadır (eşzamanlı koşu tavanı aşamaz); satır AÇMADAN ÖNCE yazılır. Kuru kip dosyayı yalnız OKUR (açardı sayısı gerçek kiple aynı çıksın), hiç yazmaz.
 #   · KİP GEÇİŞİ OTOMATİK DEĞİL (SERDAR 4 Kas, QCJYWG: "ilk 3 gece kuru kipte koşar, sonucu mektupla getir, gerçek kipe ben geçireceğim"): betikte gece sayacı
 #     yoktur; cron satırındaki --kuru bayrağını --gercek yapmak SERDAR'ın elindedir. Otomatik geçiş o kararla çelişirdi.
 # Günlüğün son satırı özet satırıdır: "<ISO> hasat-gece kip=… olur=N acilan=K atlandi_sinifli=S atlandi_sahipsiz=U atlandi_dogmus=D olmaz=M olculemedi=L rc=0"
@@ -39,6 +39,9 @@ SINIF_SOZ='para|ödeme|odeme|fatura|ücret|ucret|bütçe|butce|satın al|satin a
 SATIRLAR="$(bash "$GOREV" liste --kutu "$KUTU" 2>/dev/null)"; GRC=$?
 if [ "$GRC" -ne 0 ] || [ -z "$SATIRLAR" ]; then
   echo "$ZAMAN hasat-gece kip=$KIP olur=? acilan=0 olculemedi=defter rc=3"; exit 3
+fi
+if [ "$KIP" = gercek ]; then   # eşzamanlı iki koşu aynı eski sayıyı okuyup tavanı aşmasın: sayaç okuma → rezerve → açma tek kilit altında
+  exec 9>>"$DURUM.kilit" 2>/dev/null && flock -w 300 9 || { echo "$ZAMAN hasat-gece kip=gercek olur=? acilan=0 olculemedi=kilit ($DURUM.kilit alınamadı) rc=3"; exit 3; }
 fi
 ONCEKI=0; [ ! -r "$DURUM" ] || ONCEKI="$(grep -c "^$BUGUN " "$DURUM" 2>/dev/null)"
 case "$ONCEKI" in ''|*[!0-9]*) ONCEKI=0 ;; esac
@@ -109,9 +112,12 @@ while IFS= read -r satir; do
   [ "$ACILAN" -lt "$KALAN" ] || { echo "$ZAMAN hasat-gece $id tavan-doldu (en çok $TAVAN; bugün önceden açılan $ONCEKI)"; continue; }
   # 6) aç (gerçek) ya da "açardı" (kuru)
   if [ "$KIP" = gercek ]; then
+    # ÖNCE rezerve et (sayaç satırı), SONRA aç: açıştan sonra yazma düşerse açılan görev sayılmazdı. Başarısız açış da sayılır (güvenli yön: az açar).
+    echo "$BUGUN $id $atanan" >> "$DURUM" 2>/dev/null || { echo "$ZAMAN hasat-gece $id durum-yazilamadi (rezerve edilemedi; AÇILMADI)"; continue; }
+    ACILAN=$((ACILAN+1))
     if bash "$HASAT" ac "$id" "gece hasadı: kapı OLUR, sınıfsız, sahibi $atanan" --kip otomatik --atanan "$atanan" >/dev/null 2>&1; then
-      ACILAN=$((ACILAN+1)); echo "$BUGUN $id $atanan" >> "$DURUM" 2>/dev/null || echo "$ZAMAN hasat-gece UYARI durum dosyası yazılamadı ($DURUM): günlük tavan korunamaz"; echo "$ZAMAN hasat-gece $id acildi → $atanan"
-    else echo "$ZAMAN hasat-gece $id acma-reddedildi (hasat.sh ac rc≠0)"; fi
+      echo "$ZAMAN hasat-gece $id acildi → $atanan"
+    else echo "$ZAMAN hasat-gece $id acma-reddedildi (hasat.sh ac rc≠0; rezerve satırı kaldı, tavandan sayılır)"; fi
   else
     ACILAN=$((ACILAN+1)); echo "$ZAMAN hasat-gece $id KURU: acardi → $atanan"
   fi
