@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/sinav-og-sunucu.sh
+# rc=0 sure=8.6s zaman=2026-11-05T00:06:06+03:00
+--- stdout ---
+  ✓ OG1 medi: ad kebap anahtar KALIR, gorunen_ad "Klinik Mühendislik" (Türkçe harf aynen, üç boşluk tek boşluğa iner, yorum atılır)
+  ✓ OG2 kayıtta ad olmayan oda (etime) gorunen_ad TAŞIMAZ (uydurulmaz); üyenin ad alanı odaya karışmaz (Sahte Üye Adı yok)
+  ✓ OG3 etiket/tırnak işareti atılır, Türkçe büyük/küçük harf ve ı İ bozulmaz
+  ✓ OG4 60 karakterlik ad 40 kod noktasına kısalır (Ü bölünmez)
+  ✓ OG5 hafıza yolu kırılmaz: koltuk satırlarında oda hâlâ kebap anahtar (medi · etime · bakim · uzun), odalar[].ad kümesi aynı
+GECEN: 152  ·  KALAN: 0
+--- stderr ---
