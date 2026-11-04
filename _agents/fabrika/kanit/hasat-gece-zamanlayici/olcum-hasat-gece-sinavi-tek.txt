@@ -1,5 +1,5 @@
 $ bash gunluk-plan/scripts/hasat-gece.test.sh
-# rc=0 sure=161.0s zaman=2026-11-04T16:57:11+03:00
+# rc=0 sure=1.3s zaman=2026-11-04T17:01:19+03:00
 --- stdout ---
 ── KURU kip (varsayılan)
   ✓ K1 koştu rc=0
@@ -27,7 +27,11 @@ $ bash gunluk-plan/scripts/hasat-gece.test.sh
   ✓ Z4 bilinmeyen bayrak rc=2
   ✓ Z5 registry okunamıyor: sahipsiz → açılmadı (fail-closed)
   ✓ Z6 🔴 doğan görev okunamadı: AÇILMADI (fail-closed), ölçülemedi diye günlükte
+  ✓ Z7 🔴 aynı gün iki gerçek koşu: TOPLAM 3 açıldı (ikinci koşu ek açmadı)
+  ✓ Z8 kuru kip günün dolu tavanını görür: acilan=0, dosyaya yazmaz
+  ✓ Z9 kuru kip durum dosyasına YAZMADI (3 satır kaldı)
+  ✓ Z10 🔴 durum dosyası yazılamıyor: gerçek kip rc=3 ve HİÇBİR ŞEY AÇMADI (fail-closed)
 
-── SONUÇ: 23 geçti · 0 kaldı ──
+── SONUÇ: 27 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-hasat-gece-zamanlayici-hasat-gece-sinavi 160 sn bekledi (yuva 1, load1 6.87)
+/config/projects/_wt/Sx-Claude-Skills-hasat-gece-zamanlayici/gunluk-plan/scripts/hasat-gece.sh: line 47: /tmp/tmp.FmlFFSNU1n/ro/x/durum: No such file or directory
