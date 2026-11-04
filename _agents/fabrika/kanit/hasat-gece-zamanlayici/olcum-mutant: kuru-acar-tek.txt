@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K2 🔴 kuru kipte hasat.sh ac · rc≠0 + hedef kapı 'K2 🔴 kuru kipte hasat.sh ac' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-gece-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-hg.sh kuru-acar
+# rc=1 sure=5.7s zaman=2026-11-04T17:06:08+03:00
+--- stdout ---
+  ✗ K2 🔴 kuru kipte hasat.sh ac HİÇ çağrılmadı
+  ✗ K10 🔴 sahip = odanın müdürü (aile-registry oda_muduru)
+── SONUÇ: 28 geçti · 2 kaldı ──
+--- stderr ---

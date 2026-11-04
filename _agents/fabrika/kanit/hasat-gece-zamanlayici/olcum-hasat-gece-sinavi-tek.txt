@@ -1,0 +1,40 @@
+$ bash gunluk-plan/scripts/hasat-gece.test.sh
+# rc=0 sure=5.6s zaman=2026-11-04T17:06:02+03:00
+--- stdout ---
+── KURU kip (varsayılan)
+  ✓ K1 koştu rc=0
+  ✓ K2 🔴 kuru kipte hasat.sh ac HİÇ çağrılmadı
+  ✓ K3 varsayılan kip kuru
+  ✓ K4 🔴 tavan 3: açılabilir temiz kayıtlardan en çok 3 'açardı'
+  ✓ K5 dördüncüsü tavan-doldu diye günlükte
+  ✓ K6 🔴 'sil' sözlü kayıt sınıflı: atlandı (günlükte)
+  ✓ K7 🔴 kapı alanı dolu kayıt sınıflı: atlandı
+  ✓ K8 🔴 atanan ve odası yok: sahipsiz → AÇILMADI, günlükte
+  ✓ K9 bayat doğrulama olmaz sayıldı
+  ✓ K10 🔴 sahip = odanın müdürü (aile-registry oda_muduru)
+  ✓ K11 havuz dışı kayıt hiç işlenmedi
+  ✓ K12 🔴 doğan görevi olan kayıt TEKRAR açılmaz (tekilleştirme: hasat.sh ac kendisi yapmıyor)
+  ✓ K13 doğmuş kayıt özet satırında sayıldı
+── GERÇEK kip (açık --gercek)
+  ✓ G1 hasat.sh ac tam 3 kez çağrıldı (tavan)
+  ✓ G2 kip otomatik
+  ✓ G3 🔴 --atanan verildi (sahipsiz görev yok)
+  ✓ G4 🔴 sınıflı/sahipsiz/doğmuş kayıt için ac ÇAĞRILMADI
+── OLUR=0 ve bozuk girdi
+  ✓ Z1 🔴 hiçbiri OLUR değil: günlüğe olur=0 yazıldı
+  ✓ Z2 🔴 defter boş/okunamadı: rc=3 ÖLÇÜLEMEDİ, olur=0 UYDURULMADI
+  ✓ Z3 sayısız --tavan rc=2
+  ✓ Z4 bilinmeyen bayrak rc=2
+  ✓ Z5 registry okunamıyor: sahipsiz → açılmadı (fail-closed)
+  ✓ Z6 🔴 doğan görev okunamadı: AÇILMADI (fail-closed), ölçülemedi diye günlükte
+  ✓ Z7 🔴 aynı gün iki gerçek koşu: TOPLAM 3 açıldı (ikinci koşu ek açmadı)
+  ✓ Z8 kuru kip günün dolu tavanını görür: acilan=0, dosyaya yazmaz
+  ✓ Z9 kuru kip durum dosyasına YAZMADI (3 satır kaldı)
+  ✓ Z10 🔴 durum dosyası yazılamıyor: gerçek kip rc=3 ve HİÇBİR ŞEY AÇMADI (fail-closed)
+  ✓ Z10b 🔴 dizin yazılabilir ama durum DOSYASI salt-okur: rc=3, HİÇBİR ŞEY AÇILMADI (kilit değil dosya koruması)
+  ✓ Z11 🔴 iki EŞZAMANLI gerçek koşu: TOPLAM 3 açıldı (kilit; kilitsizde 6)
+  ✓ Z12 🔴 açış 3 kez başarısız: rezerve satırları kaldı (3), ikinci koşu yeniden denemedi
+
+── SONUÇ: 30 geçti · 0 kaldı ──
+--- stderr ---
+/config/projects/_wt/Sx-Claude-Skills-hasat-gece-zamanlayici/gunluk-plan/scripts/hasat-gece.sh: line 44: /tmp/tmp.TMlmLuRoHH/ro/x/durum.kilit: No such file or directory

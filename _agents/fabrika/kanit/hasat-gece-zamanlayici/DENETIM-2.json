@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "hasat-gece-zamanlayici",
+  "pr": "690",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T17:02:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-gece-zamanlayici",
+  "dal": "hasat-gece-zamanlayici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42613,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 24560
+  },
+  "dalgic": "uyumlu",
+  "bas": "7a62af040f11226d772fc87337f2ab63339fecd2",
+  "duzeltme_farki": {
+    "onceki_bas": "b4f0f49309f66c0a67a3c7c2702232c651faacca",
+    "dosya": 14,
+    "bayt": 41705,
+    "tam_bayt": 44988
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Günlük tavan ardışık çalıştırmalar için durum dosyasıyla korunmuş ve bunun gerçek ölçümü ile mutasyon kanıtı eklenmiş; önceki B1 bu dar senaryoda kapanıyor. Ancak eşzamanlı koşular tavanı aşabilir ve karttaki ilk üç gece davranışı hâlâ uygulanmadığı için iş üretime hazır değil, talebin doğru karşılığı da değil.",
+    "bulgular": [
+      {
+        "ne": "Günlük üç görev sınırı eşzamanlı çalıştırmalarda atomik korunmuyor; iki süreç aynı eski sayıyı okuyup ayrı ayrı üçer görev açabilir. Ayrıca görev açıldıktan sonraki durum kaydı başarısız olursa betik yalnız uyarı vererek devam ediyor ve sonraki koşu açılan görevi sayamıyor.",
+        "kanit": "ONCEKI kilitsiz grep ile bir kez okunuyor, ardından görev önce `hasat.sh ac` ile açılıyor ve durum satırı sonradan `>> \"$DURUM\"` ile yazılıyor; yazma hatası yalnız UYARI üretip başarılı açılışı geri almıyor veya rc=3 vermiyor. Z7 yalnız iki ardışık koşuyu, Z10 ise yalnız başlangıçtaki yazılabilirlik denetimini ölçüyor; eşzamanlı okuma-yazma veya açılıştan sonraki append hatası ölçülmüyor.",
+        "konum": "gunluk-plan/scripts/hasat-gece.sh:43-48,112; gunluk-plan/scripts/hasat-gece.test.sh:82-90",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önceki B2 kapanmamış: “ilk üç gece kuru kipte” davranışı kodda yok; kip süresiz kuru başlıyor ve ancak bir insan cron argümanını değiştirirse gerçek oluyor.",
+        "kanit": "KIP her çalıştırmada `kuru` olarak başlatılıyor ve yalnız açık `--gercek` seçeneğiyle değişiyor; gece sayacı veya üç gecelik durum bulunmuyor. Eklenen açıklama da geçişin SERDAR tarafından elle yapılacağını söylüyor, fakat iş kartında bu varsayım/karar yok ve ölçüm yalnız tek kuru koşu ile elle verilmiş `--gercek` koşusunu kapsıyor.",
+        "konum": "gunluk-plan/scripts/hasat-gece.sh:16-18,27-31; gunluk-plan/SKILL.md:119; olcum-hasat-gece-sinavi-tek.txt K2-K3,G1-G2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; gerçek ölçüm 27/27 yeşil, sarı kayıt yok. Yedi mutasyon hedef kapıları gerçekten düşürüyor ve özellikle ardışık günlük tavan ile başlangıçta yazılamayan durum dosyası savunmalarını doğruluyor; fakat eşzamanlı koşu/sonradan append hatası ve üç gecelik kip dizisi ölçülmediği için bu iddialar kanıtlanmış değil."
+  }
+}
