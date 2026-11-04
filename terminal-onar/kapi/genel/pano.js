@@ -129,7 +129,7 @@
           try { await navigator.clipboard.writeText(j.yol); bildir('📋 yol panoda — Cmd+V ile yapıştır', '#79c0ff', 6000); }
           catch (e) { bildir('✗ yol terminale yazılamadı: ' + j.yol, '#ff7b72', 9000); }
         }
-      } else { var neden = (j && j.hata) || ('HTTP ' + r.status); if (pencereye) { try { P.hata(neden); } catch (e) { /* pencere */ } } bildirP('✗ ' + neden, '#ff7b72', 7000); }
+      } else if (!(r.ok && j && j.yol)) { var neden = (j && j.hata) || ('HTTP ' + r.status); if (pencereye) { try { P.hata(neden); } catch (e) { /* pencere */ } } bildirP('✗ ' + neden, '#ff7b72', 7000); }   // yalnız yükleme başarısızsa (pencereye verilmiş yol 'hata' almaz — Y11 yakaladı)
     } catch (e) { if (pencereye) { try { P.hata(e && e.message); } catch (x) { /* pencere */ } } bildirP('✗ ' + (e && e.message), '#ff7b72', 7000); }
     finally { mesgul = false; }
   }
