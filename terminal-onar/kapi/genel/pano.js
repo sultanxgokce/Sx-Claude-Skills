@@ -100,10 +100,12 @@
     if (mesgul) return; mesgul = true;
     var t0 = performance.now(), P = pencereKancasi(), pencereye = false;
     try { pencereye = !!(P && P.basla(blob)); } catch (e) { pencereye = false; log('pencere kancası basla hatası:', e && e.message); }
-    bildir('⏳ resim küçültülüyor… (' + kb(blob.size) + ')', '#c9914f', 60000);
+    // pencere sahipse sağ alt bildirim BASILMAZ: pencere kendi durumunu gösterir ("Resim yükleniyor…" · ek · hata notu); bildirim telefonda Gönder'in üstüne biniyordu (kare ölçümü)
+    var bildirP = function (m, r, sn_) { if (!pencereye) bildir(m, r, sn_); };
+    bildirP('⏳ resim küçültülüyor… (' + kb(blob.size) + ')', '#c9914f', 60000);
     try {
       var kucuk = await kucult(blob); var govde = kucuk || blob, t1 = performance.now();
-      bildir('⬆ resim yükleniyor… (' + kb(govde.size) + ' · küçültme ' + sn(t1 - t0) + ')', '#c9914f', 60000);
+      bildirP('⬆ resim yükleniyor… (' + kb(govde.size) + ' · küçültme ' + sn(t1 - t0) + ')', '#c9914f', 60000);
       var r = await fetch(RESIM_URL, { method: 'POST', credentials: 'same-origin',
         headers: { 'x-kapi': '1', 'content-type': govde.type || 'application/octet-stream' }, body: govde });
       var j = null; try { j = await r.json(); } catch (e) { /* gövde json değil */ }
@@ -113,7 +115,7 @@
       log('süreler', sonOlcum);
       if (r.ok && j && j.yol && pencereye) {
         try { P.bitti(j.yol); } catch (e) { log('pencere kancası bitti hatası:', e && e.message); }
-        bildir('✓ resim yazma penceresine eklendi — Gönder ile gider\n' + sure, '#7ee787', 6000); log('pencereye', j.yol);
+        log('pencereye', j.yol, sure);
       } else if (r.ok && j && j.yol) {
         var nasil = terminaleYaz(' ' + j.yol + ' ');
         if (nasil) { bildir('✓ resmin yolu terminale yazıldı — Enter ile gönder\n' + sure, '#7ee787', 6000); log('yazıldı', nasil, j.yol); }
@@ -121,8 +123,8 @@
           try { await navigator.clipboard.writeText(j.yol); bildir('📋 yol panoda — Cmd+V ile yapıştır', '#79c0ff', 6000); }
           catch (e) { bildir('✗ yol terminale yazılamadı: ' + j.yol, '#ff7b72', 9000); }
         }
-      } else { var neden = (j && j.hata) || ('HTTP ' + r.status); if (pencereye) { try { P.hata(neden); } catch (e) { /* pencere */ } } bildir('✗ ' + neden, '#ff7b72', 7000); }
-    } catch (e) { if (pencereye) { try { P.hata(e && e.message); } catch (x) { /* pencere */ } } bildir('✗ ' + (e && e.message), '#ff7b72', 7000); }
+      } else { var neden = (j && j.hata) || ('HTTP ' + r.status); if (pencereye) { try { P.hata(neden); } catch (e) { /* pencere */ } } bildirP('✗ ' + neden, '#ff7b72', 7000); }
+    } catch (e) { if (pencereye) { try { P.hata(e && e.message); } catch (x) { /* pencere */ } } bildirP('✗ ' + (e && e.message), '#ff7b72', 7000); }
     finally { mesgul = false; }
   }
 

@@ -9,8 +9,8 @@ version: 2.43.0
 Eskiden `genel/pano.js` telefonda seçilen/yapıştırılan resmi yükleyip yolunu doğrudan terminale yazıyordu; merkezin yazma penceresinde yazan
 Sultan metni pencerede, yolu terminalde görüyordu (pencerede ek görünmez, yükleme bitmeden Gönder sırayı bozar, "Enter ile gönder" uyarısı
 pencere akışına yanlış). pano.js 1.2.0: merkezin penceresi `window.__kapiResimPencere = { basla(blob) → true|false, bitti(yol), hata(mesaj) }`
-sunuyorsa yol pencereye verilir (`basla` yüklemeden ÖNCE: pencere "yükleniyor" der, Gönder bekler; `hata` da pencereye gider), bildirim
-"resim yazma penceresine eklendi — Gönder ile gider". Kanca yoksa ya da `basla` false dönerse eski yol aynen. Masaüstünde pencere yok → değişiklik yok.
+sunuyorsa yol pencereye verilir (`basla` yüklemeden ÖNCE: pencere "yükleniyor" der, Gönder bekler; `hata` da pencereye gider); pencere sahipken
+sağ alt bildirim basılmaz (telefonda Gönder'in üstüne biniyordu; pencere kendi durumunu gösterir). Kanca yoksa ya da `basla` false dönerse eski yol aynen. Masaüstünde pencere yok → değişiklik yok.
 Sınav `pano-sinav.mjs` Y11 (kanca varken yol terminale yazılmaz, basla+bitti verilir) · Y11b (kanca kalkınca eski yol). Pencere tarafı: cloudtop
 merkez `telefon-fotograf-sinav.mjs` F1–F10 (F9 gerçek pano.js ile uçtan uca: Yaz → + → Görüntü ekle → Gönder = 4 dokunuş, yol + metin tek satır).
 Canlıya iniş: kurulumdan sonra kapı SIGHUP ile yeni pano.js'i verir (2.36.4 ile aynı yol).
