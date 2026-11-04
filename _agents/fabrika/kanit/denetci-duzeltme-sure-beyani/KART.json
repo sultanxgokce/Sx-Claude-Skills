@@ -1,0 +1,30 @@
+{
+  "is": "denetci-duzeltme-sure-beyani",
+  "cumle": "denetci-duzeltme-farki sinamasinin sure beyanini olculmus en kotu kosunun 1,5 kati yap",
+  "istedi": "BENNA",
+  "aldi": "BENNA",
+  "zaman": "2026-11-04T16:00:40+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "1,5 kati"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}
