@@ -1,9 +1,16 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.41.0
+version: 2.41.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.41.1 · Yalnız uyuyan ustası olan oda da `odalar` listesine girer (4 Kas · kart uyuyan-oda-listesi · Sultan tellal karesi 15:41)
+Ölçülen kusur (SERDAR, canlı tellal kapısı): `odalar` yalnız açık koltukların odalarından kuruluyordu → 6 odanın 2'si listedeydi
+(mimari-cizim, ortak-kapilar); bakim · reklam-videosu · web-tanitim · sosyal-medya yoktu. Merkez listede olmayan odayı uydurma sayıp
+açmadığı için o odaların uyuyan ustaları şeridin sonuna yığılıyordu (2.41.0'ın `uyuyanlar[].oda` alanı doluyken bile). Artık uyuyan
+ustanın kayıttaki odası listede yoksa listeye eklenir (hedef/reis boş, uydurulmaz; her oda bir kez). Sınav: kapi UY6 + 1 mutant (satır
+çıkınca UY6 kırmızı, 146/1).
 
 ## 🆕 2.41.0 · Uyuyan usta kendi odasını taşır: `uyuyanlar[].oda` (4 Kas · kart usta-oda-alani · tellal şeridi)
 Ölçülen kusur (SERDAR, tellal karesi): PERGEL (mimari-cizim), USTABASI ve DEMIRCI (bakim) uyurken kendi oda başlığının altına değil şeridin
