@@ -1,0 +1,25 @@
+{
+  "is": "pano-pencere-kancasi",
+  "cumle": "Kapının pano.js betiği telefonda yüklenen resmin yolunu, merkezin yazma penceresi kanca sunuyorsa terminale değil pencereye verir (basla/bitti/hata); pencere yoksa eski yol aynen sürer (ANA8GF dilim 4, kapı tarafı)",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-04T20:31:52+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "pano-sinav kapısı + merkez telefon-fotograf F9 uçtan uca kanıt dizininde",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}
