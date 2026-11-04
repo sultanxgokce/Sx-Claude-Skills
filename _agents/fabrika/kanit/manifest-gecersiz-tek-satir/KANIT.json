@@ -1,0 +1,80 @@
+{
+  "is": "manifest-gecersiz-tek-satir",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T14:08:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "manifest-ozet sınavı",
+      "asama": "tek",
+      "dosya": "olcum-manifest-ozet sınavı-tek.txt",
+      "sha256": "f3205b79ffc63eacf6d81f3e55d9cb18fe8e015c0377e56381e40b0411312916",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/manifest-ozet.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T14:08:13+03:00",
+      "sure_sn": 85.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2ec6e4f77f6e41e4b77854b119885771",
+      "olculen_commit": "39289673594ad048efc6085768b8bca08a2bc014",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: denetci ham cat yapar",
+      "asama": "tek",
+      "dosya": "olcum-mutant: denetci ham cat yapar-tek.txt",
+      "sha256": "4bd4aadae26435acb857c0b590b70cad2967d3a9585aca2e25d56b61f5b1911c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-mo1.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T14:08:13+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "manifest-ozet sınavı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D1",
+      "hedef_dustu": true,
+      "olcum_id": "3e2c4860e7e5469fb0fc5b05683f1331",
+      "olculen_commit": "39289673594ad048efc6085768b8bca08a2bc014",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: yardımcı ilanı indirmez",
+      "asama": "tek",
+      "dosya": "olcum-mutant: yardımcı ilanı indirmez-tek.txt",
+      "sha256": "012df1b173ceedae0ff238626185be46e9e1e67c6e902d36e8154e2ee3cd5d97",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-mo2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T14:08:24+03:00",
+      "sure_sn": 10.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "manifest-ozet sınavı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K4",
+      "hedef_dustu": true,
+      "olcum_id": "8bce3ea1690e4df4a31cb58394fbf5b6",
+      "olculen_commit": "39289673594ad048efc6085768b8bca08a2bc014",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "e35d6f95c2fd60a1130aacc79c918a63c8acaaa35fd5259d9a1db516197505d6"
+}

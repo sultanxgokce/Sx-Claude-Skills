@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K4 · rc≠0 + hedef kapı 'K4' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-manifest-ozet sınavı-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-mo2.sh
+# rc=1 sure=10.7s zaman=2026-11-04T14:08:24+03:00
+--- stdout ---
+  ✗ K4 ilan hâlâ JSON olarak basılıyor
+  ✗ K5 sha alanı sızdı
+  ✗ M1 kazanç yok: 42778 / 39668
+SONUÇ: PASS=13 FAIL=3
+--- stderr ---
+⏳ agir-sira: kanit-manifest-gecersiz-tek-satir-mutant: yardımcı ilanı indirmez 10 sn bekledi (yuva 1, load1 15.56)

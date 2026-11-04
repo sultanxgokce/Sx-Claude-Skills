@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: D1 · rc≠0 + hedef kapı 'D1' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-manifest-ozet sınavı-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-mo1.sh
+# rc=1 sure=0.3s zaman=2026-11-04T14:08:13+03:00
+--- stdout ---
+  ✗ D1 çağrı YOK (ham cat kalmış)
+  ✗ D2 yedek yol yok
+SONUÇ: PASS=14 FAIL=2
+--- stderr ---
