@@ -1,0 +1,18 @@
+$ bash yazilim-fabrikasi/scripts/denetci-manifest-istem.test.sh
+# rc=0 sure=4.9s zaman=2026-11-04T14:12:21+03:00
+--- stdout ---
+  ✓ ESKİ denetci.sh ham 'cat KANIT.json' yapıyor (karşılaştırma tabanı)
+  ✓ fikstür: 16 geçersiz ilan KANIT.json'da (gerçek kanit.sh ile)
+     manifest (diskte, imzalı): 28351 bayt
+  ✓ iki sürüm de koştu (rc eski=0 yeni=0)
+     TAM İSTEM önce=43464 sonra=22132 bayt (fark 21332)
+  ✓ yeni istem ESKİden küçük
+  ✓ yeni istem eskinin %70'inden küçük (geçersizlik şişkinliği gitti)
+  ✓ yeni istemde 16 ilan = 16 tek satır (göz neyin ilan edildiğini hâlâ görüyor)
+  ✓ 3 geçerli ölçüm yeni istemde tam
+     tavan=32798: eski rc=1 yeni rc=0
+  ✓ 🔴 ESKİ sürüm bu tavanda İŞİ BÖL (rc=1): mihenk vakası yeniden üretildi
+  ✓ 🔴 YENİ sürüm aynı tavanda GEÇER (rc=0): geçersizlik ilanları artık tavanı doldurmuyor
+
+── SONUÇ: 9 geçti · 0 kaldı ──
+--- stderr ---

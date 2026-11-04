@@ -1,7 +1,7 @@
 {
   "is": "manifest-gecersiz-tek-satir",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-04T14:08:24+03:00",
+  "guncelleme": "2026-11-04T14:12:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -74,7 +74,53 @@
       "olculen_commit": "39289673594ad048efc6085768b8bca08a2bc014",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tam istem önce sonra baytı",
+      "asama": "tek",
+      "dosya": "olcum-tam istem önce sonra baytı-tek.txt",
+      "sha256": "2f9ff29680e5b7e20e554e9f8a73dc0d3f97e49c9e4ccf5627f505e14875a41a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-manifest-istem.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T14:12:21+03:00",
+      "sure_sn": 4.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ceb0e37f926248059d8d3bf0bbf950a9",
+      "olculen_commit": "56f2a9ad15c3f91affa24bfe84ad0a4ffe2d65ca",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: yardımcı ilanı indirmez (tam istem)",
+      "asama": "tek",
+      "dosya": "olcum-mutant: yardımcı ilanı indirmez (tam istem)-tek.txt",
+      "sha256": "1cb10f971d194adf850e8d369e61f8c20c9d09fe4d1ec86441620d107d8af308",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-dmi.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T14:12:25+03:00",
+      "sure_sn": 4.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "tam istem önce sonra baytı",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "yeni istem ESKİden küçük",
+      "hedef_dustu": true,
+      "olcum_id": "0c829556f1c94978974562e040929443",
+      "olculen_commit": "56f2a9ad15c3f91affa24bfe84ad0a4ffe2d65ca",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "e35d6f95c2fd60a1130aacc79c918a63c8acaaa35fd5259d9a1db516197505d6"
+  "imza": "0e60509186015f60897d09a2a25f86315e80e39038d5c43492776c546fd17618"
 }

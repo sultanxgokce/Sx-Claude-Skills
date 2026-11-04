@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: yeni istem ESKİden küçük · rc≠0 + hedef kapı 'yeni istem ESKİden küçük' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-tam istem önce sonra baytı-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-dmi.sh
+# rc=1 sure=4.2s zaman=2026-11-04T14:12:25+03:00
+--- stdout ---
+  ✗ yeni istem ESKİden küçük
+  ✗ yeni istem eskinin %70'inden küçük (geçersizlik şişkinliği gitti)
+  ✗ 🔴 ESKİ sürüm bu tavanda İŞİ BÖL (rc=1): mihenk vakası yeniden üretildi
+  ✗ 🔴 YENİ sürüm aynı tavanda GEÇER (rc=0): geçersizlik ilanları artık tavanı doldurmuyor
+── SONUÇ: 4 geçti · 4 kaldı ──
+--- stderr ---
