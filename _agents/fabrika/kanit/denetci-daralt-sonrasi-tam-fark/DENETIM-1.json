@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-daralt-sonrasi-tam-fark",
+  "pr": "697",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T01:42:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-mut-eski-kosul-tek.txt (sari → gecersiz) — mutant yalnız denetci.sh kopyaladı; kanit.py yok, 5 kapı çökmeden düştü (sahte yakalama) · BENNÂ",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-daralt-sonrasi-tam-fark",
+  "dal": "denetci-daralt-sonrasi-tam-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20568,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9637
+  },
+  "dalgic": "uyumsuz",
+  "bas": "d33992342da1ec66bc60d8d3e93e69dee85d2efd",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Daraltma sonrasındaki ilk turda artımlı fark koşulu ertelenerek PR bütünü gönderilmiş, sonraki turda artımlı davranış korunmuş. Gerçek ölçüm 7/0 geçiyor ve geçerli mutasyon eski koşulun hedef kapılarda yakalandığını gösteriyor; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı/geçersiz eski mutasyon kaydı doğru biçimde kanıt dışı bırakılmış. Gerçek kod ölçümü rc=0 ile E1–E3 davranışlarını 7/0 doğruluyor; geçerli mutasyon kaydı rc=1 ile hedef E2b kapısını ve ayrıca E2c'yi düşürerek sınavın eski koşulu gerçekten ayırt ettiğini gösteriyor."
+  }
+}
