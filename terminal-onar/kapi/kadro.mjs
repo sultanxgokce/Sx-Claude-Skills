@@ -126,7 +126,35 @@ export function kayitOku(proje, ortam = process.env) {
   if (listeler.length && fs.existsSync(model)) {
     try { const l3 = kayitAyristir(fs.readFileSync(model, 'utf8'), 'kayit'); l3.yalniz = ['durum_once']; listeler.push(l3); } catch {}
   }
-  return { kaynak, okunamadi, uyeler: birlestir(listeler), ...(dava_kurali ? { dava_kurali } : {}) };
+  // 2.44.0 (SERDAR 5 Kas · medigate 'Medi' → 'Klinik Mühendislik'): oda ANAHTARI kebap kalır; görünen ad aile kaydındaki `odalar:` bloğunun `ad:` alanıdır.
+  let odaAdlari = {}; try { if (fs.existsSync(aile)) odaAdlari = odaAdlariAyristir(fs.readFileSync(aile, 'utf8')); } catch {}
+  return { kaynak, okunamadi, uyeler: birlestir(listeler), ...(Object.keys(odaAdlari).length ? { odaAdlari } : {}), ...(dava_kurali ? { dava_kurali } : {}) };
+}
+
+/** Kayıttaki görünen oda adını şerit için temizler: metin değilse ya da temizlik sonrası boşsa '' (uydurulmaz). Türkçe harf aynen kalır (NFC),
+ *  denetim karakteri/yön işareti/etiket işareti atılır, boşluk tek boşluğa iner, en çok 40 karakter (kod noktası; Türkçe harf bölünmez). */
+export function odaGorunenTemiz(v) {
+  if (typeof v !== 'string') return '';
+  const s = v.normalize('NFC').replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2066-\u2069<>"`]/g, ' ').replace(/\s+/g, ' ').trim();
+  return Array.from(s).slice(0, 40).join('').trim();
+}
+
+/** Aile kaydının kök `odalar:` bloğu → { <oda anahtarı>: <görünen ad> }. Yalnız anahtarı kebap kurala uyan ve `ad:` alanı temizlik sonrası dolu olan oda girer;
+ *  `ad:` olmayan oda haritada YOKTUR (kapı addan türetmeye düşer, kayıttan ad uydurmaz). Blok sınırı kayitAyristir ile aynı: girintisiz satır bloğu kapatır. */
+export function odaAdlariAyristir(metin) {
+  const h = {}; let icerde = false, cur = null, girinti = -1;
+  for (const line of String(metin || '').split('\n')) {
+    if (/^odalar:\s*(#.*)?$/.test(line)) { icerde = true; cur = null; continue; }
+    if (!icerde) continue;
+    const g = line.search(/\S/); if (g < 0 || line[g] === '#') continue;
+    if (g === 0) { icerde = false; cur = null; continue; }
+    const m = line.match(/^\s*-\s*oda:\s*("([^"]*)"|'([^']*)'|([^\s#]+))/);
+    if (m) { cur = m[2] ?? m[3] ?? m[4]; girinti = g; continue; }
+    if (cur && g > girinti && /^[a-z0-9][a-z0-9-]{0,29}[a-z0-9]$/.test(cur) && !(cur in h)) {
+      const ad = skaler(line, 'ad'); if (ad !== null) { const t = odaGorunenTemiz(ad); if (t) h[cur] = t; }
+    }
+  }
+  return h;
 }
 
 // ── DAVA KURALI (Parça B1): kayıt KÖKÜNDE `dava_kurali: {tavan: 4, gun: 14}` (akış biçimi) ya da blok biçimi

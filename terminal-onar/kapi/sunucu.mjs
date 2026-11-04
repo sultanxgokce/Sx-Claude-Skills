@@ -496,7 +496,7 @@ const sunucu = http.createServer(async (req, res) => {
         // RÜTBE (2.38.0 · kart rutbe-koltuk-alani): kademe · amir · amir_ad kayıttan türer (kural kapi/rutbe.mjs); kayıt okunamazsa alan yazılmaz, liste düşmez.
         const odalar = new Map();
         const satirlar = koltukSatirlari(r.out), acik = satirlar.map((k) => k.ad);
-        let kayitOda = new Map(), gecersizOda = new Map(), rutbe = new Map(); try { const { uyeler } = kayitOku(PROJE); kayitOda = kayitOdaHaritasi(uyeler, acik); gecersizOda = kayitOdaGecersizHaritasi(uyeler, acik); rutbe = rutbeHaritasi(uyeler, acik); } catch {}   // 2.38.6: kurala uymayan oda adı uyarı olarak döner
+        let kayitOda = new Map(), gecersizOda = new Map(), rutbe = new Map(); let odaAdlari = {}; try { const { uyeler, odaAdlari: oa } = kayitOku(PROJE); odaAdlari = oa || {}; kayitOda = kayitOdaHaritasi(uyeler, acik); gecersizOda = kayitOdaGecersizHaritasi(uyeler, acik); rutbe = rutbeHaritasi(uyeler, acik); } catch {}   // 2.38.6: kurala uymayan oda adı uyarı olarak döner
         const koltuklar = satirlar.map(({ dizin, ...k }) => {
           const bulunan = odaBul(dizin), kayitta = kayitOdaBul(kayitOda, k.ad), sec = odaSec(bulunan, kayitta), uyari = odaUyarisi(bulunan, kayitta, kayitOdaBul(gecersizOda, k.ad));
           if (sec && sec.kaynak === 'klasor') odalar.set(sec.oda, bulunan);   // klasörün hedef · reis bilgisi kayıt satırını ezer
@@ -511,7 +511,7 @@ const sunucu = http.createServer(async (req, res) => {
         // 2.41.1 (kart uyuyan-oda-listesi · Sultan tellal karesi 15:41): yalnız uyuyan ustası olan oda da `odalar` listesine girer — liste yalnız açık koltuklardan
         //   kurulduğu için bakim · reklam-videosu · web-tanitim · sosyal-medya odaları listede yoktu; merkez listede olmayan odayı (uydurma sayıp) açmadığından bu ustalar sona yığılıyordu.
         for (const u of uyuyanlar) if (u.oda && !odalar.has(u.oda)) odalar.set(u.oda, { ad: u.oda, hedef: '', reis: '' });
-        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar, uyuyanlar });
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, yas_ms: yas, odalar: [...odalar.values()].map((o) => (Object.hasOwn(odaAdlari, o.ad) ? { ...o, gorunen_ad: odaAdlari[o.ad] } : o)).sort((a, b) => a.ad.localeCompare(b.ad, 'tr')), koltuklar, uyuyanlar });   // 2.44.0: odalar[].ad kebap anahtar kalır; görünen ad ayrı alan gorunen_ad (kayıttaki odalar bloğu)
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
