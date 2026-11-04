@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "oda-gorunen-ad",
+  "pr": "695",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T00:12:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-oda-gorunen-ad",
+  "dal": "oda-gorunen-ad",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37853,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 20181
+  },
+  "dalgic": "uyumlu",
+  "bas": "b8e66778da83b21ccf1699f0f17986117ea29af6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı aile kaydının kök odalar bloğundaki görünen adı temizleyip /api/koltuklar yanıtında odalar[].gorunen_ad olarak veriyor; odalar[].ad ve koltuk oda anahtarları değişmiyor. İmzalı gerçek ölçümler temiz geçti, hedefli mutasyonlar da sınavların talebin kritik davranışlarını gerçekten yakaladığını gösterdiği için üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı ya da geçersiz kayıt yok. Gerçek kod ölçümleri sonra-kadro için 46/0, sonra-sunucu için 152/0 ve temiz commit üzerinde yeşil; gorunen_ad eklenmemesi, anahtarın görünen ada kayması, temizlik ve blok sınırı bozuklukları ayrı mutasyon kayıtlarında hedef kapıları düşürüyor. Görsel önce/sonra karesi yok, ancak bu API ve ayrıştırma değişikliği gerçekçi kayıt verili hedefli entegrasyon ölçümleriyle ve mutasyon karşılıklarıyla doğrudan ölçülmüş."
+  }
+}

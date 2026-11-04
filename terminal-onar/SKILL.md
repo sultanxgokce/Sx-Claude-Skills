@@ -1,9 +1,14 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.43.0
+version: 2.44.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.44.0 · Oda görünen adı: anahtar kebap kalır, şerit kayıttaki adı basar (5 Kas · kart oda-gorunen-ad · SERDAR · medigate)
+Ölçülen kusur: medigate şeridinde oda `medi` anahtarından türetilen "Medi" yazıyordu; Sultan "Klinik Mühendislik" istedi. Kapı `ODA_AD_DESEN` ile yalnız kebap anahtarı okuyordu, kayıttaki ad alanını hiç okumuyordu.
+Artık `kayitOku` aile kaydının kök `odalar:` bloğundaki `ad:` alanını okur (`odaAdlariAyristir`); `/api/koltuklar` `odalar[]` satırına **`gorunen_ad`** ekler (merkez şeridi bu alanı zaten okur: sayfalar.mjs `odaGorunur`). **`odalar[].ad` ve koltuk `oda` alanı DEĞİŞMEZ** (kebap anahtar; hafıza yolu, oda.json, kümeleme ona bağlı). Kayıtta `ad:` yoksa alan hiç yazılmaz, addan türetmeye merkez düşer (uydurma yok). Temizlik (`odaGorunenTemiz`): NFC, boşluk tek, denetim/yön karakteri ve `<>"` + ters tırnak atılır, en çok 40 kod noktası; Türkçe harf bozulmaz. `kalem:` ve `uyeler:` bloklarının `ad:` alanı odaya karışmaz.
+Sınav: kadro.test.mjs OG-K1..K6 (46/0) · sunucu.test.mjs OG1..OG5 (152/0). Canlıya iniş: kurulum + kapı SIGHUP/yeniden başlatma.
 
 ## 🆕 2.43.0 · Telefonda yüklenen resmin yolu yazma penceresine gider (4 Kas · kart pano-pencere-kancasi · görev …ANA8GF dilim 4 · SERDAR)
 Eskiden `genel/pano.js` telefonda seçilen/yapıştırılan resmi yükleyip yolunu doğrudan terminale yazıyordu; merkezin yazma penceresinde yazan

@@ -2,7 +2,7 @@
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { kayitAyristir, kayitOku, kadroBirlestir, HAL_KAYIT, altyapiNeden } from './kadro.mjs';
+import { kayitAyristir, kayitOku, kadroBirlestir, HAL_KAYIT, altyapiNeden, odaAdlariAyristir, odaGorunenTemiz } from './kadro.mjs';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { koltukSatirlari } from './koltuklar.mjs';
@@ -102,5 +102,19 @@ kapi('OD5 aile kaydından amir ve oda_muduru da gelir (rütbe gösterimi buna da
 const nz0 = join(T, 'nz0'); mkdirSync(join(nz0, '_agents/handoff'), { recursive: true });
 writeFileSync(join(nz0, 'iskan-registry.yaml'), `proje: nz0\nuyeler:\n  - id: a\n    tmux: "a:0"\n`);
 kapi('OD4 aile kaydı yoksa iskan kutusu eskisi gibi çalışır, oda alanı yok (uydurma yok)', kayitOku(nz0).uyeler.every((u) => u.oda === undefined) && kayitOku(nz0).uyeler.length === 1, JSON.stringify(kayitOku(nz0).uyeler));
+console.log('── OG · oda görünen adı (2.44.0)');
+{
+  const Y = 'meta:\n  aile: X\nodalar:\n  - oda: medi\n    ad: Klinik Mühendislik   # not\n    reis: L\n  - oda: etime\n    kapsam: E\n  - oda: "bakim"\n    ad: \'Bakım  Odası\'\n  - oda: Kötü_Ad\n    ad: Reddedilir\n  - oda: bos\n    ad: "  <> "\ntaslak:\n  - oda: yeni\n    ad: Gizli\nkalem:\n  - ad: Sultan kalemi\nuyeler:\n  - id: A\n    oda: medi\n    ad: Üye Adı\n';
+  const h = odaAdlariAyristir(Y);
+  kapi('OG-K1 medi → "Klinik Mühendislik" (yorum atılır), bakim → "Bakım Odası" (çift boşluk tek, tırnaklar soyulur)', h.medi === 'Klinik Mühendislik' && h.bakim === 'Bakım Odası', JSON.stringify(h));
+  kapi('OG-K2 ad alanı olmayan (etime), anahtarı kurala uymayan (Kötü_Ad), temizlik sonrası boş (bos) oda haritada YOK', !('etime' in h) && !('Kötü_Ad' in h) && !('bos' in h) && Object.keys(h).join() === 'medi,bakim', JSON.stringify(h));
+  kapi('OG-K3 kalem ve üyeler bloklarının ad alanı odalara karışmaz; odalar bloğu bitince başka bloktaki `- oda:` satırı (taslak) odaya sayılmaz', !Object.values(h).some((v) => /Sultan|Üye|Gizli/.test(v)) && !('yeni' in h), JSON.stringify(h));
+  kapi('OG-K4 Türkçe harfler bozulmaz (ÇĞİÖŞÜ çğıöşü İstanbul ığ), NFD girdi NFC olur', odaGorunenTemiz('ÇĞİÖŞÜ çğıöşü') === 'ÇĞİÖŞÜ çğıöşü' && odaGorunenTemiz('Mühendis') === 'Mühendis', odaGorunenTemiz('Mühendis'));
+  kapi('OG-K5 sınır: metin değil → ""; denetim/yön karakteri ve etiket işareti atılır; 40 kod noktası tavan', odaGorunenTemiz(7) === '' && odaGorunenTemiz(null) === '' && odaGorunenTemiz('A‮B\u0007C<D>') === 'A B C D' && Array.from(odaGorunenTemiz('Ş'.repeat(99))).length === 40, JSON.stringify(odaGorunenTemiz('A‮B\u0007C<D>')));
+  const og = join(T, 'og'); mkdirSync(join(og, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(og, '_agents/handoff/aile-registry.yaml'), Y);
+  const ko = kayitOku(og);
+  kapi('OG-K6 kayitOku odaAdlari döner; aile kaydı yoksa alan hiç yok (uydurma yok)', ko.odaAdlari?.medi === 'Klinik Mühendislik' && !('odaAdlari' in kayitOku(nz0)), JSON.stringify(ko.odaAdlari));
+}
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);

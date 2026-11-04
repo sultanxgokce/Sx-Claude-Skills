@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: OG-K2 · rc≠0 + hedef kapı 'OG-K2' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-kadro-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-og.sh adsiz-oda-uydurulur
+# rc=1 sure=0.1s zaman=2026-11-05T00:06:12+03:00
+--- stdout ---
+  ✗ OG-K2 ad alanı olmayan (etime), anahtarı kurala uymayan (Kötü_Ad), temizlik sonrası boş (bos) oda haritada YOK {"medi":"Klinik Mühendislik","etime":"Etime","bakim":"Bakım Odası"}
+SONUÇ: 45 geçti · 1 kaldı
+--- stderr ---

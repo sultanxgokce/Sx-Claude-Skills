@@ -1,0 +1,9 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: OG1 · rc≠0 + hedef kapı 'OG1' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-sunucu-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-og.sh gorunen-ad-eklenmez
+# rc=1 sure=9.2s zaman=2026-11-05T00:07:24+03:00
+--- stdout ---
+  ✗ OG1 medi: ad kebap anahtar KALIR, gorunen_ad "Klinik Mühendislik" (Türkçe harf aynen, üç boşluk tek boşluğa iner, yorum atılır) [{"ad":"bakim","hedef":"","reis":""},{"ad":"etime","hedef":"","reis":""},{"ad":"medi","hedef":"","reis":""},{"ad":"uzun","hedef":"","reis":""}]
+  ✗ OG3 etiket/tırnak işareti atılır, Türkçe büyük/küçük harf ve ı İ bozulmaz {"ad":"bakim","hedef":"","reis":""}
+  ✗ OG4 60 karakterlik ad 40 kod noktasına kısalır (Ü bölünmez) {"ad":"uzun","hedef":"","reis":""}
+GECEN: 149  ·  KALAN: 3
+--- stderr ---

@@ -698,6 +698,26 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   pd.kill();
 }
 
+// ── OG · oda GÖRÜNEN ADI (2.44.0 · SERDAR 5 Kas: medigate şeridi 'Medi' yazıyor, Sultan 'Klinik Mühendislik' istiyor): anahtar ad kebap kalır, odalar[].gorunen_ad kayıttan gelir ──
+{
+  const PG = join(T, 'oda-gorunen-proje'); mkdirSync(join(PG, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(PG, '_agents/handoff/aile-registry.yaml'), 'odalar:\n  - oda: medi\n    ad: Klinik   Mühendislik   # bugünkü medi\n    reis: LOKMAN\n  - oda: etime\n    kapsam: Etimesgut\n  - oda: bakim\n    ad: "Şişli <b>Bakım</b> ÇĞİÖŞÜ ıİ"\n  - oda: uzun\n    ad: ' + 'Ü'.repeat(60) + '\n\nuyeler:\n  - id: SERTABIP\n    tmux: "SERTABIP:0"\n    oda: medi\n  - id: LOKMAN\n    tmux: "LOKMAN:0"\n    oda: etime\n    ad: Sahte Üye Adı\n  - id: FERRAS\n    tmux: "FERRAS:0"\n    oda: bakim\n  - id: UZUN\n    tmux: "UZUN:0"\n    oda: uzun\n');
+  const sg = (ad) => `${ad}\\t5\\t1\\tajan\\tbos\\t\\t\\t\\t${PG}\\n`;
+  const KG = join(T, 'koltuk-sahte-og.sh');
+  writeFileSync(KG, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nprintf "' + sg('SERTABIP') + sg('LOKMAN') + sg('FERRAS') + sg('UZUN') + '"\n', { mode: 0o755 });
+  const PGP = 18782; const pg = await kapiAc('/sedir', PGP, { TO_PROJE: PG, KAPI_KOLTUK_BETIK: KG });
+  const okg = await iste(PGP, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cg = 'kapi=' + ((okg.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const rg = await iste(PGP, '/sedir/api/koltuklar', { cerez: cg }); const jg2 = await rg.json();
+  const O = (ad) => (jg2.odalar || []).find((o) => o.ad === ad) || {};
+  kapi('OG1 medi: ad kebap anahtar KALIR, gorunen_ad "Klinik Mühendislik" (Türkçe harf aynen, üç boşluk tek boşluğa iner, yorum atılır)', O('medi').ad === 'medi' && O('medi').gorunen_ad === 'Klinik Mühendislik', JSON.stringify(jg2.odalar));
+  kapi('OG2 kayıtta ad olmayan oda (etime) gorunen_ad TAŞIMAZ (uydurulmaz); üyenin ad alanı odaya karışmaz (Sahte Üye Adı yok)', O('etime').ad === 'etime' && !('gorunen_ad' in O('etime')) && !JSON.stringify(jg2.odalar).includes('Sahte'), JSON.stringify(jg2.odalar));
+  kapi('OG3 etiket/tırnak işareti atılır, Türkçe büyük/küçük harf ve ı İ bozulmaz', O('bakim').gorunen_ad === 'Şişli b Bakım /b ÇĞİÖŞÜ ıİ', JSON.stringify(O('bakim')));
+  kapi('OG4 60 karakterlik ad 40 kod noktasına kısalır (Ü bölünmez)', Array.from(O('uzun').gorunen_ad || '').length === 40 && /^Ü+$/.test(O('uzun').gorunen_ad || ''), JSON.stringify(O('uzun')));
+  kapi('OG5 hafıza yolu kırılmaz: koltuk satırlarında oda hâlâ kebap anahtar (medi · etime · bakim · uzun), odalar[].ad kümesi aynı', ['SERTABIP', 'LOKMAN', 'FERRAS', 'UZUN'].map((a) => (jg2.koltuklar.find((x) => x.ad === a) || {}).oda).join() === 'medi,etime,bakim,uzun' && (jg2.odalar || []).map((o) => o.ad).join() === 'bakim,etime,medi,uzun', JSON.stringify(jg2.odalar));
+  pg.kill();
+}
+
 console.log('\n── UY · UYUYAN USTALAR (şerit gri koltuk · kart usta-seridi-api) ──');
 {
   // sahte usta.sh: liste → ad<TAB>durum<TAB>klasör. İlk üçü anlamlı; BASIRET koltuklar'da zaten var (uyanık sayılır, tekrar eklenmez); kotu:ad süzgeçten düşer; kayit-eksik gösterilmez
