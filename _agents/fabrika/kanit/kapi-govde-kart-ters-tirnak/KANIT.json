@@ -1,0 +1,83 @@
+{
+  "is": "kapi-govde-kart-ters-tirnak",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T01:19:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek.txt",
+      "sha256": "d3d819e5084d07ff8fcf02af204b08b96ce8646f818309e754e7af3577d6c4ae",
+      "komut": [
+        "bash",
+        "-c",
+        "cd yazilim-fabrikasi/scripts && bash birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T01:10:41+03:00",
+      "sure_sn": 253.8,
+      "boru_denetimi": "temiz",
+      "olcum_id": "a502a581787641fe8a0968f7cfe781f2",
+      "olculen_commit": "8e50921dde0f9f196e5c3207f65474ed2062a58c",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-eski-bicim",
+      "asama": "tek",
+      "dosya": "olcum-mut-eski-bicim-tek.txt",
+      "sha256": "75eed1e5177daf595a2fa6d9d19428df2b27ff76874f31d0c5d5eeca2aa8a4d9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-kt.sh",
+        "eski-bicim"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T01:14:50+03:00",
+      "sure_sn": 241.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T19a2",
+      "hedef_dustu": true,
+      "olcum_id": "cae498380c4342aabbe62799a9c0b98d",
+      "olculen_commit": "8e50921dde0f9f196e5c3207f65474ed2062a58c",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-tirnak-kalir",
+      "asama": "tek",
+      "dosya": "olcum-mut-tirnak-kalir-tek.txt",
+      "sha256": "d663961005214bf843a4758c29ba55c407462af885369916df0bc603078e8a7b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-kt.sh",
+        "tirnak-kalir"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T01:19:03+03:00",
+      "sure_sn": 249.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T19a2",
+      "hedef_dustu": true,
+      "olcum_id": "76cf931f45e74ffd949ca67766f82c56",
+      "olculen_commit": "8e50921dde0f9f196e5c3207f65474ed2062a58c",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "1d4b29fa97a7c4ea918401700fae9f6841cb9fb2e758b53a4eb7856a59e8b26a"
+}

@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: T19a2 · rc≠0 + hedef kapı 'T19a2' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-kt.sh eski-bicim
+# rc=1 sure=241.9s zaman=2026-11-05T01:14:50+03:00
+--- stdout ---
+  ✗ 🔴 T19a2 gövde 'kart: `is-govde`' → kart adı sarmalsız 'is-govde', çelişki YOK, rc=0 (rc=1)
+  ✗ 🔴 T19a2 gövde 'Kart: "is-govde"' → kart adı sarmalsız 'is-govde', çelişki YOK, rc=0 (rc=1)
+  ✗ 🔴 T19a2 gövde '**kart:** `is-govde`.' → kart adı sarmalsız 'is-govde', çelişki YOK, rc=0 (rc=0)
+  ✗ 🔴 T19a2 gövde 'kart: is-govde.' → kart adı sarmalsız 'is-govde', çelişki YOK, rc=0 (rc=1)
+── SONUÇ: 232 geçti · 4 kaldı ──
+--- stderr ---

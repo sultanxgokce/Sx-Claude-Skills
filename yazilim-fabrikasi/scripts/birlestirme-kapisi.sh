@@ -61,7 +61,7 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
   #         bu tahminle yanlış kartı okudu; eskiden rc 3 / dal adı). Çare PR gövdesine 'kart: <ad>' yazmak ya da iş adını elle vermek.
   #      5) sıfır dizin ya da liste okunamadı → dal adı (is-alani dalı iş adıyla açar; kapı yine de kanıt yoksa kapalı kalır).
   DAL_ADI="$IS"; IS_NOT=""; PR_UYARI=""; ANA_DAL="${KANIT_ANA:-main}"
-  GOVDE_KART="$(cd "$DEPO" && gh pr view "$PR" --json body --jq .body 2>/dev/null | sed -n 's/^[[:space:]]*[kK][aA][rR][tT]:[[:space:]]*\([^[:space:]]\{1,\}\).*/\1/p' | head -1)"
+  GOVDE_KART="$(cd "$DEPO" && gh pr view "$PR" --json body --jq .body 2>/dev/null | sed -nE 's/^[[:space:]]*[*_]*[kK][aA][rR][tT]:[*_]*[[:space:]]*[`"'"'"'*_(<[]*([A-Za-z0-9]([A-Za-z0-9._-]*[A-Za-z0-9])?).*/\1/p' | head -1)"   # 0.27.57: 'kart: `ad`' (ters tırnak) · \"ad\" · **ad** · ad. sarmalı/noktalaması kart adına karışmaz (yanlış 'çelişki' rc=2 biter)
   PRBAS_C=""; GERCEK=""
   if git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
     PRBAS_C="$(git -C "$DEPO" rev-parse FETCH_HEAD 2>/dev/null)"
