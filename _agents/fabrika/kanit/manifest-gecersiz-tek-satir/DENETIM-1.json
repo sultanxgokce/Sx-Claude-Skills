@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "manifest-gecersiz-tek-satir",
+  "pr": "687",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T14:10:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-manifest-gecersiz-tek-satir",
+  "dal": "manifest-gecersiz-tek-satir",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24541,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7037
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2db5c903a49b17196680f2d1ff1830eed62326db",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Geçersiz ilanlarla hedef ölçümleri denetçi görünümünde tek satıra indirilmiş, geçerli kayıtlar korunmuş ve bozulmuş iki ayrı sürümün sınava takıldığı gösterilmiş. Ancak iş kartının istediği tam istem önce/sonra bayt ölçümü yok; yalnız manifest fikstürü ölçüldüğü için istem tavanının gerçekten aşılmadığı kanıtlanmadan üretime hazır denemez.",
+    "bulgular": [
+      {
+        "ne": "İstem tavanına ilişkin sonuç doğrudan ölçülmemiş; sunulan çift yalnız üretilmiş manifest fikstürünün ham ve özet boyutunu karşılaştırıyor, denetçiye giden birleşik istemin önce/sonra baytlarını göstermiyor.",
+        "kanit": "Gerçek ölçüm çıktısındaki tek boyut çifti “mihenk ölçeği ... ham=39668 özet=14352 bayt”; buna karşılık iş kartı açıkça “önce/sonra istem bayt ölçümü + sınav” istiyor. Şablon, iş kartı, manifest görünümü ve ölçüm çıktılarından oluşan nihai istem için toplam bayt veya tavan karşılaştırması bulunmuyor.",
+        "konum": "olcum-manifest-ozet sınavı-tek.txt · M1 ölçümü; İŞ KARTI.kanit_nerede",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm 16/16 yeşil, iki mutasyon da hedef kapıları D1 ve K4 üzerinden bozuk kodu yakalıyor. Buna rağmen ölçüm çifti nihai istemi değil yalnız manifest fikstürünü kapsadığından tavan iddiasının kanıtı eksik."
+  }
+}

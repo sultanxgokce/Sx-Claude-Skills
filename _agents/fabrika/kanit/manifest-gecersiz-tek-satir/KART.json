@@ -1,0 +1,34 @@
+{
+  "is": "manifest-gecersiz-tek-satir",
+  "cumle": "denetçiye giden kanıt manifesti görünümünde geçersiz ilan edilen her ölçüm ve ilanı tek satıra iner, istem tavanı geçersizlik ilanlarıyla dolmaz",
+  "istedi": "serdar",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-04T14:03:52+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "mihenk PYBNNV manifesti: önce/sonra istem bayt ölçümü + sınav",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6AX7Y31S4R4GK6NMDKT29NK",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-04T14:03:53+03:00",
+      "olay": "ac",
+      "sonuc": "yazılamadı: http 400 · ozet_cikista_gerekli · havuzdan çıkan iş de Sultan-dili özet ister: önce gorev.sh ozet gorev_01M6AX7Y31S4R4GK6NMDKT29NK \"ad (5-10 kelime): sebep → ne olacak\", sonra durumu değiştir"
+    }
+  ]
+}
