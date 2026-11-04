@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K4 🔴 tavan 3 · rc≠0 + hedef kapı 'K4 🔴 tavan 3' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-gece-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-hg.sh tavan-yok
-# rc=1 sure=1.3s zaman=2026-11-04T17:01:22+03:00
+# rc=1 sure=2.6s zaman=2026-11-04T17:06:11+03:00
 --- stdout ---
   ✗ K4 🔴 tavan 3: açılabilir temiz kayıtlardan en çok 3 'açardı'
   ✗ K10 🔴 sahip = odanın müdürü (aile-registry oda_muduru)
@@ -9,5 +9,7 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f96575
   ✗ G3 🔴 --atanan verildi (sahipsiz görev yok)
   ✗ Z7 🔴 aynı gün iki gerçek koşu: TOPLAM 3 açıldı (ikinci koşu ek açmadı)
   ✗ Z9 kuru kip durum dosyasına YAZMADI (3 satır kaldı)
-── SONUÇ: 20 geçti · 7 kaldı ──
+  ✗ Z11 🔴 iki EŞZAMANLI gerçek koşu: TOPLAM 3 açıldı (kilit; kilitsizde 6)
+  ✗ Z12 🔴 açış 3 kez başarısız: rezerve satırları kaldı (3), ikinci koşu yeniden denemedi
+── SONUÇ: 21 geçti · 9 kaldı ──
 --- stderr ---

@@ -1,7 +1,7 @@
-=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Z10 🔴 durum dosyası yazılamıyor · rc≠0 + hedef kapı 'Z10 🔴 durum dosyası yazılamıyor' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-gece-sinavi-* ===
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Z10b 🔴 dizin yazılabilir · rc≠0 + hedef kapı 'Z10b 🔴 dizin yazılabilir' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-gece-sinavi-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-hg.sh durum-yazilamaz-acar
-# rc=1 sure=1.6s zaman=2026-11-04T17:01:30+03:00
+# rc=1 sure=6.5s zaman=2026-11-04T17:06:44+03:00
 --- stdout ---
-  ✗ Z10 🔴 durum dosyası yazılamıyor: gerçek kip rc=3 ve HİÇBİR ŞEY AÇMADI (fail-closed)
-── SONUÇ: 26 geçti · 1 kaldı ──
+  ✗ Z10b 🔴 dizin yazılabilir ama durum DOSYASI salt-okur: rc=3, HİÇBİR ŞEY AÇILMADI (kilit değil dosya koruması)
+── SONUÇ: 29 geçti · 1 kaldı ──
 --- stderr ---

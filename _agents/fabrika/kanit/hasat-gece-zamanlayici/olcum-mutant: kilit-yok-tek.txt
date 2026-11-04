@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Z11 🔴 iki EŞZAMANLI · rc≠0 + hedef kapı 'Z11 🔴 iki EŞZAMANLI' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-hasat-gece-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-hg.sh kilit-yok
+# rc=1 sure=5.3s zaman=2026-11-04T17:06:49+03:00
+--- stdout ---
+  ✗ Z11 🔴 iki EŞZAMANLI gerçek koşu: TOPLAM 3 açıldı (kilit; kilitsizde 6)
+── SONUÇ: 29 geçti · 1 kaldı ──
+--- stderr ---
