@@ -160,6 +160,25 @@ try {
   // Y8 (1.2.2): adım süreleri bildirimde ve köprüde — "yavaş" olunca beklemenin küçültmede mi yüklemede mi olduğu okunur
   const so = await pg.evaluate(() => window.__kapiPano.sonResim && window.__kapiPano.sonResim());
   kapi('Y8 son resmin adım süreleri ölçülür (küçültme ms · yükleme ms · bayt) ve bildirim bunları yazar ("küçültme X sn · yükleme Y sn · Z KB")', !!so && so.kucultMs >= 0 && so.yukleMs >= 0 && so.bayt > 0 && so.ilkBayt === buyuk.boy && /küçültme \d+,\d sn · yükleme \d+,\d sn · \d+ (KB|MB)/.test(bdBuyuk), `→ ${JSON.stringify(so)} · "${bdBuyuk}"`);
+  // Y11 (pano 1.2.0 · BÂNİ 4 Kas, görev …ANA8GF dilim 4): merkezin telefon yazma penceresi window.__kapiResimPencere sunuyorsa yüklenen resmin yolu
+  //   TERMİNALE DEĞİL pencereye verilir (basla(blob) yüklemeden önce, bitti(yol) sonra); kanca kalkınca eski yol aynen (Y11b). Hata yüzü merkez sınavında (F5).
+  const onceK = yuklemeler.length;
+  await pg.evaluate(() => { window.__pk = []; window.__kapiResimPencere = { basla: function (bl) { window.__pk.push('basla:' + (bl && bl.type) + ':' + (bl && bl.size)); return true; }, bitti: function (y) { window.__pk.push('bitti:' + y); }, hata: function (m) { window.__pk.push('hata:' + m); } }; });
+  await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Control+u'); await yapistir(pg, { tip: 'image/png', b64: PNG1 });
+  for (let k = 0; k < 50 && yuklemeler.length === onceK; k++) await bekle(200);
+  await pg.waitForFunction(() => /eklendi|yazıldı|✗/.test((document.getElementById('kapi-pano-bildirim') || {}).textContent || ''), null, { timeout: 10000 }).catch(() => {});
+  await bekle(800);
+  const pk = await pg.evaluate(() => window.__pk.slice()), bd11 = await bildirim(pg), yol11 = yuklemeler[onceK] ? yuklemeler[onceK].yol : '';
+  const ekrandaYol11 = yol11 ? await ekranda(pg, yol11, 1500) : false;
+  kapi('Y11 yazma penceresi kancası varken: yükleme gitti, yol TERMİNALE YAZILMADI, pencereye basla(blob) + bitti(yol) verildi, bildirim "yazma penceresine eklendi — Gönder ile gider"',
+       yuklemeler.length === onceK + 1 && !ekrandaYol11 && pk.length === 2 && /^basla:image\/png:\d+$/.test(pk[0]) && pk[1] === 'bitti:' + yol11 && /yazma penceresine eklendi/.test(bd11), `→ pk=${JSON.stringify(pk)} ekranda=${ekrandaYol11} bildirim="${bd11}" yükleme ${yuklemeler.length - onceK}`);
+  await pg.evaluate(() => { delete window.__kapiResimPencere; });
+  const onceK2 = yuklemeler.length; await bekle(1600);
+  await pg.focus('.xterm-helper-textarea'); await yapistir(pg, { tip: 'image/png', b64: PNG1 });
+  for (let k = 0; k < 50 && yuklemeler.length === onceK2; k++) await bekle(200);
+  await pg.waitForFunction(() => /yazıldı|✗/.test((document.getElementById('kapi-pano-bildirim') || {}).textContent || ''), null, { timeout: 10000 }).catch(() => {});
+  const yol11b = yuklemeler[onceK2] ? yuklemeler[onceK2].yol : '';
+  kapi('Y11b kanca kaldırılınca eski yol aynen: yol terminale yazılır', yuklemeler.length === onceK2 + 1 && !!yol11b && await ekranda(pg, yol11b), `→ ${yol11b || 'yükleme yok'} · ${(await ekran(pg)).trim().split('\n').pop()}`);
   // Y9-Y10 SAFARİ TAKLİDİ: Safari WebP KODLAYAMAZ — webp istenince PNG döner (toDataURL da PNG verir). Kodlama ÇAĞRILARI sayılır.
   //   Eski kod: webp dener (PNG gelir) → JPEG'i ikinci kez kodlar = 2 kodlama. 1.2.2: destek yoklanır → doğrudan JPEG = 1 kodlama.
   {
