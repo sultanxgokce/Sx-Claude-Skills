@@ -228,7 +228,7 @@ PY
     if grep -q "✗ $kapi_adi" <<<"$O" && grep -q "✓ D1a" <<<"$O"; then
       GECEN=$((GECEN+1)); echo "  ✓ mutant '$ad' → $kapi_adi düştü, kontrol D1a geçti"
     else DUSEN=$((DUSEN+1)); echo "  ✗ mutant '$ad' → $kapi_adi düşmedi ya da kontrol D1a da düştü (geçersiz mutant)"; fi; }
-  mut duzeltme-yok 'if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then' 'if false; then' "D2e"
+  mut duzeltme-yok 'if [ "$TUR" -gt $((TUR_SIFIR + 1)) ] && [ -n "$BAS" ]; then' 'if false; then' "D2e"
   mut dosya-siniri-yok 'git -C "$DEPO" --literal-pathspecs diff "$_sol" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
   mut ana-dal-suzme-yok '_sol="$_ob"; _CAKIS=0; _omb=' '_sol="$_ob"; _CAKIS=0; _omb="";  _x=' "D12d"
   mut ikili-atlanir "    if grep -q '^GIT binary patch' <<<\"\$eskiham\$yeniham\"; then" "    if false; then" "D14c"
