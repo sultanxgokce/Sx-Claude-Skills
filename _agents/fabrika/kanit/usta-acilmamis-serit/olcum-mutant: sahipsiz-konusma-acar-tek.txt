@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: U3 sohbet kimliği yok + klasörde · rc≠0 + hedef kapı 'U3 sohbet kimliği yok + klasörde' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-usta-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-usta.sh sahipsiz-konusma-acar
+# rc=1 sure=19.8s zaman=2026-11-04T17:36:46+03:00
+--- stdout ---
+  ✗ U3 sohbet kimliği yok + klasörde sahipsiz konuşma var → rc 5, hangisinin ustanın olduğu uydurulmaz, oturum AÇILMADI  → rc=0 uyandı (yeni oturum): ESKISOHBET
+SONUÇ: geçti=16 kaldı=1
+--- stderr ---

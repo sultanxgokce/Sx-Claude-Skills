@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: U1 liste · rc≠0 + hedef kapı 'U1 liste' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-usta-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-usta.sh klasorsuz-acilmamis
+# rc=1 sure=17.5s zaman=2026-11-04T17:37:04+03:00
+--- stdout ---
+  ✗ U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok); BASSIZ (klasör var, konuşma yok) = acilmamis · YOKKLASOR (klasör diskte yok) ve ESKISOHBET (klasörde sahipsiz konuşma var) = kayit-eksik  → PERGEL	uyuyor	ustalar/PERGEL	mimari-cizim
+SONUÇ: geçti=16 kaldı=1
+--- stderr ---
