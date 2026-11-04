@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mut-eski-kosul-tek.txt
+hedef_sha256: d5e58c16741ea116798638d34dc65b1c981f516c07ff15aa86dcb16458ec2ee0
+hedef_zaman: 2026-11-05T01:40:43+03:00
+hedef_renk: sari
+neden: mutant yalnız denetci.sh kopyaladı; kanit.py yok, 5 kapı çökmeden düştü (sahte yakalama)
+kim: BENNÂ
+karsi: -
+zaman: 2026-11-05T01:40:59+03:00

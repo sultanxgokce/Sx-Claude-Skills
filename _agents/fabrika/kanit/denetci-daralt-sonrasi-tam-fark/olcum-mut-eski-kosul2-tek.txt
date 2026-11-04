@@ -1,0 +1,16 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: E2b · rc≠0 + hedef kapı 'E2b' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-* ===
+$ env MUTANT_D=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-dt2/denetci.sh bash yazilim-fabrikasi/scripts/denetci-daralt-tam-fark.test.sh
+# rc=1 sure=1.9s zaman=2026-11-05T01:41:09+03:00
+--- stdout ---
+════ E1 · tur 1: tam fark ════
+  ✓ E1a tur 1 koştu (4/E → rc 1)
+════ E2 · kart daraltıldı (tur_sifir=1) + yeni commit: tur 2 = daraltmadan SONRAKİ ilk tur → TAM fark ════
+  ✓ E2a tur 2 koştu (5/E → rc 0)
+  ✗ E2b DÜZELTME TURU satırı YOK (daralma sonrası ilk tur artımlı değil) ('DÜZELTME TURU' var, olmamalı)
+  ✗ E2c istemde değişmeyen dosya VAR (PR bütünü gitti) ('degismeyen-dosya-icerigi' /tmp/tmp.DKCoNlG4g0/istem.md içinde yok)
+════ E3 · aynı daraltılmış cümlede ikinci tur (tur 3): artımlı fark geri gelir ════
+  ✓ E3a tur 3 koştu (5/E → rc 0)
+  ✓ E3b DÜZELTME TURU satırı VAR
+  ✓ E3c değişmeyen dosya istemde YOK (yalnız yeni fark)
+SONUÇ: 5 geçti, 2 düştü
+--- stderr ---

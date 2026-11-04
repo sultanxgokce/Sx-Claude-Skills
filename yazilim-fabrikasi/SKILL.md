@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.57
+version: 0.27.58
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.58 (5 Kas 2026, kart denetci-daralt-sonrasi-tam-fark · görev …CMJHBB):** `denetci.sh` kart daraltıldıktan (ya da Sultan turu kaydedildikten) sonraki İLK turda artık PR'ın TAMAMINI göze verir. Eskiden tur>1 olunca fark önceki turun başına göre kuruluyordu; önceki tur daraltmadan ÖNCEki cümleye aitti, yeni cümlenin kapsadığı kod göze gitmeden puanlanıyordu. Artımlı "düzeltme farkı" yalnız aynı cümle üzerindeki ikinci ve sonraki turlarda (tur > tur_sifir+1) kurulur. Sınav: denetci-daralt-tam-fark.test.sh E1–E3 (7/0), mutant (eski koşul) E2b+E2c düşürür.
 - **0.27.57 (5 Kas 2026, kart kapi-govde-kart-ters-tirnak · görev …7A3MVB7H):** `birlestirme-kapisi.sh` PR gövdesindeki `kart: <ad>` satırından kart adını okurken ad ters tırnak, tırnak, yıldız ya da sondaki nokta/virgülle sarılıysa sarmalı atar (`kart: \`ad\``, `**kart:** "ad"`, `kart: ad.`). Eskiden sarmal adın parçası sayılıyor, kanıt kaydındaki gerçek kartla eşleşmiyor, kapı sahte 'çelişki' (rc=2) basıyordu. Kart adı kebap (harf-rakam-tire/nokta/alt çizgi) olarak okunur; gövdede olmayan kart yine 'kart YOK' der (sessiz düzeltme yok). Sınav: birlestirme-kapisi.test.sh T19a2 ×4 (236/0).
 - **0.27.56 (4 Kas 2026, kart birlestirme-kapisi-reis-birlestir · görev …KHKM03):** `birlestirme-kapisi.sh` kartın `reis-dedi --karar birlestir` kaydını okur. Puandan sonra kod değişmişse (sürüm satırı gibi) ve karar birleşen uç commit'inden SONRA verilmişse engel düşer, çıktıda reis, zaman ve değişen dosyalar basılır; karar uçtan ÖNCE verilmişse ya da karar `devam|daralt|geri-al` ise engel sürer; kart okunamazsa engel sürer. Sınav: olculen-commit O20-O22 (38/0), tam kapı sınavı 232/0 (kayıt: tam-kapi), 2 mutant yakalandı (O21, O22).
 - **0.27.46 (3 Kas 2026, kart kapi-ci-sonucu-sart · görev …VNK0M7):** `birlestirme-kapisi.sh --pr N` dördüncü ölçümü yapar: PR başının CI sonucu. Başta kırmızı ya da bitmemiş kontrol varsa rc 1 (kapı kapalı); yeşil/atlandı/nötr geçer. Baş commit yalnız kanıt içerdiği için kontrolü yoksa (yol süzgeci) en çok 8 önceki commit geriye bakılır ve ilk kontrollü commit karar verir; hiçbir yerde kontrol bulunamazsa ya da `gh` okunamazsa rc 3 ÖLÇÜLEMEDİ, asla yeşil değil. `--pr` verilmezse CI sorgulanmaz. `KAPI_CI_GH` yalnız sınav dikişi (üretimde tanımsız, gerçek `gh`); `--pr` ile kapıyı çağıran her sınav sahte `gh` vermeli. Sınav kapı T20 (12 kapı) + 2 mutant (CI çağrısı kalkarsa kırmızı geçer; bitmemiş dalı kalkarsa bekleyen geçer).

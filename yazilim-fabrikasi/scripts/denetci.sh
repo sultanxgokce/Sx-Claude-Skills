@@ -630,7 +630,10 @@ _duz_dosya_bazli() {
 }
 if [ -n "$PR" ] && [ -z "$DIFF" ]; then BAS="$PR_SHA"
 elif [ -z "$DIFF" ]; then BAS="$(git -C "$DEPO" rev-parse -q --verify HEAD 2>/dev/null)"; fi
-if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
+# DARALTMADAN SONRAKİ İLK TUR (gorev …CMJHBB): önceki tur (ONCEKI) daraltmadan ÖNCEki cümleye aitti (TUR_SIFIR ona eşit ya da
+#   büyük); yeni cümleyi kimse görmedi → göze "önceki baştan bu yana" fark değil PR'ın TAMAMI gider. Artımlı fark yalnız aynı
+#   cümle üzerindeki ikinci ve sonraki turlarda (TUR > TUR_SIFIR+1) kurulur.
+if [ "$TUR" -gt $((TUR_SIFIR + 1)) ] && [ -n "$BAS" ]; then
   _ob="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('bas') or '')" "$DZ/DENETIM-$ONCEKI.json" 2>/dev/null)"
   #    Eski kayıt (bas alanı yok, 0.18.1) hâlâ süren işte tam farkı yeniden gönderip 100 KB tavanına takılıyordu (gorev …DCX24C,
   #    Sx #437: istem 118.737 bayt). Baş, kaydı depoya ekleyen commit'in atasından türetilir; kayıt zamanından önceki son
