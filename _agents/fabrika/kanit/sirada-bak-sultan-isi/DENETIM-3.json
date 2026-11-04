@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "sirada-bak-sultan-isi",
+  "pr": "692",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T18:35:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sirada-bak-sultan-isi",
+  "dal": "sirada-bak-sultan-isi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42734,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 23253
+  },
+  "dalgic": "olculemedi",
+  "bas": "a11782a1fcc6a97dedcf823a5c422bbb3e5399e3",
+  "duzeltme_farki": {
+    "onceki_bas": "7bdc60d27a9a679b74eb54174b7c8a5e8b9ade2f",
+    "dosya": 13,
+    "bayt": 34841,
+    "tam_bayt": 49260
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: `-` artık ikinci okumayı kapatmıyor; doğrulama kaynağı okunamazsa iş üstlenilmeden rc 3 dönüyor. K7, gerçek 19/19 ölçümü ve hedefli mutasyon bu güvenlik kapısını doğrudan sınadığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, gerçek ölçüm temiz commit üzerinde rc 0 ve 19/19. Önceki açığı K7 doğrudan ölçüyor; `isaret-kapagi-var` mutasyonu K7’yi düşürerek sınavın hatalı davranışı gerçekten yakaladığını, diğer hedefli mutasyonlar da ikinci okuma, süzme ve okunamama güvenliklerini doğruluyor."
+  }
+}
