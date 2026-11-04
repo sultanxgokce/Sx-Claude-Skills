@@ -1,7 +1,7 @@
 {
   "is": "pano-pencere-kancasi",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-04T20:54:07+03:00",
+  "guncelleme": "2026-11-04T20:58:07+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -111,7 +111,27 @@
       "olculen_commit": "43c8f2e70651ac203bdb2a97dc34178c7efaa107",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-3",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-3-sonra.txt",
+      "sha256": "c24a71572c5bab36b16c334b8381e75e6f36213673292d2e286483f78aa7170d",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T20:58:07+03:00",
+      "sure_sn": 107.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6cb6db06ee4048d1b866eeb04849b967",
+      "olculen_commit": "584d7bdd34db35aabed1abdc7409481e9e92b295",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "464862dcb581eb66ada59701f5fe33ec61b0df39db39dbb4bf3833d4aef1be39"
+  "imza": "6171e3a5349a8a6dbc866d93d21b46aed5ebab175ed62b84d9f3b96ef45ee600"
 }
