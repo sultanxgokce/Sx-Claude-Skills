@@ -34,6 +34,20 @@
       "zaman": "2026-11-04T16:58:54+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-04T17:02:53+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BENNA",
+      "oturum": "aile-notify SERDAR 4 Kas · Sx 690 karari",
+      "gerekce": "SERDAR karari 4 Kas: Sx 690 karar: EVET. Tur 3 acilir (reis SERDAR, B1 flock+rezerve haklı bulgu). B2 karar kaydi: gercek kipe gecis otomatik degil, insan karari: SERDAR 3 gece sonucunu gorup elle gecirir, gece sayaci eklenmez. Tur 3 de 5/E degilse daralt: B2 karttan cikar; ucuncusu yok.",
+      "zaman": "2026-11-04T17:05:45+03:00"
     }
   ]
 }
