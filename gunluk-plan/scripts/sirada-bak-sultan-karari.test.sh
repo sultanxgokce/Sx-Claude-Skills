@@ -85,6 +85,11 @@ kos(){
   ok "K3 kör kopyayla varsayılan koşuda ustlen YALNIZ sıradan işe gider; Sultan kararına PATCH yok" '[ "$(cat "$T/yama.log" 2>/dev/null | sort -u | tr "\n" " ")" = "gorev_A " ]'
   rm -f "$T/yama.log"; local C4; C4="$("${E2[@]}" GUNLUK_PLAN_ISARET_SH=/yok/gorev.sh bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"; local R4=$?
   ok "K4 işaret ikinci kaynaktan okunamazsa ÖLÇÜLEMEDİ (rc 3), hiçbir şey üstlenilmez" '[ "$R4" = 3 ] && printf "%s\n" "$C4" | grep -q "ÖLÇÜLEMEDİ" && [ ! -s "$T/yama.log" ]'
+  local D6="$T/paketsiz-$$-$RANDOM"; mkdir -p "$D6"; cp "$D/sirada-bak.sh" "$D/kimlik-coz.sh" "$D/kutu-bul.sh" "$D/gorev-yolu.sh" "$D/hasat.sh" "$D6/" 2>/dev/null
+  rm -f "$T/yama.log"; local C6; C6="$("${E[@]}" bash "$D6/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"; local R6=$?
+  ok "K6 paketli ikinci kaynak (scripts/gorev.sh) yoksa ve seçilen kopya başkaysa ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (doğrulanamayan Sultan işi sayılmaz)" '[ "$R6" = 3 ] && printf "%s\n" "$C6" | grep -q "ikinci kaynak" && [ ! -s "$T/yama.log" ]'
+  rm -f "$T/yama.log"; local C5; C5="$("${E[@]}" GUNLUK_PLAN_GOREV_SH="$KOR" bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"
+  ok "K5 🔴 AÇIK GUNLUK_PLAN_GOREV_SH ile seçilen KÖR kopya da ikinci okumadan muaf DEĞİL: ISI/MADDE'de Sultan kararı yok, ustlen yalnız sıradan işe (göz tur 1)" '! printf "%s\n" "$C5" | grep -E "^(ISI|MADDE)=" | grep -qE "S1|S2|K1|H1" && [ "$(cat "$T/yama.log" 2>/dev/null | sort -u | tr "\n" " ")" = "gorev_A " ]'
   [ "$S" = 1 ] || echo "── $g geçti · $k kaldı"
   return $k
 }
@@ -116,9 +121,10 @@ mut sirada-suzgeci-yok sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " i
 mut yalniz-kapi-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " in ek: continue||if "  kapi: " in ek: continue'
 mut yalniz-sahip-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " in ek: continue||if "  sahip: sultan" in ek: continue'
 mut tum-satiri-tarar sirada-bak.sh 'ek=p[6].rsplit("(son:",1)[-1]||ek=p[6]'
-mut ikinci-okuma-yok sirada-bak.sh 'if [ -z "$ISARET_SH" ] && [ -z "${GUNLUK_PLAN_GOREV_SH:-}" ]||if false'
+mut ikinci-okuma-yok sirada-bak.sh 'if [ -z "$ISARET_SH" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then||if false; then'
+mut acik-gorev-muaf sirada-bak.sh 'if [ -z "$ISARET_SH" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then||if [ -z "$ISARET_SH" ] && [ -z "${GUNLUK_PLAN_GOREV_SH:-}" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then'
 mut isaret-suzgeci-yok sirada-bak.sh 'if p[0] in sultan: continue||pass'
-mut okunamazsa-devam sirada-bak.sh 'üstlenme yapılmadı" >&2; exit 3; }||üstlenme yapılmadı" >&2; }'
+mut okunamazsa-devam sirada-bak.sh 'DENMEZ, üstlenme yapılmadı" >&2; exit 3; }||DENMEZ, üstlenme yapılmadı" >&2; }'
 mut liste-sahip-isareti-yok gorev.sh '+ ("  sahip: sultan" if str(g["canli"].get("sahip","")).strip().lower()=="sultan" else "")||'
 mut liste-kapi-isareti-yok gorev.sh '+ (("  kapi: %s" % g["canli"]["kapi"].strip()) if isinstance(g["canli"].get("kapi"),str) and g["canli"]["kapi"].strip() else "")||'
 [ -z "${SADECE_MUTANT:-}" ] || { echo "SADECE_MUTANT=$SADECE_MUTANT tanımsız ad" >&2; exit 99; }
