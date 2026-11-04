@@ -1,7 +1,7 @@
 {
   "is": "pano-pencere-kancasi",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-04T20:58:07+03:00",
+  "guncelleme": "2026-11-04T21:01:02+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -131,7 +131,49 @@
       "olculen_commit": "584d7bdd34db35aabed1abdc7409481e9e92b295",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-4",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-4-sonra.txt",
+      "sha256": "d0fd04a77ce66727602926f3d7b0a1eed5705b336da2f202059b9c31136467c9",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-04T21:00:55+03:00",
+      "sure_sn": 108.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f3b9871782484fe7a828ae4f6bfc5f6e",
+      "olculen_commit": "d8a7050028f299408f27094ec0a326a90a4c5df2",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "merkez-telefon-fotograf-uctan-uca-2",
+      "asama": "sonra",
+      "dosya": "olcum-merkez-telefon-fotograf-uctan-uca-2-sonra.txt",
+      "sha256": "ff274b7ef06ad45486257a2fe465e0f6b8037b3ba4576b6e714b0a78bafe297f",
+      "komut": [
+        "node",
+        "/config/projects/cloudtop/infra/terminal-merkez/telefon-fotograf-sinav.mjs",
+        "--pano",
+        "terminal-onar/kapi/genel/pano.js"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T21:01:02+03:00",
+      "sure_sn": 7.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "95a04ad0f370407bb4ebeeffc709e520",
+      "olculen_commit": "d8a7050028f299408f27094ec0a326a90a4c5df2",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "6171e3a5349a8a6dbc866d93d21b46aed5ebab175ed62b84d9f3b96ef45ee600"
+  "imza": "04ba22d86cfb6f91af2ed8a24d75fe4faecd951d1ed02d4fb72fb124b625c76d"
 }
