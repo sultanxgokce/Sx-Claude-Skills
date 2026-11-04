@@ -1,0 +1,25 @@
+{
+  "is": "usta-acilmamis-serit",
+  "cumle": "Hiç açılmamış usta (kayıtta klasörü ve odası var, sohbet kimliği yok) terminal kapısında gri koltuk olarak görünür; ilk dokunuşta kendi klasöründe YENİ oturum açılır, sohbet kimliği uydurulmaz",
+  "istedi": "SERDAR",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-04T17:14:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false
+}

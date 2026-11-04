@@ -18,15 +18,18 @@ uyeler:
   - {ad: KUKLACI, klasor: ustalar/KUKLACI, sohbet: sid-KUKLACI, koltuk: yok}
   - {ad: ORTA, klasor: ustalar/ORTA, sohbet: sid-ORTA, koltuk: yok}
   - {ad: BASSIZ, klasor: ustalar/BASSIZ, koltuk: yok, oda: bakim}
+  - {ad: YOKKLASOR, klasor: ustalar/YOKKLASOR, koltuk: yok}
+  - {ad: ESKISOHBET, klasor: ustalar/ESKISOHBET, koltuk: yok}
   - {ad: MUDUR, koltuk: var}
   - {ad: KLASORLU, klasor: ustalar/KLASORLU, sohbet: sid-K, koltuk: var}
 Y
   export USTA_TMUX="$T/tm" USTA_CLAUDE="$T/claude" USTA_CONFIG="$T/cfg" USTA_PROJE="$P" UYUT_BEKLE_SN=3 UYUT_SAKIN_SN=1
-  mkdir -p "$P/ustalar/BASSIZ"
+  mkdir -p "$P/ustalar/BASSIZ" "$P/ustalar/ESKISOHBET"   # BASSIZ: klasör var, konuşma yok → acilmamis · ESKISOHBET: klasörde sahipsiz konuşma var · YOKKLASOR: klasör diskte yok
+  local EK; EK="$T/cfg/projects/$(printf '%s' "$P/ustalar/ESKISOHBET" | sed 's#[/._]#-#g')"; mkdir -p "$EK"; : > "$EK/eski-konusma.jsonl"
   local O r
   O="$(bash "$U" liste 2>&1)"
-  ok "U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok, BASSIZ kayit-eksik)" "$([ "$(wc -l <<<"$O")" = 4 ] && has $'BASSIZ\tkayit-eksik' "$O" && ! has MUDUR "$O" && ! has KLASORLU "$O" && echo 1 || echo 0)" "$O"
-  ok "U1b liste 4. sütun = kayıttaki oda (PERGEL mimari-cizim · odasız KUKLACI boş); sohbetsiz BASSIZ'in odası sohbete KAYMAZ (kayit-eksik kalır)" "$(has $'PERGEL\tuyuyor\tustalar/PERGEL\tmimari-cizim' "$O" && has $'KUKLACI\tuyuyor\tustalar/KUKLACI\t\n' "$O"$'\n' && has $'BASSIZ\tkayit-eksik\tustalar/BASSIZ\tbakim' "$O" && echo 1 || echo 0)" "$O"
+  ok "U1 liste: yalnız koltuk:yok + klasor alanlı üyeler (MUDUR ve koltuklu KLASORLU yok); BASSIZ (klasör var, konuşma yok) = acilmamis · YOKKLASOR (klasör diskte yok) ve ESKISOHBET (klasörde sahipsiz konuşma var) = kayit-eksik" "$([ "$(wc -l <<<"$O")" = 6 ] && has $'BASSIZ\tacilmamis' "$O" && has $'YOKKLASOR\tkayit-eksik' "$O" && has $'ESKISOHBET\tkayit-eksik' "$O" && ! has MUDUR "$O" && ! has KLASORLU "$O" && echo 1 || echo 0)" "$O"
+  ok "U1b liste 4. sütun = kayıttaki oda (PERGEL mimari-cizim · odasız KUKLACI boş); sohbetsiz BASSIZ'in odası sohbete KAYMAZ (acilmamis, oda bakim)" "$(has $'PERGEL\tuyuyor\tustalar/PERGEL\tmimari-cizim' "$O" && has $'KUKLACI\tuyuyor\tustalar/KUKLACI\t\n' "$O"$'\n' && has $'BASSIZ\tacilmamis\tustalar/BASSIZ\tbakim' "$O" && echo 1 || echo 0)" "$O"
   O="$(TO_KUTU=sinav TO_PROJE="$P" bash "$(dirname "$U")/koltuk-ac.sh" durum PERGEL 2>&1)"
   ok "U10 koltuk-ac: usta koltuğu yol=usta olarak tanınır (kayıtsız koltuk gibi reddedilmez)" "$(has '"yol":"usta"' "$O" && echo 1 || echo 0)" "$O"
   # prova: PERGEL'in sohbeti YANLIŞ klasörün proje dizinine konur
@@ -35,8 +38,17 @@ Y
   O="$(bash "$U" uyandir PERGEL 2>&1)"; r=$?
   ok "U2 YANLIŞ KLASÖR KİLİDİ: sohbet başka klasörün dizininde → rc 4, oturum AÇILMADI" "$([ "$r" = 4 ] && ! "$T/tm" has-session -t =PERGEL 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
   mv "$YK/sid-PERGEL.jsonl" "$T/cfg/projects/$(printf '%s' "$P/ustalar/PERGEL" | sed 's#[/._]#-#g')/sid-PERGEL.jsonl"
-  O="$(bash "$U" uyandir BASSIZ 2>&1)"; r=$?
-  ok "U3 sohbet kimliği yok → rc 5, kimliksiz Claude açılmaz" "$([ "$r" = 5 ] && echo 1 || echo 0)" "rc=$r $O"
+  O="$(bash "$U" uyandir ESKISOHBET 2>&1)"; r=$?
+  ok "U3 sohbet kimliği yok + klasörde sahipsiz konuşma var → rc 5, hangisinin ustanın olduğu uydurulmaz, oturum AÇILMADI" "$([ "$r" = 5 ] && ! "$T/tm" has-session -t =ESKISOHBET 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
+  O="$(bash "$U" uyandir YOKKLASOR 2>&1)"; r=$?
+  ok "U3b klasör diskte yok → rc 5, oturum AÇILMADI" "$([ "$r" = 5 ] && ! "$T/tm" has-session -t =YOKKLASOR 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
+  O="$(bash "$U" uyandir BASSIZ --kuru 2>&1)"; r=$?
+  ok "U3c HİÇ AÇILMAMIŞ usta kuru koşu: YENİ oturum planı (--resume YOK), oturum AÇMAZ" "$([ "$r" = 0 ] && has 'YENİ oturum' "$O" && ! has '--resume' "$O" && ! "$T/tm" has-session -t =BASSIZ 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
+  O="$(bash "$U" uyandir BASSIZ 2>&1)"; r=$?; sleep 1
+  ok "U3d HİÇ AÇILMAMIŞ usta uyandır: oturum açıldı, claude ustanın KENDİ klasöründe ARGÜMANSIZ (sohbet kimliği uydurulmadı) koştu" "$([ "$r" = 0 ] && "$T/tm" has-session -t =BASSIZ 2>/dev/null && grep -q "pwd=$P/ustalar/BASSIZ args=\$" "$T/claude.log" && echo 1 || echo 0)" "rc=$r $O $(cat "$T/claude.log" 2>/dev/null)"
+  O="$(bash "$U" liste 2>&1)"
+  ok "U3e açılan hiç-açılmamış usta artık uyanik görünür; ikinci dokunuş ikinci kopya AÇMAZ (zaten uyanık)" "$(has $'BASSIZ\tuyanik' "$O" && has 'zaten uyanık' "$(bash "$U" uyandir BASSIZ 2>&1)" && echo 1 || echo 0)" "$O"
+  "$T/tm" kill-session -t =BASSIZ 2>/dev/null
   O="$(bash "$U" uyandir PERGEL --kuru 2>&1)"; r=$?
   ok "U4 kuru koşu: plan basar, oturum AÇMAZ" "$([ "$r" = 0 ] && has 'KURU' "$O" && ! "$T/tm" has-session -t =PERGEL 2>/dev/null && echo 1 || echo 0)" "rc=$r $O"
   O="$(bash "$U" uyandir PERGEL 2>&1)"; r=$?; sleep 1
@@ -78,11 +90,13 @@ mut "liste sekmeyi ayırıcı bırakır (boş sohbet alanı yutulur, oda sohbete
 mut "liste oda sütununu basmaz" '"$a" "$d" "$k" "$o"' '"$a" "$d" "$k" ""'
 mut "en boştaki yerine listedeki son usta uyutulur" '[ "$e" -lt "$ens" ] &&' 'true &&'
 mut "DURUM.md damgası yok" "printf '\\n- uyutuldu" "true '\\n- uyutuldu"
-mut "claude ustanın klasöründe açılmaz" '-c "$MK"' '-c "$PROJE"'
+mut "claude ustanın klasöründe açılmaz" '-c "$MK" "$(printf '"'"'%q'"'"' "$CL") --resume' '-c "$PROJE" "$(printf '"'"'%q'"'"' "$CL") --resume'
 mut "koltuklu üye de usta sayılır" "u.get('koltuk', '').lower() == 'yok'" "True"
 mut "tavanda uyutulamayan olsa da yeni usta açılır" 'uyutulamadı — yeni usta AÇILMADI" >&2; exit 3; }' 'uyutulamadı — yeni usta AÇILMADI" >&2; }'
 mut "DURUM.md yazılamasa da oturum kapatılır" 'yazılamadı (oturum açık bırakıldı)" >&2; return 3; }' 'yazılamadı (oturum açık bırakıldı)" >&2; }'
-mut "sohbetsiz usta açılır" '[ -n "$S" ] || {' 'false || {'
+mut "klasörde sahipsiz konuşma olsa da sohbetsiz usta yeni oturumla açılır" 'bos_klasor "$MK" || {' 'true || {'
+mut "klasörü diskte olmayan usta acilmamis gösterilir" '[ -n "$k" ] && bos_klasor "$(mutlak "$k")" && d=acilmamis' 'd=acilmamis'
+mut "hiç açılmamış usta uydurma sohbet kimliğiyle açılır" '"$TM" new-session -d -s "$AD" -c "$MK" "$(printf '"'"'%q'"'"' "$CL")" 2>/dev/null' '"$TM" new-session -d -s "$AD" -c "$MK" "$(printf '"'"'%q'"'"' "$CL") --resume uydurma" 2>/dev/null'
 # koltuk-ac mutantı: usta yolu tanınmaz
 cp "$HERE/usta.sh" "$M/usta.sh"; cp "$HERE/koltuk-ac.sh" "$M/koltuk-ac.sh"
 python3 -I -c "import sys;p=sys.argv[1];s=open(p,encoding='utf-8').read();a='if usta_mi \"\$1\"; then YOL=usta';assert s.count(a)==1,'çapa';open(p,'w',encoding='utf-8').write(s.replace(a,'if false; then YOL=usta'))" "$M/koltuk-ac.sh" || MK=$((MK+1))

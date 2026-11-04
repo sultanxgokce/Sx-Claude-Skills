@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: UY1 uyuyan · rc≠0 + hedef kapı 'UY1 uyuyan' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kapi-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-usta.sh acilmamis-isareti-yok
+# rc=1 sure=8.7s zaman=2026-11-04T17:37:40+03:00
+--- stdout ---
+  ✗ UY1 uyuyan ustalar ayrı alanda, hal:uyuyor; yalnız uyuyor ve acilmamis olanlar (uyanık·kayıt-eksik·bozuk ad·tekrar·koltukta olan YOK); acilmamis olan hal:uyuyor + acilmamis:true + oda taşır → [{"ad":"PERGEL","hal":"uyuyor"},{"ad":"KUKLACI","hal":"uyuyor"},{"ad":"YENIUSTA","hal":"uyuyor","oda":"bakim"}]
+  ✗ UY4 GERÇEK usta.sh ile: kayıttaki koltuk:yok + sohbetli ustalar uyuyanlar'da; sohbetsiz ama klasörü diskte olmayan (BASSIZ) ve koltuklu (KLASORLU) YOK; hiç açılmamış (YENI, klasör var) acilmamis:true ile VAR → [{"ad":"PERGEL","hal":"uyuyor","oda":"mimari-cizim"},{"ad":"KUKLACI","hal":"uyuyor"},{"ad":"DEMIRCI","hal":"uyuyor","oda":"bakim"},{"ad":"YENI","hal":"uyuyor","oda":"bakim"}]
+--- stderr ---

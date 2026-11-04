@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "usta-acilmamis-serit",
+  "pr": "691",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T17:39:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-usta-acilmamis-serit",
+  "dal": "usta-acilmamis-serit",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49293,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 29690
+  },
+  "dalgic": "uyumsuz",
+  "bas": "a278a3fa588d61a8a21a0780eee272ac0cc815f4",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hiç açılmamış usta, klasör ve konuşma geçmişi koşulları doğrulandıktan sonra gri şeride ekleniyor; dokunulduğunda kendi klasöründe sohbet kimliği olmadan yeni oturum açılıyor. Gerçek ölçümler ile hedefli mutasyonlar listeleme, kapı aktarımı, klasör seçimi ve kimlik uydurmama davranışlarını doğruladığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, gerçek kod ölçümleri usta-sinavi ve kapi-sinavi etiketlerinde yeşil. U3c-U3e yeni oturumun argümansız ve doğru klasörde açılmasını, UY1/UY4 gri şerit verisini ölçüyor; beş hedefli mutasyon da ilgili kapıların bozuk kodu yakaladığını gösteriyor. Görsel önce/sonra karesi yok, ancak talep edilen davranış CLI ve API düzeyinde gerçekçi verili otomatik ölçümlerle doğrudan sınanmış."
+  }
+}

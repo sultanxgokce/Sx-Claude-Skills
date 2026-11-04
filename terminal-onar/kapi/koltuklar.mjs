@@ -33,12 +33,14 @@ export function koltukSatirlari(cikti) {
     return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}), ...(pencere ? { pencere } : {}), ...(soru ? { soru } : {}), ...(dizin ? { dizin } : {}) };
   }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));
 }
-// usta.sh liste çıktısı → uyuyan ustalar (2.40.0 · kart usta-seridi-api). Satır: ad · durum(uyuyor|uyanik|kayit-eksik) · klasör.
-// Yalnız 'uyuyor' döner: uyanık usta zaten tmux koltuğudur (koltuklar'da), kayıt-eksik olan uyandırılamaz (sohbet kimliği yok → şeritte gösterilmez).
+// usta.sh liste çıktısı → uyuyan ustalar (2.40.0 · kart usta-seridi-api). Satır: ad · durum(uyuyor|acilmamis|uyanik|kayit-eksik) · klasör.
+// 'uyuyor' ve 'acilmamis' döner: uyanık usta zaten tmux koltuğudur (koltuklar'da), kayıt-eksik olan uyandırılamaz (klasör yok ya da klasörde sahipsiz konuşma var → gösterilmez).
+// ACILMAMIS (kart usta-acilmamis-serit · SERDAR 4 Kas): kayıtta klasörü var, sohbet kimliği YOK, hiç açılmamış → şeritte gri koltuk; hal 'uyuyor' kalır
+//   (merkez şeridi o hali çizer) + `acilmamis: true` (uyandırınca YENİ oturum açılır, kimlik uydurulmaz).
 // Klasör YANITA YAZILMAZ. Koltuk adı süzgecinden geçmeyen ad atılır; aynı koltuk adı koltuklar'da varsa o zaten uyanıktır → atlanır.
 export function uyuyanUstalar(cikti, acik = []) {
   const var_ = new Set(acik), gor = new Set();
   return String(cikti || '').split('\n').filter(Boolean).map((l) => l.split('\t')).filter(([ad, durum]) =>
-    durum === 'uyuyor' && KOLTUK_AD_DESEN.test(ad || '') && !var_.has(ad) && !gor.has(ad) && gor.add(ad))
-    .map(([ad, , , oda]) => (ODA_AD_DESEN.test(oda || '') ? { ad, hal: 'uyuyor', oda } : { ad, hal: 'uyuyor' }));   // 2.41.0: 4. sütun = kayıttaki oda (kurala uymayan ad alınmaz)
+    (durum === 'uyuyor' || durum === 'acilmamis') && KOLTUK_AD_DESEN.test(ad || '') && !var_.has(ad) && !gor.has(ad) && gor.add(ad))
+    .map(([ad, durum, , oda]) => ({ ad, hal: 'uyuyor', ...(durum === 'acilmamis' ? { acilmamis: true } : {}), ...(ODA_AD_DESEN.test(oda || '') ? { oda } : {}) }));   // 2.41.0: 4. sütun = kayıttaki oda (kurala uymayan ad alınmaz)
 }

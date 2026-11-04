@@ -1,9 +1,21 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.41.1
+version: 2.42.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.42.0 · Hiç açılmamış usta şeritte gri koltuk; ilk dokunuşta YENİ oturum (4 Kas · kart usta-acilmamis-serit · gorev EC9HKY · SERDAR)
+Ölçülen kusur: kayıtta klasörü ve odası olan ama sohbet kimliği olmayan usta `usta.sh liste`de `kayit-eksik` çıkıyordu; kapı yalnız `uyuyor`u
+aldığı için şeritte HİÇ görünmüyor, uyuyan ustalar arasında da sayılmıyordu. Artık `usta.sh liste` yeni bir durum basar: **`acilmamis`** =
+kayıtta klasör var + sohbet yok + klasör diskte var + claude proje dizininde o klasöre ait hiç konuşma dosyası (*.jsonl) yok. Kapı onu
+`uyuyanlar: [{ad, hal:"uyuyor", acilmamis:true, oda}]` olarak yansıtır (hal `uyuyor` kalır: merkez şeridi o hali zaten gri koltuk çizer;
+`acilmamis` alanı ayrımı taşır; klasör yanıta yazılmaz). `usta.sh uyandir` böyle bir ustayı kendi klasöründe **argümansız `claude`** ile
+(YENİ oturum) açar — sohbet kimliği ne uydurulur ne kayda yazılır; kilit, tavan ve "zaten uyanık" kararları aynen geçerli.
+🔴 Sınır: klasör diskte yoksa ya da klasörde sahipsiz konuşma dosyası varsa (hangisinin ustanın olduğu bilinmez) durum `kayit-eksik` kalır:
+şeritte yok, açılmaz (rc 5). Bilinen açık uç: yeni açılan usta uyutulunca klasörde konuşma dosyası oluştuğundan `kayit-eksik`e döner
+(kayda sohbet kimliği yazan bir adım ayrı karttır; kimlik çıkarımı bilerek yapılmadı). Merkez ipucu metni ("Uyuyor — basınca uyanır")
+cloudtop'ta; `acilmamis` için ayrı metin ayrı karttır. Sınav: usta.test.sh 17 kapı + 13 mutant, kapi UY1/UY4.
 
 ## 🆕 2.41.1 · Yalnız uyuyan ustası olan oda da `odalar` listesine girer (4 Kas · kart uyuyan-oda-listesi · Sultan tellal karesi 15:41)
 Ölçülen kusur (SERDAR, canlı tellal kapısı): `odalar` yalnız açık koltukların odalarından kuruluyordu → 6 odanın 2'si listedeydi
