@@ -28,24 +28,24 @@
       "etiket": "mutant: sure beyani silinir",
       "asama": "tek",
       "dosya": "olcum-mutant: sure beyani silinir-tek.txt",
-      "sha256": "880fc1987a77d38fd4d0a3cc7f6826e2b06a401ed66f279e7104e0267a6aa04a",
+      "sha256": "176d1c5ed8946d11d3ab918fdb914b0ae72c3fca92c2a7939d7bb06882cdce31",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-sure.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-04T16:10:35+03:00",
-      "sure_sn": 125.5,
+      "zaman": "2026-11-04T16:18:50+03:00",
+      "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sure-okuma",
       "beklenen": "kirmizi",
       "dusen_kapi": true,
-      "hedef_kapi": "okunan sure=620",
+      "hedef_kapi": "okunan sure=531",
       "hedef_dustu": true,
-      "olcum_id": "0ffaecc155a540ea9fadf3e9c06d5fff",
-      "olculen_commit": "755d7d219a34a222bd7858731173052d61c71ddf",
+      "olcum_id": "2fa7d6fbbf3c4d2bb81c6d246df0b719",
+      "olculen_commit": "3d26310f6096cdb544787d4e0cd7923e2821a97f",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -70,5 +70,5 @@
       "kirli_kurali": 1
     }
   ],
-  "imza": "76d19314625298e05528583e774f18bd00fd4a972c590cbdcea58cd9b5fdc359"
+  "imza": "599be0af62677ccd713240847856e578d442f566a03272c2c97758f191661718"
 }
