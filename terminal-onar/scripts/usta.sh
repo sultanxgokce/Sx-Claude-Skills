@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 # usta.sh — USTA = UYUYAN OTURUM (Sultan onaylı usta düzeni, 2 Kas 2026 · kart usta-uyku-uyandir)
 #
-#   usta.sh liste   [--kayit F] [--proje D]               → her usta: ad · durum (uyanik|uyuyor|kayit-eksik) · klasor · oda (kayıtta yoksa boş)
+#   usta.sh liste   [--kayit F] [--proje D]               → her usta: ad · durum (uyanik|uyuyor|acilmamis|kayit-eksik) · klasor · oda (kayıtta yoksa boş)
 #   usta.sh uyandir <AD> [--kuru] [--kayit F] [--proje D] → ustanın KENDİ klasöründe `claude --resume <sohbet>`; kilit + tavan
+#                                                            (HİÇ AÇILMAMIŞ usta: sohbet kimliği yok → kendi klasöründe YENİ `claude`; kimlik UYDURULMAZ)
 #   usta.sh uyut    <AD> [--kuru] [--kayit F]             → kapanış kancası (DURUM.md) sonra oturumu kapatır
 #
 # KAYIT (ekip-registry.yaml, usta başına): ad · klasor (proje köküne göre, örn. ustalar/PERGEL) · sohbet (claude oturum kimliği) · koltuk: yok
 #
+# HİÇ AÇILMAMIŞ (acilmamis · kart usta-acilmamis-serit, SERDAR 4 Kas): kayıtta klasor var, sohbet YOK, klasör diskte var ve claude proje
+#    dizininde ona ait hiç konuşma dosyası yok → şeritte gri koltuk; ilk dokunuşta YENİ oturum. Sohbet kimliği kayda YAZILMAZ ve çıkarılmaz.
+#    Klasörde zaten konuşma dosyası varsa (hangisi ustanın? bilinmez) ya da klasör yoksa → kayit-eksik: gösterilmez, açılmaz (uydurma yok).
 # 🔴 YANLIŞ KLASÖR KİLİDİ: claude --resume kimliği BAŞKA klasörde de açar, HATA VERMEZ ve hafızayı karıştırır (prova).
 #    Konuşma dosyası yalnız ustanın kendi klasörünün proje dizininde olmalı: <config>/projects/<klasör-kodu>/<sohbet>.jsonl.
 #    Yoksa AÇILMAZ (rc 4). Klasör kodu = mutlak yolun / . _ karakterlerinin '-' yapılmış hâli.
@@ -80,21 +84,29 @@ uyut_et() { # <AD> <klasor-mutlak> → rc 0 yalnız kanca + damga + kapanış DO
   return 0
 }
 mutlak() { case "$1" in /*) printf '%s' "$1";; *) printf '%s/%s' "$PROJE" "$1";; esac; }
+# bos_klasor <mutlak klasör>: klasör diskte var VE claude proje dizininde ona ait konuşma dosyası (*.jsonl) yok → hiç açılmamış (rc 0)
+bos_klasor() { local m pd; [ -d "$1" ] || return 1; m="$(cd "$1" && pwd -P)"; pd="$CFG/projects/$(kod "$m")"
+  [ -d "$pd" ] || return 0; [ -z "$(find "$pd" -maxdepth 1 -name '*.jsonl' -print -quit 2>/dev/null)" ]; }
 
 case "$KOMUT" in
   liste)
     ustalar | tr '\t' '\037' | while IFS=$'\037' read -r a k s o; do   # sekme boşluk sayılır, ardışık sekme tek olur: boş sohbet alanı odayı sohbete kaydırırdı
-      d=uyuyor; uyanik_mi "$a" && d=uyanik; { [ -n "$s" ] && [ -n "$k" ]; } || d=kayit-eksik
+      d=uyuyor; uyanik_mi "$a" && d=uyanik
+      if [ -z "$s" ] && [ "$d" != uyanik ]; then d=kayit-eksik; [ -n "$k" ] && bos_klasor "$(mutlak "$k")" && d=acilmamis; fi
       printf '%s\t%s\t%s\t%s\n' "$a" "$d" "$k" "$o"; done ;;
   uyandir)
     [ -n "$AD" ] || { echo "kullanım: usta.sh uyandir <AD> [--kuru]" >&2; exit 2; }
     sat="$(usta_satir "$AD")"; [ -n "$sat" ] || { echo "usta yok: '$AD' (kayıtta klasor alanlı üye değil)" >&2; exit 5; }
     IFS=$'\037' read -r _ K S _ <<<"$(printf '%s' "$sat" | tr '\t' '\037')"
-    [ -n "$S" ] || { echo "kayıt eksik: '$AD' için sohbet kimliği yok — kimliksiz Claude açılmaz" >&2; exit 5; }
     MK="$(mutlak "$K")"; [ -d "$MK" ] || { echo "klasör yok: $MK" >&2; exit 5; }
-    MK="$(cd "$MK" && pwd -P)"
-    DOSYA="$CFG/projects/$(kod "$MK")/$S.jsonl"
-    [ -f "$DOSYA" ] || { echo "KİLİT: '$AD' sohbeti $S bu klasörün ($MK) proje dizininde YOK — başka klasörde resume hafızayı karıştırır, açılmadı" >&2; exit 4; }
+    MK="$(cd "$MK" && pwd -P)"; YENI=0
+    if [ -z "$S" ]; then   # sohbet kimliği yok: yalnız HİÇ AÇILMAMIŞ usta (klasörde ona ait konuşma yok) yeni oturumla açılır; kimlik uydurulmaz
+      bos_klasor "$MK" || { echo "kayıt eksik: '$AD' için sohbet kimliği yok ve klasörde ($MK) önceki konuşma dosyası var — hangisinin ustanın olduğu uydurulmaz, açılmadı" >&2; exit 5; }
+      YENI=1
+    else
+      DOSYA="$CFG/projects/$(kod "$MK")/$S.jsonl"
+      [ -f "$DOSYA" ] || { echo "KİLİT: '$AD' sohbeti $S bu klasörün ($MK) proje dizininde YOK — başka klasörde resume hafızayı karıştırır, açılmadı" >&2; exit 4; }
+    fi
     if uyanik_mi "$AD"; then echo "zaten uyanık: $AD"; exit 0; fi
     uyanikler=(); while IFS=$'\t' read -r a _ _; do uyanik_mi "$a" && uyanikler+=("$a"); done < <(ustalar)
     if [ "${#uyanikler[@]}" -ge "$TAVAN" ]; then
@@ -104,9 +116,11 @@ case "$KOMUT" in
       else uyut_et "$en" "$(mutlak "$(usta_satir "$en" | cut -f2)")" || { echo "tavan dolu ($TAVAN) ve en boştaki ($en) uyutulamadı — yeni usta AÇILMADI" >&2; exit 3; }
         echo "uyutuldu (tavan): $en"; fi
     fi
-    if [ "$KURU" = 1 ]; then echo "KURU: $AD ← cd $MK && $CL --resume $S (kilit geçti)"; exit 0; fi
-    "$TM" new-session -d -s "$AD" -c "$MK" "$(printf '%q' "$CL") --resume $(printf '%q' "$S")" 2>/dev/null
-    if uyanik_mi "$AD"; then echo "uyandı: $AD"; else echo "açılamadı: $AD" >&2; exit 3; fi ;;
+    if [ "$KURU" = 1 ]; then
+      if [ "$YENI" = 1 ]; then echo "KURU: $AD ← cd $MK && $CL (hiç açılmamış: YENİ oturum, sohbet kimliği yok)"; else echo "KURU: $AD ← cd $MK && $CL --resume $S (kilit geçti)"; fi; exit 0; fi
+    if [ "$YENI" = 1 ]; then "$TM" new-session -d -s "$AD" -c "$MK" "$(printf '%q' "$CL")" 2>/dev/null
+    else "$TM" new-session -d -s "$AD" -c "$MK" "$(printf '%q' "$CL") --resume $(printf '%q' "$S")" 2>/dev/null; fi
+    if uyanik_mi "$AD"; then if [ "$YENI" = 1 ]; then echo "uyandı (yeni oturum): $AD"; else echo "uyandı: $AD"; fi; else echo "açılamadı: $AD" >&2; exit 3; fi ;;
   uyut)
     [ -n "$AD" ] || { echo "kullanım: usta.sh uyut <AD>" >&2; exit 2; }
     sat="$(usta_satir "$AD")"; [ -n "$sat" ] || { echo "usta yok: '$AD'" >&2; exit 5; }
