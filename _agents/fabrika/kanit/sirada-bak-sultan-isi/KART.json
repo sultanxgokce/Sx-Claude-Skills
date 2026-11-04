@@ -34,6 +34,20 @@
       "zaman": "2026-11-04T18:24:25+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-04T18:31:04+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BENNÂ",
+      "oturum": "aile-notify SERDAR 4 Kas · Sx 692 karari",
+      "gerekce": "SERDAR karari 4 Kas: Sx 692 reis karari: tur 3 acilir (iki gecerli bulgu kapandi, 19 kapi, 11 mutant, 141/0; kok neden ayni, ilerliyor). 5/E degilse daralt, sonra geri al.",
+      "zaman": "2026-11-04T18:34:43+03:00"
     }
   ]
 }
