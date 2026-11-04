@@ -741,6 +741,14 @@ kartP is-govde; A4="$(alan govde-dali)"; kanitla "$A4" is-govde 5 E
 git -C "$P" worktree remove --force "$A4" >/dev/null 2>&1
 CIKTI="$(ghk env FAKE_DAL=govde-dali FAKE_GOVDE=$'açıklama satırı\nkart: is-govde\n\nkanıt: …' FAKE_DOSYALAR="$KD/is-govde/KANIT.json $KD/is-govde/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 41")"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "iş adı PR gövdesinden: 'kart: is-govde' (PR dalı 'govde-dali')" <<<"$CIKTI" && grep -q "iş: is-govde" <<<"$CIKTI"; g $? "🔴 T19a gövdedeki 'kart: is-govde' satırı kart kimliğidir → doğru kart, 5/E, rc=0 (rc=$RC)"
+# T19a2-a4 (0.27.57 · bulgu …7A3MVB7H): gövdede kart adı ters tırnak / tırnak / kalın yazı / sondaki nokta ile sarılı yazılsa da AYNI kart okunur (eskiden "`is-govde`" tam eşleşmedi → sahte çelişki rc=2)
+for ORNEK in 'kart: `is-govde`' 'Kart: "is-govde"' '**kart:** `is-govde`.' 'kart: is-govde.'; do
+  CIKTI="$(ghk env FAKE_DAL=govde-dali FAKE_GOVDE="açıklama
+$ORNEK
+
+kanıt: …" FAKE_DOSYALAR="$KD/is-govde/KANIT.json $KD/is-govde/DENETIM-1.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 41")"; RC=$?
+  [ "$RC" -eq 0 ] && grep -q "iş adı PR gövdesinden: 'kart: is-govde' (PR dalı 'govde-dali')" <<<"$CIKTI" && ! grep -q "çelişki" <<<"$CIKTI"; g $? "🔴 T19a2 gövde '$ORNEK' → kart adı sarmalsız 'is-govde', çelişki YOK, rc=0 (rc=$RC)"
+done
 CIKTI="$(ghk env FAKE_DAL=govde-dali FAKE_GOVDE='kart: olmayan-kart' FAKE_DOSYALAR="$KD/is-govde/KANIT.json" bash -c "$(declare -f kapi); G='$G'; kapi '$P' --pr 41")"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "kart YOK: .*olmayan-kart" <<<"$CIKTI"; g $? "T19a2 gövde olmayan kartı ilan ederse kapı onu arar ve 'kart YOK' der (gövde kazanır, sessiz düzeltme yok) rc=1"
 # (b) PR numarası eşleşmesi: iki kanıt dizini (is-p1 kaydı pr=42 · is-p2 kaydı pr=7), dal 'ikili-dal' hiçbiriyle eşleşmez
