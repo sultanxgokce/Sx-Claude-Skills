@@ -11,14 +11,19 @@
 #   · SINIFLI kayıt (kapı alanı dolu ya da başlık/özet para · silme · dış yüzey · yetki sözü taşıyor) otomatik AÇILMAZ → günlüğe "atlandi-sinifli".
 #   · doğan görev SAHİPSİZ kalmaz: kaydın atananı, yoksa kaydın odasının müdürü (aile-registry oda_muduru). Çözülemezse AÇILMAZ → "atlandi-sahipsiz".
 #   · ölçülemeyen kayıt (HASAT=ÖLÇÜLEMEDİ) açılmaz, sayılır. Aynı kayıttan ikinci görev açmayı hasat.sh'ın tekilleştirmesi önler.
+#   · "GÜNDE EN ÇOK TAVAN" KOŞULAR ARASI korunur: gerçek kipte her açılış HASAT_GECE_DURUM dosyasına "<gün> <kayıt> <atanan>" yazılır; aynı günün ikinci koşusu
+#     (elle ya da cron tekrarı) o günkü açılışları tavandan düşer. Kuru kip dosyayı yalnız OKUR (açardı sayısı gerçek kiple aynı çıksın), hiç yazmaz.
+#   · KİP GEÇİŞİ OTOMATİK DEĞİL (SERDAR 4 Kas, QCJYWG: "ilk 3 gece kuru kipte koşar, sonucu mektupla getir, gerçek kipe ben geçireceğim"): betikte gece sayacı
+#     yoktur; cron satırındaki --kuru bayrağını --gercek yapmak SERDAR'ın elindedir. Otomatik geçiş o kararla çelişirdi.
 # Günlüğün son satırı özet satırıdır: "<ISO> hasat-gece kip=… olur=N acilan=K atlandi_sinifli=S atlandi_sahipsiz=U atlandi_dogmus=D olmaz=M olculemedi=L rc=0"
-# Ortam (sınav): GOREV_SH · HASAT_SH · ILE_REGISTRY · HASAT_GECE_ZAMAN · HASAT_GECE_DOGAN_OKU
+# Ortam (sınav): GOREV_SH · HASAT_SH · ILE_REGISTRY · HASAT_GECE_ZAMAN · HASAT_GECE_DOGAN_OKU · HASAT_GECE_DURUM · HASAT_GECE_GUN
 # rc: 0 koştu (olur=0 dahil) · 2 kullanım · 3 defter okunamadı (ÖLÇÜLEMEDİ: "olur=0" UYDURULMAZ)
 set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 GOREV="${GOREV_SH:-$(bash "$KOK/gorev-yolu.sh" 2>/dev/null)}"; HASAT="${HASAT_SH:-$KOK/hasat.sh}"
 REGISTRY="${ILE_REGISTRY:-/config/projects/Nexus/_agents/handoff/aile-registry.yaml}"
 KIP=kuru; TAVAN=3; KUTU=code
+DURUM="${HASAT_GECE_DURUM:-/config/.filo/hasat-gece-durum.log}"; BUGUN="${HASAT_GECE_GUN:-$(date +%F)}"
 while [ $# -gt 0 ]; do
   case "$1" in
     --kuru) KIP=kuru; shift ;; --gercek) KIP=gercek; shift ;;
@@ -34,6 +39,12 @@ SINIF_SOZ='para|ödeme|odeme|fatura|ücret|ucret|bütçe|butce|satın al|satin a
 SATIRLAR="$(bash "$GOREV" liste --kutu "$KUTU" 2>/dev/null)"; GRC=$?
 if [ "$GRC" -ne 0 ] || [ -z "$SATIRLAR" ]; then
   echo "$ZAMAN hasat-gece kip=$KIP olur=? acilan=0 olculemedi=defter rc=3"; exit 3
+fi
+ONCEKI=0; [ ! -r "$DURUM" ] || ONCEKI="$(grep -c "^$BUGUN " "$DURUM" 2>/dev/null)"
+case "$ONCEKI" in ''|*[!0-9]*) ONCEKI=0 ;; esac
+KALAN=$((TAVAN - ONCEKI)); [ "$KALAN" -ge 0 ] || KALAN=0
+if [ "$KIP" = gercek ]; then   # günlük tavan dosyaya dayanır: yazılamıyorsa gerçek kip HİÇBİR ŞEY açmaz (sayaç sessizce işlemez olurdu)
+  mkdir -p "$(dirname "$DURUM")" 2>/dev/null; : >> "$DURUM" 2>/dev/null || { echo "$ZAMAN hasat-gece kip=gercek olur=? acilan=0 olculemedi=durum-dosyasi ($DURUM yazılamıyor) rc=3"; exit 3; }
 fi
 HAVUZ="$(printf '%s\n' "$SATIRLAR" | awk '$1 ~ /^gorev_/ && $3 == "havuz"')"
 
@@ -95,11 +106,11 @@ while IFS= read -r satir; do
     *) OLCULEMEDI=$((OLCULEMEDI+1)); echo "$ZAMAN hasat-gece $id olculemedi (doğan görev okunamadı; açılmadı)"; continue ;;
   esac
   # 5) tavan: sınıflı/sahipsiz kayıtlar yukarıda zaten günlüğe düştü; tavan yalnız AÇILACAKLARI sınırlar
-  [ "$ACILAN" -lt "$TAVAN" ] || { echo "$ZAMAN hasat-gece $id tavan-doldu (en çok $TAVAN)"; continue; }
+  [ "$ACILAN" -lt "$KALAN" ] || { echo "$ZAMAN hasat-gece $id tavan-doldu (en çok $TAVAN; bugün önceden açılan $ONCEKI)"; continue; }
   # 6) aç (gerçek) ya da "açardı" (kuru)
   if [ "$KIP" = gercek ]; then
     if bash "$HASAT" ac "$id" "gece hasadı: kapı OLUR, sınıfsız, sahibi $atanan" --kip otomatik --atanan "$atanan" >/dev/null 2>&1; then
-      ACILAN=$((ACILAN+1)); echo "$ZAMAN hasat-gece $id acildi → $atanan"
+      ACILAN=$((ACILAN+1)); echo "$BUGUN $id $atanan" >> "$DURUM" 2>/dev/null || echo "$ZAMAN hasat-gece UYARI durum dosyası yazılamadı ($DURUM): günlük tavan korunamaz"; echo "$ZAMAN hasat-gece $id acildi → $atanan"
     else echo "$ZAMAN hasat-gece $id acma-reddedildi (hasat.sh ac rc≠0)"; fi
   else
     ACILAN=$((ACILAN+1)); echo "$ZAMAN hasat-gece $id KURU: acardi → $atanan"

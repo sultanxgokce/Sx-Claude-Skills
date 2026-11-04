@@ -43,23 +43,25 @@ cat > "$T/reg.yaml" <<'EOF'
     oda: agentic-os
 EOF
 printf '#!/usr/bin/env bash\ncase "$1" in gorev_AAA1) echo 1 ;; gorev_EEE0) exit 7 ;; *) echo 0 ;; esac\n' > "$T/dogan.sh"
-koş() { GOREV_SH="$T/gorev.sh" HASAT_SH="$T/hasat.sh" ILE_REGISTRY="${REG:-$T/reg.yaml}" HASAT_GECE_ZAMAN=Z HASAT_GECE_DOGAN_OKU="${DOGAN:-$T/dogan.sh}" bash "$B" "$@"; }
+ic()  { grep -q -- "$1" <<< "$C"; }                      # günlükte var mı (boru yok: çıkış kodu maskelenmez)
+son() { local l; l="$(tail -1 <<< "$C")"; grep -q -- "$1" <<< "$l"; }   # son (özet) satırda var mı
+koş() { GOREV_SH="$T/gorev.sh" HASAT_SH="$T/hasat.sh" ILE_REGISTRY="${REG:-$T/reg.yaml}" HASAT_GECE_GUN=2026-11-05 HASAT_GECE_DURUM="${DURUM:-$T/durum.$RANDOM}" HASAT_GECE_ZAMAN=Z HASAT_GECE_DOGAN_OKU="${DOGAN:-$T/dogan.sh}" bash "$B" "$@"; }
 
 echo "── KURU kip (varsayılan)"
 rm -f "$T/ac.log"; C="$(koş)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "K1 koştu rc=0"
 [ ! -s "$T/ac.log" ]; g $? "K2 🔴 kuru kipte hasat.sh ac HİÇ çağrılmadı"
-printf '%s' "$C" | grep -q 'kip=kuru'; g $? "K3 varsayılan kip kuru"
-printf '%s' "$C" | tail -1 | grep -q 'acilan=3'; g $? "K4 🔴 tavan 3: açılabilir temiz kayıtlardan en çok 3 'açardı'"
-printf '%s' "$C" | grep -q 'gorev_FFF0 tavan-doldu'; g $? "K5 dördüncüsü tavan-doldu diye günlükte"
-printf '%s' "$C" | grep -q 'gorev_SSS5 atlandi-sinifli'; g $? "K6 🔴 'sil' sözlü kayıt sınıflı: atlandı (günlükte)"
-printf '%s' "$C" | grep -q 'gorev_KKK6 atlandi-sinifli (kapi: karar)'; g $? "K7 🔴 kapı alanı dolu kayıt sınıflı: atlandı"
-printf '%s' "$C" | grep -q 'gorev_OOO7 atlandi-sahipsiz'; g $? "K8 🔴 atanan ve odası yok: sahipsiz → AÇILMADI, günlükte"
-printf '%s' "$C" | tail -1 | grep -q 'olmaz=1'; g $? "K9 bayat doğrulama olmaz sayıldı"
-printf '%s' "$C" | grep -q 'gorev_BBB2 KURU: acardi → SERDAR'; g $? "K10 🔴 sahip = odanın müdürü (aile-registry oda_muduru)"
-! printf '%s' "$C" | grep -q 'gorev_ZZZ9'; g $? "K11 havuz dışı kayıt hiç işlenmedi"
-printf '%s' "$C" | grep -q 'gorev_AAA1 atlandi-dogmus'; g $? "K12 🔴 doğan görevi olan kayıt TEKRAR açılmaz (tekilleştirme: hasat.sh ac kendisi yapmıyor)"
-printf '%s' "$C" | tail -1 | grep -q 'atlandi_dogmus=1'; g $? "K13 doğmuş kayıt özet satırında sayıldı"
+ic 'kip=kuru'; g $? "K3 varsayılan kip kuru"
+son 'acilan=3'; g $? "K4 🔴 tavan 3: açılabilir temiz kayıtlardan en çok 3 'açardı'"
+ic 'gorev_FFF0 tavan-doldu'; g $? "K5 dördüncüsü tavan-doldu diye günlükte"
+ic 'gorev_SSS5 atlandi-sinifli'; g $? "K6 🔴 'sil' sözlü kayıt sınıflı: atlandı (günlükte)"
+ic 'gorev_KKK6 atlandi-sinifli (kapi: karar)'; g $? "K7 🔴 kapı alanı dolu kayıt sınıflı: atlandı"
+ic 'gorev_OOO7 atlandi-sahipsiz'; g $? "K8 🔴 atanan ve odası yok: sahipsiz → AÇILMADI, günlükte"
+son 'olmaz=1'; g $? "K9 bayat doğrulama olmaz sayıldı"
+ic 'gorev_BBB2 KURU: acardi → SERDAR'; g $? "K10 🔴 sahip = odanın müdürü (aile-registry oda_muduru)"
+! ic 'gorev_ZZZ9'; g $? "K11 havuz dışı kayıt hiç işlenmedi"
+ic 'gorev_AAA1 atlandi-dogmus'; g $? "K12 🔴 doğan görevi olan kayıt TEKRAR açılmaz (tekilleştirme: hasat.sh ac kendisi yapmıyor)"
+son 'atlandi_dogmus=1'; g $? "K13 doğmuş kayıt özet satırında sayıldı"
 
 echo "── GERÇEK kip (açık --gercek)"
 rm -f "$T/ac.log"; C="$(koş --gercek)"; RC=$?
@@ -70,15 +72,24 @@ grep -q -- '--atanan SERDAR' "$T/ac.log"; g $? "G3 🔴 --atanan verildi (sahips
 
 echo "── OLUR=0 ve bozuk girdi"
 printf 'gorev_NNN8  code  havuz  -  bug  -  Doğrulaması bayat  (son: 2026-11-04T12:00)  oda: agentic-os\n' > "$T/liste.txt"
-C="$(koş)"; printf '%s' "$C" | tail -1 | grep -q 'olur=0 acilan=0'; g $? "Z1 🔴 hiçbiri OLUR değil: günlüğe olur=0 yazıldı"
+C="$(koş)"; son 'olur=0 acilan=0'; g $? "Z1 🔴 hiçbiri OLUR değil: günlüğe olur=0 yazıldı"
 printf '' > "$T/liste.txt"; C="$(koş)"; RC=$?
-[ "$RC" -eq 3 ] && printf '%s' "$C" | grep -q 'olculemedi=defter'; g $? "Z2 🔴 defter boş/okunamadı: rc=3 ÖLÇÜLEMEDİ, olur=0 UYDURULMADI"
+[ "$RC" -eq 3 ] && ic 'olculemedi=defter'; g $? "Z2 🔴 defter boş/okunamadı: rc=3 ÖLÇÜLEMEDİ, olur=0 UYDURULMADI"
 koş --tavan x >/dev/null 2>&1; [ "$?" -eq 2 ]; g $? "Z3 sayısız --tavan rc=2"
 koş --bilinmeyen >/dev/null 2>&1; [ "$?" -eq 2 ]; g $? "Z4 bilinmeyen bayrak rc=2"
-printf 'gorev_AAA1  code  havuz  -  bug  -  Temiz  (son: x)  oda: agentic-os\n' > "$T/liste.txt"; C="$(REG=/yok koş)"; printf '%s' "$C" | grep -q 'atlandi-sahipsiz'; g $? "Z5 registry okunamıyor: sahipsiz → açılmadı (fail-closed)"
+printf 'gorev_AAA1  code  havuz  -  bug  -  Temiz  (son: x)  oda: agentic-os\n' > "$T/liste.txt"; C="$(REG=/yok koş)"; ic 'atlandi-sahipsiz'; g $? "Z5 registry okunamıyor: sahipsiz → açılmadı (fail-closed)"
 
 printf 'gorev_EEE0  code  havuz  -  bug  -  Doğan okunamayan  (son: x)  oda: agentic-os\n' > "$T/liste.txt"; rm -f "$T/ac.log"; C="$(koş --gercek)"
-printf '%s' "$C" | grep -q 'gorev_EEE0 olculemedi' && [ ! -s "$T/ac.log" ]; g $? "Z6 🔴 doğan görev okunamadı: AÇILMADI (fail-closed), ölçülemedi diye günlükte"
+ic 'gorev_EEE0 olculemedi' && [ ! -s "$T/ac.log" ]; g $? "Z6 🔴 doğan görev okunamadı: AÇILMADI (fail-closed), ölçülemedi diye günlükte"
+
+# günlük tavan KOŞULAR ARASI (göz tur 1 ciddi bulgu): aynı gün ikinci gerçek koşu ek 3 daha açmaz
+printf 'gorev_P1  code  havuz  -  bug  -  Bir  (son: x)  oda: agentic-os\ngorev_P2  code  havuz  -  bug  -  İki  (son: x)  oda: agentic-os\ngorev_P3  code  havuz  -  bug  -  Üç  (son: x)  oda: agentic-os\ngorev_P4  code  havuz  -  bug  -  Dört  (son: x)  oda: agentic-os\ngorev_P5  code  havuz  -  bug  -  Beş  (son: x)  oda: agentic-os\ngorev_P6  code  havuz  -  bug  -  Altı  (son: x)  oda: agentic-os\ngorev_P7  code  havuz  -  bug  -  Yedi  (son: x)  oda: agentic-os\n' > "$T/liste.txt"
+rm -f "$T/ac.log" "$T/durum7"; DURUM="$T/durum7" koş --gercek >/dev/null; DURUM="$T/durum7" koş --gercek >/dev/null
+[ "$(wc -l < "$T/ac.log")" -eq 3 ]; g $? "Z7 🔴 aynı gün iki gerçek koşu: TOPLAM 3 açıldı (ikinci koşu ek açmadı)"
+C="$(DURUM="$T/durum7" koş --kuru)"; son 'acilan=0'; g $? "Z8 kuru kip günün dolu tavanını görür: acilan=0, dosyaya yazmaz"
+[ "$(wc -l < "$T/durum7")" -eq 3 ]; g $? "Z9 kuru kip durum dosyasına YAZMADI (3 satır kaldı)"
+rm -f "$T/ac.log"; mkdir -p "$T/ro"; chmod 555 "$T/ro"; C="$(DURUM="$T/ro/x/durum" koş --gercek)"; RC=$?
+[ "$RC" -eq 3 ] && [ ! -s "$T/ac.log" ]; g $? "Z10 🔴 durum dosyası yazılamıyor: gerçek kip rc=3 ve HİÇBİR ŞEY AÇMADI (fail-closed)"; chmod 755 "$T/ro"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
