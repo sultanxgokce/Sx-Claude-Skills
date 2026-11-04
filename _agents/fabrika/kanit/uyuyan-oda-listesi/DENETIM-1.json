@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "uyuyan-oda-listesi",
+  "pr": "688",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T15:50:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uyuyan-oda-listesi",
+  "dal": "uyuyan-oda-listesi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19694,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 28228
+  },
+  "dalgic": "uyumsuz",
+  "bas": "cc48b804a872c39a776651840d9e5dbb4f0b6fa6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kapı, uyuyan ustaların kayıtlı odalarını tekilleştirerek oda listesine ekliyor; istenen veri akışı doğru kurulmuş ve mutasyon ölçümü UY6 kapısının değişikliği gerçekten yakaladığını gösteriyor. Önce şunu çöz: iş kartının son kullanıcı sonucu olan tellal şeridinde bakım, reklam videosu, web tanıtım ve sosyal medya odalarının görünmesi yalnız API düzeyindeki iki oda örneğiyle sınanmış; dört odalı gerçekçi bir kare veya uçtan uca ölçüm olmadan üretime hazır diyemem.",
+    "bulgular": [
+      {
+        "ne": "İstenen dört odanın tellal şeridinde gerçekten göründüğü kanıtlanmamış; sınav yalnız API yanıtında `bakim` ve `mimari-cizim` adlarını denetliyor, reklam-videosu, web-tanitim, sosyal-medya ve şerit tüketicisi ölçülmüyor.",
+        "kanit": "Gerçek ölçümde UY6 koşulu `oa.includes('bakim') && oa.includes('mimari-cizim')` ile sınırlı; diffteki UY6 da aynı koşulu taşıyor. Manifestte önce/sonra kullanıcı karesi veya tellal şeridi uçtan uca ölçümü bulunmuyor.",
+        "konum": "terminal-onar/kapi/sunucu.test.mjs:741; olcum-kapi-sinavi-sonra.txt/UY6",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek ölçüm 147/147 yeşil; mutasyon kaydı UY6 bilerek bozulduğunda hedef kapının düştüğünü doğruluyor. Ancak bu çift API davranışı ve sınav duyarlılığını kanıtlıyor; iş kartındaki dört odanın tellal şeridinde görünmesine ilişkin gerçekçi önce/sonra kare ya da uçtan uca ölçüm yok."
+  }
+}
