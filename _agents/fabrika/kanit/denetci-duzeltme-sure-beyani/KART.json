@@ -26,5 +26,14 @@
     "şimdi → hedef iki SAYI olarak yok",
     "(kaynak: <komut/ekran>, <gün>) parantezi yok"
   ],
-  "sayi_bicim_uyarisi": true
+  "sayi_bicim_uyarisi": true,
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BENNA",
+      "oturum": "aile-notify SERDAR 4 Kas · Sx 689 karari",
+      "gerekce": "SERDAR karari 4 Kas: (a) tur 3 acilir, reis karari SERDAR. Iki bulgu imzali olcumle kapandi (main 353 / dal 354 ayni yukte, mutant yakalandi), is ilerliyor; 531 = ceil(354 x 1,5) kabul, CIdaki 411 elle olcumu de kapsar. Tur 3 de 5/E degilse geri al, ucuncusu yok.",
+      "zaman": "2026-11-04T16:19:30+03:00"
+    }
+  ]
 }
