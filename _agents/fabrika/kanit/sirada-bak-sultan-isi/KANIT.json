@@ -1,0 +1,112 @@
+{
+  "is": "sirada-bak-sultan-isi",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T18:20:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-bak-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-sirada-bak-sinavi-tek.txt",
+      "sha256": "2b5d4e778bf57276761ff0c750f135a5661b4aba906b4f831a9d8caa45e44ed8",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T18:20:24+03:00",
+      "sure_sn": 19.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8d79e1347c3140f09ec947ed92062903",
+      "olculen_commit": "31df05c4a2f49a9335096048c2cee1df85384798",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: ikinci-okuma-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant: ikinci-okuma-yok-tek.txt",
+      "sha256": "f3843d2c8225f51bbae0cdb73ae9ae2d432ee47a68bd6db13189f600fe0e33dc",
+      "komut": [
+        "env",
+        "SADECE_MUTANT=ikinci-okuma-yok",
+        "bash",
+        "gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T18:20:26+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K1 kör kopyayla",
+      "hedef_dustu": true,
+      "olcum_id": "70f0806af5b64a8eb31c16ab7d4ddc58",
+      "olculen_commit": "31df05c4a2f49a9335096048c2cee1df85384798",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: isaret-suzgeci-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant: isaret-suzgeci-yok-tek.txt",
+      "sha256": "cc9244fff0f8c9eab6c038459852429c2e4626f5408c8aaef9dd58f72e10fde6",
+      "komut": [
+        "env",
+        "SADECE_MUTANT=isaret-suzgeci-yok",
+        "bash",
+        "gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T18:20:28+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K1 kör kopyayla",
+      "hedef_dustu": true,
+      "olcum_id": "fa864773237f48efbf4686d74918dfad",
+      "olculen_commit": "31df05c4a2f49a9335096048c2cee1df85384798",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: okunamazsa-devam",
+      "asama": "tek",
+      "dosya": "olcum-mutant: okunamazsa-devam-tek.txt",
+      "sha256": "acd81cf5d1b72bcf0cdd000d943ddb573bf7d26281ce5304f4faef34cd3c5773",
+      "komut": [
+        "env",
+        "SADECE_MUTANT=okunamazsa-devam",
+        "bash",
+        "gunluk-plan/scripts/sirada-bak-sultan-karari.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T18:20:30+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sirada-bak-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K4 işaret ikinci kaynaktan",
+      "hedef_dustu": true,
+      "olcum_id": "0354a0736d7e40ab9f2cafd2b5fe9833",
+      "olculen_commit": "31df05c4a2f49a9335096048c2cee1df85384798",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "8b5f8ad7a96b9036068a01c9e39d531a4fbd4f35eb4dca2b0ed62b97623e2320"
+}
