@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "fabrika-surum-0-27-54",
+  "pr": "685",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T03:52:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-surum-0-27-54",
+  "dal": "fabrika-surum-0-27-54",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10226,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4254
+  },
+  "dalgic": "uyumlu",
+  "bas": "bcb09cb0c5b7e708e28b60e40bed1ed0b362d897",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sürüm, katalog ve beceri tanımında birlikte 0.27.53'ten 0.27.54'e çıkarılmış; önceki içerik-drift kilidi sonraki kuru koşuda normal güncelleme planına dönüşüyor. Değişiklik dar kapsamlı, tutarlı ve üretime hazır; ciddi ya da işi bozan uygulama kusuru görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı sağlam manifestte aynı hedef için önce/sonra ölçüm çifti var: önce rc=1 ile aynı sürümde içerik-drift saptanıyor, sonra rc=0 ile v0.27.53 → v0.27.54 güncellemesi planlanıyor ve drift uyarısı sıfırlanıyor. Sarı kayıt yok; ölçüm çıktıları talep edilen sürüm artışının kilidi giderdiğini doğrudan sınamış."
+  }
+}

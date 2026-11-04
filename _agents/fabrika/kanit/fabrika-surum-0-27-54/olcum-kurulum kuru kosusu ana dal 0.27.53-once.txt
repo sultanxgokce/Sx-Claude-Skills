@@ -1,0 +1,16 @@
+$ bash -c cd /config/projects/_wt/Sx-sync-c279ad40 && node sync-skills.mjs --skill yazilim-fabrikasi; exit $?
+# rc=1 sure=15.3s zaman=2026-11-04T03:50:47+03:00
+--- stdout ---
+  kaynak: HEAD@c279ad40 · origin/main'e göre 0 commit geride · 0 kirli dosya
+
+  sync-skills — CHECK (dry-run)
+
+  ⚠ yazilim-fabrikasi → _global: İÇERİK-DRIFT — sürüm aynı (v0.27.53) ama içerik farklı
+     → kaynak bbdd22c23e25 ≠ kurulu dc18d72e7880. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+
+  özet: 0 planlandı · 0 güncel · 1 drift-uyarı · 0 eksik · 0 duman-düştü
+
+--- stderr ---
+⏳ agir-sira: kanit-fabrika-surum-0-27-54-kurulum kuru kosusu ana dal 0.27.53 15 sn bekledi (yuva 1, load1 17.57)
