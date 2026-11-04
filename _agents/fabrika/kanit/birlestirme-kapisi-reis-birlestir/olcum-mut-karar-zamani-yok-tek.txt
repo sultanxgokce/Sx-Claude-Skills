@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: O21 · rc≠0 + hedef kapı 'O21' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-kg.sh karar-zamani-yok
+# rc=1 sure=82.2s zaman=2026-11-04T19:30:02+03:00
+--- stdout ---
+  ✗ O21 · karar uçtan ÖNCE (karardan sonra kod girdi) → rc=1, kapsamaz
+── SONUÇ: 37 geçti · 1 kaldı ──
+--- stderr ---
