@@ -90,6 +90,8 @@ kos(){
   ok "K6 paketli ikinci kaynak (scripts/gorev.sh) yoksa ve seçilen kopya başkaysa ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (doğrulanamayan Sultan işi sayılmaz)" '[ "$R6" = 3 ] && printf "%s\n" "$C6" | grep -q "ikinci kaynak" && [ ! -s "$T/yama.log" ]'
   rm -f "$T/yama.log"; local C5; C5="$("${E[@]}" GUNLUK_PLAN_GOREV_SH="$KOR" bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"
   ok "K5 🔴 AÇIK GUNLUK_PLAN_GOREV_SH ile seçilen KÖR kopya da ikinci okumadan muaf DEĞİL: ISI/MADDE'de Sultan kararı yok, ustlen yalnız sıradan işe (göz tur 1)" '! printf "%s\n" "$C5" | grep -E "^(ISI|MADDE)=" | grep -qE "S1|S2|K1|H1" && [ "$(cat "$T/yama.log" 2>/dev/null | sort -u | tr "\n" " ")" = "gorev_A " ]'
+  rm -f "$T/yama.log"; local C7; C7="$("${E2[@]}" GUNLUK_PLAN_ISARET_SH=- bash "$D/sirada-bak.sh" --kutu menzil --kim MENZILCI 2>&1)"; local R7=$?
+  ok "K7 🔴 ikinci okuma ortam değişkeniyle KAPATILAMAZ: GUNLUK_PLAN_ISARET_SH=- → ÖLÇÜLEMEDİ rc 3, hiçbir şey üstlenilmez (göz tur 2)" '[ "$R7" = 3 ] && printf "%s\n" "$C7" | grep -q "ÖLÇÜLEMEDİ" && [ ! -s "$T/yama.log" ]'
   [ "$S" = 1 ] || echo "── $g geçti · $k kaldı"
   return $k
 }
@@ -122,6 +124,7 @@ mut yalniz-kapi-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " in
 mut yalniz-sahip-suzer sirada-bak.sh 'if "  sahip: sultan" in ek or "  kapi: " in ek: continue||if "  sahip: sultan" in ek: continue'
 mut tum-satiri-tarar sirada-bak.sh 'ek=p[6].rsplit("(son:",1)[-1]||ek=p[6]'
 mut ikinci-okuma-yok sirada-bak.sh 'if [ -z "$ISARET_SH" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then||if false; then'
+mut isaret-kapagi-var sirada-bak.sh 'if [ -n "$ISARET_SH" ]; then||if [ -n "$ISARET_SH" ] && [ "$ISARET_SH" != "-" ]; then'
 mut acik-gorev-muaf sirada-bak.sh 'if [ -z "$ISARET_SH" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then||if [ -z "$ISARET_SH" ] && [ -z "${GUNLUK_PLAN_GOREV_SH:-}" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then'
 mut isaret-suzgeci-yok sirada-bak.sh 'if p[0] in sultan: continue||pass'
 mut okunamazsa-devam sirada-bak.sh 'DENMEZ, üstlenme yapılmadı" >&2; exit 3; }||DENMEZ, üstlenme yapılmadı" >&2; }'

@@ -22,7 +22,7 @@ case "$1" in
   *) printf '%s\n' "$*" >> "$T/baska.log" ;;
 esac
 EOS
-chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"; export GUNLUK_PLAN_ISARET_SH=-   # hermetik: sahte gorev.sh tek kaynak; ikinci okuma (1.24.0) kapalı
+chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"; export GUNLUK_PLAN_ISARET_SH="$T/gorev.sh"   # hermetik: ikinci okuma kaynağı da AYNI sahte gorev.sh (kapatılamaz, 1.24.0); işaret yok → eleme yok
 cat > "$T/kart.sh" <<'EOK'
 #!/usr/bin/env bash
 T="$(dirname "${BASH_SOURCE[0]}")"; printf '%s\n' "$*" >> "$T/kart.log"

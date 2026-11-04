@@ -59,14 +59,14 @@ LISTE="$(bash "$GOREV" liste 2>/dev/null)"; LRC=$?
 #   o kopyanın `liste`si "  sahip: sultan" / "  kapi: <kapı>" işaretlerini HİÇ basmıyordu (paketli kopya basıyordu) → aşağıdaki süzgeç kör kalıyor, Sultan'ın karar işi
 #   ÜSTLENİLİYORDU. Artık: seçilen kopya paketli kopyadan (KOK/gorev.sh) farklıysa işaret listesi paketli kopyadan da okunur; işaretli kimlikler süzgece SULTAN_ID olarak girer.
 #   Okunamazsa ÖLÇÜLEMEDİ rc 3: "Sultan işi yok" DENMEZ, üstlenme yapılmaz. Açıkça verilen GUNLUK_PLAN_GOREV_SH de İSTİSNA DEĞİLDİR
-#   (göz tur 1: istisna "hangi kopya olursa olsun" sözünü deliyordu): ikinci okuma her zaman yapılır. GUNLUK_PLAN_ISARET_SH ikinci kaynağı elle verir; "-" yalnız hermetik sınav kapağıdır.
+#   (göz tur 1: istisna "hangi kopya olursa olsun" sözünü deliyordu): ikinci okuma her zaman yapılır. GUNLUK_PLAN_ISARET_SH ikinci kaynağı elle verir; KAPATMA YOLU YOKTUR
+#   (göz tur 2: "-" kapağı aynı deliği başka bir ortam değişkeninden açıyordu): değer çalışan bir liste betiği olmak zorundadır, "-" ya da boş okuma ÖLÇÜLEMEDİ rc 3 verir.
 SULTAN_ID=""
 ISARET_SH="${GUNLUK_PLAN_ISARET_SH:-}"
 if [ -z "$ISARET_SH" ] && [ "$GOREV" != "$KOK/gorev.sh" ]; then
   [ -f "$KOK/gorev.sh" ] || { echo "ÖLÇÜLEMEDİ: seçilen gorev.sh ($GOREV) paketli kopyadan farklı ve ikinci kaynak ($KOK/gorev.sh) yok — Sultan işi işareti doğrulanamaz, üstlenme yapılmadı" >&2; exit 3; }
   ISARET_SH="$KOK/gorev.sh"
 fi
-[ "$ISARET_SH" != "-" ] || ISARET_SH=""   # GUNLUK_PLAN_ISARET_SH=- : YALNIZ hermetik sınav kapağı (sahte gorev.sh'ı çağıran vouch eder); üretimde kullanılmaz
 if [ -n "$ISARET_SH" ]; then
   ILISTE="$(bash "$ISARET_SH" liste 2>/dev/null)"; IRC=$?
   [ "$IRC" -eq 0 ] && [ -n "$ILISTE" ] || { echo "ÖLÇÜLEMEDİ: Sultan işi işareti ikinci kaynaktan okunamadı (rc=$IRC, $ISARET_SH) — 'Sultan işi yok' DENMEZ, üstlenme yapılmadı" >&2; exit 3; }
