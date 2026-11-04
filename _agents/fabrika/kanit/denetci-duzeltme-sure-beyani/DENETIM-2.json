@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "denetci-duzeltme-sure-beyani",
+  "pr": "689",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T16:11:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-duzeltme-sure-beyani",
+  "dal": "denetci-duzeltme-sure-beyani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13942,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 26503
+  },
+  "dalgic": "uyumlu",
+  "bas": "f2ce64761768e21be85049b9e379e28717018ecd",
+  "duzeltme_farki": {
+    "onceki_bas": "783600f0c019865a839be54123b7723170adde9a",
+    "dosya": 9,
+    "bayt": 27872,
+    "tam_bayt": 27041
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Süre beyanı 620 saniyeye ayarlanmış; gerçek ölçüm değerin okunduğunu, mutasyon ölçümü de beyan silinince kapının düştüğünü doğruluyor. Ancak önceki ciddi bulgu kapanmamış ve talepteki 411 × 1,5 = 616,5 yerine değişikliği yapanın eklediği yuvarlama kuralıyla 620 seçilmiş; önce kaynak ölçümü kanıtlayıp talepteki sayısal hedefe uyun.",
+    "bulgular": [
+      {
+        "ne": "B1 kapanmadı: Beyanın girdisi olan “ölçülmüş en kötü koşu 411 sn” hâlâ araç imzalı bir hedef ölçümle kanıtlanmıyor.",
+        "kanit": "Manifest görünümü açıkça “0 hedef ölçüm” bildiriyor. Geçerli `sure-okuma` kaydı 261,4 saniyelik denetim süresini ve çıktıda yazılı 411 değerini gösteriyor; 411 saniyelik hedef koşuyu ölçen bir kayıt göstermiyor. Yorumda eklenen ham veri dizini de manifestte geçerli hedef ölçüm bulunmasının yerini tutmaz.",
+        "konum": "KANIT manifesti: görünüm özeti ve sure-okuma; denetci-duzeltme-farki.test.sh:9",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "B2 kapanmadı: 620 saniye, talep edilen ölçülmüş en kötü koşunun 1,5 katı değil; 5 saniyeye yukarı yuvarlama değişiklikte açıklanmış olsa da iş kartında istenmeyen yeni bir kuraldır.",
+        "kanit": "Ölçüm çıktısı ve değişiklik yorumu hesabı “411 sn x1,5 = 616,5” olarak verip hedefi 620 yapıyor. İş kartı yalnız “1,5 katı” diyor ve yukarı yuvarlama yetkisi veya kuralı içermiyor.",
+        "konum": "denetci-duzeltme-farki.test.sh:9; olcum-sure-okuma-tek.txt; İŞ KARTI.cumle",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm 620 beyanının okunduğunu, mutasyon kaydı da beyan kaldırılınca doğru kapının düştüğünü kanıtlıyor. Fakat manifestte 411 saniyeyi üreten hedef ölçüm kaydı yok; ayrıca mevcut kanıt 616,5 hesabını gösterirken talepte bulunmayan yuvarlama kararıyla 620 hedeflenmiş."
+  }
+}

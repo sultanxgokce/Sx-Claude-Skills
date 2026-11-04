@@ -1,0 +1,74 @@
+{
+  "is": "denetci-duzeltme-sure-beyani",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T16:18:50+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sure-okuma",
+      "asama": "tek",
+      "dosya": "olcum-sure-okuma-tek.txt",
+      "sha256": "cd9a3c290508ebfed068a7db94150d8e3463d72866a2557a1818201d705d4614",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-duzeltme-sure-beyani/sure-oku.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T16:18:50+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9750dd151b6c45f2889a43b566ac3136",
+      "olculen_commit": "e3c7f60f51ed4840d915328b5795b43e0b5a53d8",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant: sure beyani silinir",
+      "asama": "tek",
+      "dosya": "olcum-mutant: sure beyani silinir-tek.txt",
+      "sha256": "176d1c5ed8946d11d3ab918fdb914b0ae72c3fca92c2a7939d7bb06882cdce31",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-sure.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T16:18:50+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sure-okuma",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "okunan sure=531",
+      "hedef_dustu": true,
+      "olcum_id": "2fa7d6fbbf3c4d2bb81c6d246df0b719",
+      "olculen_commit": "3d26310f6096cdb544787d4e0cd7923e2821a97f",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kosu-suresi",
+      "asama": "tek",
+      "dosya": "olcum-kosu-suresi-tek.txt",
+      "sha256": "6050a7e54c5c320933c4a0d6872e1cc63bc7998e7a3226aac49ced661c762641",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-duzeltme-sure-beyani/kosu-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T16:18:16+03:00",
+      "sure_sn": 375.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ab6340b51dd34c8e990a9e0612d9b90b",
+      "olculen_commit": "d2083f937c4bd77e4eb70e0644dc53fa26b194de",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "599be0af62677ccd713240847856e578d442f566a03272c2c97758f191661718"
+}

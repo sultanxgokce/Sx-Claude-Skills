@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "denetci-duzeltme-sure-beyani",
+  "pr": "689",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T16:03:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-duzeltme-sure-beyani",
+  "dal": "denetci-duzeltme-sure-beyani",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 9345,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 5408
+  },
+  "dalgic": "uyumsuz",
+  "bas": "783600f0c019865a839be54123b7723170adde9a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Süre beyanı 620 saniyeye çıkarılmış ve mutasyon sınavı bu beyanın gerçekten okunduğunu gösteriyor. Ancak talep ölçülmüş en kötü koşunun 1,5 katını isterken 411 × 1,5 = 616,5’tir; 620’ye yuvarlama açıklanmamış, ayrıca 411 saniyelik kaynak ölçüm araç imzalı manifestte yoktur—önce hedef ölçümü ve yuvarlama kuralını kanıtlayın.",
+    "bulgular": [
+      {
+        "ne": "Beyanın dayandığı “ölçülmüş en kötü koşu 411 sn” iddiası kanıtsız; manifest yalnız 620 değerini okuyan kontrolü içeriyor, 411 saniyeyi üreten hedef ölçüm kaydı içermiyor.",
+        "kanit": "Manifest görünümü açıkça “0 hedef ölçüm” bildiriyor; geçerli gerçek ölçümün çıktısı yalnız “okunan sure=620 (beklenen 620)” diyor. Diff yorumundaki 399/411 saniyeleri destekleyen ölçüm çifti bulunmuyor.",
+        "konum": "KANIT manifesti: sure-okuma; denetci-duzeltme-farki.test.sh:9",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "620 saniye, belirtilen 411 saniyelik en kötü koşunun tam 1,5 katı değil; sonuç 616,5 saniyedir ve yukarı yuvarlama kuralı talepte ya da değişiklikte belirtilmemiştir.",
+        "kanit": "Diff yorumu “411 sn ×1,5” deyip “sure=620” yazıyor; aritmetik sonuç 411 × 1,5 = 616,5. Gerçek ölçüm de yalnız 620’nin dosyadan okunduğunu doğruluyor.",
+        "konum": "denetci-duzeltme-farki.test.sh:9; olcum-sure-okuma-tek.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Gerçek ölçüm 620 beyanının okunduğunu, mutasyon kaydı da beyan silinince kapının düştüğünü kanıtlıyor. Buna karşılık talebin esas girdisi olan en kötü 411 saniyelik koşuya ait önce/sonra ölçüm çifti veya hedef ölçüm kaydı yok; dolayısıyla 1,5 kat hesabının kaynağı kanıtlanmamış."
+  }
+}
