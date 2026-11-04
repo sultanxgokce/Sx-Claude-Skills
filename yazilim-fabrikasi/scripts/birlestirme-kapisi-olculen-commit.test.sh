@@ -194,5 +194,15 @@ m["imza"]=k.imza(m["kayitlar"]); json.dump(m,open(p,"w"))' "$T/_agents/fabrika/k
 B="$(bas_al)"; den "$B"; C="$(kapi)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "soyundan olmayan commit'te ölçülmüş" <<<"$C"; g $? "yabancı commit'te ölçülmüş kayıt adıyla uyarıldı, engellenmedi"
 
+echo "════ O20-O21 · REİS BİRLEŞTİR KARARI (KHKM03): puandan sonra sürüm satırı değişti; karar uçtan SONRA ise GEÇER, ÖNCE ise ENGELLER ════"
+reis_dedi() { ( cd "$T" && bash "$KT" reis-dedi is-oc --karar birlestir --reis M --oturum ref-r --gerekce "puandan sonra yalniz surum satiri degisti, reis uci gordu" ) >/dev/null 2>&1; }
+kur; B="$(bas_al)"; den "$B"; ( cd "$T" && git checkout -q -b is-dal && echo kod2 > uygulama.sh && git add -A && GIT_COMMITTER_DATE="2020-01-01T00:00:00+00:00" git commit -q -m "fix: surum satiri" ) >/dev/null 2>&1
+reis_dedi; C="$(kapi)"; RC=$?; [ "$RC" -eq 0 ] && grep -q "reis birleştir kararı birleşen uçtan SONRA verilmiş" <<<"$C" && grep -q "uygulama.sh" <<<"$C"; g $? "O20 · karar uçtan sonra → rc=0, karar ve değişen dosya basıldı"
+kur; B="$(bas_al)"; den "$B"; reis_dedi; ( cd "$T" && git checkout -q -b is-dal && echo kod2 > uygulama.sh && git add -A && GIT_COMMITTER_DATE="2099-01-01T00:00:00+00:00" git commit -q -m "fix: karardan sonra kod" ) >/dev/null 2>&1
+C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C"; g $? "O21 · karar uçtan ÖNCE (karardan sonra kod girdi) → rc=1, kapsamaz"
+kur; B="$(bas_al)"; den "$B"; ( cd "$T" && git checkout -q -b is-dal && echo kod2 > uygulama.sh && git add -A && GIT_COMMITTER_DATE="2020-01-01T00:00:00+00:00" git commit -q -m "fix: surum satiri" ) >/dev/null 2>&1
+( cd "$T" && bash "$KT" reis-dedi is-oc --karar devam --reis M --oturum ref-r --gerekce "devam karari birlestir karari degildir, kapsamaz" ) >/dev/null 2>&1
+C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C"; g $? "O22 · reis kararı 'devam' (birlestir değil) → rc=1, kapıyı açmaz"
+
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

@@ -1,0 +1,142 @@
+{
+  "is": "birlestirme-kapisi-reis-birlestir",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-04T19:36:56+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek.txt",
+      "sha256": "c6c3d7f3cae11fc222737c1cf8af90c895ff922b222c10529b412f976a9ee871",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T19:21:37+03:00",
+      "sure_sn": 80.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ff303393531044b292b74dbae4f8ba61",
+      "olculen_commit": "de479797665b83a747f61c0d6bdda1178d0b1aae",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "karar-zamani-yok",
+      "asama": "tek",
+      "dosya": "olcum-karar-zamani-yok-tek.txt",
+      "sha256": "ffc9e22b8339daddf174c77b141b3c8c16263b3830957807e77f7bcb38af10ba",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T19:24:11+03:00",
+      "sure_sn": 127.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9b01d35bb3fe4fc69da51d7053d0247c",
+      "olculen_commit": "de479797665b83a747f61c0d6bdda1178d0b1aae",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "her-karar-sayilir",
+      "asama": "tek",
+      "dosya": "olcum-her-karar-sayilir-tek.txt",
+      "sha256": "ecd0e07146dbe17821bb5b1f38064460febb466ba242f8927f19449dfd25be58",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T19:25:46+03:00",
+      "sure_sn": 94.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c233a5f71e85445c9dcb0fd96d605560",
+      "olculen_commit": "de479797665b83a747f61c0d6bdda1178d0b1aae",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-karar-zamani-yok",
+      "asama": "tek",
+      "dosya": "olcum-mut-karar-zamani-yok-tek.txt",
+      "sha256": "e9359f24ab7effef87bfae6c4ad7f9d4087e892a7b4b7302400348891e4e7eeb",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-kg.sh",
+        "karar-zamani-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T19:30:02+03:00",
+      "sure_sn": 82.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "O21",
+      "hedef_dustu": true,
+      "olcum_id": "9e472bf99e4d4a6f94040b67e5515f78",
+      "olculen_commit": "de479797665b83a747f61c0d6bdda1178d0b1aae",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-her-karar-sayilir",
+      "asama": "tek",
+      "dosya": "olcum-mut-her-karar-sayilir-tek.txt",
+      "sha256": "1d307333845f409a0b5c5ca33add97d1e5d6bfc8acba6b6a168e12849e1f139d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-kg.sh",
+        "her-karar-sayilir"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-04T19:31:20+03:00",
+      "sure_sn": 77.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "O22",
+      "hedef_dustu": true,
+      "olcum_id": "04d1cbee04704ebeaa3103e682e85b20",
+      "olculen_commit": "de479797665b83a747f61c0d6bdda1178d0b1aae",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tam-kapi",
+      "asama": "tek",
+      "dosya": "olcum-tam-kapi-tek.txt",
+      "sha256": "10444a4ecc161c23d64eccc80ab09ee6c171807d33123d50b3103559ae1a428d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-04T19:36:56+03:00",
+      "sure_sn": 246.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fcc59bed66da49c99e91f65359942263",
+      "olculen_commit": "230f977039ce8a024cd27b003abb8f17d921e730",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "5b281ed766d863743069c4d5696c3e91d02886fa213f401183aeb27d79696186"
+}

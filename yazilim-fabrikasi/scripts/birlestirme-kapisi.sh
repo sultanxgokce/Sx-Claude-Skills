@@ -418,6 +418,20 @@ PYK
     fi
     if [ "${oc_atla:-0}" -eq 1 ]; then :
     elif [ "${oc_ana_kapali:-0}" -eq 1 ]; then :
+    elif [ -n "$oc_degisen" ] && [ -n "${KART:-}" ] && [ -r "$KART" ] && oc_ucz="$(git -C "$oc_agac" show -s --format=%cI "$oc_uc" 2>/dev/null)" && [ -n "$oc_ucz" ] \
+         && oc_rb="$(python3 - "$KART" "$oc_ucz" <<'PYR'
+import json,sys,datetime
+# REİS BİRLEŞTİR KARARI (KHKM03): puandan sonra kod değişmişse (sürüm satırı gibi) engel, ancak reis AYNI uçu görüp karar verdiyse düşer.
+# Karar uç commit'inden ÖNCE verilmişse bu uç için verilmiş sayılmaz (karardan sonra giren kod kararı kapsamaz); okunamazsa engel sürer.
+try:
+    k=json.load(open(sys.argv[1],encoding="utf-8")); uc=datetime.datetime.fromisoformat(sys.argv[2])
+    for x in reversed(k.get("reis_kararlari") or []):
+        if x.get("karar")=="birlestir" and datetime.datetime.fromisoformat(x.get("zaman",""))>=uc:
+            print(f"{x.get('reis','?')} {x.get('zaman')} {x.get('oturum','?')}"); break
+except Exception: pass
+PYR
+)" && [ -n "$oc_rb" ]; then
+      _y "  ✓ puandan sonra kod değişmiş ama reis birleştir kararı birleşen uçtan SONRA verilmiş (${oc_rb}); değişen:${oc_degisen:0:300} — karar reisindir, puan değil: denetim ${oc_bas:0:8} → uç ${oc_uc:0:8}"
     elif [ -n "$oc_degisen" ]; then
       _h "puan verildikten sonra kod değişmiş: denetim ${oc_bas:0:8}, birleşen uç ${oc_uc:0:8}; arada kanıt dizini dışında değişen:${oc_degisen:0:300} — yeniden göze gönder"; eksik=$((eksik+1))
     else
