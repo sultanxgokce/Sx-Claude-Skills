@@ -163,6 +163,7 @@ try {
   // Y11 (pano 1.2.0 · BÂNİ 4 Kas, görev …ANA8GF dilim 4): merkezin telefon yazma penceresi window.__kapiResimPencere sunuyorsa yüklenen resmin yolu
   //   TERMİNALE DEĞİL pencereye verilir (basla(blob) yüklemeden önce, bitti(yol) sonra); kanca kalkınca eski yol aynen (Y11b). Hata yüzü merkez sınavında (F5).
   const onceK = yuklemeler.length;
+  await pg.evaluate(() => { const bk = document.getElementById('kapi-pano-bildirim'); if (bk) { bk.style.display = 'none'; bk.textContent = ''; } });   // önceki yüklemenin bildirimi (6 sn) ölçümü kirletmesin: yalnız BU yüklemenin bildirimi sayılır
   await pg.evaluate(() => { window.__pk = []; window.__kapiResimPencere = { basla: function (bl) { window.__pk.push('basla:' + (bl && bl.type) + ':' + (bl && bl.size)); return true; }, bitti: function (y) { window.__pk.push('bitti:' + y); }, hata: function (m) { window.__pk.push('hata:' + m); } }; });
   await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Control+u'); await yapistir(pg, { tip: 'image/png', b64: PNG1 });
   for (let k = 0; k < 50 && yuklemeler.length === onceK; k++) await bekle(200);
