@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/denetci-duzeltme-sure-beyani/kosu-olc.sh
+# rc=0 sure=375.0s zaman=2026-11-04T16:18:16+03:00
+--- stdout ---
+main rc=0 sn=353
+dal rc=0 sn=354
+── SONUÇ (düzeltme-farkı): 87 geçti · 0 kaldı ──
+── SONUÇ (düzeltme-farkı): 87 geçti · 0 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-denetci-duzeltme-sure-beyani-kosu-suresi 20 sn bekledi (yuva 1, load1 17.24)

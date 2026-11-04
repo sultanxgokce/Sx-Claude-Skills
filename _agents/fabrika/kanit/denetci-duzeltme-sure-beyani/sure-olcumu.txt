@@ -1,5 +1,0 @@
-# denetci-duzeltme-farki.test.sh süre ölçümü — 4 Kas 2026, aynı anda iki koşu (aynı yük)
-main rc=0 sn=399
-dal rc=0 sn=411
-# CI (kalan kovası, varsayılan tavan 300 sn): koşu1 262170 ms geçti · koşu2 300090 ms düştü · koşu3 300091 ms düştü · yeniden koşu geçti
-# en kötü ölçülmüş = 411 sn · x1,5 = 616 · beyan = 620 (tavan 900)
