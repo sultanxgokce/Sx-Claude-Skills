@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "hasat-gece-zamanlayici",
+  "pr": "690",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-04T16:58:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-gece-zamanlayici",
+  "dal": "hasat-gece-zamanlayici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35593,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 13508
+  },
+  "dalgic": "uyumsuz",
+  "bas": "b4f0f49309f66c0a67a3c7c2702232c651faacca",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Hasat adaylarını güvenli süzüp kuru/gerçek kipte en çok üçlü gruplar halinde açan bir betik ve güçlü hermetik sınavlar yazılmış. Ancak talebin iki zamanlama değişmezi uygulanmamış: günlük tavan çalıştırmalar arasında korunmuyor ve ilk üç geceden sonra gerçek kipe otomatik geçiş yok; bu yüzden kod üretime hazır değil ve iş kartındaki doğru şeyi bütünüyle yapmıyor.",
+    "bulgular": [
+      {
+        "ne": "“Günde en çok üç” sınırı yalnız tek betik çalıştırması için geçerli; aynı gün yeniden çalıştırılırsa önceki çalıştırmada doğanlar atlanıp sonraki üç aday açılabilir, böylece günlük toplam üçü aşar.",
+        "kanit": "ACILAN her süreç başlangıcında 0 yapılıyor ve tavan yalnız bu süreç içindeki ACILAN ile denetleniyor; tarih bazlı sayaç/kilit yok. Sınav da yalnız tek bir --gercek çalıştırmasında üç çağrı ölçüyor (G1), aynı gün ikinci çalıştırmayı ölçmüyor.",
+        "konum": "gunluk-plan/scripts/hasat-gece.sh:84, gunluk-plan/scripts/hasat-gece.sh:101; gunluk-plan/scripts/hasat-gece.test.sh:65",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartındaki “ilk üç gece kuru kipte” davranışı uygulanmamış; betik varsayılan olarak süresiz kuru kalıyor, gerçek kipe ancak dışarıdan açık --gercek verilince geçiyor.",
+        "kanit": "KIP=kuru sabit başlangıç değeri ve seçenek ayrıştırma dışında gece sayacı/tarih durumu ya da üçüncü geceden sonra otomatik geçiş bulunmuyor. K2/K3 yalnız tek çalıştırmanın kuru olduğunu, G1 ise elle --gercek verilince açıldığını ölçüyor; üç gecelik geçiş sınanmıyor.",
+        "konum": "gunluk-plan/scripts/hasat-gece.sh:23-27, gunluk-plan/scripts/hasat-gece.test.sh:49-66",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve gerçek ölçüm yeşil: 23 kapı geçmiş; beş mutasyon da hedef kapıları düşürerek sınavın seçili kusurları yakaladığını gösteriyor. Bununla birlikte kanıt, tek çalıştırmadaki kuru/gerçek kip ve üçlük tavanı ölçüyor; aynı gün yinelenen çalıştırma ile ilk üç geceden sonraki kip geçişi için ölçüm çifti veya dizi yok. Sarı kayıt bulunmuyor."
+  }
+}
