@@ -1,0 +1,7 @@
+2026-11-05T19:15:29+03:00 dumen-canli-blob sekme-once sayi=11
+2026-11-05T19:15:31+03:00 dumen-canli-blob goto tamam (bu kutudan sunulan fikstür sayfası)
+2026-11-05T19:15:32+03:00 dumen-canli-blob indir-tikla tamam kaynak=gomulu bayt=13264 ozet-ayni=true ms=863
+2026-11-05T19:15:32+03:00 dumen-canli-blob indirGomulu tamam kaynak=gomulu bayt=13264 ozet-ayni=true
+2026-11-05T19:15:33+03:00 dumen-canli-blob indirAdres-blob tamam bayt=13264 ozet-ayni=true
+2026-11-05T19:15:34+03:00 dumen-canli-blob sekme-sonra sayi=11 artik=0
+2026-11-05T19:15:34+03:00 dumen-canli-blob sonuc GECTI

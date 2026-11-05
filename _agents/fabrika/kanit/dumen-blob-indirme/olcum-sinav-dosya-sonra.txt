@@ -1,0 +1,108 @@
+$ bash dumen-surucu/scripts/dumen-dosya.test.sh
+# rc=0 sure=509.7s zaman=2026-11-05T19:43:39+03:00
+--- stdout ---
+── izinli dizin verilmeden dosya işi YOK (fail-closed)
+  ✓ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+  ✓ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+── yukle: onay + dosya kapıları
+  ✓ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+  ✓ Y2 dünkü onay reddedilir (onay-bayat)
+  ✓ Y3 BAŞKA dosya için verilmiş onay reddedilir (onay-dosya)
+  ✓ Y4 izinli dizin dışındaki dosya reddedilir (dosya-izinsiz)
+  ✓ Y5 izinli dizindeki BAĞ dışarıyı gösteriyorsa reddedilir (dosya-izinsiz)
+  ✓ Y6 sır taşıyabilecek yol reddedilir (dosya-yasak)
+  ✓ Y7 izinli olmayan tür reddedilir (dosya-turu)
+  ✓ Y8 reddedilen yüklemelerin hiçbiri alana dosya koymadı
+  ✓ Y9 onaylı yükleme: GİZLİ dosya alanına ad, boyut ve içerik birebir ulaştı
+  ✓ Y10 terminal satırı dosya ADINI taşımaz (müşteri verisi), "gönderme ayrı" der
+  ✓ Y11 dosya penceresi açan düğme ({ secici: true }): dosya seçildi
+  ✓ Y12 dosya penceresi açmayan düğmede asılmaz (yukleme-penceresi-yok)
+  ✓ Y13 Dümen Sultan'dayken yükleme YOK (sultanda)
+  ✓ Y14 Dümen Sultan'dayken indirme YOK (sultanda), tıklama yapılmadı
+── indir: baytlar tarayıcının içinden alınır
+  ✓ I1 indirme başlatan tıklama: dosya birebir yazıldı (kaynak indirme)
+  ✓ I2 terminal satırı sunucunun önerdiği dosya adını taşımaz
+  ✓ I3 dosyayı YENİ SEKMEDE açan tıklama: dosya birebir yazıldı (kaynak yeni-sekme)
+  ✓ I4 kendi tıklamasının açtığı sekme KAPATILDI (sekme sayısı aynı)
+  ✓ I5 "Fatura Görüntüle" (yeni sekme + PDF): dosya birebir yazıldı, artık sekme yok
+  ✓ I6 BAŞKA kökenden indirme (sayfa içi okuma engelli): tarayıcının ağ yığınıyla alındı
+  ✓ I7 ne indirme ne sekme açan tıklama ASILMAZ (indirme-yok)
+  ✓ I8 dosya yerine GİRİŞ SAYFASI gelirse dosya sayılmaz, diske yazılmaz (indirme-sayfa)
+  ✓ I9 uzantısıyla uyuşmayan içerik yazılmaz (indirme-tur)
+  ✓ I10 hedef izinli dizin dışındaysa tıklama YAPILMAZ (dosya-izinsiz)
+  ✓ I11 var olan dosya kendiliğinden ezilmez (dosya-var)
+  ✓ I12 { ustuneYaz: true } ile ezilir
+  ✓ I13 indirAdres: adresi bilinen dosya tarayıcının oturumuyla alındı
+  ✓ I14 indirAdres yalnız http(s) alır (file: reddedilir)
+── yeni sekme adresi
+  ✓ S1 yeniSekmeAdresi: açılan sekmenin adresi döndü, sekme kapatıldı
+  ✓ S2 yeni sekme açmayan tıklama asılmaz (sekme-yok)
+── sayfaya gömülü dosya (blob: · sayfa içi fatura penceresi)
+  ✓ B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı
+  ✓ B2 blob: PDF penceresi: bayt birebir
+  ✓ B3 pencere ZATEN açıkken yeni bir şey açmayan tıklama eski dosyayı almaz (indirme-yok)
+  ✓ B4 indirGomulu: açık duran penceredeki dosya tıklamadan alındı
+  ✓ B5 indirAdres bu sayfanın blob: adresini alır
+  ✓ B6 pencerede dosya yerine GİRİŞ SAYFASI varsa dosya sayılmaz, yazılmaz (indirme-sayfa)
+  ✓ B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)
+  ✓ B8 başka sayfanın blob: adresi okunamaz, dosya yazılmaz (indirme-okunamadi)
+── öğe durumu ve bekleme (salt-okur)
+  ✓ O1 gizli eşi olan seçici: 2 eşleşme, 1 görünür, ilk görünürün sırası 1
+  ✓ O2 pasif mesaj kutusu boşa yazmadan görülür (etkin: false)
+  ✓ O3 olmayan öğe: sayı 0, görünür değil
+  ✓ O4 bekle: görünen öğe true, olmayan öğe süre dolunca false (atmaz)
+── engel kapatma
+  ✓ E0 çerez KABUL etmek onaysız reddedilir (onay-yok)
+  ✓ E1 cerez: dokunma → çerez şeridi yerinde, tur kapatıldı
+  ✓ E2 varsayılan: çerez şeridi REDDEDİLDİ (Kabul Et'e basılmadı)
+  ✓ E3 çerez kutusu DIŞINDAKİ "Reddet" (iade talebi) TIKLANMADI
+  ✓ E4 anket çerçevesi ve ek katman gizlendi, rapor sayıyı verdi
+  ✓ E5 ödeme sayfasında engel kapatılmaz (durak), çerez şeridi yerinde
+── sert süre sınırı ve kapat garantisi
+  ✓ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)
+  ✓ Z2 süre aşımı iletisi "hâli bilinmiyor, ölç" der (körlemesine yineleme yok)
+  ✓ Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)
+  ✓ Z1c pozitif kontrol: bağlantı geri geldi, örtü kalkınca aynı düğme tıklanır ve sayılır
+  ✓ Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içinde hata)
+  ✓ Z4 tıklama yeni sekme açtı (ön koşul)
+  ✓ Z5 kapat(): kendi sekmesi VE kendi tıklamasının açtığı sekme kapandı
+  ✓ Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı
+  ✓ Z7 Dumen.kos: iş asılırsa toplam süre sınırında kesilir, sekme kapanır
+  ✓ Z7b süresi dolup KAPATILAN bağlantı sonradan yeniden bağlanıp tıklamaz (tık yok, artık sekme yok)
+  ✓ Z2b sert tavan KAPI DAHİLDİR: yavaş kapı (2,5 sn) + asılı eylem toplamı 4 sn tavanında kesilir (≤ 5,3 sn)
+  ✓ Z8 Dumen.kos: işin sonucu döner, sekme kapanır
+  ✓ Z9 olmayan öğede kapı ASILMAZ: durma noktası ölçümü kendi kısa süresiyle biter (eylem süresi 9 sn iken ≤ 5 sn)
+SONUÇ: geçti=63 kaldı=0 süre=42 sn
+── mutantlar (her biri sınavı KIRMALI)
+  ✓ 1 yükleme onayı aranmaz: yakalandı —   ✗ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+  ✓ 2 onay tarihi ölçülmez: yakalandı —   ✗ Y2 dünkü onay reddedilir (onay-bayat)
+  ✓ 3 onay dosya izi ölçülmez (başka dosyanın onayı geçer): yakalandı —   ✗ Y3 BAŞKA dosya için verilmiş onay reddedilir (onay-dosya)
+  ✓ 4 yüklenen dosya izinli dizinde aranmaz: yakalandı —   ✗ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+  ✓ 5 bağ çözülmeden kabul edilir: yakalandı —   ✗ Y5 izinli dizindeki BAĞ dışarıyı gösteriyorsa reddedilir (dosya-izinsiz)
+  ✓ 6 sır taşıyabilecek yol yüklenir: yakalandı —   ✗ Y6 sır taşıyabilecek yol reddedilir (dosya-yasak)
+  ✓ 7 izinli dizin verilmese de dosya işi yürür: yakalandı —   ✗ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+  ✓ 8 indirme hedefi izinli dizinde aranmaz: yakalandı —   ✗ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+  ✓ 9 var olan dosya sormadan ezilir: yakalandı —   ✗ I11 var olan dosya kendiliğinden ezilmez (dosya-var)
+  ✓ 10 dosya yerine gelen giriş sayfası dosya sayılır: yakalandı —   ✗ I8 dosya yerine GİRİŞ SAYFASI gelirse dosya sayılmaz, diske yazılmaz (indirme-sayfa)
+  ✓ 11 indirilen içeriğin türü ölçülmez: yakalandı —   ✗ I9 uzantısıyla uyuşmayan içerik yazılmaz (indirme-tur)
+  ✓ 12 başka kökenden indirmede yedek yol yok: yakalandı —   ✗ I6 BAŞKA kökenden indirme (sayfa içi okuma engelli): tarayıcının ağ yığınıyla alındı  → {
+  ✓ 13 indirmenin açtığı sekme açık kalır: yakalandı —   ✗ I4 kendi tıklamasının açtığı sekme KAPATILDI (sekme sayısı aynı)  → 3 ≠ 2
+  ✓ 14 çerez kutusu aranmaz (sayfadaki her Reddet tıklanır): yakalandı —   ✗ E2 varsayılan: çerez şeridi REDDEDİLDİ (Kabul Et'e basılmadı)  → {"escape":3,"tiklanan":["Redde
+  ✓ 15 çerez kabulü onaysız geçer: yakalandı —   ✗ E0 çerez KABUL etmek onaysız reddedilir (onay-yok)
+  ✓ 16 ödeme sayfasında engel kapatılır: yakalandı —   ✗ E5 ödeme sayfasında engel kapatılmaz (durak), çerez şeridi yerinde
+  ✓ 17 sert süre sınırı yok: yakalandı —   ✗ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)  → dumen-kap
+  ✓ 18 eylemler süresiz bekler: yakalandı —   ✗ Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içind
+  ✓ 19 kapat() tıklamanın açtığı sekmeyi bırakır: yakalandı —   ✗ Z5 kapat(): kendi sekmesi VE kendi tıklamasının açtığı sekme kapandı  → 2 ≠ 1
+  ✓ 20 kos() iş bitince kapatmaz: yakalandı —   ✗ Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı  → 2 ≠ 1
+  ✓ 21 dosya yolu terminale yazılır: yakalandı —   ✗ Y10 terminal satırı dosya ADINI taşımaz (müşteri verisi), "gönderme ayrı" der  → ⬆ Dümen: d
+  ✓ 22 durma noktası ölçümünün süresi uygulanmaz (olmayan öğede kapı asılır): yakalandı —   ✗ Z9 olmayan öğede kapı ASILMAZ: durma noktası ölçümü kendi kısa süresiyle biter (eylem süresi 
+  ✓ 23 süre dolunca eylem kesilmez (yarım tıklama sonradan gerçekleşir): yakalandı —   ✗ Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)  → tık
+  ✓ 24 kapı ve eylem ayrı ayrı tam süre alır (tavan iki katına çıkar): yakalandı —   ✗ Z2b sert tavan KAPI DAHİLDİR: yavaş kapı (2,5 sn) + asılı eylem toplamı 4 sn tavanında kesilir (
+  ✓ 25 kapatılan Dümen yeniden bağlanıp eylem yapar: yakalandı —   ✗ Z7b süresi dolup KAPATILAN bağlantı sonradan yeniden bağlanıp tıklamaz (tık yok, artık sekme yok
+  ✓ 26 bağlantı düşmüşken kendi sekmesi açık kalır: yakalandı —   ✗ Z8 Dumen.kos: işin sonucu döner, sekme kapanır
+  ✓ 27 sayfaya gömülü dosya aranmaz (blob: fatura penceresi indirme-yok döner): yakalandı —   ✗ B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı
+  ✓ 28 tıklamadan önce açık duran pencere yeni sayılır (eski dosya alınır): yakalandı —   ✗ B2 blob: PDF penceresi: bayt birebir  → {"hata":"indirme-tur"}
+  ✓ 29 indirAdres blob: adresini almaz: yakalandı —   ✗ B5 indirAdres bu sayfanın blob: adresini alır  → blob:http://127.0.0.
+  ✓ 30 indirGomulu öğedeki adresin türüne bakmaz: yakalandı —   ✗ B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)
+MUTANT: 30/30 yakalandı
+--- stderr ---

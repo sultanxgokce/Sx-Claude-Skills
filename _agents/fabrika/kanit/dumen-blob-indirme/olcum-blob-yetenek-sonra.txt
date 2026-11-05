@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/dumen-blob-indirme/blob-yetenek.sh sonra
+# rc=0 sure=41.1s zaman=2026-11-05T19:35:09+03:00
+--- stdout ---
+  ✓ B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı
+  ✓ B2 blob: PDF penceresi: bayt birebir
+  ✓ B3 pencere ZATEN açıkken yeni bir şey açmayan tıklama eski dosyayı almaz (indirme-yok)
+  ✓ B4 indirGomulu: açık duran penceredeki dosya tıklamadan alındı
+  ✓ B5 indirAdres bu sayfanın blob: adresini alır
+  ✓ B6 pencerede dosya yerine GİRİŞ SAYFASI varsa dosya sayılmaz, yazılmaz (indirme-sayfa)
+  ✓ B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)
+  ✓ B8 başka sayfanın blob: adresi okunamaz, dosya yazılmaz (indirme-okunamadi)
+SONUÇ: geçti=63 kaldı=0 süre=41 sn
+blob kapısı geçen: 8/8 (sürücü: sonra) rc=0
+--- stderr ---
