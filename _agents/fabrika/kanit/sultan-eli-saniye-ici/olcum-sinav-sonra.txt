@@ -1,0 +1,24 @@
+$ bash sultan-eli/scripts/sultan-eli.test.sh
+# rc=0 sure=652.1s zaman=2026-11-05T15:23:51+03:00
+--- stdout ---
+PASS  Ö1 kayıt hiç yokken exit 3 (ÖLÇÜLEMEDİ, '1' DEĞİL)
+PASS  Ö2 'insan yok' demiyor
+PASS  Y1 kayıt var ama insan-! yok → exit 1
+PASS  Y2 ajanın tool_use satırı insan sayılmıyor
+PASS  V1 taze insan-! + imza eşleşiyor → exit 0
+PASS  İ1 BAŞKA komutun insan-izi bu kapıyı AÇMIYOR
+PASS  İ2 anlamsız kısa imza reddedildi (kapı gevşetilemez)
+PASS  İ3 imzasız çağrı reddedildi
+PASS  Z1 ESKİ insan-izi kapıyı açmıyor (dünkü onay bugüne geçmez)
+PASS  Z1b pencere genişleyince aynı satır geçiyor (kontrol gerçekten zaman ölçüyor)
+PASS  B1 büyük kayıtta insan-izi bulunuyor (erken-çıkış exit'i ters çevirmiyor)
+PASS  S1 kayıtla aynı saniyede koşan kapı insanı görür
+PASS  S2 gelecek tarihli kayıt hâlâ reddedilir
+PASS  D1 durum her hâlde exit 0 (tanı, kapı değil)
+PASS  D2 durum ölçüm yüzeyini söylüyor
+PASS  K1 'kilit değil korkuluk' uyarısı kodda duruyor
+PASS  K2 kastı durdurmadığı açıkça yazılı
+
+── SONUÇ: PASS=17 FAIL=0 ──
+--- stderr ---
+⏳ agir-sira: kanit-sultan-eli-saniye-ici-sinav 651 sn bekledi (yuva 1, load1 8.72)
