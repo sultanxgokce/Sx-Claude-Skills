@@ -1,7 +1,7 @@
 {
   "is": "dumen-blob-indirme",
   "arac": "kanit.py/0.8.0",
-  "guncelleme": "2026-11-05T19:49:41+03:00",
+  "guncelleme": "2026-11-05T19:50:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -200,7 +200,44 @@
       "olculen_commit": "a1ed58e3b742c9a887b87ea23c9def2fd02835b1",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-blob",
+      "asama": "canli",
+      "dosya": "canli-canli-blob.txt",
+      "sha256": "5843011eed29f0a48ac9de3b636ada9a4e07f582a1d92c74ea2f708d0c0c29de",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/projects/_wt/Sx-Claude-Skills-dumen-blob-indirme/_agents/fabrika/kanit/dumen-blob-indirme/canli-blob-20261105.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/projects/_wt/Sx-Claude-Skills-dumen-blob-indirme/_agents/fabrika/kanit/dumen-blob-indirme/canli-blob-20261105.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "dumen-canli-blob (indir-tikla tamam kaynak=gomulu|indirGomulu tamam|indirAdres-blob tamam|sonuc GECTI)",
+      "en_az": 1,
+      "atesleme_sayisi": 4,
+      "ilk_atesleme": {
+        "satir": "2026-11-05T19:15:32+03:00 dumen-canli-blob indir-tikla tamam kaynak=gomulu bayt=13264 ozet-ayni=true ms=863",
+        "saat": "2026-11-05T19:15:32+03:00",
+        "saat_iso": "2026-11-05T19:15:32+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-05T19:15:34+03:00 dumen-canli-blob sonuc GECTI",
+        "saat": "2026-11-05T19:15:34+03:00",
+        "saat_iso": "2026-11-05T19:15:34+03:00"
+      },
+      "zaman": "2026-11-05T19:50:16+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "a02e87a2a70d42788ddfee3c70757239",
+      "olculen_commit": "2743050c054daeef8dae32a5538a3e3d56752688",
+      "olculen_kirli": false
     }
   ],
-  "imza": "a2131cc0f0ba7c66af8b99c3e424c7e446d8d8f7416db491f30450b16a55f1c9"
+  "imza": "4b16604ccb447cb4b8bda86b2a1e99c67b78328eca09541094544049ec8bcf07"
 }
