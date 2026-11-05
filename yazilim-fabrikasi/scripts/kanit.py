@@ -10,6 +10,8 @@ Renkler: yesil (ölçtü, korudu) · kirmizi (ölçtü, korumuyor) · sari (ÖL�
 Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
                   [--kirli-izin "<gerekçe ≥15>"]  ağaçta commit'lenmemiş değişiklik varsa ölçüm DURUR (rc 2); bilerek kirli ölçmenin açık bayrağı, gerekçe kayda yazılır
+                  [--ayni-girdi-atla]  AÇIK bayrak: aynı girdinin (komut+etiket+aşama, kanıt dışı ağaç, izlenmeyen/depo dışı dosya içeriği, araç sürümü) yeşil, imzalı,
+                  mutant olmayan kaydı varsa komut KOŞMAZ; kayıt DEĞİŞMEZ (olculen_commit eski kalır; kod aynıdır). Mutant ölçümde bayrak yok sayılır. Saate/ağa/host'a bağlı sınavda verme.
                   [--mutasyon <gerçek etiket> --kapi <düşmesi beklenen kapı adı>]  bilerek bozulmuş kodla koşum: dosya başı MUTASYON KANITI der,
                   renk ters (kırmızı = yakalandı). --kapi ZORUNLU: yakalandı = ADI VERİLEN kapı düşen kapı satırında görünür; başka kapı
                   düşmesi, çöküş ya da kurulamayan mutant (rc 9) SARI "ölçülemedi"dir
@@ -31,7 +33,7 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 """
 import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys, uuid
 
-SURUM = "kanit.py/0.7.0"   # 0.7.0: kirli ağaçta ölçüm DURUR, açık bayrak --kirli-izin ister; kayıt `kirli_kurali` + `kirli_izin` taşır (4 Kas 2026) · 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
+SURUM = "kanit.py/0.8.0"   # 0.8.0: --ayni-girdi-atla (açık bayrak; kayıt `girdi_anahtar`, 5 Kas 2026) · 0.7.0: kirli ağaçta ölçüm DURUR, açık bayrak --kirli-izin ister; kayıt `kirli_kurali` + `kirli_izin` taşır (4 Kas 2026) · 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
 # 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
 # bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
@@ -193,6 +195,51 @@ def kirli_kapisi(a, dz):
         hata("ağaçta commit'lenmemiş değişiklik var — ölçüm HEAD'in kendisini değil 'HEAD + yerel fark'ı ölçerdi (göz hangi kod ölçüldü diye soruyor). "
              "Önce commit'le, sonra ölç. Bilerek kirli ölçeceksen: --kirli-izin \"<gerekçe ≥15 karakter>\" (kayda yazılır, kapı gösterir). Ölçüm KOŞMADI.", 2)
     KIRLI_IZIN = izin if (_ok and izin) else None
+
+
+# ── AYNI GİRDİ ATLAMA (görev …T4D3H, 5 Kas): aynı kodda aynı komut tekrar ölçülünce ağır sınav boşuna koşuyordu. Açık bayrak
+#    `--ayni-girdi-atla` verilirse ve AYNI GİRDİNİN yeşil, imzalı, mutant olmayan kaydı varsa komut koşmaz.
+#    Bayrak YOKSA davranış aynen: sınav her seferinde koşar. Mutant ölçümü hiçbir zaman atlanmaz (sınavın bozuk kodu yakaladığını göstermek onun işi).
+def girdi_anahtari(depo, a):
+    """Girdi parmak izi: komut+etiket+aşama · kanıt dizini DIŞINDA izlenen ağaç · izlenmeyen dosyaların içeriği · depo dışı dosya argümanları · araç sürümü.
+    Okunamazsa (None, neden): atlama yapılmaz, sınav koşar. Dış duruma bağlı sınavlar (saat, ağ, host) bayrağı vermemelidir."""
+    try:
+        def git(*x): return subprocess.run(["git", "-C", depo, *x], errors="replace", text=True, capture_output=True)   # sıra bilerek farklı: kanit.test.sh T13 mutant çapası asıl ölçüm çağrısını bulsun
+        ag = git("ls-tree", "-r", "HEAD")
+        if ag.returncode != 0: return None, "ağaç okunamadı"
+        satirlar = [l for l in ag.stdout.splitlines() if "\t_agents/fabrika/kanit/" not in l]
+        un = git("ls-files", "-o", "--exclude-standard", "-z")
+        if un.returncode != 0: return None, "izlenmeyen dosyalar okunamadı"
+        izlenmeyen = []
+        for yol in sorted(x for x in un.stdout.split("\0") if x and not x.startswith("_agents/fabrika/kanit/")):
+            try: izlenmeyen.append(f"{yol}\t{sha_dosya(os.path.join(depo, yol))}")
+            except OSError: return None, f"izlenmeyen dosya okunamadı: {yol}"
+        dis = []
+        kok = os.path.realpath(depo) + os.sep
+        for t in a.komut:
+            if os.path.isfile(t) and not (os.path.realpath(t) + "").startswith(kok):
+                dis.append(f"{os.path.realpath(t)}\t{sha_dosya(t)}")
+        ham = json.dumps({"komut": a.komut, "etiket": a.etiket, "asama": a.asama, "agac": satirlar, "izlenmeyen": izlenmeyen, "dis": dis, "arac": SURUM}, ensure_ascii=False, sort_keys=True)
+        return hashlib.sha256(ham.encode("utf-8")).hexdigest(), None
+    except Exception as e:
+        return None, f"anahtar kurulamadı: {e}"
+
+
+def ayni_girdi_kaydi(dz, anahtar):
+    """Aynı anahtarlı, atlamaya uygun kayıt: olcum · yeşil (etkin renk de) · mutant değil · rc 0 · manifest imzası ve dosya sha'sı tutuyor. Yoksa None."""
+    m = manifest_oku(dz)
+    if not m: return None
+    tutuyor, _b = imza_tutuyor_mu(m)
+    if not tutuyor: return None
+    for k in reversed(etkin_kayitlar(m)):
+        if (k.get("tur") == "olcum" and k.get("girdi_anahtar") == anahtar and not k.get("mutasyon") and k.get("rc") == 0
+                and k.get("renk") == "yesil" and k.get("etkin_renk") == "yesil" and not k.get("olculen_kirli")):
+            yol = os.path.join(dz, k.get("dosya", ""))
+            try:
+                if sha_dosya(yol) == k.get("sha256"): return k
+            except OSError:
+                continue
+    return None
 
 
 def kayit_ekle(depo, is_adi, kayit):
@@ -437,6 +484,19 @@ def cmd_olcum(a):
             hata(f"--mutasyon '{mut}': bu işte o etiketli GERÇEK ölçüm yok — önce gerçek kodu ölç (kanit.sh olcum {a.is_adi} {mut} -- …). Kayıt ÜRETİLMEDİ.", 2)
     ad = f"olcum-{a.etiket}-{a.asama}.txt"
     yol = os.path.join(dz, ad)
+    anahtar, anahtar_neden = girdi_anahtari(depo, a)
+    _oc0, _ok0 = olculen_commit(dz)
+    if anahtar and (_ok0 or KIRLI_IZIN): anahtar, anahtar_neden = None, "ağaç kirli: girdi parmak izi HEAD'i temsil etmez"
+    if getattr(a, "ayni_girdi_atla", False):
+        if mut:
+            print("ℹ --ayni-girdi-atla mutasyon ölçümünde YOK SAYILDI: mutant her zaman gerçekten koşar.", file=sys.stderr)
+        elif not anahtar:
+            print(f"ℹ --ayni-girdi-atla uygulanamadı ({anahtar_neden}): sınav koşuyor.", file=sys.stderr)
+        else:
+            k0 = ayni_girdi_kaydi(dz, anahtar)
+            if k0 and k0.get("dosya") == ad:   # anahtar etiket+aşamayı içerir → eşleşen kayıt hep aynı dosyadır; kayıt değişmez, yeni yazım YOK
+                print(f"⏭ aynı girdi, sınav YENİDEN KOŞMADI: {ad} (kayıt {k0.get('olcum_id','?')[:8]}, {k0.get('zaman')} — bu girdinin yeşil ölçümü; kod ve komut aynı)")
+                sys.exit(0)
     t0 = datetime.datetime.now()
     sarili, sira_env = sira_komutu(a.komut, f"kanit-{a.is_adi}-{a.etiket}")
     p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
@@ -471,6 +531,7 @@ def cmd_olcum(a):
     kayit = {"tur": "olcum", "etiket": a.etiket, "asama": a.asama, "dosya": ad, "sha256": sha_dosya(yol),
              "komut": a.komut, "rc": p.returncode, "renk": renk, "zaman": simdi(), "sure_sn": round(sure, 1),
              "boru_denetimi": boru}
+    if anahtar and not mut: kayit["girdi_anahtar"] = anahtar
     if mut:
         kayit.update({"mutasyon": True, "gercek_olcum": mut, "beklenen": "kirmizi", "dusen_kapi": dusen_kapi,
                       "hedef_kapi": kapi_adi, "hedef_dustu": hedef_dustu})
@@ -989,7 +1050,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
-    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.add_argument("--kapi", dest="kapi", default=None, metavar="HEDEF_KAPI_ADI"); o.set_defaults(f=cmd_olcum)
+    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); o.add_argument("--ayni-girdi-atla", dest="ayni_girdi_atla", action="store_true"); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.add_argument("--kapi", dest="kapi", default=None, metavar="HEDEF_KAPI_ADI"); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
     e.add_argument("--uc-boy", action="store_true", help="1440 · 1280 · 390 — her boy ayrı kayıt (etiket-<boy>)"); e.add_argument("--boylar", type=_boylar, help="virgüllü genişlik listesi")
     e.add_argument("--gelen", metavar="KUTU", help="yeşil kareleri Sultan'ın gelen klasörüne <kutu>_<iş>-kare-… adıyla kopyala"); e.set_defaults(f=cmd_ekran)
