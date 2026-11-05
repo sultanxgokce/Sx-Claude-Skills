@@ -215,6 +215,52 @@ kos is-j5 "$NORMAL" "${JORT[@]}" >/dev/null 2>&1
 kos is-j5 "$NORMAL" "${JORT[@]}" >/dev/null 2>&1
 kapi "J10 🔴 normal (kutuda kapanan) bulgu tekrarında borç YAZILMAZ" 1 borc_var is-j5
 
+echo "K · 🔴 ikinci geliş YÜZEYLE tanınır: göz aynı bulguyu her turda başka sözle yazar (görev …FYJBRB)"
+# ÖLÇÜLMÜŞ VAKA (5 Kas 2026): 3 Kas 12:05'ten beri üç depoda 20 işte kutu dışı bulgu birden çok turda geldi, hiçbirinde
+# metin birebir aynı değildi ("B2 kapanmadı: …", "Önceki B1 kısmen kapandı: …"); J devri 0 kez çalıştı.
+kdj() {  # kdj <ne> <yüzey> [<ne2> <yüzey2>] → kutu dışı bulgulu sonuç JSON'u (gerçek gözün yazdığı gibi serbest metin)
+  python3 -c "
+import json,sys
+a=sys.argv[1:]; b=[{'ne':a[i],'kanit':'k','konum':'x:1','agirlik':'kutu-disi','kutu_disi_yuzey':a[i+1]} for i in range(0,len(a),2)]
+print(json.dumps({'kod_puani':3,'dogru_sey':'E','ozet':'s','bulgular':b,'kanit_gorusu':'s'},ensure_ascii=False))" "$@"; }
+defter() {  # defter <is> <python ifadesi; sat = defter satırları> → ifade doğruysa 0
+  python3 -c "
+import json,sys
+sat=[json.loads(l) for l in open('$KOK/_agents/fabrika/kanit/$1/KUTU-DISI.jsonl',encoding='utf-8') if l.strip()]
+sys.exit(0 if ($2) else 1)"; }
+K1=$(kdj "Merkezin canliya inisi ve telefonda dogrulama olculmedi" "canlı merkez + dağıtım yetkisi + Sultan'ın telefonu")
+K2=$(kdj "B2 kapanmadi: telefonda dogrulama hala olculmedi" "Sultan’ın Telefonu")
+kartj is-k e
+kos is-k "$K1" "${JORT[@]}" >/dev/null 2>&1
+kapi "K1 ilk gelişte borç yazılmaz" 1 borc_var is-k
+iceren "K2 🔴 BAŞKA SÖZLE gelen ikinci geliş (yüzeyin bir parçası ortak, kesme işareti ve harf büyüklüğü farklı) devri tetikler" "CANLI BORCA DEVREDİLDİ" kos is-k "$K2" "${JORT[@]}"
+kapi "K3 🔴 karta canlı borç YAZILDI" 0 borc_var is-k
+kapi "K4 defterde iki satır: ilki işaretsiz, ikincisi tekrar işaretli ve ortak parçayı taşıyor (ayrıntı kaybolmadı)" 0 defter is-k "len(sat)==2 and 'tekrar' not in sat[0] and sat[1].get('tekrar') is True and sat[1].get('ortak_yuzey')==['sultanın telefonu'] and sat[1]['ne'].startswith('B2 kapanmadi')"
+kartj is-k2 e
+kos is-k2 "$(kdj "telefonda dogrulama yok" "Sultan'ın telefonu")" "${JORT[@]}" >/dev/null 2>&1
+kos is-k2 "$(kdj "canli veritabaninda goc olculmedi" "canlı veritabanı + göç yetkisi")" "${JORT[@]}" >/dev/null 2>&1
+kapi "K5 🔴 ortak parçası OLMAYAN yüzey yeni bulgudur: borç YAZILMAZ" 1 borc_var is-k2
+kapi "K5b iki satır da işaretsiz yazıldı" 0 defter is-k2 "len(sat)==2 and not any('tekrar' in x for x in sat)"
+kartj is-k3 e
+kos is-k3 "$(kdj "telefonda dogrulama yok" "Sultan'ın telefonu")" "${JORT[@]}" >/dev/null 2>&1
+kos is-k3 "$(kdj "telefon genisliginde olculmedi" "telefonu")" "${JORT[@]}" >/dev/null 2>&1
+kapi "K6 🔴 parça TAM eşleşir, kelime kesişimi yetmez: 'telefonu' ile 'Sultan'ın telefonu' ayrı yüzeydir, borç YAZILMAZ" 1 borc_var is-k3
+kapi "K6b iki satır da işaretsiz" 0 defter is-k3 "len(sat)==2 and not any('tekrar' in x for x in sat)"
+kartj is-k4 e
+kos is-k4 "$(kdj "telefonda dogrulama yok" "Sultan'ın telefonu" "telefonda klavye olculmedi" "Sultan'ın telefonu")" "${JORT[@]}" >/dev/null 2>&1
+kapi "K7 🔴 AYNI turdaki iki bulgu birbirinin tekrarı sayılmaz: borç YAZILMAZ" 1 borc_var is-k4
+kapi "K7b iki satır da işaretsiz" 0 defter is-k4 "len(sat)==2 and not any('tekrar' in x for x in sat)"
+kapi "K8 birebir aynı metin bugünkü gibi: üç koşuda defterde TEK satır (yeniden yazılmaz)" 0 defter is-j "len(sat)==1"
+kartj is-k5 h
+kos is-k5 "$K1" "${JORT[@]}" >/dev/null 2>&1
+iceren "K9 canlı kanıt istemeyen kartta başka sözle gelen tekrar da TANINIR, devir reddi söylenir" "canlı borca devredilemedi" kos is-k5 "$K2" "${JORT[@]}"
+kapi "K9b borç yazılmadı, defterde tekrar işareti var" 0 bash -c "! python3 -c \"
+import json,sys
+k=json.load(open('$KOK/_agents/fabrika/kartlar/is-k5.json',encoding='utf-8')); sys.exit(0 if k.get('canli_borc') else 1)\" && python3 -c \"
+import json,sys
+sat=[json.loads(l) for l in open('$KOK/_agents/fabrika/kanit/is-k5/KUTU-DISI.jsonl',encoding='utf-8') if l.strip()]
+sys.exit(0 if len(sat)==2 and sat[1].get('tekrar') is True else 1)\""
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

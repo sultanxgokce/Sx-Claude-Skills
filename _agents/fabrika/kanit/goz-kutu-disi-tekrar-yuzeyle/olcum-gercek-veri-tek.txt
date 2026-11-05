@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/goz-kutu-disi-tekrar-yuzeyle/gercek-veri.sh
+# rc=0 sure=1.5s zaman=2026-11-05T06:16:46+03:00
+--- stdout ---
+cloudtop: birden çok turda kutu dışı bulgu yazılan iş=14
+Sx-Claude-Skills: birden çok turda kutu dışı bulgu yazılan iş=1
+Nexus: birden çok turda kutu dışı bulgu yazılan iş=5
+eşik 2026-11-03T12:05 · kutu dışı defteri olan iş=33 · birden çok turda yazılan iş=20
+ikinci gelişi tanıyan: eski kural (metin birebir)=0 · yeni kural (yüzey parçası ortak)=20
+--- stderr ---

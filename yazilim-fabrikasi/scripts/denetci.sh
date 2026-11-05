@@ -1128,25 +1128,44 @@ _bilgi "   kayıt: $DZ/DENETIM-$TUR.json"
 #    Ayrı bir deftere (append-only) yazılır; işin sahibi buradan kart/görev açar.
 KDT="$TMP/kutu-disi-tekrar.json"; rm -f "$KDT"   # ikinci gelişte dolar (JDDN1N): aşağıdaki canlı borca devir okur
 python3 - "$DOGRULANMIS" "$DZ/KUTU-DISI.jsonl" "$TUR" "$IS" "$KDT" <<'PYKD'
-import json,sys,datetime
+import json,sys,datetime,re
 sonuc,defter,tur,is_,tekrar_yolu=sys.argv[1:]
+def parcalar(y):
+    # Yüzeyi parçalarına ayırır: "canlı merkez + dağıtım yetkisi + Sultan'ın telefonu" → 3 parça. Harf büyüklüğü, kesme işareti
+    # ve noktalama farkı sayılmaz. Parça TAM eşleşir (kelime kesişimi değil): "telefon" ile "Sultan'ın telefonu" ayrı yüzeydir.
+    y=str(y or "").replace("İ","i").replace("I","ı").lower().replace("’","'")
+    cik=set()
+    for p in re.split(r"\s*(?:\+|,|;|/|\bve\b|\bile\b)\s*",y):
+        p=" ".join(re.sub(r"[^0-9a-zçğıöşü ]+"," ",p.replace("'","")).split())
+        if len(p)>=3: cik.add(p)
+    return cik
 kd=[b for b in json.load(open(sonuc,encoding="utf-8"))["bulgular"] if b.get("agirlik")=="kutu-disi"]
 if kd:
-    var=set()
+    var=set(); eski=set()   # eski: ÖNCEKİ turlarda deftere yazılmış yüzey parçaları (bu turun bulguları birbirini tekrar saymaz)
     try:
         for sat in open(defter,encoding="utf-8"):
             sat=sat.strip()
-            if sat: var.add(json.loads(sat).get("ne",""))
+            if sat:
+                k=json.loads(sat); var.add(k.get("ne","")); eski|=parcalar(k.get("yuzey"))
     except FileNotFoundError: pass
     tekrar=[]
     with open(defter,"a",encoding="utf-8") as f:
         for b in kd:
             if b.get("ne","") in var:               # aynı bulgu her turda yeniden yazılmaz
                 tekrar.append({"ne":b.get("ne"),"yuzey":b.get("kutu_disi_yuzey")}); continue
-            f.write(json.dumps({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
-                                "is":is_,"tur":int(tur),"ne":b.get("ne"),
-                                "yuzey":b.get("kutu_disi_yuzey"),"konum":b.get("konum"),
-                                "kanit":b.get("kanit")},ensure_ascii=False)+"\n")
+            # 🔴 İKİNCİ GELİŞ YÜZEYLE TANINIR (görev …FYJBRB, 5 Kas 2026): göz aynı bulguyu her turda BAŞKA SÖZLE yazar
+            #    ("B2 kapanmadı: …", "Önceki B1 kısmen kapandı: …"); metin birebir arandığı için ikinci geliş hiç tanınmıyordu.
+            #    Ölçüm: 3 Kas 12:05'ten beri üç depoda 20 işte kutu dışı bulgu birden çok turda geldi, devir 0 kez çalıştı.
+            #    Söz farklı olduğu için satır yine yazılır (ayrıntı kaybolmaz) ama "tekrar" işaretiyle.
+            ortak=sorted(parcalar(b.get("kutu_disi_yuzey"))&eski)
+            kayit={"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+                   "is":is_,"tur":int(tur),"ne":b.get("ne"),
+                   "yuzey":b.get("kutu_disi_yuzey"),"konum":b.get("konum"),
+                   "kanit":b.get("kanit")}
+            if ortak:
+                kayit["tekrar"]=True; kayit["ortak_yuzey"]=ortak
+                tekrar.append({"ne":b.get("ne"),"yuzey":b.get("kutu_disi_yuzey")})
+            f.write(json.dumps(kayit,ensure_ascii=False)+"\n")
     print(f"   kutu-dışı defteri: {defter}")
     if tekrar: json.dump(tekrar,open(tekrar_yolu,"w",encoding="utf-8"),ensure_ascii=False)
 PYKD
