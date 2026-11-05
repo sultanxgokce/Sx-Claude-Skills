@@ -214,12 +214,22 @@ def girdi_anahtari(depo, a):
         for yol in sorted(x for x in un.stdout.split("\0") if x and not x.startswith("_agents/fabrika/kanit/")):
             try: izlenmeyen.append(f"{yol}\t{sha_dosya(os.path.join(depo, yol))}")
             except OSError: return None, f"izlenmeyen dosya okunamadı: {yol}"
+        # Git'in YOK SAYDIĞI depo içi dosyalar (göz tur 1, 5 Kas): sınav onları okuyabilir (.env, üretilmiş girdi, önbellek) → içerikleri de girer.
+        #    Sayı tavanı aşılırsa (node_modules gibi) anahtar kurulmaz = atlama yok, sınav koşar (dürüst taraf).
+        ig = git("ls-files", "-o", "-i", "--exclude-standard", "-z")
+        if ig.returncode != 0: return None, "yok sayılan dosyalar okunamadı"
+        yoksayilan = []
+        igl = sorted(x for x in ig.stdout.split("\0") if x and not x.startswith("_agents/fabrika/kanit/"))
+        if len(igl) > 20000: return None, f"yok sayılan dosya çok ({len(igl)} > 20000): anahtar kurulmadı"
+        for yol in igl:
+            try: yoksayilan.append(f"{yol}\t{sha_dosya(os.path.join(depo, yol))}")
+            except OSError: return None, f"yok sayılan dosya okunamadı: {yol}"
         dis = []
         kok = os.path.realpath(depo) + os.sep
         for t in a.komut:
             if os.path.isfile(t) and not (os.path.realpath(t) + "").startswith(kok):
                 dis.append(f"{os.path.realpath(t)}\t{sha_dosya(t)}")
-        ham = json.dumps({"komut": a.komut, "etiket": a.etiket, "asama": a.asama, "agac": satirlar, "izlenmeyen": izlenmeyen, "dis": dis, "arac": SURUM}, ensure_ascii=False, sort_keys=True)
+        ham = json.dumps({"komut": a.komut, "etiket": a.etiket, "asama": a.asama, "agac": satirlar, "izlenmeyen": izlenmeyen, "yoksayilan": yoksayilan, "dis": dis, "arac": SURUM}, ensure_ascii=False, sort_keys=True)
         return hashlib.sha256(ham.encode("utf-8")).hexdigest(), None
     except Exception as e:
         return None, f"anahtar kurulamadı: {e}"

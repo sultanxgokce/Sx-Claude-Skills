@@ -42,20 +42,25 @@ kos_takim() {   # $1 = kanit.sh yolu, $2 = ad öneki
   echo u2 > "$T/u.txt"; ol is-g iki --asama tek --ayni-girdi-atla -- bash "$S/gec.sh" >/dev/null
   [ "$(sayi)" = "8" ]; g $? "izlenmeyen dosyanın içeriği değişti → yine koştu (sayaç 8)"
 
+  printf 'ign.txt\n' > "$T/.gitignore"; commitle gi; echo i1 > "$T/ign.txt"
+  ol is-g iki --asama tek --ayni-girdi-atla -- bash "$S/gec.sh" >/dev/null
+  echo i2 > "$T/ign.txt"; ol is-g iki --asama tek --ayni-girdi-atla -- bash "$S/gec.sh" >/dev/null
+  [ "$(sayi)" = "10" ]; g $? "Git'in yok saydığı depo içi dosyanın içeriği değişti → yine koştu (sayaç 10)"
+
   echo "════ ${P}A4 · mutant ve kırmızı kayıt atlanmaz ════"
   ol is-g mut --asama tek --mutasyon iki --kapi K1 --ayni-girdi-atla -- bash "$S/mut.sh" >/dev/null
   ol is-g mut --asama tek --mutasyon iki --kapi K1 --ayni-girdi-atla -- bash "$S/mut.sh" >/dev/null
-  [ "$(sayi)" = "10" ]; g $? "mutasyon ölçümü bayrakla bile iki kez koştu (sayaç 10)"
+  [ "$(sayi)" = "12" ]; g $? "mutasyon ölçümü bayrakla bile iki kez koştu (sayaç 12)"
   ol is-g kirm --asama tek --ayni-girdi-atla -- bash "$S/kirmizi.sh" >/dev/null
   ol is-g kirm --asama tek --ayni-girdi-atla -- bash "$S/kirmizi.sh" >/dev/null
-  [ "$(sayi)" = "12" ]; g $? "kırmızı önceki kayıt atlanmaz, iki kez koştu (sayaç 12)"
+  [ "$(sayi)" = "14" ]; g $? "kırmızı önceki kayıt atlanmaz, iki kez koştu (sayaç 14)"
 
   echo "════ ${P}A5 · kirli ağaç: anahtar HEAD'i temsil etmez, koşar ════"
   commitle onceki   # izlenmeyen u.txt ağaca girsin: anahtar iki ölçüm arasında kendiliğinden kaymasın
   ol is-g kirli --asama tek --ayni-girdi-atla -- bash "$S/gec.sh" >/dev/null; commitle k4
   ( cd "$T" && echo c > f.sh )
   ol is-g kirli --asama tek --ayni-girdi-atla --kirli-izin "sınav: kirli ağaçta atlama yok" -- bash "$S/gec.sh" >/dev/null
-  [ "$(sayi)" = "14" ]; g $? "kirli ağaçta (izinli) atlanmadı (sayaç 14)"
+  [ "$(sayi)" = "16" ]; g $? "kirli ağaçta (izinli) atlanmadı (sayaç 16)"
   rm -rf "$T" "$S"
 }
 
@@ -89,6 +94,7 @@ mut "mutant atlanabilir (yok sayma + kayıtta anahtar + mutant süzgeci)" '     
             print("ℹ --ayni-girdi-atla mutasyon' '        if False:
             print("ℹ --ayni-girdi-atla mutasyon' 'if anahtar and not mut: kayit["girdi_anahtar"]' 'if anahtar: kayit["girdi_anahtar"]' 'and not k.get("mutasyon") and' 'and' 'and k.get("rc") == 0
                 and k.get("renk")' 'and k.get("renk")'
+mut "yok sayılan dosya çıkarıldı" '"yoksayilan": yoksayilan,' '"yoksayilan": [],'
 mut "kırmızı kayıt atlanabilir" 'and k.get("rc") == 0
                 and k.get("renk") == "yesil" and k.get("etkin_renk") == "yesil"' 'and True'
 mut "kirli ağaçta anahtar kurulur" 'if anahtar and (_ok0 or KIRLI_IZIN):' 'if False:'
