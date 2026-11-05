@@ -1,7 +1,7 @@
 {
   "is": "gun-sonu-saat-damgasi",
   "arac": "kanit.py/0.8.0",
-  "guncelleme": "2026-11-05T21:54:11+03:00",
+  "guncelleme": "2026-11-05T21:58:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -56,7 +56,44 @@
       "olcum_id": "63f9b22d36c04ba3812a7c7a14845da6",
       "olculen_commit": "1ea4e5ca79bdbfd43b209dc4890d941a45b0594b",
       "olculen_kirli": false
+    },
+    {
+      "tur": "canli",
+      "etiket": "cron-uc-aksam",
+      "asama": "canli",
+      "dosya": "canli-cron-uc-aksam.txt",
+      "sha256": "3c4d49b3b88e01cbbd2598df22131fa1442a0cd2b76bf9926131016548d5401d",
+      "komut": [
+        "tail",
+        "-n",
+        "5000",
+        "--",
+        "/config/.claude/gun-sonu-aksam-son.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/.claude/gun-sonu-aksam-son.log",
+      "kaynak_turu": "dosya",
+      "son": 5000,
+      "desen": "gün sonu çalıştı · 2026-11-0[345]T21:30:0[0-9]\\+03:00",
+      "en_az": 3,
+      "atesleme_sayisi": 3,
+      "ilk_atesleme": {
+        "satir": "→ gün sonu çalıştı · 2026-11-03T21:30:02+03:00 · gün 2026-11-03",
+        "saat": "2026-11-03T21:30:02+03:00",
+        "saat_iso": "2026-11-03T21:30:02+03:00"
+      },
+      "son_atesleme": {
+        "satir": "→ gün sonu çalıştı · 2026-11-05T21:30:02+03:00 · gün 2026-11-05",
+        "saat": "2026-11-05T21:30:02+03:00",
+        "saat_iso": "2026-11-05T21:30:02+03:00"
+      },
+      "zaman": "2026-11-05T21:58:00+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "d45d9fcb75684913869a499b825305c6",
+      "olculen_commit": "7d3c318616ef8a93e0e88b141c412cd7c4acc3fa",
+      "olculen_kirli": false
     }
   ],
-  "imza": "4519d9e83aaec07162e7bf5567fc66fd6d462813ab0bb00276366f887c90888c"
+  "imza": "7e5a3086ddf567d9d3e26bb5383d499a683f9b4d59c0478e47ccaa8552a136e3"
 }

@@ -1,0 +1,44 @@
+{
+  "tur": 2,
+  "is": "gun-sonu-saat-damgasi",
+  "pr": "708",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T21:57:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-gun-sonu-saat-borc",
+  "dal": "mirahur/gun-sonu-saat-borc",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14609,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3422
+  },
+  "dalgic": "olculemedi",
+  "bas": "7d3c318616ef8a93e0e88b141c412cd7c4acc3fa",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "H",
+    "ozet": "ISO damgalı “çalıştı” satırının gerçek kod sınavı ve canlı günlükteki 5 Kasım kaydı gösterilmiş; önceki turun kutu-dışı bulgusu günlük okuması bakımından ilerlemiş, fakat ilk satırın gerçekten cron tarafından üretildiği kanıtlanmamış. Kod puanı düşmez ve üretime hazır görünür, ancak kart hâlâ `odendi: null` ve `canli_kanit: yok` dediğinden canlı borcun ödendiği sonucu henüz doğru şey değildir.",
+    "bulgular": [
+      {
+        "ne": "Canlı günlükteki satırın akşam cron’unun ilk gerçek ateşlemesinden doğduğu doğrulanmıyor; ayrıca iş kartında canlı borç kapanmamış durumda.",
+        "kanit": "Canlı kaydın ölçüm komutu yalnız `tail -n 6 /config/.claude/gun-sonu-aksam-son.log`; bu komut satırı ve biçimini ölçer, cron tetikleyicisinin kimliğini veya manuel koşu olmadığını ölçmez. Aynı iş kartında `canli_borc.odendi: null`, `canli_kanit: \"yok\"` ve `bitis: null` bulunuyor.",
+        "konum": "KANIT MANİFESTİ: saat-damgasi-5kas; İŞ KARTI: canli_borc.odendi, canli_kanit, bitis",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı akşam cron zamanlayıcı/jurnal kayıtları + iş kartı borç kapatma yüzeyi"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. `sinav-gercek` rc=0/yeşil, G13 ve damga satırı mutasyonu kod davranışını sınarken canlı kayıt temiz bir committe ISO satırını gerçekten gösteriyor. Bununla birlikte `tail` ölçümü satırın cron kökenini kanıtlamaz; yeşil kayıt hedefin “ilk gerçek cron ateşlemesi” olduğunu tek başına söylemez ve iş kartındaki borç alanları da kapanmamıştır."
+  }
+}
