@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sultan-eli-saniye-ici",
+  "pr": "704",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T15:24:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-saniye-ici",
+  "dal": "sultan-eli-saniye-ici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 12391,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2730
+  },
+  "dalgic": "uyumlu",
+  "bas": "19e83d8b1c3d4ee650a445594c2f5c38125a23e8",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı saati tam saniyeden kesirli `time.time()` değerine geçirilmiş, aynı saniyedeki meşru insan izi için regresyon sınavı eklenmiş ve sürüm iki kanonik yerde 0.1.1 yapılmış. Üretimi bozan bir kusur görünmüyor; yalnız canlıdaki iki RED ve yorumdaki 6/6 tekrar iddiası önce/sonra ölçüm çiftiyle belgelenmemiş.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve temiz commit üzerinde çalışan gerçek ölçüm yeşil; S1 gerçekçi milisaniyeli kayıtla aynı-saniye davranışını, S2 gelecek tarih korumasını sınıyor. Ancak yalnız sonra ölçümü var; önce/sonra veya mutasyon kaydı bulunmadığından eski kodun sınavda kırıldığı ve canlıdaki iki RED/6-of-6 anlatısı manifest kanıtıyla gösterilmiyor."
+  }
+}
