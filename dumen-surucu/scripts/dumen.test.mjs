@@ -1,8 +1,8 @@
 // dumen.test.mjs — HERMETİK: sahte merkez (mod + durak ucu + sayfalar) + gerçek headless Chromium (CDP portu) + dumen.mjs.
 // Çalıştır: DUMEN_CHROME=<chrome-headless-shell> node dumen.test.mjs   (dumen.mjs yolu: DUMEN_LIB, varsayılan yanı)
 import http from 'http';
-import { cocukBaslat } from './sinav-cocuk.mjs';
-import { mkdtempSync, writeFileSync } from 'fs';
+import { cocukBaslat, gecici } from './sinav-cocuk.mjs';
+import { writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 const LIB = process.env.DUMEN_LIB || new URL('./dumen.mjs', import.meta.url).pathname;
@@ -11,7 +11,7 @@ const CHROME = process.env.DUMEN_CHROME;
 if (!CHROME) { console.log('ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi'); process.exit(3); }
 
 let mod = 'ajan'; let uyariKod = 200; const uyariGelen = []; const uyariBaslik = []; let durakKod = 200; const duraklar = []; const durakBaslik = [];
-const JETON_DOSYA = join(mkdtempSync(join(tmpdir(), 'dumen-jeton-')), 'jeton'); const JETON = 'sahte-jeton-' + Math.random().toString(36).slice(2);
+const JETON_DOSYA = join(gecici('dumen-jeton-'), 'jeton'); const JETON = 'sahte-jeton-' + Math.random().toString(36).slice(2);
 writeFileSync(JETON_DOSYA, JETON + '\n'); process.env.DUMEN_DEFTER_JETON = JETON_DOSYA;
 const FORM = `<!doctype html><title>f</title><input id=t type=text><input id=d type=date><select id=s><option value=a>a</option><option value=b>b</option></select><input id=pw type=password><input id=otp type=text name=otp><button id=g>Tamam</button><button id=ode>Öde</button>`;
 let modSonra = null;   // /dumen/mod cevaplandıktan SONRA bir kez çalışır (kapı geçti, tam o sırada soket düşsün)
@@ -26,7 +26,7 @@ const srv = http.createServer((q, r) => {
 await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
 const MERKEZ = `http://127.0.0.1:${srv.address().port}`;
 const PORT = 19800 + Math.floor(Math.random() * 100);
-const prof = mkdtempSync(join(tmpdir(), 'dumen-test-'));
+const prof = gecici('dumen-test-');
 const ch = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 
@@ -128,7 +128,7 @@ ok('D19 durak bildirimi x-defter-jeton başlığıyla gitti (her istek)', durakB
 ok('D20 jeton değeri günlük satırlarında YOK', !satirlar.some((x) => x.includes(JETON)));
 
 console.log('── mod sultan iken soket düşer');
-const PORT2 = PORT + 100; const prof2 = mkdtempSync(join(tmpdir(), 'dumen-test2-'));
+const PORT2 = PORT + 100; const prof2 = gecici('dumen-test2-');
 const baslat = () => cocukBaslat(CHROME, [`--remote-debugging-port=${PORT2}`, `--user-data-dir=${prof2}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 const bekle = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT2}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
 let ch2 = baslat(); await bekle();
@@ -151,7 +151,7 @@ ok('D25 mod ajan olunca YENİDEN bağlandı ve eylem yapıldı', eR === null && 
 await dS.kapat(); ch2.kill();
 
 console.log('── kapı geçtikten SONRA soket düşer (eylem sırasında)');
-const PORT3 = PORT + 200; const prof3 = mkdtempSync(join(tmpdir(), 'dumen-test3-'));
+const PORT3 = PORT + 200; const prof3 = gecici('dumen-test3-');
 const baslat3 = () => cocukBaslat(CHROME, [`--remote-debugging-port=${PORT3}`, `--user-data-dir=${prof3}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 const bekle3 = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT3}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
 let ch3 = baslat3(); await bekle3();
@@ -179,7 +179,7 @@ ok('O2 metin(): giriş alanının DEĞERİ metne girmez', !m1.includes('gizli-de
 ok('O3 okuma sayfayı değiştirmez, terminale/merkeze metin yazmaz, uyarı üretmez', (await deger('#t')) === 'gizli-deger-731' && !satirlar.some((x) => x.includes('Tamam')) && uyariGelen.length === uyariOnce, JSON.stringify(satirlar));
 const eOP = await hata(() => d.metin('#pw'));
 ok('O4 parola alanını hedefleyen okuma durma noktasına takılır', eOP instanceof KapiHata && eOP.neden === 'durak' && duraklar.length === durakOnce + 1 && duraklar.at(-1).neden === 'sifre', String(eOP));
-const kareYol = join(mkdtempSync(join(tmpdir(), 'dumen-kare-')), 'k.png');
+const kareYol = join(gecici('dumen-kare-'), 'k.png');
 await d.kare(kareYol);
 const kb = (await import('fs')).readFileSync(kareYol);
 ok('O5 kare(yol): PNG dosyası yazılır', kb.length > 100 && kb.subarray(1, 4).toString() === 'PNG', String(kb.length));
@@ -194,7 +194,7 @@ ok('O7 kare() yolsuz reddedilir', eOY instanceof KapiHata && eOY.neden === 'kare
 
 console.log('── sekme seçimi (Sultan\'ın terminal sekmesine dokunulmaz)');
 const PORT4 = 19950 + Math.floor(Math.random() * 40);
-const prof4 = mkdtempSync(join(tmpdir(), 'dumen-test-'));
+const prof4 = gecici('dumen-test-');
 const ch4 = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT4}`, `--user-data-dir=${prof4}`, '--no-sandbox', '--headless', MERKEZ + '/terminal-sultan'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT4}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 const cdp4 = `http://127.0.0.1:${PORT4}`;
@@ -234,7 +234,7 @@ ch4.kill();
 
 console.log('── yeniden bağlanma: aynı sekmeye döner, öteki sekmelere oturum açmaz');
 const { playwrightYukle } = await import(LIB);
-const PORT5 = PORT + 300; const prof5 = mkdtempSync(join(tmpdir(), 'dumen-test5-'));
+const PORT5 = PORT + 300; const prof5 = gecici('dumen-test5-');
 const ch5 = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT5}`, `--user-data-dir=${prof5}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT5}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 const cdp5 = `http://127.0.0.1:${PORT5}`;

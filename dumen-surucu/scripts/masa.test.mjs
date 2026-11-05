@@ -1,14 +1,15 @@
 // masa.test.mjs — HERMETİK: sahte merkez (mod + durak ucu) + sahte masaüstü bekçisi (HTTP) + masa.mjs. Chromium gerekmez.
 // Çalıştır: node masa.test.mjs   (masa.mjs yolu: MASA_LIB, varsayılan yanı)
 import http from 'http';
-import { mkdtempSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
+import { gecici } from './sinav-cocuk.mjs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 const LIB = process.env.MASA_LIB || new URL('./masa.mjs', import.meta.url).pathname;
 const { Masa } = await import(LIB);
 const { KapiHata } = await import(new URL('./dumen.mjs', import.meta.url).pathname);
 
-const dizin = mkdtempSync(join(tmpdir(), 'masa-test-'));
+const dizin = gecici('masa-test-');
 const MASA_JETON = 'masa-jeton-' + Math.random().toString(36).slice(2), DEFTER_JETON = 'defter-jeton-' + Math.random().toString(36).slice(2);
 const MASA_DOSYA = join(dizin, 'masa-jeton'); writeFileSync(MASA_DOSYA, MASA_JETON + '\n');
 const DEFTER_DOSYA = join(dizin, 'defter-jeton'); writeFileSync(DEFTER_DOSYA, DEFTER_JETON + '\n'); process.env.DUMEN_DEFTER_JETON = DEFTER_DOSYA;

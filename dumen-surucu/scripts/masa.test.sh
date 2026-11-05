@@ -7,7 +7,7 @@ node "$HERE/masa.test.mjs"; RC=$?
 [ "$RC" -eq 0 ] || exit "$RC"
 [ "${MASA_MUTANT:-1}" = 0 ] && exit 0
 echo "── mutantlar (her biri sınavı KIRMALI)"
-T="$(mktemp -d)"; cp "$HERE/masa.mjs" "$HERE/masa.test.mjs" "$HERE/dumen.mjs" "$T/"
+T="$(mktemp -d)"; trap 'python3 -I -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T"' EXIT; cp "$HERE/masa.mjs" "$HERE/masa.test.mjs" "$HERE/dumen.mjs" "$HERE/sinav-cocuk.mjs" "$T/"
 MK=0; MS=0
 mut() { # mut <ad> <çapa> <yerine>
   cp "$HERE/masa.mjs" "$T/masa.mjs"
