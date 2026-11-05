@@ -686,7 +686,7 @@ if [ "$TUR" -gt $((TUR_SIFIR + 1)) ] && [ -n "$BAS" ]; then
       _bilgi "· düzeltme farkı hesaplanamadı: git diff ${_ob:0:8}..${BAS:0:8} düştü → tam fark gider"
     else
       DUZ_TAM_BAYT=$(wc -c < "$TMP/diff.patch"); DUZ_BAYT=$(wc -c < "$TMP/diff-duz.patch"); DUZ_DOSYA=$(grep -c '^diff --git ' "$TMP/diff-duz.patch")
-      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"
+      DUZ_ONCEKI_BAS="$_ob"; cp "$TMP/diff.patch" "$TMP/diff-tam.patch"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"   # tam fark ön göze (aşağıda) lazım
       if [ "$DUZ_DOSYA" -gt 0 ]; then _bilgi "· DÜZELTME TURU: göze yalnız ${_ob:0:8}..${BAS:0:8} farkı gider ($DUZ_DOSYA dosya, $DUZ_BAYT bayt; tam fark $DUZ_TAM_BAYT bayt)"
       else _bilgi "· DÜZELTME TURU: ${_ob:0:8}..${BAS:0:8} arasında PR dosyalarında YENİ DEĞİŞİKLİK YOK → fark BOŞ gider (tam fark $DUZ_TAM_BAYT bayt, önceki turda görüldü)"; fi
     fi
@@ -813,7 +813,14 @@ if [ "${DALGIC_KAPALI:-0}" != 1 ] && [ -n "$KART" ]; then
   if [ -z "$DALGIC_BIN" ]; then for _d in "$DEPO/_agents/dalgic/dalgic.sh" /config/projects/Nexus/_agents/dalgic/dalgic.sh; do if [ -r "$_d" ]; then DALGIC_BIN="$_d"; break; fi; done; fi
   if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then DALGIC_DURUM=atlandi; _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
   else
-    DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$TMP/diff.patch" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
+    #   Düzeltme turunda göze giden fark yalnız artımdır; ön göz ise kart cümlesini PR BÜTÜNÜYLE karşılaştırır (gorev …GKMT: yalnız düzeltme farkını
+    #   görüp sahte UYUMSUZ diyordu). Ön göze tam fark gider; kanıt dizini blokları atılır (ölçüm dökümü kodu itmesin).
+    DALGIC_DIFF="$TMP/diff.patch"
+    if [ -n "$DUZ_ONCEKI_BAS" ] && [ -s "$TMP/diff-tam.patch" ]; then
+      awk '/^diff --git /{atla = ($0 ~ /_agents\/fabrika\/kanit\//)} !atla' "$TMP/diff-tam.patch" > "$TMP/diff-dalgic.patch" && [ -s "$TMP/diff-dalgic.patch" ] && DALGIC_DIFF="$TMP/diff-dalgic.patch" \
+        && _bilgi "· ön-göz (DALGIÇ): düzeltme turu — ön göze PR'ın TAM farkı gider (göze giden artımlı fark değil)"
+    fi
+    DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$DALGIC_DIFF" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
     DALGIC_OUT="$(tr -d '\000-\010\013-\037\177' < "$TMP/dalgic.ham" | head -c 4000)"
     case "$DALGIC_RC" in
       0) DALGIC_DURUM=uyumlu; _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;

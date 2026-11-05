@@ -1,0 +1,56 @@
+{
+  "is": "denetci-ongoz-duzeltme-tam-fark",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T02:30:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek.txt",
+      "sha256": "ecd2cac47e5a31b18a3c88a54526c945ef16ea80c0cb09968090fade82e43861",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-ongoz-tam-fark.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T02:30:39+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8d0659f8f8434a84adceaf4701e492b0",
+      "olculen_commit": "b8973eeb5fd2106266778f54d7d0823c6c57de0e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-artim-ongoze",
+      "asama": "tek",
+      "dosya": "olcum-mut-artim-ongoze-tek.txt",
+      "sha256": "5f1658e94d957e8d37207af1293c0f94e9a295a0bb61890f80c89fd7209dbcfe",
+      "komut": [
+        "env",
+        "MUTANT_D=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-og2/denetci.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-ongoz-tam-fark.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T02:30:41+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "O2d",
+      "hedef_dustu": true,
+      "olcum_id": "11fd242c41da49f8b21d2c88aefa5a20",
+      "olculen_commit": "b8973eeb5fd2106266778f54d7d0823c6c57de0e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "153c7f225352d1429a67489de76996fa0429912681b0b79fedd45842a83d17c3"
+}

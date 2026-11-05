@@ -249,7 +249,7 @@ MUTY
   mut onceki-bulgu-sayilmaz 'for i,x in enumerate(b,1): print(' 'for i,x in []: print(' "D2g"
   mut tavan-yalniz-dikis 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ -n "${DENETCI_KIRP_ESIK:-}" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6a"   # tavan yalnız sınav dikişiyle uygulanırsa (varsayılanda kapı yok) D6a düşer
   mut tavan-ayiklamaya-bagli 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6e"
-  mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
+  mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; cp "$TMP/diff.patch" "$TMP/diff-tam.patch"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"   # tam fark ön göze (aşağıda) lazım' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
   mut eski-bas-atasi-degil '  elif ! git -C "$DEPO" merge-base --is-ancestor "$_ob" "$BAS" 2>/dev/null \' '  elif false \' "D10b"   # çatışma kolu squash vakasında da başkasının işini göstermez (D10c artık geçer); sebep satırı ve kayıt D10b/D10e ile ölçülür
   mut eski-bas-ana-hatta '       || git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' '       || false && git -C "$DEPO" merge-base --is-ancestor "$_ob" "$(git -C "$DEPO" symbolic-ref' "D11b"
   mut tavan-400k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-400000}"' "D6a"

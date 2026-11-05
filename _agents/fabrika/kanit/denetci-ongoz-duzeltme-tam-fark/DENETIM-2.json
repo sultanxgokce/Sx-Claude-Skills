@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "denetci-ongoz-duzeltme-tam-fark",
+  "pr": "698",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T02:54:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-ongoz-duzeltme-tam-fark",
+  "dal": "denetci-ongoz-duzeltme-tam-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13511,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2958
+  },
+  "dalgic": "uyumsuz",
+  "bas": "066f6cdb7222fb3528d5f4e43e197da33aae1128",
+  "duzeltme_farki": {
+    "onceki_bas": "8d79c10a677f654128b1ead84415223b6f1c3c89",
+    "dosya": 3,
+    "bayt": 4952,
+    "tam_bayt": 21983
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "PR bütünü kart cümlesini karşılıyor: düzeltme turunda bağımsız göze artımlı fark, ön göze ise kanıt blokları ayıklanmış tam PR farkı veriliyor; bu turdaki değişiklik de mevcut mutasyon sınavını yeni tam-fark akışına uyarlıyor. Önceki turda kapatılacak bulgu yoktu; gerçek ölçüm 9/0 geçiyor ve hedefli mutasyon O2d kapısını düşürüyor, dolayısıyla üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Temiz commit üzerindeki gerçek ölçüm rc=0 ve 9/0 sonuçlu; mutasyon kaydı ise ön göze tam fark verilmesini bilerek bozduğunda rc=1 ile O2d kapısını düşürüyor ve gerçek ölçümü 'sonra' kaydına bağlıyor. Böylece sınav yalnız yeşil görünmekle kalmıyor, kartın esas davranışını hedefli olarak ölçüyor; ayrı bir değişiklik-öncesi ölçüm bulunmasa da gerçek ölçüm ile mutasyon çifti yeterli kanıt sağlıyor."
+  }
+}
