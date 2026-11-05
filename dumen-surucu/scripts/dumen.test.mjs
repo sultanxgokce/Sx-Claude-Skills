@@ -1,7 +1,7 @@
 // dumen.test.mjs — HERMETİK: sahte merkez (mod + durak ucu + sayfalar) + gerçek headless Chromium (CDP portu) + dumen.mjs.
 // Çalıştır: DUMEN_CHROME=<chrome-headless-shell> node dumen.test.mjs   (dumen.mjs yolu: DUMEN_LIB, varsayılan yanı)
 import http from 'http';
-import { spawn } from 'child_process';
+import { cocukBaslat } from './sinav-cocuk.mjs';
 import { mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -27,7 +27,7 @@ await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
 const MERKEZ = `http://127.0.0.1:${srv.address().port}`;
 const PORT = 19800 + Math.floor(Math.random() * 100);
 const prof = mkdtempSync(join(tmpdir(), 'dumen-test-'));
-const ch = spawn(CHROME, [`--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+const ch = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 
 let G = 0, K = 0;
@@ -129,7 +129,7 @@ ok('D20 jeton değeri günlük satırlarında YOK', !satirlar.some((x) => x.incl
 
 console.log('── mod sultan iken soket düşer');
 const PORT2 = PORT + 100; const prof2 = mkdtempSync(join(tmpdir(), 'dumen-test2-'));
-const baslat = () => spawn(CHROME, [`--remote-debugging-port=${PORT2}`, `--user-data-dir=${prof2}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+const baslat = () => cocukBaslat(CHROME, [`--remote-debugging-port=${PORT2}`, `--user-data-dir=${prof2}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 const bekle = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT2}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
 let ch2 = baslat(); await bekle();
 const sat2 = [];
@@ -152,7 +152,7 @@ await dS.kapat(); ch2.kill();
 
 console.log('── kapı geçtikten SONRA soket düşer (eylem sırasında)');
 const PORT3 = PORT + 200; const prof3 = mkdtempSync(join(tmpdir(), 'dumen-test3-'));
-const baslat3 = () => spawn(CHROME, [`--remote-debugging-port=${PORT3}`, `--user-data-dir=${prof3}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+const baslat3 = () => cocukBaslat(CHROME, [`--remote-debugging-port=${PORT3}`, `--user-data-dir=${prof3}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 const bekle3 = async () => { for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT3}/json/version`); return; } catch { await new Promise((r) => setTimeout(r, 200)); } } };
 let ch3 = baslat3(); await bekle3();
 const dZ = await Dumen.baglan({ cdpUrl: `http://127.0.0.1:${PORT3}`, merkez: MERKEZ, zamanAsimiMs: 1500, yaz: () => {}, sekme: 'ilk' });
@@ -195,7 +195,7 @@ ok('O7 kare() yolsuz reddedilir', eOY instanceof KapiHata && eOY.neden === 'kare
 console.log('── sekme seçimi (Sultan\'ın terminal sekmesine dokunulmaz)');
 const PORT4 = 19950 + Math.floor(Math.random() * 40);
 const prof4 = mkdtempSync(join(tmpdir(), 'dumen-test-'));
-const ch4 = spawn(CHROME, [`--remote-debugging-port=${PORT4}`, `--user-data-dir=${prof4}`, '--no-sandbox', '--headless', MERKEZ + '/terminal-sultan'], { stdio: 'ignore' });
+const ch4 = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT4}`, `--user-data-dir=${prof4}`, '--no-sandbox', '--headless', MERKEZ + '/terminal-sultan'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT4}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 const cdp4 = `http://127.0.0.1:${PORT4}`;
 const sekmeler = async () => (await (await fetch(`${cdp4}/json/list`)).json()).filter((t) => t.type === 'page').map((t) => t.url);
@@ -235,7 +235,7 @@ ch4.kill();
 console.log('── yeniden bağlanma: aynı sekmeye döner, öteki sekmelere oturum açmaz');
 const { playwrightYukle } = await import(LIB);
 const PORT5 = PORT + 300; const prof5 = mkdtempSync(join(tmpdir(), 'dumen-test5-'));
-const ch5 = spawn(CHROME, [`--remote-debugging-port=${PORT5}`, `--user-data-dir=${prof5}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
+const ch5 = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT5}`, `--user-data-dir=${prof5}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT5}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 const cdp5 = `http://127.0.0.1:${PORT5}`;
 const { chromium: cr5 } = await playwrightYukle();
