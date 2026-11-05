@@ -1,0 +1,31 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: izlenen kod dosyası · rc≠0 + hedef kapı 'izlenen kod dosyası' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ag-mutant.sh /config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla
+# rc=1 sure=12.1s zaman=2026-11-05T16:12:18+03:00
+--- stdout ---
+════ A1 · bayraksız: iki çağrı iki koşu ════
+  ✓ bayraksız ikinci çağrı da koştu (sayaç 2)
+════ A2 · bayraklı: ilk koşar, ikinci (kanıt commit'i arada) koşmaz ════
+  ✓ bayraklı ilk çağrı koştu (sayaç 3)
+  ✓ aynı girdi: komut YENİDEN KOŞMADI (sayaç 3)
+  ✓ çıktı yeniden koşmadığını söylüyor
+  ✓ dogrula rc=0 (kayıt değişmedi, imza sağlam)
+════ A3 · girdi değişince koşar ════
+  ✗ izlenen kod dosyası değişti → koştu (sayaç 4)
+  ✗ depo DIŞI betik içeriği değişti → koştu (sayaç 5)
+  ✗ komut argümanı değişti → koştu (sayaç 6)
+  ✗ izlenmeyen dosyanın içeriği değişti → yine koştu (sayaç 8)
+════ A4 · mutant ve kırmızı kayıt atlanmaz ════
+  ✗ mutasyon ölçümü bayrakla bile iki kez koştu (sayaç 10)
+  ✗ kırmızı önceki kayıt atlanmaz, iki kez koştu (sayaç 12)
+════ A5 · kirli ağaç: anahtar HEAD'i temsil etmez, koşar ════
+  ✗ kirli ağaçta (izinli) atlanmadı (sayaç 14)
+════ M · mutantlar: araç bozulursa sınav DÜŞMELİ ════
+  ✓ mutant YAKALANDI: ağaç özeti çıkarıldı
+  ✓ mutant YAKALANDI: dış betik sha çıkarıldı
+  ✓ mutant YAKALANDI: izlenmeyen dosya çıkarıldı
+  ✓ mutant YAKALANDI: mutant atlanabilir (yok sayma + kayıtta anahtar + mutant süzgeci)
+  ✓ mutant YAKALANDI: kırmızı kayıt atlanabilir
+  ✓ mutant YAKALANDI: kirli ağaçta anahtar kurulur
+
+SONUÇ: 11 geçti · 7 kaldı
+--- stderr ---

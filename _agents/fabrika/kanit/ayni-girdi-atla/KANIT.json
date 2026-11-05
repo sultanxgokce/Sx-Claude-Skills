@@ -1,0 +1,56 @@
+{
+  "is": "ayni-girdi-atla",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T16:12:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-sonra.txt",
+      "sha256": "4d6369291dc9144b1a356dbdc41027417bf6e9ee11c3c817ccb81ea61111f72c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ag-kanit.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T16:03:12+03:00",
+      "sure_sn": 54.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f3347ae1209b4073b1b8b06f8a5b1199",
+      "olculen_commit": "2ca8ef04ba4034a979ec64044bb4f86000f45a1c",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-agac-ozeti",
+      "asama": "tek",
+      "dosya": "olcum-mutant-agac-ozeti-tek.txt",
+      "sha256": "cd00f6773e674b55e86b0b78011b1c498c2e73ef085807240217f14dbe70bd6d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ag-mutant.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T16:12:18+03:00",
+      "sure_sn": 12.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "izlenen kod dosyası",
+      "hedef_dustu": true,
+      "olcum_id": "b9a0211c01664c1ab99294bd4365e027",
+      "olculen_commit": "2ca8ef04ba4034a979ec64044bb4f86000f45a1c",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "a7be7f7ebd92e941c62d633fdc9094cf09081a328b188611d2bb902c3391642c"
+}
