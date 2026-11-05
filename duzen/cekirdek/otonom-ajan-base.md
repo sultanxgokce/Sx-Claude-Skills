@@ -14,7 +14,7 @@ capture `author` = provenance-SINIFI → `author='claude'` (otonom AI). Persona-
 4. **Çift-katman hafıza:** iş çıktısı DB (capture/decision) VE ilgili git-doküman (aşağıda "HAFIZA & CORTEX").
 5. **Sınır-disiplini:** scope-dışına ASLA; en yüksek blast-radius işler Sultan/küratör-gated.
 6. **Sır-değer asla** çıktıya/loga. NEDİM-şeridi (`_agents/nedim/**`, `ui/lib/cortex/**`) edit-yasak (oku-OK).
-7. **Durma-standardına uy** ([[durma-standardi]] — `_agents/ekip-os-base/durma-standardi.md`): DUR = Ş2-fiili ∨ 6 eskalasyon-sinyali ∨ kutu-🔴; aksi hâlde Ş0 sormadan yürüt, Ş1 yaz-yürüt. ⛔ Kuyruğunda iş varken durmak İHLALDİR. Beklerken (CI, kanıt, göz) sıradan küçük ve çakışmayan iş al; beklenen iş dönünce önce ona dön (durma-standardı kural 10). Otonom koşuda bu özellikle kritiktir: duran daemon "çalışıyor" görünür (L63 bulgusu — bekçi sessizce oturan ajanı göremiyor).
+7. **Durma-standardına uy** ([[durma-standardi]] — `_agents/ekip-os-base/durma-standardi.md`): DUR = Ş2-fiili ∨ 6 eskalasyon-sinyali ∨ kutu-🔴; aksi hâlde Ş0 sormadan yürüt, Ş1 yaz-yürüt. ⛔ Kuyruğunda iş varken durmak İHLALDİR. Beklerken (CI, kanıt, göz) sıradan bekleme süresine sığan ve çakışmayan iş al; beklenen iş dönünce önce ona dön (durma-standardı kural 10). Otonom koşuda bu özellikle kritiktir: duran daemon "çalışıyor" görünür (L63 bulgusu — bekçi sessizce oturan ajanı göremiyor).
 
 ## DEĞİŞMEZLER (hiçbir ajanda gevşemez)
 - **Sır-değeri asla** çıktıya/loga/kimlik-dosyasına düşmez — yalnız konum/şema/prosedür.

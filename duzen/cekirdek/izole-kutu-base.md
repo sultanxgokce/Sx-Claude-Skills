@@ -25,7 +25,7 @@ hangi ajan olduğuna bakmaz.
   kutunun dışına çıkarmaz.
 
 ## BEKLERKEN
-CI, kanıt ya da göz beklerken boş durma: defterden küçük ve çakışmayan bir iş al, kendi iş alanında yürüt, beklenen iş
+CI, kanıt ya da göz beklerken boş durma: defterden bekleme süresine sığan ve çakışmayan bir iş al, kendi iş alanında yürüt, beklenen iş
 dönünce önce ona dön. Bağlam %60'a yaklaştıysa, kota kısma eşiğindeyse ya da uygun iş yoksa yeni iş alma; rolünün dışına çıkma.
 Kural: `duzen/cekirdek/durma-standardi.md` kural 10.
 
