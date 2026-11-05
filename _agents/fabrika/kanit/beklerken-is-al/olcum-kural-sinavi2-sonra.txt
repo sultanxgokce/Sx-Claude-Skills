@@ -1,0 +1,5 @@
+$ bash duzen/scripts/bekleme-kurali.test.sh
+# rc=0 sure=0.0s zaman=2026-11-05T11:14:59+03:00
+--- stdout ---
+YESIL: standart + 4 temel
+--- stderr ---

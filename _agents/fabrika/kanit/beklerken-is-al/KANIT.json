@@ -1,7 +1,7 @@
 {
   "is": "beklerken-is-al",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-05T11:08:40+03:00",
+  "guncelleme": "2026-11-05T11:15:03+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -83,7 +83,47 @@
       "olculen_commit": "0dfd1c0678a9e0f6d01db245adccafa98e5be826",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kural-sinavi2",
+      "asama": "sonra",
+      "dosya": "olcum-kural-sinavi2-sonra.txt",
+      "sha256": "639f16f4289271d0e9ebb8a273a5dc04c74dbe3effe970dc5b19e103ea04596d",
+      "komut": [
+        "bash",
+        "duzen/scripts/bekleme-kurali.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:14:59+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3786df6f3e0a4daf81a69b58b0f2cc21",
+      "olculen_commit": "be8883bd3dd15da71f50a497ae997e7a08238041",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "parite2",
+      "asama": "tek",
+      "dosya": "olcum-parite2-tek.txt",
+      "sha256": "5ca91ceb6a5353d17c8a3a8e24d9a19a88cb7a2720af664d5117aff4eb956ac8",
+      "komut": [
+        "bash",
+        "duzen/scripts/ekipc-paritesi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:15:03+03:00",
+      "sure_sn": 3.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a668e05465d04188bf83bfd0c3069c74",
+      "olculen_commit": "be8883bd3dd15da71f50a497ae997e7a08238041",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "65133fbe2e48c5e46e0d0af410f6db0353d63532033bad5eaedead41a3813680"
+  "imza": "415a7eb3fe601f56054cc80aa5125bd5921c74c39ef7553ddaf4084918eaa815"
 }
