@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "beklerken-is-al",
+  "pr": "702",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T11:17:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-beklerken-is-al",
+  "dal": "beklerken-is-al",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28808,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9535
+  },
+  "dalgic": "uyumsuz",
+  "bas": "1486d271b1954b3199b228b00ad4fc67fd9e6138",
+  "duzeltme_farki": {
+    "onceki_bas": "28db13185512baab49c6af79ab925680ac4e3fbe",
+    "dosya": 10,
+    "bayt": 16522,
+    "tam_bayt": 31294
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düzeltme, beklerken alınacak işi “küçük” diye sınırlamak yerine bekleme süresine sığma ölçütünü dört temelde birleştirmiş ve bunu sınava bağlamış; paket içindeki kod üretime hazır görünüyor. Önceki B1 kod kusuru olarak kapanmış, fakat kuralın bütün filoya gerçekten kurulması ve her kimlikte görülmesi canlı dağıtım yüzeyinde hâlâ ölçülmek zorunda.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kutu içinde giderilebilecek bir kod kusuru değildir: paket ve dört temel doğrulanmış olsa da “bütün filoya iner” sonucunun canlı kurulum ve filo kimlikleri üzerindeki doğrulaması henüz yapılmamış; kartta bunun için açık canlı borç bulunmaktadır.",
+        "kanit": "bekleme-kurali.test.sh artık dört temelde “bekleme süresine sığan” ifadesini arıyor ve kural-sinavi2 yeşil; parite2 de 39/39 geçiyor. Buna karşılık iş kartındaki canli_borc, 6 Kas sabahı surum.sh denetimi ile her kutunun kimliğinde kural 10 sayımı yapılacağını ve odendi alanının null olduğunu açıkça gösteriyor; manifestte gerçek filo kurulumunu ölçen kayıt yok.",
+        "konum": "duzen/scripts/bekleme-kurali.test.sh:14-17; olcum-kural-sinavi2-sonra.txt; olcum-parite2-tek.txt; iş kartı canli_borc",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı filo + kurulum yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Kaynak kuralı için kırmızıdan yeşile ölçüm çifti, son başta yinelenmiş yeşil kural sınavı ve 39/39 parite ölçümü var; bunlar paket değişikliğini yeterince destekliyor. Ancak canlı filoya kurulum için önce/sonra kimlik ölçümü yok; bu eksik kartta dürüstçe canlı borç olarak kaydedilmiş ve kod puanını düşürmeyen kutu-dışı doğrulamadır."
+  }
+}
