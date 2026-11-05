@@ -92,6 +92,16 @@ echo 3 > "$R/yuzey/kayitsiz.sh"; c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/ka
 c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/hic-yok.sh --depo "$R" 2>&1)"; kapi "B7b yüzey ne diskte ne git'te → ÖLÇÜLEMEDİ ('birleşme yok' uydurulmaz)" "ÖLÇÜLEMEDİ:ÖLÇÜLEMEDİ" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2):$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2)"
 c="$(bash "$HS" durum gorev_A2 --yuzey yuzey/a.sh --depo "$T/git-degil" 2>&1)"; rc=$?
 kapi "B8 depo git değil → BIRLESME=ÖLÇÜLEMEDİ, HASAT=ÖLÇÜLEMEDİ rc 3 ('birleşme yok' UYDURULMAZ)" "3:ÖLÇÜLEMEDİ:ÖLÇÜLEMEDİ" "$rc:$(grep '^BIRLESME=' <<<"$c" | cut -d= -f2):$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
+echo "— aynı gün birleşme: doğrulamadan ÖNCE ise engel değil, SONRA ise engel (gorev …EWT7RX)"
+RS="$T/saat-depo"; mkdir -p "$RS/y"; git -C "$RS" init -q 2>/dev/null; git -C "$RS" config user.email t@t; git -C "$RS" config user.name t
+echo 1 > "$RS/y/once.sh"; git -C "$RS" add -A; GIT_AUTHOR_DATE="2026-01-08T08:00:00+00:00" GIT_COMMITTER_DATE="2026-01-08T08:00:00+00:00" git -C "$RS" commit -qm once
+echo 2 > "$RS/y/sonra.sh"; git -C "$RS" add -A; GIT_AUTHOR_DATE="2026-01-08T12:00:00+00:00" GIT_COMMITTER_DATE="2026-01-08T12:00:00+00:00" git -C "$RS" commit -qm sonra
+# doğrulama A2: 2026-01-08T09:00:00Z (tarih=2026-01-08). once.sh 08:00Z (önce) · sonra.sh 12:00Z (sonra)
+c="$(bash "$HS" durum gorev_A2 --yuzey y/once.sh --depo "$RS" 2>&1)"; rc=$?
+kapi "SG1 aynı gün ama doğrulamadan ÖNCE birleşme (08:00Z < 09:00Z) → OLUR rc 0" "0:OLUR" "$rc:$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
+c="$(bash "$HS" durum gorev_A2 --yuzey y/sonra.sh --depo "$RS" 2>&1)"; rc=$?
+kapi "SG2 aynı gün doğrulamadan SONRA birleşme (12:00Z > 09:00Z) → OLMAZ rc 1" "1:OLMAZ" "$rc:$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
+c="$(bash "$HS" durum gorev_A2 --birlesme 2026-01-08 2>&1)"; kapi "SG3 yalnız gün verilince (saat yok) aynı gün hâlâ sıkı → OLMAZ" "OLMAZ" "$(grep '^HASAT=' <<<"$c" | cut -d= -f2)"
 echo "— dogrula: ölçümü kayda yazar (MUHAKKİK biçimi)"
 temiz; c="$(bash "$HS" dogrula gorev_A1 --sonuc var --olcum "grep -c TODO x.sh → 3" --yuzey - --soz "Sorun duruyor, üç yerde." 2>&1)"; rc=$?
 kapi "Y1 var: adım yazılır rc 0" "0" "$rc"

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "hasat-ayni-gun-birlesme-saati",
+  "pr": "699",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T03:37:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-ayni-gun-birlesme-saati",
+  "dal": "hasat-ayni-gun-birlesme-saati",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31788,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 29894
+  },
+  "dalgic": "uyumsuz",
+  "bas": "922c1e7b288ad3c04ade6b5368ba38fb3156df90",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hasat kapısı, aynı günkü birleşmenin tam saatini doğrulama saatiyle karşılaştırıyor; önceki birleşmeyi geçirip sonraki birleşmeyi engelliyor. Gerçek ölçüm 106/0 yeşil, iki hedefli mutasyon da yanlış saat davranışını yakaladığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kod ölçümü rc=0 ile 106/0 geçiyor, SG1–SG3 talebin önce/sonra ve saat ölçülemediğinde sıkı kalma davranışlarını sınıyor. İki mutasyon kaydı hedef kapıları düşürerek sınavın yanlış gün/saat mantığını gerçekten yakaladığını gösteriyor; ayrıca ölçülen commit temiz ve gerçek ölçüm etiketi açık."
+  }
+}

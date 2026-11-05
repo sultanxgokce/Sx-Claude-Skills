@@ -1,0 +1,84 @@
+{
+  "is": "hasat-ayni-gun-birlesme-saati",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T03:36:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek.txt",
+      "sha256": "d31dcbfb75befb8993bcacd22bca599f1a9f140c0a784b4d2b729865f283349e",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/hasat.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T03:36:10+03:00",
+      "sure_sn": 6.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8d977410190549699c403886c95a9a7d",
+      "olculen_commit": "46ea66411f79c4d7f882d974129d8b075eef9e83",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-sikı-gun",
+      "asama": "tek",
+      "dosya": "olcum-mut-sikı-gun-tek.txt",
+      "sha256": "b79d60d622e62498d7b0f58019a55684aba230d325f3ee1ad7314f4e31996e23",
+      "komut": [
+        "env",
+        "HASAT_SH=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-hs1/hasat.sh",
+        "bash",
+        "gunluk-plan/scripts/hasat.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T03:36:15+03:00",
+      "sure_sn": 4.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "SG1",
+      "hedef_dustu": true,
+      "olcum_id": "640814f051d840ae9e6a2b03939b332e",
+      "olculen_commit": "46ea66411f79c4d7f882d974129d8b075eef9e83",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-ters-saat",
+      "asama": "tek",
+      "dosya": "olcum-mut-ters-saat-tek.txt",
+      "sha256": "7b43c15d412cc9a4d158a50268776db20ce8e39a114e5a72fe883241da1e6540",
+      "komut": [
+        "env",
+        "HASAT_SH=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mut-hs2/hasat.sh",
+        "bash",
+        "gunluk-plan/scripts/hasat.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T03:36:20+03:00",
+      "sure_sn": 4.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "SG2",
+      "hedef_dustu": true,
+      "olcum_id": "1bd6907f466c401f951f9c33f939aa77",
+      "olculen_commit": "46ea66411f79c4d7f882d974129d8b075eef9e83",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "5dca9d81264b0a4407cc77b934e8826656e0c1b5c5ddd2d7f08f636c39a52e46"
+}
