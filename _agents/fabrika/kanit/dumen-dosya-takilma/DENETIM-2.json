@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "dumen-dosya-takilma",
+  "pr": "706",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T17:12:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma",
+  "dal": "dumen-dosya-takilma",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 85644,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 18,
+    "bayt": 63360
+  },
+  "dalgic": "uyumsuz",
+  "bas": "b7182ab4fe7500f358430ccbd2b03a06c87e3532",
+  "duzeltme_farki": {
+    "onceki_bas": "44d1cbc4fb883d203fedb0233deed9bcecdfe34a",
+    "dosya": 22,
+    "bayt": 82533,
+    "tam_bayt": 167008
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dosya yükleme/indirme, engel kapatma, yeni sekme adresi, sert süre bütçesi, hata kataloğu ve güvenlik kapıları eklenmiş; önceki B1, süre aşımından sonra tıklamanın gerçekleşmediğini ölçen Z1b ve mutant 23 ile, B2 ise kapı dahil tek bütçeyi ölçen Z2b ve mutant 24 ile kapanmış. Gerçek kod sınavları yeşil ve 26/26 mutant yakalanmış olduğundan kod üretime hazırdır; yalnız filoda kurulum ve canlı Dümen doğrulaması hâlâ kutu-dışı yüzeyde beklemektedir.",
+    "bulgular": [
+      {
+        "ne": "Önceki B3 kapanmadı: filoda kurulu sürüm ve canlı Dümen/Chrome doğrulaması sunulan kanıt paketinde ölçülmemiş.",
+        "kanit": "Araç imzalı manifestte yalnız çalışma ağacı yetenek ölçümü ile sahte merkez/sahte siteli sınav kayıtları bulunuyor; filoda kurulu sürümü veya canlı Dümen yüzeyini ölçen bir kayıt yok.",
+        "konum": "KANIT manifesti:kayıtlar",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı Dümen + filo kurulum yüzeyi ve yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce/sonra yetenek çifti 0/7'den 7/7'ye geçişi gösteriyor; gerçek kodun sinav-dosya ve sinav-surucu kayıtları yeşil, Z1b/Z2b dahil 55 kapı geçiyor ve 26/26 hedefli mutant yakalanıyor. B1 ve B2 böylece ölçülerek kapanmış; filoda kurulu sürüm/canlı yüzey ölçümü ise manifestte bulunmadığından ayrı kutu-dışı kayıt olarak kalmıştır."
+  }
+}
