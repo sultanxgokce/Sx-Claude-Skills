@@ -12,7 +12,7 @@ export DALGIC_KAPALI=1   # ön-göz (ZP640T) sınavda KAPALI: gerçek model ça�
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
+D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart-sinav-sarmal.sh"; KTG="$HERE/kart.sh"
 # Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; göz 23 Eki tur 2) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
 # 🧹 GEÇİCİ DİZİN SIZINTISI (SERDAR disk önceliği, gorev …DSSE): her koşu 4 dizin (içinde git deposu) + sahte tetik dosyası bırakıyordu;
 #    mutasyon koşumları bu betiği yeniden çağırdığından (mut_kos) bir sınav onlarca dizin sızdırıyordu. Hepsi ÇIKIŞTA silinir (erken çıkış dahil).
@@ -948,7 +948,7 @@ fi
 echo "════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle sıfırdan sayılır (PCP7J) ════"
 export KANIT_DEPO="$T"
 mkdir -p "$T"; cd "$T" 2>/dev/null; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/d.patch"   # önceki sınav farkı/dizini kaldırmış olabilir
-bash "$HERE/kart.sh" ac is-dar --is "iki yarım iş tek kartta bu yüzden üç tur boyunca tıkandı" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$HERE/kart-sinav-sarmal.sh" ac is-dar --is "iki yarım iş tek kartta bu yüzden üç tur boyunca tıkandı" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
 bash "$K" olcum is-dar olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; done
 SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "3 tur ilerlemeyince rc=4 (tıkandı)"
@@ -961,7 +961,7 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-dar --diff "$T/d.patch" 2>&1)"; R
 grep -q "DARALTILMIŞ: ilk 3 tur" <<<"$CIKTI"; g $? "denetçi daraltmayı söyledi (ilk 3 tur sayılmıyor)"
 [ -f "$T/_agents/fabrika/kanit/is-dar/DENETIM-4.json" ]; g $? "DENETIM-4 yazıldı (tur numarası sürdü, sayım sıfırlandı)"
 # daraltmadan sonra da üç düşük tur → yine tıkanır (sıfırlama sınırsız tur değildir)
-bash "$HERE/kart.sh" ac is-dar2 --is "daraltma sonrası da tıkanabilen iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$HERE/kart-sinav-sarmal.sh" ac is-dar2 --is "daraltma sonrası da tıkanabilen iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 bash "$K" olcum is-dar2 olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
 bash "$HERE/kart.sh" daralt is-dar2 --kalan "kalan yarı burada yirmi karakterden uzun" --cumle "daraltılmış cümle burada yirmi karakterden uzun" --oturum ref-dar2 >/dev/null 2>&1
@@ -970,7 +970,7 @@ SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2
 unset KANIT_DEPO; export KANIT_DEPO="$T"
 
 echo "════ T-SULTAN · Sultan turu kaydı (kart.sh sultan-turu) göz tur sayımını sıfırlar; daralt gibi (beğeni döngüsü, 2BXA6J) ════"
-bash "$HERE/kart.sh" ac is-stur --is "beğeni döngüsünde Sultan turları sonrası göz sayacı sıfırlanır" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$HERE/kart-sinav-sarmal.sh" ac is-stur --is "beğeni döngüsünde Sultan turları sonrası göz sayacı sıfırlanır" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
 bash "$K" olcum is-stur olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-stur --diff "$T/d.patch" >/dev/null 2>&1; done
 python3 - "$T/_agents/fabrika/kartlar/is-stur.json" <<'PYK'
@@ -986,7 +986,7 @@ grep -q "DARALTILMIŞ: ilk 2 tur" <<<"$CIKTI"; g $? "denetçi sıfırı söyledi
 unset KANIT_DEPO; export KANIT_DEPO="$T"
 
 echo "════ T-ONGOZ · DALGIÇ ön-göz gönder akışında kendiliğinden koşar, YALNIZ bilgidir (ZP640T) ════"
-bash "$HERE/kart.sh" ac is-on --is "ön-göz sınavı için küçük bir iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$HERE/kart-sinav-sarmal.sh" ac is-on --is "ön-göz sınavı için küçük bir iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
 bash "$K" olcum is-on olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for sonuc in 0 1 3; do printf '#!/usr/bin/env bash\necho "sahte dalgic rapor rc=%s"; exit %s\n' "$sonuc" "$sonuc" > "$T/dalgic-$sonuc.sh"; done
 on() { DALGIC_KAPALI= DALGIC_BIN="$1" SAHTE_JSON="$(J 5 E "")" bash "$D" is-on --diff "$T/d.patch" 2>&1; }

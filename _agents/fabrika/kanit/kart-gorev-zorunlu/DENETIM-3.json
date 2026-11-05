@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "kart-gorev-zorunlu",
+  "pr": "703",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T15:23:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-gorev-zorunlu",
+  "dal": "kart-gorev-zorunlu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17343,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2838
+  },
+  "dalgic": "uyumlu",
+  "bas": "3affa3d5b59fd855ad187c06dd28c262fbbadbda",
+  "duzeltme_farki": {
+    "onceki_bas": "96643d9cc02a44bd53a52e0e112415825f408ca8",
+    "dosya": 3,
+    "bayt": 2979,
+    "tam_bayt": 64352
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turda kusursuz bulunan görev zorunluluğu, gerekçeli `--gorevsiz` istisnası ve gün sonu sayımı korunmuş; bu turdaki tek üretim değişikliği sınav sarmalına eksik çalıştırma bitini ekliyor. Temiz committe 487 geçti/0 kaldı ve hedefli mutasyonlar bozuk kodu yakaladı; üretime engel kusur yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı veya geçersiz kayıt yok. `sinav-sonra-2` temiz committe GZ1–GZ7 ile talebin bütün ana davranışlarını ve yalnız boşluk gerekçesinin reddini 487/0 ölçüyor; iki mutasyon kaydı da GZ1 ve GZ2b kapılarının bilinçli bozmayı yakaladığını gösteriyor. Önceki turda bulgu yoktu; dolayısıyla kapanması gereken açık bulunmuyor. Önce/sonra ölçüm çifti yok, ancak gerçek ölçüm ve hedefli mutasyon kanıtı mevcut değişiklik için yeterli."
+  }
+}

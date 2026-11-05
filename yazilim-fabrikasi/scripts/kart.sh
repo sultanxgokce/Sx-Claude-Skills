@@ -47,6 +47,7 @@
 #          (daralt'ın tur_sifir'i ile aynı mekanizma; yeni kart yok). Şartlar araçta: görev etiketi 'begeni-dongusu' (defterden) · görevde
 #          [tur N] kare: <yol/url> · Sultan: "<yorum>" satırı · reis = kart sahibi · defter okunamazsa hiçbir şey değişmez. Mutlak 4. tavan kalkmaz.
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
+#   --gorevsiz "<neden ≥20>" (ac): GÖREVSİZ açış gerekçesi; --gorev ya da --gorevsiz BİRİ ZORUNLU (yeni kart); gün sonu özeti görevsiz kartları sayar
 #   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti → göreve DİLİM adımı (durum kalır);
 #          görev de bitecekse kart.sh bitti … --gorev-bitti --kare <yol> --surum <sürüm> | --olcum "…" | --belge <yol> → 'onay bekliyor' + kanıt sınıfı (KF22R)
 #          + kanıt, tıkandı 'bekliyor' + not (kutunun defter jetonuyla; DEFTER_JETON_YOL · DEFTER_UC). Bağsız kart bunu söyler.
@@ -97,12 +98,12 @@ while [ $# -gt 0 ]; do case "$1" in
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --soz-zamani) SOZ_ZAMANI="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --esik-saat) ESIK_SAAT="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
-  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;; --sinir) SINIR="$2"; shift 2 ;;
+  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;; --sinir) SINIR="$2"; shift 2 ;; --gorevsiz) GOREVSIZ="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
   --senaryo) SENARYO="$2"; shift 2 ;; --kare-onay) KARE_ONAY="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 SENARYO="${SENARYO:-}"; KARE_ONAY="${KARE_ONAY:-}"   # ekran kapısı (ac): senaryo kartı yolu · Sultan'ın kare onayı D1 damgası
-GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
+GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"; GOREVSIZ="${GOREVSIZ:-}"
 
 # 🔴 GÖREV DURUMU (Sultan 20 Eki, gorev_…Y7J3Q "çalışılıyor görünümü güvenilmez"; ölçüm 21 Eki 00:00: koltukların 3'ü çalışıyor,
 #    defterde 'çalışılıyor' 0). Kök: ajan işe başlarken/bırakırken deftere yazmıyordu. Her iş zaten bu araçtan geçtiği için yazımı
@@ -448,6 +449,15 @@ case "$CMD" in
     for v in GA PARA DIS YETKI; do case "${!v}" in e|h|\?) ;; *) _hata "dört sınıf sorusu cevapsız kart AÇILMAZ: --geri-alinamaz --para --dis-yuzey --yetki (e|h|?)"; exit 1 ;; esac; done
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
+    # 🔴 GÖREV KİMLİĞİ TEK ANAHTAR (görev …DZJ0D, SERDAR 5 Kas): yeni kart ya bir göreve bağlanır (--gorev) ya da görevsizliğini
+    #    gerekçeyle ilan eder (--gorevsiz "<≥20 karakter>"). İkisi birden olmaz. Karta `gorevsiz` yazılır; gün sonu özeti sayar.
+    #    Eski kartlar bozulmaz (kapı yalnız `ac`ta, yeni kartta sert); kart dosyası ve iş adı DEĞİŞMEDİ.
+    if [ -n "$GOREV" ] && [ -n "$GOREVSIZ" ]; then _hata "--gorev ile --gorevsiz birlikte olmaz: ya göreve bağlı ya görevsiz (kart AÇILMADI)"; exit 1; fi
+    if [ -z "$GOREV" ]; then
+      [ -n "$GOREVSIZ" ] || { _hata "kart bir göreve bağlanmalı: --gorev gorev_<kimlik> --tahmin <dk> ver (görev yoksa önce gorev.sh ac); gerçekten görevsizse açıkça --gorevsiz \"<neden, en az 20 karakter>\" yaz (kart AÇILMADI)"; exit 1; }
+      GZK="$(printf '%s' "$GOREVSIZ" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"   # boşluk yığını gerekçe sayılmaz (göz tur 1)
+      [ "${#GZK}" -ge 20 ] || { _hata "--gorevsiz gerekçesi en az 20 karakter olmalı (boşluklar sayılmaz; ${#GZK} yazıldı) — kart AÇILMADI"; exit 1; }
+    fi
     olcut_zorunlu "$IS_C" "AÇILMADI" || exit 1
     sinir_zorunlu "$IS_C" || exit 1
     ekran_kapisi || exit 1
@@ -486,7 +496,7 @@ case "$CMD" in
     #    yayımlanır. Tetik sırasında süreç kesilirse görünür kart KALMAZ (izin isteği gitmemiş kart yok); başarısızlıkta yalnız KENDİ geçici
     #    dosyamız silinir — aynı kimlikle eşzamanlı açılan başkasının kartına dokunulmaz.
     KART_TMP="$KD/$IS.json.acilis-$$"
-    SINIR="$SINIR" SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    GOREVSIZ="$GOREVSIZ" SINIR="$SINIR" SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,datetime
 yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import KURAL_SURUMU
@@ -504,6 +514,7 @@ import os
 if os.environ.get("SENARYO"): kart["senaryo"]=os.environ["SENARYO"]
 if os.environ.get("KARE_ONAY"): kart["kare_onayi"]=os.environ["KARE_ONAY"]
 if os.environ.get("SINIR"): kart["sinir"]=os.environ["SINIR"]
+if os.environ.get("GOREVSIZ"): kart["gorevsiz"]=os.environ["GOREVSIZ"]
 if os.environ.get("OLCUT") or os.environ.get("OLCUM_YERI"):
     kart["olcut"]=[x for x in os.environ.get("OLCUT","").splitlines() if x.strip()]; kart["olcum_yeri"]=os.environ.get("OLCUM_YERI","")
 sayilar=[u for u in suyari.splitlines() if u.strip()]
