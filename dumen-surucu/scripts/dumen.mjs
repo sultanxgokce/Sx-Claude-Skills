@@ -74,11 +74,17 @@ export class Dumen {
 
   // SERT SÜRE SINIRI: hiçbir eylem ya da okuma bundan uzun süremez (5 Kas: tıklama sonrası 80-85 sn yanıtsız kalış, iki kez).
   // Süre dolunca KapiHata('zaman-asimi'); sayfanın hâli BİLİNMEZ — çağıran kare()/adres() ile ölçer, körlemesine yinelemez.
-  #sureli(ad, hedef, fn, ms = this.#eylemAzamiMs) {
+  // kes = true (eylemler): süre dolunca BAĞLANTI BIRAKILIR → süren Playwright eylemi durur, yarım kalan tıklama SONRADAN gerçekleşemez.
+  #sureli(ad, hedef, fn, ms = this.#eylemAzamiMs, kes = false) {
     let z; const is = Promise.resolve().then(fn); is.catch(() => {});   // süre dolduktan sonra gelen ret sahipsiz kalmasın
-    const sinir = new Promise((_, red) => { z = setTimeout(() => red(new KapiHata('zaman-asimi', `${ad}${hedef ? ' ' + hedef : ''}: ${ms} ms içinde bitmedi — sayfanın hâli BİLİNMİYOR; kare() ve adres() ile ölç, körlemesine yineleme`)), ms); });
+    const sinir = new Promise((_, red) => { z = setTimeout(() => {
+      if (kes) this.#kes();
+      red(new KapiHata('zaman-asimi', `${ad}${hedef ? ' ' + hedef : ''}: ${ms} ms içinde bitmedi — sayfanın hâli BİLİNMİYOR; kare() ve adres() ile ölç, körlemesine yineleme${kes ? ' (bağlantı bırakıldı: yarım eylem sürmez; sonraki eylemde yeniden bağlanılır)' : ''}`));
+    }, ms); });
     return Promise.race([is, sinir]).finally(() => clearTimeout(z));
   }
+  // Bağlantıyı bırak (Chrome ve sekme AÇIK kalır): eylemin yeniden deneme döngüsü bu süreçte yaşar, soket kapanınca tarayıcıya komut gidemez.
+  #kes() { this.#kopuk = true; const t = this.#tarayici; if (t) t.close().catch(() => {}); }
 
   async #bagla() {
     const { chromium } = await playwrightYukle();
@@ -141,6 +147,7 @@ export class Dumen {
   }
 
   async kapi(eylemAdi, hedef) {
+    if (this.#kapandi) throw new KapiHata('kapali', 'bu Dümen bağlantısı kapatıldı — kapatılan bağlantı yeniden bağlanıp eylem yapmaz');
     this.#yabanciTara();   // önceki eylemlerden sonra gelen eylem-dışı değişiklikler burada uyarıya döner
     const mod = await this.modOku();
     if (mod !== 'ajan') {
@@ -184,12 +191,14 @@ export class Dumen {
     } catch { return false; }   // bildirim ulaşmasa da eylem YAPILMAZ; ama çağıran "bildirildi" sanmaz
   }
 
-  async #uygula(ad, hedef, fn, ms) {
-    await this.#sureli(ad + ' (kapı)', hedef, () => this.kapi(ad, hedef), ms);
+  async #uygula(ad, hedef, fn, ms = this.#eylemAzamiMs) {
+    const son = Date.now() + ms;   // TEK bütçe: kapı + eylem birlikte ms'i aşamaz
+    await this.#sureli(ad + ' (kapı)', hedef, () => this.kapi(ad, hedef), ms, true);
     const p = { id: ++this.#sayac, ad, hedef, t0: Date.now() };
     this.#aktif++;
-    try { return await this.#sureli(ad, hedef, fn, ms); }
+    try { return await this.#sureli(ad, hedef, fn, Math.max(1, son - Date.now()), true); }
     catch (e) {
+      if (e instanceof KapiHata && e.neden === 'zaman-asimi') throw e;   // süre aşımı bağlantıyı kendisi bıraktı: 'bağlantı koptu' sanılmasın
       if (this.#kopuk || KOPMA.test(String(e && e.message))) {
         this.#kopuk = true;
         const mod = await this.modOku().catch(() => null);
@@ -498,6 +507,8 @@ export class Dumen {
       for (const s of [...this.#acilanlar]) await s.close().catch(() => {});
       if (this.#kendiSekmem) await this.#page?.close().catch(() => {});
       await this.#tarayici?.close().catch(() => {});
+      // bağlantı düşmüşse (süre aşımı kesmesi, soket kopması) sekme yukarıda kapanamaz: KENDİ sekmesini hedef kimliğiyle kapatır — artık sekme kalmaz
+      if (this.#kendiSekmem && this.#hedefId) await fetch(`${this.#cdpUrl.replace(/\/$/, '')}/json/close/${this.#hedefId}`, { signal: AbortSignal.timeout(3000) }).catch(() => {});
     })();
     await Promise.race([is, new Promise((r) => { const z = setTimeout(r, 8000); z.unref?.(); })]);
   }

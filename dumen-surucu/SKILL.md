@@ -14,7 +14,7 @@ Dümen'i kullanan **her ajan**, kullanırken gördüğü her **hatayı** ve **ge
 ## 🧭 Çalışma disiplini — her Dümen işinde (0.9.0 · kalıcı tecrübe · Sultan 5 Kas)
 Bu on kural filoda yaşanmış takılmalardan çıktı (aşağıda HATA KATALOĞU). Betiği yazmadan önce oku.
 1. **İşi `Dumen.kos` içinde koş.** Bağlan, işi yap, her koşulda kapat: `await Dumen.kos({ cdpUrl, merkez, dosyaKok }, async (d) => { … })`. Hata, süre dolması ya da süreç sinyali gelse de sekme kapanır. Çıplak `baglan` kullanıyorsan `try { … } finally { await d.kapat(); }` zorunlu.
-2. **Hiçbir eylem süresiz değildir.** Tek eylem öğeyi en çok 15 sn bekler (`eylemSureMs`), kapı dahil sert tavan 45 sn (`eylemAzamiMs`; eyleme özel `{ azamiMs }`). `zaman-asimi` gelirse sayfanın hâli **bilinmez**: `kare()` ve `adres()` ile ölç, aynı tıklamayı körlemesine yineleme.
+2. **Hiçbir eylem süresiz değildir.** Tek eylem öğeyi en çok 15 sn bekler (`eylemSureMs`), kapı dahil sert tavan 45 sn (`eylemAzamiMs`; eyleme özel `{ azamiMs }`). Süre kapı dahil **tek bütçedir**. `zaman-asimi` gelince bağlantı bırakılır: yarım kalan eylem sonradan gerçekleşmez; sonraki eylemde yeniden bağlanılır ve sayfa yeniden yüklenir. Sayfanın hâli **bilinmez**: `kare()` ve `adres()` ile ölç, aynı tıklamayı körlemesine yineleme.
 3. **Önce ölç, sonra dokun.** Tıklamadan ya da yazmadan önce `ogeDurumu(sel)`: kaç öğe eşleşti, kaçı görünür, o öğe etkin mi. Gizli eşe çözülen seçicide `sel >> nth=<ilkGorunur>` kullan; `etkin: false` ise alan pasiftir, yazma (önce onu açan adımı bul).
 4. **Sabit uyku yerine `bekle(sel)`.** Öğe görünene dek bekler, süre dolarsa `false` döner.
 5. **Engeli `engelKapat()` ile kaldır**, `force: true` ile delme. `force` örten katmana tıklayabilir; yalnız `ogeDurumu` görünür ve etkin diyorsa ve örtenin zararsız olduğu kareyle görüldüyse kullan.
@@ -111,7 +111,7 @@ Yeni bir takılma görürsen buraya satır eklenmesi için bulgu yaz. "Ölçülm
 | Belirti | Sebep | Ne yap |
 |---|---|---|
 | Tıklamadan sonra betik onlarca saniye yanıtsız (5 Kas, iki kez, 80-85 sn) | Eylemlerin süre sınırı yoktu; örtülü öğeye tıklama sonsuza dek yeniden deniyordu (kesin kök canlıda ölçülmedi) | 0.9.0: her eylem 15 sn + sert tavan 45 sn. `zaman-asimi` gelince `kare()` ile bak, `engelKapat()`, `ogeDurumu()` |
-| Betik yarıda kesildi, sekme açık kaldı | `kapat()` çağrılmadı | `Dumen.kos` kullan; kapat iki kez çağrılabilir, kendi açtırdığı sekmeleri de toplar |
+| Betik yarıda kesildi, sekme açık kaldı | `kapat()` çağrılmadı | `Dumen.kos` kullan; kapat iki kez çağrılabilir, kendi açtırdığı sekmeleri de toplar, bağlantı düşmüşse sekmeyi kimliğiyle kapatır. Kapatılan bağlantı yeniden eylem yapmaz (`kapali`) |
 | Olmayan öğede okuma ya da eylem 30 sn bekliyor | Durma noktası ölçümünün süresi uygulanmıyordu | 0.9.0'da düzeldi (1,5 sn). Öğe var mı diye `ogeDurumu(sel).sayi` |
 | İndirilen dosya bulunamıyor | Dosya tarayıcının makinesine düşer; ajan kutusundan o diske yol yok, `saveAs` uzak tarayıcıda çalışmaz | `indir(sel, hedef)` ya da `indirAdres(adres, hedef)` |
 | "Görüntüle" dosyayı yeni sekmede açıyor | Bağlantı yeni sekme hedefli | `indir(sel, hedef)` yeni sekmeyi de karşılar; yalnız adres gerekiyorsa `yeniSekmeAdresi(sel)` |
@@ -148,6 +148,6 @@ Komut yalnız `GET <merkez>/dumen/mod` okur (jeton yok, yazma yok); bekleme sır
 Merkez ajana doğrudan zil çalamaz (tmux yolu yok); uyanma yolu bu bekleyicidir. Sultan'a süre hatırlatması merkez tarafındadır (cloudtop terminal-merkez), bu beceride değil.
 
 ## Sınav
-`bash scripts/dumen-dosya.test.sh` — 0.9.0: sahte merkez + iki sahte site (ikinci köken) + gerçek headless Chromium, 51 kapı + 22 mutant (onaysız yükleme · bayat/başka dosyanın onayı · izinli dizin dışı · bağ · sır yolu · giriş sayfasını dosya sayma · tür ölçmeme · başka köken yedeği · açık kalan sekme · her Reddet'e tıklama · onaysız çerez kabulü · ödeme sayfasında engel · sert süre yok · süresiz eylem · kapat/kos sekme bırakır · dosya yolunu yazdırma · kapıda asılma).
+`bash scripts/dumen-dosya.test.sh` — 0.9.0: sahte merkez + iki sahte site (ikinci köken) + gerçek headless Chromium, 55 kapı + 26 mutant (onaysız yükleme · bayat/başka dosyanın onayı · izinli dizin dışı · bağ · sır yolu · giriş sayfasını dosya sayma · tür ölçmeme · başka köken yedeği · açık kalan sekme · her Reddet'e tıklama · onaysız çerez kabulü · ödeme sayfasında engel · sert süre yok · süresiz eylem · kapat/kos sekme bırakır · dosya yolunu yazdırma · kapıda asılma · süre dolunca eylemin kesilmemesi · kapı ve eyleme ayrı süre · kapatılan bağlantının yeniden eylem yapması · bağlantı düşmüşken açık kalan sekme).
 `bash scripts/dumen-bekle.test.sh` — sahte merkez + GERÇEK süreç (Sultan'dayken çıkmaz, geri verilince rc 0 ile çıkar), 12 kapı + 9 mutant.
 `bash scripts/dumen.test.sh` — sahte merkez + gerçek headless Chromium, 29 kapı + 10 mutant (fail-open · merkez cevapsız→devam · durma noktası kapalı · durak bildirimi 5xx'i başarı sayar · ham page dışarı açık · parola gizleme yok · jetonsuz bildirim · soket düşünce ham hata · sultan iken yeniden bağlanma · ajan olunca bağlanmama). Chromium yoksa rc 3 ÖLÇÜLEMEDİ.

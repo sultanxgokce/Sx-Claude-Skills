@@ -49,5 +49,9 @@ mut "kapat() tıklamanın açtığı sekmeyi bırakır" "for (const s of [...thi
 mut "kos() iş bitince kapatmaz" "process.off('SIGINT', sinyal); await d.kapat(); }" "process.off('SIGINT', sinyal); }"
 mut "dosya yolu terminale yazılır" "dosya alana eklendi (\${k.uzanti}," "dosya alana eklendi (\${k.yol},"
 mut "durma noktası ölçümünün süresi uygulanmaz (olmayan öğede kapı asılır)" "}), undefined, { timeout: 1500 }).catch(() => null);" "}), { timeout: 1500 }).catch(() => null);"
+mut "süre dolunca eylem kesilmez (yarım tıklama sonradan gerçekleşir)" "if (kes) this.#kes();" ""
+mut "kapı ve eylem ayrı ayrı tam süre alır (tavan iki katına çıkar)" "Math.max(1, son - Date.now())" "ms"
+mut "kapatılan Dümen yeniden bağlanıp eylem yapar" "if (this.#kapandi) throw new KapiHata('kapali'" "if (false) throw new KapiHata('kapali'"
+mut "bağlantı düşmüşken kendi sekmesi açık kalır" "if (this.#kendiSekmem && this.#hedefId) await fetch(" "if (false) await fetch("
 find "$T" -mindepth 1 -delete; rmdir "$T"
 [ "$MK" -eq 0 ] && echo "MUTANT: $MS/$MS yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

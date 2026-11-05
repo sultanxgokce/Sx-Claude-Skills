@@ -13,7 +13,7 @@ if (!CHROME) { console.log('ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi'); process.ex
 
 const PDF = Buffer.from('%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n');
 const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64');
-let mod = 'ajan'; const istek = {};
+let mod = 'ajan'; let modGecikme = 0; const istek = {};
 const say = (u) => { istek[u] = (istek[u] || 0) + 1; };
 const dis = http.createServer((q, r) => { say('dis' + q.url); r.setHeader('content-type', 'application/pdf'); r.setHeader('content-disposition', 'attachment; filename="dis.pdf"'); r.end(PDF); });   // başka köken, CORS başlığı YOK
 await new Promise((ok) => dis.listen(0, '127.0.0.1', ok));
@@ -23,7 +23,8 @@ const SAYFA = () => `<!doctype html><meta charset=utf-8><title>panel</title>
 <a id=x href="${DIS}/dis.pdf">Başka kökenden indir</a> <a id=g href="/giris.pdf">Oturum düşmüş indirme</a> <a id=bozuk href="/bozuk.pdf">Bozuk</a> <button id=yok>Hiçbir şey açmaz</button></div>
 <div id=yuk><input id=f type=file style="display:none" onchange="const x=this.files[0];x.text().then(t=>document.getElementById('fs').textContent=x.name+'|'+x.size+'|'+btoa(t))"><span id=fs>-</span>
 <button id=sec onclick="document.getElementById('f2').click()">Fatura gönder</button><input id=f2 type=file style="display:none" onchange="document.getElementById('fs2').textContent=this.files[0].name"><span id=fs2>-</span></div>
-<div id=ortulu style="position:relative;width:200px;height:40px"><button id=alt>Altta</button><div style="position:absolute;inset:0;background:#0003"></div></div>
+<div id=ortulu style="position:relative;width:200px;height:40px"><button id=alt onclick="fetch('/tik')">Altta</button><div id=ortu style="position:absolute;inset:0;background:#0003"></div></div>
+<button id=ortukaldir onclick="setTimeout(()=>document.getElementById('ortu').remove(),1500)">Örtüyü 1,5 sn sonra kaldır</button> <button id=tik2 onclick="fetch('/tik2')">Tık 2</button>
 <div id=iadekutu><button id=iade onclick="document.getElementById('iz').textContent='iade-reddedildi'">Reddet</button><span id=iz>-</span></div>
 <div id=cz>Bu site çerez kullanır. <button onclick="document.getElementById('cz').remove()">Reddet</button> <button onclick="document.getElementById('kb').textContent='kabul'">Kabul Et</button></div><span id=kb>-</span>
 <div id=tur>Yeni özellik turu <button onclick="document.getElementById('tur').remove()">Turu Geç</button></div>
@@ -31,7 +32,8 @@ const SAYFA = () => `<!doctype html><meta charset=utf-8><title>panel</title>
 <button class=btn style="display:none">Gönder</button><button class=btn>Gönder</button><textarea id=msj disabled></textarea>`;
 const srv = http.createServer((q, r) => {
   say(q.url);
-  if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); return r.end(JSON.stringify({ mod, an: '' })); }
+  if (q.url === '/dumen/mod') { r.setHeader('content-type', 'application/json'); return setTimeout(() => r.end(JSON.stringify({ mod, an: '' })), modGecikme); }
+  if (q.url === '/tik' || q.url === '/tik2') return r.end('ok');
   if (q.url.startsWith('/api/dumen/')) { r.setHeader('content-type', 'application/json'); return r.end('{"ok":true}'); }
   if (q.url === '/dosya.pdf') { r.setHeader('content-type', 'application/pdf'); r.setHeader('content-disposition', 'attachment; filename="musteri-adi-fatura.pdf"'); return r.end(PDF); }
   if (q.url === '/gor.pdf') { r.setHeader('content-type', 'application/pdf'); return r.end(PDF); }
@@ -149,10 +151,16 @@ try {
   await d.goto(MERKEZ + '/panel');
 
   console.log('── sert süre sınırı ve kapat garantisi');
+  await d.click('#ortukaldir');   // örtü 1,5 sn sonra kalkacak: kesilmeyen bir tıklama O ZAMAN gerçekleşirdi
   const tz = Date.now();
-  const ez = await hata(() => d.click('#alt', { timeout: 8000, azamiMs: 1200 }));
+  const ez = await hata(() => d.click('#alt', { timeout: 8000, azamiMs: 700 }));
   ok('Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)', ez instanceof KapiHata && ez.neden === 'zaman-asimi' && Date.now() - tz < 3000, `${ez && ez.message} ${Date.now() - tz} ms`);
   ok('Z2 süre aşımı iletisi "hâli bilinmiyor, ölç" der (körlemesine yineleme yok)', /BİLİNMİYOR/.test(String(ez && ez.message)));
+  await new Promise((r2) => setTimeout(r2, 2200));   // örtü çoktan kalktı
+  ok('Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)', !istek['/tik'], `tık=${istek['/tik']}`);
+  await d.goto(MERKEZ + '/panel'); await d.click('#ortukaldir');
+  ok('Z1c pozitif kontrol: bağlantı geri geldi, örtü kalkınca aynı düğme tıklanır ve sayılır', (await d.bekle('#ortu', { durum: 'hidden', azamiMs: 5000 })) === true && (await d.click('#alt').then(() => new Promise((r2) => setTimeout(r2, 400)))) === undefined && istek['/tik'] === 1, `tık=${istek['/tik']} bağlanma=${d.durum().baglanmaSayisi}`);
+  await d.goto(MERKEZ + '/panel');
   const tv = Date.now();
   const ev = await hata(() => d.click('#alt'));
   ok('Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içinde hata)', ev && !(ev instanceof KapiHata) && Date.now() - tv < 6000, `${Date.now() - tv} ms`);
@@ -166,6 +174,16 @@ try {
   ok('Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı', e1 && /iş patladı/.test(e1.message) && (await sekmeSay()) === tk, `${await sekmeSay()} ≠ ${tk}`);
   const e2 = await hata(() => Dumen.kos({ ...sec, dosyaKok: [KOK] }, async (x) => { await x.goto(MERKEZ + '/panel'); await new Promise(() => {}); }, { toplamAzamiMs: 1500 }));
   ok('Z7 Dumen.kos: iş asılırsa toplam süre sınırında kesilir, sekme kapanır', e2 instanceof KapiHata && e2.neden === 'zaman-asimi' && (await sekmeSay()) === tk, `${e2 && e2.message}`);
+  const e3 = await hata(() => Dumen.kos({ ...sec, dosyaKok: [KOK] }, async (x) => { await x.goto(MERKEZ + '/panel'); await new Promise((r2) => setTimeout(r2, 1800)); await x.click('#tik2'); }, { toplamAzamiMs: 900 }));
+  await new Promise((r2) => setTimeout(r2, 2300));
+  ok('Z7b süresi dolup KAPATILAN bağlantı sonradan yeniden bağlanıp tıklamaz (tık yok, artık sekme yok)', e3 instanceof KapiHata && !istek['/tik2'] && (await sekmeSay()) === tk, `tık2=${istek['/tik2']} sekme=${await sekmeSay()}`);
+  let sureKapi = 0;
+  const e4 = await hata(() => Dumen.kos({ ...sec, zamanAsimiMs: 6000 }, async (x) => {
+    await x.goto(MERKEZ + '/panel'); modGecikme = 2500; const tb2 = Date.now();
+    try { await x.click('#alt', { timeout: 20000, azamiMs: 4000 }); } finally { sureKapi = Date.now() - tb2; modGecikme = 0; }
+  }));
+  modGecikme = 0;
+  ok('Z2b sert tavan KAPI DAHİLDİR: yavaş kapı (2,5 sn) + asılı eylem toplamı 4 sn tavanında kesilir (≤ 5,3 sn)', e4 instanceof KapiHata && e4.neden === 'zaman-asimi' && sureKapi >= 3600 && sureKapi < 5300, `${sureKapi} ms · ${e4 && e4.message}`);
   const sonuc = await Dumen.kos({ ...sec, dosyaKok: [KOK] }, async (x) => { await x.goto(MERKEZ + '/panel'); return x.metin('#a'); });
   ok('Z8 Dumen.kos: işin sonucu döner, sekme kapanır', sonuc === 'Faturayı indir' && (await sekmeSay()) === tk);
   const to = Date.now();
@@ -174,4 +192,4 @@ try {
 } catch (e) { K++; console.log('  ✗ SINAV ÇÖKTÜ: ' + String(e && e.stack || e).slice(0, 600)); }
 finally { ch.kill('SIGKILL'); srv.close(); dis.close(); }
 console.log(`SONUÇ: geçti=${G} kaldı=${K} süre=${Math.round((Date.now() - t0) / 1000)} sn`);
-process.exit(K === 0 && G >= 51 ? 0 : 1);
+process.exit(K === 0 && G >= 55 ? 0 : 1);
