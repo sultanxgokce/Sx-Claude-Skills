@@ -1,7 +1,7 @@
 {
   "is": "dumen-dosya-takilma",
-  "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-05T17:08:13+03:00",
+  "arac": "kanit.py/0.8.0",
+  "guncelleme": "2026-11-05T17:30:40+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -424,7 +424,44 @@
       "olculen_commit": "63b4a240a0fe475de28b6c7bf1200ec77f272585",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-dumen",
+      "asama": "canli",
+      "dosya": "canli-canli-dumen.txt",
+      "sha256": "00c2e36751971a6e06079e3bacc7c938fe48ba4cf70499976a3cdbe864a05b8c",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma/_agents/fabrika/kanit/dumen-dosya-takilma/canli-dumen-20261105.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma/_agents/fabrika/kanit/dumen-dosya-takilma/canli-dumen-20261105.txt",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "dumen-canli (indirAdres tamam|sert-sure kesildi|yukle-onaysiz reddedildi|sonuc GECTI)",
+      "en_az": 1,
+      "atesleme_sayisi": 4,
+      "ilk_atesleme": {
+        "satir": "2026-11-05T17:30:19+03:00 dumen-canli indirAdres tamam tur=application/pdf; qs=0.001 bayt=13264 diskte=13264 kaynak=adres ms=336",
+        "saat": "2026-11-05T17:30:19+03:00",
+        "saat_iso": "2026-11-05T17:30:19+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-05T17:30:25+03:00 dumen-canli sonuc GECTI",
+        "saat": "2026-11-05T17:30:25+03:00",
+        "saat_iso": "2026-11-05T17:30:25+03:00"
+      },
+      "zaman": "2026-11-05T17:30:40+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "96df3254dbce452c8eab0678214a48df",
+      "olculen_commit": "47c872745405f517730bb3411c89f5bf80386a88",
+      "olculen_kirli": false
     }
   ],
-  "imza": "741952b6b9a4df5daf0d9401894435ebd5a95c93cea74114a4a0f7288b0a01b8"
+  "imza": "a6c0f438a4b80a682fb1dd9b3d6f8b2acafc318a2ac1943d0abd64a1e6768737"
 }
