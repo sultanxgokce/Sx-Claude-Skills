@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ÖNCE ölçümü: yeni sınav (HEAD'deki denetci-kutu-disi.test.sh) ESKİ denetci.sh ile (bu dalın ana dalla ortak atası) GEÇİCİ KOPYADA koşar.
-# Beklenen: eski 54 kapı yeşil; başka sözle gelen tekrarı ölçen K kapıları (K2, K3, K4, K9, K9b) kırmızı. Çıkış: sınavın rc'si · kopya kurulamazsa 9.
+# Beklenen: eski 54 kapı ve yeni kuralın değiştirmediği K kapıları yeşil; başka sözle gelen tekrarı ölçen K kapıları (K2, K3, K4, K9, K9b) kırmızı. Çıkış: sınavın rc'si · kopya kurulamazsa 9.
 set -u
 kok="$(git rev-parse --show-toplevel)" || exit 9
 ata="$(git -C "$kok" merge-base HEAD origin/main)" || exit 9

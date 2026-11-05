@@ -243,8 +243,9 @@ kapi "K5 🔴 ortak parçası OLMAYAN yüzey yeni bulgudur: borç YAZILMAZ" 1 bo
 kapi "K5b iki satır da işaretsiz yazıldı" 0 defter is-k2 "len(sat)==2 and not any('tekrar' in x for x in sat)"
 kartj is-k3 e
 kos is-k3 "$(kdj "telefonda dogrulama yok" "Sultan'ın telefonu")" "${JORT[@]}" >/dev/null 2>&1
-kos is-k3 "$(kdj "telefon genisliginde olculmedi" "telefon")" "${JORT[@]}" >/dev/null 2>&1
-kapi "K6 🔴 parça TAM eşleşir: 'telefon' ile 'Sultan'ın telefonu' ayrı yüzeydir, borç YAZILMAZ" 1 borc_var is-k3
+kos is-k3 "$(kdj "telefon genisliginde olculmedi" "telefonu")" "${JORT[@]}" >/dev/null 2>&1
+kapi "K6 🔴 parça TAM eşleşir, kelime kesişimi yetmez: 'telefonu' ile 'Sultan'ın telefonu' ayrı yüzeydir, borç YAZILMAZ" 1 borc_var is-k3
+kapi "K6b iki satır da işaretsiz" 0 defter is-k3 "len(sat)==2 and not any('tekrar' in x for x in sat)"
 kartj is-k4 e
 kos is-k4 "$(kdj "telefonda dogrulama yok" "Sultan'ın telefonu" "telefonda klavye olculmedi" "Sultan'ın telefonu")" "${JORT[@]}" >/dev/null 2>&1
 kapi "K7 🔴 AYNI turdaki iki bulgu birbirinin tekrarı sayılmaz: borç YAZILMAZ" 1 borc_var is-k4

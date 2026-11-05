@@ -3,7 +3,7 @@
 #   yuzey-yok        → yüzey eşlemesi kalkar, tekrar yine yalnız birebir metinle aranır (eski kural)        (beklenen düşen kapı: K2)
 #   isaret-yok       → başka sözle gelen tekrar deftere işaretsiz yazılır                                    (beklenen düşen kapı: K4)
 #   hep-tekrar       → yüzeyi olan her kutu dışı bulgu tekrar sayılır (ortak parça aranmaz)                  (beklenen düşen kapı: K5)
-#   kelime-kesisimi  → parça tam eşleşmez, kelime kesişimi yeter ("telefon" = "Sultan'ın telefonu")          (beklenen düşen kapı: K6)
+#   kelime-kesisimi  → parça tam eşleşmez, kelime kesişimi yeter ("telefonu" = "Sultan'ın telefonu")         (beklenen düşen kapı: K6)
 #   ayni-tur         → aynı turdaki bulgular birbirini tekrar sayar                                          (beklenen düşen kapı: K7)
 #   ayni-metin-yazar → birebir aynı metin her turda deftere yeniden yazılır                                  (beklenen düşen kapı: K8)
 #   kesme-sayilir    → kesme işareti ve harf büyüklüğü farkı ayrı yüzey sayılır                              (beklenen düşen kapı: K2)
