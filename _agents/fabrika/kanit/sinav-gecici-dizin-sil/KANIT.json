@@ -1,0 +1,97 @@
+{
+  "is": "sinav-gecici-dizin-sil",
+  "arac": "kanit.py/0.8.0",
+  "guncelleme": "2026-11-06T00:06:00+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dizin-once",
+      "asama": "once",
+      "dosya": "olcum-dizin-once-once.txt",
+      "sha256": "e5a021ac963b38f2754c9bc5d294c2c8dbbfedb978cd249e0e0cb042424c7674",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gd-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-05T23:49:44+03:00",
+      "sure_sn": 54.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "e81bc48d699537ca836f9a66de4ed418faa98eebcb5be2475b7ced71b6188a97",
+      "olcum_id": "10d8cbcc2fe74f058c144fe168a7dfd9",
+      "olculen_commit": "0e6054e5f5d677ebc0a417a5745ca62bf07eb1e1",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dizin-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-dizin-sonra-sonra.txt",
+      "sha256": "772c01f4539a3a530513c11dc944a70589627f29ad04db7c0cbb8b6d9c937aad",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gd-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T23:50:38+03:00",
+      "sure_sn": 53.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "911d4302bf356f7b0a6136ccd0e2429781464be4e55330bd1fcdf2f7c4366c2b",
+      "olcum_id": "ba1520b44f524083b08f12fa6b9be026",
+      "olculen_commit": "0e6054e5f5d677ebc0a417a5745ca62bf07eb1e1",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-silme-kapali",
+      "asama": "tek",
+      "dosya": "olcum-mutant-silme-kapali-tek.txt",
+      "sha256": "a90afb392053d521385b6fc6b493f1e4f2003c70c4b2357694d36a30c3db9cd2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gd-mutant.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T23:51:34+03:00",
+      "sure_sn": 56.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "dizin-sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "sınav geçici dizin bıraktı",
+      "hedef_dustu": true,
+      "olcum_id": "26cee6f35c78484cbaf7f6723af19482",
+      "olculen_commit": "0e6054e5f5d677ebc0a417a5745ca62bf07eb1e1",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dumen-masa-tam",
+      "asama": "sonra",
+      "dosya": "olcum-dumen-masa-tam-sonra.txt",
+      "sha256": "69750b2987b8d6082a4c81f4039f2ebaee0906c9bb08ca57015ba0578c5863de",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gd-tam.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T00:06:00+03:00",
+      "sure_sn": 865.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "7c7b0c302f9e3819a5d0e99bbfc3e92bf4a5d5d48b30e9d5c56ca09120038151",
+      "olcum_id": "9c82fa84389e4354b1b4de846a9c7876",
+      "olculen_commit": "0e6054e5f5d677ebc0a417a5745ca62bf07eb1e1",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "8bf8955219100e9ce12a86d3a5c015703e6fde3e5d9ef1e556ce8477e9e69a86"
+}

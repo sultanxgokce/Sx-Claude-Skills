@@ -2,8 +2,8 @@
 // Sınanan: yukle · indir · indirAdres · yeniSekmeAdresi · engelKapat · ogeDurumu · bekle · sert süre sınırı · kapat garantisi (Dumen.kos).
 // Çalıştır: DUMEN_CHROME=<chrome-headless-shell> node dumen-dosya.test.mjs   (dumen.mjs yolu: DUMEN_LIB, varsayılan yanı)
 import http from 'http';
-import { cocukBaslat } from './sinav-cocuk.mjs';
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, symlinkSync } from 'fs';
+import { cocukBaslat, gecici } from './sinav-cocuk.mjs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, symlinkSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 const LIB = process.env.DUMEN_LIB || new URL('./dumen.mjs', import.meta.url).pathname;
@@ -48,13 +48,13 @@ const srv = http.createServer((q, r) => {
 await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
 const MERKEZ = `http://127.0.0.1:${srv.address().port}`;
 const PORT = 19900 + Math.floor(Math.random() * 60);
-const prof = mkdtempSync(join(tmpdir(), 'dumen-dosya-prof-'));
+const prof = gecici('dumen-dosya-prof-');
 const ch = cocukBaslat(CHROME, [`--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, '--no-sandbox', '--headless', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${PORT}/json/version`); break; } catch { await new Promise((r) => setTimeout(r, 200)); } }
 const CDP = `http://127.0.0.1:${PORT}`;
 
 // dosya düzeni: KOK izinli dizin · DISARI izinsiz
-const T = mkdtempSync(join(tmpdir(), 'dumen-dosya-'));
+const T = gecici('dumen-dosya-');
 const KOK = join(T, 'izinli'); const DISARI = join(T, 'disari'); mkdirSync(KOK); mkdirSync(DISARI); mkdirSync(join(KOK, 'in'));
 const FATURA = join(KOK, 'ahmet-yilmaz-fatura.pdf'); writeFileSync(FATURA, PDF);
 const BASKA = join(KOK, 'baska.pdf'); writeFileSync(BASKA, Buffer.concat([PDF, Buffer.from('x')]));

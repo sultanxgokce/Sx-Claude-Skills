@@ -13,7 +13,7 @@ if [ -z "${MUTANT_HAM:-}" ]; then
   [ "${DUMEN_MUTANT:-1}" = 0 ] && exit 0
 fi
 echo "── mutantlar (her biri sınavı KIRMALI)"
-T="$(mktemp -d)"; cp "$HERE/dumen.mjs" "$HERE/dumen-dosya.test.mjs" "$HERE/sinav-cocuk.mjs" "$T/"
+T="$(mktemp -d)"; trap 'python3 -I -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T"' EXIT; cp "$HERE/dumen.mjs" "$HERE/dumen-dosya.test.mjs" "$HERE/sinav-cocuk.mjs" "$T/"
 MK=0; MS=0
 mut() { # mut <ad> <çapa> <yerine> : kopyayı bozar, sınavı koşar, KIRMIZI beklenir. Yalnız TEK=<n> verilirse o mutant koşar.
   MS=$((MS+1)); [ -n "${TEK:-}" ] && [ "$TEK" != "$MS" ] && return 0

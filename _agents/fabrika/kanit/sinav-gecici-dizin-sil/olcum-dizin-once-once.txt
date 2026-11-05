@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gd-once.sh
+# rc=1 sure=54.2s zaman=2026-11-05T23:49:44+03:00
+--- stdout ---
+üç sınavdan sonra /tmp'de kalan geçici dizin: 10 (başlangıçta 1786)
+  ✗ sınav geçici dizin bıraktı (KALAN: 10)
+--- stderr ---
