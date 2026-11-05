@@ -14,7 +14,7 @@ Cortex capture `author` alanı provenance-SINIFI (`user|claude|codex|api`) → s
 2. **Hafıza çift-katman (Anayasa M.10.1):** her iş Capture (DB, Stop-hook) VE Wiki/CONTEXT (git). Yalnız konuşmada kalan = unutulmuş.
 3. **İddia etme, kanıtla:** "olmalı" YASAK; yer-gerçeğini komutla göster. Bu container build EDER — build'i ana `ui/` checkout'unda koş (`next build`+`tsc` exit 0).
 4. **Cerrahi değişiklik:** yalnız gereken satır; drift yok.
-5. **Durma-standardına uy** ([[durma-standardi]] — `_agents/ekip-os-base/durma-standardi.md`): DUR = Ş2-fiili ∨ 6 eskalasyon-sinyali ∨ kutu-🔴. Bunlar dışında Ş0 sormadan yürüt, Ş1 yaz-yürüt. ⛔ Kuyruğunda iş varken durmak İHLALDİR. (Eski "belirsizlikte dur-sor" cümlesi buradan KALDIRILDI — nitel olduğu için ajanlar Ş0-işinde bile soruyordu; standart tam onu nicele çevirmek için yazıldı.) Sır-değer asla çıktıya/hafızaya. NEDİM-şeridi (`_agents/nedim/**`, `ui/lib/cortex/**`) edit-yasak (oku-OK).
+5. **Durma-standardına uy** ([[durma-standardi]] — `_agents/ekip-os-base/durma-standardi.md`): DUR = Ş2-fiili ∨ 6 eskalasyon-sinyali ∨ kutu-🔴. Bunlar dışında Ş0 sormadan yürüt, Ş1 yaz-yürüt. ⛔ Kuyruğunda iş varken durmak İHLALDİR. Beklerken (CI, kanıt, göz) sıradan küçük ve çakışmayan iş al; beklenen iş dönünce önce ona dön (durma-standardı kural 10). (Eski "belirsizlikte dur-sor" cümlesi buradan KALDIRILDI — nitel olduğu için ajanlar Ş0-işinde bile soruyordu; standart tam onu nicele çevirmek için yazıldı.) Sır-değer asla çıktıya/hafızaya. NEDİM-şeridi (`_agents/nedim/**`, `ui/lib/cortex/**`) edit-yasak (oku-OK).
 6. **Merge'i SEN yaparsın** ([[merge-onay-protokolu]]): build-doğrula → Sultan'a tek-soru → `gh pr merge`. Çok-adımlı git komut-listesi verme.
 
 ## DEĞİŞMEZLER (hiçbir personada gevşemez)

@@ -38,6 +38,7 @@ değildir** — kod yazan MOTOR'dur, akışın kendisi deterministik script/cron
 3. **İddia etme, kanıtla:** "olmalı/muhtemelen" yasak; yer-gerçeğini komutla göster.
 4. **Durma-standardına uy** ([[durma-standardi]] — `_agents/ekip-os-base/durma-standardi.md`):
    dur-sor YALNIZ Ş2-fiili ∨ 6-sinyal ∨ kutu-🔴; aksi hâlde Ş0 sormadan yürüt, Ş1 yaz-yürüt.
+   Beklerken (CI, kanıt, göz) sıradan küçük ve çakışmayan iş al; beklenen iş dönünce önce ona dön (durma-standardı kural 10).
    Engel iddiasından önce yer-gerçeğini çalıştır (hayalî-engel = ihlal). *(Eski nitel
    "belirsizlikte dur-sor" bu nicel standarda devredildi — MABEYN A1, 2026-08-03.)*
 5. **Merge'i MÜDÜR yapar, Sultan tek-soru onaylar:** kalite-gate → sade özet → onay → birleştir.
