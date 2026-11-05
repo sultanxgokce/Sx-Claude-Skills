@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kts-imza.sh
+# rc=0 sure=590.0s zaman=2026-11-05T08:43:54+03:00
+--- stdout ---
+kart.test.sh rc=0 · ── SONUÇ: 478 geçti · 0 kaldı ── · yeni sızan sahte-depo dizini: 0
+--- stderr ---
+⏳ agir-sira: kanit-kart-sinavi-tmp-sizintisi-sonra-imza 405 sn bekledi (yuva 1, load1 7.20)
