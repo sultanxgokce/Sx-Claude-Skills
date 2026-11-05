@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kart-sinavi-tmp-sizintisi",
+  "pr": "701",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T08:53:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-sinavi-tmp-sizintisi",
+  "dal": "kart-sinavi-tmp-sizintisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 9309,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3554
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2cfbbb980b5e93dc1c599df58245cd0ccac10b93",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "kart.test.sh için güvenli hedef denetimli bir EXIT tuzağı eklenmiş; normal koşuda geçici sahte depo ağacı silinirken teşhis amacıyla açık bir saklama seçeneği bırakılmış. İmzalı önce/sonra ölçümü 478 sınavın yeşil kaldığını ve yeni sızıntının 1 dizinden 0 dizine indiğini gösterdiği için iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçekçi sahte-depo verisiyle aynı sınav sonucu korunurken önce 1, sonra 0 yeni sızan dizin ölçülmüş; bu, talep edilen davranış için yeterli bir ölçüm çiftidir."
+  }
+}
