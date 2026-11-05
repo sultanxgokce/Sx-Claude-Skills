@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "beklerken-is-al",
+  "pr": "702",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T11:47:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-beklerken-is-al",
+  "dal": "beklerken-is-al",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22162,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5692
+  },
+  "dalgic": "uyumsuz",
+  "bas": "b2e427ea928769c1ec28f792597f035791d68730",
+  "duzeltme_farki": {
+    "onceki_bas": "1486d271b1954b3199b228b00ad4fc67fd9e6138",
+    "dosya": 4,
+    "bayt": 5813,
+    "tam_bayt": 36354
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Paket kuralı ve dört temel önceki tam incelemede doğrulanmış; bu turdaki tek üretim değişikliği sınav betiğini çalıştırılabilir yapıyor ve yeni bir kod kusuru göstermiyor. Kod üretime hazırdır; önceki B1 kapanmamıştır ama canlı filo ve kurulum yetkisi gerektiren kutu-dışı doğrulama olduğundan puanı düşürmez.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kapanmamış: “bütün filoya iner” sonucu canlı kurulumdan sonra filo kimliklerinde henüz doğrulanmamış ve karttaki canlı borcun odendi alanı hâlâ null.",
+        "kanit": "Manifestte paket kuralını doğrulayan kural-sinavi2 sonucu YESIL ve parite2 sonucu 39/39'dur; buna karşılık gerçek filo kurulumunu veya her kutudaki kural sayımını ölçen kayıt yoktur. İş kartı canli_borc, 6 Kas sabahı surum.sh denetimi ve her kutunun kimliğinde kural 10 sayımını açıkça sonraya bırakıyor.",
+        "konum": "olcum-kural-sinavi2-sonra.txt; olcum-parite2-tek.txt; iş kartı canli_borc",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı filo + kurulum yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kaynak kuralı için kırmızıdan yeşile ölçüm çifti, son ölçülen başta yinelenmiş yeşil kural sınavı, 39/39 parite ve 18/18 sürüm sınavı var. Son düzeltme yalnız bekleme-kurali.test.sh kipini 100644'ten 100755'e çeviriyor; ölçümler betiği bash ile çalıştırdığı için bu kip değişikliğini doğrudan sınamıyor, ancak farkın kendisi çalıştırılabilir kipin verildiğini kanıtlıyor. Canlı filoya iniş ölçümü yoktur ve bu eksik açık canlı borç olarak kayıtlıdır."
+  }
+}
