@@ -1,0 +1,56 @@
+{
+  "is": "kart-gorev-zorunlu",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T14:36:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra",
+      "asama": "tek",
+      "dosya": "olcum-sinav-sonra-tek.txt",
+      "sha256": "f35d8215341d39b1e3d68137b751ea906ec0976967eaaeda3569d051cd91f33c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gz-olc.sh",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T14:31:41+03:00",
+      "sure_sn": 279.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "77b5009f1eb74cfbacaf4a14c65e65e6",
+      "olculen_commit": "01a61e41de0549c88b50c2d16fd850a2217687dd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-gorevsiz-kapi",
+      "asama": "tek",
+      "dosya": "olcum-mutant-gorevsiz-kapi-tek.txt",
+      "sha256": "a9dbbd6e0a8348c4d7f666a41a92acd6de8419ba6d6b2fa869325d6cae490508",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/gz-olc.sh",
+        "mutant"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-05T14:36:46+03:00",
+      "sure_sn": 304.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "GZ1",
+      "hedef_dustu": true,
+      "olcum_id": "dba6c9f31c1f4398ba47ae8687ab5fa2",
+      "olculen_commit": "01a61e41de0549c88b50c2d16fd850a2217687dd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "c7c0aa1c583c54909062da5dfbbe207ccd228070c65122a4cd17ebe7b870cec4"
+}
