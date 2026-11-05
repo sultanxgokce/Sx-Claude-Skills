@@ -29,6 +29,9 @@ const SAYFA = () => `<!doctype html><meta charset=utf-8><title>panel</title>
 <div id=cz>Bu site çerez kullanır. <button onclick="document.getElementById('cz').remove()">Reddet</button> <button onclick="document.getElementById('kb').textContent='kabul'">Kabul Et</button></div><span id=kb>-</span>
 <div id=tur>Yeni özellik turu <button onclick="document.getElementById('tur').remove()">Turu Geç</button></div>
 <iframe id=qualaroo_anket src="about:blank" style="width:50px;height:50px"></iframe><div id=ozel style="width:10px;height:10px">katman</div>
+<div id=blobkutu><button id=bgp onclick="const b=new Blob([Uint8Array.from(atob('${PNG.toString('base64')}'),c=>c.charCodeAt(0))],{type:'image/png'});const f=document.createElement('iframe');f.id='gorp';f.src=window.URL.createObjectURL(b);f.style='width:40px;height:30px';document.getElementById('blobkutu').appendChild(f)">Görseli pencerede aç</button>
+<button id=bg onclick="const b=new Blob([Uint8Array.from(atob('${PDF.toString('base64')}'),c=>c.charCodeAt(0))],{type:'application/pdf'});const f=document.createElement('embed');f.id='gor';f.type='application/pdf';f.src=window.URL.createObjectURL(b);f.style='width:40px;height:30px';document.getElementById('blobkutu').appendChild(f)">Fatura Görüntüle (pencere)</button>
+<button id=bh onclick="const b=new Blob(['<!doctype html><title>Giriş</title><form>parola</form>'],{type:'text/html'});const f=document.createElement('iframe');f.id='gorh';f.src=window.URL.createObjectURL(b);f.style='width:40px;height:30px';document.getElementById('blobkutu').appendChild(f)">Oturum düşmüş pencere</button></div>
 <button class=btn style="display:none">Gönder</button><button class=btn>Gönder</button><textarea id=msj disabled></textarea>`;
 const srv = http.createServer((q, r) => {
   say(q.url);
@@ -131,6 +134,21 @@ try {
   ok('S1 yeniSekmeAdresi: açılan sekmenin adresi döndü, sekme kapatıldı', (await d.yeniSekmeAdresi('#p')) === MERKEZ + '/r.png' && (await sekmeSay()) === taban);
   ok('S2 yeni sekme açmayan tıklama asılmaz (sekme-yok)', (await neden(() => d.yeniSekmeAdresi('#yok', { olayMs: 1200 }))) === 'sekme-yok');
 
+  console.log('── sayfaya gömülü dosya (blob: · sayfa içi fatura penceresi)');
+  const tabanB = await sekmeSay();
+  const b1 = await d.indir('#bgp', join(KOK, 'in', 'gomulu.png'));
+  ok('B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı', b1.kaynak === 'gomulu' && readFileSync(join(KOK, 'in', 'gomulu.png')).equals(PNG) && (await sekmeSay()) === tabanB, JSON.stringify(b1));
+  const b2 = await d.indir('#bg', join(KOK, 'in', 'gomulu.pdf'));
+  ok('B2 blob: PDF penceresi: bayt birebir', readFileSync(join(KOK, 'in', 'gomulu.pdf')).equals(PDF) && ['gomulu', 'indirme'].includes(b2.kaynak), JSON.stringify(b2));
+  ok('B3 pencere ZATEN açıkken yeni bir şey açmayan tıklama eski dosyayı almaz (indirme-yok)', (await neden(() => d.indir('#yok', join(KOK, 'in', 'eski.png'), { olayMs: 1500 }))) === 'indirme-yok' && !existsSync(join(KOK, 'in', 'eski.png')));
+  const b4 = await d.indirGomulu('#gorp', join(KOK, 'in', 'acik.png'));
+  ok('B4 indirGomulu: açık duran penceredeki dosya tıklamadan alındı', b4.kaynak === 'gomulu' && readFileSync(join(KOK, 'in', 'acik.png')).equals(PNG), JSON.stringify(b4));
+  const ba = (await d.nitelikler('#gorp', 'src'))[0] || '';
+  ok('B5 indirAdres bu sayfanın blob: adresini alır', /^blob:/.test(ba) && (await neden(() => d.indirAdres(ba, join(KOK, 'in', 'blob-adres.png')))) === null && readFileSync(join(KOK, 'in', 'blob-adres.png')).equals(PNG), ba.slice(0, 20));
+  ok('B6 pencerede dosya yerine GİRİŞ SAYFASI varsa dosya sayılmaz, yazılmaz (indirme-sayfa)', (await neden(() => d.indir('#bh', join(KOK, 'in', 'giris2.pdf')))) === 'indirme-sayfa' && !existsSync(join(KOK, 'in', 'giris2.pdf')));
+  ok('B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)', (await neden(() => d.indirGomulu('#qualaroo_anket', join(KOK, 'in', 'bos.pdf')))) === 'indirme-yok');
+  ok('B8 başka sayfanın blob: adresi okunamaz, dosya yazılmaz (indirme-okunamadi)', (await neden(() => d.indirAdres('blob:https://example.com/00000000-0000-0000-0000-000000000000', join(KOK, 'in', 'yabanci.pdf')))) === 'indirme-okunamadi' && !existsSync(join(KOK, 'in', 'yabanci.pdf')));
+
   console.log('── öğe durumu ve bekleme (salt-okur)');
   const od = await d.ogeDurumu('.btn');
   ok('O1 gizli eşi olan seçici: 2 eşleşme, 1 görünür, ilk görünürün sırası 1', od.sayi === 2 && od.gorunurSayi === 1 && od.ilkGorunur === 1 && od.gorunur && od.etkin, JSON.stringify(od));
@@ -192,4 +210,4 @@ try {
 } catch (e) { K++; console.log('  ✗ SINAV ÇÖKTÜ: ' + String(e && e.stack || e).slice(0, 600)); }
 finally { ch.kill('SIGKILL'); srv.close(); dis.close(); }
 console.log(`SONUÇ: geçti=${G} kaldı=${K} süre=${Math.round((Date.now() - t0) / 1000)} sn`);
-process.exit(K === 0 && G >= 55 ? 0 : 1);
+process.exit(K === 0 && G >= 63 ? 0 : 1);
