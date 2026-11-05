@@ -54,8 +54,7 @@ EOF
 _kayitlar() { find "$KOK" -name '*.jsonl' -mmin -10 2>/dev/null; }
 
 _dogrula() {
-  local imza="$1" simdi bulundu=0 gorundu=0
-  simdi="$(date +%s)"
+  local imza="$1" bulundu=0 gorundu=0
   while IFS= read -r dosya; do
     [ -n "$dosya" ] || continue
     gorundu=1
@@ -73,8 +72,10 @@ _dogrula() {
     #   belirsizliğin kaynağını sildik.
     #   DERS (bu tur 8. kez): fixture-yeşil, gerçek-yeşil DEĞİLDİR. Her kapı gerçek veride sınanır.
     if python3 -c '
-import json,sys,datetime,collections
-dosya,imza=sys.argv[1],sys.argv[2]; simdi=float(sys.argv[3]); pencere=float(sys.argv[4])
+import json,sys,datetime,collections,time
+# 🔴 Saat kesirli olmalı (05.11, ölçüldü): tam saniyeye yuvarlanan saat, kapı kayıtla AYNI saniyede koşunca
+#   kaydı "gelecekte" görüyordu; hızlı başlayan her meşru `!` satırı RED yiyordu (6/6 tekrarlandı).
+dosya,imza=sys.argv[1],sys.argv[2]; simdi=time.time(); pencere=float(sys.argv[3])
 try: son=collections.deque(open(dosya,encoding="utf-8",errors="replace"), maxlen=800)
 except Exception: sys.exit(1)
 for satir in son:
@@ -89,7 +90,7 @@ for satir in son:
     except Exception: continue
     if 0 <= simdi-an <= pencere: sys.exit(0)
 sys.exit(1)
-' "$dosya" "$imza" "$simdi" "$PENCERE"; then
+' "$dosya" "$imza" "$PENCERE"; then
       bulundu=1; break
     fi
   done <<< "$(_kayitlar)"

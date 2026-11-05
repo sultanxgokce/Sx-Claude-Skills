@@ -78,6 +78,22 @@ PY
 bash "$K" dogrula --imza "sokum tez" >/dev/null 2>&1
 check "B1 büyük kayıtta insan-izi bulunuyor (erken-çıkış exit'i ters çevirmiyor)" "0" "$?"
 
+# ── S · saniye içi: kayıt ile kapı aynı saniyede (05.11, canlıda iki kez meşru RED) ───────
+# Saat tam saniyeye yuvarlanırsa kayıt "gelecekte" görünür. Saniyenin başına hizalanır ki kapı aynı saniyede koşsun.
+: > "$KOK/proje/a.jsonl"
+python3 - "$KOK/proje/s.jsonl" <<'PY'
+import json,sys,time,datetime
+while time.time()%1>0.15: time.sleep(0.005)
+an=datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="milliseconds").replace("+00:00","Z")
+open(sys.argv[1],"w").write(json.dumps({"type":"user","message":{"role":"user","content":"<bash-input>saniye ici</bash-input>"},"timestamp":an})+"\n")
+PY
+bash "$K" dogrula --imza "saniye ici" >/dev/null 2>&1
+check "S1 kayıtla aynı saniyede koşan kapı insanı görür" "0" "$?"
+_satir "<bash-input>ileri tarih</bash-input>" -30 > "$KOK/proje/s.jsonl"
+bash "$K" dogrula --imza "ileri tarih" >/dev/null 2>&1
+check "S2 gelecek tarihli kayıt hâlâ reddedilir" "1" "$?"
+: > "$KOK/proje/s.jsonl"
+
 # ── D · durum tanısı verdikt vermez ──────────────────────────────────────────
 bash "$K" durum >/dev/null 2>&1
 check "D1 durum her hâlde exit 0 (tanı, kapı değil)" "0" "$?"
