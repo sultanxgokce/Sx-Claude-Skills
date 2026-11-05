@@ -51,6 +51,10 @@ out.append(""); out.append(f"## İçeride bitirdiklerimiz ({len(icerde)}) — 'b
 for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else ('süpürüldü (PR birleşmiş, kanıt toplanmadı)' if k.get('supuruldu') else '⚠ YOK')}{' · PR '+k['pr'] if k.get('pr') else ''}")
 out.append(""); out.append(f"## Tıkananlar ({len(tik)})")
 for k in tik: out.append(f"- **{k['is']}** — {k['cumle']} · yol: {k['tikanma']['yol']} · neden: {k['tikanma']['neden']} · sahip {k['aldi']}")
+# 🔴 Görevsiz kartlar (görev …DZJ0D): kart.sh ac artık görev kimliği ister; görevsiz açılanlar gerekçesiyle burada SAYILIR.
+gsz=[k for k in g if k.get("gorevsiz")]
+out.append(""); out.append(f"## Görevsiz açılan kartlar ({len(gsz)}) — kart.sh ac --gorevsiz; görev defterine bağlı değil")
+for k in gsz: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · gerekçe: {k['gorevsiz']}")
 # 🔴 Kaçışlar Sultan'ın önüne gelir (23 Eyl kararı): sessiz delik olmaktan çıkar, kayda geçen istisna olur.
 import os as _os
 

@@ -4,7 +4,7 @@
 set -uo pipefail
 export KANIT_SIRA=0 DENETCI_SIRA=0
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-G="${KAPI:-$HERE/birlestirme-kapisi.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
+G="${KAPI:-$HERE/birlestirme-kapisi.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart-sinav-sarmal.sh"; KTG="$HERE/kart.sh"
 export HERE
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
