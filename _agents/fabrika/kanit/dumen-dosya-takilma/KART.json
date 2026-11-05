@@ -1,0 +1,59 @@
+{
+  "is": "dumen-dosya-takilma",
+  "cumle": "Dümen sürücüsüne dosya yükleme, dosya indirme, engel kapatma, yeni sekme adresi okuma ve her eylemde sert süre sınırı eklenir; hata kataloğu beceriye yazılır; güvenlik kapıları korunur",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-11-05T15:47:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "sahte sunuculu sınav ölçümleri, mutant kayıtları, filoda kurulu sürüm ölçümü",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "--canli e",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "basla",
+    "istendi": "2026-11-05T15:47:49+03:00",
+    "zaman": "2026-11-05T15:48:22+03:00",
+    "yazildi": "2026-11-05T15:48:22+03:00",
+    "zaman_kaynagi": "yazim",
+    "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+    "soz": "kalıcı ai skill olarak kaydedip tüm filoya paktleyeceksin tamam mı",
+    "beyan": "SERDAR"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M6NW01VZYAV5JCH8QA0DRF6W",
+  "tahmin_dk": 240,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-05T15:47:56+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "sultan_kararlari": [
+    {
+      "karar": "basla",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "kalıcı ai skill olarak kaydedip tüm filoya paktleyeceksin tamam mı",
+      "beyan": "SERDAR",
+      "gerekce": "",
+      "zaman": "2026-11-05T15:48:22+03:00",
+      "yazildi": "2026-11-05T15:48:22+03:00",
+      "zaman_kaynagi": "yazim"
+    }
+  ]
+}

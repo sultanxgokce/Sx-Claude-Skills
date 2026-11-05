@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "dumen-dosya-takilma",
+  "pr": "706",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T16:37:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma",
+  "dal": "dumen-dosya-takilma",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 119194,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 52574
+  },
+  "dalgic": "uyumlu",
+  "bas": "44d1cbc4fb883d203fedb0233deed9bcecdfe34a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Dosya yükleme/indirme, engel kapatma, yeni sekme adresi, hata kataloğu ve güvenlik kapıları kapsamlı sınavlarla eklenmiş; ancak “sert süre sınırı” işlemi iptal etmiyor ve kapı ile eyleme ayrı ayrı tam süre vererek vaat edilen kapı-dahil tavanı aşabiliyor. Bu, süre aşımı bildirildikten sonra eski bir tıklamanın gerçekleşebilmesi gibi yanlış eylem riski doğurduğundan üretime hazır değildir; önce süre sınırı ve iptal davranışı çözülmelidir.",
+    "bulgular": [
+      {
+        "ne": "Sert süre sınırı alttaki eylemi iptal etmiyor; çağıran `zaman-asimi` aldıktan sonra Playwright işlemi çalışmaya devam edip sonradan sayfayı değiştirebilir.",
+        "kanit": "`#sureli` yalnız `Promise.race([is, sinir])` sonucunu döndürüyor; `is.catch` sadece geç reddi yutuyor, çalışan `fn` için iptal/Abort mekanizması yok. Z1 sınavı yalnız dönüşün 3 saniyeden kısa olduğunu ölçüyor; süre aşımından sonra düğmenin tıklanmadığını ölçmüyor. Mutant 17 de yalnız `Promise.race` kaldırılmasını hedefliyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:#sureli; dumen-surucu/scripts/dumen-dosya.test.mjs:Z1-Z2; dumen-surucu/scripts/dumen-dosya.test.sh:mutant 17",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“Kapı dahil sert tavan” uygulanmıyor; kapı ve eylem aynı tam süre bütçesini ayrı ayrı kullanabildiği için tek çağrı yaklaşık iki kat süre sürebilir.",
+        "kanit": "`#uygula`, önce `#sureli(ad + ' (kapı)', ..., ms)` çağırıyor, ardından aynı `ms` ile ikinci kez `#sureli(ad, ..., fn, ms)` çağırıyor. Böylece varsayılan 45 saniyelik eylem 45 saniye kapı + 45 saniye işlem tüketebilir; mevcut Z1/Z3 ölçümleri yavaş kapı senaryosu kurmuyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:#uygula; dumen-surucu/scripts/dumen-dosya.test.mjs:Z1-Z3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartında adı geçen filoda kurulu sürüm ve gerçek Dümen/Chrome doğrulaması bu kanıt paketinde ölçülmemiş.",
+        "kanit": "Manifestte yalnız çalışma ağacı yollarındaki yetenek ölçümü ile sahte merkez/sahte siteli headless Chromium sınavları var; filoda kurulu sürümü sorgulayan kayıt yok. SKILL.md de “0.9.0 canlı Dümen'de henüz ölçülmedi” ve Chrome/PDF görüntüleyici dalının canlıda ölçülmediğini açıkça söylüyor.",
+        "konum": "KANIT manifesti:kayıtlar; dumen-surucu/SKILL.md:Dürüst sınırlar",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı Dümen + filo kurulum yüzeyi ve yetki"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra yetenek çifti, iki gerçek-kod yeşil sınavı ve hedef kapıları düşüren mutasyon kayıtları güçlüdür. Bununla birlikte sınavlar zaman aşımından sonra alttaki eylemin gerçekten durduğunu ve kapı gecikmesiyle toplam tavanı ölçmüyor; ayrıca filoda kurulu sürüm/canlı Chrome ölçümü manifestte bulunmuyor."
+  }
+}
