@@ -1,0 +1,52 @@
+{
+  "is": "sultan-eli-saniye-ici",
+  "cumle": "sultan-eli 0.1.1 (kapı saati kesirli) kanona taşınsın",
+  "istedi": "SINAN 5 Kas: mmex'te canlıda iki kez meşru ! satırı RED",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-11-05T15:12:30+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-11-05T15:36:50+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "canli_kanit": "yok",
+  "bitis": "2026-11-05T15:36:50+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 3,
+    "dogru": "H",
+    "tur": 2
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "daralt",
+    "neden": "tur 2 3/H: kökneden iddiası (kayıt komut bitince düşüyor, '3 RED') canlı ölçümsüz ve karttaki 'iki kez' ile çelişiyor; kart yalnız 'kapı saati kesirli' (S1/S2 17/0) olarak daraltıldı, SKILL.md paragrafı çıkarıldı, kök neden SINAN'ın canlı ölçümüyle ayrı iş"
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "d26a1038-c462-43e7-8057-360eceeaec18",
+      "gerekce": "tur 2 bulgusu giderildi: ölçülmemiş kökneden paragrafı SKILL.md'den çıkarıldı, kart yalnız kapı saati kesirli; SERDAR 5 Kas devam dedi, tur 3",
+      "zaman": "2026-11-05T15:37:32+03:00"
+    }
+  ]
+}

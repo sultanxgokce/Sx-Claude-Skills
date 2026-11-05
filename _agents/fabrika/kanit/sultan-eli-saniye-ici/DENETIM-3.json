@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "sultan-eli-saniye-ici",
+  "pr": "704",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T15:37:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-saniye-ici",
+  "dal": "sultan-eli-saniye-ici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13792,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 1,
+    "bayt": 3553
+  },
+  "dalgic": "uyumlu",
+  "bas": "0ace0879274b3886ff8f05a059dca86c136681b2",
+  "duzeltme_farki": {
+    "onceki_bas": "ccbeb2a043a0f0c1cdaaba4752bee1c2816cce06",
+    "dosya": 2,
+    "bayt": 4614,
+    "tam_bayt": 14114
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kanon, yetkili daraltma kararına uygun biçimde yalnız kapı saatinin kesirli/saniye-içi davranışını taşıyor; önceki turdaki ölçülmemiş canlı kök-neden paragrafı çıkarılmış ve S1/S2 dâhil 17 sınav temiz committe geçmiştir. Önceki iki bulgu bu farkla kapanmış, üretimi engelleyen yeni bir kusur gösterilmemiştir; yalnız kanıt bir önce/sonra çifti değil, tek bir sentetik son-ölçümdür.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı, sha doğrulamalı ve ölçülen commit temizdir; tek kayıt rc=0/yeşil olup 17/17 sınavı, özellikle aynı saniye kabulünü ve gelecek tarih reddini ölçüyor. Sarı veya mutasyon kaydı yoktur. Önceki B1, işin yetkili kararla kapı saati kesirli kapsamına daraltılması ve canlı kök-nedenin ayrı işe bırakılmasıyla; B2 ise kanıtsız ve çelişkili “3 RED” metninin kaldırılmasıyla kapanmıştır. Bununla birlikte canlı iki RED için ölçüm ve önce/sonra çifti yoktur; bu iddia artık mevcut daraltılmış işin teslim iddiası değildir."
+  }
+}

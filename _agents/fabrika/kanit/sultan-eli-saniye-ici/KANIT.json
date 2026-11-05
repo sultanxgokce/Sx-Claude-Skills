@@ -1,0 +1,28 @@
+{
+  "is": "sultan-eli-saniye-ici",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T15:23:51+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "62b18c6c179b6a34e8b84d4d5e98752f56faf56eca0ede1399d07d530814aec6",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T15:23:51+03:00",
+      "sure_sn": 652.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "444776653e624267bbed2e067e622ee4",
+      "olculen_commit": "ac30841cf5f7906b62372d321091650d6baccb6a",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "fcffe9205dbe20c84ed2a66089a53e0ac7e27133faf64775c36db8ff48c20dc2"
+}

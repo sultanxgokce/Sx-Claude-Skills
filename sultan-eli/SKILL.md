@@ -1,7 +1,7 @@
 ---
 name: sultan-eli
 type: agent
-version: 0.1.0
+version: 0.1.1
 description: >
   Geri alınamaz kapılar için "bu komutu gerçekten insan mı başlattı?" ölçümü. Sultan'ın `!`
   ile koştuğu komut oturum kaydına `<bash-input>` olarak düşer, ajanın komutu düşmez —
@@ -61,7 +61,7 @@ Aynı oturumda: `<bash-input>` = **59** · ajan Bash çağrısı = **12515**.
 `<bash-input>` .492 → komut .863 → `<bash-stdout>` .866. Sonra düşseydi bu yaklaşım ölüydü.
 
 ## Kademe
-Kalfa (S2 · paketli, proje-bağımsız). Doğrula: `bash scripts/sultan-eli.test.sh` (15 kontrol).
+Kalfa (S2 · paketli, proje-bağımsız). Doğrula: `bash scripts/sultan-eli.test.sh` (saniye-içi dahil).
 
 ## Geliştirme (KULLANDIKÇA GELİŞTİR — AHÎ §12)
 Bu beceriyi kullanırken eksik/hata/daha-iyi-yol görürsen **düzeltmek senin işindir**:

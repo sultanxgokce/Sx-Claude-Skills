@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "sultan-eli-saniye-ici",
+  "pr": "704",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T15:36:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-saniye-ici",
+  "dal": "sultan-eli-saniye-ici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10670,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2835
+  },
+  "dalgic": "uyumsuz",
+  "bas": "ccbeb2a043a0f0c1cdaaba4752bee1c2816cce06",
+  "duzeltme_farki": {
+    "onceki_bas": "19e83d8b1c3d4ee650a445594c2f5c38125a23e8",
+    "dosya": 3,
+    "bayt": 3896,
+    "tam_bayt": 11160
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Düzeltme, canlı kaydın komut bittikten sonra düştüğünü ve doğrudan çağrılan kapının meşru Sultan’ı reddettiğini kanona yazmış; fakat çalışan çözüm yerine çağıran betiklere aktarılmış bir arka-plan dolaşımı tarif ediyor. İş kartındaki canlı meşru RED sorunu giderilmiş ve ölçülmüş değil; mevcut yeşil sınav da farklı zamanlama varsayımını sınadığı için önce bu uygulama açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "İş kartındaki canlı meşru RED davranışı çözülmemiş; yeni kanon metni doğrudan `dogrula` çağrısının hâlâ meşru Sultan’ı reddettiğini açıkça kabul edip çözüm sorumluluğunu her çağıran betiğin arka plana alınmasına bırakıyor.",
+        "kanit": "Eklenen metin “kayıt komut BİTTİKTEN sonra görünüyor; komut içinden koşan `dogrula` izi göremez” ve “Eski bilgi doğrudan çağıran her kapıda meşru Sultan'ı reddeder” diyor. Buna karşı manifestteki tek ölçüm sentetik sınavdır; canlı çağrı zamanlamasını veya arka-plan çözümünü ölçen kayıt yoktur.",
+        "konum": "sultan-eli/SKILL.md:62; olcum-sinav-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“Canlıda 3 RED” iddiası kanıtsız ve iş kartındaki “canlıda iki kez” kaydıyla sayısal olarak çelişiyor.",
+        "kanit": "Diffte “05.11.2026, canlıda 3 RED” yazarken iş kartının `istedi` alanı “canlıda iki kez meşru ! satırı RED” diyor; araç imzalı manifestte yalnız `sinav` etiketli sonra ölçümü var, canlı RED kaydı veya önce/sonra ölçüm çifti yok.",
+        "konum": "sultan-eli/SKILL.md:62; İŞ KARTI `istedi`; KANIT.json `kayitlar[0]`",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve temiz committeki sınav rc=0/yeşil; önceki turun boş bulgu listesinde kapanacak kusur yok. Ancak tek kayıt yalnız sonra ölçümüdür ve S1 kaydın kapı çalışırken görülebildiği sentetik durumu sınar; yeni metindeki komut-sonrası canlı zamanlamayı, arka-plan çağrı düzenini veya canlıdaki iki/üç RED iddiasını ölçmez. Sarı ya da mutasyon kaydı yoktur."
+  }
+}
