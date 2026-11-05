@@ -1,0 +1,13 @@
+$ tail -n 2000 -- /config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma/_agents/fabrika/kanit/dumen-dosya-takilma/canli-dumen-20261105.txt
+# kaynak=dosya:/config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma/_agents/fabrika/kanit/dumen-dosya-takilma/canli-dumen-20261105.txt tur=dosya desen=dumen-canli (indirAdres tamam|sert-sure kesildi|yukle-onaysiz reddedildi|sonuc GECTI) en_az=1 son=2000 atesleme=4 rc=0 sure=0.0s zaman=2026-11-05T17:30:40+03:00
+--- stdout ---
+2026-11-05T17:30:16+03:00 dumen-canli sekme-once sayi=11
+2026-11-05T17:30:18+03:00 dumen-canli goto tamam ms=400
+2026-11-05T17:30:18+03:00 dumen-canli engelKapat tamam escape=3 tiklanan=0 gizlenen=undefined
+2026-11-05T17:30:19+03:00 dumen-canli ogeDurumu sayi=1 gorunur=true etkin=true
+2026-11-05T17:30:19+03:00 dumen-canli indirAdres tamam tur=application/pdf; qs=0.001 bayt=13264 diskte=13264 kaynak=adres ms=336
+2026-11-05T17:30:19+03:00 dumen-canli yukle-onaysiz reddedildi neden=onay-yok
+2026-11-05T17:30:23+03:00 dumen-canli sert-sure kesildi neden=zaman-asimi ms=4121
+2026-11-05T17:30:25+03:00 dumen-canli sekme-sonra sayi=11 artik=0
+2026-11-05T17:30:25+03:00 dumen-canli sonuc GECTI
+--- stderr ---

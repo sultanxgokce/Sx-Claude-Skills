@@ -1,0 +1,13 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Y1 onaysız yükleme reddedilir · rc≠0 + hedef kapı 'Y1 onaysız yükleme reddedilir' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
+$ env MUTANT_HAM=1 bash dumen-surucu/scripts/dumen-dosya.test.sh
+# rc=1 sure=1.4s zaman=2026-11-05T17:01:47+03:00
+--- stdout ---
+── mutantlar (her biri sınavı KIRMALI)
+MUTANT 1: yükleme onayı aranmaz
+── izinli dizin verilmeden dosya işi YOK (fail-closed)
+  ✓ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+  ✓ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+── yukle: onay + dosya kapıları
+  ✗ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+SONUÇ: geçti=2 kaldı=1 (ilk kırmızıda duruldu)
+--- stderr ---

@@ -1,0 +1,68 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Z2b sert tavan KAPI DAHİLDİR · rc≠0 + hedef kapı 'Z2b sert tavan KAPI DAHİLDİR' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
+$ env MUTANT_HAM=24 bash dumen-surucu/scripts/dumen-dosya.test.sh
+# rc=1 sure=41.0s zaman=2026-11-05T17:06:48+03:00
+--- stdout ---
+── mutantlar (her biri sınavı KIRMALI)
+MUTANT 24: kapı ve eylem ayrı ayrı tam süre alır (tavan iki katına çıkar)
+── izinli dizin verilmeden dosya işi YOK (fail-closed)
+  ✓ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+  ✓ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+── yukle: onay + dosya kapıları
+  ✓ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+  ✓ Y2 dünkü onay reddedilir (onay-bayat)
+  ✓ Y3 BAŞKA dosya için verilmiş onay reddedilir (onay-dosya)
+  ✓ Y4 izinli dizin dışındaki dosya reddedilir (dosya-izinsiz)
+  ✓ Y5 izinli dizindeki BAĞ dışarıyı gösteriyorsa reddedilir (dosya-izinsiz)
+  ✓ Y6 sır taşıyabilecek yol reddedilir (dosya-yasak)
+  ✓ Y7 izinli olmayan tür reddedilir (dosya-turu)
+  ✓ Y8 reddedilen yüklemelerin hiçbiri alana dosya koymadı
+  ✓ Y9 onaylı yükleme: GİZLİ dosya alanına ad, boyut ve içerik birebir ulaştı
+  ✓ Y10 terminal satırı dosya ADINI taşımaz (müşteri verisi), "gönderme ayrı" der
+  ✓ Y11 dosya penceresi açan düğme ({ secici: true }): dosya seçildi
+  ✓ Y12 dosya penceresi açmayan düğmede asılmaz (yukleme-penceresi-yok)
+  ✓ Y13 Dümen Sultan'dayken yükleme YOK (sultanda)
+  ✓ Y14 Dümen Sultan'dayken indirme YOK (sultanda), tıklama yapılmadı
+── indir: baytlar tarayıcının içinden alınır
+  ✓ I1 indirme başlatan tıklama: dosya birebir yazıldı (kaynak indirme)
+  ✓ I2 terminal satırı sunucunun önerdiği dosya adını taşımaz
+  ✓ I3 dosyayı YENİ SEKMEDE açan tıklama: dosya birebir yazıldı (kaynak yeni-sekme)
+  ✓ I4 kendi tıklamasının açtığı sekme KAPATILDI (sekme sayısı aynı)
+  ✓ I5 "Fatura Görüntüle" (yeni sekme + PDF): dosya birebir yazıldı, artık sekme yok
+  ✓ I6 BAŞKA kökenden indirme (sayfa içi okuma engelli): tarayıcının ağ yığınıyla alındı
+  ✓ I7 ne indirme ne sekme açan tıklama ASILMAZ (indirme-yok)
+  ✓ I8 dosya yerine GİRİŞ SAYFASI gelirse dosya sayılmaz, diske yazılmaz (indirme-sayfa)
+  ✓ I9 uzantısıyla uyuşmayan içerik yazılmaz (indirme-tur)
+  ✓ I10 hedef izinli dizin dışındaysa tıklama YAPILMAZ (dosya-izinsiz)
+  ✓ I11 var olan dosya kendiliğinden ezilmez (dosya-var)
+  ✓ I12 { ustuneYaz: true } ile ezilir
+  ✓ I13 indirAdres: adresi bilinen dosya tarayıcının oturumuyla alındı
+  ✓ I14 indirAdres yalnız http(s) alır (file: reddedilir)
+── yeni sekme adresi
+  ✓ S1 yeniSekmeAdresi: açılan sekmenin adresi döndü, sekme kapatıldı
+  ✓ S2 yeni sekme açmayan tıklama asılmaz (sekme-yok)
+── öğe durumu ve bekleme (salt-okur)
+  ✓ O1 gizli eşi olan seçici: 2 eşleşme, 1 görünür, ilk görünürün sırası 1
+  ✓ O2 pasif mesaj kutusu boşa yazmadan görülür (etkin: false)
+  ✓ O3 olmayan öğe: sayı 0, görünür değil
+  ✓ O4 bekle: görünen öğe true, olmayan öğe süre dolunca false (atmaz)
+── engel kapatma
+  ✓ E0 çerez KABUL etmek onaysız reddedilir (onay-yok)
+  ✓ E1 cerez: dokunma → çerez şeridi yerinde, tur kapatıldı
+  ✓ E2 varsayılan: çerez şeridi REDDEDİLDİ (Kabul Et'e basılmadı)
+  ✓ E3 çerez kutusu DIŞINDAKİ "Reddet" (iade talebi) TIKLANMADI
+  ✓ E4 anket çerçevesi ve ek katman gizlendi, rapor sayıyı verdi
+  ✓ E5 ödeme sayfasında engel kapatılmaz (durak), çerez şeridi yerinde
+── sert süre sınırı ve kapat garantisi
+  ✓ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)
+  ✓ Z2 süre aşımı iletisi "hâli bilinmiyor, ölç" der (körlemesine yineleme yok)
+  ✓ Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)
+  ✓ Z1c pozitif kontrol: bağlantı geri geldi, örtü kalkınca aynı düğme tıklanır ve sayılır
+  ✓ Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içinde hata)
+  ✓ Z4 tıklama yeni sekme açtı (ön koşul)
+  ✓ Z5 kapat(): kendi sekmesi VE kendi tıklamasının açtığı sekme kapandı
+  ✓ Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı
+  ✓ Z7 Dumen.kos: iş asılırsa toplam süre sınırında kesilir, sekme kapanır
+  ✓ Z7b süresi dolup KAPATILAN bağlantı sonradan yeniden bağlanıp tıklamaz (tık yok, artık sekme yok)
+  ✗ Z2b sert tavan KAPI DAHİLDİR: yavaş kapı (2,5 sn) + asılı eylem toplamı 4 sn tavanında kesilir (≤ 5,3 sn)  → 6696 ms · dumen-kapi: zaman-asimi — click #alt: 4000 ms içinde bitmedi — sayfanın hâli BİLİNMİYOR; kare() ve adres() ile ölç, körlemesine yineleme (bağlantı bırakıldı: yarım eylem sürmez; sonraki eylemde yeniden bağlanılır)
+SONUÇ: geçti=52 kaldı=1 (ilk kırmızıda duruldu)
+--- stderr ---

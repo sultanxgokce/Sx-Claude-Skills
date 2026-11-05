@@ -35,6 +35,7 @@ kova() {   # kova <sınama yolu> → bu sınama hangi kovada
     ./tescil/scripts/diploma.test.sh)                  echo diploma ;;
     ./yazilim-fabrikasi/scripts/denetci.test.sh)       echo denetci ;;
     ./dumen-surucu/scripts/dumen.test.sh)              echo dumen ;;   # gerçek Chromium + 10 mutant: paralel kovada ilgisiz sınamalara yük bindirip onları düşürdü (CI #40491126187)
+    ./dumen-surucu/scripts/dumen-dosya.test.sh)        echo dumen ;;   # gerçek Chromium + 26 mutant (5 Kas, Sx #706): kalan kovasında Chromium yok → rc 3 kırmızı; dumen kovası SIRAYLA koşar (iş akışında KABUK_PARALEL=1), iki tarayıcı sınavı süre kapılarında birbirine yük bindirmesin
     ./pazaryeri-mesaj/scripts/mesaj.test.sh)           echo pazaryeri ;;   # gerçek Chromium + 13 mutant (3 Kas, Sx #668): kalan kovasında Chromium yok → rc 3 kırmızı; dumen kovasıyla aynı anda iki tarayıcı sınavı birbirine yük bindirmesin diye ayrı kova
     *)                                                 echo kalan ;;
   esac
