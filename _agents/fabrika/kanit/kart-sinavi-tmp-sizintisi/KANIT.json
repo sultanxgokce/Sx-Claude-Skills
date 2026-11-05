@@ -1,0 +1,49 @@
+{
+  "is": "kart-sinavi-tmp-sizintisi",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T08:47:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra-imza",
+      "asama": "sonra",
+      "dosya": "olcum-sonra-imza-sonra.txt",
+      "sha256": "a330dd1989736685d9ad8cd6006b0f09b80cedef1cdc187f0d3d381c19a10cd7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kts-imza.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T08:43:54+03:00",
+      "sure_sn": 590.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e7297893a2d944b1b721d4569e2b26bb",
+      "olculen_commit": "c4bee01287f6aac9567eec2dd5f0790140e4dafc",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "once-imza",
+      "asama": "once",
+      "dosya": "olcum-once-imza-once.txt",
+      "sha256": "782cb9e2ecff867044db141f97a7ea2b4ed1559b9d6f336b4c03d9713775d997",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kts-imza.sh",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-05T08:47:58+03:00",
+      "sure_sn": 234.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "60e016b9f0b149fc9c8a0e9d55a10383",
+      "olculen_commit": "c4bee01287f6aac9567eec2dd5f0790140e4dafc",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "b6b2933ecf32d14994ef4291efdf4250c78d1ad48289aeb239e48bbecf023202"
+}

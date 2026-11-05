@@ -1,0 +1,31 @@
+{
+  "is": "kart-sinavi-tmp-sizintisi",
+  "cumle": "kart.test.sh çıkışta mktemp dizinini silsin: her koşu ~50 MB tmp.* bırakıyor (21 dizin 1 GB, disk %93)",
+  "istedi": "SERDAR 5 Kas: disk zinciri KABFPF kalıcı önlem",
+  "aldi": "kart.test.sh'a EXIT tuzağı (find -delete); sınav yeşil kalır, koşudan sonra tmp.* kalmaz",
+  "zaman": "2026-11-05T08:30:07+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [
+    "21 dizin",
+    "%93"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true
+}

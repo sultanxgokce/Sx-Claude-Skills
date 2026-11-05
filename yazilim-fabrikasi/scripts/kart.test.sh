@@ -9,6 +9,8 @@ KT="$HERE/kart.sh"; GS="$HERE/gun-sonu.sh"; K="$HERE/kanit.sh"; D="$HERE/denetci
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; mkdir -p "$T/uzak" "$T/depo"
+# çıkışta sahte depoları sil (KABFPF): her koşu ~50 MB tmp.* bırakıyordu; KART_TEST_TMP_KALSIN=1 teşhis için bırakır
+trap '[ -n "${KART_TEST_TMP_KALSIN:-}" ] || { case "$T" in /tmp/tmp.*|"${TMPDIR:-/tmp}"/tmp.*) find "$T" -depth -delete 2>/dev/null;; esac; }' EXIT
 ( cd "$T/uzak" && git init -q --bare ) >/dev/null 2>&1
 ( cd "$T/depo" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && git remote add origin "$T/uzak" && git push -q -u origin main ) >/dev/null 2>&1
 # 🔴 SAHTE TETİK (göz 23 Eki tur 2): sınıflı kart artık Sultan'a ulaşım yolu ister (--oda + tetik betiği) — sınav GERÇEK odalara
