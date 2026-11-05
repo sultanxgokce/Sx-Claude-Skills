@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "ayni-girdi-atla",
+  "pr": "705",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T16:24:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla",
+  "dal": "ayni-girdi-atla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25447,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 11692
+  },
+  "dalgic": "uyumlu",
+  "bas": "7ffd15574a92dbb0b413ae31699a1fa92a8a9d55",
+  "duzeltme_farki": {
+    "onceki_bas": "9089f5684b158c9dcfdf4334176eb882223f51c5",
+    "dosya": 8,
+    "bayt": 21691,
+    "tam_bayt": 35009
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Açık `--ayni-girdi-atla` bayrağı aynı girdide yeniden koşmayı önlüyor; mutant, kırmızı kayıt, kirli ağaç ve değişen girdiler ise her zaman yeniden koşuyor. Önceki turdaki Git-ignored dosya açığı anahtara `yoksayilan` içeriği katılarak kapatılmış, ilgili gerçek ölçüm ve mutasyon kapısı geçtiği için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `sinav-sonra` rc=0 ile yeni takımda 20/0, toplamda 275/0 ve 17/0 sonucunu gösteriyor; sayaç dizisi bayraklı aynı girdinin atlandığını, ignored dosya değişikliğinin yeniden koşturduğunu ve mutant ölçümün atlanmadığını doğruluyor. `mutant-agac-ozeti` kaydı beklenen kırmızı sonucu üretmiş ve hedef kapının bozuk kodu yakaladığını göstermiştir; önceki B1 böylece kod ve ölçüm düzeyinde kapanmıştır."
+  }
+}

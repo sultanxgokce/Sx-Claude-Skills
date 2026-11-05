@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "ayni-girdi-atla",
+  "pr": "705",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T16:19:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla",
+  "dal": "ayni-girdi-atla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34054,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7105
+  },
+  "dalgic": "uyumlu",
+  "bas": "9089f5684b158c9dcfdf4334176eb882223f51c5",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Açık bayrakla aynı girdinin yeniden koşmasını engelleyen akış, mutantların daima koşması dahil talep edilen işi yapıyor ve güçlü ölçümle doğrulanmış. Ancak anahtar Git tarafından yok sayılan depo içi dosyaları hesaba katmadığı için bazı gerçek girdi değişikliklerinde eski yeşil ölçümü yanlışlıkla yeniden kullanabilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Depo içindeki Git-ignored dosyaların içeriği girdi anahtarına katılmıyor; sınav bu dosyalardan etkileniyorsa içerik değiştiği halde komut atlanabilir ve yanlış sonuç üretilebilir.",
+        "kanit": "Anahtar yalnız `git ls-files -o --exclude-standard -z` çıktısını topluyor; `--exclude-standard` ignored dosyaları dışlıyor. Komut argümanı taraması da yalnız depo dışındaki dosyaları `dis` listesine ekliyor. A3 sınavı sadece normal izlenmeyen `u.txt` değişimini ölçüyor, ignored dosya vakasını ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:214; yazilim-fabrikasi/scripts/kanit.py:223; yazilim-fabrikasi/scripts/kanit-ayni-girdi.test.sh:49",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `sinav-sonra` rc=0 ile 275+17 kapının ve yeni sınavın 18/0 geçtiğini gösteriyor; mutasyon kaydı da hedef kapının bozuk kodu yakaladığını doğruluyor. Bununla birlikte ölçüm kümesi ignored depo içi girdi değişimini kapsamıyor; bu nedenle yukarıdaki risk kanıtla kapanmış değil."
+  }
+}
