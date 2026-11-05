@@ -59,6 +59,10 @@ Aynı oturumda: `<bash-input>` = **59** · ajan Bash çağrısı = **12515**.
 ⚠️ `userType=external` **ayırt etmez** (168047 satır — her kullanıcı-rolü satırında var).
 **Zamanlama** (yaklaşımın yaşam-şartı): kayıt komuttan **önce** düşüyor —
 `<bash-input>` .492 → komut .863 → `<bash-stdout>` .866. Sonra düşseydi bu yaklaşım ölüydü.
+🔴 **ARTIK DEĞİL (05.11.2026, canlıda 3 RED):** kayıt komut BİTTİKTEN sonra görünüyor; komut içinden koşan
+`dogrula` izi göremez, hemen sonraki `dogrula` görür. Kapıyı çağıran betik kendini arka plana almalı, ön plan
+bitsin, arka plan kopyası izi birkaç saniye yoklasın. Örnek: bedesten `fatura-yukle.sh`. Eski bilgi doğrudan
+çağıran her kapıda meşru Sultan'ı reddeder.
 
 ## Kademe
 Kalfa (S2 · paketli, proje-bağımsız). Doğrula: `bash scripts/sultan-eli.test.sh` (saniye-içi dahil).
