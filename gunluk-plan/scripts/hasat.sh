@@ -54,6 +54,7 @@ yuzey_kok() { local d="$1"; while [ ! -d "$d" ] && [ "$d" != / ]; do d="$(dirnam
 # birlesme_olc <mutlak yol> → stdout: son commit günü (boş = yüzeye hiç commit yok) · rc 3 ölçülemedi. Dal: HASAT_DAL, yoksa origin/main, yoksa HEAD.
 #   DALGIÇ tur 2: (a) yerel origin/main bayat olabilir → origin varsa önce fetch; düşerse ÖLÇÜLEMEDİ (bayat kopyadan "birleşme yok" denmez; HASAT_FETCH=0 kapatır).
 #   (b) hiç commit yok VE yol diskte yok = yanlış/uydurma yüzey → ÖLÇÜLEMEDİ ("birleşme yok" sayılmaz). Silinmiş dosyanın silme commit'i vardır, boş dönmez.
+#   İkinci argüman git biçimi: %cs (gün, varsayılan) · %cI (tam zaman, aynı gün birleşme doğrulamadan ÖNCE mi sonra mı ayırt etmek için).
 birlesme_olc() { local kok ref gun; kok="$(yuzey_kok "$1")" && [ -n "$kok" ] || return 3
   ref="${HASAT_DAL:-}"
   if [ -z "$ref" ] && git -C "$kok" remote get-url origin >/dev/null 2>&1; then
@@ -61,7 +62,7 @@ birlesme_olc() { local kok ref gun; kok="$(yuzey_kok "$1")" && [ -n "$kok" ] || 
     ref=origin/main
   fi
   [ -n "$ref" ] || ref=HEAD
-  gun="$(git -C "$kok" log -1 --format=%cs "$ref" -- "$1" 2>/dev/null)" || return 3
+  gun="$(git -C "$kok" log -1 --format="${2:-%cs}" "$ref" -- "$1" 2>/dev/null)" || return 3
   [ -n "$gun" ] || [ -e "$1" ] || return 3
   printf '%s\n' "$gun"; }
 
@@ -149,10 +150,12 @@ elif [ -n "$YUZEY" ]; then
   # yüzeye hiç commit yoksa boş döner: birleşme yok (ölçüldü, uydurulmadı)
 elif [ -z "$BIRLESME" ]; then BIRLESME_BEYAN="yok"   # son doğrulamada yüzey yok (eski biçim / elle yazılmış): birleşme ölçülemez
 fi
+BIRLESME_ZAMAN=""
+if [ -n "$BIRLESME" ] && [ -n "$YUZEY" ] && [ "$YUZEY" != "-" ]; then BIRLESME_ZAMAN="$(HASAT_FETCH=0 birlesme_olc "$YUZEY" %cI 2>/dev/null || true)"; fi   # ölçülemezse boş: aynı gün sıkı (eski) davranış
 [ -z "$BIRLESME" ] || tarih_mi "$BIRLESME" || { echo "HATA: --birlesme YYYY-MM-DD olmalı (verilen: '$BIRLESME')" >&2; exit 2; }
 PY="$(cat <<'PYKOD'
 import sys, re, datetime
-gid, bugun, gun, birlesme, beyan = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4], sys.argv[5]
+gid, bugun, gun, birlesme, beyan, bzaman = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4], sys.argv[5], sys.argv[6]
 durum = "?"; son = None   # son doğrulama: (hüküm, tarih-metni)
 for s in sys.stdin:
     p = s.rstrip("\n").split("\t")
@@ -162,10 +165,10 @@ for s in sys.stdin:
     m = re.match(r"\[doğrulama: (var|düzelmiş|ölçülemedi)\]", metin)
     if not m: continue
     t = next((x[6:] for x in metin.split(" · ") if re.fullmatch(r"tarih=\d{4}-\d{2}-\d{2}", x)), "")   # tam parça, ilk (yazıcı ölçümden önce koyar)
-    son = (m.group(1), t or (ts[:10] if re.match(r"\d{4}-\d{2}-\d{2}", ts) else ""))
+    son = (m.group(1), t or (ts[:10] if re.match(r"\d{4}-\d{2}-\d{2}", ts) else ""), ts)
 def cik(dog, tarih, yas, hasat, neden): print("\t".join([durum, dog, tarih or "-", str(yas) if yas is not None else "-", hasat, neden])); sys.exit(0)
 if son is None: cik("yok", "", None, "OLMAZ", "doğrulama yok: bulgu ölçülmeden hasat edilmez → bash hasat.sh dogrula %s --sonuc var|duzelmis|olculemedi --olcum \"<komut>\"" % gid)
-dog, tarih = son
+dog, tarih, dts = son
 try: bg = datetime.date.fromisoformat(bugun)
 except Exception: cik(dog, tarih, None, "ÖLÇÜLEMEDİ", "bugünün tarihi okunamadı (GUNLUK_PLAN_TARIH='%s')" % bugun)
 if dog == "düzelmiş": cik("duzelmis", tarih, None, "OLMAZ", "son ölçüm 'düzelmiş': bulgu hasat edilmez, kapanır (hasat.sh dogrula --sonuc duzelmis --kapandi … kaydı kapatır)")
@@ -181,11 +184,19 @@ if beyan == "yok": cik("var", tarih, yas, "OLMAZ", "son doğrulamada yüzey yok:
 if birlesme:
     try: bt = datetime.date.fromisoformat(birlesme)
     except Exception: cik("var", tarih, yas, "ÖLÇÜLEMEDİ", "birleşme tarihi bozuk ('%s')" % birlesme)
-    if bt >= dt: cik("var", tarih, yas, "OLMAZ", "ilgili yüzeyde doğrulamadan sonra (ya da aynı gün) birleşme var (%s ≥ %s): bulgu düzelmiş olabilir — yeniden ölç" % (birlesme, tarih))
+    def _z(s):
+        try:
+            x = datetime.datetime.fromisoformat(s.replace("Z", "+00:00")); return x if x.tzinfo else None
+        except Exception: return None
+    #   Aynı gün birleşme (gorev …EWT7RX): gün granülaritesi doğrulamadan ÖNCEki birleşmeyi de engel sayıyordu. Tam zamanlar ikisi için de
+    #   ölçülmüşse ve birleşme doğrulamadan ÖNCE ise engel DEĞİL; biri bile okunamazsa/saat dilimsizse sıkı (eski) davranış kalır.
+    bz, dz = _z(bzaman), _z(dts)
+    onceden = bool(bt == dt and bz and dz and bz < dz and dz.astimezone(bz.tzinfo).date() == dt)
+    if bt >= dt and not onceden: cik("var", tarih, yas, "OLMAZ", "ilgili yüzeyde doğrulamadan sonra (ya da aynı gün) birleşme var (%s ≥ %s): bulgu düzelmiş olabilir — yeniden ölç" % (birlesme, tarih))
 cik("var", tarih, yas, "OLUR", "son doğrulama %d gün önce 'var'%s — hasat edilebilir" % (yas, (" · yüzeyde sonradan birleşme yok" if birlesme else (" · kod yüzeyi yok (beyan)" if beyan == "beyan" else " · yüzeye hiç birleşme yok"))))
 PYKOD
 )"
-IFS=$'\t' read -r DURUM DOG DTARIH YAS HASAT NEDEN < <(printf '%s\n' "$KAYIT" | python3 -c "$PY" "$ID" "$BUGUN" "$TAZE_GUN" "$BIRLESME" "$BIRLESME_BEYAN")
+IFS=$'\t' read -r DURUM DOG DTARIH YAS HASAT NEDEN < <(printf '%s\n' "$KAYIT" | python3 -c "$PY" "$ID" "$BUGUN" "$TAZE_GUN" "$BIRLESME" "$BIRLESME_BEYAN" "$BIRLESME_ZAMAN")
 [ -n "${HASAT:-}" ] || { echo "KAYIT=$ID"; echo "HASAT=ÖLÇÜLEMEDİ"; echo "NEDEN=kapı hesabı çıktı vermedi (python3 çöktü ya da bulunamadı) — 'olur' DENMEZ"; exit 3; }
 echo "KAYIT=$ID"; echo "DURUM=$DURUM"; echo "DOGRULAMA=$DOG"; echo "DOGRULAMA_TARIH=$DTARIH"; echo "DOGRULAMA_YAS_GUN=$YAS"; echo "YUZEY=${YUZEY:--}"; echo "BIRLESME=${BIRLESME:--}"; echo "TAZE_GUN=$TAZE_GUN"
 echo "HASAT=$HASAT"; echo "NEDEN=$NEDEN"
