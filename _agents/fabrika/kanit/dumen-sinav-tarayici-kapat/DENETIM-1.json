@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "dumen-sinav-tarayici-kapat",
+  "pr": "709",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T23:16:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-sinav-tarayici-kapat",
+  "dal": "dumen-sinav-tarayici-kapat",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27881,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 15043
+  },
+  "dalgic": "uyumsuz",
+  "bas": "9525534ebe61b98abc57e2906f1f523740af20d6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sınavların açtığı tarayıcılar ayrı süreç grubunda izlenip normal çıkış, yakalanmamış hata ve TERM/INT/HUP yollarında alt süreçleriyle birlikte kapatılmış; ilgili iki sınav da bu yardımcıya geçirilmiş. Önce/sonra ölçümü, üç çıkış senaryosu ve kapatmayı bilerek bozan mutasyon sınavı talebi doğrudan doğruladığından iş üretime hazır görünüyor; yalnız sinyal çıkış kodunun bütün sinyaller için 128 olması küçük bir rötuş olabilir.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Aynı temiz commit üzerindeki önce ölçümü açık tarayıcı kaldığını (1), gerçek sonra ölçümü kalmadığını (0) gösteriyor; tam sınav normal çıkış, çökme ve sinyal/zaman aşımı benzeri kesilmeyi alt süreçlerle birlikte sınamış ve 69/69 geçmiş. Mutasyon kaydı kapatma devre dışıyken hedef kapının düştüğünü gösteriyor; buradaki rc=1 ve ✗ beklenen sonuç, gerçek kodun durumu gercek_olcum=tarayici-sonra kaydından okunuyor."
+  }
+}

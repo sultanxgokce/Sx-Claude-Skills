@@ -10,7 +10,7 @@ node "$HERE/dumen.test.mjs"; RC=$?
 [ "$RC" -eq 0 ] || exit "$RC"
 [ "${DUMEN_MUTANT:-1}" = 0 ] && exit 0
 echo "── mutantlar (her biri sınavı KIRMALI)"
-T="$(mktemp -d)"; cp "$HERE/dumen.mjs" "$HERE/dumen.test.mjs" "$T/"
+T="$(mktemp -d)"; cp "$HERE/dumen.mjs" "$HERE/dumen.test.mjs" "$HERE/sinav-cocuk.mjs" "$T/"
 mut() { # mut <ad> <python-düzeltmesi> : kopyayı bozar, sınavı koşar, KIRMIZI beklenir
   cp "$HERE/dumen.mjs" "$T/dumen.mjs"
   python3 -I -c "import sys;p=sys.argv[1];s=open(p,encoding='utf-8').read();a,b=sys.argv[2],sys.argv[3];assert s.count(a)==1,'çapa '+str(s.count(a));open(p,'w',encoding='utf-8').write(s.replace(a,b))" "$T/dumen.mjs" "$2" "$3" || { echo "  ✗ $1: MUTASYON ÜRETİLEMEDİ"; MK=$((MK+1)); return; }
