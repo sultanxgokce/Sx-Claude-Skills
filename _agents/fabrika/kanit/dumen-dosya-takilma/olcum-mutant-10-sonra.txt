@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: I8 dosya yerine GİRİŞ SAYFASI · rc≠0 + hedef kapı 'I8 dosya yerine GİRİŞ SAYFASI' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
 $ env MUTANT_HAM=10 bash dumen-surucu/scripts/dumen-dosya.test.sh
-# rc=1 sure=11.1s zaman=2026-11-05T16:22:28+03:00
+# rc=1 sure=6.0s zaman=2026-11-05T17:01:58+03:00
 --- stdout ---
 ── mutantlar (her biri sınavı KIRMALI)
 MUTANT 10: dosya yerine gelen giriş sayfası dosya sayılır
@@ -33,4 +33,3 @@ MUTANT 10: dosya yerine gelen giriş sayfası dosya sayılır
   ✗ I8 dosya yerine GİRİŞ SAYFASI gelirse dosya sayılmaz, diske yazılmaz (indirme-sayfa)
 SONUÇ: geçti=23 kaldı=1 (ilk kırmızıda duruldu)
 --- stderr ---
-⏳ agir-sira: kanit-dumen-dosya-takilma-mutant-10 5 sn bekledi (yuva 2, load1 17.27)

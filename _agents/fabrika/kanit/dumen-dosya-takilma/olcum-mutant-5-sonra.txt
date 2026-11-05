@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Y5 izinli dizindeki BAĞ · rc≠0 + hedef kapı 'Y5 izinli dizindeki BAĞ' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
 $ env MUTANT_HAM=5 bash dumen-surucu/scripts/dumen-dosya.test.sh
-# rc=1 sure=3.7s zaman=2026-11-05T16:22:15+03:00
+# rc=1 sure=1.6s zaman=2026-11-05T17:01:50+03:00
 --- stdout ---
 ── mutantlar (her biri sınavı KIRMALI)
 MUTANT 5: bağ çözülmeden kabul edilir

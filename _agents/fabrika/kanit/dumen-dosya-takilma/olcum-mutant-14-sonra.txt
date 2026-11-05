@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: E2 varsayılan: çerez şeridi REDDEDİLDİ · rc≠0 + hedef kapı 'E2 varsayılan: çerez şeridi REDDEDİLDİ' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
 $ env MUTANT_HAM=14 bash dumen-surucu/scripts/dumen-dosya.test.sh
-# rc=1 sure=35.8s zaman=2026-11-05T16:23:04+03:00
+# rc=1 sure=18.5s zaman=2026-11-05T17:02:16+03:00
 --- stdout ---
 ── mutantlar (her biri sınavı KIRMALI)
 MUTANT 14: çerez kutusu aranmaz (sayfadaki her Reddet tıklanır)
@@ -51,4 +51,3 @@ MUTANT 14: çerez kutusu aranmaz (sayfadaki her Reddet tıklanır)
   ✗ E2 varsayılan: çerez şeridi REDDEDİLDİ (Kabul Et'e basılmadı)  → {"escape":3,"tiklanan":["Reddet","Reddet","Reddet"],"gizlenen":1}
 SONUÇ: geçti=38 kaldı=1 (ilk kırmızıda duruldu)
 --- stderr ---
-⏳ agir-sira: kanit-dumen-dosya-takilma-mutant-14 20 sn bekledi (yuva 2, load1 17.75)

@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Z6 Dumen.kos: iş hata verse de sekme kapandı · rc≠0 + hedef kapı 'Z6 Dumen.kos: iş hata verse de sekme kapandı' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
 $ env MUTANT_HAM=20 bash dumen-surucu/scripts/dumen-dosya.test.sh
-# rc=1 sure=27.0s zaman=2026-11-05T16:23:58+03:00
+# rc=1 sure=78.7s zaman=2026-11-05T17:05:11+03:00
 --- stdout ---
 ── mutantlar (her biri sınavı KIRMALI)
 MUTANT 20: kos() iş bitince kapatmaz
@@ -55,10 +55,12 @@ MUTANT 20: kos() iş bitince kapatmaz
 ── sert süre sınırı ve kapat garantisi
   ✓ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)
   ✓ Z2 süre aşımı iletisi "hâli bilinmiyor, ölç" der (körlemesine yineleme yok)
+  ✓ Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)
+  ✓ Z1c pozitif kontrol: bağlantı geri geldi, örtü kalkınca aynı düğme tıklanır ve sayılır
   ✓ Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içinde hata)
   ✓ Z4 tıklama yeni sekme açtı (ön koşul)
   ✓ Z5 kapat(): kendi sekmesi VE kendi tıklamasının açtığı sekme kapandı
   ✗ Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı  → 2 ≠ 1
-SONUÇ: geçti=47 kaldı=1 (ilk kırmızıda duruldu)
+SONUÇ: geçti=49 kaldı=1 (ilk kırmızıda duruldu)
 --- stderr ---
-⏳ agir-sira: kanit-dumen-dosya-takilma-mutant-20 5 sn bekledi (yuva 2, load1 17.02)
+⏳ agir-sira: kanit-dumen-dosya-takilma-mutant-20 50 sn bekledi (yuva 1, load1 17.53)

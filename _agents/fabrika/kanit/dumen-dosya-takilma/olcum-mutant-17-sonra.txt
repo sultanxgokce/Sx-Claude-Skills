@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR · rc≠0 + hedef kapı 'Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
 $ env MUTANT_HAM=17 bash dumen-surucu/scripts/dumen-dosya.test.sh
-# rc=1 sure=26.4s zaman=2026-11-05T16:23:30+03:00
+# rc=1 sure=95.8s zaman=2026-11-05T17:03:52+03:00
 --- stdout ---
 ── mutantlar (her biri sınavı KIRMALI)
 MUTANT 17: sert süre sınırı yok
@@ -53,12 +53,12 @@ MUTANT 17: sert süre sınırı yok
   ✓ E4 anket çerçevesi ve ek katman gizlendi, rapor sayıyı verdi
   ✓ E5 ödeme sayfasında engel kapatılmaz (durak), çerez şeridi yerinde
 ── sert süre sınırı ve kapat garantisi
-  ✗ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)  → page.click: Timeout 8000ms exceeded.
+  ✗ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)  → dumen-kapi: baglanti-koptu — page.click: Target page, context or browser has been closed
 Call log:
 [2m  - waiting for locator('#alt')[22m
-[2m    - locator resolved to <button id="alt">Altta</button>[22m
+[2m    - locator resolved to <button id="alt" onclick="fetch('/tik')">Altta</button>[22m
 [2m  - attempting click action[22m
-[2m    2 × waiting for element to be visible, enabled and stable[22m
-[2m      - element is visible, enabl
+[2m    2 × waiting for element 
 SONUÇ: geçti=42 kaldı=1 (ilk kırmızıda duruldu)
 --- stderr ---
+⏳ agir-sira: kanit-dumen-dosya-takilma-mutant-17 76 sn bekledi (yuva 1, load1 17.64)
