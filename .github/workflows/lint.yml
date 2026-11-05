@@ -104,6 +104,8 @@ jobs:
           echo "DUMEN_CHROME=$CH" >> "$GITHUB_ENV"; echo "DUMEN_PLAYWRIGHT=$PW/node_modules/playwright-core" >> "$GITHUB_ENV"
           echo "tarayıcı hazır: $("$CH" --version 2>&1 | head -1)"
       - name: "Kabuk sınamaları · ${{ matrix.kova }} kovası (liste türetilir, sıfır bulmak kırmızı)"
+        env:
+          KABUK_PARALEL: ${{ matrix.kova == 'dumen' && '1' || '' }}   # dumen kovasında iki tarayıcı sınavı var (sürücü + dosya): sırayla koşar; boş değer = çekirdek sayısı
         run: bash .github/ci/kabuk-sinamalari.sh "${{ matrix.kova }}"
 
   arcelik-fatura-kesim:
