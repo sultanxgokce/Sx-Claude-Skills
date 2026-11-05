@@ -1,0 +1,1041 @@
+$ tail -n 5000 -- /config/.claude/gun-sonu-aksam-son.log
+# kaynak=dosya:/config/.claude/gun-sonu-aksam-son.log tur=dosya desen=gün sonu çalıştı · 2026-11-0[345]T21:30:0[0-9]\+03:00 en_az=3 son=5000 atesleme=3 rc=0 sure=0.0s zaman=2026-11-05T21:58:00+03:00
+--- stdout ---
+# GÜN SONU · 2026-10-26 · 50 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (0)
+
+## İçeride bitirdiklerimiz (44) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **agir-sira-yuva-tanitici** — Ağır sıra, sarmaladığı komuta yuva kilit tanıtıcısını vermez; komutun arka plana bıraktığı süreç yuvayı tutamaz · sahip HENDESE · 5/5 E · 1 tur · kanıt var
+- **aile-zil-kuyrugu** — aile-notify engellenen zili kaybetmez: koltuk meşgul/taslakken zil kuyruğa girer, aynı alıcı+metin tek teslim, --bosalt koltuk boşsa tek mesajda teslim eder (ömür 6 sa); --oran engel oranı satırı aile-durum'da (W42-E2 H6M) · sahip MİRAHUR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1186
+- **bekci-kutu-koltuklari** — Boşta bekçisinin 'sahipsiz iş' alarmı maişet kutusunun iç koltukları (DÜLGER, ÇARŞI, KEŞŞAF, PEYK) için susar; bu koltukların işi sahipsiz sayılmaz · sahip MUAVİN · 5/5 E · 1 tur · kanıt var
+- **bekci-reis-zili-karar** — Boşta bekçisi: (1) reis zili iletilen maddenin metnini ve saatini taşısın (21:5x biçimi dahil; bulunamazsa 'saatsiz', '?' değil); (2) ajanın son satırı SERDAR/Sultan'a karar sorusuysa madde iletilmez, kararı bekleyene (reis) 'senden karar bekliyor' zili gider (XBC) · sahip MİRAHUR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1180
+- **birlestirme-kapisi-t9b-gkapi-ci** — T9b (PR #1147), GKAPI'yi /config/.claude/skills altındaki sabit yola bağlıyor; CI koşucusunda o dizin hiç yok, sınav orada hep ÖLÇÜLEMEDİ kırmızısı veriyor (CI main'de #1149 üzerinden ölçüldü). · sahip CI'da Kabuk korpusu 113/113 yeşil; kutuda da 113/113 kalır (varsayılan yol hâlâ /config/.claude/skills/...). · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1150
+- **donus-zili-canli** — Dönüş zili canlı kurulum + ilk gerçek kutu dönüşü ≤60 sn: birleşme sonrası canliya-inis.sh (donus becerisi kurulumu, apply-crontab ile cron satırı), host adımı reddedilirse MUAVİN koşar · sahip BANI · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1123
+- **ekipc-yenile** — Benimsenmiş 14 yönetilen kimliğe temel değişikliğini yayan yol yok: ekipc.sh yenile komutu + sınavı ayrı kartta; birleşince 14 kimlik yenile ile tazelenir · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1188
+- **federe-kopru** — gorev_01M54C4A56HDMS1H5SAWFCWSGE: federe tetik 2 saat cevapsızsa MUAVİN turu (federe-tetik.sh kopru) onu alıcı kutunun reisine oda mektubu olarak bırakır ve reisi uyandırır — her tetik TEK sefer (teslim kaydı bırakılınca yazılır); alıcı kutusu yoksa (birim kaydında yok/sökülmüş) gonder ve kopru kırmızı döner · sahip MUAVIN · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1168
+- **filo-hal-suresi** — filo durum raporunda her koltuğun hâl SÜRESİ, takılı/uzun-boşta işareti ve bağlam çubuğu + özet satırı · sahip BASIRET · 2/5 H · 3 tur · kanıt var · PR 1142
+- **filo-havuz-toplayici** — Haftalık filo havuzu F1 (gorev_01M4XTNQHDBM0G2CAHB33GT2FN): her görünür kutunun son 7 gündeki teslimatlarını, ajan notlarını, gün sonu özetlerini ve Görev Defteri'ndeki o hafta açılan bulguları TEK havuz dosyasında toplayan betik (scripts/filo-havuz.sh) + sınav. Süzme/araştırma/görev üretimi bu kartta değil (F2). · sahip SERDAR · 4/5 E · 4 tur · kanıt var · PR 1134
+- **gozcu-bosta-suresi-gercek** — GÖZCÜ koltuk-boş süresini bekçinin ekran-değişim damgasından sayar ve turu açmadan önce koltuğun canlı hâlini yeniden ölçer; çalışan koltuk için tur açılmaz · sahip HENDESE · 5/5 E · 1 tur · kanıt var · PR 1326
+- **hedef-gorev-tasarim** — Hedef türü görev + Mühürdarlık + teslim oturumu: Durak 0-2 tasarım belgeleri · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1183
+- **hendese-kutuphane-h1** — HENDESE kütüphanesi 1. hafta: günlük tur kayıtları (depo/web/video) + örnek vaka kartları, kaynaklı · sahip HENDESE · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1156
+- **hezarfen-ulak-bayat** — ULAK bayat mesaj birikimi turları yemesin: bir kerelik temizlik betiği (kuru kip varsayılan) bir günden eski bekleyen mesajları 'düştü' yapar ve ajan başına önce/sonra sayısını gösterir; teslimde ve tur sonu balonunda bir günden eski mesaj verilmez, durum çubuğunda ayrı sayılır · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **hezarfen-verim-alarm** — Verim nabzı kutu başına alarm verir: yalnız son gün içinde teslimi ya da açık işi olan kutular değerlendirilir, işsiz kutu sessiz kalır; telefona yalnız acil seviyesi gider, toplam saatte en çok bir bildirimle ve birden çok kutu tek mesajda birleşir; panelde her kutu ayrı görünür (HH01S dilim 2) · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **hezarfen-verim-hareketsiz** — Verim nabzında kutu, son 24 saatte teslimi ya da yazılmış adımı olan açık işi varsa aktif sayılır; hareketsiz açık iş kutuyu aktif yapmaz (SERDAR 26 Eki 15:5x) · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **hezarfen-verim-kutu** — Verim nabzı kutu başına ölçülsün: her kutunun ağırlıklı puanı, hedefi (code 20, diğer kutular 15) ve seviyesi ayrı hesaplansın, filo toplamı ayrı kalsın; canlıya alma bekleyen sayısı canlı kanıt gerektirmeyen işleri saymasın · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **ise-alim-hendese** — HENDESE işe alımı — REA araştırması + CAD/AI çizim programı mimarı · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1153
+- **karar-ids-suzgeci** — GET /api/cortex/decisions'a ids= süzgeci: ÇAVUŞ açık kartlarını kimliğiyle okusun (liste 100'de kesiliyor, sayfalama yok); salt-okur, geriye uyumlu · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1090
+- **kart-supurme-t9b** — süpürmenin kapattığı izlenen kart dosyasını (t9b) kayda geçir · sahip MUAVIN · 5/5 E · 1 tur · kanıt var
+- **kokpit-a2-hal-noktasi** — Kokpit ekranı A2: rozette kutu hâl noktası + 'N oturumun hâli bilinmiyor' ve 'kapanmış' sayıları + Seni bekleyenler (yalnız hâli bilinen oturumlardan; eksik veriden 'bekleyen 0' türetilmez); veri cloudtop #561 alanlarından (hal_bilinen · hal_bilinmeyen · kapanmis · hal=bilinmiyor); dondurulmuş dile yalnız ekleme, 02-tasarim-dili günlüğüne gerekçe · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1105
+- **kokpit-agentic-os-plan** — Agentic OS yön ve sıra belgesi (kokpit-ux/04 §1-§7): Sultan'ın üç akış + eylemler + personel/persona/kural/rutin/sır/model tarifi, sıra B0→B1→C→D→E (Sultan onayı 2026-10-08 'onayladım' damgalı); 02 günlüğüne ek satırı · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1106
+- **kokpit-b0-kosu-kaydi-sema-12** — kokpit-ux/05 koşu kaydı şeması sürüm 1.2 (yalnız K4 eki): --nobetci ile --gozlem <komut> verilirse sessiz başarı ölçüsü stdout değil GÖZLEMDİR (önce/sonra çıktı aynı = ayakta-dokunmadim, değişti = tamam); gözlemsiz --nobetci yalnız 'sessizlik = iş yok' doğru olan işte kullanılır (nazir sunucu.sh böyle değil, A300). Pilot satırı gözlemli. Sürüm 2 madde 1 nazir kanıtı düşürüldü (A299). · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1109
+- **kokpit-b0-kosu-kaydi-sema-13** — koşu kaydı şeması 1.3: K4-d boş gözlem = gözlenen şey yok (boş→boş, dolu→boş = hata; boş→dolu = tamam; gözlem rc yalnız olculemedi'yi belirler) — NÂZIR altı hâl ölçümü; K4-c örneği soket inode (A306); zaman damgası UTC (A303) · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1111
+- **kokpit-b0-kosu-kaydi-sema-14** — koşu kaydı şeması 1.4: iki alan — gozlem_once/gozlem_sonra (string|null, gözlemli kipte kırpılmış gözlem çıktısının ilk 120 baytı; gözlemsiz kipte null): satır hükmün dayanağını taşır (A310, NÂZIR: 'tamam yazınca neyin değiştiği okunamıyor'); alan sayısı 15→17 · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1112
+- **kokpit-b0-kosu-kaydi** — B0-b Koşu kaydı (tasarım+kanon): her headless koşu tek kütüğe tek satır — ad · sahip · başlangıç · bitiş · sonuç · sonraki_planli (gözlem, sarmalayıcı yazar) · ifadeden_tahmin (tahmin damgalı; çelişirse kokpit sarı). Yazan: cron satırlarını saran tek sarmalayıcı; okuyan kokpit verisi. Mevcut kütükler taşınmaz. İnşa cloudtop'ta; sahipsiz kalmasın diye tasarım SERDAR'da, pilot kutu nazir (envanter: 10 iş, 9 defterli, 1 izsiz) · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1108
+- **kokpit-kutu-tazelik** — Kokpit canlı sürümünde her kutunun tazeliği kendi ölçüm saatinden gelsin (sayfa geneli değil); belleği bayat kutu kartında ve tazelik satırında adıyla söylensin (sentez B4) · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1086
+- **kokpit-kuyruk-ekran** — Kokpit 'Kutu dışı' kuyruğu kapı kartının ne istediğini, yapılmazsa ne olacağını ve yaşını göstersin; tıkanmış ve en eski üstte; ayrıntıda niçin sen · bitince; salt-okur kalır (tek kuyruk dilim 1 ön yüz) · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1085
+- **kurye-hedef-dagitim** — Kurye başka odanın postasını yanlış kutuya düşürüyor (2 günde 2 mektup nazir'e, 1 HEDEF/dosya-adı çelişkisi): dağıtım yalnız HEDEF alanına göre; HEDEF ile dosya adı çelişirse teslim etme, gönderene dön; büyük/küçük harf (HEDEF: Nexus) çözümleyici farkı kapanır; MUAVİN #1084 ile birleşir · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1107
+- **kurye-kisisel-veri-kapisi** — Kurye (oda-tetik gonder) mektupta maskesiz cep telefonu ya da IBAN varsa teslim etmez, mektup gonderende kalir; ciktida numara MASKELI gorunur; bilincli istisna gerekce ister ve ize duser (b0188) · sahip MUAVIN · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1113
+- **mesaj-yazi-korumasi** — Ajan mesajı (aile-notify ve kurye) Sultan'ın koltukta yazmakta olduğu gönderilmemiş metnin üstüne basıp siliyor; girdi satırında yazı varken mesaj bekletilsin · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1127
+- **muhakkik-defter-jeton-ortam** — ekip-ac registry defter_jeton: alanı → üye DEFTER_JETON_YOL ile doğar; MUHAKKIK kaydına /config/defter-jeton-muhakkik · sahip MUAVIN · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1155
+- **oda-tetik-alici-bayragi** — oda-tetik.sh alıcı koltuğu adıyla söylesin: --alici bayrağı (--ajan eş adı kalır) ve rc 5 mesajı 'ALICI koltuk … gönderen değil' yazsın (6HW8D · BASİRET Ö4) · sahip MİRAHUR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1179
+- **oda-tetik-mektup-yok** — oda-tetik uyandir turu: kuyruk girdisinin mektubu handoff ağacında diskte yoksa hatırlatma yollanmaz, girdi kuyruktan düşer ve ize tek 'mektup-yok' satırı yazılır · sahip MUAVİN · 5/5 E · 2 tur · kanıt var
+- **oda-tetik-olu-mektup** — oda-tetik'te kurye düşen mektup 5. denemede ölü/ klasörüne taşınır (silinmez), aynı mektubun düşme izi saatte bir satırla sınırlanır, gonder.jsonl 10 MB'ı aşınca döndürülür · sahip MUAVİN · 5/5 E · 2 tur · kanıt var
+- **otopilot-u1-issiz-sinyal** — Boşta bekçisi, işi olmayan ve bloke olmayan boş koltuğu kütüğe issiz diye yazar; gündüz 60 dakikayı geçince koltuk ve gün başına en çok bir kez reise 'kuyruk boş' zili gider; gece yalnız kütük (OTOPİLOT U1, görev gorev_01M5QK39RC2Z11ZVQAQZKRKK9P) · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var
+- **otopilot-u2-yukseltme** — Boşta bekçisi: ikmal zili gittikten sonra koltuk 2 sa kesintisiz işsiz kalırsa (reisden iş ya da madde gelmedi) SERDAR'a yükseltme zili · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var
+- **otopilot-u3-reis-erisim** — Reisin gerçek erişilebilirliğini (koltuk ölü mü, oturum var mı) ölçüp yükseltmeyi buna bağlamak; bu dilim yalnız ikmal zilinden beri yanıtsızlığı ölçer · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **otopilot-u4-kuyruk-tukenme** — Boşta bekçisi: ikmal turu kuyruk tükenince kademeli düşüş sırasını (hazır layiha, açık-kararlı layiha, araştırma, Sultan'a haber) zilin içinde söyler · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var
+- **registry-crx-sizinti** — Kimlik bilgisi kayıt defterine, ortam dosyasında açığa çıkan imza anahtarı için sızıntı kaydı eklenir; döndürme kararı Sultan turuna bırakılır · sahip MİRAHUR · 5/5 E · 3 tur · kanıt var
+- **reis-koltuk-eslesme** — Reis adı kutunun açık koltuğuna çevrilir, eşleşmezse ölçülemedi; bekçi sınavı mutant kopyası filo_reis.py'yi taşır · sahip SERDAR · 4/5 E · 4 tur · kanıt var · PR 1182
+- **revak-filo-kaydi** — Revak kutusunu Nexus filo defterine kaydet: _agents/filo/filo-registry.yaml birim 17 (cell_id s18, kod adı, sinif mahrem-tenant, konteyner cloudtop-revak, repo revak, mudur null, durum dogum) → federe-derle.sh türetilmiş görünümü yeniden üretir, filo-registry-lint.sh yeşil. Koltuk açma engeli (Create Unsafe Agents sınıflandırıcısı) ayrı Sultan kararı — bu PR izin genişletmez. Merge Sultan. · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1110
+- **ui-beceri-isaretci** — Nexus el kitaplarına ve master prompta UI üç beceri işaretçisi (P07: ui-tasarim-akisi + frontend-design + frontend-boost) girer: ortak temeller, derlenmiş MÜDÜR temeli, elle yazılmış 18 AGENT.md, Nexus CLAUDE.md ve doğum şablonu · sahip SERDAR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1187
+- **wait-ci-oturma-tavan** — wait-ci.sh: tüm kontroller geçmiş (pending=0) ama oturma penceresi tavana denk gelince 'süre doldu' exit 3 veriyor (2 vaka: Kabuk korpusu 11m34s ve cloudtop #722). pending=0 olunca tavanı oturma süresi kadar uzatsın, yeşil iş exit 3 almasın; sınav + mutant · sahip MİRAHUR · puan YOK · kanıt süpürüldü (PR birleşmiş, kanıt toplanmadı) · PR 1173
+
+## Tıkananlar (0)
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (0) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- (bugün tavan açılmadı)
+
+## Açık işler (47)
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-tarama — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi — sahip HEZARFEN · açıldı 2026-10-26T19:07
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- registry-restic-ad-notu — sahip MİRAHUR · açıldı 2026-10-26T18:32
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- wait-ci-sahte-kirmizi — sahip MIRAHUR · açıldı 2026-10-15T16:40
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **1** · atanmış açık 28 · sıra Sultan'da 0 · onay bekleyen 3
+  - QWRDT · HENDESE · Ekran kapısı: dış yüzey ekran kartı senaryo kartı + tık bütçesi ister… · son adım 26 Oct 21:21
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-10-26.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-10-26.md
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "<stdin>", line 11, in bugun
+TypeError: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "<stdin>", line 11, in bugun
+TypeError: 'NoneType' object is not subscriptable
+# GÜN SONU · 2026-10-29 · 33 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (1)
+- [acik] **reis-yeni-sohbet-zorla-taze-kalan** — yerel koltuk kipi (--yerel/--hepsi), 07:30 saat kapısı, ilk KONUM mesajı: ayrı kart; yama /config/projects/_wt/yerel-kip-0df13cfc.patch · sınıf: geri_alinamaz · sahip MUAVİN · puan YOK · kanıt yok
+
+## İçeride bitirdiklerimiz (27) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **ajan-nobeti-sinav-ci-atla** — Beceri sınavı, kurulu olmayan ağaçta (CI) yan beceri yok diye korpusu kırmızı yapmasın · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var
+- **asili-zil-temizle** — İzole kutuda yazı kutusunda asılı kalan kendi zilimiz temizlenip yeniden gönderilir · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **bekliyorum-havuz** — bekliyorum-olc.py kuyruk sayımına havuzdaki ve ajan bekleyen işi de katsın (SERDAR 28 Eki: havuzdaki iş de iştir), durma standardı bunu ve turu bitirince durmama kuralını söylesin (ders 1-2, görev …4YB6Y8KX2Y5F) · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **ci-kabuk-kovalar** — Nexus PR kabuk korpusu dört kovaya bölünür, duvar süresi 27 dk → 8 dk (kaynak: CI koşusu, 29 Eki), karantina sözleşmesi ve mutant kapıları çalışır · sahip HEZARFEN · 5/5 E · 4 tur · kanıt var
+- **ci-kova-dengesi** — PR korpus kovaları dengelensin: verim nabzı sınavının mutantları iki dosyaya bölünür, kova ağırlıkları tazelenir · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **compact-kurali-eski-oturum-penceresi** — Zorunlu compact kuralı, 6 saatten eski sohbeti olan boş koltukları da ölçsün (bugün 20 koltuk 'oturum eşleşmedi' diye ölçülemiyor) · sahip MUAVİN · 5/5 E · 2 tur · kanıt var · PR 1377
+- **defter-kutu-jetonlari-kaydi** — Defter geçidi kutu/ajan jetonları credentials.yaml'a kayıt olarak girer (iki konum, değersiz doğrulama, rotasyon yolu, anahtar=ham jeton uyarısı); rotation.last bugünkü gerçek (28 Eki dağıtımı) ve TELLAL rotasyonunun sabah paketinde beklediği yazılır; runbook bölümü + lint 0 fail · sahip BERİD · 5/5 E · 2 tur · kanıt var · PR 1402
+- **defter-kutu-jetonlari-rotasyon-son** — TELLAL rotasyonu Sultan --uygula ile koşunca credentials.yaml defter-kutu-jetonlari.rotation.last koşu gününe çekilir (canlı olay sonrası; yeni kart defter-kutu-jetonlari-rotasyon-son) · sahip BERİD · 5/5 E · 1 tur · kanıt var · PR 1403
+- **ders2-nobeti-bekleme** — 6 dersin 2.si: tur sonunda durup bekleme kuralı nöbet becerisine işlenir; kuyruğunda iş varken bekleyen ajan nöbetçi tarafından sıradakini almaya yönlendirilir · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **filo-plan-hazirlik** — Filo günlük plan kuru koşusu --hazirlik ile her reisin koltuğunun hazır, meşgul, soruda takılı ya da bulunamaz olduğunu mektup gitmeden önce söylesin (görev …V33REZCHKW00ETSA3JNE6R) · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **filo-plan-yaz** — filo.sh gunluk-plan-yaz: kutu hazırlığı + günlük plan özetini tek dosyaya (filo-plan JSON) atomik yazar; merkez panelinin veri kaynağı · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **filo-reis-kayit-code** — Filo planı panelinde code kutusunun reisi kayıtta yok görünüyor: koltuk okuyucusu code kutusunda başka deponun ekip kaydını seçiyor; Nexus'un aile kaydı da okunsun · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **koltuk-gonder-izi** — koltuk-gonder.lib.sh gönderim başarısızlığını (rc 2 doğrulanamadı, rc 3 kutuda asılı) kütüğe yazsın; 'Enter düşmüyor' vakaları şimdi hiçbir kayda düşmediği için ölçülemiyor · sahip MİRAHUR · 5/5 E · 2 tur · kanıt var · PR 1379
+- **koltuk-iz-test-kirliligi** — Koltuk gönderici iz kütüğü (#1379) gerçek dosyaya sahte tmux testlerinden de yazılıyor; sekiz test kütüğü kirletiyor, Enter düşmüyor sayımı bozuluyor · sahip MİRAHUR · 5/5 E · 1 tur · kanıt var · PR 1385
+- **kurye-klasor-paketi-sessiz** — Kurye gelen kutusuna bırakılan klasör paketi artık sessizce atlanmaz: ilk görüldüğü turda sesli uyarı ve iz kaydı düşer · sahip MUAVİN · 5/5 E · 2 tur · kanıt var · PR 1381
+- **mihenk-pr-ac** — Mihenk kutusu PR açamaz (kuralı: izole kutu PR açmaz, merkez açar); merkezde tek komutla kutunun itilmiş dalından PR açan betik · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **oturum-dosyasi-buyuk-uyari** — Zorunlu compact kuralı, sohbet kayıt dosyası 300 MB'ı aşan koltukları 'compact küçültmez, yeni sohbet gerek' diye ayrıca işaretlesin (sedir/akar 1,2 GB vakası) · sahip MUAVİN · 5/5 E · 2 tur · kanıt var · PR 1384
+- **pr-gate-satir-sonu** — agent-dashboard pr-skill-gate kancası satır sonuyla ayrılmış komutlarda da gh pr create'i yakalar (agent-dashboard PR #5) · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **preflight-bayat-esc-mesgul** — Boş koltuk ekrandaki eski yazıyı çalışıyor sanıp zili kuyruğa atmasın · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **secret-scan-pr-araligi** — PR dalında ana dal birleşim kaydı varsa sır taraması sızıntı olmadan kırmızı veriyor; PR kapsamı açık aralıkla taransın, gerçek sızıntı yine yakalansın · sahip MİRAHUR · 5/5 E · 1 tur · kanıt var · PR 1383
+- **sir-taramasi-temel-cizgi** — Haftalık sır taramasının 57 eski bulgusundan telefon biçimli 27 ve test dosyasındaki 6 bulgu parmak iziyle temel çizgiye alınır; 24 kimlik-sınıfı bulgu ignore'a alınmaz, konum listesiyle HAZİNEDAR görevine devredilir · sahip MİRAHUR · 5/5 E · 3 tur · kanıt var · PR 1390
+- **ulak-bilgi-sinifi** — aile-notify bilgi niteliğindeki zilleri (✅ iş-bitti · golge birleştirirdim · Doğrulat partisi işlendi · Verim · compact bitti) ulak postasına ⚪ bilgi önemiyle yazar; ulak liste başlığında bilgi 'yeni' sayılmaz, ayrı gösterilir — SERDAR kutusundaki birikimin %46'sı (24 sa: 264/568) bu sınıf · sahip BERİD · 5/5 E · 3 tur · kanıt var · PR 1404
+- **ulak-toplu-alindi-teslim** — ulak al --hepsi, balonu düşmüş ama ajanın tek tek almadığı 'teslim' mesajları da toplu 'alındı' yapar (eski davranış --teslim-atla ile); böylece teslimde kalan mesaj eskalasyon mektubu üretmez; sınav kapıları + mutant güncellenir. · sahip BANI · 5/5 E · 1 tur · kanıt var · PR 1393
+- **verim-nabzi-sure-payi** — Verim nabzı sınavı CI'da 415 sn sürüp 420 sn bütçeyi aşıyor, ana dalı kırmızı tutuyor: bütçeyi koşucu tavanına çıkar · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var
+- **wait-ci-dal-kosulari** — wait-ci aynı adlı iş akışlarını workflowDatabaseId ile gruplar, dalın önceki commit koşularını kapsar ve tamamlanmış koşuda success dışı her sonucu kırmızı sayar · sahip BERİD · 5/5 E · 5 tur · kanıt var · PR 1395
+- **wait-ci-kosu-listesi** — wait-ci.sh, PR başı commit'inin iş akışı koşularını da sorar: süren koşu varken 'CI yeşil' demez, düşen koşuda fail verir (gh pr checks listesinde olmayan koşu kaçmasın) · sahip BERİD · 5/5 E · 1 tur · kanıt var
+- **wait-ci-sonuc-sinifi** — wait-ci sonuç sınıfları: skipped/neutral uyarılı yeşil, bilinmeyen=ÖLÇÜLEMEDİ rc 3, mutant kanıtı (yeni kart wait-ci-sonuc-sinifi) · sahip BERİD · 5/5 E · 2 tur · kanıt var · PR 1398
+
+## Tıkananlar (1)
+- **retro-nabiz-d4** — Haftalık retroya İş Nabzı D4 ölçüsü: nabız kütüğünden o hafta kırmızıya düşen iş sayısı ve kırmızıda ortalama kalma süresi satırı; kütük okunamazsa ölçülemedi denir, sıfır denmez; sınav + mutant (görev JHX20YPE) · yol: geri-al · neden: Kart yanlış depoda açıldı: iş retro.py'de (Sx-Claude-Skills), aynı adlı kart Sx'te açılıp PR #568 oradan yürütüldü; bu kartta iş yapılmadı · sahip BANI
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (0) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- (bugün tavan açılmadı)
+
+## Açık işler (59)
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- otopilot-f1-karar-hasadi — sahip HEZARFEN · açıldı 2026-10-29T21:26
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze-kalan — sahip MUAVİN · açıldı 2026-10-29T04:18 · SULTAN
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **3** · atanmış açık 8 · sıra Sultan'da 0 · onay bekleyen 2
+  - QATMR · BÂNİ · Eski görevleri yeni görev ekranı düzenine uydur · son adım 29 Oct 21:05
+  - N1K8K · MİRAHUR · Dümen bekçisi: Playwright fill() metin dışı alanlarda (seçim/tarih vb… · son adım 29 Oct 21:12
+  - YB30K · HENDESE · Ayşenur terminali (medigate): kişi istemcisi ve köprü yeni sürümle ça… · son adım 29 Oct 21:24
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-10-29.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-10-29.md
+→ gün sonu çalıştı · 2026-10-29T21:30:02+03:00 · gün 2026-10-29
+# GÜN SONU · 2026-10-30 · 22 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (1)
+- [bitti] **meal-tek-cumle** — Defterde özeti boş açık kayıtlara merkezde koşan araç tek cümlelik Sultan dilinde özet yazar; ucuz model, kuru varsayılan, tur tavanı ve maliyet satırıyla · sınıf: para · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1427
+
+## İçeride bitirdiklerimiz (17) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **alt-personel-pr-yetkisi** — MÜCERRİB ve MÜTEFENNİN istemlerine PR yetkisi satırı girer (önce=0 sonra=2 ölçüldü) ve ikisi de gerçek istemle sorulunca doğru hükmü verir (açabilir, birleştiremez); gerçek PR açma bu işin dışındadır, yetki satırı politikadır · sahip HEZARFEN · 5/5 E · 5 tur · kanıt var · PR 1417
+- **d0013-kapanis-main** — iskan-dersleri.jsonl'de d0013 kapanış satırı (durum kapali, kanıt Sx #468, 26 Eki) main'e girecek PR commit'ine işlenir; commit'teki kütükle ders kapısı geçer · sahip BERİD · 5/5 E · 3 tur · kanıt var · PR 1408
+- **dogum-kaynak-kapisi-fabrika-haric** — Doğum zincirinin kaynak kapısı ana kopyadaki fabrika kanıt ve kart dosyalarının (araçların ana kopyaya yazdığı) değişikliğini kirlilik saymaz; öteki izlenen dosyalardaki değişiklik yine durdurur; sınav vakası eklenir · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1419
+- **duzen-isaretsiz-11-kimlik** — Sultanla çalışan on bir kimlik düzen paketine bağlanır, HEZARFEN kimliği yenilenir; kendi başına koşan beş kimlik ile emekli ya da beklemedeki iki kimlik dışarıda kalır · sahip BENNÂ · 5/5 E · 1 tur · kanıt var · PR 1423
+- **filo-donus-ozeti-govde** — Filo plan özeti dönüş dosyasını nöbet kopyasının değil merkez Nexus giden kutusunun içinde de arar ve özet parçası dosya yolu olan dönüşte gövdedeki ilk plan satırını okur; sınav vakaları eklenir · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1418
+- **hesap-yuzde-kaydedici** — statusLine girdisindeki rate_limits (5 saat ve 7 gün yüzdesi, resets_at) hesap başına /config/.filo/hesap-yuzde.jsonl dosyasına yalnız KAYIT olarak yazılır; hiçbir geçiş tetiklemez (F2a) · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var · PR 1424
+- **layiha-hesap-gecisi** — Layiha: filoyu birden çok hesaba bölme ve sınır yaklaşınca/dolunca otomatik hesap geçişi — yalnız araştırma belgesi, inşa yok · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var · PR 1420
+- **merkez-alt-personel** — Kuzey Yıldızı Madde 3: merkez kutusuna 9 alt personel (BÂNİ 3 · BERİD 2 · HENDESE 2 · HEZARFEN 2) işe alımı · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1414
+- **oda-tetik-sapkali-harf** — Oda tetiği şapkalı harfli ajan adını (BÂNİ, BENNÂ, MESSÂH) koltuk adıyla eşleştirir; sınıflı kartın başlama izni zili bu adlarda da gider · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1426
+- **ortak-ayar-koltuk-tasarim** — Ortak ayar dizini ve koltuk dönüşü tasarım belgesi: bypass'a yükseltme öneri dışı, dönüş yeni yetki vermeden auto modda · sahip HENDESE · 5/5 E · 5 tur · kanıt var · PR 1421
+- **postane-f4-d1-aile-notify-kalan** — postane başarısında tuş içeriksiz (tuş son çare): postane tur-sonu kancası filoya kurulunca · sahip HEZARFEN · puan YOK · kanıt ⚠ YOK
+- **postane-f4-d1-canli-kanit-kapanis** — docs: POSTANE F4 D1 canlı ölçüm kanıtı (gerçek zil posta kütüğüne düştü) iki kartın kanıt dizinine işlenir · sahip HEZARFEN · puan YOK · kanıt ⚠ YOK
+- **postane-f4-d3-oda-federe-tetik** — POSTANE F4 D3: oda-tetik, federe-tetik ve oda-cevap-zili dürtmeleri posta kütüğüne de yazılır (tuş yolu çalışır kalır) · sahip HEZARFEN · puan YOK · kanıt ⚠ YOK
+- **ulak-bozuk-bayt** — ulak.sh posta okumaları geçersiz UTF-8 baytta çökmez (bozuk satır işaretlenir, kalan mektuplar okunur) ve HARICI köprüsü metni bayt değil karakter sınırında keser · sahip BERİD · 5/5 E · 1 tur · kanıt var · PR 1415
+- **ulak-govde-oku** — ulak'a mektup gövdesini tam basan 'ulak oku <kimlik>' komutu ve 'liste --govde' eklenir; bugün liste yalnız 120 karakterlik konuyu basıyor (26-29 Eki 4965 mektubun 3522'si kesik) · sahip BERİD · 5/5 E · 3 tur · kanıt ⚠ YOK · PR 1409
+- **ulak-kimliksiz-liste** — ulak liste/al kimlik (AGENT_NAME/AILE_KIMDEN) yokken 'HARICI: posta yok' rc 0 yerine kimliği tmux oturumundan registry ile türetir ya da 'kimlik yok' rc 2 der · sahip BERİD · 5/5 E · 1 tur · kanıt var
+- **zil-odasiz-hedef** — Cevap zili odası olmayan hedefe giden mektubu her turda yeniden denemez; tur başına bir kez konteyner listesine bakar, odasız mektubu tek özet satırında sayar · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1425
+
+## Tıkananlar (0)
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (1) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- 09:34 · is=alt-personel-pr-yetkisi tur=4 · reis kararı (sınıfsız iş) · gerekçe: reis=HEZARFEN oturum=f3c46c94 gerekce="Tur 3 bulgusu kanıt içeriğinin görünmemesi; davranış sınamasının çıktısını ölçüm olarak görünür kılıp bir tur daha"
+
+## Açık işler (63)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze-kalan — sahip MUAVİN · açıldı 2026-10-29T04:18 · SULTAN
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **2** · atanmış açık 5 · sıra Sultan'da 0 · onay bekleyen 1
+  - JKXAB · BÂNİ · Kullanıcı deneyimi ve UI/UX mükemmelleştirme: kokpit · merkez · görev… · son adım 30 Oct 21:21
+  - MGC55 · BÂNİ · Gezinti Faz 2: Dümen içinde tek tuş yakalama + işaretleme katmanı (ku… · son adım 30 Oct 21:23
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-10-30.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-10-30.md
+→ gün sonu çalıştı · 2026-10-30T21:30:02+03:00 · gün 2026-10-30
+# GÜN SONU · 2026-10-31 · 37 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (1)
+- [tikandi] **reis-yeni-sohbet-zorla-taze-kalan** — yerel koltuk kipi (--yerel/--hepsi), 07:30 saat kapısı, ilk KONUM mesajı: ayrı kart; yama /config/projects/_wt/yerel-kip-0df13cfc.patch · sınıf: geri_alinamaz · sahip MUAVİN · puan YOK · kanıt yok
+
+## İçeride bitirdiklerimiz (28) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **ad-taramasi-kor-hucre** — Ad tekilliği taraması sökülmüş kutuyu, gerekçeyle ekipsiz beyan edilen kutuyu ve VPS filosunun hücresini kör saymaz; iki araç aynı kuralı uygular · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1434
+- **bani-alt-koltuk** — MÜZEHHİP ve BENNÂ kayıtta normal şeride ve sultanxgokce hesabına geçsin, koltuklu üye olarak açılabilsin · sahip SERDAR · 5/5 E · 1 tur · kanıt var
+- **ekipc-alt-personel-satiri** — manuel-claude ortak temeline koltuksuz alt personelin el defteriyle çağrıldığı ve zilinin amirine düştüğü bölüm eklenir; metin düzen paketi çekirdeğindekiyle başlık hariç bayt aynıdır · sahip MİRAHUR · 5/5 E · 1 tur · kanıt var · PR 1457
+- **ekipc-otonom-yedi-benimse** — ares forge gozcu hafiz irfan nedim pusula kimlik dosyalarını ekipc benimse --baz otonom-ajan ile ortak temele bağlar; mevcut cümleler ELLE bölgesinde bayt-aynı kalır · sahip MİRAHUR · 5/5 E · 1 tur · kanıt var · PR 1450
+- **ekipc-paket-baslik-atla** — ekipc paket çekirdeğindeki kaynak başlık satırını ortak temele gömmez; paketten ve Nexus katalogundan üretilen bölge bayt aynıdır · sahip MİRAHUR · 5/5 E · 2 tur · kanıt var · PR 1456
+- **ekipc-paket-uyumu** — ekipc.sh Nexus manifesti olmadan ve ortak temel katalogu betiğin yanındaki pakette dururken --baz ile benimse ve yenile çalıştırır; ürettiği bölge Nexus'ta üretilenle bayt aynıdır · sahip MİRAHUR · 5/5 E · 1 tur · kanıt var · PR 1455
+- **kilit-sinavi-atlama** — Kilit sınavı tarayıcı yokken doğrudan çağrıda ölçülemedi (rc 3) desin; tarayıcısız olduğu bildirilen CI ortamında rc 0 ve ⚪ satırı versin · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1444
+- **kuzey-g4-puanlama-turu** — Havuzdaki puansız kayıtlara belirlenimci rubrikle reis puanı ve gerekçe yazan sabah turu betiği (varsayılan kuru) · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1433
+- **kuzey-g4-rubrik-yenile** — Puanlama turu rubriği Sultan önemi, kaynak, bekleme süresi, tekrar ve etikete göre puanlar; puanlar en az altı değere yayılır · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1436
+- **kuzey-g4-tasarim-kalan** — tur 4 bulgusu: benzerlik ayırma kuralının regex ortamı belgede eksikti; son commitle giderildi, doğrulaması denetçide · sahip HENDESE · puan YOK · kanıt ⚠ YOK
+- **kuzey-g4-tasarim** — Kuzey G4 puanlama turu tasarım belgesi: rubrik betikle hizalı, ayırma kuralı ortamıyla yazılı · sahip HENDESE · 5/5 E · 5 tur · kanıt var · PR 1435
+- **kuzey-olc-dokunulmaz** — Kuzey ölçümü dokunulmaz SEDİR ve TEZ kutularını G3.2 postacı ve G3.7 ad taraması sayımından çıkarır, karnede adıyla yazar · sahip SERDAR · 5/5 E · 2 tur · kanıt var
+- **kuzey-olc-fikstur** — Kuzey karnesinin tarayıcı betiği için sahte merkez fikstürü ve fikstürlü sınav: her ekran sözleşmesinin pozitif ve negatif ölçümü, önce eksik veri, sunucu taraflı kilit sayaçları ve kapanmış bulguların geri açılmadığı sınanır · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1441
+- **kuzey-olc-g13-baloncuk** — Kuzey karnesinin görev ekranı ölçümleri liste yüklenmeden ölçmesin ve g13 baloncuktaki süreyi ve tarihi rozetin zamanıyla karşılaştırsın (Sırada ve Başlandı); fikstür sınavı geç yüklenen listeyi ve yanlış süreli ya da tarihli baloncuğu sınasın · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1445
+- **kuzey-olc-hat12** — Kuzey karnesinin hat 1 ve hat 2 ölçümleri (G1-G18) hat dosyalarıyla gelir, tarayıcı satırları ana daldaki gerçek tarayıcı betiğini çağırır: ölçümü yazılmış makine satırı 0 → 18 (kaynak: bash scripts/kuzey-olc.sh --karne --kapsam, 31 Eki) · sahip SERDAR · 5/5 E · 3 tur · kanıt var · PR 1443
+- **kuzey-olc-hat34** — Kuzey karnesinin üçüncü ve dördüncü hattı (G20-G31) hat dosyalarıyla gelir; G3.5 Hasat izini doğan görevin kendi oda alanından sayar, kutu postacısının crontab okuması düşerse satır ÖLÇÜLEMEDİ der: ölçümü yazılmış makine satırı 18 → 30 (kaynak: bash scripts/kuzey-olc.sh --karne --kapsam, 31 Eki) · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1446
+- **kuzey-olc-secici-g15-g16** — Kuzey ölçüm aracında G16 oda önekini .grv-kimlik metninden okur ve menüyü .grv-odaon tıklayarak açar; G15 doğru şartı #mrk-grv dışında #mrk-engel olmaması olur; fikstür güncellenir · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1454
+- **kuzey-olc-tarayici** — Kuzey karnesinin tarayıcı ölçüm betiği: ekran satırlarını gerçek tarayıcıyla ölçer, sayfanın GET dışı isteğini ve terminal soketini keser; saf yardımcıların birim sınavı geçer (fikstürlü sınav ayrı kartta) · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1438
+- **kuzey-olc** — Kuzey karnesinin çekirdeği: karne ve kapsam kipi, hat dosyalarını ilk kullanımda (tembel) yükleyen ölçüm tablosu, eksik veride ÖLÇÜLEMEDİ ve KALDI baskın hüküm; hat dosyası olmayan satır 'ölçüm henüz yazılmadı' der, kapsama girmez · sahip SERDAR · 5/5 E · 3 tur · kanıt var · PR 1429
+- **meal-baslik-kip** — meal --baslik: açık görevlerde yol, komut ya da kod terimi taşıyan başlığa Sultan-dilinde yeni ad ekler (eski ad listede kalır, [madde N]/(N) gibi işaretler bayt aynı korunur); Kuzey üst görevi ile günlük plan ve [tarama] izli kayıtlar tura girmez (SERDAR B2: iki aracın tekrar denetimi bozulmasın, dışarıda kalan jargonlu sayısı ölçülüp yazılır), kuru varsayılan, tur başına en çok 20 · sahip BENNA · 5/5 E · 3 tur · kanıt var · PR 1442
+- **meal-baslik-uzun** — meal --baslik 300 harften uzun başlıktaki jargonu da görür: kapı önce uzunluk sebebini döndürdüğü için jargonlu uzun başlık aday dışında kalıyordu; yalnız 300'ü aşan başlık 280'lik parçalarla kapıdan yeniden taranır, sınav (sahte kapıya 300 kuralı, gerçek kapıyla da) ve mutantla kilitli · sahip BANI · 5/5 E · 3 tur · kanıt var · PR 1449
+- **meal-bicim-disi-yeniden** — Meal aracına biçim dışı kipi: aday yalnız kart adı 5-10 kelime kuralına takılan açık iş özeti; kuru koşu + 5 örnek SERDAR onayı; tur başına en çok 20 tashih; biçim dışından çevrilen 175 kayıt, sonra biçim dışı 0 · sahip BANI · 5/5 E · 6 tur · kanıt var · PR 1437
+- **meal-kapsam-disi-geri-al** — Kapsam dışı 2 tashihi geri al: eski özet tashih kaydından aynen geri yazılır, iki kaydın önce/sonra ölçümüyle · sahip BANI · puan YOK · kanıt var · PR 1439
+- **meal-kart-adi-bicim** — Meal yazarı özeti baştan 'ad (5-10 kelime): açıklama' biçiminde yazsın; kapı geri çevirmesine kalmasın · sahip BANI · 5/5 E · 1 tur · kanıt var · PR 1432
+- **meal-kisa-kip** — Meal aracına kısa kip: açık işte 80 harf ve üstü özet, adı korunarak 80 harften kısa tek cümleye iner; kuru varsayılan, tur başına en çok 20 tashih, eski metin kayıtta kalır (Kuzey G9 / G2.1, HENDESE tasarımı) · sahip BANI · 5/5 E · 2 tur · kanıt var · PR 1440
+- **merkez-oda-duzeni** — Merkezin dört odasının müdürü kayıtta işaretlenir, altı koltuğun rolü kayıtta ve kimlik dosyasında belgedeki tanımla yazılır, beş eski SERDAR kopyası ve NAKKAŞ SERDAR odasından arşiv odasına alınır · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1431
+- **oda-tetik-koltuksuz-amir** — oda tetiği koltuksuz alt personele giden mektubun zilini amirin postane gelen kutusuna düşürür; gönderim kaydına alıcı, amir ve mesaj alanları yazılır · sahip ÇAPAR · 5/5 E · 2 tur · kanıt var · PR 1430
+- **paralel-sinav-goreli-sure** — Kabuk çalıştırıcısının paralellik sınavı (P1b) mutlak 3-5 saniye sınırı yüzünden yavaş CI makinesinde kırmızı veriyor; ölçüm milisaniyeyle ve aynı makinedeki sıralı koşuyla karşılaştırmalı olsun, paralellik bozulunca yine kırmızı versin. · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1448
+
+## Tıkananlar (3)
+- **kuzey-olc-g15-engel-ac** — Kuzey ölçüm aracı G15: Engel paneli açılışta yok, düğme tıklanınca doğuyor; araç önce açma düğmesini tıklasın (salt okur) sonra paneli arasın · yol: geri-al · neden: Ölçüm düzeltti: canlıda #mrk-engel-ac yok, #mrk-engel #mrk-grv içinde; G15 'Engel paneli yok' doğru hüküm, araç hatası yok. Eski teşhis yanlıştı. · sahip HEZARFEN
+- **kuzey-olc-hatlar** — 30 makine satırının ölçümleri dört hat dosyasında (G1.x · G2.x · G3.x · G4.x) ve hat sınavlarında; hepsi gelince canlı karne kapsamı 30/30 · yol: geri-al · neden: hat12 ve hat34 kartlarına bölündü (#1429 daraltı sonrası) · sahip SERDAR
+- **reis-yeni-sohbet-zorla-taze-kalan** — yerel koltuk kipi (--yerel/--hepsi), 07:30 saat kapısı, ilk KONUM mesajı: ayrı kart; yama /config/projects/_wt/yerel-kip-0df13cfc.patch · yol: geri-al · neden: Rol 3.2: MUAVİN iletişim ve postane yöneticisi, kod işi almaz (SERDAR 31 Eki 01:00); iş BÂNİ'ye devredilir · sahip MUAVİN
+
+## Kapı kaçışları (1) — her biri bir istisnadır, veto hakkın var
+- 03:55 · gerekçe: yalnız kanıt: kapsam dışı 2 tashihin yazar ölçümü (HEZARFEN), geri alma yok, reis kararı KAPAT, gitleaks yeşil · komut: `cd /config/projects/_wt/Nexus-meal-kapsam-disi-geri-al && FABRIKA_KAPI`
+
+## Tavan açılışları (1) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- 03:36 · is=meal-bicim-disi-yeniden tur=4 · reis kararı (sınıfsız iş) · gerekçe: reis=BANI oturum=ulak_1793406838-05dbfad1 gerekce="SERDAR kararı DEVAM tur 4 son tur: kalan bulgu kayıttan önce/sonra ölçümüyle kapandı (tashih-kayit once 175 kırmızı, sonra 0, tur başına en çok 20)"
+
+## Açık işler (68)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- bosta-takili-zil — sahip MİRAHUR · açıldı 2026-10-31T16:20
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- ekipc-paket-pyyaml — sahip MİRAHUR · açıldı 2026-10-31T21:23
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- kuzey-puanla-saat-damgasi — sahip HEZARFEN · açıldı 2026-10-31T06:51
+- kuzey-yildizi-bitirme — sahip SERDAR · açıldı 2026-10-31T10:45
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- meal-baslik-kip-kalan — sahip BENNA · açıldı 2026-10-31T05:42
+- meal-baslik-uzun-kalan — sahip BANI · açıldı 2026-10-31T08:00
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **4** · atanmış açık 6 · sıra Sultan'da 0 · onay bekleyen 7
+  - YEFRZ · SERDAR · Agentic OS Kuzey Yıldızı · son adım 31 Oct 21:04
+  - 0BMQY · HEZARFEN · sultan-ana haftalık hak %96: filoyu boş hesaplara taşı · son adım 31 Oct 21:15
+  - K1692 · BÂNİ · Açık karta sonradan görev bağlanamıyor · son adım 31 Oct 21:18
+  - 7YCSJ · MÜZEHHİP · Üst koltuk sekmeleri oda gruplamasına göre ayrışmıyor · son adım 31 Oct 21:19
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-10-31.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-10-31.md
+→ gün sonu çalıştı · 2026-10-31T21:30:02+03:00 · gün 2026-10-31
+# GÜN SONU · 2026-11-01 · 19 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (0)
+
+## İçeride bitirdiklerimiz (17) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **dalgic-claude-yolu** — DALGIÇ ön-göz aracı Claude'u PATH'te olmasa da bulur; bulamazsa sebebini açıkça söyler ve ÖLÇÜLEMEDİ döner · sahip BENNÂ · 5/5 E · 2 tur · kanıt var · PR 1470
+- **ekipc-paket-pyyaml-kalan** — Gerçek paket vendor içeriğinin PyYAML'sız izole kutuda benimse ve yenile kuru koşuda exit 0 verdiğinin kanıtı: Sx duzen-pyyaml-vendor kartı (parite P8 gerçek vendor ile + 12 kutuda canlı kuru koşu) · sahip MİRAHUR · puan YOK · kanıt ⚠ YOK
+- **ekipc-yaml-onbaslik** — ekipc benimse YAML ön başlığını (--- ile başlayan kimlik başlığı) dosyanın başında tutar, ELLE bölgesine gömüp 58. satıra düşürmez; yenile daha önce düşmüş başlığı başa geri alır · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1468
+- **gozcu-kota-parki** — Tıkanma gözcüsü bütün hesaplar kota sınırındayken duran işi kullanım sınırı sebebiyle kaydeder, SERDAR'a zil atmaz, kök görev açmaz, günlük tur tavanını tüketmez · sahip BENNÂ · 5/5 E · 1 tur · kanıt var · PR 1465
+- **kuzey-g15-dumen-dugme-eslesmesi** — Kuzey G15 ölçeri Dümen'e gönder düğmesini satır başlığından ayırır ve Sırada'da 40 kartın ötesine bakar · sahip BENNÂ · 5/5 E · 2 tur · kanıt var · PR 1477
+- **kuzey-g15-dumen-sirada** — Kuzey G15 ölçeri sıra sende komut kartını Sırada sekmesinde de arar · sahip BENNÂ · 5/5 E · 1 tur · kanıt var · PR 1476
+- **kuzey-g17-tel-gecis** — Kuzey G17 ölçümü telefonda terminale geçişi kaldırılan düğme yerine ← terminal yolundan ölçer · sahip BENNÂ · 5/5 E · 1 tur · kanıt var · PR 1474
+- **kuzey-g17-yeni-akis** — Kuzey G17 ölçümü telefonda ara ekransız yeni terminal akışını (Görevler kapanınca doğrudan terminal) ölçer, soket denemesi gerçek akıştan görülür · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var · PR 1475
+- **kuzey-g18-az-kart** — Kuzey G18 ölçümü her sekmenin listenin başından ilk 8 kartını (daha az varsa hepsini) yargıya verir, en az bir kart şarttır ve boş sekme ölçülemedi kalır · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var · PR 1462
+- **kuzey-g18-panel-acik-telefon** — Kuzey G18 ölçeri telefonda panel açık gelince Görevler düğmesini beklemeyi bırakır (merkez 1.202 şeridi gizliyor) · sahip BENNÂ · 5/5 E · 1 tur · kanıt var
+- **kuzey-g18-tam-kare** — Kuzey G18 tam panel karesi paneli yerinden oynatmadan sayfa yüksekliğini büyüterek alınır, sol çubuk kartların üstüne binmez · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var · PR 1464
+- **kuzey-g18-tekrar-yargi** — Kuzey G18 yargısı: gerekçe dosyaya yazılır, KALDI'da ikinci tur, tur çelişirse ÖLÇÜLEMEDİ, tarayıcı düşünce sayılı yeniden deneme · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1471
+- **kuzey-g18-uc-yargi** — Kuzey G18 ölçümü kareleri kalıcı saklar, aynı kareye üç bağımsız Codex yargısı alıp çoğunlukla hüküm verir; her görünüm listenin başından aynı sayıda kartla, aynı kırpımla ve kartlar tam görünür çekilir (SERDAR tarifi) · sahip HEZARFEN · 5/5 E · 4 tur · kanıt var · PR 1461
+- **kuzey-g21-iptal-karsilik** — Kuzey G21 ölçümü iptal edilmiş kaydı karşılık saymaz ve her aksayan mektup için iptal olmayan en az bir kayıt ister · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1463
+- **kuzey-g28-reis-ayri-koltuk** — Kuzey G28 ölçeri reisi, aile-registry'de amiri Sultan olan üyeden okur (yoksa yönetici koltuğundan) · sahip BENNÂ · 5/5 E · 1 tur · kanıt var
+- **kuzey-g30-en-az-bir-kayit** — Kuzey G30 ölçümü: son koşuda sapma varsa havuzda en az bir açık uyum kaydı yeterli say (üretici koşu başına bir kayıt yazar), sapma başına kayıt isteme · sahip MİRAHUR · 5/5 E · 1 tur · kanıt var · PR 1469
+- **oda-kurye-adres-kucuk-harf** — oda-kurye _adres_coz registry'deki küçük harfli kimlikle (nazir-yon) eşleşsin: adresli mektup yalnız o ajana zil çalsın, herkese değil · sahip MİRAHUR · 5/5 E · 2 tur · kanıt var · PR 1472
+
+## Tıkananlar (0)
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (0) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- (bugün tavan açılmadı)
+
+## Açık işler (69)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- bosta-takili-zil — sahip MİRAHUR · açıldı 2026-10-31T16:20
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- kuzey-g18-az-kart-kalan — sahip HEZARFEN · açıldı 2026-11-01T03:56
+- kuzey-g18-uc-yargi-kalan — sahip HEZARFEN · açıldı 2026-11-01T02:49
+- kuzey-puanla-saat-damgasi — sahip HEZARFEN · açıldı 2026-10-31T06:51
+- kuzey-yildizi-bitirme — sahip SERDAR · açıldı 2026-10-31T10:45
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- meal-baslik-kip-kalan — sahip BENNA · açıldı 2026-10-31T05:42
+- meal-baslik-uzun-kalan — sahip BANI · açıldı 2026-10-31T08:00
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **5** · atanmış açık 6 · sıra Sultan'da 0 · onay bekleyen 1
+  - PNBGC · BÂNİ · Telefonda açılış Kutular ekranı sade ve sıkı olsun · son adım 01 Nov 15:07
+  - FXN8H · BÂNİ · Terminal ekranında ortak klasör gezgini: Finder gibi klasör/dosya gör… · son adım 01 Nov 16:49
+  - DXBWJ · BÂNİ · Telefonda Görevler ekranının üst katları sadeleşsin · son adım 01 Nov 18:37
+  - MHBAM · MÜZEHHİP · Ayşenur ekranında koltuk adları üst şeritte görünsün · son adım 01 Nov 20:09
+  - YEFRZ · SERDAR · Agentic OS Kuzey Yıldızı · son adım 01 Nov 20:24
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-11-01.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-11-01.md
+→ gün sonu çalıştı · 2026-11-01T21:30:02+03:00 · gün 2026-11-01
+# GÜN SONU · 2026-11-02 · 2 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (0)
+
+## İçeride bitirdiklerimiz (1) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **kuzey-g29-postane-icerik-okur** — Kuzey G29 ölçeri postanedeki düzen mektubunu boş konu yerine mektup metninden (icerik) okur; teslim için en az iki kutu ister · sahip BENNÂ · 5/5 E · 1 tur · kanıt var
+
+## Tıkananlar (0)
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (0) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- (bugün tavan açılmadı)
+
+## Açık işler (70)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- bosta-takili-zil — sahip MİRAHUR · açıldı 2026-10-31T16:20
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- dumen-sekme-secimi — sahip BENNA · açıldı 2026-11-02T10:07
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- kuzey-g18-az-kart-kalan — sahip HEZARFEN · açıldı 2026-11-01T03:56
+- kuzey-g18-uc-yargi-kalan — sahip HEZARFEN · açıldı 2026-11-01T02:49
+- kuzey-puanla-saat-damgasi — sahip HEZARFEN · açıldı 2026-10-31T06:51
+- kuzey-yildizi-bitirme — sahip SERDAR · açıldı 2026-10-31T10:45
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- meal-baslik-kip-kalan — sahip BENNA · açıldı 2026-10-31T05:42
+- meal-baslik-uzun-kalan — sahip BANI · açıldı 2026-10-31T08:00
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **1** · atanmış açık 5 · sıra Sultan'da 0 · onay bekleyen 3
+  - YEFRZ · SERDAR · Agentic OS Kuzey Yıldızı · son adım 02 Nov 10:23
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-11-02.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-11-02.md
+→ gün sonu çalıştı · 2026-11-02T21:30:02+03:00 · gün 2026-11-02
+# GÜN SONU · 2026-11-03 · 28 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (0)
+
+## İçeride bitirdiklerimiz (19) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **bilgi-notu-alarm-bir-gun** — Bilgi notu ve betik alarmı bir günde kendiliğinden kapanır; kutuya yalnız iş düşer · sahip ÇAPAR · 5/5 E · 3 tur · kanıt var · PR 1497
+- **ekipc-kaynak-yolu-bildirimi** — ekipc'in ürettiği ORTAK-TEMEL bölgesi kaynak olarak yalnız Nexus'ta var olan _agents/ekip-os-base/ yolunu yazıyor; izole kutuda bu yol yok. Etiket her iki ortamda bayt-aynı kalıp yolu iki yerde de doğru söylemeli · sahip MİRAHUR · 5/5 E · 3 tur · kanıt var
+- **fabrika-md-goz-tavan** — Nexus hat dosyası (FABRIKA.md) şablondaki yeni göz tavanı cümlesine eşitlenir · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1505
+- **kuzey-g10-teslim-sekmesi** — Kuzey ölçeri açık sekmeleri tararken Teslim sekmesini de sayar; onay bekleyen görevler ekranda görünmeyen sayılmaz · sahip SERDAR · 5/5 E · 3 tur · kanıt var · PR 1487
+- **kuzey-g15-g18-butun-kutular** — Kuzey ölçeri G15 soru ve Dümen kartlarını ve G18 karelerini bütün kutular görünümünde arar; bulunulan kutuda örnek yokken satır ölçülemez kalmaz · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1488
+- **kuzey-g15-kanarya** — Kuzey G15 ölçeri filoda soru ya da Dümen kartı örneği yokken ölçüm anında geçici kanarya kaydı açar, ölçer, hemen iptal eder; satır örnek yok diye ölçülemez kalmaz · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1490
+- **kuzey-g29-kaynak-surum** — Kuzey G29 ölçeri kutuların canlı sürümünü günlükteki eski kurulum satırıyla değil kaynağın güncel sürümüyle kıyaslar; kutular 1.6.7'deyken 1.6.4 bekleyip sıfır sayıyordu · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1482
+- **kuzey-g31-emekli-bolge** — Emekli kimlikler (akar _agents/emekli/<ad>) için üretilmiş bölge şartının ayrıca ele alınması: bugün diri kimlikle aynı sayılıyor, emekli için KOLTUK KAPALI satırı mı yoksa bölge mi isteneceği kararı · sahip SERDAR · puan YOK · kanıt ⚠ YOK
+- **kuzey-g31-istisna** — Kuzey G31 ölçeri hedef belgedeki istisnaları tanır: ADR-019 kapsamındaki kutuda (HÜMA) üretilmiş bölge aranmaz, KOLTUK KAPALI işaretli kimlik bölge şartından muaf, revak için dilim-0 ana hat sayılır · sahip SERDAR · 5/5 E · 3 tur · kanıt var · PR 1496
+- **kuzey-g31-kimlik-kumesi** — Kuzey G31 ölçeri kimlikleri kümeyle sayar: kimlik dosyası _agents altında herhangi bir derinlikteki <ad>/AGENT.md (nazir/huzur ekip-os/<ad>, akar emekli/<ad> dahil, 3 Kas canlı ölçüldü) ya da _agents/handoff/<AD>-kimlik.md'dir; kök _agents/AGENT.md kimlik değildir; ana daldaki kimlik kümesi (anahtar klasör adı ya da dosya kökü, küçük harf) çalışma ağacındakini kapsıyorsa geçer, geride kalmış çalışma ağacı eksik sayılmaz · sahip SERDAR · 5/5 E · 2 tur · kanıt var · PR 1498
+- **kuzey-g32-olcer** — Kuzey G32 ölçeri (Ek 1 Ayşenur tam kip): merkez kaynağının hermetik tam kip tarayıcı sınavı canlı imajın sürümünde koşar ve sıfır kalanla geçer, canlı merkez MÜNÂVEBE sayfasını tam kip işaretleriyle sunar; Ayşenur'un gerçek oturumu ölçülmez (JWT+PIN), bu sınır kanıta yazılır · sahip SERDAR · 5/5 E · 3 tur · kanıt var · PR 1491
+- **kuzey-g33-olcer** — Kuzey G33 ölçeri: canlı Görevler ekranında masaüstü ve telefonda sekiz Sultan düzeltmesinin her biri sayfadan ölçülür (şerit, iki sekme, Onaylar düğmesi, kutu düğmeleri, tek tık, katlanır Yeni eklenenler, kart etiket satırı ve açık kart bölümü ölçerin varsayılan tavanıyla) ve kareler üç bağımsız Codex yargısından geçer · sahip SERDAR · 5/5 E · 4 tur · kanıt var · PR 1486
+- **kuzey-g34-havuz-sekmesi** — Kuzey G34 ölçeri: canlı Görevler ekranında Bulgu Havuzu sekmesinin adı ve sayısı masaüstü ve telefonda görünür, sekme sayısı defterdeki bulunulan kutu havuz kaydı ve listedeki kart sayısıyla aynı; karne G1-35 satırlarını tanır · sahip SERDAR · 5/5 E · 4 tur · kanıt var · PR 1483
+- **kuzey-g35-olcer** — Kuzey G35 ölçeri: telefon terminalindeki artı düğmesi menüsü dört maddeyle açılıyor, bulgu maddeleri yetkili koltuğu taşıyor ve bekleyen tetik yazılıyor; canlı merkezde tarayıcıyla ölçülür · sahip SERDAR · 5/5 E · 1 tur · kanıt var · PR 1494
+- **kuzey-karne-sebep-etiketi** — Kuzey karnesi KALDI/ÖLÇÜLEMEDİ satırına sebep etiketi basar: veri · ölçer · örnek yok; ÖZET'te üçü ayrı sayılır · sahip HEZARFEN · 5/5 E · 3 tur · kanıt var · PR 1492
+- **kuzey-olc-butun-kutular-cipi** — Kuzey ölçeri (G10 G12 G14 G16) canlı Görevler ekranında bütün kutular süzgecini yeni çip tasarımıyla tanır: basılı çip bütün kutular ise kapsam tam sayılır (dört satır da kapsamı tanır, G12 ve G16 canlıda GEÇTİ), eski diğer menüsü aranmaz · sahip SERDAR · 5/5 E · 5 tur · kanıt var · PR 1485
+- **kuzey-olcer-sozlesme-sinavi** — Kuzey ölçerinin class, id ve data- niteliği olarak aradığı ekran adları merkezin gerçek kaynağında tanım bağlamında var mı diye bakan sözleşme denetimi ve mantık sınavı; dataset yazımı kapsam dışı (ayrı kart) · sahip HEZARFEN · 5/5 E · 5 tur · kanıt var · PR 1489
+- **kuzey-olu-secici-temizligi** — Kuzey ölçeri merkezde olmayan üç ekran adını arıyor (grv-oda-menu, data-dumen-gorev, data-tn): sözleşme denetiminde 'merkezde yok' adı 3 → 0 (kaynak: scripts/kuzey-olc-sozlesme.sh canlı cloudtop origin/main, 2026-11-03) · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1500
+- **tarayici-sinavi-parcali** — Kuzey tarayıcı sınavı (scripts/kuzey-olc-tarayici.test.sh) tek parça seri koşuyor, duvar süresi ~10-11 dk → parçalara bölünüp paralel koşsun, her parça bağımsız fikstürle (kaynak: betik başlığı + ölçüm, 2026-11-03) · sahip HEZARFEN · 5/5 E · 1 tur · kanıt var · PR 1499
+
+## Tıkananlar (1)
+- **kuzey-g33-sekiz-duzeltme** — Kuzey G33 ölçeri: canlı Görevler ekranında masaüstü ve telefonda sekiz Sultan düzeltmesinin her biri sayfadan ölçülür (şerit, iki sekme, Onaylar düğmesi, kutu düğmeleri, tek tık, katlanır Yeni eklenenler, kart etiket satırı ve açık kart bölümü ölçerin varsayılan tavanıyla) ve kareler üç bağımsız Codex yargısından geçer · yol: geri-al · neden: Yığınlı dalın eski denetim kayıtları PR farkına sızıp her turda aynı bulguyu doğurdu; aynı kod main'den temiz dalda kuzey-g33-olcer kartıyla yeniden gönderiliyor (kalan tavan sorusu kuzey-g33-tavanlar-sultan kartında). · sahip SERDAR
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (2) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- 13:05 · is=kuzey-g33-olcer tur=4 · reis kararı (sınıfsız iş) · gerekçe: reis=SERDAR oturum=session_01Ge4BawKcUrcm1pdV8WANyF gerekce="Tur 3 iki bulgu da doğrulandı ve inceleme yapaylığı: (1) adcd655a ile ölçülen c9557014 arasında yalnız kanıt dosyaları değişiyor (git diff --stat: 3 kanıt dosyası, kod 0); (2) G15/G32/G35 değişiklikleri origin/main birleşmesinden geliyor, PR'ın gerçek kapsamı origin/main...HEAD yalnız G33 dosyaları. Tur 2→3 ilerledi (4/H → 4/E)."
+- 13:06 · is=kuzey-g33-olcer tur=4 · reis kararı (sınıfsız iş) · gerekçe: reis=SERDAR oturum=session_01Ge4BawKcUrcm1pdV8WANyF gerekce="Tur 3 iki bulgu da doğrulandı ve inceleme yapaylığı: (1) adcd655a ile ölçülen c9557014 arasında yalnız kanıt dosyaları değişiyor (git diff --stat: 3 kanıt dosyası, kod 0); (2) G15/G32/G35 değişiklikleri origin/main birleşmesinden geliyor, PR'ın gerçek kapsamı origin/main...HEAD yalnız G33 dosyaları. Tur 2→3 ilerledi (4/H → 4/E)."
+
+## Açık işler (75)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bekci-canli-kanit-1502-1503 — sahip HENDESE · açıldı 2026-11-03T19:35
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- bosta-takili-zil — sahip MİRAHUR · açıldı 2026-10-31T16:20
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- dumen-sekme-secimi — sahip BENNA · açıldı 2026-11-02T10:07
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- kuzey-g10-g14-veri — sahip SERDAR · açıldı 2026-11-03T05:47
+- kuzey-g18-az-kart-kalan — sahip HEZARFEN · açıldı 2026-11-01T03:56
+- kuzey-g18-uc-yargi-kalan — sahip HEZARFEN · açıldı 2026-11-01T02:49
+- kuzey-g33-tavanlar-sultan — sahip SERDAR · açıldı 2026-11-03T05:33
+- kuzey-g34-kart-yargisi — sahip SERDAR · açıldı 2026-11-03T04:10
+- kuzey-olcer-sozlesme-sinavi-kalan — sahip HEZARFEN · açıldı 2026-11-03T10:02
+- kuzey-puanla-saat-damgasi — sahip HEZARFEN · açıldı 2026-10-31T06:51
+- kuzey-yildizi-bitirme — sahip SERDAR · açıldı 2026-10-31T10:45
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- meal-baslik-kip-kalan — sahip BENNA · açıldı 2026-10-31T05:42
+- meal-baslik-uzun-kalan — sahip BANI · açıldı 2026-10-31T08:00
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **6** · atanmış açık 17 · sıra Sultan'da 0 · onay bekleyen 4
+  - 2PXVW · ÇAPAR · Bilgi notları ve betik alarmları bir günde kendiliğinden kapansın · son adım 03 Nov 14:20
+  - 4V8N1 · HENDESE · Bekçi boş ve kilitsiz koltuğa sıradaki işi kendisi üstlendirsin · son adım 03 Nov 17:50
+  - 6CMD2 · HENDESE · Boşta bekçisi Sultan'ı bekleyen işi olan koltuğu hiç doldurmuyor · son adım 03 Nov 19:05
+  - W3REJ · BÂNİ · Kart bitince görev bitmiyor, bitmiş işler defterde bekliyor kalıyor · son adım 03 Nov 20:11
+  - YEFRZ · SERDAR · Agentic OS Kuzey Yıldızı · son adım 03 Nov 20:46
+  - 19DN6 · BENNÂ · Göz düzeltme farkı main birleşmesini kapsam kayması sayıyor · son adım 03 Nov 21:15
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-11-03.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-11-03.md
+→ gün sonu çalıştı · 2026-11-03T21:30:02+03:00 · gün 2026-11-03
+# GÜN SONU · 2026-11-04 · 19 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (0)
+
+## İçeride bitirdiklerimiz (8) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **berid-mesaj-tutma-inceleme** — BERID ve HENDESE'ye giden eş mesajlarının tutulma kök nedenini ölç ve çözüm seçeneklerini yaz; hiçbir ayar değişmez, düzeltme ayrı sınıflı karttır · sahip BENNA · puan YOK · kanıt var
+- **dumen-sekme-secimi** — Dumen.baglan sekme secimi: varsayilan yeni sekme, ilk sekmeye dokunmaz; sekme deseni; kapat yalniz kendi sekmesi · sahip BENNA · puan YOK · kanıt var
+- **kuzey-g25-kutu-kimligi** — G25 ölçeri merkezin konteyner kimliğiyle yazılmış gerçek kimlik yenilemelerini de merkez sayar · sahip SERDAR · 5/5 E · 1 tur · kanıt var
+- **kuzey-olc-ham-metin** — Kuzey ölçeri telefon görev ekranında kod/komut metni ve ham durum kodu (acik, atandi, sira-bende…) taraması yapar (…BW2 SERDAR) · sahip BANI · 5/5 E · 2 tur · kanıt var
+- **kuzey-olc-rozet-rakam** — Kuzey ölçeri telefon sekme şeridinde rozet-rakam kesişimini ölçsün (G33 vekil ölçüt) · sahip MÜZEHHİP · 5/5 E · 2 tur · kanıt var
+- **ortak-taban-ucuz-model** — Yeni koltuklar hesapsız (ortak taban) açılırken ucuz kademe modelle (Sonnet 5.5) doğar; Sultan hesaplarıyla açılanlar Opus kalır · sahip BENNÂ · 5/5 E · 2 tur · kanıt ⚠ YOK · PR 1512
+- **otopilot-kuru-gece** — Otopilot kuru senkron betiği tek koşuda FARKLI sayısını günlüğe yazar, ölçemezse ÖLÇÜLEMEDİ der; hiçbir şeyi ezmez, fetch yapmaz; gece zamanlaması ayrı kartta · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **usta-acilmamis-serit** — Hiç açılmamış usta (kayıtta klasörü ve odası var, sohbet kimliği yok) terminal kapısında gri koltuk olarak görünür; ilk dokunuşta kendi klasöründe YENİ oturum açılır, sohbet kimliği uydurulmaz · sahip BENNÂ · puan YOK · kanıt ⚠ YOK · PR 691
+
+## Tıkananlar (0)
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (0) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- (bugün tavan açılmadı)
+
+## Açık işler (81)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- bosta-takili-zil — sahip MİRAHUR · açıldı 2026-10-31T16:20
+- canli-kanit-gozcu-yetki — sahip HENDESE · açıldı 2026-11-04T03:05
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- defter-eritme-plani — sahip BÂNİ · açıldı 2026-11-04T21:29
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- havuz-iplik-nabiz — sahip MÜZEHHİP · açıldı 2026-11-04T14:20
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- kuzey-g10-g14-veri — sahip SERDAR · açıldı 2026-11-03T05:47
+- kuzey-g18-az-kart-kalan — sahip HEZARFEN · açıldı 2026-11-01T03:56
+- kuzey-g18-uc-yargi-kalan — sahip HEZARFEN · açıldı 2026-11-01T02:49
+- kuzey-g33-tavanlar-sultan — sahip SERDAR · açıldı 2026-11-03T05:33
+- kuzey-g34-kart-yargisi — sahip SERDAR · açıldı 2026-11-03T04:10
+- kuzey-olcer-sozlesme-sinavi-kalan — sahip HEZARFEN · açıldı 2026-11-03T10:02
+- kuzey-puanla-saat-damgasi — sahip HEZARFEN · açıldı 2026-10-31T06:51
+- kuzey-yildizi-bitirme — sahip SERDAR · açıldı 2026-10-31T10:45
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- meal-baslik-kip-kalan — sahip BENNA · açıldı 2026-10-31T05:42
+- meal-baslik-uzun-kalan — sahip BANI · açıldı 2026-10-31T08:00
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- nova-marangoz-boyaci-iskan-kaydi — sahip BENNÂ · açıldı 2026-11-04T13:33
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- otopilot-kuru-gece-kalan — sahip HEZARFEN · açıldı 2026-11-04T20:35
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- senden-bekleyen-karar-bloklari — sahip MÜZEHHİP · açıldı 2026-11-04T14:21
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- telefon-gorevler-onarim — sahip telefon-gorevler-sinav TG1/TG2 kırmızıları yeşil; mevcut dil korunur; 1440 masaüstü aynen · açıldı 2026-11-04T21:29
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+- zilci-ulasamayinca-muavin — sahip ÇAPAR · açıldı 2026-11-04T00:04
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **2** · atanmış açık 12 · sıra Sultan'da 0 · onay bekleyen 48
+  - YEFRZ · SERDAR · Agentic OS Kuzey Yıldızı · son adım 04 Nov 12:23
+  - HC75A · HEZARFEN · Kutular görev defterini kullanmıyor: sabah /gunluk-plan, sıra boşsa (… · son adım 04 Nov 21:29
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-11-04.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-11-04.md
+→ gün sonu çalıştı · 2026-11-04T21:30:02+03:00 · gün 2026-11-04
+# GÜN SONU · 2026-11-05 · 29 iş (kart defterinden üretildi, elle satır yok)
+
+## Sultan'a gidenler (0)
+
+## İçeride bitirdiklerimiz (25) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir
+- **agir-sira-sinav-saat-kapilari** — Ağır sıra sınavının saate bağlı iki kapısı yavaş koşucuda boşuna düşmesin: F7 beklemenin alt sınırını ölçsün (yuva boşalana kadar bekledi), üst sınırı koşucunun hızına bağlı olmasın; G3 ve onun mutantı M10 toplam süreye değil yuva alındıktan sonraki yük beklemesine baksın; ağır sıra betiğinin kendisi değişmez, öteki kapılar değişmez · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1526
+- **aile-notify-adas-kopya** — aile-notify aynı ajan kimliği kayıtta iki satırsa postaya ve postaneye iki kopya yazar; tek kopya yazsın · sahip BERİD · 5/5 E · 1 tur · kanıt var · PR 1534
+- **bekci-zil-sonra-olcum** — Bekçi sıradaki iş, ikmal ve yükseltme zilini koltuğa kaydeder; zilden 5-10 dk sonra koltuğun işe başlayıp başlamadığını ölçüp kütüğe ZIL-SONRA olarak yazar · sahip HENDESE · 3/5 H · 2 tur · kanıt var · PR 1507
+- **donus-durtme-ozet** — Dönüş dürtmeleri alıcı başına en çok 5 dakikada bir, toplu özet · sahip BERİD · 5/5 E · 3 tur · kanıt var · PR 1537
+- **filo-plan-federe-kutular** — Filo günlük planı federe-registry'deki tenant kutuları (enis, maiset, menzil, munavebe) da kapsar; reisi bilinmeyen kutu sessizce düşmez, söylenir · sahip BENNÂ · 5/5 E · 3 tur · kanıt var
+- **gitleaks-yoksayma-sikistirilmis** — Sır taraması yoksayma kaydı ana daldaki sıkıştırılmış commit'i de kapsar: ana dalı alan dalda push yanlış alarmla durmaz · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1542
+- **gozcu-sinav-sure-butcesi** — Tıkanma gözcüsü sınavı kabuk korpusunda süre sınırına takılmasın: sınav koşucunun kendi başlığıyla ölçülmüş süresinin en az iki katı bütçe ister, kova ağırlık tablosundaki süresi ölçülen CI süresiyle güncellenir; sınavın kendisi ve kapıları değişmez · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1525
+- **groq-konum-live** — Groq anahtarının yalnız ses dinleyicisi konumu kayıtta canlı olarak işaretlenir; merkez konumu beklemede kalır · sahip BENNÂ · 5/5 E · 3 tur · kanıt var · PR 1522
+- **groq-merkez-live** — Merkez konumu (host-cloudtop groq.env) live işareti: otomatik dağıtıcı merkez anahtarını düşürüyor, MİRAHUR onarınca ayrı kartla live yapılacak · sahip BENNÂ · 5/5 E · 1 tur · kanıt var · PR 1524
+- **hezarfen-faz2-temsil-suzgeci** — Sayfa temsili süzgeci prototipi: snapshot boyutu 13 sınav öğesinde ölçülür, hedef öğe varlığı mekanik desenle ve mutasyonla sınanır (okuyucu ölçümü Faz 3) · sahip HEZARFEN · 5/5 E · 4 tur · kanıt var
+- **hezarfen-kural-dosyasi-175** — Nexus CLAUDE.md 437 satırdan 175'e iner: AKC ve Frontend Yeniden Yapılandırma bölümleri arşive taşınır (silinmez), UI İŞİ proje dosyasından çıkar global kalır, tekrar ve çelişkiler giderilir · sahip HEZARFEN · 5/5 E · 2 tur · kanıt var
+- **koltuk-kuyrugu-kendini-bekleyen** — Kendini bekleyen 24 saatten eski kod kutusu kaydı uzlaştırmada açığa dönsün; boş sayacı hâl titreyince sıfırlanmasın · sahip MİRAHUR · 5/5 E · 3 tur · kanıt var
+- **kuzey-ek-kesik-baslik** — Kuzey ölçeri karne dışı ek ölçüm kapısı kazanır ve canlı telefonda kesik başlığı ölçer: defterde 200 karakterde kelime ortasından kesilmiş başlık karar kutusunda ve kart başlığında son tam kelimede üç noktayla görünür · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1529
+- **kuzey-ek-klasor-ara-son** — Kuzey ölçerine Ortak klasör ek ölçümü: bir ad aranınca üç kişi klasörünün hepsinden sonuç geliyor ve Son açılanlar listesi iki ayrı cihazda aynı görünüyor · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1536
+- **kuzey-ek-telefon-kutular** — Kuzey ölçerine telefonda Kutular ekranı ek ölçümü: kutu başına tek ince satır, görünür hap ve tutamaç yok, yatay taşma yok, satıra dokunmak kutuyu açar, liste bitişik · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1532
+- **kuzey-ek-ust-serit-rutbe** — Kuzey ölçerine üst şerit rütbe ek ölçümü: masaüstü şeritte reis üç, oda müdürü iki baklava taşıyor, bağlılar müdürün arkasında duruyor ve baloncuk rütbe ile amiri yazıyor · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1538
+- **kuzey-ek2-satir-sayimi** — Kuzey ölçeri Ek2 kart düzeni maddesi etiket satırını üst kenarın tam eşitliğiyle değil dikey örtüşmeyle saysın: aynı satırda duran farklı yükseklikte etiketler (acil yazısı ile yanındaki hap) tek satır sayılsın; gerçekten ayrı satıra düşen etiket yine ayrı sayılsın; tavanlar ve öteki maddeler değişmez · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1528
+- **kuzey-ek2-soru-tavani** — Kuzey Ek2 kart düzeni ölçümünde soru kartı etiket satırı tavanı düzeltilmiş sayıma iner: masaüstünde 3, telefonda 4 · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1543
+- **kuzey-ek3-ek4-olcer** — Kuzey tarayıcı ölçerinin Ek3 ve Ek4 ölçümleri bugünkü merkez ekranını ölçsün: Ek3 Havuz sekmesinde bulgular iz kümeleriyle çizildiğinde küme sayılarının toplamını sekme sayısıyla kıyaslasın ve bir kümeyi açıp kartların çıktığını saysın, düz listede bugünkü gibi kart saysın; Ek4 artı düğmesine basmadan önce kapalı gelen yazma penceresini açsın, bir tıklama düşerse hangisi olduğunu yazsın; iki ölçümün tarayıcı kısmı sahte merkez fikstüründe olumlu ve olumsuz sınansın · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1521
+- **kuzey-g32-kutuk** — Kuzey G3.2 ölçer aksayan mektubun karşılığını havuz kaydı ya da aksama kütüğü kaydı sayar ve işlenmiş mektubu aksama saymaz · sahip BERİD · 5/5 E · 3 tur · kanıt var · PR 1535
+- **kuzey-olc-g26-kanarya** — Kuzey ölçeri G2.6 öne alma duraklaması satırı, defterde gerçek vaka yokken iki geçici kayıtla (kanarya) duraklamayı üretir, kartı canlı ölçer, kayıtları iptal eder · sahip BENNÂ · 5/5 E · 1 tur · kanıt var · PR 1523
+- **kuzey-olc-ts-g18-g22** — Kuzey ölçeri G1.8 fikstürüne ikinci kaynak verir ve G2.2 yalnız Sultan'ı bekleyen görevleri ekranda arar · sahip BENNÂ · 5/5 E · 2 tur · kanıt var · PR 1520
+- **kuzey-puanla-sinav-saat** — Kuzey puanlama sınavı iki koşuyu saat satırı dışında kıyaslar: saniye sınırına denk gelen koşu kırmızı vermez · sahip BÂNİ · 5/5 E · 1 tur · kanıt var · PR 1544
+- **nabiz-ozet-boru-sigpipe** — Nabız alarm özeti kapımda listesini boruyla değil değişkenle eşler: liste eşleşmeden sonra yazmayı sürdürse de açık kart görülür, ikinci kart açılmaz · sahip BÂNİ · 5/5 E · 2 tur · kanıt var · PR 1531
+- **tikanma-olcut-gecis-ve-pencere** — Gözcü T1 çözümü koltuğun durum geçmişine baksın (anlık duruma değil); çözüm turdan 90 dk sonra yazılmaz, 'olculmedi' kalır · sahip MÜZEHHİP · 5/5 E · 2 tur · kanıt var
+
+## Tıkananlar (0)
+
+## Görevsiz açılan kartlar (0) — kart.sh ac --gorevsiz; görev defterine bağlı değil
+
+## Kapı kaçışları (0) — her biri bir istisnadır, veto hakkın var
+- (bugün kapı atlanmadı)
+
+## Tavan açılışları (0) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)
+- (bugün tavan açılmadı)
+
+## Açık işler (84)
+- alt-personel-pr-yetkisi-kalan — sahip HEZARFEN · açıldı 2026-10-30T09:35
+- ayse-betik-tty-yok — sahip HENDESE · açıldı 2026-10-28T07:13
+- bani-pilot-olcut8-tam-pencere — sahip BASİRET · açıldı 2026-10-24T10:46
+- begeni-dongusu-tasarim-kalan — sahip HENDESE · açıldı 2026-10-25T16:19
+- beklerken-is-al-nexus — sahip SERDAR · açıldı 2026-11-05T10:53
+- bosta-oturum-zil — sahip kuru liste + zil defteri; kapatma yalnız açık bayrakla · açıldı 2026-10-26T16:33
+- bosta-takili-zil — sahip MİRAHUR · açıldı 2026-10-31T16:20
+- canli-kanit-gozcu-yetki-kalan — sahip HENDESE · açıldı 2026-11-05T00:41
+- canli-kanit-gozcu-yetki — sahip HENDESE · açıldı 2026-11-04T03:05
+- ci-kabuk-kovalar-kalan — sahip HEZARFEN · açıldı 2026-10-29T12:42
+- ci-maliyet-nexus-kalan — sahip MIRAHUR · açıldı 2026-10-22T20:12
+- d0013-kapanis-main-dogrula — sahip BERİD · açıldı 2026-10-30T00:07
+- denetci-manifest-gecersiz-tek-satir — sahip HEZARFEN · açıldı 2026-10-28T01:06
+- enis-kasa-kurulumu-kalan — sahip BASIRET · açıldı 2026-10-22T14:01 · SULTAN
+- enis-kasa-olcemedigim-pencereler — sahip BASIRET · açıldı 2026-10-22T14:31 · SULTAN
+- enis-kasa-yayim-atomikligi — sahip BASIRET · açıldı 2026-10-22T15:31 · SULTAN
+- filo-hal-surekli-gozlem — sahip BASIRET · açıldı 2026-10-15T16:57
+- gece-supurme-birlesik — sahip MİRAHUR · açıldı 2026-10-29T22:07
+- gun-sonu-saat-kaymasi — sahip MUAVIN · açıldı 2026-10-07T01:13
+- guven-listesi-kurulum — sahip MUAVIN · açıldı 2026-10-07T16:50
+- havuz-iplik-nabiz — sahip MÜZEHHİP · açıldı 2026-11-04T14:20
+- hc75a-kutu-defter-sayim-kalan — sahip HEZARFEN · açıldı 2026-10-28T08:22
+- hezarfen-akar-olumsuzluk-kalan — sahip HEZARFEN · açıldı 2026-10-25T23:50
+- hezarfen-akar-olumsuzluk — sahip HEZARFEN · açıldı 2026-10-25T15:17
+- hezarfen-faz2-temsil-suzgeci-kalan — sahip HEZARFEN · açıldı 2026-11-05T14:21
+- hezarfen-verim-nabzi-kalan — sahip HEZARFEN · açıldı 2026-10-24T17:10
+- hezarfen-zaman-penceresi-kalan — sahip HEZARFEN · açıldı 2026-10-22T13:04
+- hook-surtunme-yetenek-zinciri — sahip basiret · açıldı 2026-10-24T20:53 · SULTAN
+- ikinci-goz-ayri-kutu-kimligi — sahip HEZARFEN · açıldı 2026-10-28T22:53 · SULTAN
+- indeks-tamamlama — sahip SERDAR · açıldı 2026-10-07T23:26 · SULTAN
+- is-alani-temizle — sahip MİRAHUR · açıldı 2026-10-27T17:16
+- is-nabzi-baslama-bekci — sahip SERDAR · açıldı 2026-10-21T18:29
+- iskan-kapi-aciklari — sahip MUAVIN · açıldı 2026-10-08T20:19
+- kabuk-testleri-kirmizi-gorunurluk — sahip tail -40 yalnız logun SONUNU gösterir; ✗ dosyanın başındaysa ve sonrasında 40+ ✓ satırı varsa görünmez — kırmızı kapı kendi sebebini söylemiyor (PR #1150 teşhisinde bulundu, kapsam-kayması diye o karttan çıkarıldı) · açıldı 2026-10-15T22:25
+- kanca-genisletme — sahip desenler eklendi+testli (agent-dashboard fork kaynağı) + patch-hooks.sh REL_FILES'a warn-destructive.js eklendi (canlı plugin cache'e yayılsın) + cloudtop.patch güncellendi · açıldı 2026-10-17T12:32
+- kapi-altkabuk-kapsami — sahip MUAVIN · açıldı 2026-09-24T11:26 · SULTAN
+- kapi-sari-sayim — sahip HEZARFEN · açıldı 2026-10-26T19:20
+- kapi-sinavi-sure — sahip MUAVIN · açıldı 2026-10-07T10:11
+- kokpit-b0-headless-defter — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-kosu-kaydi-sema-11 — sahip SERDAR · açıldı 2026-10-09T12:52
+- kokpit-b0-kosu-kaydi-sema-son — sahip SERDAR · açıldı 2026-10-09T13:05
+- kokpit-b0-kosu-kaydi-sema — sahip SERDAR · açıldı 2026-10-09T12:02
+- kokpit-b0-model-kaydi — sahip SERDAR · açıldı 2026-10-09T00:23
+- kokpit-b0-panel-korlugu — sahip SERDAR · açıldı 2026-10-09T00:23
+- korpus-gitleaks-kurulumu — sahip MİRAHUR · açıldı 2026-10-29T05:30
+- kuzey-g10-g14-veri — sahip SERDAR · açıldı 2026-11-03T05:47
+- kuzey-g18-az-kart-kalan — sahip HEZARFEN · açıldı 2026-11-01T03:56
+- kuzey-g18-uc-yargi-kalan — sahip HEZARFEN · açıldı 2026-11-01T02:49
+- kuzey-g33-tavanlar-sultan — sahip SERDAR · açıldı 2026-11-03T05:33
+- kuzey-g34-kart-yargisi — sahip SERDAR · açıldı 2026-11-03T04:10
+- kuzey-olcer-sozlesme-sinavi-kalan — sahip HEZARFEN · açıldı 2026-11-03T10:02
+- kuzey-puanla-saat-damgasi — sahip HEZARFEN · açıldı 2026-10-31T06:51
+- kuzey-yildizi-bitirme — sahip SERDAR · açıldı 2026-10-31T10:45
+- lifeos-emekli — sahip MUAVIN · açıldı 2026-10-18T17:09
+- meal-baslik-kip-kalan — sahip BENNA · açıldı 2026-10-31T05:42
+- meal-baslik-uzun-kalan — sahip BANI · açıldı 2026-10-31T08:00
+- medigate-kare — sahip NAKKAS · açıldı 2026-10-01T12:36 · SULTAN
+- nabiz-korpus-kirmizi-kalan — sahip HEZARFEN · açıldı 2026-10-26T21:36
+- nabiz-sebep-adim-izi — sahip BÂNİ · açıldı 2026-10-22T19:33
+- nazir-uc-kalem — sahip MUAVIN · açıldı 2026-09-23T10:32
+- nova-marangoz-boyaci-iskan-kaydi — sahip BENNÂ · açıldı 2026-11-04T13:33
+- oda-alani-layiha — sahip MUAVİN · açıldı 2026-10-27T14:58
+- oda-kayitlari-merkez — sahip SERDAR · açıldı 2026-10-29T23:56
+- oda-modeli-klasor-kanca — sahip HEZARFEN · açıldı 2026-10-27T14:37 · SULTAN
+- ortak-ayar-koltuk-tasarim-kalan — sahip HENDESE · açıldı 2026-10-30T18:13
+- otopilot-kuru-gece-kalan — sahip HEZARFEN · açıldı 2026-11-04T20:35
+- pazaryeri-itibar-elemesi-kalan — sahip HENDESE · açıldı 2026-10-25T13:58
+- rea-b-kolu-anahtarli — sahip HEZARFEN · açıldı 2026-10-22T00:42 · SULTAN
+- reis-koltuk-eslesme-kalan — sahip SERDAR · açıldı 2026-10-21T10:33
+- reis-yeni-sohbet-zorla-taze — sahip MUAVİN · açıldı 2026-10-28T23:07 · SULTAN
+- revak-filo-kaydi-2 — sahip SERDAR · açıldı 2026-10-09T21:25
+- sabah-plan-cron — sahip MUAVIN · açıldı 2026-10-28T09:10 · SULTAN
+- senden-bekleyen-karar-bloklari — sahip MÜZEHHİP · açıldı 2026-11-04T14:21
+- sinav-tmp-artigi-temizle — sahip MİRAHUR · açıldı 2026-11-05T01:39
+- sir-taramasi-temel-cizgi-kalan — sahip MİRAHUR · açıldı 2026-10-29T07:42
+- sk-olcum-kurali-kalan — sahip SERDAR · açıldı 2026-10-21T00:17
+- telefon-gorevler-onarim — sahip telefon-gorevler-sinav TG1/TG2 kırmızıları yeşil; mevcut dil korunur; 1440 masaüstü aynen · açıldı 2026-11-04T21:29
+- tellal-oda-pilot-gorev-metni — sahip HEZARFEN · açıldı 2026-10-28T06:14
+- terminal-her-koltuk — sahip SERDAR · açıldı 2026-10-12T19:43 · SULTAN
+- terminoloji-tasarim-kalan — sahip SERDAR · açıldı 2026-10-21T10:07
+- vekatip-vodafone-izni — sahip MUAVIN · açıldı 2026-10-07T20:35 · SULTAN
+- wait-ci-bas-sha-degisimi — sahip MIRAHUR · açıldı 2026-10-15T17:08
+- zil-adressiz — sahip SERDAR · açıldı 2026-09-25T09:02
+- zilci-ulasamayinca-muavin — sahip ÇAPAR · açıldı 2026-11-04T00:04
+## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · kutu code
+- çalışılıyor **4** · atanmış açık 34 · sıra Sultan'da 0 · onay bekleyen 1
+  - HC75A · HEZARFEN · Kutular görev defterini kullanmıyor: sabah /gunluk-plan, sıra boşsa (… · son adım 04 Nov 21:29
+  - YEFRZ · SERDAR · Agentic OS Kuzey Yıldızı · son adım 05 Nov 12:08
+  - DRF6W · SERDAR · Dümen dosya indirir, yükler ve takılmaz; tecrübe filoya beceri olur · son adım 05 Nov 20:10
+  - N5JMS · BÂNİ · Terminal arayüzü baştan aşağı yeniden tasarım: çok daha kullanışlı, k… · son adım 05 Nov 21:26
+- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)
+→ yazıldı: _agents/fabrika/gun-sonu/2026-11-05.md
+→ gelen klasörüne yazıldı: /config/evraklar/Sultan/0-Gelen/nexus_gun-sonu_2026-11-05.md
+→ gün sonu çalıştı · 2026-11-05T21:30:02+03:00 · gün 2026-11-05
+--- stderr ---

@@ -14,10 +14,34 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "code",
-  "durum": "acik",
-  "gecmis": [],
+  "durum": "canli-borclu",
+  "gecmis": [
+    {
+      "zaman": "2026-10-28T23:56:00+03:00",
+      "olay": "canli-borc"
+    },
+    {
+      "zaman": "2026-10-29T00:19:46+03:00",
+      "olay": "bitti"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "cümlede: canli, canlı, cron, cron'",
   "kapsam_uyarilari": [],
-  "sayi_uyarilari": []
+  "sayi_uyarilari": [],
+  "canli_borc": {
+    "zaman": "2026-10-28T23:56:00+03:00",
+    "yazan": "MİRAHUR",
+    "gerekce": "saat damgalı çalıştı satırı yalnız birleşme + kurulumdan sonraki ilk gerçek akşam cron ateşlemesinde (yarın 21:30, günlük /config/.claude/gun-sonu-aksam-son.log) üretilir; kanit.sh canli ile o zaman ödenir, gun-sonu-aksam-cron borcu aynı satırla kapanır",
+    "odendi": null
+  },
+  "canli_kanit": "yok",
+  "bitis": null,
+  "pr": "547",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 1
+  },
+  "kanit_var": true
 }

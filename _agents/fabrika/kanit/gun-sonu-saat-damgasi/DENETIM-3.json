@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "gun-sonu-saat-damgasi",
+  "pr": "708",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T21:58:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-gun-sonu-saat-borc",
+  "dal": "mirahur/gun-sonu-saat-borc",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16762,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 131254
+  },
+  "dalgic": "olculemedi",
+  "bas": "aee9883780ffb7997497e1dc990172be17e9d727",
+  "duzeltme_farki": {
+    "onceki_bas": "7d3c318616ef8a93e0e88b141c412cd7c4acc3fa",
+    "dosya": 5,
+    "bayt": 131254,
+    "tam_bayt": 133839
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "ISO saat damgalı “çalıştı” satırı gerçek sınavda doğrulanmış ve canlı günlükte üç ardışık akşam tam cron saatinde görülmüş; önceki kutu-dışı bulgu böylece kapanmıştır. Kod üretime hazırdır ve talep edilen canlı cron ateşlemesini okunabilir kılma işi yapılmıştır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. `sinav-gercek` rc=0 ile G13’ü ve satır kaldırma mutasyonunu doğruluyor; `cron-uc-aksam` ise temiz commitlerden 3, 4 ve 5 Kasım’da 21:30:0x zamanlarında üç ateşleme ölçerek önceki turun cron kökeni belirsizliğini gideriyor. İş kartındaki `odendi: null`, `canli_kanit: yok` ve `bitis: null` alanları güncel kanıtla uyumsuz eski durum bilgisi olsa da kodun veya istenen davranışın kusuru değildir."
+  }
+}
