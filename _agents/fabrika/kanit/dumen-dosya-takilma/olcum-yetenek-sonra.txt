@@ -1,0 +1,5 @@
+$ node --input-type=module -e const {Dumen}=await import(process.argv[1]); const y=["yukle","indir","indirAdres","yeniSekmeAdresi","engelKapat","ogeDurumu","bekle"].filter((m)=>typeof Dumen.prototype[m]==="function"); console.log("dosya ve engel yardımcısı="+y.length+"/7 · kapat garantisi (kos)="+(typeof Dumen.kos==="function"?"var":"yok")); process.exit(y.length===7&&typeof Dumen.kos==="function"?0:1) /config/projects/_wt/Sx-Claude-Skills-dumen-dosya-takilma/dumen-surucu/scripts/dumen.mjs
+# rc=0 sure=0.0s zaman=2026-11-05T16:09:51+03:00
+--- stdout ---
+dosya ve engel yardımcısı=7/7 · kapat garantisi (kos)=var
+--- stderr ---

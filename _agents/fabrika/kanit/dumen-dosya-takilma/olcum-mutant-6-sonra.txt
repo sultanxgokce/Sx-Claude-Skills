@@ -1,0 +1,18 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: Y6 sır taşıyabilecek yol reddedilir · rc≠0 + hedef kapı 'Y6 sır taşıyabilecek yol reddedilir' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-dosya-* ===
+$ env MUTANT_HAM=6 bash dumen-surucu/scripts/dumen-dosya.test.sh
+# rc=1 sure=1.7s zaman=2026-11-05T16:22:17+03:00
+--- stdout ---
+── mutantlar (her biri sınavı KIRMALI)
+MUTANT 6: sır taşıyabilecek yol yüklenir
+── izinli dizin verilmeden dosya işi YOK (fail-closed)
+  ✓ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+  ✓ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+── yukle: onay + dosya kapıları
+  ✓ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+  ✓ Y2 dünkü onay reddedilir (onay-bayat)
+  ✓ Y3 BAŞKA dosya için verilmiş onay reddedilir (onay-dosya)
+  ✓ Y4 izinli dizin dışındaki dosya reddedilir (dosya-izinsiz)
+  ✓ Y5 izinli dizindeki BAĞ dışarıyı gösteriyorsa reddedilir (dosya-izinsiz)
+  ✗ Y6 sır taşıyabilecek yol reddedilir (dosya-yasak)
+SONUÇ: geçti=7 kaldı=1 (ilk kırmızıda duruldu)
+--- stderr ---
