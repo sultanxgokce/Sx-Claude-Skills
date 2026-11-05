@@ -1,14 +1,14 @@
 {
   "is": "ayni-girdi-atla",
   "arac": "kanit.py/0.7.0",
-  "guncelleme": "2026-11-05T16:12:18+03:00",
+  "guncelleme": "2026-11-05T16:22:15+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav-sonra",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra-sonra.txt",
-      "sha256": "4d6369291dc9144b1a356dbdc41027417bf6e9ee11c3c817ccb81ea61111f72c",
+      "sha256": "7f8bd091d8968a387b096b6b5ac10525156c89e65004bc3e1d26e419530b176c",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ag-kanit.sh",
@@ -16,11 +16,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-05T16:03:12+03:00",
-      "sure_sn": 54.4,
+      "zaman": "2026-11-05T16:21:54+03:00",
+      "sure_sn": 79.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f3347ae1209b4073b1b8b06f8a5b1199",
-      "olculen_commit": "2ca8ef04ba4034a979ec64044bb4f86000f45a1c",
+      "olcum_id": "81bb2f2753f64cc9899ea16ac5f66b40",
+      "olculen_commit": "58007c90a270e24cda638fe38904f09ed0081fb9",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -29,7 +29,7 @@
       "etiket": "mutant-agac-ozeti",
       "asama": "tek",
       "dosya": "olcum-mutant-agac-ozeti-tek.txt",
-      "sha256": "cd00f6773e674b55e86b0b78011b1c498c2e73ef085807240217f14dbe70bd6d",
+      "sha256": "66fa9c278bf9bd4198ffc1d5f86799e0c708785007e8ace103ac3e5ff5c51496",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ag-mutant.sh",
@@ -37,8 +37,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-05T16:12:18+03:00",
-      "sure_sn": 12.1,
+      "zaman": "2026-11-05T16:22:15+03:00",
+      "sure_sn": 16.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav-sonra",
@@ -46,11 +46,11 @@
       "dusen_kapi": true,
       "hedef_kapi": "izlenen kod dosyası",
       "hedef_dustu": true,
-      "olcum_id": "b9a0211c01664c1ab99294bd4365e027",
-      "olculen_commit": "2ca8ef04ba4034a979ec64044bb4f86000f45a1c",
+      "olcum_id": "577be1c95d754da6b9cff16d07812f20",
+      "olculen_commit": "58007c90a270e24cda638fe38904f09ed0081fb9",
       "olculen_kirli": false,
       "kirli_kurali": 1
     }
   ],
-  "imza": "a7be7f7ebd92e941c62d633fdc9094cf09081a328b188611d2bb902c3391642c"
+  "imza": "59728daee7e37af1acbcf25cd75e06a673332502d0eca5b7fe717b67f7f8f301"
 }

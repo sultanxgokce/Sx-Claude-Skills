@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ag-kanit.sh /config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla
-# rc=0 sure=54.4s zaman=2026-11-05T16:03:12+03:00
+# rc=0 sure=79.1s zaman=2026-11-05T16:21:54+03:00
 --- stdout ---
 ════ A1 · bayraksız: iki çağrı iki koşu ════
   ✓ bayraksız ikinci çağrı da koştu (sayaç 2)
@@ -13,20 +13,22 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f96575
   ✓ depo DIŞI betik içeriği değişti → koştu (sayaç 5)
   ✓ komut argümanı değişti → koştu (sayaç 6)
   ✓ izlenmeyen dosyanın içeriği değişti → yine koştu (sayaç 8)
+  ✓ Git'in yok saydığı depo içi dosyanın içeriği değişti → yine koştu (sayaç 10)
 ════ A4 · mutant ve kırmızı kayıt atlanmaz ════
-  ✓ mutasyon ölçümü bayrakla bile iki kez koştu (sayaç 10)
-  ✓ kırmızı önceki kayıt atlanmaz, iki kez koştu (sayaç 12)
+  ✓ mutasyon ölçümü bayrakla bile iki kez koştu (sayaç 12)
+  ✓ kırmızı önceki kayıt atlanmaz, iki kez koştu (sayaç 14)
 ════ A5 · kirli ağaç: anahtar HEAD'i temsil etmez, koşar ════
-  ✓ kirli ağaçta (izinli) atlanmadı (sayaç 14)
+  ✓ kirli ağaçta (izinli) atlanmadı (sayaç 16)
 ════ M · mutantlar: araç bozulursa sınav DÜŞMELİ ════
   ✓ mutant YAKALANDI: ağaç özeti çıkarıldı
   ✓ mutant YAKALANDI: dış betik sha çıkarıldı
   ✓ mutant YAKALANDI: izlenmeyen dosya çıkarıldı
   ✓ mutant YAKALANDI: mutant atlanabilir (yok sayma + kayıtta anahtar + mutant süzgeci)
+  ✓ mutant YAKALANDI: yok sayılan dosya çıkarıldı
   ✓ mutant YAKALANDI: kırmızı kayıt atlanabilir
   ✓ mutant YAKALANDI: kirli ağaçta anahtar kurulur
 
-SONUÇ: 18 geçti · 0 kaldı
+SONUÇ: 20 geçti · 0 kaldı
   ✓ TB6b MUTASYON: kapı sökülünce birincile yazılır (kapı gerçekten çalışıyor)
 
 ── SONUÇ: 275 geçti · 0 kaldı ──
