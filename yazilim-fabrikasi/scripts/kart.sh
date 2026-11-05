@@ -455,7 +455,8 @@ case "$CMD" in
     if [ -n "$GOREV" ] && [ -n "$GOREVSIZ" ]; then _hata "--gorev ile --gorevsiz birlikte olmaz: ya göreve bağlı ya görevsiz (kart AÇILMADI)"; exit 1; fi
     if [ -z "$GOREV" ]; then
       [ -n "$GOREVSIZ" ] || { _hata "kart bir göreve bağlanmalı: --gorev gorev_<kimlik> --tahmin <dk> ver (görev yoksa önce gorev.sh ac); gerçekten görevsizse açıkça --gorevsiz \"<neden, en az 20 karakter>\" yaz (kart AÇILMADI)"; exit 1; }
-      [ "${#GOREVSIZ}" -ge 20 ] || { _hata "--gorevsiz gerekçesi en az 20 karakter olmalı (${#GOREVSIZ} yazıldı) — kart AÇILMADI"; exit 1; }
+      GZK="$(printf '%s' "$GOREVSIZ" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"   # boşluk yığını gerekçe sayılmaz (göz tur 1)
+      [ "${#GZK}" -ge 20 ] || { _hata "--gorevsiz gerekçesi en az 20 karakter olmalı (boşluklar sayılmaz; ${#GZK} yazıldı) — kart AÇILMADI"; exit 1; }
     fi
     olcut_zorunlu "$IS_C" "AÇILMADI" || exit 1
     sinir_zorunlu "$IS_C" || exit 1

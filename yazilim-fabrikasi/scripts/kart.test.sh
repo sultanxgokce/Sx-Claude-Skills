@@ -1235,6 +1235,8 @@ CIKTI="$(bash "$KTG" ac is-gz1 --is "görevsiz ve gerekçesiz kart" $GZS 2>&1)";
 [ "$RC" -eq 1 ] && grep -q -- "--gorevsiz" <<<"$CIKTI" && [ ! -f "$KG/is-gz1.json" ]; g $? "GZ1 ne --gorev ne --gorevsiz → rc 1, kart yazılmadı, mesaj --gorevsiz'i söyler"
 bash "$KTG" ac is-gz2 --is "kısa gerekçeli kart" $GZS --gorevsiz "yok" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 1 ] && [ ! -f "$KG/is-gz2.json" ]; g $? "GZ2 gerekçe 20 karakterden kısa → rc 1, kart yok"
+bash "$KTG" ac is-gz2b --is "boşluk yığını gerekçe" $GZS --gorevsiz "                              " >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 1 ] && [ ! -f "$KG/is-gz2b.json" ]; g $? "GZ2b yalnız boşluktan oluşan 30 karakterlik gerekçe → rc 1, kart yok (göz tur 1)"
 bash "$KTG" ac is-gz3 --is "açık gerekçeli görevsiz kart" $GZS --gorevsiz "görev defteri bu işi kapsamıyor, açık gerekçe" >/dev/null 2>&1; g $? "GZ3 yeterli gerekçeyle açıldı"
 python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['gorevsiz'].startswith('görev defteri') and 'gorev' not in k,k" "$KG/is-gz3.json"; g $? "GZ3b karta gorevsiz yazıldı, gorev yok"
 bash "$KTG" ac is-gz4 --is "ikisi birden kart" $GZS --gorev gorev_01M6GSTYKDYVK8JJB61D1DZJ0D --tahmin 5 --gorevsiz "görev defteri bu işi kapsamıyor, açık gerekçe" >/dev/null 2>&1; RC=$?
