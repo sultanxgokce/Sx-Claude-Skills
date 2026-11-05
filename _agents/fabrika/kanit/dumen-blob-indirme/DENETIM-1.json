@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "dumen-blob-indirme",
+  "pr": "707",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T19:51:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-blob-indirme",
+  "dal": "dumen-blob-indirme",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65411,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 52980
+  },
+  "dalgic": "uyumsuz",
+  "bas": "9009af07fb3a7347fb885ae3099147a81ce8d51f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan, sayfa içindeki blob dosyasını indirme, aynı sayfanın blob adresini kabul etme ve güvenlik kapılarını koruma işi sınavlar ile mutantlarda ölçülmüş; beceriye depo içi izinli dizin uyarısı da yazılmış. Kod üretime hazır görünüyor, ancak filoda kurulu sürüm ve gerçek Trendyol faturası bu kutudaki kanıtla doğrulanamıyor.",
+    "bulgular": [
+      {
+        "ne": "Filoda kurulu sürümün bu değişiklik olduğu ve gerçek Trendyol fatura penceresinde çalıştığı doğrulanmamış.",
+        "kanit": "Gerçek sınavlar commit a1ed58e3b742c9a887b87ea23c9def2fd02835b1 üzerinde; canli-blob kaydı farklı commit 2743050c054daeef8dae32a5538a3e3d56752688 üzerinde ve yalnız fikstür sonucunu gösteriyor. SKILL.md dürüst sınırlar bölümü de gerçek Trendyol fatura penceresini 'ilk vaka' diye belirtiyor.",
+        "konum": "KANIT manifesti: sinav-dosya/canli-blob; dumen-surucu/SKILL.md:Dürüst sınırlar",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "filoda kurulu gerçek Dümen + Trendyol oturumu"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Blob yeteneği için kırmızıdan yeşile ölçüm çifti, gerçekçi blob/PDF fikstürü, bayt-birebir kapılar, güvenlik sınavları ve hedef kapıları düşüren dört mutasyon kaydı var. Bununla birlikte canlı fikstür kaydı sınavlardan farklı committe; filoya kurulum ve gerçek Trendyol vakası kanıtlanmış değil."
+  }
+}

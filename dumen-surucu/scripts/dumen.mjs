@@ -351,6 +351,28 @@ export class Dumen {
     try { return await this.#baytSayfadan(sayfa, adres); }
     catch (e) { if (!/^https?:/i.test(adres)) throw e; return this.#baytAgdan(adres); }
   }
+  // SAYFAYA GÖMÜLÜ DOSYA (0.9.1 · NARH 5 Kas, Trendyol fatura penceresi): panel dosyayı sayfa içi pencerede (iframe/embed/object) geçici adreste
+  //   (blob:) açınca ne indirme olayı ne yeni sekme olur. blob: adresi yalnız onu üreten sayfanın içinden okunur: önce öğenin çerçevesi, sonra ötekiler.
+  async #gomuluAdresler(sayfa) {
+    const cikti = [];
+    for (const f of sayfa.frames()) {
+      const l = await f.evaluate(({ turler }) => [...document.querySelectorAll('iframe[src],embed[src],object[data]')].map((e) => e.src || e.data || '').filter((u) => {
+        if (/^blob:/i.test(u)) return true;
+        if (!/^https?:/i.test(u)) return false;
+        try { const p = new URL(u).pathname.toLowerCase(); return turler.some((x) => p.endsWith(x)); } catch (e) { return false; }
+      }), { turler: [...DOSYA_TUR] }).catch(() => []);
+      for (const u of l) cikti.push({ u, f });
+    }
+    return cikti;
+  }
+  async #baytBlob(cerceveler, u) {
+    let son;
+    for (const c of cerceveler) { if (!c) continue; try { return await this.#baytSayfadan(c, u); } catch (e) { son = e; } }
+    throw son || new KapiHata('indirme-okunamadi', 'blob adresi okunamadı');
+  }
+  async #baytGomulu(sayfa, { u, f }) {
+    return /^blob:/i.test(u) ? this.#baytBlob([f, sayfa.mainFrame(), ...sayfa.frames()], u) : this.#baytAl(sayfa, u);
+  }
   // İNDİRDİĞİNİ ÖLÇ: boş dosya, dosya yerine gelen sayfa (giriş ekranı/hata) ve uzantıyla uyuşmayan içerik DOSYA SAYILMAZ, diske yazılmaz.
   #dosyaYaz(hedef, veri, tur, kaynak) {
     const u = extname(hedef).toLowerCase(); const imza = SIHIR[u];
@@ -372,11 +394,15 @@ export class Dumen {
       const ind = (x) => coz({ ind: x }); const sek = (x) => coz({ sek: x });
       const acilan = []; const topla = (s) => acilan.push(s);   // bu tıklamanın açtığı HER sekme (indirme olayı sekmeden önce gelse de) kapatılır
       page.once('download', ind); page.once('popup', sek); page.on('popup', topla);
-      let sekme = null;
+      let sekme = null; let dur = false;
+      const once = new Set((await this.#gomuluAdresler(page)).map((x) => x.u));   // tıklamadan ÖNCE açık duran gömülü dosya "yeni" sayılmaz
+      const gomBekle = async () => { const son = Date.now() + olayMs; while (!dur && Date.now() < son) { await uyu(250); if (dur) return; const y = (await this.#gomuluAdresler(page)).find((x) => !once.has(x.u)); if (y) { coz({ gom: y }); return; } } };
       try {
         await page.click(sel, { timeout: 10000, ...pw });
+        gomBekle().catch(() => {});
         let o = await Promise.race([ilk, uyu(olayMs).then(() => null)]);
-        if (!o) throw new KapiHata('indirme-yok', `tıklama ${olayMs} ms içinde ne indirme başlattı ne yeni sekme açtı`);
+        if (!o) throw new KapiHata('indirme-yok', `tıklama ${olayMs} ms içinde ne indirme başlattı, ne yeni sekme açtı, ne de sayfaya gömülü dosya açtı`);
+        if (o.gom) { const b = await this.#baytGomulu(page, o.gom); return this.#dosyaYaz(hedef, b.veri, b.tur, 'gomulu'); }
         if (o.sek) {   // yeni sekme: ya dosyayı gösterir, ya da indirmeye döner (indirme olayı açan sayfaya ya da sekmeye düşer)
           sekme = o.sek;
           const sonraki = new Promise((r) => { page.once('download', r); sekme.once('download', r); });
@@ -385,6 +411,7 @@ export class Dumen {
           const d = await Promise.race([sonraki, uyu(dosyaMi ? 400 : 5000).then(() => null)]);
           if (d) o = { ind: d };
           else if (dosyaMi) { const b = await this.#baytAl(sekme, sekme.url()); return this.#dosyaYaz(hedef, b.veri, b.tur, 'yeni-sekme'); }
+          else if (/^blob:/i.test(sekme.url())) { const b = await this.#baytBlob([sekme.mainFrame(), page.mainFrame()], sekme.url()); return this.#dosyaYaz(hedef, b.veri, b.tur, 'yeni-sekme'); }
           else throw new KapiHata('indirme-yok', 'açılan sekme boş kaldı, indirme de başlamadı');
         }
         const d = o.ind; let b;   // saveAs/path KULLANILMAZ: Dümen'in tarayıcısı başka makinede, diske düşen dosya buradan okunamaz
@@ -392,14 +419,26 @@ export class Dumen {
         catch (e) { throw new KapiHata('indirme-uzakta', `dosya tarayıcının makinesinde kaldı, baytları alınamadı (${String(e.message || e).slice(0, 80)})`); }
         finally { await d.cancel().catch(() => {}); await d.delete().catch(() => {}); }
         return this.#dosyaYaz(hedef, b.veri, b.tur, 'indirme');
-      } finally { page.off('download', ind); page.off('popup', sek); page.off('popup', topla); for (const s of acilan) await s.close().catch(() => {}); }
+      } finally { dur = true; page.off('download', ind); page.off('popup', sek); page.off('popup', topla); for (const s of acilan) await s.close().catch(() => {}); }
+    }, azamiMs);
+  }
+  // indirGomulu(sel, hedefYol): sayfada ZATEN AÇIK duran gömülü dosyayı (sel: ana sayfadaki iframe/embed/object) TIKLAMADAN alır.
+  async indirGomulu(sel, hedefYol, { ustuneYaz = false, turler, azamiMs = 60000 } = {}) {
+    const hedef = this.#hedefDosya(hedefYol, { ustuneYaz, turler });
+    return this.#uygula('indir-gomulu', sel, async () => {
+      const page = this.#page;
+      const u = await page.locator(sel).first().evaluate((e) => e.src || e.data || '', undefined, { timeout: 5000 }).catch(() => '');
+      if (!/^(blob:|https?:\/\/)/i.test(u)) throw new KapiHata('indirme-yok', 'seçilen öğede dosya adresi yok (blob: ya da http(s) beklenir)');
+      const b = await this.#baytGomulu(page, { u, f: page.mainFrame() });
+      return this.#dosyaYaz(hedef, b.veri, b.tur, 'gomulu');
     }, azamiMs);
   }
   // indirAdres(adres, hedefYol): adresi bilinen dosyayı (ör. yeniSekmeAdresi() ya da nitelikler(sel,'href') ile okunan) tarayıcının oturumuyla alır.
   async indirAdres(adres, hedefYol, { ustuneYaz = false, turler, azamiMs = 60000 } = {}) {
-    if (!/^https?:\/\//i.test(String(adres))) throw new KapiHata('kullanim', 'indirAdres yalnız http(s) adresi alır');
+    const a = String(adres); const blob = /^blob:/i.test(a);
+    if (!blob && !/^https?:\/\//i.test(a)) throw new KapiHata('kullanim', 'indirAdres http(s) ya da bu sayfanın blob: adresini alır');
     const hedef = this.#hedefDosya(hedefYol, { ustuneYaz, turler });
-    return this.#uygula('indir-adres', null, async () => { const b = await this.#baytAl(this.#page, String(adres)); return this.#dosyaYaz(hedef, b.veri, b.tur, 'adres'); }, azamiMs);
+    return this.#uygula('indir-adres', null, async () => { const page = this.#page; const b = blob ? await this.#baytBlob([page.mainFrame(), ...page.frames()], a) : await this.#baytAl(page, a); return this.#dosyaYaz(hedef, b.veri, b.tur, 'adres'); }, azamiMs);
   }
   // yeniSekmeAdresi(sel): sel'e tıklar, açılan YENİ SEKMENİN adresini döndürür ve o sekmeyi kapatır (başkasının sekmesine dokunmaz).
   async yeniSekmeAdresi(sel, { olayMs = 10000, azamiMs = 30000, ...pw } = {}) {

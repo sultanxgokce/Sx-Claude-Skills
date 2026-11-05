@@ -1,0 +1,11 @@
+$ tail -n 2000 -- /config/projects/_wt/Sx-Claude-Skills-dumen-blob-indirme/_agents/fabrika/kanit/dumen-blob-indirme/canli-blob-20261105.txt
+# kaynak=dosya:/config/projects/_wt/Sx-Claude-Skills-dumen-blob-indirme/_agents/fabrika/kanit/dumen-blob-indirme/canli-blob-20261105.txt tur=dosya desen=dumen-canli-blob (indir-tikla tamam kaynak=gomulu|indirGomulu tamam|indirAdres-blob tamam|sonuc GECTI) en_az=1 son=2000 atesleme=4 rc=0 sure=0.0s zaman=2026-11-05T19:50:16+03:00
+--- stdout ---
+2026-11-05T19:15:29+03:00 dumen-canli-blob sekme-once sayi=11
+2026-11-05T19:15:31+03:00 dumen-canli-blob goto tamam (bu kutudan sunulan fikstür sayfası)
+2026-11-05T19:15:32+03:00 dumen-canli-blob indir-tikla tamam kaynak=gomulu bayt=13264 ozet-ayni=true ms=863
+2026-11-05T19:15:32+03:00 dumen-canli-blob indirGomulu tamam kaynak=gomulu bayt=13264 ozet-ayni=true
+2026-11-05T19:15:33+03:00 dumen-canli-blob indirAdres-blob tamam bayt=13264 ozet-ayni=true
+2026-11-05T19:15:34+03:00 dumen-canli-blob sekme-sonra sayi=11 artik=0
+2026-11-05T19:15:34+03:00 dumen-canli-blob sonuc GECTI
+--- stderr ---

@@ -53,5 +53,9 @@ mut "süre dolunca eylem kesilmez (yarım tıklama sonradan gerçekleşir)" "if 
 mut "kapı ve eylem ayrı ayrı tam süre alır (tavan iki katına çıkar)" "Math.max(1, son - Date.now())" "ms"
 mut "kapatılan Dümen yeniden bağlanıp eylem yapar" "if (this.#kapandi) throw new KapiHata('kapali'" "if (false) throw new KapiHata('kapali'"
 mut "bağlantı düşmüşken kendi sekmesi açık kalır" "if (this.#kendiSekmem && this.#hedefId) await fetch(" "if (false) await fetch("
+mut "sayfaya gömülü dosya aranmaz (blob: fatura penceresi indirme-yok döner)" "if (y) { coz({ gom: y }); return; }" "if (false) { coz({ gom: y }); return; }"
+mut "tıklamadan önce açık duran pencere yeni sayılır (eski dosya alınır)" ".find((x) => !once.has(x.u))" ".find(() => true)"
+mut "indirAdres blob: adresini almaz" "const blob = /^blob:/i.test(a);" "const blob = false;"
+mut "indirGomulu öğedeki adresin türüne bakmaz" "if (!/^(blob:|https?:\/\/)/i.test(u)) throw new KapiHata('indirme-yok', 'seçilen" "if (false) throw new KapiHata('indirme-yok', 'seçilen"
 find "$T" -mindepth 1 -delete; rmdir "$T"
 [ "$MK" -eq 0 ] && echo "MUTANT: $MS/$MS yakalandı" || { echo "MUTANT: $MK kaçtı"; exit 1; }

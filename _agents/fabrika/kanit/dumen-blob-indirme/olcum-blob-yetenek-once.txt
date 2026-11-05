@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/dumen-blob-indirme/blob-yetenek.sh once
+# rc=1 sure=39.6s zaman=2026-11-05T19:34:27+03:00
+--- stdout ---
+  ✗ B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı  → {"hata":"indirme-yok"}
+  ✗ B2 blob: PDF penceresi: bayt birebir  → {"hata":"indirme-yok"}
+  ✓ B3 pencere ZATEN açıkken yeni bir şey açmayan tıklama eski dosyayı almaz (indirme-yok)
+  ✗ SINAV ÇÖKTÜ: TypeError: d.indirGomulu is not a function
+SONUÇ: geçti=33 kaldı=3 süre=39 sn
+blob kapısı geçen: 1/8 (sürücü: once) rc=1
+--- stderr ---

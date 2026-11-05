@@ -1,0 +1,59 @@
+{
+  "is": "dumen-blob-indirme",
+  "cumle": "Dümen indir aracı, sayfa içi pencerede geçici adreste (blob) açılan dosyayı da indirir; indirAdres aynı sayfanın blob adresini kabul eder; izinli dizin deponun içindeyse uyarı beceriye yazılır; güvenlik kapıları korunur",
+  "istedi": "Sultan 5 Kas 19:04 (NARH EK 2: Trendyol faturası blob iframe içinde, indirme-yok)",
+  "aldi": "SERDAR",
+  "zaman": "2026-11-05T19:06:21+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "sınav kapıları + mutant, gerçek Dümen'de blob fikstürüyle canlı deneme, filoda kurulu sürüm",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "--canli e",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "basla",
+    "istendi": "2026-11-05T19:06:21+03:00",
+    "zaman": "2026-11-05T19:06:40+03:00",
+    "yazildi": "2026-11-05T19:06:40+03:00",
+    "zaman_kaynagi": "yazim",
+    "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+    "soz": "narh sorunu kısmen çözdüünü söylüyor lütfen tam çözer misin",
+    "beyan": "SERDAR"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M6NW01VZYAV5JCH8QA0DRF6W",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-05T19:06:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "sultan_kararlari": [
+    {
+      "karar": "basla",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "narh sorunu kısmen çözdüünü söylüyor lütfen tam çözer misin",
+      "beyan": "SERDAR",
+      "gerekce": "",
+      "zaman": "2026-11-05T19:06:40+03:00",
+      "yazildi": "2026-11-05T19:06:40+03:00",
+      "zaman_kaynagi": "yazim"
+    }
+  ]
+}
