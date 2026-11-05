@@ -136,15 +136,16 @@ try {
 
   console.log('── sayfaya gömülü dosya (blob: · sayfa içi fatura penceresi)');
   const tabanB = await sekmeSay();
-  const b1 = await d.indir('#bgp', join(KOK, 'in', 'gomulu.png'));
-  ok('B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı', b1.kaynak === 'gomulu' && readFileSync(join(KOK, 'in', 'gomulu.png')).equals(PNG) && (await sekmeSay()) === tabanB, JSON.stringify(b1));
-  const b2 = await d.indir('#bg', join(KOK, 'in', 'gomulu.pdf'));
-  ok('B2 blob: PDF penceresi: bayt birebir', readFileSync(join(KOK, 'in', 'gomulu.pdf')).equals(PDF) && ['gomulu', 'indirme'].includes(b2.kaynak), JSON.stringify(b2));
+  const dene = (f) => f().catch((e) => ({ hata: e instanceof KapiHata ? e.neden : String(e.message).split('\n')[0] }));   // kapı düşerse sınav çökmez, kırmızı yazar
+  const b1 = await dene(() => d.indir('#bgp', join(KOK, 'in', 'gomulu.png')));
+  ok('B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı', b1.kaynak === 'gomulu' && existsSync(join(KOK, 'in', 'gomulu.png')) && readFileSync(join(KOK, 'in', 'gomulu.png')).equals(PNG) && (await sekmeSay()) === tabanB, JSON.stringify(b1));
+  const b2 = await dene(() => d.indir('#bg', join(KOK, 'in', 'gomulu.pdf')));
+  ok('B2 blob: PDF penceresi: bayt birebir', existsSync(join(KOK, 'in', 'gomulu.pdf')) && readFileSync(join(KOK, 'in', 'gomulu.pdf')).equals(PDF) && ['gomulu', 'indirme'].includes(b2.kaynak), JSON.stringify(b2));
   ok('B3 pencere ZATEN açıkken yeni bir şey açmayan tıklama eski dosyayı almaz (indirme-yok)', (await neden(() => d.indir('#yok', join(KOK, 'in', 'eski.png'), { olayMs: 1500 }))) === 'indirme-yok' && !existsSync(join(KOK, 'in', 'eski.png')));
-  const b4 = await d.indirGomulu('#gorp', join(KOK, 'in', 'acik.png'));
-  ok('B4 indirGomulu: açık duran penceredeki dosya tıklamadan alındı', b4.kaynak === 'gomulu' && readFileSync(join(KOK, 'in', 'acik.png')).equals(PNG), JSON.stringify(b4));
+  const b4 = await dene(() => d.indirGomulu('#gorp', join(KOK, 'in', 'acik.png')));
+  ok('B4 indirGomulu: açık duran penceredeki dosya tıklamadan alındı', b4.kaynak === 'gomulu' && existsSync(join(KOK, 'in', 'acik.png')) && readFileSync(join(KOK, 'in', 'acik.png')).equals(PNG), JSON.stringify(b4));
   const ba = (await d.nitelikler('#gorp', 'src'))[0] || '';
-  ok('B5 indirAdres bu sayfanın blob: adresini alır', /^blob:/.test(ba) && (await neden(() => d.indirAdres(ba, join(KOK, 'in', 'blob-adres.png')))) === null && readFileSync(join(KOK, 'in', 'blob-adres.png')).equals(PNG), ba.slice(0, 20));
+  ok('B5 indirAdres bu sayfanın blob: adresini alır', /^blob:/.test(ba) && (await neden(() => d.indirAdres(ba, join(KOK, 'in', 'blob-adres.png')))) === null && existsSync(join(KOK, 'in', 'blob-adres.png')) && readFileSync(join(KOK, 'in', 'blob-adres.png')).equals(PNG), ba.slice(0, 20));
   ok('B6 pencerede dosya yerine GİRİŞ SAYFASI varsa dosya sayılmaz, yazılmaz (indirme-sayfa)', (await neden(() => d.indir('#bh', join(KOK, 'in', 'giris2.pdf')))) === 'indirme-sayfa' && !existsSync(join(KOK, 'in', 'giris2.pdf')));
   ok('B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)', (await neden(() => d.indirGomulu('#qualaroo_anket', join(KOK, 'in', 'bos.pdf')))) === 'indirme-yok');
   ok('B8 başka sayfanın blob: adresi okunamaz, dosya yazılmaz (indirme-okunamadi)', (await neden(() => d.indirAdres('blob:https://example.com/00000000-0000-0000-0000-000000000000', join(KOK, 'in', 'yabanci.pdf')))) === 'indirme-okunamadi' && !existsSync(join(KOK, 'in', 'yabanci.pdf')));
