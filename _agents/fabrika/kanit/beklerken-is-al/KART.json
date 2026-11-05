@@ -1,0 +1,43 @@
+{
+  "is": "beklerken-is-al",
+  "cumle": "Beklerken iş alma kuralı düzen paketiyle bütün filoya iner",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-11-05T10:51:38+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-05T11:15:28+03:00",
+      "olay": "canli-ayarla",
+      "reis": "SERDAR",
+      "canli": "e",
+      "gerekce": "Kart cümlesi filoya inişi söylüyor, göz tur 1 bulgusu: iniş ancak dağıtımdan sonra ölçülür."
+    },
+    {
+      "zaman": "2026-11-05T11:15:28+03:00",
+      "olay": "canli-borc"
+    }
+  ],
+  "canli_gerekir": true,
+  "canli_sebep": "sahip SERDAR ayarladı (--canli e): Kart cümlesi filoya inişi söylüyor, göz tur 1 bulgusu: iniş ancak dağıtımdan sonra ölçülür.",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "canli_borc": {
+    "zaman": "2026-11-05T11:15:28+03:00",
+    "yazan": "SERDAR",
+    "gerekce": "Filoya iniş ancak birleşme ve gece kurulumundan sonra ölçülebilir. 6 Kas sabah: surum.sh denetle ve kimliklerde kural 10 sayımı, her kutu için.",
+    "odendi": null
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "is": "beklerken-is-al",
+  "arac": "kanit.py/0.7.0",
+  "guncelleme": "2026-11-05T11:15:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kural-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kural-sinavi-once.txt",
+      "sha256": "c7111aab5cffe61b79626ee80235952df197687891968f4b327dd6bb3c29a783",
+      "komut": [
+        "bash",
+        "duzen/scripts/bekleme-kurali.test.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/once-duzen/duzen"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-05T11:08:29+03:00",
+      "sure_sn": 861.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bd70cecd472b4227982a05246f22ce79",
+      "olculen_commit": "0dfd1c0678a9e0f6d01db245adccafa98e5be826",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kural-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kural-sinavi-sonra.txt",
+      "sha256": "870234727909833d9edeef1afb86b4852c1c7c3131e329c070001fb7629adaf9",
+      "komut": [
+        "bash",
+        "duzen/scripts/bekleme-kurali.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:08:29+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c57266cdf6f644d78684053d686817b4",
+      "olculen_commit": "0dfd1c0678a9e0f6d01db245adccafa98e5be826",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-surum-sinavi-tek.txt",
+      "sha256": "63e277d6b560dac4293f7c325b7f7bd9f999c246299519c31bccd96e4fef4681",
+      "komut": [
+        "bash",
+        "duzen/scripts/surum.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:08:37+03:00",
+      "sure_sn": 8.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b55d49e7d0df40529fcd1bd4b302e6a0",
+      "olculen_commit": "0dfd1c0678a9e0f6d01db245adccafa98e5be826",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "parite",
+      "asama": "tek",
+      "dosya": "olcum-parite-tek.txt",
+      "sha256": "943d858291024a674919f0d02ce3a95df6080da7a684c9e6741501e1e413473b",
+      "komut": [
+        "bash",
+        "duzen/scripts/ekipc-paritesi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:08:39+03:00",
+      "sure_sn": 2.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "27ad33dacb024253a959972d575be111",
+      "olculen_commit": "0dfd1c0678a9e0f6d01db245adccafa98e5be826",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kural-sinavi2",
+      "asama": "sonra",
+      "dosya": "olcum-kural-sinavi2-sonra.txt",
+      "sha256": "639f16f4289271d0e9ebb8a273a5dc04c74dbe3effe970dc5b19e103ea04596d",
+      "komut": [
+        "bash",
+        "duzen/scripts/bekleme-kurali.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:14:59+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3786df6f3e0a4daf81a69b58b0f2cc21",
+      "olculen_commit": "be8883bd3dd15da71f50a497ae997e7a08238041",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "parite2",
+      "asama": "tek",
+      "dosya": "olcum-parite2-tek.txt",
+      "sha256": "5ca91ceb6a5353d17c8a3a8e24d9a19a88cb7a2720af664d5117aff4eb956ac8",
+      "komut": [
+        "bash",
+        "duzen/scripts/ekipc-paritesi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-05T11:15:03+03:00",
+      "sure_sn": 3.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a668e05465d04188bf83bfd0c3069c74",
+      "olculen_commit": "be8883bd3dd15da71f50a497ae997e7a08238041",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "415a7eb3fe601f56054cc80aa5125bd5921c74c39ef7553ddaf4084918eaa815"
+}

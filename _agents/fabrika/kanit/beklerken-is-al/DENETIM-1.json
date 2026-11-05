@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "beklerken-is-al",
+  "pr": "702",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T11:14:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-beklerken-is-al",
+  "dal": "beklerken-is-al",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25698,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 9669
+  },
+  "dalgic": "uyumsuz",
+  "bas": "28db13185512baab49c6af79ab925680ac4e3fbe",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kural 10 düzen paketinin kanonik standardına ve dört temel kimliğe eklenmiş, sürüm de 1.6.9'a yükseltilmiş; yani seçilen çözüm iş kartının istediği paket yoluyla dağıtım yönünde. Ancak ana sonuç olan kuralın bütün filoya gerçekten indiği kanıtlanmamış; mevcut yeşil ölçümler kaynak metin varlığını, sürüm davranışını ve ekipc paritesini gösteriyor, hedef kimliklerin yenilendiğini göstermiyor; önce bunu ölçmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "“Bütün filoya iner” kabul ölçütü kanıtsız: sınav yalnız paket kaynağında anahtar metinleri arıyor; filodaki kurulu kimliklerin 1.6.9'a yenilendiğini ve kuralı taşıdığını sınamıyor.",
+        "kanit": "kural-sinavi sonrası yalnız “YESIL: standart + 4 temel” diyor; bekleme-kurali.test.sh satır 5-14 yalnız duzen/cekirdek altındaki kaynak dosyalarda grep çalıştırıyor. surum-sinavi ise örnek kimliklerde sürüm/bayatlık mantığını sınayıp hiçbir dosyaya yazmadığını açıkça bildiriyor; parite ölçümü de ekipc paket kopyası ve tekil benimse/yenile davranışlarını ölçüyor, filo kurulum sonucu vermiyor.",
+        "konum": "duzen/scripts/bekleme-kurali.test.sh:5; olcum-kural-sinavi-sonra.txt; olcum-surum-sinavi-tek.txt S9; olcum-parite-tek.txt",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kural için kırmızıdan yeşile bir ölçüm çifti var ve sürüm/parite sınavları yeşil, fakat önce ölçümü farklı bir kaynak kökünde, sonra ölçümü mevcut paket kaynağında yapıyor. Kanıt gerçek filo hedeflerinde önce/sonra kurulum veya kimlik içeriği ölçümü içermediğinden kartın “bütün filoya iner” sonucunu doğrulamaya yetmiyor."
+  }
+}

@@ -98,6 +98,16 @@ sınırı 41 · ekrana asılı soru 1.356. Metin yalnız burada yaşar; kutular 
 9. **Eskalasyon sırası: reis → SERDAR → Sultan.** Önce kutunun reisi (`aile-notify --waiting`); reis 45 dk içinde cevap
    vermezse SERDAR (yalnız kutular-arası iş); Sultan yalnız sınıflı kartta ve o da `kapımda` kartıyla. Basamak atlanmaz;
    her basamak NOTES'ta tek satırla görünür. Boşta bekçisi aynı sırayı kendisi uygular (ajan → reis → Sultan, yalnız sınıflı kartta).
+10. **Beklerken sıradan iş al (Sultan 5 Kas 2026: "tüm filoda bu kural uygulansın").** CI, kanıt koşusu, göz ya da gece
+    ölçümü beklerken koltuk boş durmaz. Hız kaliteden ödün vermesin diye dört koşul vardır; biri tutmuyorsa yeni iş alınmaz:
+    - **Küçük:** tahmini süre bekleme süresine sığar. Bekleme 10 dk'nın altındaysa yeni iş açılmaz, aynı işin küçük eksikleri
+      bitirilir. CI ya da uzun kanıt koşusunda küçük iş, geceye kalan ölçümde normal boy iş alınır.
+    - **Ayrı:** kendi iş alanında yürür, bekleyen işin dosyalarına dokunmaz. Çakışma varsa alınmaz.
+    - **Geri dönüş önce:** bekleyen iş sonuçlanınca yan iş durur, önce ona dönülür. Yarım kalan yan işe `gorev.sh adim` ile
+      yer kaydedilir. "Aynı anda en çok 2 çalışılıyor" tavanı burada da geçerlidir.
+    - **Bağlam ve kota:** bağlam %60'a yaklaştıysa ya da hesap kotası kısma eşiğindeyse yeni iş alınmaz.
+    Rol önce gelir: hakem ve denetçi gibi kod işi almayan koltuk rolü dışında iş almaz. Uygun iş yoksa NOTES'a
+    `BEKLİYORUM-ŞU-SAATE-KADAR` yazılır; "bekleyici arka planda" demek boşta durmayı meşru kılmaz.
 
 
 ## KAÇIŞ YOLLARI (fail-open — kötü gün filoyu dondurmasın)

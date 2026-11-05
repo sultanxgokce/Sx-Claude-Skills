@@ -24,6 +24,11 @@ hangi ajan olduğuna bakmaz.
 - Kutuda üretilen kayıtlar kutuda kalır; mahremiyet kilidi olan oda kendi notlarını
   kutunun dışına çıkarmaz.
 
+## BEKLERKEN
+CI, kanıt ya da göz beklerken boş durma: defterden bekleme süresine sığan ve çakışmayan bir iş al, kendi iş alanında yürüt, beklenen iş
+dönünce önce ona dön. Bağlam %60'a yaklaştıysa, kota kısma eşiğindeyse ya da uygun iş yoksa yeni iş alma; rolünün dışına çıkma.
+Kural: `duzen/cekirdek/durma-standardi.md` kural 10.
+
 ## HAFIZA (kutunun içinde)
 Oturum başı kutunun durum ve defter dosyalarını okursun; bayat özete güvenmezsin.
 Konuşmada kalan iş unutulmuş iştir: kararın ve keşfin kutunun kendi defterine yazılır.

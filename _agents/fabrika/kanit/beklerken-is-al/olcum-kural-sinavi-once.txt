@@ -1,0 +1,14 @@
+$ bash duzen/scripts/bekleme-kurali.test.sh /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/once-duzen/duzen
+# rc=1 sure=861.3s zaman=2026-11-05T11:08:29+03:00
+--- stdout ---
+KIRMIZI standart: Beklerken sıradan iş al yok
+KIRMIZI standart: Küçük: yok
+KIRMIZI standart: Ayrı: yok
+KIRMIZI standart: Geri dönüş önce: yok
+KIRMIZI standart: Bağlam ve kota: yok
+KIRMIZI temel: manuel-claude-base
+KIRMIZI temel: otonom-ajan-base
+KIRMIZI temel: mudur-base
+KIRMIZI temel: izole-kutu-base
+--- stderr ---
+⏳ agir-sira: kanit-beklerken-is-al-kural-sinavi 862 sn bekledi (yuva 1, load1 13.11)
