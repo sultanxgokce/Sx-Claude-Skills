@@ -1,0 +1,34 @@
+{
+  "is": "goz-kutu-disi-tekrar-yuzeyle",
+  "cumle": "Göz aracı kutu dışı bulgunun ikinci gelişini bulgu metninin birebir aynısıyla değil yüzeyiyle tanısın: aynı işte yüzeyi daha önce yazılmış bir yüzeyle ortak parça taşıyan kutu dışı bulgu tekrar sayılsın ve canlı borca devir çalışsın; başka sözle gelen tekrar deftere tekrar işaretiyle yazılsın; ortak parçası olmayan yüzeyli bulgu yeni bulgu kalsın; birebir aynı metin bugünkü gibi tekrar sayılsın",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-05T04:05:02+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "görünmez iş: sınav önce/sonra ölçüm çifti, mutantlar tek tek, öteki göz sınavları; birleşince kurulu kopya yalnız bu beceri için yenilenir ve koşturularak ölçülür",
+  "oda": "agentic-os",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6G1Q3FYJBRB60418M1MA2RT",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-05T04:05:03+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
