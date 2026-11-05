@@ -26,7 +26,7 @@ kos_takim() {   # $1 = kanit.sh yolu, $2 = ad öneki
   [ "$(sayi)" = "3" ]; g $? "bayraklı ilk çağrı koştu (sayaç 3)"
   c="$(ol is-g iki --asama tek --ayni-girdi-atla -- bash "$S/gec.sh")"; commitle k3
   [ "$(sayi)" = "3" ]; g $? "aynı girdi: komut YENİDEN KOŞMADI (sayaç 3)"
-  printf '%s' "$c" | grep -q "YENİDEN KOŞMADI"; g $? "çıktı yeniden koşmadığını söylüyor"
+  printf '%s' "$c" | grep "YENİDEN KOŞMADI" >/dev/null; g $? "çıktı yeniden koşmadığını söylüyor"
   ( cd "$T" && bash "$K" dogrula is-g ) >/dev/null 2>&1; g $? "dogrula rc=0 (kayıt değişmedi, imza sağlam)"
 
   echo "════ ${P}A3 · girdi değişince koşar ════"
@@ -85,7 +85,7 @@ PY
   local gec0=$gecen kal0=$kalan cikti
   cikti="$(kos_takim "$MD/kanit.sh" "M:$ad " 2>&1)"
   gecen=$gec0; kalan=$kal0
-  if printf '%s' "$cikti" | grep -q "✗"; then g 0 "mutant YAKALANDI: $ad"; else g 1 "mutant KAÇTI: $ad"; fi
+  if printf '%s' "$cikti" | grep "✗" >/dev/null; then g 0 "mutant YAKALANDI: $ad"; else g 1 "mutant KAÇTI: $ad"; fi
 }
 mut "ağaç özeti çıkarıldı" '"agac": satirlar,' '"agac": [],'
 mut "dış betik sha çıkarıldı" '"dis": dis,' '"dis": [],'
