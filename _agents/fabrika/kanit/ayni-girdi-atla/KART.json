@@ -34,6 +34,20 @@
       "zaman": "2026-11-05T16:19:29+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-05T16:24:11+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BENNÂ",
+      "oturum": "6b97a4cc",
+      "gerekce": "Puan sonrası yalnız sınav dosyasında iki boru-grep satırı CI lint için düzeltildi, çalıştırma biti verildi; davranış aynı, kapı yeniden göz ister",
+      "zaman": "2026-11-05T17:03:07+03:00"
     }
   ]
 }

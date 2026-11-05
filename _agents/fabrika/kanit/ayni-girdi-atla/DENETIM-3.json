@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "ayni-girdi-atla",
+  "pr": "705",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T17:10:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-ayni-girdi-atla",
+  "dal": "ayni-girdi-atla",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16477,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2642
+  },
+  "dalgic": "uyumlu",
+  "bas": "d19eea4a5e549e760be92d77c7be3cb23cd23eb7",
+  "duzeltme_farki": {
+    "onceki_bas": "7ffd15574a92dbb0b413ae31699a1fa92a8a9d55",
+    "dosya": 3,
+    "bayt": 4146,
+    "tam_bayt": 37260
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Açık `--ayni-girdi-atla` davranışı aynı girdiyi atlarken değişen girdi, mutant, kırmızı kayıt ve kirli ağaç vakalarını yeniden koşturuyor. Önceki turda bulgu yoktu; bu turdaki iki boru-grep düzeltmesi ve çalıştırma biti davranışı bozmamış, sağlam gerçek ölçüm ile mutasyon kapısı geçtiğinden iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `sinav-sonra` gerçek ölçümü rc=0 ile hedef takımda 20/0, toplamda 275/0 ve 17/0 gösteriyor; sayaç 3'te kalarak aynı girdinin atlandığını, diğer vakaların yeniden koştuğunu doğruluyor. `mutant-agac-ozeti` bilinçli bozma kaydıdır: rc=1 ve hedef kapının düşmesi beklenen sonuç olup sınavın bozuk kodu yakaladığını kanıtlıyor."
+  }
+}
