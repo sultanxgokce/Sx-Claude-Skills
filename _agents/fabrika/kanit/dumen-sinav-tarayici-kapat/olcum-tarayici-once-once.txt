@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dts-once.sh
+# rc=1 sure=5.1s zaman=2026-11-05T23:15:14+03:00
+--- stdout ---
+kesilen sınavdan sonra açık tarayıcı: 1 (başlangıçta 0)
+  ✗ kesilen sınav tarayıcıyı kapatmadı (KALAN: 1)
+--- stderr ---
