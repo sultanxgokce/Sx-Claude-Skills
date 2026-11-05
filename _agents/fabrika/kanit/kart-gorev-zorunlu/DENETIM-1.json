@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kart-gorev-zorunlu",
+  "pr": "703",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-05T14:39:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-gorev-zorunlu",
+  "dal": "kart-gorev-zorunlu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57452,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 5195
+  },
+  "dalgic": "olculemedi",
+  "bas": "6a35c66fcf0cb8a07fa936045715b9ee5a6d6fa3",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, görevli veya açık gerekçeli görevsiz açış kapısı, kart kaydı ve gün sonu sayımı doğru hedefe kurulmuş; gerçek ölçüm 486/0 geçmiş, mutasyon da ana kapının bozulmasını yakalamış. Ancak yalnız boşluklardan oluşan 20 karakterlik değer “gerekçe” kabul edilerek ana kural kolayca aşılabildiği için önce bu uygulama açığı kapatılmalı.",
+    "bulgular": [
+      {
+        "ne": "`--gorevsiz` gerekçesi içerik olarak doğrulanmıyor; 20 veya daha fazla boşluk, gerekçe sayılıp görevsiz kart açabilir ve gün sonu özetine anlamsız kayıt taşır.",
+        "kanit": "Kapı yalnız `[ \"${#GOREVSIZ}\" -ge 20 ]` uzunluk denetimi yapıyor; boşluk kırpma veya boş olmayan karakter şartı yok. GZ2 yalnız `\"yok\"` kısa değerini sınıyor, boşluk-only vakası ölçülmemiş.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:456; yazilim-fabrikasi/scripts/kart.test.sh GZ2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Temiz commit üzerindeki gerçek ölçüm 486 geçti/0 kaldı, ayrıca mutasyon kaydı hedef GZ1 kapısının bozuk kodu yakaladığını gösteriyor. Önce/sonra çifti yok; buna karşılık gerçek ölçüm ile mutasyon çifti ana davranışı güçlü biçimde sınamış, fakat yalnız boşluk gerekçesi kapsam dışı kalmış."
+  }
+}
