@@ -63,8 +63,9 @@ echo "════ K12 · --olculen-dizin: ölçüm geçici kopyada koşar, kay�
 T2="$(mktemp -d)"
 ( cd "$T2" && git init -q -b main && git config user.email t@t && git config user.name t && echo z > g.sh && git add -A && git commit -q -m "chore: kopya" ) >/dev/null 2>&1
 H2="$(git -C "$T2" rev-parse HEAD)"; HT="$(git -C "$T" rev-parse HEAD)"
-( cd "$T" && bash "$K" olcum is-k oncekopya --asama once --olculen-dizin "$T2" -- echo kopya ) >/dev/null 2>&1
+( cd "$T" && bash "$K" olcum is-k oncekopya --asama once --olculen-dizin "$T2" -- bash -c 'pwd -P; exit 0' ) >/dev/null 2>&1
 [ "$(alan olculen_commit)" = "$H2" ]; g $? "K12 olculen_commit ölçülen kopyanın HEAD'i"
+grep -qx "$(cd "$T2" && pwd -P)" "$T/_agents/fabrika/kanit/is-k/olcum-oncekopya-once.txt"; g $? "K12 komut ölçülen kopyada KOŞTU (pwd = kopya, çalışılan ağaç değil) — kimlik komutla bağlı"
 [ "$(alan olculen_commit)" != "$HT" ]; g $? "K12 çalışılan dalın ucu yazılmadı"
 [ "$(alan olculen_dizin)" = "$T2" ]; g $? "K12 kayıt olculen_dizin taşır"
 [ "$(alan olculen_kirli)" = "False" ]; g $? "K12 temiz kopya olculen_kirli=False"

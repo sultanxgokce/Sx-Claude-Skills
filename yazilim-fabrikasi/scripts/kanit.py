@@ -10,7 +10,7 @@ Renkler: yesil (ölçtü, korudu) · kirmizi (ölçtü, korumuyor) · sari (ÖL�
 Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
                   [--kirli-izin "<gerekçe ≥15>"]  ağaçta commit'lenmemiş değişiklik varsa ölçüm DURUR (rc 2); bilerek kirli ölçmenin açık bayrağı, gerekçe kayda yazılır
-                  [--olculen-dizin <git ağacı>]  ölçüm geçici kopyada (ör. ana dalın temiz klonu) koşuyorsa: kayıttaki olculen_commit/olculen_kirli O ağaçtan okunur, çalışılan dalın ucu yazılmaz; ağaç değilse rc 2
+                  [--olculen-dizin <git ağacı>]  komut O ağaçta koşar (cwd) ve kayıttaki olculen_commit/olculen_kirli O ağaçtan okunur, çalışılan dalın ucu yazılmaz; ağaç değilse rc 2
                   [--ayni-girdi-atla]  AÇIK bayrak: aynı girdinin (komut+etiket+aşama, kanıt dışı ağaç, izlenmeyen/depo dışı dosya içeriği, araç sürümü) yeşil, imzalı,
                   mutant olmayan kaydı varsa komut KOŞMAZ; kayıt DEĞİŞMEZ (olculen_commit eski kalır; kod aynıdır). Mutant ölçümde bayrak yok sayılır. Saate/ağa/host'a bağlı sınavda verme.
                   [--mutasyon <gerçek etiket> --kapi <düşmesi beklenen kapı adı>]  bilerek bozulmuş kodla koşum: dosya başı MUTASYON KANITI der,
@@ -525,8 +525,11 @@ def cmd_olcum(a):
                 sys.exit(0)
     t0 = datetime.datetime.now()
     sarili, sira_env = sira_komutu(a.komut, f"kanit-{a.is_adi}-{a.etiket}")
-    p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
+    _oc_once = olculen_commit(dz)[0] if OLCULEN_DIZIN else None
+    p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace", cwd=OLCULEN_DIZIN or None)   # boru YOK; --olculen-dizin verilince komut O ağaçta koşar (göz tur 1: kimlik yalnız etiket olamaz, komutla bağı kuruldu): çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
+    if OLCULEN_DIZIN and olculen_commit(dz)[0] != _oc_once:
+        hata(f"--olculen-dizin {OLCULEN_DIZIN}: ölçüm sırasında ağacın HEAD'i değişti — kayıt hangi koddan geldiğini söyleyemez. Kayıt ÜRETİLMEDİ.", 2)
     dusen_kapi = bool(DUSEN_KAPI_RE.search(p.stdout + "\n" + p.stderr)) if mut else None   # düşen kapı satırı var mı (yalnız mutasyonda anlamlı)
     hedef_kapi_re = re.compile(r"(?<!\w)" + re.escape(kapi_adi) + r"(?!\w)") if kapi_adi else None   # TAM sözcük: K1, K10'u yakalamaz (göz tur 1)
     hedef_dustu = bool(mut) and any(hedef_kapi_re.search(l) for l in dusen_satirlar(p.stdout + "\n" + p.stderr))   # ADI VERİLEN kapı düşen bir satırda mı
