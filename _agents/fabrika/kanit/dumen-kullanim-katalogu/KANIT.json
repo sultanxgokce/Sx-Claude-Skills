@@ -1,0 +1,102 @@
+{
+  "is": "dumen-kullanim-katalogu",
+  "arac": "kanit.py/0.8.0",
+  "guncelleme": "2026-11-06T12:48:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "harita-once",
+      "asama": "once",
+      "dosya": "olcum-harita-once-once.txt",
+      "sha256": "40a8269685aebb21591574de47d22887a5a3c3ee4a2b769b3f208ae1dbaf9da9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dk-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T12:48:54+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "2897744896ad1ac03c162051ed23096ad30c433137356e8c2e36050f070a03e8",
+      "olcum_id": "1ceb795711bf446b919f20c1b51160c7",
+      "olculen_commit": "2273192230e11da2a753ed05e0581591befa47e5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "harita-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-harita-sonra-sonra.txt",
+      "sha256": "061125173a18f9ca4f8346a340c7d070a3d1248a7033be5259912a13384aa897",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dk-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T12:48:54+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "38e46b7ae7bc1e2da31aa4386373367cf8eb927ee80004a829e001d4f616b82c",
+      "olcum_id": "45f9b81a2c7f4532951867347cd4c9cd",
+      "olculen_commit": "2273192230e11da2a753ed05e0581591befa47e5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "m-madde5",
+      "asama": "tek",
+      "dosya": "olcum-m-madde5-tek.txt",
+      "sha256": "39d6befb039f7ac139d0ddacbfa4b3773c21a9aaa2c79926ac0ed3735df6790d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dk-m1.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T12:48:54+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "harita-sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "madde 5 haritada YOK",
+      "hedef_dustu": true,
+      "olcum_id": "28e0ec6b3a864542b78c4a60e3aab237",
+      "olculen_commit": "2273192230e11da2a753ed05e0581591befa47e5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "m-baslik",
+      "asama": "tek",
+      "dosya": "olcum-m-baslik-tek.txt",
+      "sha256": "14b93453df3c4269cb2fd261ccb6f95ca6d320b0d019958d1ba6992244c4b2a2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dk-m2.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T12:48:55+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "harita-sonra",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "madde 1 haritada YOK",
+      "hedef_dustu": true,
+      "olcum_id": "f12089f230f449878f539577dc0c2c22",
+      "olculen_commit": "2273192230e11da2a753ed05e0581591befa47e5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "1988de5966a265d792e70763a624f7c0f58abf8c5720452f23a55b5d62acb1de"
+}

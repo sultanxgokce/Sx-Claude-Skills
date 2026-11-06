@@ -1,0 +1,14 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: madde 1 haritada YOK · rc≠0 + hedef kapı 'madde 1 haritada YOK' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-harita-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dk-m2.sh
+# rc=1 sure=0.0s zaman=2026-11-06T12:48:55+03:00
+--- stdout ---
+  ✗ madde 1 haritada YOK (KALAN madde)
+  ✗ madde 2 haritada YOK (KALAN madde)
+  ✗ madde 3 haritada YOK (KALAN madde)
+  ✗ madde 4 haritada YOK (KALAN madde)
+  ✗ madde 5 haritada YOK (KALAN madde)
+  ✗ madde 6 haritada YOK (KALAN madde)
+  ✗ madde 7 haritada YOK (KALAN madde)
+  ✗ madde 8 haritada YOK (KALAN madde)
+KALAN: 8
+--- stderr ---
