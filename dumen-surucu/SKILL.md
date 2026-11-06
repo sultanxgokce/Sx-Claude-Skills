@@ -1,7 +1,7 @@
 ---
 name: dumen-surucu
 description: Ajanın Dümen Chrome'unu (bulut masaüstündeki CDP'li tarayıcı) SÜRMESİNİN tek yolu — Playwright connectOverCDP üstünde eylem kapısı. Her eylemden önce merkezden Dümen kimde okunur; Sultan'da ya da merkez cevapsızsa eylem YAPILMAZ (fail-closed). Parola/SMS/ödeme alanında ajan kendi durur ve nedeni bildirir. İzole dünya dinleyicisi tarih/seçim gibi CDP girdisi üretmeyen değişimleri eylem günlüğüyle eşleştirir. Tetik "Dümen'i sür", "Dümen'de tarayıcı işi", "devral/geri ver". 0.9.0: dosya yükleme (Sultan onaylı) ve indirme, yeni sekme adresi, engel kapatma (çerez/tur/anket), her eylemde sert süre sınırı, kapat garantisi (Dumen.kos), öğe durumu ölçümü ve HATA KATALOĞU — Dümen'de takıldıysan önce bunu oku.
-version: 0.10.0
+version: 0.10.1
 ---
 
 # dumen-surucu — Dümen'i kapıdan sür
@@ -133,6 +133,24 @@ Yeni bir takılma görürsen buraya satır eklenmesi için bulgu yaz. "Ölçülm
 | Oturum açık mı belli değil | Giriş ekranı gecikmeli gelir | `goto` sonrası `bekle('<içerik seçicisi>')`, `adres()` ile giriş adresine bak |
 | İki ajan aynı anda Dümen'de | Ajanlar arası kilit yok | Her ajan kendi sekmesinde kalır (varsayılan yeni sekme); eşzamanlı kullanımı reis koordine eder |
 | Masaüstündeki boş pencere kapanınca tarayıcı da kapandı | Ölçüldü (27 Eki); kök çözülmedi | O pencereyi kapatma; gözetmen tarayıcıyı yeniden açar |
+
+## 🗂️ NARH vaka haritası — filoya bildirilen takılma → çaresi (0.10.1 · NARH 5-6 Kas)
+NARH'ın Trendyol/Amazon işlerinde yaşadığı sekiz takılma ve bugünkü karşılığı. Yeni bir kutuda aynı belirtiyi görürsen çareyi buradan al; çözülmemiş olanı bulguya yaz.
+
+| # | NARH'ın gördüğü | Çare (nerede) |
+|---|---|---|
+| 1 | Dosya yükleme yok ("Fatura gönder" PDF ister) | `yukle(sel, dosya, { onay })` (0.9.0) — Sultan onayı, izinli dizin; "Dosya yükle · indir" bölümü |
+| 2 | İndirilen dosyaya yol yok | `indir(sel, hedefYol)`; dosya tarayıcı makinesinde kalır, baytlar içeriden alınır (0.9.0) |
+| 3 | Betik 80-100 sn yanıtsız, sekme açık kaldı | Her eylem süre sınırlı, `Dumen.kos` her koşulda kapatır (0.9.0); "Çalışma disiplini" 1-2 |
+| 4 | Çerez şeridi, tanıtım turu, anket çerçeveleri tıklamayı kapatıyor | `engelKapat()`; çerez varsayılanı Reddet, Kabul Sultan izniyle (0.9.0) |
+| 5 | Küçük pencerede çerez şeridi alttaki "Gönder"i örtüyor | Önce `engelKapat()`, sonra `ogeDurumu` ile görünür ve etkin mi ölç; örten kalıyorsa `force` değil, örtenin kapatma düğmesini `engelKapat({ ek: [...] })` ile ver |
+| 6 | "Görseli Gör" yeni sekme açıyor, adres elle okunuyordu | `yeniSekmeAdresi(sel)` (0.9.0); adres bilinince `indirAdres` |
+| 7 | Açık talep varken mesaj kutusu pasif; ajan boşa yazıyor | `ogeDurumu(sel).etkin` — `false` ise önce alanı açan adımı bul |
+| 8 | Metin/rol seçicisi Vue arayüzünde gizli eşe çözülüyor | `ogeDurumu` ile `ilkGorunur`; `sel >> nth=<ilkGorunur>` |
+| + | PDF sayfa içi pencerede (`blob:`) açılıyor, `indir` `indirme-yok` | 0.9.1: `indir` kendisi alır; zaten açıksa `indirGomulu` |
+| + | Etiket düğmesi yazdırma penceresi açıp sekmeyi kilitliyor | 0.10.0: `yazdirYakala(sel, hedef.pdf)` |
+
+Aynı kural her satırda: Sultan Dümen'dayken dur, parola/SMS/kart alanına ve ödeme sayfasındaki onay düğmesine dokunma, müşteri dosyası depoya girmesin (`dosyaKok` `.gitignore`'da).
 
 ## Dürüst sınırlar
 - **Canlı ölçüm sınırlı.** 0.9.0 gerçek Dümen'de zararsız denemeyle ölçüldü (5 Kas: adresle indirme, onaysız yükleme reddi, sert süre). 0.9.1'in blob yolu gerçek Dümen'de fikstür sayfasıyla ölçüldü; gerçek Trendyol fatura penceresi ilk vakadır. Sınav headless Chromium 149 / playwright-core 1.59.1 ile koştu. Gerçek Chrome'da PDF yeni sekmede görüntüleyicide açılır (sınav tarayıcısında indirmeye döner); o dal sınavda resimle ölçüldü, PDF görüntüleyicisiyle ölçülmedi. İlk gerçek vaka: Trendyol fatura gönderimi ve etiket indirme.
