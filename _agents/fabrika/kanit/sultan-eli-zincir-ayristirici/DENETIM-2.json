@@ -1,0 +1,51 @@
+{
+  "tur": 2,
+  "is": "sultan-eli-zincir-ayristirici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T20:17:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-sinav-sonra-sonra.txt (yesil → gecersiz) — tur 1 bulgusu sonrası betik ve sınav değişti (komut konumu, yedek regex kalktı); yeni sonra kaydı var · BASİRET",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-zincir-ayristirici",
+  "dal": "sultan-eli-zincir-ayristirici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34963,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1, komut-konumu denetimi ve ZA14–ZA19 ölçümleriyle kapanmış; ancak ayırıcı yönlendirme hedefinden sonra gelen `eval` sözcüğünü hâlâ komut sanarak insan-izi kapısını yanlış açabilir. İstenen ayrıştırma yönünde çalışılmıştır, fakat bu yeni yanlış-olumlu ciddi kusur çözülmeden üretime hazır değildir; önceki canlı doğrulama eksiği de kutu-dışı olarak açıktır.",
+    "bulgular": [
+      {
+        "ne": "Komut-konumu denetimi her işleci komut sınırı kabul ettiği için yönlendirme hedefi olan `eval` sözcüğünü gerçek komut sanabilir. Örneğin `printf x > eval '<kayıtlı-komut>'` içinde `eval` çalıştırılmaz; buna rağmen ayırıcı kayıtlı komutu eval argümanı olarak çıkarıp kapıyı açabilir.",
+        "kanit": "`kabuk_ayristir` `>` işlecini `(\"o\", \">\")`, ardından yönlendirme hedefi `eval`i sıradan sözcük olarak üretir. `eval_argumanlari` ise önceki tokenın yalnız `o` olmasını yeterli sayar ve sonraki sözcükleri argüman kabul eder; çağıran `any(kom in eval_argumanlari(a) for a in argv)` sonucu doğrudan başarı yapar. Geçerli sonra ölçümündeki ZA14–ZA19 yalnız `printf` argümanı, tırnaklı `;` ve metin içi vakaları kapsar; yönlendirme hedefi vakası yoktur.",
+        "konum": "sultan-eli/scripts/sultan-eli.sh:145-183, 214; olcum-sinav-sonra-tur2-sonra.txt ZA14–ZA19",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önceki B2 kapanmamış: kartın istediği değişiklik-sonrası gerçek canlı `!` koşusu ölçülmemiştir.",
+        "kanit": "İş kartında `canli_gerekir: true` ve `canli_sebep: \"--canli e\"` yazıyor; sağlam manifestteki geçerli kayıtların üçü de `sultan-eli.test.sh` betik ölçümüdür. SKILL.md ayrıca gerçek `!` koşusunun fixture ile üretilemeyeceğini açıkça belirtiyor.",
+        "konum": "iş kartı `canli_gerekir`/`canli_sebep`; KANIT manifesti kayıtları; sultan-eli/SKILL.md 0.1.3 bölümü",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın canlı `!` komutunu çalıştırabildiği oturum"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır; sarı kayıt yoktur, ilan edilen eski sonra kaydı doğru biçimde kanıt dışı bırakılmıştır. Geçerli ölçüm çifti tur-2 öncesinde 43 PASS/9 FAIL, sonrasında 52 PASS/0 FAIL gösteriyor ve önceki B1 için ZA14–ZA19 ile mutant kanıtı sağlıyor; ancak yeni yönlendirme-hedefi vakasını ve kartın zorunlu canlı `!` koşusunu ölçmüyor."
+  }
+}

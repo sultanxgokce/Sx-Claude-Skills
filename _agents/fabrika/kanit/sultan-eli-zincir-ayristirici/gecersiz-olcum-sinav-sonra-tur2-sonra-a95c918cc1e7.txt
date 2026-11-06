@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-sinav-sonra-tur2-sonra.txt
+hedef_sha256: 88b84dd9c051922652bc4bff64612299c74502b67f4a92e9a87641e36b491c59
+hedef_zaman: 2026-11-06T20:16:48+03:00
+hedef_renk: yesil
+neden: tur 2 bulgusu sonrası betik ve sınav değişti (yönlendirme hedefi); yeni sonra kaydı var
+kim: BASİRET
+karsi: -
+zaman: 2026-11-06T20:21:49+03:00

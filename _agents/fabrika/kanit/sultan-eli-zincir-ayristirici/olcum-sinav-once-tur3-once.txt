@@ -1,0 +1,63 @@
+$ bash /tmp/tmp.A5P7wYu67n/sultan-eli.test.sh
+# rc=1 sure=274.7s zaman=2026-11-06T20:26:25+03:00
+--- stdout ---
+PASS  Ö1 kayıt hiç yokken exit 3 (ÖLÇÜLEMEDİ, '1' DEĞİL)
+PASS  Ö2 'insan yok' demiyor
+PASS  Y1 kayıt var ama insan-! yok → exit 1
+PASS  Y2 ajanın tool_use satırı insan sayılmıyor
+PASS  V1 taze insan-! + imza eşleşiyor → exit 0
+PASS  İ1 BAŞKA komutun insan-izi bu kapıyı AÇMIYOR
+PASS  İ2 anlamsız kısa imza reddedildi (kapı gevşetilemez)
+PASS  İ3 imzasız çağrı reddedildi
+PASS  Z1 ESKİ insan-izi kapıyı açmıyor (dünkü onay bugüne geçmez)
+PASS  Z1b pencere genişleyince aynı satır geçiyor (kontrol gerçekten zaman ölçüyor)
+PASS  B1 büyük kayıtta insan-izi bulunuyor (erken-çıkış exit'i ters çevirmiyor)
+PASS  S1 kayıtla aynı saniyede koşan kapı insanı görür
+PASS  S2 gelecek tarihli kayıt hâlâ reddedilir
+PASS  D1 durum her hâlde exit 0 (tanı, kapı değil)
+PASS  D2 durum ölçüm yüzeyini söylüyor
+PASS  K1 'kilit değil korkuluk' uyarısı kodda duruyor
+PASS  K2 kastı durdurmadığı açıkça yazılı
+PASS  ZK1 aynı zincir, kapı geç kaldı (pencere dolmuş) → VAR
+PASS  ZK2 farklı zincir (kök komut metni kayıttakinden farklı) → YOK
+PASS  ZK3 komut metni bir boşluk farklı → YOK (birebir)
+PASS  ZK4 kök kayıttan ÖNCE başlamış → YOK
+PASS  ZK5 aynı komut kayıttan 8 sn SONRA yeniden koşulunca → YOK (replay)
+PASS  ZK6 mutlak üst sınır aşılınca → YOK
+PASS  ZK7 mutant sökülmüş başlangıç koşulu gerçekten dosyayı değiştirdi
+PASS  ZK8 mutantta replay GEÇİYOR (0) → başlangıç koşulu sökülünce ZK5 yakalanır
+PASS  ZK11 mutantta 'kök önce başlamış' senaryosu GEÇİYOR (0) → ZK4 yakalanır
+PASS  ZK12a kök komut = kayıtlı komut + sonek (alt dize) → YOK
+PASS  ZK12b kök komut = önek + kayıtlı komut (eval içinde alt dize) → YOK
+PASS  ZA1 gerçek harness biçimi (tek tırnaklı eval + < /dev/null + pwd -P) → VAR
+FAIL  ZA2 eval argümanı ÇİFT tırnaklı → VAR (alıntı biçimine bağlı değil) (beklenen=0 gelen=1)
+FAIL  ZA3 eval argümanı ters-bölülü (alıntısız) → VAR (beklenen=0 gelen=1)
+PASS  ZA4 harness biçimi ama eval argümanı = önek + komut → YOK (alt dize)
+PASS  ZA5 harness biçimi ama eval argümanı = komut + sonek → YOK (alt dize; çıkış kodu taşınır)
+PASS  ZA6 komut başka bir kabuğun içinde, metni değişmiş (sonekli) koşuyor → YOK
+PASS  ZA8 harness biçimi ama kayıtlı komutta bir boşluk fazla → YOK (birebir)
+FAIL  ZA9a teşhis satırı basıldı (tanı: pid=… başlangıç-kayıt=… eval-argümanı=…) (beklenen=1 gelen=0)
+PASS  ZA9b teşhis komut metnini BASMIYOR
+FAIL  ZA10 mutant (eşleştirme 'içeriyor'a gevşetildi) dosyayı gerçekten değiştirdi (beklenen=1 gelen=0)
+FAIL  ZA11 gevşetilmiş mutantta önek+komut GEÇİYOR (0) → ZA4 yakalar (beklenen=0 gelen=1)
+FAIL  ZA12 mutant (ayrıştırıcı söküldü) dosyayı gerçekten değiştirdi (beklenen=1 gelen=0)
+PASS  ZA13 ayrıştırıcısız mutantta çift tırnaklı eval REDDEDİLİYOR (1) → ZA2 yakalar
+FAIL  ZA14 printf argümanı olarak geçen eval (komut konumunda DEĞİL) → YOK (beklenen=1 gelen=0)
+FAIL  ZA15 tırnaklı ';' sonrası eval (işleç değil, sözcük) → YOK (beklenen=1 gelen=0)
+PASS  ZA16 eval çift tırnaklı metnin İÇİNDE → YOK
+PASS  ZA17 pozitif kontrol: gerçek komut konumunda eval (öncesinde başka komut) → VAR
+FAIL  ZA20 yönlendirme HEDEFİ olan eval (printf x > eval '<komut>') komut değil → YOK (beklenen=1 gelen=0)
+FAIL  ZA21 ekleme yönlendirmesi hedefi eval → YOK (beklenen=1 gelen=0)
+FAIL  ZA18 mutant (komut-konumu denetimi söküldü) dosyayı gerçekten değiştirdi (beklenen=1 gelen=0)
+PASS  ZA19 konum denetimsiz mutantta printf-eval GEÇİYOR (0) → ZA14 yakalar
+FAIL  ZA22 mutant (yönlendirme hedefi de komut konumu sayıldı) dosyayı gerçekten değiştirdi (beklenen=1 gelen=0)
+PASS  ZA23 yönlendirmeyi komut sayan mutantta ZA20 senaryosu GEÇİYOR (0) → ZA20 yakalar
+PASS  ZK13 SULTAN_ELI_ZINCIR_UST tavanın ÜSTÜNE çıkarılamaz → YOK
+PASS  ZK14 tavan mutantı dosyayı gerçekten değiştirdi
+PASS  ZK14b tavan mutantında 9999 GEÇİYOR (0) → ZK13 yakalar
+PASS  ZK9 eski kural: taze kayıt, kök eşleşmesi gerekmeden → VAR
+PASS  ZK10 eski kural: 60 sn yaşlı kayıt, kök yok → YOK (gevşemedi)
+
+── SONUÇ: PASS=44 FAIL=12 ──
+--- stderr ---
+⏳ agir-sira: kanit-sultan-eli-zincir-ayristirici-sinav-once-tur3 176 sn bekledi (yuva 1, load1 17.55)

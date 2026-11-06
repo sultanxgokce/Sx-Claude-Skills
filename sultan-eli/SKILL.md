@@ -1,7 +1,7 @@
 ---
 name: sultan-eli
 type: agent
-version: 0.1.2
+version: 0.1.3
 description: >
   Geri alınamaz kapılar için "bu komutu gerçekten insan mı başlattı?" ölçümü. Sultan'ın `!`
   ile koştuğu komut oturum kaydına `<bash-input>` olarak düşer, ajanın komutu düşmez —
@@ -83,3 +83,12 @@ varsa ve o kök kayıt anında başlamışsa (−2..+5 sn) kayıt kabul edilir, 
 ve yeniden kullanılmış PID geçmez. **Dürüst sınır:** kaydı Claude Code yazar, satıra PID giremez; bağ komut
 metni + başlangıç saatidir. Sınav sarmalayıcıyı `eval '<komut>'` kökü olarak taklit eder (bu oturumun kendi
 zincirinde ölçüldü); gerçek `!` koşusu fixture ile üretilemez → canlı doğrulama Sultan'ın tek `!` komutuyla.
+
+### 0.1.3 · sarmalayıcıyı ayrıştır (6 Kas 20:2x, canlı `!` koşusu "insan-izi YOK" dedi)
+0.1.2 yalnız `eval '<komut>'` biçimini tanıyordu; sınav da kökü öyle kuruyordu (fixtürde yeşil, canlıda kırmızı).
+Artık kök kabuk satırı küçük bir kabuk ayırıcıyla (işleç ve sözcük ayrımı korunur) çözülür, KOMUT KONUMUNDAKİ `eval`in argümanı komutla BİREBİR karşılaştırılır (tek/çift
+tırnak ya da ters bölü fark etmez); `< /dev/null && pwd -P >| …` kuyruğu ve `source … && shopt …` başı sınavda
+ps'ten ölçülen gerçek biçimle kurulur. Alt dize hâlâ geçmez (önek/sonek, başka argümanın içinde geçen metin).
+Eşleşmeyen zincirde kapı SEBEBİ sayılarla basar (`tanı: pid=… başlangıç-kayıt=… eval-argümanı=…`; komut metni
+basılmaz). **Dürüst sınır:** canlı koşunun neden düştüğü KANITLANMADI (iki aday: sarmalayıcı biçimi, kök başlangıç
+saati); bu sürüm birincisini kapatır, ikincisini tanı satırı gösterecek.

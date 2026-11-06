@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "sultan-eli-zincir-ayristirici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T20:06:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-zincir-ayristirici",
+  "dal": "sultan-eli-zincir-ayristirici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22853,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Sarmalayıcı satırı ayrıştırılıp `eval` argümanı kayıtlı komutla karşılaştırılmış ve önce/sonra ölçümünde 6 hata kapatılmış. Ancak ayrıştırıcı `eval` sözcüğünün gerçekten kabuk komutu olduğunu doğrulamadığından çalıştırılmayan metni insan komutu sanabilir; ayrıca gerekli canlı doğrulama bu kutunun dışında kalmıştır.",
+    "bulgular": [
+      {
+        "ne": "Ayrıştırıcı, token dizisindeki her `eval` sözcüğünü komut kabul ediyor; örneğin `printf %s eval '<kayıtlı-komut>'` satırında kayıtlı komut hiç çalıştırılmadığı hâlde eşleşme üretip kapıyı açabilir. Bu, insan-izi kapısında yanlış olumlu ve yetki riski doğurur.",
+        "kanit": "`eval_argumanlari` içinde `if x!=\"eval\": continue` sonrasında önceki tokenın bir kabuk komut sınırı olup olmadığı denetlenmiyor; çağıran kod `any(kom in eval_argumanlari(a) for a in argv)` ile bu sonucu doğrudan başarı sayıyor. ZA6 yalnız komutun başka bir argümanın içinde geçtiği vakayı sınar; bağımsız fakat komut konumunda olmayan `eval` tokenı için kayıt gösterilmemiştir.",
+        "konum": "sultan-eli/scripts/sultan-eli.sh:145-157,177",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kart `--canli e` nedeniyle canlı koşu gerektiriyor; değişiklik sonrası gerçek `!` koşusunun sonucuna ilişkin ölçüm bulunmuyor.",
+        "kanit": "İş kartında `canli_gerekir: true`; manifestte yalnız `sinav-once` ve `sinav-sonra` betik ölçümleri var. SKILL.md de gerçek `!` koşusunun fixture ile üretilemeyeceğini ve canlı doğrulama gerektiğini söylüyor.",
+        "konum": "iş kartı `canli_gerekir`; KANIT manifesti kayıtları; sultan-eli/SKILL.md:85-94",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın canlı `!` komutunu çalıştırabildiği oturum"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır; sarı kayıt yoktur. Önce ölçümü 40 PASS/6 FAIL, sonra ölçümü 46 PASS/0 FAIL göstererek hedeflenen test değişimini ve mutantların yakalandığını kanıtlıyor. Bununla birlikte kanıt fixture tabanlıdır, komut konumu olmayan bağımsız `eval` tokenı vakasını ölçmez ve kartın istediği değişiklik-sonrası canlı `!` doğrulamasını içermez."
+  }
+}
