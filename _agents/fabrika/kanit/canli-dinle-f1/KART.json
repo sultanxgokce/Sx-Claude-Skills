@@ -1,0 +1,47 @@
+{
+  "is": "canli-dinle-f1",
+  "cumle": "canli-dinle becerisi: bir yayın adresini tek komutla alıp 30 sn parçalara bölen, Türkçe yazıya döken (Groq ya da yerel small-q5) ve 10 dakikalık pencerede özet çıkaran araç; sahte HLS fikstürü ve mutantla sınanır",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-11-06T15:59:47+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "e",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "para",
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "Sx canli-dinle/ sınav + _agents/fabrika/kanit/canli-dinle-f1",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canli",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-11-06T15:59:47+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M6RF022S6K0HQB17B9C06YJF",
+  "tahmin_dk": 240,
+  "sayi_uyarilari": [
+    "10 dakikalık"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-06T15:59:52+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
