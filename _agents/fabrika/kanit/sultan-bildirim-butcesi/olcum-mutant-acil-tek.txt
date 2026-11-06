@@ -1,0 +1,39 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: acil 2 kuyruk · rc≠0 + hedef kapı 'acil 2 kuyruk' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh mutant-acil /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
+# rc=1 sure=1.0s zaman=2026-11-06T15:17:57+03:00
+--- stdout ---
+B1 dört istek geçer, beşinci kuyruğa
+  ✓ istek 1 geçti
+  ✓ istek 2 geçti
+  ✓ istek 3 geçti
+  ✓ istek 4 geçti
+  ✓ beşinci rc 10
+  ✓ kuyruk metni sahibine 'KUYRUKTA' der
+  ✓ kuyruk metni 09:00 der
+B2 aynı tür+ad ikinci kez düşmez
+  ✓ k1 tekrar geçer
+  ✓ durumda hâlâ 4/4
+  ✓ k5 tekrar yine kuyruk
+B3 acil: bütçe dolu olsa da geçer, günde 1
+  ✓ acil 1 geçti
+  ✗ acil 2 kuyruk (beklenen=10 gelen=0)
+  ✗ acil istek sayacını artırmadı (beklenen=1 gelen=0)
+  ✗ aynı acil adı ikinci kez hak düşer, kuyruk (beklenen=10 gelen=0)
+B4 ertesi gün sayaç sıfırlanır (İstanbul günü)
+  ✓ ertesi gün yeni istek geçer
+B5 gün sınırı İstanbul'a göre (UTC değil)
+  ✓ 23:59 beşinci kuyruk
+  ✓ 00:01 yeni gün geçer
+B6 özet: kuyruğu tek metin yapar, --isle temizler
+  ✓ özet k5'i taşır
+  ✗ özet ikinci acili taşır (beklenen=1 gelen=0)
+  ✓ isle sonrası kuyruk boş
+B7 girdi kapıları
+  ✓ bilinmeyen tür rc 2 (bilgi satırı bütçeye girmez)
+  ✓ sahip yoksa rc 2
+  ✓ boş ad rc 2
+B8 eşzamanlı 8 istek: tam 4 geçer
+  ✓ geçen sayısı
+  ✓ kuyruk sayısı
+geçti=21 kaldı=4
+--- stderr ---

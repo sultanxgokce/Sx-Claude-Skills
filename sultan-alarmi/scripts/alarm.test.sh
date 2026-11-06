@@ -87,6 +87,13 @@ var "T4 ölçülemeyen kaynaklar açıkça yazılır" "ÖLÇEMEDİM: sabah paket
 ok "T5 rc 0" "0" "$rc"
 o="$(GOREV_RC=7 bash "$AL" tara)"; rc=$?; var "T6 defter okunamazsa OKUNAMADI yazar" "OKUNAMADI: defter" "$o"; ok "T6b biri okunduysa rc 0" "0" "$rc"
 SULTAN_ALARMI_KAPIMDA_SH=/yok GOREV_RC=7 bash "$AL" tara >/dev/null 2>&1; ok "T7 hiçbir kaynak okunamazsa rc 3 ('aday yok' DENMEZ)" "3" "$?"
+echo "— günlük istek bütçesi (acil hakkı)"
+rm -r -- "$T/d"; : > "$T/wa.log"
+bash "$AL" gonder --is "Hat durdu bir" --kim "SERDAR" --ne "tek tık" --telefon >/dev/null 2>&1
+o="$(bash "$AL" gonder --is "Hat durdu iki" --kim "SERDAR" --ne "tek tık" --telefon 2>&1)"
+ok "G8 günde ikinci acil telefona GİTMEZ (yalnız ilki gider)" "1" "$(grep -c . "$T/wa.log")"
+var "G8b ikinci acil kuyruğa yazıldığını söyler" "09:00" "$o"
+ok "G8c kütükte kuyruk kaydı" "1" "$(grep -c '"telefon": "kuyruk"' "$T/d/kutuk.jsonl")"
 echo "— ders"
 cp -r -- "$KOK/.." "$T/b" 2>/dev/null; : > "$T/b/DERSLER.md"; bash "$T/b/scripts/alarm.sh" ders "deneme dersi" >/dev/null; ok "D1 ders tarihli satır olarak eklenir" "- 2027-01-15 — deneme dersi" "$(tail -1 "$T/b/DERSLER.md")"
 echo; echo "sonuç: $gec geçti · $kal kaldı"; [ "$kal" -eq 0 ]
