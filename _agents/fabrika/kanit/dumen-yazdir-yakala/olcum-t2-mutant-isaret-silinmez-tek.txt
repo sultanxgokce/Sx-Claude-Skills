@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: alt belge basıldıktan sonra ana sayfada gizleme · rc≠0 + hedef kapı 'alt belge basıldıktan sonra ana sayfada gizleme' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-sonra-t2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dyk-m5.sh
+# rc=1 sure=5.0s zaman=2026-11-06T11:43:51+03:00
+--- stdout ---
+MUTANT 5: alt belgeyi basınca ana sayfaya konan gizleme işaretleri silinmez
+  ✗ Y4c alt belge basıldıktan sonra ana sayfada gizleme işaretleri ve stil kalmadı  → 1
+SONUÇ: geçti=5 kaldı=1 (ilk kırmızıda duruldu)
+--- stderr ---
