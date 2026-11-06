@@ -1,26 +1,26 @@
 {
   "is": "canli-dinle-f1",
   "arac": "kanit.py/0.9.0",
-  "guncelleme": "2026-11-06T16:10:13+03:00",
+  "guncelleme": "2026-11-06T16:32:24+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "271e0c248d3e3e080f7cde675e16a058b11d9d8d38a72776166c7c567dfe444d",
+      "sha256": "e25e52365743c9ecf7aed56da1321b71a495a653b0278d4cae420d1344172bd4",
       "komut": [
         "bash",
         "canli-dinle/scripts/canli-dinle.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-06T16:08:21+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-11-06T16:27:25+03:00",
+      "sure_sn": 100.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "girdi_anahtar": "e3a7cf1711e3072e108adbed208a449a3c1457772f72ef91b61d5db88282e9e2",
-      "olcum_id": "3c006bccf4d54621854daabf46ed69bc",
-      "olculen_commit": "9b0ece38616db447be55e006eff04f6a2c38e0c8",
+      "girdi_anahtar": "a27f99af9725721f9215d9723f106435d79106275bcb7994e8e841b225091bd7",
+      "olcum_id": "f5e8c516ea6d4fd99ff2902ba1da4c0c",
+      "olculen_commit": "5e4e29f68e805d46bfa8b6d358388b552c58dad8",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -29,7 +29,7 @@
       "etiket": "mutant-kirpma",
       "asama": "sonra",
       "dosya": "olcum-mutant-kirpma-sonra.txt",
-      "sha256": "ef884cc4a8a4d61979f4b152ab92f15a80b104c48802cd63a8ea4ae3e5497279",
+      "sha256": "30e637daea697c3d91b81511941dcce43f5b564c92b3de70a902b7d8e4c7fd5d",
       "komut": [
         "env",
         "MUTANT=kirpma",
@@ -38,8 +38,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-06T16:08:37+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-11-06T16:28:16+03:00",
+      "sure_sn": 50.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
@@ -47,8 +47,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "metin:",
       "hedef_dustu": true,
-      "olcum_id": "70c50817671f44ba8c46b8f46b7e64d8",
-      "olculen_commit": "9b0ece38616db447be55e006eff04f6a2c38e0c8",
+      "olcum_id": "f2c4983f6ddf4b8485a05c2e6331aad8",
+      "olculen_commit": "5e4e29f68e805d46bfa8b6d358388b552c58dad8",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -57,7 +57,7 @@
       "etiket": "mutant-ortu",
       "asama": "sonra",
       "dosya": "olcum-mutant-ortu-sonra.txt",
-      "sha256": "cd720028c981017b56eedc1cac2d4a8439d91506eb4e2bc7c20c41688f786f46",
+      "sha256": "03f3b07938ce012d68eec55501be75b44397b443439dc267178507443517297d",
       "komut": [
         "env",
         "MUTANT=ortu",
@@ -66,8 +66,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-06T16:08:39+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-11-06T16:29:16+03:00",
+      "sure_sn": 60.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
@@ -75,8 +75,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "metin:",
       "hedef_dustu": true,
-      "olcum_id": "5ec3561517924440b6c3a07623750334",
-      "olculen_commit": "9b0ece38616db447be55e006eff04f6a2c38e0c8",
+      "olcum_id": "c9eb53d5f6a74e499873e8b906bfa2ef",
+      "olculen_commit": "5e4e29f68e805d46bfa8b6d358388b552c58dad8",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -85,7 +85,7 @@
       "etiket": "mutant-arac-sirasi",
       "asama": "sonra",
       "dosya": "olcum-mutant-arac-sirasi-sonra.txt",
-      "sha256": "be1f0c206f0fd9d1fff39701b62085cf18a6b3e108b9985dd292472bfe8c74aa",
+      "sha256": "421664987033184f6233099e956f26a91dd8779602c557f9da14b7fd1d5d2a4c",
       "komut": [
         "env",
         "MUTANT=arac-sirasi",
@@ -94,8 +94,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-06T16:08:41+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-11-06T16:30:08+03:00",
+      "sure_sn": 51.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
@@ -103,8 +103,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "streamlink önceliği",
       "hedef_dustu": true,
-      "olcum_id": "9f7356b9fe0c4c64813636d09fc1f8ff",
-      "olculen_commit": "9b0ece38616db447be55e006eff04f6a2c38e0c8",
+      "olcum_id": "6cfd71b0e59041b2952223f38e9e4621",
+      "olculen_commit": "5e4e29f68e805d46bfa8b6d358388b552c58dad8",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -113,7 +113,7 @@
       "etiket": "canli-gercek-yayin",
       "asama": "canli",
       "dosya": "canli-canli-gercek-yayin.txt",
-      "sha256": "ea39779fb893890b6714f8efe7f35e0c969eae51cbd5ef89bcfd391f515c605f",
+      "sha256": "17aabe4e0e07f8ff7fdac83aff13ba82e508d14fb74e51911891d5c40b9641ba",
       "komut": [
         "tail",
         "-n",
@@ -130,22 +130,50 @@
       "en_az": 3,
       "atesleme_sayisi": 3,
       "ilk_atesleme": {
-        "satir": "2026-11-06T16:09:12+0300 parca 0 yazildi kaynak=groq sozcuk=49",
-        "saat": "2026-11-06T16:09:12+0300",
-        "saat_iso": "2026-11-06T16:09:12+03:00"
+        "satir": "2026-11-06T16:24:54+0300 parca 0 yazildi kaynak=groq sozcuk=51",
+        "saat": "2026-11-06T16:24:54+0300",
+        "saat_iso": "2026-11-06T16:24:54+03:00"
       },
       "son_atesleme": {
-        "satir": "2026-11-06T16:09:54+0300 parca 2 yazildi kaynak=groq sozcuk=27",
-        "saat": "2026-11-06T16:09:54+0300",
-        "saat_iso": "2026-11-06T16:09:54+03:00"
+        "satir": "2026-11-06T16:25:36+0300 parca 2 yazildi kaynak=groq sozcuk=31",
+        "saat": "2026-11-06T16:25:36+0300",
+        "saat_iso": "2026-11-06T16:25:36+03:00"
       },
-      "zaman": "2026-11-06T16:10:13+03:00",
+      "zaman": "2026-11-06T16:32:24+03:00",
       "sure_sn": 0.0,
-      "olcum_id": "c275364de99e473d9e9c2a59f1a8c485",
-      "olculen_commit": "5b1d2a2060d58a0d7557dfb5896947d5cd260b6a",
+      "olcum_id": "9f9346fa03384532bd4b17910d2cee22",
+      "olculen_commit": "5e4e29f68e805d46bfa8b6d358388b552c58dad8",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-segment",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-segment-sonra.txt",
+      "sha256": "9d3a4bd941a3ab3d61b04ec53232a31def5d1c0e0f30d624d93e1c7d56eb814d",
+      "komut": [
+        "env",
+        "MUTANT=segment",
+        "bash",
+        "canli-dinle/scripts/canli-dinle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T16:32:24+03:00",
+      "sure_sn": 135.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "yerel rc",
+      "hedef_dustu": true,
+      "olcum_id": "22d56d4468234d719c383f2c2b48ebd7",
+      "olculen_commit": "5e4e29f68e805d46bfa8b6d358388b552c58dad8",
       "olculen_kirli": false,
       "kirli_kurali": 1
     }
   ],
-  "imza": "a19271c756df3b681f31fa379601f0afcf08d0f7ae6144314d48dbae04009431"
+  "imza": "2842050f19553a6c77bcdf00c0b0132485447e4a88e68a583b0d951d6adc3b9f"
 }

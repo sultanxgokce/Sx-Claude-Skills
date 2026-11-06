@@ -1,5 +1,5 @@
 $ bash canli-dinle/scripts/canli-dinle.test.sh
-# rc=0 sure=1.4s zaman=2026-11-06T16:08:21+03:00
+# rc=0 sure=100.7s zaman=2026-11-06T16:27:25+03:00
 --- stdout ---
 ── T1 araç seçimi
   ✓ ikisi de varsa streamlink
@@ -15,8 +15,14 @@ $ bash canli-dinle/scripts/canli-dinle.test.sh
   ✓ pencereler 6 sn: 6+6+2 sözcük
 ── T5 yerel kaynak (sahte whisper.cpp)
   ✓ yerel yol aynı metni verir
+── T5b varsayılanlar
+  ✓ varsayılan 30 sn parça · 5 sn örtüşme · 600 sn pencere
+── T5c hata yolları
+  ✓ Groq ulaşılamazsa traceback yok: parçalar atlanır, rc 2
+  ✓ yakalama hiç parça vermezse rc 1
 ── T6 anahtar
   ✓ anahtar hiçbir çıktıda yok
   ✓ anahtarsız rc 3
-sonuç: 11 geçti, 0 kaldı
+sonuç: 14 geçti, 0 kaldı
 --- stderr ---
+⏳ agir-sira: kanit-canli-dinle-f1-sinav 51 sn bekledi (yuva 2, load1 16.03)
