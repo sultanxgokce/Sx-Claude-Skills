@@ -1,0 +1,36 @@
+{
+  "tur": 4,
+  "is": "sultan-eli-zincir-ayristirici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T20:40:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 4 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-sinav-sonra-sonra.txt (yesil → gecersiz) — tur 1 bulgusu sonrası betik ve sınav değişti (komut konumu, yedek regex kalktı); yeni sonra kaydı var · BASİRET;olcum-sinav-sonra-tur2-sonra.txt (yesil → gecersiz) — tur 2 bulgusu sonrası betik ve sınav değişti (yönlendirme hedefi); yeni sonra kaydı var · BASİRET;olcum-sinav-once-tur3-once.txt (kirmizi → gecersiz) — daraltma + sınav düzeltmesi (cd geçici dizin, artık dosya) sonrası yeni kayıt var · BASİRET;olcum-sinav-sonra-tur3-sonra.txt (yesil → gecersiz) — daraltma + sınav düzeltmesi (cd geçici dizin, artık dosya) sonrası yeni kayıt var · BASİRET",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-zincir-ayristirici",
+  "dal": "sultan-eli-zincir-ayristirici",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45077,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: sınav yönlendirme vakalarından önce geçici dizine geçiyor ve güncel farkta artık `sultan-eli/eval` dosyası yok; önceki B2 kodda kapanmamış olsa da canlı ölçüm açıkça `sultan-eli-ayristirici-canli` kartına ayrıldığı için bu daraltılmış işin kusuru değildir. İstenen sarmal ayrıştırma ve eval argümanının birebir karşılaştırılması gerçek biçim, olumsuz vakalar ve mutantlarla ölçülmüş; geçerli son kayıt 56/56 geçtiğinden kod üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır; sarı kayıt yoktur ve geçersiz ilan edilen dört kayıt hesaba katılmamıştır. Geçerli ölçüm çifti aynı commit üzerinde 44 PASS/12 FAIL'den 56 PASS/0 FAIL'e geçiş gösteriyor; son kayıt gerçek harness biçimini, alıntı çeşitlerini, birebir eşleşmeyi, komut konumunu, yönlendirme hedeflerini ve ilgili mutantların sınav tarafından yakalandığını kapsıyor. Önceki B1, `cd \"$T\"` ile ve artık dosyanın güncel farkta bulunmamasıyla kapanmıştır. Önceki B2'nin canlı `!` ölçümü bu kartta yapılmamış, fakat 20:34 daraltma kararıyla ayrı `sultan-eli-ayristirici-canli` kartına taşınmıştır; bu nedenle mevcut daraltılmış talebin kanıt açığı sayılmamıştır."
+  }
+}
