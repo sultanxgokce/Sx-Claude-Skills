@@ -1,10 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-kapilari/gercek.sh
-# rc=0 sure=0.2s zaman=2026-11-07T01:26:50+03:00
+# rc=3 sure=0.1s zaman=2026-11-07T01:47:13+03:00
 --- stdout ---
-  ✓ A1 kanıt başı: geçerli kayıtlar HEAD c0db6c3d ile aynı (ya da arada yalnız kanıt)
-  ✓ A2 kanıt eksik: 4 geçerli kayıt, manifest doğrulandı
-  ✓ A3 taban: dal origin/main üstünde
-  ✓ A4 ağaç: kanıt dışı commit'lenmemiş izlenen dosya yok
-  ✓ A5 kapsam: kart cümlesi kapsam dışı yol anmıyor
-ÖN GÖZ (mekanik): UYUMLU
+ÖLÇÜLEMEDİ: iş alanı yok (/config/projects/_wt/Nexus-on-goz-olc)
 --- stderr ---

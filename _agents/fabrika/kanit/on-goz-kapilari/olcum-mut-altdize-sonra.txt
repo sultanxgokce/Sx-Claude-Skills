@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S10c · rc≠0 + hedef kapı 'S10c' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-kapilari/kos.sh altdize
-# rc=1 sure=9.5s zaman=2026-11-07T01:26:50+03:00
+# rc=1 sure=9.7s zaman=2026-11-07T01:47:12+03:00
 --- stdout ---
 mutant: altdize
 ── S1 · temiz iş
