@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S3b · rc≠0 + hedef kapı 'S3b' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-kapilari/kos.sh once
-# rc=1 sure=7.6s zaman=2026-11-07T01:20:04+03:00
+# rc=1 sure=11.6s zaman=2026-11-07T01:23:17+03:00
 --- stdout ---
 mutant: once
 ── S1 · temiz iş
@@ -10,6 +10,7 @@ mutant: once
   ✓ S3 HEAD ile ölçülen commit arasında YALNIZ kanıt dosyası → A1 uyumlu (kapının istisnası)
   ✗ S3b 'once' kaydı eski commit'te ölçülmüş olsa da muaf → A1 uyumlu
   ✓ S4 itilmemiş commit → A1 'önce it'
+  ✓ S4r dal başka uzağı (fork) izliyor ve güncel, origin/is1 bayat → A1 'önce it' (izlenen uzak değil origin kıyaslanır)
   ✓ S4p PR başı = HEAD → A1 uyumlu
   ✓ S4q PR başı ≠ HEAD → A1 uyumsuz 'önce it'
   ✓ S11 PR başı okunamıyor (gh 255) → A1 ölçülemedi, hüküm ÖLÇÜLEMEDİ rc 3 (uyumlu sayılmaz) [rc=3]
@@ -26,6 +27,8 @@ mutant: once
 ── A5 · kapsam
   ✓ S10 kart 'dokunulmaz' dediği dosya farkta → A5 uyumsuz
   ✓ S10b aynı cümle, dosya farkta yok → A5 uyumlu
+  ✓ S10c kart 'od.txt dokunulmaz', farkta kod.txt var → A5 uyumlu (alt dize değil, yol bileşeni eşleşir)
+  ✓ S10d kart dizini ('_agents/fabrika') dışarıda sayıyor, farkta o dizinin altındaki kart dosyası → A5 uyumsuz (dizin altı eşleşir)
   ✓ S12 kart yok → A5 ölçülemedi
-── SONUÇ: 17 geçti · 1 kaldı ──
+── SONUÇ: 20 geçti · 1 kaldı ──
 --- stderr ---
