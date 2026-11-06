@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-kapilari/kos.sh
-# rc=0 sure=7.2s zaman=2026-11-07T01:18:50+03:00
+# rc=0 sure=7.2s zaman=2026-11-07T01:19:49+03:00
 --- stdout ---
 ── S1 · temiz iş
   ✓ S1 kanıt HEAD'de, dal itilmiş, tabanın üstünde, ağaç temiz → UYUMLU rc 0 [rc=0]
