@@ -142,16 +142,50 @@ for _ in range(16):
     zincir.append((p,bas,cmd(p)))
     if pp<=1: break
     p=pp
-AYIRAC={"<","&&","||","|",";",">",">|","&","2>&1","2>/dev/null",">/dev/null"}
+def kabuk_ayristir(m):
+    # Minik kabuk sözcük ayırıcı: sözcük ve İŞLEÇ ayrımını korur (shlex tırnaklı noktalı virgül ile gerçek olanı ayırt edemez).
+    # İşleç = tırnaksız & | ; < > ve satır sonu. Dönüş: [("s",değer) | ("o",işleç)]
+    out=[]; i=0; n=len(m)
+    while i<n:
+        c=m[i]
+        if c in " \t": i+=1; continue
+        if c in "&|;<>\n":
+            j=i+1
+            while j<n and m[j] in "&|;<>" and c!="\n" and m[i] in "&|;<>": j+=1
+            out.append(("o",m[i:j])); i=j; continue
+        w=""; tirnakli=False
+        while i<n and m[i] not in " \t&|;<>\n":
+            c=m[i]
+            if c==chr(39):
+                k=m.find(chr(39),i+1)
+                if k<0: return None
+                w+=m[i+1:k]; i=k+1; tirnakli=True
+            elif c==chr(34):
+                i+=1; tirnakli=True
+                while i<n and m[i]!=chr(34):
+                    if m[i]==chr(92) and i+1<n and m[i+1] in (chr(34),chr(92),chr(36),chr(96)): w+=m[i+1]; i+=2
+                    else: w+=m[i]; i+=1
+                if i>=n: return None
+                i+=1
+            elif c=="\\":
+                if i+1>=n: return None
+                w+=m[i+1]; i+=2; tirnakli=True
+            else: w+=c; i+=1
+        if w.isdigit() and not tirnakli and i<n and m[i] in "<>": continue   # 2>&1 gibi fd öneki
+        out.append(("s",w))
+    return out
 def eval_argumanlari(a):
-    # `eval` sözcüğünü izleyen argümanlar (bir sonraki kabuk işlecine kadar) — eval onları boşlukla birleştirip koşar
-    try: t=shlex.split(a)
-    except Exception: return []
+    # KOMUT KONUMUNDAKİ (satır başı ya da bir işleçten/`{`/`(`/`!` den hemen sonra) tırnaksız `eval` sözcüğünün argümanları,
+    # bir sonraki işlece kadar — eval onları boşlukla birleştirip koşar. `printf %s eval …` gibi komut konumunda
+    # olmayan ya da tırnak içinde geçen `eval` hiçbir şey koşmaz → sayılmaz.
+    t=kabuk_ayristir(a)
+    if not t: return []
     out=[]
-    for i,x in enumerate(t):
-        if x!="eval": continue
+    for i,(tur,x) in enumerate(t):
+        if tur!="s" or x!="eval": continue
+        if i>0 and not (t[i-1][0]=="o" or t[i-1][1] in ("{","(","!")): continue
         j=i+1; parca=[]
-        while j<len(t) and t[j] not in AYIRAC: parca.append(t[j]); j+=1
+        while j<len(t) and t[j][0]=="s": parca.append(t[j][1]); j+=1
         if parca: out.append(" ".join(parca))
     return out
 tani=[]
@@ -173,13 +207,11 @@ for satir in son:
     for _,bas,argv in zincir:
         if not (an-2<=bas<=an+5): continue            # kök KAYIT ANINDA başlamış olmalı
         # BİREBİR: argv öğesi komutun kendisi, ya da `eval <komut>` sarmalayıcısının eval ARGÜMANI komutun kendisi.
-        # Sarmalayıcı kabuk satırını (`source … && eval <alıntılı komut> < /dev/null && pwd -P >| …`) shlex ile AYRIŞTIRIRIZ:
+        # Sarmalayıcı kabuk satırını (`source … && eval <alıntılı komut> < /dev/null && pwd -P >| …`) kabuk_ayristir ile AYRIŞTIRIRIZ (yalnız komut konumundaki eval sayılır):
         # alıntı biçimi (tek/çift/ters bölü) fark etmez, eval argümanı çözülüp komutla BİREBİR karşılaştırılır.
         # Başına/sonuna metin eklenmiş farklı komut, başka bir argümanın içinde geçen "eval '…'" metni eşleşmez.
         if any(a==kom for a in argv): sys.exit(0)
         if any(kom in eval_argumanlari(a) for a in argv): sys.exit(0)
-        q=shlex.quote(kom)    # ayrıştırılamayan (dengesiz tırnaklı) satır için eski sınırlı desen
-        if any(re.search(r"(?:^|[\s;&|(])eval\s+"+re.escape(q)+r"(?=$|[\s;&|<>)])",a) for a in argv): sys.exit(0)
     tani.append((an,kom))
 if tani:   # kayıt VAR ama zincir eşleşmedi: sebep sayılarla (komut metni basılmaz) — canlı koşuda teşhis için
     for an,kom in tani:

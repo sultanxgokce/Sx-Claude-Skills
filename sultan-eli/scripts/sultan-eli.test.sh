@@ -198,11 +198,33 @@ check "ZA10 mutant (eşleştirme 'içeriyor'a gevşetildi) dosyayı gerçekten d
 KMA="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MA dogrula --imza $IM"
 gercek "$MA" "$KMA" "$(q "echo onek; $KMA")"
 check "ZA11 gevşetilmiş mutantta önek+komut GEÇİYOR (0) → ZA4 yakalar" "0" "$?"
-MB="$T/mutant-ayristirici2.sh"; sed 's/^    try: t=shlex.split(a)$/    try: t=[]/' "$K" > "$MB"
+MB="$T/mutant-ayristirici2.sh"; sed 's/^    t=kabuk_ayristir(a)$/    t=None/' "$K" > "$MB"
 check "ZA12 mutant (ayrıştırıcı söküldü) dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MB" && echo 0 || echo 1)"
 KMB="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MB dogrula --imza $IM"
 gercek "$MB" "$KMB" "\"$KMB\""
 check "ZA13 ayrıştırıcısız mutantta çift tırnaklı eval REDDEDİLİYOR (1) → ZA2 yakalar" "1" "$?"
+
+# ZA14-ZA19 · KOMUT KONUMU (denetçi tur 1 bulgusu): `eval` sözcüğü komut olarak koşmuyorsa (printf'in argümanı, tırnaklı
+#   noktalı virgülden sonra) kayıtlı komut "koşmuş" sayılmaz. Kapı yine de koşar (kök kabuk onu sonradan çağırır), kayıt 3 sn yaşlı.
+KAPI_CAGRI="sleep 3; SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM"
+sahte() {  # $1=kapı komutu $2=kök kabuğun -c metni → kayıt KOMUT, kök sahte-eval taşıyor
+  _satir "<bash-input>$KOMUT</bash-input>" 0 > "$KOK/proje/z.jsonl"
+  bash -c "$2; r=\$?; exit \$r" >/dev/null 2>&1   # son komut exec'e çevrilmesin (kök cmdline kaybolur)
+}
+sahte "$K" "printf %s eval $(q "$KOMUT") >/dev/null; $KAPI_CAGRI"
+check "ZA14 printf argümanı olarak geçen eval (komut konumunda DEĞİL) → YOK" "1" "$?"
+sahte "$K" "printf %s ';' eval $(q "$KOMUT") >/dev/null; $KAPI_CAGRI"
+check "ZA15 tırnaklı ';' sonrası eval (işleç değil, sözcük) → YOK" "1" "$?"
+sahte "$K" "echo \"x; eval $(q "$KOMUT")\" >/dev/null; $KAPI_CAGRI"
+check "ZA16 eval çift tırnaklı metnin İÇİNDE → YOK" "1" "$?"
+sahte "$K" "printf x >/dev/null; eval $(q "$KOMUT")"
+check "ZA17 pozitif kontrol: gerçek komut konumunda eval (öncesinde başka komut) → VAR" "0" "$?"
+MC="$T/mutant-konum.sh"; sed 's/^        if i>0 and not (t\[i-1\]\[0\]=="o" or t\[i-1\]\[1\] in ("{","(","!")): continue$/        pass/' "$K" > "$MC"
+check "ZA18 mutant (komut-konumu denetimi söküldü) dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MC" && echo 0 || echo 1)"
+KC="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MC dogrula --imza $IM"
+_satir "<bash-input>$KC</bash-input>" 0 > "$KOK/proje/z.jsonl"
+bash -c "printf %s eval $(q "$KC") >/dev/null; sleep 3; SULTAN_ELI_PENCERE=1 bash $MC dogrula --imza $IM; r=\$?; exit \$r" >/dev/null 2>&1
+check "ZA19 konum denetimsiz mutantta printf-eval GEÇİYOR (0) → ZA14 yakalar" "0" "$?"
 
 # ZK13 · üst sınır ortamdan YÜKSELTİLEMEZ: tavan sınav dikişiyle 1 sn, çağıran 9999 vermeye çalışıyor
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 zk "$K" "$KOMUT" 0 "SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 $KOMUT"

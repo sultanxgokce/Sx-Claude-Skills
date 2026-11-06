@@ -86,7 +86,7 @@ zincirinde ölçüldü); gerçek `!` koşusu fixture ile üretilemez → canlı 
 
 ### 0.1.3 · sarmalayıcıyı ayrıştır (6 Kas 20:2x, canlı `!` koşusu "insan-izi YOK" dedi)
 0.1.2 yalnız `eval '<komut>'` biçimini tanıyordu; sınav da kökü öyle kuruyordu (fixtürde yeşil, canlıda kırmızı).
-Artık kök kabuk satırı shlex ile ayrıştırılır, `eval` argümanı çözülüp komutla BİREBİR karşılaştırılır (tek/çift
+Artık kök kabuk satırı küçük bir kabuk ayırıcıyla (işleç ve sözcük ayrımı korunur) çözülür, KOMUT KONUMUNDAKİ `eval`in argümanı komutla BİREBİR karşılaştırılır (tek/çift
 tırnak ya da ters bölü fark etmez); `< /dev/null && pwd -P >| …` kuyruğu ve `source … && shopt …` başı sınavda
 ps'ten ölçülen gerçek biçimle kurulur. Alt dize hâlâ geçmez (önek/sonek, başka argümanın içinde geçen metin).
 Eşleşmeyen zincirde kapı SEBEBİ sayılarla basar (`tanı: pid=… başlangıç-kayıt=… eval-argümanı=…`; komut metni
