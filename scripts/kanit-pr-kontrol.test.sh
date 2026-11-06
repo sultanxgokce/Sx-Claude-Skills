@@ -22,4 +22,8 @@ bash "$K" >/dev/null 2>&1; check "K5 taban verilmezse kullanım hatası → 2" 2
 # mutant: karışık-PR atlaması sökülünce K4 düşmeli (kodlu PR'da bozuk JSON denetlenir → rc 1)
 sed 's/if grep -qv .\^_agents\/. "\$d"/if false/' "$K" > "$T/mut.sh"
 bash "$T/mut.sh" main >/dev/null 2>&1; check "K6 atlama mutantında kodlu PR denetlenir (rc 1) → K4 yakalar" 1 $?
+mk; mkdir -p _agents/is/kanit; echo '{bozuk' > _agents/is/kanit/K.json; git add -A; git commit -q -m k; git checkout -q main; git merge -q --ff-only pr 2>/dev/null; git checkout -q -b pr2; git mv _agents/is/kanit/K.json _agents/is/kanit/K2.json; git commit -q -m r
+bash "$K" main >/dev/null 2>&1; check "K7 yeniden adlandırılmış bozuk kanıt JSON → 1 (R durumu da denetlenir)" 1 $?
+sed 's/--diff-filter=AMR/--diff-filter=AM/' "$K" > "$T/mut2.sh"
+bash "$T/mut2.sh" main >/dev/null 2>&1; check "K8 R filtresi sökülmüş mutantta yeniden adlandırılan bozuk JSON GEÇİYOR (0) → K7 yakalar" 0 $?
 echo "── SONUÇ: PASS=$pass FAIL=$fail ──"; [ "$fail" -eq 0 ]

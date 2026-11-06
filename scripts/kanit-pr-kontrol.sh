@@ -5,7 +5,7 @@
 # Çıkış: 0 temiz ya da atlandı · 1 bozuk JSON · 2 kullanım.
 set -euo pipefail
 taban="${1:-}"; [ -n "$taban" ] || { echo "kullanım: kanit-pr-kontrol.sh <taban-ref>" >&2; exit 2; }
-git diff --name-only --diff-filter=AM "$taban...HEAD" > "${TMPDIR:-/tmp}/kpk-degisen.$$"
+git diff --name-only --diff-filter=AMR "$taban...HEAD" > "${TMPDIR:-/tmp}/kpk-degisen.$$"
 trap 'rm -f "${TMPDIR:-/tmp}/kpk-degisen.$$"' EXIT
 d="${TMPDIR:-/tmp}/kpk-degisen.$$"
 echo "değişen dosya: $(wc -l < "$d")"
