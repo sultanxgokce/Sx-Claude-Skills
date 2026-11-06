@@ -330,6 +330,17 @@ chmod +x "$T/tetik-gozlem.sh"; GK="$T/gozlem.kayit"
 [ "$RC" -eq 1 ] && grep -q "baskasinin-karti" "$KU/is-u8.json" && grep -q "kart zaten var" <<<"$O" && ! ls "$KU"/is-u8.json.acilis-* >/dev/null 2>&1; g $? "U8 🔴 tetik sırasında başkası aynı kimlikle kart açtıysa onun kartı EZİLMEZ (rc 1 'kart zaten var')"
 : > "$GK"; O="$(TETIK_SAHTE_RC=4 FABRIKA_TETIK="$T/tetik-gozlem.sh" GOZLEM_KART="$KU/is-u9.json" GOZLEM_KAYIT="$GK" GOZLEM_YARIS=1 bash "$KT" ac is-u9 --is "tetiği düşen ve eşzamanlı aynı kimlikli sınıflı kart" $SNF --oda sinav-oda 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "baskasinin-karti" "$KU/is-u9.json" && grep -q "GERİ ALINDI" <<<"$O"; g $? "U9 🔴 tetik düşünce geri alma YALNIZ kendi geçici dosyasını siler: başkasının aynı kimlikli kartı SİLİNMEZ"
+# U9k (gorev_…NYQGK8 · SERTABİP 5 Kas): süreç tetikte KESİLİRSE (timeout/Ctrl-C/TERM) geçici dosya kalmaz, kart yayımlanmaz ve "kart açıldı" ÖZETİ BASILMAZ
+#     (eskiden özet yayımdan ÖNCE basılıyordu: sahibi kartı açıldı sanıp elle yerine koydu, geriye 'adı.json.acilis-PID' kaldı).
+cat > "$T/tetik-yavas.sh" <<'SH'
+#!/usr/bin/env bash
+sleep 20
+SH
+chmod +x "$T/tetik-yavas.sh"
+O="$(FABRIKA_TETIK="$T/tetik-yavas.sh" timeout -s TERM 3 bash "$KT" ac is-u9k --is "tetikte kesilen sınıflı kart" $SNF --oda sinav-oda 2>&1)"; RC=$?
+[ "$RC" -ne 0 ] && [ ! -f "$KU/is-u9k.json" ] && ! ls "$KU"/is-u9k.json.acilis-* >/dev/null 2>&1 && ! grep -q "kart açıldı" <<<"$O"; g $? "U9k 🔴 tetikte kesilen açılış: kart yayımlanmadı (rc=$RC), geçici dosya kalmadı, 'kart açıldı' özeti basılmadı"
+O="$(FABRIKA_TETIK="$T/tetik-gozlem.sh" GOZLEM_KART="$KU/is-u9n.json" GOZLEM_KAYIT="$GK" bash "$KT" ac is-u9n --is "kesilmeyen açılış özeti yayımdan sonra basılır" $SNF --oda sinav-oda 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ -f "$KU/is-u9n.json" ] && grep -q "✓ kart açıldı: is-u9n" <<<"$O" && ! ls "$KU"/is-u9n.json.acilis-* >/dev/null 2>&1; g $? "U9n kesilmeyen açılış: özet basıldı, kart yayımlandı, geçici dosya yok"
 # U10 (SERDAR 23 Eki 20:1x · lifeos-kalan): gerçek oda-tetik.sh dağıtımı YALNIZ mektubun HEDEF: alanına göre yapar (ilk 5 satır, oda argümanıyla
 #     büyük/küçük harf farkıyla aynı; yoksa rc 6 'hedef-yok' iadesi). Sahte tetik bu kuralı AYNEN uygular → HEDEF'siz gövde kartı açtırmaz.
 cat > "$T/tetik-hedefli.sh" <<'SH'

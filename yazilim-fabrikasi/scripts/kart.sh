@@ -496,7 +496,12 @@ case "$CMD" in
     #    yayımlanır. Tetik sırasında süreç kesilirse görünür kart KALMAZ (izin isteği gitmemiş kart yok); başarısızlıkta yalnız KENDİ geçici
     #    dosyamız silinir — aynı kimlikle eşzamanlı açılan başkasının kartına dokunulmaz.
     KART_TMP="$KD/$IS.json.acilis-$$"
-    GOREVSIZ="$GOREVSIZ" SINIR="$SINIR" SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    # 🔴 KESİLEN AÇILIŞ (gorev_…NYQGK8 · SERTABİP 5 Kas): süreç tetikte/görev yazımında kesilirse geçici dosya kalıyor, üstelik "✓ kart açıldı"
+    #    çoktan basılmıştı → sahibi kartı AÇILDI sanıp elle yerine koydu. İki kural: (1) çıkış/sinyalde YALNIZ kendi geçici dosyalarımız silinir,
+    #    (2) "kart açıldı" özeti geçici dosyaya yazılır ve ancak YAYIMDAN (ln) sonra basılır.
+    KART_CIKTI="$KART_TMP.cikti"
+    trap 'rm -f -- "$KART_TMP" "$KART_CIKTI"' EXIT; trap 'exit 143' TERM; trap 'exit 130' INT; trap 'exit 129' HUP
+    GOREVSIZ="$GOREVSIZ" SINIR="$SINIR" SENARYO="$SENARYO" KARE_ONAY="$KARE_ONAY" OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" >"$KART_CIKTI" <<'PY'
 import json,sys,datetime
 yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import KURAL_SURUMU
@@ -569,7 +574,7 @@ PY
       rm -f -- "$KART_TMP"; _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — '$ODA' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)"; exit 1
     fi
     ln -- "$KART_TMP" "$KD/$IS.json" 2>/dev/null || { rm -f -- "$KART_TMP"; _hata "kart zaten var: $IS (açılış sırasında başkası açtı; onun kartına dokunulmadı)"; exit 1; }
-    rm -f -- "$KART_TMP"
+    rm -f -- "$KART_TMP"; cat -- "$KART_CIKTI" 2>/dev/null; rm -f -- "$KART_CIKTI"   # özet YALNIZ yayımdan sonra basılır
     [ -n "$GOREV" ] && [ "$GYAZILDI" = 0 ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
     # 0.24.0: aynı ajanın BAŞKA açık, görev bağlı kartı varsa o görev 'bekliyor' + 'başka işe geçti: <bu kart>' (bırakma anı araçta)
     if [ -n "$GOREV" ]; then
