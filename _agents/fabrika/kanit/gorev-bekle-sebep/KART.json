@@ -34,6 +34,20 @@
       "zaman": "2026-11-06T23:31:13+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T23:32:43+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HEZARFEN",
+      "oturum": "ulak_1793997242-23d84e66",
+      "gerekce": "SERDAR kararı: bulgu 2 → 1, ölçülmemiş gösterim kartın 62/62 tarayıcı sınavıyla kanıtlandı",
+      "zaman": "2026-11-06T23:34:43+03:00"
     }
   ]
 }
