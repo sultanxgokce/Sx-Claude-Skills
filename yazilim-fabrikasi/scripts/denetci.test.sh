@@ -759,6 +759,10 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z
 # Z9b (28 Eki, bugün 5 kez rc 3): reddedilen ikinci koşum 'ÖLÇÜLEMEDİ' zili ÇALMAZ (yazana da reise de) — öteki koşum kendi zilini çalar
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
 [ $RC -eq 3 ] && [ ! -s "$ZL" ] && grep -q "denetçi zili çalınmadı: başka koşum sürüyor" "$T/z-err"; g $? "Z9b kilit reddi rc 3 verir ama zil ÇALMAZ (yazana ve reise), sebep stderr'de"
+# Z9e (KS0Z3H, #1429: 3 sahte zil): istem tavanı aşımı (İŞİ BÖL, rc 1) model ÇAĞRILMADAN biter ve tur yanmaz → 'tur N: —/— · rc 1 · düzelt' zili ÇALMAZ; sebep stderr'de
+kartac is-zbol; bash "$K" olcum is-zbol olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- true >/dev/null 2>&1
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" DENETCI_ISTEM_TAVAN=1 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zbol --diff "$T/zd.patch" >"$T/z-out" 2>&1; RC=$?
+[ $RC -eq 1 ] && grep -q "İŞİ BÖL" "$T/z-out" && [ ! -s "$ZL" ] && grep -q "denetçi zili çalınmadı: istem tavanı aşıldı" "$T/z-out" && ! ls "$T/_agents/fabrika/kanit/is-zbol"/DENETIM-*.json >/dev/null 2>&1; g $? "Z9e istem tavanı aşımı (İŞİ BÖL) rc 1 verir, tur yakmaz, zil ÇALMAZ (yazana ve reise), sebep ekranda"
 # Z12: gerçek ölçülemedi zili sebebi taşır (yalnız 'ÖLÇÜLEMEDİ' teşhis değildi)
 : > "$ZL"; SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZY" DENETCI_ZAMAN_ASIMI=1 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-za --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?
 [ $RC -eq 3 ] && grep -q -- "rc 3 · ZAMAN AŞIMI.* · sebep: .*ZAMAN AŞIMI" "$ZL"; g $? "Z9c rc 3 zili sebep satırını taşır (· sebep: …)"
@@ -885,6 +889,7 @@ mut "sure-dogrulanmaz" 's@ZA=900 ;; esac@: ;; esac@'
 mut "bayat-iz-silinmez" 's@; rm -f "$_iz"$@@'
 mut "canli-iz-ezilir" '/başka denetçi koşuyor/s@; exit 3$@@'
 mut "kilit-red-zil-calar" 's@KILIT_RED=1; exit 3@exit 3@'
+mut "bol-red-zil-calar" 's@BOL_RED=1; exit 1@exit 1@'
 mut "sebep-bayt-kesilir" 's@| python3 -I -c .import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().decode("utf-8", "replace")\[:140\].encode("utf-8")).)"@| cut -c1-140)"@'
 mut "sebep-zile-girmez" 's@^  case "$rc" in 2|3|4) \[ -n "$SON_HATA" \]@  case "$rc" in 9) [ -n "$SON_HATA" ]@'
 mut "asim-ham-yazilmaz" 's@^if \[ "$DRC" -eq 124 \]; then$@if false; then@'
