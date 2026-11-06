@@ -42,7 +42,8 @@ def kanit_kayitlari(dz):
         return None
     sys.path.insert(0, HDIR)
     from kanit import etkin_kayitlar
-    return etkin_kayitlar(json.load(open(p, encoding="utf-8")))
+    # etkin_kayitlar süzmez, İŞARETLER: geçersiz ilan edilen kayıt etkin_renk='gecersiz', ilanın kendisi 'ilan' — ikisi de kanıt sayılmaz
+    return [k for k in etkin_kayitlar(json.load(open(p, encoding="utf-8"))) if k.get("etkin_renk") not in ("gecersiz", "ilan")]
 
 
 def a1(depo, kayitlar, pr):
@@ -195,7 +196,7 @@ def main():
             print(f"  {isaret[k['durum']]} {k['ad']}: {k['satirlar'][0] if k['satirlar'] else ''}")
             for s in k["satirlar"][1:]:
                 print(f"      {s}")
-        print(f"ÖN GÖZ (mekanik): {hukum.upper()}" + ("" if hukum == "uyumlu" else " — ölçülemeyen uyumlu sayılmaz" if hukum == "olculemedi" else " — göze göndermeden önce düzelt"))
+        print(f"ÖN GÖZ (mekanik): {dict(uyumlu='UYUMLU', uyumsuz='UYUMSUZ', olculemedi='ÖLÇÜLEMEDİ')[hukum]}" + ("" if hukum == "uyumlu" else " — ölçülemeyen uyumlu sayılmaz" if hukum == "olculemedi" else " — göze göndermeden önce düzelt"))
     return {"uyumlu": 0, "uyumsuz": 1, "olculemedi": 3}[hukum]
 
 
