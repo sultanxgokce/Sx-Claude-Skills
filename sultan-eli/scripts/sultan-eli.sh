@@ -99,6 +99,77 @@ sys.exit(1)
   return 0
 }
 
+# ── ZİNCİR KİMLİĞİ (SERDAR kararı 6 Kas 2026, görev …YC9DS) ─────────────────────────────
+# SORUN: kayıt komutun BAŞINDA düşer, kapı zincirin SONUNDA koşabilir (`cd x && uzun-is && kapi`).
+#   Pencere 45 sn kayıt anından sayıldığı için geç kalan kapı meşru Sultan'ı reddediyordu
+#   (fixture: kayıt 5 sn → VAR, 60 sn → YOK). Pencereyi büyütmek kapıyı GEVŞETİRDİ → yapılmadı.
+# ÇÖZÜM = ZAMAN değil KİMLİK bağı: kapının kendi süreç zincirinde, komut satırı kayıttaki insan
+#   komutunu BİREBİR taşıyan bir kök varsa ve o kök KAYIT ANINDA başlamışsa (-2..+5 sn) kayıt kabul
+#   edilir (mutlak üst sınır 10 dk). Yoksa eski 45 sn kuralı AYNEN geçerlidir (bu bölüm yalnız ekler).
+#   Başka komuttan, aynı komutun sonradan yeniden koşusundan, yeniden kullanılmış PID'den geçmez.
+# 🔴 DÜRÜST SINIR: kaydı Claude Code yazar; satıra PID giremez, o yüzden bağ komut METNİ + başlangıç
+#   saatidir. Gerçek `!` sarmalayıcısının komut satırını nasıl taşıdığı fixture ile ÖLÇÜLEMEZ:
+#   birebir ya da kabuk-tırnaklı (shlex) biçim aranır; eşleşmezse eski kurala düşer (regresyon yok).
+ZINCIR_TAVAN=600   # saniye: MUTLAK üst sınır; ortam değişkeni yalnız DÜŞÜREBİLİR, yükseltemez
+# Sınav dikişi (denetci.sh emsali): tavan yalnız SULTAN_ELI_SINAV=1 iken sınav için düşürülebilir.
+[ "${SULTAN_ELI_SINAV:-}" = 1 ] && case "${SULTAN_ELI_SINAV_TAVAN:-}" in [1-9]|[1-9][0-9]*) ZINCIR_TAVAN="$SULTAN_ELI_SINAV_TAVAN" ;; esac
+ZINCIR_UST="${SULTAN_ELI_ZINCIR_UST:-$ZINCIR_TAVAN}"
+case "$ZINCIR_UST" in ''|*[!0-9]*) ZINCIR_UST="$ZINCIR_TAVAN" ;; esac
+[ "$ZINCIR_UST" -le "$ZINCIR_TAVAN" ] || ZINCIR_UST="$ZINCIR_TAVAN"
+
+_zincir() {
+  local imza="$1"
+  while IFS= read -r dosya; do
+    [ -n "$dosya" ] || continue
+    python3 -c '
+import json,sys,os,re,shlex,collections,time,datetime
+dosya,imza,pid,ust=sys.argv[1],sys.argv[2],int(sys.argv[3]),float(sys.argv[4])
+simdi=time.time()
+try: tick=os.sysconf("SC_CLK_TCK"); btime=[float(l.split()[1]) for l in open("/proc/stat") if l.startswith("btime")][0]
+except Exception: sys.exit(1)
+def ata(p):
+    try:
+        s=open("/proc/%d/stat"%p).read(); r=s.rsplit(")",1)[1].split()
+        return int(r[1]), btime+int(r[19])/tick     # ppid, başlangıç (epoch sn)
+    except Exception: return 0,0.0
+def cmd(p):
+    try: return open("/proc/%d/cmdline"%p,"rb").read().decode("utf-8","replace").split("\0")
+    except Exception: return []
+zincir=[]; p=pid
+for _ in range(16):
+    pp,bas=ata(p)
+    if not bas: break
+    zincir.append((p,bas,cmd(p)))
+    if pp<=1: break
+    p=pp
+try: son=collections.deque(open(dosya,encoding="utf-8",errors="replace"),maxlen=800)
+except Exception: sys.exit(1)
+for satir in son:
+    try: o=json.loads(satir)
+    except Exception: continue
+    ic=o.get("message",{}).get("content")
+    if not isinstance(ic,str): continue
+    m=re.search(r"<bash-input>(.*?)</bash-input>",ic,re.S)
+    if not m or imza not in m.group(1): continue
+    kom=m.group(1)
+    ts=o.get("timestamp")
+    if not ts: continue
+    try: an=datetime.datetime.fromisoformat(ts.replace("Z","+00:00")).timestamp()
+    except Exception: continue
+    if not (0<=simdi-an<=ust): continue
+    for _,bas,argv in zincir:
+        if not (an-2<=bas<=an+5): continue            # kök KAYIT ANINDA başlamış olmalı
+        # BİREBİR: argv öğesi komutun kendisi, ya da `eval <tırnaklı komut>` sarmalayıcısı (başına/sonuna
+        # metin eklenmiş farklı komut alt dize olarak GEÇMEZ; tırnaklı biçimin sonu sınırlandırılmıştır).
+        q=shlex.quote(kom)
+        if any(a==kom for a in argv): sys.exit(0)
+        if any(re.search(r"(?:^|[\s;&|(])eval\s+"+re.escape(q)+r"(?=$|[\s;&|<>)])",a) for a in argv): sys.exit(0)
+sys.exit(1)
+' "$dosya" "$imza" "$$" "$ZINCIR_UST" && return 0
+  done <<< "$(_kayitlar)"
+  return 1
+}
+
 case "${1:-}" in
   dogrula)
     IMZA=""
@@ -114,8 +185,11 @@ case "${1:-}" in
     # sonra ajan bu kapıdan geçebilirdi. İmza, izi KOMUTA bağlar.
     [ ${#IMZA} -ge 3 ] || { echo "HATA: --imza en az 3 karakter olmalı (kapının kendi komut parçası)" >&2; exit 2; }
     _dogrula "$IMZA"; RC=$?
+    ZINCIRDEN=0
+    if [ "$RC" = 1 ] && _zincir "$IMZA"; then RC=0; ZINCIRDEN=1; fi
     case "$RC" in
-      0) echo "insan-izi VAR: son ${PENCERE}sn içinde '$IMZA' geçen bir '!' komutu kayıtta" ;;
+      0) if [ "$ZINCIRDEN" = 1 ]; then echo "insan-izi VAR (zincir kimliği): '$IMZA' geçen '!' komutunun kökü bu zincirde, kayıt anında başlamış"
+         else echo "insan-izi VAR: son ${PENCERE}sn içinde '$IMZA' geçen bir '!' komutu kayıtta"; fi ;;
       1) echo "insan-izi YOK: son ${PENCERE}sn içinde '$IMZA' geçen bir '!' komutu kayıtta bulunamadı" >&2 ;;
       3) echo "ÖLÇÜLEMEDİ: oturum kaydı görünmüyor ($KOK) — bu 'insan yok' DEMEK DEĞİLDİR" >&2 ;;
     esac

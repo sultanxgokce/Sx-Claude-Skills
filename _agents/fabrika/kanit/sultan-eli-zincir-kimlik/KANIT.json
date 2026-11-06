@@ -1,0 +1,71 @@
+{
+  "is": "sultan-eli-zincir-kimlik",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T19:20:08+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-sonra.txt",
+      "sha256": "e4d28cda0203b35db905c5040ce5db1f6671d8ebcbba220dafcb1f98f7811a3b",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:15:20+03:00",
+      "sure_sn": 27.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "aa35c123858a0a286ded364d35948443820efa08d130b2ea081eb3bd9d7435a5",
+      "olcum_id": "c9dd642185044df699f196291bd4ed69",
+      "olculen_commit": "a0c74df12643b044d0bf2090d9ea4d57e61915bc",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-once",
+      "asama": "once",
+      "dosya": "olcum-sinav-once-once.txt",
+      "sha256": "dd58e259a9eb20f60d5293ca63cae734f58034e7d563d54d4e709527d2a94793",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/1065a6f5-8463-464e-a2f8-0550f8ee5658/scratchpad/once.Av71/sultan-eli.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T19:16:02+03:00",
+      "sure_sn": 26.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "d676d3841297c3eb3a40ae72b4b9a526f2448bbe9591fe0c11f0bbd5e5a78bf8",
+      "olcum_id": "1ee80b799ff34d67867e2fc2dcc1e851",
+      "olculen_commit": "a0c74df12643b044d0bf2090d9ea4d57e61915bc",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-tur2-sonra.txt",
+      "sha256": "09c37f42dc160a5246d0934c63554cfb8dd2329747114f572e05656db1369ec2",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:20:08+03:00",
+      "sure_sn": 41.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "87491e6c58b265d0701bacff0f59fc34e87ab3ba7fd4cf7db0b19aece33e7deb",
+      "olcum_id": "cea0b6804a3a40f98081ef66fade4ea5",
+      "olculen_commit": "799101fee32550d4628b4039a40670326acc8ddb",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "55ea4cc6b265a5021e17c91c9d64e33d7f0b23be96a63f226ff3a1cfd268b8da"
+}

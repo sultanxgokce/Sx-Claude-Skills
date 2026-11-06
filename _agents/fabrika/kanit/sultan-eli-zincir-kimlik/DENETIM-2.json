@@ -1,0 +1,44 @@
+{
+  "tur": 2,
+  "is": "sultan-eli-zincir-kimlik",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T19:20:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-zincir-kimlik",
+  "dal": "sultan-eli-zincir-kimlik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31559,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, önceki turun B1’i tam argv/eval sınırı ve ZK12a-b ile, B2’si 600 saniyelik sert tavan ve ZK13/ZK14 mutasyon sınavıyla kapanmış; son ölçüm 33/33 yeşildir. Kod talepteki kök komut kimliği bağını gevşetmeden kurmuş ve üretime hazırdır; yalnız B3, gerçek `!` sarmalayıcısının Sultan’ın canlı Claude Code oturumunda doğrulanması olarak kutu dışında açıktır.",
+    "bulgular": [
+      {
+        "ne": "Önceki turun B3’ü kapanmadı: gerçek Claude Code `!` sarmalayıcısının süreç komut satırını zincir eşleştiricinin kabul ettiği biçimde taşıdığı canlı yüzeyde doğrulanmamış.",
+        "kanit": "SKILL.md, gerçek `!` koşusunun fixture ile üretilemediğini ve Sultan’ın tek `!` komutuyla canlı doğrulama gerektiğini açıkça belirtiyor. Manifestteki üç komut da test betiğini doğrudan `bash` ile çalıştırıyor; canlı `!` ölçümü yok.",
+        "konum": "sultan-eli/SKILL.md:Zincir kimliği bölümü; kanıt manifesti sinav-once, sinav-sonra ve sinav-sonra-tur2 kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın canlı Claude Code oturumu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti eski ZK1 hatasının FAIL’den PASS’e döndüğünü gösteriyor; güncel committeki ikinci sonra ölçümü 33/33 yeşil. B1’in kapanışı ZK12a-b alt-dize saldırı sınavlarıyla, B2’nin kapanışı ZK13 ve tavanı kaldıran mutantı yakalayan ZK14/ZK14b ile ölçülmüş; B3 için canlı ölçüm bulunmuyor."
+  }
+}
