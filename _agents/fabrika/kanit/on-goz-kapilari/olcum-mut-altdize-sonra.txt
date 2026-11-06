@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S10c · rc≠0 + hedef kapı 'S10c' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-kapilari/kos.sh altdize
-# rc=1 sure=8.8s zaman=2026-11-07T01:23:46+03:00
+# rc=1 sure=9.5s zaman=2026-11-07T01:26:50+03:00
 --- stdout ---
 mutant: altdize
 ── S1 · temiz iş
@@ -8,6 +8,7 @@ mutant: altdize
 ── A1 · kanıt başı
   ✓ S2 kanıttan sonra kod commit'i → A1 UYUMSUZ, iki sha ve dosya adı yazılır, rc 1
   ✓ S3 HEAD ile ölçülen commit arasında YALNIZ kanıt dosyası → A1 uyumlu (kapının istisnası)
+  ✓ S3c _agents/fabrika/kanit dışındaki bir 'kanit' dizini kanıt sayılmaz → A1 uyumsuz (A4 ve kanit.py ile aynı tanım)
   ✓ S3b 'once' kaydı eski commit'te ölçülmüş olsa da muaf → A1 uyumlu
   ✓ S4 itilmemiş commit → A1 'önce it'
   ✓ S4r dal başka uzağı (fork) izliyor ve güncel, origin/is1 bayat → A1 'önce it' (izlenen uzak değil origin kıyaslanır)
@@ -16,6 +17,7 @@ mutant: altdize
   ✓ S11 PR başı okunamıyor (gh 255) → A1 ölçülemedi, hüküm ÖLÇÜLEMEDİ rc 3 (uyumlu sayılmaz) [rc=3]
 ── A2 · kanıt eksik
   ✓ S5 kanıt dizini yok → A2 'kanıt yok'
+  ✓ S5b KANIT.json bozuk → A1/A2 ölçülemedi, rc 3 ('kanıt yok' rc 1 DEĞİL) [rc=3]
   ✓ S6 tek gerçek ölçüm geçersiz ilan edildi → A2 uyumsuz (mutant gerçek ölçüm sayılmaz) [⛔ geçersiz ilan edildi: olcum-sinav-sonra.txt (yesil → gecersiz) · S · sınavda ge�]
   ✓ S7 mutant başka kapıyı düşürdü, hedef kapı (X1) düşmedi → A2 uyumsuz (kanit.sh hedefsiz mutantı zaten kaydetmez)
 ── A3 · taban
@@ -30,5 +32,5 @@ mutant: altdize
   ✗ S10c kart 'od.txt dokunulmaz', farkta kod.txt var → A5 uyumlu (alt dize değil, yol bileşeni eşleşir)
   ✓ S10d kart dizini ('_agents/fabrika') dışarıda sayıyor, farkta o dizinin altındaki kart dosyası → A5 uyumsuz (dizin altı eşleşir)
   ✓ S12 kart yok → A5 ölçülemedi
-── SONUÇ: 20 geçti · 1 kaldı ──
+── SONUÇ: 22 geçti · 1 kaldı ──
 --- stderr ---
