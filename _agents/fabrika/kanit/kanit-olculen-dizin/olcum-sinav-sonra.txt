@@ -1,0 +1,54 @@
+$ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
+# rc=0 sure=2.4s zaman=2026-11-06T19:06:45+03:00
+--- stdout ---
+════ K1 · temiz ağaç: olculen_commit = HEAD, olculen_kirli = False ════
+  ✓ olculen_commit HEAD ile aynı
+  ✓ olculen_kirli=False
+════ K2 · izlenen dosyada commit'siz değişiklik: olculen_kirli = True ════
+  ✓ olculen_kirli=True
+════ K3 · imza bozulmadı (dogrula rc=0) ════
+  ✓ dogrula rc=0
+════ K4 · kod temiz, izlenen kanıt dosyası değişmiş: kirli SAYILMAZ (aracın kendi yazımı koda dair bir şey söylemez) ════
+  ✓ temiz başta ilk kayıt False
+  ✓ aynı başta ikinci kayıt da False (KANIT.json izlenen ve değişmiş)
+  ✓ aynı etiket yeniden: izlenen ölçüm dosyası değişse de False
+════ K5 · kanıt dışındaki izlenen dosya değişince yine kirli ════
+  ✓ kanıt dışı değişiklik True (dışlama yalnız kanıt dizini)
+════ K6 · kirli ağaç, izinsiz: ölçüm KOŞMAZ (rc 2) ════
+  ✓ rc=2
+  ✓ kayıt yazılmadı
+════ K7 · izin gerekçesi 15 karakterden kısa → rc 2 ════
+  ✓ kısa gerekçe rc=2
+════ K8 · izinli kayıt kirli_kurali + kirli_izin taşır; temiz ağaçta izin yazılmaz ════
+  ✓ kirli_kurali=1
+  ✓ kirli_izin yazıldı
+  ✓ temiz ağaçta kirli_kurali=1
+  ✓ temiz ağaçta kirli_izin yazılmadı
+════ K9 · dosya kaydı kirli ağaçta İZİNSİZ yazılmaz (rc 2); izinliyse kirli_kurali + kirli_izin taşır ════
+  ✓ K9 izinsiz kirli dosya kaydı rc=2
+  ✓ K9 izinsiz dosya kaydı YAZILMADI
+  ✓ K9 izinli dosya kaydı yazıldı
+  ✓ K9 dosya kaydında kirli_kurali=1
+  ✓ K9 dosya kaydında gerekçe yazıldı
+════ K10 · canlı kaydı kirli ağaçta İZİNSİZ yazılmaz (rc 2); izinliyse kirli_kurali + kirli_izin taşır ════
+  ✓ K10 izinsiz kirli canlı kaydı rc=2
+  ✓ K10 izinsiz canlı kaydı YAZILMADI
+  ✓ K10 izinli canlı kaydı yazıldı
+  ✓ K10 canlı kaydında kirli_kurali=1
+  ✓ K10 canlı kaydında gerekçe yazıldı
+════ K11 · temiz ağaçta dosya ve canlı izinsiz yazılır, damga taşır (gereksiz engel yok) ════
+  ✓ K11 temiz ağaçta dosya kaydı izinsiz yazıldı
+  ✓ K11 damga var, izin yok
+  ✓ K11 temiz ağaçta canlı kaydı izinsiz yazıldı
+════ K12 · --olculen-dizin: ölçüm geçici kopyada koşar, kayıt O ağacın kimliğini taşır (görev …PGT8Z1) ════
+  ✓ K12 olculen_commit ölçülen kopyanın HEAD'i
+  ✓ K12 çalışılan dalın ucu yazılmadı
+  ✓ K12 kayıt olculen_dizin taşır
+  ✓ K12 temiz kopya olculen_kirli=False
+  ✓ K12 kirli kopya izinsiz rc=2 (kapı kopyaya bakar)
+  ✓ K12 kirli kopya izinli: olculen_kirli=True
+  ✓ K12 git ağacı olmayan dizin rc=2, ölçüm koşmaz
+  ✓ K12 kayıt yazılmadı
+  ✓ K12 imza bozulmadı (dogrula rc=0)
+── SONUÇ: 37 geçti · 0 kaldı ──
+--- stderr ---
