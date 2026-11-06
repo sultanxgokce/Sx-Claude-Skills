@@ -73,7 +73,12 @@ def groq_yaz(wav, anh, ofset):
             j = json.load(urllib.request.urlopen(r, timeout=60))
             return [(ofset + w["start"], w["word"]) for w in j.get("words", [])]
         except urllib.error.HTTPError as e:
-            if e.code == 429 and deneme < 3:
+            if (e.code == 429 or e.code >= 500) and deneme < 3:
+                time.sleep(2 * (deneme + 1))
+                continue
+            raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
+            if deneme < 3:
                 time.sleep(2 * (deneme + 1))
                 continue
             raise
@@ -91,7 +96,18 @@ def yerel_yaz(wav, ofset):
     subprocess.run([cli, "-m", model, "-l", "tr", "-t", "6", "-oj", "-of", onek, "-f", wav],
                    check=True, capture_output=True, env=env)
     j = json.load(open(onek + ".json"))
-    return [(ofset + s["offsets"]["from"] / 1000.0, s["text"].strip()) for s in j.get("transcription", []) if s["text"].strip()]
+    return [(t, k) for s in j.get("transcription", []) for t, k in segment_kelimeleri(s, ofset)]
+
+
+def segment_kelimeleri(s, ofset):
+    """Segmenti kelimelere böler; zamanı segmentin [from,to] aralığına eşit paylaştırır (yerelde kelime zamanı yok).
+    Sınırı aşan segmentin her kelimesi kendi zamanıyla sahiplenilir: ne kaybolur ne ikilenir."""
+    k = s["text"].split()
+    if not k:
+        return []
+    b, e = s["offsets"]["from"] / 1000.0, s["offsets"]["to"] / 1000.0
+    adim = (e - b) / len(k) if e > b else 0.0
+    return [(ofset + b + n * adim, w) for n, w in enumerate(k)]
 
 
 def sahip_penceresi(i, parca_sn, ortu_sn, son):
@@ -127,7 +143,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("adres")
     ap.add_argument("--kaynak", choices=["groq", "yerel"], default="groq")
-    ap.add_argument("--not", dest="notu", action="store_true", help="10 dk pencerede özet de çıkar")
+    ap.add_argument("--ozetsiz", dest="ozetsiz", action="store_true", help="10 dk pencere özetini kapat (varsayılan: açık)")
     ap.add_argument("--sure", type=int, default=0, help="en çok bu kadar sn dinle (0 = yayın bitene dek)")
     ap.add_argument("--parca-sn", type=int, default=30)
     ap.add_argument("--ortu-sn", type=int, default=5)
@@ -144,12 +160,18 @@ def main(argv=None):
         print("arac=" + arac)
         print(kom)
         return 0
-    anh = anahtar() if (a.kaynak == "groq" or a.notu) else None
-    if (a.kaynak == "groq" or a.notu) and not anh:
-        print("✗ GROQ_API_KEY bulunamadı (süreç ortamı ya da ~/.config/cortex-access.env); --kaynak yerel ile özetsiz çalışır", file=sys.stderr)
+    a.notu = not a.ozetsiz
+    anh = anahtar()
+    if a.kaynak == "groq" and not anh:
+        print("✗ GROQ_API_KEY bulunamadı (süreç ortamı ya da ~/.config/cortex-access.env); --kaynak yerel ile anahtarsız çalışır", file=sys.stderr)
         return 3
+    if a.notu and not anh:
+        print("! GROQ_API_KEY yok: özet kapatıldı, yalnız döküm alınacak", file=sys.stderr)
+        a.notu = False
     print(f"yakalama: {arac} · çıktı: {dizin}", file=sys.stderr)
-    yakala = subprocess.Popen(["bash", "-c", "set -o pipefail; " + kom], stderr=subprocess.PIPE, text=True)
+    hata_dosyasi = open(os.path.join(dizin, "yakala.err"), "w")
+    yakala = subprocess.Popen(["bash", "-c", "set -o pipefail; " + kom], stderr=hata_dosyasi, text=True)
+    atlanan = 0
     metin_f = open(os.path.join(dizin, "metin.txt"), "a", buffering=1)
     sozluk, i, penc_bas, ozet_no = [], 0, 0, 0
 
@@ -181,12 +203,22 @@ def main(argv=None):
         w = parca(i)
         if i and os.path.exists(onceki):  # örtüşme: önceki parçanın son ortu_sn saniyesi
             birlesik = w + ".ortulu.wav"
-            subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-sseof", f"-{a.ortu_sn}", "-i", onceki, "-i", w,
-                            "-filter_complex", "[0:a][1:a]concat=n=2:v=0:a=1", "-ar", "16000", "-ac", "1", birlesik], check=True)
+            r = subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-sseof", f"-{a.ortu_sn}", "-i", onceki, "-i", w,
+                                "-filter_complex", "[0:a][1:a]concat=n=2:v=0:a=1", "-ar", "16000", "-ac", "1", birlesik])
+            if r.returncode != 0:
+                birlesik = w + ".yok"
             girdi, ofset = birlesik, i * a.parca_sn - a.ortu_sn
         else:
             girdi, ofset = w, i * a.parca_sn
-        soz = groq_yaz(girdi, anh, ofset) if a.kaynak == "groq" else yerel_yaz(girdi, ofset)
+        try:
+            if i and os.path.exists(onceki) and not os.path.exists(girdi):
+                raise RuntimeError("örtüşme dosyası yok")
+            soz = groq_yaz(girdi, anh, ofset) if a.kaynak == "groq" else yerel_yaz(girdi, ofset)
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError, RuntimeError, subprocess.CalledProcessError, KeyError, ValueError) as e:
+            olay(dizin, f"parca {i} ATLANDI hata={type(e).__name__}")
+            atlanan += 1
+            i += 1
+            continue
         soz = kirp(soz, i, a.parca_sn, a.ortu_sn, son)
         for _, kel in soz:
             metin_f.write(kel.strip() + " ")
@@ -201,11 +233,18 @@ def main(argv=None):
     if sozluk:
         ozet_yaz(sozluk, ozet_no)
     metin_f.close()
-    hata = yakala.stderr.read() if yakala.stderr else ""
+    hata_dosyasi.close()
+    rc = yakala.wait()
+    hata = open(os.path.join(dizin, "yakala.err")).read()
     if i == 0:
         print("✗ hiç parça gelmedi: " + hata[-300:], file=sys.stderr)
         return 1
-    olay(dizin, f"bitti parca={i} arac={arac}")
+    olay(dizin, f"bitti parca={i} atlanan={atlanan} arac={arac} yakalama_rc={rc}")
+    if a.sure:  # -t ile kesilen girdide streamlink/yt-dlp SIGPIPE (141/13) alır: bu hata değil
+        rc = 0 if rc in (141, 13) else rc
+    if rc != 0 or atlanan:
+        print(f"! yakalama rc={rc}, atlanan parça={atlanan}: döküm eksik olabilir ({dizin}/yakala.err)", file=sys.stderr)
+        return 2
     return 0
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # canli-dinle sınavı: sahte HLS yayını + sahte Groq/whisper. Gerçek ağ ve gerçek anahtar yok.
-# Mutant modu: MUTANT=kirpma|ortu|arac-sirasi  (kirpma = sahiplik süzgeci kapalı; ortu = pencereler örtüşür; arac-sirasi = yt-dlp önce)
+# Mutant modu: MUTANT=kirpma|ortu|arac-sirasi|segment  (segment = yerelde segment zamanı kelimelere paylaştırılmaz; kirpma = sahiplik süzgeci kapalı; ortu = pencereler örtüşür; arac-sirasi = yt-dlp önce)
 set -u
 D="$(cd "$(dirname "$0")" && pwd)"
 T="$(mktemp -d)"; trap 'kill $(cat "$T/sunucu.pid" 2>/dev/null) 2>/dev/null; rm -r "$T"' EXIT
@@ -15,6 +15,10 @@ M
   ;;
   ortu) python3 - "$PY" <<'M'
 import sys; s=open(sys.argv[1]).read(); s=s.replace("else i * parca_sn - ortu_sn / 2.0","else i * parca_sn - ortu_sn * 1.0"); open(sys.argv[1],"w").write(s)
+M
+  ;;
+  segment) python3 - "$PY" <<'M'
+import sys; s=open(sys.argv[1]).read(); s=s.replace("(ofset + b + n * adim, w)","(ofset + b, w)"); open(sys.argv[1],"w").write(s)
 M
   ;;
   arac-sirasi) python3 - "$PY" <<'M'
@@ -40,7 +44,7 @@ for _ in $(seq 1 50); do [ -s "$T/port" ] && break; sleep 0.1; done
 export CANLI_DINLE_GROQ_URL="http://127.0.0.1:$(cat "$T/port")" CANLI_DINLE_ARAC=ffmpeg
 BEKLENEN="$(for n in $(seq 0 13); do printf 'k%d ' "$n"; done)"
 CIK(){ python3 "$PY" "$T/y.m3u8" --parca-sn 4 --ortu-sn 1 --pencere-sn 6 --cikti "$1" "${@:2}"; }
-CIK "$T/c1" --not >"$T/o1" 2>&1; RC=$?
+CIK "$T/c1" >"$T/o1" 2>&1; RC=$?
 M="$(cat "$T"/c1/*/metin.txt 2>/dev/null | sed "s/ *$//")"
 [ $RC -eq 0 ] && ok "rc 0" || bad "rc $RC: $(tail -3 "$T/o1")"
 [ "$M" = "${BEKLENEN% }" ] && ok "metin kesintisiz ve çift sözcüksüz (k0..k13)" || bad "metin: '$M'"
@@ -54,6 +58,15 @@ rm -f "$T/say"
 CIK "$T/c2" --kaynak yerel >"$T/o2" 2>&1; RC=$?
 M2="$(cat "$T"/c2/*/metin.txt 2>/dev/null | sed "s/ *$//")"
 [ $RC -eq 0 ] && [ "$M2" = "${BEKLENEN% }" ] && ok "yerel yol aynı metni verir" || bad "yerel rc $RC metin '$M2'"
+echo "── T5b varsayılanlar"
+python3 -c "import sys;sys.path.insert(0,'$T');import canli_dinle as c
+import argparse,re
+src=open('$T/canli_dinle.py').read()
+assert 'ap.add_argument(\"--pencere-sn\", type=int, default=600)' in src and 'ap.add_argument(\"--parca-sn\", type=int, default=30)' in src and 'ap.add_argument(\"--ortu-sn\", type=int, default=5)' in src" && ok "varsayılan 30 sn parça · 5 sn örtüşme · 600 sn pencere" || bad "varsayılanlar"
+echo "── T5c hata yolları"
+( export CANLI_DINLE_GROQ_URL=http://127.0.0.1:9; python3 "$PY" "$T/y.m3u8" --parca-sn 4 --ortu-sn 1 --cikti "$T/c4" >"$T/o4" 2>&1 ); R4=$?
+[ $R4 -eq 2 ] && grep -q "ATLANDI" "$T/o4" && ok "Groq ulaşılamazsa traceback yok: parçalar atlanır, rc 2" || bad "ulaşılamaz Groq: rc $R4 $(tail -2 "$T/o4")"
+python3 "$PY" "$T/yok.m3u8" --cikti "$T/c5" >"$T/o5" 2>&1; [ $? -eq 1 ] && ok "yakalama hiç parça vermezse rc 1" || bad "boş yakalama"
 echo "── T6 anahtar"
 if grep -rq GIZLI-DEGER-123 "$T"/c1 "$T"/c2 "$T/o1" "$T/o2" 2>/dev/null; then bad "anahtar çıktıya/kutuya sızdı"; else ok "anahtar hiçbir çıktıda yok"; fi
 ( unset GROQ_API_KEY; CANLI_DINLE_ANAHTAR_DOSYASI=/yok python3 "$PY" "$T/y.m3u8" --cikti "$T/c3" >"$T/o3" 2>&1 ); [ $? -eq 3 ] && ok "anahtarsız rc 3" || bad "anahtarsız davranış"
