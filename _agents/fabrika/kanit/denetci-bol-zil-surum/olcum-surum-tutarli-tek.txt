@@ -1,0 +1,7 @@
+$ bash -c echo "SKILL.md: $(grep -m1 "^version:" yazilim-fabrikasi/SKILL.md)"; echo "kurulu: $(grep -m1 "^version:" /config/.claude/skills/yazilim-fabrikasi/SKILL.md) · kurulu denetci.sh BOL_RED=$(grep -c BOL_RED /config/.claude/skills/yazilim-fabrikasi/scripts/denetci.sh) · kaynak BOL_RED=$(grep -c BOL_RED yazilim-fabrikasi/scripts/denetci.sh)"; grep -c "\"version\": \"0.27.69\"" catalog.json
+# rc=0 sure=0.0s zaman=2026-11-06T20:36:20+03:00
+--- stdout ---
+SKILL.md: version: 0.27.69
+kurulu: version: 0.27.68 · kurulu denetci.sh BOL_RED=0 · kaynak BOL_RED=3
+1
+--- stderr ---

@@ -1,0 +1,30 @@
+{
+  "is": "denetci-bol-zil-surum",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-06T20:36:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "surum-tutarli",
+      "asama": "tek",
+      "dosya": "olcum-surum-tutarli-tek.txt",
+      "sha256": "f0c4b6f9f306c8fd4a987a7280fc72f99ca393c89008e614c6c3d1511ccf6729",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"SKILL.md: $(grep -m1 \"^version:\" yazilim-fabrikasi/SKILL.md)\"; echo \"kurulu: $(grep -m1 \"^version:\" /config/.claude/skills/yazilim-fabrikasi/SKILL.md) · kurulu denetci.sh BOL_RED=$(grep -c BOL_RED /config/.claude/skills/yazilim-fabrikasi/scripts/denetci.sh) · kaynak BOL_RED=$(grep -c BOL_RED yazilim-fabrikasi/scripts/denetci.sh)\"; grep -c \"\\\"version\\\": \\\"0.27.69\\\"\" catalog.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T20:36:20+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "f270fc3eb71b967b34ed990b291ac9cec3218bf00b1f227b372f4f88b84da512",
+      "olcum_id": "c38b9c43a83c4695b161d445d9741ef0",
+      "olculen_commit": "719a8cf64e247420f6c7578ab179990a8e3cda32",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "ee0b2d563d121d0d65eb060974cec7bc4eb431974b7934524b79ec6c90900082"
+}
