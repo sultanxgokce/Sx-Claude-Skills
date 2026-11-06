@@ -98,6 +98,8 @@ FAKE_PR_VIEW="0000000000000000000000000000000000000000 is-dal" PATH="$SAHTEGH:$P
 git -C "$KOK/w" checkout -q is-dal; git -C "$KOK/w" branch -q -D denetleyen-dal
 
 echo "════ F5g-l · yerel baş PR başının yalnız İLERİSİNDEYSE denetçi iter, PR başını bekler, devam eder (görev …HJGVS: 3 Kas'tan beri 59 duruş) ════"
+# mutant koşularında (MUTANT_D) bu bölüm atlanır: mutantlar F1-F8 kapılarını sınar, dosya 9 kez yeniden koşar (süre: CI tavanı)
+if [ -z "${MUTANT_D:-}" ]; then
 export FAKE_ORIGIN="$KOK/o.git"
 git -C "$KOK/w" checkout -q -b ileri-dal; git -C "$KOK/w" push -q origin ileri-dal 2>/dev/null
 echo ileri > "$KOK/w/ileri.txt"; git -C "$KOK/w" add ileri.txt; git -C "$KOK/w" commit -q -m ileri; IB="$(git -C "$KOK/w" rev-parse HEAD)"
@@ -121,6 +123,7 @@ kanitla f5l; DENETCI_ITME=1 FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5
 kanitla f5m; DENETCI_IT_BEKLE_SN=2 FAKE_PR_VIEW="$OB ileri-dal" PATH="$SAHTEGH:$PATH" kapi "F5m itildi ama PR başı güncellenmedi (GitHub gecikmesi tavanı aştı) → rc=3, eski farkı puanlamaz" 3 den f5m --pr 11
 iceren "F5n güncellenmediği söylenir" "güncellenmedi" "$KOK/son.out"
 git -C "$KOK/w" checkout -q is-dal; unset FAKE_ORIGIN
+fi
 
 echo "════ F8 · kaçış kodlu fark (Z9SZF3): gh bayraksız reddeder → bayrakla alınır ve ESC süzülür; gh hep düşerse git yolu; o da yoksa rc=3 ════"
 kanitla f8; : > "$KOK/istem.md"; FAKE_GH_ESC=1 FAKE_PR_VIEW="$BAS is-dal" PATH="$SAHTEGH:$PATH" kapi "F8a farkta ESC baytı var → gh bayrakla alındı, denetim GEÇTİ (rc 3 değil)" 0 den f8 --pr 7
