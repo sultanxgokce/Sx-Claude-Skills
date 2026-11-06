@@ -1,0 +1,53 @@
+{
+  "is": "arayuz-zanaati-kural-13-kaynaga",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T00:23:31+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kaynak-kurulu-fark",
+      "asama": "once",
+      "dosya": "olcum-kaynak-kurulu-fark-once.txt",
+      "sha256": "cb52efacaf455d5ee00695d24cebc27cf02a953ac420881e667c8da0ea9e95d6",
+      "komut": [
+        "bash",
+        "-c",
+        "N=$(diff arayuz-zanaati/SKILL.md /config/.claude/skills/arayuz-zanaati/SKILL.md | grep -c \"^[<>]\"); echo \"kaynak-kurulu SKILL.md farklı satır: $N\"; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:23:30+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "cdc5e28061b2a0f5023cc92bae4f755bfbfa597ce02ebc5730741235dfb797ee",
+      "olcum_id": "a3e89a628cd047fe9ba0013185f300e3",
+      "olculen_commit": "d5f04e1e44945200e5d8c885f9045e1d2809cd73",
+      "olculen_dizin": "/config/projects/Sx-Claude-Skills",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kaynak-kurulu-fark",
+      "asama": "sonra",
+      "dosya": "olcum-kaynak-kurulu-fark-sonra.txt",
+      "sha256": "2d6f002f0ad0fb1dacccc2e0166fdbb9d72e08d7aa4390f85812570307cc93ad",
+      "komut": [
+        "bash",
+        "-c",
+        "N=$(diff arayuz-zanaati/SKILL.md /config/.claude/skills/arayuz-zanaati/SKILL.md | grep -c \"^[<>]\"); echo \"kaynak-kurulu SKILL.md farklı satır: $N\"; exit 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:23:31+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "9847c3f9682cccd00bc39cc8166ef694e747a1d240f71f66a2e99f5696c24389",
+      "olcum_id": "80fb5b54693c4f768819ce792ef1e8ae",
+      "olculen_commit": "af6bf80e766e0b9eca65f1fc07939d805a317933",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "177f9cc6395743705a1fb7f284fa137938e69bca8ef2efbddca7f02eb6ae4511"
+}
