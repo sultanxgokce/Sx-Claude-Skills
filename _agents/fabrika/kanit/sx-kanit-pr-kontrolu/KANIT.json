@@ -1,7 +1,7 @@
 {
   "is": "sx-kanit-pr-kontrolu",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T02:23:21+03:00",
+  "guncelleme": "2026-11-07T02:24:57+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -52,7 +52,49 @@
       "olculen_commit": "38d10a3d77543f5510da80203e1c0d73521f1fb5",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-once",
+      "asama": "once",
+      "dosya": "olcum-kapsam-once-once.txt",
+      "sha256": "166e361a78e8ae25ef5ffc113812e610e9878e5f9b0381ff39c4545bb76b11cf",
+      "komut": [
+        "bash",
+        "/tmp/tmp.AUvXQBmomN/kanit-pr-kontrol.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T02:24:57+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "d361a9bbeb9598ba046d21eab24cca96a9fb3437ab9eeae001a5b53d2c359c6e",
+      "olcum_id": "aaab44cebae14aa0b9d842315b7e1445",
+      "olculen_commit": "8231c4e94f2c97ba9039fbd4dcc894d084484a82",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-sonra-sonra.txt",
+      "sha256": "4504a7ca7269b3b598d31255e5987a1a4a683b051a4df71038312e2f4c2b0fc8",
+      "komut": [
+        "bash",
+        "scripts/kanit-pr-kontrol.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:24:57+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "1d0b0bb7cf83fb9329a1e978d151edffce601f72bb193fb9b38e5dd1fa3da559",
+      "olcum_id": "8bd8a33e79dd40bfa8a2838052154d62",
+      "olculen_commit": "8231c4e94f2c97ba9039fbd4dcc894d084484a82",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "6699790297d368772a12b4ed23a1e68df4e27c999b30af9a26af97185c9543af"
+  "imza": "407bfa6e7c4e5a911082e8e56df88e2563a98bb4bdcf69a0e6f623606347d40f"
 }

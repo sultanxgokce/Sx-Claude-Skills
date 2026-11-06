@@ -1,0 +1,12 @@
+$ bash /tmp/tmp.AUvXQBmomN/kanit-pr-kontrol.test.sh
+# rc=1 sure=0.2s zaman=2026-11-07T02:24:57+03:00
+--- stdout ---
+FAIL  K1 yalnız geçerli kanıt JSON → 0 (beklenen=0 gelen=127)
+FAIL  K2 yalnız _agents, bozuk JSON → 1 (yakalanır) (beklenen=1 gelen=127)
+FAIL  K3 kodla karışık PR → 'atlandı' (denetlemez) (beklenen=0 gelen=1)
+FAIL  K4 kodla karışık PR → rc 0 (beklenen=0 gelen=127)
+FAIL  K5 taban verilmezse kullanım hatası → 2 (beklenen=2 gelen=127)
+FAIL  K6 atlama mutantında kodlu PR denetlenir (rc 1) → K4 yakalar (beklenen=1 gelen=0)
+── SONUÇ: PASS=0 FAIL=6 ──
+--- stderr ---
+sed: can't read /tmp/tmp.AUvXQBmomN/kanit-pr-kontrol.sh: No such file or directory
