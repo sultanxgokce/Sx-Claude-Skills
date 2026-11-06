@@ -1,7 +1,7 @@
 {
   "is": "kanit-kirli-dosya-canli",
   "arac": "kanit.py/0.8.0",
-  "guncelleme": "2026-11-06T14:22:13+03:00",
+  "guncelleme": "2026-11-06T14:39:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -101,7 +101,126 @@
       "olculen_commit": "9ad1b9a0aa55428399f628f5646a5c77a50b5bf9",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "say-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-say-sinav-sonra.txt",
+      "sha256": "350cbcf35e5a8681d9386528fbf14b417982083389f6eee3071f9abf2e9d6c1e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-kirli-dosya-canli/say-kos.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T14:39:05+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "82cf71036da265f919dad3d644a7ace9f76db39aa982fa35b121756b9ae2d8cd",
+      "olcum_id": "1f858d9919c64497a9b6745f1307a92c",
+      "olculen_commit": "3cf5e17b7e1ababf7e90699ece01eb5e0ea84947",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-say-damga",
+      "asama": "sonra",
+      "dosya": "olcum-mut-say-damga-sonra.txt",
+      "sha256": "0229b755be7cf462e62962c5644fcf5f603112ffe3b6ff7028639747749c1cf0",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-kirli-dosya-canli/say-kos.sh",
+        "damga"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T14:39:06+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "say-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K1",
+      "hedef_dustu": true,
+      "olcum_id": "cb024020af8540649191377b67c5dd17",
+      "olculen_commit": "3cf5e17b7e1ababf7e90699ece01eb5e0ea84947",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-say-tur",
+      "asama": "sonra",
+      "dosya": "olcum-mut-say-tur-sonra.txt",
+      "sha256": "be8c3aa3704ca349e57e2b4f2b3dd31fb02f2e5beb85d371516cc6499357ef94",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-kirli-dosya-canli/say-kos.sh",
+        "tur"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T14:39:07+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "say-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K1",
+      "hedef_dustu": true,
+      "olcum_id": "e420b67bd80c4d78936ca94e7396f2ab",
+      "olculen_commit": "3cf5e17b7e1ababf7e90699ece01eb5e0ea84947",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kirli-sayim",
+      "asama": "once",
+      "dosya": "olcum-canli-kirli-sayim-once.txt",
+      "sha256": "fe52f7bbc44ebe22dc6388e4ee0ae7d3bad5a9bca407d311c84d5ae199618cd8",
+      "komut": [
+        "bash",
+        "-c",
+        "python3 yazilim-fabrikasi/scripts/kanit-kirli-say.py --sonra 2026-11-04T00:00:00+03:00 --liste 30 /config/projects/* /config/projects/_wt/*"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T14:39:18+03:00",
+      "sure_sn": 3.3,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "79db8f73a3216fa2d6999938329b888a285c82b6130cd553bed6a2d88510ad9f",
+      "olcum_id": "2346851cb92b492684bf9cdbe5af80b3",
+      "olculen_commit": "3cf5e17b7e1ababf7e90699ece01eb5e0ea84947",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kural-sonrasi",
+      "asama": "once",
+      "dosya": "olcum-canli-kural-sonrasi-once.txt",
+      "sha256": "3becb587dccc01369ed30a981910a4556e79f7a068a683a313f4d9ec9f0e0d9d",
+      "komut": [
+        "bash",
+        "-c",
+        "python3 yazilim-fabrikasi/scripts/kanit-kirli-say.py --sonra 2026-11-04T01:56:15+03:00 --liste 30 /config/projects/* /config/projects/_wt/*"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T14:39:35+03:00",
+      "sure_sn": 3.6,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "116a106e61d34df1a06ba37eea536496f2ac8e40cae5cabbd91b1ead2307ecdb",
+      "olcum_id": "d6078a0276be4a42b39cbdb7f6948744",
+      "olculen_commit": "3cf5e17b7e1ababf7e90699ece01eb5e0ea84947",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "ce430f2f084f0805c61c70b73da93d9d2a39bd15ad6ed4900f3a403f301f391b"
+  "imza": "0c982c0ecad10c8d7edcf7e2db79747eef80444fc74ed73fcdc8500ffb930e25"
 }

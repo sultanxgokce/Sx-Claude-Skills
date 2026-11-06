@@ -1,0 +1,37 @@
+$ bash -c python3 yazilim-fabrikasi/scripts/kanit-kirli-say.py --sonra 2026-11-04T00:00:00+03:00 --liste 30 /config/projects/* /config/projects/_wt/*
+# rc=1 sure=3.3s zaman=2026-11-06T14:39:18+03:00
+--- stdout ---
+kirli ağaç kapanış ölçümü · 40339 manifest · pencere: 2026-11-04T00:00:00+03:00 · alan: olculen_kirli (kapıdan bağımsız)
+tür     toplam  kirli  izinli  izinsiz  ölçülemedi
+olcum     1266     42      27       15           0
+ekran        0      0       0        0           0
+dosya      203      4       0        4           0
+canli       49      5       0        5           0
+İZİNSİZ KİRLİ TOPLAM=24 · olcum=15 · ekran=0 · dosya=4 · canli=5
+dört tür dışı (sayıma girmedi): gecersiz=106
+okunamayan manifest: 22
+  izinsiz · 2026-11-04T00:10:33+03:00 · olcum · zilci-ulasamayinca-muavin · zilci-sinavi
+  izinsiz · 2026-11-04T00:11:39+03:00 · olcum · fabrika-md-goz-tavan-cloudtop · hat-dosyasi-sha
+  izinsiz · 2026-11-04T00:12:47+03:00 · olcum · kapanis-kapisi-kaynak-ekran-sozu · gecit sinavi kaynak ekran sozu
+  izinsiz · 2026-11-04T00:13:20+03:00 · olcum · kapanis-kapisi-kaynak-ekran-sozu · mutant kaynak alanlari taraniyor
+  izinsiz · 2026-11-04T00:16:09+03:00 · olcum · gunluk-plan-ozet-seksen-harf · deftere-yaz sinavi ozet 80 harf
+  izinsiz · 2026-11-04T00:16:25+03:00 · olcum · gunluk-plan-ozet-seksen-harf · mutant eski uzun ozet
+  izinsiz · 2026-11-04T01:27:03+03:00 · olcum · gozcu-kilitli-koltuk-t1 · olcum-kilitli-t1
+  izinsiz · 2026-11-04T01:27:08+03:00 · olcum · gozcu-kilitli-koltuk-t1 · olcum-kilitli-t1
+  izinsiz · 2026-11-04T01:51:04+03:00 · olcum · gozcu-kilitli-koltuk-t1 · gozcu-sinav
+  izinsiz · 2026-11-04T01:51:13+03:00 · olcum · gozcu-kilitli-koltuk-t1 · gozcu-t1-sinav
+  izinsiz · 2026-11-04T01:51:14+03:00 · olcum · gozcu-kilitli-koltuk-t1 · mutant-t1-kilitli-yok
+  izinsiz · 2026-11-04T01:51:15+03:00 · olcum · gozcu-kilitli-koltuk-t1 · mutant-t1-kilitli-sebep
+  izinsiz · 2026-11-04T01:51:17+03:00 · olcum · gozcu-kilitli-koltuk-t1 · mutant-t1-basari-sozu
+  izinsiz · 2026-11-04T01:51:18+03:00 · olcum · gozcu-kilitli-koltuk-t1 · mutant-t1-ekran-vekil
+  izinsiz · 2026-11-04T01:51:19+03:00 · olcum · gozcu-kilitli-koltuk-t1 · mutant-basari-t1
+  izinsiz · 2026-11-04T03:41:33+03:00 · canli · duzen-gece-kutu-adi · gece-kutu-code
+  izinsiz · 2026-11-04T20:09:14+03:00 · dosya · sinav-ci-envanteri · envanter-kos
+  izinsiz · 2026-11-04T20:09:14+03:00 · dosya · sinav-ci-envanteri · envanter-sonuc
+  izinsiz · 2026-11-04T23:27:54+03:00 · canli · groq-merkez-konum · canli-host-uygula
+  izinsiz · 2026-11-05T00:59:11+03:00 · canli · telefon-kutular-canli · canli-telefon-390
+  izinsiz · 2026-11-05T04:10:37+03:00 · canli · hasat-gece-cron-satiri · gece-5kas
+  izinsiz · 2026-11-05T10:32:22+03:00 · canli · gecit-ekran-satir-basi · defter-1582-indi
+  izinsiz · 2026-11-06T12:21:20+03:00 · dosya · bugun-sekmesi-prompt · 44-bugun-sekmesi-PROMPT
+  izinsiz · 2026-11-06T12:21:20+03:00 · dosya · bugun-sekmesi-prompt · 44-bugun-sekmesi-prompt-sablon
+--- stderr ---

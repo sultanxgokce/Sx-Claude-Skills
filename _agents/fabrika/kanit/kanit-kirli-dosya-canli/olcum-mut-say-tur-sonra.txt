@@ -1,0 +1,30 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K1 · rc≠0 + hedef kapı 'K1' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-say-sinav-* ===
+$ bash _agents/fabrika/kanit/kanit-kirli-dosya-canli/say-kos.sh tur
+# rc=1 sure=1.1s zaman=2026-11-06T14:39:07+03:00
+--- stdout ---
+mutant: tur
+rev: 3cf5e17b
+── K1 dört tür ayrı satır, kapı damgası süzgeç değil
+  ✓ K1 izinsiz varken rc 1
+  ✓ K1 olcum: 2 toplam · 1 izinsiz · 1 ölçülemedi
+  ✓ K1 ekran: 1 izinsiz
+  ✗ K1 dosya satırı: 
+  ✗ K1 canli satırı: 
+  ✗ K1 toplam satırı yok
+  ✗ K1 tür dışı satırı yok
+── K2 görülmeyen tür de 0 satırıyla basılır
+  ✓ K2 izinsiz yok → rc 0
+  ✓ K2 ekran satırı 0 ile basıldı
+  ✗ K2 dosya satırı: 
+  ✗ K2 canli satırı: 
+── K3 pencere (--sonra) ve tekilleştirme
+  ✗ K3 dosya satırı: 
+  ✗ K3 rc=0 canli= dosya=
+  ✓ K3 pencere boş → rc 0
+── K4 ölçülemedi ve kullanım hataları
+  ✓ K4 manifest yok → rc 3 ÖLÇÜLEMEDİ
+  ✓ K4 yalnız bozuk manifest → rc 3
+  ✓ K4 okunamayan --sonra → rc 2
+  ✗ K4 rc=1
+── SONUÇ: 9 geçti · 9 kaldı ──
+--- stderr ---
