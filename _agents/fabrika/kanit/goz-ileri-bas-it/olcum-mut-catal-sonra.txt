@@ -1,0 +1,69 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: F5o · rc≠0 + hedef kapı 'F5o' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-fark-sinav-* ===
+$ bash _agents/fabrika/kanit/goz-ileri-bas-it/mut-catal.sh
+# rc=1 sure=61.2s zaman=2026-11-06T15:40:49+03:00
+--- stdout ---
+mutant: çatal koruması silindi
+════ F1 · yerel kip: --pr/--diff yok → denetçi farkı kendisi alır (üç-nokta, ana hat güncel) ════
+  ✓ F1a yerel kip GEÇTİ (rc=0) — kanıt dizini kayıtsız olsa bile (kanıt/kart dışı kir sayılır)
+  ✓ F1b ekranda fark kaynağı söyleniyor
+  ✓ F1c istemde dalın kendi değişikliği var
+════ F2 · ana hat ilerledi (başkası itti), dal geride → DUR rc=3, denetim yazılmaz ════
+  ✓ F2a dal 1 commit geride → rc=3 (iki-nokta tuzağı kapalı)
+  ✓ F2b neden söyleniyor: GERİSİNDE
+  ✓ F2c denetçiye istem GİTMEDİ (tur yanmadı)
+════ F3 · ana hat dala birleştirildi → geçer; başkasının dosyası farkta 'silinmiş' görünmez ════
+  ✓ F3a birleştirmeden sonra yerel kip GEÇTİ
+  ✓ F3b istemde dalın değişikliği var
+  ✓ F3c başkasının dosyası farka girmedi (üç-nokta)
+════ F4 · kayıtsız kod değişikliği → DUR rc=3 (farka girmezdi) ════
+  ✓ F4a kanıt/kart dışı kayıtsız dosya → rc=3
+  ✓ F4b neden söyleniyor: kayıtsız
+  ✓ F4c (…VAHT3) tavan-defteri.log aracın kendi defteridir, kayıtsız değişiklik SAYILMAZ → GEÇTİ (devam yolu kendi kapısına takılmaz)
+════ F5 · --pr: PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR (itilmemiş commit) — hangi dalda durulursa dursun ════
+  ✓ F5a yerel baş ≠ PR başı (aynı dal) → rc=3
+  ✓ F5b neden söyleniyor: FARKLI
+  ✓ F5c yerel baş = PR başı → GEÇTİ, GitHub farkı kullanıldı
+  ✓ F5d istemde gh farkı var
+  ✓ F5e PR dalının yerel kopyası YOK (başkasının, çekilmemiş) → itilmemiş commit olamaz, GEÇTİ
+  ✓ F5f BAŞKA dalda durulurken bile PR dalının (is-dal) yerel başı ≠ PR başı → rc=3 (göz tur 1)
+════ F5g-l · yerel baş PR başının yalnız İLERİSİNDEYSE denetçi iter, PR başını bekler, devam eder (görev …HJGVS: 3 Kas'tan beri 59 duruş) ════
+  ✓ F5g yerel baş PR başının İLERİSİNDE → itildi, denetim GEÇTİ (rc 0)
+  ✓ F5h itildiği söylenir
+  ✓ F5i origin'deki dal yerel başa ilerledi
+  ✓ F5j yerel baş PR başının GERİSİNDE → itmez, rc=3
+  ✓ F5j2 origin dalına dokunulmadı
+  ✓ F5k yerel ile PR başı AYRIŞMIŞ → itmez, rc=3
+  ✓ F5k2 ayrışmada origin dalına dokunulmadı (zorla itme yok)
+  ✓ F5l DENETCI_ITME=1 → ileride olsa da itmez, rc=3
+  ✓ F5l2 kapalıyken origin dalına dokunulmadı
+  ✗ F5o ÇATAL PR (isCrossRepository=true): ileride olsa da itmez, rc=3 (göz tur 1) (rc=0, beklenen=3)
+  ✗ F5o2 origin dalı değişti
+  ✗ F5p depo bilgisi okunamadı (boş) → itmez, rc=3 (kapalı varsayılan) (rc=0, beklenen=3)
+  ✗ F5q eski hata metni korunur ('itilmemiş ya da çekilmemiş commit var' /tmp/tmp.tugPGpBoyq/son.out içinde yok)
+  ✓ F5m itildi ama PR başı güncellenmedi (GitHub gecikmesi tavanı aştı) → rc=3, eski farkı puanlamaz
+  ✓ F5n güncellenmediği söylenir
+════ F8 · kaçış kodlu fark (Z9SZF3): gh bayraksız reddeder → bayrakla alınır ve ESC süzülür; gh hep düşerse git yolu; o da yoksa rc=3 ════
+  ✓ F8a farkta ESC baytı var → gh bayrakla alındı, denetim GEÇTİ (rc 3 değil)
+  ✓ F8b istemde gh farkı var (esc-farki)
+  ✓ F8c isteme giden farkta ESC baytı YOK (süzüldü)
+  ✓ F8d fark kaynağı 'kaçış dizileri süzüldü' der
+  ✓ F8e gh pr diff hep düşer, origin pull/9/head var → git yolu, GEÇTİ
+  ✓ F8f istemde git farkı var (benim-isim)
+  ✓ F8g fark kaynağı git yolunu söyler
+  ✓ F8h gh düşer ve pull/10/head yok → rc=3
+  ✓ F8i iki sebep birden söyleniyor
+════ F6 · boş fark → DUR rc=3 ════
+  ✓ F6a dal = ana hat → fark boş, rc=3
+════ F7 · MUTASYON: her kapı kaldırılınca bir F kapısı düşer (mutant ana dosyanın kopyasıdır) ════
+  ✓ mutant 'geride' → F2a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bas' → F5a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bas-dal' → F5f düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'kir' → F4a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bos' → F6a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'tavan-defteri' → F4c düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'esc-bayragi' → F8a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'esc-suzgeci' → F8c düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'git-yolu' → F8e düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+
+── SONUÇ (fark-kendisi): 48 geçti · 4 kaldı ──
+--- stderr ---

@@ -1,7 +1,7 @@
 {
   "is": "goz-ileri-bas-it",
   "arac": "kanit.py/0.9.0",
-  "guncelleme": "2026-11-06T15:34:12+03:00",
+  "guncelleme": "2026-11-06T15:40:49+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -29,22 +29,48 @@
       "etiket": "fark-sinav",
       "asama": "sonra",
       "dosya": "olcum-fark-sinav-sonra.txt",
-      "sha256": "b3dea383a56be6f58de6c064ca8ef8e0316e8719b32ebd473f127eb0380d8f8b",
+      "sha256": "5a9f8ecfe1ec1491e4e2c662a9c1c911d2dd6b0f778c84cb67f6acd89d3c6f75",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-06T15:34:12+03:00",
-      "sure_sn": 62.1,
+      "zaman": "2026-11-06T15:39:47+03:00",
+      "sure_sn": 65.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "girdi_anahtar": "32dcd4d82e4281f4c81063be6f3ba7c541e567bdd2e865806479d9da32944fbc",
-      "olcum_id": "04c2f25c40254ba5935fd80033eb94ad",
-      "olculen_commit": "068473aedd2c0c51ce1f9a41abc2359fca84df0a",
+      "girdi_anahtar": "6708c11ddd9e7890cf537e2e66802d73a7b8ce4a8539551a24a104e1ecd5298a",
+      "olcum_id": "872f7c0780d44b0bb3903c366fb99660",
+      "olculen_commit": "cab8df4df4fe0de9d12d85b1a3092638eeedbe74",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-catal",
+      "asama": "sonra",
+      "dosya": "olcum-mut-catal-sonra.txt",
+      "sha256": "12498ef700248f70c6feb3c61dde7aa99534853433c406b9c0f0465c8683f899",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/goz-ileri-bas-it/mut-catal.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T15:40:49+03:00",
+      "sure_sn": 61.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "fark-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "F5o",
+      "hedef_dustu": true,
+      "olcum_id": "ae13c6a2cc0f4a4f832b9f1b47e6b65d",
+      "olculen_commit": "cab8df4df4fe0de9d12d85b1a3092638eeedbe74",
       "olculen_kirli": false,
       "kirli_kurali": 1
     }
   ],
-  "imza": "4d2e96ea28d9e50856fb1c55e875c044c37a413c96db7d48e14da30bd7c7d39e"
+  "imza": "60cdebdbbf614bbc1a90c6471a0ac73ec8c71934123620ccdae2069220435758"
 }

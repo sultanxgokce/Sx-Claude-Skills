@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh
-# rc=0 sure=62.1s zaman=2026-11-06T15:34:12+03:00
+# rc=0 sure=65.8s zaman=2026-11-06T15:39:47+03:00
 --- stdout ---
 ════ F1 · yerel kip: --pr/--diff yok → denetçi farkı kendisi alır (üç-nokta, ana hat güncel) ════
   ✓ F1a yerel kip GEÇTİ (rc=0) — kanıt dizini kayıtsız olsa bile (kanıt/kart dışı kir sayılır)
@@ -34,6 +34,10 @@ $ bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh
   ✓ F5k2 ayrışmada origin dalına dokunulmadı (zorla itme yok)
   ✓ F5l DENETCI_ITME=1 → ileride olsa da itmez, rc=3
   ✓ F5l2 kapalıyken origin dalına dokunulmadı
+  ✓ F5o ÇATAL PR (isCrossRepository=true): ileride olsa da itmez, rc=3 (göz tur 1)
+  ✓ F5o2 çatal PR'da origin'deki adaş dala dokunulmadı
+  ✓ F5p depo bilgisi okunamadı (boş) → itmez, rc=3 (kapalı varsayılan)
+  ✓ F5q eski hata metni korunur
   ✓ F5m itildi ama PR başı güncellenmedi (GitHub gecikmesi tavanı aştı) → rc=3, eski farkı puanlamaz
   ✓ F5n güncellenmediği söylenir
 ════ F8 · kaçış kodlu fark (Z9SZF3): gh bayraksız reddeder → bayrakla alınır ve ESC süzülür; gh hep düşerse git yolu; o da yoksa rc=3 ════
@@ -59,5 +63,5 @@ $ bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh
   ✓ mutant 'esc-suzgeci' → F8c düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
   ✓ mutant 'git-yolu' → F8e düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
 
-── SONUÇ (fark-kendisi): 48 geçti · 0 kaldı ──
+── SONUÇ (fark-kendisi): 52 geçti · 0 kaldı ──
 --- stderr ---
