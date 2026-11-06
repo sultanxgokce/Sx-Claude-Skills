@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.64
+version: 0.27.65
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.65 (6 Kas 2026, kart kapi-iptal-ci · görev …MECECK · BÂNİ):** `birlestirme-kapisi.sh` CI hükmünden önce aynı adda İPTAL OLMAYAN koşusu olan kontrolün `CANCELLED` kayıtlarını düşürür (`iptal_sus`). `tam-kosu` etiketi aynı baştaki push koşusunu iptal ettirir; özet aynı ad için CANCELLED + SUCCESS taşır ve kapı yeşil işi kırmızı sayıp engelliyordu (cloudtop #1551, iptal edilen koşuyu yeniden koşturmak gerekti). Tek başına iptal kırmızı KALIR; aynı adda FAILURE + SUCCESS'e dokunulmaz (yeniden koşu kanıt değildir); iptal + hâlâ koşan → bitmemiş. Sınav `birlestirme-kapisi.test.sh` T20o-r.
 - **0.27.64 (6 Kas 2026, kart kart-acilis-gecici-ad-kalmaz · görev …NYQGK8, SERTABİP bildirdi · HEZARFEN):** `kart.sh ac` süreç tetikte ya da görev yazımında kesilirse (timeout, Ctrl-C, TERM) artık `adı.json.acilis-PID` geçici dosyası bırakmaz ve "✓ kart açıldı" özeti basılmaz. Eskiden özet yayımdan ÖNCE basılıyordu: sahibi kartı açıldı sanıp geçici dosyayı elle yerine koydu (medigate'te iki kez). Şimdi özet geçici dosyaya yazılır ve yalnız yayımdan (ln) sonra basılır; EXIT/TERM/INT/HUP'ta yalnız kendi geçici dosyalarımız silinir. Sınav: kart.test.sh U9k (kesilen açılış) + U9n (kesilmeyen açılışta özet basılır).
 - **0.27.63 (6 Kas 2026, kart kapi-turkce-yol · görev …RNY9N, Sx #681'de ölçüldü · BÂNİ):** `birlestirme-kapisi.sh` git dosya yollarını kaçışsız okur (`git -c core.quotepath=off … diff --name-only`, dört yer). Git varsayılanında Türkçe adlı dosya tırnaklı ve sekizli kaçışlı geliyordu: (1) puandan sonra commit'lenen Türkçe adlı KANIT dosyası kanıt dizini önekini tutturamıyor, "puan verildikten sonra kod değişmiş" engeli üretiyordu; (2) PR dosya listesi süzgecinde GitHub'ın kaçışsız adı git'in kaçışlı adıyla eşleşmiyor, dosya listeden düşüyordu. Kural değişmedi, yalnız okuma. Sınav `birlestirme-kapisi-olculen-commit.test.sh` O23 (önkoşul: fikstürde git gerçekten kaçışlı basıyor; Türkçe adlı kanıt dosyası → rc 0) + O24 (kanıt dışındaki Türkçe adlı kod dosyası yine engeller, adı okunur yazılır).
 - **0.27.62 (5 Kas 2026, kart ayni-girdi-atla · görev …T4D3H, SERDAR: önce kısa tasarım, kalite kapısına dokunma):** `kanit.sh olcum` yeni AÇIK bayrak `--ayni-girdi-atla` alır. Aynı girdinin (komut+etiket+aşama · kanıt dizini dışındaki izlenen ağaç · izlenmeyen ve Git'in yok saydığı dosya içeriği · depo dışı dosya argümanı içeriği · araç sürümü) yeşil, imzalı, mutant olmayan, kirlisiz kaydı varsa komut KOŞMAZ, kayıt değişmez. Bayrak yoksa davranış aynen; mutasyon ölçümü, kırmızı/geçersiz kayıt, kirli ağaç ve girdi değişimi her zaman koşar. Kapı/denetçi/CI kodu değişmedi. Saate, ağa ya da host'a bağlı sınavda bayrak verilmez (dış durum anahtara girmez). Sınav: kanit-ayni-girdi.test.sh (20 kapı, 7 mutant). Kayıtlara `girdi_anahtar` yazılır.

@@ -557,10 +557,16 @@ def gh(*a):
     return json.loads(r.stdout)
 KIRMIZI = {"FAILURE", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED", "STARTUP_FAILURE", "STALE", "ERROR"}
 YESIL = {"SUCCESS", "SKIPPED", "NEUTRAL"}
+def iptal_sus(ogeler):
+    """Aynı adda İPTAL OLMAYAN başka bir koşu varsa o adın CANCELLED kayıtlarını düşürür (görev …MECECK, cloudtop #1551 6 Kas):
+    tam-kosu etiketi aynı baştaki push koşusunu iptal ettirir; özet aynı ad için CANCELLED + SUCCESS taşır ve kapı iptali kırmızı
+    sayıp yeşil işi engelliyordu. Tek başına iptal kırmızı KALIR. FAILURE + SUCCESS'e dokunulmaz (yeniden koşu kanıt değildir)."""
+    iptalsiz = {ad for ad, tamam, son in ogeler if (son or "").upper() != "CANCELLED" or not tamam}
+    return [(ad, tamam, son) for ad, tamam, son in ogeler if not (tamam and (son or "").upper() == "CANCELLED" and ad in iptalsiz)]
 def hukum(ogeler):
     """ogeler: [(ad, durum_tamam_mi, sonuc)] → (kirmizi, bitmemis, yesil)"""
     k, b, y = [], [], []
-    for ad, tamam, son in ogeler:
+    for ad, tamam, son in iptal_sus(ogeler):
         son = (son or "").upper()
         if not tamam: b.append(ad)
         elif son in KIRMIZI: k.append(ad)

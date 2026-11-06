@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/kapi-iptal-ci/kos.sh
+# rc=0 sure=252.6s zaman=2026-11-06T13:55:13+03:00
+--- stdout ---
+rev: 6f489867
+  ✓ T20o aynı adda iptal + başarı (etiket push koşusunu iptal ettirdi) → geçer, iptal sayılmaz
+  ✓ T20p TEK BAŞINA iptal → yine ENGELLER (rc=1)
+  ✓ T20q aynı adda BAŞARISIZLIK + başarı → yine ENGELLER (yeniden koşu kanıt değil)
+  ✓ T20r iptal + aynı adda HÂLÂ koşan → bitmemiş (rc=1), iptal kırmızısı değil
+── SONUÇ: 240 geçti · 0 kaldı ──
+--- stderr ---

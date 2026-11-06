@@ -697,6 +697,19 @@ CIKTI="$(ci_kos FAKE_CI="$CIE" FAKE_API='{"check_runs":[{"name":"kabuk","status"
 [ "$RC" -eq 3 ] && grep -q "kod değiştiriyor ama kontrolü yok" <<<"$CIKTI"; g $? "🔴 T20m kontrolsüz baş KOD değiştiriyor (kontroller henüz oluşmamış olabilir) → önceki commit yeşil olsa da ÖLÇÜLEMEDİ (rc=3), ödünç yeşil yok"
 CIKTI="$(ci_kos FAKE_CI="$CIE" FAKE_ST='{"statuses":[{"context":"eski-durum","state":"failure"}]}' 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "eski-durum" <<<"$CIKTI"; g $? "T20n geriye bakışta kırmızı eski tip durum (StatusContext) da okunur → ENGELLER"
+# T20o-q · İPTAL + AYNI ADDA BAŞARI (görev …MECECK, cloudtop #1551): tam-kosu etiketi push koşusunu iptal ettirince özet aynı ad için CANCELLED + SUCCESS taşır
+CII='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"kabuk","status":"COMPLETED","conclusion":"CANCELLED"},{"name":"kabuk","status":"COMPLETED","conclusion":"SUCCESS"},{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+CIT='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"kabuk","status":"COMPLETED","conclusion":"CANCELLED"},{"name":"lint","status":"COMPLETED","conclusion":"SUCCESS"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+CIF='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"kabuk","status":"COMPLETED","conclusion":"FAILURE"},{"name":"kabuk","status":"COMPLETED","conclusion":"SUCCESS"}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+CIIB='{"headRefOid":"aaaaaaaa11111111","statusCheckRollup":[{"name":"kabuk","status":"COMPLETED","conclusion":"CANCELLED"},{"name":"kabuk","status":"IN_PROGRESS","conclusion":""}],"commits":[{"oid":"aaaaaaaa11111111"}]}'
+CIKTI="$(ci_kos FAKE_CI="$CII" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "CI: PR başı aaaaaaaa · 2 kontrol yeşil" <<<"$CIKTI"; g $? "T20o aynı adda iptal + başarı (etiket push koşusunu iptal ettirdi) → geçer, iptal sayılmaz"
+CIKTI="$(ci_kos FAKE_CI="$CIT" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "CI KIRMIZI" <<<"$CIKTI" && grep -q "kabuk" <<<"$CIKTI"; g $? "T20p TEK BAŞINA iptal → yine ENGELLER (rc=1)"
+CIKTI="$(ci_kos FAKE_CI="$CIF" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "CI KIRMIZI" <<<"$CIKTI"; g $? "T20q aynı adda BAŞARISIZLIK + başarı → yine ENGELLER (yeniden koşu kanıt değil)"
+CIKTI="$(ci_kos FAKE_CI="$CIIB" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "CI BİTMEMİŞ" <<<"$CIKTI"; g $? "T20r iptal + aynı adda HÂLÂ koşan → bitmemiş (rc=1), iptal kırmızısı değil"
 M15="$PKG/mutant15.sh"; sed 's/^ci_olc$/:/' "$G" > "$M15"; ! cmp -s "$G" "$M15"; g $? "T20i mutant 15 üretildi (CI ölçümü çağrılmıyor)"
 CIKTI="$(ghk env FAKE_DAL=kanit-dali FAKE_DOSYALAR="$KD/is-asil/KANIT.json $KD/is-asil/DENETIM-1.json" FAKE_CI="$CIK" bash -c "$(declare -f kapi); G='$M15'; kapi '$P' --pr 31" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "T20j mutant 15: kırmızı CI kapıyı GEÇİRİYOR → T20a bu mutantta düşerdi"
