@@ -1,7 +1,7 @@
 {
   "is": "raf-bagla-egik-cizgi",
   "arac": "kanit.py/0.9.0",
-  "guncelleme": "2026-11-06T17:56:40+03:00",
+  "guncelleme": "2026-11-06T17:58:40+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -87,7 +87,34 @@
       "olculen_commit": "5777289efa5fbf476fe09b103cd42beeb8b9cf51",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-egik-cizgi-izni",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-egik-cizgi-izni-sonra.txt",
+      "sha256": "5079d623ba56f0c01fefa39b3aae53f8a34da6e03437736f6856d923274287a7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/mut-egik.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-raf-bagla-egik-cizgi/terminal-onar/kapi"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:58:40+03:00",
+      "sure_sn": 30.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kadro-yaz-sinavi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "F1",
+      "hedef_dustu": true,
+      "olcum_id": "e4e3da0975a84a2489935627f468d549",
+      "olculen_commit": "20a71b24c136e951c54e86b17a3da71ade8c3d11",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "6ff41d5cf7f24ee9937d5b8a2fee190b71794da70ed200bddb0a3dd3c2c252de"
+  "imza": "77377c467edb43eb2d78637632edbc56978d2d2f25c5559afa5e7984225abf4b"
 }
