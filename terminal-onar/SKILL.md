@@ -1,9 +1,14 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.44.0
+version: 2.45.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.45.0 · Oda görünen adı aile kaydı yoksa ekip kaydından okunur (6 Kas · kart serit-oda-adi-ekip-kaydi · SERDAR · MMEx · görev …G7PM)
+Ölçülen kusur: MMEx şeridinde oda adları kayıttaki gibi değil kebap anahtardan türetilmiş çıkıyordu; `kayitOku` oda adlarını yalnız `aile-registry.yaml`'dan okuyordu, MMEx'te o dosya yok (ve açılmayacak). MMEx'in adları kendi ekip kaydında: `_agents/handoff/ekip-registry.yaml` `odalar:` bloğu (aynı `- oda:` + `ad:` biçimi).
+Artık `kayitOku` önce aile kaydına bakar; o ad vermediyse (dosya yok ya da `odalar:` boş) ekip kaydını (`_agents/handoff/ekip-registry.yaml`, yoksa `_agents/ekip-os/ekip-registry.yaml`) aynı ayrıştırıcıyla okur. Hiçbiri ad vermezse alan hiç yazılmaz (uydurma yok). Kayıttaki sıra `odaAdlari` anahtar sırasında korunur; `/api/koltuklar` yanıtındaki `odalar[]` sırası (ad'a göre) ve şerit kümeleme sırası (koltuk sırası) DEĞİŞMEDİ.
+Sınav: kadro.test.mjs OG-K7..K9 (49/0). Canlıya iniş: kurulum + kapı SIGHUP/yeniden başlatma.
 
 ## 🆕 2.44.0 · Oda görünen adı: anahtar kebap kalır, şerit kayıttaki adı basar (5 Kas · kart oda-gorunen-ad · SERDAR · medigate)
 Ölçülen kusur: medigate şeridinde oda `medi` anahtarından türetilen "Medi" yazıyordu; Sultan "Klinik Mühendislik" istedi. Kapı `ODA_AD_DESEN` ile yalnız kebap anahtarı okuyordu, kayıttaki ad alanını hiç okumuyordu.

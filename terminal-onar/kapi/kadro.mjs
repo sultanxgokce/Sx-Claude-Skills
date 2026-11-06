@@ -128,6 +128,13 @@ export function kayitOku(proje, ortam = process.env) {
   }
   // 2.44.0 (SERDAR 5 Kas · medigate 'Medi' → 'Klinik Mühendislik'): oda ANAHTARI kebap kalır; görünen ad aile kaydındaki `odalar:` bloğunun `ad:` alanıdır.
   let odaAdlari = {}; try { if (fs.existsSync(aile)) odaAdlari = odaAdlariAyristir(fs.readFileSync(aile, 'utf8')); } catch {}
+  // 2.45.0 (SERDAR 6 Kas · MMEx şeridi, görev …G7PM): aile kaydı olmayan ya da `odalar:` bloğu boş kutuda (MMEx: aile-registry.yaml yok ve açılmayacak) görünen oda adı
+  //   kutunun EKİP kaydındaki aynı `odalar:` bloğundan okunur (aynı biçim: `- oda:` + `ad:`). Önce aile kaydı; yalnız o ad vermediyse ekip kaydı. Hiçbiri yoksa alan yok (uydurma yok).
+  if (!Object.keys(odaAdlari).length) {
+    for (const y of [path.join(proje, '_agents/handoff/ekip-registry.yaml'), path.join(proje, '_agents/ekip-os/ekip-registry.yaml')]) {
+      try { if (!fs.existsSync(y)) continue; const h = odaAdlariAyristir(fs.readFileSync(y, 'utf8')); if (Object.keys(h).length) { odaAdlari = h; break; } } catch {}
+    }
+  }
   return { kaynak, okunamadi, uyeler: birlestir(listeler), ...(Object.keys(odaAdlari).length ? { odaAdlari } : {}), ...(dava_kurali ? { dava_kurali } : {}) };
 }
 
