@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kanit-olculen-dizin",
+  "pr": "726",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T19:08:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-olculen-dizin",
+  "dal": "kanit-olculen-dizin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28927,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 13533
+  },
+  "dalgic": "uyumlu",
+  "bas": "395a4b6473f0adb5ad7c5a1d437cfd0c7e87d399",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Araç, `--olculen-dizin` ile gösterilen ağacın kimliğini kayda yazıyor; fakat ölçüm komutunun gerçekten o kopyada çalıştığını sağlamıyor. Böylece başka bir dalda çalışan sınav, ilgisiz geçici kopyanın commit’iyle damgalanabildiğinden kanıtın kaynak kimliği güvenilir değil.",
+    "bulgular": [
+      {
+        "ne": "`--olculen-dizin` yalnız commit/kirlilik bilgisinin okunduğu dizini değiştiriyor; ölçüm komutunun çalışma dizinini değiştirmiyor veya komutla bu dizin arasındaki bağı doğrulamıyor. Çağıran herhangi bir Git ağacını gösterip başka yerde çalışan ölçümü o ağacın kimliğiyle kaydettirebilir.",
+        "kanit": "`cmd_olcum` içinde seçenek yalnız `OLCULEN_DIZIN = _od` yapıyor; `olculen_commit` bu dizinden HEAD okuyor. K12 testi ise `cd \"$T\"` konumundan aracı çağırıp `--olculen-dizin \"$T2\" -- echo kopya` çalıştırıyor ve sadece kaydedilen commit’in H2 olduğunu denetliyor; komutun T2 içinde çalıştığını sınamıyor. Sonraki ölçümün 37/37 yeşil olması bu yanlış kaynak ilişkilendirmesini ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:163,475-482; yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh:62-68",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce/yeşil sonra ölçüm çifti ile hedef kapıyı düşüren mutasyon kaydı mevcut. Ancak gerçek ölçüm K12 yalnız kayda seçilen dizinin HEAD’inin yazıldığını kanıtlıyor; komutun ölçülen kopyada çalıştığını kanıtlamadığı için iş kartındaki temel iddia kanıtsız ve yanıltılabilir durumda."
+  }
+}
