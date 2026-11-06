@@ -1,0 +1,33 @@
+{
+  "is": "sx-kanit-pr-kontrolu",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T01:54:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-pr-once",
+      "asama": "once",
+      "dosya": "olcum-kanit-pr-once-once.txt",
+      "sha256": "cc6aee1d2468231ee0e4e1a6c305aa7a9b5146a3638f409839677d510c2284b7",
+      "komut": [
+        "gh",
+        "pr",
+        "checks",
+        "736",
+        "--repo",
+        "sultanxgokce/Sx-Claude-Skills"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T01:54:48+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "db2d31a223efa285c6d77354724558aefa55bbd5eaa408571628951e2b21bd80",
+      "olcum_id": "7997bf8015694c5a93325000fe37a927",
+      "olculen_commit": "1f137038de981f8e7306ff7dbc1b35eeef4f6b76",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "2e918206618e2bbe25bc9c05138189d51249fcc6bbd6b6652f6837f1da78516a"
+}

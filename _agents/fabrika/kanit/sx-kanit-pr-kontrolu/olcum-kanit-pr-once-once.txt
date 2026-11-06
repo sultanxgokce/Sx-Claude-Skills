@@ -1,0 +1,5 @@
+$ gh pr checks 736 --repo sultanxgokce/Sx-Claude-Skills
+# rc=1 sure=0.7s zaman=2026-11-07T01:54:48+03:00
+--- stdout ---
+--- stderr ---
+no checks reported on the 'sultan-eli-iki-adim-canli-kanit' branch
