@@ -1,0 +1,59 @@
+{
+  "is": "butce-dis-kuyruk",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T16:26:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "e3f13589ed0598440483b8ec10fbf7ff04225820339214752660fb5aa62875f5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh",
+        "ana",
+        "/config/projects/_wt/Sx-Claude-Skills-butce-dis-kuyruk"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T16:26:35+03:00",
+      "sure_sn": 42.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "652f8280615ad8fb0dbc2cadd5b4cfc822d9f665d557de7425d48780f2b1f961",
+      "olcum_id": "2a63b15434dc48c09f74e4715d63b572",
+      "olculen_commit": "a57d0df6154ad1da6c7aacb8cb9eadedb6ed0f72",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-dis",
+      "asama": "tek",
+      "dosya": "olcum-mutant-dis-tek.txt",
+      "sha256": "ac2fd30c904c76759eff5617040ffc2c3891cc69746d3a7e77baaa0876644691",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh",
+        "mutant-dis",
+        "/config/projects/_wt/Sx-Claude-Skills-butce-dis-kuyruk"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T16:26:37+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "durum kuyrukta 0 (özete girmez)",
+      "hedef_dustu": true,
+      "olcum_id": "46d5a9f6db1447c4b1373b569f7bd430",
+      "olculen_commit": "a57d0df6154ad1da6c7aacb8cb9eadedb6ed0f72",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "c7771eaf80a9adb95e114ca2a4e8a850c1d1a0ab4f166a6b524b73170a56738f"
+}
