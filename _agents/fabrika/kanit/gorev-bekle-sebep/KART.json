@@ -1,6 +1,6 @@
 {
   "is": "gorev-bekle-sebep",
-  "cumle": "Ajan duraklayan işine tek komutla sebep yazar; kart Durakladı sebebini gösterir (Kuzey G14)",
+  "cumle": "gorev.sh bekle komutu duraklayan işin sebebini tek komutla yazar; kart bunu Durakladı olarak gösterir (sınavlı)",
   "istedi": "SERDAR (Kuzey G14)",
   "aldi": "HEZARFEN",
   "zaman": "2026-11-06T23:29:05+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "code",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-07T00:44:25+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gorev-bekle-bekci-zil",
+      "tur_sifir": 3
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -39,6 +46,11 @@
       "zaman": "2026-11-06T23:32:43+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T23:35:15+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
@@ -48,6 +60,29 @@
       "oturum": "ulak_1793997242-23d84e66",
       "gerekce": "SERDAR kararı: bulgu 2 → 1, ölçülmemiş gösterim kartın 62/62 tarayıcı sınavıyla kanıtlandı",
       "zaman": "2026-11-06T23:34:43+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "ulak_1794001438-727946d2",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gorev-bekle-bekci-zil) — Bekçi zili 60 dakikalık sessizlikte sebep sormuyor; G14 ikinci parçası ayrı kartta yapılacak",
+      "zaman": "2026-11-07T00:44:25+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Ajan duraklayan işine tek komutla sebep yazar; kart Durakladı sebebini gösterir (Kuzey G14)",
+      "zaman": "2026-11-07T00:44:25+03:00",
+      "kalan_kart": "gorev-bekle-bekci-zil"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-07T00:44:25+03:00",
+      "kalan_kart": "gorev-bekle-bekci-zil",
+      "kalan": "Bekçi zili 60 dakikalık sessizlikte sebep sormuyor; G14 ikinci parçası ayrı kartta yapılacak",
+      "tur_sifir": 3,
+      "oturum": "ulak_1794001438-727946d2"
     }
   ]
 }
