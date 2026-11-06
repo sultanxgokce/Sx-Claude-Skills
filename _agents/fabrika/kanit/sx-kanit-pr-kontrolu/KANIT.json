@@ -1,7 +1,7 @@
 {
   "is": "sx-kanit-pr-kontrolu",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T02:28:00+03:00",
+  "guncelleme": "2026-11-07T02:53:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -115,7 +115,28 @@
       "olculen_commit": "79d22068edb0bf0dfc193d0e0834dce8f37c7e04",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "karma-pr-canli-log",
+      "asama": "sonra",
+      "dosya": "olcum-karma-pr-canli-log-sonra.txt",
+      "sha256": "b09b074d133e007d0e70225f6b2f0ff339b359f4d76b179f396f8e01a4c5d2e0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/1065a6f5-8463-464e-a2f8-0550f8ee5658/scratchpad/kpk-log.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:53:44+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "f6c6af0d1a61286926b64598a458c667724994f8f1e39cc37a990932664e4cf9",
+      "olcum_id": "17f3f09c496b45b4b41b33dbe829dc79",
+      "olculen_commit": "898485f84400bda0896945cf54ebf0bc571085be",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "44f4e835150f359c2192edb7f67dc2578137a2cfc234746c65638c77e291b721"
+  "imza": "6a21ef4fd12ab29ee371e89357a6e4949f58a11417f2d4f00f0256b19ca84870"
 }
