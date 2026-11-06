@@ -404,8 +404,9 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF"
     _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"doğan görevler: %s" % ", ".join(x["deger"] for x in j["kayit"].get("dogan_gorevler",[]))' ;;
   bekle)
     # G14 (Kuzey): duraklayan/bekleyen işin SEBEBİ tek komutla — kart "Durakladı · <sebep>" bu adımı okur (ekran değişmez)
-    [ $# -ge 3 ] && [ "${#3}" -ge 5 ] && [ "${#3}" -le 120 ] || { echo "kullanım: gorev.sh bekle <gorev_id> \"<neden duruyor, Sultan diliyle, 5-120 harf>\" — sebepsiz duraklama yazılmaz" >&2; exit 2; }
-    G="$(python3 -c 'import sys,json; print(json.dumps({"adimlar":["[bekliyor] %s" % sys.argv[1].strip()]},ensure_ascii=False))' "$3")"
+    SEB="$(printf '%s' "${3:-}" | python3 -c 'import sys; print(sys.stdin.read().strip())')"
+    [ $# -ge 3 ] && [ "${#SEB}" -ge 5 ] && [ "${#SEB}" -le 120 ] || { echo "kullanım: gorev.sh bekle <gorev_id> \"<neden duruyor, Sultan diliyle, 5-120 harf>\" — sebepsiz duraklama yazılmaz" >&2; exit 2; }
+    G="$(python3 -c 'import sys,json; print(json.dumps({"adimlar":["[bekliyor] %s" % sys.argv[1]]},ensure_ascii=False))' "$SEB")"
     _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '(("⏸ sebep yazıldı" if j["degisti"] else "bu sebep zaten yazılı") + " · kart: Durakladı")' ;;
   adim)
     [ $# -ge 3 ] && [ -n "$(printf '%s' "$3" | tr -d '[:space:]')" ] || { echo "kullanım: gorev.sh adim <gorev_id> \"<ne yapıldı>\" [--dugum <kutu>:<gorev_id>] — boş adım yazılmaz" >&2; exit 2; }

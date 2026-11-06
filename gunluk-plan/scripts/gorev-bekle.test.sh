@@ -23,11 +23,15 @@ yazim(){ [ -f "$T/sayi" ] && wc -c < "$T/sayi" | tr -d ' ' || echo 0; }; sifirla
 echo "── bekle fiili"
 sifirla; o=$("${E[@]}" bash "$G" bekle gorev_A "Sultan onayını bekliyor" 2>&1); r=$?
 ok "K1 sebep yazılır: rc 0, tek istek, adım '[bekliyor] <sebep>' biçiminde" '[ $r -eq 0 ] && [ "$(yazim)" = 1 ] && grep -q "\[bekliyor\] Sultan onayını bekliyor" "$T/gelen.json"'
-ok "K2 çıktı kartın Durakladı göstereceğini söyler" '[[ "$o" == *"Durakladı"* ]]'
+ok "K2 adım metni kartın okuduğu '[bekliyor] ' önekiyle başlar ve kırpılmış sebebi taşır (kart tarafı: terminal-merkez gorev-ayrinti-tarayici-sinav B5/B9)" 'python3 -c "import json;a=json.load(open(\"$T/gelen.json\"))[\"adimlar\"];assert a==[\"[bekliyor] Sultan onayını bekliyor\"],a"'
 sifirla; o=$("${E[@]}" bash "$G" bekle gorev_A "kısa" 2>&1); r=$?
 ok "K3 5 harften kısa sebep yazılmaz: rc 2, istek yok" '[ $r -eq 2 ] && [ "$(yazim)" = 0 ]'
 sifirla; o=$("${E[@]}" bash "$G" bekle gorev_A "$(printf 'a%.0s' $(seq 121))" 2>&1); r=$?
 ok "K4 120 harften uzun sebep yazılmaz: rc 2, istek yok" '[ $r -eq 2 ] && [ "$(yazim)" = 0 ]'
 sifirla; o=$("${E[@]}" bash "$G" bekle gorev_A 2>&1); r=$?
 ok "K5 sebepsiz çağrı yazılmaz: rc 2, kullanımı söyler" '[ $r -eq 2 ] && [[ "$o" == *"kullanım"* ]] && [ "$(yazim)" = 0 ]'
+sifirla; o=$("${E[@]}" bash "$G" bekle gorev_A "        " 2>&1); r=$?
+ok "K6 yalnız boşluktan oluşan sebep yazılmaz (denetçi tur 1): rc 2, istek yok" '[ $r -eq 2 ] && [ "$(yazim)" = 0 ]'
+sifirla; o=$("${E[@]}" bash "$G" bekle gorev_A "   sebep boşluklu kenar   " 2>&1); r=$?
+ok "K7 kenar boşlukları kırpılarak yazılır" 'grep -q "\[bekliyor\] sebep boşluklu kenar\"" "$T/gelen.json"'
 echo "── $g geçti · $k düştü"; [ $k -eq 0 ]
