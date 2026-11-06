@@ -15,7 +15,12 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-06T20:17:41+03:00",
+      "olay": "canli-borc"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "--canli e",
   "kapsam_uyarilari": [],
@@ -34,6 +39,26 @@
       "zaman": "2026-11-06T20:06:11+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T20:17:41+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "canli_borc": {
+    "zaman": "2026-11-06T20:17:41+03:00",
+    "yazan": "BASİRET",
+    "gerekce": "denetçi tur 2: kutu dışı bulgu ikinci kez geldi, kutuda kapanmaz; kapanacağı yüzey: Sultan'ın canlı `!` komutunu çalıştırabildiği oturum",
+    "odendi": null
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BASİRET",
+      "oturum": "basiret-6kas-2026-1065a6f5",
+      "gerekce": "tur 1 bulgusu (komut konumu) kapandı, tur 2 yalnız daha dar yönlendirme hedefi vakası buldu ve ZA20-ZA23 ile kapatıldı; açık ciddi bulgu sürekli daralıyor, bir tur daha",
+      "zaman": "2026-11-06T20:28:58+03:00"
     }
   ]
 }
