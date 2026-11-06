@@ -7,6 +7,7 @@
 #   gorev.sh ac "<ne lazım>" --kutu <B> --oda <istenen oda> --isteyen-oda <senin odan> --teslim YYYY-MM-DD --dugum <x>   → SİPARİŞ (Oda modeli 5 D2): üçü birlikte; --oda açıkça yazılır, --isteyen-oda verilmezse koltuğunun odası
 #   BAŞLIKTA SAYI (verim R2 · SERDAR 29 Eki): tek ölçüt biçimi "<ne sayılıyor> <şimdi> → <hedef> (kaynak: <komut/ekran>, <gün>)"; çok parçalı başlık sayılabilir (1)(2) maddelere bölünür ya da [ayri] ile ayrılır; süre/aşama içeren başlık süresi dolmadan bitti yazılmaz; bitti --olcum "sonra" kapanışta canlıdan okunur: sonra=M (kaynak: <komut/ekran>, <gün>)
 #            (--durum bekliyor → --not ZORUNLU: defter neyi beklediği yazılmamış 'bekliyor'u reddeder · G12)
+#   gorev.sh bekle <gorev_id> "<neden duruyor>"  → "[bekliyor] <sebep>" adımı yazar; kart "Durakladı · <sebep>" gösterir (G14)
 #   gorev.sh adim <gorev_id> "<ne yapıldı>" [--dugum <kutu>:<gorev_id>]  → adım EKLENİR (silinmez, değişmez; aynı metin ikinci kez eklenmez)
 #   gorev.sh yildiz-oner <gorev_id> [--geri]  → ⭐ ÖNERİR (yıldızı yalnız Sultan koyar, A06) · gorev.sh not-okudum <gorev_id> → Sultan'ın "ajana" notunu okudum damgası
 #            (--dugum: bu görev o kutunun görevini serbest bırakmak için çalışıyor → düğüm bağı + adım TEK istekte · 20 Eki)
@@ -401,6 +402,11 @@ print(json.dumps(d,ensure_ascii=False))' "$B" "$KIM" "$NOTU" "$ETIKET" "$KSINIF"
     [ $# -ge 3 ] && [ -n "${3:-}" ] || { echo "kullanım: gorev.sh dogan <bulgu_id> <dogan_gorev_id>" >&2; exit 2; }
     G="$(python3 -c 'import sys,json; print(json.dumps({"dogan_gorevler":[sys.argv[1]],"adimlar":["[doğan görev] "+sys.argv[1]]},ensure_ascii=False))' "$3")"
     _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '"doğan görevler: %s" % ", ".join(x["deger"] for x in j["kayit"].get("dogan_gorevler",[]))' ;;
+  bekle)
+    # G14 (Kuzey): duraklayan/bekleyen işin SEBEBİ tek komutla — kart "Durakladı · <sebep>" bu adımı okur (ekran değişmez)
+    [ $# -ge 3 ] && [ "${#3}" -ge 5 ] && [ "${#3}" -le 120 ] || { echo "kullanım: gorev.sh bekle <gorev_id> \"<neden duruyor, Sultan diliyle, 5-120 harf>\" — sebepsiz duraklama yazılmaz" >&2; exit 2; }
+    G="$(python3 -c 'import sys,json; print(json.dumps({"adimlar":["[bekliyor] %s" % sys.argv[1].strip()]},ensure_ascii=False))' "$3")"
+    _cagir PATCH "/kayit/$2" "$G" | _sonuc 200 '(("⏸ sebep yazıldı" if j["degisti"] else "bu sebep zaten yazılı") + " · kart: Durakladı")' ;;
   adim)
     [ $# -ge 3 ] && [ -n "$(printf '%s' "$3" | tr -d '[:space:]')" ] || { echo "kullanım: gorev.sh adim <gorev_id> \"<ne yapıldı>\" [--dugum <kutu>:<gorev_id>] — boş adım yazılmaz" >&2; exit 2; }
     DUGUM=""; if [ "${4:-}" = "--dugum" ]; then DUGUM="${5:-}"; [ -n "$DUGUM" ] || { echo "--dugum değer ister: <kutu>:gorev_<kimlik>" >&2; exit 2; }; DUGUM="$(_dugum_coz "$DUGUM")" || exit 1; elif [ -n "${4:-}" ]; then echo "bilinmeyen: $4" >&2; exit 2; fi
