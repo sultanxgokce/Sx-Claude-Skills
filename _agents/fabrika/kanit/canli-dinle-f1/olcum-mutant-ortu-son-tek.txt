@@ -1,0 +1,36 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: metin: · rc≠0 + hedef kapı 'metin:' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-son-* ===
+$ env MUTANT=ortu bash canli-dinle/scripts/canli-dinle.test.sh
+# rc=1 sure=201.3s zaman=2026-11-06T21:23:57+03:00
+--- stdout ---
+── T1 araç seçimi
+  ✓ ikisi de varsa streamlink
+  ✓ yalnız yt-dlp varsa yt-dlp
+  ✓ hiçbiri yoksa ffmpeg doğrudan
+── T2 yakalama komutu
+  ✓ streamlink boru hattı; ffmpeg doğrudan, süre sınırı
+── T3 sahte yayın uçtan uca (Groq)
+  ✓ rc 0
+  ✗ metin: 'k0 k1 k2 k3 k3 k4 k5 k6 k7 k7 k8 k9 k10 k11 k11 k12 k13'
+  ✓ 4 parça (4+4+4+2 sn)
+── T4 10 dk pencerede özet
+  ✗ özet: ## Pencere 0
+ÖZET(7)
+
+## Pencere 1
+ÖZET(8)
+
+## Pencere 2
+ÖZET(2)
+── T5 yerel kaynak (sahte whisper.cpp)
+  ✗ yerel rc 0 metin 'k0 k1 k2 k3 k3 k4 k5 k6 k7 k7 k8 k9 k10 k11 k11 k12 k13'
+── T5b varsayılanlar
+  ✓ varsayılan 30 sn parça · 5 sn örtüşme · 600 sn pencere
+── T5c hata yolları
+  ✓ Groq ulaşılamazsa traceback yok: parçalar atlanır, rc 2
+  ✓ yakalama hiç parça vermezse rc 1
+── T6 anahtar
+  ✓ anahtar hiçbir çıktıda yok
+  ✓ anahtarsız rc 3
+sonuç: 11 geçti, 3 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-canli-dinle-f1-mutant-ortu-son 150 sn bekledi (yuva 1, load1 17.72)
