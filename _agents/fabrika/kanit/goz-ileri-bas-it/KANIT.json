@@ -1,0 +1,50 @@
+{
+  "is": "goz-ileri-bas-it",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T15:34:12+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "fark-sinav",
+      "asama": "once",
+      "dosya": "olcum-fark-sinav-once.txt",
+      "sha256": "a7244912f0118c4bdc731563a5f7e319c94f1d98643f244753a0a117ded6a728",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T15:24:37+03:00",
+      "sure_sn": 73.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "464caf9aec54e4047a5073aad17bb70f895864ef107dccc6af279be3efa2eb6c",
+      "olcum_id": "52a20d21a490422a88a5f546470cf574",
+      "olculen_commit": "02b0c203c5f601689823d6f392ba4cd2c528a85e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fark-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-fark-sinav-sonra.txt",
+      "sha256": "b3dea383a56be6f58de6c064ca8ef8e0316e8719b32ebd473f127eb0380d8f8b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T15:34:12+03:00",
+      "sure_sn": 62.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "32dcd4d82e4281f4c81063be6f3ba7c541e567bdd2e865806479d9da32944fbc",
+      "olcum_id": "04c2f25c40254ba5935fd80033eb94ad",
+      "olculen_commit": "068473aedd2c0c51ce1f9a41abc2359fca84df0a",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "4d2e96ea28d9e50856fb1c55e875c044c37a413c96db7d48e14da30bd7c7d39e"
+}
