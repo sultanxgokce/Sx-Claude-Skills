@@ -1,7 +1,7 @@
 ---
 name: sultan-eli
 type: agent
-version: 0.1.3
+version: 0.2.0
 description: >
   Geri alınamaz kapılar için "bu komutu gerçekten insan mı başlattı?" ölçümü. Sultan'ın `!`
   ile koştuğu komut oturum kaydına `<bash-input>` olarak düşer, ajanın komutu düşmez —
@@ -83,6 +83,19 @@ varsa ve o kök kayıt anında başlamışsa (−2..+5 sn) kayıt kabul edilir, 
 ve yeniden kullanılmış PID geçmez. **Dürüst sınır:** kaydı Claude Code yazar, satıra PID giremez; bağ komut
 metni + başlangıç saatidir. Sınav sarmalayıcıyı `eval '<komut>'` kökü olarak taklit eder (bu oturumun kendi
 zincirinde ölçüldü); gerçek `!` koşusu fixture ile üretilemez → canlı doğrulama Sultan'ın tek `!` komutuyla.
+
+### 0.2.0 · iki adım: iz bırak, kayıt yazıldıktan sonra onayla (6 Kas 22:5x, SERDAR ölçümü)
+**Ölçüm:** harness insan `!` komutunun kullanıcı kaydını komut BİTTİKTEN SONRA yazıyor (zaman damgası gönderim anı, satır sırası bitişten sonra).
+Komutun İÇİNDE koşan `dogrula` kendi kaydını hiçbir zaman göremez; `sleep` ne olursa olsun düşer. (Eski 0.1.x tek adımlı `dogrula` kayıtları
+komut dışından okumak için kalır; içeriden insan kanıtı için bu iki adım kullanılır.)
+- `iz --imza <metin>` — insan komutunun İÇİNDE: süreç zincirinde imzayı taşıyan kök komutu bulur; komut metnini ve kökün başlangıcını bir iz
+  dosyasına (`$XDG_CACHE_HOME/sultan-eli/iz`) yazar. Hiçbir şeyi onaylamaz. Zincirde imza yoksa rc 1.
+- `onayla --imza <metin> [--nonce <kimlik>]` — komut BİTTİKTEN sonra, ayrı süreçte: iz ile BİREBİR aynı `<bash-input>` kaydı var mı ve damgası kök başlangıcından
+  -2..+5 sn içinde mi? Varsa VAR (rc 0) ve kayıt HARCANIR; aynı kayıtla ikinci onay YOK. rc 1 YOK · rc 3 ÖLÇÜLEMEDİ (oturum kaydı görünmüyor).
+- Güvenlik özellikleri (hepsi mutantla ölçülür): kayıt yoksa VAR yok (ajan `iz`'i kendi aracıyla koşsa da insan kaydı oluşmaz) · eski insan kaydı
+  taze izle eşleşmez (zaman bağı) · tek kullanım · komut metni birebir (alt dize geçmez) · iz yaşı en çok 900 sn (ortam yalnız düşürebilir).
+- Ayrıca `dogrula`: kayıtlı komut metni kırpılarak karşılaştırılır (baştaki/sondaki boşluk) ve YOK sonucu en yakın kaydın yaşını açıklar.
+- Kullanım örneği (Sultan tek `!` komutu): `bash …/sultan-eli.sh iz --imza <metin>`; sonra ajan `bash …/sultan-eli.sh onayla --imza <metin>` koşar.
 
 ### 0.1.3 · sarmalayıcıyı ayrıştır (6 Kas 20:2x, canlı `!` koşusu "insan-izi YOK" dedi)
 0.1.2 yalnız `eval '<komut>'` biçimini tanıyordu; sınav da kökü öyle kuruyordu (fixtürde yeşil, canlıda kırmızı).

@@ -273,6 +273,66 @@ bash "$K" dogrula --imza "$IM" >/dev/null 2>&1
 check "ZK10 eski kural: 60 sn yaşlı kayıt, kök yok → YOK (gevşemedi)" "1" "$?"
 : > "$KOK/proje/z.jsonl"
 
+# ZB · İKİ ADIM (SERDAR ölçümü 6 Kas: harness `!` kaydını komut BİTTİKTEN SONRA yazıyor → içeriden görülmez).
+#   iz = komutun içinde, onayla = komuttan sonra ayrı süreçte. Fikstür kaydı bilerek komuttan SONRA yazar (zaman damgası = gönderim anı).
+IZD="$T/iz"; export SULTAN_ELI_IZ="$IZD"; PYI="$HERE/iki-adim.py"
+limpa() { find "$1" -delete 2>/dev/null; true; }
+zb() {  # $1=kapı betiği $2=kayıtlı komut(insan yazdı) $3=kayıt yazma biçimi: sonra|yok|eski $4=kök kabuğun eval'e verdiği ifade
+  : > "$KOK/proje/z.jsonl"; limpa "$IZD"
+  local t0; t0=$(date +%s)
+  bash -c "source $SNAP 2>/dev/null || true && eval $4 < /dev/null && pwd -P >| $T/cwd-dosyasi" >/dev/null 2>&1
+  local iz_rc=$?
+  case "$3" in
+    sonra) _satir "<bash-input>$2</bash-input>" $(( $(date +%s) - t0 )) > "$KOK/proje/z.jsonl" ;;   # kayıt komuttan SONRA yazılır, damga = başlangıç
+    eski) _satir "<bash-input>$2</bash-input>" 3000 > "$KOK/proje/z.jsonl" ;;
+    yok) : > "$KOK/proje/z.jsonl" ;;
+  esac
+  return $iz_rc
+}
+IZK="sleep 1 && bash $K iz --imza $IM"
+zb "$K" "$IZK" sonra "$(q "$IZK")"
+check "ZB0 iz komutun içinde bırakıldı (rc 0)" "0" "$?"
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB1 kayıt komuttan SONRA yazıldı, ayrı süreçte onayla → VAR" "0" "$?"
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB2 aynı kayıtla ikinci onay → YOK (kayıt harcandı)" "1" "$?"
+zb "$K" "$IZK" yok "$(q "$IZK")"
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB3 insan kaydı hiç yok (ajan iz'i kendi aracıyla koştu) → YOK" "1" "$?"
+zb "$K" "echo x; $IZK" sonra "$(q "$IZK")"
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB4 kayıt = önek + komut (alt dize) → YOK (birebir)" "1" "$?"
+zb "$K" "$IZK" eski "$(q "$IZK")"
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB5 aynı metinli ESKİ insan kaydı (3000 sn önce) taze izle eşleşmez → YOK (zaman bağı)" "1" "$?"
+zb "$K" "$IZK" sonra "$(q "$IZK")"
+sleep 2; SULTAN_ELI_IZ_YAS=1 bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB6 iz tavandan yaşlı (1 sn) → YOK" "1" "$?"
+SULTAN_ELI_KOK="$T/hic-yok-dizin" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB7 oturum kaydı hiç görünmüyor → 3 (ÖLÇÜLEMEDİ, YOK değil)" "3" "$?"
+bash "$K" iz --imza zzz-yok-boyle-imza >/dev/null 2>&1
+check "ZB8 süreç zincirinde imza yok (insan komutu gibi görünmüyor) → iz bırakılmaz, rc 1" "1" "$?"
+# mutantlar: her söküm ilgili vakayı DÜŞÜRMELİ
+mutb() {  # $1=ad $2=eski $3=yeni → mutant yolunu basar
+  local M="$T/iki-adim-$1.py"
+  python3 -c 'import sys; src,dst,e,y=sys.argv[1:]; s=open(src,encoding="utf-8").read(); assert e in s; open(dst,"w",encoding="utf-8").write(s.replace(e,y))' "$PYI" "$M" "$2" "$3"
+  echo "$M"
+}
+MB1="$(mutb harcama 'if a in harcanan:' 'if False:')"
+zb "$K" "$IZK" sonra "$(q "$IZK")"
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB1" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB1" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB9 harcama mutantında ikinci onay GEÇİYOR (0) → ZB2 yakalar" "0" "$?"
+MB2="$(mutb zaman 'if not (BAS_ALT <= fark <= BAS_UST):' 'if False:')"
+zb "$K" "$IZK" eski "$(q "$IZK")"
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB2" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB10 zaman bağı mutantında eski kayıt GEÇİYOR (0) → ZB5 yakalar" "0" "$?"
+MB3="$(mutb birebir 'if komut != iz["komut"]:' 'if iz["komut"] not in komut:')"
+zb "$K" "echo x; $IZK" sonra "$(q "$IZK")"
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB3" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB11 birebir mutantında önek+komut GEÇİYOR (0) → ZB4 yakalar" "0" "$?"
+limpa "$IZD"; unset SULTAN_ELI_IZ
+
 echo ""
 echo "── SONUÇ: PASS=$pass FAIL=$fail ──"
 [ "$fail" = "0" ] || exit 1

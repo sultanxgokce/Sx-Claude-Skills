@@ -41,6 +41,11 @@ sultan-eli.sh — geri alınamaz kapılar için "bunu insan mı başlattı" öl�
   dogrula --imza <metin>   kayıtta, son <pencere> sn içinde, <metin> geçen bir insan-`!`
                            komutu var mı? (imza = kapının kendi komut parçası)
   durum                    ölçüm yüzeyi görünüyor mu (tanı; verdikt vermez)
+  iz --imza <metin>        İKİ ADIM, 1/2 — insan `!` komutunun İÇİNDE koşar: komutun kendisini ve başlangıcını bir iz dosyasına
+                           yazar, hiçbir şeyi onaylamaz. (Harness `!` kaydını komut BİTTİKTEN sonra yazar; içeriden görülmez.)
+  onayla --imza <metin> [--nonce <kimlik>]
+                           İKİ ADIM, 2/2 — komut BİTTİKTEN sonra ayrı süreçte: iz ile birebir aynı komutun insan kaydı var mı?
+                           Bulursa izi ve kaydı HARCAR (tek kullanım). 0 VAR · 1 YOK · 3 ÖLÇÜLEMEDİ
 
 Çıkış: 0 insan-izi VAR · 1 insan-izi YOK · 2 kullanım · 3 ÖLÇÜLEMEDİ (kayıt görünmüyor)
 
@@ -229,7 +234,26 @@ sys.exit(1)
   return 1
 }
 
+IZDIR="${SULTAN_ELI_IZ:-${XDG_CACHE_HOME:-$HOME/.cache}/sultan-eli/iz}"
+IZ_YAS="${SULTAN_ELI_IZ_YAS:-900}"; case "$IZ_YAS" in ''|*[!0-9]*) IZ_YAS=900 ;; esac   # iki adım: iz'in en çok yaşı; python tarafı 900 üstüne çıkarmaz
 case "${1:-}" in
+  iz|onayla)
+    MOD="$1"; shift; IMZA=""; NONCE=""
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --imza) IMZA="${2:-}"; shift 2 ;;
+        --nonce) NONCE="${2:-}"; shift 2 ;;
+        *) echo "HATA: bilinmeyen argüman: $1" >&2; exit 2 ;;
+      esac
+    done
+    [ ${#IMZA} -ge 3 ] || { echo "HATA: --imza en az 3 karakter olmalı (kapının kendi komut parçası)" >&2; exit 2; }
+    PY="$(dirname "${BASH_SOURCE[0]}")/iki-adim.py"
+    [ "${SULTAN_ELI_SINAV:-}" = 1 ] && [ -n "${SULTAN_ELI_SINAV_IKI_ADIM:-}" ] && PY="$SULTAN_ELI_SINAV_IKI_ADIM"   # sınav dikişi (mutant): yalnız SULTAN_ELI_SINAV=1 iken
+    [ -r "$PY" ] || { echo "ÖLÇÜLEMEDİ: $PY okunamıyor" >&2; exit 3; }
+    if [ "$MOD" = iz ]; then python3 "$PY" iz "$IMZA" "$$" "$IZDIR"; exit $?; fi
+    # shellcheck disable=SC2046
+    python3 "$PY" onayla "$IMZA" "$IZDIR" "$NONCE" "$IZ_YAS" $(find "$KOK" -name '*.jsonl' -mmin -30 2>/dev/null)
+    exit $? ;;
   dogrula)
     IMZA=""
     shift
