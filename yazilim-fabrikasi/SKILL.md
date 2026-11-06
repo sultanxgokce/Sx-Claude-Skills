@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.71
+version: 0.27.72
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.72 (7 Kas 2026, kart on-goz-denetime · görev W42-E1 …W7H1EBA dilim 3 · BÂNİ):** ön göz denetime BAĞLANDI. Her denetim turu başında `on-goz.py` (A1-A5) + DALGIÇ koşar, DENETIM kaydına `on_goz: {durum, dalgic, kanit_basi, kanit_eksik, taban, agac, kapsam_dosya, gecis_gerekcesi, zorunlu, notlar}` yazılır, karne satırı durumu taşır ve `karne.sh ozet` ilk tur 5/E'yi ön göz kırılımıyla basar. **Zorunlu kip** (`DENETCI_ON_GOZ_ZORUNLU=1` ya da çalışma ağacında/`origin/main`'de `_agents/fabrika/on-goz-zorunlu`; ortam kipi kapatamaz): ön göz uyumsuzsa denetim AÇILMAZ (rc 1), ölçülemediyse AÇILMAZ (rc 3) — DENETIM yazılmaz, tur yanmaz, zil çalmaz; mekanik kapı uyumsuzken DALGIÇ çağrılmaz. `--on-goz-gec "<gerekçe ≥20>"` bilinçli geçiş: `kart.sh on-goz-gec` ile karta (`on_goz_gecisleri[]`) ve DENETIM'e (`durum: gecildi`, `gecis_oncesi`) yazılır, göz gerekçeyi kart metninde görür. `denetci.sh <iş> --on-goz`: yalnız ön göz (denetim yok, rc 0/1/3) — göze göndermeden önceki komut. Bayraksız kutu: ön göz bilgi + kayıt (davranış değişmedi). Sınav `denetci-on-goz.test.sh` 39 kapı + 8 mutant.
 - **0.27.71 (7 Kas 2026, kart on-goz-kapilari · görev W42-E1 …W7H1EBA dilim 2 · BÂNİ):** `scripts/on-goz.py <iş> [--pr N] [--json]` — bağımsız göze göndermeden önce MEKANİK ön göz (tasarım Nexus `_agents/spec/on-goz-adimi-DESIGN.md`): A1 kanıt başı (geçerli, 'once' olmayan kayıtların ölçüldüğü commit = HEAD ya da arada yalnız kanıt; PR başı/itilmiş dal = HEAD) · A2 kanıt eksik (dogrula yeşil, en az bir gerçek ölçüm, mutantın hedef kapısı düşmüş) · A3 taban (geride + birleştirme çakışıyorsa) · A4 ağaç (kanıt dışı commit'lenmemiş) · A5 kapsam (kart cümlesinin 'dışında/dokunulmaz' dediği yol farkta). rc 0 uyumlu · 1 uyumsuz · 3 ölçülemedi. Denetime henüz bağlı değil (dilim 3). Sınav `on-goz.test.sh` 23 kapı.
 - **0.27.70 (7 Kas 2026, kart borclar-odenmis-borc · görev …XPQS · BÂNİ):** `kart.sh borclar` canlı kanıtı alınmış ama henüz `bitti` yapılmamış kartı (`canli-borc-durum` → `odendi`) kırmızı saymaz: satır `✅ … ödendi · kart.sh bitti bekliyor`, çıkış kodunu yalnız ödenmemiş borçlar belirler. Vaka: 6 Kas otopilot-kuru-gece-cron, borclar 44 sa SÜRE AŞILDI derken canli-borc-durum ödendi diyordu. `canli-borc-durum` okunamazsa ödenmiş sayılmaz. Sınav T14m2.
 - **0.27.69 (6 Kas 2026, kart denetci-bol-zil-yok + denetci-bol-zil-surum · görev …KS0Z3H · BERİD):** `denetci.sh` İŞİ BÖL (istem tavanı aşımı) yolunda model çağrılmaz, tur yanmaz; eskiden çıkış yine de 'tur N: —/— · rc 1 · düzelt, yeniden gönder' bitiş zilini çalıp yanlış teşhis koyuyordu (#1429'da 3 sahte zil). Artık `BOL_RED` bayrağı zili atlar ve 'denetçi zili çalınmadı: istem tavanı aşıldı' basar. Sınav Z9e + mutant `bol-red-zil-calar`. (Kod #728'de girdi; sürüm numarası #727 ile çakıştığı için kurulum yüklemedi, bu sürüm onu düzeltir.)
