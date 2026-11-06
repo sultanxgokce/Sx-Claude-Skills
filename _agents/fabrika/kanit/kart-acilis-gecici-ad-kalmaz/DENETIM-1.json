@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kart-acilis-gecici-ad-kalmaz",
+  "pr": "714",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T12:43:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-acilis-gecici-ad-kalmaz",
+  "dal": "kart-acilis-gecici-ad-kalmaz",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22978,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 47191
+  },
+  "dalgic": "uyumlu",
+  "bas": "fedbb087f06a2c5202c82c723cdba797e4bf0247",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kart açılışı tetikte kesildiğinde yalnız sürecin kendi geçici kart/çıktı dosyalarını temizleyen sinyal/çıkış kapanı eklenmiş; başarı özeti de kart yayımlandıktan sonraya taşınmış. Gerçek ölçüm U9k ve U9n kapılarını geçiriyor, hedefli mutasyon da U9k kapısını düşürdüğü için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve ölçülen ağaç temiz. Gerçek ölçümde 489/489 kapı geçiyor; U9k kesintide kartın yayımlanmadığını, geçici dosya ve başarı özeti kalmadığını, U9n normal açılışın korunduğunu ölçüyor. Mutasyon kaydı hedef U9k kapısını gerçekten düşürüyor; dolayısıyla sınavın yalnız yeşil görünmediği, kusuru yakaladığı da kanıtlı."
+  }
+}
