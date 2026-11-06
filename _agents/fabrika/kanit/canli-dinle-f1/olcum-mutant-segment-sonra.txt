@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: yerel rc · rc≠0 + hedef kapı 'yerel rc' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ env MUTANT=segment bash canli-dinle/scripts/canli-dinle.test.sh
-# rc=1 sure=135.5s zaman=2026-11-06T16:32:24+03:00
+# rc=1 sure=50.3s zaman=2026-11-06T16:59:09+03:00
 --- stdout ---
 ── T1 araç seçimi
   ✓ ikisi de varsa streamlink
@@ -26,4 +26,3 @@ $ env MUTANT=segment bash canli-dinle/scripts/canli-dinle.test.sh
   ✓ anahtarsız rc 3
 sonuç: 13 geçti, 1 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-canli-dinle-f1-mutant-segment 86 sn bekledi (yuva 1, load1 17.97)

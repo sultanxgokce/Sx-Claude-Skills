@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: streamlink önceliği · rc≠0 + hedef kapı 'streamlink önceliği' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ env MUTANT=arac-sirasi bash canli-dinle/scripts/canli-dinle.test.sh
-# rc=1 sure=51.0s zaman=2026-11-06T16:30:08+03:00
+# rc=1 sure=50.3s zaman=2026-11-06T16:58:18+03:00
 --- stdout ---
 ── T1 araç seçimi
   ✗ streamlink önceliği

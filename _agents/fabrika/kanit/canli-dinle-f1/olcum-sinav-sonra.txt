@@ -1,5 +1,5 @@
 $ bash canli-dinle/scripts/canli-dinle.test.sh
-# rc=0 sure=100.7s zaman=2026-11-06T16:27:25+03:00
+# rc=0 sure=50.8s zaman=2026-11-06T16:53:17+03:00
 --- stdout ---
 ── T1 araç seçimi
   ✓ ikisi de varsa streamlink
@@ -25,4 +25,3 @@ $ bash canli-dinle/scripts/canli-dinle.test.sh
   ✓ anahtarsız rc 3
 sonuç: 14 geçti, 0 kaldı
 --- stderr ---
-⏳ agir-sira: kanit-canli-dinle-f1-sinav 51 sn bekledi (yuva 2, load1 16.03)
