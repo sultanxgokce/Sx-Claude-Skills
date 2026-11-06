@@ -1,7 +1,7 @@
 {
   "is": "dumen-yazdir-yakala",
   "arac": "kanit.py/0.8.0",
-  "guncelleme": "2026-11-06T11:44:29+03:00",
+  "guncelleme": "2026-11-06T12:17:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -481,7 +481,102 @@
       "olculen_commit": "c8415bea0edb43872c6660eb8eefa3697b54882f",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "ci-dumen-kovasi-a0eb3390",
+      "asama": "canli",
+      "dosya": "canli-ci-dumen-kovasi-a0eb3390.txt",
+      "sha256": "b17735df478ed0122ef9a94ac8b582da079888abe91b112f37b6c4e2e6170595",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ci-dumen-a0eb3390.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ci-dumen-a0eb3390.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "✓ ./dumen-surucu/scripts/dumen-yazdir.test.sh",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-11-06T09:14:26.2408956Z    ✓ ./dumen-surucu/scripts/dumen-yazdir.test.sh (77465 ms)",
+        "saat": "2026-11-06T09:14:26.2408956Z",
+        "saat_iso": "2026-11-06T09:14:26+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-06T09:14:26.2408956Z    ✓ ./dumen-surucu/scripts/dumen-yazdir.test.sh (77465 ms)",
+        "saat": "2026-11-06T09:14:26.2408956Z",
+        "saat_iso": "2026-11-06T09:14:26+00:00"
+      },
+      "zaman": "2026-11-06T12:17:29+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "7eacbaa6e3ee4c558e39abb53fcce689",
+      "olculen_commit": "fb063b764660e5ea78771b443f71d63ef8ca4ffd",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "canli",
+      "etiket": "ci-dumen-gecti-sayisi-a0eb3390",
+      "asama": "canli",
+      "dosya": "canli-ci-dumen-gecti-sayisi-a0eb3390.txt",
+      "sha256": "288b3ed8251a28fef4fb1c8afc4bfab94d2f4315cb69275cfbc14f794d6c4a7e",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ci-dumen-a0eb3390.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ci-dumen-a0eb3390.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "SONUÇ: geçti=11 kaldı=0",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-11-06T09:14:26.2377919Z SONUÇ: geçti=11 kaldı=0 süre=7 sn",
+        "saat": "2026-11-06T09:14:26.2377919Z",
+        "saat_iso": "2026-11-06T09:14:26+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-06T09:14:26.2377919Z SONUÇ: geçti=11 kaldı=0 süre=7 sn",
+        "saat": "2026-11-06T09:14:26.2377919Z",
+        "saat_iso": "2026-11-06T09:14:26+00:00"
+      },
+      "zaman": "2026-11-06T12:17:34+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "f7fb3369e59d4e75a659b290a19f368c",
+      "olculen_commit": "fb063b764660e5ea78771b443f71d63ef8ca4ffd",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra-t3",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-t3-sonra.txt",
+      "sha256": "ece7f0fa1154ed99d02341f832f813915669701b8c4dce42dba4964d541804b4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dyk-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T12:17:43+03:00",
+      "sure_sn": 8.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "82d5bbea7fc123b7d468dbd13c86021b3efb4fe8288f1816dbf49bb4183648fa",
+      "olcum_id": "62139844e2d447a284e205a4402e38cb",
+      "olculen_commit": "fb063b764660e5ea78771b443f71d63ef8ca4ffd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "30fcd6162fe0e28496b2fbfea8d2fc64d7e1847c8cb6c7bd3c5772ff389f0b0b"
+  "imza": "c0ed0930ea708c8b80c62e5e7b08c427dab9f93874cb7aa3a0acc80ef161b859"
 }
