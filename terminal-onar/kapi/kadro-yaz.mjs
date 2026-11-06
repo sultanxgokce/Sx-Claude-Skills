@@ -173,8 +173,9 @@ function blokDosyasi(proje, ortam, id, alan = '') {
 }
 
 export const DOSYA_NO = /^[0-9]{4}\/[0-9]{1,6}$/;
-// Kayda yazılan oturum adı: koltuk adı kuralının DARALTILMIŞI — boşluk ve tırnak yok (açıcıların satır ayrıştırıcıları `\S+` okur)
-const TMUX_KAYIT = /^[A-Za-z0-9_çğıöşüÇĞİÖŞÜ-]{1,60}$/u;
+// Kayda yazılan oturum adı: koltuk adı kuralının DARALTILMIŞI — boşluk ve tırnak yok (açıcıların satır ayrıştırıcıları `\S+` okur).
+// '/' İZİNLİ (FB51K): dava oturumları dosya no adıyla açılır (2022/777); tmux adı kayıtta AYNEN durur, okuyucu `split(':')[0]` ile tam adı eşler.
+const TMUX_KAYIT = /^[A-Za-z0-9_çğıöşüÇĞİÖŞÜ\/-]{1,60}$/u;
 const SID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export function kisaAdGecerli(s) { const t = String(s || ''); return t.trim() === t && t.length >= 1 && [...t].length <= 60 && !/["\\\x00-\x1f\x7f]/.test(t); }
 

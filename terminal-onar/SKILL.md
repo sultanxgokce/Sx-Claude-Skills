@@ -1,9 +1,14 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.45.0
+version: 2.45.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.45.1 · Kayda bağla: eğik çizgili oturum adı (2022/777) bağlanır (6 Kas · kart raf-bagla-egik-cizgi · SERDAR · vekatip · görev …WF0SF / FB51K)
+Ölçülen kusur (REİSÜLKÜTTAB): dava oturumları dosya no adıyla açılır (`2022/777`); Kadro → Kayda bağla "Oturum adı ("2022/777") kayda yazılamaz" der, raf bağlanmaz. Sebep: `kadro-yaz.mjs` `TMUX_KAYIT` deseni `/` kabul etmiyordu.
+Düzeltme: desene `/` eklendi (boşluk, tırnak, ters bölü, `:` hâlâ ret). Ad kayda AYNEN yazılır (`tmux: "2022/777:0"`); okuyucu `split(':')[0]` ile tam adı eşler, ad dönüştürme yok → kayıt ile koltuk eşlemesi tek kuraldır (uçtan uca eşleme ölçüldü: kişi.oturum = 2022/777, kayıtsız boş). Sınav: kadro-yaz.test.mjs F1/F2 (34/0); mutant (`/` desenden çıkar) F1'i düşürür.
+Canlıya iniş: kurulum + kapı yeniden başlatma.
 
 ## 🆕 2.45.0 · Oda görünen adı aile kaydı yoksa ekip kaydından okunur (6 Kas · kart serit-oda-adi-ekip-kaydi · SERDAR · MMEx · görev …G7PM)
 Ölçülen kusur: MMEx şeridinde oda adları kayıttaki gibi değil kebap anahtardan türetilmiş çıkıyordu; `kayitOku` oda adlarını yalnız `aile-registry.yaml`'dan okuyordu, MMEx'te o dosya yok (ve açılmayacak). MMEx'in adları kendi ekip kaydında: `_agents/handoff/ekip-registry.yaml` `odalar:` bloğu (aynı `- oda:` + `ad:` biçimi).
