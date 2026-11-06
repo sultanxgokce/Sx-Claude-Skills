@@ -34,6 +34,20 @@
       "zaman": "2026-11-06T19:08:20+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T19:11:31+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BENNÂ",
+      "oturum": "ulak_1793982503-00688503",
+      "gerekce": "Göz 5/E sonrası yalnız kanit.py'de cwd bayrağı sırası değişti (mutant çapası); davranış aynı, kanit.test.sh 275/0 ve CI 10/10",
+      "zaman": "2026-11-06T19:44:19+03:00"
     }
   ]
 }

@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "kanit-olculen-dizin",
+  "pr": "726",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T19:44:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-olculen-dizin",
+  "dal": "kanit-olculen-dizin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20248,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2559
+  },
+  "dalgic": "uyumlu",
+  "bas": "cbf01ea0e52a9f838be12a910ad4c3ea2d1e6cc0",
+  "duzeltme_farki": {
+    "onceki_bas": "4295442d119b06e5986585d502686c2b0eaf97c1",
+    "dosya": 3,
+    "bayt": 3855,
+    "tam_bayt": 34249
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turda bulgu yoktu; bu turdaki tek üretim kodu değişikliği `subprocess.run` anahtarlarının sırasını değiştiriyor ve davranışı değiştirmiyor. Sağlam önce/sonra ölçümü ile hedefe seçici mutasyon sınavı talebin karşılandığını gösterdiğinden kod üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm önce K12’de 5 hata ve toplam 33/38, sonra K12 dahil 38/38 gösteriyor; mutasyon kaydı ise yalnız “K12 komut ölçülen kopyada KOŞTU” kapısını düşürerek 37/38 sonucu veriyor. Bu, ölçülen kopyada çalıştırma ile kayda o kopyanın kimliğini yazma bağını doğrudan ve seçici biçimde doğruluyor."
+  }
+}
