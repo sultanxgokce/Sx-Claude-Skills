@@ -1,0 +1,113 @@
+{
+  "is": "canli-dinle-f1",
+  "cumle": "canli-dinle becerisinin çekirdeği: yayın adresini alıp 30 sn parçalara bölen ve Groq ya da yerel small-q5 ile Türkçe yazıya döken araç, sahte HLS fikstürü ve mutantla sınanır (10 dakikalık özet penceresi kalan karta devredildi)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-11-06T15:59:47+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "e",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "para",
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "Sx canli-dinle/ sınav + _agents/fabrika/kanit/canli-dinle-f1",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-06T21:12:01+03:00",
+      "olay": "daralt",
+      "kalan_kart": "canli-dinle-f1-kalan",
+      "tur_sifir": 3
+    }
+  ],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canli",
+  "kapsam_uyarilari": [],
+  "baslama_izni": {
+    "durum": "bekliyor",
+    "istendi": "2026-11-06T15:59:47+03:00"
+  },
+  "kural_surumu": "0.21.0",
+  "gorev": "gorev_01M6RF022S6K0HQB17B9C06YJF",
+  "tahmin_dk": 240,
+  "sayi_uyarilari": [
+    "10 dakikalık"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-06T15:59:52+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T16:11:31+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T16:33:49+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T17:11:03+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T21:28:38+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "2-tamamdır ne öneriyorsan öyle yapalım",
+      "beyan": "SERDAR",
+      "gerekce": "SERDAR önerisi devam: tur 3 bulgusu usuldü (kanıt eski başta), kod kusuru yok; HEZARFEN CI kırmızısını (ffmpeg kurulumu) düzeltiyor",
+      "zaman": "2026-11-06T20:28:29+03:00",
+      "yazildi": "2026-11-06T20:28:29+03:00",
+      "zaman_kaynagi": "soz"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "daraltma: kalan bulgu yeni karta (canli-dinle-f1-kalan) — Tur 3 bulgusu: gerçek sınav, mutant ve canlı kayıt kanıtları incelenen başta değil eski commit'te alınmış; kanıtlar güncel başta yeniden alınacak (yeni kart canli-dinle-f1-kanit)",
+      "zaman": "2026-11-06T21:12:01+03:00",
+      "sinifli": true,
+      "izin": "bekliyor"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "canli-dinle becerisi: bir yayın adresini tek komutla alıp 30 sn parçalara bölen, Türkçe yazıya döken (Groq ya da yerel small-q5) ve 10 dakikalık pencerede özet çıkaran araç; sahte HLS fikstürü ve mutantla sınanır",
+      "zaman": "2026-11-06T21:12:01+03:00",
+      "kalan_kart": "canli-dinle-f1-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-06T21:12:01+03:00",
+      "kalan_kart": "canli-dinle-f1-kalan",
+      "kalan": "Tur 3 bulgusu: gerçek sınav, mutant ve canlı kayıt kanıtları incelenen başta değil eski commit'te alınmış; kanıtlar güncel başta yeniden alınacak (yeni kart canli-dinle-f1-kanit)",
+      "tur_sifir": 3,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF"
+    }
+  ]
+}

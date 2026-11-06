@@ -1,0 +1,8 @@
+$ tail -n 10 -- /config/.filo/canli-dinle-f1-olay-son.log
+# kaynak=dosya:/config/.filo/canli-dinle-f1-olay-son.log tur=dosya desen=yazildi kaynak=groq en_az=3 son=10 atesleme=3 rc=0 sure=0.0s zaman=2026-11-06T21:31:15+03:00
+--- stdout ---
+2026-11-06T21:30:17+0300 parca 0 yazildi kaynak=groq sozcuk=61
+2026-11-06T21:30:47+0300 parca 1 yazildi kaynak=groq sozcuk=49
+2026-11-06T21:30:59+0300 parca 2 yazildi kaynak=groq sozcuk=28
+2026-11-06T21:30:59+0300 bitti parca=3 atlanan=0 arac=streamlink yakalama_rc=0
+--- stderr ---

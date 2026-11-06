@@ -1905,6 +1905,27 @@
         "mesaj",
         "onay"
       ]
+    },
+    {
+      "id": "canli-dinle",
+      "type": "tool",
+      "name": "canlı dinle — canlı yayını yazıya döker ve özetler",
+      "version": "0.1.0",
+      "description": "Canlı yayın adresini tek komutla alır, 30 sn parçalara böler, Türkçe yazıya döker (Groq ya da yerel whisper.cpp) ve 10 dakikalık pencerelerde özet çıkarır. Yakalama: streamlink, yoksa yt-dlp, yoksa ffmpeg. Sahiplik süzgeciyle parça sınırında çift/eksik sözcük yok. DRM'li yayında durur.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "python3",
+          "ffmpeg"
+        ]
+      },
+      "tags": [
+        "canli-yayin",
+        "stt",
+        "groq",
+        "whisper"
+      ],
+      "sync_dagitim": false
     }
   ]
 }

@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "canli-dinle-f1",
+  "pr": "722",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T16:33:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-canli-dinle-f1",
+  "dal": "canli-dinle-f1",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37894,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 21480
+  },
+  "dalgic": "uyumsuz",
+  "bas": "ef513d51edffdc03832ef76eb2294d6656625f0e",
+  "duzeltme_farki": {
+    "onceki_bas": "337c36ed7a8d596f96beb18e419da6c439175d24",
+    "dosya": 13,
+    "bayt": 36382,
+    "tam_bayt": 48674
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Araç; tek komutla yayın yakalama, varsayılan 30 saniyelik parçalama, Groq/yerel Türkçe döküm ve 10 dakikalık pencereli özet akışını kurmuş; sahte HLS, gerçek yayın ve dört hedefli mutantla sınanmış. Önceki iki bulgu da kapanmış, yeni ciddi veya işi bozan uygulama kusuru görünmediği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı ya da geçersiz kayıt yok. Gerçek ölçüm 14/14 yeşil; dört mutasyon kaydı hedeflenen kapıları düşürerek kırpma, örtüşme, araç sırası ve yerel segment-zamanlama bozulmalarının sınavca yakalandığını gösteriyor. B1 kapandı: yerel çok sözcüklü segmentler artık süre boyunca kelimelere zaman paylaştırılarak işleniyor; gerçekçi çok sözcüklü sahte whisper fikstürü, yerel uçtan uca kapısı ve `segment` mutantı bunu ölçüyor. B2 kapandı: gerçek sınav, dört mutant ve canlı gerçek-yayın kaydının tamamı aynı temiz commit `5e4e29f68e805d46bfa8b6d358388b552c58dad8` üzerinde; canlı kayıtta Groq kaynaklı üç dolu parça ateşlemesi var."
+  }
+}

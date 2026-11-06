@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "canli-dinle-f1",
+  "pr": "722",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T16:11:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-canli-dinle-f1",
+  "dal": "canli-dinle-f1",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 39272,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 11443
+  },
+  "dalgic": "uyumsuz",
+  "bas": "337c36ed7a8d596f96beb18e419da6c439175d24",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Araç; yayın yakalama, parçalama, Groq/yerel döküm ve pencereli özet akışını kurmuş, sahte HLS sınavı ile mutant kapıları da çalışıyor. Ancak yerel whisper.cpp yolunda segment başlangıcına göre bütün metin tek zaman noktasına bağlandığından parça sınırlarında gerçek konuşma eksilebilir; ayrıca canlı kayıt sınavdan farklı commit ölçtüğü için üretime hazır sayılmaz.",
+    "bulgular": [
+      {
+        "ne": "Yerel whisper.cpp çıktısındaki çok sözcüklü segment, yalnız segment başlangıç zamanı ve tek metin değeri olarak işleniyor; ardından tüm segment bu tek zamana göre sahiplik penceresine alınıyor veya atılıyor. Sınırı aşan gerçek bir segmentin sonraki kısmı böylece kaybolabilir; 'ne çift ne eksik sözcük' güvencesi yerel yol için geçerli değil.",
+        "kanit": "yerel_yaz her segmenti `(ofset + from, s[\"text\"])` biçiminde tek öğeye çeviriyor; kirp bu öğeyi yalnız bu başlangıç zamanıyla süzüyor. Yerel sınav sahtesi ise gerçekçi çok sözcüklü segment yerine her sözcük için ayrı segment üretiyor (`seg.append(... \"text\": \" k%d\")`), dolayısıyla kusuru ölçmüyor.",
+        "konum": "canli-dinle/scripts/canli_dinle.py:92 ve canli-dinle/scripts/canli_dinle.py:106; canli-dinle/scripts/sahte-whisper.py:12",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Canlı gerçek-yayın kanıtı, sınavın ve değerlendirilen üretim kodunun ölçüldüğü commit ile aynı değil; bu nedenle mevcut sürümün canlı yayında çalıştığı iddiası kanıtlanmış değil.",
+        "kanit": "`canli-gercek-yayin` kaydı `olculen_commit=5b1d2a2060d58a0d7557dfb5896947d5cd260b6a`, gerçek sınav ve üç mutant kaydı ise `olculen_commit=9b0ece38616db447be55e006eff04f6a2c38e0c8` bildiriyor.",
+        "konum": "KANIT.json: canli-gercek-yayin ve sinav kayıtları",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek sınav 11/11 yeşil ve üç mutasyon hedef kapıları düşürerek sınavın ilgili bozulmaları yakaladığını gösteriyor. Bununla birlikte yerel fikstür gerçek whisper.cpp segment yapısını temsil etmiyor ve canlı ölçüm farklı committe olduğundan kanıt bütünü üretime hazır iddiasını tamamlamıyor."
+  }
+}

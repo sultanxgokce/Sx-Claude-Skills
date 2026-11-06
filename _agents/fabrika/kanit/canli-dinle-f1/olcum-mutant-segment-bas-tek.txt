@@ -1,0 +1,28 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: yerel rc · rc≠0 + hedef kapı 'yerel rc' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-bas-* ===
+$ env MUTANT=segment bash canli-dinle/scripts/canli-dinle.test.sh
+# rc=1 sure=50.4s zaman=2026-11-06T17:15:56+03:00
+--- stdout ---
+── T1 araç seçimi
+  ✓ ikisi de varsa streamlink
+  ✓ yalnız yt-dlp varsa yt-dlp
+  ✓ hiçbiri yoksa ffmpeg doğrudan
+── T2 yakalama komutu
+  ✓ streamlink boru hattı; ffmpeg doğrudan, süre sınırı
+── T3 sahte yayın uçtan uca (Groq)
+  ✓ rc 0
+  ✓ metin kesintisiz ve çift sözcüksüz (k0..k13)
+  ✓ 4 parça (4+4+4+2 sn)
+── T4 10 dk pencerede özet
+  ✓ pencereler 6 sn: 6+6+2 sözcük
+── T5 yerel kaynak (sahte whisper.cpp)
+  ✗ yerel rc 0 metin 'k0 k1 k2 k3 k5 k6 k7 k9 k10 k11 k13'
+── T5b varsayılanlar
+  ✓ varsayılan 30 sn parça · 5 sn örtüşme · 600 sn pencere
+── T5c hata yolları
+  ✓ Groq ulaşılamazsa traceback yok: parçalar atlanır, rc 2
+  ✓ yakalama hiç parça vermezse rc 1
+── T6 anahtar
+  ✓ anahtar hiçbir çıktıda yok
+  ✓ anahtarsız rc 3
+sonuç: 13 geçti, 1 kaldı
+--- stderr ---
