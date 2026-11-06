@@ -31,7 +31,7 @@ mut "window.print yamalanmaz (yazdırma sayılmaz)" "window.print=function(){win
 mut "yama bitince geri konmaz" "if(window.__dumenPrint0){window.print=window.__dumenPrint0;delete window.__dumenPrint0}" ""
 mut "yazdırma çağrılmasa da PDF yazılmaya çalışılır" "if (!cerceve) throw new KapiHata('yazdirma-yok'" "if (false) throw new KapiHata('yazdirma-yok'"
 mut "alt belge yerine hep ana sayfa basılır" "if (cerceve !== page.mainFrame()) {" "if (false) {"
-mut "alt belge için açılan geçici sekme kapanmaz" "finally { if (o) await o.detach().catch(() => {}); await s.close().catch(() => {}); }" "finally { if (o) await o.detach().catch(() => {}); }"
+mut "alt belgeyi basınca ana sayfaya konan gizleme işaretleri silinmez" "await this.#page.evaluate(() => { document.getElementById('__dumenYz')?.remove(); for (const x of" "await this.#page.evaluate(() => { for (const x of"
 mut "var olan dosya sormadan ezilir" "if (!ustuneYaz) throw new KapiHata('dosya-var'" "if (false) throw new KapiHata('dosya-var'"
 mut "hedef izinli dizinde aranmaz" "if (!this.#icinde(g)) throw new KapiHata('dosya-izinsiz', 'hedef izinli dizinin dışında');" ""
 mut "hedefin türü ölçülmez (.pdf dışı yazılır)" "const u = extname(g).toLowerCase(); if (!this.#turKumesi(turler).has(u)) throw new KapiHata('dosya-turu', \`izinli tür değil: \${u || '(uzantısız)'}\`);

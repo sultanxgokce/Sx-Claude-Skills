@@ -12,11 +12,13 @@ if (!CHROME) { console.log('ÖLÇÜLEMEDİ: DUMEN_CHROME verilmedi'); process.ex
 const PDF = Buffer.from('%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n');
 const SAYFA = `<!doctype html><meta charset=utf-8><title>etiket paneli</title>
 <div id=icerik style="font:20px sans-serif">ETIKET-ANA-SAYFA barkod 7260038702245305</div>
-<span id=sayac>0</span> <span id=hicsonuc>-</span>
+<span id=bp>-</span> <span id=kalinti>-</span> <span id=sayac>0</span> <span id=hicsonuc>-</span>
 <button id=ana onclick="document.getElementById('sayac').textContent=String(+document.getElementById('sayac').textContent+1);window.print()">Ana sayfayı yazdır</button>
 <button id=gec onclick="setTimeout(()=>window.print(),800)">Gecikmeli yazdır</button>
-<button id=alt onclick="const f=document.createElement('iframe');f.id='kap';f.srcdoc='<!doctype html><p>ETIKET-ALT-BELGE</p>';f.onload=()=>f.contentWindow.print();document.body.appendChild(f)">Alt belgeyi yazdır</button>
+<button id=alt onclick="altYaz()">Alt belgeyi yazdır</button>
+<script>function altYaz(){const f=document.createElement('iframe');f.id='kap';f.srcdoc='<!doctype html><p>ETIKET-ALT-BELGE</p><input id=i><script>window.__durum="CANLI";document.getElementById("i").value="BELLEKTE";window.addEventListener("beforeprint",()=>{parent.document.getElementById("bp").textContent="bp:"+window.__durum+":"+document.getElementById("i").value})<\\/script>';f.onload=()=>f.contentWindow.print();document.body.appendChild(f)}</script>
 <button id=sor onclick="document.getElementById('yamasonuc').textContent=(String(window.print).includes('native code')&&window.__dumenYazdirSay===undefined)?'dogal':'yamali'">Yazdırma işlevi durumu</button><span id=yamasonuc>-</span>
+<button id=kal onclick="document.getElementById('kalinti').textContent=document.querySelectorAll('[data-dumen-yz],[data-dumen-ata],[data-dumen-gizle],#__dumenYz').length">Yama kalıntısı say</button>
 <button id=hic onclick="document.getElementById('hicsonuc').textContent='tiklandi'">Yazdırmaz</button>`;
 let mod = 'ajan';
 const srv = http.createServer((q, r) => {
@@ -55,7 +57,10 @@ try {
   ok('Y3 800 ms sonra gelen yazdırma da yakalanır', !r3 && pdfMi(join(KOK, 'gec.pdf')), r3 && r3.message);
   const r4 = await hata(() => d.yazdirYakala('#alt', join(KOK, 'alt.pdf')));
   const s4 = existsSync(join(KOK, 'alt.pdf')) ? readFileSync(join(KOK, 'alt.pdf')).length : 0;
-  ok('Y4 alt belgenin (iframe) yazdırması PDF olarak yazıldı, geçici sekme kapandı', !r4 && pdfMi(join(KOK, 'alt.pdf')) && s4 > 500 && s4 < s1 && (await sekmeSay()) === taban, r4 && r4.message);
+  ok('Y4 alt belgenin (iframe) yazdırması PDF olarak yazıldı, sekme sayısı değişmedi', !r4 && pdfMi(join(KOK, 'alt.pdf')) && s4 > 500 && s4 < s1 && (await sekmeSay()) === taban, r4 && r4.message);
+  ok('Y4b alt belge CANLI haliyle basıldı (kendi betiği ve bellekteki form değeri yazdırma anında yerinde)', (await d.metin('#bp')) === 'bp:CANLI:BELLEKTE', await d.metin('#bp'));
+  await d.click('#kal');
+  ok('Y4c alt belge basıldıktan sonra ana sayfada gizleme işaretleri ve stil kalmadı', (await d.metin('#kalinti')) === '0', await d.metin('#kalinti'));
   console.log('── yazdirYakala: kapılar');
   ok('Y6 yazdırma çağrılmazsa yazdirma-yok (asılmaz), dosya yazılmaz', (await neden(() => d.yazdirYakala('#hic', join(KOK, 'hic.pdf'), { olayMs: 1200 }))) === 'yazdirma-yok' && !existsSync(join(KOK, 'hic.pdf')));
   const sayacOnce = await d.metin('#sayac');
@@ -69,4 +74,4 @@ try {
 } catch (e) { K++; console.log('  ✗ SINAV ÇÖKTÜ: ' + String(e && e.stack || e).slice(0, 600)); }
 finally { ch.kill('SIGKILL'); srv.close(); }
 console.log(`SONUÇ: geçti=${G} kaldı=${K} süre=${Math.round((Date.now() - t0) / 1000)} sn`);
-process.exit(K === 0 && G >= 9 ? 0 : 1);
+process.exit(K === 0 && G >= 11 ? 0 : 1);
