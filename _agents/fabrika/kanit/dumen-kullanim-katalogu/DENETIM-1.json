@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "dumen-kullanim-katalogu",
+  "pr": "715",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T12:49:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-kullanim-katalogu",
+  "dal": "dumen-kullanim-katalogu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 17035,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 7936
+  },
+  "dalgic": "uyumsuz",
+  "bas": "fe9c07d93e4ddbb2e83d96dc6f82ff911fe97990",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "NARH’ın sekiz takılması ayrı satırlarda mevcut Dümen araçlarına bağlanmış ve eksik maddeyi yakalayan sınavlarla katalog kapsamı korunmuş. Ancak 7. satır gerçek bir çare vermek yerine ajanı yeniden araştırmaya gönderiyor; üretime hazır saymadan önce bu vakanın alanı açan somut adımı yazılmalı.",
+    "bulgular": [
+      {
+        "ne": "7. vaka, istenen “takılma → çare” bağını tamamlamıyor: `ogeDurumu(sel).etkin` yalnız pasifliği teşhis ediyor, “önce alanı açan adımı bul” ise uygulanabilir çözümü tarif etmiyor.",
+        "kanit": "Eklenen tablonun 7. satırı aynen `ogeDurumu(sel).etkin — false ise önce alanı açan adımı bul` diyor. `harita-sonra` ölçümü madde 7’yi yeşil saysa da yalnız “çareyle haritada” sonucunu bildiriyor; çarenin somutluğunu ölçtüğünü göstermiyor.",
+        "konum": "dumen-surucu/SKILL.md: NARH vaka haritası, satır 7; olcum-harita-sonra-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti sekiz maddenin haritada bulunmasını, iki mutasyon kaydı da eksik madde kapısının gerçekten düştüğünü gösteriyor. Bununla birlikte ölçüm çıktısı çarelerin doğruluğunu veya uygulanabilirliğini değil, esasen maddelerin haritada bulunmasını kanıtlıyor; gerçekçi arayüz karesi ya da canlı vaka dizisi yok."
+  }
+}
