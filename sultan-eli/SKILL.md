@@ -1,7 +1,7 @@
 ---
 name: sultan-eli
 type: agent
-version: 0.1.1
+version: 0.1.2
 description: >
   Geri alınamaz kapılar için "bu komutu gerçekten insan mı başlattı?" ölçümü. Sultan'ın `!`
   ile koştuğu komut oturum kaydına `<bash-input>` olarak düşer, ajanın komutu düşmez —
@@ -73,3 +73,13 @@ Bu beceriyi kullanırken eksik/hata/daha-iyi-yol görürsen **düzeltmek senin i
 
 ⚠️ Bu becerinin özel borcu: **fixture-yeşil yetmez.** İlk sürüm 14/14 fixture testini geçtiği
 hâlde gerçek oturum kaydında yanlış cevap verdi. Her değişiklikten sonra **canlı kayıtta** koştur.
+
+## Zincir kimliği (0.1.2 · SERDAR kararı 6 Kas 2026)
+Kayıt komutun BAŞINDA düşer, kapı zincirin SONUNDA koşabilir; 45 sn pencere kayıt anından sayıldığı için
+geç kalan kapı meşru Sultan'ı reddediyordu (fixture: 5 sn → VAR, 60 sn → YOK). Pencere büyütülmedi (gevşetir).
+Kimlik bağı eklendi: kapının süreç zincirinde komut satırı kayıttaki insan komutunu BİREBİR taşıyan bir kök
+varsa ve o kök kayıt anında başlamışsa (−2..+5 sn) kayıt kabul edilir, mutlak üst sınır 10 dk
+(`SULTAN_ELI_ZINCIR_UST`). Yoksa eski 45 sn kuralı aynen. Aynı komutun sonradan yeniden koşusu, başka komut
+ve yeniden kullanılmış PID geçmez. **Dürüst sınır:** kaydı Claude Code yazar, satıra PID giremez; bağ komut
+metni + başlangıç saatidir. Sınav sarmalayıcıyı `eval '<komut>'` kökü olarak taklit eder (bu oturumun kendi
+zincirinde ölçüldü); gerçek `!` koşusu fixture ile üretilemez → canlı doğrulama Sultan'ın tek `!` komutuyla.

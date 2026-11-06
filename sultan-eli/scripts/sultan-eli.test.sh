@@ -107,6 +107,64 @@ check "K1 'kilit değil korkuluk' uyarısı kodda duruyor" "1" \
 check "K2 kastı durdurmadığı açıkça yazılı" "1" \
       "$(grep -c 'KASTI durdurmaz' "$K")"
 
+# ── ZK · ZİNCİR KİMLİĞİ (SERDAR kararı 6 Kas, görev …YC9DS) ───────────────────────
+# Kayıt komut BAŞINDA düşer; kapı zincirin SONUNDA koşar. Pencere 1 sn'e indirilir (45 sn'lik
+# bekleme yerine), böylece "kayıt yaşlandı" durumu saniyeler içinde üretilir.
+IM="zincir-sinavi-x"
+zk() {  # $1=kapı betiği $2=kayıttaki komut metni $3=kayıt kaç sn önce $4=kök kabuğun komutu
+  _satir "<bash-input>$2</bash-input>" "$3" > "$KOK/proje/z.jsonl"
+  bash -c "eval '$4'; r=\$?; exit \$r" >/dev/null 2>&1   # gerçek araç sarmalayıcısı gibi: kök kabuk eval ile tutar (exec'e çevrilmez)
+}
+KOMUT="sleep 3 && SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM"
+zk "$K" "$KOMUT" 0 "$KOMUT"
+check "ZK1 aynı zincir, kapı geç kaldı (pencere dolmuş) → VAR" "0" "$?"
+
+zk "$K" "başka komut $IM" 0 "$KOMUT"
+check "ZK2 farklı zincir (kök komut metni kayıttakinden farklı) → YOK" "1" "$?"
+
+zk "$K" "sleep 3 &&  SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM" 0 "$KOMUT"
+check "ZK3 komut metni bir boşluk farklı → YOK (birebir)" "1" "$?"
+
+# ZK4 · kök, kayıttan ÖNCE başlamış (PID yeniden kullanımı / eski kabuk): kayıt kökten 4 sn sonra düşer
+KOMUT4="sleep 6 && SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM"
+bash -c "eval '$KOMUT4'; r=\$?; exit \$r" >/dev/null 2>&1 & KP=$!
+sleep 4; _satir "<bash-input>$KOMUT4</bash-input>" 0 > "$KOK/proje/z.jsonl"
+wait $KP
+check "ZK4 kök kayıttan ÖNCE başlamış → YOK" "1" "$?"
+
+# ZK5 · aynı komutun SONRADAN yeniden koşusu (replay): kayıt 8 sn önce, kök şimdi başlıyor
+KOMUT5="SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM"
+zk "$K" "$KOMUT5" 8 "$KOMUT5"
+check "ZK5 aynı komut kayıttan 8 sn SONRA yeniden koşulunca → YOK (replay)" "1" "$?"
+
+# ZK6 · mutlak üst sınır
+SULTAN_ELI_ZINCIR_UST=1 zk "$K" "$KOMUT" 0 "SULTAN_ELI_ZINCIR_UST=1 $KOMUT"
+check "ZK6 mutlak üst sınır aşılınca → YOK" "1" "$?"
+
+# ZK7/ZK8 · mutantlar: bağ koşulu sökülünce ZK4/ZK5 senaryosu GEÇMEMELİ (geçerse sınav yakalamıştır)
+M="$T/mutant.sh"; sed 's/if not (an-2<=bas<=an+5): continue.*/pass/' "$K" > "$M"
+check "ZK7 mutant sökülmüş başlangıç koşulu gerçekten dosyayı değiştirdi" "1" \
+      "$(cmp -s "$K" "$M" && echo 0 || echo 1)"
+KOMUT7="SULTAN_ELI_PENCERE=1 bash $M dogrula --imza $IM"
+zk "$M" "$KOMUT7" 8 "$KOMUT7"
+check "ZK8 mutantta replay GEÇİYOR (0) → başlangıç koşulu sökülünce ZK5 yakalanır" "0" "$?"
+
+# ZK11 · aynı mutant, ZK4 senaryosunda (kök kayıttan ÖNCE) de yakalanmalı
+KOMUT11="sleep 6 && SULTAN_ELI_PENCERE=1 bash $M dogrula --imza $IM"
+bash -c "eval '$KOMUT11'; r=\$?; exit \$r" >/dev/null 2>&1 & KP=$!
+sleep 4; _satir "<bash-input>$KOMUT11</bash-input>" 0 > "$KOK/proje/z.jsonl"
+wait $KP
+check "ZK11 mutantta 'kök önce başlamış' senaryosu GEÇİYOR (0) → ZK4 yakalanır" "0" "$?"
+
+# ZK9 · eski kural bozulmadı: kök eşleşmesi yoksa 45 sn kuralı aynen
+_satir "<bash-input>cd /x && bash kapi.sh $IM</bash-input>" 5 > "$KOK/proje/z.jsonl"
+bash "$K" dogrula --imza "$IM" >/dev/null 2>&1
+check "ZK9 eski kural: taze kayıt, kök eşleşmesi gerekmeden → VAR" "0" "$?"
+_satir "<bash-input>cd /x && bash kapi.sh $IM</bash-input>" 60 > "$KOK/proje/z.jsonl"
+bash "$K" dogrula --imza "$IM" >/dev/null 2>&1
+check "ZK10 eski kural: 60 sn yaşlı kayıt, kök yok → YOK (gevşemedi)" "1" "$?"
+: > "$KOK/proje/z.jsonl"
+
 echo ""
 echo "── SONUÇ: PASS=$pass FAIL=$fail ──"
 [ "$fail" = "0" ] || exit 1
