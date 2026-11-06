@@ -110,7 +110,12 @@ sys.exit(1)
 # 🔴 DÜRÜST SINIR: kaydı Claude Code yazar; satıra PID giremez, o yüzden bağ komut METNİ + başlangıç
 #   saatidir. Gerçek `!` sarmalayıcısının komut satırını nasıl taşıdığı fixture ile ÖLÇÜLEMEZ:
 #   birebir ya da kabuk-tırnaklı (shlex) biçim aranır; eşleşmezse eski kurala düşer (regresyon yok).
-ZINCIR_UST="${SULTAN_ELI_ZINCIR_UST:-600}"   # saniye: mutlak üst sınır
+ZINCIR_TAVAN=600   # saniye: MUTLAK üst sınır; ortam değişkeni yalnız DÜŞÜREBİLİR, yükseltemez
+# Sınav dikişi (denetci.sh emsali): tavan yalnız SULTAN_ELI_SINAV=1 iken sınav için düşürülebilir.
+[ "${SULTAN_ELI_SINAV:-}" = 1 ] && case "${SULTAN_ELI_SINAV_TAVAN:-}" in [1-9]|[1-9][0-9]*) ZINCIR_TAVAN="$SULTAN_ELI_SINAV_TAVAN" ;; esac
+ZINCIR_UST="${SULTAN_ELI_ZINCIR_UST:-$ZINCIR_TAVAN}"
+case "$ZINCIR_UST" in ''|*[!0-9]*) ZINCIR_UST="$ZINCIR_TAVAN" ;; esac
+[ "$ZINCIR_UST" -le "$ZINCIR_TAVAN" ] || ZINCIR_UST="$ZINCIR_TAVAN"
 
 _zincir() {
   local imza="$1"
@@ -154,7 +159,11 @@ for satir in son:
     if not (0<=simdi-an<=ust): continue
     for _,bas,argv in zincir:
         if not (an-2<=bas<=an+5): continue            # kök KAYIT ANINDA başlamış olmalı
-        if any(kom in a for a in argv) or shlex.quote(kom) in " ".join(argv): sys.exit(0)
+        # BİREBİR: argv öğesi komutun kendisi, ya da `eval <tırnaklı komut>` sarmalayıcısı (başına/sonuna
+        # metin eklenmiş farklı komut alt dize olarak GEÇMEZ; tırnaklı biçimin sonu sınırlandırılmıştır).
+        q=shlex.quote(kom)
+        if any(a==kom for a in argv): sys.exit(0)
+        if any(re.search(r"(?:^|[\s;&|(])eval\s+"+re.escape(q)+r"(?=$|[\s;&|<>)])",a) for a in argv): sys.exit(0)
 sys.exit(1)
 ' "$dosya" "$imza" "$$" "$ZINCIR_UST" && return 0
   done <<< "$(_kayitlar)"

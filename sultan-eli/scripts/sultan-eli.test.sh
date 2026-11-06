@@ -156,6 +156,22 @@ sleep 4; _satir "<bash-input>$KOMUT11</bash-input>" 0 > "$KOK/proje/z.jsonl"
 wait $KP
 check "ZK11 mutantta 'kök önce başlamış' senaryosu GEÇİYOR (0) → ZK4 yakalanır" "0" "$?"
 
+# ZK12 · ALT DİZE saldırısı: kök komut, kayıtlı komutu ÖNEK/SONEK eklenmiş halde taşıyor → YOK
+zk "$K" "$KOMUT" 0 "$KOMUT; g=\$?; echo sonek; exit \$g"   # sonek eklendi, kapının çıkış kodu taşınır
+check "ZK12a kök komut = kayıtlı komut + sonek (alt dize) → YOK" "1" "$?"
+_satir "<bash-input>$KOMUT</bash-input>" 0 > "$KOK/proje/z.jsonl"
+bash -c "eval 'echo onek; $KOMUT'; r=\$?; exit \$r" >/dev/null 2>&1
+check "ZK12b kök komut = önek + kayıtlı komut (eval içinde alt dize) → YOK" "1" "$?"
+
+# ZK13 · üst sınır ortamdan YÜKSELTİLEMEZ: tavan sınav dikişiyle 1 sn, çağıran 9999 vermeye çalışıyor
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 zk "$K" "$KOMUT" 0 "SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 $KOMUT"
+check "ZK13 SULTAN_ELI_ZINCIR_UST tavanın ÜSTÜNE çıkarılamaz → YOK" "1" "$?"
+M2="$T/mutant2.sh"; sed 's/^\[ "\$ZINCIR_UST" -le "\$ZINCIR_TAVAN" \].*/:/' "$K" > "$M2"
+check "ZK14 tavan mutantı dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$M2" && echo 0 || echo 1)"
+K14="SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 sleep 3 && SULTAN_ELI_PENCERE=1 bash $M2 dogrula --imza $IM"
+zk "$M2" "$K14" 0 "$K14"
+check "ZK14b tavan mutantında 9999 GEÇİYOR (0) → ZK13 yakalar" "0" "$?"
+
 # ZK9 · eski kural bozulmadı: kök eşleşmesi yoksa 45 sn kuralı aynen
 _satir "<bash-input>cd /x && bash kapi.sh $IM</bash-input>" 5 > "$KOK/proje/z.jsonl"
 bash "$K" dogrula --imza "$IM" >/dev/null 2>&1
