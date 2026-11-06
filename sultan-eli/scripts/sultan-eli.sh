@@ -188,7 +188,7 @@ def eval_argumanlari(a):
         while j<len(t) and t[j][0]=="s": parca.append(t[j][1]); j+=1
         if parca: out.append(" ".join(parca))
     return out
-tani=[]
+tani=[]; yaslar=[]
 try: son=collections.deque(open(dosya,encoding="utf-8",errors="replace"),maxlen=800)
 except Exception: sys.exit(1)
 for satir in son:
@@ -198,11 +198,12 @@ for satir in son:
     if not isinstance(ic,str): continue
     m=re.search(r"<bash-input>(.*?)</bash-input>",ic,re.S)
     if not m or imza not in m.group(1): continue
-    kom=m.group(1)
+    kom=m.group(1).strip()   # kabuk baştaki/sondaki boşluğu görmez: kayıt " sleep 5 && …" ise eval argümanı "sleep 5 && …" olur
     ts=o.get("timestamp")
     if not ts: continue
     try: an=datetime.datetime.fromisoformat(ts.replace("Z","+00:00")).timestamp()
     except Exception: continue
+    yaslar.append(simdi-an)
     if not (0<=simdi-an<=ust): continue
     for _,bas,argv in zincir:
         if not (an-2<=bas<=an+5): continue            # kök KAYIT ANINDA başlamış olmalı
@@ -220,6 +221,8 @@ if tani:   # kayıt VAR ama zincir eşleşmedi: sebep sayılarla (komut metni ba
             print("tanı: pid=%d başlangıç-kayıt=%+.1fsn(izin -2..+5) argv0=%s argc=%d eval-argümanı=%d kayıt-uzun=%d aday-uzun=%s"%(
                 pid_,bas-an,os.path.basename(argv[0]) if argv else "?",len(argv),len(adaylar),len(kom),
                 ",".join(str(len(c)) for c in adaylar[:3]) or "-"),file=sys.stderr)
+if not tani:   # kayıt hiç yok ya da pencere dışı: YOK sonucu kendini açıklasın (komut metni basılmaz)
+    print("tanı: zincir=%d süreç · imzalı kayıt=%d · en yakın kaydın yaşı=%s sn (zincir üst sınırı %d)"%(len(zincir),len(yaslar),("%.0f"%min(yaslar,key=abs)) if yaslar else "yok",ust),file=sys.stderr)
 sys.exit(1)
 ' "$dosya" "$imza" "$$" "$ZINCIR_UST" && return 0
   done <<< "$(_kayitlar)"

@@ -238,6 +238,23 @@ _satir "<bash-input>$KD</bash-input>" 0 > "$KOK/proje/z.jsonl"
 bash -c "printf x > eval $(q "$KD") ; sleep 3; SULTAN_ELI_PENCERE=1 bash $MD dogrula --imza $IM; r=\$?; exit \$r" >/dev/null 2>&1
 check "ZA23 yönlendirmeyi komut sayan mutantta ZA20 senaryosu GEÇİYOR (0) → ZA20 yakalar" "0" "$?"
 
+# ZA24-ZA27 · BAŞTAKİ BOŞLUK (SERDAR 6 Kas: Sultan komutu " sleep 5 && …" diye yazdı, kayıt boşluklu; kabuk eval argümanını boşluksuz görür) ve YOK tanısı
+gercek "$K" " $KOMUT" "$(q "$KOMUT")"
+check "ZA24 kayıtta baştaki boşluk var, eval argümanı boşluksuz → VAR" "0" "$?"
+gercek "$K" "$KOMUT " "$(q "$KOMUT")"
+check "ZA24b kayıtta sondaki boşluk var → VAR" "0" "$?"
+MK="$T/mutant-kirpma.sh"; sed 's/kom=m.group(1).strip()/kom=m.group(1)/' "$K" > "$MK"
+check "ZA25 kırpma mutantı dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MK" && echo 0 || echo 1)"
+KMK="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MK dogrula --imza $IM"
+gercek "$MK" " $KMK" "$(q "$KMK")"
+check "ZA26 kırpma sökülünce baştaki boşluklu kayıt YOK (1) → ZA24 yakalar" "1" "$?"
+_satir "<bash-input>cd /x && bash kapi.sh $IM</bash-input>" 900 > "$KOK/proje/z.jsonl"
+TANI2="$(SULTAN_ELI_PENCERE=1 bash "$K" dogrula --imza "$IM" 2>&1)"
+check "ZA27a YOK sonucu en yakın kaydın yaşını açıklıyor (tanı: zincir=… imzalı kayıt=1 … yaşı=900, zincir üst sınırı 600 dışı)" "1" "$(printf '%s' "$TANI2" | grep -c '^tanı: zincir=.*imzalı kayıt=1.*yaşı=9[0-9][0-9]' | sed 's/^[2-9].*/1/')"
+: > "$KOK/proje/z.jsonl"
+TANI3="$(SULTAN_ELI_PENCERE=1 bash "$K" dogrula --imza "$IM" 2>&1)"
+check "ZA27b hiç kayıt yokken de YOK açıklıyor (imzalı kayıt=0 … yaşı=yok)" "1" "$(printf '%s' "$TANI3" | grep -c 'imzalı kayıt=0.*yaşı=yok' | sed 's/^[2-9].*/1/')"
+
 # ZK13 · üst sınır ortamdan YÜKSELTİLEMEZ: tavan sınav dikişiyle 1 sn, çağıran 9999 vermeye çalışıyor
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 zk "$K" "$KOMUT" 0 "SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 $KOMUT"
 check "ZK13 SULTAN_ELI_ZINCIR_UST tavanın ÜSTÜNE çıkarılamaz → YOK" "1" "$?"
