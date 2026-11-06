@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "arayuz-zanaati-kural-13-kaynaga",
+  "pr": "733",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T00:24:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-arayuz-zanaati-kural-13-kaynaga",
+  "dal": "arayuz-zanaati-kural-13-kaynaga",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13249,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 3665
+  },
+  "dalgic": "uyumlu",
+  "bas": "3efc6bd123b8c39b4888b186986b48dec810239f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kaynak beceri v0.1.1’e yükseltilmiş, on üçüncü kural eklenmiş ve katalog sürümü de onunla hizalanmış. Talep doğrudan karşılanmış; imzalı önce/sonra ölçümü kaynak ile kurulu kopya arasındaki farkın 5 satırdan 0’a indiğini gösterdiği için iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı ya da geçersiz kayıt yoktur. Önce/sonra ölçüm çifti farkı 5 satırdan 0’a indirerek kaynak ile kurulu v0.1.1 kopyanın eşitlendiğini kanıtlıyor; bu metin taşıma işi için görsel kare gerekmiyor."
+  }
+}

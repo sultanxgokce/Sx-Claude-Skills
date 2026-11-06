@@ -1,0 +1,34 @@
+{
+  "is": "arayuz-zanaati-kural-13-kaynaga",
+  "cumle": "arayuz-zanaati becerisinin kurulu v0.1.1 sürümündeki 13. kural (PDF ve indirilen dosya POST cevabında verilmez) kaynağa taşınsın; kaynak v0.1.0 geride kaldı",
+  "istedi": "SERDAR",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-07T00:22:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "Sx-Claude-Skills/_agents/fabrika/kanit/arayuz-zanaati-kural-13-kaynaga/",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M65HD5HKS5D9YCMHY6M4VVP3",
+  "tahmin_dk": 20,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T00:22:49+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
