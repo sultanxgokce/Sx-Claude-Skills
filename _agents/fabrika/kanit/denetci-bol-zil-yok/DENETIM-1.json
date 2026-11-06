@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "denetci-bol-zil-yok",
+  "pr": "728",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T19:16:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-bol-zil-yok",
+  "dal": "denetci-bol-zil-yok",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26755,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 14761
+  },
+  "dalgic": "uyumlu",
+  "bas": "e83ed99d806f10d0c2c3d7f462f9ae8bdf3ceec5",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstem tavanındaki İŞİ BÖL çıkışı BOL_RED ile ayrılmış; bitiş zili bastırılırken neden stderr'e bırakılmış, Z9e sınavı ve hedefli mutant da davranışı yakalamıştır. Kod üretime hazır görünüyor; yalnız gerçek zil yüzeyindeki uçtan uca sessizlik bu kutuda ölçülmemiştir.",
+    "bulgular": [
+      {
+        "ne": "Gerçek ajan koltuğunda İŞİ BÖL çıkışının zil üretmediği uçtan uca doğrulanmamış.",
+        "kanit": "İş kartında canli_gerekir=true ve canli_sebep=\"cümlede: zili\"; geçerli son ölçüm ise IC_KOSUM=1 ile çalışıyor ve Z9e FABRIKA_AILE_NOTIFY sahte zil aracının boş kaldığını sınuyor.",
+        "konum": "iş kartı canli_gerekir/canli_sebep; olcum-zil-bolumu-sonra.txt Z9e",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı ajan koltuğu + gerçek zil altyapısı"
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı veya geçersiz kayıt yok. Önce ölçümünde Z9e düşüyor, gerçek son ölçümünde geçiyor; mutasyon kaydı BOL_RED kaldırılınca hedef kapı Z9e'nin düştüğünü gösteriyor. Böylece değişiklik ve sınav duyarlılığı güçlü biçimde kanıtlı; gerçek canlı zil yüzeyi ölçüm dışında."
+  }
+}
