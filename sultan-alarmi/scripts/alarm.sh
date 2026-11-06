@@ -67,7 +67,7 @@ gonder)
   if [ "${SULTAN_EKRANDA:-0}" = 1 ]; then echo "(telefon atlandı: Sultan ekranda)"; kutuk "$SAY" atlandi ekranda; exit 0; fi
   if [ "$KURU" -eq 1 ]; then echo "(kuru: telefona gidecekti → WhatsApp)"; kutuk "$SAY" kuru -; exit 0; fi
   # Sultan'a istek bütçesi (günde 4): alarm telefonu yalnız ACİL hakkıyla gider, günde en çok 1; hak bitince kuyruğa yazılır (09:00 özeti).
-  if [ -x "$BUTCE" ]; then
+  if [ -f "$BUTCE" ]; then
     bash "$BUTCE" acil --ad "$IS" --sahip "$KIM"; B_RC=$?
     if [ "$B_RC" -eq 10 ]; then kutuk "$SAY" kuyruk "butce"; exit 0; fi
     [ "$B_RC" -eq 0 ] || echo "UYARI: bütçe kapısı okunamadı (rc=$B_RC); telefon yine de gidiyor" >&2

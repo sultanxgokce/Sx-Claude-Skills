@@ -615,7 +615,7 @@ case "$KOMUT" in
     # Başka dosyaya yönlendirilmiş koşu (KAPIMDA_DOSYA, sınav) gerçek bütçeyi harcamaz; KAPIMDA_BUTCE_SH açıkça verilirse uygulanır.
     BUTCE_SH="${KAPIMDA_BUTCE_SH:-}"
     [ -z "$BUTCE_SH" ] && [ -z "${KAPIMDA_DOSYA:-}" ] && BUTCE_SH="$(dirname "$0")/../../sultan-alarmi/scripts/butce.sh"
-    if [ -n "$BUTCE_SH" ] && [ -x "$BUTCE_SH" ]; then
+    if [ -n "$BUTCE_SH" ] && [ -f "$BUTCE_SH" ]; then
       bash "$BUTCE_SH" harca --tur kart --ad "$AD" --sahip "$ODA"; B_RC=$?
       if [ "$B_RC" -eq 10 ]; then printf '⏳ kart kuyrukta: %s (bugünkü 4 istek doldu)\n' "$AD"; exit 0; fi
     fi

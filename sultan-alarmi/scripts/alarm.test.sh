@@ -94,6 +94,12 @@ o="$(bash "$AL" gonder --is "Hat durdu iki" --kim "SERDAR" --ne "tek tık" --tel
 ok "G8 günde ikinci acil telefona GİTMEZ (yalnız ilki gider)" "1" "$(grep -c . "$T/wa.log")"
 var "G8b ikinci acil kuyruğa yazıldığını söyler" "09:00" "$o"
 ok "G8c kütükte kuyruk kaydı" "1" "$(grep -c '"telefon": "kuyruk"' "$T/d/kutuk.jsonl")"
+rm -r -- "$T/d"; : > "$T/wa.log"; cp -- "$KOK/butce.sh" "$T/butce-nx.sh"; chmod 644 "$T/butce-nx.sh"
+export SULTAN_ALARMI_BUTCE="$T/butce-nx.sh"
+bash "$AL" gonder --is "Hat durdu bir" --kim "SERDAR" --ne "tek tık" --telefon >/dev/null 2>&1
+bash "$AL" gonder --is "Hat durdu iki" --kim "SERDAR" --ne "tek tık" --telefon >/dev/null 2>&1
+ok "G9 betik yürütme biti olmasa da (644) bütçe devrede: ikinci acil gitmez" "1" "$(grep -c . "$T/wa.log")"
+unset SULTAN_ALARMI_BUTCE
 echo "— ders"
 cp -r -- "$KOK/.." "$T/b" 2>/dev/null; : > "$T/b/DERSLER.md"; bash "$T/b/scripts/alarm.sh" ders "deneme dersi" >/dev/null; ok "D1 ders tarihli satır olarak eklenir" "- 2027-01-15 — deneme dersi" "$(tail -1 "$T/b/DERSLER.md")"
 echo; echo "sonuç: $gec geçti · $kal kaldı"; [ "$kal" -eq 0 ]
