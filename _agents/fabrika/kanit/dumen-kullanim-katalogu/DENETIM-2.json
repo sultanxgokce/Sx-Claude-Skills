@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "dumen-kullanim-katalogu",
+  "pr": "715",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T12:51:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-kullanim-katalogu",
+  "dal": "dumen-kullanim-katalogu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21627,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10382
+  },
+  "dalgic": "uyumsuz",
+  "bas": "0bcb28a9ba3223455d143f83066c11fbd17ed1e5",
+  "duzeltme_farki": {
+    "onceki_bas": "fe9c07d93e4ddbb2e83d96dc6f82ff911fe97990",
+    "dosya": 7,
+    "bayt": 12117,
+    "tam_bayt": 23013
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "NARH’ın sekiz takılması çarelere bağlanmış; önceki turdaki 7. vaka da talep düğmesine basma, gerekirse yükleme, yeniden ölçme ve başarısızlıkta durma adımlarıyla uygulanabilir hale getirilmiş. Üretimi engelleyen ciddi veya uygulama kusuru görünmüyor; katalog işi doğru kapsamda tamamlanmış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti sekiz maddenin eksiksiz haritalandığını, son gerçek ölçüm `harita-sonra-t2` düzeltme başında KALAN: 0 sonucunu ve mutasyon kayıtları kapıların eksik 5. ve 7. maddeleri yakaladığını gösteriyor. Ölçümler gerçek arayüz davranışını sınamıyor, fakat iş kartı bir kullanım kataloğu istediğinden üretim metni ve madde eşleme kanıtı bu kapsam için yeterli."
+  }
+}
