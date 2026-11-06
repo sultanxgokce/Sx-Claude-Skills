@@ -1,7 +1,7 @@
 {
   "is": "gorev-bekle-sebep",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T23:33:37+03:00",
+  "guncelleme": "2026-11-07T00:43:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -156,7 +156,28 @@
       "olculen_kirli": true,
       "kirli_kurali": 1,
       "kirli_izin": "cloudtop ana kopyasında başka işlerin kanıt dosyaları kirli; ölçülen sınav ve kaynağı temiz (git diff infra/terminal-merkez boş)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "son-bas",
+      "asama": "tek",
+      "dosya": "olcum-son-bas-tek.txt",
+      "sha256": "6b67c9d5e756fe40e67a4ce2c5c5e115ac1fbfc02a8e1e2583ab9afa2b6326cb",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:43:42+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "6a88f078c7126e9ef7b021cad7c694ca0d231e8d805e909e77ee05a50fa8d2f9",
+      "olcum_id": "d0e75bbff2f44fcf9f5ba10bf2ec241f",
+      "olculen_commit": "1683f9cf0c9abe0a17b2cd42e9637b8e6f0220b0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "28f495d4f91d17432bf0cad6520715c2b762605805883973b5eec9cab64098e8"
+  "imza": "15465014118509426144982bff02e006405173d10fddfe475d28b9dcfcd4b261"
 }
