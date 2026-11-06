@@ -1,7 +1,7 @@
 {
   "is": "sultan-eli-zincir-ayristirici",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T20:34:16+03:00",
+  "guncelleme": "2026-11-06T20:39:22+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -212,7 +212,49 @@
       "olcum_id": "a41cea8c769d42bdb029487eb5d49baa",
       "olculen_commit": "51f05a56395dde25c7d7cc432e83716bb31ae4b0",
       "olculen_kirli": true
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-once-daralt",
+      "asama": "once",
+      "dosya": "olcum-sinav-once-daralt-once.txt",
+      "sha256": "54b1e8b2512b6ff869996b5d9a8bcc6b0cce09d3e4c58c7575ea875bfcc6641e",
+      "komut": [
+        "bash",
+        "/tmp/tmp.t6ypJSUEt9/sultan-eli.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T20:37:47+03:00",
+      "sure_sn": 97.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "83b4539da01b8bcfdfc347128132aa2efda372697896b519f4e094588c96707c",
+      "olcum_id": "ead614735f6e4121b2c7c9adbc1d67ee",
+      "olculen_commit": "8bda958fb382e4661566bfdbdf7eb2a7a313ff43",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra-daralt",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-daralt-sonra.txt",
+      "sha256": "4417f9e57ffadf16210ee60adec1809ec1ef8c6a0a178226e75a9ddac0b06a68",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T20:39:22+03:00",
+      "sure_sn": 95.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "28dc985eac6747374b896cd8216183d97494afd98961753e78ca86e4837cb3f0",
+      "olcum_id": "cb874bcd62094572a5211f337ead507e",
+      "olculen_commit": "8bda958fb382e4661566bfdbdf7eb2a7a313ff43",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "698f80bac11798010d47f810a105941dcfdb1a39586c00e54ea5fe0a0c55303b"
+  "imza": "27ead345c53dd021bbc6387dc3a72af824895b7dcb8bc30715119672e47e9c93"
 }
