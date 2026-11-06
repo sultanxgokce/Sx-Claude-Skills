@@ -5,8 +5,9 @@ D="$(cd "$(dirname "$0")" && pwd)"
 A="$D/kanit-kirli-say.py"
 T="$(mktemp -d)"; trap 'find "$T" -delete 2>/dev/null' EXIT
 G=0; K=0
-ok() { G=$((G+1)); echo "  ✓ $1"; }
-no() { K=$((K+1)); echo "  ✗ $1"; }
+SEC=K0
+ok() { G=$((G+1)); echo "  ✓ $SEC $1"; }
+no() { K=$((K+1)); echo "  ✗ $SEC $1"; }
 kos() { OUT="$(python3 "$A" "$@" 2>&1)"; RC=$?; }
 satir() { printf '%s\n' "$OUT" | awk -v t="$1" '$1==t {print $2, $3, $4, $5, $6}'; }
 
@@ -24,6 +25,7 @@ mk a is1 '{"kayitlar":[
  {"tur":"gecersiz","olcum_id":"g1","zaman":"2026-11-06T10:00:00+03:00"}]}'
 
 echo "── K1 dört tür ayrı satır, kapı damgası süzgeç değil"
+SEC=K1
 kos "$T/a"
 [ "$RC" = 1 ] && ok "izinsiz varken rc 1" || no "rc=$RC (1 beklendi)"
 [ "$(satir olcum)" = "2 1 0 1 1" ] && ok "olcum: 2 toplam · 1 izinsiz · 1 ölçülemedi" || no "olcum satırı: $(satir olcum)"
@@ -34,12 +36,14 @@ printf '%s\n' "$OUT" | grep -q "İZİNSİZ KİRLİ TOPLAM=4 · olcum=1 · ekran=
 printf '%s\n' "$OUT" | grep -q "dört tür dışı (sayıma girmedi): gecersiz=1" && ok "tür dışı kayıt söylenir" || no "tür dışı satırı yok"
 
 echo "── K2 görülmeyen tür de 0 satırıyla basılır"
+SEC=K2
 mk b is2 '{"kayitlar":[{"tur":"olcum","olcum_id":"x1","zaman":"2026-11-06T10:00:00+03:00","olculen_kirli":false}]}'
 kos "$T/b"
 [ "$RC" = 0 ] && ok "izinsiz yok → rc 0" || no "rc=$RC"
 for t in ekran dosya canli; do [ "$(satir $t)" = "0 0 0 0 0" ] && ok "$t satırı 0 ile basıldı" || no "$t satırı: $(satir $t)"; done
 
 echo "── K3 pencere (--sonra) ve tekilleştirme"
+SEC=K3
 mk c is1 '{"kayitlar":[
  {"tur":"dosya","olcum_id":"d1","zaman":"2026-11-06T10:00:00+03:00","olculen_kirli":true},
  {"tur":"canli","olcum_id":"c9","zaman":"2026-11-06T15:00:00+03:00","olculen_kirli":true}]}'
@@ -51,6 +55,7 @@ kos --sonra 2026-11-06T16:00:00+03:00 "$T/a" "$T/c"
 [ "$RC" = 0 ] && ok "pencere boş → rc 0" || no "rc=$RC"
 
 echo "── K4 ölçülemedi ve kullanım hataları"
+SEC=K4
 kos "$T/yok"
 [ "$RC" = 3 ] && printf '%s\n' "$OUT" | grep -q "ÖLÇÜLEMEDİ" && ok "manifest yok → rc 3 ÖLÇÜLEMEDİ" || no "rc=$RC"
 mk d bozuk '{bozuk'
