@@ -1,7 +1,7 @@
 ---
 name: whatsapp-gonder
 type: agent
-version: 1.2.0
+version: 1.3.0
 description: >
   Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında
   yapılandırma yoktur: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara
@@ -38,6 +38,9 @@ belge yerine satır-içi fotoğraf olarak düşer. Bayrak verilmezse davranış 
 
 Çıkış kodları: `0` gönderildi · `2` kullanım/ortam · `3` geçide ulaşılamadı (**mesaj gitmedi**) ·
 `4` geçit reddetti (gövdede neden).
+
+## Sultan'dan tık ya da karar isteyen mesaj: `--istek` (1.3.0)
+Sultan'a günde en çok 4 istek (SERDAR 6 Kas). Mesaj Sultan'dan tık/karar istiyorsa `--istek "<kısa ad>"` ver: günlük bütçeden düşer, doluysa mesaj GİTMEZ, kuyruğa yazılır ve ertesi sabah 09:00 özetinde gider (rc 0). Bilgi mesajı `--istek` taşımaz, sayılmaz. Bütçe `sultan-alarmi/scripts/butce.sh` içindedir.
 
 ## Değişmezler
 

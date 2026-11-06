@@ -12,13 +12,15 @@
 #   wa-gonder.sh --kime Sultan "mesaj"        → adlandırılmış alıcıya
 #   wa-gonder.sh --dosya /yol/rapor.pdf [--not "açıklama"]   → BELGE (ek) olarak
 #   wa-gonder.sh --dosya /yol/foto.png --gorsel               → satır-içi FOTOĞRAF olarak
+#   wa-gonder.sh --istek "<istek adı>" "mesaj" → Sultan'dan tık/karar İSTEYEN mesaj: günlük 4 istek bütçesinden düşer;
+#                                               bütçe doluysa GİTMEZ, kuyruğa yazılır (09:00 özeti), rc 0. Bilgi mesajı --istek taşımaz.
 #   wa-gonder.sh --durum                      → geçit ayakta mı, oturum açık mı
 #
-# Çıkış: 0 gönderildi · 2 kullanım · 3 geçide ulaşılamıyor · 4 geçit reddetti (gövdede neden)
+# Çıkış: 0 gönderildi (ya da --istek bütçesi doluydu: kuyruğa yazıldı) · 2 kullanım · 3 geçide ulaşılamıyor · 4 geçit reddetti (gövdede neden)
 set -uo pipefail
 
 GECIT="${WA_GECIT:-http://cloudtop-wa:8790}"
-KIME="Sultan"; METIN=""; DOSYA=""; NOT=""; MOD="metin"; GORSEL=0
+KIME="Sultan"; METIN=""; DOSYA=""; NOT=""; MOD="metin"; GORSEL=0; ISTEK=""
 
 # ── Kutu jetonu (kimlik) ─────────────────────────────────────────────────────
 # Geçit 2026-07-29'dan beri kimlik istiyor; jetonsuz istek 401 {"hata":"jeton_yok"} döner.
@@ -36,8 +38,9 @@ while [ $# -gt 0 ]; do
     --dosya) DOSYA="${2:-}"; MOD="dosya"; shift 2 ;;
     --not)   NOT="${2:-}"; shift 2 ;;
     --gorsel) GORSEL=1; shift ;;
+    --istek) ISTEK="${2:-}"; shift 2 ;;
     --durum) MOD="durum"; shift ;;
-    -h|--yardim) sed -n '2,17p' "$0"; exit 0 ;;
+    -h|--yardim) sed -n '2,19p' "$0"; exit 0 ;;
     -*) echo "bilinmeyen seçenek: $1" >&2; exit 2 ;;
     # ⚠️ İKİNCİ KONUMSAL ARGÜMAN = GÜRÜLTÜLÜ RET (sessiz kabul DEĞİL).
     #   Eski davranış: her konumsal argüman METIN'i EZİYORDU. `wa-gonder.sh "SaaS" "mesaj"`
@@ -156,6 +159,17 @@ else
 import json,sys
 print(json.dumps({"alici":sys.argv[1],"tur":"metin","metin":sys.argv[2]}))' \
     "$KIME" "$METIN" 2>/dev/null) || { echo "HATA: gövde üretilemedi (python3 yok?)" >&2; exit 2; }
+fi
+
+# Günlük istek bütçesi (sultan-alarmi/butce.sh): yalnız --istek taşıyan ve Sultan'a giden mesaj sayılır.
+if [ -n "$ISTEK" ]; then
+  case "$(printf '%s' "$KIME" | tr 'A-ZÇĞİÖŞÜ' 'a-zçğiöşü')" in sultan)
+    BUTCE="${WA_BUTCE_SH:-$(dirname "${BASH_SOURCE[0]}")/../../sultan-alarmi/scripts/butce.sh}"
+    if [ -f "$BUTCE" ]; then
+      bash "$BUTCE" harca --tur wa --ad "$ISTEK" --sahip "${WA_SAHIP:-$(hostname)}"; B_RC=$?
+      [ "$B_RC" -eq 10 ] && { echo "🟡 mesaj GİTMEDİ: günlük istek bütçesi dolu, kuyruğa yazıldı (yarın 09:00 özeti)."; exit 0; }
+    else echo "UYARI: bütçe betiği yok ($BUTCE); mesaj yine de gidiyor" >&2; fi ;;
+  esac
 fi
 
 KOD=$(_cagir /gonder "$GOVDE") || true

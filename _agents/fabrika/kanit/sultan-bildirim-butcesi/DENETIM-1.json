@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "sultan-bildirim-butcesi",
+  "pr": "719",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T15:20:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi",
+  "dal": "sultan-bildirim-butcesi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 52962,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 12486
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e5ae86fc7da4b86ddcca6382bed232f253a14a75",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Günlük sayaç, kuyruk, İstanbul günü, eşzamanlılık ve mutasyon kapıları sağlam kurulmuş; ancak talebin özü olan Sultan’ın telefonuna giden bütün mesajların tavanlanması tamamlanmamış. Yalnız kapımda kartı ile acil alarm bağlanmış, normal telefon yolları ve 09:00 kuyruk gönderimi açıkça bağlı olmadığı için önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Günlük tavan telefon mesajı çıkışına genel olarak uygulanmıyor; onay, soru mektubu ve WhatsApp sorusu bütçe kapısına bağlı değil. Bu nedenle Sultan’ın telefonuna giden mesajlar günlük tavanı aşabilir.",
+        "kanit": "SKILL metni açıkça “Bağlı DEĞİL: onay-bekliyor görevi, soru mektubu, WhatsApp sorusu” diyor; yeşil gerçek ölçümler de yalnız butce.sh, kapimda BU1/BU2 ve alarm G8 yollarını sınıyor.",
+        "konum": "sultan-alarmi/SKILL.md — Günlük istek bütçesi; olcum-sinav-sonra.txt B1-B8; olcum-bag-alarm-sonra.txt G8; olcum-bag-kapimda-sonra.txt BU1-BU2",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Taşan istekler kuyruğa yazılıyor fakat iş kartındaki “taşan kuyruğa gider” sonucunun operasyonel devamı olan ertesi sabah telefon özetinin gönderimi uygulanmamış; yalnız özet metni üreten manuel komut var.",
+        "kanit": "SKILL metni “09:00 özetinin gönderimi”ni bağlı olmayan yollar arasında sayıyor. butce.sh yalnız `ozet [--isle]` komutuyla metin üretip kayıtları işliyor; zamanlayıcı veya telefon gönderim bağlantısı diffte yok. Ölçüm B6 da yalnız özetin içeriğini ve `--isle` sonrası temizlenmesini doğruluyor, gönderimi ölçmüyor.",
+        "konum": "sultan-alarmi/SKILL.md — Günlük istek bütçesi; sultan-alarmi/scripts/butce.sh — ozet dalı; olcum-sinav-sonra.txt B6",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçümler rc=0 ile bütçe çekirdeğini ve iki bağlantıyı doğruluyor, mutasyon kayıtları da tavan, acil, gün sınırı ve bağlantı kapılarının bozuk kodu yakaladığını gösteriyor. Ancak kanıt seti bütün telefon çıkışlarını veya 09:00 özetinin gerçekten telefona gönderilmesini ölçmüyor; tersine SKILL bunların bağlı olmadığını açıkça beyan ediyor."
+  }
+}

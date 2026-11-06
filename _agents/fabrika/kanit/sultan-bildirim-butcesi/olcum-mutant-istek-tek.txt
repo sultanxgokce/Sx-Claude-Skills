@@ -1,0 +1,21 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: rc 0, gönderim denenmedi · rc≠0 + hedef kapı 'rc 0, gönderim denenmedi' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-istek-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cwi-olc.sh mutant /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
+# rc=1 sure=0.3s zaman=2026-11-06T15:23:13+03:00
+--- stdout ---
+I1 bütçe varsa mesaj gönderime geçer (geçit ulaşılmaz → rc 3 = gönderim denendi)
+  ✓ istek geçti, gönderim denendi
+  ✓ bütçe 'wa' türüyle ve istek adıyla çağrıldı
+I2 bütçe doluysa mesaj GİTMEZ
+  ✗ rc 0, gönderim denenmedi (beklenen=0 gelen=3)
+  ✓ kuyruk bilgisi basıldı
+I3 --istek taşımayan mesaj bütçeye girmez
+  ✓ bilgi mesajı gönderime geçer
+  ✓ bütçe çağrılmadı
+I4 Sultan dışı alıcıya bütçe uygulanmaz
+  ✓ başka alıcı gönderime geçer
+  ✓ bütçe çağrılmadı
+I5 bütçe betiği yoksa uyarıyla gider
+  ✓ betik yok: gönderim denendi
+  ✓ uyarı basıldı
+geçti=9 kaldı=1
+--- stderr ---

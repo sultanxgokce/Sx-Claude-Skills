@@ -611,6 +611,14 @@ case "$KOMUT" in
       printf '⛔ kart AÇILMADI — lint kapısı (yukarıdaki sebepler)\n' >&2; exit 1; }
     [ "$KURU" -eq 1 ] && { printf '✅ lint temiz (kuru koşu — yazılmadı): %s\n' "$AD"; exit 0; }
     ODA="$(_bu_oda)"
+    # Sultan'a günlük istek bütçesi (4): dolunca kart AÇILMAZ, kuyruğa yazılır, ertesi sabah 09:00 özetinde gider.
+    # Başka dosyaya yönlendirilmiş koşu (KAPIMDA_DOSYA, sınav) gerçek bütçeyi harcamaz; KAPIMDA_BUTCE_SH açıkça verilirse uygulanır.
+    BUTCE_SH="${KAPIMDA_BUTCE_SH:-}"
+    [ -z "$BUTCE_SH" ] && [ -z "${KAPIMDA_DOSYA:-}" ] && BUTCE_SH="$(dirname "$0")/../../sultan-alarmi/scripts/butce.sh"
+    if [ -n "$BUTCE_SH" ] && [ -f "$BUTCE_SH" ]; then
+      bash "$BUTCE_SH" harca --tur kart --ad "$AD" --sahip "$ODA"; B_RC=$?
+      if [ "$B_RC" -eq 10 ]; then printf '⏳ kart kuyrukta: %s (bugünkü 4 istek doldu)\n' "$AD"; exit 0; fi
+    fi
     flock "$KILIT" bash -c "$(declare -f _kart_yaz _bugun); DOSYA='$DOSYA' TAVAN='$TAVAN' _kart_yaz \"\$@\"" _ \
       "$AD" "$NE" "$NICIN" "$YAPILMAZSA" "$BITINCE" "$OZET" "$YAS" "$ENGEL" "$ODA" || { _hata "yazım düştü"; exit 1; }
     printf '🚦 kart açıldı: %s  (oda: %s · açık: %s/%s)\n' "$AD" "$ODA" "$(_acik_sayi)" "$TAVAN"

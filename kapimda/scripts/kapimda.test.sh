@@ -515,6 +515,15 @@ kos bitti "D1 Iki" --gerekce '2026-09-18 Sultan: onayladı (sohbet · nöbet-125
 kos bitti "D1 Iki" --gerekce "soru kendiliğinden düştü: ürün tarafında karar verildi" >/dev/null 2>&1
 [ $? -eq 0 ] && ok "D1-6 Sultan'a atıf yoksa kapı devreye girmez" || kotu "D1-6 masum gerekçe bloklandı"
 
+# ── günlük istek bütçesi: dolunca kart AÇILMAZ, kuyruğa yazılır (sahte bütçe betiği)
+printf '#!/usr/bin/env bash\nexit "${FAKE_BUTCE_RC:-0}"\n' > "$T/butce-sahte.sh"; chmod 644 "$T/butce-sahte.sh"   # yürütme biti YOK: git kipi 644 düşerse de bağ çalışmalı (tur 2 bulgusu)
+: > "$KAPIMDA_DOSYA"
+o="$(FAKE_BUTCE_RC=10 KAPIMDA_BUTCE_SH="$T/butce-sahte.sh" kos ac "Butce Dolu" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" 2>&1)"; rc=$?
+[ "$rc" -eq 0 ] && [ -z "$(grep 'Butce Dolu' "$KAPIMDA_DOSYA")" ] && case "$o" in *"kuyrukta"*) true ;; *) false ;; esac \
+  && ok "BU1 bütçe doluysa kart açılmaz, kuyrukta der (rc 0)" || kotu "BU1 bütçe dolu ama kart açıldı ya da kuyruk demedi: rc=$rc"
+FAKE_BUTCE_RC=0 KAPIMDA_BUTCE_SH="$T/butce-sahte.sh" kos ac "Butce Bos" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1
+[ -n "$(grep 'Butce Bos' "$KAPIMDA_DOSYA")" ] && ok "BU2 bütçe varsa kart açılır" || kotu "BU2 bütçe varken kart açılmadı"
+
 # ── boru + grep -q kalıbı: pipefail altında grep erken çıkınca yazan süreç SIGPIPE (141) alır, sınav rastgele kırmızı olur (Sx main 09781b28 L1)
 BORU_SAY="$(sed '/BORU_SAY=/d' "${BASH_SOURCE[0]}" | grep -cE '\|[[:space:]]*[ef]?grep[^|&;)]*[[:space:]](-[a-zA-Z]*q[a-zA-Z]*|--quiet|--silent)([[:space:]]|$)' || true)"
 [ "$BORU_SAY" -eq 0 ] && ok "BR1 sınavda boru arkasında grep -q yok" || kotu "BR1 boru arkasında grep -q var: $BORU_SAY satır"
