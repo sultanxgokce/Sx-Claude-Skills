@@ -6,14 +6,14 @@ Kullanım (iş alanından): on-goz.py <iş> [--pr N] [--depo DİZİN] [--json]
 Kapılar (ölçülen tasarım sınıfları: kanıt başı %32 · kanıt eksik %13 · kapsam %26 · bugünkü rc 3 vakaları):
   A1 kanıt başı — KANIT.json'daki GEÇERLİ (geçersiz ilan edilmemiş) kayıtlardan 'once' olmayanların olculen_commit'i HEAD'e eşit ya da
                   arada yalnız _agents/**/kanit/** dosyası değişmiş. 'once' kayıtları muaftır (tanımı gereği düzeltmeden önceki kodu ölçer).
-                  --pr verilirse PR başı (gh) = HEAD; verilmezse dal itilmişse yerel izleme dalı = HEAD ('önce it').
+                  --pr verilirse PR başı (gh) = HEAD; verilmezse dal origin'e itilmişse origin/<dal> = HEAD ('önce it').
   A2 kanıt eksik — kanıt dizini ve KANIT.json var · `kanit.sh dogrula` yeşil (imza + sha) · en az bir geçerli gerçek (mutant olmayan) ölçüm ·
                   her mutant kaydı hedef kapı (hedef_kapi) taşır ve o kapı düşmüştür (hedef_dustu).
   A3 taban     — dal tabanın (ON_GOZ_TABAN, varsayılan origin/main) gerisindeyse birleştirme ÇAKIŞIYOR mu (git merge-tree).
                   Yalnız geride olmak bilgidir (ana dal hızlı ilerler; her işi sürekli birleştirmeye zorlamak tasarımın amacı değil).
   A4 ağaç      — kanıt dizini dışında commit'lenmemiş İZLENEN dosya (kanit.py ile aynı süzgeç).
   A5 kapsam    — kart cümlesinde 'dışında / dışı / ayrı kart / dokunulmaz / dokunmaz / değişmez' geçen bölümdeki yol ya da dosya adı
-                  dalın farkında (taban...HEAD) geçiyorsa.
+                  dalın farkında (taban...HEAD) BİLEŞEN olarak geçiyorsa (tam yol · yol sonu · dizin altı · yalın ad = dosya adı; alt dize değil).
 Hüküm: beşinden biri uyumsuz → rc 1 (ne düzeltileceği satır satır) · biri ölçülemedi, hiçbiri uyumsuz değil → rc 3 · beşi uyumlu → rc 0 ·
 kullanım hatası rc 2. Ölçülemedi uyumlu sayılmaz.
 """
@@ -72,9 +72,11 @@ def a1(depo, kayitlar, pr):
         elif prbas != head:
             out.append(f"PR #{pr} başı {prbas[:8]} ≠ HEAD {head[:8]} — önce it (PR başı GitHub'da birkaç dakika geç güncellenebilir)")
     else:
-        up = git(depo, "rev-parse", "--verify", "-q", "@{u}")
+        # Kart: "dal itilmişse ORIGIN dalı = HEAD" — izlenen uzak (@{u}) başka bir uzak olabilir (göz tur 1); origin'deki aynı adlı dal kıyaslanır.
+        dal = git(depo, "symbolic-ref", "--short", "-q", "HEAD")
+        up = git(depo, "rev-parse", "--verify", "-q", f"refs/remotes/origin/{dal}") if dal else None
         if up and up != head:
-            out.append(f"itilmiş dal {up[:8]} ≠ HEAD {head[:8]} — önce it")
+            out.append(f"origin/{dal} {up[:8]} ≠ HEAD {head[:8]} — önce it")
     if out:
         return kapi("A1 kanıt başı", "uyumsuz", out)
     if olc:
@@ -145,6 +147,13 @@ def kart_bul(depo, is_adi):
     return None
 
 
+def yol_eslesir(f, y):
+    """Kapsam dışı yol y farktaki dosya f'ye BİLEŞEN olarak denk mi (alt dize değil — göz tur 1: 'od.txt' 'kod.txt'i vurmamalı):
+    tam yol · yolun sonu ('/'+y) · y bir dizinse altı · y yalın dosya adıysa f'nin adı."""
+    y = y.strip("/")
+    return f == y or f.endswith("/" + y) or f.startswith(y + "/") or ("/" not in y and os.path.basename(f) == y)
+
+
 def a5(depo, is_adi):
     kp = kart_bul(depo, is_adi)
     if not kp:
@@ -164,7 +173,7 @@ def a5(depo, is_adi):
     fark = git(depo, "diff", "--name-only", f"{t}...HEAD") if t else None
     if fark is None:
         return kapi("A5 kapsam", "olculemedi", ["dalın farkı okunamadı (taban yok)"])
-    vur = sorted({f"{f} ← '{y}'" for f in fark.splitlines() for y in yasak if y in f})
+    vur = sorted({f"{f} ← '{y}'" for f in fark.splitlines() for y in yasak if yol_eslesir(f, y)})
     if vur:
         return kapi("A5 kapsam", "uyumsuz", [f"kart cümlesinde kapsam dışı denen yol farkta: {', '.join(vur[:4])} — dosyayı çıkar ya da kartı daralt"])
     return kapi("A5 kapsam", "uyumlu", [f"kapsam dışı yollar ({', '.join(sorted(yasak)[:4])}) farkta yok"])

@@ -46,7 +46,9 @@ kur s3b; (cd "$W" && KANIT_DEPO="$W" bash "$K" olcum is1 sinav --asama once -- b
   git add -A && git commit -qm kanit2 && git push -q 2>/dev/null)
 [ "$(kd "$(ogj)" A1)" = uyumlu ]; g $? "S3b 'once' kaydı eski commit'te ölçülmüş olsa da muaf → A1 uyumlu"
 kur s4; (cd "$W" && echo ek > _agents/fabrika/kanit/is1/ek.txt && git add -A && git commit -qm itilmedi)
-O="$(og)"; grep -q "itilmiş dal [0-9a-f]\{8\} ≠ HEAD [0-9a-f]\{8\} — önce it" <<<"$O"; g $? "S4 itilmemiş commit → A1 'önce it'"
+O="$(og)"; grep -q "origin/is1 [0-9a-f]\{8\} ≠ HEAD [0-9a-f]\{8\} — önce it" <<<"$O"; g $? "S4 itilmemiş commit → A1 'önce it'"
+kur s4r; (cd "$W" && git init -q --bare -b main ../F.git && git remote add fork ../F.git && git push -q -u fork is1 2>/dev/null && echo ek > _agents/fabrika/kanit/is1/ek.txt && git add -A && git commit -qm yalniz-fork && git push -q fork is1 2>/dev/null)
+O="$(og)"; grep -q "origin/is1 [0-9a-f]\{8\} ≠ HEAD [0-9a-f]\{8\} — önce it" <<<"$O"; g $? "S4r dal başka uzağı (fork) izliyor ve güncel, origin/is1 bayat → A1 'önce it' (izlenen uzak değil origin kıyaslanır)"
 kur s4p; H="$(git -C "$W" rev-parse HEAD)"
 [ "$(kd "$(FAKE_PR_BAS="$H" ogj --pr 7)" A1)" = uyumlu ]; g $? "S4p PR başı = HEAD → A1 uyumlu"
 O="$(FAKE_PR_BAS=0123456789abcdef0123 og --pr 7)"; grep -q "PR #7 başı 01234567 ≠ HEAD" <<<"$O"; g $? "S4q PR başı ≠ HEAD → A1 uyumsuz 'önce it'"
@@ -73,6 +75,10 @@ kur s10 "Kod satırı değişir; tavan-defteri.log dokunulmaz (ayrı kart)"; (cd
 O="$(og)"; grep -q "kart cümlesinde kapsam dışı denen yol farkta: _agents/fabrika/tavan-defteri.log ← 'tavan-defteri.log'" <<<"$O"; g $? "S10 kart 'dokunulmaz' dediği dosya farkta → A5 uyumsuz"
 kur s10b "Kod satırı değişir; tavan-defteri.log dokunulmaz (ayrı kart)"
 [ "$(kd "$(ogj)" A5)" = uyumlu ]; g $? "S10b aynı cümle, dosya farkta yok → A5 uyumlu"
+kur s10c "Kod satırı değişir; od.txt dokunulmaz"
+[ "$(kd "$(ogj)" A5)" = uyumlu ]; g $? "S10c kart 'od.txt dokunulmaz', farkta kod.txt var → A5 uyumlu (alt dize değil, yol bileşeni eşleşir)"
+kur s10d "Kod satırı değişir; _agents/fabrika dizini dışında kalır"
+[ "$(kd "$(ogj)" A5)" = uyumsuz ]; g $? "S10d kart dizini ('_agents/fabrika') dışarıda sayıyor, farkta o dizinin altındaki kart dosyası → A5 uyumsuz (dizin altı eşleşir)"
 kur s12; rm -f "$W/_agents/fabrika/kartlar/is1.json"; (cd "$W" && git commit -qam kartsiz && git push -q 2>/dev/null)
 [ "$(kd "$(ogj)" A5)" = olculemedi ]; g $? "S12 kart yok → A5 ölçülemedi"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; exit $((kalan > 0))
