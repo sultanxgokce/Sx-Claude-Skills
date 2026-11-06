@@ -1,0 +1,36 @@
+{
+  "tur": 3,
+  "is": "goz-ileri-bas-it",
+  "pr": "720",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T15:43:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-ileri-bas-it",
+  "dal": "goz-ileri-bas-it",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38061,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 27165
+  },
+  "dalgic": "uyumlu",
+  "bas": "bc29e13b9b6a267182421cccdf908c254e6ab63e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki B1 kapanmış: kart BÂNİ kararıyla aynı depodaki PR’lara daraltılmış; kod çatalı ve okunamayan depo bilgisini kapalı varsayılanla durdururken yalnız hızlı ileri durumu iter, güncellemeyi bekler ve kapatma bayrağına uyar. Gerçek ölçüm 52/52 yeşil, önce/sonra çifti ve çatal koruması mutasyonu davranışı doğruladığı için değişiklik üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce ölçümü 44 geçti · 4 kaldı, yeşil gerçek sonra ölçümü 52 geçti · 0 kaldı sonucunu veriyor; F5g-q kapsamı ileri, geri, ayrışmış, DENETCI_ITME=1, çatal, okunamayan depo bilgisi ve güncelleme zaman aşımını sınıyor. Mutasyon kaydı gerçek ölçüm olarak yorumlanmadı; gercek_olcum=fark-sinav kaydına bağlı olarak çatal koruması bilerek kaldırıldığında F5o hedef kapısının düştüğünü gösteriyor."
+  }
+}
