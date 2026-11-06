@@ -1,0 +1,44 @@
+{
+  "tur": 2,
+  "is": "sultan-bildirim-butcesi",
+  "pr": "719",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T15:24:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi",
+  "dal": "sultan-bildirim-butcesi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 77306,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 53630
+  },
+  "dalgic": "uyumsuz",
+  "bas": "5c2494ed76e9f5c5ae946e95ff83cddb6013eca4",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Daraltılmış kartın üç yolu ile sabah özeti komutu yazılmış; önceki B1, WhatsApp bağlantısı ve kapsam daraltmasıyla, B2 ise `sabah` gönderimiyle kapanmış. Ancak yeni bütçe betiği çalıştırılabilir kurulmadığı için kapımda ve alarm üretimde bütçe kapısını sessizce atlar; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Yeni `butce.sh` dosyası çalıştırılabilir değil; kapımda ve alarm bağlantıları yalnız `-x` olduğunda bütçeyi çağırdığı için günlük tavan bu iki üretim yolunda devreye girmez.",
+        "kanit": "Diff dosyayı `new file mode 100644` ile ekliyor. `kapimda.sh` bütçeyi yalnız `[ -x \"$BUTCE_SH\" ]` koşulunda, `alarm.sh` yalnız `[ -x \"$BUTCE\" ]` koşulunda çağırıyor; iki koşul da bu modda false olur. Yeşil bütçe testi betiği doğrudan `bash \"$B\"` ile çalıştırdığı için yürütme biti eksiğini ölçmüyor.",
+        "konum": "sultan-alarmi/scripts/butce.sh — new file mode 100644; kapimda/scripts/kapimda.sh bütçe `-x` kapısı; sultan-alarmi/scripts/alarm.sh bütçe `-x` kapısı; sultan-alarmi/scripts/butce.test.sh `run()`",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve sarı kayıt yok; gerçek ölçümler ile mutasyon çiftleri bütçe mantığını, WhatsApp bağlantısını ve sabah gönderimini güçlü biçimde sınıyor. Ancak ölçümler çalıştırılabilir dosya kurulumu sözleşmesini sınamıyor: doğrudan `bash` çağrısı veya sınama düzeni 100644 modunu örttüğü için kapımda ve alarmdaki gerçek `-x` kapıları hakkında yeşil kayıt güvence vermiyor."
+  }
+}

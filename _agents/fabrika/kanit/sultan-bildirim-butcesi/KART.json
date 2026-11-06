@@ -1,6 +1,6 @@
 {
   "is": "sultan-bildirim-butcesi",
-  "cumle": "Sultan telefonuna giden mesajlara günlük tavan konur, taşan kuyruğa gider",
+  "cumle": "Sultan'a giden istekler günlük dört bütçeden düşer: kapımda kartı, alarm acili, WhatsApp isteği; taşan kuyruğa yazılır ve sabah özeti komutla gönderilir",
   "istedi": "SERDAR",
   "aldi": "BENNÂ",
   "zaman": "2026-11-06T14:38:01+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-06T15:22:28+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sultan-bildirim-butcesi-kalan",
+      "tur_sifir": 1
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -29,6 +36,36 @@
       "zaman": "2026-11-06T14:38:01+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T15:20:47+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BENNÂ",
+      "oturum": "6b97a4cc",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sultan-bildirim-butcesi-kalan) — onay-bekliyor görevi (gorev.sh, cloudtop), soru mektubu, 09:00 cron'u: ayrı kartlar",
+      "zaman": "2026-11-06T15:22:28+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Sultan telefonuna giden mesajlara günlük tavan konur, taşan kuyruğa gider",
+      "zaman": "2026-11-06T15:22:28+03:00",
+      "kalan_kart": "sultan-bildirim-butcesi-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-06T15:22:28+03:00",
+      "kalan_kart": "sultan-bildirim-butcesi-kalan",
+      "kalan": "onay-bekliyor görevi (gorev.sh, cloudtop), soru mektubu, 09:00 cron'u: ayrı kartlar",
+      "tur_sifir": 1,
+      "oturum": "6b97a4cc"
     }
   ]
 }
