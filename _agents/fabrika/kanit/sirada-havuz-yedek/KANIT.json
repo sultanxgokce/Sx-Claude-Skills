@@ -1,0 +1,94 @@
+{
+  "is": "sirada-havuz-yedek",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T15:16:34+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sirada-sinav",
+      "asama": "once",
+      "dosya": "olcum-sirada-sinav-once.txt",
+      "sha256": "00cb9e86eb56dac8f695c46d33489185b2ca73486c9a2bae4fe027880f4e7a16",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T15:15:32+03:00",
+      "sure_sn": 9.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "427eb83a1c07fcffc37c7030a3d32da00fa4aba33ef5ec943c1e431ef7b717a6",
+      "olcum_id": "4f50dd7b2bd44172ac51182f7149f50a",
+      "olculen_commit": "1a0108811517cf6299c3340524b02b40cb7db44d",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sirada-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sirada-sinav-sonra.txt",
+      "sha256": "002ef5f1e59fccd4b05f821b1a60a493e11ab5940efb5e12537a02f45556be99",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/sirada-bak.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T15:16:22+03:00",
+      "sure_sn": 9.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "aab0517656a5f81b77e505a73be9d50fa7a0a4e867c881544c5bd4cf857d121c",
+      "olcum_id": "767ff7744517419d91a628f0f1fa9252",
+      "olculen_commit": "1de62f8cc6e607e9c00ea51a396a7b320a1c4b9e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-defter-bak",
+      "asama": "once",
+      "dosya": "olcum-canli-defter-bak-once.txt",
+      "sha256": "ba8ce3bab6da14840abd1903d45892ad831b1793760d09ed3367893ac347a5da",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sirada-havuz-yedek/canli-bak.sh",
+        "/config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T15:16:32+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "834a42b80a29b3c46b848d0493e1eae7ca73fcfd5559f4fc30a463389c945fc8",
+      "olcum_id": "72f30166ac4441d095296df74fbb826a",
+      "olculen_commit": "845c89c20c49af62d772324125611c8937179deb",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-defter-bak",
+      "asama": "sonra",
+      "dosya": "olcum-canli-defter-bak-sonra.txt",
+      "sha256": "042308cd1454163ef452183eb6f642ea5eaa1267bdc068eca31c9fe9b7b2b56d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sirada-havuz-yedek/canli-bak.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-sirada-havuz-yedek/gunluk-plan/scripts/sirada-bak.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T15:16:34+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "bac6f1c52da6df14853b411a7e94bde90c88e5e5d223922464918f0b81a780e6",
+      "olcum_id": "091bc428b2e24efab45772776f7a90e1",
+      "olculen_commit": "845c89c20c49af62d772324125611c8937179deb",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "8ac4ea2fdf75134f9590303f81da61387f56ea4305368e32baa7d114717cfe7e"
+}

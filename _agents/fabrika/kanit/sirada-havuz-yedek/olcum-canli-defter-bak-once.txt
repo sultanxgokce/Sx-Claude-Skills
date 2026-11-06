@@ -1,0 +1,12 @@
+$ bash _agents/fabrika/kanit/sirada-havuz-yedek/canli-bak.sh /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh
+# rc=0 sure=2.0s zaman=2026-11-06T15:16:32+03:00
+--- stdout ---
+betik: /config/.claude/skills/gunluk-plan/scripts/sirada-bak.sh
+SIRADA=5
+HAVUZDA=52
+ESIK=3
+KARAR=BAS
+BASLAMADI=yok (sıradaki 5 işin hiçbiri bu koltuğa atanmış ya da sahipsiz değil — başkasının işi üstlenilmez)
+ONERI=Sultan'a: 'Sırada 5 iş var ama hepsi başka koltuklara atanmış; bana atanmış ya da sahipsiz iş yok. Kendimize iş çıkarma seansı yapalım mı?'
+rc=0
+--- stderr ---
