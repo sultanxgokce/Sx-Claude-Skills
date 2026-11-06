@@ -5,7 +5,7 @@ import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { kadroYaz, durumDegistir, kayitDosyalari, KadroHata, adetAyarla } from './kadro-yaz.mjs';
+import { kadroYaz, durumDegistir, kayitDosyalari, KadroHata, adetAyarla, davaEkle } from './kadro-yaz.mjs';
 import { kayitOku, kadroBirlestir } from './kadro.mjs';
 let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log('  ✓ ' + ad); } else { k++; console.log('  ✗ ' + ad + ' ' + ek); } };
 const T = mkdtempSync(join(tmpdir(), 'kadro-yaz-'));
@@ -112,5 +112,14 @@ kapi('K1 kayıt başka süreçte kilitliyken → 503, kayıt dosyası aynen kal�
 tutan.kill('SIGKILL'); await new Promise((r) => tutan.on('close', r));
 const kr = kadroYaz({ proje: KP, id: 'A', eylem: 'dondur', ortam: KO });
 kapi('K2 tutucu ölünce yazım tutar; iş bitince ack/geçici dosya kalmaz', kr.dosya === KR && readFileSync(KR, 'utf8').includes('durum: dondurulmus') && !readdirSync(KP).some((f) => f.includes('.ack-')));
+
+console.log('── F · FB51K: eğik çizgili oturum adı kayda bağlanır');
+{ const FP = join(T, 'fb51k'); const FR = join(FP, 'iskan-registry.yaml'); const SID1 = '5a1e0000-0000-4000-8000-000000000009';
+  yaz(FR, 'uyeler:\n  - id: A\n    tmux: "a:0"\n');
+  const ok = hata(() => davaEkle({ proje: FP, ortam: {}, id: '2022/777', tmux: '2022/777', arz_adi: 'Kira', session_id: SID1 }));
+  const oku = (y) => { try { return readFileSync(y, 'utf8'); } catch { return ''; } }; const m = oku(join(FP, 'davalar.yaml')) + oku(FR);
+  kapi('F1 tmux adı "2022/777" kayda AYNEN yazılır (tmux: "2022/777:0"), hata yok', ok === null && m.includes('tmux: "2022/777:0"'), String(ok && ok.message));
+  for (const kotu of ['a b', 'a"b', 'a\\b', 'a:b', '']) { const e = hata(() => davaEkle({ proje: FP, ortam: {}, id: '2022/778', tmux: kotu, arz_adi: 'x', session_id: SID1 }));
+    kapi('F2 kötü oturum adı reddedilir (409): ' + JSON.stringify(kotu), e instanceof KadroHata && e.kod === 409, String(e && e.message)); } }
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);
