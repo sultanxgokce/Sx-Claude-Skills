@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: 00:01 yeni gün geçer · rc≠0 + hedef kapı '00:01 yeni gün geçer' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh mutant-gun /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=1 sure=0.9s zaman=2026-11-06T15:17:58+03:00
+# rc=1 sure=3.8s zaman=2026-11-06T15:23:10+03:00
 --- stdout ---
 B1 dört istek geçer, beşinci kuyruğa
   ✓ istek 1 geçti
@@ -35,5 +35,14 @@ B7 girdi kapıları
 B8 eşzamanlı 8 istek: tam 4 geçer
   ✓ geçen sayısı
   ✓ kuyruk sayısı
-geçti=24 kaldı=1
+B9 sabah özeti: dünkü kuyruk tek WhatsApp mesajı, gidince işlenir
+  ✓ aynı gün sabah özeti göndermez (yalnız dünkü)
+  ✓ ertesi sabah özet gider rc 0
+  ✓ tek mesaj gitti
+  ✓ mesaj s5'i taşır
+  ✓ işlendi: kuyruk boş
+  ✓ ikinci koşu mesaj atmaz
+  ✓ geçit düşerse rc 3
+  ✓ gitmeyen özet kuyruğu korur
+geçti=32 kaldı=1
 --- stderr ---

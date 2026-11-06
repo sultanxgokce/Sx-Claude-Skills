@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: beşinci rc 10 · rc≠0 + hedef kapı 'beşinci rc 10' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh mutant-tavan /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=1 sure=1.1s zaman=2026-11-06T15:17:51+03:00
+# rc=1 sure=1.6s zaman=2026-11-06T15:23:05+03:00
 --- stdout ---
 B1 dört istek geçer, beşinci kuyruğa
   ✓ istek 1 geçti
@@ -35,5 +35,15 @@ B7 girdi kapıları
 B8 eşzamanlı 8 istek: tam 4 geçer
   ✗ geçen sayısı (beklenen=4 gelen=8)
   ✗ kuyruk sayısı (beklenen=4 gelen=0)
-geçti=12 kaldı=13
+B9 sabah özeti: dünkü kuyruk tek WhatsApp mesajı, gidince işlenir
+  ✓ aynı gün sabah özeti göndermez (yalnız dünkü)
+  ✓ ertesi sabah özet gider rc 0
+  ✗ tek mesaj gitti (beklenen=1 gelen=0)
+  ✗ mesaj s5'i taşır (beklenen=1 gelen=)
+  ✓ işlendi: kuyruk boş
+  ✗ ikinci koşu mesaj atmaz (beklenen=1 gelen=0)
+  ✗ geçit düşerse rc 3 (beklenen=3 gelen=0)
+  ✗ gitmeyen özet kuyruğu korur (beklenen=1 gelen=0)
+geçti=15 kaldı=18
 --- stderr ---
+grep: /tmp/tmp.DPRBsui642/metin.log: No such file or directory

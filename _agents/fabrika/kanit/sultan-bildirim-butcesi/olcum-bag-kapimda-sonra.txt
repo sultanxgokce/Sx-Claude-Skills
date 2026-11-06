@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh kapimda ana /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=0 sure=16.8s zaman=2026-11-06T15:19:35+03:00
+# rc=0 sure=4.1s zaman=2026-11-06T15:22:55+03:00
 --- stdout ---
 PASS  G0 sözdizimi
 PASS  K1 eksik alan (--bitince yok) → RED
@@ -143,4 +143,3 @@ PASS  BR1 sınavda boru arkasında grep -q yok
 
 ── SONUÇ: 139 geçti · 0 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-sultan-bildirim-butcesi-bag-kapimda 10 sn bekledi (yuva 1, load1 17.66)

@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh ana /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=0 sure=1.0s zaman=2026-11-06T15:17:34+03:00
+# rc=0 sure=1.8s zaman=2026-11-06T15:22:50+03:00
 --- stdout ---
 B1 dört istek geçer, beşinci kuyruğa
   ✓ istek 1 geçti
@@ -34,5 +34,14 @@ B7 girdi kapıları
 B8 eşzamanlı 8 istek: tam 4 geçer
   ✓ geçen sayısı
   ✓ kuyruk sayısı
-geçti=25 kaldı=0
+B9 sabah özeti: dünkü kuyruk tek WhatsApp mesajı, gidince işlenir
+  ✓ aynı gün sabah özeti göndermez (yalnız dünkü)
+  ✓ ertesi sabah özet gider rc 0
+  ✓ tek mesaj gitti
+  ✓ mesaj s5'i taşır
+  ✓ işlendi: kuyruk boş
+  ✓ ikinci koşu mesaj atmaz
+  ✓ geçit düşerse rc 3
+  ✓ gitmeyen özet kuyruğu korur
+geçti=33 kaldı=0
 --- stderr ---
