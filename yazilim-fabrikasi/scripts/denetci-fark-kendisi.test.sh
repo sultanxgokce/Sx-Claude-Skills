@@ -43,7 +43,8 @@ cat > "$SAHTEGH/gh" <<'GH'
 #!/usr/bin/env bash
 E="$(printf '\033')"
 case "$1 $2" in
- "pr view") if [[ " $* " == *" isCrossRepository "* ]]; then printf "%s\n" "${FAKE_CROSS-false}"
+ "pr view") if [[ " $* " == *"isCrossRepository,headRepositoryOwner"* ]]; then printf "%s %s %s\n" "${FAKE_CROSS-false}" "${FAKE_HEAD_OWNER:-}" "${FAKE_HEAD_REPO:-}"
+    elif [[ " $* " == *" isCrossRepository "* ]]; then printf "%s\n" "${FAKE_CROSS-false}"
     elif [ -n "${FAKE_PR_DAL:-}" ]; then printf "%s %s\n" "$(git -C "$FAKE_ORIGIN" rev-parse -q --verify "refs/heads/$FAKE_PR_DAL" || echo 0000000000000000000000000000000000000000)" "$FAKE_PR_DAL"; else printf "%s\n" "$FAKE_PR_VIEW"; fi;;
  "pr diff") [ -n "${FAKE_GH_FAIL:-}" ] && { echo "sahte gh: pr diff düştü" >&2; exit 1; }
     if [ -n "${FAKE_GH_ESC:-}" ]; then
@@ -125,6 +126,17 @@ kanitla f5o; FAKE_CROSS=true FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F
 [ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$OB" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5o2 çatal PR'da origin'deki adaş dala dokunulmadı"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5o2 origin dalı değişti"; }
 kanitla f5p; FAKE_CROSS="" FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5p depo bilgisi okunamadı (boş) → itmez, rc=3 (kapalı varsayılan)" 3 den f5p --pr 11
 iceren "F5q eski hata metni korunur" "itilmemiş ya da çekilmemiş commit var" "$KOK/son.out"
+# ÇATAL PR (görev …RX892): PR'ın baş deposunu gösteren uzak varsa ORAYA itilir; origin'deki adaş dala dokunulmaz
+mkdir -p "$KOK/kisi"; git init -q --bare -b main "$KOK/kisi/catal.git"; git -C "$KOK/w" remote add catal "$KOK/kisi/catal.git"
+git -C "$KOK/w" push -q catal "$OB:refs/heads/ileri-dal" 2>/dev/null; OB2="$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)"
+kanitla f5r; : > "$KOK/istem.md"; FAKE_ORIGIN="$KOK/kisi/catal.git" FAKE_CROSS=true FAKE_HEAD_OWNER=kisi FAKE_HEAD_REPO=catal FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5r ÇATAL PR, baş deposunun uzağı (kisi/catal) var → oraya itildi, rc 0" 0 den f5r --pr 12
+iceren "F5s hangi uzağa itildiği söylenir" "uzak: catal" "$KOK/son.out"
+[ "$(git -C "$KOK/kisi/catal.git" rev-parse refs/heads/ileri-dal)" = "$(git -C "$KOK/w" rev-parse ileri-dal)" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5t çatal deposundaki dal yerel başa ilerledi"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5t çatal dalı ilerlemedi"; }
+[ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$OB2" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5u origin'deki adaş dala dokunulmadı"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5u origin dalı değişti"; }
+echo ileri3 > "$KOK/w/ileri3.txt"; git -C "$KOK/w" add ileri3.txt; git -C "$KOK/w" commit -q -m ileri3
+kanitla f5v; FAKE_ORIGIN="$KOK/kisi/catal.git" FAKE_CROSS=true FAKE_HEAD_OWNER=baskasi FAKE_HEAD_REPO=yok FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5v ÇATAL PR, baş deposunun uzağı YOK → itmez, rc=3" 3 den f5v --pr 12
+iceren "F5w uzak bulunamadığı söylenir" "baş deposu (baskasi/yok) için uzak yok" "$KOK/son.out"
+git -C "$KOK/w" remote remove catal
 kanitla f5m; DENETCI_IT_BEKLE_SN=2 FAKE_PR_VIEW="$OB ileri-dal" PATH="$SAHTEGH:$PATH" kapi "F5m itildi ama PR başı güncellenmedi (GitHub gecikmesi tavanı aştı) → rc=3, eski farkı puanlamaz" 3 den f5m --pr 11
 iceren "F5n güncellenmediği söylenir" "güncellenmedi" "$KOK/son.out"
 git -C "$KOK/w" checkout -q is-dal; unset FAKE_ORIGIN

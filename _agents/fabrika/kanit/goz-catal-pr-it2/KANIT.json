@@ -1,0 +1,76 @@
+{
+  "is": "goz-catal-pr-it2",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T19:11:57+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "fark-sinav",
+      "asama": "once",
+      "dosya": "olcum-fark-sinav-once.txt",
+      "sha256": "392ac76e12d219faa045bd7df8c2b2c664fab96d9b7c5a46a5e4313a814de19d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T19:07:51+03:00",
+      "sure_sn": 82.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "3dedf5a7038630a6f9250e8de73c95b262cc442159004d1d2ef3764c18537222",
+      "olcum_id": "5ad191cde4d1499cb8f11d76a1875466",
+      "olculen_commit": "668e1800f2a695137ace4ba62eaa5a42acd18ff3",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fark-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-fark-sinav-sonra.txt",
+      "sha256": "14d926790c920b5533b3c3f40ecf87aa058e1b19a61c68831260688c9be37207",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:10:46+03:00",
+      "sure_sn": 66.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "f2f5f6d5b611a3d39dee60e36311390334994c91d3e3b02a1db586ef2d2798f5",
+      "olcum_id": "2c11da193cde44c4898b45049a523a8e",
+      "olculen_commit": "06e8ea11c1c85e9be25ac54724c941a746c20b93",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-catal-uzak",
+      "asama": "sonra",
+      "dosya": "olcum-mut-catal-uzak-sonra.txt",
+      "sha256": "b06c0b3ece7ad5c939a78f5939137c1bf400930e5bd0f5eaf7e1a6f8060f5c41",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/goz-catal-pr-it2/mut-catal-uzak.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:11:57+03:00",
+      "sure_sn": 71.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "fark-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "F5r",
+      "hedef_dustu": true,
+      "olcum_id": "b5a37fe9e1784cec9041f3c4907b132e",
+      "olculen_commit": "06e8ea11c1c85e9be25ac54724c941a746c20b93",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "f59149e0d92a388fc96d7613688724edf6571e0e4f5e6bf10e7a006f18b2d446"
+}
