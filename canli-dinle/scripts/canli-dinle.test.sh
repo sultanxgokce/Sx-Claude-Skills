@@ -53,7 +53,8 @@ echo "── T4 10 dk pencerede özet"
 O="$(cat "$T"/c1/*/ozet.md 2>/dev/null)"
 [ "$(echo "$O" | grep -c 'ÖZET(6)')" -eq 2 ] && echo "$O" | grep -q 'ÖZET(2)' && ok "pencereler 6 sn: 6+6+2 sözcük" || bad "özet: $O"
 echo "── T5 yerel kaynak (sahte whisper.cpp)"
-export WHISPER_CLI="$D/sahte-whisper.py" FAKE_SAYAC="$T/say" WHISPER_MODEL=/yok
+printf '#!/bin/sh\nexec python3 "%s/sahte-whisper.py" "$@"\n' "$D" >"$T/whisper-cli"; chmod +x "$T/whisper-cli"
+export WHISPER_CLI="$T/whisper-cli" FAKE_SAYAC="$T/say" WHISPER_MODEL=/yok
 rm -f "$T/say"
 CIK "$T/c2" --kaynak yerel >"$T/o2" 2>&1; RC=$?
 M2="$(cat "$T"/c2/*/metin.txt 2>/dev/null | sed "s/ *$//")"
