@@ -557,8 +557,26 @@ elif [ -n "$PR" ]; then
   # istisnası kartın şartından dardı). Yerel kopya yoksa (başkasının PR'ı, hiç çekilmemiş) itilmemiş commit de olamaz → devam.
   PR_DAL="${PR_BAS#* }"; PR_SHA="${PR_BAS%% *}"
   YEREL_BAS="$(git -C "$DEPO" rev-parse -q --verify "refs/heads/$PR_DAL" 2>/dev/null)"
+  # İLERİ BAŞI İT (görev …HJGVS, 6 Kas): 3 Kas'tan beri 59 kez burada durulmuş, her seferinde ajanın sonraki adımı "it ve yeniden koştur" olmuştu.
+  #   Yerel baş PR başının YALNIZ İLERİSİNDEYSE (PR başı yerel başın atası: hızlı ileri) dal origin'e itilir — zorla itme YOK —, sonra PR başı
+  #   GitHub'da yerel başa dönene kadar beklenir (15-20 sn gecikme ölçüldü; tavan DENETCI_IT_BEKLE_SN, vars. 90). Güncellenmezse DUR: eski fark puanlanmaz.
+  #   Geride ya da ayrışmışsa (çekilmemiş commit) eskisi gibi DUR. DENETCI_ITME=1 itmeyi kapatır.
+  if [ -n "$PR_SHA" ] && [ -n "$YEREL_BAS" ] && [ "$YEREL_BAS" != "$PR_SHA" ] && [ "${DENETCI_ITME:-0}" != 1 ] \
+     && git -C "$DEPO" cat-file -e "$PR_SHA^{commit}" 2>/dev/null && git -C "$DEPO" merge-base --is-ancestor "$PR_SHA" "$YEREL_BAS" 2>/dev/null; then
+    echo "· PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başının (${PR_SHA:0:8}) ilerisinde — dal itiliyor (hızlı ileri, zorla değil)"
+    git -C "$DEPO" push -q origin "$YEREL_BAS:refs/heads/$PR_DAL" 2>"$TMP/it.err" \
+      || { _hata "dal itilemedi ($(head -c 200 "$TMP/it.err" | tr '\n' ' ')) — elle it, sonra koştur"; exit 3; }
+    _bek="${DENETCI_IT_BEKLE_SN:-90}"; case "$_bek" in ''|*[!0-9]*) _bek=90;; esac; _bas=$SECONDS
+    while :; do
+      PR_SHA="$(cd "$DEPO" && gh pr view "$PR" --json headRefOid,headRefName --jq '.headRefOid+" "+.headRefName' 2>/dev/null)"; PR_SHA="${PR_SHA%% *}"
+      [ "$PR_SHA" = "$YEREL_BAS" ] && break
+      [ $((SECONDS - _bas)) -ge "$_bek" ] && { _hata "dal itildi ama PR #$PR başı ${_bek} sn içinde yerel başa (${YEREL_BAS:0:8}) güncellenmedi (şu an ${PR_SHA:0:8}) — göz eski farkı puanlardı; biraz sonra yeniden koştur"; exit 3; }
+      sleep 3
+    done
+    echo "· itildi: PR #$PR başı ${YEREL_BAS:0:8} ($((SECONDS - _bas)) sn)"
+  fi
   if [ -n "$PR_SHA" ] && [ -n "$YEREL_BAS" ] && [ "$YEREL_BAS" != "$PR_SHA" ]; then
-    _hata "PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başından (${PR_SHA:0:8}) FARKLI — itilmemiş ya da çekilmemiş commit var; göz GitHub'daki farkı puanlardı. Önce it/çek, sonra koştur"; exit 3
+    _hata "PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başından (${PR_SHA:0:8}) FARKLI — çekilmemiş commit var ya da dal ayrışmış (yalnız ileride olan baş kendiliğinden itilir); göz GitHub'daki farkı puanlardı. Önce çek/birleştir, sonra koştur"; exit 3
   fi
   # 🔴 KAÇIŞ KODLU FARK (görev …Z9SZF3, 29 Eki): gh 2.98 `pr diff` farkta terminal kaçış dizisi görünce (ölçüm dosyasına düşen ANSI
   #    renk — Playwright hata çıktısı — ya da onu temizleyen sed kalıbının METNİ) çıktıyı reddediyor ("pass --allow-escape-sequences")
