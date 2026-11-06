@@ -1,0 +1,39 @@
+{
+  "is": "goz-ileri-bas-it",
+  "cumle": "denetci.sh --pr kipinde PR dalının yerel başı PR başının yalnız İLERİSİNDEYSE (hızlı ileri) dalı kendisi iter, PR başının güncellenmesini bekler ve devam eder; geride ya da ayrışmışsa eskisi gibi durur; DENETCI_ITME=1 itmeyi kapatır",
+  "istedi": "BÂNİ",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-06T15:21:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6RCW4A6N6E5B4VPZ04HJGVS",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [
+    "1 itmeyi"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-06T15:21:36+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
