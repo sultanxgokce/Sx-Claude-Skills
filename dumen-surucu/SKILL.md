@@ -145,7 +145,7 @@ NARH'ın Trendyol/Amazon işlerinde yaşadığı sekiz takılma ve bugünkü kar
 | 4 | Çerez şeridi, tanıtım turu, anket çerçeveleri tıklamayı kapatıyor | `engelKapat()`; çerez varsayılanı Reddet, Kabul Sultan izniyle (0.9.0) |
 | 5 | Küçük pencerede çerez şeridi alttaki "Gönder"i örtüyor | Önce `engelKapat()`, sonra `ogeDurumu` ile görünür ve etkin mi ölç; örten kalıyorsa `force` değil, örtenin kapatma düğmesini `engelKapat({ ek: [...] })` ile ver |
 | 6 | "Görseli Gör" yeni sekme açıyor, adres elle okunuyordu | `yeniSekmeAdresi(sel)` (0.9.0); adres bilinince `indirAdres` |
-| 7 | Açık talep varken mesaj kutusu pasif; ajan boşa yazıyor | `ogeDurumu(sel).etkin` — `false` ise önce alanı açan adımı bul |
+| 7 | Açık talep varken mesaj kutusu pasif; ajan boşa yazıyor (Trendyol sipariş sorusu) | Yazmadan önce `ogeDurumu('<mesaj kutusu>').etkin`. `false` ise sayfadaki **talep düğmesine** (talebi karşılama/yanıtlama eylemi, ör. "Fatura gönder") `click` + gerekiyorsa `yukle` ile talebi işle, sonra kutuyu yeniden ölç; `etkin: true` olunca yaz. Düğme yoksa ya da kutu pasif kalıyorsa yazma, dur ve bulguya yaz |
 | 8 | Metin/rol seçicisi Vue arayüzünde gizli eşe çözülüyor | `ogeDurumu` ile `ilkGorunur`; `sel >> nth=<ilkGorunur>` |
 | + | PDF sayfa içi pencerede (`blob:`) açılıyor, `indir` `indirme-yok` | 0.9.1: `indir` kendisi alır; zaten açıksa `indirGomulu` |
 | + | Etiket düğmesi yazdırma penceresi açıp sekmeyi kilitliyor | 0.10.0: `yazdirYakala(sel, hedef.pdf)` |
