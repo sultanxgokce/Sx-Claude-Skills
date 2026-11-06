@@ -16,7 +16,7 @@ GÜVENLİK ÖZELLİKLERİ (hepsi sınavda mutantla ölçülür):
   · iz yaşı sınırlı (varsayılan 900 sn; ortam yalnız düşürebilir).
 Çıkış (onayla): 0 VAR · 1 YOK · 3 ÖLÇÜLEMEDİ (oturum kaydı görünmüyor). (iz): 0 bırakıldı · 1 zincirde imza yok · 2 kullanım.
 """
-import datetime, hashlib, json, os, re, secrets, sys, time, collections
+import datetime, fcntl, hashlib, json, os, re, secrets, sys, time, collections
 
 IZ_TAVAN = 900          # saniye: iz'in en çok yaşı (MUTLAK; ortam yalnız düşürebilir)
 BAS_ALT, BAS_UST = -2.0, 5.0   # kaydın zaman damgası - kökün başlangıcı (sn)
@@ -215,12 +215,17 @@ def onayla(imza, izdir, dosyalar, nonce, tavan):
         print("ÖLÇÜLEMEDİ: oturum kaydı görünmüyor — bu 'insan yok' DEMEK DEĞİLDİR", file=sys.stderr)
         return 3
     simdi = time.time()
-    aday = [i for i in izler(izdir) if i.get("imza") == imza and (not nonce or i.get("nonce") == nonce) and 0 <= simdi - i.get("an", 0) <= tavan]
+    if not os.path.isdir(izdir):
+        print("insan-izi YOK: iz dizini yok (iz komutun İÇİNDE `iz --imza ...` ile bırakılır)", file=sys.stderr)
+        return 1
+    kilit = open(os.path.join(izdir, ".kilit"), "a")
+    fcntl.flock(kilit, fcntl.LOCK_EX)   # kontrol + harcama ATOMİK: eşzamanlı iki onay aynı kaydı/izi geçemez
+    harcanan = harcananlar(izdir)
+    aday = [i for i in izler(izdir) if i.get("imza") == imza and (not nonce or i.get("nonce") == nonce) and 0 <= simdi - i.get("an", 0) <= tavan and ("iz:" + str(i.get("nonce"))) not in harcanan]
     if not aday:
         print("insan-izi YOK: '%s' için taze iz yok (iz komutun İÇİNDE `iz --imza ...` ile bırakılır, en çok %d sn önce)" % (imza, tavan), file=sys.stderr)
         return 1
     kay = list(kayitlar(dosyalar))
-    harcanan = harcananlar(izdir)
     sebepler = []
     for iz in sorted(aday, key=lambda i: -i["an"]):
         for an, komut in kay:
@@ -236,6 +241,7 @@ def onayla(imza, izdir, dosyalar, nonce, tavan):
                 continue
             with open(kayit_yazi(izdir), "a", encoding="utf-8") as f:
                 f.write(a + "\n")
+                f.write("iz:" + str(iz["nonce"]) + "\n")   # iz de BİR kez: ikinci uygun kayıt aynı izle VAR üretemez
             print("insan-izi VAR (iki adım): '%s' geçen '!' komutunun kaydı, iz %s ile birebir ve başlangıçla %+.1f sn farklı; kayıt harcandı" % (imza, iz["nonce"], fark))
             return 0
     print("insan-izi YOK: %d iz var, eşleşen insan kaydı yok%s" % (len(aday), (" · " + "; ".join(sorted(set(sebepler)))) if sebepler else " · komut kaydı henüz yazılmamış olabilir (komut bitince tekrar dene)"), file=sys.stderr)

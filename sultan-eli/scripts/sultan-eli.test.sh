@@ -318,7 +318,8 @@ mutb() {  # $1=ad $2=eski $3=yeni → mutant yolunu basar
   python3 -c 'import sys; src,dst,e,y=sys.argv[1:]; s=open(src,encoding="utf-8").read(); assert e in s; open(dst,"w",encoding="utf-8").write(s.replace(e,y))' "$PYI" "$M" "$2" "$3"
   echo "$M"
 }
-MB1="$(mutb harcama 'if a in harcanan:' 'if False:')"
+MB1="$(mutb harcama 'if a in harcanan:' 'if False:')"   # kayıt harcaması kapalı
+python3 -c 'import sys; p=sys.argv[1]; s=open(p,encoding="utf-8").read(); e=" and (\"iz:\" + str(i.get(\"nonce\"))) not in harcanan]"; assert e in s; open(p,"w",encoding="utf-8").write(s.replace(e,"]"))' "$MB1"   # iz harcaması da kapalı: tek kayıtlı ikinci onayı yalnız ikisi birden tutar
 zb "$K" "$IZK" sonra "$(q "$IZK")"
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB1" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB1" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
@@ -331,6 +332,18 @@ MB3="$(mutb birebir 'if komut != iz["komut"]:' 'if iz["komut"] not in komut:')"
 zb "$K" "echo x; $IZK" sonra "$(q "$IZK")"
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB3" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
 check "ZB11 birebir mutantında önek+komut GEÇİYOR (0) → ZB4 yakalar" "0" "$?"
+# ZB12: aynı iz, İKİ uygun kayıt (zaman penceresinde) → ikinci onay YOK (iz harcandı)
+zb "$K" "$IZK" sonra "$(q "$IZK")"
+{ cat "$KOK/proje/z.jsonl"; _satir "<bash-input>$IZK</bash-input>" 0; } > "$T/z2.jsonl"; cp "$T/z2.jsonl" "$KOK/proje/z.jsonl"
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB12 iki uygun kayıt olsa da aynı iz ikinci kez VAR vermez → YOK (iz harcandı)" "1" "$?"
+MB4="$(mutb izharca 'f.write("iz:" + str(iz["nonce"]) + "\n")' 'pass')"
+zb "$K" "$IZK" sonra "$(q "$IZK")"
+{ cat "$KOK/proje/z.jsonl"; _satir "<bash-input>$IZK</bash-input>" 0; } > "$T/z2.jsonl"; cp "$T/z2.jsonl" "$KOK/proje/z.jsonl"
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB4" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_IKI_ADIM="$MB4" bash "$K" onayla --imza "$IM" >/dev/null 2>&1
+check "ZB13 iz-harcama mutantında ikinci kayıtla İKİNCİ onay GEÇİYOR (0) → ZB12 yakalar" "0" "$?"
 limpa "$IZD"; unset SULTAN_ELI_IZ
 
 echo ""
