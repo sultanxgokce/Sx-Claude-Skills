@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "gorev-bekle-sebep",
+  "pr": "732",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T23:31:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-bekle-sebep",
+  "dal": "gorev-bekle-sebep",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18180,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4104
+  },
+  "dalgic": "uyumsuz",
+  "bas": "cd2511945673251003933ad8f3d1526248f99d1a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Tek komutla `[bekliyor] <sebep>` adımı yazan `bekle` fiili eklenmiş; ancak boşluklardan oluşan sebep kabul ediliyor ve kartın sebebi gerçekten gösterdiği sınanmıyor. Önce sebebi kırpılmış değer üzerinden doğrulayın ve gerçek kart çıktısını ölçen uçtan uca kapıyı ekleyin.",
+    "bulgular": [
+      {
+        "ne": "Yalnız boşluklardan oluşan sebep geçerli sayılıyor; komut gerçekte sebep olmadan `[bekliyor] ` adımı yazabiliyor.",
+        "kanit": "Uzunluk denetimi ham `$3` üzerinde yapılıyor (`${#3}`), ardından değer Python içinde `strip()` edilerek yazılıyor. Örneğin beş boşluk uzunluk kapısını geçer fakat kırpılınca boş kalır; K3 yalnız `kısa`, K5 ise eksik argüman vakasını sınadığı için bu vaka kapsanmıyor.",
+        "konum": "gunluk-plan/scripts/gorev.sh:405-407; gunluk-plan/scripts/gorev-bekle.test.sh:27-32",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartının “Durakladı · <sebep>” gösterdiği temel talep kanıtlanmamış; sınav yalnız komut çıktısında `Durakladı` kelimesini arıyor.",
+        "kanit": "K2 koşulu `[[ \"$o\" == *\"Durakladı\"* ]]`; sahte sunucu yalnız PATCH gövdesini kaydediyor ve hiçbir kart görüntüsü/çıktısı üretmiyor. Yeşil ölçümdeki K2 bu nedenle kartın sebebi okuduğunu değil, `_sonuc` mesajının kelimeyi içerdiğini ölçüyor.",
+        "konum": "gunluk-plan/scripts/gorev-bekle.test.sh:12-18,24-26; olcum-sonra-tek-tek.txt K2",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve gerçek ölçüm yeşil; mutasyon kaydı da K3 alt-sınır kapısının bozuk kodu yakaladığını gösteriyor. Buna karşılık gerçekçi bir kart karesi veya kart oluşturucusunu sınayan ölçüm yok; K2 hedef davranış yerine yalnız CLI metnini ölçtüğü için kullanıcıya dönük ana iddia kanıtsız."
+  }
+}
