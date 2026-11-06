@@ -204,5 +204,15 @@ kur; B="$(bas_al)"; den "$B"; ( cd "$T" && git checkout -q -b is-dal && echo kod
 ( cd "$T" && bash "$KT" reis-dedi is-oc --karar devam --reis M --oturum ref-r --gerekce "devam karari birlestir karari degildir, kapsamaz" ) >/dev/null 2>&1
 C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C"; g $? "O22 · reis kararı 'devam' (birlestir değil) → rc=1, kapıyı açmaz"
 
+echo "════ O23 · göz sonrası Türkçe adlı kanıt dosyası commit'lendi (core.quotepath açık) → GEÇER (görev …RNY9N, Sx #681) ════"
+# git varsayılanı core.quotepath=true: Türkçe ad diff çıktısında tırnaklı + sekizli kaçışlı gelir ve kanıt dizini öneki tutmazdı.
+kur; ( cd "$T" && git config core.quotepath true ); B="$(bas_al)"; den "$B"
+( cd "$T" && printf 'ölçüm\n' > "_agents/fabrika/kanit/is-oc/canlı-ölçüm-çıktısı.txt" && git add -A && git commit -q -m "docs: kanit" ) >/dev/null 2>&1
+kac="$(git -C "$T" diff --name-only "$B" HEAD | grep -c '\\')"; [ "$kac" -ge 1 ]; g $? "O23 önkoşul: bu depoda git yolu kaçışlı basıyor (vaka yeniden üretildi)"
+C="$(kapi)"; RC=$?; [ "$RC" -eq 0 ] && grep -q "aradaki fark yalnız kanıt kaydı" <<<"$C"; g $? "O23 · Türkçe adlı kanıt dosyası kod değişikliği SAYILMADI → rc=0"
+kur; ( cd "$T" && git config core.quotepath true ); B="$(bas_al)"; den "$B"
+( cd "$T" && git checkout -q -b is-dal && printf 'x\n' > "düzeltme.sh" && git add -A && git commit -q -m "fix: gozden sonra" ) >/dev/null 2>&1
+C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "düzeltme.sh" <<<"$C"; g $? "O24 · kanıt dışındaki Türkçe adlı kod dosyası yine ENGELLER ve adı okunur biçimde yazılır"
+
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

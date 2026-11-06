@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/kapi-turkce-yol/kos.sh
+# rc=0 sure=85.4s zaman=2026-11-06T11:12:56+03:00
+--- stdout ---
+rev: 454a8e12
+════ O23 · göz sonrası Türkçe adlı kanıt dosyası commit'lendi (core.quotepath açık) → GEÇER (görev …RNY9N, Sx #681) ════
+  ✓ O23 önkoşul: bu depoda git yolu kaçışlı basıyor (vaka yeniden üretildi)
+  ✓ O23 · Türkçe adlı kanıt dosyası kod değişikliği SAYILMADI → rc=0
+  ✓ O24 · kanıt dışındaki Türkçe adlı kod dosyası yine ENGELLER ve adı okunur biçimde yazılır
+── SONUÇ: 41 geçti · 0 kaldı ──
+--- stderr ---

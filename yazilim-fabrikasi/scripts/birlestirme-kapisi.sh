@@ -66,7 +66,7 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
   if git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
     PRBAS_C="$(git -C "$DEPO" rev-parse FETCH_HEAD 2>/dev/null)"
     if [ -n "$PRBAS_C" ] && git -C "$DEPO" fetch -q origin "$ANA_DAL" 2>/dev/null; then
-      GERCEK="$(git -C "$DEPO" diff --name-only "origin/$ANA_DAL...$PRBAS_C" 2>/dev/null)" || GERCEK=""
+      GERCEK="$(git -c core.quotepath=off -C "$DEPO" diff --name-only "origin/$ANA_DAL...$PRBAS_C" 2>/dev/null)" || GERCEK=""
       geri="$(git -C "$DEPO" rev-list --count "$PRBAS_C..origin/$ANA_DAL" 2>/dev/null || echo "")"
       if [ -z "$geri" ]; then PR_UYARI="PR #$PR tabanının origin/$ANA_DAL'e göre konumu ÖLÇÜLEMEDİ (rev-list düştü) — adaylar süzülmedi"
       elif [ "$geri" -gt 0 ]; then PR_UYARI="PR #$PR tabanı origin/$ANA_DAL'in $geri commit gerisinde — GitHub dosya listesi main'den gelen (yabancı) kanıt dizinlerini sayabilir; adaylar merge-base farkıyla süzüldü"
@@ -391,7 +391,7 @@ PYK
     _h "puan başka bir commit'e verilmiş: denetim ${oc_bas:0:8} için, birleşen uç ${oc_uc:0:8} onun soyundan değil — yeniden göze gönder"; eksik=$((eksik+1))
   else
     oc_ana=""; for r in origin/HEAD origin/main origin/master main master; do git -C "$oc_agac" rev-parse -q --verify "$r" >/dev/null 2>&1 && { oc_ana="$r"; break; }; done
-    oc_degisen=""; oc_fark="$(git -C "$oc_agac" diff --name-only "$oc_bas" "$oc_uc" 2>/dev/null)"; oc_frc=$?
+    oc_degisen=""; oc_fark="$(git -c core.quotepath=off -C "$oc_agac" diff --name-only "$oc_bas" "$oc_uc" 2>/dev/null)"; oc_frc=$?
     [ "$oc_frc" -eq 0 ] || { _h "puan ile birleşen uç arasındaki fark alınamadı (git diff rc=$oc_frc) — ÖLÇÜLEMEDİ, geçti sayılmaz"; olcemedi=$((olcemedi+1)); oc_fark=""; oc_atla=1; }
     while IFS= read -r f; do
       [ -n "$f" ] || continue
@@ -411,7 +411,7 @@ PYK
       oc_x="$(git -C "$oc_agac" merge-base "$oc_ana" "$oc_uc" 2>/dev/null)"
       if [ -n "$oc_x" ] && oc_mt="$(git -C "$oc_agac" merge-tree --write-tree "$oc_bas" "$oc_x" 2>/dev/null)" && [ -n "$oc_mt" ]; then
         oc_mt="${oc_mt%%$'\n'*}"
-        if oc_fk="$(git -C "$oc_agac" diff --name-only "$oc_mt" "$oc_uc" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null)" && [ -z "$oc_fk" ]; then
+        if oc_fk="$(git -c core.quotepath=off -C "$oc_agac" diff --name-only "$oc_mt" "$oc_uc" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null)" && [ -z "$oc_fk" ]; then
           _y "  ✓ puan ${oc_bas:0:8} için verilmiş; birleşen uç ${oc_uc:0:8}: uç ağacı = puanlı baş + ana dal ${oc_x:0:8} (git merge-tree; arada yalnız ana dal birleşmiş:${oc_degisen:0:160})"; oc_degisen=""; oc_ana_kapali=1
         fi
       fi
@@ -521,7 +521,7 @@ canli_uyari() {
   [ -r "$liste" ] || { _y "  ℹ canlı-dosya listesi okunamadı — uyarı ölçülemedi"; return 0; }
   if [ -n "${CANLI_DOSYA_DEGISEN:-}" ] && [ -r "$CANLI_DOSYA_DEGISEN" ]; then dosyalar="$(cat "$CANLI_DOSYA_DEGISEN")"; okundu=1
   elif [ -n "$PR" ] && command -v gh >/dev/null 2>&1 && dosyalar="$(cd "$DEPO" && gh pr diff "$PR" --name-only 2>/dev/null)" && [ -n "$dosyalar" ]; then okundu=1
-  elif dosyalar="$(git -C "$WT" diff --name-only origin/main...HEAD 2>/dev/null)" && [ -n "$dosyalar" ]; then okundu=1; fi
+  elif dosyalar="$(git -c core.quotepath=off -C "$WT" diff --name-only origin/main...HEAD 2>/dev/null)" && [ -n "$dosyalar" ]; then okundu=1; fi
   [ "$okundu" -eq 1 ] || { _y "  ℹ değişen dosya listesi okunamadı — canlı-dosya uyarısı ölçülemedi"; return 0; }
   while IFS= read -r f; do
     [ -n "$f" ] || continue

@@ -1,0 +1,100 @@
+{
+  "is": "kapi-turkce-yol",
+  "arac": "kanit.py/0.8.0",
+  "guncelleme": "2026-11-06T11:19:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "olculen-commit",
+      "asama": "sonra",
+      "dosya": "olcum-olculen-commit-sonra.txt",
+      "sha256": "a098f92518e9f06d851b77460cb1a40e36ee2302e4cc07df46935cd0a0144856",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-turkce-yol/kos.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T11:12:56+03:00",
+      "sure_sn": 85.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "d5f671d819f4cfec0cf5cf64b7c2e73e9752f84d9f769c58cb8a6656e8fb52e3",
+      "olcum_id": "dddd3f29a63f4d849b48d92e9106f519",
+      "olculen_commit": "454a8e128410753d8c8d94b3dcd91df4f2a24bce",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olculen-commit",
+      "asama": "once",
+      "dosya": "olcum-olculen-commit-once.txt",
+      "sha256": "619c496ae84f263404c3887bd7b9023d559569394747b9393ec66f9198405614",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-turkce-yol/kos.sh",
+        "e873c904e90e3104940bc2eb7f23bf90ddf0fe48"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T11:14:23+03:00",
+      "sure_sn": 86.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "3b146d6bc08b340a8bf52d1f69f359eb273ce1d2d7fff121997883ba35ba08bb",
+      "olcum_id": "c0d1c6b8f02c4f67ab02bcc6dc2bb815",
+      "olculen_commit": "454a8e128410753d8c8d94b3dcd91df4f2a24bce",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-tirnak",
+      "asama": "sonra",
+      "dosya": "olcum-mut-tirnak-sonra.txt",
+      "sha256": "7bc1aff57cadd72b3baf4c83a4262bcf65b95bbd2b94a4aa9297db3a3f6b1e2d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-turkce-yol/kos.sh",
+        "HEAD",
+        "tirnak"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T11:15:52+03:00",
+      "sure_sn": 89.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "olculen-commit",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "O23",
+      "hedef_dustu": true,
+      "olcum_id": "e379244474bb4ad3995d753a6a6764fc",
+      "olculen_commit": "454a8e128410753d8c8d94b3dcd91df4f2a24bce",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-gerileme-kapi-sonra.txt",
+      "sha256": "e21655fa6a5d22a1dd666377c63ad610f18e1453c646c143521b13e4658e4e24",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-turkce-yol/gerileme.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T11:19:59+03:00",
+      "sure_sn": 247.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "23c19813522e9824f0b98e8b8e7ec578a81ced44f1adc98cd0afdaf262d9afd5",
+      "olcum_id": "d6c498bd71924a79b1b537ade109fc08",
+      "olculen_commit": "454a8e128410753d8c8d94b3dcd91df4f2a24bce",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "60a33db666e386eaab016a71253ae5a499ce6f81f10413e4c96327d9469269fc"
+}
