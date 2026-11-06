@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "borclar-odenmis-borc",
+  "pr": "735",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T00:51:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-borclar-odenmis-borc",
+  "dal": "borclar-odenmis-borc",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27087,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 75282
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3a8f2b37673e718a57b1583988f15e97239f78bf",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "BÂNİ, `kart.sh borclar` artık canlı borç durumu `odendi` olan, henüz `bitti` yapılmamış kartı yeşil işaretleyip bekleme notunu yazıyor; çıkış kodunu yalnız ödenmemiş ve süresi aşılmış borçlar belirliyor. Önce/sonra ölçümü hedef T14m2’nin kırmızıdan yeşile döndüğünü, mutasyon ölçümü de davranış bozulunca aynı kapının düştüğünü gösterdiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; önce ölçümü rc=1 ve T14m2 başarısız, sonra ölçümü rc=0 ve 241/241 başarılıdır. `mut-odendi` kaydı sarı değil, `mutasyon:true` ve `gercek_olcum:kapi-sinav` bağlantılıdır; bilerek bozulan kodda T14m2’nin düşmesi sınavın hedef davranışı gerçekten ölçtüğünü doğrular."
+  }
+}
