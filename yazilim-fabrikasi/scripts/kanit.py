@@ -526,7 +526,7 @@ def cmd_olcum(a):
     t0 = datetime.datetime.now()
     sarili, sira_env = sira_komutu(a.komut, f"kanit-{a.is_adi}-{a.etiket}")
     _oc_once = olculen_commit(dz)[0] if OLCULEN_DIZIN else None
-    p = subprocess.run(sarili, env={**os.environ, **sira_env}, capture_output=True, text=True, errors="replace", cwd=OLCULEN_DIZIN or None)   # boru YOK; --olculen-dizin verilince komut O ağaçta koşar (göz tur 1: kimlik yalnız etiket olamaz, komutla bağı kuruldu): çıktı kırpılmadan
+    p = subprocess.run(sarili, env={**os.environ, **sira_env}, cwd=OLCULEN_DIZIN or None, capture_output=True, text=True, errors="replace")   # boru YOK; --olculen-dizin verilince komut O ağaçta koşar (göz tur 1: kimlik yalnız etiket olamaz, komutla bağı kuruldu): çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
     if OLCULEN_DIZIN and olculen_commit(dz)[0] != _oc_once:
         hata(f"--olculen-dizin {OLCULEN_DIZIN}: ölçüm sırasında ağacın HEAD'i değişti — kayıt hangi koddan geldiğini söyleyemez. Kayıt ÜRETİLMEDİ.", 2)
