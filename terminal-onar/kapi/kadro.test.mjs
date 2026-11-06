@@ -115,6 +115,18 @@ console.log('── OG · oda görünen adı (2.44.0)');
   writeFileSync(join(og, '_agents/handoff/aile-registry.yaml'), Y);
   const ko = kayitOku(og);
   kapi('OG-K6 kayitOku odaAdlari döner; aile kaydı yoksa alan hiç yok (uydurma yok)', ko.odaAdlari?.medi === 'Klinik Mühendislik' && !('odaAdlari' in kayitOku(nz0)), JSON.stringify(ko.odaAdlari));
+  // OG-K7..K9 (görev …G7PM): aile kaydı olmayan kutu (MMEx) görünen oda adını ekip kaydının `odalar:` bloğundan alır; aile kaydı varsa o kazanır; ikisi de yoksa alan yok
+  const mm = join(T, 'mm'); mkdirSync(join(mm, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(mm, '_agents/handoff/ekip-registry.yaml'), 'odalar:\n  - oda: bakim\n    ad: "Reis ve Bakım"\n  - oda: eticaret\n    ad: "E-Ticaret"\n  - oda: veri\n    ad: "Veri"\n\nuyeler:\n  - id: BAZIRGAN\n    ad: "BAZİRGÂN"\n    oda: bakim\n');
+  const km = kayitOku(mm);
+  kapi('OG-K7 aile kaydı yok, ekip kaydı var (MMEx): odaAdlari ekip kaydının odalar: bloğundan gelir, kayıttaki sırayla ve üye satırındaki ad odaya karışmaz', Object.keys(km.odaAdlari || {}).join() === 'bakim,eticaret,veri' && km.odaAdlari.eticaret === 'E-Ticaret' && km.odaAdlari.bakim === 'Reis ve Bakım', JSON.stringify(km.odaAdlari));
+  const mk = join(T, 'mk'); mkdirSync(join(mk, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(mk, '_agents/handoff/ekip-registry.yaml'), 'odalar:\n  - oda: bakim\n    ad: "Ekip Adı"\nuyeler:\n  - id: X\n    ad: "X"\n    oda: bakim\n');
+  writeFileSync(join(mk, '_agents/handoff/aile-registry.yaml'), 'odalar:\n  - oda: bakim\n    ad: "Aile Adı"\nuyeler:\n  - id: X\n    ad: "X"\n    oda: bakim\n');
+  kapi('OG-K8 ikisi de varsa AİLE kaydı kazanır (ekip kaydı yalnız aile kaydı ad vermediğinde okunur)', kayitOku(mk).odaAdlari?.bakim === 'Aile Adı', JSON.stringify(kayitOku(mk).odaAdlari));
+  const mz = join(T, 'mz'); mkdirSync(join(mz, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(mz, '_agents/handoff/ekip-registry.yaml'), 'uyeler:\n  - id: X\n    ad: "X"\n    oda: bakim\n');
+  kapi('OG-K9 ekip kaydında odalar: bloğu yoksa alan hiç yok (uydurma yok)', !('odaAdlari' in kayitOku(mz)), JSON.stringify(kayitOku(mz).odaAdlari));
 }
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "serit-oda-adi-ekip-kaydi",
+  "pr": "723",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T16:13:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-serit-oda-adi-ekip-kaydi",
+  "dal": "serit-oda-adi-ekip-kaydi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25822,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 20100
+  },
+  "dalgic": "uyumlu",
+  "bas": "d4442fc909d8ccc5eccbb1cc00a76c3c19043d6e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Aile kaydı ad vermediğinde ekip kaydının odalar bloğuna düşen okuma eklenmiş; kayıttaki ad ile sıra korunmuş, aile önceliği ve uydurmama davranışı bozulmamış. Önce/sonra ölçümü hedef kapıyı kırmızıdan yeşile çevirmiş, mutasyon da sınavın kusuru gerçekten yakaladığını göstermiş; üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Aynı temiz commit üzerinde önce ölçümünde OG-K7 düşerken 48/1, sonra ölçümünde 49/0 görülüyor; ayrıca mutasyon kaydı ekip yedeği bilerek kapatıldığında özellikle OG-K7'nin düştüğünü ve sınavın değişikliği gerçekten ölçtüğünü doğruluyor."
+  }
+}
