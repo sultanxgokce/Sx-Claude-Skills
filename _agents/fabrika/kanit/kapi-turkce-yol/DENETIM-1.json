@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kapi-turkce-yol",
+  "pr": "712",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T11:20:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-turkce-yol",
+  "dal": "kapi-turkce-yol",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23506,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 9756
+  },
+  "dalgic": "uyumsuz",
+  "bas": "99ac5c40ed8d7f826f4bd4677504187fdf33a9e7",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Birleştirme kapısındaki dört git dosya-listesi okuması `core.quotepath=off` ile Türkçe yolları kaçışsız okuyacak biçimde düzeltilmiş; Türkçe adlı kanıt dosyası kod değişikliği sayılmazken kanıt dışındaki Türkçe kod dosyası engellenmeye devam ediyor. Araç imzalı önce/sonra ölçümü, hedefli mutasyon ve 236 kapılık gerileme ölçümü talebi doğrudan doğruladığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıtlar sarı değil. Gerçek ölçüm önce 39 geçti/2 kaldı ve rc=1 iken sonra 41 geçti/0 kaldı ve rc=0; O23 Türkçe kanıt dosyasının dışlandığını, O24 Türkçe kod dosyasının hâlâ engellendiğini ölçüyor. `mut-tirnak` kaydı beklenen mutasyon başarısızlıklarıyla O23 kapısının bozuk kodu yakaladığını gösteriyor; ayrıca gerileme ölçümü 236 geçti/0 kaldı. Görsel kare gerektirmeyen kabuk kapısı değişikliği için ölçüm çifti yeterli ve gerçekçi."
+  }
+}
