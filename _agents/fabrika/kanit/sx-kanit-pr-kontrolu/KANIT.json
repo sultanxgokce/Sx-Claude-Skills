@@ -1,7 +1,7 @@
 {
   "is": "sx-kanit-pr-kontrolu",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T01:54:48+03:00",
+  "guncelleme": "2026-11-07T02:23:21+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -27,7 +27,32 @@
       "olculen_commit": "1f137038de981f8e7306ff7dbc1b35eeef4f6b76",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-pr-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-pr-sonra-sonra.txt",
+      "sha256": "9b4a9cab0a39e1c43659dfdd8ba7dd201d857e77b1e955787db1e7160a324ceb",
+      "komut": [
+        "gh",
+        "pr",
+        "checks",
+        "738",
+        "--repo",
+        "sultanxgokce/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:23:21+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "e60e09ef5d7f22db4a067ac7730ddaf9a491ff7999660add6b7b175e87d69e95",
+      "olcum_id": "5b1e61b042d84d2184724afd76787f06",
+      "olculen_commit": "38d10a3d77543f5510da80203e1c0d73521f1fb5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "2e918206618e2bbe25bc9c05138189d51249fcc6bbd6b6652f6837f1da78516a"
+  "imza": "6699790297d368772a12b4ed23a1e68df4e27c999b30af9a26af97185c9543af"
 }
