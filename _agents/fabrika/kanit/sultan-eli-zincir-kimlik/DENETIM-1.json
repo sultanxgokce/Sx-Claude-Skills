@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "sultan-eli-zincir-kimlik",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T19:16:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-zincir-kimlik",
+  "dal": "sultan-eli-zincir-kimlik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21365,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Zincir kimliği hedeflenmiş ve önce/sonra sınavı fixture’daki hatayı giderdiğini gösteriyor; ancak yetki kapısı komut metnini birebir değil alt dize olarak kabul ediyor ve 10 dakikalık üst sınır ortam değişkeniyle aşılabiliyor. Bunlar “gevşetme yok” talebini ihlal eden yanlış-kabul yolları olduğundan kod üretime hazır değil; ayrıca gerçek `!` sarmalayıcısı doğrulaması Sultan’ın canlı yüzeyinde hâlâ ölçülmeli.",
+    "bulgular": [
+      {
+        "ne": "Komut kimliği birebir eşleşmiyor: kayıtlı komutun herhangi bir argv öğesinin içinde alt dize olarak bulunması kabul ediliyor; başına veya sonuna başka metin eklenmiş farklı bir kök komut da kapıyı açabilir.",
+        "kanit": "Uygulama `any(kom in a for a in argv)` ve `shlex.quote(kom) in \" \".join(argv)` alt-dize kontrolleriyle `sys.exit(0)` yapıyor. Buna karşılık ZK3 yalnız bir boşluk farkının reddini ölçüyor; kayıtlı komutun daha uzun/farklı bir argv içinde alt dize olduğu vaka ölçülmemiş.",
+        "konum": "sultan-eli/scripts/sultan-eli.sh:_zincir Python bölümü; sultan-eli/scripts/sultan-eli.test.sh:ZK3",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Talepteki mutlak 10 dakika üst sınır mutlak değil; çağıran `SULTAN_ELI_ZINCIR_UST` değerini 600’den büyük vererek eski bir insan izinin kabul penceresini genişletebilir.",
+        "kanit": "`ZINCIR_UST=\"${SULTAN_ELI_ZINCIR_UST:-600}\"` yalnız varsayılanı 600 yapıyor; doğrulama doğrudan `0<=simdi-an<=ust` kullanıyor ve 600’e tavan uygulamıyor. ZK6 da değişkenin 1’e düşürülmesini ölçüyor, 600’ün üzerine çıkarılamadığını ölçmüyor.",
+        "konum": "sultan-eli/scripts/sultan-eli.sh:ZINCIR_UST tanımı ve _zincir zaman denetimi; sultan-eli/scripts/sultan-eli.test.sh:ZK6",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek Claude Code `!` sarmalayıcısının süreç komut satırını beklenen biçimde taşıdığı bu konteynerde doğrulanmamış.",
+        "kanit": "SKILL.md açıkça “gerçek `!` koşusu fixture ile üretilemez → canlı doğrulama Sultan'ın tek `!` komutuyla” diyor; manifestte yalnız iki `bash .../sultan-eli.test.sh` ölçümü var ve iş kartında `canli_gerekir: true` belirtilmiş.",
+        "konum": "sultan-eli/SKILL.md:Zincir kimliği bölümü; kanıt manifesti sinav-once/sinav-sonra kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın canlı Claude Code oturumu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü ZK1 ile eski davranışın hatasını, sonra ölçümü 28/28 geçişi gösteriyor; ancak bunlar fixture/betik ölçümleri. Birebir eşleşmenin alt-dize saldırı vakası ile 600 saniyelik tavanın aşılamaması ölçülmemiş, gerçek `!` sarmalayıcısı için de canlı ölçüm bulunmuyor."
+  }
+}
