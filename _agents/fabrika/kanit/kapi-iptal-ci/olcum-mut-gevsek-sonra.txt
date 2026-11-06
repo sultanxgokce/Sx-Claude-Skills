@@ -1,0 +1,13 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: T20p · rc≠0 + hedef kapı 'T20p' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kapi-sinav-* ===
+$ bash _agents/fabrika/kanit/kapi-iptal-ci/kos.sh HEAD gevsek
+# rc=1 sure=382.8s zaman=2026-11-06T14:10:59+03:00
+--- stdout ---
+mutant: gevsek
+rev: 6f489867
+  ✓ T20o aynı adda iptal + başarı (etiket push koşusunu iptal ettirdi) → geçer, iptal sayılmaz
+  ✗ T20p TEK BAŞINA iptal → yine ENGELLER (rc=1)
+  ✓ T20q aynı adda BAŞARISIZLIK + başarı → yine ENGELLER (yeniden koşu kanıt değil)
+  ✓ T20r iptal + aynı adda HÂLÂ koşan → bitmemiş (rc=1), iptal kırmızısı değil
+── SONUÇ: 239 geçti · 1 kaldı ──
+--- stderr ---
+⏳ agir-sira: kanit-kapi-iptal-ci-mut-gevsek 75 sn bekledi (yuva 1, load1 17.37)

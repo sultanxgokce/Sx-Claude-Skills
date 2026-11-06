@@ -1,0 +1,107 @@
+{
+  "is": "kapi-iptal-ci",
+  "arac": "kanit.py/0.8.0",
+  "guncelleme": "2026-11-06T14:10:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-sonra.txt",
+      "sha256": "31f1ccf90f308925a63d0f533f5c6b2da9f9beaa2f57fdef6bfcf33fa7ba7e75",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-iptal-ci/kos.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T13:55:13+03:00",
+      "sure_sn": 252.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "43a3ab8c6c14949cac0efd57f995f576eea64bee2b81d85728081f4816d8479a",
+      "olcum_id": "ecb6da69b5914478af49ea56412c42dc",
+      "olculen_commit": "6f4898678c7b780687c46c0d18bd13dc7ce186fd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinav-once.txt",
+      "sha256": "fed4b23adab67df0e2f723f7c369c7cb1e5f87675190450566a6dc2dccb3d32a",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-iptal-ci/kos.sh",
+        "939ce6a79228642df95d9e7e3a9173f800dbcc8c"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T13:59:26+03:00",
+      "sure_sn": 253.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "31de964ae02485ef3490302fb169b46982b447c488f5904b7bc69b7304ec1152",
+      "olcum_id": "7c079aefd4f64d6cb0c02bd5686c7e77",
+      "olculen_commit": "6f4898678c7b780687c46c0d18bd13dc7ce186fd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mut-yok-sonra.txt",
+      "sha256": "ec8feec987d8decd4e7e84bfbebb06cdc30b3ae85fcbe54c98d871bc4b5ffbba",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-iptal-ci/kos.sh",
+        "HEAD",
+        "yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T14:04:36+03:00",
+      "sure_sn": 310.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T20o",
+      "hedef_dustu": true,
+      "olcum_id": "cd79995e45d9418f88a10a589fb4d2f0",
+      "olculen_commit": "6f4898678c7b780687c46c0d18bd13dc7ce186fd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-gevsek",
+      "asama": "sonra",
+      "dosya": "olcum-mut-gevsek-sonra.txt",
+      "sha256": "d0776fdb8bb35d759d2790cbb63dbc92a8f398a7d9479e94aec3afc1e0bc50e6",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-iptal-ci/kos.sh",
+        "HEAD",
+        "gevsek"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T14:10:59+03:00",
+      "sure_sn": 382.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T20p",
+      "hedef_dustu": true,
+      "olcum_id": "0e1297eec2834979898d760d2ec00817",
+      "olculen_commit": "6f4898678c7b780687c46c0d18bd13dc7ce186fd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "04f7ef64e303782d412185554ab5da91eed15aa84913fbd9371346c86ede41e9"
+}
