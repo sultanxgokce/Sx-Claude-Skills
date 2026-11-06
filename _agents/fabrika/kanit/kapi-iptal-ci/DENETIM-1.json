@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kapi-iptal-ci",
+  "pr": "716",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T14:14:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-iptal-ci",
+  "dal": "kapi-iptal-ci",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21778,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 9767
+  },
+  "dalgic": "uyumlu",
+  "bas": "dd035189f7b7e3a08e52d721453ddc64ba1755ef",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Birleştirme kapısı, aynı adlı iptal olmayan başka bir koşu bulunduğunda yalnız CANCELLED kaydını susturuyor; tek iptal, başarısızlık ve bitmemiş koşu engel olmaya devam ediyor. Talep dört hedef vakayla karşılanmış, önce/sonra ölçümü ve iki mutasyon kaydı sınavın değişikliği gerçekten ayırt ettiğini göstermiş; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümünde T20o ile T20r düşerken sonra ölçümünde 240/240 geçiyor; T20o-p mutasyonları da bilerek bozulan davranışı yakalıyor. CLI işi için gerçekçi CI özetleriyle ölçüm çifti yeterli; kare gerekmiyor."
+  }
+}
