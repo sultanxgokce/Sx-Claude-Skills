@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "kanit-kirli-dosya-canli",
+  "pr": "717",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T14:35:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-kirli-dosya-canli",
+  "dal": "kanit-kirli-dosya-canli",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29178,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12437
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f1bc40c314df52ae656ff89092565b41e379ac3e",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Dosya ve canlı kayıtlarının kirli ağaçta izinsiz durması, gerekçeli izinle geçmesi uygulanmış ve K9-K11 ile mutasyon ölçümleri bunu doğrulamış. Ancak iş kartının ayrı kabulü olan kapanış ölçümünün bütün kayıt türlerini sayması ne kod farkında ne de ölçümlerde yer alıyor; iş eksik teslim edilmiş, önce bu tamamlanmalı.",
+    "bulgular": [
+      {
+        "ne": "Kapanış ölçümünün bütün kayıt türlerini sayması talebi uygulanmamış ve kanıtlanmamış.",
+        "kanit": "Üretim kodu farkında yalnız cmd_dosya/cmd_canli kirli kapıları ile bu komutların --kirli-izin seçenekleri değişiyor; sınavın K9-K11 bölümleri de yalnız kirli kapı davranışını ölçüyor. Sonraki gerçek ölçüm 28/0 olsa da kapanış sayımı veya bütün kayıt türlerini içeren bir döküm bulunmuyor.",
+        "konum": "İŞ KARTI cumle; yazilim-fabrikasi/scripts/kanit.py cmd_dosya, cmd_canli ve main hunks; olcum-kirli-sinav-sonra.txt K9-K11",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kirli dosya/canlı kapısı için kırmızı-yeşil önce/sonra ölçüm çifti ile K9 ve K10'u ayrı ayrı düşüren geçerli mutasyon kayıtları güçlü kanıt sağlıyor. Buna karşılık kapanış ölçümünün bütün kayıt türlerini saydığına ilişkin hedef ölçüm veya kod değişikliği yok."
+  }
+}
