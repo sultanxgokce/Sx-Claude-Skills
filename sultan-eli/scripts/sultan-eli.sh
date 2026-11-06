@@ -175,7 +175,7 @@ def kabuk_ayristir(m):
         out.append(("s",w))
     return out
 def eval_argumanlari(a):
-    # KOMUT KONUMUNDAKİ (satır başı ya da bir işleçten/`{`/`(`/`!` den hemen sonra) tırnaksız `eval` sözcüğünün argümanları,
+    # KOMUT KONUMUNDAKİ (satır başı ya da bir komut ayıran işleçten &&, ||, ;, |, & ve `{`/`(`/`!` den hemen sonra; yönlendirme hedefi DEĞİL) tırnaksız `eval` sözcüğünün argümanları,
     # bir sonraki işlece kadar — eval onları boşlukla birleştirip koşar. `printf %s eval …` gibi komut konumunda
     # olmayan ya da tırnak içinde geçen `eval` hiçbir şey koşmaz → sayılmaz.
     t=kabuk_ayristir(a)
@@ -183,7 +183,7 @@ def eval_argumanlari(a):
     out=[]
     for i,(tur,x) in enumerate(t):
         if tur!="s" or x!="eval": continue
-        if i>0 and not (t[i-1][0]=="o" or t[i-1][1] in ("{","(","!")): continue
+        if i>0 and not ((t[i-1][0]=="o" and not any(ch in t[i-1][1] for ch in "<>")) or (t[i-1][0]=="s" and t[i-1][1] in ("{","(","!"))): continue
         j=i+1; parca=[]
         while j<len(t) and t[j][0]=="s": parca.append(t[j][1]); j+=1
         if parca: out.append(" ".join(parca))

@@ -219,12 +219,23 @@ sahte "$K" "echo \"x; eval $(q "$KOMUT")\" >/dev/null; $KAPI_CAGRI"
 check "ZA16 eval çift tırnaklı metnin İÇİNDE → YOK" "1" "$?"
 sahte "$K" "printf x >/dev/null; eval $(q "$KOMUT")"
 check "ZA17 pozitif kontrol: gerçek komut konumunda eval (öncesinde başka komut) → VAR" "0" "$?"
-MC="$T/mutant-konum.sh"; sed 's/^        if i>0 and not (t\[i-1\]\[0\]=="o" or t\[i-1\]\[1\] in ("{","(","!")): continue$/        pass/' "$K" > "$MC"
+sahte "$K" "printf x > eval $(q "$KOMUT") ; $KAPI_CAGRI"
+check "ZA20 yönlendirme HEDEFİ olan eval (printf x > eval '<komut>') komut değil → YOK" "1" "$?"
+sahte "$K" "printf x >> eval $(q "$KOMUT") ; $KAPI_CAGRI"
+check "ZA21 ekleme yönlendirmesi hedefi eval → YOK" "1" "$?"
+MC="$T/mutant-konum.sh"; sed 's/^        if i>0 and not .*: continue$/        pass/' "$K" > "$MC"
 check "ZA18 mutant (komut-konumu denetimi söküldü) dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MC" && echo 0 || echo 1)"
 KC="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MC dogrula --imza $IM"
 _satir "<bash-input>$KC</bash-input>" 0 > "$KOK/proje/z.jsonl"
 bash -c "printf %s eval $(q "$KC") >/dev/null; sleep 3; SULTAN_ELI_PENCERE=1 bash $MC dogrula --imza $IM; r=\$?; exit \$r" >/dev/null 2>&1
 check "ZA19 konum denetimsiz mutantta printf-eval GEÇİYOR (0) → ZA14 yakalar" "0" "$?"
+
+MD="$T/mutant-yonlendirme.sh"; sed 's/(t\[i-1\]\[0\]=="o" and not any(ch in t\[i-1\]\[1\] for ch in "<>"))/(t[i-1][0]=="o")/' "$K" > "$MD"
+check "ZA22 mutant (yönlendirme hedefi de komut konumu sayıldı) dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MD" && echo 0 || echo 1)"
+KD="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MD dogrula --imza $IM"
+_satir "<bash-input>$KD</bash-input>" 0 > "$KOK/proje/z.jsonl"
+bash -c "printf x > eval $(q "$KD") ; sleep 3; SULTAN_ELI_PENCERE=1 bash $MD dogrula --imza $IM; r=\$?; exit \$r" >/dev/null 2>&1
+check "ZA23 yönlendirmeyi komut sayan mutantta ZA20 senaryosu GEÇİYOR (0) → ZA20 yakalar" "0" "$?"
 
 # ZK13 · üst sınır ortamdan YÜKSELTİLEMEZ: tavan sınav dikişiyle 1 sn, çağıran 9999 vermeye çalışıyor
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 zk "$K" "$KOMUT" 0 "SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 $KOMUT"
