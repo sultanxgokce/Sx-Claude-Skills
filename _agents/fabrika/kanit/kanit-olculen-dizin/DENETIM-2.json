@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "kanit-olculen-dizin",
+  "pr": "726",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T19:11:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-olculen-dizin",
+  "dal": "kanit-olculen-dizin",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24266,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 14051
+  },
+  "dalgic": "uyumlu",
+  "bas": "4295442d119b06e5986585d502686c2b0eaf97c1",
+  "duzeltme_farki": {
+    "onceki_bas": "395a4b6473f0adb5ad7c5a1d437cfd0c7e87d399",
+    "dosya": 8,
+    "bayt": 18541,
+    "tam_bayt": 32113
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun B1 bulgusu kapanmış: komut artık `--olculen-dizin` ile seçilen kopyada çalışıyor, kayıt o kopyanın kimliğini taşıyor ve ölçüm sırasında HEAD değişirse kayıt reddediliyor. Önce/sonra ölçüm çifti ile hedef kapıyı düşüren mutasyon sınavı bu bağı doğrudan doğruladığından kod üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önceki gerçek ölçüm K12’de 5 hata verirken sonraki gerçek ölçüm 38/38 geçiyor; ayrıca mutasyon kaydı yalnız “komut ölçülen kopyada KOŞTU” kapısını düşürüp 37 geçti/1 kaldı sonucuyla sınavın hedef kusuru yakaladığını gösteriyor. Böylece hem ölçüm çifti hem de seçici mutasyon kanıtı mevcut."
+  }
+}
