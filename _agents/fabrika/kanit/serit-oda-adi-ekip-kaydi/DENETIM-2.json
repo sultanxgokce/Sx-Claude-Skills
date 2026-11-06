@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "serit-oda-adi-ekip-kaydi",
+  "pr": "723",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T16:34:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-serit-oda-adi-ekip-kaydi",
+  "dal": "serit-oda-adi-ekip-kaydi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21969,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3232
+  },
+  "dalgic": "uyumlu",
+  "bas": "1d104e3b3c8492a340cfc4226c304167d54e6674",
+  "duzeltme_farki": {
+    "onceki_bas": "d4442fc909d8ccc5eccbb1cc00a76c3c19043d6e",
+    "dosya": 3,
+    "bayt": 4122,
+    "tam_bayt": 31219
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Aile kaydı yokken ekip kaydının odalar bloğundan MMEx görünen adlarını kayıt sırasıyla okuma, önceki tam incelemede üretime hazır bulunmuş; bu turdaki tek üretim farkı kabiliyet sürümünü 2.45.0'a yükseltiyor ve önceki turda kapatılacak bulgu yok. Hedef davranış önce/sonra ve mutasyon ölçümleriyle güçlü biçimde sınanmış; mevcut fark yeni bir uygulama kusuru getirmiyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. OG-K7 önce 48/1 içinde düşüyor, sonra 49/0 içinde geçiyor; mutasyon kaydı ekip yedeği kapatılınca özellikle OG-K7'yi yeniden düşürerek sınavın hedef davranışı ölçtüğünü doğruluyor. Ölçümler 7f54dc25 commit'ine aitken düzeltme farkının başı 1d104e3b olarak verilmiş; ancak d4442fc başındaki PR bütünü önceki turda 5/5 incelenmiş ve bu turda gösterilen tek üretim değişikliği yalnız catalog.json sürüm artışı olduğundan değerlendirmeyi engelleyen kanıt boşluğu oluşmuyor."
+  }
+}
