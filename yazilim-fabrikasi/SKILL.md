@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.63
+version: 0.27.64
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.64 (6 Kas 2026, kart kart-acilis-gecici-ad-kalmaz · görev …NYQGK8, SERTABİP bildirdi · HEZARFEN):** `kart.sh ac` süreç tetikte ya da görev yazımında kesilirse (timeout, Ctrl-C, TERM) artık `adı.json.acilis-PID` geçici dosyası bırakmaz ve "✓ kart açıldı" özeti basılmaz. Eskiden özet yayımdan ÖNCE basılıyordu: sahibi kartı açıldı sanıp geçici dosyayı elle yerine koydu (medigate'te iki kez). Şimdi özet geçici dosyaya yazılır ve yalnız yayımdan (ln) sonra basılır; EXIT/TERM/INT/HUP'ta yalnız kendi geçici dosyalarımız silinir. Sınav: kart.test.sh U9k (kesilen açılış) + U9n (kesilmeyen açılışta özet basılır).
 - **0.27.63 (6 Kas 2026, kart kapi-turkce-yol · görev …RNY9N, Sx #681'de ölçüldü · BÂNİ):** `birlestirme-kapisi.sh` git dosya yollarını kaçışsız okur (`git -c core.quotepath=off … diff --name-only`, dört yer). Git varsayılanında Türkçe adlı dosya tırnaklı ve sekizli kaçışlı geliyordu: (1) puandan sonra commit'lenen Türkçe adlı KANIT dosyası kanıt dizini önekini tutturamıyor, "puan verildikten sonra kod değişmiş" engeli üretiyordu; (2) PR dosya listesi süzgecinde GitHub'ın kaçışsız adı git'in kaçışlı adıyla eşleşmiyor, dosya listeden düşüyordu. Kural değişmedi, yalnız okuma. Sınav `birlestirme-kapisi-olculen-commit.test.sh` O23 (önkoşul: fikstürde git gerçekten kaçışlı basıyor; Türkçe adlı kanıt dosyası → rc 0) + O24 (kanıt dışındaki Türkçe adlı kod dosyası yine engeller, adı okunur yazılır).
 - **0.27.62 (5 Kas 2026, kart ayni-girdi-atla · görev …T4D3H, SERDAR: önce kısa tasarım, kalite kapısına dokunma):** `kanit.sh olcum` yeni AÇIK bayrak `--ayni-girdi-atla` alır. Aynı girdinin (komut+etiket+aşama · kanıt dizini dışındaki izlenen ağaç · izlenmeyen ve Git'in yok saydığı dosya içeriği · depo dışı dosya argümanı içeriği · araç sürümü) yeşil, imzalı, mutant olmayan, kirlisiz kaydı varsa komut KOŞMAZ, kayıt değişmez. Bayrak yoksa davranış aynen; mutasyon ölçümü, kırmızı/geçersiz kayıt, kirli ağaç ve girdi değişimi her zaman koşar. Kapı/denetçi/CI kodu değişmedi. Saate, ağa ya da host'a bağlı sınavda bayrak verilmez (dış durum anahtara girmez). Sınav: kanit-ayni-girdi.test.sh (20 kapı, 7 mutant). Kayıtlara `girdi_anahtar` yazılır.
 - **0.27.61 (5 Kas 2026, kart kart-gorev-zorunlu · görev …1DZJ0D, SERDAR kapsamı):** `kart.sh ac` artık görev kimliği ister: ya `--gorev gorev_<kimlik> --tahmin <dk>` ya da açık `--gorevsiz "<neden, en az 20 karakter>"`; ikisi birden ya da ikisi de yoksa kart AÇILMAZ (rc 1). Kart dosyası ve iş adı aynen kalır, anahtar değişmedi; eski kartlar bozulmaz (kapı yalnız `ac`ta, yeni kartta sert). Karta `gorevsiz` alanı yazılır; `gun-sonu.sh` özetinde "Görevsiz açılan kartlar (N)" bölümü gerekçeyle sayar. Sınav: kart.test.sh GZ1–GZ7 (gerçek kart.sh). Sınavların yüzlerce fikstür kartı için `kart-sinav-sarmal.sh` (yalnız sınav; bayrak yoksa açık gerekçeli --gorevsiz ekler).
