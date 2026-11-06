@@ -43,7 +43,8 @@ cat > "$SAHTEGH/gh" <<'GH'
 #!/usr/bin/env bash
 E="$(printf '\033')"
 case "$1 $2" in
- "pr view") printf "%s\n" "$FAKE_PR_VIEW";;
+ "pr view") if [[ " $* " == *" isCrossRepository "* ]]; then printf "%s\n" "${FAKE_CROSS-false}"
+    elif [ -n "${FAKE_PR_DAL:-}" ]; then printf "%s %s\n" "$(git -C "$FAKE_ORIGIN" rev-parse -q --verify "refs/heads/$FAKE_PR_DAL" || echo 0000000000000000000000000000000000000000)" "$FAKE_PR_DAL"; else printf "%s\n" "$FAKE_PR_VIEW"; fi;;
  "pr diff") [ -n "${FAKE_GH_FAIL:-}" ] && { echo "sahte gh: pr diff düştü" >&2; exit 1; }
     if [ -n "${FAKE_GH_ESC:-}" ]; then
       [[ " $* " == *" --allow-escape-sequences "* ]] || { echo "the diff contains terminal escape sequences; pass --allow-escape-sequences" >&2; exit 1; }
@@ -96,6 +97,38 @@ kanitla f5c; FAKE_PR_VIEW="1111111111111111111111111111111111111111 hic-cekilmem
 git -C "$KOK/w" checkout -q -b denetleyen-dal; kanitla f5f
 FAKE_PR_VIEW="0000000000000000000000000000000000000000 is-dal" PATH="$SAHTEGH:$PATH" kapi "F5f BAŞKA dalda durulurken bile PR dalının (is-dal) yerel başı ≠ PR başı → rc=3 (göz tur 1)" 3 den f5f --pr 7
 git -C "$KOK/w" checkout -q is-dal; git -C "$KOK/w" branch -q -D denetleyen-dal
+
+echo "════ F5g-l · yerel baş PR başının yalnız İLERİSİNDEYSE denetçi iter, PR başını bekler, devam eder (görev …HJGVS: 3 Kas'tan beri 59 duruş) ════"
+# mutant koşularında (MUTANT_D) bu bölüm atlanır: mutantlar F1-F8 kapılarını sınar, dosya 9 kez yeniden koşar (süre: CI tavanı)
+if [ -z "${MUTANT_D:-}" ]; then
+export FAKE_ORIGIN="$KOK/o.git"
+git -C "$KOK/w" checkout -q -b ileri-dal; git -C "$KOK/w" push -q origin ileri-dal 2>/dev/null
+echo ileri > "$KOK/w/ileri.txt"; git -C "$KOK/w" add ileri.txt; git -C "$KOK/w" commit -q -m ileri; IB="$(git -C "$KOK/w" rev-parse HEAD)"
+kanitla f5g; : > "$KOK/istem.md"; FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5g yerel baş PR başının İLERİSİNDE → itildi, denetim GEÇTİ (rc 0)" 0 den f5g --pr 11
+iceren "F5h itildiği söylenir" "itildi" "$KOK/son.out"
+[ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$IB" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5i origin'deki dal yerel başa ilerledi"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5i origin dalı ilerlemedi"; }
+# geride: origin'de yerelde olmayan commit (başka klon itti)
+git -C "$KOK/baska" fetch -q origin 2>/dev/null; git -C "$KOK/baska" checkout -q -b ileri-dal origin/ileri-dal 2>/dev/null
+echo baska > "$KOK/baska/baska.txt"; git -C "$KOK/baska" add baska.txt; git -C "$KOK/baska" commit -q -m baska; git -C "$KOK/baska" push -q origin ileri-dal 2>/dev/null
+OB="$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)"; git -C "$KOK/w" fetch -q origin 2>/dev/null
+kanitla f5j; FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5j yerel baş PR başının GERİSİNDE → itmez, rc=3" 3 den f5j --pr 11
+[ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$OB" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5j2 origin dalına dokunulmadı"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5j2 origin dalı değişti"; }
+# ayrışmış: yerelde de yeni commit var
+echo ayri > "$KOK/w/ayri.txt"; git -C "$KOK/w" add ayri.txt; git -C "$KOK/w" commit -q -m ayri
+kanitla f5k; FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5k yerel ile PR başı AYRIŞMIŞ → itmez, rc=3" 3 den f5k --pr 11
+[ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$OB" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5k2 ayrışmada origin dalına dokunulmadı (zorla itme yok)"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5k2 origin dalı değişti"; }
+# kapatma bayrağı ve PR başı güncellenmiyor
+git -C "$KOK/w" reset -q --hard "$OB"; echo ileri2 > "$KOK/w/ileri2.txt"; git -C "$KOK/w" add ileri2.txt; git -C "$KOK/w" commit -q -m ileri2
+kanitla f5l; DENETCI_ITME=1 FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5l DENETCI_ITME=1 → ileride olsa da itmez, rc=3" 3 den f5l --pr 11
+[ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$OB" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5l2 kapalıyken origin dalına dokunulmadı"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5l2 origin dalı değişti"; }
+kanitla f5o; FAKE_CROSS=true FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5o ÇATAL PR (isCrossRepository=true): ileride olsa da itmez, rc=3 (göz tur 1)" 3 den f5o --pr 11
+[ "$(git -C "$KOK/o.git" rev-parse refs/heads/ileri-dal)" = "$OB" ] && { GECEN=$((GECEN+1)); echo "  ✓ F5o2 çatal PR'da origin'deki adaş dala dokunulmadı"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ F5o2 origin dalı değişti"; }
+kanitla f5p; FAKE_CROSS="" FAKE_PR_DAL=ileri-dal PATH="$SAHTEGH:$PATH" kapi "F5p depo bilgisi okunamadı (boş) → itmez, rc=3 (kapalı varsayılan)" 3 den f5p --pr 11
+iceren "F5q eski hata metni korunur" "itilmemiş ya da çekilmemiş commit var" "$KOK/son.out"
+kanitla f5m; DENETCI_IT_BEKLE_SN=2 FAKE_PR_VIEW="$OB ileri-dal" PATH="$SAHTEGH:$PATH" kapi "F5m itildi ama PR başı güncellenmedi (GitHub gecikmesi tavanı aştı) → rc=3, eski farkı puanlamaz" 3 den f5m --pr 11
+iceren "F5n güncellenmediği söylenir" "güncellenmedi" "$KOK/son.out"
+git -C "$KOK/w" checkout -q is-dal; unset FAKE_ORIGIN
+fi
 
 echo "════ F8 · kaçış kodlu fark (Z9SZF3): gh bayraksız reddeder → bayrakla alınır ve ESC süzülür; gh hep düşerse git yolu; o da yoksa rc=3 ════"
 kanitla f8; : > "$KOK/istem.md"; FAKE_GH_ESC=1 FAKE_PR_VIEW="$BAS is-dal" PATH="$SAHTEGH:$PATH" kapi "F8a farkta ESC baytı var → gh bayrakla alındı, denetim GEÇTİ (rc 3 değil)" 0 den f8 --pr 7
