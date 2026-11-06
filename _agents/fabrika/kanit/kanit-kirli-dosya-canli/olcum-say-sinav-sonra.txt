@@ -1,0 +1,28 @@
+$ bash _agents/fabrika/kanit/kanit-kirli-dosya-canli/say-kos.sh
+# rc=0 sure=1.0s zaman=2026-11-06T14:39:05+03:00
+--- stdout ---
+rev: 3cf5e17b
+── K1 dört tür ayrı satır, kapı damgası süzgeç değil
+  ✓ K1 izinsiz varken rc 1
+  ✓ K1 olcum: 2 toplam · 1 izinsiz · 1 ölçülemedi
+  ✓ K1 ekran: 1 izinsiz
+  ✓ K1 dosya: damgasız izinsiz kayıt sayıldı, izinli ayrı
+  ✓ K1 canli: damgasız izinsiz sayıldı, temiz kayıt kirli değil
+  ✓ K1 toplam satırı dört türü adıyla basar
+  ✓ K1 tür dışı kayıt söylenir
+── K2 görülmeyen tür de 0 satırıyla basılır
+  ✓ K2 izinsiz yok → rc 0
+  ✓ K2 ekran satırı 0 ile basıldı
+  ✓ K2 dosya satırı 0 ile basıldı
+  ✓ K2 canli satırı 0 ile basıldı
+── K3 pencere (--sonra) ve tekilleştirme
+  ✓ K3 aynı olcum_id iki kökte tek sayıldı
+  ✓ K3 pencere yalnız sonraki kaydı sayar
+  ✓ K3 pencere boş → rc 0
+── K4 ölçülemedi ve kullanım hataları
+  ✓ K4 manifest yok → rc 3 ÖLÇÜLEMEDİ
+  ✓ K4 yalnız bozuk manifest → rc 3
+  ✓ K4 okunamayan --sonra → rc 2
+  ✓ K4 doğrudan KANIT.json yolu da okunur
+── SONUÇ: 18 geçti · 0 kaldı ──
+--- stderr ---

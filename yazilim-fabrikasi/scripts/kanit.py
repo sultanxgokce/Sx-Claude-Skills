@@ -33,7 +33,7 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 """
 import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys, uuid
 
-SURUM = "kanit.py/0.8.0"   # 0.8.0: --ayni-girdi-atla (açık bayrak; kayıt `girdi_anahtar`, 5 Kas 2026) · 0.7.0: kirli ağaçta ölçüm DURUR, açık bayrak --kirli-izin ister; kayıt `kirli_kurali` + `kirli_izin` taşır (4 Kas 2026) · 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
+SURUM = "kanit.py/0.9.0"   # 0.9.0: dosya ve canli da kirli ağaçta DURUR, --kirli-izin alır (6 Kas 2026, görev …PYWKB) · 0.8.0: --ayni-girdi-atla (açık bayrak; kayıt `girdi_anahtar`, 5 Kas 2026) · 0.7.0: kirli ağaçta ölçüm DURUR, açık bayrak --kirli-izin ister; kayıt `kirli_kurali` + `kirli_izin` taşır (4 Kas 2026) · 0.6.1: kirli işareti kanıt dizinini saymaz (1 Kas 2026) · 0.6.0: kayıt `olculen_commit` + `olculen_kirli` taşır (31 Eki 2026) · 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
 # 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
 # bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
@@ -177,7 +177,9 @@ def olculen_commit(dz):
         return None, None
 
 
-KIRLI_KAPI_KOSTU = False   # kapı yalnız kodu ölçen yollarda (olcum/ekran) koşar; dosya/canli kayıtları kural damgası taşımaz
+KIRLI_KAPI_KOSTU = False   # kapı BÜTÜN kayıt yollarında koşar: olcum · ekran · dosya · canli (0.9.0, 6 Kas 2026 · görev …PYWKB, MUHAKKİK revizyonu:
+#   kural sonrası 9 izinsiz kirli kayıt yalnız dosya (4) ve canli (5) yolundan gelmişti — 'kanıt kirli ağaçta alınmasın' kuralı bütün kanıtı kapsar;
+#   dosya kaydı commit'lenmemiş bir dosyayı kanıt yapabilir, canli kaydı da ağacın kirliliğini taşır ve kapı onu ancak kural damgasıyla durdurur)
 KIRLI_IZIN = None   # --kirli-izin gerekçesi (yalnız ağaç GERÇEKTEN kirliyse kayda yazılır)
 
 
@@ -715,6 +717,7 @@ def _ekran_tek(a, etiket, genislik):
 def cmd_dosya(a):
     depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     if not os.path.isfile(a.yol): hata(f"dosya yok: {a.yol}", 3)
+    kirli_kapisi(a, dz)   # 0.9.0: dosya kaydı da kirli ağaçta DURUR (--kirli-izin ile gerekçeli geçer)
     ad = f"dosya-{a.etiket}-{a.asama}{os.path.splitext(a.yol)[1]}"; hedef = os.path.join(dz, ad)
     shutil.copyfile(a.yol, hedef)
     kayit = {"tur": "dosya", "etiket": a.etiket, "asama": a.asama, "dosya": ad, "sha256": sha_dosya(hedef),
@@ -826,6 +829,7 @@ def cmd_canli(a):
     if sebep:
         hata(sebep, 1)
     depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    kirli_kapisi(a, dz)   # 0.9.0: canlı kaydı da kirli ağaçta DURUR (--kirli-izin ile gerekçeli geçer)
     ad = f"canli-{a.etiket}.txt"; yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
     # stdin KAPALI: arka planda / cron'dan çağrılınca açık bir socket'te asılı kalmasın (denetçi 68 dk vakası, 0.6.3)
@@ -1064,8 +1068,8 @@ def main():
     e = s.add_parser("ekran"); e.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
     e.add_argument("--uc-boy", action="store_true", help="1440 · 1280 · 390 — her boy ayrı kayıt (etiket-<boy>)"); e.add_argument("--boylar", type=_boylar, help="virgüllü genişlik listesi")
     e.add_argument("--gelen", metavar="KUTU", help="yeşil kareleri Sultan'ın gelen klasörüne <kutu>_<iş>-kare-… adıyla kopyala"); e.set_defaults(f=cmd_ekran)
-    d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
-    c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)
+    d = s.add_parser("dosya"); d.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
+    c = s.add_parser("canli"); c.add_argument("--kirli-izin", dest="kirli_izin", default=None, metavar="GEREKCE"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)
     v = s.add_parser("gecersiz"); v.add_argument("is_adi"); v.add_argument("hedef"); v.add_argument("--neden", required=True); v.add_argument("--kim", required=True); v.add_argument("--karsi"); v.set_defaults(f=cmd_gecersiz)
     for ad, f in (("dogrula", cmd_dogrula), ("ozet", cmd_ozet), ("liste", cmd_liste)):
         x = s.add_parser(ad); x.add_argument("is_adi"); x.set_defaults(f=f)

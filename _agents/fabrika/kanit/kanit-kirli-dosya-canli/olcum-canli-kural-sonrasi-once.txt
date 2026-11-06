@@ -1,0 +1,22 @@
+$ bash -c python3 yazilim-fabrikasi/scripts/kanit-kirli-say.py --sonra 2026-11-04T01:56:15+03:00 --liste 30 /config/projects/* /config/projects/_wt/*
+# rc=1 sure=3.6s zaman=2026-11-06T14:39:35+03:00
+--- stdout ---
+kirli ağaç kapanış ölçümü · 40339 manifest · pencere: 2026-11-04T01:56:15+03:00 · alan: olculen_kirli (kapıdan bağımsız)
+tür     toplam  kirli  izinli  izinsiz  ölçülemedi
+olcum     1246     27      27        0           0
+ekran        0      0       0        0           0
+dosya      203      4       0        4           0
+canli       48      5       0        5           0
+İZİNSİZ KİRLİ TOPLAM=9 · olcum=0 · ekran=0 · dosya=4 · canli=5
+dört tür dışı (sayıma girmedi): gecersiz=106
+okunamayan manifest: 22
+  izinsiz · 2026-11-04T03:41:33+03:00 · canli · duzen-gece-kutu-adi · gece-kutu-code
+  izinsiz · 2026-11-04T20:09:14+03:00 · dosya · sinav-ci-envanteri · envanter-kos
+  izinsiz · 2026-11-04T20:09:14+03:00 · dosya · sinav-ci-envanteri · envanter-sonuc
+  izinsiz · 2026-11-04T23:27:54+03:00 · canli · groq-merkez-konum · canli-host-uygula
+  izinsiz · 2026-11-05T00:59:11+03:00 · canli · telefon-kutular-canli · canli-telefon-390
+  izinsiz · 2026-11-05T04:10:37+03:00 · canli · hasat-gece-cron-satiri · gece-5kas
+  izinsiz · 2026-11-05T10:32:22+03:00 · canli · gecit-ekran-satir-basi · defter-1582-indi
+  izinsiz · 2026-11-06T12:21:20+03:00 · dosya · bugun-sekmesi-prompt · 44-bugun-sekmesi-PROMPT
+  izinsiz · 2026-11-06T12:21:20+03:00 · dosya · bugun-sekmesi-prompt · 44-bugun-sekmesi-prompt-sablon
+--- stderr ---

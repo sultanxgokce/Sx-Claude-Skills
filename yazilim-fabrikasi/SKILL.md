@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.65
+version: 0.27.66
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.66 (6 Kas 2026, kart kanit-kirli-dosya-canli · görev …PYWKB · BÂNİ):** `kanit.py` 0.9.0 — kirli ağaç kapısı (`kirli_kapisi`) artık `kanit.sh dosya` ve `kanit.sh canli`'da da koşar; önceden yalnız `olcum`/`ekran`'daydı ve kural sonrası 9 izinsiz kirli kayıt (4 dosya, 5 canlı) yazılmıştı (MUHAKKİK saydı). Kirli ağaçta izinsiz `dosya`/`canli` rc 2 döner ve kayıt yazmaz; `--kirli-izin "<≥15 karakter gerekçe>"` ile gerekçeli geçer (`kirli_kurali=1` + `kirli_izin`). Sınav `kanit-olculen-commit.test.sh` K9-K11. **Kapanış ölçümü** `scripts/kanit-kirli-say.py [--sonra ISO] KÖK…`: dört kayıt türünü (olcum · ekran · dosya · canli) AYRI satırda sayar, görülmeyen türü 0 ile basar; sayım kapıdan bağımsız `olculen_kirli` alanıyla (kapı damgası `kirli_kurali` süzgeç değil), aynı `olcum_id` tek sayılır, manifest okunamazsa rc 3. Kural (#684) sonrası gerçek veri: olcum 0 · ekran 0 · dosya 4 · canli 5. Sınav `kanit-kirli-say.test.sh` K1-K4.
 - **0.27.65 (6 Kas 2026, kart kapi-iptal-ci · görev …MECECK · BÂNİ):** `birlestirme-kapisi.sh` CI hükmünden önce aynı adda İPTAL OLMAYAN koşusu olan kontrolün `CANCELLED` kayıtlarını düşürür (`iptal_sus`). `tam-kosu` etiketi aynı baştaki push koşusunu iptal ettirir; özet aynı ad için CANCELLED + SUCCESS taşır ve kapı yeşil işi kırmızı sayıp engelliyordu (cloudtop #1551, iptal edilen koşuyu yeniden koşturmak gerekti). Tek başına iptal kırmızı KALIR; aynı adda FAILURE + SUCCESS'e dokunulmaz (yeniden koşu kanıt değildir); iptal + hâlâ koşan → bitmemiş. Sınav `birlestirme-kapisi.test.sh` T20o-r.
 - **0.27.64 (6 Kas 2026, kart kart-acilis-gecici-ad-kalmaz · görev …NYQGK8, SERTABİP bildirdi · HEZARFEN):** `kart.sh ac` süreç tetikte ya da görev yazımında kesilirse (timeout, Ctrl-C, TERM) artık `adı.json.acilis-PID` geçici dosyası bırakmaz ve "✓ kart açıldı" özeti basılmaz. Eskiden özet yayımdan ÖNCE basılıyordu: sahibi kartı açıldı sanıp geçici dosyayı elle yerine koydu (medigate'te iki kez). Şimdi özet geçici dosyaya yazılır ve yalnız yayımdan (ln) sonra basılır; EXIT/TERM/INT/HUP'ta yalnız kendi geçici dosyalarımız silinir. Sınav: kart.test.sh U9k (kesilen açılış) + U9n (kesilmeyen açılışta özet basılır).
 - **0.27.63 (6 Kas 2026, kart kapi-turkce-yol · görev …RNY9N, Sx #681'de ölçüldü · BÂNİ):** `birlestirme-kapisi.sh` git dosya yollarını kaçışsız okur (`git -c core.quotepath=off … diff --name-only`, dört yer). Git varsayılanında Türkçe adlı dosya tırnaklı ve sekizli kaçışlı geliyordu: (1) puandan sonra commit'lenen Türkçe adlı KANIT dosyası kanıt dizini önekini tutturamıyor, "puan verildikten sonra kod değişmiş" engeli üretiyordu; (2) PR dosya listesi süzgecinde GitHub'ın kaçışsız adı git'in kaçışlı adıyla eşleşmiyor, dosya listeden düşüyordu. Kural değişmedi, yalnız okuma. Sınav `birlestirme-kapisi-olculen-commit.test.sh` O23 (önkoşul: fikstürde git gerçekten kaçışlı basıyor; Türkçe adlı kanıt dosyası → rc 0) + O24 (kanıt dışındaki Türkçe adlı kod dosyası yine engeller, adı okunur yazılır).
