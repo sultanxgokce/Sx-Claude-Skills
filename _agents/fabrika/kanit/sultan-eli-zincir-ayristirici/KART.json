@@ -1,6 +1,6 @@
 {
   "is": "sultan-eli-zincir-ayristirici",
-  "cumle": "sultan-eli kapısı harness sarmalayıcısından gerçek komutu ayrıştırıp kayıtla birebir karşılaştırır; canlı koşuda insan-izi YOK dedi",
+  "cumle": "sultan-eli kapısı harness snapshot+eval sarmalını ayrıştırıp eval argümanını kayıtlı komutla birebir karşılaştırır; gerçek sarmal fikstürü ve mutantlarla ölçülür",
   "istedi": "SERDAR",
   "aldi": "BASİRET",
   "zaman": "2026-11-06T19:57:27+03:00",
@@ -19,6 +19,12 @@
     {
       "zaman": "2026-11-06T20:17:41+03:00",
       "olay": "canli-borc"
+    },
+    {
+      "zaman": "2026-11-06T20:34:03+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sultan-eli-ayristirici-canli",
+      "tur_sifir": 3
     }
   ],
   "canli_gerekir": true,
@@ -44,6 +50,11 @@
       "zaman": "2026-11-06T20:17:41+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T20:31:16+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "canli_borc": {
@@ -59,6 +70,36 @@
       "oturum": "basiret-6kas-2026-1065a6f5",
       "gerekce": "tur 1 bulgusu (komut konumu) kapandı, tur 2 yalnız daha dar yönlendirme hedefi vakası buldu ve ZA20-ZA23 ile kapatıldı; açık ciddi bulgu sürekli daralıyor, bir tur daha",
       "zaman": "2026-11-06T20:28:58+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BASİRET",
+      "oturum": "ulak_1793986310-f8c147d3",
+      "gerekce": "SERDAR 20:4x: tur 3 mutlak tavan doldu, kapsam yalnız harness snapshot+eval sarmalını ayrıştır ve eval argümanını birebir karşılaştır; çekirdek dışı bulgu ayrı karta",
+      "zaman": "2026-11-06T20:33:56+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BASİRET",
+      "oturum": "ulak_1793986310-f8c147d3",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sultan-eli-ayristirici-canli) — canlı '!' koşusunun değişiklik sonrası gerçek ölçümü (Sultan'ın tek komutu, tanı satırı dahil) ve kanıt kaydı; bu kutuda üretilemez",
+      "zaman": "2026-11-06T20:34:03+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "sultan-eli kapısı harness sarmalayıcısından gerçek komutu ayrıştırıp kayıtla birebir karşılaştırır; canlı koşuda insan-izi YOK dedi",
+      "zaman": "2026-11-06T20:34:03+03:00",
+      "kalan_kart": "sultan-eli-ayristirici-canli"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-06T20:34:03+03:00",
+      "kalan_kart": "sultan-eli-ayristirici-canli",
+      "kalan": "canlı '!' koşusunun değişiklik sonrası gerçek ölçümü (Sultan'ın tek komutu, tanı satırı dahil) ve kanıt kaydı; bu kutuda üretilemez",
+      "tur_sifir": 3,
+      "oturum": "ulak_1793986310-f8c147d3"
     }
   ]
 }
