@@ -1,0 +1,50 @@
+{
+  "is": "hasat-sahipsiz-red",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T16:00:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "hasat-sinav",
+      "asama": "once",
+      "dosya": "olcum-hasat-sinav-once.txt",
+      "sha256": "73e3c2aa4414549f8789ec5cde27d0a0cf2891f9853b48e87318461a43332eb8",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/hasat.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T16:00:01+03:00",
+      "sure_sn": 6.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "f2bfd6e45c14ad1afebc7ba28351938a89b88fd8c02815ff72151daacca42220",
+      "olcum_id": "1cc0c46f4ff34c2fa12717c1b1d9638d",
+      "olculen_commit": "c17ea2abe9713399d9b7622f802fbaac905d7bef",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "hasat-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-hasat-sinav-sonra.txt",
+      "sha256": "ec6d15a90c351940d76d95e19d09a1d3b8e676b5e80a493e501424a4ae2e4e99",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/hasat.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T16:00:52+03:00",
+      "sure_sn": 4.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "0c25ed61c88a1f52f15ef6e7c5e1271fa7b9bf61802cd6112d572b498065ebb6",
+      "olcum_id": "8d56d28eb0f7496593f32c02f8333cad",
+      "olculen_commit": "f02449b16bd0152b625b4ff281241a3518b421d1",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "eb1fed65f8be6e7569c60ee6322bb3749b62e8e8b05957e56a9a0add3e138672"
+}
