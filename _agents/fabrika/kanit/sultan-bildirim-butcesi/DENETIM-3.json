@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "sultan-bildirim-butcesi",
+  "pr": "719",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T15:27:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi",
+  "dal": "sultan-bildirim-butcesi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49959,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 20105
+  },
+  "dalgic": "uyumsuz",
+  "bas": "01af0b4e82f77898f2b8a5e619c40f2dcb7a5447",
+  "duzeltme_farki": {
+    "onceki_bas": "5c2494ed76e9f5c5ae946e95ff83cddb6013eca4",
+    "dosya": 15,
+    "bayt": 24653,
+    "tam_bayt": 97922
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Günlük dört istek bütçesi kapımda kartına, alarmın günlük tek acil hakkına ve WhatsApp isteğine bağlanmış; taşanlar kuyruğa alınarak sabah özeti komutuyla gönderiliyor. Önceki ciddi bulgu, bütçe betiğinin kipinin düzeltilmesi ve bağlantıların yürütme bitine bağlı kalmadan dosyayı `bash` ile çağırmasıyla kapanmış; yalnız rötuş düzeyinde iş kalmış görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçümler bütçe çekirdeğinde 33/33, kapımda bağlantısında 139/139, alarm bağlantısında 55/55 ve WhatsApp isteğinde 10/10 geçiyor; özellikle 644 kipli bütçe betiğinin kapımda ve alarm yollarında devrede kaldığı ölçülmüş. Tavan, acil hak, İstanbul gün sınırı, sabah kuyruğunu temizleme ve üç bağlantı için mutasyon kayıtları hedef kapıları gerçekten düşürüyor; önceki B1 böylece hem kod farkı hem ölçümle kapanıyor."
+  }
+}
