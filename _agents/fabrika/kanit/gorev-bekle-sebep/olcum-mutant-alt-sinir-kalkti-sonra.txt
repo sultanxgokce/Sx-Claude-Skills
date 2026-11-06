@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K3 5 harften kısa · rc≠0 + hedef kapı 'K3 5 harften kısa' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-tek-* ===
+$ bash gunluk-plan/scripts/gorev-bekle.test.sh
+# rc=1 sure=0.3s zaman=2026-11-06T23:30:17+03:00
+--- stdout ---
+── bekle fiili
+  ✓ K1 sebep yazılır: rc 0, tek istek, adım '[bekliyor] <sebep>' biçiminde
+  ✓ K2 çıktı kartın Durakladı göstereceğini söyler
+  ✗ K3 5 harften kısa sebep yazılmaz: rc 2, istek yok
+  ✓ K4 120 harften uzun sebep yazılmaz: rc 2, istek yok
+  ✓ K5 sebepsiz çağrı yazılmaz: rc 2, kullanımı söyler
+── 4 geçti · 1 düştü
+--- stderr ---

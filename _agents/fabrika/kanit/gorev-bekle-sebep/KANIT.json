@@ -1,0 +1,55 @@
+{
+  "is": "gorev-bekle-sebep",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-06T23:30:17+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra-tek",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek-tek.txt",
+      "sha256": "5a54559575c814d226b3de184d09d7bdd4bff2472cf89a853e37b13558e3442e",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:30:11+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "cf537f93dbc8a0204a1a65cbd102591c1d03d09784ce71915709647a5d48b674",
+      "olcum_id": "b93e1f9311914b1eb2c7b24289003081",
+      "olculen_commit": "f5263e4b9a11d647c837e7a3bf3b9572cbd6a222",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-alt-sinir-kalkti",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-alt-sinir-kalkti-sonra.txt",
+      "sha256": "07e5d9232067e6f9c0fda8af66d08e77bf5040e13ff488d0f0f38ba5c2c30033",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:30:17+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-tek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K3 5 harften kısa",
+      "hedef_dustu": true,
+      "olcum_id": "343a45d392714f6f81c65bebb0a9759c",
+      "olculen_commit": "f5263e4b9a11d647c837e7a3bf3b9572cbd6a222",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "4552f0d8fb188ba5821429db54f5076a20a71bfd10113116f844e6e68dbbf797"
+}
