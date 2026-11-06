@@ -166,12 +166,19 @@ if [ -n "$KIM" ] && [ -r "$KARTSH" ]; then
     *) echo "BORC=ÖLÇÜLEMEDİ (kart.sh borclar-sahip rc $BORC_RC) — borç yok DENMEZ; kart.sh borclar elle koş" ;;
   esac
 fi
-if [ "$N" -lt "$ESIK" ] && [ "$H" -ge 1 ]; then
+# 1.24.2 (görev …PFW1F9Q · BÂNİ 6 Kas): Sırada eşik üstünde olsa da HİÇBİRİ koltuğa düşmüyorsa havuz da adaydır. Eskiden havuz yalnız N<eşik iken
+#   ekleniyordu: SIRADA=5 (hepsi başkasının) HAVUZDA=52 (benim) iken "bana atanmış iş yok, iş çıkaralım mı" deniyor, koltuk boşta kalıyordu.
+SIRA_BEN=0; [ -n "$SIRA" ] && SIRA_BEN=$(printf '%s\n' "$SIRA" | awk -F'\t' '$4=="1"' | wc -l)
+if [ "$H" -ge 1 ] && { [ "$N" -lt "$ESIK" ] || [ "$SIRA_BEN" -eq 0 ]; }; then
   HAVUZDAN=1; SIRA="$(printf '%s\n%s\n' "$SIRA" "$HAVUZ" | sed '/^$/d')"; NB=$(printf '%s\n' "$SIRA" | wc -l)
 fi
 if [ "$N" -ge "$ESIK" ] || [ "$HAVUZDAN" -eq 1 ]; then
   echo "KARAR=BAS"
-  [ "$HAVUZDAN" -eq 0 ] || echo "NEDEN=Sırada $N iş var (eşik $ESIK) ama havuzda sana düşen $H iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)"
+  if [ "$HAVUZDAN" -eq 1 ] && [ "$N" -ge "$ESIK" ]; then
+    echo "NEDEN=Sırada $N iş var ama hiçbiri sana düşmüyor; havuzda sana düşen $H iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)"
+  elif [ "$HAVUZDAN" -eq 1 ]; then
+    echo "NEDEN=Sırada $N iş var (eşik $ESIK) ama havuzda sana düşen $H iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)"
+  fi
   printf '%s\n' "$SIRA" | head -5 | awk -F'\t' '{printf "ISI=%s · %s · %s\n",$1,$2,$3}'
   # 1.16.0 (GJRBF1T8 · Sultan 29 Eki): aynı işler doğrudan PLAN MADDESİ biçiminde — çıpaya kopyalanır, deftere-yaz kimliği görür ve ikiz açmaz.
   #   Biçim: görev …<son 6> tamamlanacak: <başlık> (sahip: <atanan | sen>)  — kimlik son-ek olarak taşınır, deftere-yaz tam kimliğe çözer.

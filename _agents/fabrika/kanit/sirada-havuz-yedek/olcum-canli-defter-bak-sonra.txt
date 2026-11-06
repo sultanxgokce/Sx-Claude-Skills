@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/sirada-havuz-yedek/canli-bak.sh /config/projects/_wt/Sx-Claude-Skills-sirada-havuz-yedek/gunluk-plan/scripts/sirada-bak.sh
+# rc=0 sure=2.0s zaman=2026-11-06T15:16:34+03:00
+--- stdout ---
+betik: /config/projects/_wt/Sx-Claude-Skills-sirada-havuz-yedek/gunluk-plan/scripts/sirada-bak.sh
+SIRADA=5
+HAVUZDA=52
+ESIK=3
+KARAR=BAS
+NEDEN=Sırada 5 iş var ama hiçbiri sana düşmüyor; havuzda sana düşen 52 iş var — havuz da iştir: Sultan'a SORMADAN başla (iş çıkarma seansı gerekmez)
+HASAT=OLMAZ · gorev_01M5W6YKRG6C8B28VNG9CD13TR
+BASLAMADI=gorev_01M5W6YKRG6C8B28VNG9CD13TR (hasat kapısı: doğrulama yok: bulgu ölçülmeden hasat edilmez → bash hasat.sh dogrula gorev_01M5W6YKRG6C8B28VNG9CD13TR --sonuc var|duzelmis|olculemedi --olcum "<komut>" — havuz kaydı ölçülmeden göreve çevrilmez)
+ZORUNLU=HASAT KAPISI: önce ölç ve kayda yaz → bash /config/projects/_wt/Sx-Claude-Skills-sirada-havuz-yedek/gunluk-plan/scripts/hasat.sh dogrula gorev_01M5W6YKRG6C8B28VNG9CD13TR --sonuc var|duzelmis|olculemedi --olcum "<komut ya da dosya>" --yuzey <sorunun dosyası|dizini|-> [--kapandi "PR #N"] ; 'var' ise bash /config/projects/_wt/Sx-Claude-Skills-sirada-havuz-yedek/gunluk-plan/scripts/hasat.sh ac gorev_01M5W6YKRG6C8B28VNG9CD13TR "<gerekçe>" (ya da sirada-bak'ı yeniden koş)
+rc=0
+--- stderr ---

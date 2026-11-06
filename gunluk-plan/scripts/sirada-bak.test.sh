@@ -170,6 +170,21 @@ R="$T/hdepo"; mkdir -p "$R"; git -C "$R" init -q 2>/dev/null; git -C "$R" config
 : > "$T/liste.txt"; satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
 { printf 'KAYIT\tgorev_H1\thavuz\t-\tbaşlık\n'; printf 'ADIM\t2026-01-01T09:00:00Z\t[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-01 · yüzey=%s/a.sh\n' "$R"; } > "$T/kayit-gorev_H1.txt"
 c="$(bash "$SB" 2>&1)"; kapi "H9 kayıttaki yüzeyde doğrulamadan SONRA birleşme var → sirada-bak de üstlenmez (bayraksız ölçüm)" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c 'hasat kapısı: ilgili yüzeyde doğrulamadan sonra' <<<"$c")"
+echo "— havuz da iştir: Sırada eşik üstünde ama hiçbiri koltuğun değil (görev …PFW1F9Q · BÂNİ 6 Kas: SIRADA=5 başkasının, HAVUZDA=52 benim → 'iş yok' deniyordu)"
+: > "$T/liste.txt"; for i in 1 2 3; do satir "Y$i" menzil acik esnek ozellik SERDAR "serdarın işi $i" >> "$T/liste.txt"; done
+satir H1 menzil havuz esnek ozellik MENZILCI "havuz işim" >> "$T/liste.txt"; rm -f "$T/ustlen.log"; dogrulama H1 2026-01-01
+c="$(bash "$SB" --kutu menzil 2>&1)"; rc=$?
+kapi "S22 Sırada 3 = eşik, üçü de başkasının; havuzda koltuğun işi var → havuz işi üstlenilir" "0:ustlen gorev_H1 --kim MENZILCI --tahmin 30" "$rc:$(cat "$T/ustlen.log" 2>/dev/null)"
+icermiyor "S22b 'bana atanmış iş yok' önerisi BASILMAZ" "BASLAMADI=yok" "$c"
+iceriyor "S22c NEDEN Sırada'nın koltuğa düşmediğini ve havuzu söyler" "NEDEN=Sırada 3 iş var ama hiçbiri sana düşmüyor; havuzda sana düşen 1 iş var" "$c"
+iceriyor "S22d SIRADA sayısı değişmez (ekranın tanımı)" "SIRADA=3" "$c"
+iceriyor "S22e hasat kapısı bu yolda da koşar" "HASAT=OLUR · gorev_H1" "$c"
+rm -f "$T/ustlen.log"; dogrulama H1 -; c="$(bash "$SB" --kutu menzil 2>&1)"
+kapi "S22f doğrulamasız havuz kaydı bu yolda da üstlenilmez (kapı aynen)" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c '^BASLAMADI=gorev_H1 (hasat kapısı' <<<"$c")"
+: > "$T/liste.txt"; for i in 1 2 3; do satir "Y$i" menzil acik esnek ozellik SERDAR "serdarın işi $i" >> "$T/liste.txt"; done
+satir H2 menzil havuz esnek ozellik HENDESE "başkasının havuzu" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
+c="$(bash "$SB" --kutu menzil 2>&1)"
+kapi "S22g havuz da başkasınınsa eski davranış: BASLAMADI=yok, ustlen yok" "yok:1" "$([ -e "$T/ustlen.log" ] && echo var || echo yok):$(grep -c '^BASLAMADI=yok' <<<"$c")"
 echo "— havuz da iştir (devam)"
 : > "$T/liste.txt"; satir H2 menzil havuz esnek ozellik HENDESE "başkasının havuzu" >> "$T/liste.txt"; rm -f "$T/ustlen.log"
 c="$(bash "$SB" --kutu menzil 2>&1)"
