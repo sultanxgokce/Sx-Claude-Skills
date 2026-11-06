@@ -204,6 +204,7 @@ KMB="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MB dogrula --imza $IM"
 gercek "$MB" "$KMB" "\"$KMB\""
 check "ZA13 ayrıştırıcısız mutantta çift tırnaklı eval REDDEDİLİYOR (1) → ZA2 yakalar" "1" "$?"
 
+cd "$T"   # yönlendirme vakaları (> eval) dosya yazar: depoya değil geçici dizine yazsın (tur 3 bulgusu)
 # ZA14-ZA19 · KOMUT KONUMU (denetçi tur 1 bulgusu): `eval` sözcüğü komut olarak koşmuyorsa (printf'in argümanı, tırnaklı
 #   noktalı virgülden sonra) kayıtlı komut "koşmuş" sayılmaz. Kapı yine de koşar (kök kabuk onu sonradan çağırır), kayıt 3 sn yaşlı.
 KAPI_CAGRI="sleep 3; SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM"
