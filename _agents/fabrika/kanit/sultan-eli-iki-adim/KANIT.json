@@ -1,7 +1,7 @@
 {
   "is": "sultan-eli-iki-adim",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T23:18:39+03:00",
+  "guncelleme": "2026-11-07T00:06:51+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,7 +44,28 @@
       "olculen_commit": "7e5bc8100769ff70c45e955d2a61d69eb163bd41",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra-2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-2-sonra.txt",
+      "sha256": "56b5e3306a4ae24874a82541f6cc73a2654668f2e8454c3188b66ab4723d2160",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:06:51+03:00",
+      "sure_sn": 119.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "35e6c17d6efaa3da31df55e409ff6d62e2b05b94a17ee47975bdc83799dd99cb",
+      "olcum_id": "e167c0cf6b5940e9812ee8920e57ac21",
+      "olculen_commit": "286ad04a37d2ad1f9e91b6d2f6196dfee825f2f4",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "bfc942adf8878b521eabe47544b283be8003388dadc565a8628873c4b49ae6e4"
+  "imza": "c48dd1c16a34a477310ab07c4695619dcb7c4ad634a3767d3dbf2b70130d512e"
 }
