@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "on-goz-kapilari",
+  "pr": "737",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T01:28:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-kapilari",
+  "dal": "on-goz-kapilari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40496,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 27321
+  },
+  "dalgic": "uyumsuz",
+  "bas": "86205b6894624285c6fe85b20e077472212735d3",
+  "duzeltme_farki": {
+    "onceki_bas": "26ae85db13924bc72f125c43288e8f05498fd58f",
+    "dosya": 13,
+    "bayt": 36531,
+    "tam_bayt": 62556
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turda bulgu yoktu; bu düzeltme turu A1’in kanıt yolu tanımını daraltıp bozuk manifesti A1/A2 için doğru biçimde “ölçülemedi” saymış ve iki yeni sınavla davranışı sabitlemiş. Gerçek koşu beş kapıda uyumlu/rc 0, ana sınav 23/23 ve hedefli mutasyonlar beklenen kapıları düşürdüğü için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı ya da geçersiz kayıt yok. `on-goz-sinav` 23/23 ve rc 0, `gercek-kosu` A1–A5 uyumlu ve rc 0 gösteriyor; kayıtlar temiz commit üzerinde ölçülmüş, gerçek koşudaki HEAD farkı da A1 tarafından aradaki yalnız kanıt dosyaları kuralıyla doğrulanmış. S3c ile dar kanıt dizini, S5b ile bozuk manifest davranışı ölçülüyor; mutasyon kayıtlarının rc 1 ve ✗ satırları beklenen bozma sonuçları olup manifestte hedef kapıların düştüğü doğrulanıyor."
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.70
+version: 0.27.71
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.71 (7 Kas 2026, kart on-goz-kapilari · görev W42-E1 …W7H1EBA dilim 2 · BÂNİ):** `scripts/on-goz.py <iş> [--pr N] [--json]` — bağımsız göze göndermeden önce MEKANİK ön göz (tasarım Nexus `_agents/spec/on-goz-adimi-DESIGN.md`): A1 kanıt başı (geçerli, 'once' olmayan kayıtların ölçüldüğü commit = HEAD ya da arada yalnız kanıt; PR başı/itilmiş dal = HEAD) · A2 kanıt eksik (dogrula yeşil, en az bir gerçek ölçüm, mutantın hedef kapısı düşmüş) · A3 taban (geride + birleştirme çakışıyorsa) · A4 ağaç (kanıt dışı commit'lenmemiş) · A5 kapsam (kart cümlesinin 'dışında/dokunulmaz' dediği yol farkta). rc 0 uyumlu · 1 uyumsuz · 3 ölçülemedi. Denetime henüz bağlı değil (dilim 3). Sınav `on-goz.test.sh` 23 kapı.
 - **0.27.70 (7 Kas 2026, kart borclar-odenmis-borc · görev …XPQS · BÂNİ):** `kart.sh borclar` canlı kanıtı alınmış ama henüz `bitti` yapılmamış kartı (`canli-borc-durum` → `odendi`) kırmızı saymaz: satır `✅ … ödendi · kart.sh bitti bekliyor`, çıkış kodunu yalnız ödenmemiş borçlar belirler. Vaka: 6 Kas otopilot-kuru-gece-cron, borclar 44 sa SÜRE AŞILDI derken canli-borc-durum ödendi diyordu. `canli-borc-durum` okunamazsa ödenmiş sayılmaz. Sınav T14m2.
 - **0.27.69 (6 Kas 2026, kart denetci-bol-zil-yok + denetci-bol-zil-surum · görev …KS0Z3H · BERİD):** `denetci.sh` İŞİ BÖL (istem tavanı aşımı) yolunda model çağrılmaz, tur yanmaz; eskiden çıkış yine de 'tur N: —/— · rc 1 · düzelt, yeniden gönder' bitiş zilini çalıp yanlış teşhis koyuyordu (#1429'da 3 sahte zil). Artık `BOL_RED` bayrağı zili atlar ve 'denetçi zili çalınmadı: istem tavanı aşıldı' basar. Sınav Z9e + mutant `bol-red-zil-calar`. (Kod #728'de girdi; sürüm numarası #727 ile çakıştığı için kurulum yüklemedi, bu sürüm onu düzeltir.)
 - **0.27.68 (6 Kas 2026, kart goz-catal-pr-it2 · görev …RX892 · BÂNİ):** `denetci.sh --pr` çatal PR'da da itilmemiş baş itilir: PR'ın baş deposu (`headRepositoryOwner`/`headRepository`) okunur, o depoyu gösteren yerel uzak (adres sonu `<sahip>/<depo>[.git]`) aranır ve ORAYA hızlı ileri itilir; uzak yoksa ya da bilgi okunamazsa itilmez, hata metni hangi depo için uzak gerektiğini söyler. origin'deki adaş dala çatal PR'da asla itilmez. Sınav `denetci-fark-kendisi.test.sh` F5r-w.
