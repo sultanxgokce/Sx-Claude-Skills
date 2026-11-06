@@ -1,0 +1,10 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: U9k · rc≠0 + hedef kapı 'U9k' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kart-sinavi-tek-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-kart.sh
+# rc=1 sure=192.6s zaman=2026-11-06T12:41:49+03:00
+--- stdout ---
+  ✗ U8 🔴 tetik sırasında başkası aynı kimlikle kart açtıysa onun kartı EZİLMEZ (rc 1 'kart zaten var')
+  ✗ U9k 🔴 tetikte kesilen açılış: kart yayımlanmadı (rc=124), geçici dosya kalmadı, 'kart açıldı' özeti basılmadı
+  ✓ U9n kesilmeyen açılış: özet basıldı, kart yayımlandı, geçici dosya yok
+  ✗ D2 🔴 tetik yok + görev yazılamadı (409) → rc 1, kart YOK, geçici dosya YOK, 'izni GİTMEDİ'
+── SONUÇ: 486 geçti · 3 kaldı ──
+--- stderr ---

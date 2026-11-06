@@ -1,0 +1,55 @@
+{
+  "is": "kart-acilis-gecici-ad-kalmaz",
+  "arac": "kanit.py/0.8.0",
+  "guncelleme": "2026-11-06T12:41:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi-tek",
+      "asama": "tek",
+      "dosya": "olcum-kart-sinavi-tek-tek.txt",
+      "sha256": "216bd1c6b894adc6dd70b4851a893cf178e75fe703f3523a618a7a79e56498ca",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T12:37:45+03:00",
+      "sure_sn": 238.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "8240f7815ee218f5f5c1fc55d0702a0b2f20750af32e73a8deafa3f4bb47ad3e",
+      "olcum_id": "653ec58fc11640e4b3210bf94913567d",
+      "olculen_commit": "fbda80bc4862e91ccb63b6a70b77fa06e7ad5834",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi-mut-trap",
+      "asama": "tek",
+      "dosya": "olcum-kart-sinavi-mut-trap-tek.txt",
+      "sha256": "af77d7ddfbf613f4c8b7e8d828c4ab268cdf1fe17382bc0599e4503c99a25d20",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-kart.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T12:41:49+03:00",
+      "sure_sn": 192.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi-tek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "U9k",
+      "hedef_dustu": true,
+      "olcum_id": "b237166ce5ae44de99736ca2695d1fbb",
+      "olculen_commit": "fbda80bc4862e91ccb63b6a70b77fa06e7ad5834",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "88f720c2f0e185b7786086f3f7a2765d4ec4c643a312710b3b9e037479e3f609"
+}
