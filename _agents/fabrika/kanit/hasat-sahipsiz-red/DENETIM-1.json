@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "hasat-sahipsiz-red",
+  "pr": "721",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T16:01:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hasat-sahipsiz-red",
+  "dal": "hasat-sahipsiz-red",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24907,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 20549
+  },
+  "dalgic": "uyumlu",
+  "bas": "6796659fe34bdb545d443c5c6fce1a0283393e24",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`hasat.sh ac`, havuz kaydı sahipsiz ve `--atanan` yoksa görev açmadan rc 2 dönüyor; sahipli kayıt ve açıkça verilen atanan eski akışı sürdürüyor. Alan kaymasını da düzelten değişiklik, temiz commitlerdeki önce/sonra ölçümünde 109/112’den 112/112’ye geçtiği için üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı sağlam manifest, temiz commitlerde aynı sınavın önce rc 1 ve 109 geçti · 3 kaldı, sonra rc 0 ve 112 geçti · 0 kaldı sonuçlarını gösteren geçerli bir ölçüm çifti içeriyor. Önce çıktısındaki N1, N1b ve N4b hataları talebi doğrudan ölçüyor; sonra kaydının ortası görünümde kısaltılmış olsa da tam çıktı kanıt dizininde kayıtlı ve toplam üç eksiğin kapandığını gösteriyor. Sarı kayıt veya mutasyon kaydı yok."
+  }
+}
