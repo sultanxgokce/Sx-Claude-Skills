@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/kapi-turkce-yol/gerileme.sh
+# rc=0 sure=247.1s zaman=2026-11-06T11:19:59+03:00
+--- stdout ---
+── SONUÇ: 236 geçti · 0 kaldı ──
+--- stderr ---

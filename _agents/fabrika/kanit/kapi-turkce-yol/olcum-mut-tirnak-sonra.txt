@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: O23 · rc≠0 + hedef kapı 'O23' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-olculen-commit-* ===
+$ bash _agents/fabrika/kanit/kapi-turkce-yol/kos.sh HEAD tirnak
+# rc=1 sure=89.3s zaman=2026-11-06T11:15:52+03:00
+--- stdout ---
+mutant: tirnak
+rev: 454a8e12
+════ O23 · göz sonrası Türkçe adlı kanıt dosyası commit'lendi (core.quotepath açık) → GEÇER (görev …RNY9N, Sx #681) ════
+  ✓ O23 önkoşul: bu depoda git yolu kaçışlı basıyor (vaka yeniden üretildi)
+  ✗ O23 · Türkçe adlı kanıt dosyası kod değişikliği SAYILMADI → rc=0
+  ✗ O24 · kanıt dışındaki Türkçe adlı kod dosyası yine ENGELLER ve adı okunur biçimde yazılır
+── SONUÇ: 39 geçti · 2 kaldı ──
+--- stderr ---
