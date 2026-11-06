@@ -1,0 +1,81 @@
+{
+  "is": "denetci-bol-zil-yok",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T19:14:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "zil-bolumu",
+      "asama": "sonra",
+      "dosya": "olcum-zil-bolumu-sonra.txt",
+      "sha256": "c27f4e507a31e561a8f7f28b002734b7c9c98a85622c6f603ba4f22378b36f55",
+      "komut": [
+        "env",
+        "IC_KOSUM=1",
+        "IC_BOLUM=zil",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:12:27+03:00",
+      "sure_sn": 119.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "ba2d7c495907dda2f777c4e912bb3af9cf6739424694482f079b86a7ea246c9b",
+      "olcum_id": "83b6b5f983a74b44a2f6e4e461f6b6a2",
+      "olculen_commit": "8a7d34a2703c2a8e34b18ea35063a850c6a066eb",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "zil-bolumu",
+      "asama": "once",
+      "dosya": "olcum-zil-bolumu-once.txt",
+      "sha256": "a2b29b404f637f60560b6074f92851ba5b1e0e78e021cbb46acd04c1a21ff38a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/bol-once.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-bol-zil-yok"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T19:13:33+03:00",
+      "sure_sn": 57.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "072897957208dff2f949e633fffdc9d47e7c694570dd05e2c984a64cdec39c5c",
+      "olcum_id": "57da6e6a3e4b46aeaa352c1cb363ab2c",
+      "olculen_commit": "8a7d34a2703c2a8e34b18ea35063a850c6a066eb",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-bol-bayragi",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-bol-bayragi-sonra.txt",
+      "sha256": "ffbb0af83d4817ab6445aef2b72c3c95e8e1ff8ebb8eefd44c83fb94a39e9179",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/bol-mut.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-bol-zil-yok/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:14:24+03:00",
+      "sure_sn": 51.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "zil-bolumu",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "Z9e",
+      "hedef_dustu": true,
+      "olcum_id": "8bacfae61444440cbd15a953d76c01c8",
+      "olculen_commit": "8a7d34a2703c2a8e34b18ea35063a850c6a066eb",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "5174b83580cccf01c23f6a1f0fa4a76b470be10f1935d2a8867935cf74fb4c53"
+}
