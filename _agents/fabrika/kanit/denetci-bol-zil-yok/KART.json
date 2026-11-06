@@ -15,7 +15,12 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-06T19:16:29+03:00",
+      "olay": "canli-borc"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "cümlede: zili",
   "kapsam_uyarilari": [],
@@ -29,6 +34,17 @@
       "zaman": "2026-11-06T19:04:56+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-06T19:16:03+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
-  ]
+  ],
+  "canli_borc": {
+    "zaman": "2026-11-06T19:16:29+03:00",
+    "yazan": "BERİD",
+    "gerekce": "Gerçek zil altyapısı kurulu beceri kopyasıyla çalışır; birleşmeden önce canlı kutuda İŞİ BÖL zilsiz ölçülemez. Ödeme: sync-skills kurulumundan sonra gerçek aile-notify ile DENETCI_ISTEM_TAVAN=1 kuru koşu, zil günlüğünde 'tur N: —/— · rc 1' satırı OLMAMALI; kanit.sh canli ile kayda geçer.",
+    "odendi": null
+  }
 }
