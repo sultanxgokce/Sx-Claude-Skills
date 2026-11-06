@@ -1,0 +1,28 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: G26 · rc≠0 + hedef kapı 'G26' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-gece-sinavi-* ===
+$ env GECE_BETIK=/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutant-mudur/duzen-gece.sh bash duzen/scripts/duzen-gece.test.sh
+# rc=1 sure=3.1s zaman=2026-11-06T03:46:22+03:00
+--- stdout ---
+  ✓ G1 varsayılan KURU: komut çalışmaz, günlük yazılmaz
+  ✗ G2 --uygula: dört beceri kurulur, bayat kimlik yenilenir, reise mektup gider → rc=0
+  ✓ G3 her şey güncel: komut yok, mektup yok, rc 0
+  ✓ G4 sync reddeder: atlandi + rc 1, 'kuruldu' yazılmaz
+  ✓ G5 reis yok: mektup tahminle yollanmaz (atlandi), rc 1
+  ✓ G9 iki kutu reisi: her birine AYRI mektup satırı (kutu+reis), rc 0
+  ✓ G10 yalnız duzen sürümü eski: düzen artınca dördü de kurulur, mektup kurulan adları sayar
+  ✓ G6 kaynak sürüm yok: rc 3 ÖLÇÜLEMEDİ
+  ✗ G7 temeli bilinmeyen bayat kimlik: yenile çağrılmaz (atlandi), rc 1 → rc=0
+  ✗ G11 bayat otonom kimlik: yenile --baz otonom-ajan ile çağrılır, günlükte temel=otonom-ajan → rc=0
+  ✓ G12 kurulum betiği yerinde değiştirse de çalışan kopya kayık okumaz: kurulum + yenileme + mektup satırları tamam
+  ✓ G8 hiçbir komuta --force geçmez
+  ✗ G21 yenile reddi: günlükte rc ve stderr sebebi (rc=5 ayrinti=EL-DEĞMİŞ…), eski alanlar yerinde → rc=0 
+  ✓ G22 sync reddi: günlükte rc ve stderr sebebi (rc=1 ayrinti=Sürüm bump'lanmadan…)
+  ✓ G23 kurulum betiği değiştirince yeni sürümle yeniden başlar: yeniden-basladi 1, yenilendi 1, mektup 1 (kurulan 4 beceriyle), sonsuz döngü yok
+  ✓ G24 mektup postane bayraklarıyla: --aciliyet orta, --tekrar duzen-v1.2.0-code, --konu 'düzen v1.2.0 indi', --onem YOK; varsayılan komut posta.sh gonder
+  ✓ G25 postane alıcıyı reddedince mektup durum=hata, rc ve sebep (alici_bilinmiyor) günlükte
+  ✓ G13 cron ortamında yenileme paket ekipc.sh ile (depo ekipc.sh çağrılmaz), kimlik yenilendi
+  ✓ G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir)
+  ✗ G26 MÜDÜR kimliği depo ekipc.sh ile (--rol MÜDÜR, PYTHONPATH vendor), manuel kimlik paket ekipc.sh ile; ikisi de yenilendi → rc=0 PAKET-ekipc yenile --dosya /tmp/tmp.1wvNZasgSw/mudur/_agents/bani/AGENT.md --baz manuel-claude --apply
+PAKET-ekipc yenile --dosya /tmp/tmp.1wvNZasgSw/mudur/_agents/serdar/AGENT.md --rol MÜDÜR --apply
+mektup SERDAR düzen v1.2.0 indi (code): kurulan beceriler: yok; yenilenen kimlik: 1 (1=var, 0=yok). 'bash /config/.claude/skills/duzen/scripts/surum.sh denetle' koş; BAYAT kimlik kalırsa 'ekipc y
+== 15 geçti · 5 düştü ==
+--- stderr ---
