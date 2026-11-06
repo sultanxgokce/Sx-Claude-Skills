@@ -1,0 +1,24 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K9 · rc≠0 + hedef kapı 'K9' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kirli-sinav-* ===
+$ bash _agents/fabrika/kanit/kanit-kirli-dosya-canli/kos.sh HEAD dosya
+# rc=1 sure=3.4s zaman=2026-11-06T14:22:11+03:00
+--- stdout ---
+mutant: dosya
+rev: 9ad1b9a0
+════ K9 · dosya kaydı kirli ağaçta İZİNSİZ yazılmaz (rc 2); izinliyse kirli_kurali + kirli_izin taşır ════
+  ✗ K9 izinsiz kirli dosya kaydı rc=2
+  ✗ K9 izinsiz dosya kaydı YAZILMADI
+  ✓ K9 izinli dosya kaydı yazıldı
+  ✗ K9 dosya kaydında kirli_kurali=1
+  ✗ K9 dosya kaydında gerekçe yazıldı
+════ K10 · canlı kaydı kirli ağaçta İZİNSİZ yazılmaz (rc 2); izinliyse kirli_kurali + kirli_izin taşır ════
+  ✓ K10 izinsiz kirli canlı kaydı rc=2
+  ✓ K10 izinsiz canlı kaydı YAZILMADI
+  ✓ K10 izinli canlı kaydı yazıldı
+  ✓ K10 canlı kaydında kirli_kurali=1
+  ✓ K10 canlı kaydında gerekçe yazıldı
+════ K11 · temiz ağaçta dosya ve canlı izinsiz yazılır, damga taşır (gereksiz engel yok) ════
+  ✓ K11 temiz ağaçta dosya kaydı izinsiz yazıldı
+  ✗ K11 damga var, izin yok
+  ✓ K11 temiz ağaçta canlı kaydı izinsiz yazıldı
+── SONUÇ: 23 geçti · 5 kaldı ──
+--- stderr ---
