@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "canli-dinle-f1",
+  "pr": "722",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T17:11:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-canli-dinle-f1",
+  "dal": "canli-dinle-f1",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22437,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 15943
+  },
+  "dalgic": "uyumlu",
+  "bas": "143aed57c0d9ffac5b83fb7d2d818d43f12c9c0c",
+  "duzeltme_farki": {
+    "onceki_bas": "ef513d51edffdc03832ef76eb2294d6656625f0e",
+    "dosya": 14,
+    "bayt": 17347,
+    "tam_bayt": 51134
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Araç talep edilen yayın yakalama, 30 saniyelik parçalama, Groq/yerel döküm ve 10 dakikalık özet akışını hedefliyor; önceki turda açık bulgu yoktu ve bu farkta yeni bir işlev kusuru görünmüyor. Ancak sunulan kanıtlar incelenen başı ölçmediği için bu sürümün üretime hazır olduğu kanıtlanmış değil.",
+    "bulgular": [
+      {
+        "ne": "Gerçek sınav, mutantlar ve canlı kayıt incelenen baş yerine başka bir commit üzerinde alınmış; dolayısıyla mevcut baş için çalışma iddiası kanıtsız.",
+        "kanit": "Değişiklik notu incelenen başı `143aed57c0d9` olarak bildirirken manifestteki altı kaydın tamamında `olculen_commit` değeri `a76caf2d0b04edc91c4b76f49cf7edacd830f608`. Üstelik bu tur sınav dosyasını ve çalıştırılabilir dosya kiplerini değiştiriyor; eski committeki yeşil sonuç yeni başa taşınamaz.",
+        "konum": "DEĞİŞİKLİK baş notu; KANIT.json kayıtları `olculen_commit`; canli-dinle/scripts/canli-dinle.test.sh:53-58",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sarı kayıt içermiyor; gerçek ölçüm 14/14, dört mutasyon da hedef kapıları düşürüyor ve canlı kayıtta üç Groq parçası var. Ne var ki bütün kayıtlar incelenen `143aed57c0d9` başı yerine `a76caf2d...` commitini ölçtüğünden mevcut değişiklik için geçerli ölçüm çifti yok; önceki turda bulgu bulunmadığından kapanması gereken önceki bulgu da yok."
+  }
+}
