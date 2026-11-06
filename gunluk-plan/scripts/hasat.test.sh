@@ -28,7 +28,7 @@ EOS
 chmod +x "$T/gorev.sh"; export GUNLUK_PLAN_GOREV_SH="$T/gorev.sh"
 printf '#!/usr/bin/env bash\n[ "${ADIMLAR_RC:-0}" -eq 0 ] || exit "$ADIMLAR_RC"\ncat "%s/kayit-$1.txt" 2>/dev/null || exit 3\n' "$T" > "$T/oku.sh"; export HASAT_KAYIT_OKU="$T/oku.sh"   # kayıt okuyucu (gorev.sh paket kopyasına fiil EKLENMEDİ)
 # fikstür: kayit <id> <durum> [adım metni ...] — her adım "ts|metin"
-kayit(){ local id="$1" d="$2"; shift 2; { printf 'KAYIT\tgorev_%s\t%s\t-\tbaşlık %s\t%s\t%s\n' "$id" "$d" "$id" "${K_KUTU-menzil}" "${K_OZET-Havuz kaydı örneği için beş kelimelik ad: açıklama}"; for a in "$@"; do printf 'ADIM\t%s\t%s\n' "${a%%|*}" "${a#*|}"; done; } > "$T/kayit-gorev_$id.txt"; }
+kayit(){ local id="$1" d="$2"; shift 2; { printf 'KAYIT\tgorev_%s\t%s\t%s\tbaşlık %s\t%s\t%s\n' "$id" "$d" "${K_ATANAN-SAHIP}" "$id" "${K_KUTU-menzil}" "${K_OZET-Havuz kaydı örneği için beş kelimelik ad: açıklama}"; for a in "$@"; do printf 'ADIM\t%s\t%s\n' "${a%%|*}" "${a#*|}"; done; } > "$T/kayit-gorev_$id.txt"; }
 temiz(){ rm -f "$T/adim.log" "$T/durum.log" "$T/baska.log" "$T/ekle.log" "$T/dogan.log" "$T/liste.txt"; }
 echo "— kullanım"
 bash "$HS" >/dev/null 2>&1; kapi "U1 komutsuz rc 2" "2" "$?"
@@ -180,6 +180,18 @@ kayit AB havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm
 temiz; bash "$HS" ac gorev_AB "başka sun sonrası" --kip seansli >/dev/null 2>&1; kapi "S3 SON cevap 'başka sun' (öncesinde kabul olsa da) → rc 1, görev doğmaz" "1:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
 temiz; bash "$HS" ac gorev_AS "düzeltmeyle" --kip seansli --baslik "Düzeltilmiş görev başlığı" --ozet "Düzeltilmiş ad beş kelime burada: açıklama" --kutu akar --atanan ASIL >/dev/null 2>&1
 iceriyor "S4 --baslik/--ozet/--kutu/--atanan doğan göreve aynen gider" "ekle Düzeltilmiş görev başlığı --kutu akar --ozet Düzeltilmiş ad beş kelime burada: açıklama --kaynak-kim REİS --kaynak-nereden Hasat (Seanslı) --atanan ASIL" "$(cat "$T/ekle.log" 2>/dev/null)"
+echo "— ac: doğan görev sahipsiz AÇILMAZ (görev …MBCW0H; gece hasadı K8/G3 ile aynı kural, elle ac yolunda kapı yoktu)"
+K_ATANAN="-" kayit AN havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=-"
+temiz; bash "$HS" ac gorev_AN "sahipsiz kayıt" --kip otomatik >/dev/null 2>"$T/an1"; rc=$?
+kapi "N1 havuz kaydı sahipsiz ve --atanan yok → rc 2, görev doğmaz" "2:yok" "$rc:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
+iceriyor "N1b sebep söylenir ve --atanan istenir" "doğan görevin sahibi yok" "$(cat "$T/an1")"
+temiz; bash "$HS" ac gorev_AN "sahipsiz kayıt, sahip verildi" --kip otomatik --atanan HENDESE >/dev/null 2>&1
+iceriyor "N2 sahipsiz kayıt + --atanan → doğan görev o sahiple açılır" "--kaynak-nereden Hasat (Otomatik) --atanan HENDESE" "$(cat "$T/ekle.log" 2>/dev/null)"
+temiz; bash "$HS" ac gorev_A2 "sahipli kayıt" --kip otomatik >/dev/null 2>&1
+iceriyor "N3 sahipli havuz kaydı → doğan görev kaydın sahibini alır" "--kaynak-nereden Hasat (Otomatik) --atanan SAHIP" "$(cat "$T/ekle.log" 2>/dev/null)"
+K_ATANAN="" kayit AE havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=-"
+temiz; bash "$HS" ac gorev_AE "atanan alanı boş" --kip otomatik >/dev/null 2>"$T/an4"; kapi "N4 atanan alanı BOŞ (tire değil) da sahipsizdir → rc 2" "2:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"
+iceriyor "N4b boş alan alanları KAYDIRMAZ: sebep yine 'sahibi yok' (başlık atanan sanılmaz)" "doğan görevin sahibi yok" "$(cat "$T/an4")"
 echo "— ac: doğan görev hata yolları ve mevcut kapı"
 K_OZET="" kayit AO havuz "2026-01-08T09:00:00Z|[doğrulama: var] sınıf=olcum · ölçüm: x · tarih=2026-01-08 · yüzey=-"
 temiz; bash "$HS" ac gorev_AO "özetsiz kayıt" --kip otomatik >/dev/null 2>&1; kapi "E1 özet yok (kayıtta da, bayrakta da) → rc 2, görev doğmaz (özet uydurulmaz)" "2:yok" "$?:$([ -e "$T/ekle.log" ] && echo var || echo yok)"

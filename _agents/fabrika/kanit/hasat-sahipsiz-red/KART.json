@@ -1,0 +1,39 @@
+{
+  "is": "hasat-sahipsiz-red",
+  "cumle": "hasat.sh ac doğan görevin atananı belli değilse (--atanan yok ve havuz kaydı sahipsiz) görevi açmaz, rc 2 ve --atanan ister; sahipli havuz kaydı ya da --atanan ile eskisi gibi açar",
+  "istedi": "BÂNİ",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-06T15:58:47+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6RF13A2XZA99XJSA0MBCW0H",
+  "tahmin_dk": 40,
+  "sayi_uyarilari": [
+    "2 ve"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-06T15:58:48+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

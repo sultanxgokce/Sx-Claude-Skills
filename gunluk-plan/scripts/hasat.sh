@@ -107,7 +107,7 @@ kayit_oku() {
 import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
 if kod!="200": print("kayıt okunamadı http=%s" % kod, file=sys.stderr); sys.exit(3)
 k=json.loads(g).get("kayit") or {}; c=k.get("canli",{}); tm=lambda s: str(s).replace("\t"," ").replace("\n"," ")
-print("KAYIT\t%s\t%s\t%s\t%s\t%s\t%s" % (k.get("id",""), tm(c.get("gorev_durumu","")), tm(c.get("atanan","-")), tm((k.get("adlar") or [{}])[-1].get("deger","")), tm(c.get("kutu","")), tm(c.get("ozet_sultan",""))))
+print("KAYIT\t%s\t%s\t%s\t%s\t%s\t%s" % (k.get("id",""), tm(c.get("gorev_durumu","")), tm(c.get("atanan") or "-"), tm((k.get("adlar") or [{}])[-1].get("deger","")), tm(c.get("kutu","")), tm(c.get("ozet_sultan",""))))
 for a in k.get("adimlar",[]): print("ADIM\t%s\t%s" % (tm(a.get("ts","")), tm(a.get("deger",""))))'
 }
 KAYIT="$(kayit_oku "$ID" 2>/dev/null)"; KRC=$?
@@ -208,8 +208,10 @@ KAYIT_SATIRI="$(printf '%s\n' "$KAYIT" | python3 -c 'import sys
 for s in sys.stdin:
     p=s.rstrip("\n").split("\t")
     if p[0]=="KAYIT":
-        p=(p+["","","","","",""])[:7]; print("\t".join(p[3:7])); break')"
-IFS=$'\t' read -r K_ATANAN K_BASLIK K_KUTU K_OZET <<<"$KAYIT_SATIRI"
+        p=(p+["","","","","",""])[:7]; print("\x1f".join(p[3:7])); break')"
+# 1.24.3 (görev …MBCW0H): ayraç \x1f — sekme IFS'te BOŞLUK sayılır ve ardışık sekmeleri tek ayraç yapar: boş atanan alanı yutulup
+#   başlık atanan, kutu başlık okunuyordu (alanlar kayıyordu). \x1f boşluk değildir, boş alan yerinde kalır.
+IFS=$'\x1f' read -r K_ATANAN K_BASLIK K_KUTU K_OZET <<<"$KAYIT_SATIRI"
 if [ "$KIP" = seansli ]; then   # Sultan cevabı kayıtta SON Seanslı cevap olarak durmalı; ajan cevap üretmez
   SON_CEVAP="$(printf '%s\n' "$KAYIT" | python3 -c 'import sys
 son=""
@@ -220,7 +222,10 @@ print(son)')"
   case "$SON_CEVAP" in "kabul"|"düzeltmeyle kabul") ;; *) echo "KIRMIZI: Seanslı Hasat'ta Sultan'ın kabul cevabı kayıtta yok (son cevap: ${SON_CEVAP:-yok}) — önce: hasat.sh cevap $ID kabul|duzeltmeyle-kabul --oturum <ref> --soz \"<Sultan'ın sözü>\"" >&2; exit 1 ;; esac
 fi
 BASLIK="${BASLIK_ARG:-$K_BASLIK}"; OZET="${OZET_ARG:-$K_OZET}"; KUTU="${KUTU_ARG:-$K_KUTU}"; ATANAN="${ATANAN_ARG:-}"
-[ -n "$ATANAN" ] || { [ "$K_ATANAN" != "-" ] && ATANAN="$K_ATANAN"; }
+[ -n "$ATANAN" ] || { [ -n "$K_ATANAN" ] && [ "$K_ATANAN" != "-" ] && ATANAN="$K_ATANAN"; }
+# SAHİPSİZ DOĞAN GÖREV AÇILMAZ (1.24.3 · görev …MBCW0H; gece hasadı K8/G3 ile aynı kural): havuz kaydı sahipsiz ve --atanan yoksa
+#   doğan görev kimsenin Sırada'sına düşmez, Sultan'ın ekranında sahipsiz kalırdı. Sahip uydurulmaz: --atanan istenir.
+[ -n "$ATANAN" ] || { echo "HATA: doğan görevin sahibi yok — havuz kaydı sahipsiz ve --atanan verilmedi; sahipsiz görev açılmaz (gece hasadıyla aynı kural): --atanan <AJAN> ver" >&2; exit 2; }
 [ -n "$(printf '%s' "$BASLIK" | tr -d '[:space:]')" ] || { echo "HATA: doğan görev başlığı yok (--baslik ver)" >&2; exit 2; }
 [ -n "$(printf '%s' "$OZET" | tr -d '[:space:]')" ] || { echo "HATA: doğan görev özeti yok (--ozet \"<ad (5-10 kelime): açıklama>\" ver; özet kapısı tek cümle, 80 harften kısa ister)" >&2; exit 2; }
 [ -n "$KUTU" ] || { echo "HATA: doğan görevin kutusu okunamadı (--kutu ver)" >&2; exit 2; }
