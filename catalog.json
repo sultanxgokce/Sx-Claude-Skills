@@ -1488,7 +1488,7 @@
       "id": "arayuz-zanaati",
       "type": "agent",
       "name": "/arayuz-zanaati — arayüz zanaatı: garip, amatör durmasın (GLOBAL)",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Web sayfası ya da uygulama ekranı yazılırken, değiştirilirken ve denetlenirken tasarım zevki değil ZANAAT: tek aralık ölçeği, yakınlık, tek sol kenar, düğme-kutu aynı boy, tek yarıçap ailesi, her durum (otomatik doldurma dahil), koyu temada color-scheme, form temelleri, tipografi, tarayıcı tuzakları, tablo kuralları. KURALLAR.md (kırk belirti → çare, CSS parçaları) + KONTROL-LISTESI.md (kırk maddelik yayın öncesi bakış). Sultan 19 Eylül: 'kutucuklarda gariplik var, harmoni olmamış'. MÜTEVELLİ/AKAR doğurdu (38 sayfalık kaynaklı tarama); MUAVİN filo geneline paketledi."
     },
     {

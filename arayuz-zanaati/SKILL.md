@@ -1,6 +1,6 @@
 ---
 name: arayuz-zanaati
-version: 0.1.0
+version: 0.1.1
 allowed-tools: Bash, Read, Write, Edit
 description: Web sayfası ya da uygulama ekranı yazarken, değiştirirken ve denetlerken kullan. Tasarım zevki değil ZANAAT - aralık ölçeği, hizalama, form denetimleri, durumlar (otomatik doldurma dahil), koyu tema tuzakları, tipografi, tarayıcı farkları, tablo kuralları, tutarlılık. "Garip, amatör, tam oturmamış, harmonisiz" görünümü önler. HTML/CSS, form, giriş sayfası, tablo, kart, ekran, prototip geçince çağır.
 ---
@@ -10,7 +10,7 @@ description: Web sayfası ya da uygulama ekranı yazarken, değiştirirken ve de
 **Doğduğu yer (19 Eylül 2026):** Sultan giriş sayfasına baktı: "tasarım iyi; ama kutucuklarda gariplik var, tam uymamış, harmoni olmamış, amatör durmuş." Sebep zevk değildi, zanaattı: Chrome otomatik doldurma kutuları açık maviye boyadı, kutuda iç boşluk yoktu, hap düğmenin yanında keskin köşeli kutu duruyordu, dikey aralıklar eşitsizdi. Biz hep **boş kutuyla** ölçmüştük. Sultan: "Tasarım olarak sormuyorum. Uyum, dikkat edilecek noktalar, CSS, Bootstrap kuralları; bunları bil ki yanlış, tuhaf duracak şeyler yapma."
 Görsel yön `tasarim-citasi` ve `frontend-design`'dadır. Bu beceri olgun tasarım sistemlerinin **yazılı, ölçülebilir** kurallarıdır. Dayanak: 38 sayfalık tarama (sonda). Ayrıntı ve CSS parçaları: `KURALLAR.md`. Yayın öncesi bakış: `KONTROL-LISTESI.md`.
 
-## On iki temel kural (ezber)
+## On üç temel kural (ezber)
 1. **Tek aralık ölçeği.** `4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96`. Ölçek dışı değer (13, 18, 22 px) yasak. (Bootstrap, Atlassian, GOV.UK aynı mantık.)
 2. **Yakınlık.** İlgili öğeler yakın, gruplar uzak: etiket→kutu 8 · kutu→yardım/hata 4–8 · alan→alan 24 · grup→grup 48 · son alan→düğme 24–32. Alan arası boşluk, etiket-kutu boşluğunun **en az üç katı**. Kabın iç dolgusu ≥ içindeki öğe aralığı.
 3. **Boşluğu kap dağıtır.** Öğeye tek tek margin yazma; kapsayıcı `> * + *` ya da `gap` ile versin. Eşitsiz dikey ritmin kök çaresi budur.
@@ -23,6 +23,7 @@ Görsel yön `tasarim-citasi` ve `frontend-design`'dadır. Bu beceri olgun tasar
 10. **Tipografi.** 6–8 kademelik boy ölçeği; koyu zeminde ağırlık ≥ 400; rakam sütunlarında `tabular-nums`; başlıkta `text-wrap: balance`; satır ≤ 66 karakter; `lang="tr"` (yoksa "iptal" → "IPTAL"); gömülü fontta İ ı ğ ş ç ö ü glifleri var mı bak.
 11. **Tarayıcı tuzakları.** `100vh` yerine `100dvh` yedeğiyle · `scrollbar-gutter: stable` · flex çocuğunda `min-width: 0` (kesme için) · sticky + atada `overflow:hidden` çalışmaz · üst katman **opak** zemin + `isolation: isolate` · görselde `width/height` ya da `aspect-ratio` · hover yalnız `@media (hover:hover)`.
 12. **Tablo.** Sayı, tutar, tarih sağa; metin sola; başlık sütunun hizasını alır; boş değer "—"; ya zebra ya çizgi; yapışkan başlık opak; kayan kabın içine not konmaz; dar ekranda kaydırma ya da karta çevirme — içerik gizlenmez.
+13. **PDF ve indirilen dosya POST cevabında verilmez.** POST yan etkiyi yapar (basım damgası, kayıt), 303 ile yan etkisiz GET adresine yönlendirir. Yoksa önizleme açılır ama tarayıcının "indir"i aynı adresi GET ile yeniden ister, 405 alır, "Bilinmeyen sunucu hatası" çıkar (Sultan 02.11, sipariş ekranı: önce Trendyol, sonra Amazon). Sınav: **POST + GET ile iki kez indir**, ikinci indirme yan etkiyi tekrarlamasın; yalnız önizlemeye bakmak ölçüm değildir. Adres taşıyan çıktı diske yazılmıyorsa kısa ömürlü bellekte tutulur.
 
 ## Çalışma sırası
 1. **Yazmadan önce belirteçler:** aralık 9 · yarıçap 3 + hap · yüzey 4 · metin 3 · kenarlık 2 · süre 2 · adlı z katmanları. Bileşenler yalnız belirteçten beslenir.
