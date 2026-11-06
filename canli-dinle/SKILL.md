@@ -13,7 +13,7 @@ Deney 1-2 (HEZARFEN, 6 Kas, TRT Haber HLS) ölçümleri bu sürümün varsayıla
 
 ## Komut
 ```bash
-bash canli-dinle/scripts/canli-dinle.sh <adres> [--kaynak groq|yerel] [--sure SN] [--pencere-sn 600] [--cikti DIR] [--kuru]
+bash canli-dinle/scripts/canli-dinle.sh <adres> [--kaynak groq|yerel] [--ozetsiz] [--sure SN] [--pencere-sn 600] [--cikti DIR] [--kuru]
 ```
 - `adres`: streamlink'in anladığı her adres (YouTube/Twitch/Kick… ya da `hls://https://…/master.m3u8`); streamlink yoksa yt-dlp, o da yoksa ffmpeg doğrudan.
 - `--kaynak groq` (varsayılan): `GROQ_API_KEY` süreç ortamından ya da `~/.config/cortex-access.env`'den okunur; **hiçbir yere yazılmaz/basılmaz**. Anahtar yoksa rc 3.
