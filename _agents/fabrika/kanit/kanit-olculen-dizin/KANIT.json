@@ -1,0 +1,76 @@
+{
+  "is": "kanit-olculen-dizin",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T19:09:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "8245a88971c5af5c10d8afe8e0154eb1b794770cb9f62a488387253e5750d82d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ke-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T19:09:26+03:00",
+      "sure_sn": 2.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "f1022c5bd69959c0e220ed5ad5868aa35ff7eeda42168555b2f81029c7851b7e",
+      "olcum_id": "c6cc8472f62b4b6ea881bd5b41950213",
+      "olculen_commit": "cfa7e33241b6c7adaced55edb01018ba902aa371",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "d4eb1737f8451cad75c7a54b6294315829c67f1b8297c8bf3644927cb397b6bc",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:09:29+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "4fcaea2240dc311156190b86d988cfa88014ac1a31e6c40797b87fcd8f05c481",
+      "olcum_id": "8d7cd58ae3204a1ca262da80464ecfd1",
+      "olculen_commit": "cfa7e33241b6c7adaced55edb01018ba902aa371",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-sonra.txt",
+      "sha256": "c42727e83b69b4931b34f955d61d99841e4d46714ba80a97e36d0f209eb6c368",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/km-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T19:09:32+03:00",
+      "sure_sn": 2.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K12 komut ölçülen kopyada KOŞTU",
+      "hedef_dustu": true,
+      "olcum_id": "2aa9c2a4752e4ec894cce412fbafebf1",
+      "olculen_commit": "cfa7e33241b6c7adaced55edb01018ba902aa371",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "520f12cda1d11d1232d4fd215da4b88092769105536cc0bd1ee82e198bc22ab0"
+}

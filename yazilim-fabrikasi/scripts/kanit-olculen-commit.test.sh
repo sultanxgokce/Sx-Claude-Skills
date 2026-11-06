@@ -59,4 +59,24 @@ echo "════ K11 · temiz ağaçta dosya ve canlı izinsiz yazılır, damg
 [ "$(alan etiket)" = "onuc" ]; g $? "K11 temiz ağaçta dosya kaydı izinsiz yazıldı"; [ "$(alan kirli_kurali)" = "1" ] && [ "$(alan kirli_izin)" = "YOK" ]; g $? "K11 damga var, izin yok"
 ( cd "$T" && bash "$K" canli is-k ondort --kaynak "dosya:$T/k10.log" --desen olay-k10 ) >/dev/null 2>&1
 [ "$(alan etiket)" = "ondort" ]; g $? "K11 temiz ağaçta canlı kaydı izinsiz yazıldı"
+echo "════ K12 · --olculen-dizin: ölçüm geçici kopyada koşar, kayıt O ağacın kimliğini taşır (görev …PGT8Z1) ════"
+T2="$(mktemp -d)"
+( cd "$T2" && git init -q -b main && git config user.email t@t && git config user.name t && echo z > g.sh && git add -A && git commit -q -m "chore: kopya" ) >/dev/null 2>&1
+H2="$(git -C "$T2" rev-parse HEAD)"; HT="$(git -C "$T" rev-parse HEAD)"
+( cd "$T" && bash "$K" olcum is-k oncekopya --asama once --olculen-dizin "$T2" -- bash -c 'pwd -P; exit 0' ) >/dev/null 2>&1
+[ "$(alan olculen_commit)" = "$H2" ]; g $? "K12 olculen_commit ölçülen kopyanın HEAD'i"
+grep -qx "$(cd "$T2" && pwd -P)" "$T/_agents/fabrika/kanit/is-k/olcum-oncekopya-once.txt"; g $? "K12 komut ölçülen kopyada KOŞTU (pwd = kopya, çalışılan ağaç değil) — kimlik komutla bağlı"
+[ "$(alan olculen_commit)" != "$HT" ]; g $? "K12 çalışılan dalın ucu yazılmadı"
+[ "$(alan olculen_dizin)" = "$T2" ]; g $? "K12 kayıt olculen_dizin taşır"
+[ "$(alan olculen_kirli)" = "False" ]; g $? "K12 temiz kopya olculen_kirli=False"
+echo q >> "$T2/g.sh"
+( cd "$T" && bash "$K" olcum is-k kirlikopya --asama once --olculen-dizin "$T2" -- echo kopya2 ) >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 2 ]; g $? "K12 kirli kopya izinsiz rc=2 (kapı kopyaya bakar)"
+( cd "$T" && bash "$K" olcum is-k kirlikopya --asama once --olculen-dizin "$T2" --kirli-izin "sınav: kirli kopya ölçümü" -- echo kopya2 ) >/dev/null 2>&1
+[ "$(alan olculen_kirli)" = "True" ]; g $? "K12 kirli kopya izinli: olculen_kirli=True"
+GT="$(mktemp -d)"
+( cd "$T" && bash "$K" olcum is-k gitdegil --asama once --olculen-dizin "$GT" -- echo x ) >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 2 ]; g $? "K12 git ağacı olmayan dizin rc=2, ölçüm koşmaz"
+[ "$(alan etiket)" != "gitdegil" ]; g $? "K12 kayıt yazılmadı"
+( cd "$T" && bash "$K" dogrula is-k ) >/dev/null 2>&1; g $? "K12 imza bozulmadı (dogrula rc=0)"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
