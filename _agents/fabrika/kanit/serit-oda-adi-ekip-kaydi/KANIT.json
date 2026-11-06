@@ -1,0 +1,79 @@
+{
+  "is": "serit-oda-adi-ekip-kaydi",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T16:13:01+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kadro-oda-sinav",
+      "asama": "once",
+      "dosya": "olcum-kadro-oda-sinav-once.txt",
+      "sha256": "4ae5f0ee46187fe8d7b26404968b01896be19a0742722fad082749028dd7425d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sx-olc.sh",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T16:13:01+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "154438d91dd157ca29af290ad0dba3ca85513078f7f430bf78795951ed518e23",
+      "olcum_id": "8ed5a3162e42481db4b4e66246e44136",
+      "olculen_commit": "7f54dc25a39152625c42616a5df80147c664d5c5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-oda-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-oda-sinav-sonra.txt",
+      "sha256": "42f6548e429b250fc47cecd92394fa6a70263b98041c558b6a5d7057514f4c9a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sx-olc.sh",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T16:13:01+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "8a19a0b8d3dda1f4fb731e6dcb18b5e55702efccfee7fa0504aa1002f9fc355d",
+      "olcum_id": "5b9ee8cec1a346d792b29c2d642158ad",
+      "olculen_commit": "7f54dc25a39152625c42616a5df80147c664d5c5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ekip-yedegi-kapali",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-ekip-yedegi-kapali-sonra.txt",
+      "sha256": "98f82f3ebdb77351a7d6034838d6f19d0dd1eb2305fe9e1d5814084747c210c1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/sx-olc.sh",
+        "mutant"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T16:13:01+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kadro-oda-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "OG-K7",
+      "hedef_dustu": true,
+      "olcum_id": "f02c76e35e4348638f95a14dba003d8f",
+      "olculen_commit": "7f54dc25a39152625c42616a5df80147c664d5c5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "f6732cddc89d354b507b1334648246418bd9ee51328625164cf6b6d83eccbc4b"
+}
