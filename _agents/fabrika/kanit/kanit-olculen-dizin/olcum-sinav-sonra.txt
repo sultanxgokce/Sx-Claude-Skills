@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
-# rc=0 sure=2.4s zaman=2026-11-06T19:06:45+03:00
+# rc=0 sure=2.7s zaman=2026-11-06T19:09:29+03:00
 --- stdout ---
 ════ K1 · temiz ağaç: olculen_commit = HEAD, olculen_kirli = False ════
   ✓ olculen_commit HEAD ile aynı
@@ -42,6 +42,7 @@ $ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
   ✓ K11 temiz ağaçta canlı kaydı izinsiz yazıldı
 ════ K12 · --olculen-dizin: ölçüm geçici kopyada koşar, kayıt O ağacın kimliğini taşır (görev …PGT8Z1) ════
   ✓ K12 olculen_commit ölçülen kopyanın HEAD'i
+  ✓ K12 komut ölçülen kopyada KOŞTU (pwd = kopya, çalışılan ağaç değil) — kimlik komutla bağlı
   ✓ K12 çalışılan dalın ucu yazılmadı
   ✓ K12 kayıt olculen_dizin taşır
   ✓ K12 temiz kopya olculen_kirli=False
@@ -50,5 +51,5 @@ $ bash yazilim-fabrikasi/scripts/kanit-olculen-commit.test.sh
   ✓ K12 git ağacı olmayan dizin rc=2, ölçüm koşmaz
   ✓ K12 kayıt yazılmadı
   ✓ K12 imza bozulmadı (dogrula rc=0)
-── SONUÇ: 37 geçti · 0 kaldı ──
+── SONUÇ: 38 geçti · 0 kaldı ──
 --- stderr ---

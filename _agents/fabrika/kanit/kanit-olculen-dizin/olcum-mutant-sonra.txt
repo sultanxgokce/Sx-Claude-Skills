@@ -1,6 +1,6 @@
-=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K12 olculen_commit ölçülen kopyanın HEAD'i · rc≠0 + hedef kapı 'K12 olculen_commit ölçülen kopyanın HEAD'i' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K12 komut ölçülen kopyada KOŞTU · rc≠0 + hedef kapı 'K12 komut ölçülen kopyada KOŞTU' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/km-mut.sh
-# rc=1 sure=2.9s zaman=2026-11-06T19:06:48+03:00
+# rc=1 sure=2.5s zaman=2026-11-06T19:09:32+03:00
 --- stdout ---
 ════ K1 · temiz ağaç: olculen_commit = HEAD, olculen_kirli = False ════
   ✓ olculen_commit HEAD ile aynı
@@ -42,14 +42,15 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f96575
   ✓ K11 damga var, izin yok
   ✓ K11 temiz ağaçta canlı kaydı izinsiz yazıldı
 ════ K12 · --olculen-dizin: ölçüm geçici kopyada koşar, kayıt O ağacın kimliğini taşır (görev …PGT8Z1) ════
-  ✗ K12 olculen_commit ölçülen kopyanın HEAD'i
-  ✗ K12 çalışılan dalın ucu yazılmadı
+  ✓ K12 olculen_commit ölçülen kopyanın HEAD'i
+  ✗ K12 komut ölçülen kopyada KOŞTU (pwd = kopya, çalışılan ağaç değil) — kimlik komutla bağlı
+  ✓ K12 çalışılan dalın ucu yazılmadı
   ✓ K12 kayıt olculen_dizin taşır
   ✓ K12 temiz kopya olculen_kirli=False
-  ✗ K12 kirli kopya izinsiz rc=2 (kapı kopyaya bakar)
-  ✗ K12 kirli kopya izinli: olculen_kirli=True
+  ✓ K12 kirli kopya izinsiz rc=2 (kapı kopyaya bakar)
+  ✓ K12 kirli kopya izinli: olculen_kirli=True
   ✓ K12 git ağacı olmayan dizin rc=2, ölçüm koşmaz
   ✓ K12 kayıt yazılmadı
   ✓ K12 imza bozulmadı (dogrula rc=0)
-── SONUÇ: 33 geçti · 4 kaldı ──
+── SONUÇ: 37 geçti · 1 kaldı ──
 --- stderr ---
