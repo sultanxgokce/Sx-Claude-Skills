@@ -453,7 +453,8 @@ export class Dumen {
       let kimlik = null;
       try {
         kimlik = (await this.#cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: yama })).identifier;
-        for (const f of page.frames()) await f.evaluate(yama).catch(() => {});
+        await page.mainFrame().evaluate(yama);   // ana sayfa yamalanamadıysa SESSİZ geçme: print gelirse pencere açılırdı
+        for (const f of page.frames()) if (f !== page.mainFrame()) await f.evaluate(yama).catch(() => {});   // alt çerçeve yamalanamazsa yeni-belge betiği ve 'yazdirma-yok' ölçümü kalır
         await page.click(sel, { timeout: 10000, ...pw });
         let cerceve = null; const son = Date.now() + olayMs;
         while (!cerceve && Date.now() < son) {
