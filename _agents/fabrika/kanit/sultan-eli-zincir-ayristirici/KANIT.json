@@ -1,0 +1,50 @@
+{
+  "is": "sultan-eli-zincir-ayristirici",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-06T20:05:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-once",
+      "asama": "once",
+      "dosya": "olcum-sinav-once-once.txt",
+      "sha256": "c8160ad6924f3dbecaf8bdd61df3a2153333e062f46fd16398bd0d2fe1f58b77",
+      "komut": [
+        "bash",
+        "/tmp/tmp.2Mndn7qTSg/sultan-eli.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T20:04:04+03:00",
+      "sure_sn": 69.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "29d953830668c8b528864f1d2019b981120512da3b2760247a47d19e152f6c2e",
+      "olcum_id": "0b0a8f21aee24f91a1adfd630184a3b2",
+      "olculen_commit": "43da96a2e1ac1e9c87b12c68a2cc7a1386738669",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-sonra.txt",
+      "sha256": "e2bfeec65f894d994418e011eb3c500cee4208a91abd886aae80337899928250",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T20:05:22+03:00",
+      "sure_sn": 71.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "1f90f496227c13f65b075a43079b69a628d83b324039110eb8f344174ace14ed",
+      "olcum_id": "fe2e7ca533ea4d7dba5c82aa59cfd976",
+      "olculen_commit": "43da96a2e1ac1e9c87b12c68a2cc7a1386738669",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "5f9a1b095a918be6fc813642405f7b54cd71d601a7152a04be1e7b8376d0a637"
+}
