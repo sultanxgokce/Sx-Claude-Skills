@@ -1,0 +1,70 @@
+$ node /config/projects/cloudtop/infra/terminal-merkez/gorev-ayrinti-tarayici-sinav.mjs
+# rc=0 sure=37.0s zaman=2026-11-06T23:33:37+03:00
+--- stdout ---
+  ✓ A0 görev satırı açıldı
+  ✓ A1 AD büyük: açık satırın başlığı teknik başlık; blok var
+  ✓ A2 açıklama = ozet_sultan
+  ✓ A3 künye kimde/kimden/açıldı/son hareket + "Seni bekliyor" hapı
+  ✓ A4a belge satırı: belgenin başlığı
+  ✓ A5a bölümler: İhtiyaçlar 12 · Gereklilikler 1 · Araştırmalar yok · Bütün adımlar 25
+  ✓ A48 açık kartta kaynak etiketi (G12 · Kuzey G2.4): ayrıntıda "kaynak" satırında Sultan · düğme düğmenin içinde değil
+  ✓ A43 1440 açık kart (Madde 12 · G11): kimlik şeridi akan tek satır, panel darsa en çok iki (≤ 56 px, ≤ 12 px yazı, haplar ≤ 20 px) durum hapı + Kimde · Kimden · Açıldı · Son hareket; sekme 0; bölümler İhtiyaçlar 12 · Gereklilikler 1 · Araştırmalar yok · Adımlar 25; son 5 adım (9Y6CEX: 12 → 5) + "Önceki 20 adımı göster"; eski açılır bölüm 0; ayar tablosu iki sütun (tür · atanan yan yana, tahmin ~4 sa); emoji+renk tek satır ≤ 30 px; notlar katlı (kutu 0); sıra şerit › açıklama › Detay › Adımlar › ayar › işaret › not; kart ≤ 1800 px
+  ✓ A51 açık kartta kimlik bir kez: künyede "istedi/aldı/açtı" cümlesi yok, kimlik şeridinde "Kimden Sultan istedi" var, "Sultan istedi" kartta tek
+  ✓ D1 kart açılınca Detay KAPALI: tek details, summary metni tam "Detay", içi görünmez (kutu summary boyunda, üç başlık görünmez), özet sayı satırı "12 ihtiyaç · 1 gereklilik"; Adımlar Detay'ın DIŞINDA ve son 5 adımı görünür (9Y6CEX)
+  ✓ A4b "Belgeyi oku" belgeyi yerinde açar
+  ✓ A4c "Belgeyi kapat" kapatır
+  ✓ D2 summary'ye tık Detay'ı açar: üç başlık görünür ve alt alta (İhtiyaçlar › Gereklilikler › Araştırmalar, aynı sol hiza); İhtiyaçlar 12 madde · Gereklilikler 1 madde · Araştırmalar boş cümlesi; Adımlar hâlâ dışarıda
+  ✓ A5b İhtiyaçlar açılınca madde numaraları adım metninden (1.1 … 1.7 · 2.1 … 2.5)
+  ✓ A44 Detay açıkken Adımlar 5 adım (9Y6CEX: 12 → 5), "Önceki 20 adımı göster" ile 25
+  ✓ A6 Adımlar sekmesinde "önceki adımları göster" sonrası 25 adım, saatli, gün başlıklı
+  ✓ A45 notlar katlı: başlığa tık iki kutuyu açar (Kendime · Ajana), ikinci tık kapatır
+  ✓ A8 tazeleme sonrası açık bölümler açık kalır (adım sayısı hâlâ 25)
+  ✓ D3 tazelemede Detay açık kalır; klavyeyle (Enter) kapanır ve odak summary'de kalır
+  ✓ D4 Boşluk tuşu Detay'ı açar; kart kapatılıp yeniden açılınca Detay yine KAPALI gelir
+  ✓ A14 ayraçsız önek de bölüme düşer: İhtiyaçlar 1 · Gereklilikler 1 · Araştırmalar 1
+  ✓ A16 kapalı kart: sekiz yaş kademesi doğru rozet + renk sınıfı, kaynak etiketi Sultan/Auto/Agent, başlık Sultan özeti (Madde 7 ekran yüzü)
+  ✓ A47 Madde 7 ekran yüzü (çift yüzlü kart): kapalıda Sultan yüzü — başlık özetin ilk duraklamasına kadar, altında kalan, ham başlık yok; karta tık → ikinci (teknik) yüz: ham başlık büyük + özet tam; kapatınca Sultan yüzü geri; özetsiz kayıt → ham başlık + soluk "özet yok" rozeti
+  ✓ A30 1440 kapalı kart: başlık ilk satır (14,5 px), açıklama altında; rozet şeridi düğmenin altında TEK sıra, kimlik etiketi [oda ‖ kod] · kaynak · yaş · aciliyet, her rozet ≤ 22 px; düğmede rozet yok
+  ✓ A34 Madde 5 kapalı kart: künye cümlesi yok, "alt görev 0/1" yok, çıplak "bekliyor" yok, renk noktası yok, başlık TEK satır, seçilen renk 3 px sol kenar + şeffaf zemin; AÇIK kartta "alt görev 0/1" var; künye cümlesi açık kartta da YOK (9Y6CEX · Sultan 31 Eki "kimlik iki kez" — "Sultan istedi" kimlik şeridinde, A51 ölçer)
+  ÖLÇÜM A35 (fikstür, 1440 Sırada): {"kart":18,"rozetOrtanca":4,"rozetEnCok":4,"yukseklikOrtanca":77,"yukseklikEnCok":112}
+  ✓ A35 1440 kapalı kart göstergeleri (fikstür): kart başına rozet ortanca ≤ 4, en çok ≤ 6; kapalı kart yüksekliği ortanca ≤ 110 px (canlı 1.154.0 önce: ortanca 3 rozet, en çok 5, 129 px)
+  ✓ A17 kaynak etiketine tıklayınca baloncuk (Auto · SERDAR açtı, nereden) açılır ve satır AÇILMAZ
+  ✓ A17b G12 baloncukta Açan · Karar · Niçin satırları; Karar = nereden (rapor yoksa), Niçin = Sultan özeti
+  ✓ A17c G12 Sultan işi, karar kaydı yok: Açan "Sultan", Karar "karar kaydı yok" (boş bırakılmaz)
+  ✓ A17d G12 rapor kodu nereden'in önüne geçer; Niçin yalnız İLK cümle
+  ✓ A18 yaş rozetine tıklayınca baloncukta tam süre + açılış saati; Esc kapatır
+  ✓ A19 klavye: Tab ile kaynak etiketine, Enter ile baloncuk; sonra Tab+Boşluk ile yaş rozeti; satır AÇILMAZ, aria-expanded/describedby bağlı, Esc kapatır; rozetler satır düğmesinin içinde değil
+  ✓ A15 çok adlı görevde başlık SON ad (ilk ad ekranda yok)
+  ✓ A7 öneksiz görev: üç bölüm yok, adımlar akışta (2)
+  ✓ A10 belgesiz görevde belge satırı yok
+  ✓ A9 hub dışına çıkan yol: belge 404, ayrıntıda belge yok, gizli metin sızmaz; yolu tutan belge 200
+  ✓ A9c sembolik bağ raf dışına çıkamaz: belge 404, ayrıntıda belge yok, gizli metin sızmaz
+  ✓ A13 6000 adımın hepsi gelir (tavan yok) ve zaman sırasıyla (en eski önde)
+  ✓ A9b oturumsuz istek reddedilir
+  ✓ A20 Başlandı: anlık durumlar gerçek kaynaktan (Kodlanıyor · Göz · CI · sebep · [bekliyor] · sessiz · ölçülemedi · öne alma; öne alma eski bekçi sebebini geçer — G14), ipucu kaynağı söyler
+  ✓ A30b Başlandı kapalı kart: anlık durum hapı rozet şeridinde, iki satır (G18 · 1 Kas): 1. satır kimlik etiketi [oda ‖ kod] · kaynak · süre kuşağı, 2. satır son adım · durum · aciliyet; satır arası 3-8 px; hepsi ≤ 22 px
+  ✓ A40 Başlandı: uzun hâl satırı yok; yaş rozeti SÜRE KUŞAĞI — K1 ≤30 dk (y1) · K2 30 dk–1 sa (y2) · K3 1–3 sa (y3) · K4 3 sa–1 gün (y4) · K5 1 günden uzun (y7) aynı renk ölçeği; "son adım" kuşağı (10 dk içinde · 1 saati geçti); etiket 20 px / 10,5 px (1 Kas: 18 → 20)
+  ✓ A41 süre rozetine tık → ayrıntı baloncuğu: Başlandı · Çalışıldı · Bekledi · Tahmin ~1 sa 30 dk · Son adım · Kişi BASIRET + son adım tam metni; satır açılmaz; Esc kapatır; "son adım" rozeti aynı baloncuğu açar
+  ✓ A42 Kodlanıyor hapına tık → baloncuk: Kutu sedir · Koltuk BASIRET · çalışıyor (kapıdan) · Ne zamandan beri · Son adım · Son güncellenme · Yenile; Yenile deftere yeniden sorar (GET +1) ve baloncuğu tazeler (hap aria-expanded true)
+  ✓ A21 soru: kapalı kartta şıklar + yazı kutusu; açık kartta hap tek (Seni bekliyor yerine Blokajlı), kutu açıklamanın hemen altında ve tek; "Seni bekleyen karar" + iki şık (önerim işaretli) + serbest cevap kutusu
+  ✓ A31b blokajlı açık kart (5. tur): Sultan yolu kutusu açıklamanın hemen altında, tam genişlik; kimlik şeridi (≥ 4 alan) üstünde
+  ✓ A22 şık tıkı: PATCH {cevap:secildi} deftere düştü (adım "[↩ seçti: Bu adlarla]"), iş açık'a döndü, sonuç satırı "seçtin", kutu kayboldu
+  ✓ A23 komut: komut + nerede + cevap kutusu; Cevabı gönder boşken kapalı, yazınca açık; gönderince PATCH kostu ve cevap metni deftere; Kopyala var
+  ✓ A24 mac: Ortak yolu + İstemi kopyala + Yaptım (mac_verdi); Dümen bağlı değilken bağ yok
+  ✓ A49 390 kapalı kart başlığı en çok İKİ satır (G18 tur 2): iki satıra sarılan başlık ≥1 · hiçbiri 2 satırı aşmaz · sığmayan iki satırda üç noktayla kırpılır (line-clamp 2) · başlık kartın sınırı içinde
+  ✓ A11 390: yatay taşma 0, blok satırın içinde
+  ✓ A46 390 açık kart (Madde 12 · G11): kimlik şeridi kartın içinde (sarabilir), Detay satırı ≥ 44 px ve açık, üç başlık kartın içinde, ayar tablosu TEK sütun (atanan türün altında), emoji+renk satırı kartın içinde, taşma 0
+  ✓ A25 390 Sırada: başlık satırı kartın ≥ %80’i (168 px yuva kalktı), rozetler başlığın altında, kartın içinde ve ≥ 24 px (#1328: görünen 24, dokunma 44), taşma 0
+  ✓ A33 390 kapalı kart: başlık şeridin üstünde, rozet şeridi kartın içinde (kimlik etiketi [oda ‖ kod] · kaynak · yaş · aciliyet), düğmede rozet yok, taşma 0
+  ✓ A26 390 blokaj kutusu satırın içinde, düğmeler görünen 24 px + 20 px dokunma uzantısı = 44 px, taşma 0
+  ✓ A56 390 Sırada (…QE0J54): 24 saatten uzun bekleyen acil kartta TEK yaş — açılış yaşı rozeti çizilmez, bekleme süresi gün ve saatle ("4 gün 9 sa bekliyor", "105 sa 50 dk" değil); açılış yaşı süre hapının ipucunda (jenerik sebepli: ikinci hap yok, 1.205.23)
+  ✓ A57 390 Sırada: "24 saatten uzun bekleyen acil işler" başlığı kartlara sıkışmaz — altındaki karta ≥ 8 px, üstündeki karta (varsa) ≥ 12 px boşluk; taşma 0
+  ✓ A59 390 Sırada: kısa bekleyen kartta yaş TEK (açılış yaşı rozeti kalır, süre hapı yok) — tek yaş kuralı yalnız çift yaşı kaldırır, yaşı hiç silmez
+  ✓ A53 390 Teslim (…F2VCH1): ölçülemedi hükmü ÇİZİLDİ, kendi sınıfında (grv-hk; düğme sınıfı grv-dg DEĞİL), kırılarak akar, kartın içinde, sayfa taşması 0
+  ✓ A54 390 Teslim: hüküm satırda Sultan dilinde TEK cümle, MUHAKKİK’in ham notu katlı ve kapalı · Sonuç ölçümü "önce N, sonra M" (araç biçimi "önce=" ve sondaki kaynak parantezi kapalı satırda yok)
+  ✓ A55 390 Teslim: MUHAKKİK’in notu AÇILINCA da (bölünemez görev kimliği dahil) hüküm kartın içinde, sayfa taşması 0
+  ✓ A12 sayfa hatası 0
+
+SONUÇ: 62 geçti · 0 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-gorev-bekle-sebep-kart-tarafi-tarayici 5 sn bekledi (yuva 2, load1 6.74)

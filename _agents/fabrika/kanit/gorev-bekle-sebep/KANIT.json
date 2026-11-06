@@ -1,7 +1,7 @@
 {
   "is": "gorev-bekle-sebep",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T23:32:00+03:00",
+  "guncelleme": "2026-11-06T23:33:37+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -134,7 +134,29 @@
       "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-tarafi-tarayici",
+      "asama": "tek",
+      "dosya": "olcum-kart-tarafi-tarayici-tek.txt",
+      "sha256": "82c847c9f7c7b2ce6e553c968b22f8a6d44d3194a6666a30947a00d2b18c3649",
+      "komut": [
+        "node",
+        "/config/projects/cloudtop/infra/terminal-merkez/gorev-ayrinti-tarayici-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:33:37+03:00",
+      "sure_sn": 37.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e2423cf7204a4f26b0fdb2de9370589f",
+      "olculen_commit": "09407b6781614a452ebc4f4e3be25d6a00745444",
+      "olculen_dizin": "/config/projects/cloudtop",
+      "olculen_kirli": true,
+      "kirli_kurali": 1,
+      "kirli_izin": "cloudtop ana kopyasında başka işlerin kanıt dosyaları kirli; ölçülen sınav ve kaynağı temiz (git diff infra/terminal-merkez boş)"
     }
   ],
-  "imza": "155b8e79bb6dc2d87ac2eb36fe670889a0397fc01aad5a9f59aa2eaf3d48a64f"
+  "imza": "28f495d4f91d17432bf0cad6520715c2b762605805883973b5eec9cab64098e8"
 }
