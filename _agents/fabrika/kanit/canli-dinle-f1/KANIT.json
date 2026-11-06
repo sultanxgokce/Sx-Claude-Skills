@@ -1,7 +1,7 @@
 {
   "is": "canli-dinle-f1",
   "arac": "kanit.py/0.9.0",
-  "guncelleme": "2026-11-06T16:59:09+03:00",
+  "guncelleme": "2026-11-06T17:15:56+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -173,7 +173,122 @@
       "olculen_commit": "a76caf2d0b04edc91c4b76f49cf7edacd830f608",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-bas",
+      "asama": "tek",
+      "dosya": "olcum-sinav-bas-tek.txt",
+      "sha256": "6b48b3f6f3b7a90e5c9bfc3aca92213945b34d5aea36f676ef80e0ed50dc85b6",
+      "komut": [
+        "bash",
+        "canli-dinle/scripts/canli-dinle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:14:15+03:00",
+      "sure_sn": 50.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "466511ded558f52f894990c722b4daa85374edde5bf0bfb143debddfe794f1bb",
+      "olcum_id": "b51c83880ad646b08e7f550372a04dcb",
+      "olculen_commit": "7d064e85079ec82b8ea5c1b6b8bce30e1e0c2407",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kirpma-bas",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kirpma-bas-tek.txt",
+      "sha256": "4d9b735b3e291ea597786911cba389c4099a61ac52b91deef70cebfa1260d3f0",
+      "komut": [
+        "env",
+        "MUTANT=kirpma",
+        "bash",
+        "canli-dinle/scripts/canli-dinle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:15:05+03:00",
+      "sure_sn": 50.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-bas",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "metin:",
+      "hedef_dustu": true,
+      "olcum_id": "d836ba8e8e8a4b2a86bdc93c8c44c1b4",
+      "olculen_commit": "7d064e85079ec82b8ea5c1b6b8bce30e1e0c2407",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-segment-bas",
+      "asama": "tek",
+      "dosya": "olcum-mutant-segment-bas-tek.txt",
+      "sha256": "605990efc6b90f60851064dac0f58e8b9b5b60227cfffa5f212ea836e95550c4",
+      "komut": [
+        "env",
+        "MUTANT=segment",
+        "bash",
+        "canli-dinle/scripts/canli-dinle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:15:56+03:00",
+      "sure_sn": 50.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav-bas",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "yerel rc",
+      "hedef_dustu": true,
+      "olcum_id": "87c6c2a3c6be4302b74545322823c818",
+      "olculen_commit": "7d064e85079ec82b8ea5c1b6b8bce30e1e0c2407",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-gercek-yayin-bas",
+      "asama": "canli",
+      "dosya": "canli-canli-gercek-yayin-bas.txt",
+      "sha256": "163547206abcc486ba7e2a1f5510e85b1a65819b9541755460706dee8becdb4c",
+      "komut": [
+        "tail",
+        "-n",
+        "10",
+        "--",
+        "/config/.filo/canli-dinle-f1-olay-bas.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/.filo/canli-dinle-f1-olay-bas.log",
+      "kaynak_turu": "dosya",
+      "son": 10,
+      "desen": "parca [0-9]+ yazildi kaynak=groq sozcuk=[1-9]",
+      "en_az": 3,
+      "atesleme_sayisi": 3,
+      "ilk_atesleme": {
+        "satir": "2026-11-06T17:12:40+0300 parca 0 yazildi kaynak=groq sozcuk=46",
+        "saat": "2026-11-06T17:12:40+0300",
+        "saat_iso": "2026-11-06T17:12:40+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-06T17:13:23+0300 parca 2 yazildi kaynak=groq sozcuk=27",
+        "saat": "2026-11-06T17:13:23+0300",
+        "saat_iso": "2026-11-06T17:13:23+03:00"
+      },
+      "zaman": "2026-11-06T17:15:56+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "f3395b1580634220a28671554cfc7d47",
+      "olculen_commit": "7d064e85079ec82b8ea5c1b6b8bce30e1e0c2407",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "88e1f1ec79eb06fa6fb7689583e7739d705ab4718f4220ea46d4de3166b5c210"
+  "imza": "d445304ad4bbac47df1e7b846175ae353705ea11ab64e0593b09f359a3d77e8c"
 }
