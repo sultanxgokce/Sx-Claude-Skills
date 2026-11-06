@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "denetci-bol-zil-yok",
+  "pr": "728",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T20:18:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-bol-zil-yok",
+  "dal": "denetci-bol-zil-yok",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23593,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 4376
+  },
+  "dalgic": "uyumsuz",
+  "bas": "f8c7248feead6e06bbe4ad5cbba20d984d4a0472",
+  "duzeltme_farki": {
+    "onceki_bas": "e83ed99d806f10d0c2c3d7f462f9ae8bdf3ceec5",
+    "dosya": 4,
+    "bayt": 5434,
+    "tam_bayt": 27717
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İŞİ BÖL yolunda BOL_RED bayrağını kaldıran mutant artık gerçek üretim satırını hedefliyor; gerçek ölçüm Z9e’yi geçirirken mutant aynı kapıyı düşürüyor. Kod üretime hazırdır; önceki turun canlı gerçek-zil borcu bu farkla kapanmamış ve doğru biçimde kutu-dışı kalmıştır.",
+    "bulgular": [
+      {
+        "ne": "Gerçek ajan koltuğunda İŞİ BÖL çıkışının zil üretmediği uçtan uca hâlâ doğrulanmamış; önceki B1 kapanmamış.",
+        "kanit": "İş kartında canli_gerekir=true, canlı borcunda odendi=null; son ölçüm IC_KOSUM=1 altında Z9e’yi sınarken çıktı Z3e’de sınav kipinde gerçek zil aranmadığını açıkça belirtiyor.",
+        "konum": "iş kartı canli_borc/odendi; olcum-zil-bolumu-sonra.txt Z3e ve Z9e",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı ajan koltuğu + gerçek zil altyapısı"
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı veya geçersiz kayıt yok. Önce ölçümünde Z9e düşüyor, gerçek son ölçümünde geçiyor; mutasyon kaydı BOL_RED atamasını etkisizleştirince hedef kapı Z9e’nin düştüğünü gösteriyor. Ölçüm çifti ve hedefli mutant güçlüdür; yalnız canlı gerçek-zil yüzeyi ölçülmemiştir."
+  }
+}

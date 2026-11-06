@@ -31,7 +31,7 @@ if [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; then
   case "${DENETCI_MUTLAK:-}" in [1-9]) MUTLAK="$DENETCI_MUTLAK" ;; esac
 fi
 
-SON_HATA=""; KILIT_RED=0   # SON_HATA: bitiş zilinin 'sebep' parçası (rc 3 'ölçülemedi' tek başına sebebi söylemiyordu); KILIT_RED: başka denetçi koşuyor reddi
+SON_HATA=""; KILIT_RED=0; BOL_RED=0   # SON_HATA: bitiş zilinin 'sebep' parçası (rc 3 'ölçülemedi' tek başına sebebi söylemiyordu); KILIT_RED: başka denetçi koşuyor reddi
 _hata() { SON_HATA="$*"; printf '✗ %s\n' "$*" >&2; }
 # 🔴 SESSİZ BİTİŞ YOK (SERDAR ACİL 21 Eki 19:49, Sultan: "işler sessizce duruyor"): bir günde iki ajan bitmiş göz turunu
 #    1'er saat fark etmedi, biri HİÇ başlamamış denetçinin DENETIM-N.json'unu 1 saat bekledi. Kök üçlü: bitince haber yok,
@@ -56,6 +56,9 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   # 5 kez rc 3 (SERDAR 28 Eki): 'başka denetçi koşuyor' reddi ölçülemedi DEĞİL — öteki koşum kendi bitiş zilini çalacak; reddedilen koşumun zili
   #   aynı turu 'ÖLÇÜLEMEDİ' diye ilan edip reise --waiting da yolluyordu. Sebep stderr'de (_hata), zil çalınmaz.
   [ "$KILIT_RED" = 1 ] && { printf '· denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak\n' >&2; return 0; }
+  # İŞİ BÖL (istem tavanı, KS0Z3H · #1429 3 sahte zil): model ÇAĞRILMADI, tur YANMADI; 'tur N: —/— · rc 1 · düzelt, yeniden gönder' zili yanlış teşhis koyar.
+  #   Sebep ve yol zaten stderr'de (yazan denetçiyi kendisi koşturuyor). Zil çalınmaz.
+  [ "$BOL_RED" = 1 ] && { printf '· denetçi zili çalınmadı: istem tavanı aşıldı (İŞİ BÖL), tur yakılmadı — yol yukarıda\n' >&2; return 0; }
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
   if [ -z "$an" ] && { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ] || [ -n "${SAHTE_ISTEM_KOPYA:-}" ]; }; then   # sınav kipi (sahte göz/sahte json): gerçek zil ARANMAZ, yalnız açıkça verilen çalar
     printf '· sınav kipi (DENETCI_KOMUT/SAHTE_JSON): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
@@ -1013,7 +1016,7 @@ if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then
     olcum|kanit) _bilgi "   yol: ölçüm kayıtlarını küçült (yalnız kartın istediği ölçümler kalsın; yanlış kaydı kanit.sh gecersiz ile ilan et) ya da işi böl: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref>" ;;
     *) _bilgi "   yol: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref> → kalan yarı yeni kart/dal; bu dalda yalnız daraltılmış cümle kalsın" ;;
   esac
-  exit 1   # İŞİ BÖL
+  BOL_RED=1; exit 1   # İŞİ BÖL
 fi
 if [ -n "${DENETCI_KOMUT:-}" ]; then
   DENETCI_AD="$DENETCI_KOMUT (sınav)"; _sinirli $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
