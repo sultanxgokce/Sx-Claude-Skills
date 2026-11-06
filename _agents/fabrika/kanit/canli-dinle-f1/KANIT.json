@@ -1,7 +1,7 @@
 {
   "is": "canli-dinle-f1",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T21:27:51+03:00",
+  "guncelleme": "2026-11-06T21:31:15+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -459,7 +459,45 @@
       "olculen_commit": "e0e39f8ad5cad156d367b3ae8009c387a1e2e888",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-gercek-yayin-son2",
+      "asama": "canli",
+      "dosya": "canli-canli-gercek-yayin-son2.txt",
+      "sha256": "530366fa24bfb55295e55afeed44e40ed6f2c2d56ef72bb863df7216fc78d45e",
+      "komut": [
+        "tail",
+        "-n",
+        "10",
+        "--",
+        "/config/.filo/canli-dinle-f1-olay-son.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/.filo/canli-dinle-f1-olay-son.log",
+      "kaynak_turu": "dosya",
+      "son": 10,
+      "desen": "yazildi kaynak=groq",
+      "en_az": 3,
+      "atesleme_sayisi": 3,
+      "ilk_atesleme": {
+        "satir": "2026-11-06T21:30:17+0300 parca 0 yazildi kaynak=groq sozcuk=61",
+        "saat": "2026-11-06T21:30:17+0300",
+        "saat_iso": "2026-11-06T21:30:17+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-11-06T21:30:59+0300 parca 2 yazildi kaynak=groq sozcuk=28",
+        "saat": "2026-11-06T21:30:59+0300",
+        "saat_iso": "2026-11-06T21:30:59+03:00"
+      },
+      "zaman": "2026-11-06T21:31:15+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "ced232b2c60e49b8be39679f079078ba",
+      "olculen_commit": "434befd51f573b15a980e5bfc8895a07f305e8b3",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "df2080b0a4900b9c831395f3cc7b456fed1b09f61c63876553d8497fd5c9926b"
+  "imza": "104d11f73569492646d6675c0dcbb24d983489d69434429b7dc5990e75abaf22"
 }
