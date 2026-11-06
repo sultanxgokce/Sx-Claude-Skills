@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dyk-sonra.sh
+# rc=0 sure=7.7s zaman=2026-11-06T11:34:53+03:00
+--- stdout ---
+SONUÇ: geçti=9 kaldı=0 süre=7 sn
+KALAN: 0
+--- stderr ---

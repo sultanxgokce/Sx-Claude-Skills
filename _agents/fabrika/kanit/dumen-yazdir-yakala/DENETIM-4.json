@@ -1,0 +1,36 @@
+{
+  "tur": 4,
+  "is": "dumen-yazdir-yakala",
+  "pr": "713",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T12:18:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-yazdir-yakala",
+  "dal": "dumen-yazdir-yakala",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 74872,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 27,
+    "bayt": 141510
+  },
+  "dalgic": "uyumsuz",
+  "bas": "bbe1c36e26d0c015f9e4151e715f5a487d6a56e6",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dümen’e yazdirYakala eklenmiş; yazdırma penceresi açılmadan ana sayfa ve iframe içeriğinin PDF alınması, temizlik ve dosya güvenliği kapıları gerçek Chromium ölçümleriyle doğrulanmış. Önceki turdaki B1 kapanmış: güncel fb063b7 başında dumen-yazdir.test.sh’nin CI dumen kovasında çağrılıp geçtiği araç imzalı kayıt bulunduğundan üretime engel ciddi veya uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce rc=1 ve 1/9, sonra güncel fb063b764660e5ea78771b443f71d63ef8ca4ffd başında rc=0 ve 11/11 ölçüm çifti var; sekiz mutasyon ilgili kapıları düşürerek sınavın kusurları yakaladığını gösteriyor. Ayrıca aynı güncel başta CI kaydı dumen-yazdir.test.sh çağrısını ve dumen kovasının geçti=11 kaldı=0 sonucunu gösteriyor; böylece önceki turun entegrasyon kanıtı eksiği kapanmış."
+  }
+}

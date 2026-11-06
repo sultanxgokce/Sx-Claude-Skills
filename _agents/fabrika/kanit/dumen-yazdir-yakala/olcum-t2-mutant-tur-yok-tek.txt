@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: .pdf olmayan hedef reddedilir · rc≠0 + hedef kapı '.pdf olmayan hedef reddedilir' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-sonra-t2-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dyk-m8.sh
+# rc=1 sure=22.8s zaman=2026-11-06T11:44:28+03:00
+--- stdout ---
+MUTANT 8: hedefin türü ölçülmez (.pdf dışı yazılır)
+  ✗ Y7 .pdf olmayan hedef reddedilir (dosya-turu), tıklama yapılmaz
+SONUÇ: geçti=7 kaldı=1 (ilk kırmızıda duruldu)
+--- stderr ---

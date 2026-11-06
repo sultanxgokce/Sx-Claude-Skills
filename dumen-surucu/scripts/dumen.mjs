@@ -440,6 +440,61 @@ export class Dumen {
     const hedef = this.#hedefDosya(hedefYol, { ustuneYaz, turler });
     return this.#uygula('indir-adres', null, async () => { const page = this.#page; const b = blob ? await this.#baytBlob([page.mainFrame(), ...page.frames()], a) : await this.#baytAl(page, a); return this.#dosyaYaz(hedef, b.veri, b.tur, 'adres'); }, azamiMs);
   }
+  // yazdirYakala(sel, hedefYol.pdf): sel'e tıklar; sayfa window.print() çağırırsa YAZDIRMA PENCERESİ AÇILMAZ (sekme kilitlenmez),
+  //   yazdırılacak içerik PDF olarak hedefYol'a yazılır. Tıklamadan önce window.print no-op yamalanır (açık çerçeveler + sonradan açılanlar), bitince geri konur.
+  //   Çağıran çerçeve ana sayfaysa sayfanın yazdırma ortamı (@media print); alt çerçeveyse o çerçeve YERİNDE (canlı belge, durumu korunarak) PDF'e basılır.
+  //   Hiç print çağrılmazsa 'yazdirma-yok' (asılmaz). Yalnız bu tıklamanın açtığı yazdırma sayılır; yeni pencerede (window.open) ve PDF görüntüleyici penceresinde çağrılan print kapsam dışıdır (PDF zaten pencerede açıksa indirGomulu).
+  async yazdirYakala(sel, hedefYol, { ustuneYaz = false, olayMs = 15000, hazirMs = 600, azamiMs = 60000, ...pw } = {}) {
+    const hedef = this.#hedefDosya(hedefYol, { ustuneYaz, turler: ['.pdf'] });
+    return this.#uygula('click-yazdir', sel, async () => {
+      const page = this.#page;
+      const yama = '(()=>{if(!window.__dumenPrint0)window.__dumenPrint0=window.print;window.__dumenYazdirSay=0;window.print=function(){window.__dumenYazdirSay=(window.__dumenYazdirSay||0)+1};})()';
+      const geri = '(()=>{if(window.__dumenPrint0){window.print=window.__dumenPrint0;delete window.__dumenPrint0}delete window.__dumenYazdirSay})()';
+      let kimlik = null;
+      try {
+        kimlik = (await this.#cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: yama })).identifier;
+        await page.mainFrame().evaluate(yama);   // ana sayfa yamalanamadıysa SESSİZ geçme: print gelirse pencere açılırdı
+        for (const f of page.frames()) if (f !== page.mainFrame()) await f.evaluate(yama).catch(() => {});   // alt çerçeve yamalanamazsa yeni-belge betiği ve 'yazdirma-yok' ölçümü kalır
+        await page.click(sel, { timeout: 10000, ...pw });
+        let cerceve = null; const son = Date.now() + olayMs;
+        while (!cerceve && Date.now() < son) {
+          for (const f of page.frames()) { if ((await f.evaluate(() => window.__dumenYazdirSay || 0).catch(() => 0)) > 0) { cerceve = f; break; } }
+          if (!cerceve) await uyu(250);
+        }
+        if (!cerceve) throw new KapiHata('yazdirma-yok', `tıklama ${olayMs} ms içinde sayfanın yazdırmasını başlatmadı (window.print çağrılmadı)`);
+        await uyu(hazirMs);   // yazdırılacak içerik yerleşsin
+        let veri = null;
+        if (cerceve !== page.mainFrame()) {
+          veri = await this.#cerceveBas(cerceve);
+        } else veri = Buffer.from((await this.#cdp.send('Page.printToPDF', { printBackground: true, preferCSSPageSize: true })).data, 'base64');
+        if (veri.length > DOSYA_TAVAN) throw new KapiHata('indirme-okunamadi', 'boyut tavanı aşıldı');
+        return this.#dosyaYaz(hedef, veri, 'application/pdf', 'yazdirma');
+      } finally {
+        if (kimlik) await this.#cdp.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: kimlik }).catch(() => {});
+        for (const f of page.frames()) await f.evaluate(geri).catch(() => {});
+      }
+    }, azamiMs);
+  }
+  // alt çerçeveyi YERİNDE PDF'e basar: canlı belge korunur (kendi betiği, form değerleri, canvas, bellekteki durum). Ana sayfada çerçeve dışındaki her şey
+  //   yalnız yazdırma ortamında gizlenir, çerçeve içerik boyuna açılır; iş bitince işaretler ve stil silinir.
+  async #cerceveBas(cerceve) {
+    const el = await cerceve.frameElement();
+    const yuk = await cerceve.evaluate(() => Math.max(document.documentElement.scrollHeight, document.body ? document.body.scrollHeight : 0)).catch(() => 0);
+    try {
+      await el.evaluate((f, y) => {
+        const st = document.createElement('style'); st.id = '__dumenYz';
+        st.textContent = '@media print{[data-dumen-gizle]{display:none!important}[data-dumen-ata]{display:block!important;position:static!important;width:auto!important;height:auto!important;max-height:none!important;overflow:visible!important;margin:0!important;padding:0!important;border:0!important;transform:none!important;float:none!important}iframe[data-dumen-yz]{display:block!important;position:static!important;width:100%!important;border:0!important;margin:0!important;height:' + (y > 0 ? y : 1000) + 'px!important}}';
+        document.head.appendChild(st); f.setAttribute('data-dumen-yz', '1');
+        for (let n = f; n && n !== document.body; n = n.parentElement) {
+          if (n !== f) n.setAttribute('data-dumen-ata', '1');
+          for (const k of (n.parentElement ? n.parentElement.children : [])) if (k !== n) k.setAttribute('data-dumen-gizle', '1');
+        }
+      }, yuk);
+      return Buffer.from((await this.#cdp.send('Page.printToPDF', { printBackground: true, preferCSSPageSize: true })).data, 'base64');
+    } finally {
+      await this.#page.evaluate(() => { document.getElementById('__dumenYz')?.remove(); for (const x of document.querySelectorAll('[data-dumen-yz],[data-dumen-ata],[data-dumen-gizle]')) { x.removeAttribute('data-dumen-yz'); x.removeAttribute('data-dumen-ata'); x.removeAttribute('data-dumen-gizle'); } }).catch(() => {});
+    }
+  }
   // yeniSekmeAdresi(sel): sel'e tıklar, açılan YENİ SEKMENİN adresini döndürür ve o sekmeyi kapatır (başkasının sekmesine dokunmaz).
   async yeniSekmeAdresi(sel, { olayMs = 10000, azamiMs = 30000, ...pw } = {}) {
     return this.#uygula('click-sekme', sel, async () => {

@@ -1,0 +1,49 @@
+{
+  "tur": 3,
+  "is": "dumen-yazdir-yakala",
+  "pr": "713",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T12:16:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-yazdir-yakala",
+  "dal": "dumen-yazdir-yakala",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41294,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2653
+  },
+  "dalgic": "uyumlu",
+  "bas": "a0eb3390935c8cf3b961742a6dce65dac4846eb9",
+  "duzeltme_farki": {
+    "onceki_bas": "4b141f8d949baee01c95e2cfab8ffd83027e162c",
+    "dosya": 3,
+    "bayt": 4031,
+    "tam_bayt": 73817
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Dümen’in yazdırma sınavı CI’daki dumen kovasına eklenmiş; önceki turda bulgu bulunmadığından kapanacak eski kusur yok ve değişiklik talebe hizmet ediyor. Ancak son kanıt c8415bea commit’ini ölçerken değerlendirilen baş a0eb3390935c; bu son CI bağlantısının gerçekten çağrıldığını gösteren güncel ölçüm olmadan üretime hazır denemez, önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Son CI kayıt değişikliği ölçülmemiş: sınavın kovaya yazılması, CI tarafından gerçekten keşfedilip çağrıldığını tek başına kanıtlamıyor.",
+        "kanit": "Manifestteki gerçek son ölçüm sinav-sonra-t2 rc=0 ve 11/11 olsa da olculen_commit=c8415bea0edb43872c6660eb8eefa3697b54882f; değişiklik notundaki güncel baş a0eb3390935c. Sunulan hiçbir ölçüm .github/ci/kabuk-sinamalari.sh üzerinden dumen-yazdir.test.sh çağrısını göstermiyor.",
+        "konum": ".github/ci/kabuk-sinamalari.sh:39; kanıt kaydı sinav-sonra-t2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; önce/sonra çifti ile sekiz mutasyon hedef davranışlarını güçlü biçimde ölçüyor. Ne var ki gerçek ölçüm c8415bea commit’ine ait ve yeni CI kova satırını içeren a0eb3390935c başı için çağrılma/kurulum ölçümü bulunmuyor; dolayısıyla işlev kanıtı güçlü, son entegrasyon kanıtı eksik."
+  }
+}

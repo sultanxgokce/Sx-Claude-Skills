@@ -1,0 +1,450 @@
+$ tail -n 2000 -- /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ci-dumen-a0eb3390.log
+# kaynak=dosya:/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/ci-dumen-a0eb3390.log tur=dosya desen=SONUÇ: geçti=11 kaldı=0 en_az=1 son=2000 atesleme=1 rc=0 sure=0.0s zaman=2026-11-06T12:17:34+03:00
+--- stdout ---
+﻿2026-11-06T08:59:35.9726837Z Current runner version: '2.338.2'
+2026-11-06T08:59:35.9750978Z ##[group]Runner Image Provisioner
+2026-11-06T08:59:35.9752040Z Hosted Compute Agent
+2026-11-06T08:59:35.9752677Z Version: 20261028.624
+2026-11-06T08:59:35.9753319Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-06T08:59:35.9754108Z Build Date: 2026-10-28T21:51:42Z
+2026-11-06T08:59:35.9754822Z Worker ID: {170c28d7-8d8c-4ec7-8727-97d42204361f}
+2026-11-06T08:59:35.9755526Z Region: westus
+2026-11-06T08:59:35.9756571Z Cloud: Azure
+2026-11-06T08:59:35.9757129Z ##[endgroup]
+2026-11-06T08:59:35.9758733Z ##[group]Operating System
+2026-11-06T08:59:35.9759412Z Ubuntu
+2026-11-06T08:59:35.9759950Z 24.04.5
+2026-11-06T08:59:35.9760590Z LTS
+2026-11-06T08:59:35.9761107Z ##[endgroup]
+2026-11-06T08:59:35.9761701Z ##[group]Runner Image
+2026-11-06T08:59:35.9762325Z Image: ubuntu-24.04
+2026-11-06T08:59:35.9762946Z Version: 20261101.360.1
+2026-11-06T08:59:35.9764278Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261101.360/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-06T08:59:35.9766238Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261101.360
+2026-11-06T08:59:35.9767301Z ##[endgroup]
+2026-11-06T08:59:35.9768575Z ##[group]GITHUB_TOKEN Permissions
+2026-11-06T08:59:35.9770491Z Contents: read
+2026-11-06T08:59:35.9771112Z Metadata: read
+2026-11-06T08:59:35.9771769Z Packages: read
+2026-11-06T08:59:35.9772326Z ##[endgroup]
+2026-11-06T08:59:35.9774370Z Secret source: Actions
+2026-11-06T08:59:35.9775449Z Cache mode: write
+2026-11-06T08:59:35.9776647Z Prepare workflow directory
+2026-11-06T08:59:36.0121616Z Prepare all required actions
+2026-11-06T08:59:36.0171076Z Getting action download info
+2026-11-06T08:59:36.3651268Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-06T08:59:36.4780879Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-11-06T08:59:36.7737422Z Complete job name: kabuk sınamaları (dumen)
+2026-11-06T08:59:36.8542652Z ##[group]Run actions/checkout@v4
+2026-11-06T08:59:36.8543556Z with:
+2026-11-06T08:59:36.8544048Z   repository: sultanxgokce/Sx-Claude-Skills
+2026-11-06T08:59:36.8547961Z   token: ***
+2026-11-06T08:59:36.8548409Z   ssh-strict: true
+2026-11-06T08:59:36.8548856Z   ssh-user: git
+2026-11-06T08:59:36.8549316Z   persist-credentials: true
+2026-11-06T08:59:36.8549826Z   clean: true
+2026-11-06T08:59:36.8550284Z   sparse-checkout-cone-mode: true
+2026-11-06T08:59:36.8550817Z   fetch-depth: 1
+2026-11-06T08:59:36.8551260Z   fetch-tags: false
+2026-11-06T08:59:36.8551714Z   show-progress: true
+2026-11-06T08:59:36.8552167Z   lfs: false
+2026-11-06T08:59:36.8552574Z   submodules: false
+2026-11-06T08:59:36.8553024Z   set-safe-directory: true
+2026-11-06T08:59:36.8553532Z   allow-unsafe-pr-checkout: false
+2026-11-06T08:59:36.8554302Z ##[endgroup]
+2026-11-06T08:59:37.0971943Z Syncing repository: sultanxgokce/Sx-Claude-Skills
+2026-11-06T08:59:37.0973891Z ##[group]Getting Git version info
+2026-11-06T08:59:37.0975386Z Working directory is '/home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills'
+2026-11-06T08:59:37.0977908Z [command]/usr/bin/git version
+2026-11-06T08:59:37.1051080Z git version 2.56.0
+2026-11-06T08:59:37.1072474Z ##[endgroup]
+2026-11-06T08:59:37.1088570Z Temporarily overriding HOME='/home/runner/work/_temp/ffe2616b-ca5e-45db-8f2c-5e5650881f33' before making global git config changes
+2026-11-06T08:59:37.1094545Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-06T08:59:37.1097042Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills
+2026-11-06T08:59:37.1143818Z Deleting the contents of '/home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills'
+2026-11-06T08:59:37.1148790Z ##[group]Initializing the repository
+2026-11-06T08:59:37.1152385Z [command]/usr/bin/git init /home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills
+2026-11-06T08:59:37.1253451Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-06T08:59:37.1255291Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-06T08:59:37.1256979Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-06T08:59:37.1258046Z hint: call:
+2026-11-06T08:59:37.1258592Z hint:
+2026-11-06T08:59:37.1259362Z hint: 	git config --global init.defaultBranch <name>
+2026-11-06T08:59:37.1260195Z hint:
+2026-11-06T08:59:37.1261074Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-06T08:59:37.1262393Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-06T08:59:37.1263996Z hint:
+2026-11-06T08:59:37.1264566Z hint: 	git branch -m <name>
+2026-11-06T08:59:37.1265526Z hint:
+2026-11-06T08:59:37.1266946Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-06T08:59:37.1268690Z Initialized empty Git repository in /home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills/.git/
+2026-11-06T08:59:37.1273511Z [command]/usr/bin/git remote add origin https://github.com/sultanxgokce/Sx-Claude-Skills
+2026-11-06T08:59:37.1316387Z ##[endgroup]
+2026-11-06T08:59:37.1317253Z ##[group]Disabling automatic garbage collection
+2026-11-06T08:59:37.1320533Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-06T08:59:37.1352451Z ##[endgroup]
+2026-11-06T08:59:37.1353181Z ##[group]Setting up auth
+2026-11-06T08:59:37.1359528Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-06T08:59:37.1395226Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-06T08:59:37.1727623Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-06T08:59:37.1761779Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-06T08:59:37.1992490Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-06T08:59:37.2028529Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-06T08:59:37.2257379Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-06T08:59:37.2295283Z ##[endgroup]
+2026-11-06T08:59:37.2297132Z ##[group]Fetching the repository
+2026-11-06T08:59:37.2308427Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e620f9c3575c8fa7658ee60df59b3a0fe28d7af4:refs/remotes/pull/713/merge
+2026-11-06T08:59:38.4023718Z From https://github.com/sultanxgokce/Sx-Claude-Skills
+2026-11-06T08:59:38.4047572Z  * [new ref]         e620f9c3575c8fa7658ee60df59b3a0fe28d7af4 -> pull/713/merge
+2026-11-06T08:59:38.4060833Z ##[endgroup]
+2026-11-06T08:59:38.4062893Z ##[group]Determining the checkout info
+2026-11-06T08:59:38.4065068Z ##[endgroup]
+2026-11-06T08:59:38.4067083Z [command]/usr/bin/git sparse-checkout disable
+2026-11-06T08:59:38.4106091Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-06T08:59:38.4138869Z ##[group]Checking out the ref
+2026-11-06T08:59:38.4142991Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/713/merge
+2026-11-06T08:59:38.7225899Z Note: switching to 'refs/remotes/pull/713/merge'.
+2026-11-06T08:59:38.7226782Z 
+2026-11-06T08:59:38.7227426Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-06T08:59:38.7228974Z changes and commit them, and you can discard any commits you make in this
+2026-11-06T08:59:38.7230381Z state without impacting any branches by switching back to a branch.
+2026-11-06T08:59:38.7231291Z 
+2026-11-06T08:59:38.7231921Z If you want to create a new branch to retain commits you create, you may
+2026-11-06T08:59:38.7233367Z do so (now or later) by using -c with the switch command. Example:
+2026-11-06T08:59:38.7234583Z 
+2026-11-06T08:59:38.7234948Z   git switch -c <new-branch-name>
+2026-11-06T08:59:38.7235536Z 
+2026-11-06T08:59:38.7236083Z Or undo this operation with:
+2026-11-06T08:59:38.7236522Z 
+2026-11-06T08:59:38.7236774Z   git switch -
+2026-11-06T08:59:38.7237136Z 
+2026-11-06T08:59:38.7237640Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-06T08:59:38.7238406Z 
+2026-11-06T08:59:38.7239223Z HEAD is now at e620f9c Merge a0eb3390935c8cf3b961742a6dce65dac4846eb9 into d9da0138dd8b5e6dfefa8bae2435fd23ce7029cf
+2026-11-06T08:59:38.7243826Z ##[endgroup]
+2026-11-06T08:59:38.7291200Z [command]/usr/bin/git log -1 --format=%H
+2026-11-06T08:59:38.7318601Z e620f9c3575c8fa7658ee60df59b3a0fe28d7af4
+2026-11-06T08:59:38.7636526Z ##[group]Run actions/cache@v4
+2026-11-06T08:59:38.7636931Z with:
+2026-11-06T08:59:38.7637322Z   path: ~/.cache/ms-playwright
+/home/runner/work/_temp/pw
+
+2026-11-06T08:59:38.7637849Z   key: playwright-1.59.1-chromium-headless-shell-Linux
+2026-11-06T08:59:38.7638323Z   enableCrossOsArchive: false
+2026-11-06T08:59:38.7638689Z   fail-on-cache-miss: false
+2026-11-06T08:59:38.7639025Z   lookup-only: false
+2026-11-06T08:59:38.7639342Z   save-always: false
+2026-11-06T08:59:38.7639639Z ##[endgroup]
+2026-11-06T08:59:38.8824815Z (node:2286) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-06T08:59:38.8826309Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-06T08:59:39.1466483Z Cache hit for: playwright-1.59.1-chromium-headless-shell-Linux
+2026-11-06T08:59:39.1567876Z (node:2286) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-06T08:59:40.4322446Z Received 16777216 of 107774168 (15.6%), 16.0 MBs/sec
+2026-11-06T08:59:41.1810264Z Received 107774168 of 107774168 (100.0%), 58.8 MBs/sec
+2026-11-06T08:59:41.1814009Z Cache Size: ~103 MB (107774168 B)
+2026-11-06T08:59:41.1929885Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d44d3720-588e-49f5-99d7-73b3409c8bab/cache.tzst -P -C /home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills --use-compress-program unzstd
+2026-11-06T08:59:41.7263425Z Cache restored successfully
+2026-11-06T08:59:41.8822463Z Cache restored from key: playwright-1.59.1-chromium-headless-shell-Linux
+2026-11-06T08:59:41.9051724Z ##[group]Run set -uo pipefail
+2026-11-06T08:59:41.9052114Z set -uo pipefail
+2026-11-06T08:59:41.9052424Z PW="${RUNNER_TEMP}/pw"; mkdir -p "$PW"
+2026-11-06T08:59:41.9053159Z [ -f "$PW/node_modules/playwright-core/package.json" ] || (cd "$PW" && npm init -y >/dev/null && npm i playwright-core@1.59.1 --no-audit --no-fund)
+2026-11-06T08:59:41.9054031Z CH="$(find "$HOME/.cache/ms-playwright" -name chrome-headless-shell -type f 2>/dev/null | head -1 || true)"
+2026-11-06T08:59:41.9054585Z if [ -z "$CH" ]; then
+2026-11-06T08:59:41.9054847Z   for n in 1 2; do
+2026-11-06T08:59:41.9055316Z     (cd "$PW" && timeout 240 npx playwright-core install --with-deps chromium-headless-shell) && break
+2026-11-06T08:59:41.9056259Z     echo "::warning::tarayıcı kurulumu $n. deneme başarısız/zaman aşımı"
+2026-11-06T08:59:41.9056685Z   done
+2026-11-06T08:59:41.9057196Z   CH="$(find "$HOME/.cache/ms-playwright" -name chrome-headless-shell -type f 2>/dev/null | head -1 || true)"
+2026-11-06T08:59:41.9057708Z fi
+2026-11-06T08:59:41.9058015Z [ -x "$CH" ] || { echo "::error::headless Chromium kurulamadı"; exit 1; }
+2026-11-06T08:59:41.9058654Z echo "DUMEN_CHROME=$CH" >> "$GITHUB_ENV"; echo "DUMEN_PLAYWRIGHT=$PW/node_modules/playwright-core" >> "$GITHUB_ENV"
+2026-11-06T08:59:41.9059266Z echo "tarayıcı hazır: $("$CH" --version 2>&1 | head -1)"
+2026-11-06T08:59:41.9082700Z shell: /usr/bin/bash -e {0}
+2026-11-06T08:59:41.9083225Z ##[endgroup]
+2026-11-06T08:59:42.0778351Z tarayıcı hazır: Google Chrome for Testing 147.0.7727.15
+2026-11-06T08:59:42.0837232Z ##[group]Run bash .github/ci/kabuk-sinamalari.sh "dumen"
+2026-11-06T08:59:42.0837671Z bash .github/ci/kabuk-sinamalari.sh "dumen"
+2026-11-06T08:59:42.0856789Z shell: /usr/bin/bash -e {0}
+2026-11-06T08:59:42.0857083Z env:
+2026-11-06T08:59:42.0857635Z   DUMEN_CHROME: /home/runner/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell
+2026-11-06T08:59:42.0858397Z   DUMEN_PLAYWRIGHT: /home/runner/work/_temp/pw/node_modules/playwright-core
+2026-11-06T08:59:42.0858842Z   KABUK_PARALEL: 1
+2026-11-06T08:59:42.0859062Z ##[endgroup]
+2026-11-06T08:59:42.2129621Z kova=dumen · toplam sınama 201 · bu kovada 3 · koşan 3 · atlanan 0 · paralel 1
+2026-11-06T09:14:26.2256480Z ##[group]── ./dumen-surucu/scripts/dumen-dosya.test.sh
+2026-11-06T09:14:26.2279100Z ── izinli dizin verilmeden dosya işi YOK (fail-closed)
+2026-11-06T09:14:26.2280187Z   ✓ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+2026-11-06T09:14:26.2281243Z   ✓ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+2026-11-06T09:14:26.2282049Z ── yukle: onay + dosya kapıları
+2026-11-06T09:14:26.2282839Z   ✓ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+2026-11-06T09:14:26.2283582Z   ✓ Y2 dünkü onay reddedilir (onay-bayat)
+2026-11-06T09:14:26.2284386Z   ✓ Y3 BAŞKA dosya için verilmiş onay reddedilir (onay-dosya)
+2026-11-06T09:14:26.2285315Z   ✓ Y4 izinli dizin dışındaki dosya reddedilir (dosya-izinsiz)
+2026-11-06T09:14:26.2286689Z   ✓ Y5 izinli dizindeki BAĞ dışarıyı gösteriyorsa reddedilir (dosya-izinsiz)
+2026-11-06T09:14:26.2287751Z   ✓ Y6 sır taşıyabilecek yol reddedilir (dosya-yasak)
+2026-11-06T09:14:26.2288466Z   ✓ Y7 izinli olmayan tür reddedilir (dosya-turu)
+2026-11-06T09:14:26.2289203Z   ✓ Y8 reddedilen yüklemelerin hiçbiri alana dosya koymadı
+2026-11-06T09:14:26.2290119Z   ✓ Y9 onaylı yükleme: GİZLİ dosya alanına ad, boyut ve içerik birebir ulaştı
+2026-11-06T09:14:26.2291268Z   ✓ Y10 terminal satırı dosya ADINI taşımaz (müşteri verisi), "gönderme ayrı" der
+2026-11-06T09:14:26.2292253Z   ✓ Y11 dosya penceresi açan düğme ({ secici: true }): dosya seçildi
+2026-11-06T09:14:26.2293244Z   ✓ Y12 dosya penceresi açmayan düğmede asılmaz (yukleme-penceresi-yok)
+2026-11-06T09:14:26.2294061Z   ✓ Y13 Dümen Sultan'dayken yükleme YOK (sultanda)
+2026-11-06T09:14:26.2294763Z   ✓ Y14 Dümen Sultan'dayken indirme YOK (sultanda), tıklama yapılmadı
+2026-11-06T09:14:26.2295209Z ── indir: baytlar tarayıcının içinden alınır
+2026-11-06T09:14:26.2295666Z   ✓ I1 indirme başlatan tıklama: dosya birebir yazıldı (kaynak indirme)
+2026-11-06T09:14:26.2296512Z   ✓ I2 terminal satırı sunucunun önerdiği dosya adını taşımaz
+2026-11-06T09:14:26.2297048Z   ✓ I3 dosyayı YENİ SEKMEDE açan tıklama: dosya birebir yazıldı (kaynak yeni-sekme)
+2026-11-06T09:14:26.2297588Z   ✓ I4 kendi tıklamasının açtığı sekme KAPATILDI (sekme sayısı aynı)
+2026-11-06T09:14:26.2298146Z   ✓ I5 "Fatura Görüntüle" (yeni sekme + PDF): dosya birebir yazıldı, artık sekme yok
+2026-11-06T09:14:26.2298742Z   ✓ I6 BAŞKA kökenden indirme (sayfa içi okuma engelli): tarayıcının ağ yığınıyla alındı
+2026-11-06T09:14:26.2299257Z   ✓ I7 ne indirme ne sekme açan tıklama ASILMAZ (indirme-yok)
+2026-11-06T09:14:26.2299777Z   ✓ I8 dosya yerine GİRİŞ SAYFASI gelirse dosya sayılmaz, diske yazılmaz (indirme-sayfa)
+2026-11-06T09:14:26.2300285Z   ✓ I9 uzantısıyla uyuşmayan içerik yazılmaz (indirme-tur)
+2026-11-06T09:14:26.2300741Z   ✓ I10 hedef izinli dizin dışındaysa tıklama YAPILMAZ (dosya-izinsiz)
+2026-11-06T09:14:26.2301198Z   ✓ I11 var olan dosya kendiliğinden ezilmez (dosya-var)
+2026-11-06T09:14:26.2301549Z   ✓ I12 { ustuneYaz: true } ile ezilir
+2026-11-06T09:14:26.2301951Z   ✓ I13 indirAdres: adresi bilinen dosya tarayıcının oturumuyla alındı
+2026-11-06T09:14:26.2302400Z   ✓ I14 indirAdres yalnız http(s) alır (file: reddedilir)
+2026-11-06T09:14:26.2302742Z ── yeni sekme adresi
+2026-11-06T09:14:26.2303322Z   ✓ S1 yeniSekmeAdresi: açılan sekmenin adresi döndü, sekme kapatıldı
+2026-11-06T09:14:26.2304388Z   ✓ S2 yeni sekme açmayan tıklama asılmaz (sekme-yok)
+2026-11-06T09:14:26.2304868Z ── sayfaya gömülü dosya (blob: · sayfa içi fatura penceresi)
+2026-11-06T09:14:26.2305484Z   ✓ B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı
+2026-11-06T09:14:26.2306339Z   ✓ B2 blob: PDF penceresi: bayt birebir
+2026-11-06T09:14:26.2306845Z   ✓ B3 pencere ZATEN açıkken yeni bir şey açmayan tıklama eski dosyayı almaz (indirme-yok)
+2026-11-06T09:14:26.2307527Z   ✓ B4 indirGomulu: açık duran penceredeki dosya tıklamadan alındı
+2026-11-06T09:14:26.2307959Z   ✓ B5 indirAdres bu sayfanın blob: adresini alır
+2026-11-06T09:14:26.2308482Z   ✓ B6 pencerede dosya yerine GİRİŞ SAYFASI varsa dosya sayılmaz, yazılmaz (indirme-sayfa)
+2026-11-06T09:14:26.2309065Z   ✓ B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)
+2026-11-06T09:14:26.2309612Z   ✓ B8 başka sayfanın blob: adresi okunamaz, dosya yazılmaz (indirme-okunamadi)
+2026-11-06T09:14:26.2310079Z ── öğe durumu ve bekleme (salt-okur)
+2026-11-06T09:14:26.2310512Z   ✓ O1 gizli eşi olan seçici: 2 eşleşme, 1 görünür, ilk görünürün sırası 1
+2026-11-06T09:14:26.2311008Z   ✓ O2 pasif mesaj kutusu boşa yazmadan görülür (etkin: false)
+2026-11-06T09:14:26.2311401Z   ✓ O3 olmayan öğe: sayı 0, görünür değil
+2026-11-06T09:14:26.2311809Z   ✓ O4 bekle: görünen öğe true, olmayan öğe süre dolunca false (atmaz)
+2026-11-06T09:14:26.2312169Z ── engel kapatma
+2026-11-06T09:14:26.2312475Z   ✓ E0 çerez KABUL etmek onaysız reddedilir (onay-yok)
+2026-11-06T09:14:26.2312891Z   ✓ E1 cerez: dokunma → çerez şeridi yerinde, tur kapatıldı
+2026-11-06T09:14:26.2313338Z   ✓ E2 varsayılan: çerez şeridi REDDEDİLDİ (Kabul Et'e basılmadı)
+2026-11-06T09:14:26.2313799Z   ✓ E3 çerez kutusu DIŞINDAKİ "Reddet" (iade talebi) TIKLANMADI
+2026-11-06T09:14:26.2314252Z   ✓ E4 anket çerçevesi ve ek katman gizlendi, rapor sayıyı verdi
+2026-11-06T09:14:26.2314723Z   ✓ E5 ödeme sayfasında engel kapatılmaz (durak), çerez şeridi yerinde
+2026-11-06T09:14:26.2315151Z ── sert süre sınırı ve kapat garantisi
+2026-11-06T09:14:26.2315604Z   ✓ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)
+2026-11-06T09:14:26.2316457Z   ✓ Z2 süre aşımı iletisi "hâli bilinmiyor, ölç" der (körlemesine yineleme yok)
+2026-11-06T09:14:26.2317036Z   ✓ Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)
+2026-11-06T09:14:26.2317659Z   ✓ Z1c pozitif kontrol: bağlantı geri geldi, örtü kalkınca aynı düğme tıklanır ve sayılır
+2026-11-06T09:14:26.2318324Z   ✓ Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içinde hata)
+2026-11-06T09:14:26.2318818Z   ✓ Z4 tıklama yeni sekme açtı (ön koşul)
+2026-11-06T09:14:26.2319253Z   ✓ Z5 kapat(): kendi sekmesi VE kendi tıklamasının açtığı sekme kapandı
+2026-11-06T09:14:26.2319797Z   ✓ Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı
+2026-11-06T09:14:26.2320292Z   ✓ Z7 Dumen.kos: iş asılırsa toplam süre sınırında kesilir, sekme kapanır
+2026-11-06T09:14:26.2320962Z   ✓ Z7b süresi dolup KAPATILAN bağlantı sonradan yeniden bağlanıp tıklamaz (tık yok, artık sekme yok)
+2026-11-06T09:14:26.2321688Z   ✓ Z2b sert tavan KAPI DAHİLDİR: yavaş kapı (2,5 sn) + asılı eylem toplamı 4 sn tavanında kesilir (≤ 5,3 sn)
+2026-11-06T09:14:26.2322282Z   ✓ Z8 Dumen.kos: işin sonucu döner, sekme kapanır
+2026-11-06T09:14:26.2323391Z   ✓ Z9 olmayan öğede kapı ASILMAZ: durma noktası ölçümü kendi kısa süresiyle biter (eylem süresi 9 sn iken ≤ 5 sn)
+2026-11-06T09:14:26.2324052Z SONUÇ: geçti=63 kaldı=0 süre=41 sn
+2026-11-06T09:14:26.2324369Z ── mutantlar (her biri sınavı KIRMALI)
+2026-11-06T09:14:26.2324900Z   ✓ 1 yükleme onayı aranmaz: yakalandı —   ✗ Y1 onaysız yükleme reddedilir (onay-yok), alan boş kalır
+2026-11-06T09:14:26.2325523Z   ✓ 2 onay tarihi ölçülmez: yakalandı —   ✗ Y2 dünkü onay reddedilir (onay-bayat)
+2026-11-06T09:14:26.2326640Z   ✓ 3 onay dosya izi ölçülmez (başka dosyanın onayı geçer): yakalandı —   ✗ Y3 BAŞKA dosya için verilmiş onay reddedilir (onay-dosya)
+2026-11-06T09:14:26.2327961Z   ✓ 4 yüklenen dosya izinli dizinde aranmaz: yakalandı —   ✗ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+2026-11-06T09:14:26.2329269Z   ✓ 5 bağ çözülmeden kabul edilir: yakalandı —   ✗ Y5 izinli dizindeki BAĞ dışarıyı gösteriyorsa reddedilir (dosya-izinsiz)
+2026-11-06T09:14:26.2330666Z   ✓ 6 sır taşıyabilecek yol yüklenir: yakalandı —   ✗ Y6 sır taşıyabilecek yol reddedilir (dosya-yasak)
+2026-11-06T09:14:26.2331805Z   ✓ 7 izinli dizin verilmese de dosya işi yürür: yakalandı —   ✗ F1 yukle: izinli dizin verilmediyse reddedilir (dosya-kok-yok)
+2026-11-06T09:14:26.2332691Z   ✓ 8 indirme hedefi izinli dizinde aranmaz: yakalandı —   ✗ F2 indir: izinli dizin verilmediyse reddedilir, tıklama YAPILMAZ
+2026-11-06T09:14:26.2333488Z   ✓ 9 var olan dosya sormadan ezilir: yakalandı —   ✗ I11 var olan dosya kendiliğinden ezilmez (dosya-var)
+2026-11-06T09:14:26.2334418Z   ✓ 10 dosya yerine gelen giriş sayfası dosya sayılır: yakalandı —   ✗ I8 dosya yerine GİRİŞ SAYFASI gelirse dosya sayılmaz, diske yazılmaz (indirme-sayfa)
+2026-11-06T09:14:26.2335405Z   ✓ 11 indirilen içeriğin türü ölçülmez: yakalandı —   ✗ I9 uzantısıyla uyuşmayan içerik yazılmaz (indirme-tur)
+2026-11-06T09:14:26.2336653Z   ✓ 12 başka kökenden indirmede yedek yol yok: yakalandı —   ✗ I6 BAŞKA kökenden indirme (sayfa içi okuma engelli): tarayıcının ağ yığınıyla alındı  → {
+2026-11-06T09:14:26.2337622Z   ✓ 13 indirmenin açtığı sekme açık kalır: yakalandı —   ✗ I4 kendi tıklamasının açtığı sekme KAPATILDI (sekme sayısı aynı)  → 3 ≠ 2
+2026-11-06T09:14:26.2338682Z   ✓ 14 çerez kutusu aranmaz (sayfadaki her Reddet tıklanır): yakalandı —   ✗ E2 varsayılan: çerez şeridi REDDEDİLDİ (Kabul Et'e basılmadı)  → {"escape":3,"tiklanan":["Redde
+2026-11-06T09:14:26.2339601Z   ✓ 15 çerez kabulü onaysız geçer: yakalandı —   ✗ E0 çerez KABUL etmek onaysız reddedilir (onay-yok)
+2026-11-06T09:14:26.2340369Z   ✓ 16 ödeme sayfasında engel kapatılır: yakalandı —   ✗ E5 ödeme sayfasında engel kapatılmaz (durak), çerez şeridi yerinde
+2026-11-06T09:14:26.2341269Z   ✓ 17 sert süre sınırı yok: yakalandı —   ✗ Z1 örtülü düğmede tıklama sert süre sınırında KESİLİR (zaman-asimi, ≤ 3 sn)  → dumen-kap
+2026-11-06T09:14:26.2342770Z   ✓ 18 eylemler süresiz bekler: yakalandı —   ✗ Z3 süre verilmese de tıklama SÜRESİZ değil (bağlantının eylem süresi 2,5 sn → ≤ 6 sn içind
+2026-11-06T09:14:26.2344557Z   ✓ 19 kapat() tıklamanın açtığı sekmeyi bırakır: yakalandı —   ✗ Z5 kapat(): kendi sekmesi VE kendi tıklamasının açtığı sekme kapandı  → 2 ≠ 1
+2026-11-06T09:14:26.2346064Z   ✓ 20 kos() iş bitince kapatmaz: yakalandı —   ✗ Z6 Dumen.kos: iş hata verse de sekme kapandı, hata çağırana ulaştı  → 2 ≠ 1
+2026-11-06T09:14:26.2347232Z   ✓ 21 dosya yolu terminale yazılır: yakalandı —   ✗ Y10 terminal satırı dosya ADINI taşımaz (müşteri verisi), "gönderme ayrı" der  → ⬆ Dümen: d
+2026-11-06T09:14:26.2348393Z   ✓ 22 durma noktası ölçümünün süresi uygulanmaz (olmayan öğede kapı asılır): yakalandı —   ✗ Z9 olmayan öğede kapı ASILMAZ: durma noktası ölçümü kendi kısa süresiyle biter (eylem süresi 
+2026-11-06T09:14:26.2349712Z   ✓ 23 süre dolunca eylem kesilmez (yarım tıklama sonradan gerçekleşir): yakalandı —   ✗ Z1b süre aşımından SONRA yarım kalan tıklama GERÇEKLEŞMEDİ (eylem gerçekten kesildi)  → tık
+2026-11-06T09:14:26.2350929Z   ✓ 24 kapı ve eylem ayrı ayrı tam süre alır (tavan iki katına çıkar): yakalandı —   ✗ Z2b sert tavan KAPI DAHİLDİR: yavaş kapı (2,5 sn) + asılı eylem toplamı 4 sn tavanında kesilir (
+2026-11-06T09:14:26.2352095Z   ✓ 25 kapatılan Dümen yeniden bağlanıp eylem yapar: yakalandı —   ✗ Z7b süresi dolup KAPATILAN bağlantı sonradan yeniden bağlanıp tıklamaz (tık yok, artık sekme yok
+2026-11-06T09:14:26.2353037Z   ✓ 26 bağlantı düşmüşken kendi sekmesi açık kalır: yakalandı —   ✗ Z8 Dumen.kos: işin sonucu döner, sekme kapanır
+2026-11-06T09:14:26.2354441Z   ✓ 27 sayfaya gömülü dosya aranmaz (blob: fatura penceresi indirme-yok döner): yakalandı —   ✗ B1 sayfa içi pencerede (blob:) açılan dosya indirildi: bayt birebir, kaynak gomulu, sekme açılmadı
+2026-11-06T09:14:26.2357403Z   ✓ 28 tıklamadan önce açık duran pencere yeni sayılır (eski dosya alınır): yakalandı —   ✗ B2 blob: PDF penceresi: bayt birebir  → {"hata":"indirme-tur"}
+2026-11-06T09:14:26.2358441Z   ✓ 29 indirAdres blob: adresini almaz: yakalandı —   ✗ B5 indirAdres bu sayfanın blob: adresini alır  → blob:http://127.0.0.
+2026-11-06T09:14:26.2359393Z   ✓ 30 indirGomulu öğedeki adresin türüne bakmaz: yakalandı —   ✗ B7 indirGomulu dosya adresi taşımayan öğeyi reddeder (indirme-yok)
+2026-11-06T09:14:26.2359971Z MUTANT: 30/30 yakalandı
+2026-11-06T09:14:26.2360472Z ##[endgroup]
+2026-11-06T09:14:26.2360829Z    ✓ ./dumen-surucu/scripts/dumen-dosya.test.sh (501135 ms)
+2026-11-06T09:14:26.2361457Z ##[group]── ./dumen-surucu/scripts/dumen-yazdir.test.sh
+2026-11-06T09:14:26.2365401Z ── yazdirYakala: ana sayfa
+2026-11-06T09:14:26.2366264Z ⬇ Dümen: dosya alındı (.pdf, 21959 bayt)
+2026-11-06T09:14:26.2367023Z   ✓ Y1 ana sayfanın yazdırması PDF olarak yazıldı (%PDF, gerçek sayfa boyutu), pencere açılmadı
+2026-11-06T09:14:26.2368314Z   ✓ Y2 yakalamadan sonra window.print eski (doğal) haline döndü, yama kalıntısı yok
+2026-11-06T09:14:26.2369176Z ── yazdirYakala: gecikmeli · alt belge
+2026-11-06T09:14:26.2369740Z ⬇ Dümen: dosya alındı (.pdf, 23161 bayt)
+2026-11-06T09:14:26.2370340Z   ✓ Y3 800 ms sonra gelen yazdırma da yakalanır
+2026-11-06T09:14:26.2370927Z ⬇ Dümen: dosya alındı (.pdf, 12495 bayt)
+2026-11-06T09:14:26.2371469Z   ✓ Y4 alt belgenin (iframe) yazdırması PDF olarak yazıldı, sekme sayısı değişmedi
+2026-11-06T09:14:26.2372158Z   ✓ Y4b alt belge CANLI haliyle basıldı (kendi betiği ve bellekteki form değeri yazdırma anında yerinde)
+2026-11-06T09:14:26.2372803Z   ✓ Y4c alt belge basıldıktan sonra ana sayfada gizleme işaretleri ve stil kalmadı
+2026-11-06T09:14:26.2373229Z ── yazdirYakala: kapılar
+2026-11-06T09:14:26.2373599Z   ✓ Y6 yazdırma çağrılmazsa yazdirma-yok (asılmaz), dosya yazılmaz
+2026-11-06T09:14:26.2374076Z   ✓ Y7 .pdf olmayan hedef reddedilir (dosya-turu), tıklama yapılmaz
+2026-11-06T09:14:26.2374524Z   ✓ Y8 izinli dizin dışına yazılmaz (dosya-izinsiz)
+2026-11-06T09:14:26.2374895Z ⬇ Dümen: dosya alındı (.pdf, 27607 bayt)
+2026-11-06T09:14:26.2375309Z   ✓ Y9 var olan dosya sormadan ezilmez (dosya-var), ustuneYaz ile ezilir
+2026-11-06T09:14:26.2376076Z ⬇ Dümen: dosya alındı (.pdf, 27677 bayt)
+2026-11-06T09:14:26.2376567Z   ✓ Y10 art arda ikinci yakalama da çalışır (yama kalıntısı yok)
+2026-11-06T09:14:26.2377310Z Dümen bulgu hatırlatması: gördüğün hata ya da geliştirme önerisini yazdın mı? → bash /config/.claude/skills/bulgu/scripts/bulgu.sh yaz …
+2026-11-06T09:14:26.2377919Z SONUÇ: geçti=11 kaldı=0 süre=7 sn
+2026-11-06T09:14:26.2378226Z ── mutantlar (her biri sınavı KIRMALI)
+2026-11-06T09:14:26.2398510Z   ✓ 1 window.print yamalanmaz (yazdırma sayılmaz): yakalandı —   ✗ Y1 ana sayfanın yazdırması PDF olarak yazıldı (%PDF, gerçek sayfa boyutu), pencere açılmadı  �
+2026-11-06T09:14:26.2400408Z   ✓ 2 yama bitince geri konmaz: yakalandı —   ✗ Y2 yakalamadan sonra window.print eski (doğal) haline döndü, yama kalıntısı yok  → yamali
+2026-11-06T09:14:26.2401955Z   ✓ 3 yazdırma çağrılmasa da PDF yazılmaya çalışılır: yakalandı —   ✗ Y6 yazdırma çağrılmazsa yazdirma-yok (asılmaz), dosya yazılmaz
+2026-11-06T09:14:26.2402904Z   ✓ 4 alt belge yerine hep ana sayfa basılır: yakalandı —   ✗ Y4 alt belgenin (iframe) yazdırması PDF olarak yazıldı, sekme sayısı değişmedi
+2026-11-06T09:14:26.2404008Z   ✓ 5 alt belgeyi basınca ana sayfaya konan gizleme işaretleri silinmez: yakalandı —   ✗ Y4c alt belge basıldıktan sonra ana sayfada gizleme işaretleri ve stil kalmadı  → 1
+2026-11-06T09:14:26.2405026Z   ✓ 6 var olan dosya sormadan ezilir: yakalandı —   ✗ Y9 var olan dosya sormadan ezilmez (dosya-var), ustuneYaz ile ezilir
+2026-11-06T09:14:26.2406164Z   ✓ 7 hedef izinli dizinde aranmaz: yakalandı —   ✗ Y8 izinli dizin dışına yazılmaz (dosya-izinsiz)
+2026-11-06T09:14:26.2407019Z   ✓ 8 hedefin türü ölçülmez (.pdf dışı yazılır): yakalandı —   ✗ Y7 .pdf olmayan hedef reddedilir (dosya-turu), tıklama yapılmaz
+2026-11-06T09:14:26.2407732Z MUTANT: 8/8 yakalandı
+2026-11-06T09:14:26.2408468Z ##[endgroup]
+2026-11-06T09:14:26.2408956Z    ✓ ./dumen-surucu/scripts/dumen-yazdir.test.sh (77465 ms)
+2026-11-06T09:14:26.2428003Z ##[group]── ./dumen-surucu/scripts/dumen.test.sh
+2026-11-06T09:14:26.2449876Z ── mod ajan
+2026-11-06T09:14:26.2450365Z   ✓ D1 mod ajan: metin alanı dolduruldu
+2026-11-06T09:14:26.2451009Z   ✓ D2 tarih ve seçim eylemleri sonuç verdi
+2026-11-06T09:14:26.2451982Z   ✓ D3 metin dışı alan değişimi dinleyiciyle YAKALANDI ve ajan eylemiyle eşleşti (isTrusted=false)
+2026-11-06T09:14:26.2452944Z   ✓ D4 yabancı (eylem penceresi dışı) olay yok
+2026-11-06T09:14:26.2453787Z   ✓ D3b fill(tarih) ve selectOption "köprüde GÖRÜNMEZ" uyarısı bastı (2 eylem)
+2026-11-06T09:14:26.2454534Z   ✓ D3c uyarı terminale de yazıldı
+2026-11-06T09:14:26.2455266Z   ✓ D3d metin alanı fill'i (Input.insertText, köprü görür) uyarı ÜRETMEDİ
+2026-11-06T09:14:26.2456283Z   ✓ D3e uyarı alan DEĞERİNİ taşımaz
+2026-11-06T09:14:26.2457120Z   ✓ D3f görünmez eylem uyarısı MERKEZE gitti (2 eylem × kod+sayı), jeton başlığıyla
+2026-11-06T09:14:26.2457870Z   ✓ D3g merkeze yalnız {kod, n} gitti — hedef/değer/adres/çerez YOK
+2026-11-06T09:14:26.2458275Z ── sayfa sahte olay üretir → yabancı
+2026-11-06T09:14:26.2458679Z   ✓ D5 sayfanın kendi olayı YABANCI sayıldı (insan ya da sayfa)
+2026-11-06T09:14:26.2459296Z   ✓ D5c eylem dışı uyarı KENDİLİĞİNDEN terminale yazıldı (sonraki kapı/uyarilar() çağrısı beklenmeden)
+2026-11-06T09:14:26.2459914Z   ✓ D5f eylem dışı değişiklik uyarısı MERKEZE gitti (kod yabanci-olay, n=1)
+2026-11-06T09:14:26.2460514Z   ✓ D5g merkez uyarı ucu 500 verirse eylem YİNE yapıldı, terminale "İLETİLEMEDİ" yazıldı
+2026-11-06T09:14:26.2461323Z   ✓ D5h kutu jetonu okunamazsa uyarı JETONSUZ GÖNDERİLMEZ (merkeze istek yok), eylem sürer, terminale "kutu jetonu okunamadı" yazılır
+2026-11-06T09:14:26.2461944Z   ✓ D5b eylem dışı değişiklik UYARI üretti
+2026-11-06T09:14:26.2462261Z   ✓ D5d aynı olay ikinci kez uyarmaz
+2026-11-06T09:14:26.2462728Z ── click sırasında sayfanın sentetik olayı "köprüde görünmez eylem" SAYILMAZ
+2026-11-06T09:14:26.2463316Z   ✓ D5e click sırasındaki sentetik olay görülemeyen-eylem UYARISI üretmedi
+2026-11-06T09:14:26.2463971Z ── mod sultan
+2026-11-06T09:14:26.2464237Z   ✓ D6 mod sultan: eylem REDDEDİLDİ
+2026-11-06T09:14:26.2464695Z   ✓ D7 mod sultan: alan DEĞİŞMEDİ
+2026-11-06T09:14:26.2465281Z   ✓ D8 bekleme satırı terminale yazıldı
+2026-11-06T09:14:26.2466090Z ── merkez cevapsız → fail-closed
+2026-11-06T09:14:26.2466732Z   ✓ D9 merkez cevapsız: eylem REDDEDİLDİ (fail-closed)
+2026-11-06T09:14:26.2467581Z   ✓ D10 merkez cevapsız: alan DEĞİŞMEDİ (DEGISMEZ2 yazılmadı)
+2026-11-06T09:14:26.2468036Z ── durma noktaları
+2026-11-06T09:14:26.2468339Z   ✓ D11 parola alanı: eylem YAPILMADI, durak=sifre
+2026-11-06T09:14:26.2468771Z   ✓ D12 ad=otp alanı: durak=sms/sifre bildirildi, değer yazılmadı
+2026-11-06T09:14:26.2469225Z   ✓ D13 merkeze yalnız NEDEN gitti (değer/adres/çerez yok)
+2026-11-06T09:14:26.2469661Z   ✓ D14 ödeme sayfasında "Öde" tıklaması durdu, durak=odeme
+2026-11-06T09:14:26.2470536Z   ✓ D17 ham nesneler DIŞARIYA AÇIK DEĞİL (d.page/d.cdp/d.tarayici/d.merkez yok)
+2026-11-06T09:14:26.2471158Z   ✓ D18 durak ucu 500 verirse eylem yine YAPILMAZ ama bildirildi=false ve satır UYARIR
+2026-11-06T09:14:26.2471748Z   ✓ D15 ödeme sayfasında zararsız düğme tıklaması GEÇTİ (aşırı engelleme yok)
+2026-11-06T09:14:26.2472319Z   ✓ D16 parola alanı değişimi KAYDEDİLDİ ama DEĞER yok (<gizli>)
+2026-11-06T09:14:26.2472846Z ── durak bildirimi jeton başlığı
+2026-11-06T09:14:26.2473249Z   ✓ D19 durak bildirimi x-defter-jeton başlığıyla gitti (her istek)
+2026-11-06T09:14:26.2473671Z   ✓ D20 jeton değeri günlük satırlarında YOK
+2026-11-06T09:14:26.2473995Z ── mod sultan iken soket düşer
+2026-11-06T09:14:26.2474399Z   ✓ D21 sultan + soket düşük: eylem "sultanda" (ham bağlantı hatası DEĞİL)
+2026-11-06T09:14:26.2474917Z   ✓ D22 sultan iken tekrar denenince yine "sultanda", yeniden bağlanma YOK
+2026-11-06T09:14:26.2475324Z   ✓ D23 bekleme satırı yazıldı
+2026-11-06T09:14:26.2475918Z   ✓ D24 uç yeniden açıldı ama mod hâlâ sultan: yine bağlanmadı
+2026-11-06T09:14:26.2476468Z   ✓ D25 mod ajan olunca YENİDEN bağlandı ve eylem yapıldı
+2026-11-06T09:14:26.2477102Z ── kapı geçtikten SONRA soket düşer (eylem sırasında)
+2026-11-06T09:14:26.2477684Z   ✓ D26 eylem sırasında Sultan aldı + soket düştü: "sultanda" (ham hata ya da baglanti-koptu DEĞİL)
+2026-11-06T09:14:26.2478605Z   ✓ D27 geri verildi (mod ajan): kopukluk durumda görünür
+2026-11-06T09:14:26.2479393Z   ✓ D28 mod ajan olunca bir sonraki eylemde yeniden bağlandı
+2026-11-06T09:14:26.2480343Z   ✓ D29 mod ajan iken soket düşerse: açık hata "baglanti-koptu" (sessiz yutulmaz)
+2026-11-06T09:14:26.2480970Z   ✓ O1 metin(): görünür sayfa yazısı döner
+2026-11-06T09:14:26.2481331Z   ✓ O2 metin(): giriş alanının DEĞERİ metne girmez
+2026-11-06T09:14:26.2481813Z   ✓ O3 okuma sayfayı değiştirmez, terminale/merkeze metin yazmaz, uyarı üretmez
+2026-11-06T09:14:26.2482321Z   ✓ O4 parola alanını hedefleyen okuma durma noktasına takılır
+2026-11-06T09:14:26.2482761Z   ✓ O5 kare(yol): PNG dosyası yazılır
+2026-11-06T09:14:26.2483224Z   ✓ O6 Dümen Sultanda iken okuma da YOK (metin + kare "sultanda", dosya yazılmaz)
+2026-11-06T09:14:26.2483650Z   ✓ O7 kare() yolsuz reddedilir
+2026-11-06T09:14:26.2484004Z ── sekme seçimi (Sultan'ın terminal sekmesine dokunulmaz)
+2026-11-06T09:14:26.2484408Z   ✓ D40 ön koşul: Sultan'ın terminal sekmesi açık
+2026-11-06T09:14:26.2484866Z   ✓ D41 varsayılan: Sultan'ın sekmesi ADRESİNDE kaldı, ajan yeni sekmede gezdi
+2026-11-06T09:14:26.2485414Z   ✓ D42 kapat() yalnız KENDİ açtığı sekmeyi kapattı; terminal sekmesi yerinde
+2026-11-06T09:14:26.2486249Z   ✓ D43 sekme deseni: eşleşen sekme seçildi, yeni sekme AÇILMADI
+2026-11-06T09:14:26.2486728Z   ✓ D44 desenle seçilen (başkasının) sekme kapat() ile KAPANMADI
+2026-11-06T09:14:26.2487198Z   ✓ D45 desen eşleşmezse yeni sekme açılır, ilk sekmeye dokunulmaz
+2026-11-06T09:14:26.2487812Z   ✓ D47 durum taşıyan (g bayraklı) RegExp ikinci kullanımda da eşleşen sekmeyi bulur, yeni sekme açılmaz
+2026-11-06T09:14:26.2488459Z   ✓ D48 kapat() çıkışında bulgu hatırlatma satırı basılır (bulgu.sh yaz)
+2026-11-06T09:14:26.2488948Z   ✓ D46 sekme:"ilk" açıkça istenirse eski davranış (yeni sekme yok)
+2026-11-06T09:14:26.2489438Z ── yeniden bağlanma: aynı sekmeye döner, öteki sekmelere oturum açmaz
+2026-11-06T09:14:26.2490112Z   ✓ D50 yeniden bağlanınca AYNI sekmeye döndü: yeni sekme açılmadı, adres güncel
+2026-11-06T09:14:26.2490815Z   ✓ D51 yeniden bağlanırken oturumlar YALNIZ aranan sekmede açıldı (yan-a/b/c'ye hiç)
+2026-11-06T09:14:26.2492106Z   ✓ D52 aynı adresli yabancı sekme: yalnız adaylarda oturum (yan-* ya da başka adreste yok), doğru sekme seçildi, yabancı yerinde
+2026-11-06T09:14:26.2493397Z   ✓ D53 /json/list okunamazsa eski sekmelerin hiçbirine oturum açılmaz
+2026-11-06T09:14:26.2494433Z   ✓ D54 aranan sekme kapanmışsa eski sekmelere oturum açılmaz, yeni sekmede sürülür
+2026-11-06T09:14:26.2495086Z ── 0.8.0 liste okuma (metinler · nitelikler · adres)
+2026-11-06T09:14:26.2496304Z   ✓ D55 metinler(): seçiciye uyan BÜTÜN öğelerin yazısı (3), sıra korunur
+2026-11-06T09:14:26.2496945Z   ✓ D56 nitelikler(): her öğenin niteliği
+2026-11-06T09:14:26.2497295Z   ✓ D57 nitelikler() tavan: enCok=2
+2026-11-06T09:14:26.2497717Z   ✓ D58 nitelikler(): hassas nitelik adı (parola/çerez/jeton) REDDEDİLİR
+2026-11-06T09:14:26.2498117Z   ✓ D59 adres(): sayfa adresi
+2026-11-06T09:14:26.2498456Z   ✓ D60 metinler() Dümen Sultan'dayken okumaz (sultanda)
+2026-11-06T09:14:26.2498801Z SONUÇ: geçti=69 kaldı=0
+2026-11-06T09:14:26.2499083Z ── mutantlar (her biri sınavı KIRMALI)
+2026-11-06T09:14:26.2499484Z   ✓ fail-open (mod ajan değilse devam): yakalandı (9 kapı kırmızı)
+2026-11-06T09:14:26.2499921Z   ✓ merkez cevapsız → devam: yakalandı (2 kapı kırmızı)
+2026-11-06T09:14:26.2500310Z   ✓ durma noktası kapalı: yakalandı (6 kapı kırmızı)
+2026-11-06T09:14:26.2500760Z   ✓ durak bildirimi 4xx/5xx başarı sayılır: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2501203Z   ✓ ham page dışarıya açık: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2501604Z   ✓ parola gizleme yok: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2502014Z   ✓ durak bildirimi jetonsuz: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2502480Z   ✓ soket düşünce 'sultanda' yerine ham hata: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2502963Z   ✓ mod sultan iken yeniden bağlanır: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2503487Z   ✓ mod ajan olunca yeniden bağlanmaz: yakalandı (4 kapı kırmızı)
+2026-11-06T09:14:26.2503943Z   ✓ görülemeyen eylem uyarısı kapalı: yakalandı (5 kapı kırmızı)
+2026-11-06T09:14:26.2504412Z   ✓ eylem dışı değişiklik uyarısı kapalı: yakalandı (4 kapı kırmızı)
+2026-11-06T09:14:26.2505170Z   ✓ eylem dışı uyarı yalnız kapıda (kendiliğinden yok): yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2506030Z   ✓ görülemeyen uyarı eylem türünden bağımsız: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2507029Z   ✓ metin alanı da görülemeyen sayılır: yakalandı (4 kapı kırmızı)
+2026-11-06T09:14:26.2507863Z   ✓ uyarı merkeze iletilmez: yakalandı (4 kapı kırmızı)
+2026-11-06T09:14:26.2508723Z   ✓ uyarı iletimi jetonsuz da gider: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2509603Z   ✓ uyarı iletimi hedef/değer taşır: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2510501Z   ✓ okuma kapısız (Dümen Sultan'dayken de okur): yakalandı (3 kapı kırmızı)
+2026-11-06T09:14:26.2511017Z   ✓ okunan metin terminale yazılır: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2511484Z   ✓ metin hedefi durma noktasına gitmez: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2512004Z   ✓ varsayılan yeni sekme yerine ilk sekmeyi alır: yakalandı (6 kapı kırmızı)
+2026-11-06T09:14:26.2512529Z   ✓ kapat() başkasının sekmesini de kapatır: yakalandı (2 kapı kırmızı)
+2026-11-06T09:14:26.2513093Z   ✓ RegExp çağıranın nesnesiyle aranır (lastIndex taşınır): yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2513627Z   ✓ kapat() bulgu hatırlatması basmaz: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2514058Z   ✓ sekme deseni yok sayılır: yakalandı (1 kapı kırmızı)
+2026-11-06T09:14:26.2514589Z MUTANT: 26/26 yakalandı
+2026-11-06T09:14:26.2515035Z ##[endgroup]
+2026-11-06T09:14:26.2515502Z    ✓ ./dumen-surucu/scripts/dumen.test.sh (305368 ms)
+2026-11-06T09:14:26.2516306Z kova=dumen toplam=3 koşan=3 atlanan=0 düşen=0 duvar=884 sn
+2026-11-06T09:14:26.2657910Z Post job cleanup.
+2026-11-06T09:14:26.3785669Z Cache hit occurred on the primary key playwright-1.59.1-chromium-headless-shell-Linux, not saving cache.
+2026-11-06T09:14:26.3788406Z (node:20885) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-06T09:14:26.3790258Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-06T09:14:26.3956678Z Post job cleanup.
+2026-11-06T09:14:26.4849184Z [command]/usr/bin/git version
+2026-11-06T09:14:26.4922228Z git version 2.56.0
+2026-11-06T09:14:26.4961482Z Temporarily overriding HOME='/home/runner/work/_temp/6efa35af-8687-48c3-8cc7-07cf6228a5c1' before making global git config changes
+2026-11-06T09:14:26.4963302Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-06T09:14:26.4967366Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sx-Claude-Skills/Sx-Claude-Skills
+2026-11-06T09:14:26.5012992Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-06T09:14:26.5052232Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-06T09:14:26.5307184Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-06T09:14:26.5338580Z http.https://github.com/.extraheader
+2026-11-06T09:14:26.5350854Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-06T09:14:26.5388356Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-06T09:14:26.5638586Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-06T09:14:26.5678168Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-06T09:14:26.6099236Z Cleaning up orphan processes
+2026-11-06T09:14:26.6526038Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+--- stderr ---
