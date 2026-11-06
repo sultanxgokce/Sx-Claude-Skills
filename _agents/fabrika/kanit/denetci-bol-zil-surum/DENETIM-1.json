@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-bol-zil-surum",
+  "pr": "730",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T20:37:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-denetci-bol-zil-surum",
+  "dal": "denetci-bol-zil-surum",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 12336,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 2500
+  },
+  "dalgic": "uyumlu",
+  "bas": "8d753f2f64988bc95a52c42335f50d2b2a4cb281",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sürüm, çakışan 0.27.68’den 0.27.69’a hem SKILL.md hem katalog kaydında birlikte yükseltilmiş; sürüm notu da bunun #728’de gelen değişikliği kurulum için görünür kılacağını açıklıyor. Üretim farkında işi bozan kusur yok ve araç imzalı ölçüm kaynak/kurulu ayrımını istenen 3/0 değerleriyle doğruluyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıt yeşil; ölçüm temiz commit üzerinde SKILL.md sürümünü 0.27.69, katalogdaki 0.27.69 eşleşmesini 1, kurulu/kaynak BOL_RED sayılarını 0/3 olarak gösteriyor. Ayrı önce/sonra kare yok; ancak bu iş görsel değil ve sürüm tutarlılığı ile kurulu-kaynak durumunu doğrudan karşılaştıran ölçüm talebi yeterince kanıtlıyor."
+  }
+}

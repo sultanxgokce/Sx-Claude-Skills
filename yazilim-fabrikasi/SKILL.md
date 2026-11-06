@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.68
+version: 0.27.69
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.69 (6 Kas 2026, kart denetci-bol-zil-yok + denetci-bol-zil-surum · görev …KS0Z3H · BERİD):** `denetci.sh` İŞİ BÖL (istem tavanı aşımı) yolunda model çağrılmaz, tur yanmaz; eskiden çıkış yine de 'tur N: —/— · rc 1 · düzelt, yeniden gönder' bitiş zilini çalıp yanlış teşhis koyuyordu (#1429'da 3 sahte zil). Artık `BOL_RED` bayrağı zili atlar ve 'denetçi zili çalınmadı: istem tavanı aşıldı' basar. Sınav Z9e + mutant `bol-red-zil-calar`. (Kod #728'de girdi; sürüm numarası #727 ile çakıştığı için kurulum yüklemedi, bu sürüm onu düzeltir.)
 - **0.27.68 (6 Kas 2026, kart goz-catal-pr-it2 · görev …RX892 · BÂNİ):** `denetci.sh --pr` çatal PR'da da itilmemiş baş itilir: PR'ın baş deposu (`headRepositoryOwner`/`headRepository`) okunur, o depoyu gösteren yerel uzak (adres sonu `<sahip>/<depo>[.git]`) aranır ve ORAYA hızlı ileri itilir; uzak yoksa ya da bilgi okunamazsa itilmez, hata metni hangi depo için uzak gerektiğini söyler. origin'deki adaş dala çatal PR'da asla itilmez. Sınav `denetci-fark-kendisi.test.sh` F5r-w.
 - **0.27.67 (6 Kas 2026, kart goz-ileri-bas-it · görev …HJGVS · BÂNİ):** `denetci.sh --pr` PR dalının yerel başı PR başının YALNIZ İLERİSİNDEYSE (hızlı ileri) dalı kendisi iter (zorla değil), PR başı GitHub'da yerel başa dönene kadar bekler (tavan `DENETCI_IT_BEKLE_SN`, vars. 90) ve devam eder; güncellenmezse eski farkı puanlamaz, durur. Geride ya da ayrışmışsa eskisi gibi rc 3. `DENETCI_ITME=1` itmeyi kapatır. Yalnız aynı depodaki PR itilir (`isCrossRepository=false`); çatal PR'da ya da bilgi okunamazsa itilmez (göz tur 1: origin'deki adaş dal yanlışlıkla ilerlerdi). 3 Kas'tan beri oturum kayıtlarında 59 ayrı 'yerel baş PR başından FARKLI' duruşu ölçüldü. Sınav `denetci-fark-kendisi.test.sh` F5g-q.
 - **0.27.66 (6 Kas 2026, kart kanit-kirli-dosya-canli · görev …PYWKB · BÂNİ):** `kanit.py` 0.9.0 — kirli ağaç kapısı (`kirli_kapisi`) artık `kanit.sh dosya` ve `kanit.sh canli`'da da koşar; önceden yalnız `olcum`/`ekran`'daydı ve kural sonrası 9 izinsiz kirli kayıt (4 dosya, 5 canlı) yazılmıştı (MUHAKKİK saydı). Kirli ağaçta izinsiz `dosya`/`canli` rc 2 döner ve kayıt yazmaz; `--kirli-izin "<≥15 karakter gerekçe>"` ile gerekçeli geçer (`kirli_kurali=1` + `kirli_izin`). Sınav `kanit-olculen-commit.test.sh` K9-K11. **Kapanış ölçümü** `scripts/kanit-kirli-say.py [--sonra ISO] KÖK…`: dört kayıt türünü (olcum · ekran · dosya · canli) AYRI satırda sayar, görülmeyen türü 0 ile basar; sayım kapıdan bağımsız `olculen_kirli` alanıyla (kapı damgası `kirli_kurali` süzgeç değil), aynı `olcum_id` tek sayılır, manifest okunamazsa rc 3. Kural (#684) sonrası gerçek veri: olcum 0 · ekran 0 · dosya 4 · canli 5. Sınav `kanit-kirli-say.test.sh` K1-K4.
