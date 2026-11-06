@@ -39,7 +39,24 @@ echo "════ K8 · izinli kayıt kirli_kurali + kirli_izin taşır; temiz 
 [ "$(alan kirli_kurali)" = "1" ]; g $? "kirli_kurali=1"; [ "$(alan kirli_izin)" = "sınav: ikinci izinli ölçüm" ]; g $? "kirli_izin yazıldı"
 ( cd "$T" && git checkout -q -- f.sh && bash "$K" olcum is-k dokuz --asama tek --kirli-izin "temiz ağaçta gereksiz izin" -- echo 10 ) >/dev/null 2>&1
 [ "$(alan kirli_kurali)" = "1" ]; g $? "temiz ağaçta kirli_kurali=1"; [ "$(alan kirli_izin)" = "YOK" ]; g $? "temiz ağaçta kirli_izin yazılmadı"
-echo "════ K9 · dosya kaydı kirli ağaçta kural damgası taşımaz (kapı onu engellemesin) ════"
-( cd "$T" && echo e > f.sh && echo veri > ek.txt && bash "$K" dosya is-k onbir ek.txt --asama tek ) >/dev/null 2>&1
-[ "$(alan etiket)" = "onbir" ]; g $? "dosya kaydı yazıldı"; [ "$(alan kirli_kurali)" = "YOK" ]; g $? "dosya kaydında kirli_kurali yok"
+# 🔴 0.9.0 (6 Kas, görev …PYWKB · MUHAKKİK revizyonu): eski K9 "dosya kaydı kirli ağaçta kural damgası taşımaz" diyordu (0.7.0 kararı: kapı yalnız
+#    kodu ölçen yollarda). Kural sonrası 9 izinsiz kirli kayıt yalnız dosya ve canli yolundan geldi; kural bütün kanıtı kapsar → iki yol da DURUR.
+echo "════ K9 · dosya kaydı kirli ağaçta İZİNSİZ yazılmaz (rc 2); izinliyse kirli_kurali + kirli_izin taşır ════"
+( cd "$T" && echo e > f.sh && echo veri > ek.txt && bash "$K" dosya is-k onbir ek.txt --asama tek ) >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 2 ]; g $? "K9 izinsiz kirli dosya kaydı rc=2"; [ "$(alan etiket)" != "onbir" ]; g $? "K9 izinsiz dosya kaydı YAZILMADI"
+( cd "$T" && bash "$K" dosya is-k onbir ek.txt --asama tek --kirli-izin "sınav: kirli ağaçta dosya kaydı" ) >/dev/null 2>&1
+[ "$(alan etiket)" = "onbir" ]; g $? "K9 izinli dosya kaydı yazıldı"; [ "$(alan kirli_kurali)" = "1" ]; g $? "K9 dosya kaydında kirli_kurali=1"
+[ "$(alan kirli_izin)" = "sınav: kirli ağaçta dosya kaydı" ]; g $? "K9 dosya kaydında gerekçe yazıldı"
+echo "════ K10 · canlı kaydı kirli ağaçta İZİNSİZ yazılmaz (rc 2); izinliyse kirli_kurali + kirli_izin taşır ════"
+printf '2026-11-06T10:00:00+03:00 olay-k10 ateşlendi\n' > "$T/k10.log"
+( cd "$T" && bash "$K" canli is-k oniki --kaynak "dosya:$T/k10.log" --desen olay-k10 ) >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 2 ]; g $? "K10 izinsiz kirli canlı kaydı rc=2"; [ "$(alan etiket)" != "oniki" ]; g $? "K10 izinsiz canlı kaydı YAZILMADI"
+( cd "$T" && bash "$K" canli is-k oniki --kaynak "dosya:$T/k10.log" --desen olay-k10 --kirli-izin "sınav: kirli ağaçta canlı kaydı" ) >/dev/null 2>&1
+[ "$(alan etiket)" = "oniki" ]; g $? "K10 izinli canlı kaydı yazıldı"; [ "$(alan kirli_kurali)" = "1" ]; g $? "K10 canlı kaydında kirli_kurali=1"
+[ "$(alan kirli_izin)" = "sınav: kirli ağaçta canlı kaydı" ]; g $? "K10 canlı kaydında gerekçe yazıldı"
+echo "════ K11 · temiz ağaçta dosya ve canlı izinsiz yazılır, damga taşır (gereksiz engel yok) ════"
+( cd "$T" && git checkout -q -- f.sh && git add ek.txt k10.log && git commit -q -m "chore: ek" && bash "$K" dosya is-k onuc ek.txt --asama tek ) >/dev/null 2>&1
+[ "$(alan etiket)" = "onuc" ]; g $? "K11 temiz ağaçta dosya kaydı izinsiz yazıldı"; [ "$(alan kirli_kurali)" = "1" ] && [ "$(alan kirli_izin)" = "YOK" ]; g $? "K11 damga var, izin yok"
+( cd "$T" && bash "$K" canli is-k ondort --kaynak "dosya:$T/k10.log" --desen olay-k10 ) >/dev/null 2>&1
+[ "$(alan etiket)" = "ondort" ]; g $? "K11 temiz ağaçta canlı kaydı izinsiz yazıldı"
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
