@@ -866,7 +866,7 @@ mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılma
 mut "gecersiz-goze-soylenmez" 's@\[ "\$NGEC" -gt 0 \] && KANIT_DURUM=@false \&\& KANIT_DURUM=@'
 # T-ISTEM mutantları (BÂNİ 21:59): her biri istem kapısının bir parçasını söker
 mut "istem-yerine-fark-olculur" 's@^if \[ "$ISTEM_BAYT" -gt "$BOL_SINIR" \]; then@if [ "$(wc -c < "$TMP/diff.patch")" -gt "$KIRP_ESIK" ]; then@'
-mut "istem-bol-tur-yakar" 's@^  exit 1   # İŞİ BÖL@  :@'
+mut "istem-bol-tur-yakar" 's@^  BOL_RED=1; exit 1   # İŞİ BÖL@  :@'
 mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&\& {@'
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
