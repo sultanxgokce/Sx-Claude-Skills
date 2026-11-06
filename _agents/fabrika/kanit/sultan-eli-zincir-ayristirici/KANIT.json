@@ -1,7 +1,7 @@
 {
   "is": "sultan-eli-zincir-ayristirici",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T20:16:48+03:00",
+  "guncelleme": "2026-11-06T20:28:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -107,7 +107,70 @@
       "olculen_commit": "0bd2137f3edf9f7d4a1c46b7ccff50527579badf",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "sinav-sonra-tur2",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-sinav-sonra-tur2-sonra-a95c918cc1e7.txt",
+      "sha256": "7979bd272ca34d745bfd3d4521b2e9fc0f5283c6dde2a5ee9ea5d933579d44b2",
+      "hedef_dosya": "olcum-sinav-sonra-tur2-sonra.txt",
+      "hedef_olcum_id": "df8bc098718743d694aa67756694fb9d",
+      "hedef_sha256": "88b84dd9c051922652bc4bff64612299c74502b67f4a92e9a87641e36b491c59",
+      "hedef_zaman": "2026-11-06T20:16:48+03:00",
+      "hedef_renk": "yesil",
+      "neden": "tur 2 bulgusu sonrası betik ve sınav değişti (yönlendirme hedefi); yeni sonra kaydı var",
+      "kim": "BASİRET",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-11-06T20:21:49+03:00",
+      "olcum_id": "a1bb10abaa8943dda5f99326d0c3a517",
+      "olculen_commit": "d53d86569c2fea48719f03534eed5aa1b6d94600",
+      "olculen_kirli": false
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-once-tur3",
+      "asama": "once",
+      "dosya": "olcum-sinav-once-tur3-once.txt",
+      "sha256": "7d4a62bd0e111102a38a858a6959e2db22abf407e0d7a4376af9f83811d0d702",
+      "komut": [
+        "bash",
+        "/tmp/tmp.A5P7wYu67n/sultan-eli.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T20:26:25+03:00",
+      "sure_sn": 274.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "aa9a50f82613ac8185edcdade85319f03184cba1582f66c655ad3fa4610ae45d",
+      "olcum_id": "b8ccf8137dd340448c3ecd6270c45a91",
+      "olculen_commit": "d53d86569c2fea48719f03534eed5aa1b6d94600",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-tur3-sonra.txt",
+      "sha256": "90e53ac895ec18b0201862d540b432031c60b57be2e7addc58df81453d77e1da",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T20:28:42+03:00",
+      "sure_sn": 136.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "a98f8981044c8ae675bb9e46b1703b0ff45cb4982136601a5378e82ec110323e",
+      "olcum_id": "33484fb6cf3548e89175f9284f51140e",
+      "olculen_commit": "d53d86569c2fea48719f03534eed5aa1b6d94600",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "b7e6f3b90da0e4ced7811e2bdfb3daf5c32d81dddcafa1fafe3c55476f673e4f"
+  "imza": "d4aef76340d47a23a1a7bfe6eadc17a40d957d12db2d43d0f38188be84f60c59"
 }
