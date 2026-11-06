@@ -40,6 +40,14 @@ done
 SYNC="${DUZEN_SYNC_CMD:-node $SX/sync-skills.mjs}"
 # Yenileme betiğin YANINDAKİ paket ekipc.sh ile yapılır (vendor/yaml taşır); Nexus scripts/ekipc.sh değil — zamanlayıcı PATH'inde PyYAML yok, Nexus kopyası exit 2 verir (1 Kas 2026 03:17: 37 kimlik atlandı).
 YENILE="${DUZEN_YENILE_CMD:-bash $HERE/ekipc.sh yenile}"
+# MÜDÜR temelli kimlik (--rol MÜDÜR) ekip modelini ister; paket ekipc.sh onu kendi klasöründe arar ("manifest yok", 6 Kas 03:17: serdar atlandı)
+#   ve modeldeki yolları da paket köküne göre denetler (yanlış kırmızı). Depoda kendi ekipc.sh + ekip modeli varsa o koşar, PyYAML paketin vendor/'undan verilir.
+YENILE_MUDUR="${DUZEN_YENILE_MUDUR_CMD:-}"
+if [ -z "$YENILE_MUDUR" ]; then
+  if [ -z "${DUZEN_YENILE_CMD:-}" ] && [ -f "$DEPO/scripts/ekipc.sh" ] && [ -f "$DEPO/_agents/ekip-modeli.yaml" ]; then
+    YENILE_MUDUR="env PYTHONPATH=$HERE/../vendor${PYTHONPATH:+:$PYTHONPATH} bash $DEPO/scripts/ekipc.sh yenile"
+  else YENILE_MUDUR="$YENILE"; fi
+fi
 MEKTUP="${DUZEN_MEKTUP_CMD:-bash /config/.claude/skills/postane-postaci/scripts/posta.sh gonder}"   # POSTANE yolu (ulak değil): teslim/görüldü/işlendi izi var, kutu reisine ulaştığı ölçülebilir; ulak teslimi ölçülemiyordu (2 Kas, Hat E bulgu 3)
 surum_oku() { sed -nE 's/^[[:space:]]*version:[[:space:]]*["'"'"']?([0-9]+\.[0-9]+\.[0-9]+)["'"'"']?[[:space:]]*$/\1/p' "$1" 2>/dev/null | head -1; }
 yeni_mi() { [ "$1" != "$2" ] && [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | tail -1)" = "$1" ]; }   # $1 > $2
@@ -81,8 +89,9 @@ while IFS= read -r satir; do
   ad="$(sed -nE 's/^[[:space:]]*([^:[:space:]]+): BAYAT.*/\1/p' <<<"$satir")"; [ -n "$ad" ] || continue
   temel="$(sed -nE 's/.*temel: ([a-z-]+)-base.*/\1/p' <<<"$satir")"
   case "$temel" in manuel-claude) arg=(--baz manuel-claude); t=manuel-claude ;; mudur) arg=(--rol MÜDÜR); t=MÜDÜR ;; otonom-ajan) arg=(--baz otonom-ajan); t=otonom-ajan ;; *) yaz "atlandi beceri=kimlik:$ad sebep=temel-bilinmiyor kutu=$KUTU"; RC=1; continue ;; esac
+  yc="$YENILE"; [ "$t" = MÜDÜR ] && yc="$YENILE_MUDUR"
   if [ "$UYGULA" -eq 1 ]; then
-    if $YENILE --dosya "$DEPO/_agents/$ad/AGENT.md" "${arg[@]}" --apply </dev/null >/dev/null 2>"$HATA"; then yaz "yenilendi kimlik=$ad temel=$t surum=$KAYNAK_DUZEN kutu=$KUTU reis=$REISYAZ"; YENILENDI=1
+    if $yc --dosya "$DEPO/_agents/$ad/AGENT.md" "${arg[@]}" --apply </dev/null >/dev/null 2>"$HATA"; then yaz "yenilendi kimlik=$ad temel=$t surum=$KAYNAK_DUZEN kutu=$KUTU reis=$REISYAZ"; YENILENDI=1
     else src=$?; yaz "atlandi beceri=kimlik:$ad sebep=yenile-reddetti kutu=$KUTU rc=$src ayrinti=$(sebep "$HATA")"; RC=1; fi
   else echo "KURU: $ad yenilenecekti ($t)"; YENILENDI=1; fi
 done < <(bash "$SURUM" denetle --depo "$DEPO" --kurulu "$KURULU_KOK/duzen" 2>/dev/null)
