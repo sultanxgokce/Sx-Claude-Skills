@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "goz-ileri-bas-it",
+  "pr": "720",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T15:42:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-goz-ileri-bas-it",
+  "dal": "goz-ileri-bas-it",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32263,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 15718
+  },
+  "dalgic": "uyumsuz",
+  "bas": "c737979f50a7b99d6e513e5b6c0ba1bfc2cfb1a9",
+  "duzeltme_farki": {
+    "onceki_bas": "24f38377dac4519bcdc87e431930ee0bc00a9531",
+    "dosya": 9,
+    "bayt": 25639,
+    "tam_bayt": 38880
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "H",
+    "ozet": "Önceki turun yanlış `origin` dalını ilerletme riski, çatal PR’ları kapalı varsayılanla durdurarak ve bunu mutasyonla sınayarak kapatılmış; daraltılmış davranış üretime hazırdır. Ancak iş kartı bütün PR dalları için kendiliğinden itmeyi isterken uygulama çatal PR’ları açıkça kapsam dışında bırakıyor; bu nedenle kod sağlam olsa da talep bütünüyle yapılan şey aynı değildir.",
+    "bulgular": [
+      {
+        "ne": "İş kartındaki koşulu sağlayan çatal PR’lar kendiliğinden itilmek yerine rc=3 ile durduruluyor; kartta yalnız aynı depodaki PR’larla sınırlama bulunmuyor.",
+        "kanit": "Sonraki sınavın F5o vakası `isCrossRepository=true` ve yerel baş ilerideyken beklenen sonucu rc=3 olarak tanımlıyor; üretim koşulu da yalnız `isCrossRepository=false` olduğunda itmeye izin veriyor. Böylece önceki B1’deki yanlış dala itme riski kapanmış, fakat genel PR talebi daraltılmıştır.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:567; yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh:124; iş kartı cumle",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı sınavın kırmızı önce (44 geçti · 4 kaldı) ve yeşil sonra (52 geçti · 0 kaldı) ölçüm çifti var; ayrıca F5o çatal korumasını kaldıran mutasyon hedef kapıyı düşürerek sınavın bu güvenlik koşulunu gerçekten ölçtüğünü gösteriyor. Kanıt uygulanan dar kapsamı güçlü biçimde doğruluyor, fakat karttaki kapsam daraltmasını haklı çıkaran bir talep kaydı sunmuyor."
+  }
+}
