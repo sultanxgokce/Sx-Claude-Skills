@@ -74,6 +74,9 @@ jobs:
         kova: [diploma-1, diploma-2, denetci-1, denetci-2, denetci-3, dumen, pazaryeri, kalan]   # diploma iki parça: tek parça 879–884 sn ile 900 tavanına dayandı (28 Eki) · denetci üç parça: 53 mutant × tam süit 900 tavanını aştı (29 Eki, …Q15C)
     steps:
       - uses: actions/checkout@v4
+      # canli-dinle sınavı gerçek ffmpeg ister (sahte HLS yayını üretir, parçalar); yoksa kurulur, kurulamazsa sınav kırmızı kalır.
+      - name: ffmpeg (canli-dinle sınavı)
+        run: command -v ffmpeg >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
       # dumen-surucu sınavı gerçek headless Chromium + playwright-core ister; yoksa rc 3 (ÖLÇÜLEMEDİ) verir ve kova bunu kırmızı sayar
       # (doğru olan da bu: ölçülemeyen yeşil değildir). Sınav kendi `dumen` kovasında koşar (pazaryeri-mesaj sınavı da aynı sebeple kendi `pazaryeri` kovasında, 3 Kas) (Chromium yükü kalan kovasındaki sınamaları düşürüyordu) → tarayıcı yalnız orada kurulur, önbellekten gelir,
       # kurulum denemesi 240 sn'de kesilir ve bir kez yeniden denenir (cloudtop ci-tarayici-kur deseni: kurulum bazen dakikalarca takılıyor).
