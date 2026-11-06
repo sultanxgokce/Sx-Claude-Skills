@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "on-goz-kapilari",
+  "pr": "737",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T01:21:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-kapilari",
+  "dal": "on-goz-kapilari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 43982,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 16850
+  },
+  "dalgic": "uyumsuz",
+  "bas": "ed04bd55660bbc541ee85e25c7c3b37420767d5d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "A1–A5 mekanik ön göz kapıları ve çıkış kodları talep edilen yönde kurulmuş; gerçek ölçüm 18 senaryoyu geçiriyor, mutasyonlar da üç hassas davranışın bozulmasını yakalıyor. Ancak A1 origin şartını uygulamıyor ve A5 yol eşleştirmesi alt dize kullandığı için yanlış hüküm üretebilir; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "A1, dalın özellikle origin'deki karşılığını HEAD ile kıyaslamak yerine herhangi bir upstream (`@{u}`) dalını kabul ediyor; başka bir uzak izlenirken origin dalı eski olsa bile kapı uyumlu sonuç verebilir.",
+        "kanit": "İş kartı açıkça “dal itilmişse origin dalı = HEAD” diyor; uygulama `rev-parse --verify -q @{u}` sonucunu HEAD ile karşılaştırıyor. Sınavın S4 vakası yalnız origin'i izleyen dalı kapsıyor.",
+        "konum": "yazilim-fabrikasi/scripts/on-goz.py:a1; yazilim-fabrikasi/scripts/on-goz.test.sh:S4",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "A5 yasak yolu dosya adına alt dize olarak arıyor; örneğin kartta `foo.py` kapsam dışıyken farktaki `myfoo.py` de ihlal sayılır. Bu, kapsam kapısında yanlış rc 1 üretebilir.",
+        "kanit": "Vuruş kümesi `y in f` koşuluyla kuruluyor; yol veya dosya bileşeni eşitliği aranmıyor. S10 yalnız tam dosya adı eşleşmesini sınadığı için bu yanlış-pozitif davranış ölçülmemiş.",
+        "konum": "yazilim-fabrikasi/scripts/on-goz.py:a5 (`vur` hesabı); yazilim-fabrikasi/scripts/on-goz.test.sh:S10-S10b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kod için `gercek-kosu` ile ana sınav rc 0, 18/18 senaryo geçiyor; üç mutasyon kaydı hedef kapılarının düştüğünü gösteriyor. Kanıt güçlü fakat origin dışı upstream ve A5 alt-dize çakışması senaryolarını ölçmediğinden iki yanlış-hüküm boşluğunu kapatmıyor."
+  }
+}

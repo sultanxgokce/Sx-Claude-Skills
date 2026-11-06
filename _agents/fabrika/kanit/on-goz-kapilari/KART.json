@@ -1,0 +1,39 @@
+{
+  "is": "on-goz-kapilari",
+  "cumle": "Ön göz mekanik kapıları yazilim-fabrikasi/scripts/on-goz.py <iş> [--pr N]: A1 kanıt başı (geçerli sonra/tek/mutant kayıtlarının ölçüldüğü commit HEAD'e eşit ya da arada yalnız kanıt dosyası; önce kayıtları muaf; PR verilince PR başı = HEAD; dal itilmişse origin dalı = HEAD) · A2 kanıt eksik (manifest doğrulanır, en az bir geçerli ölçüm, her mutant kaydı hedef kapı taşır) · A3 taban (main'in gerisindeyken birleştirme çakışıyorsa; yalnız geride olmak bilgi) · A4 ağaç (kanıt dışı commit'lenmemiş izlenen dosya) · A5 kapsam (kart cümlesinde dışında/ayrı kart diye anılan yol farkta) ölçer; beş kapıdan biri uyumsuzsa rc 1 ve ne düzeltileceğini satır satır yazar, ölçülemezse rc 3, beşi de uyumluysa rc 0; denetime bağlanmaz (dilim 3)",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-07T01:12:34+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5CYPSK57KYPXXW42W7H1EBA",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [
+    "1 ve"
+  ],
+  "sayi_bicim_eksikleri": [
+    "şimdi → hedef iki SAYI olarak yok",
+    "(kaynak: <komut/ekran>, <gün>) parantezi yok"
+  ],
+  "sayi_bicim_uyarisi": true,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T01:12:35+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
