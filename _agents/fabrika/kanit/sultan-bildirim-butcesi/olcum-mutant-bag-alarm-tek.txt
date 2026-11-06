@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: G8 günde ikinci acil telefona GİTMEZ · rc≠0 + hedef kapı 'G8 günde ikinci acil telefona GİTMEZ' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-bag-alarm-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh alarm mutant /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=1 sure=1.3s zaman=2026-11-06T15:23:18+03:00
+# rc=1 sure=1.5s zaman=2026-11-06T15:26:00+03:00
 --- stdout ---
 — biçim
   ✓ B1 sabit biçim
@@ -62,8 +62,9 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f96575
   ✗ G8b ikinci acil kuyruğa yazıldığını söyler — '09:00' yok: 🚨🔴 SULTAN ALARMI — Hat durdu iki · SERDAR · tek tık
 whatsapp: gitti
   ✗ G8c kütükte kuyruk kaydı — beklenen=[1] gerçek=[0]
+  ✗ G9 betik yürütme biti olmasa da (644) bütçe devrede: ikinci acil gitmez — beklenen=[1] gerçek=[2]
 — ders
   ✓ D1 ders tarihli satır olarak eklenir
 
-sonuç: 51 geçti · 3 kaldı
+sonuç: 51 geçti · 4 kaldı
 --- stderr ---

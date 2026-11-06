@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh alarm ana /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=0 sure=1.5s zaman=2026-11-06T15:22:56+03:00
+# rc=0 sure=1.9s zaman=2026-11-06T15:25:44+03:00
 --- stdout ---
 — biçim
   ✓ B1 sabit biçim
@@ -60,8 +60,9 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f96575
   ✓ G8 günde ikinci acil telefona GİTMEZ (yalnız ilki gider)
   ✓ G8b ikinci acil kuyruğa yazıldığını söyler
   ✓ G8c kütükte kuyruk kaydı
+  ✓ G9 betik yürütme biti olmasa da (644) bütçe devrede: ikinci acil gitmez
 — ders
   ✓ D1 ders tarihli satır olarak eklenir
 
-sonuç: 54 geçti · 0 kaldı
+sonuç: 55 geçti · 0 kaldı
 --- stderr ---

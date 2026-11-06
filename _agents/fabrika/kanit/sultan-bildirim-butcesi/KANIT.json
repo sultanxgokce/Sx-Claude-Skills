@@ -1,7 +1,7 @@
 {
   "is": "sultan-bildirim-butcesi",
   "arac": "kanit.py/0.9.0",
-  "guncelleme": "2026-11-06T15:23:18+03:00",
+  "guncelleme": "2026-11-06T15:26:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -115,7 +115,7 @@
       "etiket": "bag-kapimda",
       "asama": "sonra",
       "dosya": "olcum-bag-kapimda-sonra.txt",
-      "sha256": "a0b88cbcbfada316bbd4aaae5dd041bd7b7c53b98573788731b66f228cef33b2",
+      "sha256": "482b2479cd982c05fed6be05fb77d31487321cc348e297c017dd56c89361d5c8",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh",
@@ -125,12 +125,12 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-06T15:22:55+03:00",
-      "sure_sn": 4.1,
+      "zaman": "2026-11-06T15:25:42+03:00",
+      "sure_sn": 4.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "girdi_anahtar": "232c8624a359165f5d607d292c252812ae7a894681e3b0e646bcf5bd0cf9eed4",
-      "olcum_id": "9c3d350d41074fad92786933ff40a5f5",
-      "olculen_commit": "73889b169c44194ef8e00315d6608f931bd92584",
+      "girdi_anahtar": "cddcfd28a81ce17097bf272753e5c5133038683a150bbda02dd9bcd8cfe7f93d",
+      "olcum_id": "3f2d648447344f908a34f4605f228aba",
+      "olculen_commit": "83d60a7a66243a03504c551ce87fa678771d7357",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -139,7 +139,7 @@
       "etiket": "bag-alarm",
       "asama": "sonra",
       "dosya": "olcum-bag-alarm-sonra.txt",
-      "sha256": "4ddc957831953778bce520b7db2e97129411f9f05c7854f1b6b6c09e0abf0134",
+      "sha256": "30d8ae3e47108507b97c60fdd8e4dd6bac3570cd2306c8d29152e6bcd5f3f25a",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh",
@@ -149,12 +149,12 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-06T15:22:56+03:00",
-      "sure_sn": 1.5,
+      "zaman": "2026-11-06T15:25:44+03:00",
+      "sure_sn": 1.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "girdi_anahtar": "a91def89dc2b5491878a7f270fd3f99895aa864d5db66bf83d6440eb9da7e0c9",
-      "olcum_id": "4bc28d4cc6e54db592c6bab2f66ccc46",
-      "olculen_commit": "73889b169c44194ef8e00315d6608f931bd92584",
+      "girdi_anahtar": "692ff526d2e0ebf1b3ee9c101438640e116f04f613c1cc6e41b7bac6d2bb258b",
+      "olcum_id": "c6ee2d6282664fc49cc2afef171d8da1",
+      "olculen_commit": "83d60a7a66243a03504c551ce87fa678771d7357",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -163,7 +163,7 @@
       "etiket": "mutant-bag-kapimda",
       "asama": "tek",
       "dosya": "olcum-mutant-bag-kapimda-tek.txt",
-      "sha256": "26742782f0d10d4b7c2eede11aadaf5324c939fe09e6003ac27de7f1cec47c61",
+      "sha256": "92883aabdb8b2dd9b3da5b7d0e4930b1032486692c8524ca0c6b486e3fc372f5",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh",
@@ -173,8 +173,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-06T15:23:17+03:00",
-      "sure_sn": 4.1,
+      "zaman": "2026-11-06T15:25:58+03:00",
+      "sure_sn": 4.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "bag-kapimda",
@@ -182,8 +182,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "BU1 bütçe dolu ama kart açıldı ya da kuyruk demedi",
       "hedef_dustu": true,
-      "olcum_id": "3eb12853b82047d093ce8c0e6f04fb36",
-      "olculen_commit": "73889b169c44194ef8e00315d6608f931bd92584",
+      "olcum_id": "195798112f2b4de7a89c2a858aa4d93e",
+      "olculen_commit": "83d60a7a66243a03504c551ce87fa678771d7357",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -192,7 +192,7 @@
       "etiket": "mutant-bag-alarm",
       "asama": "tek",
       "dosya": "olcum-mutant-bag-alarm-tek.txt",
-      "sha256": "59bdbaac34208925f56767026dd7026e53a7a32447be512b3b7b7ce2e5daaac0",
+      "sha256": "9a04e1a7b45ab752a16d25adcab3ba0a04e13e0852a83a2905d23b9227651fd2",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh",
@@ -202,8 +202,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-06T15:23:18+03:00",
-      "sure_sn": 1.3,
+      "zaman": "2026-11-06T15:26:00+03:00",
+      "sure_sn": 1.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "bag-alarm",
@@ -211,8 +211,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "G8 günde ikinci acil telefona GİTMEZ",
       "hedef_dustu": true,
-      "olcum_id": "d5eae3e893544d61b4f7425555fde210",
-      "olculen_commit": "73889b169c44194ef8e00315d6608f931bd92584",
+      "olcum_id": "1e82fc0f9e814bb594d30d3f68527727",
+      "olculen_commit": "83d60a7a66243a03504c551ce87fa678771d7357",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -294,7 +294,36 @@
       "olculen_commit": "73889b169c44194ef8e00315d6608f931bd92584",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-x",
+      "asama": "tek",
+      "dosya": "olcum-mutant-x-tek.txt",
+      "sha256": "afcf24be04f0b96918f4c6feb36a8a776d0684a8d4389884e71ffafd3716cb00",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh",
+        "alarm",
+        "mutant-x",
+        "/config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T15:25:46+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bag-alarm",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "G9 betik yürütme biti olmasa da",
+      "hedef_dustu": true,
+      "olcum_id": "66384afeaaaf47829fedd5abc5e3ad40",
+      "olculen_commit": "83d60a7a66243a03504c551ce87fa678771d7357",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "f6e86e9fdfdff7d30f62e6b3a1dad31cd1490c2991f5b86dac7d7951b45f9aff"
+  "imza": "56448c3330724f9a25a2d15b71deb62478242a68730189d9012b6f4c8d47c3b4"
 }

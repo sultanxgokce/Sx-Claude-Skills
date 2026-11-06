@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: BU1 bütçe dolu ama kart açıldı ya da kuyruk demedi · rc≠0 + hedef kapı 'BU1 bütçe dolu ama kart açıldı ya da kuyruk demedi' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-bag-kapimda-* ===
 $ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cw-olc.sh kapimda mutant /config/projects/_wt/Sx-Claude-Skills-sultan-bildirim-butcesi
-# rc=1 sure=4.1s zaman=2026-11-06T15:23:17+03:00
+# rc=1 sure=4.9s zaman=2026-11-06T15:25:58+03:00
 --- stdout ---
 PASS  G0 sözdizimi
 PASS  K1 eksik alan (--bitince yok) → RED
