@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "dumen-yazdir-yakala",
+  "pr": "713",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T11:37:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-dumen-yazdir-yakala",
+  "dal": "dumen-yazdir-yakala",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47874,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 20240
+  },
+  "dalgic": "uyumsuz",
+  "bas": "4ccdd6175b5fcab6fb4ea0ca331293750e02f1b7",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Dümen’e yazdirYakala eklenmiş; ana sayfadaki window.print çağrısını bastırıp gerçek Chromium ile PDF üretme, temizlik ve dosya kapıları ölçülmüş. Ancak alt çerçeve doğrudan basılmak yerine HTML olarak yeniden kuruluyor; bu yöntem çalışma anındaki belge durumunu kaybedebileceğinden önce bu uygulama kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Alt çerçeve PDF’i gerçek çerçeveden alınmıyor; cerceve.content() sonucu yeni bir sekmede setContent ile yeniden kuruluyor. Canvas çizimleri, form denetimlerinin çalışma anındaki değerleri ve yalnız bellekte bulunan sayfa durumu HTML serileştirmesinde korunmayabilir; dolayısıyla bazı iframe yazdırmaları eksik veya yanlış PDF üretebilir.",
+        "kanit": "Alt çerçeve dalı `#belgePdf(await cerceve.content(), cerceve.url())` çağırıyor; `#belgePdf` ise yeni sayfa açıp `setContent(ek + html)` sonrasında onu `Page.printToPDF` ile basıyor. Y4 sınavı PDF içeriğini doğrulamıyor; yalnız `%PDF`, boyut aralığı ve sekme sayısını ölçüyor.",
+        "konum": "dumen-surucu/scripts/dumen.mjs:470",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce/yeşil sonra ölçüm çifti gerçek headless Chromium üzerinde çalışmış, sarı kayıt yok. Sekiz mutasyon hedef kapıları düşürerek sınavın temel davranış ve güvenlik kapılarına duyarlı olduğunu gösteriyor; ancak üretilen PDF’in beklenen metin/görsel içeriğini doğrulayan bir ölçüm bulunmadığı için özellikle yeniden kurulan iframe belgesinin doğruluğu kanıtlanmıyor."
+  }
+}
