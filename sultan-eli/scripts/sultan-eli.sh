@@ -142,6 +142,19 @@ for _ in range(16):
     zincir.append((p,bas,cmd(p)))
     if pp<=1: break
     p=pp
+AYIRAC={"<","&&","||","|",";",">",">|","&","2>&1","2>/dev/null",">/dev/null"}
+def eval_argumanlari(a):
+    # `eval` sözcüğünü izleyen argümanlar (bir sonraki kabuk işlecine kadar) — eval onları boşlukla birleştirip koşar
+    try: t=shlex.split(a)
+    except Exception: return []
+    out=[]
+    for i,x in enumerate(t):
+        if x!="eval": continue
+        j=i+1; parca=[]
+        while j<len(t) and t[j] not in AYIRAC: parca.append(t[j]); j+=1
+        if parca: out.append(" ".join(parca))
+    return out
+tani=[]
 try: son=collections.deque(open(dosya,encoding="utf-8",errors="replace"),maxlen=800)
 except Exception: sys.exit(1)
 for satir in son:
@@ -159,11 +172,22 @@ for satir in son:
     if not (0<=simdi-an<=ust): continue
     for _,bas,argv in zincir:
         if not (an-2<=bas<=an+5): continue            # kök KAYIT ANINDA başlamış olmalı
-        # BİREBİR: argv öğesi komutun kendisi, ya da `eval <tırnaklı komut>` sarmalayıcısı (başına/sonuna
-        # metin eklenmiş farklı komut alt dize olarak GEÇMEZ; tırnaklı biçimin sonu sınırlandırılmıştır).
-        q=shlex.quote(kom)
+        # BİREBİR: argv öğesi komutun kendisi, ya da `eval <komut>` sarmalayıcısının eval ARGÜMANI komutun kendisi.
+        # Sarmalayıcı kabuk satırını (`source … && eval <alıntılı komut> < /dev/null && pwd -P >| …`) shlex ile AYRIŞTIRIRIZ:
+        # alıntı biçimi (tek/çift/ters bölü) fark etmez, eval argümanı çözülüp komutla BİREBİR karşılaştırılır.
+        # Başına/sonuna metin eklenmiş farklı komut, başka bir argümanın içinde geçen "eval '…'" metni eşleşmez.
         if any(a==kom for a in argv): sys.exit(0)
+        if any(kom in eval_argumanlari(a) for a in argv): sys.exit(0)
+        q=shlex.quote(kom)    # ayrıştırılamayan (dengesiz tırnaklı) satır için eski sınırlı desen
         if any(re.search(r"(?:^|[\s;&|(])eval\s+"+re.escape(q)+r"(?=$|[\s;&|<>)])",a) for a in argv): sys.exit(0)
+    tani.append((an,kom))
+if tani:   # kayıt VAR ama zincir eşleşmedi: sebep sayılarla (komut metni basılmaz) — canlı koşuda teşhis için
+    for an,kom in tani:
+        for pid_,bas,argv in zincir:
+            adaylar=[c for a in argv for c in eval_argumanlari(a)]
+            print("tanı: pid=%d başlangıç-kayıt=%+.1fsn(izin -2..+5) argv0=%s argc=%d eval-argümanı=%d kayıt-uzun=%d aday-uzun=%s"%(
+                pid_,bas-an,os.path.basename(argv[0]) if argv else "?",len(argv),len(adaylar),len(kom),
+                ",".join(str(len(c)) for c in adaylar[:3]) or "-"),file=sys.stderr)
 sys.exit(1)
 ' "$dosya" "$imza" "$$" "$ZINCIR_UST" && return 0
   done <<< "$(_kayitlar)"

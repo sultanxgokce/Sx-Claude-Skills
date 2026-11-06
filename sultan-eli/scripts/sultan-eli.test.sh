@@ -163,6 +163,47 @@ _satir "<bash-input>$KOMUT</bash-input>" 0 > "$KOK/proje/z.jsonl"
 bash -c "eval 'echo onek; $KOMUT'; r=\$?; exit \$r" >/dev/null 2>&1
 check "ZK12b kök komut = önek + kayıtlı komut (eval içinde alt dize) → YOK" "1" "$?"
 
+# ── ZA · GERÇEK SARMALAYICI BİÇİMİ (SERDAR 6 Kas 20:2x: canlı '!' koşusu insan-izi YOK dedi) ──────────────
+# Harness kökü ps'ten ÖLÇÜLEN biçimde sarar: `source <snap> 2>/dev/null || true && shopt -u extglob … && { …unalias…; } >/dev/null 2>&1 || true
+#   && eval '<komut>' < /dev/null && pwd -P >| <cwd dosyası>`. ZK sınavları yalnız `eval '<komut>'; …` taşıyordu → fixtürde yeşil, canlıda kırmızı.
+SNAP="$T/snap.sh"; : > "$SNAP"
+gercek() {  # $1=kapı betiği $2=kayıttaki komut $3=eval'e giren (alıntılanmış) ifade → harness biçimli kök kabuk
+  _satir "<bash-input>$2</bash-input>" 0 > "$KOK/proje/z.jsonl"
+  bash -c "source $SNAP 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'which'; \\builtin unset -f -- 'which'; } >/dev/null 2>&1 || true && eval $3 < /dev/null && pwd -P >| $T/cwd-dosyasi" >/dev/null 2>&1
+}
+q() { python3 -c 'import shlex,sys;print(shlex.quote(sys.argv[1]))' "$1"; }
+gercek "$K" "$KOMUT" "$(q "$KOMUT")"
+check "ZA1 gerçek harness biçimi (tek tırnaklı eval + < /dev/null + pwd -P) → VAR" "0" "$?"
+gercek "$K" "$KOMUT" "\"$KOMUT\""
+check "ZA2 eval argümanı ÇİFT tırnaklı → VAR (alıntı biçimine bağlı değil)" "0" "$?"
+gercek "$K" "$KOMUT" "$(printf '%q' "$KOMUT")"
+check "ZA3 eval argümanı ters-bölülü (alıntısız) → VAR" "0" "$?"
+gercek "$K" "$KOMUT" "$(q "echo onek; $KOMUT")"
+check "ZA4 harness biçimi ama eval argümanı = önek + komut → YOK (alt dize)" "1" "$?"
+gercek "$K" "$KOMUT" "$(q "$KOMUT; g=\$?; echo sonek; exit \$g")"
+check "ZA5 harness biçimi ama eval argümanı = komut + sonek → YOK (alt dize; çıkış kodu taşınır)" "1" "$?"
+gercek "$K" "$KOMUT" "$(q "bash -c $(q "$KOMUT; g=\$?; exit \$g")")"
+check "ZA6 komut başka bir kabuğun içinde, metni değişmiş (sonekli) koşuyor → YOK" "1" "$?"
+gercek "$K" "sleep 3 &&  SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM" "$(q "$KOMUT")"
+check "ZA8 harness biçimi ama kayıtlı komutta bir boşluk fazla → YOK (birebir)" "1" "$?"
+# ZA9 · teşhis: eşleşmeyen zincirde sebep sayıları basılır, komut metni BASILMAZ (kayıt 5 sn yaşlı → pencere dolu, zincir denenir)
+_satir "<bash-input>$KOMUT</bash-input>" 5 > "$KOK/proje/z.jsonl"
+TANI="$(bash -c "eval $(q "SULTAN_ELI_PENCERE=1 bash $K dogrula --imza $IM 2>&1; true")" 2>&1)"
+check "ZA9a teşhis satırı basıldı (tanı: pid=… başlangıç-kayıt=… eval-argümanı=…)" "1" "$(printf '%s' "$TANI" | grep -c '^tanı: pid=.*eval-argümanı=' | sed 's/^[2-9].*/1/;s/^1[0-9]*$/1/')"
+check "ZA9b teşhis komut metnini BASMIYOR" "0" "$(printf '%s' "$TANI" | grep -c 'sleep 3 && SULTAN_ELI')"
+
+# ZA10-ZA13 · mutantlar (sarmalayıcı ayrıştırıcısı): her söküm ilgili vakayı DÜŞÜRMELİ, yani sınav gerçekten ısırıyor
+MA="$T/mutant-ayristirici.sh"; sed 's/if any(kom in eval_argumanlari(a) for a in argv): sys.exit(0)/if any(kom in c for a in argv for c in eval_argumanlari(a)): sys.exit(0)/' "$K" > "$MA"
+check "ZA10 mutant (eşleştirme 'içeriyor'a gevşetildi) dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MA" && echo 0 || echo 1)"
+KMA="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MA dogrula --imza $IM"
+gercek "$MA" "$KMA" "$(q "echo onek; $KMA")"
+check "ZA11 gevşetilmiş mutantta önek+komut GEÇİYOR (0) → ZA4 yakalar" "0" "$?"
+MB="$T/mutant-ayristirici2.sh"; sed 's/^    try: t=shlex.split(a)$/    try: t=[]/' "$K" > "$MB"
+check "ZA12 mutant (ayrıştırıcı söküldü) dosyayı gerçekten değiştirdi" "1" "$(cmp -s "$K" "$MB" && echo 0 || echo 1)"
+KMB="sleep 3 && SULTAN_ELI_PENCERE=1 bash $MB dogrula --imza $IM"
+gercek "$MB" "$KMB" "\"$KMB\""
+check "ZA13 ayrıştırıcısız mutantta çift tırnaklı eval REDDEDİLİYOR (1) → ZA2 yakalar" "1" "$?"
+
 # ZK13 · üst sınır ortamdan YÜKSELTİLEMEZ: tavan sınav dikişiyle 1 sn, çağıran 9999 vermeye çalışıyor
 SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 zk "$K" "$KOMUT" 0 "SULTAN_ELI_SINAV=1 SULTAN_ELI_SINAV_TAVAN=1 SULTAN_ELI_ZINCIR_UST=9999 $KOMUT"
 check "ZK13 SULTAN_ELI_ZINCIR_UST tavanın ÜSTÜNE çıkarılamaz → YOK" "1" "$?"
