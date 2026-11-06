@@ -27,7 +27,7 @@ bash canli-dinle/scripts/canli-dinle.sh <adres> [--kaynak groq|yerel] [--ozetsiz
 2. **Örtüşme:** her parçaya önceki parçanın son 5 sn'si eklenir; kelime zamanı mutlak saniyeye çevrilir.
 3. **Sahiplik süzgeci:** her sözcük, zamanı örtüşmenin ortasından bölünen TEK parçaya aittir → ne çift ne eksik sözcük (sınavda kanıtlı).
 4. **Dök:** Groq `verbose_json` kelime zaman damgası. Yerelde (whisper.cpp) kelime zamanı yok: segmentin süresi kelimelere eşit paylaştırılır — parça sınırında ±1 kelime kayabilir (Groq yolunda bu yok).
-5. **Hata yolları:** Groq 429/5xx/zaman aşımında 3 kez yeniden dener; yine olmazsa o parça `olay.log`'a ATLANDI yazılır, dinleme sürer. Yakalama çıkış kodu ve atlanan parça varsa rc 2 (`--sure` ile kesilen girdide SIGPIPE hata sayılmaz); hiç parça gelmezse rc 1; anahtarsız Groq rc 3. Yakalama hatası `yakala.err`'de.
+5. **Hata yolları:** Groq 429/5xx/zaman aşımında 3 kez yeniden dener; yine olmazsa o parça `olay.log`'a ATLANDI yazılır, dinleme sürer. Yakalama çıkış kodu ve atlanan parça varsa rc 2 (çıkış kodu borunun son halkası ffmpeg'indir; `--sure` ile kesilince streamlink'in kopan boru hatası sayılmaz); hiç parça gelmezse rc 1; anahtarsız Groq rc 3. Yakalama hatası `yakala.err`'de.
 
 ## Ölçülmüş sınırlar (6 Kas 2026)
 - Groq: parça başına istek ≈ 0,4 sn (gecikme ≈ 30 sn parça + 0,4 sn), 10 dk ≈ 0,0067 $, saatlik 7200 ses-sn sınırı (429'da 3 kez yeniden dener).

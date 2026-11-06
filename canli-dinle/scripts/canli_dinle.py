@@ -170,7 +170,7 @@ def main(argv=None):
         a.notu = False
     print(f"yakalama: {arac} · çıktı: {dizin}", file=sys.stderr)
     hata_dosyasi = open(os.path.join(dizin, "yakala.err"), "w")
-    yakala = subprocess.Popen(["bash", "-c", "set -o pipefail; " + kom], stderr=hata_dosyasi, text=True)
+    yakala = subprocess.Popen(["bash", "-c", kom], stderr=hata_dosyasi, text=True)
     atlanan = 0
     metin_f = open(os.path.join(dizin, "metin.txt"), "a", buffering=1)
     sozluk, i, penc_bas, ozet_no = [], 0, 0, 0
@@ -240,8 +240,8 @@ def main(argv=None):
         print("✗ hiç parça gelmedi: " + hata[-300:], file=sys.stderr)
         return 1
     olay(dizin, f"bitti parca={i} atlanan={atlanan} arac={arac} yakalama_rc={rc}")
-    if a.sure:  # -t ile kesilen girdide streamlink/yt-dlp SIGPIPE (141/13) alır: bu hata değil
-        rc = 0 if rc in (141, 13) else rc
+    # rc = borunun SON halkası (ffmpeg): --sure ile kesilince streamlink/yt-dlp kopan boruyla biter, bu hata değildir;
+    # yayın hiç açılmazsa ffmpeg boş girdi görür ve parça gelmez (rc 1 yolu).
     if rc != 0 or atlanan:
         print(f"! yakalama rc={rc}, atlanan parça={atlanan}: döküm eksik olabilir ({dizin}/yakala.err)", file=sys.stderr)
         return 2
