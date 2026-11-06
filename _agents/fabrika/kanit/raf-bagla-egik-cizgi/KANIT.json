@@ -1,0 +1,93 @@
+{
+  "is": "raf-bagla-egik-cizgi",
+  "arac": "kanit.py/0.9.0",
+  "guncelleme": "2026-11-06T17:56:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kadro-yaz-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kadro-yaz-sinavi-once.txt",
+      "sha256": "539cc749ec583fcf377653dd67c53c7b66993a4184e5f9b13ce34efc7cf1c665",
+      "komut": [
+        "bash",
+        "-c",
+        "D=$(mktemp -d); cp -r terminal-onar/kapi/. $D/; git show HEAD~1:terminal-onar/kapi/kadro-yaz.mjs > $D/kadro-yaz.mjs; node $D/kadro-yaz.test.mjs | grep -E \"✗|SONUÇ\"; exit ${PIPESTATUS[0]}"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T17:55:55+03:00",
+      "sure_sn": 30.6,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "2ae67510419cd559c4a4bde054c23b7f0587f0a356d5c6d56495318c91c68850",
+      "olcum_id": "1e94b772c35f4af7b21fbb503f320e68",
+      "olculen_commit": "5777289efa5fbf476fe09b103cd42beeb8b9cf51",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-yaz-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-yaz-sinavi-sonra.txt",
+      "sha256": "e49fd5328471a5baeaa39ac9e7a9d783a7b2784e76c380123ee0ab6980643800",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-yaz.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:56:25+03:00",
+      "sure_sn": 30.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "fe1dc55ec019f5436a9301bc69d60da227f5690ad4d877beaca93e383d7a520f",
+      "olcum_id": "d855c2c3e046495a97d22afb6ad97aae",
+      "olculen_commit": "5777289efa5fbf476fe09b103cd42beeb8b9cf51",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-dava-sinavi-sonra.txt",
+      "sha256": "2902e20d051464605a40e4cd23cd9d84de9fa755bc68b705c07980d110e515fa",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/dava.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:56:40+03:00",
+      "sure_sn": 5.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "a8243178d7cede2ec8355c3b0a7644db9f45e365bca1cf58388375575c9f0d0e",
+      "olcum_id": "fad6ce1a16d74320bd3d4241be3b56fc",
+      "olculen_commit": "5777289efa5fbf476fe09b103cd42beeb8b9cf51",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-sinavi-sonra.txt",
+      "sha256": "c3724c392e91116aa325117a853426b240af39a9222a89b75250e6c6591546b0",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T17:56:40+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "cf7457030c5618a37b876a452cc8b9f506d4f28c4bb838668c59a72ef5f4f59a",
+      "olcum_id": "e3c78530b87043c09d998c50f4959eae",
+      "olculen_commit": "5777289efa5fbf476fe09b103cd42beeb8b9cf51",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "6ff41d5cf7f24ee9937d5b8a2fee190b71794da70ed200bddb0a3dd3c2c252de"
+}

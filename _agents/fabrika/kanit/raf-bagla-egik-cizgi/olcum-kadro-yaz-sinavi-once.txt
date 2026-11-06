@@ -1,0 +1,6 @@
+$ bash -c D=$(mktemp -d); cp -r terminal-onar/kapi/. $D/; git show HEAD~1:terminal-onar/kapi/kadro-yaz.mjs > $D/kadro-yaz.mjs; node $D/kadro-yaz.test.mjs | grep -E "✗|SONUÇ"; exit ${PIPESTATUS[0]}
+# rc=1 sure=30.6s zaman=2026-11-06T17:55:55+03:00
+--- stdout ---
+  ✗ F1 tmux adı "2022/777" kayda AYNEN yazılır (tmux: "2022/777:0"), hata yok Oturum adı ("2022/777") kayda yazılamaz — boşluk/özel karakter taşıyan oturum bağlanamaz.
+SONUÇ: 33 geçti · 1 kaldı
+--- stderr ---
