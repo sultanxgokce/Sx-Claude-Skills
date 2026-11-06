@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: ana sayfanın yazdırması PDF olarak yazıldı · rc≠0 + hedef kapı 'ana sayfanın yazdırması PDF olarak yazıldı' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-sonra-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/dyk-m1.sh
+# rc=1 sure=16.3s zaman=2026-11-06T11:35:33+03:00
+--- stdout ---
+MUTANT 1: window.print yamalanmaz (yazdırma sayılmaz)
+  ✗ Y1 ana sayfanın yazdırması PDF olarak yazıldı (%PDF, gerçek sayfa boyutu), pencere açılmadı  → dumen-kapi: yazdirma-yok — tıklama 15000 ms içinde sayfanın yazdırmasını başlatmadı (window.print çağrılmadı)
+SONUÇ: geçti=0 kaldı=1 (ilk kırmızıda duruldu)
+--- stderr ---
