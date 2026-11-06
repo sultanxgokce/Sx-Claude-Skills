@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-sinav-once-tur3-once.txt
+hedef_sha256: 7d4a62bd0e111102a38a858a6959e2db22abf407e0d7a4376af9f83811d0d702
+hedef_zaman: 2026-11-06T20:26:25+03:00
+hedef_renk: kirmizi
+neden: daraltma + sınav düzeltmesi (cd geçici dizin, artık dosya) sonrası yeni kayıt var
+kim: BASİRET
+karsi: -
+zaman: 2026-11-06T20:34:15+03:00
