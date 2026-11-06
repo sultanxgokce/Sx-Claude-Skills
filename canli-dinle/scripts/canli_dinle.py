@@ -115,6 +115,14 @@ def ozetle(metin, anh):
     return json.load(urllib.request.urlopen(r, timeout=90))["choices"][0]["message"]["content"].strip()
 
 
+def olay(dizin, mesaj):
+    """Saat damgalı olay günlüğü (canlı koşu kanıtı): <çıktı>/olay.log; anahtar ve metin yazılmaz."""
+    satir = time.strftime("%Y-%m-%dT%H:%M:%S%z") + " " + mesaj
+    print(satir, file=sys.stderr)
+    with open(os.path.join(dizin, "olay.log"), "a") as f:
+        f.write(satir + "\n")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("adres")
@@ -188,7 +196,7 @@ def main(argv=None):
                 kes = penc_bas + a.pencere_sn
                 ozet_yaz([s for s in sozluk if s[0] < kes], ozet_no); ozet_no += 1
                 sozluk = [s for s in sozluk if s[0] >= kes]; penc_bas = kes
-        print(f"parça {i} yazıldı · {len(soz)} sözcük", file=sys.stderr)
+        olay(dizin, f"parca {i} yazildi kaynak={a.kaynak} sozcuk={len(soz)}")
         i += 1
     if sozluk:
         ozet_yaz(sozluk, ozet_no)
@@ -197,7 +205,7 @@ def main(argv=None):
     if i == 0:
         print("✗ hiç parça gelmedi: " + hata[-300:], file=sys.stderr)
         return 1
-    print(f"bitti: {i} parça · {dizin}/metin.txt", file=sys.stderr)
+    olay(dizin, f"bitti parca={i} arac={arac}")
     return 0
 
 
