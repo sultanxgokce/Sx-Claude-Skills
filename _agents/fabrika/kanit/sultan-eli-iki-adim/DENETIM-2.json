@@ -1,0 +1,44 @@
+{
+  "tur": 2,
+  "is": "sultan-eli-iki-adim",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T00:23:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-iki-adim",
+  "dal": "sultan-eli-iki-adim",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 48634,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki adımlı doğrulama uygulanmış; önceki B1, kilit altında atomik kontrol-harcama ve izin de tüketilmesiyle kapanmış, çoklu kayıt ile mutant sınavları bunu doğruluyor. Kod üretime hazır düzeyde; yalnız önceki B2 olan gerçek canlı harness doğrulaması kutu dışında hâlâ açık.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmamış: gerçek harness üzerinde insan `!` kaydının komut bittikten sonra yazıldığı ve ayrı `onayla` sürecince görülebildiği hâlâ doğrulanmamış.",
+        "kanit": "İş kartında `canli_gerekir: true` ve sebep `--canli e`; SKILL.md gerçek `!` koşusunun fixture ile üretilemediğini söylüyor. Yeşil ZB1 ölçümü gerçek harness yerine `zb` yardımcı işlevinin `_satir` ile yazdığı sentetik JSONL kaydını kullanıyor.",
+        "konum": "iş kartı: canli_gerekir/canli_sebep; sultan-eli/SKILL.md: canlı doğrulama notu; sultan-eli/scripts/sultan-eli.test.sh: zb ve ZB1",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın canlı harness oturumu ve tek gerçek `!` komutu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce ile iki ayrı yeşil sonra kaydı var. Son temiz committe 76/76 geçen ölçüm, önceki B1'i doğrudan hedefleyen ZB12'yi ve iz-harcama mutantını yakalayan ZB13'ü içeriyor; ayrıca `flock` kontrol ile harcamayı atomik yapıyor ve `iz:<nonce>` kaydı aynı izin yeniden kullanımını engelliyor. Gerçek canlı `!` akışı ölçülmediği için B2 yalnız kutu-dışı kayıt olarak sürüyor."
+  }
+}

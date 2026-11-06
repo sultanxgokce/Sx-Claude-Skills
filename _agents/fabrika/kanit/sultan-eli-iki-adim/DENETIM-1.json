@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "sultan-eli-iki-adim",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T23:22:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sultan-eli-iki-adim",
+  "dal": "sultan-eli-iki-adim",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38839,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki adımlı akış kurulmuş; önce/sonra ölçümü kayıt-sonrası eşleme, eski kayıt, birebir eşleşme ve ardışık ikinci onay senaryolarını doğruluyor. Ancak iz gerçekten harcanmadığı için birden fazla uygun kayıt varsa aynı iz ikinci kez VAR üretebilir; güvenlik kapısında yanlış sonuç veren bu kusur çözülmeden üretime hazır değil.",
+    "bulgular": [
+      {
+        "ne": "Tek kullanımlılık eksik uygulanmış: başarılı onay yalnız eşleşen kayıt anahtarını harcananlar dosyasına ekliyor, iz JSON'unu silmiyor veya tüketilmiş olarak işaretlemiyor. Aynı komuta ait zaman penceresindeki ikinci bir kayıt, aynı iz kullanılarak sonraki çağrıda yeniden VAR sonucu verebilir; ayrıca kontrol ile ekleme atomik olmadığından eşzamanlı iki onay da aynı kaydı geçebilir.",
+        "kanit": "onayla içinde aday izler her çağrıda izler(izdir) üzerinden yeniden yükleniyor; başarı yolunda yalnız f.write(a + \"\\n\") yapılıp return 0 ediliyor. ZB2 testi ise tek kayıtla ardışık iki çağrıyı sınayarak geçiyor; ikinci uygun kayıt veya eşzamanlı çağrı senaryosu ölçülmüyor.",
+        "konum": "sultan-eli/scripts/iki-adim.py: onayla, harcanan denetimi ve başarıdaki harcanan.txt ekleme bölümü; sultan-eli/scripts/sultan-eli.test.sh: ZB1-ZB2",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek harness üzerinde, insan `!` kaydının komut bittikten sonra yazılması ve ayrı sürecin bu kaydı görmesi bu konteynerde doğrulanmamış.",
+        "kanit": "SKILL.md açıkça gerçek `!` koşusunun fixture ile üretilemediğini ve canlı doğrulamanın Sultan'ın tek `!` komutunu gerektirdiğini söylüyor; sunulan sonra ölçümü ZB fikstüründe `_satir` ile sentetik kayıt yazıyor. İş kartında da `canli_gerekir: true` bulunuyor.",
+        "konum": "sultan-eli/SKILL.md: 0.2.0 bölümü ve hemen önceki canlı doğrulama notu; sultan-eli/scripts/sultan-eli.test.sh: ZB/zb fikstürü; iş kartı canli_gerekir",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın canlı harness oturumu ve tek gerçek `!` komutu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; aynı temiz commit üzerinde kırmızı önce/yeşil sonra ölçüm çifti var. Sonra kaydı 74/74 geçiyor ve eski kayıt, birebir eşleşme ile ardışık yeniden kullanım dahil anlamlı senaryoları ölçüyor; ancak çoklu uygun kayıt/eşzamanlı onay açığını kapsamıyor ve gerçek canlı `!` akışı yerine sentetik JSONL fikstürü kullanıyor."
+  }
+}

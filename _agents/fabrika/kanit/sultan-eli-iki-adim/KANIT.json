@@ -1,0 +1,71 @@
+{
+  "is": "sultan-eli-iki-adim",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T00:06:51+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-once",
+      "asama": "once",
+      "dosya": "olcum-sinav-once-once.txt",
+      "sha256": "db0635307bf0364d3dfd04160946671188e84302c33b45d5335a62170e33bfd0",
+      "komut": [
+        "bash",
+        "/tmp/tmp.OKatxTFht4/sultan-eli.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-06T23:16:36+03:00",
+      "sure_sn": 583.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "ac60889c679613078100febcf73b6ee608b375702bcd9eef84bde7ce3c170ac6",
+      "olcum_id": "2abbabb2399e4e878f7141972c539412",
+      "olculen_commit": "7e5bc8100769ff70c45e955d2a61d69eb163bd41",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-sonra.txt",
+      "sha256": "35c2bedc124f0cdfc5e723b911f3b1af5a8b60ae9bbcf0f8071fd8e4edb9cb6f",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:18:39+03:00",
+      "sure_sn": 122.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "7bac57115e0b90c35c2b6f32a327601f492d732a9ae10ba9edb4b8bb4bfe4854",
+      "olcum_id": "20bc6b82c54b497a93b175d5ff419036",
+      "olculen_commit": "7e5bc8100769ff70c45e955d2a61d69eb163bd41",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-sonra-2",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra-2-sonra.txt",
+      "sha256": "56b5e3306a4ae24874a82541f6cc73a2654668f2e8454c3188b66ab4723d2160",
+      "komut": [
+        "bash",
+        "sultan-eli/scripts/sultan-eli.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:06:51+03:00",
+      "sure_sn": 119.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "35e6c17d6efaa3da31df55e409ff6d62e2b05b94a17ee47975bdc83799dd99cb",
+      "olcum_id": "e167c0cf6b5940e9812ee8920e57ac21",
+      "olculen_commit": "286ad04a37d2ad1f9e91b6d2f6196dfee825f2f4",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "c48dd1c16a34a477310ab07c4695619dcb7c4ad634a3767d3dbf2b70130d512e"
+}
