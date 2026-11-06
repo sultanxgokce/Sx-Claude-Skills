@@ -1,0 +1,31 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S3 · rc≠0 + hedef kapı 'S3' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-sinav-* ===
+$ bash _agents/fabrika/kanit/on-goz-kapilari/kos.sh istisna
+# rc=1 sure=7.2s zaman=2026-11-07T01:18:58+03:00
+--- stdout ---
+mutant: istisna
+── S1 · temiz iş
+  ✗ S1 kanıt HEAD'de, dal itilmiş, tabanın üstünde, ağaç temiz → UYUMLU rc 0 [rc=1]
+── A1 · kanıt başı
+  ✗ S2 kanıttan sonra kod commit'i → A1 UYUMSUZ, iki sha ve dosya adı yazılır, rc 1
+  ✗ S3 HEAD ile ölçülen commit arasında YALNIZ kanıt dosyası → A1 uyumlu (kapının istisnası)
+  ✗ S3b 'once' kaydı eski commit'te ölçülmüş olsa da muaf → A1 uyumlu
+  ✓ S4 itilmemiş commit → A1 'önce it'
+  ✗ S4p PR başı = HEAD → A1 uyumlu
+  ✓ S4q PR başı ≠ HEAD → A1 uyumsuz 'önce it'
+  ✗ S11 PR başı okunamıyor (gh 255) → A1 ölçülemedi, hüküm ÖLÇÜLEMEDİ rc 3 (uyumlu sayılmaz) [rc=1]
+── A2 · kanıt eksik
+  ✓ S5 kanıt dizini yok → A2 'kanıt yok'
+  ✓ S6 tek gerçek ölçüm geçersiz ilan edildi → A2 uyumsuz (mutant gerçek ölçüm sayılmaz) [⛔ geçersiz ilan edildi: olcum-sinav-sonra.txt (yesil → gecersiz) · S · sınavda ge�]
+  ✓ S7 mutant başka kapıyı düşürdü, hedef kapı (X1) düşmedi → A2 uyumsuz (kanit.sh hedefsiz mutantı zaten kaydetmez)
+── A3 · taban
+  ✓ S8 taban ileride ve çakışıyor → A3 uyumsuz, dosya adıyla
+  ✓ S8b taban ileride ama çakışma yok → A3 uyumlu (bilgi satırı)
+── A4 · ağaç
+  ✓ S9 izlenen dosya commit'lenmemiş → A4 uyumsuz
+  ✓ S9b yalnız kanıt dizini kirli → A4 uyumlu
+── A5 · kapsam
+  ✓ S10 kart 'dokunulmaz' dediği dosya farkta → A5 uyumsuz
+  ✓ S10b aynı cümle, dosya farkta yok → A5 uyumlu
+  ✓ S12 kart yok → A5 ölçülemedi
+── SONUÇ: 12 geçti · 6 kaldı ──
+--- stderr ---

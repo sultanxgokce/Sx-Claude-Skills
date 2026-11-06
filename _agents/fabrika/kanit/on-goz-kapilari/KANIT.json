@@ -1,0 +1,131 @@
+{
+  "is": "on-goz-kapilari",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T01:19:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "on-goz-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-on-goz-sinav-sonra.txt",
+      "sha256": "c66e5f6c7e203430cc9e092519c3db618a6f5eb9a7248a95daea6c281ac92837",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-kapilari/kos.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T01:18:50+03:00",
+      "sure_sn": 7.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "0154613ddc6ce71f9aac2d4b405d2a9a9b465a12e27cc4f80825e315e6d24a31",
+      "olcum_id": "70198d3c0c0045d686e2236584f106a4",
+      "olculen_commit": "4e21d6f03a5890549fc81dc3e68efddbccd94665",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-istisna",
+      "asama": "sonra",
+      "dosya": "olcum-mut-istisna-sonra.txt",
+      "sha256": "5d52586dae519736e143992347a8ebeed6e52353cdc0ea972e9128d3df85240a",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-kapilari/kos.sh",
+        "istisna"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T01:18:58+03:00",
+      "sure_sn": 7.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "on-goz-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "S3",
+      "hedef_dustu": true,
+      "olcum_id": "de87779fea8d4716912a09d678b28748",
+      "olculen_commit": "4e21d6f03a5890549fc81dc3e68efddbccd94665",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-once",
+      "asama": "sonra",
+      "dosya": "olcum-mut-once-sonra.txt",
+      "sha256": "3eb3f9b5e7763c4cadb517c0361d87233b7c428d56bfb3cf1e495c9bbd40595d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-kapilari/kos.sh",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T01:19:05+03:00",
+      "sure_sn": 7.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "on-goz-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "S3b",
+      "hedef_dustu": true,
+      "olcum_id": "b6719b1e4d9a49b8a581ecac62096c5d",
+      "olculen_commit": "4e21d6f03a5890549fc81dc3e68efddbccd94665",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-gecersiz",
+      "asama": "sonra",
+      "dosya": "olcum-mut-gecersiz-sonra.txt",
+      "sha256": "f288b7bc30c92aa032c780a74f803904da4a76a935366dc807e59b75ab48f9e7",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-kapilari/kos.sh",
+        "gecersiz"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T01:19:15+03:00",
+      "sure_sn": 9.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "on-goz-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "S6",
+      "hedef_dustu": true,
+      "olcum_id": "d9dedb550d2743f4954c18952caa3498",
+      "olculen_commit": "4e21d6f03a5890549fc81dc3e68efddbccd94665",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kosu",
+      "asama": "tek",
+      "dosya": "olcum-gercek-kosu-tek.txt",
+      "sha256": "e8e41426caa7a69c7307015c1c1553aa2415449021f7e600b614856bd908ace6",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-kapilari/gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T01:19:15+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "cac053c99b067fbcedcc8c2af512e519a56b27eef61274d261d35f6d7c705e8b",
+      "olcum_id": "2b40e4f1bebe45c1bd0de7bbe66cc66f",
+      "olculen_commit": "4e21d6f03a5890549fc81dc3e68efddbccd94665",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "5e4898c89ac5c8fb1aefeb8672820ed4f0dfdae8b13acb1aee1d9eb2de9dcb69"
+}
