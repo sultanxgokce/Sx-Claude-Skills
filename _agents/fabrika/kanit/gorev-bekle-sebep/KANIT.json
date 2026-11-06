@@ -1,7 +1,7 @@
 {
   "is": "gorev-bekle-sebep",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-06T23:30:17+03:00",
+  "guncelleme": "2026-11-06T23:32:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -49,7 +49,92 @@
       "olculen_commit": "f5263e4b9a11d647c837e7a3bf3b9572cbd6a222",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sonra-tur2",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tur2-tek.txt",
+      "sha256": "27b9ff93884b9994ca9d4f276924f2a616bec9977a38f6207f89b2ec3cd2a7b5",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:31:53+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "7a6d12d736bae617833d523df7acb5ee2e5cbb27fdc5e9ed02391fde3e385c90",
+      "olcum_id": "41855140a0c545b1b951408b87be2251",
+      "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-tur2-alt-sinir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-tur2-alt-sinir-sonra.txt",
+      "sha256": "4c47d759d583dd3c0bd5d8a9e6191fb0573a8991efa87d1417c5d7266e2400af",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:31:54+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K6 yalnız boşluktan",
+      "hedef_dustu": true,
+      "olcum_id": "75b7559b3df34fdaadec5dd8aa77ef0b",
+      "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-defter-bekle",
+      "asama": "canli",
+      "dosya": "canli-canli-defter-bekle.txt",
+      "sha256": "52802e3cc1917e4ec9b96e0fece94b1d66295f650a5233b8411744475fc75564",
+      "komut": [
+        "tail",
+        "-n",
+        "5",
+        "--",
+        "/tmp/claude-1000/canli-bekle.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/canli-bekle.json",
+      "kaynak_turu": "dosya",
+      "son": 5,
+      "desen": "\\[bekliyor\\] Sx 722 birleştirmesi",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "{\"ok\":true,\"kayit\":{\"id\":\"gorev_01M6RF022S6K0HQB17B9C06YJF\",\"tur\":\"gorev\",\"surum\":12,\"durum\":\"gecerli\",\"adlar\":[{\"deger\":\"Canlı yayın dinleme becerisi F1: yakala, parçala, yazıya dök, not çıkar\",\"anahtar\":\"canli yayin dinleme becerisi f1 yakala parcala yaziya dok not cikar\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.225Z\"}],\"telefonlar\":[],\"epostalar\":[],\"adimlar\":[{\"deger\":\"[atandı → HEZARFEN] F1 inşa\",\"anahtar\":\"atandi hezarfen f1 insa\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.521Z\"},{\"deger\":\"[üs",
+        "saat": "2026-11-06T12:58:03.225Z",
+        "saat_iso": "2026-11-06T12:58:03+00:00"
+      },
+      "son_atesleme": {
+        "satir": "{\"ok\":true,\"kayit\":{\"id\":\"gorev_01M6RF022S6K0HQB17B9C06YJF\",\"tur\":\"gorev\",\"surum\":12,\"durum\":\"gecerli\",\"adlar\":[{\"deger\":\"Canlı yayın dinleme becerisi F1: yakala, parçala, yazıya dök, not çıkar\",\"anahtar\":\"canli yayin dinleme becerisi f1 yakala parcala yaziya dok not cikar\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.225Z\"}],\"telefonlar\":[],\"epostalar\":[],\"adimlar\":[{\"deger\":\"[atandı → HEZARFEN] F1 inşa\",\"anahtar\":\"atandi hezarfen f1 insa\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.521Z\"},{\"deger\":\"[üs",
+        "saat": "2026-11-06T12:58:03.225Z",
+        "saat_iso": "2026-11-06T12:58:03+00:00"
+      },
+      "zaman": "2026-11-06T23:32:00+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "796a31f3e69f4e00b43587e4b2f2367b",
+      "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "4552f0d8fb188ba5821429db54f5076a20a71bfd10113116f844e6e68dbbf797"
+  "imza": "155b8e79bb6dc2d87ac2eb36fe670889a0397fc01aad5a9f59aa2eaf3d48a64f"
 }
