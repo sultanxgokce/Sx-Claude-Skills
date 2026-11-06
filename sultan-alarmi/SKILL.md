@@ -55,11 +55,13 @@ Sultan'a günde en çok **4 istek**. İstek = Sultan'dan tık ya da karar isteye
 ```
 butce.sh harca --tur kart|onay|soru|wa --ad "<ad>" --sahip <ajan>   rc 0 geçti · rc 10 kuyruğa yazıldı (gönderme)
 butce.sh acil  --ad "<ne>" --sahip <ajan>                           yalnız hat durdu · para kaybı · canlı kesinti; tavanı aşar, günde en çok 1
-butce.sh durum | butce.sh ozet [--isle]                              bugünkü sayaç · kuyruğun tek özet metni
+butce.sh durum | butce.sh ozet [--isle] [--onceki]                   bugünkü sayaç · kuyruğun tek özet metni
+butce.sh sabah [--kuru]                                             dünkü kuyruğu TEK WhatsApp mesajı olarak Sultan'a gönderir (09:00'da çağrılacak); gidince satırları işler, gitmezse korur (rc 3)
 ```
 - Gün İstanbul günüdür. Tavan dolunca ret yok, **kuyruk**: istek ertesi sabah 09:00 özetinde tek satır gider; sahibine "KUYRUKTA" bilgisi basılır.
 - Aynı gün aynı tür+ad istek bir kez düşer. Acil böyle değildir: her çağrı acil hakkından düşer (günde 1 telefon).
-- Bağlı yollar: `kapimda ac` (kart) ve `alarm.sh gonder --telefon` (acil hakkı). **Bağlı DEĞİL:** onay-bekliyor görevi, soru mektubu, WhatsApp sorusu, 09:00 özetinin gönderimi (ayrı kartlar).
+- Bağlı yollar: `kapimda ac` (kart) · `alarm.sh gonder --telefon` (acil hakkı) · `wa-gonder.sh --istek "<ad>"` (WhatsApp sorusu; bayrağı çağıran verir, bilgi mesajı vermez). **Bağlı DEĞİL:** onay-bekliyor görevi (gorev.sh, cloudtop), soru mektubu, `butce.sh sabah`'ın 09:00'da kendiliğinden koşması (cloudtop cron kartı) — o güne dek özeti `butce.sh sabah` ile elle koşturmak gerekir.
+- Bütçe betiği okunamazsa istek geçer (fail-open, uyarı basılır): bu bir politika sınırlayıcısıdır, güvenlik kapısı değil.
 - Defter dosya-yereldir (konteyner başına `butce.jsonl`); kutular arası tek sayaç yoktur.
 
 ## Ders defteri (kullandıkça gelişir)

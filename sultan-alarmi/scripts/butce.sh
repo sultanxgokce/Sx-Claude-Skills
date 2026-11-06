@@ -6,7 +6,8 @@
 #   butce.sh acil --ad "<ne>" --sahip <ajan>
 #        yalnız sultan-alarmi acili (hat durdu · para kaybı · canlı kesinti): tavanı aşar, günde en çok 1. rc 0 geçti · rc 10 acil hakkı da bitti → kuyruk
 #   butce.sh durum                 bugünkü harcama, kalan, kuyruk
-#   butce.sh ozet [--isle]         kuyruktaki isteklerin TEK özet metni (09:00 paketine); --isle satırları 'özete girdi' yapar
+#   butce.sh ozet [--isle] [--onceki]   kuyruktaki isteklerin TEK özet metni; --isle satırları 'özete girdi' yapar; --onceki yalnız bugünden ÖNCEKİ günlerin satırları
+#   butce.sh sabah [--kuru]        09:00 özeti: dünkü kuyruğu TEK WhatsApp mesajı olarak Sultan'a gönderir, gitti ise satırları işler; kuyruk boşsa mesaj yok; gitmezse kuyruk korunur (rc 3)
 # Gün = İstanbul günü. Sayılan: kart · onay-bekliyor görevi · soru mektubu · WhatsApp sorusu. Bilgi satırı SAYILMAZ (çağıran harca çağırmaz).
 # Aynı gün aynı tür+ad istek ikinci kez bütçeden düşmez (tekrar çağrı = aynı sonuç). Acil böyle değil: her çağrı hakkı düşer.
 # SINIR (dürüstçe): defter dosya-yereldir (konteyner başına); kutular arası tek sayaç yoktur. Ortak sayaç ancak ortak serviste olur.
@@ -15,13 +16,14 @@ DIZIN="${SULTAN_BUTCE_DIZIN:-${SULTAN_ALARMI_DIZIN:-${HOME:-/tmp}/.cache/sultan-
 DEFTER="$DIZIN/butce.jsonl"; KILIT="$DIZIN/butce.kilit"
 TAVAN="${SULTAN_BUTCE_TAVAN:-4}"; ACIL_TAVAN="${SULTAN_BUTCE_ACIL_TAVAN:-1}"
 SIMDI="${SULTAN_BUTCE_SIMDI:-$(date +%s)}"
-kullanim(){ sed -n 2,11p "$0" | sed 's/^# \{0,1\}//' >&2; exit 2; }
+kullanim(){ sed -n 2,13p "$0" | sed 's/^# \{0,1\}//' >&2; exit 2; }
 CMD="${1:-}"; [ -n "$CMD" ] && shift || kullanim
-TUR=""; AD=""; SAHIP=""; ISLE=0
+TUR=""; AD=""; SAHIP=""; ISLE=0; ONCEKI=0; KURU=0
+WA="${SULTAN_BUTCE_WA:-$(dirname "${BASH_SOURCE[0]}")/../../whatsapp-gonder/scripts/wa-gonder.sh}"
 while [ $# -gt 0 ]; do case "$1" in
   --tur|--ad|--sahip|--tavan) [ $# -ge 2 ] || { echo "değer eksik: $1" >&2; exit 2; }
      case "$1" in --tur) TUR="$2" ;; --ad) AD="$2" ;; --sahip) SAHIP="$2" ;; --tavan) TAVAN="$2" ;; esac; shift 2 ;;
-  --isle) ISLE=1; shift ;;
+  --isle) ISLE=1; shift ;; --onceki) ONCEKI=1; shift ;; --kuru) KURU=1; shift ;;
   *) echo "bilinmeyen: $1" >&2; kullanim ;;
 esac; done
 case "$TAVAN$ACIL_TAVAN" in *[!0-9]*|"") echo "tavan sayı olmalı" >&2; exit 2 ;; esac
@@ -88,19 +90,28 @@ PY
   ;;
 ozet)
   exec 9>>"$KILIT"; flock 9
-  python3 - "$DEFTER" "$ISLE" <<'PY'
+  python3 - "$DEFTER" "$ISLE" "$ONCEKI" "$GUN" <<'PY'
 import sys,json
-p,isle=sys.argv[1],sys.argv[2]=='1'
+p,isle,onceki,gun=sys.argv[1],sys.argv[2]=='1',sys.argv[3]=='1',sys.argv[4]
 kay=[json.loads(l) for l in open(p,encoding='utf-8') if l.strip()]
-q=[k for k in kay if k['durum']=='kuyruk']
+uygun=lambda k: k['durum']=='kuyruk' and (not onceki or k.get('gun','')<gun)
+q=[k for k in kay if uygun(k)]
 if not q: print("kuyrukta istek yok"); sys.exit(0)
 print("Dün kuyruğa giren %d istek (sahibi, ne, ne zaman):"%len(q))
 for k in q: print("- %s · %s · %s (%s)"%(k.get('sahip'),k.get('ad'),k.get('tur'),k.get('gun')))
 if isle:
     for k in kay:
-        if k['durum']=='kuyruk': k['durum']='ozete-girdi'
+        if uygun(k): k['durum']='ozete-girdi'
     open(p,'w',encoding='utf-8').write(''.join(json.dumps(k,ensure_ascii=False)+"\n" for k in kay))
 PY
   ;;
+sabah)
+  OZ="$(bash "${BASH_SOURCE[0]}" ozet --onceki)"
+  case "$OZ" in "kuyrukta istek yok"*) echo "butce: kuyrukta dünkü istek yok, mesaj gönderilmedi"; exit 0 ;; esac
+  [ "$KURU" -eq 1 ] && { echo "(kuru: Sultan'a şu özet gidecekti)"; printf '%s\n' "$OZ"; exit 0; }
+  [ -x "$WA" ] || [ -f "$WA" ] || { echo "butce: WhatsApp betiği yok ($WA); kuyruk korundu" >&2; exit 3; }
+  if bash "$WA" "Dünkü istek kuyruğu (günlük 4 istek dolmuştu): $OZ" >/dev/null 2>&1; then
+    bash "${BASH_SOURCE[0]}" ozet --onceki --isle >/dev/null; echo "butce: sabah özeti gitti, kuyruk işlendi"
+  else echo "butce: sabah özeti GİTMEDİ; kuyruk korundu, sonraki koşuda yeniden denenir" >&2; exit 3; fi ;;
 *) kullanim ;;
 esac

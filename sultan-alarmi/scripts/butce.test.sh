@@ -58,4 +58,25 @@ ok "geçen sayısı" "$(cat "$T3"/rc? | grep -c '^0$')" 4
 ok "kuyruk sayısı" "$(cat "$T3"/rc? | grep -c '^10$')" 4
 python3 -I -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T3"
 
+echo "B9 sabah özeti: dünkü kuyruk tek WhatsApp mesajı, gidince işlenir"
+T4="$(mktemp -d)"
+cat > "$T4/wa" <<EOW
+#!/usr/bin/env bash
+echo CAGRI >> "$T4/cagri.log"; printf '%s\n' "\$*" >> "$T4/metin.log"; exit "\${WA_RC:-0}"
+EOW
+chmod +x "$T4/wa"; : > "$T4/cagri.log"
+cagri(){ grep -c CAGRI "$T4/cagri.log" || true; }
+B9(){ SULTAN_BUTCE_DIZIN="$T4" SULTAN_BUTCE_WA="$T4/wa" SULTAN_BUTCE_SIMDI="${SIM9:-$S0}" bash "$B" "$@" >"$T4/out" 2>&1; echo $?; }
+for i in 1 2 3 4; do B9 harca --tur kart --ad "s$i" --sahip A >/dev/null; done; B9 harca --tur onay --ad s5 --sahip BERID >/dev/null
+B9 sabah >/dev/null; ok "aynı gün sabah özeti göndermez (yalnız dünkü)" "$(cagri)" 0
+SIM9=$((S0 + 86400)); ok "ertesi sabah özet gider rc 0" "$(B9 sabah)" 0
+ok "tek mesaj gitti" "$(cagri)" 1
+ok "mesaj s5'i taşır" "$(grep -c 's5' "$T4/metin.log")" 1
+ok "işlendi: kuyruk boş" "$(SULTAN_BUTCE_DIZIN="$T4" SULTAN_BUTCE_SIMDI=$SIM9 bash "$B" ozet | grep -c 'kuyrukta istek yok')" 1
+B9 sabah >/dev/null; ok "ikinci koşu mesaj atmaz" "$(cagri)" 1
+for i in 7 8 9 10 11; do B9 harca --tur kart --ad "s$i" --sahip A >/dev/null; done
+SIM9=$((S0 + 2*86400)); ok "geçit düşerse rc 3" "$(WA_RC=4 B9 sabah)" 3
+ok "gitmeyen özet kuyruğu korur" "$(SULTAN_BUTCE_DIZIN="$T4" SULTAN_BUTCE_SIMDI=$SIM9 bash "$B" ozet --onceki | grep -c 's11')" 1
+python3 -I -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T4"
+
 echo "geçti=$GEC kaldı=$KAL"; [ "$KAL" -eq 0 ]
