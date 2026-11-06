@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # butce.sh — Sultan'dan tık ya da karar isteyen isteklere GÜNLÜK BÜTÇE (günde en çok 4) + taşan isteğin kuyruğu.
-#   butce.sh harca --tur kart|onay|soru|wa --ad "<istek adı>" --sahip <ajan> [--tavan N]
+#   butce.sh harca --tur kart|onay|soru|wa --ad "<istek adı>" --sahip <ajan> [--tavan N] [--dis-kuyruk]
 #        rc 0  → bütçeden düştü, istek şimdi gidebilir ("geçti n/4")
 #        rc 10 → bütçe dolu: istek KUYRUĞA yazıldı, çağıran göndermez; sahibine "kuyrukta" bilgisi basılır
+#              --dis-kuyruk: çağıranın kendi sabah kuyruğu varsa (ör. karar-kuyrugu.sh) kayıt 'dis-kuyruk' düşer, sabah özetine GİRMEZ (çift gönderim olmasın)
 #   butce.sh acil --ad "<ne>" --sahip <ajan>
 #        yalnız sultan-alarmi acili (hat durdu · para kaybı · canlı kesinti): tavanı aşar, günde en çok 1. rc 0 geçti · rc 10 acil hakkı da bitti → kuyruk
 #   butce.sh durum                 bugünkü harcama, kalan, kuyruk
@@ -16,14 +17,14 @@ DIZIN="${SULTAN_BUTCE_DIZIN:-${SULTAN_ALARMI_DIZIN:-${HOME:-/tmp}/.cache/sultan-
 DEFTER="$DIZIN/butce.jsonl"; KILIT="$DIZIN/butce.kilit"
 TAVAN="${SULTAN_BUTCE_TAVAN:-4}"; ACIL_TAVAN="${SULTAN_BUTCE_ACIL_TAVAN:-1}"
 SIMDI="${SULTAN_BUTCE_SIMDI:-$(date +%s)}"
-kullanim(){ sed -n 2,13p "$0" | sed 's/^# \{0,1\}//' >&2; exit 2; }
+kullanim(){ sed -n 2,14p "$0" | sed 's/^# \{0,1\}//' >&2; exit 2; }
 CMD="${1:-}"; [ -n "$CMD" ] && shift || kullanim
-TUR=""; AD=""; SAHIP=""; ISLE=0; ONCEKI=0; KURU=0
+TUR=""; AD=""; SAHIP=""; ISLE=0; ONCEKI=0; KURU=0; DIS=0
 WA="${SULTAN_BUTCE_WA:-$(dirname "${BASH_SOURCE[0]}")/../../whatsapp-gonder/scripts/wa-gonder.sh}"
 while [ $# -gt 0 ]; do case "$1" in
   --tur|--ad|--sahip|--tavan) [ $# -ge 2 ] || { echo "değer eksik: $1" >&2; exit 2; }
      case "$1" in --tur) TUR="$2" ;; --ad) AD="$2" ;; --sahip) SAHIP="$2" ;; --tavan) TAVAN="$2" ;; esac; shift 2 ;;
-  --isle) ISLE=1; shift ;; --onceki) ONCEKI=1; shift ;; --kuru) KURU=1; shift ;;
+  --isle) ISLE=1; shift ;; --onceki) ONCEKI=1; shift ;; --dis-kuyruk) DIS=1; shift ;; --kuru) KURU=1; shift ;;
   *) echo "bilinmeyen: $1" >&2; kullanim ;;
 esac; done
 case "$TAVAN$ACIL_TAVAN" in *[!0-9]*|"") echo "tavan sayı olmalı" >&2; exit 2 ;; esac
@@ -33,23 +34,23 @@ touch "$DEFTER"
 
 # python tek yerde: okuma-karar-yazma aynı kilitte (iki eşzamanlı istek 5. kapıyı açmasın)
 karar(){ # karar <mod> → stdout: SONUC|n|kalan  (mod harca|acil)
-  python3 - "$DEFTER" "$1" "$GUN" "$SIMDI" "$TUR" "$AD" "$SAHIP" "$TAVAN" "$ACIL_TAVAN" <<'PY'
+  python3 - "$DEFTER" "$1" "$GUN" "$SIMDI" "$TUR" "$AD" "$SAHIP" "$TAVAN" "$ACIL_TAVAN" "$DIS" <<'PY'
 import sys,json
-p,mod,gun,ts,tur,ad,sahip,tavan,acil=sys.argv[1:10]; tavan=int(tavan); acil=int(acil)
+p,mod,gun,ts,tur,ad,sahip,tavan,acil,dis=sys.argv[1:11]; tavan=int(tavan); acil=int(acil); dis=dis=='1'
 kay=[]
 for l in open(p,encoding='utf-8'):
     try: kay.append(json.loads(l))
     except Exception: pass
 bugun=[k for k in kay if k.get('gun')==gun]
 for k in (bugun if mod=='harca' else []):   # tekrar çağrı: aynı istek → aynı sonuç, ikinci düşüş yok (acil HER çağrıda düşer: günde 1 telefon)
-    if k.get('mod')==mod and k.get('tur')==tur and k.get('ad')==ad and k.get('durum') in ('harcandi','kuyruk'):
+    if k.get('mod')==mod and k.get('tur')==tur and k.get('ad')==ad and k.get('durum') in ('harcandi','kuyruk','dis-kuyruk'):
         n=sum(1 for x in bugun if x.get('mod')=='harca' and x.get('durum')=='harcandi')
         print(("GECTI" if k['durum']=='harcandi' else "KUYRUK")+"|%d|%d"%(n,max(0,tavan-n))); sys.exit(0)
 if mod=='harca':
     n=sum(1 for x in bugun if x.get('mod')=='harca' and x.get('durum')=='harcandi'); lim=tavan
 else:
     n=sum(1 for x in bugun if x.get('mod')=='acil' and x.get('durum')=='harcandi'); lim=acil
-durum='harcandi' if n<lim else 'kuyruk'
+durum='harcandi' if n<lim else ('dis-kuyruk' if (dis and mod=='harca') else 'kuyruk')
 open(p,'a',encoding='utf-8').write(json.dumps({"gun":gun,"ts":int(ts),"mod":mod,"tur":tur,"ad":ad,"sahip":sahip,"durum":durum},ensure_ascii=False)+"\n")
 if durum=='harcandi': n+=1
 print(("GECTI" if durum=='harcandi' else "KUYRUK")+"|%d|%d"%(n,max(0,lim-n)))

@@ -79,4 +79,17 @@ SIM9=$((S0 + 2*86400)); ok "geçit düşerse rc 3" "$(WA_RC=4 B9 sabah)" 3
 ok "gitmeyen özet kuyruğu korur" "$(SULTAN_BUTCE_DIZIN="$T4" SULTAN_BUTCE_SIMDI=$SIM9 bash "$B" ozet --onceki | grep -c 's11')" 1
 python3 -I -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T4"
 
+echo "B10 --dis-kuyruk: taşan istek sabah özetine GİRMEZ (çağıranın kendi kuyruğu var)"
+T5="$(mktemp -d)"
+D(){ SULTAN_BUTCE_DIZIN="$T5" SULTAN_BUTCE_SIMDI="${SIM10:-$S0}" bash "$B" "$@" >"$T5/out" 2>&1; echo $?; }
+for i in 1 2 3 4; do D harca --tur soru --ad "d$i" --sahip A --dis-kuyruk >/dev/null; done
+ok "beşinci --dis-kuyruk rc 10" "$(D harca --tur soru --ad d5 --sahip A --dis-kuyruk)" 10
+ok "durum kuyrukta 0 (özete girmez)" "$(SULTAN_BUTCE_DIZIN="$T5" SULTAN_BUTCE_SIMDI=$S0 bash "$B" durum | grep -c 'kuyrukta 0')" 1
+ok "özet boş" "$(SULTAN_BUTCE_DIZIN="$T5" SULTAN_BUTCE_SIMDI=$S0 bash "$B" ozet | grep -c 'kuyrukta istek yok')" 1
+ok "tekrar çağrı aynı sonuç (rc 10)" "$(D harca --tur soru --ad d5 --sahip A --dis-kuyruk)" 10
+ok "bayraksız beşinci hâlâ kuyruğa girer" "$(D harca --tur soru --ad d6 --sahip A)" 10
+ok "bayraksız olan özette" "$(SULTAN_BUTCE_DIZIN="$T5" SULTAN_BUTCE_SIMDI=$S0 bash "$B" ozet | grep -c 'd6')" 1
+ok "acil hakkı bundan bağımsız, geçer" "$(D acil --ad "a1" --sahip A)" 0
+python3 -I -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T5"
+
 echo "geçti=$GEC kaldı=$KAL"; [ "$KAL" -eq 0 ]
