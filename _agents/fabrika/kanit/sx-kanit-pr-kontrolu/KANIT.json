@@ -1,7 +1,7 @@
 {
   "is": "sx-kanit-pr-kontrolu",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T02:24:57+03:00",
+  "guncelleme": "2026-11-07T02:28:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -94,7 +94,28 @@
       "olculen_commit": "8231c4e94f2c97ba9039fbd4dcc894d084484a82",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-sonra-2",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-sonra-2-sonra.txt",
+      "sha256": "18db81a10f854b3cc43af89e4f97bc19049b94421b95836903b9bac749673a5f",
+      "komut": [
+        "bash",
+        "scripts/kanit-pr-kontrol.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:28:00+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "be6228535f9e83e2462d68c948c74eb6aa7cc1fc7e97dc1f8fe6e1c95e60803b",
+      "olcum_id": "fce83d227a87417b95520cee0dcec75f",
+      "olculen_commit": "79d22068edb0bf0dfc193d0e0834dce8f37c7e04",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "407bfa6e7c4e5a911082e8e56df88e2563a98bb4bdcf69a0e6f623606347d40f"
+  "imza": "44f4e835150f359c2192edb7f67dc2578137a2cfc234746c65638c77e291b721"
 }

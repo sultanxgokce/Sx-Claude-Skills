@@ -1,0 +1,13 @@
+$ bash scripts/kanit-pr-kontrol.test.sh
+# rc=0 sure=0.4s zaman=2026-11-07T02:28:00+03:00
+--- stdout ---
+PASS  K1 yalnız geçerli kanıt JSON → 0
+PASS  K2 yalnız _agents, bozuk JSON → 1 (yakalanır)
+PASS  K3 kodla karışık PR → 'atlandı' (denetlemez)
+PASS  K4 kodla karışık PR → rc 0
+PASS  K5 taban verilmezse kullanım hatası → 2
+PASS  K6 atlama mutantında kodlu PR denetlenir (rc 1) → K4 yakalar
+PASS  K7 yeniden adlandırılmış bozuk kanıt JSON → 1 (R durumu da denetlenir)
+PASS  K8 R filtresi sökülmüş mutantta yeniden adlandırılan bozuk JSON GEÇİYOR (0) → K7 yakalar
+── SONUÇ: PASS=8 FAIL=0 ──
+--- stderr ---
