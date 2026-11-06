@@ -440,6 +440,50 @@ export class Dumen {
     const hedef = this.#hedefDosya(hedefYol, { ustuneYaz, turler });
     return this.#uygula('indir-adres', null, async () => { const page = this.#page; const b = blob ? await this.#baytBlob([page.mainFrame(), ...page.frames()], a) : await this.#baytAl(page, a); return this.#dosyaYaz(hedef, b.veri, b.tur, 'adres'); }, azamiMs);
   }
+  // yazdirYakala(sel, hedefYol.pdf): sel'e tıklar; sayfa window.print() çağırırsa YAZDIRMA PENCERESİ AÇILMAZ (sekme kilitlenmez),
+  //   yazdırılacak içerik PDF olarak hedefYol'a yazılır. Tıklamadan önce window.print no-op yamalanır (açık çerçeveler + sonradan açılanlar), bitince geri konur.
+  //   Çağıran çerçeve ana sayfaysa sayfanın yazdırma ortamı (@media print); alt çerçeveyse o belgenin HTML'i PDF'e basılır.
+  //   Hiç print çağrılmazsa 'yazdirma-yok' (asılmaz). Yalnız bu tıklamanın açtığı yazdırma sayılır; yeni pencerede (window.open) ve PDF görüntüleyici penceresinde çağrılan print kapsam dışıdır (PDF zaten pencerede açıksa indirGomulu).
+  async yazdirYakala(sel, hedefYol, { ustuneYaz = false, olayMs = 15000, hazirMs = 600, azamiMs = 60000, ...pw } = {}) {
+    const hedef = this.#hedefDosya(hedefYol, { ustuneYaz, turler: ['.pdf'] });
+    return this.#uygula('click-yazdir', sel, async () => {
+      const page = this.#page;
+      const yama = '(()=>{if(!window.__dumenPrint0)window.__dumenPrint0=window.print;window.__dumenYazdirSay=0;window.print=function(){window.__dumenYazdirSay=(window.__dumenYazdirSay||0)+1};})()';
+      const geri = '(()=>{if(window.__dumenPrint0){window.print=window.__dumenPrint0;delete window.__dumenPrint0}delete window.__dumenYazdirSay})()';
+      let kimlik = null;
+      try {
+        kimlik = (await this.#cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: yama })).identifier;
+        for (const f of page.frames()) await f.evaluate(yama).catch(() => {});
+        await page.click(sel, { timeout: 10000, ...pw });
+        let cerceve = null; const son = Date.now() + olayMs;
+        while (!cerceve && Date.now() < son) {
+          for (const f of page.frames()) { if ((await f.evaluate(() => window.__dumenYazdirSay || 0).catch(() => 0)) > 0) { cerceve = f; break; } }
+          if (!cerceve) await uyu(250);
+        }
+        if (!cerceve) throw new KapiHata('yazdirma-yok', `tıklama ${olayMs} ms içinde sayfanın yazdırmasını başlatmadı (window.print çağrılmadı)`);
+        await uyu(hazirMs);   // yazdırılacak içerik yerleşsin
+        let veri = null;
+        if (cerceve !== page.mainFrame()) {
+          veri = await this.#belgePdf(await cerceve.content(), cerceve.url());
+        } else veri = Buffer.from((await this.#cdp.send('Page.printToPDF', { printBackground: true, preferCSSPageSize: true })).data, 'base64');
+        if (veri.length > DOSYA_TAVAN) throw new KapiHata('indirme-okunamadi', 'boyut tavanı aşıldı');
+        return this.#dosyaYaz(hedef, veri, 'application/pdf', 'yazdirma');
+      } finally {
+        if (kimlik) await this.#cdp.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: kimlik }).catch(() => {});
+        for (const f of page.frames()) await f.evaluate(geri).catch(() => {});
+      }
+    }, azamiMs);
+  }
+  // alt çerçevenin HTML'ini geçici boş sekmede PDF'e basar (kendi açtığı sekmeyi kapatır; Sultan'ın sekmelerine dokunmaz)
+  async #belgePdf(html, taban) {
+    const s = await this.#page.context().newPage(); let o = null;
+    try {
+      const ek = /^https?:/i.test(taban) ? `<base href="${taban.replace(/"/g, '')}">` : '';
+      await s.setContent(ek + html, { waitUntil: 'load', timeout: 10000 }).catch(() => {});
+      o = await this.#page.context().newCDPSession(s);
+      return Buffer.from((await o.send('Page.printToPDF', { printBackground: true, preferCSSPageSize: true })).data, 'base64');
+    } finally { if (o) await o.detach().catch(() => {}); await s.close().catch(() => {}); }
+  }
   // yeniSekmeAdresi(sel): sel'e tıklar, açılan YENİ SEKMENİN adresini döndürür ve o sekmeyi kapatır (başkasının sekmesine dokunmaz).
   async yeniSekmeAdresi(sel, { olayMs = 10000, azamiMs = 30000, ...pw } = {}) {
     return this.#uygula('click-sekme', sel, async () => {
