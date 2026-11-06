@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "butce-dis-kuyruk",
+  "pr": "724",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T16:27:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-butce-dis-kuyruk",
+  "dal": "butce-dis-kuyruk",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20741,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 7549
+  },
+  "dalgic": "uyumsuz",
+  "bas": "3e972ed58e7e19e7c3ec2e972153adeb1f354b87",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Taşan istek için `--dis-kuyruk` seçeneği eklenmiş; kayıt merkezi sabah özetinden ayrılıyor, dönüş kodu 10 ve eski kuyruk davranışı korunuyor. Gerçek ölçüm 40/40 geçiyor, hedefli mutasyon da sınavın kusuru yakaladığını gösteriyor; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm `olcum-sinav-sonra.txt` içinde B10 dahil 40/40 başarı gösteriyor; `mutant-dis` kaydı ise `mutasyon:true` ve `gercek_olcum:sinav` bağlantısıyla hedef davranış bozulduğunda iki kapının düştüğünü doğruluyor. Görsel önce/sonra karesi yok, fakat bu komut satırı davranışı için gerçek ölçüm ile hedefli mutasyon çifti yeterli kanıt sağlıyor."
+  }
+}

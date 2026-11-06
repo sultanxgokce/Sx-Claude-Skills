@@ -1,0 +1,56 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/cb-olc.sh ana /config/projects/_wt/Sx-Claude-Skills-butce-dis-kuyruk
+# rc=0 sure=42.4s zaman=2026-11-06T16:26:35+03:00
+--- stdout ---
+B1 dört istek geçer, beşinci kuyruğa
+  ✓ istek 1 geçti
+  ✓ istek 2 geçti
+  ✓ istek 3 geçti
+  ✓ istek 4 geçti
+  ✓ beşinci rc 10
+  ✓ kuyruk metni sahibine 'KUYRUKTA' der
+  ✓ kuyruk metni 09:00 der
+B2 aynı tür+ad ikinci kez düşmez
+  ✓ k1 tekrar geçer
+  ✓ durumda hâlâ 4/4
+  ✓ k5 tekrar yine kuyruk
+B3 acil: bütçe dolu olsa da geçer, günde 1
+  ✓ acil 1 geçti
+  ✓ acil 2 kuyruk
+  ✓ acil istek sayacını artırmadı
+  ✓ aynı acil adı ikinci kez hak düşer, kuyruk
+B4 ertesi gün sayaç sıfırlanır (İstanbul günü)
+  ✓ ertesi gün yeni istek geçer
+B5 gün sınırı İstanbul'a göre (UTC değil)
+  ✓ 23:59 beşinci kuyruk
+  ✓ 00:01 yeni gün geçer
+B6 özet: kuyruğu tek metin yapar, --isle temizler
+  ✓ özet k5'i taşır
+  ✓ özet ikinci acili taşır
+  ✓ isle sonrası kuyruk boş
+B7 girdi kapıları
+  ✓ bilinmeyen tür rc 2 (bilgi satırı bütçeye girmez)
+  ✓ sahip yoksa rc 2
+  ✓ boş ad rc 2
+B8 eşzamanlı 8 istek: tam 4 geçer
+  ✓ geçen sayısı
+  ✓ kuyruk sayısı
+B9 sabah özeti: dünkü kuyruk tek WhatsApp mesajı, gidince işlenir
+  ✓ aynı gün sabah özeti göndermez (yalnız dünkü)
+  ✓ ertesi sabah özet gider rc 0
+  ✓ tek mesaj gitti
+  ✓ mesaj s5'i taşır
+  ✓ işlendi: kuyruk boş
+  ✓ ikinci koşu mesaj atmaz
+  ✓ geçit düşerse rc 3
+  ✓ gitmeyen özet kuyruğu korur
+B10 --dis-kuyruk: taşan istek sabah özetine GİRMEZ (çağıranın kendi kuyruğu var)
+  ✓ beşinci --dis-kuyruk rc 10
+  ✓ durum kuyrukta 0 (özete girmez)
+  ✓ özet boş
+  ✓ tekrar çağrı aynı sonuç (rc 10)
+  ✓ bayraksız beşinci hâlâ kuyruğa girer
+  ✓ bayraksız olan özette
+  ✓ acil hakkı bundan bağımsız, geçer
+geçti=40 kaldı=0
+--- stderr ---
+⏳ agir-sira: kanit-butce-dis-kuyruk-sinav 40 sn bekledi (yuva 1, load1 16.81)

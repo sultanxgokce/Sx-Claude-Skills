@@ -1,7 +1,7 @@
 ---
 name: sultan-alarmi
 type: agent
-version: 0.3.0
+version: 0.3.1
 description: >
   Bir iş ya da ajan SULTAN yüzünden duruyorsa tek biçimli alarm basar: terminalde kırmızı satır, istenirse telefona bildirim,
   "ne gerekiyor, tek tık" cümlesiyle. Aynı iş için tekrar sınırı (varsayılan 60 dk) ve 3. tekrarda yükseltme vardır.
@@ -59,6 +59,7 @@ butce.sh durum | butce.sh ozet [--isle] [--onceki]                   bugünkü s
 butce.sh sabah [--kuru]                                             dünkü kuyruğu TEK WhatsApp mesajı olarak Sultan'a gönderir (09:00'da çağrılacak); gidince satırları işler, gitmezse korur (rc 3)
 ```
 - Gün İstanbul günüdür. Tavan dolunca ret yok, **kuyruk**: istek ertesi sabah 09:00 özetinde tek satır gider; sahibine "KUYRUKTA" bilgisi basılır.
+- `harca --dis-kuyruk`: çağıranın kendi sabah kuyruğu varsa (ör. `karar-kuyrugu.sh`) taşan istek 'dis-kuyruk' diye kaydedilir, sabah özetine GİRMEZ (çift gönderim olmasın); rc yine 10.
 - Aynı gün aynı tür+ad istek bir kez düşer. Acil böyle değildir: her çağrı acil hakkından düşer (günde 1 telefon).
 - Bağlı yollar: `kapimda ac` (kart) · `alarm.sh gonder --telefon` (acil hakkı) · `wa-gonder.sh --istek "<ad>"` (WhatsApp sorusu; bayrağı çağıran verir, bilgi mesajı vermez). **Bağlı DEĞİL:** onay-bekliyor görevi (gorev.sh, cloudtop), soru mektubu, `butce.sh sabah`'ın 09:00'da kendiliğinden koşması (cloudtop cron kartı) — o güne dek özeti `butce.sh sabah` ile elle koşturmak gerekir.
 - Bütçe betiği okunamazsa istek geçer (fail-open, uyarı basılır): bu bir politika sınırlayıcısıdır, güvenlik kapısı değil.
