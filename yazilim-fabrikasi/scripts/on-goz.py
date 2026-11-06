@@ -20,7 +20,7 @@ kullanım hatası rc 2. Ölçülemedi uyumlu sayılmaz.
 import argparse, json, os, re, subprocess, sys
 
 HDIR = os.path.dirname(os.path.abspath(__file__))
-KANIT_DESEN = re.compile(r"^_agents/(?:.*/)?kanit/")
+KANIT_DESEN = re.compile(r"^_agents/fabrika/kanit/")   # A4 ve kanit.py ile AYNI tanım (göz tur 2 ön-gözü: A1 daha genişti)
 KAPSAM_SOZ = re.compile(r"dışında|dışı\b|ayrı kart|dokunulmaz|dokunmaz|değişmez", re.I)
 YOL_DESEN = re.compile(r"[\w.\-]+(?:/[\w.\-]+)+|[\w\-]+\.(?:py|sh|md|json|jsonl|mjs|js|ts|tsx|yml|yaml|log|tsv|txt|html|css)\b")
 
@@ -84,7 +84,9 @@ def a1(depo, kayitlar, pr):
     return kapi("A1 kanıt başı", "uyumlu", [f"geçerli kayıtlar HEAD {head[:8]} ile aynı (ya da arada yalnız kanıt)"])
 
 
-def a2(depo, is_adi, dz, kayitlar):
+def a2(depo, is_adi, dz, kayitlar, okunamadi=None):
+    if okunamadi:
+        return kapi("A2 kanıt eksik", "olculemedi", [f"KANIT.json okunamadı ({okunamadi}) — kanıt yok DENMEZ"])
     if kayitlar is None:
         return kapi("A2 kanıt eksik", "uyumsuz", [f"kanıt yok: {os.path.relpath(dz, depo)}/KANIT.json — önce kanit.sh olcum"])
     out = []
@@ -190,11 +192,13 @@ def main():
     if not depo:
         print("ÖLÇÜLEMEDİ: git ağacı değil", file=sys.stderr); return 3
     dz = os.path.join(depo, "_agents", "fabrika", "kanit", a.is_adi)
+    okunamadi = None
     try:
         kayitlar = kanit_kayitlari(dz)
-    except Exception as e:
-        kayitlar = None; print(f"⚠ KANIT.json okunamadı: {type(e).__name__}", file=sys.stderr)
-    kapilar = [a1(depo, kayitlar, a.pr), a2(depo, a.is_adi, dz, kayitlar), a3(depo), a4(depo), a5(depo, a.is_adi)]
+    except Exception as e:   # bozuk KANIT.json ya da kanit modülü yüklenemedi: ÖLÇÜLEMEDİ (rc 3), "kanıt yok" (rc 1) değil — göz tur 2 ön-gözü
+        kayitlar = None; okunamadi = type(e).__name__
+    a1k = kapi("A1 kanıt başı", "olculemedi", [f"KANIT.json okunamadı ({okunamadi})"]) if okunamadi else a1(depo, kayitlar, a.pr)
+    kapilar = [a1k, a2(depo, a.is_adi, dz, kayitlar, okunamadi), a3(depo), a4(depo), a5(depo, a.is_adi)]
     durumlar = [k["durum"] for k in kapilar]
     hukum = "uyumsuz" if "uyumsuz" in durumlar else "olculemedi" if "olculemedi" in durumlar else "uyumlu"
     if a.json:

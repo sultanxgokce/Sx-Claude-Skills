@@ -40,6 +40,8 @@ O="$(og)"; RC=$?; J="$(ogj)"
 [ "$RC" -eq 1 ] && [ "$(kd "$J" A1)" = uyumsuz ] && grep -qE "'sinav' .*[0-9a-f]{8}'de ölçülmüş, HEAD [0-9a-f]{8}.*kod.txt" <<<"$O"; g $? "S2 kanıttan sonra kod commit'i → A1 UYUMSUZ, iki sha ve dosya adı yazılır, rc 1"
 kur s3; (cd "$W" && echo ek > _agents/fabrika/kanit/is1/ek.txt && git add -A && git commit -qm yalniz-kanit && git push -q 2>/dev/null)
 [ "$(kd "$(ogj)" A1)" = uyumlu ]; g $? "S3 HEAD ile ölçülen commit arasında YALNIZ kanıt dosyası → A1 uyumlu (kapının istisnası)"
+kur s3c; (cd "$W" && mkdir -p _agents/baska/kanit && echo x > _agents/baska/kanit/x.txt && git add -A && git commit -qm baska-kanit && git push -q 2>/dev/null)
+[ "$(kd "$(ogj)" A1)" = uyumsuz ]; g $? "S3c _agents/fabrika/kanit dışındaki bir 'kanit' dizini kanıt sayılmaz → A1 uyumsuz (A4 ve kanit.py ile aynı tanım)"
 kur s3b; (cd "$W" && KANIT_DEPO="$W" bash "$K" olcum is1 sinav --asama once -- bash s.sh >/dev/null 2>&1; git add -A; git commit -qm once-kaydi
   printf 'x\n' > kod2.txt && git add -A && git commit -qm duzeltme
   KANIT_DEPO="$W" bash "$K" olcum is1 sinav --asama sonra -- bash s.sh >/dev/null 2>&1; KANIT_DEPO="$W" bash "$K" olcum is1 mut --asama sonra --mutasyon sinav --kapi X1 -- bash m.sh >/dev/null 2>&1
@@ -56,6 +58,8 @@ O="$(FAKE_GH_RC=255 og --pr 7)"; RC=$?; J="$(FAKE_GH_RC=255 ogj --pr 7)"
 [ "$RC" -eq 3 ] && [ "$(kd "$J" A1)" = olculemedi ] && grep -q "ÖLÇÜLEMEDİ" <<<"$O"; g $? "S11 PR başı okunamıyor (gh 255) → A1 ölçülemedi, hüküm ÖLÇÜLEMEDİ rc 3 (uyumlu sayılmaz) [rc=$RC]"
 echo "── A2 · kanıt eksik"
 kur s5; O="$(cd "$W" && python3 "$OG" baska-is 2>&1)"; grep -q "A2 kanıt eksik: kanıt yok" <<<"$O"; g $? "S5 kanıt dizini yok → A2 'kanıt yok'"
+kur s5b; (cd "$W" && printf '{bozuk' > _agents/fabrika/kanit/is1/KANIT.json && git commit -qam bozuk && git push -q 2>/dev/null)
+O="$(og)"; RC=$?; J="$(ogj)"; [ "$RC" -eq 3 ] && [ "$(kd "$J" A2)" = olculemedi ] && [ "$(kd "$J" A1)" = olculemedi ]; g $? "S5b KANIT.json bozuk → A1/A2 ölçülemedi, rc 3 ('kanıt yok' rc 1 DEĞİL) [rc=$RC]"
 kur s6; GO="$(cd "$W" && KANIT_DEPO="$W" bash "$K" gecersiz is1 olcum-sinav-sonra.txt --neden "sınavda geçersiz ilan edilen tek gerçek ölçüm" --kim S 2>&1)"; (cd "$W" && git add -A && git commit -qm gecersiz >/dev/null && git push -q 2>/dev/null)
 O="$(og)"; grep -q "geçerli gerçek ölçüm kaydı yok" <<<"$O"; g $? "S6 tek gerçek ölçüm geçersiz ilan edildi → A2 uyumsuz (mutant gerçek ölçüm sayılmaz) [$(tail -1 <<<"$GO" | cut -c1-90)]"
 kur s7; (cd "$W" && printf 'echo "  ✗ Y1 düştü"; exit 1\n' > m2.sh && git add m2.sh && git commit -qm m2 && KANIT_DEPO="$W" bash "$K" olcum is1 sinav --asama sonra -- bash s.sh >/dev/null 2>&1 && KANIT_DEPO="$W" bash "$K" olcum is1 mut2 --asama sonra --mutasyon sinav --kapi X1 -- bash m2.sh >/dev/null 2>&1; git add -A; git commit -qm yanlis-kapi; git push -q 2>/dev/null)
