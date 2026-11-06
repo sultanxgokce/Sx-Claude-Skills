@@ -1,0 +1,78 @@
+{
+  "is": "borclar-odenmis-borc",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T00:50:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinav-once.txt",
+      "sha256": "a59a7ac71ec1e7467261716853b4c6a65d19fde04156ae83a614cdc7111be138",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/borclar-odenmis-borc/kos.sh",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T00:42:25+03:00",
+      "sure_sn": 241.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "531336a67fe9d87dc464f1e90f52db60a9759267b1d77740a8ad2f2400a39d16",
+      "olcum_id": "28bf04928f2c4fb1aa6d3b25329defff",
+      "olculen_commit": "7cd0961accd1d302013b4ded2fe03ee654794f8e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-sonra.txt",
+      "sha256": "21734d5a374ef46b425f94c3a2ce4edd25cce98769669d768032885eb016b000",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/borclar-odenmis-borc/kos.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:46:31+03:00",
+      "sure_sn": 246.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "86ad2d82659bb665a5146176a648ea74a0238cd3d69dbb969e57b24ac47123ee",
+      "olcum_id": "0d508c48ec3a4c6b97720fad0146cfbf",
+      "olculen_commit": "7cd0961accd1d302013b4ded2fe03ee654794f8e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-odendi",
+      "asama": "sonra",
+      "dosya": "olcum-mut-odendi-sonra.txt",
+      "sha256": "42c7658f2cebcb4130f3c32c4502de009e5b62b2a5fa2e44b11ad01e1083eb71",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/borclar-odenmis-borc/kos.sh",
+        "mut"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:50:38+03:00",
+      "sure_sn": 246.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kapi-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T14m2",
+      "hedef_dustu": true,
+      "olcum_id": "66c52f70978143f29acb5c2cfb0d48b4",
+      "olculen_commit": "7cd0961accd1d302013b4ded2fe03ee654794f8e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "894859cf6c1a9bbb5ed2df5fc30c5c6ed17a343352651a67bbe38c1bf405f610"
+}

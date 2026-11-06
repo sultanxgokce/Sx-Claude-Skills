@@ -1020,18 +1020,25 @@ PY
   borclar)
     # Açık canlı borçlar ve yaşları. rc 1 = 24 saati aşan borç var (bekçi/nabız bunu okur); rc 0 = borç yok ya da hepsi süresinde.
     python3 - "$KD" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
-import json,sys,glob,os
+import json,sys,glob,os,subprocess
 kd,hdir=sys.argv[1:]; sys.path.insert(0,hdir); from canli_borc import yas_saat, SURE_SAAT; from izin import izin_durumu, siniflimi
-ac=[];gec=0
+def borc_durumu(is_):
+    """canli-borc-durum'un İLK satırı (kapının okuduğu yüzey, aynı kanıt ağacı kuralı). Okunamazsa None: ödenmiş SAYILMAZ (fail-closed)."""
+    try: r=subprocess.run(["bash",os.path.join(hdir,"kart.sh"),"canli-borc-durum",is_],capture_output=True,text=True,timeout=60,stdin=subprocess.DEVNULL)
+    except Exception: return None
+    return (r.stdout.split("\t",1)[0].strip() or None) if r.returncode==0 else None
+ac=[];gec=0;ode=0
 for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
     try: k=json.load(open(p,encoding="utf-8"))
     except Exception: continue
     if k.get("durum")!="canli-borclu": continue
-    y=yas_saat(k); kirmizi=(y is None) or y>SURE_SAAT; gec+=1 if kirmizi else 0
-    ac.append((k["is"],y,kirmizi,k["aldi"],("sınıflı · izin: "+izin_durumu(k)[0]) if siniflimi(k) else "ekip"))
+    # …XPQS (6 Kas): kanıtı alınmış ama 'bitti' yapılmamış kart ödenmiştir — borclar 44 sa kırmızı derken canli-borc-durum 'odendi' diyordu.
+    odendi=borc_durumu(k["is"])=="odendi"
+    y=yas_saat(k); kirmizi=not odendi and ((y is None) or y>SURE_SAAT); gec+=1 if kirmizi else 0; ode+=1 if odendi else 0
+    ac.append((k["is"],y,kirmizi,k["aldi"],("sınıflı · izin: "+izin_durumu(k)[0]) if siniflimi(k) else "ekip",odendi))
 if not ac: print("◻ açık canlı borç yok"); raise SystemExit(0)
-for is_,y,kr,al,sn in ac: print(f"{'🔴' if kr else '🟡'} {is_:34} {('?' if y is None else '%.1f sa'%y):>8} {al:10} {sn}  {'SÜRE AŞILDI' if kr else ''}")
-print(f"── {len(ac)} açık canlı borç · {gec} süresi aşılmış")
+for is_,y,kr,al,sn,od in ac: print(f"{'✅' if od else '🔴' if kr else '🟡'} {is_:34} {('?' if y is None else '%.1f sa'%y):>8} {al:10} {sn}  {'ödendi · kart.sh bitti bekliyor' if od else 'SÜRE AŞILDI' if kr else ''}")
+print(f"── {len(ac)} açık canlı borç · {gec} süresi aşılmış"+(f" · {ode} ödendi (kart.sh bitti bekliyor)" if ode else ""))
 raise SystemExit(1 if gec else 0)
 PY
     ;;
