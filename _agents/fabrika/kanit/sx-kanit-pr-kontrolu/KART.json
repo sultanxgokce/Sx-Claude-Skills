@@ -1,0 +1,36 @@
+{
+  "is": "sx-kanit-pr-kontrolu",
+  "cumle": "Sx'e, yalnız kanıt dosyası değişen PR'da koşan Kanıt PR kontrolü iş akışı eklenir (cloudtop'takinin aynısı)",
+  "istedi": "SERDAR",
+  "aldi": "BASİRET",
+  "zaman": "2026-11-07T01:54:09+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "code",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Sx-Claude-Skills + cloudtop anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac sx-kanit-pr-kontrolu-sx … · kart.sh ac sx-kanit-pr-kontrolu-cloudtop …"
+  ],
+  "gorev": "gorev_01M6SH2J2QPBZYH3ESDC49KRJK",
+  "tahmin_dk": 45,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T01:54:15+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
