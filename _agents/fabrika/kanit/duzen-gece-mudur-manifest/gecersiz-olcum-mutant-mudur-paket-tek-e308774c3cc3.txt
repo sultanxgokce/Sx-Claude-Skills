@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-mutant-mudur-paket-tek.txt
+hedef_sha256: c0fbbdeebb75f1f8228496af8b059750f5278d080b13e670d8a382dab64cb71b
+hedef_zaman: 2026-11-06T03:46:22+03:00
+hedef_renk: yesil
+neden: mutant kopyası betik dizini dışına (scratch) kondu; surum.sh ve ekipc.sh yanında olmadığı için ilgisiz G2 G7 G11 G21 de düştü — ölçüm mutantı değil yeri ölçtü
+kim: SERDAR
+karsi: -
+zaman: 2026-11-06T03:46:50+03:00

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "duzen-gece-mudur-manifest",
+  "pr": "711",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T03:48:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-mutant-mudur-paket-tek.txt (yesil → gecersiz) — mutant kopyası betik dizini dışına (scratch) kondu; surum.sh ve ekipc.sh yanında olmadığı için ilgisiz G2 G7 G11 G21 de düştü — ölçüm mutantı değil yeri ölçtü · SERDAR",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-duzen-gece-mudur-manifest",
+  "dal": "duzen-gece-mudur-manifest",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25572,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 18402
+  },
+  "dalgic": "uyumlu",
+  "bas": "0b0d2bbf6e5951433908c4cc33d49c16ba102d38",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gece kurulumu, MÜDÜR temelli kimliği uygun depo ekip modeli bulunduğunda deponun ekipc betiğiyle ve paket vendor PYTHONPATH’iyle yenileyecek şekilde değiştirilmiş; manuel ve otonom yollar korunmuş. Gerçek ölçümde tüm sınavlar geçiyor ve yerinde mutasyon G26’yı düşürüyor; üretimi engelleyen ciddi veya uygulama kusuru görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Önce kaydı sarı/rc=3 olduğu için geçerli bir ölçüm değildir; dolayısıyla kusursuz bir önce/sonra ölçüm çifti yoktur, ancak sonra ölçümü, gerçek gece sınavının 29/0 sonucu ve hedefe özgü yerinde mutasyonun G26’yı düşürmesi yeni davranışı yeterince destekliyor. Geçersiz ilan edilen scratch mutasyonu hesaba katılmadı; gerçek kodun durumu gercek_olcum=gece-sinavi kaydından okundu."
+  }
+}

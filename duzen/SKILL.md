@@ -1,10 +1,10 @@
 ---
 name: duzen
 description: Filo düzen paketi — görev · Bulgu Havuzu · Hasat · oda · el defteri · master prompt çekirdeği; tek kaynak, sürümlü, bütün kutulara ortak kitaplıkla iner. "Serdar kutusundaki düzen tüm kutularda aynı olmalı" (Sultan, 29 Eki 2026) isteğinin paketi. "/duzen", "düzen paketi", "el defteri çıkar", "alt ajan istemi üret / alt personele iş ver", "çekirdek metin", "düzen sürümü / bayat mı" tetiğinde.
-version: 1.6.9
+version: 1.6.10
 ---
 
-# /duzen — filo düzen paketi (1.6.9 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
+# /duzen — filo düzen paketi (1.6.10 · iskelet + alt ajan istem üreticisi + otonom temel + ekipc üretici)
 
 ## Niçin var (Sultan, 29 Eki 2026 · Kuzey Yıldızı 4.1-4.3)
 
@@ -108,6 +108,7 @@ Kart alanı: `kart.sh` kartı `is` (ad) + `cumle` (cümle) tutar; araç `cumle`y
 
 ## Sürüm notları
 
+- **1.6.10** (6 Kas 2026, SERDAR · Kuzey G25): gece kurulumu MÜDÜR temelli kimliği (`--rol MÜDÜR`) depoda kendi `scripts/ekipc.sh` ve ekip modeli varsa DEPO betiğiyle, PyYAML paketin `vendor/`undan verilerek yeniler. Paket `ekipc.sh` ekip modelini kendi klasöründe arıyordu ("manifest yok", 6 Kas 03:17 serdar atlandı) ve modeldeki yolları paket köküne göre denetleyip yanlış kırmızı veriyordu. Manuel ve otonom temeller değişmedi. Sınav: `scripts/duzen-gece.test.sh` G26 + mutant.
 - **1.6.9** (5 Kas 2026, SERDAR · Sultan "tüm filoda bu kural uygulansın"): durma-standardına kural 10 girdi: beklerken sıradan iş al (küçük · ayrı · geri dönüş önce · bağlam ve kota). Dört temel kısa satırını taşır, el defterlerine `ekipc yenile` ile iner. Sınav: `scripts/bekleme-kurali.test.sh`.
 - **1.6.8** (3 Kas 2026, HEZARFEN · SERDAR kararı, Kuzey G25): içerik değişmedi, yalnız sürüm arttı. Amaç: 03:17 gece işi (`duzen-gece.sh`) kaynak sürümü kurulu olandan yeni görsün, `ekipc` işaretli bayat el defterlerini yenilesin ve günlüğe `yenilendi kimlik=<ad> … kutu=code` satırı yazsın; Kuzey G25 ölçeri o günlükten sayar.
 - **1.6.7** (2 Kas 2026, MİRAHUR · SERDAR bulgusu, HUZUR): `ekip-modeli-lint.sh` düzen paketine girdi (Nexus `scripts/ekip-modeli-lint.sh`'ın **birebir** kopyası, çivili md5). İzole kutuda `ekipc derle|benimse|yenile` ön kapı olarak lint'i betiğin yanında arar; yoktu, HUZUR'da "lint beklenmedik rc=127" ile exit 3 veriyordu. Paket kipinde vendor PyYAML zaten ortama verilir. Sınav `ekipc-paritesi.test.sh` P10a-e (39/0).

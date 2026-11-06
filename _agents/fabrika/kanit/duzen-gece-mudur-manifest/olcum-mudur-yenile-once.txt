@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/duzen-gece-mudur-manifest/mudur-yenile-olc.sh eski
+# rc=3 sure=0.1s zaman=2026-11-06T03:45:30+03:00
+--- stdout ---
+--- stderr ---
+manifest yok: /config/.claude/skills/duzen/_agents/ekip-modeli.yaml

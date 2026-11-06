@@ -154,6 +154,16 @@ mkdir -p "$T/yamlsiz"; printf '#!/bin/sh\nexec %s -S "$@"\n' "$(command -v pytho
 O="$(env -i PATH="$T/yamlsiz:/usr/bin:/bin" LC_ALL=C.UTF-8 bash "$HERE/ekipc.sh" yenile --dosya "$T/bayat/_agents/bani/AGENT.md" --baz manuel-claude 2>&1)"; rc=$?
 ok "G14 PyYAML'sız çıplak ortamda gerçek paket ekipc.sh yenile kuru koşusu exit 0 (vendor yüklenir)" "$([ $rc -eq 0 ] && echo 0 || echo 1)" "→ rc=$rc $(tail -c 200 <<<"$O")"
 
+# G26 MÜDÜR temelli kimlik (6 Kas 03:17: serdar 'manifest yok' ile atlandı): depoda kendi ekipc.sh + ekip modeli varsa MÜDÜR yenilemesi
+#     DEPO ekipc.sh ile, PyYAML paketin vendor/'undan (PYTHONPATH) verilerek yapılır; manuel kimlik yine paket ekipc.sh ile (G13 değişmez)
+mkdir -p "$T/mudur/scripts" "$T/mudur/_agents"; : > "$T/mudur/_agents/ekip-modeli.yaml"
+kimlik "$T/mudur" serdar "$(printf '# ORTAK-TEMEL müdür (kaynak: _agents/ekip-os-base/mudur-base.md)\nESKİ müdür\n')"
+kimlik "$T/mudur" bani "$BAYAT"
+printf '#!/usr/bin/env bash\nprintf "DEPO-ekipc PYTHONPATH=%%s %%s\\n" "${PYTHONPATH:-}" "$*" >> "$KAYIT"\n' > "$T/mudur/scripts/ekipc.sh"
+kaynak 1.2.0; kurulu 1.2.0; : > "$KAYIT"
+O="$(env -i PATH=/usr/bin:/bin LC_ALL=C.UTF-8 KAYIT="$KAYIT" DUZEN_SYNC_CMD="bash $T/sync" DUZEN_MEKTUP_CMD="bash $T/mektup" DUZEN_KURULU_KOK="$T/kur" bash "$T/pkg/duzen-gece.sh" --uygula --sx "$T/sx" --gunluk "$T/g26.log" --kutu code --depo "$T/mudur" --reis SERDAR 2>&1)"; rc=$?
+ok "G26 MÜDÜR kimliği depo ekipc.sh ile (--rol MÜDÜR, PYTHONPATH vendor), manuel kimlik paket ekipc.sh ile; ikisi de yenilendi" "$([ $rc -eq 0 ] && grep -q "^DEPO-ekipc PYTHONPATH=$T/pkg/../vendor yenile --dosya $T/mudur/_agents/serdar/AGENT.md --rol MÜDÜR --apply" "$KAYIT" && grep -q "^PAKET-ekipc yenile --dosya $T/mudur/_agents/bani/AGENT.md --baz manuel-claude" "$KAYIT" && [ "$(grep -c '^DEPO-ekipc' "$KAYIT")" = 1 ] && grep -q 'yenilendi kimlik=serdar temel=MÜDÜR' "$T/g26.log" && grep -q 'yenilendi kimlik=bani temel=manuel-claude' "$T/g26.log" && echo 0 || echo 1)" "→ rc=$rc $(head -c 400 "$KAYIT")"
+
 if [ -z "${GECE_BETIK:-}" ]; then
   echo "── mutasyon"
   mut() { local M="$HERE/.mutant-gece-$$-$1"; python3 -I - "$R" "$M" "$2" "$3" <<'PY' || { ok "mutant $1: desen tutmadı" 1; return; }
@@ -168,5 +178,6 @@ PY
   mut sebep-yutuluyor 'sebep=yenile-reddetti kutu=$KUTU rc=$src ayrinti=$(sebep "$HATA")' 'sebep=yenile-reddetti kutu=$KUTU' G21
   mut yeniden-baslama-yok 'if [ "$UYGULA" -eq 1 ] && [ -z "${DUZEN_GECE_YENIDEN:-}" ] &&' 'if false &&' G23
   mut force-gecir '--skill "$b" --apply' '--skill "$b" --apply --force' G8
+  mut mudur-paket-ekipc 'yc="$YENILE"; [ "$t" = MÜDÜR ] && yc="$YENILE_MUDUR"' 'yc="$YENILE"' G26
 fi
 echo "== $G geçti · $K düştü =="; [ "$K" -eq 0 ]
