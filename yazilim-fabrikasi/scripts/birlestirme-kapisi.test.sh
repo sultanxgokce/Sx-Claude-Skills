@@ -529,6 +529,10 @@ bash "$K" canli is-b1 bb --desen boşta-bekcisi --kaynak "dosya:$LGK/b1.log" >/d
 # kanıt, çağrılan ağaçtan okunur (bitti ile aynı kural): ağaç = sahte depo
 IFS=$'\t' read -r BD _ <<<"$(cd "$T" && bash "$KT" canli-borc-durum is-b1 2>&1)"
 [ "$BD" = odendi ]; g $? "T14m borçtan sonra bağlı yeşil canlı kayıt → durum 'odendi'"
+# T14m2 (görev …XPQS · 6 Kas otopilot-kuru-gece-cron vakası): kanıt alınmış ama kart henüz 'bitti' yapılmamışken borclar ödenmiş borcu
+#   SÜRE AŞILDI diye kırmızı saymaz (canli-borc-durum 'odendi' derken borclar 44 sa kırmızı diyordu); satır 'ödendi' der, rc 0.
+CIKTI="$(cd "$T" && bash "$KT" borclar 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "is-b1.*ödendi.*kart.sh bitti bekliyor" <<<"$CIKTI" && ! grep -q "is-b1.*SÜRE AŞILDI" <<<"$CIKTI"; g $? "T14m2 ödenmiş (bitti bekleyen) borç kırmızı sayılmaz: satır 'ödendi · kart.sh bitti bekliyor', rc=0 [$(grep is-b1 <<<"$CIKTI" | tr -s ' ' | cut -c1-90)]"
 (cd "$T" && bash "$KT" bitti is-b1 --pr 91 >/dev/null 2>&1); [ "$(kj is-b1 "k['durum']")" = "bitti" ] && [ "$(kj is-b1 "k['canli_borc']['odendi'] is not None")" = "True" ]; g $? "T14n ödenen borçta kart.sh bitti → 'bitti' ve ödeme anı kartta"
 bash "$KT" borclar >/dev/null 2>&1; g $? "T14o ödenen borç artık listede yok (rc=0)"
 # geçersiz borç: kartın sahibi sonradan değişmiş/elle bozulmuş → kapı GEÇİRMEZ, bitti kapanmaz
