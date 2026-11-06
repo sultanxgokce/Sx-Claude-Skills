@@ -9,6 +9,7 @@ set -uo pipefail
 KOK="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 DIZIN="${SULTAN_ALARMI_DIZIN:-${HOME:-/tmp}/.cache/sultan-alarmi}"
 WA="${SULTAN_ALARMI_WA:-/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh}"   # tek telefon kanalı (Sultan 31 Eki: ntfy kullanmıyor)
+BUTCE="${SULTAN_ALARMI_BUTCE:-$KOK/butce.sh}"   # günlük istek bütçesi: alarmın telefonu ACİL hakkından düşer (günde 1)
 GOREV_SH="${SULTAN_ALARMI_GOREV_SH:-/config/projects/cloudtop/infra/defter-gecit/gorev/gorev.sh}"
 KAPIMDA_SH="${SULTAN_ALARMI_KAPIMDA_SH:-/config/.claude/skills/kapimda/scripts/kapimda.sh}"
 SIMDI="${SULTAN_ALARMI_SIMDI:-$(date +%s)}"
@@ -65,6 +66,12 @@ gonder)
   if [ "$TEL" -eq 0 ]; then kutuk "$SAY" yok terminal; exit 0; fi
   if [ "${SULTAN_EKRANDA:-0}" = 1 ]; then echo "(telefon atlandı: Sultan ekranda)"; kutuk "$SAY" atlandi ekranda; exit 0; fi
   if [ "$KURU" -eq 1 ]; then echo "(kuru: telefona gidecekti → WhatsApp)"; kutuk "$SAY" kuru -; exit 0; fi
+  # Sultan'a istek bütçesi (günde 4): alarm telefonu yalnız ACİL hakkıyla gider, günde en çok 1; hak bitince kuyruğa yazılır (09:00 özeti).
+  if [ -x "$BUTCE" ]; then
+    bash "$BUTCE" acil --ad "$IS" --sahip "$KIM"; B_RC=$?
+    if [ "$B_RC" -eq 10 ]; then kutuk "$SAY" kuyruk "butce"; exit 0; fi
+    [ "$B_RC" -eq 0 ] || echo "UYARI: bütçe kapısı okunamadı (rc=$B_RC); telefon yine de gidiyor" >&2
+  fi
   # ntfy çıkarıldı: http 200'ü Sultan'a ulaştı demek değildi (31 Eki ölçümü: 22 'gitti' alarmın hiçbiri görülmedi).
   bash "$WA" "$M" >/dev/null 2>&1; WA_RC=$?
   if [ "$WA_RC" -eq 0 ]; then echo "whatsapp: gitti"; kutuk "$SAY" gitti "wa=0"

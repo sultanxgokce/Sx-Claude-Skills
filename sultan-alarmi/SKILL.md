@@ -1,7 +1,7 @@
 ---
 name: sultan-alarmi
 type: agent
-version: 0.2.0
+version: 0.3.0
 description: >
   Bir iş ya da ajan SULTAN yüzünden duruyorsa tek biçimli alarm basar: terminalde kırmızı satır, istenirse telefona bildirim,
   "ne gerekiyor, tek tık" cümlesiyle. Aynı iş için tekrar sınırı (varsayılan 60 dk) ve 3. tekrarda yükseltme vardır.
@@ -50,6 +50,18 @@ alarm.sh ders   "<öğrenilen tek satır>"             DERSLER.md'ye tarihli sat
 Bir ajan ya da iş SULTAN yüzünden duruyorsa: kapıda Sultan kartı, Sultan onayı bekleyen görev, Sultan-eli komut bekleyen iş.
 Ajanın kendi tıkanması (kod hatası, başka ajan) alarm DEĞİLDİR. A06: alarm Sultan'ın kararını üretmez, yalnız görünür kılar.
 
+## Günlük istek bütçesi (0.3.0 · SERDAR 6 Kas)
+Sultan'a günde en çok **4 istek**. İstek = Sultan'dan tık ya da karar isteyen her şey: kapımda kartı, onay-bekliyor görevi, soru mektubu, WhatsApp sorusu. Bilgi satırı sayılmaz.
+```
+butce.sh harca --tur kart|onay|soru|wa --ad "<ad>" --sahip <ajan>   rc 0 geçti · rc 10 kuyruğa yazıldı (gönderme)
+butce.sh acil  --ad "<ne>" --sahip <ajan>                           yalnız hat durdu · para kaybı · canlı kesinti; tavanı aşar, günde en çok 1
+butce.sh durum | butce.sh ozet [--isle]                              bugünkü sayaç · kuyruğun tek özet metni
+```
+- Gün İstanbul günüdür. Tavan dolunca ret yok, **kuyruk**: istek ertesi sabah 09:00 özetinde tek satır gider; sahibine "KUYRUKTA" bilgisi basılır.
+- Aynı gün aynı tür+ad istek bir kez düşer. Acil böyle değildir: her çağrı acil hakkından düşer (günde 1 telefon).
+- Bağlı yollar: `kapimda ac` (kart) ve `alarm.sh gonder --telefon` (acil hakkı). **Bağlı DEĞİL:** onay-bekliyor görevi, soru mektubu, WhatsApp sorusu, 09:00 özetinin gönderimi (ayrı kartlar).
+- Defter dosya-yereldir (konteyner başına `butce.jsonl`); kutular arası tek sayaç yoktur.
+
 ## Ders defteri (kullandıkça gelişir)
 Her kullanımdan çıkan ders `alarm.sh ders "…"` ile `DERSLER.md`'ye eklenir; sürüm artar; Sx `sync-targets.json` + `catalog.json`
 üzerinden bütün kutulara `sync-skills.mjs --skill sultan-alarmi` ile iner (kurulu kopya elle düzenlenmez).
@@ -57,4 +69,4 @@ Her kullanımdan çıkan ders `alarm.sh ders "…"` ile `DERSLER.md`'ye eklenir;
 ## Sınır / dürüstlük
 - `gitti` yalnız WhatsApp geçidi kabul edince yazılır; ntfy 0.2.0'da çıkarıldı (31 Eki: Sultan ntfy kullanmıyor, 22 'gitti' alarm ona ulaşmadı). Sultan'ın okuduğunu bilmez.
 - Kanon (ORTAK-MIMARI) "zorunlu" satırı ve her kutunun CLAUDE.md işaretçisi bu beceriden AYRI PR'dır (sınıflı; birleştirme Sultan'ın).
-- Sınav: `bash scripts/alarm.test.sh` (hermetik, sahte curl/defter/saat).
+- Sınav: `bash scripts/butce.test.sh` (bütçe) · `bash scripts/alarm.test.sh` (hermetik, sahte curl/defter/saat).
