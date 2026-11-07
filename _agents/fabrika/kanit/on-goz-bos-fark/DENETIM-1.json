@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "on-goz-bos-fark",
+  "pr": "745",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T11:04:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-bos-fark",
+  "dal": "on-goz-bos-fark",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40105,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 43376
+  },
+  "dalgic": "uyumsuz",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumsuz",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "3f7a642ade47034154e04174b1c567089ba1f40c",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Yalnız kanıt dizini dosyaları taşıyan PR’da boş fark DALGIÇ’a gönderilmiyor; DALGIÇ uygulanamaz sayılıp karar mekanik kapılara bırakılıyor, kanıt dışı dosyalı boş fark ise ölçülemedi kalıyor. Önce/sonra ölçümü, gerçek vaka ve üç mutasyon kaydı talebin iki kolunu da doğruladığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıt sha’ları geçerli; sarı kayıt yok. Önce ölçümünde ilgili K kapıları düşerken sonra ölçümünde 63/63 geçiyor; gerçek #1585 ölçümü rc 3 → rc 0 davranış değişimini gösteriyor. K1/K3/K6 hedefli mutasyonlar sınavın uygulanamaz sınıflamasını, DALGIÇ’a göndermeme şartını ve kanıt dışı dosyalı boş farkın ölçülemedi kalmasını gerçekten sınadığını doğruluyor."
+  }
+}
