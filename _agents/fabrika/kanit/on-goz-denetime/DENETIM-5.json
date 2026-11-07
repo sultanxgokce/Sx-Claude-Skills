@@ -1,0 +1,48 @@
+{
+  "tur": 5,
+  "is": "on-goz-denetime",
+  "pr": "739",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T07:40:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-denetime",
+  "dal": "on-goz-denetime",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 134053,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 29,
+    "bayt": 123260
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "c599d7cf0a06deed6e9ad052610eefabb3ce6472",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ön göz; zorunlu kip, gerekçeli geçiş, sınav dişi, DENETIM/karne kaydı ve yalnız ön göz çıkışlarıyla talep edilen denetim akışına bağlanmış. Üretime hazır: gerçek ölçüm 53/53, regresyon 0 düşüş ve 12 hedefli mutantın tamamının ilgili kapıyı düşürmesi ana davranışları ve sınavların ayırt ediciliğini kanıtlıyor; önceki turda bulgu yoktu, A4 defter konusu da kartta açıkça ayrı işe daraltılmış durumda.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. Önce/sonra ölçüm çifti 8/53 durumundan 53/53'e geçişi gösteriyor; gerçek koşu A1-A5 + DALGIÇ için UYUMLU ve DENETIM sayısının değişmediğini ölçüyor, regresyon 0 düşüş veriyor, 12 ayrı mutasyon kaydı hedef kapıların bozuk kodu yakaladığını doğruluyor. Süre çifti eski 313 sn ve yeni 332 sn değerlerini 531 sn CI tavanıyla karşılaştırıyor."
+  }
+}
