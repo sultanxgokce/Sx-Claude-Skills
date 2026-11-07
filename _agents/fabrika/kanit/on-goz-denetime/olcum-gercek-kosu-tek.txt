@@ -1,15 +1,33 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/gercek.sh
-# rc=1 sure=0.3s zaman=2026-11-07T06:46:53+03:00
+# rc=0 sure=34.1s zaman=2026-11-07T06:47:59+03:00
 --- stdout ---
 ── ÖN GÖZ (yalnız · denetim yok) · iş: on-goz-denetime · zorunlu kip: kapali
-── ÖN GÖZ · mekanik kapılar (UYUMSUZ)
-  ✗ A1 kanıt başı: origin/on-goz-denetime 012202d6 ≠ HEAD b6f96145 — önce it
+── ÖN GÖZ · mekanik kapılar (UYUMLU)
+  ✓ A1 kanıt başı: geçerli kayıtlar HEAD de8fd8d9 ile aynı (ya da arada yalnız kanıt)
   ✓ A2 kanıt eksik: 10 geçerli kayıt, manifest doğrulandı
   ✓ A3 taban: bilgi: origin/main 5 commit ileride, çakışma yok
   ✓ A4 ağaç: kanıt dışı commit'lenmemiş izlenen dosya yok
   ✓ A5 kapsam: kart cümlesi kapsam dışı yol anmıyor
-· DALGIÇ koşmadı: mekanik kapı uyumsuz (önce onu düzelt; model çağrısı boşa gitmesin)
-ÖN GÖZ: UYUMSUZ — göze göndermeden önce düzelt
-DENETIM sayısı değişmedi (3) · rc=1
+· ön-göz (DALGIÇ): UYUMLU
+   | ÖN-GÖZ: UYUMLU
+   | 
+   | Kart cümlesinin her maddesinin farkta karşılığı var. Aşağıdaki maddelerin hiçbiri kartla çelişmiyor:
+   | 
+   | - **Tur başında ön göz:** `_ongoz_a` (`on-goz.py`) ve `_dalgic_kos` birlikte koşuyor.
+   | - **Tek istisna:** koşul "`DENETCI_KOMUT` ya da `SAHTE_JSON` varken ... `ON_GOZ_SINAV` != 1 ... `ONGOZ_ZORUNLU` = kapali ... `ONGOZ_GEC_VERILDI` != 1" olarak yazılmış. Kayıtta `sinav-kapali` yazılıyor.
+   | - **Kayıt:** DENETIM'e `on_goz` alanı, karne satırına `on_goz` durumu giriyor. `karne.sh ozet` ilk turu "ön göz (ilk tur · 5/E)" kırılımıyla basıyor.
+   | - **Zorunlu kip:** kaynağı `DENETCI_ON_GOZ_ZORUNLU=1`, çalışma ağacındaki bayrak dosyası ve `origin/main`'deki bayrak dosyası.
+   | - **Çıkış kodları:** uyumsuzda `exit 1`, ölçülemedide `exit 3` (`_ongoz_kapat`). Bu çağrı `DENETIM` yazımından önce yapılıyor.
+   | - **`--on-goz-gec`:** en az 20 karakter şartı var. `kart.sh on-goz-gec` karta `on_goz_gecisleri` yazıyor, `gecis_gerekcesi` DENETIM kaydına giriyor. Ön göz uyumluysa şu mesaj basılıyor: "geçiş gerekmedi, karta yazılmadı".
+   | - **`--on-goz`:** yalnız ön göz koşuyor, `exit 0/1/3`.
+   | - **Sınav:** `denetci-on-goz.test.sh` S9-S12 ve mutantları içeriyor.
+   | - **Bayraksız kip:** davranış korunmuş. Uyumsuz ya da ölçülemedi ön göz "bilgi kipi" uyarısı basıp denetimi sürdürüyor.
+   | 
+   | Bilmediğim: sınavlar koşulmadı, bu yüzden yeşil olup olmadıkları bilinmiyor. `.kosuyor` izinin ön göz kapısından önce oluşup oluşmadığını yalnız farktan göremiyorum. Sınavın S9c kapısı bunu ölçüyor. Ayrıca `SKILL.md`'deki "52 kapı + 11 mutant" ifadesi, test dosyasındaki 12 `mut` çağrısıyla tutmuyor. Bu belge sayısıdır, kart cümlesi dışındadır.
+   | — dalgıç: UYUMLU · maliyet 0.051 USD · kayıt /tmp/tmp.zeZri92Zfk/dalgic-cikti
+   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.zeZri92Zfk/dalgic-notes.md
+
+ÖN GÖZ: UYUMLU — göze gönderilebilir
+DENETIM sayısı değişmedi (3) · rc=0
 --- stderr ---
 · denetçi zili çalınmadı: ön göz kararı (denetim açılmadı ya da yalnız ön göz koşusu, tur yakılmadı) — sebep yukarıda
