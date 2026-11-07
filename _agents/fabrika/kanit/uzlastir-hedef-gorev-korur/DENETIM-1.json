@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "uzlastir-hedef-gorev-korur",
+  "pr": "751",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T13:25:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-uzlastir-hedef-gorev-korur",
+  "dal": "uzlastir-hedef-gorev-korur",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27195,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 20837
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "855ad063f53b105352757e97b1417f5467a9e02a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hedef türü görevler uzlaştırmanın çekim adaylarından çıkarılmış; sıradan görev davranışı korunmuş. Önce/sonra ölçümü ile hedeflenen kırılma giderilmiş, 59 sınav geçmiş ve mutasyon H1 kapısının kusuru gerçekten yakaladığını göstermiş; üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Aynı commit ve temiz ağaç üzerinde önce ölçümünde H1 kırmızı (58/1), sonra ölçümünde H1/H2 dâhil tüm takım yeşil (59/0); gerçekçi görev/defter yazımı sınanmış. Mutasyon kaydı doğru biçimde ayrı tutulmuş ve bilerek bozulan kodda yalnız hedef H1 kapısının düştüğünü doğrulamış."
+  }
+}
