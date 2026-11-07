@@ -582,7 +582,8 @@ def cmd_olcum(a):
 
 # 🧬 Mutasyon kaydında "yakalandı" kanıtı: düşen kapı satırı. ✗ ile başlayan satır · FAIL kelimesi · "N kaldı" (N≥1) · "KALAN: N" (N≥1).
 #    ✗ satır başında aranır; FAIL / N kaldı / KALAN: N satırın herhangi bir yerinde kelime olarak. "0 kaldı" / "KALAN: 0" / "FAILED" düşen kapı DEĞİLDİR. Yığın izi (Traceback, Error:) kapı değildir — o çöküştür, sınav değildir.
-DUSEN_KAPI_RE = re.compile(r"^\s*✗|\bFAIL\b|\bKALAN:\s*[1-9]|\b[1-9]\d*\s+kaldı\b", re.M)
+# düşen kapı satırı: kabuk (✗ · FAIL · KALAN: N · N kaldı) + pytest (FAILED ... · "N failed") + node (not ok) + vitest/node (✖ · ×) — …JVTZZ1
+DUSEN_KAPI_RE = re.compile(r"^\s*✗|\bFAIL\b|\bKALAN:\s*[1-9]|\b[1-9]\d*\s+kaldı\b|^\s*FAILED\b|\b[1-9]\d*\s+failed\b|^\s*not ok\b|^\s*[✖×]\s", re.M)
 
 
 def dusen_satirlar(metin):

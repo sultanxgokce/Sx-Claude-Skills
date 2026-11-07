@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "kanit-dusen-kapi-pytest-node",
+  "pr": "752",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T13:31:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kanit-dusen-kapi-pytest-node",
+  "dal": "kanit-dusen-kapi-pytest-node",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24621,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 33971
+  },
+  "dalgic": "uyumsuz",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumsuz",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "8e33078962b10e567157c3d9748e2a28f880f87d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düşen-kapı deseni pytest, node ve vitest satırlarını kapsayacak biçimde genişletilmiş; kabuk kalıpları korunmuş, geçen ve genel satırların yanlış yakalanmadığı sınanmış. Üretim ölçümü, önce/sonra çifti, hedefli mutasyon ve regresyon ölçümü yeşil olduğundan iş üretime hazır; yalnız regex üstündeki eski açıklamada “FAILED düşen kapı değildir” ifadesinin kalması küçük bir rötuştur.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Önce ölçümünde yeni beş kalıp kaçarken sonra ölçümünde D1-D9 ile N1-N7 toplam 16/16 geçiyor; mutasyon kaydı ek kalıplar kaldırılınca hedef D3 dahil beş kapının düştüğünü beklenen rc=1 ile gösteriyor, gerçek durum desen ölçümünden okunuyor. Ayrıca genel kanıt sınavı 275/275 yeşil; ölçüm çifti ve gerçekçi satır fikstürleri talebi yeterli biçimde kanıtlıyor."
+  }
+}

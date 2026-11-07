@@ -1,0 +1,25 @@
+$ env KANIT=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/kanit-eski.py bash yazilim-fabrikasi/scripts/kanit-dusen-kapi-desen.test.sh
+# rc=1 sure=10.8s zaman=2026-11-07T13:29:32+03:00
+--- stdout ---
+════ düşen kapı deseni: kabuk, pytest, node, vitest ════
+  ✓ D1 kabuk '✗ H1 ...' (=1)
+  ✓ D2 kabuk 'FAIL H1' (=1)
+  ✗ D3 pytest 'FAILED t.py::a' (beklenen 1, çıkan 0)
+  ✗ D4 pytest '1 failed, 3 passed' (beklenen 1, çıkan 0)
+  ✗ D5 node 'not ok 1' (beklenen 1, çıkan 0)
+  ✗ D6 node '✖ ad' (beklenen 1, çıkan 0)
+  ✗ D7 vitest '× ad' (beklenen 1, çıkan 0)
+  ✓ D8 'KALAN: 2' kabuk (=1)
+  ✓ D9 'N kaldı' kabuk (=1)
+── yanlış pozitif yok (geçen çıktı yakalanmamalı) ──
+  ✓ N1 pytest '3 passed' (=0)
+  ✓ N2 pytest '0 failed' (=0)
+  ✓ N3 node 'ok 1' (=0)
+  ✓ N4 vitest '✓ ad' (=0)
+  ✓ N5 kabuk '0 kaldı' (=0)
+  ✓ N6 düz ad 'ok' (=0)
+  ✓ N7 'failedsafe' alt dize (=0)
+
+SONUÇ: 11 geçti · 5 kaldı
+--- stderr ---
+⏳ agir-sira: kanit-kanit-dusen-kapi-pytest-node-desen 10 sn bekledi (yuva 2, load1 17.66)
