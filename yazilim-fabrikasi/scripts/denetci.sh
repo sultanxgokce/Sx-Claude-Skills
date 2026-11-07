@@ -952,26 +952,35 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 # W42-E1 (7H1EBA): ön-göz sonucu DENETIM kaydına ve karneye "dalgic" alanı olarak yazılır (kapali|kartsiz|atlandi|uyumlu|uyumsuz|olculemedi);
 #    böylece ilk tur geçişi DALGIÇ'lı ve DALGIÇ'sız işler için ayrı ölçülür. Yalnız kayıttır: puana, tura, rc'ye dokunmaz.
 # Ana yol (W42-E1 dilim 3): önce mekanik kapılar; zorunlu kipte A uyumsuzsa ve geçiş yoksa DALGIÇ koşmaz (model parası boşa gitmez), denetim açılmaz.
-_ongoz_a
-if [ "$ONGOZ_A" = uyumsuz ] && [ "$ONGOZ_ZORUNLU" != kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then _ongoz_kapat uyumsuz; fi
-_dalgic_kos
-_ongoz_birlestir; ONGOZ_HAM="$ONGOZ_DURUM"; ONGOZ_GEREKCE=""
-if [ "$ONGOZ_DURUM" != uyumlu ]; then
-  if [ "$ONGOZ_GEC_VERILDI" = 1 ]; then
-    ONGOZ_DURUM=gecildi; ONGOZ_GEREKCE="$(printf '%s' "$ONGOZ_GEC" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
-    _bilgi "⚠ ÖN GÖZ $(_ongoz_ad "$ONGOZ_HAM") — gerekçeli GEÇİŞ (yazanın beyanı, göz kart metninde görür): $ONGOZ_GEREKCE"
-    if [ -n "$KART" ] && [ -f "$KART" ]; then
-      ( cd "$DEPO" && bash "$HERE/kart.sh" on-goz-gec "$IS" --gerekce "$ONGOZ_GEREKCE" --oturum "${CLAUDE_CODE_SESSION_ID:-${AGENT_NAME:-?}}" --kim "${AGENT_NAME:-?}" --tur "$TUR" --durum "$ONGOZ_HAM" < /dev/null ) \
-        || { _hata "geçiş gerekçesi karta YAZILAMADI — gerekçesiz geçiş olmaz, denetim açılmadı"; ONGOZ_SUS=1; exit 3; }
-      cp "$KART" "$DZ/KART.json" 2>/dev/null || { _hata "kartın anlık kopyası yenilenemedi ($DZ/KART.json)"; exit 3; }
-      cp "$KART" "$TMP/kart.md"
-    else
-      _bilgi "· kartsız denetim: geçiş gerekçesi yalnız DENETIM kaydına yazılır"
-      { printf '\n\n[ön göz geçişi — yazanın beyanı] %s\n' "$ONGOZ_GEREKCE"; } >> "$TMP/kart.md"
-    fi
-  elif [ "$ONGOZ_ZORUNLU" != kapali ]; then _ongoz_kapat "$ONGOZ_DURUM"
-  else _bilgi "⚠⚠ ÖN GÖZ $(_ongoz_ad "$ONGOZ_DURUM") — bilgi kipi (zorunlu değil), denetim sürer; kayda girer, karne sayar"; fi
-elif [ "$ONGOZ_GEC_VERILDI" = 1 ]; then _bilgi "· --on-goz-gec verildi ama ön göz UYUMLU — geçiş gerekmedi, karta yazılmadı"
+# SINAV DİŞİ (göz tur 1 sonrası CI ölçümü, #739): sahte gözle (DENETCI_KOMUT/SAHTE_JSON) yüzlerce tur koşan sınavlarda gerçek ön göz her tura
+#   ~1 sn ekledi — denetci-duzeltme-farki 358 → 481 sn (tavan 531, %90), denetci.test.sh 1. parça 406 → 631 sn. Ön gözü ölçmeyen sınavlar için
+#   bu süre boşa. Sahte göz VARKEN ön göz yalnız ON_GOZ_SINAV=1 ile koşar (tavan dişiyle aynı kalıp: gerçek koşuda sahte göz olmaz, kaçış açmaz).
+#   Kayıtta on_goz.durum = "sinav-kapali" (ölçülmedi; uyumlu SAYILMAZ, karnede kendi satırı).
+if { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; } && [ "${ON_GOZ_SINAV:-0}" != 1 ]; then
+  printf '{}' > "$TMP/ongoz.json"; _dalgic_kos; ONGOZ_DURUM="sinav-kapali"; ONGOZ_HAM=""; ONGOZ_GEREKCE=""
+  _bilgi "· ön göz: sınav kipi (sahte göz) — koşmadı, kayıtta sinav-kapali (ON_GOZ_SINAV=1 ile koşar)"
+else
+  _ongoz_a
+  if [ "$ONGOZ_A" = uyumsuz ] && [ "$ONGOZ_ZORUNLU" != kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then _ongoz_kapat uyumsuz; fi
+  _dalgic_kos
+  _ongoz_birlestir; ONGOZ_HAM="$ONGOZ_DURUM"; ONGOZ_GEREKCE=""
+  if [ "$ONGOZ_DURUM" != uyumlu ]; then
+    if [ "$ONGOZ_GEC_VERILDI" = 1 ]; then
+      ONGOZ_DURUM=gecildi; ONGOZ_GEREKCE="$(printf '%s' "$ONGOZ_GEC" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
+      _bilgi "⚠ ÖN GÖZ $(_ongoz_ad "$ONGOZ_HAM") — gerekçeli GEÇİŞ (yazanın beyanı, göz kart metninde görür): $ONGOZ_GEREKCE"
+      if [ -n "$KART" ] && [ -f "$KART" ]; then
+        ( cd "$DEPO" && bash "$HERE/kart.sh" on-goz-gec "$IS" --gerekce "$ONGOZ_GEREKCE" --oturum "${CLAUDE_CODE_SESSION_ID:-${AGENT_NAME:-?}}" --kim "${AGENT_NAME:-?}" --tur "$TUR" --durum "$ONGOZ_HAM" < /dev/null ) \
+          || { _hata "geçiş gerekçesi karta YAZILAMADI — gerekçesiz geçiş olmaz, denetim açılmadı"; ONGOZ_SUS=1; exit 3; }
+        cp "$KART" "$DZ/KART.json" 2>/dev/null || { _hata "kartın anlık kopyası yenilenemedi ($DZ/KART.json)"; exit 3; }
+        cp "$KART" "$TMP/kart.md"
+      else
+        _bilgi "· kartsız denetim: geçiş gerekçesi yalnız DENETIM kaydına yazılır"
+        { printf '\n\n[ön göz geçişi — yazanın beyanı] %s\n' "$ONGOZ_GEREKCE"; } >> "$TMP/kart.md"
+      fi
+    elif [ "$ONGOZ_ZORUNLU" != kapali ]; then _ongoz_kapat "$ONGOZ_DURUM"
+    else _bilgi "⚠⚠ ÖN GÖZ $(_ongoz_ad "$ONGOZ_DURUM") — bilgi kipi (zorunlu değil), denetim sürer; kayda girer, karne sayar"; fi
+  elif [ "$ONGOZ_GEC_VERILDI" = 1 ]; then _bilgi "· --on-goz-gec verildi ama ön göz UYUMLU — geçiş gerekmedi, karta yazılmadı"
+  fi
 fi
 # İstem PARÇA PARÇA kurulur, sonra birleşir (BÂNİ 21:59, 18 Eki): boyut kapısı aşağıda istemin tamamını ölçer ve
 # aşınca HANGİ parçanın şiştiğini söyler. Birleşen metin eskisiyle bayt bayt aynıdır.

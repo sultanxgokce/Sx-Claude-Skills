@@ -8,7 +8,7 @@
 # Mutant: MUTANT_D=<bozuk denetci.sh>.
 # kabuk-testleri: sure=120
 set -uo pipefail
-export KANIT_SIRA=0 DENETCI_SIRA=0 FABRIKA_AILE_NOTIFY=-
+export KANIT_SIRA=0 DENETCI_SIRA=0 FABRIKA_AILE_NOTIFY=- ON_GOZ_SINAV=1   # sahte gözle ön göz yalnız ON_GOZ_SINAV=1 ile koşar (sınav dişi)
 unset DENETCI_ON_GOZ_ZORUNLU DALGIC_KAPALI
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KS="$HERE/kart.sh"
@@ -66,6 +66,11 @@ is_hazirla b1; bayat b1
 kapi "G1 bayat kanıt + zorunlu yok → denetim açılır (rc 0)" 0 den b1
 dogru "G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz" [ "$(jdeger "$(kayit b1)" on_goz.durum)/$(jdeger "$(kayit b1)" on_goz.kanit_basi)" = uyumsuz/uyumsuz ]
 iceren "G3 ekranda bilgi kipi uyarısı" "ÖN GÖZ UYUMSUZ — bilgi kipi" "$KOK/son.out"
+
+echo "════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════"
+is_hazirla s1; bayat s1
+kapi "D1 ON_GOZ_SINAV yok + zorunlu + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)" 0 env -u ON_GOZ_SINAV DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s1 < /dev/null' _ "$W" "$J5" "$D"
+dogru "D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)" [ "$(jdeger "$(kayit s1)" on_goz.durum)" = sinav-kapali ]
 
 echo "════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════"
 is_hazirla z1; bayat z1; rm -f "$DALGIC_IZ"; : > "$KOK/istem.md"
@@ -144,6 +149,7 @@ PYM
   mut gecis-karta-yazilmaz S10f kart.sh 'k.setdefault("on_goz_gecisleri",[]).append(x)' 'pass'
   mut olculemedi-uyumlu S11a denetci.sh '*olculemedi*) ONGOZ_DURUM=olculemedi ;;' '*olculemedi*) ONGOZ_DURUM=uyumlu ;;'
   mut dalgic-sayilmaz B1 denetci.sh 'case "$ONGOZ_A/${DALGIC_DURUM:-}" in' 'case "$ONGOZ_A/" in'
+  mut sinav-disi-yok D2 denetci.sh '&& [ "${ON_GOZ_SINAV:-0}" != 1 ]; then' '&& false; then'
   mut karne-alansiz S12f karne.sh '"on_goz":(d.get("on_goz") or {})' '"on_goz_yok":(d.get("on_goz") or {})'
 fi
 echo "SONUÇ: $GECEN geçti, $DUSEN düştü"; [[ $DUSEN -eq 0 ]]
