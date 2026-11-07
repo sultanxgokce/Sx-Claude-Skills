@@ -1,0 +1,58 @@
+$ bash iskan/scripts/baslat-claude.test.sh
+# rc=0 sure=1.5s zaman=2026-11-07T06:46:18+03:00
+--- stdout ---
+── söz dizimi ──
+  ✓ şablon söz dizimi
+── 1) İLK açılış: iz yok → --session-id ile taze başlar ──
+  ✓ ilk açılış rc=0
+  ✓ ilk çağrı --session-id (doğru)
+  ✓ başarılı açılışta iz bırakıldı
+── 2) YENİDEN açılış: iz var → --resume (menüye düşmez) ──
+  ✓ yeniden açılış rc=0
+  ✓ --resume ile açıldı (insan-eli gerekmez)
+  ✓ boşuna --session-id denenmedi
+── 3) İZ KAYBOLMUŞ ama oturum VAR → kendi kendini onarır ──
+  ✓ iz kayıpken de rc=0 (kendini onardı)
+  ✓ onarımı açıkça söylüyor (sessiz değil)
+  ✓ iz yeniden yazıldı
+── 4) TANIMADIĞIMIZ hata → körlemesine taze oturum AÇMAZ ──
+  ✓ tanınmayan hatada rc≠0 (sahte-yeşil yok)
+  ✓ ham çıktıyı gösteriyor (teşhis edilebilir)
+── 5) prob için --print KULLANILMIYOR (jeton + sahte-mesaj) ──
+  ✓ şablonda --print yok
+── 6) transcript ağacına DOKUNMUYOR (yüzey-daraltması değişmezi) ──
+  ✓ transcript yolu şablonda geçmiyor
+── 7) KOLTUĞA ÖZEL İZİN DOSYASI: kayıtta settings_file → her açılış yolunda --settings ──
+  ✓ izinli koltuk ilk açılış rc=0
+  ✓ taze açılışta --settings geçti
+  ✓ izinli koltuk yeniden açılış rc=0
+  ✓ yeniden açılışta da --settings geçti (restart korumayı düşürmez)
+── 8) izin dosyası kayıtta VAR ama diskte YOK → koltuk AÇILMAZ ──
+  ✓ kayıp izin dosyasında rc≠0
+  ✓ sebebi açıkça söylüyor
+  ✓ claude HİÇ çağrılmadı (yasaksız açılış yok)
+── 9) alan YOKSA bayt-aynı: --settings eklenmez ──
+  ✓ alansız koltuk eskisi gibi açıldı (--settings yok)
+
+── 8) YERLİ OTOMATİK SIKIŞTIRMA 600k: sürecin ortamında, ilk açılışta da --resume'da da (gorev_…880TAK) ──
+  ✓ ilk açılışta CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k
+  ✓ --resume yolunda da 600k (süreç özelliği, her yolda)
+  ✓ standart SABİT: dış ortam başka değer verse de 600k (kaçış yok)
+── 10) KOLTUK KAYDI (görev …W38BCZ madde 1): açılan koltuk kutunun kalıcı kaydına yazılır, izin modu YAZILMAZ ──
+  ✓ kayıtlı açılış rc=0
+  ✓ kayda tek satır: ad · rol · session_id · cwd
+  ✓ dört sütun — izin modu sütunu YOK
+  ✓ kayıtta bypassPermissions geçmiyor (kayıttaki permission_mode bypass olsa da)
+  ✓ başarılı kayıtta uyarı yok
+  ✓ ikinci açılış satırı çoğaltmaz (ad anahtar)
+   · özel izin dosyalı koltuk kayda GİRMEZ, varsa kaydı silinir
+  ✓ izin dosyalı koltuk yine açıldı (kayıt açılışı düşürmez)
+  ✓ izin dosyalı koltuğun kaydı SİLİNDİ (dönüş izin dosyasını taşımaz)
+  ✓ sebebi söylüyor
+   · deneme kalkanı: kayıt yolu değişmiş, kayıt betiği verilmemiş → YAZILMAZ
+  ✓ kalkan: kayıt yok, tmux'a bile sorulmadı
+  ✓ kalkan sebebini söylüyor
+   · tmux dışında (TMUX yok) kayıt yazılmaz
+  ✓ tmux dışı açılış kayda girmez
+baslat-claude: GEÇTI=37 DUSTU=0
+--- stderr ---

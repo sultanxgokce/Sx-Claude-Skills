@@ -1,0 +1,64 @@
+$ bash terminal-onar/scripts/koltuk-kayit.test.sh
+# rc=1 sure=12.1s zaman=2026-11-07T06:45:59+03:00
+--- stdout ---
+── H · hermetiklik
+  ✓ H1 ortak.sh yüklendikten sonra tmux SAHTE (gerçek sunucuya dokunulmaz)
+  ✓ H2 kayıt yokken bekçi turu: hiçbir koltuk açılmaz, durum dosyası doğmaz
+── Y · kayıt yazımı (madde 1)
+  ✗ Y1 yaz rc 0, üç satır, her satır dört sütun (izin modu sütunu YOK) — beklenen=[0 3 4] gerçek=[127  ]
+  ✗ Y2 aynı ad yeniden yazılınca satır çoğalmaz — beklenen=[1] gerçek=[]
+  ✗ Y3 bozuk kimlik · boş kimlik · olmayan dizin · ':'li ad · sekmeli rol → rc 2, kayda GİRMEZ — beklenen=[2 2 2 2 2 0] gerçek=[127 127 127 127 127 ]
+  ✗ Y4 sil satırı kaldırır, ötekiler kalır — beklenen=[0 3] gerçek=[ ]
+── P · doğuş A: koltuklar canlı → bekçi hiçbirine dokunmaz
+  ✗ P0 canlı ve kayıtlı koltuğa DOKUNULMAZ (new-session 0), hal canli — beklenen=[0 0 0 canli] gerçek=[0 0 0 ]
+── P · yeniden doğuş B: tmux öldü → bekçi auto modda geri açar
+  ✗ P1 🔴 ilk turda tavan kadar (2) koltuk açıldı: a ve b, c sırada — beklenen=[1 1 0 bekliyor] gerçek=[0 0 0 ]
+  ✗ P2 komut: kayıttaki dizinde, --resume <kayıttaki kimlik> --permission-mode auto — beklenen=[e e e] gerçek=[h h h]
+  ✗ P3 komut bellek ve sıkıştırma ortamını taşır (ana koltukla aynı) — beklenen=[e] gerçek=[h]
+  ✗ P4 günlükte geri açılış satırı (a için 1) — beklenen=[1] gerçek=[0]
+  ✗ P5 ikinci tur: a ve b İKİNCİ kez açılmaz, c şimdi açıldı — beklenen=[1 1 1] gerçek=[0 0 0]
+  ✗ P6 sonraki turlar da hiçbirini yeniden açmaz, hepsi canli — beklenen=[1 1 1 canli canli canli] gerçek=[0 0 0   ]
+  ✓ P7 sahte claude hiç ÇALIŞTIRILMADI (komut yalnız sahte tmux'a verildi)
+── K · bilerek kapatılan koltuk (Kadro dondur, boşta taraması) geri AÇILMAZ
+  ✗ K1 bu doğuşta canlıyken kapanan koltuk: açılmaz, hal kapandi, günlükte TEK satır — beklenen=[1 kapandi 1] gerçek=[0  0]
+  ✗ K2 sonraki yeniden doğuşta da dönmez (kutu ölürken kapalıydı); b ve c döner — beklenen=[1 2 2 gorulmedi] gerçek=[0 0 0 ]
+── Y · açılıp yaşamayan koltuk döngüye girmez
+  ✗ Y5 açıldı ama yaşamadı → bu doğuşta yeniden DENENMEZ (b için toplam 3 = önceki 2 + 1), hal yasamadi, günlükte TEK satır — beklenen=[3 yasamadi 1] gerçek=[0  0]
+  ✗ Y6 tmux oturumu kurulamazsa (new-session düşer): hal yasamadi, bu doğuşta TEK deneme (b, c) — beklenen=[yasamadi 1 1] gerçek=[ -3 -3]
+── N · negatif: kimlik bozuk/boş · dizin yok · konuşma yok · başka yerde açık · ana koltuk · izin modu sütunu
+  ✗ N1 boş kimlik → açılmaz, hal bozuk, sebep günlükte TEK satır — beklenen=[0 bozuk 1] gerçek=[0  0]
+  ✗ N2 kimlik yerine izin atlatma bayrağı → açılmaz (kimlik değil), hal bozuk — beklenen=[0 bozuk] gerçek=[0 ]
+  ✗ N3 kayıttaki dizin yok → açılmaz, sebep günlükte — beklenen=[0 1] gerçek=[0 0]
+  ✗ N4 konuşma dosyası O DİZİNDE yok (başka dizinde var) → açılmaz — beklenen=[0 1] gerçek=[0 0]
+  ✗ N5 konuşma başka yerde açık → ikinci kopya açılmaz — beklenen=[0 baska-yerde] gerçek=[0 ]
+  ✓ N6 ana koltuk bu yoldan HİÇ açılmaz (onar.sh'ın)
+  ✗ N7 kayda 5. sütunda bypass yazılsa da yok sayılır: auto ile açılır — beklenen=[1 e] gerçek=[0 h]
+  ✗ N8 savunma kapısı: komut satırında izin atlatma deseni görülürse AÇILMAZ — beklenen=[1 bozuk] gerçek=[0 ]
+  ✓ N9 🔴 bütün sınav boyunca sahte tmux'a giden HİÇBİR komutta izin atlatma yok
+  ✓ N10 her açılış komutu tam olarak '--permission-mode auto' ile biter
+  ✗ N11 kaynakta izin atlatma bayrağı yazılı değil (koltuk-kayit.sh · bekci.sh) — beklenen=[0 0] gerçek=[ 0]
+── G · kayıtlı ama kutu ölürken canlı görülmemiş koltuk (yeni kurulum, dondurulmuş) açılmaz
+  ✗ G1 önceki doğuşta hiç görülmemiş koltuk açılmaz, günlükte TEK satır — beklenen=[0 gorulmedi 1] gerçek=[0  0]
+
+koltuk-kayit: GEÇTİ=6 KALDI=24
+--- stderr ---
+⏳ agir-sira: kanit-koltuk-geri-donus-auto-koltuk-donus-sinavi 10 sn bekledi (yuva 2, load1 7.53)
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/durum/koltuklar.tsv: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/durum/koltuklar.tsv: No such file or directory
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/durum/koltuklar.tsv: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/durum/koltuklar.tsv: No such file or directory
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/durum/koltuklar.tsv: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/durum/koltuklar.tsv: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/acilan.iz: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/acilan.iz: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/tmux.iz: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/acilan.iz: No such file or directory
+grep: /tmp/tmp.yTRv5ilSsa/acilan.iz: No such file or directory
+grep: /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/alt-ajan-istem-once-agac/terminal-onar/scripts/koltuk-kayit.sh: No such file or directory
+bash: /tmp/tmp.yTRv5ilSsa/calisma/scripts/koltuk-kayit.sh: No such file or directory
