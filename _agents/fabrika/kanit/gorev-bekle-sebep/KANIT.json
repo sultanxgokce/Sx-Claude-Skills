@@ -1,0 +1,183 @@
+{
+  "is": "gorev-bekle-sebep",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T00:43:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra-tek",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek-tek.txt",
+      "sha256": "5a54559575c814d226b3de184d09d7bdd4bff2472cf89a853e37b13558e3442e",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:30:11+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "cf537f93dbc8a0204a1a65cbd102591c1d03d09784ce71915709647a5d48b674",
+      "olcum_id": "b93e1f9311914b1eb2c7b24289003081",
+      "olculen_commit": "f5263e4b9a11d647c837e7a3bf3b9572cbd6a222",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-alt-sinir-kalkti",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-alt-sinir-kalkti-sonra.txt",
+      "sha256": "07e5d9232067e6f9c0fda8af66d08e77bf5040e13ff488d0f0f38ba5c2c30033",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:30:17+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-tek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K3 5 harften kısa",
+      "hedef_dustu": true,
+      "olcum_id": "343a45d392714f6f81c65bebb0a9759c",
+      "olculen_commit": "f5263e4b9a11d647c837e7a3bf3b9572cbd6a222",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sonra-tur2",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tur2-tek.txt",
+      "sha256": "27b9ff93884b9994ca9d4f276924f2a616bec9977a38f6207f89b2ec3cd2a7b5",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:31:53+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "7a6d12d736bae617833d523df7acb5ee2e5cbb27fdc5e9ed02391fde3e385c90",
+      "olcum_id": "41855140a0c545b1b951408b87be2251",
+      "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-tur2-alt-sinir",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-tur2-alt-sinir-sonra.txt",
+      "sha256": "4c47d759d583dd3c0bd5d8a9e6191fb0573a8991efa87d1417c5d7266e2400af",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:31:54+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-tur2",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "K6 yalnız boşluktan",
+      "hedef_dustu": true,
+      "olcum_id": "75b7559b3df34fdaadec5dd8aa77ef0b",
+      "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "canli-defter-bekle",
+      "asama": "canli",
+      "dosya": "canli-canli-defter-bekle.txt",
+      "sha256": "52802e3cc1917e4ec9b96e0fece94b1d66295f650a5233b8411744475fc75564",
+      "komut": [
+        "tail",
+        "-n",
+        "5",
+        "--",
+        "/tmp/claude-1000/canli-bekle.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/tmp/claude-1000/canli-bekle.json",
+      "kaynak_turu": "dosya",
+      "son": 5,
+      "desen": "\\[bekliyor\\] Sx 722 birleştirmesi",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "{\"ok\":true,\"kayit\":{\"id\":\"gorev_01M6RF022S6K0HQB17B9C06YJF\",\"tur\":\"gorev\",\"surum\":12,\"durum\":\"gecerli\",\"adlar\":[{\"deger\":\"Canlı yayın dinleme becerisi F1: yakala, parçala, yazıya dök, not çıkar\",\"anahtar\":\"canli yayin dinleme becerisi f1 yakala parcala yaziya dok not cikar\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.225Z\"}],\"telefonlar\":[],\"epostalar\":[],\"adimlar\":[{\"deger\":\"[atandı → HEZARFEN] F1 inşa\",\"anahtar\":\"atandi hezarfen f1 insa\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.521Z\"},{\"deger\":\"[üs",
+        "saat": "2026-11-06T12:58:03.225Z",
+        "saat_iso": "2026-11-06T12:58:03+00:00"
+      },
+      "son_atesleme": {
+        "satir": "{\"ok\":true,\"kayit\":{\"id\":\"gorev_01M6RF022S6K0HQB17B9C06YJF\",\"tur\":\"gorev\",\"surum\":12,\"durum\":\"gecerli\",\"adlar\":[{\"deger\":\"Canlı yayın dinleme becerisi F1: yakala, parçala, yazıya dök, not çıkar\",\"anahtar\":\"canli yayin dinleme becerisi f1 yakala parcala yaziya dok not cikar\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.225Z\"}],\"telefonlar\":[],\"epostalar\":[],\"adimlar\":[{\"deger\":\"[atandı → HEZARFEN] F1 inşa\",\"anahtar\":\"atandi hezarfen f1 insa\",\"kutu\":\"code\",\"ts\":\"2026-11-06T12:58:03.521Z\"},{\"deger\":\"[üs",
+        "saat": "2026-11-06T12:58:03.225Z",
+        "saat_iso": "2026-11-06T12:58:03+00:00"
+      },
+      "zaman": "2026-11-06T23:32:00+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "796a31f3e69f4e00b43587e4b2f2367b",
+      "olculen_commit": "7199ab8a603567b0f71eac41d41ccb9384fc8db0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-tarafi-tarayici",
+      "asama": "tek",
+      "dosya": "olcum-kart-tarafi-tarayici-tek.txt",
+      "sha256": "82c847c9f7c7b2ce6e553c968b22f8a6d44d3194a6666a30947a00d2b18c3649",
+      "komut": [
+        "node",
+        "/config/projects/cloudtop/infra/terminal-merkez/gorev-ayrinti-tarayici-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-06T23:33:37+03:00",
+      "sure_sn": 37.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e2423cf7204a4f26b0fdb2de9370589f",
+      "olculen_commit": "09407b6781614a452ebc4f4e3be25d6a00745444",
+      "olculen_dizin": "/config/projects/cloudtop",
+      "olculen_kirli": true,
+      "kirli_kurali": 1,
+      "kirli_izin": "cloudtop ana kopyasında başka işlerin kanıt dosyaları kirli; ölçülen sınav ve kaynağı temiz (git diff infra/terminal-merkez boş)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "son-bas",
+      "asama": "tek",
+      "dosya": "olcum-son-bas-tek.txt",
+      "sha256": "6b67c9d5e756fe40e67a4ce2c5c5e115ac1fbfc02a8e1e2583ab9afa2b6326cb",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/gorev-bekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T00:43:42+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "6a88f078c7126e9ef7b021cad7c694ca0d231e8d805e909e77ee05a50fa8d2f9",
+      "olcum_id": "d0e75bbff2f44fcf9f5ba10bf2ec241f",
+      "olculen_commit": "1683f9cf0c9abe0a17b2cd42e9637b8e6f0220b0",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "15465014118509426144982bff02e006405173d10fddfe475d28b9dcfcd4b261"
+}

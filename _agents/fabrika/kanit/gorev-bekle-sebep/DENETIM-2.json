@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "gorev-bekle-sebep",
+  "pr": "732",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T23:32:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-bekle-sebep",
+  "dal": "gorev-bekle-sebep",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25606,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 17098
+  },
+  "dalgic": "uyumsuz",
+  "bas": "dfbf73894508956a73cac2461ab3dcaefa9b94e3",
+  "duzeltme_farki": {
+    "onceki_bas": "cd2511945673251003933ad8f3d1526248f99d1a",
+    "dosya": 9,
+    "bayt": 24405,
+    "tam_bayt": 30606
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "`bekle` komutu artık sebebi önce kırpıp 5–120 harf arasında doğruluyor; önceki turdaki boşluk-sebep kusuru K6/K7 ve yeşil gerçek ölçümle kapanmış. Ancak kartın gerçekten “Durakladı · <sebep>” gösterdiği hâlâ bu kanıt paketinde ölçülmediği için kullanıcıya dönük ana iddia kanıtsız; önce bunu çözüp kart yüzeyini çalıştıran ölçümü ekleyin.",
+    "bulgular": [
+      {
+        "ne": "Önceki B2 kapanmamış: iş kartının “Durakladı · <sebep>” gösterdiği temel talep hâlâ kanıtlanmıyor.",
+        "kanit": "Yeni K2 yalnız sahte sunucuya gönderilen `adimlar` değerinin `[bekliyor] Sultan onayını bekliyor` olduğunu doğruluyor. Açıklamada terminal-merkez B5/B9'a atıf var fakat manifestte bu sınavı çalıştıran kayıt, kart çıktısı veya gerçekçi kart karesi yok; dolayısıyla önekin kartta nasıl gösterildiği ölçülmemiş.",
+        "konum": "gunluk-plan/scripts/gorev-bekle.test.sh:25-26; olcum-sonra-tur2-tek.txt K2",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır. `sonra-tur2` gerçek ölçümü K1–K7 için yeşil; mutasyon ölçümü K6 kapısının boşluk-sebep bozulmasını yakaladığını gösterdiğinden önceki B1 kapanmıştır. Buna karşılık kart görünümüne ait önce/sonra kare veya kart oluşturucusunu gerçekten çalıştıran ölçüm yoktur; canlı kayıt da başka bir görev/desene ilişkindir ve G14 kart gösterimini kanıtlamaz."
+  }
+}

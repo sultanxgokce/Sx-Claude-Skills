@@ -1,0 +1,13 @@
+$ bash gunluk-plan/scripts/gorev-bekle.test.sh
+# rc=0 sure=0.4s zaman=2026-11-07T00:43:42+03:00
+--- stdout ---
+── bekle fiili
+  ✓ K1 sebep yazılır: rc 0, tek istek, adım '[bekliyor] <sebep>' biçiminde
+  ✓ K2 adım metni kartın okuduğu '[bekliyor] ' önekiyle başlar ve kırpılmış sebebi taşır (kart tarafı: terminal-merkez gorev-ayrinti-tarayici-sinav B5/B9)
+  ✓ K3 5 harften kısa sebep yazılmaz: rc 2, istek yok
+  ✓ K4 120 harften uzun sebep yazılmaz: rc 2, istek yok
+  ✓ K5 sebepsiz çağrı yazılmaz: rc 2, kullanımı söyler
+  ✓ K6 yalnız boşluktan oluşan sebep yazılmaz (denetçi tur 1): rc 2, istek yok
+  ✓ K7 kenar boşlukları kırpılarak yazılır
+── 7 geçti · 0 düştü
+--- stderr ---

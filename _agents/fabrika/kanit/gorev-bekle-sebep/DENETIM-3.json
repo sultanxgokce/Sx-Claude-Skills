@@ -1,0 +1,41 @@
+{
+  "tur": 3,
+  "is": "gorev-bekle-sebep",
+  "pr": "732",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-06T23:35:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-bekle-sebep",
+  "dal": "gorev-bekle-sebep",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24396,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 15375
+  },
+  "dalgic": "uyumsuz",
+  "bas": "2b82781e97e2ceca8c21846349f00d82d897df8f",
+  "duzeltme_farki": {
+    "onceki_bas": "dfbf73894508956a73cac2461ab3dcaefa9b94e3",
+    "dosya": 4,
+    "bayt": 15375,
+    "tam_bayt": 44767
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`bekle` komutu sebebi doğrulayıp `[bekliyor] <sebep>` adımını tek istekle yazıyor; kart tarafındaki tarayıcı sınavı da bu durumun kullanıcıya gösterilmesini ölçüyor. Önceki ciddi bulgu, yeni 62/62 kart ölçümüyle kapanmış; üretime engel ciddi veya uygulama kusuru kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve geçerli kayıtlar yeşil. `sonra-tur2` gerçek ölçümü komutun yazma, kırpma ve sınır denetimlerini K1–K7 ile doğruluyor; `kart-tarafi-tarayici` gerçek tarayıcı ölçümü 62 geçti · 0 kaldı sonucu vererek önceki turda eksik olan kart gösterimini kapsıyor. İki mutasyon kaydı hedef kapıların bozuk kodu yakaladığını gösteriyor ve içlerindeki beklenen düşüşler bulgu değildir; sarı kayıt yoktur."
+  }
+}
