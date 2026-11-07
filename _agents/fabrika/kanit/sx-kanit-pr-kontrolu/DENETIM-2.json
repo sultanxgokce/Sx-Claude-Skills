@@ -1,0 +1,51 @@
+{
+  "tur": 2,
+  "is": "sx-kanit-pr-kontrolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T02:25:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-kanit-pr-kontrolu",
+  "dal": "sx-kanit-pr-kontrolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20226,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "B1 kapanmadı: iş akışı `_agents/**` bulunan karma PR'larda ve kanıt dosyası içermeyen `_agents` PR'larında da tetikleniyor; betiğin sonradan “atlandı” demesi, talepteki yalnız kanıt dosyası değişen PR'da koşma şartını sağlamıyor. B2 de kapanmadı: eklenen sınav betik içi davranışı ölçüyor, GitHub Actions tetikleyicisinin hedef ve kapsam dışı PR kümelerindeki seçiciliğini ölçmüyor; önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "İş akışının tetikleme kapsamı hâlâ talepteki “yalnız kanıt dosyası değişen PR” kapsamından geniş; önceki B1 kapanmamış.",
+        "kanit": "Workflow `paths: ['_agents/**']` kullanıyor. Ayrıca yorum ve betik, kodla karışık PR'da işin tetiklenip betiğin “atlandı” diyerek 0 döneceğini açıkça gösteriyor; kanıt içermeyen başka `_agents/**` değişiklikleri de işi tetikleyip başarıyla geçer.",
+        "konum": ".github/workflows/kanit-pr.yml:8; scripts/kanit-pr-kontrol.sh:12",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Tetikleyicinin yalnız hedef PR türünde çalıştığı ve kapsam dışı PR'larda hiç çalışmadığı hâlâ kanıtlanmamış; önceki B2 kapanmamış.",
+        "kanit": "`kapsam-sonra` ölçümü `scripts/kanit-pr-kontrol.test.sh` çalıştırıyor ve K3/K4 yalnız zaten başlamış betiğin karma PR'da atlamasını sınıyor; workflow'un hiç tetiklenmemesini sınamıyor. `kanit-pr-sonra` ise yalnız PR #738'de işin geçtiğini gösteriyor ve PR'ın dosya kümesini ya da kapsam dışı karşı örneği vermiyor.",
+        "konum": "olcum-kapsam-sonra-sonra.txt / kapsam-sonra; olcum-kanit-pr-sonra-sonra.txt / kanit-pr-sonra",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı/yeşil çift ile 6/6 sınav betiğin eklendiğini, bozuk JSON'u reddettiğini ve karma PR'da atladığını destekliyor; ancak YAML tetikleme seçiciliğini ölçmediği için iş kartının temel “yalnız ... PR'da koşan” iddiasına yeterli kanıt oluşturmuyor."
+  }
+}

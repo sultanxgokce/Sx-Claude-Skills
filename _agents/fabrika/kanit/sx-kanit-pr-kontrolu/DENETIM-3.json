@@ -1,0 +1,51 @@
+{
+  "tur": 3,
+  "is": "sx-kanit-pr-kontrolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T02:27:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-kanit-pr-kontrolu",
+  "dal": "sx-kanit-pr-kontrolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22195,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Daraltılmış karttaki davranış uygulanmış; önceki B1 yeni kart cümlesiyle kapanmış, önceki B2’nin eski “kapsam dışında hiç çalışmama” beklentisi de artık talep değil, ancak karma kod PR’ındaki gerçek iş akışı davranışı hâlâ ölçülmemiştir. Ayrıca `--diff-filter=AM` yeniden adlandırılan JSON dosyalarını denetim dışında bıraktığı için bozuk bir JSON kontrolü geçebilir; önce bu ikisini çözün.",
+    "bulgular": [
+      {
+        "ne": "Yeniden adlandırılan kanıt veya kart JSON’u denetlenmeden geçebilir.",
+        "kanit": "Betik değişen dosyaları `git diff --name-only --diff-filter=AM` ile topluyor; `R` durumundaki yeniden adlandırmalar listeye alınmadığından sonraki JSON ayrıştırma döngüsüne girmez. K1–K6 sınavlarında da yeniden adlandırılmış bozuk JSON vakası bulunmuyor.",
+        "konum": "scripts/kanit-pr-kontrol.sh:8; scripts/kanit-pr-kontrol.test.sh:14",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kartın özellikle istediği karma kod PR’ında işin gerçekten koşup “atlandı” diyerek 0 dönmesi entegrasyon düzeyinde kanıtlanmamış.",
+        "kanit": "`kapsam-sonra` kaydı yalnız yerel betik sınavında K3/K4’ü geçiriyor. GitHub ölçümü olan PR #738 kaydı ise yalnız işin geçtiğini gösteriyor; PR dosya kümesini, “atlandı” çıktısını veya karma PR çıkış kodunu göstermiyor.",
+        "konum": "olcum-kapsam-sonra-sonra.txt / K3-K4; olcum-kanit-pr-sonra-sonra.txt / PR #738",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce/sonra ölçümleri kurulum ile yerel kapsam sınavındaki ilerlemeyi gösteriyor ve 6/6 sonuç gerçek koddandır; mutasyon kaydı değildir. Bununla birlikte GitHub ölçümü karma kod PR’ı senaryosunu göstermediği, yerel sınav da yeniden adlandırma vakasını kapsamadığı için temel iddianın kanıtı eksiktir."
+  }
+}

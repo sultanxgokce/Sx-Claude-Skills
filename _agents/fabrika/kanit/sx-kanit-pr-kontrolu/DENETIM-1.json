@@ -1,0 +1,51 @@
+{
+  "tur": 1,
+  "is": "sx-kanit-pr-kontrolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T02:24:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-kanit-pr-kontrolu",
+  "dal": "sx-kanit-pr-kontrolu",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11168,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "dalgic": "uyumsuz",
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Yeni iş akışı PR #738'de kurulup yeşil çalıştırılmış; ancak tetikleyici, talepteki yalnız kanıt dosyası değişen PR sınırını uygulamıyor. Önce tetikleme kapsamını daraltın ve olumlu/olumsuz kapsam vakalarını ölçün; mevcut kanıt yalnız işin bir PR'de geçtiğini gösteriyor.",
+    "bulgular": [
+      {
+        "ne": "İş akışı yalnız kanıt dosyası değişen PR'larla sınırlı değil; `_agents/**` altındaki herhangi bir değişiklikte ve kodla birlikte yapılan `_agents` değişikliklerinde de koşuyor, dolayısıyla talep edilen seçicilik sağlanmıyor.",
+        "kanit": "Tetikleyici `paths: ['_agents/**']`; diff yorumunda da “Kod da değişiyorsa ... bu iş yine koşabilir” denerek karma PR'larda çalışacağı açıkça belirtilmiş.",
+        "konum": ".github/workflows/kanit-pr.yml:8",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kontrolün yalnız hedef PR türünde çalıştığı ve kapsam dışı PR'larda çalışmadığı kanıtlanmamış; tek yeşil koşu yanlış tetikleyiciyi ayırt edemez.",
+        "kanit": "Sonra ölçümü yalnız `gh pr checks 738` çıktısında “Kanıt dosyası kontrolü pass” kaydını gösteriyor; PR #738'in değişen dosya kümesi verilmemiş ve kapsam dışı bir PR için karşı ölçüm bulunmuyor.",
+        "konum": "olcum-kanit-pr-sonra-sonra.txt / kanit-pr-sonra",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; kırmızı önce/yeşil sonra ölçüm çifti kontrolün eklendiğini ve bir koşuda geçtiğini destekliyor. Sarı kayıt yok, fakat ölçüm hedeflenen tetikleme seçiciliğini ve bozuk JSON'un gerçekten reddedildiğini sınamıyor."
+  }
+}

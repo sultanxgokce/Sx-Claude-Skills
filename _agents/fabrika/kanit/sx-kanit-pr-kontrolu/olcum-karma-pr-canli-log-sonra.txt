@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/1065a6f5-8463-464e-a2f8-0550f8ee5658/scratchpad/kpk-log.sh
+# rc=0 sure=2.0s zaman=2026-11-07T02:53:44+03:00
+--- stdout ---
+iş: https://github.com/sultanxgokce/Sx-Claude-Skills/actions/runs/42312095538/job/128215778916
+Kanıt dosyası kontrolü	Kanıt ve kart JSON dosyaları ayrışıyor mu (kod da değişiyorsa atlar)	2026-11-06T23:28:15.0829871Z atlandı: _agents dışı dosya da değişiyor (kod PR'ı; lint.yml koşar)
+--- stderr ---

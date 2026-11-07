@@ -1,0 +1,41 @@
+{
+  "tur": 2,
+  "is": "on-goz-kapilari",
+  "pr": "737",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T01:24:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-kapilari",
+  "dal": "on-goz-kapilari",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42270,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 29538
+  },
+  "dalgic": "uyumsuz",
+  "bas": "26ae85db13924bc72f125c43288e8f05498fd58f",
+  "duzeltme_farki": {
+    "onceki_bas": "ed04bd55660bbc541ee85e25c7c3b37420767d5d",
+    "dosya": 14,
+    "bayt": 40323,
+    "tam_bayt": 57837
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Önceki turun iki uygulama kusuru kapanmış: A1 artık özellikle origin dalını ölçüyor, A5 ise alt dize yerine yol bileşeni eşleştiriyor; yeni S4r, S10c ve S10d vakaları ile hedefli mutasyonlar bu düzeltmeleri yakalıyor. Gerçek koşu beş kapıyı uyumlu bulup rc 0 verdiği ve yeni ciddi ya da işi bozan uygulama kusuru görünmediği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kod ölçümleri `on-goz-sinav` için 21/21 ve `gercek-kosu` için A1–A5 uyumlu/rc 0 gösteriyor; ölçülen commitler aynı ve kirli değil. Önceki B1, S4r vakası ile `mut-upstream`; B2 ise S10c–S10d vakaları ile `mut-altdize` tarafından doğrudan ölçülmüş ve kapanmış. Mutasyon kayıtlarındaki rc 1 ve ✗ satırları beklenen bozma sonuçlarıdır; hedef kapıların düştüğü manifestte doğrulanmıştır."
+  }
+}
