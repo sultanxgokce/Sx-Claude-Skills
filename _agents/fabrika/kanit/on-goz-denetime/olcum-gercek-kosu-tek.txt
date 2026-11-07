@@ -1,20 +1,20 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/gercek.sh
-# rc=0 sure=23.1s zaman=2026-11-07T04:47:14+03:00
+# rc=3 sure=42.2s zaman=2026-11-07T05:20:50+03:00
 --- stdout ---
 ── ÖN GÖZ (yalnız · denetim yok) · iş: on-goz-denetime · zorunlu kip: kapali
 ── ÖN GÖZ · mekanik kapılar (UYUMLU)
-  ✓ A1 kanıt başı: geçerli kayıtlar HEAD e77af440 ile aynı (ya da arada yalnız kanıt)
-  ✓ A2 kanıt eksik: 9 geçerli kayıt, manifest doğrulandı
-  ✓ A3 taban: bilgi: origin/main 3 commit ileride, çakışma yok
+  ✓ A1 kanıt başı: geçerli kayıtlar HEAD 0073fff8 ile aynı (ya da arada yalnız kanıt)
+  ✓ A2 kanıt eksik: 10 geçerli kayıt, manifest doğrulandı
+  ✓ A3 taban: bilgi: origin/main 5 commit ileride, çakışma yok
   ✓ A4 ağaç: kanıt dışı commit'lenmemiş izlenen dosya yok
   ✓ A5 kapsam: kart cümlesi kapsam dışı yol anmıyor
-· ön-göz (DALGIÇ): UYUMLU
-   | ÖN-GÖZ: UYUMLU
-   | Bilmediğim: sınav listesi verilmediği için kartın sınav cümlesini (S9-S12 + mutantlar) ölçemedim; farkta `denetci-on-goz.test.sh` var ve 11 mutant sayıyorum, ama "52 kapı" iddiasını ve sınavların geçtiğini doğrulayamam. `$DEPO`'nun bayrak kontrolünden önce atandığını farkta göremedim.
-   | — dalgıç: UYUMLU · maliyet 0.168 USD · kayıt /tmp/tmp.doZ4oa9AR9/dalgic-cikti
-   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.doZ4oa9AR9/dalgic-notes.md
+· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=3) — UYUMLU sayılmaz; denetim yine sürer
+   | koşu hatası: 
+   | 
+   | — dalgıç: ÖLÇÜLEMEDİ (koşu rc=1, ilk satır biçimsiz) · maliyet 0.205 USD · kayıt /tmp/tmp.Dsg7Q0dh9W/dalgic-cikti
+   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.Dsg7Q0dh9W/dalgic-notes.md
 
-ÖN GÖZ: UYUMLU — göze gönderilebilir
-DENETIM sayısı değişmedi (1) · rc=0
+ÖN GÖZ: ÖLÇÜLEMEDİ — uyumlu sayılmaz
+DENETIM sayısı değişmedi (2) · rc=3
 --- stderr ---
 · denetçi zili çalınmadı: ön göz kararı (denetim açılmadı ya da yalnız ön göz koşusu, tur yakılmadı) — sebep yukarıda

@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S9e · rc≠0 + hedef kapı 'S9e' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh erken-kapi-yok
-# rc=1 sure=8.2s zaman=2026-11-07T05:03:52+03:00
+# rc=1 sure=8.1s zaman=2026-11-07T05:28:48+03:00
 --- stdout ---
 mutant: erken-kapi-yok (denetci.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════

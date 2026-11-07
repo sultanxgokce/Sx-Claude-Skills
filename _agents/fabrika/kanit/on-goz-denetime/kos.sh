@@ -4,12 +4,12 @@
 #   <mutant> : sınavın kendi M bölümündeki çapalarla aynı tek değişiklik HEAD kopyasına uygulanır; MUTANT_D ile koşulur (hedef kapı düşmeli):
 #              zorunlu-ortam-okunmaz (S9a) · gecis-karta-yazilmaz (S10f) · olculemedi-uyumlu (S11a) · erken-kapi-yok (S9e)
 set -u; R="$(git rev-parse --show-toplevel)"; T="$(mktemp -d)"; trap 'find "$T" -depth -delete 2>/dev/null' EXIT
-git -C "$R" archive HEAD yazilim-fabrikasi/scripts | tar -x -C "$T" || exit 3
+git -C "$R" archive HEAD yazilim-fabrikasi | tar -x -C "$T" || exit 3
 S="$T/yazilim-fabrikasi/scripts"
 case "${1:-}" in
   "") exec bash "$S/denetci-on-goz.test.sh" ;;
   once) cp "$S/denetci-on-goz.test.sh" "$T/sinav.sh"; find "$T/yazilim-fabrikasi" -depth -delete
-        git -C "$R" archive origin/main yazilim-fabrikasi/scripts | tar -x -C "$T" || exit 3
+        git -C "$R" archive origin/main yazilim-fabrikasi | tar -x -C "$T" || exit 3
         cp "$T/sinav.sh" "$S/denetci-on-goz.test.sh"; echo "önce: ürün betikleri origin/main ($(git -C "$R" rev-parse --short origin/main))"
         MUTANT_D="$S/denetci.sh" exec bash "$S/denetci-on-goz.test.sh" ;;   # M bölümü atlanır: çapalar eski üründe yok (gürültü olurdu)
 esac

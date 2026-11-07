@@ -1,8 +1,6 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/parca.sh
-# rc=1 sure=266.6s zaman=2026-11-07T05:20:05+03:00
+# rc=0 sure=276.9s zaman=2026-11-07T05:25:51+03:00
 --- stdout ---
-  ✗ kart · manifest · diff · rubrik · ölçüm çıktısı istemde
-  ✗ M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)
   ✓ kart açıldı (sınıfsız)
   ✓ ön-göz UYUMLU: bilgi satırı basıldı, denetim aynen geçti (rc 0)
   ✓ W42-E1: ön-göz UYUMLU → denetim kaydında dalgic=uyumlu
@@ -17,5 +15,5 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/parca.sh
   ✓ ÖLÇÜLEMEDİ'de de rapor (neden) görünür
   ✓ ön-göz çıktısında kontrol karakteri süzülür, çıktı 4000 bayta kırpılır
   ✓ DALGIC_KAPALI=0 ön-gözü KAPATMAZ (yalnız =1 kapatır)
-── SONUÇ: 282 geçti · 2 kaldı ── · 266 sn · rc=1
+── SONUÇ: 284 geçti · 0 kaldı ── · 277 sn · rc=0
 --- stderr ---
