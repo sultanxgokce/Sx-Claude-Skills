@@ -5,7 +5,8 @@
 #   DENETIM yazılmaz (tur yanmaz); --on-goz-gec "<gerekçe ≥20>" bilinçli geçiştir: karta (on_goz_gecisleri[]) ve DENETIM'e yazılır, göz kartta görür;
 #   --on-goz yalnız ön göz koşar (denetim yok, rc 0/1/3).
 # Hermetik: çıplak uzak, gerçek kanit.sh + on-goz.py, sahte göz (DENETCI_KOMUT), sahte DALGIÇ, sahte gh. Zil kapalı.
-# Mutant: MUTANT_D=<bozuk denetci.sh>.
+# Mutantlar sınavın İÇİNDE değil (her biri süiti baştan koşturur; 12 mutantla CI 120 sn tavanını aştı, 7 Kas #739): kanıt betiği
+#   _agents/fabrika/kanit/on-goz-denetime/kos.sh <mutant> her birini ayrı kayıt olarak koşar (on-goz.test.sh ile aynı desen). MUTANT_D=<bozuk denetci.sh>.
 # kabuk-testleri: sure=120
 set -uo pipefail
 export KANIT_SIRA=0 DENETCI_SIRA=0 FABRIKA_AILE_NOTIFY=- ON_GOZ_SINAV=1   # sahte gözle ön göz yalnız ON_GOZ_SINAV=1 ile koşar (sınav dişi)
@@ -141,30 +142,4 @@ bayat y1
 kapi "Y4 uyumsuz → rc 1" 1 den y1 --on-goz
 kapi "Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)" 2 den y1 --on-goz --on-goz-gec "$GER"
 
-if [ -z "${MUTANT_D:-}" ]; then
-  echo "════ M · mutantlar: her biri hedef kapısını düşürmeli ════"
-  MK="$KOK/mut"; mkdir -p "$MK"; cp -r "$HERE/." "$MK/"
-  mut() {   # mut <ad> <hedef kapı> <dosya> <aranan> <yerine>
-    local ad="$1" hk="$2" df="$3"
-    find "$MK" -mindepth 1 -depth -delete; cp -r "$HERE/." "$MK/"
-    python3 - "$MK/$df" "$4" "$5" <<'PYM' || { DUSEN=$((DUSEN+1)); echo "  ✗ M $ad: çapa bulunamadı"; return; }
-import sys; p,a,b=sys.argv[1:]; s=open(p,encoding="utf-8").read()
-assert s.count(a)==1; open(p,"w",encoding="utf-8").write(s.replace(a,b))
-PYM
-    local o; o="$(MUTANT_D="$MK/denetci.sh" bash "$MK/denetci-on-goz.test.sh" 2>&1)"
-    if grep -q "  ✗ $hk" <<<"$o"; then GECEN=$((GECEN+1)); echo "  ✓ M $ad → $hk düştü"
-    else DUSEN=$((DUSEN+1)); echo "  ✗ M $ad: $hk düşmedi"; fi; }
-  mut erken-kapi-yok S9e denetci.sh 'then _ongoz_kapat uyumsuz; fi' 'then :; fi'
-  mut zorunlu-ortam-okunmaz S9a denetci.sh 'then ONGOZ_ZORUNLU=ortam' 'then ONGOZ_ZORUNLU=kapali'
-  mut gec-kapisi-yok S10a denetci.sh '[ "${_gn:-0}" -ge 20 ] ||' 'true ||'
-  mut ana-dal-bayragi-yok S9g denetci.sh 'elif git -C "$DEPO" cat-file -e' 'elif false && git -C "$DEPO" cat-file -e'
-  mut gecis-karta-yazilmaz S10f kart.sh 'k.setdefault("on_goz_gecisleri",[]).append(x)' 'pass'
-  mut olculemedi-uyumlu S11a denetci.sh '*olculemedi*) ONGOZ_DURUM=olculemedi ;;' '*olculemedi*) ONGOZ_DURUM=uyumlu ;;'
-  mut dalgic-sayilmaz B1 denetci.sh 'case "$ONGOZ_A/${DALGIC_DURUM:-}" in' 'case "$ONGOZ_A/" in'
-  mut sinav-disi-yok D2 denetci.sh '&& [ "${ON_GOZ_SINAV:-0}" != 1 ] &&' '&& false &&'
-  mut dis-zorunlu-deler D3 denetci.sh '&& [ "$ONGOZ_ZORUNLU" = kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then' '; then'
-  mut esik-21 S10k denetci.sh '[ "${_gn:-0}" -ge 20 ] ||' '[ "${_gn:-0}" -ge 21 ] ||'
-  mut diste-dalgic-kosar D2b denetci.sh 'DALGIC_DURUM="sinav-kapali"; ONGOZ_DURUM="sinav-kapali"' '_dalgic_kos; ONGOZ_DURUM="sinav-kapali"'
-  mut karne-alansiz S12f karne.sh '"on_goz":(d.get("on_goz") or {})' '"on_goz_yok":(d.get("on_goz") or {})'
-fi
 echo "SONUÇ: $GECEN geçti, $DUSEN düştü"; [[ $DUSEN -eq 0 ]]
