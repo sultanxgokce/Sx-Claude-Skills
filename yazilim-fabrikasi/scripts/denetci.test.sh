@@ -100,6 +100,7 @@ SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-c --diff "$T/d.patch" >/dev/null 2>&1
 CIKTI="$(SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-c --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 4 ]; g $? "tur3 ilerlemeyince rc=4"
 grep -q "Üç yol" <<<"$CIKTI" && grep -q "KAPSAMI DARALT" <<<"$CIKTI"; g $? "tıkandı + üç yol raporu"
+grep -q "DURGUN" <<<"$CIKTI"; g $? "aynı puan ve aynı bulguyla iki tur → rapor DURGUN der, daraltmayı önerir"
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-c --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "4. çağrı koşulmadı (rc=4)"
 [ ! -f "$T/_agents/fabrika/kanit/is-c/DENETIM-4.json" ]; g $? "DENETIM-4 yazılmadı"
 
@@ -128,6 +129,12 @@ kartac is-s; bash "$K" olcum is-s olc --asama tek --kirli-izin "sınav fikstür�
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "puan düşünce tur3 tıkandı (rc=4)"
+kartac is-durgun-yok; bash "$K" olcum is-durgun-yok olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-durgun-yok --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 2 H "$B,$B,$B")" bash "$D" is-durgun-yok --diff "$T/d.patch" >/dev/null 2>&1
+CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-durgun-yok --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 4 ]; g $? "puan düşüp bulgu artınca tur3 tıkandı (rc=4)"
+grep -q "DURGUN" <<<"$CIKTI"; [ $? -ne 0 ]; g $? "puan ve bulgu sayısı değiştiyse DURGUN denmez (yalnız aynı puan + aynı bulgu durgundur)"
 # kartta kayıt YOKKEN bayrak işe yaramaz
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "🔴 kartta karar yokken bayrak kapıyı AÇMIYOR (rc=1)"

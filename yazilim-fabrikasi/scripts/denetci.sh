@@ -507,9 +507,22 @@ ac=lambda r: len([x for x in r["bulgular"] if x.get("agirlik")!="kutu-disi"])
 sys.exit(0 if (b["kod_puani"]>a["kod_puani"] and ac(b)<ac(a)) else 1)
 PY
 }
+durgun_mu() {  # son iki tur AYNI puan VE AYNI açık bulgu sayısı: iş kıpırdamıyor (kutu-dışı bulgu sayılmaz; daraltma sonrası en az iki tur)
+  [ $((ONCEKI - TUR_SIFIR)) -ge 2 ] || return 1
+  python3 - "$DZ" "$ONCEKI" <<'PY'
+import json,sys,os
+dz,n=sys.argv[1],int(sys.argv[2])
+a=json.load(open(os.path.join(dz,f"DENETIM-{n-1}.json")))["sonuc"]; b=json.load(open(os.path.join(dz,f"DENETIM-{n}.json")))["sonuc"]
+ac=lambda r: len([x for x in r["bulgular"] if x.get("agirlik")!="kutu-disi"])
+sys.exit(0 if (b["kod_puani"]==a["kod_puani"] and ac(b)==ac(a)) else 1)
+PY
+}
 tikandi_raporu() {
   _bilgi ""
   _bilgi "⛔ TIKANDI — $ONCEKI turda 5+E'ye ulaşılamadı (tavan $TAVAN, ilerleyene +1, $MUTLAK mutlak; kutu-dışı bulgulu turlar sayılmaz)."
+  if durgun_mu; then
+    _bilgi "🛑 DURGUN — son iki tur aynı puan ve aynı açık bulgu sayısı: yeni tur AÇMA, 2) KAPSAMI DARALT (aynı bulguyla bir tur daha aynı sonucu verir)."
+  fi
   _bilgi "   Üç yol (karar iş sahibinin/reisin, sınıf işiyse Sultan'ın):"
   _bilgi "   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?"
   _bilgi "   2) KAPSAMI DARALT — kart.sh daralt <iş> --kalan \"<bulgu>\" --cumle \"<daraltılmış cümle>\" --oturum <ref>: kalan yeni karta, tur sayacı sıfırlanır, aynı dal/PR sürer"
