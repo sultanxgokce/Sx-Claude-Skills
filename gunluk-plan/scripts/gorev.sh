@@ -360,7 +360,7 @@ if yok: print("başlık bayat: başlıkta %s, ölçümde %s" % (",".join(dict.fr
         || { KAYNAK_UY="ölçümde 'sonra' için dolu kaynak ve gün yok: sonra kapanışta canlıdan okunmalı — önce=N sonra=M (kaynak: <komut/ekran>, <gün>)"; echo "⚠ $KAYNAK_UY (kapatmayı engellemez)" >&2; }
     fi
     # ✓ bitti İNSANIN tikidir (K3/A06): kutu 'onay-bekliyor' + kanıt adımını TEK istekte yazar; Sultan ekranı ✓ verir.
-    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"gorev_durumu":"onay-bekliyor","kanit":sys.argv[2]},"gerekce":"%s bitirdi; Sultan onayı bekler" % sys.argv[1],"adimlar":["[bitirdi] %s · kanıt: %s" % (sys.argv[1], sys.argv[2])]+(["[uyarı] "+sys.argv[3]] if sys.argv[3] else [])},ensure_ascii=False))' "$KIM" "$SINIF" "$BAYAT${KAYNAK_UY:+${BAYAT:+ · }$KAYNAK_UY}")"
+    G="$(python3 -c 'import sys,json; print(json.dumps({"yerine":{"gorev_durumu":"onay-bekliyor","kanit":sys.argv[2],"bekleyen_kimi":"sultan","eylem":"onay"},"gerekce":"%s bitirdi; Sultan onayı bekler" % sys.argv[1],"adimlar":["[bitirdi] %s · kanıt: %s" % (sys.argv[1], sys.argv[2])]+(["[uyarı] "+sys.argv[3]] if sys.argv[3] else [])},ensure_ascii=False))' "$KIM" "$SINIF" "$BAYAT${KAYNAK_UY:+${BAYAT:+ · }$KAYNAK_UY}")"
     _cagir PATCH "/kayit/$ID" "$G" | _sonuc 200 '"👀 onay bekliyor · %s — ✓ bitti yalnız Sultan ekranından" % j["kayit"]["id"]' ;;
   bulgu)
     # K1 (Sultan 14 Eki): bulgu = türü bug/özellik olan GÖREV. İmza bulgu.sh yaz ile BİREBİR (başlık · --kim · --not) + isteğe bağlı --etiket;
