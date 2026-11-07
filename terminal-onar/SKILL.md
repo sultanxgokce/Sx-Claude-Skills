@@ -1,9 +1,18 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.45.1
+version: 2.46.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.46.0 · Kutu yeniden doğunca personel koltukları bekçiyle auto modda geri gelir (7 Kas · kart koltuk-geri-donus-auto · görev …W38BCZ madde 1-2 · SERDAR)
+Ölçülen kusur (HENDESE, 7 Kas): kutu yeniden yaratılınca tmux ölüyor; ana koltuğu bekçi geri açıyordu, personel koltuklarını kimse açmıyordu — munavebe (1 Kas) ve mmex (30 Eki) doğuşlarında 12 kayıtlı koltuktan 10 dk içinde dönen 1. Yeni `scripts/koltuk-kayit.sh`:
+- **Kayıt (madde 1):** koltuğu açan betik `yaz <ad> <rol> <session_id> <cwd>` çağırır → `/config/.terminal-onar/koltuklar.tsv` (kutunun kalıcı dizini). Dört sütun; **izin modu YAZILMAZ**, okuyucu fazladan sütunu yok sayar. Bozuk kimlik, göreli/olmayan dizin, `:`/`.`'lı ad, denetim karakterli alan rc 2 ile reddedilir. Bugünkü yazıcı: İSKÂN `baslat-claude.sh` (iskan 0.12.0).
+- **Dönüş (madde 2):** dakikalık bekçi her tur `koltuk-kayit.sh don` koşar. Kutu yeniden doğmuşsa (doğuş damgası = 1 numaralı sürecin başlama anı) ve koltuk **kutu ölürken canlıysa**, tmux'ta olmayan koltuk `claude --resume <kimlik> --permission-mode auto` ile kayıttaki dizinde açılır — ana koltukla aynı yol, aynı bellek/sıkıştırma ortamı. Tur başına en çok `KOLTUK_DONUS_TAVAN` (vars. 2) koltuk; kalanlar sonraki dakikada. Bir koltuk bir doğuşta en çok bir kez açılır (yaşamazsa döngü yok).
+- 🔴 **Bilerek kapatılan koltuk açılmaz:** bu doğuşta canlı görülüp kapanan koltuk (Kadro dondur/emekli, boşta oturum taraması, usta uyut) geri açılmaz; kutu ölürken kapalı olan koltuk sonraki doğuşta da dönmez. Yalnız "kayıtlı ve tmux'ta yok" ölçütü bunları her dakika geri açardı (mutant 2 ölçtü).
+- 🔴 **Yetki yükseltmez:** dönüş hiçbir koşulda izin atlatma bayrağıyla açmaz; komut satırında izin atlatma deseni görülürse koltuk açılmaz (savunma kapısı). Bypass'a yükseltme bu sürümün işi DEĞİLDİR (tasarım §4 madde 3, Sultan kararı).
+- Açmadığı her koltuğun sebebi kutu günlüğünde (yalnız durum değişince tek satır): boş/bozuk kimlik · dizin yok · konuşma dosyası o dizinde yok · konuşma başka yerde açık · kutu ölürken canlı değildi. Ana koltuk bu yoldan açılmaz (onar.sh'ın).
+- Sınav: `scripts/koltuk-kayit.test.sh` (30 kapı; sahte tmux/pgrep/claude, bekçi uçtan uca) + 3 mutant (bekçi satırı → P1 · kapanan-koltuk kuralı → K1 · savunma kapısı → N8). Dürüst sınır: kayıt ilk dağıtımdan sonra AÇILAN koltuklar içindir — bugün açık koltuklar bir kez yeniden açılmadan kayda girmez; açıcısı olmayan kutu (mmex: koltuklar elle açılıyor) ve merkezin `ekip-ac.sh`'ı (Nexus deposu) bu sürümde kayıt yazmaz.
 
 ## 🆕 2.45.1 · Kayda bağla: eğik çizgili oturum adı (2022/777) bağlanır (6 Kas · kart raf-bagla-egik-cizgi · SERDAR · vekatip · görev …WF0SF / FB51K)
 Ölçülen kusur (REİSÜLKÜTTAB): dava oturumları dosya no adıyla açılır (`2022/777`); Kadro → Kayda bağla "Oturum adı ("2022/777") kayda yazılamaz" der, raf bağlanmaz. Sebep: `kadro-yaz.mjs` `TMUX_KAYIT` deseni `/` kabul etmiyordu.

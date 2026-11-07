@@ -38,5 +38,10 @@ printf '%s' "$_sk" > "$DURUM_DIZ/sikistirma.son" 2>/dev/null
 [ -s "${TO_COMPACT_KUYRUK:-$DURUM_DIZ/compact-bekleyen.jsonl}" ] && bash "$BETIK_DIZ/compact.sh" --bekle --uygula >> "$GUNLUK" 2>&1 || true
 # Dava Rafı günlük turu (Parça B7): günde BİR kez — kapısı dava-gunluk.sh (damga turdan önce; sınav dava-gunluk.test.sh). Kuralsız kutuda no-op.
 TO_PROJE="$PROJE" TO_ANA_TMUX="$ANA_TMUX" TO_DURUM_DIZ="$DURUM_DIZ" bash "$BETIK_DIZ/dava-gunluk.sh" >> "$GUNLUK" 2>&1 || true
+# Koltuk dönüşü (2.46.0 · kart koltuk-geri-donus-auto · görev …W38BCZ madde 2): kutu yeniden doğunca, kutu ölürken canlı olan KAYITLI
+#   personel koltuklarını `claude --resume <kimlik> --permission-mode auto` ile geri açar — ana koltukla aynı yol, yetki yükseltmez,
+#   bypass ile hiçbir koşulda açmaz. Kayıt (koltuklar.tsv) yoksa no-op. Kurallar: koltuk-kayit.sh · sınav: koltuk-kayit.test.sh.
+#   Sağlık ölçüsünden (durum.sh) ÖNCE koşar: düzen sağlamken de her tur bakılmalı (tmux bekçisi dersi).
+TO_KUTU="$KUTU" TO_PROJE="$PROJE" TO_DURUM_DIZ="$DURUM_DIZ" TO_ANA_TMUX="$ANA_TMUX" bash "$BETIK_DIZ/koltuk-kayit.sh" don >> "$GUNLUK" 2>&1 || true
 bash "$BETIK_DIZ/durum.sh" >/dev/null 2>&1 && exit 0
 exec bash "$BETIK_DIZ/kademe.sh" --kaynak bekci

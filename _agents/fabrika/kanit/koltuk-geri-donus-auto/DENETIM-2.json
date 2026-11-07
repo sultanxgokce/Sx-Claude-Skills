@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "koltuk-geri-donus-auto",
+  "pr": "742",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T07:05:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-geri-donus-auto",
+  "dal": "koltuk-geri-donus-auto",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 51395,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 20281
+  },
+  "dalgic": "uyumsuz",
+  "bas": "b7a4c446fabce116f3c2a5192baabc61b50cf95c",
+  "duzeltme_farki": {
+    "onceki_bas": "e4409ac1277deb0076cf464a8834b0426c27266d",
+    "dosya": 13,
+    "bayt": 23723,
+    "tam_bayt": 98951
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Koltuk kaydı ve dakikalık bekçinin güvenli auto dönüş davranışı gerçek kod ölçümlerinde geçiyor; düzeltme turu ayrıca makine kimlikli kutuda koltuk dönüş yolunun durmasını kapsayıp önceki kod puanını koruyor. Kod tarafında işi bozan kusur görünmüyor; önceki B1 kapanmadı çünkü canlı 12/12 ve 10 dakika ölçümü hâlâ dağıtım ile gerçek kutu yeniden doğuşunu bekliyor.",
+    "bulgular": [
+      {
+        "ne": "Önceki B1 kapanmadı: canlı yeniden doğuş sonrası 12/12 kayıtlı koltuğun 10 dakika içinde döndüğü henüz ölçülmemiş; dağıtım ve gerçek bekçi ateşlemesi canlı yüzeyde doğrulanmalı.",
+        "kanit": "İş kartı ölçüm yerini \"canlı\", hedefi docker inspect StartedAt + tmux session_created ile 1/12 → 12/12 olarak tanımlıyor; canli_borc.odendi=null. Sağlam manifestteki gerçek ölçümler hermetik bash sınavlarıdır ve canlı zaman çifti/12 koltuk sonucu yoktur.",
+        "konum": "iş kartı olcum_yeri, olcut ve canli_borc; KANIT manifesti kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı kutular + dağıtım ve yeniden doğuş yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çiftleri kayıt yazımı ile dönüş sınavlarını kırmızıdan yeşile taşıyor; gerçek ölçümler baslat-kayit için 37/0, koltuk-dönüş için 30/0 ve kutu-red için 16/0. Üç mutasyon P1, K1 ve N8 kapılarını beklendiği gibi düşürerek kritik sınavların bozuk kodu yakaladığını gösteriyor. Düzeltme, koltuk-kayit.sh don yolunu kutu-red sınavına ekleyerek makine kimlikli kutu açığını ölçüyor; ancak canlı 10 dakika içinde 12/12 ölçüm çifti bulunmuyor."
+  }
+}
