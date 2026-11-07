@@ -97,6 +97,11 @@ dogru "S10e DENETIM gecis_gerekcesi = verilen" [ "$(jdeger "$(kayit g1)" on_goz.
 dogru "S10f kartta on_goz_gecisleri[0].gerekce" [ "$(jdeger "$W/_agents/fabrika/kartlar/g1.json" on_goz_gecisleri.0.gerekce)" = "$GER" ]
 iceren "S10g göz istemi gerekçeyi kart metninde görür" "$GER" "$KOK/istem.md"
 
+is_hazirla g2
+kapi "S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)" 0 den g2 --on-goz-gec "$GER"
+dogru "S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok" [ "$(jdeger "$(kayit g2)" on_goz.durum)/$(jdeger "$(kayit g2)" on_goz.gecis_gerekcesi)/$(jdeger "$W/_agents/fabrika/kartlar/g2.json" on_goz_gecisleri)" = "uyumlu/None/None" ]
+iceren "S10j söylenir: geçiş gerekmedi" "geçiş gerekmedi, karta yazılmadı" "$KOK/son.out"
+
 echo "════ S11 · ölçülemedi uyumlu sayılmaz ════"
 is_hazirla o1
 kapi "S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3" 3 env GH_RC=255 DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" o1 --pr 7 --diff /dev/null < /dev/null' _ "$W" "$J5" "$D"
