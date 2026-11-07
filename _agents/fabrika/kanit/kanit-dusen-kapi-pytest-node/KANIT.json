@@ -1,0 +1,101 @@
+{
+  "is": "kanit-dusen-kapi-pytest-node",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T13:30:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "desen",
+      "asama": "once",
+      "dosya": "olcum-desen-once.txt",
+      "sha256": "021baed2b53d8e5ad860c3351963e505475131187d3bd0385f67a44eeb3c4517",
+      "komut": [
+        "env",
+        "KANIT=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/kanit-eski.py",
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-dusen-kapi-desen.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T13:29:32+03:00",
+      "sure_sn": 10.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "1c5b941bc19a4ac06cca9ff666b3c17faa2c1eaf26611e6c877facc64bad0b7c",
+      "olcum_id": "fb1384199c0d4622a5eb1065bbc0c53f",
+      "olculen_commit": "231d99dcfede8155d6974ae5f2aefb8d34f12139",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "desen",
+      "asama": "sonra",
+      "dosya": "olcum-desen-sonra.txt",
+      "sha256": "147d8ad859b9c8c74a1667bddf350a2150c66f54795a350a1e393cfb0d87e862",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-dusen-kapi-desen.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:29:33+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "e404ec3afe797e0436fbd9b5f101f5401de801845942e0d2fb1358e9285cb73c",
+      "olcum_id": "6ed4baa960be4f5e9e999d8d7fe70938",
+      "olculen_commit": "231d99dcfede8155d6974ae5f2aefb8d34f12139",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-ekler-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-ekler-yok-tek.txt",
+      "sha256": "7eab2e47465839aeddfb67a47df0a2215a083260dd6f22c8de095ca5b91132af",
+      "komut": [
+        "env",
+        "KANIT=/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/kanit-eski.py",
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit-dusen-kapi-desen.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:29:40+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "desen",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "D3 pytest",
+      "hedef_dustu": true,
+      "olcum_id": "8611067c065d4f838d5b514bdf28ab51",
+      "olculen_commit": "231d99dcfede8155d6974ae5f2aefb8d34f12139",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "regresyon-kanit-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-regresyon-kanit-sinavi-sonra.txt",
+      "sha256": "ecd9c995af5866bf0d80552d779d857426d15d4600eefc0bde368614fcda5b93",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:30:44+03:00",
+      "sure_sn": 63.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "33819e7133eb9a9e4f10d5ad56c24da985c970417001c547b97f43992706bdbc",
+      "olcum_id": "1957bd6af7c24ce492266e4bed91cd9c",
+      "olculen_commit": "231d99dcfede8155d6974ae5f2aefb8d34f12139",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "83e1477119c4bfecc7deee025d585980a0c062c85477413e949dcca94e8a1cc9"
+}
