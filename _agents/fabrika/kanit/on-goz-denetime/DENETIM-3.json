@@ -1,0 +1,61 @@
+{
+  "tur": 3,
+  "is": "on-goz-denetime",
+  "pr": "739",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T06:22:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-denetime",
+  "dal": "on-goz-denetime",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54817,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 17,
+    "bayt": 59499
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "012202d6dae2718961feea314d0b474d3376a1f5",
+  "duzeltme_farki": {
+    "onceki_bas": "2ee4e008d1e6da36c4cdcb472ca75d163a90929f",
+    "dosya": 22,
+    "bayt": 71147,
+    "tam_bayt": 125097
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Düzeltme, sahte göz istisnasında mekanik kapılarla birlikte DALGIÇ’ı da atlayıp kayda sinav-kapali yazıyor; eklenen D2b kapısı ve mutant talebin doğru kısmını hedefliyor. Ancak sunulan ölçümlerin hiçbiri inceleme başı 012202d6dae2’yi ölçmediğinden nihai PR için üretime hazır iddiası kanıtsız; önce bu başta gerçek ölçüm ve regresyon alınmalı.",
+    "bulgular": [
+      {
+        "ne": "Nihai inceleme başı ölçülmemiş; yeşil sonuçlar farklı commitlere ait olduğu için 012202d6dae2 üzerindeki üretim kodunu ve testleri doğrulamıyor.",
+        "kanit": "Değişiklik notu nihai başı 012202d6dae2 olarak veriyor; ana önce/sonra, mutant, regresyon, süre ve parça kayıtlarının olculen_commit alanı 0073fff83f756cfef78d5d06e8c33686e26cdf26, gercek-kosu kaydınınki ise c29863550589194e245f4060ce5089f6f92492b9. Manifestte 012202d6dae2 için kayıt yok.",
+        "konum": "KANIT manifesti: olculen_commit alanları; DEĞİŞİKLİK notu: baş 012202d6dae2",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sarı kayıt içermiyor; önce/sonra çifti, gerçek koşu, regresyon ve hedefli mutantlar kendi ölçtükleri commitler için güçlü. D2b ile DALGIÇ’ın sınav dişinde çağrılmadığı ve mutantın bunu yakaladığı gösterilmiş, önceki turda bulgu da yoktu; fakat hiçbir geçerli kayıt nihai inceleme başıyla eşleşmediği için kanıt bütünü son sürüme bağlanamıyor."
+  }
+}

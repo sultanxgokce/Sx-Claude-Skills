@@ -1,0 +1,48 @@
+{
+  "tur": 2,
+  "is": "on-goz-denetime",
+  "pr": "739",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T04:48:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-denetime",
+  "dal": "on-goz-denetime",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 94219,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 16,
+    "bayt": 58274
+  },
+  "dalgic": "uyumsuz",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumsuz",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "2ee4e008d1e6da36c4cdcb472ca75d163a90929f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ön göz A1-A5 ve DALGIÇ ile denetim akışına bağlanmış; zorunlu kip, sahte göz istisnası, gerekçeli geçiş, yalnız ön göz, DENETIM kaydı ve karne kırılımı talebi karşılıyor. Üretime hazır: önceki turda bulgu yoktu; bu turdaki sağlam önce/sonra ölçümü, gerçek koşu, regresyon ve hedefli mutantlar da işi bozan bir kusur göstermiyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü rc 1 ile 44 düşüşü, sonra ölçümü rc 0 ile 63/63 geçişi gösteriyor; dört ayrı mutasyon kaydı hedef kapıların bilerek bozulan kodu yakaladığını kanıtlıyor. Regresyon rc 0, düzeltme-farkı 87/87 ve gerçek --on-goz koşusu rc 0; ölçüm çifti ile gerçek kod kaydı yeterli ve önceki turdaki sıfır bulguyla tutarlı."
+  }
+}

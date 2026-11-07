@@ -14,6 +14,12 @@
 # Kullanım:
 #   denetci.sh <iş> [--pr N | --diff DOSYA] [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
 #              [--model AD] [--depo KÖK] [--kare PNG/JPG]...
+#   --on-goz : YALNIZ ön göz (on-goz.py A1-A5 + DALGIÇ) — denetim açılmaz, tur yanmaz, DENETIM yazılmaz; rc 0 uyumlu · 1 uyumsuz · 3 ölçülemedi.
+#              Yazanın "göze göndermeden önce" komutu (W42-E1 dilim 3).
+#   --on-goz-gec "<gerekçe ≥20>" : ön göz uyumsuz/ölçülemedi iken BİLEREK denetime geçiş; gerekçe karta (on_goz_gecisleri[]) ve DENETIM'e
+#              yazılır, göz onu kart metninde görür. Ön göz uyumluysa gerekmez ve yazılmaz.
+#   ZORUNLU KİP: DENETCI_ON_GOZ_ZORUNLU=1 ya da depoda (çalışma ağacı ya da origin/main) _agents/fabrika/on-goz-zorunlu dosyası → ön göz uyumsuzsa
+#              denetim AÇILMAZ (rc 1), ölçülemediyse AÇILMAZ (rc 3); tur yanmaz. Bayraksız: ön göz yalnız bilgidir ve kayda girer.
 #   --kare : arayüz işinde kabul karesi (tekrarlanabilir, en çok 8). Kare bağımsız göze GÖRSEL olarak gider (codex exec -i);
 #            istemde "ekte N kare" yazar, DENETIM kaydı kare adı + sha256 taşır. Dosya yok / görsel değil → rc 2 (sessiz atlama yok).
 #            Neden (15 Eki, cloudtop #637 tur 2-3): göz "kabul karesi sunulmadı" diyordu; sha künyesi ve DOM tarifi kareyi görmenin yerini tutmuyor.
@@ -58,6 +64,8 @@ _zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   [ "$KILIT_RED" = 1 ] && { printf '· denetçi zili çalınmadı: başka koşum sürüyor, bitiş zilini o çalacak\n' >&2; return 0; }
   # İŞİ BÖL (istem tavanı, KS0Z3H · #1429 3 sahte zil): model ÇAĞRILMADI, tur YANMADI; 'tur N: —/— · rc 1 · düzelt, yeniden gönder' zili yanlış teşhis koyar.
   #   Sebep ve yol zaten stderr'de (yazan denetçiyi kendisi koşturuyor). Zil çalınmaz.
+  # ÖN GÖZ (W42-E1 dilim 3): yalnız ön göz koşusu ya da ön gözün açmadığı denetim — yazan komutu kendisi koşturdu, sebep ve yol ekranda; tur yanmadı.
+  [ "${ONGOZ_SUS:-0}" = 1 ] && { printf '· denetçi zili çalınmadı: ön göz kararı (denetim açılmadı ya da yalnız ön göz koşusu, tur yakılmadı) — sebep yukarıda\n' >&2; return 0; }
   [ "$BOL_RED" = 1 ] && { printf '· denetçi zili çalınmadı: istem tavanı aşıldı (İŞİ BÖL), tur yakılmadı — yol yukarıda\n' >&2; return 0; }
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
   if [ -z "$an" ] && { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ] || [ -n "${SAHTE_ISTEM_KOPYA:-}" ]; }; then   # sınav kipi (sahte göz/sahte json): gerçek zil ARANMAZ, yalnız açıkça verilen çalar
@@ -150,6 +158,7 @@ _bilgi() { printf '%s\n' "$*"; }
 #   Boşlukla bölünür (bayrak değerleri boşluk içeremez); boşsa hiçbir şey eklenmez.
 # shellcheck disable=SD2086
 [ -z "${DENETCI_EK:-}" ] || set -- "$@" $DENETCI_EK
+ONGOZ_YALNIZ=0; ONGOZ_GEC=""; ONGOZ_GEC_VERILDI=0; ONGOZ_SUS=0
 KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -159,11 +168,22 @@ while [ $# -gt 0 ]; do
     --kare) KARELER+=("$2"); shift 2 ;;
     --sultan-devam) SULTAN_DEVAM=1; shift ;;
     --reis-devam) REIS_DEVAM=1; shift ;;
+    --on-goz) ONGOZ_YALNIZ=1; shift ;;
+    --on-goz-gec) [ $# -ge 2 ] || { ONGOZ_SUS=1; _hata "--on-goz-gec gerekçe ister: --on-goz-gec \"<en az 20 karakter>\""; exit 2; }
+                  ONGOZ_GEC_VERILDI=1; ONGOZ_GEC="$2"; shift 2 ;;
     -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) [ -z "$IS" ] && IS="$1" || { _hata "tanınmayan argüman: $1"; exit 1; }; shift ;;
   esac
 done
 [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
+if [ "$ONGOZ_GEC_VERILDI" = 1 ]; then
+  ONGOZ_SUS=1   # kullanım hatası: yazanın kendi terminalinde; zil bilgi taşımaz
+  [ "$ONGOZ_YALNIZ" = 1 ] && { _hata "--on-goz ile --on-goz-gec birlikte olmaz: yalnız ön göz denetim açmaz, geçilecek bir şey yok"; exit 2; }
+  case "$ONGOZ_GEC" in *"|"*|*$'\n'*) _hata "--on-goz-gec içinde '|' ya da satır sonu olamaz (kart/defter ayracı)"; exit 2 ;; esac
+  _gn="$(python3 -c 'import sys;print(len(" ".join(sys.argv[1].split())))' "$ONGOZ_GEC")"
+  [ "${_gn:-0}" -ge 20 ] || { _hata "--on-goz-gec gerekçesi en az 20 karakter (baştaki/sondaki boşluk sayılmaz, boşluk yığını tek sayılır; ${_gn:-0} yazıldı) — denetim AÇILMADI, tur yanmadı"; exit 2; }
+  ONGOZ_SUS=0
+fi
 KARE_TAVAN=8
 [ "${#KARELER[@]}" -le "$KARE_TAVAN" ] || { _hata "--kare en çok $KARE_TAVAN (verilen ${#KARELER[@]}) — en çok tartışılacak kareleri seç"; exit 2; }
 for _k in "${KARELER[@]}"; do
@@ -293,6 +313,92 @@ kart_yolu() {  # birincil depodaki kart; yoksa boş. İş alanındaki kopya OKUN
     _hata "kart birincil depoda YOK ($KART_DEPO/_agents/fabrika/kartlar/$IS.json); iş alanındaki kopya BAYAT sayılır, OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3
   fi
 }
+
+# ── 0b · ÖN GÖZ (görev W42-E1 …W7H1EBA dilim 3 · tasarım Nexus _agents/spec/on-goz-adimi-DESIGN.md) ──────────────────────────────
+#    Ölçülen: ilk turda 5/E %45 (6 Kas, 124 tur); turların büyük payı mekanik kusurla yandı (kanıt bayat başta %32 · kapsam dışı dosya %26 · kanıt eksik %13).
+#    Mekanik kapılar (on-goz.py A1-A5, model yok, saniyeler) + DALGIÇ (kart cümlesi ⟷ fark) her turun başında koşar; sonuç DENETIM'e on_goz alanı
+#    olarak yazılır, karne sayar. ZORUNLU kipte uyumsuz/ölçülemedi ön göz denetimi AÇMAZ: DENETIM yazılmaz → tur yanmaz (ölçülemeyen yeşil değildir).
+#    Kip kaynağı: ortam DENETCI_ON_GOZ_ZORUNLU=1 · çalışma ağacında ya da ana dalda (ON_GOZ_TABAN, varsayılan origin/main) _agents/fabrika/on-goz-zorunlu
+#    (pilot: Nexus). Ortam kipi KAPATAMAZ: bayrak dosyası varken DENETCI_ON_GOZ_ZORUNLU=0 yok sayılır (kapıyı yazan kaldıramaz).
+#    Göz bağımsızlığı: ön göz raporu göze GİTMEZ; yalnız gerekçeli geçişin gerekçesi kart metninde görünür (yazanın beyanıdır).
+ONGOZ_ZORUNLU=kapali
+if [ "${DENETCI_ON_GOZ_ZORUNLU:-}" = 1 ]; then ONGOZ_ZORUNLU=ortam
+elif [ -f "$DEPO/_agents/fabrika/on-goz-zorunlu" ]; then ONGOZ_ZORUNLU=depo
+elif git -C "$DEPO" cat-file -e "${ON_GOZ_TABAN:-origin/main}:_agents/fabrika/on-goz-zorunlu" 2>/dev/null; then ONGOZ_ZORUNLU="${ON_GOZ_TABAN:-origin/main}"; fi
+ONGOZ_A=""; ONGOZ_DURUM=""; ONGOZ_HAM=""
+_ongoz_a() {   # mekanik kapılar → $TMP/ongoz.json · ONGOZ_A = uyumlu|uyumsuz|olculemedi (betik yok/çıktı bozuk → olculemedi, uyumlu SAYILMAZ)
+  local rc
+  if [ ! -r "$HERE/on-goz.py" ]; then ONGOZ_A=olculemedi; printf '{}' > "$TMP/ongoz.json"; _bilgi "· ⚠ ön göz: on-goz.py bu kurulumda yok — ÖLÇÜLEMEDİ"; return 0; fi
+  ( cd "$DEPO" && timeout "${ON_GOZ_ZAMAN:-120}" python3 "$HERE/on-goz.py" "$IS" ${PR:+--pr "$PR"} --depo "$DEPO" --json < /dev/null ) > "$TMP/ongoz.json" 2> "$TMP/ongoz.err"; rc=$?
+  case "$rc" in 0) ONGOZ_A=uyumlu ;; 1) ONGOZ_A=uyumsuz ;; *) ONGOZ_A=olculemedi ;; esac
+  python3 - "$TMP/ongoz.json" "$ONGOZ_A" <<'PYO' || { ONGOZ_A=olculemedi; _bilgi "· ⚠ ön göz çıktısı okunamadı (rc $rc): $(tail -c 300 "$TMP/ongoz.err" 2>/dev/null | tr '\n' ' ') — ÖLÇÜLEMEDİ"; }
+import json,sys
+d=json.load(open(sys.argv[1],encoding="utf-8"))
+if d.get("durum")!=sys.argv[2]: raise SystemExit(1)   # rc ile JSON hükmü ayrışırsa güvenilmez
+isaret={"uyumlu":"✓","uyumsuz":"✗","olculemedi":"○"}
+print(f"── ÖN GÖZ · mekanik kapılar ({d['durum'].upper()})")
+for k in d.get("kapilar",[]):
+    s=k.get("satirlar") or [""]
+    print(f"  {isaret.get(k.get('durum'),'?')} {k.get('ad')}: {s[0]}")
+    for x in s[1:]: print(f"      {x}")
+PYO
+}
+_ongoz_ad() { case "$1" in uyumlu) echo UYUMLU ;; uyumsuz) echo UYUMSUZ ;; olculemedi) echo ÖLÇÜLEMEDİ ;; gecildi) echo GEÇİLDİ ;; *) echo "$1" ;; esac; }
+_ongoz_birlestir() {   # ONGOZ_DURUM = A + DALGIÇ (DALGIÇ kapali/kartsiz/atlandi nötrdür, olculemedi uyumlu sayılmaz)
+  ONGOZ_DURUM=uyumlu
+  case "$ONGOZ_A/${DALGIC_DURUM:-}" in *uyumsuz*) ONGOZ_DURUM=uyumsuz ;; *olculemedi*) ONGOZ_DURUM=olculemedi ;; esac
+}
+_ongoz_kapat() {   # zorunlu kip: denetim AÇILMAZ — DENETIM yazılmaz, tur yanmaz, zil çalmaz (yazan komutu kendisi koşturdu)
+  local d="$1" rc=1; [ "$d" = olculemedi ] && rc=3
+  ONGOZ_SUS=1
+  _hata "ÖN GÖZ $( [ "$d" = olculemedi ] && echo ÖLÇÜLEMEDİ || echo UYUMSUZ ) — denetim AÇILMADI (zorunlu kip: $ONGOZ_ZORUNLU); DENETIM yazılmadı, tur yanmadı"
+  _bilgi "   Yukarıdaki satırları düzeltip yeniden koş. Bilerek geçeceksen gerekçeyle (karta ve denetim kaydına yazılır, göz kart metninde görür):"
+  _bilgi "     bash $0 $IS${PR:+ --pr $PR} --on-goz-gec \"<niçin geçiyorsun — en az 20 karakter>\" < /dev/null"
+  exit "$rc"
+}
+_dalgic_kos() {   # DALGIÇ ön gözü (aşağıdaki ZP640T notu) — <fark> verilmezse $TMP/diff.patch; düzeltme turunda tam fark kuralı aynen
+  DALGIC_DURUM=kapali; [ "${DALGIC_KAPALI:-0}" = 1 ] || DALGIC_DURUM=kartsiz
+  if [ "${DALGIC_KAPALI:-0}" != 1 ] && [ -n "$KART" ]; then
+    DALGIC_BIN="${DALGIC_BIN:-}"
+    if [ -z "$DALGIC_BIN" ]; then for _d in "$DEPO/_agents/dalgic/dalgic.sh" /config/projects/Nexus/_agents/dalgic/dalgic.sh; do if [ -r "$_d" ]; then DALGIC_BIN="$_d"; break; fi; done; fi
+    if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then DALGIC_DURUM=atlandi; _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
+    else
+      #   Düzeltme turunda göze giden fark yalnız artımdır; ön göz ise kart cümlesini PR BÜTÜNÜYLE karşılaştırır (gorev …GKMT: yalnız düzeltme farkını
+      #   görüp sahte UYUMSUZ diyordu). Ön göze tam fark gider; kanıt dizini blokları atılır (ölçüm dökümü kodu itmesin).
+      DALGIC_DIFF="${1:-$TMP/diff.patch}"
+      if [ -n "${DUZ_ONCEKI_BAS:-}" ] && [ -s "$TMP/diff-tam.patch" ]; then
+        awk '/^diff --git /{atla = ($0 ~ /_agents\/fabrika\/kanit\//)} !atla' "$TMP/diff-tam.patch" > "$TMP/diff-dalgic.patch" && [ -s "$TMP/diff-dalgic.patch" ] && DALGIC_DIFF="$TMP/diff-dalgic.patch" \
+          && _bilgi "· ön-göz (DALGIÇ): düzeltme turu — ön göze PR'ın TAM farkı gider (göze giden artımlı fark değil)"
+      fi
+      DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$DALGIC_DIFF" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
+      DALGIC_OUT="$(tr -d '\000-\010\013-\037\177' < "$TMP/dalgic.ham" | head -c 4000)"
+      case "$DALGIC_RC" in
+        0) DALGIC_DURUM=uyumlu; _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;
+        1) DALGIC_DURUM=uyumsuz; _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor (bu rapor bağımsız göze KENDİLİĞİNDEN gitmez). Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:" ;;
+        *) DALGIC_DURUM=olculemedi; _bilgi "· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=$DALGIC_RC) — UYUMLU sayılmaz; denetim yine sürer" ;;
+      esac
+      [ -z "$DALGIC_OUT" ] || { printf '%s\n' "$DALGIC_OUT" | sed 's/^/   | /'; _bilgi ""; }
+    fi
+  fi
+}
+if [ "$ONGOZ_YALNIZ" = 1 ]; then
+  ONGOZ_SUS=1; TMP="$(mktemp -d)"
+  _bilgi "── ÖN GÖZ (yalnız · denetim yok) · iş: $IS${PR:+ · PR #$PR} · zorunlu kip: $ONGOZ_ZORUNLU"
+  _ongoz_a
+  KART="${KART:-$(kart_yolu)}" || exit 3
+  if [ "$ONGOZ_A" = uyumsuz ]; then DALGIC_DURUM=atlandi; _bilgi "· DALGIÇ koşmadı: mekanik kapı uyumsuz (önce onu düzelt; model çağrısı boşa gitmesin)"
+  else
+    _tb="${ON_GOZ_TABAN:-origin/main}"
+    git -C "$DEPO" diff "$_tb...HEAD" 2>/dev/null | awk '/^diff --git /{atla = ($0 ~ /_agents\/fabrika\/kanit\//)} !atla' > "$TMP/diff.patch"
+    _dalgic_kos "$TMP/diff.patch"
+  fi
+  _ongoz_birlestir
+  case "$ONGOZ_DURUM" in
+    uyumlu) _bilgi "ÖN GÖZ: UYUMLU — göze gönderilebilir"; exit 0 ;;
+    uyumsuz) _bilgi "ÖN GÖZ: UYUMSUZ — göze göndermeden önce düzelt$( [ "$ONGOZ_ZORUNLU" != kapali ] && echo " (zorunlu kipte denetim açılmaz)")"; exit 1 ;;
+    *) _bilgi "ÖN GÖZ: ÖLÇÜLEMEDİ — uyumlu sayılmaz$( [ "$ONGOZ_ZORUNLU" != kapali ] && echo " (zorunlu kipte denetim açılmaz)")"; exit 3 ;;
+  esac
+fi
 
 # ── 1 · kanıt kapısı ─────────────────────────────────────────────────────────────
 KANIT_CIKTI="$(KANIT_DEPO="$DEPO" python3 "$HERE/kanit.py" dogrula "$IS" 2>&1)"; KRC=$?
@@ -838,33 +944,43 @@ if [ -n "$KART" ]; then cp "$KART" "$TMP/kart.md"
 elif [ -n "$PR" ]; then (cd "$DEPO" && gh pr view "$PR" --json title,body --jq '"# \(.title)\n\n\(.body)"' > "$TMP/kart.md") || echo "(iş kartı okunamadı)" > "$TMP/kart.md"
 else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'ye yakın değerlendirilir)" > "$TMP/kart.md"; fi
 # ── DALGIÇ ÖN-GÖZ (ZP640T, SERDAR 26 Eki): bağımsız göze GİTMEDEN önce yazanın farkı kart cümlesine ucuz bir ön-gözle karşılaştırılır
-#    (W42-E1 deneyi: 5 işte 5-16 sn, 0,03-0,12 USD). 🔴 YALNIZ BİLGİDİR: puana, tur sayımına, rc'ye ve göze giden isteme dokunmaz
+#    (W42-E1 deneyi: 5 işte 5-16 sn, 0,03-0,12 USD). 🔴 Puana ve göze giden isteme dokunmaz; 0.27.72'den beri ZORUNLU kipte (yukarıda '0b · ÖN GÖZ')
+#    UYUMSUZ/ÖLÇÜLEMEDİ denetimi açmaz — bayraksız kipte eskisi gibi bilgidir
 #    (göz bağımsızlığı bozulmasın; rapor göze kendiliğinden GİTMEZ — yazan PR gövdesine koyarsa göz onu gövdeden okur, o yazanın kararı).
 #    UYUMSUZ/ÖLÇÜLEMEDİ büyük uyarı basar. Rapor her durumda ekrana yazılır (kontrol karakterleri süzülür, 4000 bayta kırpılır).
 #    Kapalı: DALGIC_KAPALI=1 (sınavlar), kartsız koşu. dalgic.sh yoksa (başka kutu) "atlandı" yazar. Ön-göz çıktısı $TMP altında kalır (EXIT'te silinir).
 # W42-E1 (7H1EBA): ön-göz sonucu DENETIM kaydına ve karneye "dalgic" alanı olarak yazılır (kapali|kartsiz|atlandi|uyumlu|uyumsuz|olculemedi);
 #    böylece ilk tur geçişi DALGIÇ'lı ve DALGIÇ'sız işler için ayrı ölçülür. Yalnız kayıttır: puana, tura, rc'ye dokunmaz.
-DALGIC_DURUM=kapali; [ "${DALGIC_KAPALI:-0}" = 1 ] || DALGIC_DURUM=kartsiz
-if [ "${DALGIC_KAPALI:-0}" != 1 ] && [ -n "$KART" ]; then
-  DALGIC_BIN="${DALGIC_BIN:-}"
-  if [ -z "$DALGIC_BIN" ]; then for _d in "$DEPO/_agents/dalgic/dalgic.sh" /config/projects/Nexus/_agents/dalgic/dalgic.sh; do if [ -r "$_d" ]; then DALGIC_BIN="$_d"; break; fi; done; fi
-  if [ -z "$DALGIC_BIN" ] || [ ! -r "$DALGIC_BIN" ]; then DALGIC_DURUM=atlandi; _bilgi "· ön-göz (DALGIÇ): bu kutuda dalgic.sh yok — ATLANDI (bilgi)"
-  else
-    #   Düzeltme turunda göze giden fark yalnız artımdır; ön göz ise kart cümlesini PR BÜTÜNÜYLE karşılaştırır (gorev …GKMT: yalnız düzeltme farkını
-    #   görüp sahte UYUMSUZ diyordu). Ön göze tam fark gider; kanıt dizini blokları atılır (ölçüm dökümü kodu itmesin).
-    DALGIC_DIFF="$TMP/diff.patch"
-    if [ -n "$DUZ_ONCEKI_BAS" ] && [ -s "$TMP/diff-tam.patch" ]; then
-      awk '/^diff --git /{atla = ($0 ~ /_agents\/fabrika\/kanit\//)} !atla' "$TMP/diff-tam.patch" > "$TMP/diff-dalgic.patch" && [ -s "$TMP/diff-dalgic.patch" ] && DALGIC_DIFF="$TMP/diff-dalgic.patch" \
-        && _bilgi "· ön-göz (DALGIÇ): düzeltme turu — ön göze PR'ın TAM farkı gider (göze giden artımlı fark değil)"
-    fi
-    DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$DALGIC_DIFF" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
-    DALGIC_OUT="$(tr -d '\000-\010\013-\037\177' < "$TMP/dalgic.ham" | head -c 4000)"
-    case "$DALGIC_RC" in
-      0) DALGIC_DURUM=uyumlu; _bilgi "· ön-göz (DALGIÇ): UYUMLU" ;;
-      1) DALGIC_DURUM=uyumsuz; _bilgi ""; _bilgi "⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor (bu rapor bağımsız göze KENDİLİĞİNDEN gitmez). Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:" ;;
-      *) DALGIC_DURUM=olculemedi; _bilgi "· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=$DALGIC_RC) — UYUMLU sayılmaz; denetim yine sürer" ;;
-    esac
-    [ -z "$DALGIC_OUT" ] || { printf '%s\n' "$DALGIC_OUT" | sed 's/^/   | /'; _bilgi ""; }
+# Ana yol (W42-E1 dilim 3): önce mekanik kapılar; zorunlu kipte A uyumsuzsa ve geçiş yoksa DALGIÇ koşmaz (model parası boşa gitmez), denetim açılmaz.
+# SINAV DİŞİ (göz tur 1 sonrası CI ölçümü, #739): sahte gözle (DENETCI_KOMUT/SAHTE_JSON) yüzlerce tur koşan sınavlarda gerçek ön göz her tura
+#   ~1 sn ekledi — denetci-duzeltme-farki 358 → 481 sn (tavan 531, %90), denetci.test.sh 1. parça 406 → 631 sn. Ön gözü ölçmeyen sınavlar için
+#   bu süre boşa. Sahte göz VARKEN ön göz yalnız ON_GOZ_SINAV=1 ile koşar (tavan dişiyle aynı kalıp: gerçek koşuda sahte göz olmaz, kaçış açmaz).
+#   Kayıtta on_goz.durum = "sinav-kapali" (ölçülmedi; uyumlu SAYILMAZ, karnede kendi satırı). Diş YALNIZ bayraksız kipte ve geçiş verilmemişken
+#   geçerli (DALGIÇ ön gözü): zorunlu kip (ortam ya da bayrak dosyası) ya da --on-goz-gec varken ön göz sahte gözle de HER ZAMAN koşar.
+if { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; } && [ "${ON_GOZ_SINAV:-0}" != 1 ] && [ "$ONGOZ_ZORUNLU" = kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then
+  printf '{}' > "$TMP/ongoz.json"; DALGIC_DURUM="sinav-kapali"; ONGOZ_DURUM="sinav-kapali"; ONGOZ_HAM=""; ONGOZ_GEREKCE=""   # DALGIÇ de ön gözün parçası (kart cümlesi)
+  _bilgi "· ön göz (mekanik kapılar + DALGIÇ): sınav kipi (sahte göz) — koşmadı, kayıtta sinav-kapali (ON_GOZ_SINAV=1 ile koşar)"
+else
+  _ongoz_a
+  if [ "$ONGOZ_A" = uyumsuz ] && [ "$ONGOZ_ZORUNLU" != kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then _ongoz_kapat uyumsuz; fi
+  _dalgic_kos
+  _ongoz_birlestir; ONGOZ_HAM="$ONGOZ_DURUM"; ONGOZ_GEREKCE=""
+  if [ "$ONGOZ_DURUM" != uyumlu ]; then
+    if [ "$ONGOZ_GEC_VERILDI" = 1 ]; then
+      ONGOZ_DURUM=gecildi; ONGOZ_GEREKCE="$(printf '%s' "$ONGOZ_GEC" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
+      _bilgi "⚠ ÖN GÖZ $(_ongoz_ad "$ONGOZ_HAM") — gerekçeli GEÇİŞ (yazanın beyanı, göz kart metninde görür): $ONGOZ_GEREKCE"
+      if [ -n "$KART" ] && [ -f "$KART" ]; then
+        ( cd "$DEPO" && bash "$HERE/kart.sh" on-goz-gec "$IS" --gerekce "$ONGOZ_GEREKCE" --oturum "${CLAUDE_CODE_SESSION_ID:-${AGENT_NAME:-?}}" --kim "${AGENT_NAME:-?}" --tur "$TUR" --durum "$ONGOZ_HAM" < /dev/null ) \
+          || { _hata "geçiş gerekçesi karta YAZILAMADI — gerekçesiz geçiş olmaz, denetim açılmadı"; ONGOZ_SUS=1; exit 3; }
+        cp "$KART" "$DZ/KART.json" 2>/dev/null || { _hata "kartın anlık kopyası yenilenemedi ($DZ/KART.json)"; exit 3; }
+        cp "$KART" "$TMP/kart.md"
+      else
+        _bilgi "· kartsız denetim: geçiş gerekçesi yalnız DENETIM kaydına yazılır"
+        { printf '\n\n[ön göz geçişi — yazanın beyanı] %s\n' "$ONGOZ_GEREKCE"; } >> "$TMP/kart.md"
+      fi
+    elif [ "$ONGOZ_ZORUNLU" != kapali ]; then _ongoz_kapat "$ONGOZ_DURUM"
+    else _bilgi "⚠⚠ ÖN GÖZ $(_ongoz_ad "$ONGOZ_DURUM") — bilgi kipi (zorunlu değil), denetim sürer; kayda girer, karne sayar"; fi
+  elif [ "$ONGOZ_GEC_VERILDI" = 1 ]; then _bilgi "· --on-goz-gec verildi ama ön göz UYUMLU — geçiş gerekmedi, karta yazılmadı"
   fi
 fi
 # İstem PARÇA PARÇA kurulur, sonra birleşir (BÂNİ 21:59, 18 Eki): boyut kapısı aşağıda istemin tamamını ölçer ve
@@ -1120,9 +1236,24 @@ PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
 KARE_KAYIT="$(for _k in "${KARELER[@]}"; do printf '%s\t%s\n' "$(basename "$_k")" "$(sha256sum "$_k" | cut -d' ' -f1)"; done)"
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" "$DEPO" "$DENETCI_DAL" "$DENETCI_BIRINCIL" "$BAS" "$DUZ_ONCEKI_BAS" "$DUZ_DOSYA" "$DUZ_BAYT" "$DUZ_TAM_BAYT" "$DALGIC_DURUM" <<'PY'
+python3 - "$TMP/ongoz.json" "$TMP/ongoz-kayit.json" "${ONGOZ_DURUM:-olculemedi}" "${ONGOZ_HAM:-}" "${DALGIC_DURUM:-}" "$ONGOZ_ZORUNLU" "${ONGOZ_GEREKCE:-}" <<'PYOK' || { _bilgi "· ⚠ ön göz kaydı hazırlanamadı — kayda 'olculemedi' yazılıyor (denetim sürer; karar yukarıda verildi)"; printf '{"durum":"olculemedi","kayit_hatasi":true}' > "$TMP/ongoz-kayit.json"; }
+import json,sys
+src,hedef,durum,ham,dalgic,zorunlu,gerekce=sys.argv[1:]
+try: d=json.load(open(src,encoding="utf-8"))
+except Exception: d={}
+ad={"A1":"kanit_basi","A2":"kanit_eksik","A3":"taban","A4":"agac","A5":"kapsam_dosya"}
+k={a:"olculemedi" for a in ad.values()}; notlar=[]
+for x in d.get("kapilar") or []:
+    a=ad.get(str(x.get("ad","")).split(" ")[0])
+    if a: k[a]=x.get("durum") or "olculemedi"
+    if x.get("durum")!="uyumlu": notlar += [f"{x.get('ad')}: {y}" for y in (x.get("satirlar") or [])][:3]
+o={"durum":durum,"dalgic":dalgic or None,**k,"gecis_gerekcesi":gerekce or None,"zorunlu":zorunlu,"notlar":notlar[:10]}
+if durum=="gecildi": o["gecis_oncesi"]=ham
+json.dump(o,open(hedef,"w",encoding="utf-8"),ensure_ascii=False)
+PYOK
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" "$DEPO" "$DENETCI_DAL" "$DENETCI_BIRINCIL" "$BAS" "$DUZ_ONCEKI_BAS" "$DUZ_DOSYA" "$DUZ_BAYT" "$DUZ_TAM_BAYT" "$DALGIC_DURUM" "$TMP/ongoz-kayit.json" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi,depo,dal,birincil,bas,duz_ob,duz_dosya,duz_bayt,duz_tam,dalgic=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi,depo,dal,birincil,bas,duz_ob,duz_dosya,duz_bayt,duz_tam,dalgic,ongoz_yol=sys.argv[1:]
 kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
@@ -1135,6 +1266,7 @@ json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":d
            # Ayıklama kayıtta durur: "fark eksikti" ile "kanıt ayrı gitti" sonradan ayırt edilsin.
            "kanit_ayiklandi":{"dosya":int(ayik_dosya),"bayt":int(ayik_bayt)},
            "dalgic":dalgic,   # ön-göz (DALGIÇ) durumu: karne.sh bunu satıra kopyalar
+           "on_goz":json.load(open(ongoz_yol,encoding="utf-8")),   # W42-E1 dilim 3: ön göz (A1-A5 + DALGIÇ + geçiş) — karne.sh durumu sayar
            "bas":(bas or None),   # incelenen baş: sonraki tur yalnız bu baştan bu yana değişeni görür (SYV3F)
            "duzeltme_farki":({"onceki_bas":duz_ob,"dosya":int(duz_dosya),"bayt":int(duz_bayt),"tam_bayt":int(duz_tam)} if duz_ob else None),
            "kareler":({"adet":len(kareler),"gorsel_verildi":kare_verilemedi!="1","liste":kareler} if kareler else None),   # --kare: göz kareyi GÖRDÜ mü (yedek gözde hayır)

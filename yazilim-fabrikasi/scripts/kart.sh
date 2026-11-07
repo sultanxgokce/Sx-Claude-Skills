@@ -24,6 +24,8 @@
 #          [--soz-zamani <ISO-8601>]: damganın zamanı Sultan sözünün SÖYLENDİĞİ saattir (oturum kaydı damgasından); verilmezse
 #          yazım saati. Yazım saati her kayıtta ayrıca "yazildi" alanındadır. Niçin (görev …F6EWHF, 29 Eki): SERDAR sözü 8 saat geç
 #          yazdı, göz "izinden önce ölçüm" deyip işi tıkadı — ölçümler sözün saatine göre değerlendirilir, yazımın değil.
+#   kart.sh on-goz-gec <iş> --gerekce "<≥20>" --oturum <ref> [--kim AD] [--tur N] [--durum uyumsuz|olculemedi]
+#       ön göz uyumsuz/ölçülemedi iken bilinçli geçişi karta yazar (on_goz_gecisleri[]); çağıran denetci.sh --on-goz-gec (W42-E1 dilim 3)
 #   kart.sh reis-dedi <iş> --karar <devam|daralt|geri-al|birlestir> --reis <AD> --oturum <ref> \
 #          --gerekce "<niçin — en az 20 karakter>"     ← her kartta; VETOLU kartta rc 1
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
@@ -100,7 +102,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --kalan) KALAN="$2"; shift 2 ;; --tur) TUR_N="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;; --sinir) SINIR="$2"; shift 2 ;; --gorevsiz) GOREVSIZ="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
-  --senaryo) SENARYO="$2"; shift 2 ;; --kare-onay) KARE_ONAY="$2"; shift 2 ;;
+  --senaryo) SENARYO="$2"; shift 2 ;; --durum) OG_DURUM="$2"; shift 2 ;; --kare-onay) KARE_ONAY="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 SENARYO="${SENARYO:-}"; KARE_ONAY="${KARE_ONAY:-}"   # ekran kapısı (ac): senaryo kartı yolu · Sultan'ın kare onayı D1 damgası
 GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"; GOREVSIZ="${GOREVSIZ:-}"
@@ -815,6 +817,31 @@ if karar in ("basla","dur"):
          else " · başlama izni verildi (varsa veto kalktı); iş reis kararlarıyla sürer, dağıtım Sultan eli")
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"✓ Sultan karari karta islendi: {karar} · oturum {oturum} · beyan {beyan} · söz saati {zaman[:16]} ({'sözün saati' if kaynak=='soz' else 'yazım saati — --soz-zamani verilmedi'}){ek}")
+PY
+    ;;
+  on-goz-gec)
+    # 🔍 ÖN GÖZ GEÇİŞİ (W42-E1 dilim 3 · tasarım Nexus _agents/spec/on-goz-adimi-DESIGN.md C): ön göz uyumsuz ya da ölçülemedi iken yazan BİLEREK
+    #    denetime geçer; gerekçe karta yazılır ki göz kart metninde görsün ve haftalık ölçüm geçişleri ayrı saysın. Karar değildir, beyandır:
+    #    puanı, tur sayımını ya da sınıf kapılarını değiştirmez. Sınıflı kartta da yazılır (beyan, onay değil — A06).
+    [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
+    [ -f "$KD/$IS.json" ] || { _hata "kart YOK: $KD/$IS.json"; exit 1; }
+    { [ -n "$GEREKCE" ] && [ -n "$OTURUM" ]; } || { _hata "gerekli: --gerekce \"<en az 20 karakter>\" --oturum <ref>"; exit 1; }
+    GZK="$(printf '%s' "$GEREKCE" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
+    [ "${#GZK}" -ge 20 ] || { _hata "--gerekce en az 20 karakter (baştaki/sondaki boşluk sayılmaz, boşluk yığını tek sayılır; ${#GZK} yazıldı) — gerekçesiz geçiş olmaz"; exit 1; }
+    case "${OG_DURUM:-}" in ""|uyumsuz|olculemedi) ;; *) _hata "--durum yalnız uyumsuz|olculemedi ('${OG_DURUM}' değil): uyumlu ön gözde geçiş gerekmez"; exit 1 ;; esac
+    case "${TUR_N:-}" in ""|*[!0-9]*) [ -z "${TUR_N:-}" ] || { _hata "--tur sayı olmalı"; exit 1; } ;; esac
+    for v in GZK OTURUM KIM; do d="${!v:-}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "'|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done
+    python3 - "$KD/$IS.json" "$GZK" "$OTURUM" "${KIM:-}" "${TUR_N:-}" "${OG_DURUM:-}" <<'PY' || exit 1
+import json,os,sys,datetime
+yol,gerekce,oturum,kim,tur,durum=sys.argv[1:]
+k=json.load(open(yol,encoding="utf-8"))
+x={"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"gerekce":gerekce,"oturum":oturum}
+if kim: x["kim"]=kim
+if tur: x["tur"]=int(tur)
+if durum: x["on_goz"]=durum
+k.setdefault("on_goz_gecisleri",[]).append(x)
+gec=yol+".gecici"; json.dump(k,open(gec,"w",encoding="utf-8"),ensure_ascii=False,indent=2); os.replace(gec,yol)
+print(f"✓ ön göz geçişi karta işlendi: {k['is']} · {len(k['on_goz_gecisleri'])}. geçiş{' · tur '+tur if tur else ''}{' · '+durum if durum else ''}")
 PY
     ;;
   reis-dedi)

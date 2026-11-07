@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/on-goz-denetime/sure-duzeltme.sh
+# rc=0 sure=645.0s zaman=2026-11-07T07:38:02+03:00
+--- stdout ---
+eski (668b669c): 313 sn · yük 5.76 · ── SONUÇ (düzeltme-farkı): 87 geçti · 0 kaldı ──
+yeni (b19d8f96): 332 sn · yük 7.67 · ── SONUÇ (düzeltme-farkı): 87 geçti · 0 kaldı ──
+yerel 12 çekirdek · CI tavanı 531 sn
+--- stderr ---

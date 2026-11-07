@@ -4,7 +4,7 @@
 # Sahte denetçi (DENETCI_KOMUT) istemi diske bırakır; ön göz kapalı; zil kapalı. Mutant: MUTANT_D=<bozuk denetci.sh>.
 # kabuk-testleri: sure=120
 set -uo pipefail
-export KANIT_SIRA=0 DENETCI_SIRA=0 FABRIKA_AILE_NOTIFY=-
+export KANIT_SIRA=0 DENETCI_SIRA=0 FABRIKA_AILE_NOTIFY=- ON_GOZ_SINAV=1   # sahte gözle ön göz (DALGIÇ dahil) yalnız ON_GOZ_SINAV=1 ile koşar (0.27.72)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"
 GECEN=0; DUSEN=0

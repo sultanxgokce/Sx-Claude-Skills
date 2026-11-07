@@ -1,0 +1,19 @@
+$ bash _agents/fabrika/kanit/on-goz-denetime/parca.sh
+# rc=0 sure=276.3s zaman=2026-11-07T07:27:17+03:00
+--- stdout ---
+  ✓ kart açıldı (sınıfsız)
+  ✓ ön-göz UYUMLU: bilgi satırı basıldı, denetim aynen geçti (rc 0)
+  ✓ W42-E1: ön-göz UYUMLU → denetim kaydında dalgic=uyumlu
+  ✓ 🔴 ön-göz UYUMSUZ: büyük uyarı + rapor basıldı AMA denetim sürdü ve geçti (rc 0; göz bağımsız kalır)
+  ✓ W42-E1: ön-göz UYUMSUZ → denetim kaydında dalgic=uyumsuz (puan/rc değişmez, yukarıda rc 0)
+  ✓ ön-göz ÖLÇÜLEMEDİ: UYUMLU sayılmaz uyarısı, denetim sürer (rc 0)
+  ✓ W42-E1: ön-göz ÖLÇÜLEMEDİ → denetim kaydında dalgic=olculemedi (uyumlu sayılmaz)
+  ✓ dalgic.sh yoksa 'ATLANDI' yazılır, denetim yine koşar (rc 0)
+  ✓ W42-E1: dalgic.sh yok → dalgic=atlandi
+  ✓ DALGIC_KAPALI=1: ön-göz hiç koşmaz
+  ✓ rapor her durumda ekrana yazılır (UYUMLU'da da)
+  ✓ ÖLÇÜLEMEDİ'de de rapor (neden) görünür
+  ✓ ön-göz çıktısında kontrol karakteri süzülür, çıktı 4000 bayta kırpılır
+  ✓ DALGIC_KAPALI=0 ön-gözü KAPATMAZ (yalnız =1 kapatır)
+── SONUÇ: 284 geçti · 0 kaldı ── · 277 sn · rc=0
+--- stderr ---
