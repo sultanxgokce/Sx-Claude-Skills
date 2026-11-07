@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.6.6
+version: 0.6.7
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -44,6 +44,10 @@ Başlık kuralı "Sultan dili zorunlu" satırıyla yazılı hâle geldi (Komut b
 Meşveret seansı maddeyi `bulgu.sh yaz … --oda <oda>` ile geçiriyordu; `yaz` bu bayrağı tanımadığından (`bilinmeyen: --oda`, rc 2)
 hiçbir madde kaydedilemiyordu. Artık `--oda` alınır ve merkezî deftere `oda` alanı olarak gider (`gorev.sh ac --oda` ile aynı alan).
 Jetonsuz kutuda eski defter oda alanı tanımaz: kayıt yazılır, odanın YAZILMADIĞI söylenir (sessiz düşme yok). Sınav OD1–OD4.
+
+## 0.6.7 — başlık 10 kelimeyi aşmaz (görev …NWM7D562, kılıç bileme 3 Kas)
+
+`yaz` 10 kelimeden uzun başlığı ilk 10 kelimeye indirir; tam metin kanıt notunun başına `[tam başlık] …` diye yazılır, kırpıldığı stderr'de söylenir. Sebep: 246 görevin başlığı uzundu, Görevler panelinde kartlar taşıyordu. Sınav BU1–BU6.
 
 ## 0.6.6 — `yaz --kaynak <ad>` (SERDAR 1 Kas 2026)
 

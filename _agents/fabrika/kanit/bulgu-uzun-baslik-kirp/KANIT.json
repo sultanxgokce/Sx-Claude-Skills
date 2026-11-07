@@ -1,0 +1,50 @@
+{
+  "is": "bulgu-uzun-baslik-kirp",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T12:01:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "baslik-once",
+      "asama": "once",
+      "dosya": "olcum-baslik-once-once.txt",
+      "sha256": "70e9429c231fdba0115c05d324a9a7b6fb383f89c73a81debe59895f43cb733a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/15c190e1-61ce-4619-88d8-feb8a2f6ad8c/scratchpad/bulgu-once/scripts/bulgu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T12:00:41+03:00",
+      "sure_sn": 1740.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "b3ff22af5477b51df50dea4979a1d7d2aa245c7e4dffcbcf4f1dd5f28c2fa482",
+      "olcum_id": "80a94491075742df920b918495f23bb8",
+      "olculen_commit": "654402c16ccb0fba3162ddc7ade24921e39f106b",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "baslik-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-baslik-sonra-sonra.txt",
+      "sha256": "903c934c85c29a5787109d2e03af3b82fa0f94bf555107a7e598a93ba5817285",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-bulgu-uzun-baslik-kirp/bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T12:01:24+03:00",
+      "sure_sn": 42.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "36685ec34feebb7f29333043d0575015065a14743367fb4b297b020be7e1c96d",
+      "olcum_id": "3f8f1c5ea0be404db64023b0c7778184",
+      "olculen_commit": "654402c16ccb0fba3162ddc7ade24921e39f106b",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "ecf29e2d0eca00b95c673dd9d40865fee13335cf278aa9eec41d3ffe6241a8eb"
+}
