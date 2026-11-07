@@ -1,0 +1,76 @@
+{
+  "is": "uzlastir-hedef-gorev-korur",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T13:24:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "hedef-korur",
+      "asama": "once",
+      "dosya": "olcum-hedef-korur-once.txt",
+      "sha256": "ce60836c5c85490fb0c8b92813166cf1408c2248b3e3b4c2656b906eb1e588e7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/uz-eski/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T13:24:21+03:00",
+      "sure_sn": 5.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "7b5046c31e71c198995471a9b67de776e83e71500234abbc369c33bf64b62c20",
+      "olcum_id": "9fc21e1a2c9541598f94b34d84ae4e5f",
+      "olculen_commit": "c7053256dcfa9411a20555c584c8331382328492",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "hedef-korur",
+      "asama": "sonra",
+      "dosya": "olcum-hedef-korur-sonra.txt",
+      "sha256": "e8213bb7bbc115b86ed6a08a395d442d6a4ee36bf155c1510a8fdd4ff0723403",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:24:27+03:00",
+      "sure_sn": 5.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "337a98839d8f7b5bd4849e9b37cb21ad631e4fb61eef6d02180b9bb9f0f685f0",
+      "olcum_id": "5e99cad52b414bd29b4ac11b411e9c6d",
+      "olculen_commit": "c7053256dcfa9411a20555c584c8331382328492",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-muafiyet-yok",
+      "asama": "tek",
+      "dosya": "olcum-mutant-muafiyet-yok-tek.txt",
+      "sha256": "e490f1c79627616b7cb28ad456b969760c69373e1681dd6dc136f8915313ff55",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/uz-mut/calisiliyor-uzlastir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:24:41+03:00",
+      "sure_sn": 5.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "hedef-korur",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "H1 hedef türü görev",
+      "hedef_dustu": true,
+      "olcum_id": "2e2e37327cc5430984c83983222d21c2",
+      "olculen_commit": "c7053256dcfa9411a20555c584c8331382328492",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "b67bdd3a9df0c7bd4bfbc2c435572dfdfa6704761fa170b6450a93627dc10aa9"
+}
