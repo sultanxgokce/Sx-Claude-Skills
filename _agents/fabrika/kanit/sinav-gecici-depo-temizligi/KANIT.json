@@ -1,0 +1,30 @@
+{
+  "is": "sinav-gecici-depo-temizligi",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T04:29:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "artik-once",
+      "asama": "once",
+      "dosya": "olcum-artik-once-once.txt",
+      "sha256": "c6b4a28fb5f0a9ac126b0b74cea4f82e1bf69f4e1096a0d6e3d204c13bc60145",
+      "komut": [
+        "bash",
+        "-c",
+        "D=$(mktemp -d); TMPDIR=$D bash yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh > $D.out 2>&1; echo \"sinav_rc=$? $(tail -n 1 $D.out)\"; echo \"artik_klasor=$(find $D -mindepth 1 -maxdepth 1 | wc -l)\"; find $D $D.out -delete"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T04:29:09+03:00",
+      "sure_sn": 109.4,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "58f9ffbaee8c7e4373899989b2d3c97ebddd17221ef01f6a7ba1b3ceaa2c5f78",
+      "olcum_id": "e94819f838264281bb5db7d6ee49168f",
+      "olculen_commit": "041da321dc5a3fb3139c7200d225fba27c0d2755",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "e506dc7ba395c529280847fff45eaf93e47a7fbcfd72f2239622ce12f65b2060"
+}
