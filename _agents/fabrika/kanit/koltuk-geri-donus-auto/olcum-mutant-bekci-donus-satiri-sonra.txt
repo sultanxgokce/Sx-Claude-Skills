@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: P1 · rc≠0 + hedef kapı 'P1' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-koltuk-donus-sinavi-* ===
 $ env KOLTUK_KAYIT_MUTANT=1 bash terminal-onar/scripts/koltuk-kayit.test.sh
-# rc=1 sure=2.3s zaman=2026-11-07T06:46:29+03:00
+# rc=1 sure=2.1s zaman=2026-11-07T07:03:51+03:00
 --- stdout ---
 ‼ MUTANT 1: bekci.sh dönüş satırı söküldü (beklenen düşen kapı: P1)
 ── H · hermetiklik
@@ -44,8 +44,8 @@ $ env KOLTUK_KAYIT_MUTANT=1 bash terminal-onar/scripts/koltuk-kayit.test.sh
 
 koltuk-kayit: GEÇTİ=11 KALDI=19
 --- stderr ---
-grep: /tmp/tmp.MdE6N1cbQS/acilan.iz: No such file or directory
-grep: /tmp/tmp.MdE6N1cbQS/acilan.iz: No such file or directory
-grep: /tmp/tmp.MdE6N1cbQS/tmux.iz: No such file or directory
-grep: /tmp/tmp.MdE6N1cbQS/acilan.iz: No such file or directory
-grep: /tmp/tmp.MdE6N1cbQS/acilan.iz: No such file or directory
+grep: /tmp/tmp.cAKyuwko0A/acilan.iz: No such file or directory
+grep: /tmp/tmp.cAKyuwko0A/acilan.iz: No such file or directory
+grep: /tmp/tmp.cAKyuwko0A/tmux.iz: No such file or directory
+grep: /tmp/tmp.cAKyuwko0A/acilan.iz: No such file or directory
+grep: /tmp/tmp.cAKyuwko0A/acilan.iz: No such file or directory

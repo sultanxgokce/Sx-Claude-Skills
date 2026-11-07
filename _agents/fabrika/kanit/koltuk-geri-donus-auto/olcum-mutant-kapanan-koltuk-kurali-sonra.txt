@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: K1 · rc≠0 + hedef kapı 'K1' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-koltuk-donus-sinavi-* ===
 $ env KOLTUK_KAYIT_MUTANT=2 bash terminal-onar/scripts/koltuk-kayit.test.sh
-# rc=1 sure=4.1s zaman=2026-11-07T06:46:33+03:00
+# rc=1 sure=3.8s zaman=2026-11-07T07:03:55+03:00
 --- stdout ---
 ‼ MUTANT 2: bilerek kapatılan koltuk kuralı söküldü (beklenen düşen kapı: K1)
 ── H · hermetiklik

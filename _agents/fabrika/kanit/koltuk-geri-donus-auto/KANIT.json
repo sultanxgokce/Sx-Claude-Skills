@@ -1,7 +1,7 @@
 {
   "is": "koltuk-geri-donus-auto",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T06:46:54+03:00",
+  "guncelleme": "2026-11-07T07:03:59+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -52,19 +52,19 @@
       "etiket": "koltuk-donus-sinavi",
       "asama": "sonra",
       "dosya": "olcum-koltuk-donus-sinavi-sonra.txt",
-      "sha256": "55d02d20d12af1ab0cde60503b0cc1da4407f3528d3e566545ae9f8efc89099b",
+      "sha256": "f2e788d5396cff8564111094c18abd595451640b99091b15d2a90dc317649d1c",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-kayit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-11-07T06:46:16+03:00",
-      "sure_sn": 3.9,
+      "zaman": "2026-11-07T07:03:48+03:00",
+      "sure_sn": 9.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "girdi_anahtar": "4a0941e8ecc315bb0499a194c28fcf13d4276e4497c2aa21d32ad0f660128d8f",
-      "olcum_id": "4de3c3aa136f400aafd19b531d79164e",
-      "olculen_commit": "6f474876301f22d6466c71af8710dd05d91a15c1",
+      "girdi_anahtar": "4f45edfe7df5c467bb82932d58a5aaf68f5a060925ad0ea0cc8f67717c9a41f1",
+      "olcum_id": "e0d048650c984fa6983e8860cad1825c",
+      "olculen_commit": "802d9c08db9a4b3a7101eb8fea2d15fdfcc5bc80",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -94,7 +94,7 @@
       "etiket": "mutant-bekci-donus-satiri",
       "asama": "sonra",
       "dosya": "olcum-mutant-bekci-donus-satiri-sonra.txt",
-      "sha256": "91dfb509dbfafbe84396c15389eb920ceae0d6618a6cf6eb6bf2523bebc26054",
+      "sha256": "35348c24beb661f19a07d606884ebf743965894e16a0f4ded36e81188ab4514a",
       "komut": [
         "env",
         "KOLTUK_KAYIT_MUTANT=1",
@@ -103,8 +103,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-07T06:46:29+03:00",
-      "sure_sn": 2.3,
+      "zaman": "2026-11-07T07:03:51+03:00",
+      "sure_sn": 2.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "koltuk-donus-sinavi",
@@ -112,8 +112,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "P1",
       "hedef_dustu": true,
-      "olcum_id": "0b6d4304210e4080a798ad5bb33ac0b8",
-      "olculen_commit": "6f474876301f22d6466c71af8710dd05d91a15c1",
+      "olcum_id": "6911ca5367cd43ac97e103e0c7cf1307",
+      "olculen_commit": "802d9c08db9a4b3a7101eb8fea2d15fdfcc5bc80",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -122,7 +122,7 @@
       "etiket": "mutant-kapanan-koltuk-kurali",
       "asama": "sonra",
       "dosya": "olcum-mutant-kapanan-koltuk-kurali-sonra.txt",
-      "sha256": "ae28561c357775d3cf1ff40624e5305ae48da05736a8517e62be2b6c9773c4fa",
+      "sha256": "ce144b5496807d6236c5395b67d358b71cc251f1a0caad46ab783a1faccd8a91",
       "komut": [
         "env",
         "KOLTUK_KAYIT_MUTANT=2",
@@ -131,8 +131,8 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-07T06:46:33+03:00",
-      "sure_sn": 4.1,
+      "zaman": "2026-11-07T07:03:55+03:00",
+      "sure_sn": 3.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "koltuk-donus-sinavi",
@@ -140,8 +140,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "K1",
       "hedef_dustu": true,
-      "olcum_id": "6eca367071de492cac6660c633665750",
-      "olculen_commit": "6f474876301f22d6466c71af8710dd05d91a15c1",
+      "olcum_id": "d18df89157d147adbb3bb2c450b2d9d4",
+      "olculen_commit": "802d9c08db9a4b3a7101eb8fea2d15fdfcc5bc80",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -150,7 +150,7 @@
       "etiket": "mutant-savunma-kapisi",
       "asama": "sonra",
       "dosya": "olcum-mutant-savunma-kapisi-sonra.txt",
-      "sha256": "5c6675fddda18225388d9a755fa8567bed870bdf61f87b0b26bba52763b50b36",
+      "sha256": "7600e4cc287250b581b126f9da7c4dcc034660c4de99fbc26611c0894ec53111",
       "komut": [
         "env",
         "KOLTUK_KAYIT_MUTANT=3",
@@ -159,7 +159,7 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-11-07T06:46:37+03:00",
+      "zaman": "2026-11-07T07:03:59+03:00",
       "sure_sn": 3.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
@@ -168,8 +168,8 @@
       "dusen_kapi": true,
       "hedef_kapi": "N8",
       "hedef_dustu": true,
-      "olcum_id": "53ababe8a0464f4f9e225757bd57fb6d",
-      "olculen_commit": "6f474876301f22d6466c71af8710dd05d91a15c1",
+      "olcum_id": "3b08172629434f36bcadd33b07396241",
+      "olculen_commit": "802d9c08db9a4b3a7101eb8fea2d15fdfcc5bc80",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -194,7 +194,49 @@
       "olculen_commit": "8520bf5f7018ac31ccfe676ad1986ca179e3fde1",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-red-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-red-sinavi-sonra.txt",
+      "sha256": "6dfb4d7e410fc5a18e1c8282d1615fc835b54452e6dfb5ba0ea7e4ae16b53fe8",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kutu-red.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T07:03:49+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "31f9f78616381892f8fa95d5ccea13f33e3e9354315f4df97201e4452bcb71a1",
+      "olcum_id": "ca2d9a0d2a1e43e8be27533972723be5",
+      "olculen_commit": "802d9c08db9a4b3a7101eb8fea2d15fdfcc5bc80",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sinavi-sonra.txt",
+      "sha256": "fa8fe5db49182ab8e98c0320e0dd408f93c556fee529288a1442b21634a13878",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T07:03:49+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "b79c8e18f5eb17f18053b2fad5a4e46f28a9325fe21cff484b6d23b09643242d",
+      "olcum_id": "565f48cb27b24bd3b80a5747698422d9",
+      "olculen_commit": "802d9c08db9a4b3a7101eb8fea2d15fdfcc5bc80",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "59c1dc053dd27d716c66c77d47d3846e0138393ada10b04bec91c18532a32e49"
+  "imza": "0c15575d48126c69af1f42c1876728cd2f7e035d96f90f4990e297f8ad88cee4"
 }

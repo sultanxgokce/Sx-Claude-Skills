@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/koltuk-kayit.test.sh
-# rc=0 sure=3.9s zaman=2026-11-07T06:46:16+03:00
+# rc=0 sure=9.1s zaman=2026-11-07T07:03:48+03:00
 --- stdout ---
 ── H · hermetiklik
   ✓ H1 ortak.sh yüklendikten sonra tmux SAHTE (gerçek sunucuya dokunulmaz)
@@ -42,3 +42,4 @@ $ bash terminal-onar/scripts/koltuk-kayit.test.sh
 
 koltuk-kayit: GEÇTİ=30 KALDI=0
 --- stderr ---
+⏳ agir-sira: kanit-koltuk-geri-donus-auto-koltuk-donus-sinavi 5 sn bekledi (yuva 2, load1 5.69)
