@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
-# rc=0 sure=122.4s zaman=2026-11-07T04:31:29+03:00
+# rc=0 sure=108.3s zaman=2026-11-07T05:03:12+03:00
 --- stdout ---
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
   ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
@@ -16,6 +16,7 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
 ════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
   ✓ D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
   ✓ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
+  ✓ D2b dişte DALGIÇ da koşmaz (çağrılmadı, kayıtta dalgic = sinav-kapali)
   ✓ D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)
   ✓ D3b DENETIM yazılmadı
   ✓ D4 ON_GOZ_SINAV yok + --on-goz-gec → ön göz koşar, geçiş kayda girer (rc 0)
@@ -73,6 +74,7 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
   ✓ M sinav-disi-yok → D2 düştü
   ✓ M dis-zorunlu-deler → D3 düştü
   ✓ M esik-21 → S10k düştü
+  ✓ M diste-dalgic-kosar → D2b düştü
   ✓ M karne-alansiz → S12f düştü
-SONUÇ: 63 geçti, 0 düştü
+SONUÇ: 65 geçti, 0 düştü
 --- stderr ---

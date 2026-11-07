@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S10f · rc≠0 + hedef kapı 'S10f' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh gecis-karta-yazilmaz
-# rc=1 sure=7.5s zaman=2026-11-07T04:31:47+03:00
+# rc=1 sure=9.6s zaman=2026-11-07T05:03:35+03:00
 --- stdout ---
 mutant: gecis-karta-yazilmaz (kart.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -18,6 +18,7 @@ mutant: gecis-karta-yazilmaz (kart.sh)
 ════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
   ✓ D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
   ✓ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
+  ✓ D2b dişte DALGIÇ da koşmaz (çağrılmadı, kayıtta dalgic = sinav-kapali)
   ✓ D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)
   ✓ D3b DENETIM yazılmadı
   ✗ D4 ON_GOZ_SINAV yok + --on-goz-gec → ön göz koşar, geçiş kayda girer (rc 0) (rc=3, beklenen=0)
@@ -59,7 +60,7 @@ mutant: gecis-karta-yazilmaz (kart.sh)
   ✗ S10d DENETIM on_goz.durum = gecildi
   ✗ S10e DENETIM gecis_gerekcesi = verilen
   ✗ S10f kartta on_goz_gecisleri[0].gerekce
-  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.TaS4KkyjRD/istem.md içinde yok)
+  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.SjJsmQz14n/istem.md içinde yok)
   ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
   ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
   ✓ S10j söylenir: geçiş gerekmedi
@@ -88,5 +89,5 @@ mutant: gecis-karta-yazilmaz (kart.sh)
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-SONUÇ: 43 geçti, 9 düştü
+SONUÇ: 44 geçti, 9 düştü
 --- stderr ---

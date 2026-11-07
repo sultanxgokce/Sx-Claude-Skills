@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S9e · rc≠0 + hedef kapı 'S9e' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh erken-kapi-yok
-# rc=1 sure=8.5s zaman=2026-11-07T04:32:05+03:00
+# rc=1 sure=8.2s zaman=2026-11-07T05:03:52+03:00
 --- stdout ---
 mutant: erken-kapi-yok (denetci.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -18,6 +18,7 @@ mutant: erken-kapi-yok (denetci.sh)
 ════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
   ✓ D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
   ✓ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
+  ✓ D2b dişte DALGIÇ da koşmaz (çağrılmadı, kayıtta dalgic = sinav-kapali)
   ✓ D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)
   ✓ D3b DENETIM yazılmadı
   ✓ D4 ON_GOZ_SINAV yok + --on-goz-gec → ön göz koşar, geçiş kayda girer (rc 0)
@@ -64,5 +65,5 @@ mutant: erken-kapi-yok (denetci.sh)
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-SONUÇ: 51 geçti, 1 düştü
+SONUÇ: 52 geçti, 1 düştü
 --- stderr ---
