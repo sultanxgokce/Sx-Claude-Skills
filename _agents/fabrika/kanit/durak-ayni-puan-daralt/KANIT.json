@@ -1,0 +1,56 @@
+{
+  "is": "durak-ayni-puan-daralt",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T13:21:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra-tek",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek-tek.txt",
+      "sha256": "0c6474bbffda9651c4e980f2298ab66ded346a930936b7129c990e6612e14072",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T12:46:59+03:00",
+      "sure_sn": 1902.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "73403f34e129f3e0a9c947561b471af654a61fee54833dacb4e1c0f724c0667b",
+      "olcum_id": "607966eee13140a59e8d572baf2b8b10",
+      "olculen_commit": "796f7865788740d1517827ef8f45377609ba5dd2",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-durgun-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-durgun-yok-sonra.txt",
+      "sha256": "e03228ff0ad72ee98fbd6a5a015e5f3156fd86b7243934aca9b092493058fbc8",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:21:41+03:00",
+      "sure_sn": 2071.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-tek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "DURGUN",
+      "hedef_dustu": true,
+      "olcum_id": "c899e4c70ddd465fba8140c3c691ca25",
+      "olculen_commit": "591606c947a17beb9849099244d8bdfc2ac52211",
+      "olculen_dizin": "/config/projects/_wt/mutant-durgun",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "ec62054a5706489746c5e7bf68959b50a19c680deb03cd4794a75d24fa6a9771"
+}
