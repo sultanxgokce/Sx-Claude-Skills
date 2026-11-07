@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "on-goz-a4-defter",
+  "pr": "743",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T08:06:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-a4-defter",
+  "dal": "on-goz-a4-defter",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35388,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 31093
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "c8e8023a7984451837c316c4b7de40526d3bac3f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "A4 kirli-ağaç denetimi, aracın kendi kanıt, kart, karne ve tavan defterlerini hariç tutacak biçimde daraltılmış; gerçek kod ölçümü de ana daldaki kusurun HEAD'de kapandığını gösteriyor. Önce/sonra sınavı, zorunlu kip uçtan uca vakası ve hedef S9c mutasyonu birlikte geçtiği için üretimi durduran bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt ve geçersiz ilan yok. Önce ölçümü rc=1 ile kusuru yeniden üretiyor, sonra ölçümü rc=0 ve 55/55 geçişle düzeltmeyi doğruluyor; gercek-kosu kaydı ana dalda tavan-defteri.log nedeniyle A4 uyumsuzken HEAD'de defterler dışındaki ağacın uyumlu olduğunu gösteriyor. Mutasyon kaydı hedef S9c kapısını düşürerek sınavın istisnanın kaldırılmasını gerçekten yakaladığını kanıtlıyor."
+  }
+}
