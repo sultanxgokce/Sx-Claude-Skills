@@ -1,0 +1,54 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S9e · rc≠0 + hedef kapı 'S9e' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
+$ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh erken-kapi-yok
+# rc=1 sure=5.0s zaman=2026-11-07T03:25:35+03:00
+--- stdout ---
+mutant: erken-kapi-yok (denetci.sh)
+════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
+  ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
+  ✓ S12b DENETIM on_goz.durum = uyumlu
+  ✓ S12c beş kapı alanı da yazılı (kanit_basi·kanit_eksik·taban·agac·kapsam_dosya)
+  ✓ S12d DALGIÇ sonucu on_goz.dalgic'te
+  ✓ S12e zorunlu kip kayıtta (kapali)
+  ✓ S12f karne satırı on_goz durumunu taşır
+  ✓ S12g karne özeti ön göz kırılımını sayar
+════ G · bilgi kipi (zorunlu değil): uyumsuz ön göz denetimi durdurmaz ════
+  ✓ G1 bayat kanıt + zorunlu yok → denetim açılır (rc 0)
+  ✓ G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz
+  ✓ G3 ekranda bilgi kipi uyarısı
+════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════
+  ✓ S9a zorunlu + uyumsuz → rc 1
+  ✓ S9b DENETIM-1.json YAZILMADI (tur yanmadı)
+  ✓ S9c koşuyor izi kalmadı
+  ✓ S9d bağımsız göz çağrılmadı (istem boş)
+  ✗ S9e A uyumsuzken DALGIÇ çağrılmadı (para harcanmaz)
+  ✓ S9f sebep ve geçiş yolu söylenir
+  ✓ S9f2 sebebi A1 satırı (kanıt eski başta)
+════ S9g · depo bayrağı (origin/main'de) zorunlu kipi açar ════
+  ✓ S9g alanda bayrak yok ama origin/main'de var → zorunlu, rc 1
+  ✓ S9h DENETIM yazılmadı
+  ✓ S9i kaynak söylenir (origin/main bayrağı)
+════ S10 · gerekçeli geçiş ════
+  ✓ S10a gerekçe <20 → rc 2 (denetim açılmaz)
+  ✓ S10b kısa gerekçede DENETIM yok
+  ✓ S10c gerekçe ≥20 → denetim açılır (rc 0)
+  ✓ S10d DENETIM on_goz.durum = gecildi
+  ✓ S10e DENETIM gecis_gerekcesi = verilen
+  ✓ S10f kartta on_goz_gecisleri[0].gerekce
+  ✓ S10g göz istemi gerekçeyi kart metninde görür
+════ S11 · ölçülemedi uyumlu sayılmaz ════
+  ✓ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3
+  ✓ S11b DENETIM yazılmadı
+  ✓ S11c ÖLÇÜLEMEDİ — denetim açılmadı
+  ✓ S11d sebep PR başının okunamaması (A1 ○)
+════ B · DALGIÇ uyumsuz da zorunlu kipte durdurur ════
+  ✓ B1 A uyumlu + DALGIÇ uyumsuz + zorunlu → rc 1
+  ✓ B2 DALGIÇ çağrıldı
+  ✓ B3 DENETIM yazılmadı
+════ Y · --on-goz yalnız ön göz ════
+  ✓ Y1 uyumlu → rc 0
+  ✓ Y2 DENETIM yazılmadı, kanıt dizininde koşuyor izi yok
+  ✓ Y3 hüküm satırı
+  ✓ Y4 uyumsuz → rc 1
+  ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
+SONUÇ: 38 geçti, 1 düştü
+--- stderr ---
