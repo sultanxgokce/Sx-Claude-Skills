@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "on-goz-a5-parca",
+  "pr": "744",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T09:56:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-a5-parca",
+  "dal": "on-goz-a5-parca",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 48766,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 40983
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "9037d014e167cececb00d7b0abf4fb4bec73fed8",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "BÂNİ, A5 kapsam çözümlemesini hem “foo.py (ayrı kart)” hem de “a.py, b.py dışında” yazımlarını yakalayacak biçimde genişletmiş; fiilli ve açıklama parantezli karşı örnekleri de dar tutmuş. Üretime engel ciddi ya da uygulama kusuru görünmüyor; talep doğrudan sınanmış ve sonuç gerçek kart taramasıyla desteklenmiş.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Önce ölçümünde ilgili S10e/S10f/S10i vakaları düşerken sonra ölçümünde 32/32 geçiyor; S10e ve S10f için hedef kapıyı düşüren mutasyon kayıtları sınavın talebi gerçekten ölçtüğünü gösteriyor, S10g/S10j mutasyonları da yanlış genişlemeleri yakalıyor. Gerçek 1160 kart taraması yalnız bu kartta yeni yasaklar bulmuş ve hiçbir eski yasağı kaybetmemiş; ayrıca denetçi regresyonu 55/55 yeşil."
+  }
+}
