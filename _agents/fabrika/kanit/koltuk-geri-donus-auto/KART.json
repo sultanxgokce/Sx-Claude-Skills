@@ -1,0 +1,41 @@
+{
+  "is": "koltuk-geri-donus-auto",
+  "cumle": "Kutu yeniden doğunca kayıtlı personel koltukları dakikalık bekçiyle auto modda kendiliğinden geri gelir (görev W38BCZ madde 1-2, bypass yok): koltuk açan betik koltuğu /config/.terminal-onar/koltuklar.tsv'ye yazar (ad, rol, session_id, cwd; izin modu yok), bekçi kayıtlı ama tmux'ta olmayan koltuğu claude --resume <id> --permission-mode auto ile açar — ölçüt: yeniden doğuştan sonra 10 dk içinde dönen personel koltuğu 1/12 → 12/12 (kaynak: docker inspect StartedAt + tmux session_created, 7 Kas)",
+  "istedi": "SERDAR",
+  "aldi": "MEREMMETÇİ",
+  "zaman": "2026-11-07T06:35:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/koltuk-geri-donus-auto (taban: HENDESE 7 Kas 06:2x sayımı — munavebe 1 Kas 19:17 doğuşu 7 kayıtlı koltuktan 10 dk içinde 1, mmex 30 Eki 10:43 doğuşu 5 kayıtlıdan 0; toplam 1/12)",
+  "oda": "hendese",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "--canli e",
+  "kapsam_uyarilari": [
+    "07.11 06:36 is-alani: PR #739 aynı dosyaya dokunuyor → catalog.json: 1533-1533 — PR'dan önce kapsam-olc",
+    "07.11 06:36 is-alani: PR #722 aynı dosyaya dokunuyor → catalog.json: 1907-1907 — PR'dan önce kapsam-olc"
+  ],
+  "gorev": "gorev_01M66643THWCWSQ09C8GW38BCZ",
+  "tahmin_dk": 120,
+  "olcut": [
+    "10 dk içinde"
+  ],
+  "olcum_yeri": "canlı",
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T06:35:53+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

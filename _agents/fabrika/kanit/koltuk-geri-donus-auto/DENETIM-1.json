@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "koltuk-geri-donus-auto",
+  "pr": "742",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T06:49:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-koltuk-geri-donus-auto",
+  "dal": "koltuk-geri-donus-auto",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 85110,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 41451
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e4409ac1277deb0076cf464a8834b0426c27266d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Koltuk kaydı, bekçi üzerinden güvenli auto dönüş, tekrar açma sınırları ve bypass savunması uygulanmış; gerçek kod ölçümleri ile mutasyon kapıları yeşil. Kod tarafında işi bozan kusur görünmüyor, ancak kartın canlı 1/12 → 12/12 ve 10 dakika ölçütü bu kanıt paketinde doğrulanmamış.",
+    "bulgular": [
+      {
+        "ne": "Canlı yeniden doğuş sonrası 12/12 koltuğun 10 dakika içinde döndüğü henüz ölçülmemiş; şablonun kutulara dağıtılması ve gerçek bekçi turu ayrıca doğrulanmalı.",
+        "kanit": "İş kartında olcum_yeri=\"canlı\", canli_gerekir=true ve hedef 1/12 → 12/12; manifestteki gerçek ölçümler hermetik bash sınavlarıdır, docker inspect StartedAt + tmux session_created canlı ölçüm çifti yoktur. iskan/SKILL.md değişikliği de şablonun kutulara kendiliğinden inmediğini açıkça belirtir.",
+        "konum": "iş kartı ölçütü; KANIT manifesti; iskan/SKILL.md Durum 2026-11-07",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı kutular + dağıtım yetkisi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçümleri kayıt yazımı ile dönüş davranışının kırmızıdan yeşile geçtiğini, gerçek ölçümler 37/0 ve 30/0 sonuçlarını gösteriyor; üç mutasyon da hedef kapıları düşürerek sınavların kritik davranışları gerçekten yakaladığını kanıtlıyor. Buna karşılık kartın asıl canlı başarı ölçümü olan docker inspect StartedAt ile tmux session_created üzerinden 10 dakika içinde 12/12 sonucu bulunmuyor."
+  }
+}
