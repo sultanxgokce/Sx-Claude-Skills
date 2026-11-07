@@ -1,0 +1,58 @@
+{
+  "tur": 1,
+  "is": "kapi-iki-kartli-pr-kanit-dizini",
+  "pr": "746",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:01:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-iki-kartli-pr-kanit-dizini",
+  "dal": "kapi-iki-kartli-pr-kanit-dizini",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27224,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 14339
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumsuz",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": [
+      "A3 taban: origin/main 1 commit ileride ve birleştirme ÇAKIŞIYOR (yazilim-fabrikasi/SKILL.md) — önce merge (rebase değil, dal itilmiş)"
+    ]
+  },
+  "bas": "24e67d4b51b54a17f05920e1da35dbc9bc729bfc",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "İki kartlı PR’da gövdede ilan edilen ve aynı PR numarasını taşıyan ek kartın kanıt dizini muaf tutulmuş; O25 geçişi ile O26-O27 korumaları gerçek ölçümde 44/44 geçiyor. Ancak mutant kaydı manifestte `mutasyon: true` taşımadığı için rubriğe göre mutasyon kanıtı sayılamaz; kartta açıkça istenen bu iddia kanıtsız kaldığından üretime hazır denemez.",
+    "bulgular": [
+      {
+        "ne": "Mutantın ek kart muafiyeti kaldırılınca O25’i düşürdüğü iddiası geçerli bir mutasyon kaydıyla kanıtlanmamış.",
+        "kanit": "`ek-kart-muafiyeti-yok` kaydı rc=1/kırmızı ve çıktıda O25 için `✗` gösteriyor; fakat manifest kaydında zorunlu `mutasyon: true` alanı yok. Rubriğe göre bu nedenle FAIL/✗ satırları beklenen mutant sonucu olarak yorumlanamaz.",
+        "konum": "KANIT manifesti: `ek-kart-muafiyeti-yok`; ölçüm çıktısı: O25 ve `SONUÇ: 43 geçti · 1 kaldı`",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Gerçek ölçüm yeşil: O25 hedef davranışı, O26 ilan edilmeyen kartın engellenmesini ve O27 kanıt dışı kodun engellenmesini ölçüyor; 44/44 geçiyor. Buna karşılık önce/sonra ölçüm çifti yok ve kırmızı mutant kaydı `mutasyon: true` taşımadığından geçerli mutasyon kanıtı değildir."
+  }
+}
