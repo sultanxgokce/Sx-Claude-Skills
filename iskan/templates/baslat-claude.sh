@@ -141,6 +141,35 @@ _IZ_DIR="${BASLAT_IZ_DIR:-$HOME/.claude-baslat}"
 _IZ="$_IZ_DIR/$SID.acildi"
 mkdir -p "$_IZ_DIR" 2>/dev/null || true
 
+# ── KOLTUK KAYDI (2026-11-07 · görev …W38BCZ madde 1 · kart koltuk-geri-donus-auto) ──────────────
+# NİÇİN: kutu yeniden yaratılınca tmux ölür; ana koltuğu bekçi geri açıyordu, personel koltuklarını kimse
+#   (ölçüldü 7 Kas, HENDESE: 12 kayıtlı koltuktan 10 dk içinde dönen 1). Açtığımız koltuğu kutunun kalıcı
+#   dizinine yazarız (terminal-onar koltuk-kayit.sh: ad · rol · session_id · cwd); dakikalık bekçi oradan
+#   `claude --resume <kimlik> --permission-mode auto` ile geri açar. 🔴 İZİN MODU YAZILMAZ: dönüş her zaman
+#   auto'dur, bypass'a yükseltme bu kaydın işi değildir (Sultan kararı, tasarım §4 madde 3).
+# ÖZEL İZİN DOSYASI (settings_file) olan koltuk KAYDA GİRMEZ (varsa kaydı silinir): bekçinin dönüşü o dosyayı
+#   taşımaz, koltuk yasaksız dönerdi (fail-closed; bu koltuğu insan açar).
+# FAIL-SOFT: kayıt yazılamazsa açılış DÜŞMEZ, sarı satır basılır. tmux dışında (elle terminalde) kayıt yok.
+# 🔴 SINAV/DENEME KALKANI: kayıt yolu ISKAN_REGISTRY ile değiştirilmişse (sınav, deneme kopyası) ve kayıt betiği AÇIKÇA
+#   verilmemişse yazılmaz — tmux içinden koşan bir sınav, kutunun GERÇEK kaydına sahte satır yazıp gerçek koltuğun
+#   kimliğini ezerdi (sınavı geliştiren oturum tmux içindedir; TMUX ortamı sınava miras kalır — ölçüldü 7 Kas).
+if [ -n "${ISKAN_REGISTRY:-}" ] && [ -z "${KOLTUK_KAYIT_BETIK:-}" ]; then
+  echo "[sari] koltuk-kaydi yazilmadi: kayit yolu degistirilmis (ISKAN_REGISTRY) — deneme/sinav kalkani" >&2
+elif [ -n "${TMUX:-}" ] && [ -n "${TMUX_PANE:-}" ]; then
+  _kk="${KOLTUK_KAYIT_BETIK:-/config/.claude/skills/terminal-onar/scripts/koltuk-kayit.sh}"
+  _kad="$(tmux display-message -p -t "$TMUX_PANE" '#{session_name}' 2>/dev/null || true)"
+  if [ ! -f "$_kk" ]; then
+    echo "[sari] koltuk-kaydi yazilmadi: $_kk yok (terminal-onar 2.46.0+) — kutu yeniden doguca bu koltuk kendiliginden donmez" >&2
+  elif [ -z "$_kad" ]; then
+    echo "[sari] koltuk-kaydi yazilmadi: tmux oturum adi okunamadi" >&2
+  elif [ "${SFILE:--}" != "-" ]; then
+    bash "$_kk" sil "$_kad" >/dev/null 2>&1 || true
+    echo "[sari] koltuk ozel izin dosyasiyla acildi — kendiliginden donus kaydina YAZILMADI (donus izin dosyasini tasimaz)" >&2
+  elif ! bash "$_kk" yaz "$_kad" "$ROL" "$SID" "$PWD" >/dev/null 2>&1; then
+    echo "[sari] koltuk-kaydi yazilamadi ($_kad) — acilis suruyor; kutu yeniden doguca bu koltuk kendiliginden donmez" >&2
+  fi
+fi
+
 # İşaret VARSA önce --resume, YOKSA önce --session-id. Yanılırsak claude'un kendi hata
 # metni bizi düzeltir → iki yönde de düşmeden geçeriz (işaret kaybolsa da doğru çalışır).
 if [ -f "$_IZ" ]; then _once="resume"; else _once="taze"; fi

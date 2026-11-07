@@ -53,7 +53,7 @@ kos(){ # kos <mod> → çıktı; rc korunur
   # Registry yolu şablonun KENDİ konumundan türetiliyor; test onu ISKAN_REGISTRY ile
   # sahte kayda bağlar (yoksa dört senaryo da "registry yok" diye kırmızı döner ve
   # test yanlış sebepten geçmiş/düşmüş olur — ilk koşuda tam bu yaşandı).
-  SAHTE_MOD="$1" SAHTE_GUNLUK="$EV/cagri.log" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
+  env -u TMUX -u TMUX_PANE SAHTE_MOD="$1" SAHTE_GUNLUK="$EV/cagri.log" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
   ISKAN_REGISTRY="$EV/proje/iskan-registry.yaml" \
   PATH="$EV/bin:$PATH" bash "$SABLON" nazir-yon 2>&1
 }
@@ -123,7 +123,7 @@ cat >> "$EV/proje/iskan-registry.yaml" <<REG
     settings_file: $EV/proje/YOK.json
 REG
 kosr(){ # kosr <mod> <rol>
-  SAHTE_MOD="$1" SAHTE_GUNLUK="$EV/cagri.log" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
+  env -u TMUX -u TMUX_PANE SAHTE_MOD="$1" SAHTE_GUNLUK="$EV/cagri.log" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
   ISKAN_REGISTRY="$EV/proje/iskan-registry.yaml" \
   PATH="$EV/bin:$PATH" bash "$SABLON" "$2" 2>&1
 }
@@ -160,6 +160,49 @@ sifirla; CLAUDE_CODE_AUTO_COMPACT_WINDOW= kos resume_ok >/dev/null; grep -q '^AC
   && ok "--resume yolunda da 600k (süreç özelliği, her yolda)" || no "--resume yolunda eşik yok" "günlük: $(cagrilar)"
 sifirla; ISKAN_AUTOCOMPACT=500k CLAUDE_CODE_AUTO_COMPACT_WINDOW=900k kos resume_ok >/dev/null; grep -q '^ACW=600k$' "$EV/cagri.log" \
   && ok "standart SABİT: dış ortam başka değer verse de 600k (kaçış yok)" || no "dış ortam standardı ezdi" "günlük: $(cagrilar)"
+
+echo "── 10) KOLTUK KAYDI (görev …W38BCZ madde 1): açılan koltuk kutunun kalıcı kaydına yazılır, izin modu YAZILMAZ ──"
+# Sahte tmux: yalnız display-message cevap verir (oturum adı); GERÇEK tmux sunucusuna hiç gidilmez (TMUX sahte soket).
+# Kayıt betiği deponun kopyası, kayıt dizini geçici (TO_DURUM_DIZ) — kutunun gerçek kaydına dokunulmaz.
+KK="$BURASI/../../terminal-onar/scripts/koltuk-kayit.sh"
+cat > "$EV/bin/tmux" <<'SAHTE'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >> "$SAHTE_TMUX_IZ"
+case "$1" in display-message) printf '%s\n' "${SAHTE_OTURUM:-koltukx}" ;; *) exit 1 ;; esac
+SAHTE
+chmod +x "$EV/bin/tmux"
+KD="$EV/durum"; mkdir -p "$KD"
+kosk(){ # kosk <mod> <rol> [ISKAN_REGISTRY ver: 1] → kayıt betiği açıkça verilir (deneme kalkanı aşılır)
+  env -u ISKAN_REGISTRY SAHTE_MOD="$1" SAHTE_GUNLUK="$EV/cagri.log" SAHTE_TMUX_IZ="$EV/tmux.iz" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
+    TMUX="$EV/sahte-soket,1,0" TMUX_PANE=%1 KOLTUK_KAYIT_BETIK="$KK" TO_DURUM_DIZ="$KD" \
+    ISKAN_REGISTRY="$EV/proje/iskan-registry.yaml" PATH="$EV/bin:$PATH" bash "$SABLON" "$2" 2>&1
+}
+satir(){ grep -v '^#' "$KD/koltuklar.tsv" 2>/dev/null; }
+sifirla; rm -f "$KD/koltuklar.tsv"; cikti=$(kosk resume_ok nazir-yon); rc=$?
+[ "$rc" = 0 ] && ok "kayıtlı açılış rc=0" || no "kayıtlı açılış rc≠0" "gelen=$rc · $cikti"
+[ "$(satir)" = "$(printf 'koltukx\tnazir-yon\t11111111-2222-3333-4444-555555555555\t%s' "$PWD")" ] \
+  && ok "kayda tek satır: ad · rol · session_id · cwd" || no "kayıt satırı yanlış" "kayıt: $(satir)"
+[ "$(satir | awk -F'\t' '{print NF}')" = 4 ] && ok "dört sütun — izin modu sütunu YOK" || no "sütun sayısı 4 değil" "$(satir)"
+case "$(satir)" in *bypassPermissions*) no "izin modu kayda yazıldı" "$(satir)" ;; *) ok "kayıtta bypassPermissions geçmiyor (kayıttaki permission_mode bypass olsa da)" ;; esac
+case "$cikti" in *koltuk-kaydi*) no "başarılı kayıtta sarı satır basıldı" "$cikti" ;; *) ok "başarılı kayıtta uyarı yok" ;; esac
+sifirla; kosk resume_ok nazir-yon >/dev/null
+[ "$(satir | wc -l)" = 1 ] && ok "ikinci açılış satırı çoğaltmaz (ad anahtar)" || no "satır çoğaldı" "$(satir)"
+echo "   · özel izin dosyalı koltuk kayda GİRMEZ, varsa kaydı silinir"
+sifirla; cikti=$(SAHTE_OTURUM=koltukx kosk resume_ok dar-koltuk); rc=$?
+[ "$rc" = 0 ] && ok "izin dosyalı koltuk yine açıldı (kayıt açılışı düşürmez)" || no "izin dosyalı koltuk açılmadı" "$cikti"
+[ -z "$(satir)" ] && ok "izin dosyalı koltuğun kaydı SİLİNDİ (dönüş izin dosyasını taşımaz)" || no "izin dosyalı koltuk kayıtta kaldı" "$(satir)"
+case "$cikti" in *"kendiliginden donus kaydina YAZILMADI"*) ok "sebebi söylüyor" ;; *) no "sebep sessiz" "$cikti" ;; esac
+echo "   · deneme kalkanı: kayıt yolu değişmiş, kayıt betiği verilmemiş → YAZILMAZ"
+sifirla; rm -f "$KD/koltuklar.tsv" "$EV/tmux.iz"
+cikti=$(env -u KOLTUK_KAYIT_BETIK SAHTE_MOD=resume_ok SAHTE_GUNLUK="$EV/cagri.log" SAHTE_TMUX_IZ="$EV/tmux.iz" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
+  TMUX="$EV/sahte-soket,1,0" TMUX_PANE=%1 TO_DURUM_DIZ="$KD" ISKAN_REGISTRY="$EV/proje/iskan-registry.yaml" PATH="$EV/bin:$PATH" bash "$SABLON" nazir-yon 2>&1)
+[ ! -f "$KD/koltuklar.tsv" ] && [ ! -s "$EV/tmux.iz" ] && ok "kalkan: kayıt yok, tmux'a bile sorulmadı" || no "kalkan delindi" "kayıt: $(satir) · tmux: $(cat "$EV/tmux.iz" 2>/dev/null)"
+case "$cikti" in *"deneme/sinav kalkani"*) ok "kalkan sebebini söylüyor" ;; *) no "kalkan sessiz" "$cikti" ;; esac
+echo "   · tmux dışında (TMUX yok) kayıt yazılmaz"
+sifirla; rm -f "$KD/koltuklar.tsv"
+env -u TMUX -u TMUX_PANE SAHTE_MOD=resume_ok SAHTE_GUNLUK="$EV/cagri.log" SAHTE_TMUX_IZ="$EV/tmux.iz" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
+  KOLTUK_KAYIT_BETIK="$KK" TO_DURUM_DIZ="$KD" ISKAN_REGISTRY="$EV/proje/iskan-registry.yaml" PATH="$EV/bin:$PATH" bash "$SABLON" nazir-yon >/dev/null 2>&1
+[ ! -f "$KD/koltuklar.tsv" ] && ok "tmux dışı açılış kayda girmez" || no "tmux dışı açılış kayda girdi" "$(satir)"
 
 printf 'baslat-claude: GEÇTI=%s DUSTU=%s\n' "$G" "$D"
 [ "$D" -eq 0 ] || exit 1

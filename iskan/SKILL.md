@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.11.6
+version: 0.12.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -118,6 +118,12 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-11-07, baslat-claude.sh açtığı koltuğu dönüş kaydına yazar — v0.12.0 · MEREMMETÇİ, kart koltuk-geri-donus-auto, SERDAR)
+- `templates/baslat-claude.sh` tmux içinde açılan koltuğu terminal-onar `koltuk-kayit.sh yaz` ile `/config/.terminal-onar/koltuklar.tsv`'ye yazar (ad · rol · session_id · cwd; **izin modu YAZILMAZ**). Kutu yeniden doğunca dakikalık bekçi bu kayıttan koltuğu `--permission-mode auto` ile geri açar (terminal-onar 2.46.0).
+- Özel izin dosyalı (`settings_file`) koltuk kayda GİRMEZ, varsa kaydı silinir: dönüş izin dosyasını taşımaz, koltuk yasaksız dönerdi (fail-closed).
+- Fail-soft: kayıt yazılamazsa açılış düşmez, sarı satır. Deneme kalkanı: `ISKAN_REGISTRY` değiştirilmiş ve `KOLTUK_KAYIT_BETIK` verilmemişse yazılmaz (tmux içinden koşan sınav gerçek kaydı ezmesin). Sınav `scripts/baslat-claude.test.sh` bölüm 10.
+- Dağıtım: şablon kutulara kendiliğinden inmez; kutudaki `scripts/baslat-claude.sh` güncellenince geçerli olur.
 
 ## Durum (2026-10-26, yerli otomatik sıkıştırma 600k her koltuğun ortamında — v0.11.4 · BERİD, gorev_…880TAK, SERDAR 22:4x)
 - **`templates/baslat-claude.sh` ve `iskan.sh`'ın iki açılış satırı `CLAUDE_CODE_AUTO_COMPACT_WINDOW=600k` ile açar** (ilk açılış da `--resume` da; değer sabit, dış ortam ezemez).
