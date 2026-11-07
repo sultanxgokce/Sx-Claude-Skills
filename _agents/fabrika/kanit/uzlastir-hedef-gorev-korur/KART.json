@@ -1,0 +1,34 @@
+{
+  "is": "uzlastir-hedef-gorev-korur",
+  "cumle": "calisiliyor-uzlastir.py hedef türü görevi (hedef_turu=evet) çalışılıyor iken bekliyor'a çekmez; gereklilik onay akışı bozulmaz, sıradan görev davranışı aynı kalır",
+  "istedi": "BÂNİ",
+  "aldi": "BENNÂ",
+  "zaman": "2026-11-07T13:23:19+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "calisiliyor-uzlastir.test.sh: hedef görev çekilmez (önce kırmızı sonra yeşil), sıradan görev yine çekilir, mutant düşer",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M69K4T36Y5RBB0EJKEKB04MY",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T13:23:19+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
