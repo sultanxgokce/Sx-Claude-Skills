@@ -56,6 +56,11 @@
       "zaman": "2026-11-07T04:48:19+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-07T06:22:02+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
   ],
   "reis_kararlari": [
@@ -65,6 +70,13 @@
       "oturum": "BANI ae3ee37a · DALGIÇ ön gözü: sınav dişi ve uyumluda geçiş kartta yok",
       "gerekce": "daraltma: kalan bulgu yeni karta (on-goz-denetime-kalan) — Sahte gözlü sınavlarda ön gözün tur başı maliyeti (yerel 0,2-0,4 sn, CI ~1 sn; denetci-duzeltme-farki 358 → 481 sn, tavan 531) düşürülürse sınav dişi kaldırılır ve ön göz her koşuda ölçülür",
       "zaman": "2026-11-07T04:46:46+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "BANI ae3ee37a · göz tur 3 2/E",
+      "gerekce": "Tur 3 bulgusu (kanıt başı ölçülmemiş) ölçümle çürüdü: ölçülen 0073fff8 ile baş 012202d6 arasında yalnız iki kanıt commit'i, kanıt dışı fark boş (son kod 2f2e6e9c). Kayıtlar başta yeniden alınıp fark kanıtı PR gövdesine yazılacak; son tur.",
+      "zaman": "2026-11-07T06:22:44+03:00"
     }
   ],
   "cumle_gecmisi": [

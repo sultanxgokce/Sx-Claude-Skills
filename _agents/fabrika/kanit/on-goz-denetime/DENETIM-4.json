@@ -1,0 +1,55 @@
+{
+  "tur": 4,
+  "is": "on-goz-denetime",
+  "pr": "739",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T06:50:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-on-goz-denetime",
+  "dal": "on-goz-denetime",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 46016,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 46446
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumsuz",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": [
+      "A4 ağaç: commit'lenmemiş izlenen dosya: _agents/fabrika/tavan-defteri.log — commit'le ya da geri al"
+    ]
+  },
+  "bas": "288fbbcdd634f62f3cfbb22ea9cd740aca3940a8",
+  "duzeltme_farki": {
+    "onceki_bas": "012202d6dae2718961feea314d0b474d3376a1f5",
+    "dosya": 13,
+    "bayt": 46446,
+    "tam_bayt": 129523
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ön göz denetim akışına talep edilen sınav dişi, zorunlu kip, geçiş kaydı, çıkış kodları, karne/özet kırılımı ve yalnız ön göz davranışıyla bağlanmış; gerçek sınav 65/65, regresyon ve hedefli mutantlar yeşildir. Önceki turun B1 bulgusu kapanmıştır: ölçümler temiz b6f96145 üretim başında alınmış, sonraki farkın yalnız kanıt dosyalarından oluştuğu ve üretim kodu farkının boş olduğu bildirildiğinden ölçülen kod nihai baştaki kodla aynıdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. Önce/sonra çifti 8/53 başarısız durumdan 65/65 başarıya geçişi, gerçek koşu A1-A5 + DALGIÇ uyumunu ve DENETIM sayısının değişmediğini, regresyon 0 düşüşü, dört ayrıntılı mutasyon kaydı ile ana sınavdaki 12 mutant hedef kapıların bozuk kodu yakaladığını gösteriyor; süre ölçümü de eski 326 sn ve yeni 345 sn değerlerini 531 sn CI tavanıyla karşılaştırıyor. Ana ölçümler b6f96145, gerçek koşu de8fd8d9 commitinde alınmış olsa da değişiklik notu bu ölçümlerden nihai başa kadar üretim kodu farkının boş, farkın tamamen kanıt dosyaları olduğunu açıkça verdiği için önceki baş uyumsuzluğu artık nihai kod iddiasını kanıtsız bırakmıyor."
+  }
+}
