@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "sinav-gecici-depo-temizligi",
+  "pr": "740",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T04:33:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sinav-gecici-depo-temizligi",
+  "dal": "sinav-gecici-depo-temizligi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11280,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5751
+  },
+  "dalgic": "uyumsuz",
+  "bas": "e92a0c90bcf67eded395749d6d0ea0941c6ce1a0",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sınav, bütün geçici üretimleri tek bir kök altında topluyor ve normal çıkışta ya da INT/TERM sinyalinde EXIT tuzağıyla siliyor. Tam koşudaki artık sayısının 29'dan 0'a düşmesi ve yarıda kesilen koşuda da 0 kalması üretime hazır sonucu destekliyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı ölçüm yöntemiyle alınmış önce/sonra çifti 29 → 0 gösteriyor, ayrıca 13 vaka sonrasında TERM ile kesilen koşu da artık_klasor=0 ölçerek sinyal temizliğini doğruluyor; tam son koşu 41 geçti · 0 kaldı sonucuna sahip."
+  }
+}
