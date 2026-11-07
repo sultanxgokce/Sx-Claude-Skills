@@ -1,0 +1,6 @@
+$ bash -c D=$(mktemp -d); TMPDIR=$D timeout -s TERM 25 bash yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh > $D.out 2>&1; echo "timeout_rc=$? gecen_vaka=$(grep -c "✓" $D.out)"; sleep 2; echo "artik_klasor=$(find $D -mindepth 1 -maxdepth 1 | wc -l)"; find $D $D.out -delete
+# rc=0 sure=27.1s zaman=2026-11-07T04:31:54+03:00
+--- stdout ---
+timeout_rc=124 gecen_vaka=13
+artik_klasor=0
+--- stderr ---
