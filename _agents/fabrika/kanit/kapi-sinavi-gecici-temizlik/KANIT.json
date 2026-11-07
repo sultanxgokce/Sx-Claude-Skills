@@ -1,7 +1,7 @@
 {
   "is": "kapi-sinavi-gecici-temizlik",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T04:37:43+03:00",
+  "guncelleme": "2026-11-07T04:43:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,51 @@
       "olculen_commit": "041da321dc5a3fb3139c7200d225fba27c0d2755",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "artik-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-artik-sonra-sonra.txt",
+      "sha256": "e2107e77153da7d093bad231d2bf26598790846e1027650a1e804d8c712d76bb",
+      "komut": [
+        "bash",
+        "-c",
+        "D=$(mktemp -d); TMPDIR=$D bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh > $D.out 2>&1; echo \"sinav_rc=$? $(tail -n 1 $D.out)\"; echo \"artik_klasor=$(find $D -mindepth 1 -maxdepth 1 | wc -l) artik_kb=$(du -sk $D | cut -f1)\"; find $D $D.out -delete"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T04:42:27+03:00",
+      "sure_sn": 261.1,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "331fec0913b6973cc801a4ec9c5716983a4d9134800ac17334620515d88bbc76",
+      "olcum_id": "1dc3a487c3db486e82cf54569be251eb",
+      "olculen_commit": "f2d8d6d9388fe3d31ebb3053d76d5c880926693e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "artik-sinyal",
+      "asama": "sonra",
+      "dosya": "olcum-artik-sinyal-sonra.txt",
+      "sha256": "085dd6fe80df0230fd508a5772dd1dfabc850c8d745fca129ca11e3167a1fefa",
+      "komut": [
+        "bash",
+        "-c",
+        "D=$(mktemp -d); TMPDIR=$D timeout -s TERM 40 bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh > $D.out 2>&1; echo \"timeout_rc=$? gecen_vaka=$(grep -c \"✓\" $D.out)\"; sleep 2; echo \"artik_klasor=$(find $D -mindepth 1 -maxdepth 1 | wc -l)\"; find $D $D.out -delete"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T04:43:09+03:00",
+      "sure_sn": 42.0,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "48ff26857734716911b04ca4b69b4a15b866c7400340474ffb4ed002ffddb5db",
+      "olcum_id": "6e38dd49136042f6ba32fba35bc4d33d",
+      "olculen_commit": "f2d8d6d9388fe3d31ebb3053d76d5c880926693e",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "d06ebcf1a9a143d366268015c4c8c59402716c806cda1dc0248e2c61ab4980df"
+  "imza": "f233cab2b58b6cf80cf890dbc9855c0f4082573b7c84cd475dd5442edc5e3d64"
 }
