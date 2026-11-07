@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.25.0
+version: 1.26.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -116,6 +116,8 @@ Sınavı: `bash scripts/haftalik.test.sh` (H1-H16, hermetik: sahte gorev.sh + sa
 > **1.11.2 (27 Eki, Oda modeli 5 · görev …39QMC):** paketlenmiş `scripts/gorev.sh` cloudtop kanoniğiyle (6a8e0234) birebir eşitlendi — cloudtop'u görmeyen kutular da sipariş bayraklarını (`ac --oda --isteyen-oda --teslim`, D2) ve `sira` · `catisma` · `hakem` komutlarını (D3a–D3b) kullanır.
 > **1.18.0 (30 Eki, MUAVİN Madde 4 · NOVA):** `sirada-bak.sh` koltuk kimliğini ortamda yokken türetir — `--kim` → `GUNLUK_PLAN_AJAN` → `AGENT_NAME` → `AILE_KIMDEN` → tmux oturumu ↔ aile-registry `tmux:` alanı (tek eşleşme; yol `GUNLUK_PLAN_REGISTRY`). Eskiden kimlik boşken betik yine koşuyor, koltuğa atanmış işleri 'başkasının' sayıp Sultan'a 'iş çıkaralım mı' diye sevk ediyordu (NOVA 30 Eki). Türetilemezse ÖLÇÜLEMEDİ rc 3, kimlik uydurulmaz. Sınav X1-X5.
 > **1.19.1 (30 Eki, SERDAR · Kuzey Yıldızı G2.1–G2.2):** değişmez 4 "Sultan dili zorunlu" oldu: deftere yazılan madde özeti tek cümle ve 80 harften kısa, adı 5-10 kelime. Betik değişmedi.
+> **1.26.0 (7 Kas, MÜZEHHİP):** `gorev.sh bitti` onay bekleyen işe `bekleyen_kimi=sultan` ve `eylem=onay` da yazar; önceden alanlar boştu, bekçi "Sultan'da görünmüyor" zili atıyordu. Sınav `gorev-bitti-kimi.test.sh` B1-B3 (mutant: alanlar kalkınca B2 düşer).
+
 > **1.25.0 (6 Kas, HEZARFEN · Kuzey G14):** `gorev.sh bekle <id> "<neden duruyor>"` — duraklayan işin sebebini tek komutla yazar (`[bekliyor] <sebep>` adımı); görev kartı bunu zaten "Durakladı · <sebep>" diye gösterir, ekran değişmedi. 5-120 harf dışı sebep yazılmaz (rc 2). Sınav `gorev-bekle.test.sh` K1-K7 (mutant: uzunluk alt sınırı kalkınca K3 düşer).
 > **1.24.3 (6 Kas, BÂNİ · görev …MBCW0H, kart hasat-sahipsiz-red):** `hasat.sh ac` sahibi belli olmayan görev açmaz: havuz kaydı sahipsizse ve `--atanan` verilmediyse rc 2 (gece hasadının K8/G3 kuralı elle yolda yoktu). Ayrıca kayıt satırı `\x1f` ile okunur: sekme ayracı boş atanan alanını yutup alanları kaydırıyordu (başlık atanan, kutu başlık sanılıyordu). Sınav `hasat.test.sh` N1-N4b.
 > **1.24.2 (6 Kas, BÂNİ · görev …PFW1F9Q, kart sirada-havuz-yedek):** `sirada-bak.sh` Sırada eşik üstünde olsa da HİÇBİRİ koltuğa düşmüyorsa havuzdaki kendi işine (ya da sahipsiz işe) bakar. Eskiden havuz yalnız Sırada eşiğin altındayken adaya ekleniyordu: SIRADA=5 (hepsi başkasının) HAVUZDA=52 (bana düşen) iken `BASLAMADI=yok` + 'iş çıkarma seansı yapalım mı' deniyordu. NEDEN satırı bu durumu adıyla söyler; hasat kapısı aynen koşar. Sınav S22-S22g.
