@@ -117,8 +117,11 @@ def hareket_yasi_dk(g, simdi):
 
 def planla(gorevler, acik, ajan, azami, borclu=frozenset(), bekle_dk=0, simdi=0, kapanan=None):
     """→ [(gorev, neden)] bekliyor'a çekilecekler. Saf fonksiyon (sınavın ana hedefi)."""
+    # HEDEF GÖREV (hedef_turu=evet; gereklilik belgesi + Sultan teslim oturumu): çalışılıyor kalması onay akışının parçasıdır;
+    # uzlaştırma onu ne kartsız ne azami aşımı diye bekliyor'a çekmez (…KB04MY: çekince gereklilik onayı akışı koptu).
     benim = [g for g in gorevler if (g.get("canli") or {}).get("gorev_durumu") == "calisiliyor"
-             and norm((g.get("canli") or {}).get("atanan")) == ajan]
+             and norm((g.get("canli") or {}).get("atanan")) == ajan
+             and (g.get("canli") or {}).get("hedef_turu") != "evet"]
     kart_yok = [g for g in benim if g["id"] not in acik]
     if bekle_dk > 0:
         def taze(g):

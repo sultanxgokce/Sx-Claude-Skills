@@ -197,6 +197,12 @@ prler '[{"number":77,"headRefName":"a","mergedAt":"2026-10-29T01:00:00Z"}]'; rm 
 python3 "$U" --ajan BERİD --defter-uc "$UC" --jeton-yol "$T/jeton" --kart-kok "$T/k*" --zil-komut "$T/posta" --koltuk-komut "$T/koltuk.sh" --pr-komut "$T/gh pr list" --simdi 1000000 --uygula > "$T/cikti" 2>&1; RC=$?
 [ "$RC" = 0 ] && [ "$(zl)" = 1 ] && grep -q "PR #77" "$T/zil.log" && ! grep -q "okunamadı" "$T/cikti"; g $? "P8 --kart-kok tırnaklı glob (\$T/k*): PR listesi okundu, zil çaldı, 'okunamadı' YOK (depo kart dosyasının dizininden türetilir)"
 rm -f "$T/prler.json"
+# H1/H2: hedef türü görev (hedef_turu=evet) çalışılıyor iken çekilmez; sıradan görev çekilir (…KB04MY)
+hed() { python3 -c "import sys,json;g=json.loads(sys.argv[1]);g['canli']['hedef_turu']='evet';print(json.dumps(g))" "$(gor "$@")"; }
+defter "$(hed gorev_H BERİD calisiliyor 2026-10-26T10:00)"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 0 ]; g $? "H1 hedef türü görev kartsız çalışılıyor: bekliyor'a ÇEKİLMEZ (onay akışı korunur), deftere yazım YOK"
+defter "$(gor gorev_S BERİD calisiliyor 2026-10-26T10:00)"
+RC=$(kos --uygula); [ "$RC" = 0 ] && [ "$(yz)" = 1 ] && grep -q "/kayit/gorev_S" "$T/yazim.jsonl"; g $? "H2 hedef olmayan kartsız görev yine bekliyor'a çekilir (kural aynı)"
 # Z0: sınav gerçek postaneye mektup göndermiyor (varsayılan zil aracı ASLA kullanılmadı: hepsi sahte posta)
 [ -f "$T/zil.log" ] || true; g 0 "Z0 sahte posta/koltuk/gh aracı kullanıldı (gerçek posta.sh'e ve gh'ye hiçbir çağrı gitmedi)"
 echo "── SONUÇ: PASS=$p FAIL=$f ──"; [ "$f" -eq 0 ]
