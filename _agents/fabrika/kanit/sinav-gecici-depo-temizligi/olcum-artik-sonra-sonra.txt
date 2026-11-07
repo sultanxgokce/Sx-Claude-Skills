@@ -1,0 +1,6 @@
+$ bash -c D=$(mktemp -d); TMPDIR=$D bash yazilim-fabrikasi/scripts/birlestirme-kapisi-olculen-commit.test.sh > $D.out 2>&1; echo "sinav_rc=$? $(tail -n 1 $D.out)"; echo "artik_klasor=$(find $D -mindepth 1 -maxdepth 1 | wc -l)"; find $D $D.out -delete
+# rc=0 sure=103.9s zaman=2026-11-07T04:31:21+03:00
+--- stdout ---
+sinav_rc=0 ── SONUÇ: 41 geçti · 0 kaldı ──
+artik_klasor=0
+--- stderr ---
