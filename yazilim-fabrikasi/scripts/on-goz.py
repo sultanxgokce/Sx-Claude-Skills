@@ -140,7 +140,7 @@ def a4(depo):
     kirli = [x[3:] for x in r.stdout.splitlines() if x.strip()]
     if kirli:
         return kapi("A4 ağaç", "uyumsuz", [f"commit'lenmemiş izlenen dosya: {', '.join(kirli[:5])}{' …' if len(kirli) > 5 else ''} — commit'le ya da geri al"])
-    return kapi("A4 ağaç", "uyumlu", ["kanıt dışı commit'lenmemiş izlenen dosya yok"])
+    return kapi("A4 ağaç", "uyumlu", ["aracın defterleri (kanıt · kartlar · karne · tavan) dışında commit'lenmemiş izlenen dosya yok"])
 
 
 def kart_bul(depo, is_adi):
