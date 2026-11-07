@@ -21,8 +21,8 @@ kullanım hatası rc 2. Ölçülemedi uyumlu sayılmaz.
 import argparse, json, os, re, subprocess, sys
 
 HDIR = os.path.dirname(os.path.abspath(__file__))
-KANIT_DESEN = re.compile(r"^_agents/fabrika/kanit/")
-DEFTER_HARIC = ("_agents/fabrika/kanit", "_agents/fabrika/kartlar", "_agents/fabrika/karne.jsonl", "_agents/fabrika/tavan-defteri.log")   # A4: aracın kendi defterleri   # A4 ve kanit.py ile AYNI tanım (göz tur 2 ön-gözü: A1 daha genişti)
+KANIT_DESEN = re.compile(r"^_agents/fabrika/kanit/")   # A1 ve kanit.py ile AYNI tanım (göz tur 2 ön-gözü: A1 daha genişti)
+DEFTER_HARIC = ("_agents/fabrika/kanit", "_agents/fabrika/kartlar", "_agents/fabrika/karne.jsonl", "_agents/fabrika/tavan-defteri.log")   # A4: aracın kendi defterleri — denetci.sh kirli-ağaç kümesi
 KAPSAM_SOZ = re.compile(r"dışında|dışı\b|ayrı kart|dokunulmaz|dokunmaz|değişmez", re.I)
 YOL_DESEN = re.compile(r"[\w.\-]+(?:/[\w.\-]+)+|[\w\-]+\.(?:py|sh|md|json|jsonl|mjs|js|ts|tsx|yml|yaml|log|tsv|txt|html|css)\b")
 
