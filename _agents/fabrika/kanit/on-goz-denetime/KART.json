@@ -1,6 +1,6 @@
 {
   "is": "on-goz-denetime",
-  "cumle": "Ön göz denetime bağlanır: denetci.sh her turun başında on-goz.py (A1-A5) + DALGIÇ koşar ve DENETIM kaydına on_goz alanını yazar, karne satırı ve ozet ilk tur 5/E'yi ön göz kırılımıyla sayar; zorunlu kipte (DENETCI_ON_GOZ_ZORUNLU=1 ya da _agents/fabrika/on-goz-zorunlu çalışma ağacında ya da origin/main'de) uyumsuz ön göz denetimi açmaz rc 1, ölçülemedi rc 3, DENETIM yazılmaz ve tur yanmaz; --on-goz-gec en az 20 karakter gerekçeyle geçiş karta (kart.sh on-goz-gec, on_goz_gecisleri) ve DENETIM'e yazılır; --on-goz yalnız ön göz koşar (rc 0/1/3); sınav denetci-on-goz.test.sh S9-S12 + mutantlar; bayraksız kutuda davranış değişmez (Nexus bayrak dosyası ayrı kartta)",
+  "cumle": "Ön göz denetime bağlanır: denetci.sh her turun başında on-goz.py (A1-A5) + DALGIÇ koşar (tek istisna: sahte gözlü sınav koşusunda, DENETCI_KOMUT ya da SAHTE_JSON varken, bayraksız kipte ve geçiş verilmemişse ön göz yalnız ON_GOZ_SINAV=1 ile koşar, kayıtta sinav-kapali) ve DENETIM kaydına on_goz alanını yazar, karne satırı ve ozet ilk tur 5/E'yi ön göz kırılımıyla sayar; zorunlu kipte (DENETCI_ON_GOZ_ZORUNLU=1 ya da _agents/fabrika/on-goz-zorunlu çalışma ağacında ya da origin/main'de) uyumsuz ön göz denetimi açmaz rc 1, ölçülemedi rc 3, DENETIM yazılmaz ve tur yanmaz; ön göz uyumsuz ya da ölçülemedi iken --on-goz-gec en az 20 karakter gerekçeyle geçiş karta (kart.sh on-goz-gec, on_goz_gecisleri) ve DENETIM'e yazılır, ön göz uyumluyken geçiş gerekmez ve yazılmaz; --on-goz yalnız ön göz koşar (rc 0/1/3); sınav denetci-on-goz.test.sh S9-S12 + mutantlar; bayraksız kutuda denetimin açılıp açılmaması değişmez (Nexus bayrak dosyası ayrı kartta)",
   "istedi": "SERDAR",
   "aldi": "BÂNİ",
   "zaman": "2026-11-07T02:08:13+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-07T04:46:46+03:00",
+      "olay": "daralt",
+      "kalan_kart": "on-goz-denetime-kalan",
+      "tur_sifir": 1
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
   "kapsam_uyarilari": [],
@@ -39,6 +46,36 @@
       "zaman": "2026-11-07T02:08:15+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-07T03:44:37+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "BANI ae3ee37a · DALGIÇ ön gözü: sınav dişi ve uyumluda geçiş kartta yok",
+      "gerekce": "daraltma: kalan bulgu yeni karta (on-goz-denetime-kalan) — Sahte gözlü sınavlarda ön gözün tur başı maliyeti (yerel 0,2-0,4 sn, CI ~1 sn; denetci-duzeltme-farki 358 → 481 sn, tavan 531) düşürülürse sınav dişi kaldırılır ve ön göz her koşuda ölçülür",
+      "zaman": "2026-11-07T04:46:46+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Ön göz denetime bağlanır: denetci.sh her turun başında on-goz.py (A1-A5) + DALGIÇ koşar ve DENETIM kaydına on_goz alanını yazar, karne satırı ve ozet ilk tur 5/E'yi ön göz kırılımıyla sayar; zorunlu kipte (DENETCI_ON_GOZ_ZORUNLU=1 ya da _agents/fabrika/on-goz-zorunlu çalışma ağacında ya da origin/main'de) uyumsuz ön göz denetimi açmaz rc 1, ölçülemedi rc 3, DENETIM yazılmaz ve tur yanmaz; --on-goz-gec en az 20 karakter gerekçeyle geçiş karta (kart.sh on-goz-gec, on_goz_gecisleri) ve DENETIM'e yazılır; --on-goz yalnız ön göz koşar (rc 0/1/3); sınav denetci-on-goz.test.sh S9-S12 + mutantlar; bayraksız kutuda davranış değişmez (Nexus bayrak dosyası ayrı kartta)",
+      "zaman": "2026-11-07T04:46:46+03:00",
+      "kalan_kart": "on-goz-denetime-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-11-07T04:46:46+03:00",
+      "kalan_kart": "on-goz-denetime-kalan",
+      "kalan": "Sahte gözlü sınavlarda ön gözün tur başı maliyeti (yerel 0,2-0,4 sn, CI ~1 sn; denetci-duzeltme-farki 358 → 481 sn, tavan 531) düşürülürse sınav dişi kaldırılır ve ön göz her koşuda ölçülür",
+      "tur_sifir": 1,
+      "oturum": "BANI ae3ee37a · DALGIÇ ön gözü: sınav dişi ve uyumluda geçiş kartta yok"
     }
   ]
 }
