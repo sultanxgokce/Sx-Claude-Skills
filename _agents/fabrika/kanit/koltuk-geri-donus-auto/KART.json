@@ -15,7 +15,12 @@
   "kanit_nerede": "_agents/fabrika/kanit/koltuk-geri-donus-auto (taban: HENDESE 7 Kas 06:2x sayımı — munavebe 1 Kas 19:17 doğuşu 7 kayıtlı koltuktan 10 dk içinde 1, mmex 30 Eki 10:43 doğuşu 5 kayıtlıdan 0; toplam 1/12)",
   "oda": "hendese",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-11-07T06:48:26+03:00",
+      "olay": "canli-borc"
+    }
+  ],
   "canli_gerekir": true,
   "canli_sebep": "--canli e",
   "kapsam_uyarilari": [
@@ -36,6 +41,17 @@
       "zaman": "2026-11-07T06:35:53+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-07T06:49:14+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
     }
-  ]
+  ],
+  "canli_borc": {
+    "zaman": "2026-11-07T06:48:26+03:00",
+    "yazan": "MEREMMETÇİ",
+    "gerekce": "Gerçek ateşleme kaydı ancak dağıtımdan (kurulu terminal-onar kopyası + kutudaki baslat-claude.sh) ve bir kutu yeniden doğuşundan SONRA üretilebilir; dağıtım ve yeniden doğuş SERDAR/Sultan alanı, MEREMMETÇİ host'a ve kurulu kopyaya dokunamaz",
+    "odendi": null
+  }
 }
