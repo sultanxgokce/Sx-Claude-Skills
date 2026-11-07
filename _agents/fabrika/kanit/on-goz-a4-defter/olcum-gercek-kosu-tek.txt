@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/on-goz-a4-defter/gercek.sh
+# rc=0 sure=0.3s zaman=2026-11-07T08:05:22+03:00
+--- stdout ---
+ana dal A4: uyumsuz · commit'lenmemiş izlenen dosya: _agents/fabrika/tavan-defteri.log — commit'le ya da geri al
+HEAD    A4: uyumlu · aracın defterleri (kanıt · kartlar · karne · tavan) dışında commit'lenmemiş izlenen dosya yok
+✓ kusur ana dalda görünüyor, HEAD'de kapalı
+--- stderr ---

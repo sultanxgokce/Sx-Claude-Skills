@@ -120,6 +120,14 @@ is_hazirla g3; bayat g3
 kapi "S10k tam 20 karakter ('abcdefghij klmnopqrs') → denetim açılır (rc 0)" 0 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" g3 --on-goz-gec "abcdefghij klmnopqrs" < /dev/null' _ "$W" "$J5" "$D"
 dogru "S10l 20 karakterde durum gecildi" [ "$(jdeger "$(kayit g3)" on_goz.durum)" = gecildi ]
 
+echo "════ Z · zorunlu kipte denetçinin kendi tavan satırı (--reis-devam yazımı) denetimi kapatmaz (A4 defter istisnası) ════"
+git -C "$W" checkout -q main 2>/dev/null; mkdir -p "$W/_agents/fabrika"; printf 'baslik\n' > "$W/_agents/fabrika/tavan-defteri.log"
+git -C "$W" add _agents/fabrika/tavan-defteri.log; git -C "$W" commit -q -m tavan-defteri; git -C "$W" push -q origin main 2>/dev/null
+is_hazirla t1; printf '2026-11-07T00:00:00Z | TAVAN-ACILDI-REIS | is=t1 tur=3 | reis=BANI\n' >> "$W/_agents/fabrika/tavan-defteri.log"
+kapi "Z1 zorunlu + yalnız tavan defteri kirli → ön göz uyumlu, denetim açılır (rc 0)" 0 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" t1 < /dev/null' _ "$W" "$J5" "$D"
+dogru "Z2 DENETIM on_goz.agac = uyumlu (tavan satırı kirli sayılmadı)" [ "$(jdeger "$(kayit t1)" on_goz.agac)" = uyumlu ]
+git -C "$W" checkout -q -- _agents/fabrika/tavan-defteri.log
+
 echo "════ S11 · ölçülemedi uyumlu sayılmaz ════"
 is_hazirla o1
 kapi "S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3" 3 env GH_RC=255 DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" o1 --pr 7 --diff /dev/null < /dev/null' _ "$W" "$J5" "$D"

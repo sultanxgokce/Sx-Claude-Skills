@@ -11,7 +11,8 @@ Kapılar (ölçülen tasarım sınıfları: kanıt başı %32 · kanıt eksik %1
                   her mutant kaydı hedef kapı (hedef_kapi) taşır ve o kapı düşmüştür (hedef_dustu).
   A3 taban     — dal tabanın (ON_GOZ_TABAN, varsayılan origin/main) gerisindeyse birleştirme ÇAKIŞIYOR mu (git merge-tree).
                   Yalnız geride olmak bilgidir (ana dal hızlı ilerler; her işi sürekli birleştirmeye zorlamak tasarımın amacı değil).
-  A4 ağaç      — kanıt dizini dışında commit'lenmemiş İZLENEN dosya (kanit.py ile aynı süzgeç).
+  A4 ağaç      — commit'lenmemiş İZLENEN dosya; aracın kendi defterleri (kanıt dizini · kartlar · karne · tavan defteri) hariç — denetci.sh'in
+                  kirli-ağaç kontrolüyle aynı küme.
   A5 kapsam    — kart cümlesinde 'dışında / dışı / ayrı kart / dokunulmaz / dokunmaz / değişmez' geçen bölümdeki yol ya da dosya adı
                   dalın farkında (taban...HEAD) BİLEŞEN olarak geçiyorsa (tam yol · yol sonu · dizin altı · yalın ad = dosya adı; alt dize değil).
 Hüküm: beşinden biri uyumsuz → rc 1 (ne düzeltileceği satır satır) · biri ölçülemedi, hiçbiri uyumsuz değil → rc 3 · beşi uyumlu → rc 0 ·
@@ -20,7 +21,8 @@ kullanım hatası rc 2. Ölçülemedi uyumlu sayılmaz.
 import argparse, json, os, re, subprocess, sys
 
 HDIR = os.path.dirname(os.path.abspath(__file__))
-KANIT_DESEN = re.compile(r"^_agents/fabrika/kanit/")   # A4 ve kanit.py ile AYNI tanım (göz tur 2 ön-gözü: A1 daha genişti)
+KANIT_DESEN = re.compile(r"^_agents/fabrika/kanit/")   # A1 ve kanit.py ile AYNI tanım (göz tur 2 ön-gözü: A1 daha genişti)
+DEFTER_HARIC = ("_agents/fabrika/kanit", "_agents/fabrika/kartlar", "_agents/fabrika/karne.jsonl", "_agents/fabrika/tavan-defteri.log")   # A4: aracın kendi defterleri — denetci.sh kirli-ağaç kümesi
 KAPSAM_SOZ = re.compile(r"dışında|dışı\b|ayrı kart|dokunulmaz|dokunmaz|değişmez", re.I)
 YOL_DESEN = re.compile(r"[\w.\-]+(?:/[\w.\-]+)+|[\w\-]+\.(?:py|sh|md|json|jsonl|mjs|js|ts|tsx|yml|yaml|log|tsv|txt|html|css)\b")
 
@@ -129,13 +131,16 @@ def a3(depo):
 
 
 def a4(depo):
-    r = git(depo, "status", "--porcelain", "--untracked-files=no", "--", ":/", ":(top,exclude)_agents/fabrika/kanit", ok=True)
+    # Hariç küme denetci.sh'in kendi kirli-ağaç kontrolüyle AYNI (kanit/ · kartlar/ · karne.jsonl · tavan-defteri.log): bunlar aracın kendi
+    # defterleridir — denetçi --reis-devam turunda tavan satırını kendisi yazar; A4 onu kirli sayınca zorunlu kipte devam turu kendi
+    # yazımıyla kapanırdı (ölçüm: Sx #739 DENETIM-4 on_goz.agac=uyumsuz, kart on-goz-a4-defter).
+    r = git(depo, "status", "--porcelain", "--untracked-files=no", "--", ":/", *(f":(top,exclude){y}" for y in DEFTER_HARIC), ok=True)
     if r.returncode != 0:
         return kapi("A4 ağaç", "olculemedi", [f"git status rc {r.returncode}"])
     kirli = [x[3:] for x in r.stdout.splitlines() if x.strip()]
     if kirli:
         return kapi("A4 ağaç", "uyumsuz", [f"commit'lenmemiş izlenen dosya: {', '.join(kirli[:5])}{' …' if len(kirli) > 5 else ''} — commit'le ya da geri al"])
-    return kapi("A4 ağaç", "uyumlu", ["kanıt dışı commit'lenmemiş izlenen dosya yok"])
+    return kapi("A4 ağaç", "uyumlu", ["aracın defterleri (kanıt · kartlar · karne · tavan) dışında commit'lenmemiş izlenen dosya yok"])
 
 
 def kart_bul(depo, is_adi):

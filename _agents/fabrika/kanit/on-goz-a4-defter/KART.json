@@ -1,0 +1,45 @@
+{
+  "is": "on-goz-a4-defter",
+  "cumle": "A4 ağaç kapısı denetçinin kendi defterlerini (tavan-defteri.log, karne.jsonl, kartlar/) kirli sayıyor: --reis-devam turunda denetçinin yazdığı tavan satırı A4'ü uyumsuz yapıyor (DENETIM-4 ölçümü); zorunlu kipte devam turları kendi yazımıyla kapanır",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-07T07:14:27+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-11-07T07:14:27+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "on-goz-denetime"
+    },
+    {
+      "zaman": "2026-11-07T07:59:49+03:00",
+      "olay": "gorev-bagla",
+      "reis": "BÂNİ",
+      "gorev": "gorev_01M5CYPSK57KYPXXW42W7H1EBA",
+      "kimlik": "bag-774627-1794027589931331233"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "koken": "on-goz-denetime",
+  "gorev": "gorev_01M5CYPSK57KYPXXW42W7H1EBA",
+  "tahmin_dk": 45,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T07:59:50+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı",
+      "kimlik": "bag-774627-1794027589931331233"
+    }
+  ]
+}

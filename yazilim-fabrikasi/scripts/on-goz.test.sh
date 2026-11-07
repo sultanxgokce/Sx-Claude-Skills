@@ -74,6 +74,12 @@ kur s9; (cd "$W" && echo kirli >> kod.txt)
 O="$(og)"; grep -q "commit'lenmemiş izlenen dosya: kod.txt" <<<"$O"; g $? "S9 izlenen dosya commit'lenmemiş → A4 uyumsuz"
 kur s9b; (cd "$W" && echo kirli >> _agents/fabrika/kanit/is1/KANIT.json)
 [ "$(kd "$(ogj)" A4)" = uyumlu ]; g $? "S9b yalnız kanıt dizini kirli → A4 uyumlu"
+kur s9c; (cd "$W" && test -f _agents/fabrika/tavan-defteri.log && echo "2026-11-07T00:00:00Z | TAVAN-ACILDI-REIS | is=is1 tur=3" >> _agents/fabrika/tavan-defteri.log)
+[ -n "$(git -C "$W" status --porcelain -- _agents/fabrika/tavan-defteri.log)" ] && [ "$(kd "$(ogj)" A4)" = uyumlu ]; g $? "S9c tavan defteri GERÇEKTEN kirli (git status) ve A4 uyumlu (denetçinin --reis-devam satırı; denetci.sh kirli-ağaç kümesiyle aynı)"
+kur s9d; (cd "$W" && echo "2026-11-07T00:00:00Z | TAVAN-ACILDI-REIS | is=is1 tur=3" >> _agents/fabrika/tavan-defteri.log && echo kirli >> kod.txt)
+O="$(og)"; grep -q "commit'lenmemiş izlenen dosya: kod.txt —" <<<"$O"; g $? "S9d tavan defteri + kod kirli → A4 yalnız kod.txt'i anar (istisna dar)"
+kur s9e; (cd "$W" && mkdir -p _agents/fabrika/kartlar && echo '{"olay":"denetim"}' > _agents/fabrika/karne.jsonl && echo '{"is":"x"}' > _agents/fabrika/kartlar/x.json && git add _agents/fabrika/karne.jsonl _agents/fabrika/kartlar/x.json && git commit -qm defterler && git push -q 2>/dev/null && echo '{"olay":"denetim2"}' >> _agents/fabrika/karne.jsonl && echo '{"is":"x","durum":"bitti"}' > _agents/fabrika/kartlar/x.json)
+[ "$(git -C "$W" status --porcelain -- _agents/fabrika/karne.jsonl _agents/fabrika/kartlar | wc -l)" = 2 ] && [ "$(kd "$(ogj)" A4)" = uyumlu ]; g $? "S9e karne.jsonl ve kartlar/x.json GERÇEKTEN kirli ve A4 uyumlu (aracın defterleri)"
 echo "── A5 · kapsam"
 kur s10 "Kod satırı değişir; tavan-defteri.log dokunulmaz (ayrı kart)"; (cd "$W" && echo ek >> _agents/fabrika/tavan-defteri.log && git commit -qam tavan && KANIT_DEPO="$W" bash "$K" olcum is1 sinav --asama sonra -- bash s.sh >/dev/null 2>&1 && KANIT_DEPO="$W" bash "$K" olcum is1 mut --asama sonra --mutasyon sinav --kapi X1 -- bash m.sh >/dev/null 2>&1; git add -A; git commit -qm kanit3; git push -q 2>/dev/null)
 O="$(og)"; grep -q "kart cümlesinde kapsam dışı denen yol farkta: _agents/fabrika/tavan-defteri.log ← 'tavan-defteri.log'" <<<"$O"; g $? "S10 kart 'dokunulmaz' dediği dosya farkta → A5 uyumsuz"
