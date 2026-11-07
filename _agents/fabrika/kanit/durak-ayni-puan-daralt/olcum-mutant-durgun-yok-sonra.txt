@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: DURGUN · rc≠0 + hedef kapı 'DURGUN' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sonra-tek-* ===
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=1 sure=2071.1s zaman=2026-11-07T13:21:41+03:00
+# rc=1 sure=1679.7s zaman=2026-11-07T14:20:58+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -12,7 +12,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ rc=0
   ✓ GEÇTİ ve tur 2 yazılı
 ════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════
-  ✓ G-a 3/H turu: kart.sh goz-adim is-durgun-yok --not '[🔎 göz] kart is-durgun-yok · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)
+  ✓ G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)
   ✓ G-b 5/E turu: ikinci satır tur 2 · 5/5 · E · bulgu 0 (rc 0 değişmedi)
   ✓ G-c kartsız iş (kart.json yok): göz adımı çağrılmaz
   ✓ G-d kart aracı düşerse turun sonucu DEĞİŞMEZ (rc 0) ama uyarı söylenir
@@ -244,13 +244,13 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ M-Z3d iş-adı korkuluğu kalkarsa bilgisiz zil çalar (Z3d bunu yakalar; mutant yakalandı)
   ✓ M-Z3f tur-yok+yazan-yok korkuluğu kalkarsa reise bilgisiz zil çalar (Z3f bunu yakalar; mutant yakalandı)
   ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
-  ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
+  ✓ Z2a zaman aşımı → rc 3, beklemedi (2 sn < 6)
   ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
   ✓ Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)
   ✓ Z2d aşımda da koşuyor izi silindi
   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
-  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (2 sn < 6)
+  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (3 sn < 6)
   ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
   ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
   ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
@@ -326,7 +326,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 57 mutant · 4 paralel · 1703 sn
+  (bilgi) 57 mutant · 4 paralel · 1411 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
@@ -595,4 +595,3 @@ toplam=67 geçen=67 düşen=0
 
 ── SONUÇ: 343 geçti · 1 kaldı ──
 --- stderr ---
-⏳ agir-sira: kanit-durak-ayni-puan-daralt-mutant-durgun-yok 40 sn bekledi (yuva 2, load1 17.23)
