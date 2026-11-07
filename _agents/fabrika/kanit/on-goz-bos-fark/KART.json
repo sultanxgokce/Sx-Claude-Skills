@@ -1,0 +1,34 @@
+{
+  "is": "on-goz-bos-fark",
+  "cumle": "Denetçi ön gözünde PR'ın bütün dosyaları kanıt dizinindeyse (yalnız kanıt PR'ı) DALGIÇ'a boş fark gitmesin: DALGIÇ uygulanamaz (nötr) sayılsın, ön göz mekanik kapılarla karar versin; kanıt dışı dosyası olan ama farkı boş çıkan durum ölçülemedi kalsın",
+  "istedi": "BÂNİ (bulgu gorev_01M6TCXG0Z77C5QP3984QVT2XB)",
+  "aldi": "BÂNİ",
+  "zaman": "2026-11-07T10:48:44+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M6TCXG0Z77C5QP3984QVT2XB",
+  "tahmin_dk": 90,
+  "sayi_uyarilari": [],
+  "sayi_bicim_eksikleri": [],
+  "sayi_bicim_uyarisi": false,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-11-07T10:48:44+03:00",
+      "olay": "ac",
+      "sonuc": "yazılamadı: http 400 · ozet_cikista_gerekli · havuzdan çıkan iş de Sultan-dili özet ister: önce gorev.sh ozet gorev_01M6TCXG0Z77C5QP3984QVT2XB \"ad (5-10 kelime): sebep → ne olacak\", sonra durumu değiştir"
+    }
+  ]
+}
