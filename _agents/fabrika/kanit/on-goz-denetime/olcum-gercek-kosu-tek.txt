@@ -1,20 +1,26 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/gercek.sh
-# rc=0 sure=43.9s zaman=2026-11-07T03:43:03+03:00
+# rc=1 sure=33.3s zaman=2026-11-07T04:23:48+03:00
 --- stdout ---
 ── ÖN GÖZ (yalnız · denetim yok) · iş: on-goz-denetime · zorunlu kip: kapali
 ── ÖN GÖZ · mekanik kapılar (UYUMLU)
-  ✓ A1 kanıt başı: geçerli kayıtlar HEAD 6c608072 ile aynı (ya da arada yalnız kanıt)
-  ✓ A2 kanıt eksik: 8 geçerli kayıt, manifest doğrulandı
-  ✓ A3 taban: bilgi: origin/main 1 commit ileride, çakışma yok
+  ✓ A1 kanıt başı: geçerli kayıtlar HEAD 264b415a ile aynı (ya da arada yalnız kanıt)
+  ✓ A2 kanıt eksik: 9 geçerli kayıt, manifest doğrulandı
+  ✓ A3 taban: bilgi: origin/main 3 commit ileride, çakışma yok
   ✓ A4 ağaç: kanıt dışı commit'lenmemiş izlenen dosya yok
   ✓ A5 kapsam: kart cümlesi kapsam dışı yol anmıyor
-· ön-göz (DALGIÇ): UYUMLU
-   | ÖN-GÖZ: UYUMLU
-   | Bilmediğim: sınav listesi verilmediği için (d) kontrolünü yapamadım. Ayrıca `.kosuyor` izinin zorunlu kipte `exit` ile gerçekten silindiğini (S9c) fark içinde göremedim; temizliğin trap'e bağlı olduğunu varsaydım. `--on-goz-gec` sınırı fark içinde `-ge 20` ile kartın "en az 20" ifadesine uyuyor, ama sınavda 19/20 tam sınır ölçümü yok (yalnız 13 karakterlik "kısa gerekçe" ve ≥20 deneniyor). Hata iletisi "boşluklar sayılmaz" diyor, oysa sayım `" ".join(split())` ile aradaki tek boşlukları sayıyor; davranış karta aykırı değil, yalnız iletisi yanıltıcı.
-   | — dalgıç: UYUMLU · maliyet 0.182 USD · kayıt /tmp/tmp.XgoHCmpdJl/dalgic-cikti
-   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.XgoHCmpdJl/dalgic-notes.md
 
-ÖN GÖZ: UYUMLU — göze gönderilebilir
-DENETIM yazılmadı (beklenen) · rc=0
+⚠⚠ ÖN-GÖZ (DALGIÇ): UYUMSUZ — kart cümlesi ⟷ fark ayrışıyor (bu rapor bağımsız göze KENDİLİĞİNDEN gitmez). Düzelt ya da PR'ın Sınır bölümüne dürüstçe yaz:
+   | ÖN-GÖZ: UYUMSUZ
+   | - Zorunlu kip, `DENETCI_KOMUT` ya da `SAHTE_JSON` tanımlı bir ortamda ön gözü hiç koşmadan geçiliyor. Bayrak dosyası varken de `sinav-kapali` yazılıp denetim açılıyor, kartta bu istisna yok. Diff içindeki "ortam kipi kapatamaz" yorumu da bununla çelişiyor — kart: "zorunlu kipte … uyumsuz ön göz denetimi açmaz rc 1" · fark: "if { [ -n \"${DENETCI_KOMUT:-}\" ] || [ -n \"${SAHTE_JSON:-}\" ]; } && [ \"${ON_GOZ_SINAV:-0}\" != 1 ]; then … ONGOZ_DURUM=\"sinav-kapali\""
+   | - "En az 20 karakter" sayımı, mesajın söylediğiyle uyuşmuyor. Kod araya giren tek boşlukları sayıyor, mesaj "boşluklar sayılmaz" diyor. 11 harf ve 9 boşluklu bir gerekçe geçiyor — kart: "en az 20 karakter gerekçeyle geçiş" · fark: "len(\" \".join(sys.argv[1].split()))" ve "(boşluklar sayılmaz; ${_gn:-0} yazıldı)"
+   | - 19/20 sınır değerini ölçen sınav yok. Yalnızca 13 karakterlik "kısa gerekçe" deneniyor. `-ge 20` ve mutant `gec-kapisi-yok` tam eşiği yoklamıyor — kart: "en az 20 karakter" · fark: "kapi \"S10a gerekçe <20 → rc 2 (denetim açılmaz)\" … \"kısa gerekçe\""
+   | - Bayraksız kutuda yeni bir hata yolu eklendi. Ön göz kaydı hazırlanamazsa bayraksız kipte de rc 3 çıkıyor, denetim yazılmıyor — kart: "bayraksız kutuda davranış değişmez" · fark: "|| { _hata \"ön göz kaydı hazırlanamadı — DENETIM eksik alanla yazılmaz\"; exit 3; }"
+   | - Sahte gözle koşulduğunda `--on-goz-gec` sessizce yok sayılıyor. Gerekçe karta ve DENETIM'e yazılmıyor (`ONGOZ_GEREKCE=""`). Kart bu istisnayı anmıyor — kart: "--on-goz-gec en az 20 karakter gerekçeyle geçiş karta … ve DENETIM'e yazılır" · fark: "ONGOZ_DURUM=\"sinav-kapali\"; ONGOZ_HAM=\"\"; ONGOZ_GEREKCE=\"\""
+   | Bilmediğim: sınav listesi verilmedi; "44 kapı + 9 mutant" sayısını ve testlerin geçip geçmediğini farktan doğrulayamadım. `on-goz.py` içeriği paket dışı.
+   | — dalgıç: UYUMSUZ (5) · maliyet 0.047 USD · kayıt /tmp/tmp.hr0FGOMxo9/dalgic-cikti
+   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.hr0FGOMxo9/dalgic-notes.md
+
+ÖN GÖZ: UYUMSUZ — göze göndermeden önce düzelt
+DENETIM sayısı değişmedi (1) · rc=1
 --- stderr ---
 · denetçi zili çalınmadı: ön göz kararı (denetim açılmadı ya da yalnız ön göz koşusu, tur yakılmadı) — sebep yukarıda

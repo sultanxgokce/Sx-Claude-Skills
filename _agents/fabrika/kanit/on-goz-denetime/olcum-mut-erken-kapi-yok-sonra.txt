@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S9e · rc≠0 + hedef kapı 'S9e' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh erken-kapi-yok
-# rc=1 sure=8.4s zaman=2026-11-07T04:10:20+03:00
+# rc=1 sure=8.5s zaman=2026-11-07T04:32:05+03:00
 --- stdout ---
 mutant: erken-kapi-yok (denetci.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -16,8 +16,12 @@ mutant: erken-kapi-yok (denetci.sh)
   ✓ G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz
   ✓ G3 ekranda bilgi kipi uyarısı
 ════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
-  ✓ D1 ON_GOZ_SINAV yok + zorunlu + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
+  ✓ D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
   ✓ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
+  ✓ D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)
+  ✓ D3b DENETIM yazılmadı
+  ✓ D4 ON_GOZ_SINAV yok + --on-goz-gec → ön göz koşar, geçiş kayda girer (rc 0)
+  ✓ D4b DENETIM on_goz.durum = gecildi
 ════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════
   ✓ S9a zorunlu + uyumsuz → rc 1
   ✓ S9b DENETIM-1.json YAZILMADI (tur yanmadı)
@@ -33,6 +37,8 @@ mutant: erken-kapi-yok (denetci.sh)
 ════ S10 · gerekçeli geçiş ════
   ✓ S10a gerekçe <20 → rc 2 (denetim açılmaz)
   ✓ S10b kısa gerekçede DENETIM yok
+  ✓ S10a2 tam 19 karakter (yığın tek sayılır: '  abcdefghi   jklmnopqr ') → rc 2
+  ✓ S10a3 mesaj sayılan uzunluğu söyler (19 yazıldı)
   ✓ S10c gerekçe ≥20 → denetim açılır (rc 0)
   ✓ S10d DENETIM on_goz.durum = gecildi
   ✓ S10e DENETIM gecis_gerekcesi = verilen
@@ -41,6 +47,8 @@ mutant: erken-kapi-yok (denetci.sh)
   ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
   ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
   ✓ S10j söylenir: geçiş gerekmedi
+  ✓ S10k tam 20 karakter ('abcdefghij klmnopqrs') → denetim açılır (rc 0)
+  ✓ S10l 20 karakterde durum gecildi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✓ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3
   ✓ S11b DENETIM yazılmadı
@@ -56,5 +64,5 @@ mutant: erken-kapi-yok (denetci.sh)
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-SONUÇ: 43 geçti, 1 düştü
+SONUÇ: 51 geçti, 1 düştü
 --- stderr ---
