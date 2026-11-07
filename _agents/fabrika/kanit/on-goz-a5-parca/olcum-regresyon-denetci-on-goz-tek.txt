@@ -1,0 +1,70 @@
+$ bash _agents/fabrika/kanit/on-goz-a5-parca/regresyon.sh
+# rc=0 sure=10.2s zaman=2026-11-07T09:54:39+03:00
+--- stdout ---
+════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
+  ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
+  ✓ S12b DENETIM on_goz.durum = uyumlu
+  ✓ S12c beş kapı alanı da yazılı (kanit_basi·kanit_eksik·taban·agac·kapsam_dosya)
+  ✓ S12d DALGIÇ sonucu on_goz.dalgic'te
+  ✓ S12e zorunlu kip kayıtta (kapali)
+  ✓ S12f karne satırı on_goz durumunu taşır
+  ✓ S12g karne özeti ön göz kırılımını sayar
+════ G · bilgi kipi (zorunlu değil): uyumsuz ön göz denetimi durdurmaz ════
+  ✓ G1 bayat kanıt + zorunlu yok → denetim açılır (rc 0)
+  ✓ G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz
+  ✓ G3 ekranda bilgi kipi uyarısı
+════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
+  ✓ D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
+  ✓ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
+  ✓ D2b dişte DALGIÇ da koşmaz (çağrılmadı, kayıtta dalgic = sinav-kapali)
+  ✓ D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)
+  ✓ D3b DENETIM yazılmadı
+  ✓ D4 ON_GOZ_SINAV yok + --on-goz-gec → ön göz koşar, geçiş kayda girer (rc 0)
+  ✓ D4b DENETIM on_goz.durum = gecildi
+════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════
+  ✓ S9a zorunlu + uyumsuz → rc 1
+  ✓ S9b DENETIM-1.json YAZILMADI (tur yanmadı)
+  ✓ S9c koşuyor izi kalmadı
+  ✓ S9d bağımsız göz çağrılmadı (istem boş)
+  ✓ S9e A uyumsuzken DALGIÇ çağrılmadı (para harcanmaz)
+  ✓ S9f sebep ve geçiş yolu söylenir
+  ✓ S9f2 sebebi A1 satırı (kanıt eski başta)
+════ S9g · depo bayrağı (origin/main'de) zorunlu kipi açar ════
+  ✓ S9g alanda bayrak yok ama origin/main'de var → zorunlu, rc 1
+  ✓ S9h DENETIM yazılmadı
+  ✓ S9i kaynak söylenir (origin/main bayrağı)
+════ S10 · gerekçeli geçiş ════
+  ✓ S10a gerekçe <20 → rc 2 (denetim açılmaz)
+  ✓ S10b kısa gerekçede DENETIM yok
+  ✓ S10a2 tam 19 karakter (yığın tek sayılır: '  abcdefghi   jklmnopqr ') → rc 2
+  ✓ S10a3 mesaj sayılan uzunluğu söyler (19 yazıldı)
+  ✓ S10c gerekçe ≥20 → denetim açılır (rc 0)
+  ✓ S10d DENETIM on_goz.durum = gecildi
+  ✓ S10e DENETIM gecis_gerekcesi = verilen
+  ✓ S10f kartta on_goz_gecisleri[0].gerekce
+  ✓ S10g göz istemi gerekçeyi kart metninde görür
+  ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
+  ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
+  ✓ S10j söylenir: geçiş gerekmedi
+  ✓ S10k tam 20 karakter ('abcdefghij klmnopqrs') → denetim açılır (rc 0)
+  ✓ S10l 20 karakterde durum gecildi
+════ Z · zorunlu kipte denetçinin kendi tavan satırı (--reis-devam yazımı) denetimi kapatmaz (A4 defter istisnası) ════
+  ✓ Z1 zorunlu + yalnız tavan defteri kirli → ön göz uyumlu, denetim açılır (rc 0)
+  ✓ Z2 DENETIM on_goz.agac = uyumlu (tavan satırı kirli sayılmadı)
+════ S11 · ölçülemedi uyumlu sayılmaz ════
+  ✓ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3
+  ✓ S11b DENETIM yazılmadı
+  ✓ S11c ÖLÇÜLEMEDİ — denetim açılmadı
+  ✓ S11d sebep PR başının okunamaması (A1 ○)
+════ B · DALGIÇ uyumsuz da zorunlu kipte durdurur ════
+  ✓ B1 A uyumlu + DALGIÇ uyumsuz + zorunlu → rc 1
+  ✓ B2 DALGIÇ çağrıldı
+  ✓ B3 DENETIM yazılmadı
+════ Y · --on-goz yalnız ön göz ════
+  ✓ Y1 uyumlu → rc 0
+  ✓ Y2 DENETIM yazılmadı, kanıt dizininde koşuyor izi yok
+  ✓ Y3 hüküm satırı
+  ✓ Y4 uyumsuz → rc 1
+  ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
+SONUÇ: 55 geçti, 0 düştü
+--- stderr ---

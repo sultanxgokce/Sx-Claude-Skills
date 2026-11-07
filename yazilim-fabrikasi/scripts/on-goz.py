@@ -161,6 +161,41 @@ def yol_eslesir(f, y):
     return f == y or f.endswith("/" + y) or f.startswith(y + "/") or ("/" not in y and os.path.basename(f) == y)
 
 
+YALNIZ_SOZ = re.compile(r"\s*(?:kapsam\s+)?(?:dışında|dışı|ayrı kart|dokunulmaz|dokunmaz|değişmez)\s*$", re.I)
+
+
+def _yollar(parca):
+    return [m.group(0).strip(".-") for m in YOL_DESEN.finditer(parca)]
+
+
+def _yalin_liste(parca):
+    """Parça yalnız yol(lar)dan mı oluşuyor ('a.py' · 'a.py ve b.py' · '`a.py`')? Fiil ya da başka sözcük varsa liste değil, ayrı cümledir."""
+    kalan = re.sub(r"\b(?:ve|ile|veya|ya da)\b", " ", YOL_DESEN.sub(" ", parca))
+    return bool(_yollar(parca)) and not re.sub(r"[\s`'\"]", "", kalan)
+
+
+def kapsam_disi_yollar(cumle):
+    """Kart cümlesinde kapsam sözcüğü (KAPSAM_SOZ) taşıyan parçanın yolları + parçalama yüzünden sözcükten ayrı düşen iki yazım (bulgu …NZQR):
+    (1) 'foo.py (ayrı kart)' — parantezin İÇİ yalnız kapsam sözüyse (YALNIZ_SOZ): parantezden HEMEN önceki metnin SON yolu
+        ('(adet + defter dışı liste)' gibi sözün başka anlamda geçtiği açıklama parantezi sayılmaz — gerçek kart ölçümü);
+    (2) 'a.py, b.py dışında' — sözcüklü parçadan geriye, virgülle bağlı ve YALNIZ yoldan oluşan parçaların yolları (fiilli parça listeyi keser:
+        'kod.txt değişir, od.txt dışında' kod.txt'i yasaklamaz)."""
+    p = re.split(r"([;·()\[\]]|, )", cumle)   # çift indis metin, tek indis ayırıcı
+    yasak = set()
+    for i in range(0, len(p), 2):
+        if not KAPSAM_SOZ.search(p[i]):
+            continue
+        kendi = _yollar(p[i]); yasak.update(kendi)
+        if not kendi and i >= 2 and p[i - 1] in "([" and YALNIZ_SOZ.match(p[i]):
+            onceki = _yollar(p[i - 2])
+            if onceki: yasak.add(onceki[-1])
+        j = i
+        while j >= 2 and p[j - 1] == ", " and _yalin_liste(p[j - 2]):
+            yasak.update(_yollar(p[j - 2])); j -= 2
+    yasak.discard("")
+    return yasak
+
+
 def a5(depo, is_adi):
     kp = kart_bul(depo, is_adi)
     if not kp:
@@ -169,11 +204,7 @@ def a5(depo, is_adi):
         cumle = json.load(open(kp, encoding="utf-8")).get("cumle") or ""
     except (OSError, ValueError):
         return kapi("A5 kapsam", "olculemedi", ["kart okunamadı"])
-    yasak = set()
-    for parca in re.split(r"[;·()\[\]]|, ", cumle):
-        if KAPSAM_SOZ.search(parca):
-            yasak.update(m.group(0).strip(".-") for m in YOL_DESEN.finditer(parca))
-    yasak.discard("")
+    yasak = kapsam_disi_yollar(cumle)
     if not yasak:
         return kapi("A5 kapsam", "uyumlu", ["kart cümlesi kapsam dışı yol anmıyor"])
     t = taban_ref(depo)
