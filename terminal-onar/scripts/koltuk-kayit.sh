@@ -73,8 +73,8 @@ dogus_damgasi() {  # kutunun 1 numaralı sürecinin başlama anı — opak, yeni
 }
 
 kayit_don() {
-  [ -s "$KAYIT" ] || return 0                                          # kayıt yoksa no-op (ortak.sh bile yüklenmez: bekçi her dakika çağırır)
-  . "$_D/ortak.sh" || return 3
+  . "$_D/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30 sözleşmesi, kutu-red.test.sh R8c)
+  [ -s "$KAYIT" ] || return 0                                          # kayıt yoksa no-op
   local DURUM="$DURUM_DIZ/koltuk-donus.durum" TAVAN="${KOLTUK_DONUS_TAVAN:-2}" D
   D="$(dogus_damgasi)" || D=""
   if [ -z "$D" ]; then
