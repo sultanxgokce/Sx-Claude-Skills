@@ -958,8 +958,8 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 #   Kayıtta on_goz.durum = "sinav-kapali" (ölçülmedi; uyumlu SAYILMAZ, karnede kendi satırı). Diş YALNIZ bayraksız kipte ve geçiş verilmemişken
 #   geçerli (DALGIÇ ön gözü): zorunlu kip (ortam ya da bayrak dosyası) ya da --on-goz-gec varken ön göz sahte gözle de HER ZAMAN koşar.
 if { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; } && [ "${ON_GOZ_SINAV:-0}" != 1 ] && [ "$ONGOZ_ZORUNLU" = kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then
-  printf '{}' > "$TMP/ongoz.json"; _dalgic_kos; ONGOZ_DURUM="sinav-kapali"; ONGOZ_HAM=""; ONGOZ_GEREKCE=""
-  _bilgi "· ön göz: sınav kipi (sahte göz) — koşmadı, kayıtta sinav-kapali (ON_GOZ_SINAV=1 ile koşar)"
+  printf '{}' > "$TMP/ongoz.json"; DALGIC_DURUM="sinav-kapali"; ONGOZ_DURUM="sinav-kapali"; ONGOZ_HAM=""; ONGOZ_GEREKCE=""   # DALGIÇ de ön gözün parçası (kart cümlesi)
+  _bilgi "· ön göz (mekanik kapılar + DALGIÇ): sınav kipi (sahte göz) — koşmadı, kayıtta sinav-kapali (ON_GOZ_SINAV=1 ile koşar)"
 else
   _ongoz_a
   if [ "$ONGOZ_A" = uyumsuz ] && [ "$ONGOZ_ZORUNLU" != kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then _ongoz_kapat uyumsuz; fi

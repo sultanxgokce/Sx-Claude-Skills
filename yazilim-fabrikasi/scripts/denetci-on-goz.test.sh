@@ -68,9 +68,10 @@ dogru "G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz" [ "$(jdeger "$(k
 iceren "G3 ekranda bilgi kipi uyarısı" "ÖN GÖZ UYUMSUZ — bilgi kipi" "$KOK/son.out"
 
 echo "════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════"
-is_hazirla s1; bayat s1
+is_hazirla s1; bayat s1; rm -f "$DALGIC_IZ"
 kapi "D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)" 0 env -u ON_GOZ_SINAV bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s1 < /dev/null' _ "$W" "$J5" "$D"
 dogru "D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)" [ "$(jdeger "$(kayit s1)" on_goz.durum)" = sinav-kapali ]
+dogru "D2b dişte DALGIÇ da koşmaz (çağrılmadı, kayıtta dalgic = sinav-kapali)" [ ! -e "$DALGIC_IZ" ] && [ "$(jdeger "$(kayit s1)" dalgic)" = sinav-kapali ]
 is_hazirla s2; bayat s2
 kapi "D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)" 1 env -u ON_GOZ_SINAV DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s2 < /dev/null' _ "$W" "$J5" "$D"
 dogru "D3b DENETIM yazılmadı" [ ! -e "$(kayit s2)" ]
@@ -163,6 +164,7 @@ PYM
   mut sinav-disi-yok D2 denetci.sh '&& [ "${ON_GOZ_SINAV:-0}" != 1 ] &&' '&& false &&'
   mut dis-zorunlu-deler D3 denetci.sh '&& [ "$ONGOZ_ZORUNLU" = kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then' '; then'
   mut esik-21 S10k denetci.sh '[ "${_gn:-0}" -ge 20 ] ||' '[ "${_gn:-0}" -ge 21 ] ||'
+  mut diste-dalgic-kosar D2b denetci.sh 'DALGIC_DURUM="sinav-kapali"; ONGOZ_DURUM="sinav-kapali"' '_dalgic_kos; ONGOZ_DURUM="sinav-kapali"'
   mut karne-alansiz S12f karne.sh '"on_goz":(d.get("on_goz") or {})' '"on_goz_yok":(d.get("on_goz") or {})'
 fi
 echo "SONUÇ: $GECEN geçti, $DUSEN düştü"; [[ $DUSEN -eq 0 ]]

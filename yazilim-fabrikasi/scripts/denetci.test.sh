@@ -991,6 +991,7 @@ grep -q "DARALTILMIŞ: ilk 2 tur" <<<"$CIKTI"; g $? "denetçi sıfırı söyledi
 unset KANIT_DEPO; export KANIT_DEPO="$T"
 
 echo "════ T-ONGOZ · DALGIÇ ön-göz gönder akışında kendiliğinden koşar, YALNIZ bilgidir (ZP640T) ════"
+export ON_GOZ_SINAV=1   # 0.27.72: sahte gözle ön göz (DALGIÇ dahil) yalnız bununla koşar; bölüm sonunda kaldırılır
 bash "$HERE/kart-sinav-sarmal.sh" ac is-on --is "ön-göz sınavı için küçük bir iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
 bash "$K" olcum is-on olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 for sonuc in 0 1 3; do printf '#!/usr/bin/env bash\necho "sahte dalgic rapor rc=%s"; exit %s\n' "$sonuc" "$sonuc" > "$T/dalgic-$sonuc.sh"; done
@@ -1030,6 +1031,7 @@ PYM
 CIKTI="$(DALGIC_KAPALI= DALGIC_BIN="$T/dalgic-1.sh" SAHTE_JSON="$(J 5 E "")" bash "$MO/denetci.sh" is-on --diff "$T/d.patch" 2>&1)"; ! grep -q "ÖN-GÖZ (DALGIÇ): UYUMSUZ" <<<"$CIKTI"; g $? "mutant (UYUMSUZ kolu söküldü): uyarı BASILMAZ → üstteki 🔴 kapı düşerdi"
 rm -f "$T/_agents/fabrika/kanit/is-on/DENETIM-"*.json
 
+unset ON_GOZ_SINAV
 echo "════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════"
 bash "$K" olcum is-bol olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
 python3 - "$T/bol.patch" <<'PY'
