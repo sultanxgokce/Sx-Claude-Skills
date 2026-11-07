@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# kos.sh [once|defter-haric-yok] — on-goz.test.sh'i HEAD kopyasıyla (becerinin tamamı) koşar.
-#   once : sınav HEAD'den, ürün (on-goz.py) origin/main'den → S9c/S9d kırmızı olmalı.
-#   defter-haric-yok : A4 yalnız kanıt dizinini hariç tutar (eski davranış) → S9c düşmeli.
+# kos.sh [once|defter-haric-yok] — on-goz.test.sh ve denetci-on-goz.test.sh'i (uçtan uca Z1-Z2) HEAD kopyasıyla (becerinin tamamı) koşar.
+#   once : sınavlar HEAD'den, ürün (on-goz.py) origin/main'den → S9c/S9d/S9e ve Z1/Z2 kırmızı olmalı.
+#   defter-haric-yok : A4 yalnız kanıt dizinini hariç tutar (eski davranış) → S9c ve Z1 düşmeli.
 set -u; R="$(git rev-parse --show-toplevel)"; T="$(mktemp -d)"; trap 'find "$T" -depth -delete 2>/dev/null' EXIT
 git -C "$R" archive HEAD yazilim-fabrikasi | tar -x -C "$T" || exit 3
 S="$T/yazilim-fabrikasi/scripts"
@@ -16,4 +16,6 @@ PY
   "") ;;
   *) echo "bilinmeyen kip: $1"; exit 3 ;;
 esac
-bash "$S/on-goz.test.sh"
+r=0; bash "$S/on-goz.test.sh" || r=1
+ON_GOZ_SINAV=1 MUTANT_D="$S/denetci.sh" bash "$S/denetci-on-goz.test.sh" || r=1
+exit $r
