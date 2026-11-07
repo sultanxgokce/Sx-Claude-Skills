@@ -1,20 +1,20 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/gercek.sh
-# rc=3 sure=42.2s zaman=2026-11-07T05:20:50+03:00
+# rc=0 sure=36.9s zaman=2026-11-07T06:20:46+03:00
 --- stdout ---
 ── ÖN GÖZ (yalnız · denetim yok) · iş: on-goz-denetime · zorunlu kip: kapali
 ── ÖN GÖZ · mekanik kapılar (UYUMLU)
-  ✓ A1 kanıt başı: geçerli kayıtlar HEAD 0073fff8 ile aynı (ya da arada yalnız kanıt)
+  ✓ A1 kanıt başı: geçerli kayıtlar HEAD c2986355 ile aynı (ya da arada yalnız kanıt)
   ✓ A2 kanıt eksik: 10 geçerli kayıt, manifest doğrulandı
   ✓ A3 taban: bilgi: origin/main 5 commit ileride, çakışma yok
   ✓ A4 ağaç: kanıt dışı commit'lenmemiş izlenen dosya yok
   ✓ A5 kapsam: kart cümlesi kapsam dışı yol anmıyor
-· ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=3) — UYUMLU sayılmaz; denetim yine sürer
-   | koşu hatası: 
-   | 
-   | — dalgıç: ÖLÇÜLEMEDİ (koşu rc=1, ilk satır biçimsiz) · maliyet 0.205 USD · kayıt /tmp/tmp.Dsg7Q0dh9W/dalgic-cikti
-   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.Dsg7Q0dh9W/dalgic-notes.md
+· ön-göz (DALGIÇ): UYUMLU
+   | ÖN-GÖZ: UYUMLU
+   | Bilmediğim: sınav listesi verilmediği için sınavların kartı ölçüp ölçmediğine bakamadım. SKILL.md "11 mutant" diyor, ama denetci-on-goz.test.sh'de 12 `mut` satırı var. Kart bu sayıyı geçmiyor, yalnız belge tutarsızlığı. Zorunlu kipte ön göz kaydı hazırlanamazsa denetim `olculemedi` kaydıyla yine yazılır ("denetim sürer; karar yukarıda verildi"). Bunun kartın "ölçülemedi rc 3, DENETIM yazılmaz" cümlesiyle çelişip çelişmediğini bilmiyorum, ama yalnız kayıt-hazırlama hatasında oluşan uç durum.
+   | — dalgıç: UYUMLU · maliyet 0.053 USD · kayıt /tmp/tmp.hfOI01A2dl/dalgic-cikti
+   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.hfOI01A2dl/dalgic-notes.md
 
-ÖN GÖZ: ÖLÇÜLEMEDİ — uyumlu sayılmaz
-DENETIM sayısı değişmedi (2) · rc=3
+ÖN GÖZ: UYUMLU — göze gönderilebilir
+DENETIM sayısı değişmedi (2) · rc=0
 --- stderr ---
 · denetçi zili çalınmadı: ön göz kararı (denetim açılmadı ya da yalnız ön göz koşusu, tur yakılmadı) — sebep yukarıda

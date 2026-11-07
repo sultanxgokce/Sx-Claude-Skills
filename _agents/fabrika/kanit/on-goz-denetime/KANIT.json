@@ -1,7 +1,7 @@
 {
   "is": "on-goz-denetime",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T06:19:58+03:00",
+  "guncelleme": "2026-11-07T06:20:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -180,19 +180,19 @@
       "etiket": "gercek-kosu",
       "asama": "tek",
       "dosya": "olcum-gercek-kosu-tek.txt",
-      "sha256": "19cc2d2275f2878ce22fab1019a0b9c9b60f83e5b50e53422890d569584f98d9",
+      "sha256": "4991673b9e16c066d7a4a2fd96197f1c797756e89214d11f93e7eb6bf0020d79",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/on-goz-denetime/gercek.sh"
       ],
-      "rc": 3,
-      "renk": "sari",
-      "zaman": "2026-11-07T05:20:50+03:00",
-      "sure_sn": 42.2,
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T06:20:46+03:00",
+      "sure_sn": 36.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "girdi_anahtar": "c37b62481ce44917968effd809743e16e3d4c6ebb47c0ac4c7407e4d66cd5da1",
-      "olcum_id": "5df6207b1a43436b8d62dc1a7ded7396",
-      "olculen_commit": "0073fff83f756cfef78d5d06e8c33686e26cdf26",
+      "olcum_id": "854d3a26f9be4f4d8aed6f87614b3c5c",
+      "olculen_commit": "c29863550589194e245f4060ce5089f6f92492b9",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -239,5 +239,5 @@
       "kirli_kurali": 1
     }
   ],
-  "imza": "91964f54523a242c55a187432d3bcf5f638bf6bb73b65e8d8d747da3c60beaea"
+  "imza": "061aa67db9a71e10b054df9d33917ce0949cead733a3c36215555f59c1caca28"
 }
