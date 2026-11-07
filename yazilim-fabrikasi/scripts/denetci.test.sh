@@ -73,15 +73,15 @@ grep -q "GEÇTİ" <<<"$CIKTI" && grep -q "tur 2" <<<"$CIKTI"; g $? "GEÇTİ ve t
 
 echo "════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════"
 KS="$T/kart-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s/goz-cagri.log"\n' "$T" > "$KS"; chmod +x "$KS"; export DENETCI_KART_SH="$KS"
-kartac is-durgun-yok; bash "$K" olcum is-durgun-yok olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
-SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-durgun-yok --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
-[ "$RC" -eq 1 ] && [ "$(grep -c . "$T/goz-cagri.log")" -eq 1 ] && grep -qxF -- 'goz-adim is-durgun-yok --not [🔎 göz] kart is-durgun-yok · tur 1 · kod 3/5 · doğru şey H · bulgu 1' "$T/goz-cagri.log"; g $? "G-a 3/H turu: kart.sh goz-adim is-durgun-yok --not '[🔎 göz] kart is-durgun-yok · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)"
-SAHTE_JSON="$(J 5 E "")" bash "$D" is-durgun-yok --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+kartac is-g; bash "$K" olcum is-g olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-g --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 1 ] && [ "$(grep -c . "$T/goz-cagri.log")" -eq 1 ] && grep -qxF -- 'goz-adim is-g --not [🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' "$T/goz-cagri.log"; g $? "G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)"
+SAHTE_JSON="$(J 5 E "")" bash "$D" is-g --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && [ "$(grep -c . "$T/goz-cagri.log")" -eq 2 ] && tail -1 "$T/goz-cagri.log" | grep -F 'tur 2 · kod 5/5 · doğru şey E · bulgu 0' >/dev/null; g $? "G-b 5/E turu: ikinci satır tur 2 · 5/5 · E · bulgu 0 (rc 0 değişmedi)"
 N0=$(grep -c . "$T/goz-cagri.log"); bash "$K" olcum is-h olc --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1; SAHTE_JSON="$(J 5 E "")" bash "$D" is-h --diff "$T/d.patch" >/dev/null 2>&1
 [ "$(grep -c . "$T/goz-cagri.log")" -eq "$N0" ]; g $? "G-c kartsız iş (kart.json yok): göz adımı çağrılmaz"
-printf '#!/usr/bin/env bash\nexit 9\n' > "$KS"; bash "$K" olcum is-durgun-yok olc2 --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
-CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-durgun-yok --diff "$T/d.patch" 2>&1)"; RC=$?
+printf '#!/usr/bin/env bash\nexit 9\n' > "$KS"; bash "$K" olcum is-g olc2 --asama tek --kirli-izin "sınav fikstürü: fikstür deposu kirli" -- echo 1 >/dev/null 2>&1
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-g --diff "$T/d.patch" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "göz adımı göreve yazılamadı" <<<"$CIKTI"; g $? "G-d kart aracı düşerse turun sonucu DEĞİŞMEZ (rc 0) ama uyarı söylenir"
 unset DENETCI_KART_SH
 
