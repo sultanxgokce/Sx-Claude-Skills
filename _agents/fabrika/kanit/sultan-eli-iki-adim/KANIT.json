@@ -1,7 +1,7 @@
 {
   "is": "sultan-eli-iki-adim",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T00:06:51+03:00",
+  "guncelleme": "2026-11-07T01:06:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -65,7 +65,45 @@
       "olculen_commit": "286ad04a37d2ad1f9e91b6d2f6196dfee825f2f4",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "canli",
+      "etiket": "insan-izi-iki-adim-canli",
+      "asama": "canli",
+      "dosya": "canli-insan-izi-iki-adim-canli.txt",
+      "sha256": "e1c5286aabeabc8ccf0b0c95cb9f71bcc9e51a8a57e83b5b2b21835c67977e7f",
+      "komut": [
+        "tail",
+        "-n",
+        "600",
+        "--",
+        "/config/.claude/projects/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0.jsonl"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/.claude/projects/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0.jsonl",
+      "kaynak_turu": "dosya",
+      "son": 600,
+      "desen": "<bash-input>\\s*bash /config/.claude/skills/sultan-eli/scripts/sultan-eli.sh iz --imza sultan-eli-canli-olcum</bash-input>",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "{\"parentUuid\":\"ce9bdf1d-5280-47fe-876d-a52e2d4a1d45\",\"isSidechain\":false,\"promptId\":\"682b0c3b-1426-43e3-a120-71959f5d26f0\",\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":\"<bash-input> bash /config/.claude/skills/sultan-eli/scripts/sultan-eli.sh iz --imza sultan-eli-canli-olcum</bash-input>\"},\"uuid\":\"6599dcda-8053-4cde-aa84-31ea60374fca\",\"timestamp\":\"2026-11-06T22:01:24.089Z\",\"userType\":\"external\",\"entrypoint\":\"cli\",\"cwd\":\"/config/projects/Nexus\",\"sessionId\":\"4f6442d1-77db-445d-93ab-44b9fe1de9a",
+        "saat": "2026-11-06T22:01:24.089Z",
+        "saat_iso": "2026-11-06T22:01:24+00:00"
+      },
+      "son_atesleme": {
+        "satir": "{\"parentUuid\":\"ce9bdf1d-5280-47fe-876d-a52e2d4a1d45\",\"isSidechain\":false,\"promptId\":\"682b0c3b-1426-43e3-a120-71959f5d26f0\",\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":\"<bash-input> bash /config/.claude/skills/sultan-eli/scripts/sultan-eli.sh iz --imza sultan-eli-canli-olcum</bash-input>\"},\"uuid\":\"6599dcda-8053-4cde-aa84-31ea60374fca\",\"timestamp\":\"2026-11-06T22:01:24.089Z\",\"userType\":\"external\",\"entrypoint\":\"cli\",\"cwd\":\"/config/projects/Nexus\",\"sessionId\":\"4f6442d1-77db-445d-93ab-44b9fe1de9a",
+        "saat": "2026-11-06T22:01:24.089Z",
+        "saat_iso": "2026-11-06T22:01:24+00:00"
+      },
+      "zaman": "2026-11-07T01:06:19+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "3cf8bbcd47104e5fa553f8a9ad863355",
+      "olculen_commit": "016769fbf54e3e2b79d4a0ca60196f251467c8f8",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "c48dd1c16a34a477310ab07c4695619dcb7c4ad634a3767d3dbf2b70130d512e"
+  "imza": "9bbabfe5a0b1c8d3d831d28633ba95730affc2c722e18fc3207afab3d7a38e42"
 }
