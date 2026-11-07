@@ -1,0 +1,29 @@
+name: Kanıt PR kontrolü
+
+# NİÇİN: lint.yml yalnız _agents/ (kanıt/denetim/kart) değişen PR'ı `paths-ignore` ile hiç koşturmaz. Sonuç: yalnız-kanıt PR'ında checks=0, fabrika
+# birleştirme kapısı CI'ı ÖLÇEMEZ (rc 3; vaka: Sx #736, 7 Kas). cloudtop'taki 'Kanıt PR kontrolü' iş akışının aynısı; SERDAR 7 Kas kararı.
+# Bu iş TAM TERSİ kümeye koşar: yalnız lint.yml'in atladığı dosyalar (_agents/**).
+# Ağır kabuk korpusu YOK (yaklaşık 15 sn): dosyaların bozuk olmadığını ölçer, kanıtın DOĞRU olduğunu ölçmez
+# (o iş birleştirme kapısında: imza + bağımsız göz). Kod da değişiyorsa iş TETİKLENİR ama betik 'atlandı' der (yalnız _agents/ PR'ı denetlenir); kodu lint.yml sınar.
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+    paths:
+      - '_agents/**'
+
+concurrency:
+  group: kanit-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  kanit:
+    name: Kanıt dosyası kontrolü
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Kanıt ve kart JSON dosyaları ayrışıyor mu (kod da değişiyorsa atlar)
+        run: bash scripts/kanit-pr-kontrol.sh "origin/${{ github.base_ref }}"

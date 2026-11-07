@@ -1,0 +1,142 @@
+{
+  "is": "sx-kanit-pr-kontrolu",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T02:53:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-pr-once",
+      "asama": "once",
+      "dosya": "olcum-kanit-pr-once-once.txt",
+      "sha256": "cc6aee1d2468231ee0e4e1a6c305aa7a9b5146a3638f409839677d510c2284b7",
+      "komut": [
+        "gh",
+        "pr",
+        "checks",
+        "736",
+        "--repo",
+        "sultanxgokce/Sx-Claude-Skills"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T01:54:48+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "db2d31a223efa285c6d77354724558aefa55bbd5eaa408571628951e2b21bd80",
+      "olcum_id": "7997bf8015694c5a93325000fe37a927",
+      "olculen_commit": "1f137038de981f8e7306ff7dbc1b35eeef4f6b76",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-pr-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-pr-sonra-sonra.txt",
+      "sha256": "9b4a9cab0a39e1c43659dfdd8ba7dd201d857e77b1e955787db1e7160a324ceb",
+      "komut": [
+        "gh",
+        "pr",
+        "checks",
+        "738",
+        "--repo",
+        "sultanxgokce/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:23:21+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "e60e09ef5d7f22db4a067ac7730ddaf9a491ff7999660add6b7b175e87d69e95",
+      "olcum_id": "5b1e61b042d84d2184724afd76787f06",
+      "olculen_commit": "38d10a3d77543f5510da80203e1c0d73521f1fb5",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-once",
+      "asama": "once",
+      "dosya": "olcum-kapsam-once-once.txt",
+      "sha256": "166e361a78e8ae25ef5ffc113812e610e9878e5f9b0381ff39c4545bb76b11cf",
+      "komut": [
+        "bash",
+        "/tmp/tmp.AUvXQBmomN/kanit-pr-kontrol.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T02:24:57+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "d361a9bbeb9598ba046d21eab24cca96a9fb3437ab9eeae001a5b53d2c359c6e",
+      "olcum_id": "aaab44cebae14aa0b9d842315b7e1445",
+      "olculen_commit": "8231c4e94f2c97ba9039fbd4dcc894d084484a82",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-sonra-sonra.txt",
+      "sha256": "4504a7ca7269b3b598d31255e5987a1a4a683b051a4df71038312e2f4c2b0fc8",
+      "komut": [
+        "bash",
+        "scripts/kanit-pr-kontrol.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:24:57+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "1d0b0bb7cf83fb9329a1e978d151edffce601f72bb193fb9b38e5dd1fa3da559",
+      "olcum_id": "8bd8a33e79dd40bfa8a2838052154d62",
+      "olculen_commit": "8231c4e94f2c97ba9039fbd4dcc894d084484a82",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-sonra-2",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-sonra-2-sonra.txt",
+      "sha256": "18db81a10f854b3cc43af89e4f97bc19049b94421b95836903b9bac749673a5f",
+      "komut": [
+        "bash",
+        "scripts/kanit-pr-kontrol.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:28:00+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "be6228535f9e83e2462d68c948c74eb6aa7cc1fc7e97dc1f8fe6e1c95e60803b",
+      "olcum_id": "fce83d227a87417b95520cee0dcec75f",
+      "olculen_commit": "79d22068edb0bf0dfc193d0e0834dce8f37c7e04",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "karma-pr-canli-log",
+      "asama": "sonra",
+      "dosya": "olcum-karma-pr-canli-log-sonra.txt",
+      "sha256": "b09b074d133e007d0e70225f6b2f0ff339b359f4d76b179f396f8e01a4c5d2e0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/1065a6f5-8463-464e-a2f8-0550f8ee5658/scratchpad/kpk-log.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T02:53:44+03:00",
+      "sure_sn": 2.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "f6c6af0d1a61286926b64598a458c667724994f8f1e39cc37a990932664e4cf9",
+      "olcum_id": "17f3f09c496b45b4b41b33dbe829dc79",
+      "olculen_commit": "898485f84400bda0896945cf54ebf0bc571085be",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "6a21ef4fd12ab29ee371e89357a6e4949f58a11417f2d4f00f0256b19ca84870"
+}
