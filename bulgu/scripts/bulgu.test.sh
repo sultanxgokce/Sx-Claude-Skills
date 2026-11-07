@@ -85,6 +85,28 @@ o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$
 ok "K1e --etiket ozellik geçer" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"etiket\"]==\"ozellik\"" "$T/gelen.json"'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "uyum kaydı" --kim X --kaynak uyum 2>&1); r=$?
 ok "K1e2 --kaynak uyum → defter kaydında kaynak_nereden 'uyum'; --kaynak yokken 'bulgu komutu' (K1b)" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"kaynak_nereden\"]==\"uyum\"" "$T/gelen.json"'
+# ── BU: başlık 10 kelimeyi aşmaz (görev …NWM7D562): ilk 10 kelime başlık, tam metin nota
+UZUN="bir iki üç dört beş altı yedi sekiz dokuz on onbir oniki"
+o=$(env BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "$UZUN" --kim X --not "ek not" 2>&1); r=$?
+ok "BU1 11+ kelimelik başlık → ilk 10 kelime başlık, tam metin '[tam başlık]' ile kanıt notunun başına, özgün not korunur" '[ $r -eq 0 ] && python3 -c "
+import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]
+assert b[\"adlar\"]==[\"bir iki üç dört beş altı yedi sekiz dokuz on\"], b[\"adlar\"]
+assert b[\"adimlar\"]==[\"[kanıt] [tam başlık] bir iki üç dört beş altı yedi sekiz dokuz on onbir oniki · ek not\"], b[\"adimlar\"]" "$T/gelen.json"'
+ok "BU2 kırpma SÖYLENİR (sessiz değil)" '[[ "$o" == *"başlık 10 kelimeyi aşıyordu"* ]]'
+o=$(env BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "bir iki üç dört beş altı yedi sekiz dokuz on" --kim X 2>&1); r=$?
+ok "BU3 NEGATİF: tam 10 kelime olduğu gibi kalır, nota '[tam başlık]' YAZILMAZ, uyarı YOK" '[ $r -eq 0 ] && [[ "$o" != *"10 kelimeyi aşıyordu"* ]] && python3 -c "
+import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]
+assert b[\"adlar\"]==[\"bir iki üç dört beş altı yedi sekiz dokuz on\"] and \"adimlar\" not in b, b" "$T/gelen.json"'
+o=$(env BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "kısa başlık" --kim X --not "n" 2>&1); r=$?
+ok "BU4 NEGATİF: kısa başlık değişmez" '[ $r -eq 0 ] && python3 -c "
+import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]
+assert b[\"adlar\"]==[\"kısa başlık\"] and b[\"adimlar\"]==[\"[kanıt] n\"], b" "$T/gelen.json"'
+o=$(env BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "   bir   iki üç dört beş altı yedi sekiz dokuz on onbir   " --kim X 2>&1); r=$?
+ok "BU5 kelime sayısı boşluktan bağımsız: fazla boşluklu 11 kelime de kırpılır, başlıkta çift boşluk kalmaz" '[ $r -eq 0 ] && python3 -c "
+import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]
+assert b[\"adlar\"]==[\"bir iki üç dört beş altı yedi sekiz dokuz on\"], b[\"adlar\"]" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "$UZUN" --kim X 2>&1); r=$?
+ok "BU6 jetonsuz eski yolda da: yazıcıya 10 kelimelik başlık + tam başlık notu gider" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|bir iki üç dört beş altı yedi sekiz dokuz on|--kim|X|--not|[tam başlık] bir iki üç dört beş altı yedi sekiz dokuz on onbir oniki|"* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --kaynak "Kötü Ad" 2>&1); r=$?
 ok "K1e3 geçersiz --kaynak rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"--kaynak"* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --etiket kusur 2>&1); r=$?
