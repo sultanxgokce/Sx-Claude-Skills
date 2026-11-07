@@ -1,0 +1,99 @@
+{
+  "is": "on-goz-a4-defter",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T08:01:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "on-goz-sinav",
+      "asama": "once",
+      "dosya": "olcum-on-goz-sinav-once.txt",
+      "sha256": "a08b293aa8cf2a6ae27a43a30469267191da3e36e4c6a2538e0be56e77be78a5",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-a4-defter/kos.sh",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T08:01:13+03:00",
+      "sure_sn": 11.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "65fd2962d1f86c8872607c199a61db6d5d7a2ced3a7a0e1a8f5641c976e99c78",
+      "olcum_id": "ec4164b2e6ca4ec5992688dbd8c7f2f4",
+      "olculen_commit": "a46e3765be21eab6213331c3058de84c4b758074",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "on-goz-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-on-goz-sinav-sonra.txt",
+      "sha256": "f45d6e5e1a152e2c4795d69a91df22e82f265e60e75bfce83a6d0c1c2ec7b3d2",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-a4-defter/kos.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T08:01:25+03:00",
+      "sure_sn": 11.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "498206c361638029ddadb4910bda7fdbd34b1cfff100227fc6fa42c467532472",
+      "olcum_id": "2feb8748c7184de9b968c93f0ea2330a",
+      "olculen_commit": "a46e3765be21eab6213331c3058de84c4b758074",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mut-defter-haric-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mut-defter-haric-yok-sonra.txt",
+      "sha256": "54510ff1c7b13f0f4186c4510f32d8709c7ea6d5b7ffe69e2660b16c2221c47c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-a4-defter/kos.sh",
+        "defter-haric-yok"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T08:01:36+03:00",
+      "sure_sn": 10.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "on-goz-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "S9c",
+      "hedef_dustu": true,
+      "olcum_id": "2475021020214e498ae6490c708d2f4d",
+      "olculen_commit": "a46e3765be21eab6213331c3058de84c4b758074",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kosu",
+      "asama": "tek",
+      "dosya": "olcum-gercek-kosu-tek.txt",
+      "sha256": "9dd87e19bf938ee6575f2a1f0105f66726bb67db7a8c210d95098793558ca653",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/on-goz-a4-defter/gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T08:01:36+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "449acbe77495f13e0d14d494c8c540b0e8980afe571943b9ba06171e35ebf3f8",
+      "olcum_id": "b721254b83f04ecab667cad14e4c5187",
+      "olculen_commit": "a46e3765be21eab6213331c3058de84c4b758074",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "65a1076cb12744bcf45e9c6d74c211fcd0f4aa684524d30fe6e7085a88ecdbae"
+}
