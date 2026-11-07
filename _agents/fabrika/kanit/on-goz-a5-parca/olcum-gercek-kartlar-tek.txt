@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/on-goz-a5-parca/gercek.sh
+# rc=0 sure=0.1s zaman=2026-11-07T09:54:29+03:00
+--- stdout ---
+FARK Sx-Claude-Skills/on-goz-a5-parca.json: eklenen ['a.py', 'foo.py']
+     cümle: Ön göz A5 kapsam kapısı, yol ile kapsam sözcüğü ayrı parçaya düşse de ihlali yakalasın: 'foo.py (ayrı kart)' yazımında parantezden önceki yol, 'a.py, b.py dışında' yazımında virgülle sıralanan yalın yol listesi kapsam dışı sayılır
+kart: 1160 · kapsam sözcüklü: 135 · yasak kümesi değişen: 1 · eski yasağı kaybeden: 0
+--- stderr ---
