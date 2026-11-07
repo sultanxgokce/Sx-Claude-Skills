@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S10f · rc≠0 + hedef kapı 'S10f' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh gecis-karta-yazilmaz
-# rc=1 sure=7.3s zaman=2026-11-07T05:28:31+03:00
+# rc=1 sure=7.5s zaman=2026-11-07T06:25:03+03:00
 --- stdout ---
 mutant: gecis-karta-yazilmaz (kart.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -60,7 +60,7 @@ mutant: gecis-karta-yazilmaz (kart.sh)
   ✗ S10d DENETIM on_goz.durum = gecildi
   ✗ S10e DENETIM gecis_gerekcesi = verilen
   ✗ S10f kartta on_goz_gecisleri[0].gerekce
-  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.3z8f5UzYiQ/istem.md içinde yok)
+  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.5RKqGiTSAN/istem.md içinde yok)
   ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
   ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
   ✓ S10j söylenir: geçiş gerekmedi

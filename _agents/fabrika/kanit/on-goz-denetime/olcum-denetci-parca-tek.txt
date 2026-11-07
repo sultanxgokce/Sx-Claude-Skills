@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/parca.sh
-# rc=0 sure=276.9s zaman=2026-11-07T05:25:51+03:00
+# rc=0 sure=273.7s zaman=2026-11-07T06:35:40+03:00
 --- stdout ---
   ✓ kart açıldı (sınıfsız)
   ✓ ön-göz UYUMLU: bilgi satırı basıldı, denetim aynen geçti (rc 0)
@@ -15,5 +15,5 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/parca.sh
   ✓ ÖLÇÜLEMEDİ'de de rapor (neden) görünür
   ✓ ön-göz çıktısında kontrol karakteri süzülür, çıktı 4000 bayta kırpılır
   ✓ DALGIC_KAPALI=0 ön-gözü KAPATMAZ (yalnız =1 kapatır)
-── SONUÇ: 284 geçti · 0 kaldı ── · 277 sn · rc=0
+── SONUÇ: 284 geçti · 0 kaldı ── · 273 sn · rc=0
 --- stderr ---

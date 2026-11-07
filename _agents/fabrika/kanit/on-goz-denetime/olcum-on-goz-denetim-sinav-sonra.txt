@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
-# rc=0 sure=111.6s zaman=2026-11-07T05:28:12+03:00
+# rc=0 sure=108.8s zaman=2026-11-07T06:24:46+03:00
 --- stdout ---
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
   ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
