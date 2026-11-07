@@ -571,9 +571,17 @@ PY
       GYAZILDI=1
     else
       tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT" || TRC=1
+      # 🔴 TETİK DÜŞTÜ → DEFTER YOLU (görev …HNJKBV · 7 Kas ölçümü): tetik betiği kutuda VAR ama kuryeye ulaşamıyor (nazır: ssh hostsrv rc 255,
+      #    ~/.ssh'de hostsrv ayarı ve anahtar yok). Eski hâlde sınıflı kart üç denemede "Sultan'a ulaşılamadı" diyip geri alınıyordu. Kart bir
+      #    göreve bağlıysa izin, tetiksiz kutudaki gibi O görevden Sultan'a gider (aynı fail-closed kural: görev de yazılamazsa kart açılmaz).
+      if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ] && [ -n "$GOREV" ]; then
+        echo "· oda tetiği düştü — başlama izni bağlı görev $GOREV üzerinden gönderiliyor (defter yolu)"
+        TRC=0; if ! KART_IZIN_NOT=" · başlama izni Sultan'da: iş yürür, durdurmak için 'dur' demen yeter (oda tetiği ulaşmadı, izin bu görevden okunur)" gorev_yaz "$KART_TMP" ac; then TRC=1; fi
+        [ "$TRC" -eq 0 ] && GYAZILDI=1
+      fi
     fi
     if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ]; then   # izin isteği GİTMEDİ → kart hiç yayımlanmaz (yalnız kendi geçici dosyamız silinir)
-      rm -f -- "$KART_TMP"; _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — '$ODA' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)"; exit 1
+      rm -f -- "$KART_TMP"; _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — '$ODA' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)$([ -n "$GOREV" ] && echo "; bağlı görev $GOREV de yazılamadı" || echo "; kartı bir göreve bağlarsan (--gorev gorev_<kimlik> --tahmin <dk>) izin o görevden gider")"; exit 1
     fi
     ln -- "$KART_TMP" "$KD/$IS.json" 2>/dev/null || { rm -f -- "$KART_TMP"; _hata "kart zaten var: $IS (açılış sırasında başkası açtı; onun kartına dokunulmadı)"; exit 1; }
     rm -f -- "$KART_TMP"; cat -- "$KART_CIKTI" 2>/dev/null; rm -f -- "$KART_CIKTI"   # özet YALNIZ yayımdan sonra basılır

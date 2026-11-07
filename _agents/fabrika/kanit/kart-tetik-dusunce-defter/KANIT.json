@@ -1,0 +1,74 @@
+{
+  "is": "kart-tetik-dusunce-defter",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T13:42:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "nazir",
+      "asama": "tek",
+      "dosya": "olcum-nazir-tek.txt",
+      "sha256": "badf823a9518bee460da48ab534372ea138ca16dcafee8ee255295302f3b26c3",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-tetik-dusunce-defter/kos.sh",
+        "nazir"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:34:42+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "67d1b5e02cca8a27fd8b094dcec41daac1de886cae961be1ac9129f36b594c52",
+      "olcum_id": "6777b5882ebe48719b4e219ee6e778f4",
+      "olculen_commit": "97dd4540acc42a366d152f430fe8150632133c39",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "once",
+      "dosya": "olcum-kart-sinav-once.txt",
+      "sha256": "1640a740bf6e8b8ea3bd3c9df063c9c55c950319b287fc03c180a2e29ce4fb86",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-tetik-dusunce-defter/kos.sh",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T13:38:57+03:00",
+      "sure_sn": 248.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "bc435079a973252f61c744d996fc373476e6f68b9a167b91943de85cda2f33bb",
+      "olcum_id": "12952d609a1f4157912d873dbe49b4a9",
+      "olculen_commit": "97dd4540acc42a366d152f430fe8150632133c39",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "c5f52b90d20d1cb08e992eec1583b5c23d0a1cef83cc4b1e5f739822f2fcc4ba",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-tetik-dusunce-defter/kos.sh",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T13:42:52+03:00",
+      "sure_sn": 234.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "7836be7dd7fc7f88eab08d4174c42eeef334cbbe225447a98bd6465597943c86",
+      "olcum_id": "84c2a88a08cc49fa84b8f46f6fa661e2",
+      "olculen_commit": "97dd4540acc42a366d152f430fe8150632133c39",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "b2bd4a691bc9ad9d9e5ad42a01a9f7ae6b5c4b214d67ed025dce24f13325f1bd"
+}
