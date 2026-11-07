@@ -34,6 +34,20 @@
       "zaman": "2026-11-07T12:06:31+03:00",
       "olay": "goz",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-11-07T12:23:55+03:00",
+      "olay": "goz",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MÜZEHHİP",
+      "oturum": "muzehhip-284942fc",
+      "gerekce": "Puan 5/E idi; CI kabuk-biti kapısı yeni sınav dosyasında çalıştırma bitini istedi, tek değişiklik 100644 → 100755; kapı yeni göz ister",
+      "zaman": "2026-11-07T12:39:40+03:00"
     }
   ]
 }
