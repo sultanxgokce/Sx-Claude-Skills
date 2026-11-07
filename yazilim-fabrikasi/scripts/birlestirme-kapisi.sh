@@ -114,6 +114,24 @@ if [ -z "$IS" ] && [ -n "$PR" ]; then
 fi
 [ -n "$IS" ] || { _h "iş adı gerekiyor (ya da --pr N)"; exit 2; }
 
+# 🔴 İKİ KARTLI PR (gorev …NNTVYX · cloudtop #1321 ilk hâli): ikinci kartın göz kaydı birinci kartın "puandan sonra kod değişti" sayımına
+#    giriyordu, döngü çıkıyordu. Ek kart = PR gövdesinde 'kart: <ad>' ile ilan edilmiş VE PR başındaki kanıt kaydı (DENETIM-*/KART.json) pr=N demiş
+#    (iki imza). Yalnız onun kanıt dizini puan-sonrası farkta kod sayılmaz. Gövdede olmayan ya da kaydı başka PR'a bağlı dizin SAYILMAZ: oraya girenler engellenir.
+#    Blok iş adı verilse de verilmese de koşar (kancanın çağrısı '<iş> --pr N').
+EK_KARTLAR=""
+if [ -n "$PR" ] && command -v gh >/dev/null 2>&1; then
+  ek_govde="$(cd "$DEPO" && gh pr view "$PR" --json body --jq .body 2>/dev/null | sed -nE 's/^[[:space:]]*[*_]*[kK][aA][rR][tT]:[*_]*[[:space:]]*[`"'"'"'*_(<[]*([A-Za-z0-9]([A-Za-z0-9._-]*[A-Za-z0-9])?).*/\1/p')"
+  if [ -n "$ek_govde" ] && git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
+    ek_bas="$(git -C "$DEPO" rev-parse FETCH_HEAD 2>/dev/null)"
+    for ek_x in $(printf '%s\n' "$ek_govde" | sort -u); do
+      [ "$ek_x" = "$IS" ] && continue
+      for ek_f in $(git -C "$DEPO" ls-tree --name-only "$ek_bas" "_agents/fabrika/kanit/$ek_x/" 2>/dev/null | grep -E '/(DENETIM-[0-9]+|KART)\.json$'); do
+        git -C "$DEPO" show "$ek_bas:$ek_f" 2>/dev/null | python3 -c 'import json,sys;d=json.load(sys.stdin);print(str(d.get("pr","")).lstrip("#"))' 2>/dev/null | grep -qx -- "$PR" && { EK_KARTLAR="$EK_KARTLAR $ek_x"; break; }
+      done
+    done
+  fi
+fi
+
 KART="$DEPO/_agents/fabrika/kartlar/$IS.json"
 # 🔴 KANIT TEK KURALLA ARANIR (retro W42 ders M3 · gorev_01M57ZWR5MAMW513WYBX5MB3J8): kapı eskiden kanıtı "çağrıldığı ağaç,
 #    yoksa birincil" diye arıyordu. Birleştirme çoğu zaman BİRİNCİL checkout'tan `--pr` ile yapılır; kanıt ise iş alanında ya da
@@ -396,6 +414,7 @@ PYK
     while IFS= read -r f; do
       [ -n "$f" ] || continue
       case "$f" in _agents/fabrika/kanit/"$IS"/*) continue ;; esac
+      for e in ${EK_KARTLAR:-}; do case "$f" in _agents/fabrika/kanit/"$e"/*) continue 2 ;; esac; done
       if [ -n "$oc_ana" ]; then
         ub="$(git -C "$oc_agac" rev-parse -q --verify "$oc_uc:$f" 2>/dev/null)"; ab="$(git -C "$oc_agac" rev-parse -q --verify "$oc_ana:$f" 2>/dev/null)"
         [ -n "$ub" ] && [ "$ub" = "$ab" ] && continue   # bu dosya ana hatta zaten aynı: dala başkasının işi girmiş, bu işin kodu değil
@@ -411,7 +430,7 @@ PYK
       oc_x="$(git -C "$oc_agac" merge-base "$oc_ana" "$oc_uc" 2>/dev/null)"
       if [ -n "$oc_x" ] && oc_mt="$(git -C "$oc_agac" merge-tree --write-tree "$oc_bas" "$oc_x" 2>/dev/null)" && [ -n "$oc_mt" ]; then
         oc_mt="${oc_mt%%$'\n'*}"
-        if oc_fk="$(git -c core.quotepath=off -C "$oc_agac" diff --name-only "$oc_mt" "$oc_uc" -- . ":(exclude)_agents/fabrika/kanit/$IS" 2>/dev/null)" && [ -z "$oc_fk" ]; then
+        if oc_fk="$(git -c core.quotepath=off -C "$oc_agac" diff --name-only "$oc_mt" "$oc_uc" -- . ":(exclude)_agents/fabrika/kanit/$IS" $(for e in ${EK_KARTLAR:-}; do printf '%s\n' ":(exclude)_agents/fabrika/kanit/$e"; done) 2>/dev/null)" && [ -z "$oc_fk" ]; then
           _y "  ✓ puan ${oc_bas:0:8} için verilmiş; birleşen uç ${oc_uc:0:8}: uç ağacı = puanlı baş + ana dal ${oc_x:0:8} (git merge-tree; arada yalnız ana dal birleşmiş:${oc_degisen:0:160})"; oc_degisen=""; oc_ana_kapali=1
         fi
       fi

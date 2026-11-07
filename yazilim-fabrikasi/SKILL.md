@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.27.75
+version: 0.27.76
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -178,6 +178,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
 
 ## Sürüm notları
 
+- **0.27.76 (7 Kas 2026, kart kapi-iki-kartli-pr-kanit-dizini · görev …NNTVYX · BENNÂ):** birleştirme kapısı iki kartlı PR'ı geçirir: ek kartın kanıt dizini puandan sonra "kod değişti" sayılmaz. Ek kart iki imzalıdır — PR gövdesinde `kart: <ad>` ile ilan edilmiş VE PR başındaki kanıt kaydı (DENETIM-*/KART.json) `pr=N` demiş; biri eksikse dizin eskisi gibi kod sayılır, kanıt dışına giren kod yine engellenir. Sınav `birlestirme-kapisi-olculen-commit.test.sh` O25-O27 (O26: gövdede ilan edilmemiş ek kart engellenir; O27: iki kartlı PR'a kod girerse engellenir). Çağrı biçimi `<iş> --pr N` iken de çalışır.
 - **0.27.75 (7 Kas 2026, kart on-goz-bos-fark · bulgu …QVT2XB · BÂNİ):** yalnız kanıt taşıyan PR'da (canlı borç ödemesi, kanıt düzeltmesi) kanıt blokları ayıklanınca DALGIÇ'a boş fark gidiyor, model rc 2 → ön göz ÖLÇÜLEMEDİ → zorunlu kipte her kanıt PR'ı kapanıyordu (Nexus #1585). Artık PR'ın dosya listesi okunur; hepsi `_agents/fabrika/kanit/` altındaysa DALGIÇ **uygulanamaz** (nötr; DENETIM `on_goz.dalgic`), karar mekanik kapılarda. Kanıt dışı dosya varken boş fark yine ölçülemedi. Sınav denetci-on-goz.test.sh K0-K7 (sahte DALGIÇ artık gerçeği gibi boş farkta rc 2).
 - **0.27.74 (7 Kas 2026, kart on-goz-a5-parca · bulgu …NZQR · BÂNİ):** ön göz A5 (kapsam) yol ile kapsam sözü ayrı parçaya düşse de ihlali yakalar: `foo.py (ayrı kart)` — parantezin içi YALNIZ kapsam sözüyse önceki son yol · `a.py, b.py dışında` — sözlü parçadan geriye virgülle bağlı YALIN yol listesi (fiilli parça listeyi keser). Açıklama parantezi (`(adet + defter dışı liste)`) sayılmaz. Gerçek 1160 kart cümlesinde eski/yeni karşılaştırması: hiçbir kart eski yasağını kaybetmedi; yeni yasak yalnız bu kartın kendi örnek yazımında. Sınav on-goz.test.sh S10e-S10j.
 - **0.27.73 (7 Kas 2026, kart on-goz-a4-defter · görev W42-E1 …W7H1EBA · BÂNİ):** ön göz A4 (ağaç) aracın kendi defterlerini kirli saymaz — `_agents/fabrika/kanit/` · `kartlar/` · `karne.jsonl` · `tavan-defteri.log` (denetci.sh kirli-ağaç kontrolüyle aynı küme). Ölçülen kusur: `--reis-devam` turunda denetçinin yazdığı tavan satırı A4'ü uyumsuz yapıyordu (Sx #739 DENETIM-4) → zorunlu kipte devam turu kendi yazımıyla kapanırdı. Sınav on-goz.test.sh S9c-S9e (tavan · karne · kartlar, dosyanın gerçekten kirli olduğu doğrulanır) + denetci-on-goz.test.sh Z1-Z2 (zorunlu kipte tavan satırı denetimi kapatmaz, uçtan uca).
