@@ -594,6 +594,22 @@ import json,sys
 L=[json.loads(l) for l in open(sys.argv[1])][int(sys.argv[2]):]
 assert len(L)==1 and "başlama izni" not in L[0]["govde"]["adimlar"][0], L
 PY2
+# D6-D8 (görev …HNJKBV · nazır): tetik betiği VAR ama düşüyor (kutudan kuryeye ssh yok) → kart göreve bağlıysa izin defter yolundan gider
+N0=$(yz); O="$(TETIK_SAHTE_RC=4 bash "$KT" ac dy-6 --is "tetiği düşen kutuda bağlı sınıflı iş" --istedi Sultan --aldi DYSINAV6 --geri-alinamaz h --para e --dis-yuzey h --yetki h --oda sinav-oda --gorev gorev_KARTTEST00000017 --tahmin 40 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$KK/dy-6.json" "$N0" <<'PY2'; g $? "D6 🔴 tetik DÜŞER + --gorev → kart AÇILIR, göreve TEK açılış yazımı: çalışılıyor + 'başlama izni Sultan'da' + 'oda tetiği ulaşmadı'"
+import json,sys
+L=[json.loads(l) for l in open(sys.argv[1])][int(sys.argv[3]):]; k=json.load(open(sys.argv[2]))
+assert len(L)==1 and L[0]["yol"]=="/kayit/gorev_KARTTEST00000017", L
+ad=L[0]["govde"]["adimlar"][0]
+assert L[0]["govde"]["yerine"]["gorev_durumu"]=="calisiliyor" and "başlama izni Sultan'da" in ad and "oda tetiği ulaşmadı" in ad, ad
+assert k["sultan"] is True and k["gorev_yazimlari"][-1]["sonuc"]=="yazıldı"
+PY2
+[ $RC -eq 0 ] && grep -q "oda tetiği düştü — başlama izni bağlı görev gorev_KARTTEST00000017 üzerinden" <<<"$O"; g $? "D6b rc 0 ve ekranda 'tetik düştü → görev üzerinden' satırı"
+N0=$(yz); O="$(TETIK_SAHTE_RC=4 bash "$KT" ac dy-7 --is "tetiği düşen görevi de reddedilen iş" $SNP --oda sinav-oda --gorev gorev_KARTRED000000001 --tahmin 40 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ ! -f "$KK/dy-7.json" ] && ! ls "$KK"/dy-7.json.acilis-* >/dev/null 2>&1 && grep -q "bağlı görev gorev_KARTRED000000001 de yazılamadı" <<<"$O"; g $? "D7 🔴 tetik düşer + görev de yazılamaz → rc 1, kart YOK, geçici dosya YOK, iki yolun da düştüğü söylenir"
+O="$(TETIK_SAHTE_RC=4 bash "$KT" ac dy-8 --is "tetiği düşen görevsiz sınıflı iş" --gorevsiz "sınav fikstürü: görev defteri yok" $SNP --oda sinav-oda 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ ! -f "$KK/dy-8.json" ] && grep -q "kartı bir göreve bağlarsan" <<<"$O"; g $? "D8 tetik düşer + görev yok → rc 1, kart YOK, çare söylenir (göreve bağla)"
+m16 dy-tetik-dusus-yolu kart.sh 'if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ] && [ -n "$GOREV" ]; then' 'if false; then' && { TETIK_SAHTE_RC=4 bash "$D16/kart.sh" ac dy-m6 --is "mutant tetik düşüş yolu" --istedi Sultan --aldi DYSINAV7 --geri-alinamaz h --para e --dis-yuzey h --yetki h --oda sinav-oda --gorev gorev_KARTTEST00000018 --tahmin 40 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/dy-m6.json" ]; g $? "mutant 'tetik düşüş yolu kalkınca' (eski davranış): bağlı görevli kart da GERİ ALINIYOR → D6 bu mutantta KIRMIZI"; }
 m16 dy-izin-yutulur kart.sh 'gorev_yaz "$KART_TMP" ac || TRC=1' 'gorev_yaz "$KART_TMP" ac || true' && { O="$(FABRIKA_TETIK="$YOKT" bash "$D16/kart.sh" ac dy-m1 --is "mutant izin yutar" --istedi Sultan --aldi DYSINAV4 --geri-alinamaz h --para e --dis-yuzey h --yetki h --gorev gorev_KARTRED000000001 --tahmin 40 2>&1)"; [ -f "$KK/dy-m1.json" ]; g $? "mutant 'görev yazılamasa da kart açılır': kart AÇILIYOR → D2 bu mutantta KIRMIZI"; }
 m16 dy-cift-yazim kart.sh '[ "$GYAZILDI" = 0 ] && { gorev_yaz' 'true && { gorev_yaz' && { N0=$(yz); FABRIKA_TETIK="$YOKT" bash "$D16/kart.sh" ac dy-m2 --is "mutant çift yazım" --istedi Sultan --aldi DYSINAV3 --geri-alinamaz h --para e --dis-yuzey h --yetki h --gorev gorev_KARTTEST00000016 --tahmin 40 >/dev/null 2>&1; [ "$(python3 -c "import json;print(sum(1 for l in open('$T/yazim.jsonl') if json.loads(l)['yol'].endswith('KARTTEST00000016')))")" -eq 2 ]; g $? "mutant 'açılış göreve iki kez yazılır': iki yazım → D1 (tek yazım) bu mutantta KIRMIZI"; }
 echo "════ T14b · 0.24.0 (Y7J3Q): yeni işe geçince önceki görev 'bekliyor'; göz turu göreve tek adım, durum değişmez ════"
