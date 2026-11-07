@@ -1,7 +1,7 @@
 {
   "is": "kapi-iki-kartli-pr-kanit-dizini",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T11:31:12+03:00",
+  "guncelleme": "2026-11-07T12:05:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,7 +44,33 @@
       "olculen_commit": "f4e153efc0802309c977ebc20274d1f13d053517",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ek-kart-muafiyeti-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-ek-kart-muafiyeti-mutant-sonra.txt",
+      "sha256": "bcfd60d8ffdf07d8b945959ce5d2170ac013db03f970ffff87916861574b25ee",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/6b97a4cc-dfd6-42fe-bdf4-cf1f9657563c/scratchpad/mutek.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T12:05:19+03:00",
+      "sure_sn": 224.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "olculen-commit-sinav",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "O25 · iki kart gövdede ilanlı",
+      "hedef_dustu": true,
+      "olcum_id": "24b349d9996f49a5a65b85b105badab8",
+      "olculen_commit": "863c51ea7fd6bf15fd3c25b3c8d76fe1714142ab",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "b0286a071300f298ef8d4a5865a28db2783a306f98becffbb1712d20408b21cb"
+  "imza": "d4a696d8236d61378ac6f19b0ace09e301b84379e20a75a062ec1157ec445c9d"
 }
