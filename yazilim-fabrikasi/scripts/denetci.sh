@@ -181,7 +181,7 @@ if [ "$ONGOZ_GEC_VERILDI" = 1 ]; then
   [ "$ONGOZ_YALNIZ" = 1 ] && { _hata "--on-goz ile --on-goz-gec birlikte olmaz: yalnız ön göz denetim açmaz, geçilecek bir şey yok"; exit 2; }
   case "$ONGOZ_GEC" in *"|"*|*$'\n'*) _hata "--on-goz-gec içinde '|' ya da satır sonu olamaz (kart/defter ayracı)"; exit 2 ;; esac
   _gn="$(python3 -c 'import sys;print(len(" ".join(sys.argv[1].split())))' "$ONGOZ_GEC")"
-  [ "${_gn:-0}" -ge 20 ] || { _hata "--on-goz-gec gerekçesi en az 20 karakter (boşluklar sayılmaz; ${_gn:-0} yazıldı) — denetim AÇILMADI, tur yanmadı"; exit 2; }
+  [ "${_gn:-0}" -ge 20 ] || { _hata "--on-goz-gec gerekçesi en az 20 karakter (baştaki/sondaki boşluk sayılmaz, boşluk yığını tek sayılır; ${_gn:-0} yazıldı) — denetim AÇILMADI, tur yanmadı"; exit 2; }
   ONGOZ_SUS=0
 fi
 KARE_TAVAN=8
@@ -955,8 +955,9 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 # SINAV DİŞİ (göz tur 1 sonrası CI ölçümü, #739): sahte gözle (DENETCI_KOMUT/SAHTE_JSON) yüzlerce tur koşan sınavlarda gerçek ön göz her tura
 #   ~1 sn ekledi — denetci-duzeltme-farki 358 → 481 sn (tavan 531, %90), denetci.test.sh 1. parça 406 → 631 sn. Ön gözü ölçmeyen sınavlar için
 #   bu süre boşa. Sahte göz VARKEN ön göz yalnız ON_GOZ_SINAV=1 ile koşar (tavan dişiyle aynı kalıp: gerçek koşuda sahte göz olmaz, kaçış açmaz).
-#   Kayıtta on_goz.durum = "sinav-kapali" (ölçülmedi; uyumlu SAYILMAZ, karnede kendi satırı).
-if { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; } && [ "${ON_GOZ_SINAV:-0}" != 1 ]; then
+#   Kayıtta on_goz.durum = "sinav-kapali" (ölçülmedi; uyumlu SAYILMAZ, karnede kendi satırı). Diş YALNIZ bayraksız kipte ve geçiş verilmemişken
+#   geçerli (DALGIÇ ön gözü): zorunlu kip (ortam ya da bayrak dosyası) ya da --on-goz-gec varken ön göz sahte gözle de HER ZAMAN koşar.
+if { [ -n "${DENETCI_KOMUT:-}" ] || [ -n "${SAHTE_JSON:-}" ]; } && [ "${ON_GOZ_SINAV:-0}" != 1 ] && [ "$ONGOZ_ZORUNLU" = kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then
   printf '{}' > "$TMP/ongoz.json"; _dalgic_kos; ONGOZ_DURUM="sinav-kapali"; ONGOZ_HAM=""; ONGOZ_GEREKCE=""
   _bilgi "· ön göz: sınav kipi (sahte göz) — koşmadı, kayıtta sinav-kapali (ON_GOZ_SINAV=1 ile koşar)"
 else
@@ -1235,7 +1236,7 @@ PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
 KARE_KAYIT="$(for _k in "${KARELER[@]}"; do printf '%s\t%s\n' "$(basename "$_k")" "$(sha256sum "$_k" | cut -d' ' -f1)"; done)"
-python3 - "$TMP/ongoz.json" "$TMP/ongoz-kayit.json" "${ONGOZ_DURUM:-olculemedi}" "${ONGOZ_HAM:-}" "${DALGIC_DURUM:-}" "$ONGOZ_ZORUNLU" "${ONGOZ_GEREKCE:-}" <<'PYOK' || { _hata "ön göz kaydı hazırlanamadı — DENETIM eksik alanla yazılmaz"; exit 3; }
+python3 - "$TMP/ongoz.json" "$TMP/ongoz-kayit.json" "${ONGOZ_DURUM:-olculemedi}" "${ONGOZ_HAM:-}" "${DALGIC_DURUM:-}" "$ONGOZ_ZORUNLU" "${ONGOZ_GEREKCE:-}" <<'PYOK' || { _bilgi "· ⚠ ön göz kaydı hazırlanamadı — kayda 'olculemedi' yazılıyor (denetim sürer; karar yukarıda verildi)"; printf '{"durum":"olculemedi","kayit_hatasi":true}' > "$TMP/ongoz-kayit.json"; }
 import json,sys
 src,hedef,durum,ham,dalgic,zorunlu,gerekce=sys.argv[1:]
 try: d=json.load(open(src,encoding="utf-8"))

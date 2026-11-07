@@ -827,7 +827,7 @@ PY
     [ -f "$KD/$IS.json" ] || { _hata "kart YOK: $KD/$IS.json"; exit 1; }
     { [ -n "$GEREKCE" ] && [ -n "$OTURUM" ]; } || { _hata "gerekli: --gerekce \"<en az 20 karakter>\" --oturum <ref>"; exit 1; }
     GZK="$(printf '%s' "$GEREKCE" | tr -s '[:space:]' ' ' | sed 's/^ //; s/ $//')"
-    [ "${#GZK}" -ge 20 ] || { _hata "--gerekce en az 20 karakter (boşluklar sayılmaz; ${#GZK} yazıldı) — gerekçesiz geçiş olmaz"; exit 1; }
+    [ "${#GZK}" -ge 20 ] || { _hata "--gerekce en az 20 karakter (baştaki/sondaki boşluk sayılmaz, boşluk yığını tek sayılır; ${#GZK} yazıldı) — gerekçesiz geçiş olmaz"; exit 1; }
     case "${OG_DURUM:-}" in ""|uyumsuz|olculemedi) ;; *) _hata "--durum yalnız uyumsuz|olculemedi ('${OG_DURUM}' değil): uyumlu ön gözde geçiş gerekmez"; exit 1 ;; esac
     case "${TUR_N:-}" in ""|*[!0-9]*) [ -z "${TUR_N:-}" ] || { _hata "--tur sayı olmalı"; exit 1; } ;; esac
     for v in GZK OTURUM KIM; do d="${!v:-}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "'|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done

@@ -69,8 +69,13 @@ iceren "G3 ekranda bilgi kipi uyarısı" "ÖN GÖZ UYUMSUZ — bilgi kipi" "$KOK
 
 echo "════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════"
 is_hazirla s1; bayat s1
-kapi "D1 ON_GOZ_SINAV yok + zorunlu + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)" 0 env -u ON_GOZ_SINAV DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s1 < /dev/null' _ "$W" "$J5" "$D"
+kapi "D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)" 0 env -u ON_GOZ_SINAV bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s1 < /dev/null' _ "$W" "$J5" "$D"
 dogru "D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)" [ "$(jdeger "$(kayit s1)" on_goz.durum)" = sinav-kapali ]
+is_hazirla s2; bayat s2
+kapi "D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1)" 1 env -u ON_GOZ_SINAV DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s2 < /dev/null' _ "$W" "$J5" "$D"
+dogru "D3b DENETIM yazılmadı" [ ! -e "$(kayit s2)" ]
+kapi "D4 ON_GOZ_SINAV yok + --on-goz-gec → ön göz koşar, geçiş kayda girer (rc 0)" 0 env -u ON_GOZ_SINAV bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" s2 --on-goz-gec "$4" < /dev/null' _ "$W" "$J5" "$D" "sınav dişi geçişte kapanmaz: sınav gerekçesi"
+dogru "D4b DENETIM on_goz.durum = gecildi" [ "$(jdeger "$(kayit s2)" on_goz.durum)" = gecildi ]
 
 echo "════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════"
 is_hazirla z1; bayat z1; rm -f "$DALGIC_IZ"; : > "$KOK/istem.md"
@@ -96,6 +101,8 @@ is_hazirla g1; bayat g1; : > "$KOK/istem.md"
 GER="kanıt eski başta bilerek: sınav fikstürü burada"
 kapi "S10a gerekçe <20 → rc 2 (denetim açılmaz)" 2 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" g1 --on-goz-gec "kısa gerekçe" < /dev/null' _ "$W" "$J5" "$D"
 dogru "S10b kısa gerekçede DENETIM yok" [ ! -e "$(kayit g1)" ]
+kapi "S10a2 tam 19 karakter (yığın tek sayılır: '  abcdefghi   jklmnopqr ') → rc 2" 2 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" g1 --on-goz-gec "  abcdefghi   jklmnopqr " < /dev/null' _ "$W" "$J5" "$D"
+iceren "S10a3 mesaj sayılan uzunluğu söyler (19 yazıldı)" "19 yazıldı" "$KOK/son.out"
 kapi "S10c gerekçe ≥20 → denetim açılır (rc 0)" 0 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" g1 --on-goz-gec "$4" < /dev/null' _ "$W" "$J5" "$D" "$GER"
 dogru "S10d DENETIM on_goz.durum = gecildi" [ "$(jdeger "$(kayit g1)" on_goz.durum)" = gecildi ]
 dogru "S10e DENETIM gecis_gerekcesi = verilen" [ "$(jdeger "$(kayit g1)" on_goz.gecis_gerekcesi)" = "$GER" ]
@@ -106,6 +113,10 @@ is_hazirla g2
 kapi "S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)" 0 den g2 --on-goz-gec "$GER"
 dogru "S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok" [ "$(jdeger "$(kayit g2)" on_goz.durum)/$(jdeger "$(kayit g2)" on_goz.gecis_gerekcesi)/$(jdeger "$W/_agents/fabrika/kartlar/g2.json" on_goz_gecisleri)" = "uyumlu/None/None" ]
 iceren "S10j söylenir: geçiş gerekmedi" "geçiş gerekmedi, karta yazılmadı" "$KOK/son.out"
+
+is_hazirla g3; bayat g3
+kapi "S10k tam 20 karakter ('abcdefghij klmnopqrs') → denetim açılır (rc 0)" 0 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" g3 --on-goz-gec "abcdefghij klmnopqrs" < /dev/null' _ "$W" "$J5" "$D"
+dogru "S10l 20 karakterde durum gecildi" [ "$(jdeger "$(kayit g3)" on_goz.durum)" = gecildi ]
 
 echo "════ S11 · ölçülemedi uyumlu sayılmaz ════"
 is_hazirla o1
@@ -149,7 +160,9 @@ PYM
   mut gecis-karta-yazilmaz S10f kart.sh 'k.setdefault("on_goz_gecisleri",[]).append(x)' 'pass'
   mut olculemedi-uyumlu S11a denetci.sh '*olculemedi*) ONGOZ_DURUM=olculemedi ;;' '*olculemedi*) ONGOZ_DURUM=uyumlu ;;'
   mut dalgic-sayilmaz B1 denetci.sh 'case "$ONGOZ_A/${DALGIC_DURUM:-}" in' 'case "$ONGOZ_A/" in'
-  mut sinav-disi-yok D2 denetci.sh '&& [ "${ON_GOZ_SINAV:-0}" != 1 ]; then' '&& false; then'
+  mut sinav-disi-yok D2 denetci.sh '&& [ "${ON_GOZ_SINAV:-0}" != 1 ] &&' '&& false &&'
+  mut dis-zorunlu-deler D3 denetci.sh '&& [ "$ONGOZ_ZORUNLU" = kapali ] && [ "$ONGOZ_GEC_VERILDI" != 1 ]; then' '; then'
+  mut esik-21 S10k denetci.sh '[ "${_gn:-0}" -ge 20 ] ||' '[ "${_gn:-0}" -ge 21 ] ||'
   mut karne-alansiz S12f karne.sh '"on_goz":(d.get("on_goz") or {})' '"on_goz_yok":(d.get("on_goz") or {})'
 fi
 echo "SONUÇ: $GECEN geçti, $DUSEN düştü"; [[ $DUSEN -eq 0 ]]
