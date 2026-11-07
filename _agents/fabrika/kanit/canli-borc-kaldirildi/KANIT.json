@@ -1,0 +1,56 @@
+{
+  "is": "canli-borc-kaldirildi",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T11:54:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sonra-tek",
+      "asama": "tek",
+      "dosya": "olcum-sonra-tek-tek.txt",
+      "sha256": "7b02bdf5942248d843924730170781849a186606b2cb3eebf878a3cabeec30ac",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T11:44:47+03:00",
+      "sure_sn": 1009.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "ded4040a8128bb86441fdb0155635309e37271382bbaa965112461c30785e682",
+      "olcum_id": "7d053bfd78e3483b8d1e23245e1a186f",
+      "olculen_commit": "36cd70e4987222ba5fcee911fceae92cca09bcbd",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kaldirildi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kaldirildi-yok-sonra.txt",
+      "sha256": "5c6358f40c75eb270db7b4fb9086ef0a3f0f8839c9659998c93564022f473cb2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T11:54:13+03:00",
+      "sure_sn": 565.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sonra-tek",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "T14k2",
+      "hedef_dustu": true,
+      "olcum_id": "182c3df8211b49e9b95a8b6f9f73bdb9",
+      "olculen_commit": "baf8c1da2d211fd2a5cfef11e40cfc207383a1c1",
+      "olculen_dizin": "/config/projects/_wt/mutant-kaldirildi",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "49b7437bc92c0fac6b55089234c0c9d4118deb8a258ab007dec16e68f16e93aa"
+}

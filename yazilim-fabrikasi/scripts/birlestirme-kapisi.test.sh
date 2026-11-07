@@ -549,6 +549,20 @@ PY
 CIKTI="$(bash "$G" is-b2 2>&1)"; RC=$?
 [ "$RC" -eq 1 ] && grep -q "canlı borç GEÇERSİZ" <<<"$CIKTI"; g $? "T14p elle bozulmuş borç (yazan ≠ sahip) → kapı rc=1 ve sebep yazılı"
 bash "$KT" bitti is-b2 --pr 92 >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b2 "k['durum']")" = "acik" ]; g $? "T14q geçersiz borçla kart.sh bitti reddedilir ve kart AÇIK kalır"
+# T14k1-k4 (görev …NFC10Q · 7 Kas, bosta-takili-zil vakası): borçtan SONRA sahibi canlı şartı kaldırırsa borç konusuzdur; kart.sh bitti kartı
+#   'canli-borclu' bırakmaz (eskiden durum() yalnız yeşil canlı kaydı 'ödendi' sayıyordu, borç sonsuza dek kırmızı kalıyordu).
+borckart is-bk; bash "$KT" canli-borc is-bk --yazan M --gerekce "$GR" >/dev/null 2>&1
+O="$(cd "$T" && bash "$KT" canli-borc-durum is-bk 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"
+[ "$BD" = gecerli ]; g $? "T14k1 ayar yokken borç 'gecerli' (kaldırılmamış)"
+(cd "$T" && bash "$KT" canli-ayarla is-bk --canli h --reis M --gerekce "SERDAR kararı: bu kartta canlı kanıt istenmiyor, belge işi" >/dev/null 2>&1)
+O="$(cd "$T" && bash "$KT" canli-borc-durum is-bk 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"
+[ "$BD" = kaldirildi ]; g $? "T14k2 borçtan sonra canli-ayarla --canli h → durum 'kaldirildi' [$BD]"
+(cd "$T" && bash "$KT" bitti is-bk --pr 93 >/dev/null 2>&1); [ "$(kj is-bk "k['durum']")" = "bitti" ] && [ "$(kj is-bk "k['canli_borc'].get('kaldirildi') is not None")" = "True" ]; g $? "T14k3 kaldırılmış borçta kart.sh bitti → 'bitti' (canli-borclu DEĞİL), kaldırma anı kartta"
+# son ayar karar verir: şart yeniden konduysa borç yürür
+borckart is-bl; bash "$KT" canli-borc is-bl --yazan M --gerekce "$GR" >/dev/null 2>&1
+(cd "$T" && bash "$KT" canli-ayarla is-bl --canli h --reis M --gerekce "önce kaldırıyorum, belge işi sanmıştım" >/dev/null 2>&1; bash "$KT" canli-ayarla is-bl --canli e --reis M --gerekce "yanılmışım, cron işi; canlı kanıt şart" >/dev/null 2>&1)
+O="$(cd "$T" && bash "$KT" canli-borc-durum is-bl 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"
+[ "$BD" = gecerli ]; g $? "T14k4 şart yeniden konunca (son ayar 'e') borç yeniden 'gecerli' [$BD]"
 # sarı canlı + borç: ölçülmüş ama ateşleme yok = tam da borç durumu → geçer
 borckart is-b3; bash "$K" canli is-b3 yok --desen boşta-bekcisi --kaynak "dosya:$LGK/yok.log" >/dev/null 2>&1
 bash "$G" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14r sarı canlı, borç YOK → rc=1 (T11c ile aynı)"

@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "canli-borc-kaldirildi",
+  "pr": "747",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:00:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-canli-borc-kaldirildi",
+  "dal": "canli-borc-kaldirildi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24158,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 50439
+  },
+  "dalgic": "uyumsuz",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumsuz",
+    "kanit_basi": "uyumsuz",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": [
+      "A1 kanıt başı: 'mutant-kaldirildi-yok' (sonra) baf8c1da'de ölçülmüş, HEAD da1938bd; arada kanıt dışı 1 dosya (yazilim-fabrikasi/scripts/canli_borc.py) — kanıtı HEAD'de yeniden al"
+    ]
+  },
+  "bas": "da1938bd69b709a5ada6fafc31c60e3f6d267652",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Canlı borçtan sonra kart sahibinin canlı şartını kaldırması artık borcu “kaldirildi” yapıyor; kart bittiğinde “canli-borclu” kalmıyor ve şart yeniden konursa borç tekrar yürür. Gerçek ölçüm 245/245 yeşil, hedefli mutasyon da T14k2/T14k3 kapılarını düşürdüğü için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kod ölçümü “sonra-tek” etiketiyle rc=0 ve 245 geçti/0 kaldı; hedefli mutasyon ise kaldırma davranışı sökülünce T14k2 ve T14k3’ün beklendiği gibi kırıldığını gösteriyor. Ayrı bir görsel önce/sonra karesi yok, ancak talep kabuk tabanlı durum geçişi olduğundan gerçekçi kart akışını ölçen sınav ve ona bağlı mutasyon kanıtı yeterli."
+  }
+}
