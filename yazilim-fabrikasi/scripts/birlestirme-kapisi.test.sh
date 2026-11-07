@@ -4,6 +4,11 @@ set -uo pipefail
 export KANIT_SIRA=0 DENETCI_SIRA=0   # ağır sıra sarması (489VP8) sınavda KAPALI: gerçek sıra kütüğüne/yüküne dokunma; sarma kendi sınavında (agir-sira-sarma.test.sh)
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 G="$HERE/birlestirme-kapisi.sh"; K="$HERE/kanit.sh"; KT="$HERE/kart-sinav-sarmal.sh"; KTG="$HERE/kart.sh"
+# Geçici kök (görev …654HYM, 7 Kas): uzak/ana depo (R), sahte tetik ve mutant kopyaları silinmiyordu — bir koşu /tmp'te 3 klasör, 6,2 MB bırakıyordu.
+#   Bütün mktemp'ler (alt süreçler dahil) bu kökün altına düşer; çıkışta, sinyalde de kök silinir. SINAV_TMP_KALSIN=1 incelemek için bırakır.
+SINAV_KOK="$(mktemp -d)"; export TMPDIR="$SINAV_KOK"
+trap '[ -n "${SINAV_TMP_KALSIN:-}" ] || find "$SINAV_KOK" -depth -delete 2>/dev/null' EXIT
+trap 'exit 130' INT TERM
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; ( cd "$T" && git init -q -b main ) >/dev/null 2>&1

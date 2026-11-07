@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "kapi-sinavi-gecici-temizlik",
+  "pr": "741",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T04:44:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kapi-sinavi-gecici-temizlik",
+  "dal": "kapi-sinavi-gecici-temizlik",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11176,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5718
+  },
+  "dalgic": "uyumsuz",
+  "bas": "9ec8f5fe984c876ad677ea225b0117e17c973cdc",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sınav bütün geçici üretimini tek kökte topluyor ve normal çıkışta ya da sinyalde bu kökü siliyor. İmzalı önce/sonra ölçümü artığı 3 klasör ve 6208 KB'den 0 klasör ve 4 KB'ye indirdiği, sinyal ölçümü de 0 klasör bıraktığı için iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Ayrı commitlerdeki önce/sonra ölçüm çifti gerçek sınav koşusuyla 3→0 geçici klasör ve 6208→4 KB sonucunu, ek sinyal ölçümü ise timeout sonrasında 0 klasörü gösteriyor; talep yeterince ve doğrudan kanıtlanmış."
+  }
+}
