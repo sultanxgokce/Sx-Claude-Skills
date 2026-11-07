@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/kart-tetik-dusunce-defter/kos.sh nazir
+# rc=0 sure=0.5s zaman=2026-11-07T13:34:42+03:00
+--- stdout ---
+tetik=var
+nazir_ssh_rc=255
+nazir_ssh_ayar=yok
+code_ssh_ayar=1
+--- stderr ---
