@@ -1,0 +1,55 @@
+{
+  "tur": 2,
+  "is": "bulgu-uzun-baslik-kirp",
+  "pr": "748",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:35:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-bulgu-uzun-baslik-kirp",
+  "dal": "bulgu-uzun-baslik-kirp",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18827,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3415
+  },
+  "dalgic": "uyumsuz",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumsuz",
+    "kanit_basi": "uyumsuz",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": [
+      "A1 kanıt başı: 'baslik-sonra' (sonra) 654402c1'de ölçülmüş, HEAD b65caccc; arada kanıt dışı 1 dosya (catalog.json) — kanıtı HEAD'de yeniden al"
+    ]
+  },
+  "bas": "b65caccc3fdc385e9fadcbf74682f68b17f9b6ec",
+  "duzeltme_farki": {
+    "onceki_bas": "6368b85a9bec7e7699075e461aaf4f46f090a100",
+    "dosya": 3,
+    "bayt": 4594,
+    "tam_bayt": 27979
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bulgu komutunun 10 kelimeyi aşan başlığı ilk 10 kelimeye kırpması ve tam başlığı kanıt notuna taşıması önceki turda üretime hazır bulunmuş; bu turdaki yalnız katalog sürümü artışı o sonucu bozmaz. Önceki turda kapatılacak bulgu yoktur ve yeni farkta işi bozan kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı sağlam manifest, kırmızı önce ve yeşil sonra ölçüm çifti içeriyor; önce BU1, BU2, BU5 ve BU6 başarısızken sonra 69 geçti · 0 kaldı. Ölçüm sarı değil ve talebin kırpma, tam başlığı nota ekleme, bildirim, boşluk normalizasyonu ile merkezî/jetonsuz yollarını doğrudan sınıyor."
+  }
+}

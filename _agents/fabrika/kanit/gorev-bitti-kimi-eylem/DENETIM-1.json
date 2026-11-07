@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "gorev-bitti-kimi-eylem",
+  "pr": "749",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:06:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-bitti-kimi-eylem",
+  "dal": "gorev-bitti-kimi-eylem",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18280,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6654
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "bc3461be379f6f1262d2425b9e7e442db6e0700a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`gorev.sh bitti`, mevcut tek PATCH isteğine onay bekleme sahibini `bekleyen_kimi=sultan` ve eylemi `onay` olarak eklemiş; koruma davranışı da sınanmış. Araç imzalı önce/sonra ölçümü ile hedefli mutasyon sınavı değişikliği doğruladığından üretime engel bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı sınav önce B2’de kırmızı, sonra B1-B3 bütünüyle yeşil; ayrıca `mutasyon:true` kaydı alanlar kaldırılınca hedef B2 kapısının düştüğünü, gerçek kodun `gercek_olcum=bitti-kimi` kaydında geçtiğini gösteriyor."
+  }
+}

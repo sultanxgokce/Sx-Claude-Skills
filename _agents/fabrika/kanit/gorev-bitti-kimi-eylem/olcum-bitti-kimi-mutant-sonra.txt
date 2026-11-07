@@ -1,0 +1,13 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: B2 · rc≠0 + hedef kapı 'B2' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-bitti-kimi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/bk-kos.sh /tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/gorev-eski.sh
+# rc=1 sure=0.4s zaman=2026-11-07T12:05:34+03:00
+--- stdout ---
+── bitti kimi+eylem
+  ✓ B1 bitti: rc 0, tek istek
+  ✗ B2 tek istekte durum onay-bekliyor + bekleyen_kimi sultan + eylem onay
+  ✓ B3 kanıt sınıfsız bitti yine reddedilir: rc 2, istek yok
+── 2 geçti · 1 düştü
+--- stderr ---
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+KeyError: 'bekleyen_kimi'

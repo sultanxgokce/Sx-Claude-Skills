@@ -1,0 +1,79 @@
+{
+  "is": "gorev-bitti-kimi-eylem",
+  "arac": "kanit.py/0.10.0",
+  "guncelleme": "2026-11-07T12:05:34+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bitti-kimi",
+      "asama": "once",
+      "dosya": "olcum-bitti-kimi-once.txt",
+      "sha256": "711c82a1060cf18bbb1923cdecfc414ec37e06ad6578d1630a7b6e8d76b70a5f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/bk-kos.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/gorev-eski.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-11-07T12:00:32+03:00",
+      "sure_sn": 1350.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "f0562aa12d6e87493256bf1eb43c899c7b3f9807ce9072d6bc24ac681560d314",
+      "olcum_id": "9f2093cc217f437aa104c0465694299a",
+      "olculen_commit": "fdc53dd7184a7020b8064a713f87ddb2e85bf526",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bitti-kimi",
+      "asama": "sonra",
+      "dosya": "olcum-bitti-kimi-sonra.txt",
+      "sha256": "29d17b55c5109d5a3595251b67796597ec5d5b3d29a750be4db70d07acd57995",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/bk-kos.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gorev-bitti-kimi-eylem/gunluk-plan/scripts/gorev.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T12:05:34+03:00",
+      "sure_sn": 301.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "girdi_anahtar": "2e29ae3840bc42835721ae3c92b49495fa51453c8f17b489b9f35a64ecb79dda",
+      "olcum_id": "ad42a9b0fe8f44448e6f9934267c965f",
+      "olculen_commit": "fdc53dd7184a7020b8064a713f87ddb2e85bf526",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bitti-kimi-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-bitti-kimi-mutant-sonra.txt",
+      "sha256": "ec9d334e6be1be64735b618fcfef5c3bea19b232a968a70bae9fa7cfd27c12e9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/bk-kos.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/284942fc-c3f6-4c36-91bc-4dbc43ff3270/scratchpad/gorev-eski.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-11-07T12:05:34+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "bitti-kimi",
+      "beklenen": "kirmizi",
+      "dusen_kapi": true,
+      "hedef_kapi": "B2",
+      "hedef_dustu": true,
+      "olcum_id": "7cf819ff1f174aa48f5d4d72557ae821",
+      "olculen_commit": "fdc53dd7184a7020b8064a713f87ddb2e85bf526",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
+    }
+  ],
+  "imza": "306f4a3109cd596e77082ad5badbfaab7c692571356609367646021165d9daca"
+}

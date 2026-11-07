@@ -1,0 +1,48 @@
+{
+  "tur": 1,
+  "is": "bulgu-uzun-baslik-kirp",
+  "pr": "748",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:05:36+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-bulgu-uzun-baslik-kirp",
+  "dal": "bulgu-uzun-baslik-kirp",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22679,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 15818
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumlu",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumlu",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": []
+  },
+  "bas": "6368b85a9bec7e7699075e461aaf4f46f090a100",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bulgu komutu, 10 kelimeyi aşan başlığı ilk 10 kelimeye indiriyor; tam başlığı kanıt notunun başına ekliyor ve kırpmayı bildiriyor. Merkezî ve jetonsuz yollar ile sınır ve boşluk vakaları ölçülmüş, 69 sınavın tamamı geçtiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı sağlam manifestte kırmızı önce ve yeşil sonra ölçüm çifti var; önceki ölçümde ilgili BU1, BU2, BU5 ve BU6 vakaları kalırken sonraki ölçüm 69 geçti · 0 kaldı sonucunu veriyor. Kayıtlar sarı değil ve ölçüm çıktıları talebin başlık kırpma, tam başlığı nota taşıma, 10 kelime sınırı, fazla boşluk ve iki yazma yolu iddialarını doğrudan sınıyor."
+  }
+}

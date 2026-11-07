@@ -370,6 +370,17 @@ _dalgic_kos() {   # DALGIÇ ön gözü (aşağıdaki ZP640T notu) — <fark> ver
         awk '/^diff --git /{atla = ($0 ~ /_agents\/fabrika\/kanit\//)} !atla' "$TMP/diff-tam.patch" > "$TMP/diff-dalgic.patch" && [ -s "$TMP/diff-dalgic.patch" ] && DALGIC_DIFF="$TMP/diff-dalgic.patch" \
           && _bilgi "· ön-göz (DALGIÇ): düzeltme turu — ön göze PR'ın TAM farkı gider (göze giden artımlı fark değil)"
       fi
+      # Yalnız kanıt PR'ı (canlı borç ödemesi, kanıt düzeltmesi): kanıt blokları ayıklanınca DALGIÇ'a boş fark kalır, model rc 2 'ölçülemedi'
+      # der ve zorunlu kipte HER kanıt PR'ı kapanırdı (bulgu …QVT2XB, Nexus #1585). Kart cümlesiyle karşılaştırılacak kod yoktur → DALGIÇ
+      # UYGULANAMAZ (nötr), ön göz mekanik kapılarla (A1-A5) karar verir. Dar: PR'ın dosya listesi okunur; kanıt dışı tek dosya varsa ya da
+      # liste okunamazsa/boşsa boş fark yine DALGIÇ'a gider (rc 2 → ölçülemedi) — "kod farkı yok" yalnız ölçülerek söylenir.
+      _bos_dosyalar=""
+      if [ ! -s "$DALGIC_DIFF" ]; then _bos_dosyalar="$(git -C "$DEPO" diff --name-only "${ON_GOZ_TABAN:-origin/main}...HEAD" 2>/dev/null)"; fi
+      if [ -n "$_bos_dosyalar" ] && ! grep -qv '^_agents/fabrika/kanit/' <<<"$_bos_dosyalar"; then
+        DALGIC_DURUM=uygulanamaz
+        _bilgi "· ön-göz (DALGIÇ): UYGULANAMAZ — PR'ın $(grep -c . <<<"$_bos_dosyalar") dosyasının hepsi kanıt dizininde (kod farkı yok); ön göz mekanik kapılarla karar verir"
+        return 0
+      fi
       DALGIC_NOTES="${DALGIC_NOTES:-$TMP/dalgic-notes.md}" DALGIC_CIKTI="$TMP/dalgic-cikti" timeout "${DALGIC_ZAMAN:-150}" bash "$DALGIC_BIN" --kart "$KART" --diff "$DALGIC_DIFF" --is "$IS" </dev/null >"$TMP/dalgic.ham" 2>&1; DALGIC_RC=$?
       DALGIC_OUT="$(tr -d '\000-\010\013-\037\177' < "$TMP/dalgic.ham" | head -c 4000)"
       case "$DALGIC_RC" in

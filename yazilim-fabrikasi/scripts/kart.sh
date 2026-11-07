@@ -633,6 +633,7 @@ if cmd=="bitti" and bd=="gecersiz":
     print("✗ canlı borç GEÇERSİZ: "+bac+" — kart kapanmadı (ya borcu düzelt ya da gerçek canlı kaydı al: kanit.sh canli)",file=sys.stderr); raise SystemExit(1)
 borclu=(cmd=="bitti" and bd=="gecerli")   # geçerli ve ÖDENMEMİŞ borç: kart bitmez, borçlu kalır
 if cmd=="bitti" and bd=="odendi": k["canli_borc"]["odendi"]=simdi
+if cmd=="bitti" and bd=="kaldirildi": k["canli_borc"]["kaldirildi"]=simdi
 k["durum"]="canli-borclu" if borclu else cmd; k["bitis"]=None if borclu else simdi; k["pr"]=pr or k.get("pr","")
 k["puan"]={"kod":son["kod_puani"],"dogru":son["dogru_sey"],"tur":len(den)} if son else None
 k["kanit_var"]=kanit
@@ -654,7 +655,7 @@ if borclu:
     print(f"🧾 kart CANLI BORÇLU (bitti DEĞİL): {k['is']} · {bac}\n   ödeme: dağıtımdan sonra kanit.sh canli {k['is']} <etiket> --kaynak … --desen …; sonra kart.sh bitti {k['is']} (24 sa içinde; aksi hâlde kart.sh borclar kırmızı)")
 else:
     bk=k.get("birlestirme_karari") if cmd=="bitti" else None
-    print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}"+(f" · {bac}" if bd=="odendi" else "")
+    print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}"+(f" · {bac}" if bd in ("odendi","kaldirildi") else "")
           +(f" · birleştirme kararı: {bk['karar_veren']} ({bk['reis']}) · izin: {bk['izin']} · dağıtım Sultan eli" if bk else ""))
 PY
     if [ "$CMD" = bitti ] && [ -n "$GOREV_BITTI" ] && [ "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1],encoding="utf-8")).get("durum"))' "$KD/$IS.json")" = canli-borclu ]; then
@@ -1060,7 +1061,7 @@ for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
     except Exception: continue
     if k.get("durum")!="canli-borclu": continue
     # …XPQS (6 Kas): kanıtı alınmış ama 'bitti' yapılmamış kart ödenmiştir — borclar 44 sa kırmızı derken canli-borc-durum 'odendi' diyordu.
-    odendi=borc_durumu(k["is"])=="odendi"
+    odendi=borc_durumu(k["is"]) in ("odendi","kaldirildi")
     y=yas_saat(k); kirmizi=not odendi and ((y is None) or y>SURE_SAAT); gec+=1 if kirmizi else 0; ode+=1 if odendi else 0
     ac.append((k["is"],y,kirmizi,k["aldi"],("sınıflı · izin: "+izin_durumu(k)[0]) if siniflimi(k) else "ekip",odendi))
 if not ac: print("◻ açık canlı borç yok"); raise SystemExit(0)

@@ -7,6 +7,7 @@ NİÇİN: canlı kanıt kapısı ("git'te düzeltildi ≠ canlıda çalışıyor
 
 DURUMLAR (durum(k, canli) → (ad, açıklama)):
   yok       kartta borç kaydı yok
+  kaldirildi borçtan sonra sahibi canlı şartı kaldırdı (canli-ayarla --canli h): borç konusuz, kart bitebilir
   gecerli   borç kayıtlı, GEÇERLİ ve ÖDENMEMİŞ (kapı geçirir; kart 'canli-borclu')
   gecersiz  borç kayıtlı ama koşul tutmuyor (kapı geçirmez; sebep açıklamada)
   odendi    borçtan SONRA alınmış yeşil canlı kaydı var (kart 'bitti' olabilir)
@@ -38,6 +39,15 @@ def durum(k, canli=()):
     bz = zaman(b.get("zaman"))
     if bz is None:
         return ("gecersiz", "borç zamanı okunamadı")
+    # SERDAR 7 Kas (…NFC10Q): borçtan SONRA sahibi canlı şartı kaldırdıysa (kart.sh canli-ayarla --canli h) borç konusuz kalır; eskiden durum()
+    #   bunu bilmediği için kart 'bitti' denince yine 'canli-borclu' kalıyor, borclar listesinde sonsuza dek kırmızı duruyordu. SON canli-ayarla
+    #   olayı karar verir (sonradan şart yeniden konduysa 'e' → borç yürür).
+    for g in reversed(k.get("gecmis") or []):
+        if g.get("olay") == "canli-ayarla":
+            gz = zaman(g.get("zaman"))
+            if g.get("canli") == "h" and k.get("canli_gerekir") is False and gz is not None and gz >= bz:
+                return ("kaldirildi", "canlı şartı borçtan sonra sahibince kaldırıldı (%s): %s" % (str(g.get("zaman", ""))[:16], str(g.get("gerekce", ""))[:120]))
+            break
     if b.get("yazan") != k.get("aldi"):
         return ("gecersiz", "borcu yazan '%s' kartın sahibi değil (aldi: %s)" % (b.get("yazan"), k.get("aldi")))
     if len(str(b.get("gerekce") or "").strip()) < 20:

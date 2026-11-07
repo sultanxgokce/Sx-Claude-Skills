@@ -26,6 +26,14 @@ case "$k" in
       --oda) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--oda değersiz" >&2; exit 2; }; oda="$2"; shift 2 ;;   # 0.6.3: kaydın odası (Meşveret seansı geçirir; defterin oda alanı, gorev.sh ac --oda ile aynı)
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (kaydı kim açıyor?)" >&2; exit 2; }
+    # ── 0.6.7 (görev …NWM7D562, kılıç bileme 3 Kas): başlık 10 KELİMEYİ AŞMAZ. 246 görevin başlığı uzundu (bulgu komutu 114): Görevler panelinde kartlar taşıyor, komut/yol parçaları görünüyordu.
+    #    Aşan başlığın İLK 10 KELİMESİ başlık olur, TAM metin kanıt notunun başına '[tam başlık]' diye yazılır (bilgi kaybolmaz); kırpıldığı SÖYLENİR, sessiz değil.
+    if [ "$(printf '%s' "$baslik" | python3 -c 'import sys; print(len(sys.stdin.read().split()))')" -gt 10 ]; then
+      tam="$baslik"
+      baslik="$(printf '%s' "$tam" | python3 -c 'import sys; print(" ".join(sys.stdin.read().split()[:10]), end="")')"
+      notu="[tam başlık] $tam${notu:+ · $notu}"
+      echo "not: başlık 10 kelimeyi aşıyordu → ilk 10 kelime başlık oldu, tam metin nota yazıldı: $baslik" >&2
+    fi
     # ── 0.6.5 (görev …9ABX5, SERDAR 31 Eki): kayıt ODASIZ ve ÖZETİ UZUN doğmaz (Kuzey G3.4 odasız 0 · G2.1 özet < 80 harf; bir günde 3 kez mühür düştü).
     #    Oda sırası: açık --oda > GOREV_ODA > yazanın ekip kaydındaki odası (AGENT_NAME ya da --kim) > varsayılan agentic-os (SÖYLENİR, sessiz değil).
     if [ -z "$oda" ]; then

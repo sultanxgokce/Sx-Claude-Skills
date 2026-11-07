@@ -1,0 +1,56 @@
+{
+  "tur": 3,
+  "is": "gorev-bitti-kimi-eylem",
+  "pr": "749",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:40:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-bitti-kimi-eylem",
+  "dal": "gorev-bitti-kimi-eylem",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14327,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3120
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumsuz",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": [
+      "A1 kanıt başı: 'bitti-kimi' (sonra) fdc53dd7'de ölçülmüş, HEAD 910dcb76; arada kanıt dışı 2 dosya (catalog.json, gunluk-plan/scripts/gorev-bitti-kimi.test.sh) — kanıtı HEAD'de yeniden al",
+      "A1 kanıt başı: 'bitti-kimi-mutant' (sonra) fdc53dd7'de ölçülmüş, HEAD 910dcb76; arada kanıt dışı 2 dosya (catalog.json, gunluk-plan/scripts/gorev-bitti-kimi.test.sh) — kanıtı HEAD'de yeniden al"
+    ]
+  },
+  "bas": "910dcb7677a3e545381944c7be9603f7e293afdd",
+  "duzeltme_farki": {
+    "onceki_bas": "5e45f2c53fee194c500c6cec079ba3e0c381da7a",
+    "dosya": 3,
+    "bayt": 3257,
+    "tam_bayt": 20764
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`gorev.sh bitti` için istenen `bekleyen_kimi=sultan` ve `eylem=onay` davranışı önceki turda üretime hazır bulunmuş; bu turdaki tek üretim farkı sınav dosyasına çalıştırma biti ekliyor. Önceki turda kapatılacak bulgu yok ve yeni fark işi bozan bir kusur getirmediği için puan 5.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce B2'nin eksik alanlar nedeniyle düştüğü, sonra B1-B3'ün geçtiği ölçüm çifti talebi doğruluyor; `mutasyon:true` kaydında hedef B2 kapısının düşmesi sınavın hatayı yakaladığını, gerçek kod için `gercek_olcum=bitti-kimi` kaydı ise sonucun yeşil olduğunu gösteriyor."
+  }
+}
