@@ -219,5 +219,36 @@ kur; ( cd "$T" && git config core.quotepath true ); B="$(bas_al)"; den "$B"
 ( cd "$T" && git checkout -q -b is-dal && printf 'x\n' > "düzeltme.sh" && git add -A && git commit -q -m "fix: gozden sonra" ) >/dev/null 2>&1
 C="$(kapi)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "düzeltme.sh" <<<"$C"; g $? "O24 · kanıt dışındaki Türkçe adlı kod dosyası yine ENGELLER ve adı okunur biçimde yazılır"
 
+echo "════ O25-O27 · İKİ KARTLI PR (görev …NNTVYX, cloudtop #1321 ilk hâli): ikinci kartın göz kaydı birinci kartın kod sayımına girmez ════"
+# Ek kart = PR gövdesinde 'kart: <ad>' ile ilan edilmiş VE kanıt kaydı pr=N demiş. Gövdeyi sahte gh verir (gerçek gh bu çıplak depoda zaten düşer).
+GHB="$(mktemp -d)"; printf '#!/usr/bin/env bash\ncase " $* " in *" pr view "*"--json body"*) printf "%%b" "$KAPI_SAHTE_GOVDE"; exit 0 ;; esac\nexit 1\n' > "$GHB/gh"; chmod +x "$GHB/gh"
+iki_kur() { # iki_kur → R2 (çıplak origin + klon + iş alanı); iki kart; puan BAS'a verilir; sonra iki kartın kaydı commit'lenir, PR başı itilir
+  R2="$(mktemp -d)"; ( cd "$R2" && git init -q --bare uzak.git && git clone -q uzak.git ana && cd ana && git config user.email t@t && git config user.name T \
+    && echo x > f && git add f && git commit -qm "chore: ilk" && git push -q origin HEAD:main ) >/dev/null 2>&1
+  P2="$R2/ana"
+  for k in is-pr is-pr2; do ( cd "$P2" && KANIT_DEPO="$P2" bash "$KT" ac $k --is "örnek iş cümlesi burada" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1 ); done
+  git -C "$P2" worktree add -q -b is-pr "$R2/alan" >/dev/null 2>&1; A2="$R2/alan"; ( cd "$A2" && git config user.email t@t && git config user.name T )
+  for k in is-pr is-pr2; do ( cd "$A2" && KANIT_DEPO="$A2" bash "$K" olcum $k olc --asama tek -- echo 1 >/dev/null 2>&1 ); done
+  BAS2="$(git -C "$A2" rev-parse HEAD)"
+  for k in is-pr is-pr2; do mkdir -p "$A2/_agents/fabrika/kanit/$k"; python3 -c '
+import json,sys,datetime
+p,k,bas=sys.argv[1:]
+d={"tur":1,"is":k,"pr":"7","yazan":"claude","denetci":"codex","zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+ "kanit_durumu":"sağlam","sonuc":{"kod_puani":5,"dogru_sey":"E","ozet":"o","bulgular":[],"kanit_gorusu":"k"}}
+if k=="is-pr": d["bas"]=bas
+json.dump(d,open(p,"w"))' "$A2/_agents/fabrika/kanit/$k/DENETIM-1.json" "$k" "$BAS2"; done
+}
+iki_it() { ( cd "$A2" && git add -A _agents && git commit -qm "docs: goz kayitlari" && git push -q -f origin "HEAD:refs/pull/7/head" ) >/dev/null 2>&1; }
+iki_kapi() { ( cd "$P2" && env -u KANIT_DEPO PATH="$GHB:$PATH" KAPI_SAHTE_GOVDE="$1" bash "$G" is-pr --pr 7 2>&1 ); }
+iki_kur; iki_it
+C="$(iki_kapi 'kart: is-pr\nkart: is-pr2\n')"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "aradaki fark yalnız kanıt kaydı" <<<"$C"; g $? "O25 · iki kart gövdede ilanlı + ikinin kaydı pr=7: ikinci kartın göz kaydı kod SAYILMAZ → rc=0"
+C="$(iki_kapi 'kart: is-pr\n')"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "puan verildikten sonra kod değişmiş" <<<"$C" && grep -q "is-pr2" <<<"$C"; g $? "O26 · ikinci kart gövdede İLAN EDİLMEMİŞ → kaydı kod sayılır, rc=1 (muafiyet kendini ilan eden karta bağlı)"
+( cd "$A2" && echo y > kod.sh && git add kod.sh && git commit -qm "fix: gozden sonra" && git push -q -f origin "HEAD:refs/pull/7/head" ) >/dev/null 2>&1
+C="$(iki_kapi 'kart: is-pr\nkart: is-pr2\n')"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "kod.sh" <<<"$C"; g $? "O27 · iki kartlı PR'da puandan sonra KANIT DIŞI kod girdi → rc=1, dosya adıyla (muafiyet kodu geçirmez)"
+find "$R2" -delete 2>/dev/null
+
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
