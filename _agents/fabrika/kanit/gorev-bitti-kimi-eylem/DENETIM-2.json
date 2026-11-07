@@ -1,0 +1,56 @@
+{
+  "tur": 2,
+  "is": "gorev-bitti-kimi-eylem",
+  "pr": "749",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-11-07T12:23:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-gorev-bitti-kimi-eylem",
+  "dal": "gorev-bitti-kimi-eylem",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13988,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 2,
+    "bayt": 3167
+  },
+  "dalgic": "uyumlu",
+  "on_goz": {
+    "durum": "uyumsuz",
+    "dalgic": "uyumlu",
+    "kanit_basi": "uyumsuz",
+    "kanit_eksik": "uyumlu",
+    "taban": "uyumlu",
+    "agac": "uyumlu",
+    "kapsam_dosya": "uyumlu",
+    "gecis_gerekcesi": null,
+    "zorunlu": "kapali",
+    "notlar": [
+      "A1 kanıt başı: 'bitti-kimi' (sonra) fdc53dd7'de ölçülmüş, HEAD 5e45f2c5; arada kanıt dışı 1 dosya (catalog.json) — kanıtı HEAD'de yeniden al",
+      "A1 kanıt başı: 'bitti-kimi-mutant' (sonra) fdc53dd7'de ölçülmüş, HEAD 5e45f2c5; arada kanıt dışı 1 dosya (catalog.json) — kanıtı HEAD'de yeniden al"
+    ]
+  },
+  "bas": "5e45f2c53fee194c500c6cec079ba3e0c381da7a",
+  "duzeltme_farki": {
+    "onceki_bas": "bc3461be379f6f1262d2425b9e7e442db6e0700a",
+    "dosya": 3,
+    "bayt": 3927,
+    "tam_bayt": 18079
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "`gorev.sh bitti` için istenen `bekleyen_kimi=sultan` ve `eylem=onay` davranışı önceki turda üretime hazır bulunmuş; bu düzeltme turunda yalnız iş akışı sürümü 1.25.0’dan 1.26.0’a yükseltilmiş. Önceki turda bulgu olmadığından kapatılacak kusur yok; yeni farkta da işi bozan bir sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce B2’nin düştüğü, sonra B1-B3’ün geçtiği ölçüm çifti ile `mutasyon:true` kaydında alanlar kaldırılınca hedef B2 kapısının düşmesi birlikte davranışı doğruluyor; gerçek kodun sonucu `gercek_olcum=bitti-kimi` etiketli yeşil kayıttır."
+  }
+}
