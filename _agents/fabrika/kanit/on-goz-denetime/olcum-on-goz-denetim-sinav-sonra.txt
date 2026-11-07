@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
-# rc=0 sure=108.8s zaman=2026-11-07T06:24:46+03:00
+# rc=0 sure=8.4s zaman=2026-11-07T07:14:52+03:00
 --- stdout ---
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
   ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
@@ -63,18 +63,5 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-════ M · mutantlar: her biri hedef kapısını düşürmeli ════
-  ✓ M erken-kapi-yok → S9e düştü
-  ✓ M zorunlu-ortam-okunmaz → S9a düştü
-  ✓ M gec-kapisi-yok → S10a düştü
-  ✓ M ana-dal-bayragi-yok → S9g düştü
-  ✓ M gecis-karta-yazilmaz → S10f düştü
-  ✓ M olculemedi-uyumlu → S11a düştü
-  ✓ M dalgic-sayilmaz → B1 düştü
-  ✓ M sinav-disi-yok → D2 düştü
-  ✓ M dis-zorunlu-deler → D3 düştü
-  ✓ M esik-21 → S10k düştü
-  ✓ M diste-dalgic-kosar → D2b düştü
-  ✓ M karne-alansiz → S12f düştü
-SONUÇ: 65 geçti, 0 düştü
+SONUÇ: 53 geçti, 0 düştü
 --- stderr ---

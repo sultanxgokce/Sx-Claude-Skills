@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh once
-# rc=1 sure=5.6s zaman=2026-11-07T06:22:57+03:00
+# rc=1 sure=5.8s zaman=2026-11-07T07:14:44+03:00
 --- stdout ---
 önce: ürün betikleri origin/main (668b669c)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -9,20 +9,20 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh once
   ✗ S12d DALGIÇ sonucu on_goz.dalgic'te
   ✗ S12e zorunlu kip kayıtta (kapali)
   ✗ S12f karne satırı on_goz durumunu taşır
-  ✗ S12g karne özeti ön göz kırılımını sayar ('ön göz' /tmp/tmp.AgfIxPUAcv/ozet.out içinde yok)
+  ✗ S12g karne özeti ön göz kırılımını sayar ('ön göz' /tmp/tmp.O1UY8S2BAA/ozet.out içinde yok)
 ════ G · bilgi kipi (zorunlu değil): uyumsuz ön göz denetimi durdurmaz ════
   ✓ G1 bayat kanıt + zorunlu yok → denetim açılır (rc 0)
   ✗ G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz
-  ✗ G3 ekranda bilgi kipi uyarısı ('ÖN GÖZ UYUMSUZ — bilgi kipi' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ G3 ekranda bilgi kipi uyarısı ('ÖN GÖZ UYUMSUZ — bilgi kipi' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
 ════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
   ✓ D1 ON_GOZ_SINAV yok + bayraksız kip + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
   ✗ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
   ✗ D2b dişte DALGIÇ da koşmaz (çağrılmadı, kayıtta dalgic = sinav-kapali)
   ✗ D3 ON_GOZ_SINAV yok ama ZORUNLU kip (ortam) → ön göz yine koşar, denetim açılmaz (rc 1) (rc=0, beklenen=1)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.AgfIxPUAcv/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.O1UY8S2BAA/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.AgfIxPUAcv/w/_agents/fabrika/kanit/s2/DENETIM-1.json
+      |    kayıt: /tmp/tmp.O1UY8S2BAA/w/_agents/fabrika/kanit/s2/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: s2 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
@@ -33,10 +33,10 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh once
   ✗ D4b DENETIM on_goz.durum = gecildi
 ════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════
   ✗ S9a zorunlu + uyumsuz → rc 1 (rc=0, beklenen=1)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.AgfIxPUAcv/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.O1UY8S2BAA/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.AgfIxPUAcv/w/_agents/fabrika/kanit/z1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.O1UY8S2BAA/w/_agents/fabrika/kanit/z1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: z1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
@@ -45,59 +45,59 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh once
   ✓ S9c koşuyor izi kalmadı
   ✗ S9d bağımsız göz çağrılmadı (istem boş)
   ✗ S9e A uyumsuzken DALGIÇ çağrılmadı (para harcanmaz)
-  ✗ S9f sebep ve geçiş yolu söylenir ('--on-goz-gec' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
-  ✗ S9f2 sebebi A1 satırı (kanıt eski başta) ('✗ A1 kanıt başı' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ S9f sebep ve geçiş yolu söylenir ('--on-goz-gec' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
+  ✗ S9f2 sebebi A1 satırı (kanıt eski başta) ('✗ A1 kanıt başı' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
 ════ S9g · depo bayrağı (origin/main'de) zorunlu kipi açar ════
   ✗ S9g alanda bayrak yok ama origin/main'de var → zorunlu, rc 1 (rc=0, beklenen=1)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.AgfIxPUAcv/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.O1UY8S2BAA/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.AgfIxPUAcv/w/_agents/fabrika/kanit/z2/DENETIM-1.json
+      |    kayıt: /tmp/tmp.O1UY8S2BAA/w/_agents/fabrika/kanit/z2/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: z2 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
       | ✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi
   ✗ S9h DENETIM yazılmadı
-  ✗ S9i kaynak söylenir (origin/main bayrağı) ('zorunlu kip: origin/main' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ S9i kaynak söylenir (origin/main bayrağı) ('zorunlu kip: origin/main' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
 ════ S10 · gerekçeli geçiş ════
   ✗ S10a gerekçe <20 → rc 2 (denetim açılmaz) (rc=1, beklenen=2)
       | ✗ tanınmayan argüman: --on-goz-gec
   ✓ S10b kısa gerekçede DENETIM yok
   ✗ S10a2 tam 19 karakter (yığın tek sayılır: '  abcdefghi   jklmnopqr ') → rc 2 (rc=1, beklenen=2)
       | ✗ tanınmayan argüman: --on-goz-gec
-  ✗ S10a3 mesaj sayılan uzunluğu söyler (19 yazıldı) ('19 yazıldı' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ S10a3 mesaj sayılan uzunluğu söyler (19 yazıldı) ('19 yazıldı' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
   ✗ S10c gerekçe ≥20 → denetim açılır (rc 0) (rc=1, beklenen=0)
       | ✗ tanınmayan argüman: --on-goz-gec
   ✗ S10d DENETIM on_goz.durum = gecildi
   ✗ S10e DENETIM gecis_gerekcesi = verilen
   ✗ S10f kartta on_goz_gecisleri[0].gerekce
-  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.AgfIxPUAcv/istem.md içinde yok)
+  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.O1UY8S2BAA/istem.md içinde yok)
   ✗ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0) (rc=1, beklenen=0)
       | ✗ tanınmayan argüman: --on-goz-gec
   ✗ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
-  ✗ S10j söylenir: geçiş gerekmedi ('geçiş gerekmedi, karta yazılmadı' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ S10j söylenir: geçiş gerekmedi ('geçiş gerekmedi, karta yazılmadı' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
   ✗ S10k tam 20 karakter ('abcdefghij klmnopqrs') → denetim açılır (rc 0) (rc=1, beklenen=0)
       | ✗ tanınmayan argüman: --on-goz-gec
   ✗ S10l 20 karakterde durum gecildi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✗ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3 (rc=0, beklenen=3)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.AgfIxPUAcv/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.O1UY8S2BAA/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.AgfIxPUAcv/w/_agents/fabrika/kanit/o1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.O1UY8S2BAA/w/_agents/fabrika/kanit/o1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: o1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
       | ✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi
   ✗ S11b DENETIM yazılmadı
-  ✗ S11c ÖLÇÜLEMEDİ — denetim açılmadı ('ÖN GÖZ ÖLÇÜLEMEDİ — denetim AÇILMADI' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
-  ✗ S11d sebep PR başının okunamaması (A1 ○) ('PR #7 başı okunamadı' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ S11c ÖLÇÜLEMEDİ — denetim açılmadı ('ÖN GÖZ ÖLÇÜLEMEDİ — denetim AÇILMADI' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
+  ✗ S11d sebep PR başının okunamaması (A1 ○) ('PR #7 başı okunamadı' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
 ════ B · DALGIÇ uyumsuz da zorunlu kipte durdurur ════
   ✗ B1 A uyumlu + DALGIÇ uyumsuz + zorunlu → rc 1 (rc=0, beklenen=1)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.AgfIxPUAcv/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.O1UY8S2BAA/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.AgfIxPUAcv/w/_agents/fabrika/kanit/d1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.O1UY8S2BAA/w/_agents/fabrika/kanit/d1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: d1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
@@ -108,7 +108,7 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh once
   ✗ Y1 uyumlu → rc 0 (rc=1, beklenen=0)
       | ✗ tanınmayan argüman: --on-goz
   ✓ Y2 DENETIM yazılmadı, kanıt dizininde koşuyor izi yok
-  ✗ Y3 hüküm satırı ('ÖN GÖZ' /tmp/tmp.AgfIxPUAcv/son.out içinde yok)
+  ✗ Y3 hüküm satırı ('ÖN GÖZ' /tmp/tmp.O1UY8S2BAA/son.out içinde yok)
   ✓ Y4 uyumsuz → rc 1
   ✗ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım) (rc=1, beklenen=2)
       | ✗ tanınmayan argüman: --on-goz

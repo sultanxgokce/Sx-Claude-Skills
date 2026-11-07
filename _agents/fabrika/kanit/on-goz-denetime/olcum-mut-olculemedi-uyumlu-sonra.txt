@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S11a · rc≠0 + hedef kapı 'S11a' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh olculemedi-uyumlu
-# rc=1 sure=8.6s zaman=2026-11-07T06:25:12+03:00
+# rc=1 sure=11.5s zaman=2026-11-07T07:15:51+03:00
 --- stdout ---
 mutant: olculemedi-uyumlu (denetci.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -52,16 +52,16 @@ mutant: olculemedi-uyumlu (denetci.sh)
   ✓ S10l 20 karakterde durum gecildi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✗ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3 (rc=0, beklenen=3)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.NRedgn5Qzt/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.0h07jp4hD3/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.NRedgn5Qzt/w/_agents/fabrika/kanit/o1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.0h07jp4hD3/w/_agents/fabrika/kanit/o1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: o1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
       | ✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi
   ✗ S11b DENETIM yazılmadı
-  ✗ S11c ÖLÇÜLEMEDİ — denetim açılmadı ('ÖN GÖZ ÖLÇÜLEMEDİ — denetim AÇILMADI' /tmp/tmp.NRedgn5Qzt/son.out içinde yok)
+  ✗ S11c ÖLÇÜLEMEDİ — denetim açılmadı ('ÖN GÖZ ÖLÇÜLEMEDİ — denetim AÇILMADI' /tmp/tmp.0h07jp4hD3/son.out içinde yok)
   ✓ S11d sebep PR başının okunamaması (A1 ○)
 ════ B · DALGIÇ uyumsuz da zorunlu kipte durdurur ════
   ✓ B1 A uyumlu + DALGIÇ uyumsuz + zorunlu → rc 1
