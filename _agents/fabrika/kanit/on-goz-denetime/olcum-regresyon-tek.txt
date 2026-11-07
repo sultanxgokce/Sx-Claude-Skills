@@ -1,17 +1,17 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/regresyon.sh
-# rc=0 sure=414.0s zaman=2026-11-07T03:41:59+03:00
+# rc=0 sure=358.4s zaman=2026-11-07T04:16:19+03:00
 --- stdout ---
-  ✓ denetci-karne.test.sh 73 sn · ── SONUÇ: 22 geçti · 0 kaldı ──
-  ✓ denetci-ongoz-tam-fark.test.sh 2 sn · SONUÇ: 9 geçti, 0 düştü
-  ✓ denetci-tavan.test.sh 5 sn · ── SONUÇ: 14 geçti · 0 kaldı ──
-  ✓ denetci-kutu-disi.test.sh 44 sn · H · 🔴 tur-1 bulgusu: fren ARDIŞIK dizi sayar, TOPLAM değil
-  ✓ denetci-kayit-commit.test.sh 43 sn · ── SONUÇ: 14 geçti · 0 kaldı ──
+  ✓ denetci-karne.test.sh 59 sn · ── SONUÇ: 22 geçti · 0 kaldı ──
+  ✓ denetci-ongoz-tam-fark.test.sh 1 sn · SONUÇ: 9 geçti, 0 düştü
+  ✓ denetci-tavan.test.sh 4 sn · ── SONUÇ: 14 geçti · 0 kaldı ──
+  ✓ denetci-kutu-disi.test.sh 38 sn · H · 🔴 tur-1 bulgusu: fren ARDIŞIK dizi sayar, TOPLAM değil
+  ✓ denetci-kayit-commit.test.sh 32 sn · ── SONUÇ: 14 geçti · 0 kaldı ──
   ✓ denetci-klon-kart.test.sh 5 sn · SONUÇ: 12 geçti · 0 kaldı
-  ✓ denetci-daralt-tam-fark.test.sh 3 sn · SONUÇ: 7 geçti, 0 düştü
-  ✓ denetci-manifest-istem.test.sh 5 sn · ── SONUÇ: 9 geçti · 0 kaldı ──
+  ✓ denetci-daralt-tam-fark.test.sh 2 sn · SONUÇ: 7 geçti, 0 düştü
+  ✓ denetci-manifest-istem.test.sh 4 sn · ── SONUÇ: 9 geçti · 0 kaldı ──
   ✓ karne.test.sh 0 sn · ── SONUÇ: 11 geçti · 0 kaldı ──
-  ✓ kart.test.sh 214 sn · ── SONUÇ: 489 geçti · 0 kaldı ──
+  ✓ kart.test.sh 193 sn · ── SONUÇ: 489 geçti · 0 kaldı ──
   ✓ on-goz.test.sh 11 sn · ── SONUÇ: 23 geçti · 0 kaldı ──
-  ✓ golge.test.sh 9 sn · ── SONUÇ: 35 geçti · 0 kaldı ──
+  ✓ golge.test.sh 10 sn · ── SONUÇ: 35 geçti · 0 kaldı ──
 ── regresyon: 0 düştü
 --- stderr ---

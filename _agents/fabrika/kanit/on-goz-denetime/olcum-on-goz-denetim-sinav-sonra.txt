@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
-# rc=0 sure=53.5s zaman=2026-11-07T03:34:41+03:00
+# rc=0 sure=69.5s zaman=2026-11-07T04:09:50+03:00
 --- stdout ---
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
   ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
@@ -13,6 +13,9 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
   ✓ G1 bayat kanıt + zorunlu yok → denetim açılır (rc 0)
   ✓ G2 DENETIM on_goz.durum = uyumsuz, kanit_basi = uyumsuz
   ✓ G3 ekranda bilgi kipi uyarısı
+════ D · sınav dişi: sahte göz varken ön göz yalnız ON_GOZ_SINAV=1 ile koşar ════
+  ✓ D1 ON_GOZ_SINAV yok + zorunlu + bayat kanıt → ön göz koşmaz, denetim açılır (rc 0)
+  ✓ D2 kayıtta on_goz.durum = sinav-kapali (ölçülmedi, uyumlu sayılmaz)
 ════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════
   ✓ S9a zorunlu + uyumsuz → rc 1
   ✓ S9b DENETIM-1.json YAZILMADI (tur yanmadı)
@@ -59,6 +62,7 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
   ✓ M gecis-karta-yazilmaz → S10f düştü
   ✓ M olculemedi-uyumlu → S11a düştü
   ✓ M dalgic-sayilmaz → B1 düştü
+  ✓ M sinav-disi-yok → D2 düştü
   ✓ M karne-alansiz → S12f düştü
-SONUÇ: 50 geçti, 0 düştü
+SONUÇ: 53 geçti, 0 düştü
 --- stderr ---
