@@ -1,7 +1,7 @@
 {
   "is": "koltuk-geri-donus-auto",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T06:46:37+03:00",
+  "guncelleme": "2026-11-07T06:46:54+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -172,7 +172,29 @@
       "olculen_commit": "6f474876301f22d6466c71af8710dd05d91a15c1",
       "olculen_kirli": false,
       "kirli_kurali": 1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-gerileme",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-gerileme-sonra.txt",
+      "sha256": "750786bae8094f1da8fbd7fb1f9f6bd5d1d6633f76a5781b9940b598b4c8c6ab",
+      "komut": [
+        "bash",
+        "-c",
+        "set -e; bash terminal-onar/scripts/bekci-eski-kod.test.sh; bash terminal-onar/scripts/bekci-iz.test.sh; bash iskan/scripts/koltuk-agaci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-11-07T06:46:54+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "temiz",
+      "girdi_anahtar": "3bd7d10af5a8532500251f97155df427d7c43630f8af9da216af14329e394e5a",
+      "olcum_id": "05e2e4aeff9f4070ada4a099786497b5",
+      "olculen_commit": "8520bf5f7018ac31ccfe676ad1986ca179e3fde1",
+      "olculen_kirli": false,
+      "kirli_kurali": 1
     }
   ],
-  "imza": "2425b7c466385fc68a32e727af9e007cfc123985c3b90752b851dab4239b8438"
+  "imza": "59c1dc053dd27d716c66c77d47d3846e0138393ada10b04bec91c18532a32e49"
 }
