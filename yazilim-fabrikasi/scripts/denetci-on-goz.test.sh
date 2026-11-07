@@ -32,7 +32,8 @@ SAHTE="$KOK/sahte.sh"; printf '#!/usr/bin/env bash\ncp "$1" "$SAHTE_ISTEM_KOPYA"
 export DENETCI_KOMUT="$SAHTE" SAHTE_ISTEM_KOPYA="$KOK/istem.md"
 J5='{"kod_puani":5,"dogru_sey":"E","ozet":"o","bulgular":[],"kanit_gorusu":"k"}'
 # sahte DALGIÇ: çağrıldığını işaretler, DALGIC_RC ile döner
-SDAL="$KOK/dalgic.sh"; printf '#!/usr/bin/env bash\ntouch "$DALGIC_IZ"; echo sahte-ongoz; exit "${DALGIC_RC:-0}"\n' > "$SDAL"; chmod +x "$SDAL"
+#   gerçeği gibi (_agents/dalgic/dalgic.sh satır 25) fark dosyası yok ya da boşsa rc 2
+SDAL="$KOK/dalgic.sh"; printf '#!/usr/bin/env bash\ntouch "$DALGIC_IZ"; f=""; while [ $# -gt 0 ]; do [ "$1" = --diff ] && f="$2"; shift; done\n[ -s "$f" ] || { echo "✗ fark dosyası yok ya da boş: $f" >&2; exit 2; }\necho sahte-ongoz; exit "${DALGIC_RC:-0}"\n' > "$SDAL"; chmod +x "$SDAL"
 export DALGIC_BIN="$SDAL" DALGIC_IZ="$KOK/dalgic.cagrildi"
 # sahte gh: GH_RC verilirse o koduyla düşer; yoksa PR başı = HEAD
 mkdir -p "$KOK/bin"; printf '#!/usr/bin/env bash\n[ -n "${GH_RC:-}" ] && exit "$GH_RC"\ncase "$*" in *headRefOid*) git rev-parse HEAD ;; *"pr diff"*) git diff origin/main...HEAD ;; *) echo "{}" ;; esac\n' > "$KOK/bin/gh"; chmod +x "$KOK/bin/gh"
@@ -140,6 +141,20 @@ is_hazirla d1; rm -f "$DALGIC_IZ"
 kapi "B1 A uyumlu + DALGIÇ uyumsuz + zorunlu → rc 1" 1 env DALGIC_RC=1 DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" d1 < /dev/null' _ "$W" "$J5" "$D"
 dogru "B2 DALGIÇ çağrıldı" [ -e "$DALGIC_IZ" ]
 dogru "B3 DENETIM yazılmadı" [ ! -e "$(kayit d1)" ]
+
+echo "════ K · yalnız kanıt PR'ı (canlı borç ödemesi): DALGIÇ uygulanamaz, zorunlu kip kapatmaz (…QVT2XB) ════"
+git -C "$W" checkout -q -b k1 origin/main 2>/dev/null; kart_ac k1
+KANIT_DEPO="$W" bash "$K" olcum k1 o --asama tek -- true >/dev/null 2>&1; git -C "$W" add -f _agents/fabrika/kanit/k1; git -C "$W" commit -q -m "k1 yalnız kanıt"
+dogru "K0 fikstür: dalın farkı yalnız kanıt dizini" [ -z "$(git -C "$W" diff --name-only origin/main...HEAD | grep -v '^_agents/fabrika/kanit/')" ]
+rm -f "$DALGIC_IZ"
+kapi "K1 zorunlu + yalnız kanıt PR'ı → denetim açılır (rc 0)" 0 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" k1 < /dev/null' _ "$W" "$J5" "$D"
+iceren "K2 UYGULANAMAZ satırı dosya sayısıyla" "ön-göz (DALGIÇ): UYGULANAMAZ — PR'ın 2 dosyasının hepsi kanıt dizininde" "$KOK/son.out"
+dogru "K3 DALGIÇ çağrılmadı (boş fark modele gitmedi)" [ ! -e "$DALGIC_IZ" ]
+dogru "K4 DENETIM on_goz.dalgic = uygulanamaz, on_goz.durum = uyumlu" [ "$(jdeger "$(kayit k1)" on_goz.dalgic)" = uygulanamaz ] && [ "$(jdeger "$(kayit k1)" on_goz.durum)" = uyumlu ]
+kapi "K5 --on-goz yalnız kipte de uyumlu (rc 0)" 0 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && KANIT_DEPO="$1" bash "$2" k1 --on-goz < /dev/null' _ "$W" "$D"
+is_hazirla k2; : > "$KOK/bos.diff"; rm -f "$DALGIC_IZ"
+kapi "K6 dar: kod dosyası olan PR'da boş fark (--diff boş) yine ölçülemedi → zorunlu kipte rc 3" 3 env DENETCI_ON_GOZ_ZORUNLU=1 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" k2 --diff "$4" < /dev/null' _ "$W" "$J5" "$D" "$KOK/bos.diff"
+dogru "K7 K6'da DALGIÇ çağrıldı (uygulanamaz denmedi) ve DENETIM yazılmadı" [ -e "$DALGIC_IZ" ] && [ ! -e "$(kayit k2)" ]
 
 echo "════ Y · --on-goz yalnız ön göz ════"
 is_hazirla y1
