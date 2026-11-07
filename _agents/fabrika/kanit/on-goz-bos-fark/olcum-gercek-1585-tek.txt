@@ -1,0 +1,17 @@
+$ bash _agents/fabrika/kanit/on-goz-bos-fark/gercek.sh
+# rc=0 sure=184.7s zaman=2026-11-07T11:01:39+03:00
+--- stdout ---
+dalın dosyaları (origin/main...d94a05b7):
+  _agents/fabrika/kanit/erken-uyari-bekle-metni/KANIT.json
+  _agents/fabrika/kanit/erken-uyari-bekle-metni/canli-yeni-metin-ateslendi.txt
+── eski (origin/main denetci.sh) rc=3
+  ── ÖN GÖZ (yalnız · denetim yok) · iş: erken-uyari-bekle-metni · zorunlu kip: depo
+  · ⚠ ön-göz (DALGIÇ): ÖLÇÜLEMEDİ (rc=2) — UYUMLU sayılmaz; denetim yine sürer
+  ÖN GÖZ: ÖLÇÜLEMEDİ — uyumlu sayılmaz (zorunlu kipte denetim açılmaz)
+── yeni (HEAD denetci.sh) rc=0
+  ── ÖN GÖZ (yalnız · denetim yok) · iş: erken-uyari-bekle-metni · zorunlu kip: depo
+  · ön-göz (DALGIÇ): UYGULANAMAZ — PR'ın 2 dosyasının hepsi kanıt dizininde (kod farkı yok); ön göz mekanik kapılarla karar verir
+  ÖN GÖZ: UYUMLU — göze gönderilebilir
+SONUÇ: eski ölçülemedi (rc 3) → yeni uyumlu (rc 0, DALGIÇ uygulanamaz)
+--- stderr ---
+⏳ agir-sira: kanit-on-goz-bos-fark-gercek-1585 180 sn bekledi (yuva 2, load1 17.92)
