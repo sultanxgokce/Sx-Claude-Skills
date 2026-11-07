@@ -11,7 +11,7 @@ case "${1:-}" in
   once) cp "$S/denetci-on-goz.test.sh" "$T/sinav.sh"; find "$T/yazilim-fabrikasi" -depth -delete
         git -C "$R" archive origin/main yazilim-fabrikasi/scripts | tar -x -C "$T" || exit 3
         cp "$T/sinav.sh" "$S/denetci-on-goz.test.sh"; echo "önce: ürün betikleri origin/main ($(git -C "$R" rev-parse --short origin/main))"
-        exec bash "$S/denetci-on-goz.test.sh" ;;
+        MUTANT_D="$S/denetci.sh" exec bash "$S/denetci-on-goz.test.sh" ;;   # M bölümü atlanır: çapalar eski üründe yok (gürültü olurdu)
 esac
 case "$1" in
   zorunlu-ortam-okunmaz) f=denetci.sh; a='then ONGOZ_ZORUNLU=ortam'; b='then ONGOZ_ZORUNLU=kapali' ;;

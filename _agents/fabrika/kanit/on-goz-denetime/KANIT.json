@@ -1,14 +1,14 @@
 {
   "is": "on-goz-denetime",
   "arac": "kanit.py/0.10.0",
-  "guncelleme": "2026-11-07T04:43:44+03:00",
+  "guncelleme": "2026-11-07T04:44:57+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "on-goz-denetim-sinav",
       "asama": "once",
       "dosya": "olcum-on-goz-denetim-sinav-once.txt",
-      "sha256": "a721067c9d3f839fcc5598af942713221aa4963e5cc5443f1af9124b8c69d589",
+      "sha256": "8d8099d002e49ce0b483b1a3266cc0db048409d0b70bc81c685c896a42746ad3",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/on-goz-denetime/kos.sh",
@@ -16,12 +16,12 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-11-07T04:29:27+03:00",
-      "sure_sn": 7.9,
+      "zaman": "2026-11-07T04:44:57+03:00",
+      "sure_sn": 5.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "girdi_anahtar": "e94d8ab10bfc0d53006275fb36f990fe6da67be3f65a51f2976cbb565293e39f",
-      "olcum_id": "6d3e0c14c4114850ae552d1a9d815648",
-      "olculen_commit": "70434b34151e3810290d471e03eb763ac494326f",
+      "olcum_id": "9870470d3a274f4d8382df2ab6219c55",
+      "olculen_commit": "ebfb19e2f564a77862419cd6b808a98d44d65f90",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -180,19 +180,19 @@
       "etiket": "gercek-kosu",
       "asama": "tek",
       "dosya": "olcum-gercek-kosu-tek.txt",
-      "sha256": "780407074b629d428e542986237f17dd1302d3f5740fe7ba9172956b8f0d4d6f",
+      "sha256": "d310ada96adf40ec14086ea7cd12005cba763851707f360294537119a53c6cad",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/on-goz-denetime/gercek.sh"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-11-07T04:23:48+03:00",
-      "sure_sn": 33.3,
+      "rc": 3,
+      "renk": "sari",
+      "zaman": "2026-11-07T04:44:35+03:00",
+      "sure_sn": 49.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "girdi_anahtar": "eb2ac28a96131c0f78084e1d0be48eeb172e36f242cfcc4eacc765caa94da896",
-      "olcum_id": "2369b584167d48018408e87efb5e3d4c",
-      "olculen_commit": "264b415a4c0d784bb70e15d496426ce64eb89f6f",
+      "girdi_anahtar": "67b8db92fd355e6f228f38fdcecf21f761c0a9a540bff332eaa8008563ce863e",
+      "olcum_id": "2c9c430635b04efeb3102235e7e5bd3a",
+      "olculen_commit": "ebfb19e2f564a77862419cd6b808a98d44d65f90",
       "olculen_kirli": false,
       "kirli_kurali": 1
     },
@@ -218,5 +218,5 @@
       "kirli_kurali": 1
     }
   ],
-  "imza": "45728f4d9767eed55de3cea1c651311f465cab768e3ba40151becd3620608870"
+  "imza": "b381badfcbbad1540a3cee6ce2f89a4d1af20da89a4344f3143011af93afa976"
 }
