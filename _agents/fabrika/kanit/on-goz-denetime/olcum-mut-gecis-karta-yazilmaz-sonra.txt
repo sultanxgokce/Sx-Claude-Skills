@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S10f · rc≠0 + hedef kapı 'S10f' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh gecis-karta-yazilmaz
-# rc=1 sure=4.6s zaman=2026-11-07T03:25:24+03:00
+# rc=1 sure=5.2s zaman=2026-11-07T03:34:53+03:00
 --- stdout ---
 mutant: gecis-karta-yazilmaz (kart.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -42,7 +42,10 @@ mutant: gecis-karta-yazilmaz (kart.sh)
   ✗ S10d DENETIM on_goz.durum = gecildi
   ✗ S10e DENETIM gecis_gerekcesi = verilen
   ✗ S10f kartta on_goz_gecisleri[0].gerekce
-  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.m2c2OjUSOO/istem.md içinde yok)
+  ✗ S10g göz istemi gerekçeyi kart metninde görür ('kanıt eski başta bilerek: sınav fikstürü burada' /tmp/tmp.OFov2gajCx/istem.md içinde yok)
+  ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
+  ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
+  ✓ S10j söylenir: geçiş gerekmedi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✓ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3
   ✓ S11b DENETIM yazılmadı
@@ -58,5 +61,5 @@ mutant: gecis-karta-yazilmaz (kart.sh)
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-SONUÇ: 34 geçti, 5 düştü
+SONUÇ: 37 geçti, 5 düştü
 --- stderr ---

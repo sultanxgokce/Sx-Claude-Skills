@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S9e · rc≠0 + hedef kapı 'S9e' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh erken-kapi-yok
-# rc=1 sure=5.0s zaman=2026-11-07T03:25:35+03:00
+# rc=1 sure=5.9s zaman=2026-11-07T03:35:05+03:00
 --- stdout ---
 mutant: erken-kapi-yok (denetci.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -35,6 +35,9 @@ mutant: erken-kapi-yok (denetci.sh)
   ✓ S10e DENETIM gecis_gerekcesi = verilen
   ✓ S10f kartta on_goz_gecisleri[0].gerekce
   ✓ S10g göz istemi gerekçeyi kart metninde görür
+  ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
+  ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
+  ✓ S10j söylenir: geçiş gerekmedi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✓ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3
   ✓ S11b DENETIM yazılmadı
@@ -50,5 +53,5 @@ mutant: erken-kapi-yok (denetci.sh)
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-SONUÇ: 38 geçti, 1 düştü
+SONUÇ: 41 geçti, 1 düştü
 --- stderr ---

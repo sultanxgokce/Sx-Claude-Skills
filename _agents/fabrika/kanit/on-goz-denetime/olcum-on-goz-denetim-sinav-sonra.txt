@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
-# rc=0 sure=48.4s zaman=2026-11-07T03:25:11+03:00
+# rc=0 sure=53.5s zaman=2026-11-07T03:34:41+03:00
 --- stdout ---
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
   ✓ S12a uyumlu iş denetlenir (5/E → rc 0)
@@ -33,6 +33,9 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
   ✓ S10e DENETIM gecis_gerekcesi = verilen
   ✓ S10f kartta on_goz_gecisleri[0].gerekce
   ✓ S10g göz istemi gerekçeyi kart metninde görür
+  ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
+  ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
+  ✓ S10j söylenir: geçiş gerekmedi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✓ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3
   ✓ S11b DENETIM yazılmadı
@@ -57,5 +60,5 @@ $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh
   ✓ M olculemedi-uyumlu → S11a düştü
   ✓ M dalgic-sayilmaz → B1 düştü
   ✓ M karne-alansiz → S12f düştü
-SONUÇ: 47 geçti, 0 düştü
+SONUÇ: 50 geçti, 0 düştü
 --- stderr ---

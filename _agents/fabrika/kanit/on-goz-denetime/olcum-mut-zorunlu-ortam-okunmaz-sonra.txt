@@ -1,6 +1,6 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; hedef kapı: S9a · rc≠0 + hedef kapı 'S9a' düşen satırda = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-on-goz-denetim-sinav-* ===
 $ bash _agents/fabrika/kanit/on-goz-denetime/kos.sh zorunlu-ortam-okunmaz
-# rc=1 sure=8.3s zaman=2026-11-07T03:25:19+03:00
+# rc=1 sure=6.5s zaman=2026-11-07T03:34:48+03:00
 --- stdout ---
 mutant: zorunlu-ortam-okunmaz (denetci.sh)
 ════ S12 · uyumlu iş: denetim açılır, on_goz alanı dolu ════
@@ -17,10 +17,10 @@ mutant: zorunlu-ortam-okunmaz (denetci.sh)
   ✓ G3 ekranda bilgi kipi uyarısı
 ════ S9 · zorunlu kip: uyumsuz → denetim açılmaz, tur yanmaz ════
   ✗ S9a zorunlu + uyumsuz → rc 1 (rc=0, beklenen=1)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.9NBmpdMQWA/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.BWuXLv5OHW/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.9NBmpdMQWA/w/_agents/fabrika/kanit/z1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.BWuXLv5OHW/w/_agents/fabrika/kanit/z1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: z1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
@@ -29,7 +29,7 @@ mutant: zorunlu-ortam-okunmaz (denetci.sh)
   ✓ S9c koşuyor izi kalmadı
   ✗ S9d bağımsız göz çağrılmadı (istem boş)
   ✗ S9e A uyumsuzken DALGIÇ çağrılmadı (para harcanmaz)
-  ✗ S9f sebep ve geçiş yolu söylenir ('--on-goz-gec' /tmp/tmp.9NBmpdMQWA/son.out içinde yok)
+  ✗ S9f sebep ve geçiş yolu söylenir ('--on-goz-gec' /tmp/tmp.BWuXLv5OHW/son.out içinde yok)
   ✓ S9f2 sebebi A1 satırı (kanıt eski başta)
 ════ S9g · depo bayrağı (origin/main'de) zorunlu kipi açar ════
   ✓ S9g alanda bayrak yok ama origin/main'de var → zorunlu, rc 1
@@ -43,25 +43,28 @@ mutant: zorunlu-ortam-okunmaz (denetci.sh)
   ✓ S10e DENETIM gecis_gerekcesi = verilen
   ✓ S10f kartta on_goz_gecisleri[0].gerekce
   ✓ S10g göz istemi gerekçeyi kart metninde görür
+  ✓ S10h ön göz UYUMLU iken --on-goz-gec → denetim açılır (rc 0)
+  ✓ S10i uyumluda geçiş YAZILMAZ: DENETIM durum uyumlu, gerekçe yok, kartta on_goz_gecisleri yok
+  ✓ S10j söylenir: geçiş gerekmedi
 ════ S11 · ölçülemedi uyumlu sayılmaz ════
   ✗ S11a PR başı okunamıyor (gh rc 255) + zorunlu → rc 3 (rc=0, beklenen=3)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.9NBmpdMQWA/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.BWuXLv5OHW/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.9NBmpdMQWA/w/_agents/fabrika/kanit/o1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.BWuXLv5OHW/w/_agents/fabrika/kanit/o1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: o1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
       | ✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi
   ✗ S11b DENETIM yazılmadı
-  ✗ S11c ÖLÇÜLEMEDİ — denetim açılmadı ('ÖN GÖZ ÖLÇÜLEMEDİ — denetim AÇILMADI' /tmp/tmp.9NBmpdMQWA/son.out içinde yok)
+  ✗ S11c ÖLÇÜLEMEDİ — denetim açılmadı ('ÖN GÖZ ÖLÇÜLEMEDİ — denetim AÇILMADI' /tmp/tmp.BWuXLv5OHW/son.out içinde yok)
   ✓ S11d sebep PR başının okunamaması (A1 ○)
 ════ B · DALGIÇ uyumsuz da zorunlu kipte durdurur ════
   ✗ B1 A uyumlu + DALGIÇ uyumsuz + zorunlu → rc 1 (rc=0, beklenen=1)
-      | ── DENETİM tur 1 · denetçi: /tmp/tmp.9NBmpdMQWA/sahte.sh (sınav) · yazan: claude
+      | ── DENETİM tur 1 · denetçi: /tmp/tmp.BWuXLv5OHW/sahte.sh (sınav) · yazan: claude
       |    KOD İYİ Mİ: 5/5 · DOĞRU ŞEY Mİ: E · bulgu: 0 · kanıt: sağlam (araç imzalı, sha'lar tutuyor)
       |    özet: o
-      |    kayıt: /tmp/tmp.9NBmpdMQWA/w/_agents/fabrika/kanit/d1/DENETIM-1.json
+      |    kayıt: /tmp/tmp.BWuXLv5OHW/w/_agents/fabrika/kanit/d1/DENETIM-1.json
       |    ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le
       |    ✓ karne: d1 · tur 1 · 5/5 E · GEÇTİ · 0.0 dk
       |      · görev bağı yok — göz adımı deftere yazılmadı
@@ -74,5 +77,5 @@ mutant: zorunlu-ortam-okunmaz (denetci.sh)
   ✓ Y3 hüküm satırı
   ✓ Y4 uyumsuz → rc 1
   ✓ Y5 --on-goz ile --on-goz-gec birlikte → rc 2 (kullanım)
-SONUÇ: 29 geçti, 10 düştü
+SONUÇ: 32 geçti, 10 düştü
 --- stderr ---
