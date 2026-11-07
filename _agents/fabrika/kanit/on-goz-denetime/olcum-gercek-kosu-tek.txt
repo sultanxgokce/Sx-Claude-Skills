@@ -1,33 +1,29 @@
 $ bash _agents/fabrika/kanit/on-goz-denetime/gercek.sh
-# rc=0 sure=34.1s zaman=2026-11-07T06:47:59+03:00
+# rc=0 sure=24.5s zaman=2026-11-07T07:39:30+03:00
 --- stdout ---
 ── ÖN GÖZ (yalnız · denetim yok) · iş: on-goz-denetime · zorunlu kip: kapali
 ── ÖN GÖZ · mekanik kapılar (UYUMLU)
-  ✓ A1 kanıt başı: geçerli kayıtlar HEAD de8fd8d9 ile aynı (ya da arada yalnız kanıt)
-  ✓ A2 kanıt eksik: 10 geçerli kayıt, manifest doğrulandı
-  ✓ A3 taban: bilgi: origin/main 5 commit ileride, çakışma yok
+  ✓ A1 kanıt başı: geçerli kayıtlar HEAD 4015e026 ile aynı (ya da arada yalnız kanıt)
+  ✓ A2 kanıt eksik: 18 geçerli kayıt, manifest doğrulandı
+  ✓ A3 taban: bilgi: origin/main 6 commit ileride, çakışma yok
   ✓ A4 ağaç: kanıt dışı commit'lenmemiş izlenen dosya yok
   ✓ A5 kapsam: kart cümlesi kapsam dışı yol anmıyor
 · ön-göz (DALGIÇ): UYUMLU
    | ÖN-GÖZ: UYUMLU
+   | Bilmediğim: kartın "sınav … + mutantlar" maddesinin mutant yarısı bu farkta yok. Test dosyası mutantları `_agents/fabrika/kanit/on-goz-denetime/kos.sh` betiğine devrettiğini yazıyor ve kanıt dizini farktan süzülmüş, o yüzden 12 mutantın var olup olmadığını göremedim. Sınav listesi verilmediği için S9-S12'nin ve diğer sınavların koşup geçtiğini de ölçemedim. Kartın "ayrı kartlarda" dediği Nexus bayrak dosyası ve A4'ün denetçi defterlerini hariç tutması farkta yok, kapsam kayması da görmedim.
    | 
-   | Kart cümlesinin her maddesinin farkta karşılığı var. Aşağıdaki maddelerin hiçbiri kartla çelişmiyor:
-   | 
-   | - **Tur başında ön göz:** `_ongoz_a` (`on-goz.py`) ve `_dalgic_kos` birlikte koşuyor.
-   | - **Tek istisna:** koşul "`DENETCI_KOMUT` ya da `SAHTE_JSON` varken ... `ON_GOZ_SINAV` != 1 ... `ONGOZ_ZORUNLU` = kapali ... `ONGOZ_GEC_VERILDI` != 1" olarak yazılmış. Kayıtta `sinav-kapali` yazılıyor.
-   | - **Kayıt:** DENETIM'e `on_goz` alanı, karne satırına `on_goz` durumu giriyor. `karne.sh ozet` ilk turu "ön göz (ilk tur · 5/E)" kırılımıyla basıyor.
-   | - **Zorunlu kip:** kaynağı `DENETCI_ON_GOZ_ZORUNLU=1`, çalışma ağacındaki bayrak dosyası ve `origin/main`'deki bayrak dosyası.
-   | - **Çıkış kodları:** uyumsuzda `exit 1`, ölçülemedide `exit 3` (`_ongoz_kapat`). Bu çağrı `DENETIM` yazımından önce yapılıyor.
-   | - **`--on-goz-gec`:** en az 20 karakter şartı var. `kart.sh on-goz-gec` karta `on_goz_gecisleri` yazıyor, `gecis_gerekcesi` DENETIM kaydına giriyor. Ön göz uyumluysa şu mesaj basılıyor: "geçiş gerekmedi, karta yazılmadı".
-   | - **`--on-goz`:** yalnız ön göz koşuyor, `exit 0/1/3`.
-   | - **Sınav:** `denetci-on-goz.test.sh` S9-S12 ve mutantları içeriyor.
-   | - **Bayraksız kip:** davranış korunmuş. Uyumsuz ya da ölçülemedi ön göz "bilgi kipi" uyarısı basıp denetimi sürdürüyor.
-   | 
-   | Bilmediğim: sınavlar koşulmadı, bu yüzden yeşil olup olmadıkları bilinmiyor. `.kosuyor` izinin ön göz kapısından önce oluşup oluşmadığını yalnız farktan göremiyorum. Sınavın S9c kapısı bunu ölçüyor. Ayrıca `SKILL.md`'deki "52 kapı + 11 mutant" ifadesi, test dosyasındaki 12 `mut` çağrısıyla tutmuyor. Bu belge sayısıdır, kart cümlesi dışındadır.
-   | — dalgıç: UYUMLU · maliyet 0.051 USD · kayıt /tmp/tmp.zeZri92Zfk/dalgic-cikti
-   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.zeZri92Zfk/dalgic-notes.md
+   | Madde–kanıt tablosunda kartın diğer maddelerinin hepsi farkta karşılığıyla bulundu:
+   | - Her turda `on-goz.py` ve DALGIÇ koşuyor (`_ongoz_a`, `_dalgic_kos`).
+   | - Sınav istisnası kartın koşullarıyla örtüşüyor: `DENETCI_KOMUT`/`SAHTE_JSON` varken, `ON_GOZ_SINAV` 1 değilken, `ONGOZ_ZORUNLU = kapali` ve `ONGOZ_GEC_VERILDI` 1 değilken kayda `sinav-kapali` yazılıyor.
+   | - `on_goz` alanı DENETIM'e yazılıyor ve karne satırı ile `ozet` ilk tur kırılımı ekleniyor.
+   | - Zorunlu kip üç kaynaktan açılıyor (ortam, çalışma ağacı, `origin/main`). Uyumsuzda rc 1, ölçülemedide rc 3, `_ongoz_kapat` DENETIM yazmadan çıkıyor.
+   | - `--on-goz-gec` 20 karakter sınırını tam sınırda uyguluyor (`-ge 20`; 19 rc 2, 20 geçer). Gerekçe `kart.sh on-goz-gec` ile `on_goz_gecisleri[]`'ye ve DENETIM'e yazılıyor, uyumluyken yazılmıyor.
+   | - `--on-goz` yalnız ön göz koşuyor, rc 0/1/3 dönüyor.
+   | - Bayraksız kipte uyumsuz ön göz "bilgi kipi" uyarısıyla denetimi sürdürüyor.
+   | — dalgıç: UYUMLU · maliyet 0.173 USD · kayıt /tmp/tmp.eRGy7zfpX0/dalgic-cikti
+   | ⚠ NOTES satırı yazılamadı: /tmp/tmp.eRGy7zfpX0/dalgic-notes.md
 
 ÖN GÖZ: UYUMLU — göze gönderilebilir
-DENETIM sayısı değişmedi (3) · rc=0
+DENETIM sayısı değişmedi (4) · rc=0
 --- stderr ---
 · denetçi zili çalınmadı: ön göz kararı (denetim açılmadı ya da yalnız ön göz koşusu, tur yakılmadı) — sebep yukarıda
